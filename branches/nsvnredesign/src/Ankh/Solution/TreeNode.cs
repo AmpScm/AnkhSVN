@@ -81,9 +81,8 @@ namespace Ankh.Solution
                     this.explorer.StatusCache.Status( this.Directory );
                     this.FindChildren( );
                 }
-
-                this.currentStatus = this.NodeStatus();
-                this.CheckChildStatuses();
+                this.currentStatus = this.MergeStatuses( this.ThisNodeStatus(), 
+                    this.CheckChildStatuses() );
 
                 this.SetStatusImage( this.currentStatus );
 
@@ -109,12 +108,14 @@ namespace Ankh.Solution
 
         static TreeNode()
         {
-            statusMap[ StatusKind.Normal ]      = 1;
-            statusMap[ StatusKind.Added ]       = 2;
-            statusMap[ StatusKind.Deleted ]     = 3;
-            statusMap[ StatusKind.Conflicted ]  = 6;
-            statusMap[ StatusKind.Unversioned ] = 8;
-            statusMap[ StatusKind.Modified ]    = 9;
+            statusMap[ NodeStatus.Normal ]      = 1;
+            statusMap[ NodeStatus.Added ]       = 2;
+            statusMap[ NodeStatus.Deleted ]     = 3;
+            statusMap[ NodeStatus.IndividualStatusesConflicting ] = 7;
+            statusMap[ NodeStatus.Conflicted ]  = 6;
+            statusMap[ NodeStatus.Unversioned ] = 8;
+            statusMap[ NodeStatus.Modified ]    = 9;
+            
         }
         
 
@@ -136,8 +137,9 @@ namespace Ankh.Solution
             get{ return this.parent; }
         }
 
-        public StatusKind CurrentStatus
+        protected NodeStatus CurrentStatus
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.currentStatus; }
         }
 
@@ -147,28 +149,43 @@ namespace Ankh.Solution
         /// not including children.
         /// </summary>
         /// <returns></returns>
-        protected virtual StatusKind NodeStatus()
+        protected virtual NodeStatus ThisNodeStatus()
         {
-            return StatusKind.None;
+            return NodeStatus.None;
         }
 
+        /// <summary>
+        /// Dispatches the Changed event.
+        /// </summary>
         protected virtual void OnChanged()
         {
+            this.SetStatusImage( this.CurrentStatus );
             if ( this.Changed != null )
                 this.Changed( this, EventArgs.Empty );
         }
 
-        protected virtual void ChildChanged( object sender, EventArgs args )
+        /// <summary>
+        /// Event handler for change events in child nodes or resources belonging
+        /// to this node.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        protected virtual void ChildOrResourceChanged( object sender, EventArgs args )
         {
-            this.CheckChildStatuses();
+            NodeStatus newStatus = this.MergeStatuses( this.ThisNodeStatus(), 
+                this.CheckChildStatuses() );
+            if ( newStatus != this.currentStatus )
+            {
+                this.currentStatus = newStatus;
+                this.OnChanged();
+            }
         }
-
 
         /// <summary>
         /// Sets the status image on this node.
         /// </summary>
         /// <param name="status">The status on this node.</param>
-        protected void SetStatusImage( StatusKind status )
+        protected void SetStatusImage( NodeStatus status )
         {
             int statusImage = 0;
             if ( statusMap.Contains(status) )
@@ -189,20 +206,58 @@ namespace Ankh.Solution
         }
 
         /// <summary>
-        /// Returns a status from a resource, taking into account both text status and 
+        /// Returns a NodeStatus from a Status, taking into account both text status and 
         /// property status.
         /// </summary>
         /// <param name="resource"></param>
         /// <returns></returns>
-        protected StatusKind GenerateStatus(Status status)
+        protected NodeStatus GenerateStatus(Status status)
         {  
             if ( status.TextStatus != StatusKind.Normal )
-                return status.TextStatus;
+                return (NodeStatus)status.TextStatus;
             else if ( status.PropertyStatus != StatusKind.Normal &&
                 status.PropertyStatus != StatusKind.None )
-                return status.PropertyStatus;  
+                return (NodeStatus)status.PropertyStatus;  
             else
-                return StatusKind.Normal;
+                return NodeStatus.Normal;
+        }
+
+        /// <summary>
+        /// Merges the statuses of the passed items into a single NodeStatus.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        protected NodeStatus MergeStatuses( params SvnItem[] items )
+        {
+            return this.MergeStatuses( ((IList)items) );
+        }
+
+        /// <summary>
+        /// Merges the passed NodeStatuses into a single NodeStatus.
+        /// </summary>
+        /// <param name="statuses"></param>
+        /// <returns></returns>
+        protected NodeStatus MergeStatuses( params NodeStatus[] statuses )
+        {
+            StatusMerger merger = new StatusMerger();
+            foreach( NodeStatus status in statuses )
+                merger.NewStatus( status );
+            return merger.CurrentStatus;
+        }
+
+        /// <summary>
+        /// Merges the statuses of the passed SvnItems into
+        /// a single NodeStatus.
+        /// </summary>
+        /// <param name="items">An IList of SvnItem instances.</param>
+        /// <returns></returns>
+        protected NodeStatus MergeStatuses( IList items )
+        {   
+            StatusMerger statusMerger = new StatusMerger();
+            foreach( SvnItem item in items )
+                statusMerger.NewStatus( this.GenerateStatus(item.Status) );
+
+            return statusMerger.CurrentStatus;
         }
 
         /// <summary>
@@ -240,7 +295,7 @@ namespace Ankh.Solution
                             this );
                         if (childNode != null )
                         {
-                            childNode.Changed += new StatusChanged(this.ChildChanged);                            
+                            childNode.Changed += new StatusChanged(this.ChildOrResourceChanged);
                             this.children.Add( childNode );
                             childNode.Refresh( false );
                         }
@@ -260,27 +315,78 @@ namespace Ankh.Solution
             }
         }
 
-        private void CheckChildStatuses()
-        {
-            StatusKind newStatus = this.currentStatus;
+        /// <summary>
+        /// Gets the merged NodeStatus from the child nodes.
+        /// </summary>
+        /// <returns></returns>
+        protected NodeStatus CheckChildStatuses()
+        {            
+            StatusMerger statusMerger = new StatusMerger();
             foreach( TreeNode node in this.children )
             {
-                newStatus = node.CurrentStatus;
-                if ( newStatus != this.CurrentStatus )
-                {
-                    this.currentStatus = newStatus;
-                    this.OnChanged();
-                    break;
-                }
+                statusMerger.NewStatus( node.CurrentStatus );                
             }
+            return statusMerger.CurrentStatus;
         }
-        
+
+        /// <summary>
+        /// Used for merging several NodeStatuses into a single NodeStatus.
+        /// </summary>
+        protected struct StatusMerger
+        {
+            public void NewStatus( NodeStatus status )
+            {
+                if ( this.CurrentStatus == NodeStatus.None )
+                    this.CurrentStatus = status;
+                else if ( status != NodeStatus.None )
+                {
+                    if ( this.CurrentStatus == NodeStatus.Normal )
+                    {
+                        this.CurrentStatus = status;
+                    }
+                    else if ( status != NodeStatus.Normal &&
+                        this.CurrentStatus != status )
+                    {
+                        this.CurrentStatus = NodeStatus.IndividualStatusesConflicting;
+                    }
+                }
+                                                    
+            }
+
+            public NodeStatus CurrentStatus
+            {
+                get
+                {
+                    if ( this.currentStatus == (NodeStatus)0 )
+                        this.currentStatus = NodeStatus.None;
+                    return this.currentStatus;
+                }
+                set{ this.currentStatus = value; }
+            }
+            private NodeStatus currentStatus;
+        }
+
+        /// <summary>
+        /// Describes the status of a tree node.
+        /// </summary>
+        protected enum NodeStatus
+        {
+            None = StatusKind.None,
+            Normal = StatusKind.Normal,
+            Added = StatusKind.Added,
+            Deleted = StatusKind.Deleted,
+            Conflicted = StatusKind.Conflicted,
+            Unversioned = StatusKind.Unversioned,
+            Modified = StatusKind.Modified,
+            IndividualStatusesConflicting
+        }
+
         private UIHierarchyItem uiItem;
         private TreeNode parent;
         private IntPtr hItem;
         private IList children;
         private Explorer explorer;
-        private StatusKind currentStatus;
-        private static IDictionary statusMap = new Hashtable();
+        private NodeStatus currentStatus;
+        private static readonly IDictionary statusMap = new Hashtable();
     }
 }

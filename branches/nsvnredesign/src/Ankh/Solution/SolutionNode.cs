@@ -21,6 +21,8 @@ namespace Ankh.Solution
             this.solutionFolder = this.Explorer.StatusCache[
                 Path.GetDirectoryName( solution.FullName )];
 
+            this.solutionFolder.Changed += new StatusChanged( this.ChildOrResourceChanged );
+
             explorer.SetSolution( this );
 
             this.FindChildren();
@@ -42,16 +44,13 @@ namespace Ankh.Solution
         /// Get the status for this node, not including children.
         /// </summary>
         /// <returns></returns>
-        protected override StatusKind NodeStatus()
+        protected override NodeStatus ThisNodeStatus()
         {
             if ( this.solutionFile == null )
-                return StatusKind.None;               
+                return NodeStatus.None;               
             else
             {
-                StatusKind fileStatus = this.GenerateStatus(this.solutionFile.Status);
-                StatusKind folderStatus = this.GenerateStatus(this.solutionFolder.Status);
-                
-                return fileStatus == StatusKind.Normal ? folderStatus : fileStatus;
+                return this.MergeStatuses( this.solutionFolder, this.solutionFile );
             }
         }
 

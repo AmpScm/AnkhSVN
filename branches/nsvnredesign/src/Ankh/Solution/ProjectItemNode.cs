@@ -28,20 +28,9 @@ namespace Ankh.Solution
         /// The status of this node, not including children.
         /// </summary>
         /// <returns></returns>
-        protected override StatusKind NodeStatus()
+        protected override NodeStatus ThisNodeStatus()
         {
-            // any resources at all?
-            if ( this.resources.Count == 0 )
-                return StatusKind.None;
-
-            // go through the resources belonging to this node
-            foreach( SvnItem item in this.resources )
-            {
-                StatusKind status = GenerateStatus(item.Status);
-                if ( status != StatusKind.Normal )
-                    return status;
-            }                   
-            return StatusKind.Normal;            
+            return this.MergeStatuses( this.resources );
         }
 
         /// <summary>
@@ -70,6 +59,7 @@ namespace Ankh.Solution
             this.resources = new ArrayList();
             try
             {
+                StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
                 for( short i = 1; i <= this.projectItem.FileCount; i++ ) 
                 {
                     string path = this.projectItem.get_FileNames(i);
@@ -77,6 +67,7 @@ namespace Ankh.Solution
                     {
                         SvnItem item = this.Explorer.StatusCache[path];
                         this.resources.Add( item );
+                        item.Changed += del;
                     }                    
                 }
                 this.Explorer.AddResource( this.projectItem, this );                    

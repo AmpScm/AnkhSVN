@@ -27,11 +27,18 @@ namespace Ankh.Solution
             // the Solution Items project has no path
             if ( fullname != string.Empty && File.Exists( fullname ) )
             {
+                
+
                 string parentPath = Path.GetDirectoryName( fullname );
-                this.projectFolder = this.Explorer.StatusCache[ parentPath ];
+                this.projectFolder = this.Explorer.StatusCache[ parentPath ];                
                 this.projectFile = this.Explorer.StatusCache[ fullname ];
 
-                this.Explorer.AddResource( project, this );                    
+                this.Explorer.AddResource( project, this ); 
+
+                // attach event handlers
+                StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
+                this.projectFolder.Changed += del;
+                this.projectFolder.Changed += del;                                   
             }
             else
             {
@@ -54,17 +61,10 @@ namespace Ankh.Solution
         /// The status of this node, not including children.
         /// </summary>
         /// <returns></returns>
-        protected override StatusKind NodeStatus()
+        protected override NodeStatus ThisNodeStatus()
         {            
             // check status on the project folder
-            StatusKind folderStatus = this.GenerateStatus(this.projectFolder.Status);
-            StatusKind fileStatus = this.GenerateStatus(this.projectFile.Status);
-            if ( fileStatus != StatusKind.Normal )
-                return fileStatus;
-            else if (  folderStatus != StatusKind.Normal )
-                return folderStatus;
-            else
-                return StatusKind.Normal;
+            return this.MergeStatuses( this.projectFolder, this.projectFile );
         }                    
 
         private SvnItem projectFolder;
