@@ -61,7 +61,7 @@ namespace NSvn.Core.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(WorkingCopyLockedException))]
+        [ExpectedException(typeof(OperationCancelledException))]
         public void TestCancel()
         {
             this.Client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
@@ -74,6 +74,24 @@ namespace NSvn.Core.Tests
             this.Client.Cancel -= new CancelDelegate(this.Cancel);
             this.Client.Cancel += new CancelDelegate(this.ReallyCancel);
             this.Client.Update( this.WcPath, Revision.Head, true );
+        }
+
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        private static extern bool SetEnvironmentVariable( string name, string value );
+
+        [Test]
+        [System.Diagnostics.Conditional("ALT_ADMIN_DIR")]
+        public void TestChangeAdminDirectoryName()
+        {
+            Client.AdminDirectoryName = "__SVN__";
+            Assertion.AssertEquals( "Admin directory name should now be __SVN__",
+                "__SVN__", Client.AdminDirectoryName );
+
+            string newwc = this.FindDirName( Path.Combine( Path.GetTempPath(), "moo" ) );
+            this.Client.Checkout( this.ReposUrl, newwc, Revision.Head, true );
+
+            Assertion.Assert( "Admin directory with new name not found", 
+                Directory.Exists( Path.Combine( newwc, "__SVN__" ) ) );
         }
 
         private string GetUrl( string path )
@@ -95,6 +113,13 @@ namespace NSvn.Core.Tests
         }
 
         private int cancels = 0;
+
+        public static void Main()
+        {
+            MiscTests t = new MiscTests();
+            t.SetUp();
+            t.TestChangeAdminDirectoryName();
+        }
 
     }
 }

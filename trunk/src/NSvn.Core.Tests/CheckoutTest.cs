@@ -36,8 +36,8 @@ namespace NSvn.Core.Tests
 
             Assertion.Assert( "Checked out file not there", 
                 File.Exists( Path.Combine( this.newWc, "Form.cs" ) ) );
-            Assertion.Assert( "No .svn directory found", 
-                Directory.Exists( Path.Combine( this.newWc, ".svn" ) ) );
+            Assertion.Assert( "No admin directory found", 
+                Directory.Exists( Path.Combine( this.newWc, Client.AdminDirectoryName ) ) );
             Assertion.AssertEquals( "Wrong status", "", this.RunCommand( "svn", "st " + 
                 this.newWc ).Trim() );
         }
