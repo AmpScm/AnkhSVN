@@ -196,6 +196,7 @@
                 />
                 <File
                     RelPath = "StatusCache.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -225,11 +226,6 @@
                 />
                 <File
                     RelPath = "Commands\AddSolutionToRepositoryCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Commands\CheckoutCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
