@@ -5,17 +5,17 @@ using EnvDTE;
 using System.Diagnostics;
 using Microsoft.Office.Core;
 
-namespace Ankh.Commands
+namespace Ankh
 {
 	/// <summary>
 	/// Responsible for registering the ICommand implementations in this assembly.
 	/// </summary>
-    public class Commands : DictionaryBase
+    public class CommandMap : DictionaryBase
     {
         /// <summary>
         /// Private constructor to avoid instantiation.
         /// </summary>
-        private  Commands()
+        private  CommandMap()
         {			
         }
 
@@ -32,20 +32,20 @@ namespace Ankh.Commands
         /// Registers all commands present in this DLL.
         /// </summary>
         /// <param name="dte">TODO: what to do, what to do?</param>
-        public static Commands RegisterCommands( _DTE dte, AddIn addin )
+        public static CommandMap RegisterCommands( _DTE dte, AddIn addin )
         {
             // delete old commands
             DeleteCommands( dte, addin );
 
 
-            Commands commands = new Commands();
+            CommandMap commands = new CommandMap();
 
             // find all the ICommand subclasses in all modules
             foreach( Module module in 
-                typeof( Commands ).Assembly.GetModules( false ) )
+                typeof( CommandMap ).Assembly.GetModules( false ) )
             {
                 foreach( Type type in module.FindTypes( 
-                    new TypeFilter( Commands.CommandTypeFilter ), null ) )
+                    new TypeFilter( CommandMap.CommandTypeFilter ), null ) )
                     RegisterCommand( type, commands, dte, addin );
             }
 
@@ -84,7 +84,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="type">A Type object representing the command to register.</param>
         /// <param name="commands">A Commands collection in which to put the command.</param>
-        private static void RegisterCommand( Type type, Commands commands, _DTE dte, AddIn addin )
+        private static void RegisterCommand( Type type, CommandMap commands, _DTE dte, AddIn addin )
         {
             VSNetCommandAttribute attr = (VSNetCommandAttribute)(
                 type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) )[0];
