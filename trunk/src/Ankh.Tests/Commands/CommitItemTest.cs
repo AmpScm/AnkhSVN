@@ -23,8 +23,12 @@ namespace Ankh.Tests
             TestUtils.ToggleAnkh( false, "7.1" );
 
             this.uiShell = new MyUIShellImpl();
-            this.explorer = new MyExplorerImpl();
-            this.ctx = new MyContextBase( this.explorer, this.uiShell );
+            this.ctx = new ContextBase( );
+            this.uiShell.Context = this.ctx;
+            this.explorer = new ContextBase.ExplorerImpl( this.ctx );            
+            this.ctx.UIShell = this.uiShell;
+            this.ctx.SolutionExplorer = this.explorer;
+
             ctx.Client.SynchronizingObject = new ContextBase.NoSynch();
 
             this.cmd = new CommitItemCommand();
@@ -142,16 +146,6 @@ namespace Ankh.Tests
             } 
         }
 
-        private class MyContextBase : ContextBase
-        {
-            public MyContextBase( ISolutionExplorer explorer, IUIShell uiShell)
-            {
-                this.uiShell = uiShell;
-                this.uiShell.Context = this;
-                this.explorer = explorer;
-            }
-        }
-
         private class MyUIShellImpl : ContextBase.UIShellImpl
         {
             public override CommitContext ShowCommitDialogModal(CommitContext ctx)
@@ -169,87 +163,10 @@ namespace Ankh.Tests
             public string LogMessage = "";
             public bool Cancelled = false;
             public IList CommitItems = new object[]{};
-        }
+        }        
 
-        private class MyExplorerImpl : ISolutionExplorer
-        {
-            #region ISolutionExplorer Members
-
-            public System.Collections.IList GetItemResources(ProjectItem item, bool recursive)
-            {
-                // TODO:  Add MyExplorerImpl.GetItemResources implementation
-                return null;
-            }
-
-            public void Unload()
-            {
-                // TODO:  Add MyExplorerImpl.Unload implementation
-            }
-
-            public void VisitSelectedNodes(Ankh.Solution.INodeVisitor visitor)
-            {
-                // TODO:  Add MyExplorerImpl.VisitSelectedNodes implementation
-            }
-
-            public ProjectItem GetSelectedProjectItem()
-            {
-                // TODO:  Add MyExplorerImpl.GetSelectedProjectItem implementation
-                return null;
-            }
-
-            public void Refresh(ProjectItem item)
-            {
-                // TODO:  Add MyExplorerImpl.Refresh implementation
-            }
-
-            void Ankh.ISolutionExplorer.Refresh(Project project)
-            {
-                // TODO:  Add MyExplorerImpl.Ankh.ISolutionExplorer.Refresh implementation
-            }
-
-            #endregion
-
-            #region ISelectionContainer Members
-
-            public void RefreshSelectionParents()
-            {
-                // TODO:  Add MyExplorerImpl.RefreshSelectionParents implementation
-            }
-
-            public void SyncAll()
-            {
-                // TODO:  Add MyExplorerImpl.SyncAll implementation
-            }
-
-            public System.Collections.IList GetSelectionResources(bool getChildItems, Ankh.ResourceFilterCallback filter)
-            {
-                // TODO:  Add MyExplorerImpl.GetSelectionResources implementation
-                return this.Selection;
-            }
-
-            System.Collections.IList Ankh.ISelectionContainer.GetSelectionResources(bool getChildItems)
-            {
-                return this.Selection;
-            }
-
-            public void RefreshSelection()
-            {
-                // TODO:  Add MyExplorerImpl.RefreshSelection implementation
-            }
-
-            public System.Collections.IList GetAllResources(Ankh.ResourceFilterCallback filter)
-            {
-                // TODO:  Add MyExplorerImpl.GetAllResources implementation
-                return null;
-            }
-
-            #endregion
-
-            public IList Selection = new object[]{};
-        }
-
-        private MyContextBase ctx;
-        private MyExplorerImpl explorer;
+        private ContextBase ctx;
+        private ContextBase.ExplorerImpl explorer;
         private MyUIShellImpl uiShell;
         private CommitItemCommand cmd;
         private LogMessage message;

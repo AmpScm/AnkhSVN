@@ -115,6 +115,11 @@ namespace Ankh.Tests
                     this.uiShell = new UIShellImpl();
                 return this.uiShell;
             }
+
+            set
+            {
+                this.uiShell = value;
+            }
         }
 
         public virtual IErrorHandler ErrorHandler
@@ -205,6 +210,10 @@ namespace Ankh.Tests
                 if ( this.explorer == null )
                     this.explorer = new ExplorerImpl(this);
                 return this.explorer;
+            }
+            set
+            {
+                this.explorer = value;
             }
         }
 
@@ -353,13 +362,13 @@ namespace Ankh.Tests
             public virtual System.Collections.IList GetSelectionResources(bool getChildItems, Ankh.ResourceFilterCallback filter)
             {
                 // TODO:  Add Explorer.GetSelectionResources implementation
-                return null;
+                return this.Selection;
             }
 
             System.Collections.IList Ankh.ISelectionContainer.GetSelectionResources(bool getChildItems)
             {
                 // TODO:  Add Explorer.Ankh.ISelectionContainer.GetSelectionResources implementation
-                return null;
+                return this.Selection;
             }
 
             public virtual void RefreshSelection()
@@ -376,6 +385,8 @@ namespace Ankh.Tests
             #endregion
 
             private IContext context;
+
+            public IList Selection = new object[]{};
 
         }
 
