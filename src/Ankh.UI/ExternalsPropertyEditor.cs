@@ -26,6 +26,7 @@ namespace Ankh.UI
         public void Clear()
         {
             this.externalsTextBox.Text = "";
+            this.dirty = false;
          }
 
         /// <summary>
@@ -35,14 +36,21 @@ namespace Ankh.UI
         {
             get
             {
-                return this.externalsTextBox.Text.Trim() != ""; 
+                if (!this.dirty)
+                {
+                    return false;
+                }
+                else 
+                {
+                    return this.externalsTextBox.Text.Trim() != ""; 
+                }
             }
         }
         
-        /// <summary>
-        /// Sets and gets the property item.
-        /// </summary>
-        public PropertyItem PropertyItem
+            /// <summary>
+            /// Sets and gets the property item.
+            /// </summary>
+            public PropertyItem PropertyItem
         {
             get
             {
@@ -59,6 +67,7 @@ namespace Ankh.UI
             {
               TextPropertyItem item = (TextPropertyItem)value;
                 this.externalsTextBox.Text = item.Text;
+                this.dirty = false;
             }
         }
 
@@ -99,10 +108,13 @@ namespace Ankh.UI
             // 
             // externalsTextBox
             // 
+            this.externalsTextBox.AcceptsReturn = true;
+            this.externalsTextBox.AcceptsTab = true;
             this.externalsTextBox.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.externalsTextBox.Location = new System.Drawing.Point(0, 22);
             this.externalsTextBox.Multiline = true;
             this.externalsTextBox.Name = "externalsTextBox";
+            this.externalsTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.externalsTextBox.Size = new System.Drawing.Size(400, 128);
             this.externalsTextBox.TabIndex = 2;
             this.externalsTextBox.Text = "";
@@ -135,13 +147,18 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void externalsTextBox_TextChanged(object sender, System.EventArgs e)
         {
+            // Enables save button
+            this.dirty = true;
             if (Changed != null)
                 Changed (this, EventArgs.Empty );
         }
 
         private System.Windows.Forms.TextBox externalsTextBox;
         private System.Windows.Forms.Label externalsLabel;
-
+        /// <summary>
+        /// Flag for enabling/disabling save button
+        /// </summary>
+        private bool dirty;
         /// <summary> 
         /// Required designer variable.
         /// </summary>

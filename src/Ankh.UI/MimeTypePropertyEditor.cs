@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace Ankh.UI
 {
@@ -26,6 +27,7 @@ namespace Ankh.UI
 		public void Clear()
 		{
 			this.mimeTextBox.Text = "";
+            this.dirty = false;
 		}
 
         /// <summary>
@@ -35,7 +37,14 @@ namespace Ankh.UI
 		{
 			get
 			{
-				return this.mimeTextBox.Text != ""; 
+                if (!this.dirty)
+                {
+                    return false;
+                }
+                else 
+                {
+                    return validateMimeType.IsMatch(this.mimeTextBox.Text);
+                }
 			} 
 		}
 
@@ -58,6 +67,7 @@ namespace Ankh.UI
 			{
 				TextPropertyItem item = (TextPropertyItem)value;
                 this.mimeTextBox.Text = item.Text;
+                this.dirty = false;
 			}
 		}
 
@@ -129,12 +139,20 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void mimeTextBox_TextChanged(object sender, System.EventArgs e)
         {
-            if ( Changed != null )
+            // Enables save button
+            this.dirty = true;
+            if ( Changed != null  )
                 Changed(this, EventArgs.Empty);
         }
 
         private System.Windows.Forms.Label mimeLabel;
         private System.Windows.Forms.TextBox mimeTextBox;
+        private static readonly Regex validateMimeType = 
+            new Regex(@"\w{2,}/\*{1}|(\w{2,})", RegexOptions.Compiled);
+        /// <summary>
+        /// Flag for enabled/disabled save button
+        /// </summary>
+        private bool dirty;
 
 		/// <summary> 
 		/// Required designer variable.
