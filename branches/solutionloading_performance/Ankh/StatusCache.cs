@@ -25,6 +25,9 @@ namespace Ankh
         {
             lock (this) 
             {
+                if ( dir == null || dir == "" )
+                    return;
+                
                 if ( !SvnUtils.IsWorkingCopyPath(dir) )
                     return;
 
