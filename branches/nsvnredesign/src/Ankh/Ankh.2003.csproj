@@ -300,6 +300,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\LocalDiffCommandBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\MakeDirectoryCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

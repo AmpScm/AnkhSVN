@@ -1,13 +1,8 @@
 // $Id$
-using System;
-using EnvDTE;
-using NSvn.Core;
-
 using System.IO;
-using System.Collections;
-using System.Text;
-using SHDocVw;
 using Ankh.UI;
+using EnvDTE;
+using SHDocVw;
 
 namespace Ankh.Commands
 {
@@ -21,33 +16,15 @@ namespace Ankh.Commands
     VSNetControl( "Project", Position = 2 ),
     VSNetControl( "Solution", Position = 2 ),
     VSNetControl( "Folder", Position = 2 )]
-    internal class DiffLocalItem : CommandBase
+    internal class DiffLocalItem : LocalDiffCommandBase
     {
-		
-        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
-        {
-            // always allow diff - worst case you get an empty diff            
-            return vsCommandStatus.vsCommandStatusEnabled |
-                vsCommandStatus.vsCommandStatusSupported;
-            
-        }
-
         public override void Execute(Ankh.AnkhContext context, string parameters)
         {
             try
             {
                 context.StartOperation( "Diffing" );
 
-                // get the diff itself
-                IList resources = context.SolutionExplorer.GetSelectionResources(
-                    true, new ResourceFilterCallback(CommandBase.ModifiedFilter) );
-
-                MemoryStream stream = new MemoryStream();
-                foreach( SvnItem item in resources )
-                    context.Client.Diff( new string[]{}, item.Path, Revision.Base, 
-                        item.Path, Revision.Working, false, true, false, stream, Stream.Null );
-
-                string diff = Encoding.Default.GetString( stream.ToArray() );
+                string diff = this.GetDiff( context );
 
                 // convert it to HTML and store in a temp file
                 DiffHtmlModel model = new DiffHtmlModel( diff);
