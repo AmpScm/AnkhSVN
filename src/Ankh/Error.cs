@@ -86,7 +86,21 @@ namespace Ankh
 
         private static void DoHandle( SvnClientException ex )
         {
-            ShowErrorDialog(ex, false, false);
+            if ( ex.ErrorCode == LockedFileErrorCode )
+            {
+                MessageBox.Show(
+                    ex.Message + NL + NL +
+                    "Avoid versioning files that can be locked by VS.NET. " + 
+                    "These include *.ncb, *.projdata etc." + NL +
+                    "See the AnkhSVN FAQ for more details.",
+                    "File exclusively locked",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error );
+            }
+            else
+            {
+                ShowErrorDialog(ex, false, false);
+            }
         }
 
         
@@ -137,5 +151,6 @@ namespace Ankh
         }
 
         private static readonly string NL = Environment.NewLine;
+        private const int LockedFileErrorCode = 720032;
     }
 }
