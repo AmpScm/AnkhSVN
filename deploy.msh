@@ -4,25 +4,30 @@ $ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/trunk"
 $ANKHSVN = "$ANKHSVN_ROOT/src"
 
 # version numbers to put in the filename
-$MAJOR, $MINOR, $PATCH, $LABEL = 0, 6, 0, "rc1"
+$MAJOR, $MINOR, $PATCH, $LABEL = 0, 6, 0, "snapshot2"
 
 # The URL of the Subversion version
 $SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.1.0/"
+$SUBVERSION_VERSION="1.1.0"
 $subversion_dir=""
 
 # The URL of neon
 $NEON = "http://www.webdav.org/neon/neon-0.24.7.tar.gz"
+$NEON_VERSION="0.24.7"
 
 # Berkeley DB
 $BDB = "ftp://sleepycat1.inetu.net/releases/db-4.2.52.tar.gz"
 $BDB_DIR = "db-4.2.52"
+$BDB_VERSION="4.2.52"
 
 # OpenSSL
 $OPENSSL = "http://www.openssl.org/source/openssl-0.9.7d.tar.gz"
+$OPENSSL_VERSION="0.9.7-d"
 $openssl_target_dir = ""
 
 # ZLIB
 $ZLIB = "http://www.gzip.org/zlib/contrib/zlib113-win32.zip"
+$ZLIB_VERSION="1.1.3"
 $zlib_target_dir = ""
 
 # Whether to build openssl as a static library
@@ -40,12 +45,15 @@ $APACHE_CVS = ":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
 
 $APR_BRANCH = "APR_0_9_BRANCH"
 $APR_MODULE = "apr"
+$APR_VERSION="0.9.5"
 
 $APR_UTIL_BRANCH = "APU_0_9_BRANCH"
 $APR_UTIL_MODULE = "apr-util"
+$APR_UTIL_VERSION="0.9.5"
 
 $APR_ICONV_BRANCH = "API_0_9_BRANCH"
 $APR_ICONV_MODULE = "apr-iconv"
+$APR_ICONV_VERSION="0.9.5"
 
 # Whether to use nant to build Ankh
 $USE_NANT = 1
@@ -434,6 +442,68 @@ function do_subversion
 	 
 }
 
+function get_revision($dir)
+{
+	return $(svnversion $dir)
+}
+
+function add_version( $name, $version )
+{
+	$ver, $tag = $version.Split("-")
+	$major, $minor, $patch, $rev = $ver.Split(".")
+	if ( $rev -eq "" )
+	{
+		$rev = 0
+	}
+	$params = "`"$name`", $major, $minor, $patch, Tag=`"$tag`""
+	#$params = "`"`", {1}, {2}, {3}, Tag=`"{4}`"" -f `
+	#	$name, $maj, $min, $r, $tag 
+
+	"[assembly:Utils.VersionAttribute( $params )]" >> AssemblyInfo.cs
+	"[assembly:Utils::VersionAttribute( $params )];" >> AssemblyInfo.cpp
+}
+
+function create_assemblyinfo
+{
+	$rev = get_revision "src" 
+	$versiontuple = "{0}.{1}.{2}.{3}" -f $MAJOR, $MINOR, $PATCH, $rev
+	$ankhversion="$versiontuple-$LABEL"
+	
+	"Creating AssemblyInfo.cs"
+	
+	"using System.Reflection;`
+using System.Runtime.CompilerServices;
+`
+[assembly:AssemblyVersion(`"{0}`")]" -f $versiontuple > AssemblyInfo.cs
+
+
+	"Creating AssemblyInfo.cpp"
+	
+	"#include `"stdafx.h`"`
+`
+using namespace System::Reflection;`
+using namespace System::Runtime::CompilerServices;`
+[assembly:AssemblyVersionAttribute(`"{0}`")];" -f $versiontuple > AssemblyInfo.cpp
+
+	add_version "Subversion" $SUBVERSION_VERSION 
+	add_version "Neon" $NEON_VERSION 
+	add_version "Berkeley DB" $BDB_VERSION 
+	add_version "OpenSSL" $OPENSSL_VERSION
+	add_version "ZLib" $ZLIB_VERSION 
+	add_version "apr" $APR_VERSION 
+	add_version "apr-util" $APR_UTIL_VERSION 
+	add_version "apr-iconv" $APR_ICONV_VERSION 
+	add_version "Ankh" $ankhversion
+
+	copy-item -force AssemblyInfo.cs src\Ankh\AssemblyInfo.cs
+	copy-item -force AssemblyInfo.cs src\Ankh.UI\AssemblyInfo.cs
+	copy-item -force AssemblyInfo.cs src\Utils\AssemblyInfo.cs
+	copy-item -force AssemblyInfo.cpp src\NSvn.Core\AssemblyInfo.cpp
+	copy-item -force AssemblyInfo.cs src\ReposInstaller\AssemblyInfo.cs	
+}
+
+
+
 function checkout_tools
 {
     checkout "$ANKHSVN_ROOT/tools/WiX"
@@ -460,8 +530,7 @@ function do_ankh
 	checkout_tools
 
     # get the version thing done
-    cmd /c "svn cat $ANKHSVN_ROOT/deploy.build > deploy.build" # must use cmd here since msh screws up file redir
-    nant /f:deploy.build version /D:checkout.dir=src /D:major.version=$MAJOR /D:minor.version=$MINOR /D:patch.version=$PATCH
+	create_assemblyinfo 
     
 	set-location "src"
 
