@@ -1,3 +1,4 @@
+// $Id$
 using System;
 using ICSharpCode.SharpZipLib;
 using ICSharpCode.SharpZipLib.Zip;

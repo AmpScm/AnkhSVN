@@ -15,7 +15,7 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "WinExe"
+                OutputType = "Library"
                 RootNamespace = "Ankh.UI"
                 StartupObject = "Ankh.UI.Loader"
             >
@@ -27,7 +27,7 @@
                     ConfigurationOverrideFile = ""
                     DefineConstants = "DEBUG;TRACE"
                     DocumentationFile = ""
-                    DebugSymbols = "true"
+                    DebugSymbols = "false"
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
                     Optimize = "false"

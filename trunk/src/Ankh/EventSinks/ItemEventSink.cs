@@ -1,3 +1,4 @@
+// $Id$
 using System;
 using NSvn;
 using EnvDTE;

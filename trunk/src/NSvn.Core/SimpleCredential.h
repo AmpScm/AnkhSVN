@@ -1,3 +1,4 @@
+// $Id$
 #include "stdafx.h"
 #include <svn_auth.h>
 #include <apr_strings.h>

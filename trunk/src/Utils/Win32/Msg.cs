@@ -1,3 +1,4 @@
+// $Id$
 using System;
 
 namespace Utils.Win32

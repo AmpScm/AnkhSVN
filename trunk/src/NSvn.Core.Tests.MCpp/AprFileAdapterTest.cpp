@@ -1,3 +1,4 @@
+// $Id$
 #include "StdAfx.h"
 #include "aprfileadaptertest.h"
 #include "StringHelper.h"
