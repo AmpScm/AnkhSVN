@@ -165,13 +165,13 @@ namespace Ankh
         {   
             object control = null;
             this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
-                this.addin, "VSUserControlHost.VSUserControlHostCtl", 
+                this.addin, "Ankh.ToolWindow", 
                 "Repository Explorer", REPOSEXPLORERGUID, ref control );
 
             this.reposExplorerWindow.Visible = true;
             this.reposExplorerWindow.Caption = "Repository Explorer";
 
-            this.objControl = (VSUserControlHostLib.IVSUserControlHostCtl)control;
+            this.objControl = (AnkhToolWindowLib.IAnkhToolWindowCtl)control;
 
             this.repositoryExplorer = (RepositoryExplorerControl)this.objControl.HostUserControl( 
                 typeof(RepositoryExplorerControl).Assembly.Location, 
@@ -199,7 +199,7 @@ namespace Ankh
         private SvnContext context;
         private RepositoryExplorerControl repositoryExplorer;
         private EnvDTE.Window reposExplorerWindow;
-        private VSUserControlHostLib.IVSUserControlHostCtl objControl;
+        private AnkhToolWindowLib.IAnkhToolWindowCtl objControl;
         public static readonly string REPOSEXPLORERGUID = 
             "{1C5A739C-448C-4401-9076-5990300B0E1B}";
     }
