@@ -26,16 +26,23 @@ namespace Ankh.UI
 		public void Clear()
 		{
 			this.ignoreTextBox.Text = "";
-
+            this.dirty = false;
 		}
 
 		public bool Valid
 		{
 			get
-			{ 
-				return ( this.ignoreTextBox.Text.Trim() != "");
-			}
-		}
+            { 
+                if (!this.dirty)
+                {
+                    return false;
+                }
+                else 
+                {
+                    return ( this.ignoreTextBox.Text.Trim() != "");
+                }
+            }
+        }
 
 		public PropertyItem PropertyItem
 		{
@@ -53,6 +60,7 @@ namespace Ankh.UI
 			{
 				TextPropertyItem item = (TextPropertyItem) value;
                 this.ignoreTextBox.Text = item.Text;
+                this.dirty = false;
 			}
 		}
 
@@ -103,7 +111,7 @@ namespace Ankh.UI
             // ignoreLabel
             // 
             this.ignoreLabel.Name = "ignoreLabel";
-            this.ignoreLabel.Size = new System.Drawing.Size(256, 32);
+            this.ignoreLabel.Size = new System.Drawing.Size(256, 24);
             this.ignoreLabel.TabIndex = 3;
             this.ignoreLabel.Text = "Ignore the following files or patterns:";
             // 
@@ -119,23 +127,24 @@ namespace Ankh.UI
         }
 		#endregion
 
+        private void ignoreTextBox_TextChanged(object sender, System.EventArgs e)
+        {
+            // Enables save button
+            this.dirty = true;
+            if (Changed != null)
+                Changed( this, EventArgs.Empty );
+        }
+
 	    private System.Windows.Forms.TextBox ignoreTextBox;
         private System.Windows.Forms.Label ignoreLabel;
-	
+        /// <summary>
+        /// Flag for enabling/disabling save button
+        /// </summary>
+        private bool dirty;
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-
-        private void ignoreTextBox_TextChanged(object sender, System.EventArgs e)
-        {
-            if (Changed != null)
-			    Changed( this, EventArgs.Empty );
-
-        }
-
-		
-
 
 	}
 }

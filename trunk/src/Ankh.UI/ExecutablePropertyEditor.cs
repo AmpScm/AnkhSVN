@@ -27,12 +27,22 @@ namespace Ankh.UI
 		public void Clear()
 		{
             this.executableCheckBox.Checked = false;
+            this.dirty = false;
 		}
 
 		public bool Valid
 		{
-			get{ return this.executableCheckBox.Checked; }
-		}
+			
+            get
+            { 
+                if (!this.dirty)
+                {
+                    return false;
+                }
+                else 
+                    return this.executableCheckBox.Checked; 
+            }
+        }
 
 		public PropertyItem PropertyItem
 		{
@@ -50,6 +60,7 @@ namespace Ankh.UI
 			set
 			{
                 this.executableCheckBox.Checked = true;
+                this.dirty = false;
 			}
 		}
 
@@ -100,20 +111,26 @@ namespace Ankh.UI
 
         }
 		#endregion
+        private void executableCheckBox_Click(object sender, System.EventArgs e)
+        {
+            // Enables save button
+            this.dirty = true;
+            if (Changed != null)
+                Changed (this, EventArgs.Empty );
+        }
 
         private System.Windows.Forms.CheckBox executableCheckBox;
-
+        /// <summary>
+        /// Flag for enabling/disabling save button
+        /// </summary>
+        private bool dirty;
 		
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-        private void executableCheckBox_Click(object sender, System.EventArgs e)
-        {
-          if (Changed != null)
-				Changed (this, EventArgs.Empty );
-        }
+      
 	}
 	
 

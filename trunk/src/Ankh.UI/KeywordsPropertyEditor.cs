@@ -30,6 +30,7 @@ namespace Ankh.UI
             this.revisionCheckBox.Checked = false;
             this.urlCheckBox.Checked = false;
             this.allCheckBox.Checked = false;
+            this.dirty = false;
 		}
 
         /// <summary>
@@ -39,11 +40,18 @@ namespace Ankh.UI
 		{
 			get
             { 
-                return this.dateCheckBox.Checked || 
-                     this.revisionCheckBox.Checked ||
-                     this.authorCheckBox.Checked ||
-                     this.urlCheckBox.Checked ||
-                     this.allCheckBox.Checked; 
+                if (!this.dirty)
+                {
+                    return false;
+                }
+                else 
+                {
+                    return this.dateCheckBox.Checked || 
+                        this.revisionCheckBox.Checked ||
+                        this.authorCheckBox.Checked ||
+                        this.urlCheckBox.Checked ||
+                        this.allCheckBox.Checked; 
+                }
             }
 		}
         /// <summary>
@@ -96,7 +104,8 @@ namespace Ankh.UI
                 this.revisionCheckBox.Checked = (item.Text).IndexOf( "Revision" ) != -1;
                 this.urlCheckBox.Checked = (item.Text).IndexOf( "URL") != -1;
                 this.allCheckBox.Checked = (item.Text).IndexOf( "Id" ) != -1;
-			}
+			    this.dirty = false;
+            }
 		}
 
         /// <summary>
@@ -211,18 +220,22 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void CheckBox_Click(object sender, System.EventArgs e)
         {
+            // Enables save button
+            this.dirty = true;
             if (Changed != null)
                 Changed( this, EventArgs.Empty );
         }
 
 		private System.Windows.Forms.Label keywordLabel;
-        
         private System.Windows.Forms.CheckBox dateCheckBox;
         private System.Windows.Forms.CheckBox urlCheckBox;
         private System.Windows.Forms.CheckBox revisionCheckBox;
         private System.Windows.Forms.CheckBox allCheckBox;
         private System.Windows.Forms.CheckBox authorCheckBox;
-	
+        /// <summary>
+        /// Flag for enabling/disabling save button
+        /// </summary>
+        private bool dirty;	
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>

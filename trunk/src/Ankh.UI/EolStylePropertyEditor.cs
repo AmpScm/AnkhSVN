@@ -33,7 +33,12 @@ namespace Ankh.UI
 		{
             get 
             {
-                return true;
+                if (!this.dirty)
+                {
+                    return false;
+                }
+                else 
+                    return true;
             }
 
 		}
@@ -54,6 +59,7 @@ namespace Ankh.UI
 			set
 			{
                 TextPropertyItem item = (TextPropertyItem)value;
+                this.dirty = false;
 			}
 		}
 
@@ -148,6 +154,8 @@ namespace Ankh.UI
 
         private void RadioButton_CheckedChanged(object sender, System.EventArgs e)
         {
+            // Enables save button
+            this.dirty = true;
             if ( Changed != null )
                 Changed(this, EventArgs.Empty);
     
@@ -161,6 +169,10 @@ namespace Ankh.UI
         private System.Windows.Forms.RadioButton crRadioButton;
         private System.Windows.Forms.RadioButton crlfRdioButton;
         private string selectedValue;
+        /// <summary>
+        /// Flag for enabling/disabling save button
+        /// </summary>
+        private bool dirty;
 		
 		/// <summary> 
 		/// Required designer variable.
