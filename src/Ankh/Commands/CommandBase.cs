@@ -83,8 +83,8 @@ namespace Ankh.Commands
             string configDir = Path.GetDirectoryName(context.ConfigLoader.ConfigPath);
             string path = Path.Combine( configDir, name  );
 
-            //if ( !File.Exists( path ) )
-            CreateTransformFile( path, name );
+            if ( !File.Exists( path ) )
+                CreateTransformFile( path, name );
 
             Debug.Assert( File.Exists( path ) );
 
