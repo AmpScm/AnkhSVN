@@ -30,8 +30,12 @@ namespace Ankh.RepositoryExplorer
             this.repositoryExplorer.RemoveClicked += new EventHandler(RemoveClicked);
             this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
             this.repositoryExplorer.SelectionChanged +=new EventHandler(SelectionChanged);
+
+            this.context.Unloading += new EventHandler(ContextUnloading);
             
             this.directories = new Hashtable();
+
+            this.LoadReposRoots();
         }
 
         /// <summary>
@@ -153,7 +157,7 @@ namespace Ankh.RepositoryExplorer
         /// <param name="sender"></param>
         /// <param name="args"></param>
         private void AddClicked(object sender, EventArgs args )
-        {
+        {           
             string url = this.repositoryExplorer.Url;
             Revision revision = this.repositoryExplorer.Revision;
             INode rootNode = new RootNode(url, revision);
@@ -173,6 +177,46 @@ namespace Ankh.RepositoryExplorer
         }
 
         /// <summary>
+        /// Load the stored roots in the config dir.
+        /// </summary>
+        private void LoadReposRoots()
+        {
+            string[] roots = this.context.ConfigLoader.LoadReposExplorerRoots();
+            foreach( string root in roots  ) 
+            {                
+                string[] components = root.Split( '|' );
+
+                // silently ignore invalid entries
+                INode node;
+                if ( components.Length == 2 )
+                    node = new RootNode( components[0], Revision.Parse(components[1]) );
+                else if ( components.Length == 1 )
+                    node = new RootNode( components[0], Revision.Head );
+                else
+                    continue;
+
+                this.repositoryExplorer.AddRoot( node.Url, node );
+            }
+        }
+
+        /// <summary>
+        /// The addin is unloading. Make sure to store the repos explorer
+        /// root nodes in the config dir.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ContextUnloading(object sender, EventArgs e)
+        {
+            ArrayList list = new ArrayList();
+            IRepositoryTreeNode[] rootNodes = this.repositoryExplorer.Roots;
+            foreach( INode node in rootNodes )
+                list.Add( node.Url + "|" + node.Revision );
+
+            this.context.ConfigLoader.SaveReposExplorerRoots(
+                (string[])list.ToArray(typeof(string)));
+        }
+
+        /// <summary>
         /// The background listing checkbox' state has changed.
         /// </summary>
         /// <param name="sender"></param>
@@ -189,6 +233,7 @@ namespace Ankh.RepositoryExplorer
             this.window.SetSelectionContainer( ref this.selection );
         }
 
+        #region class ListRunner
         /// <summary>
         /// Used for running the list action in a separate thread.
         /// </summary>
@@ -217,7 +262,9 @@ namespace Ankh.RepositoryExplorer
             private INode node;
             private DirectoryEntry[] entries;
         }
+        #endregion
 
+        #region class BackgroundLister
         /// <summary>
         /// Used for doing a breadth first listing of a 
         /// repository recursively in the background.
@@ -309,6 +356,7 @@ namespace Ankh.RepositoryExplorer
             private Queue queue;
             private static int threadCount = 1;
         }
+        #endregion
 
         /// <summary>
         /// Used for ordering the items in the repository explorer.
