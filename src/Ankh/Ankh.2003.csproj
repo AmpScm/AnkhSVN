@@ -50,7 +50,7 @@
                     ConfigurationOverrideFile = ""
                     DefineConstants = "TRACE;VS2003;ALT_ADMIN_DIR"
                     DocumentationFile = ""
-                    DebugSymbols = "false"
+                    DebugSymbols = "true"
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
                     NoStdLib = "false"
