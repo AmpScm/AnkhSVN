@@ -178,15 +178,15 @@ namespace Ankh
             actionStatus[NotifyAction.FailedRevert] =           "Revert failed";
             actionStatus[NotifyAction.Resolved] =                "Resolved";
             actionStatus[NotifyAction.Skip] =                   "Skipped";
-            actionStatus[NotifyAction.UpdateDelete] =           "Update deleted";
-            actionStatus[NotifyAction.UpdateAdd] =              "Update added";
+            actionStatus[NotifyAction.UpdateDelete] =           "Deleted";
+            actionStatus[NotifyAction.UpdateAdd] =              "Added";
             actionStatus[NotifyAction.UpdateUpdate] =           "Updated";
             actionStatus[NotifyAction.UpdateCompleted] =        null;
             actionStatus[NotifyAction.UpdateExternal] =         "Updated external";
-            actionStatus[NotifyAction.CommitModified] =         "Commit modified";
-            actionStatus[NotifyAction.CommitAdded] =            "Commit added";
-            actionStatus[NotifyAction.CommitDeleted] =          "Commit deleted";
-            actionStatus[NotifyAction.CommitReplaced] =         "Commit replaced";
+            actionStatus[NotifyAction.CommitModified] =         "Modified";
+            actionStatus[NotifyAction.CommitAdded] =            "Added";
+            actionStatus[NotifyAction.CommitDeleted] =          "Deleted";
+            actionStatus[NotifyAction.CommitReplaced] =         "Replaced";
             actionStatus[NotifyAction.CommitPostfixTxDelta] =   null;
         }
         
