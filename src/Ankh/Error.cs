@@ -39,6 +39,14 @@ namespace Ankh
                     "Authorization failed", MessageBoxButtons.OK,
                     MessageBoxIcon.Warning );
             }
+            else if ( ex is ResourceOutOfDateException )
+            {
+                MessageBox.Show(
+                    "One or more of your local resources are out of date. " + 
+                    "You need to run Update before you can proceed with the operation",
+                    "Resource(s) out of date", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning );
+            }
             else
             {
 #if REPORTERROR

@@ -39,9 +39,20 @@ namespace Ankh.Commands
             WorkingCopyResource[] resources = (WorkingCopyResource[])
                 v.WorkingCopyResources.ToArray( typeof(WorkingCopyResource) );
 
-            WorkingCopyResource.Commit( resources, true );
+            try
+            {
+                WorkingCopyResource.Commit( resources, true );
+            }
+            catch( NSvn.Common.SvnException )
+            {
+                this.context.OutputPane.WriteLine( "Commit aborted" );
+                throw;
+            }
+            finally
+            {
+                this.context.OutputPane.EndActionText();
+            }
 
-            this.context.OutputPane.EndActionText();
             context.SolutionExplorer.UpdateSelectionStatus();
         }
         
