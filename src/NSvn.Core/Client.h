@@ -223,21 +223,22 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
 	        static void Resolve(String* path, bool recursive, ClientContext* context);
-            /*
-
+        
+/*
             ///<summary>Copy a file/directory.</summary>
             ///<param name="srcPath">Path to the file/directory to be copied.</param>
             ///<param name="srcRevision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
             ///                         for more information.</param>
             ///<param name="dst">Path to the destination.</param>
+            ///<param name="optionalAdmAccess></param>  //New 6.3.2003
             ///<param name="context">A client context object, which holds client specific 
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns> 
-	        static CommitInfo* Copy(String* srcPath, Revision* srcRevision, String* dst, 
-                ClientContext* context);
+	        static CommitInfo* Copy(String* srcPath, Revision* srcRevision, String* dst, ? optionalAdmAccess
+                ClientContext* context); 
 
 
             ///<summary>Move a file/directory.</summary>
@@ -331,10 +332,10 @@ namespace NSvn
             ///<returns></returns>
 	        static StringDictionary* RevPropList(String* url, Revision* revision, RevisionNumber* setRev, 
                 ClientContext* context);
-
+*/
             ///<summary>Export the contents of either a subversion repository or a subversion. </summary>
             ///         working copy into a directory with no svn administrative directories (.svn).</summary> 
-            ///<param name="url">Path to the files/directory to be exported.</param>
+            ///<param name="from">Path to the files/directory to be exported.</param>
             ///<param name="to">Path to the directory where you wish to create 
             ///                 the exported tree.</param>
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
@@ -343,9 +344,9 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>       
-	        static void Export(String* url, String* to, Revision* revision, ClientContext* context);
-
-            ///<summary>List the contents of an url or (path).</summary>
+	        static void Export(String* from, String* to, Revision* revision, ClientContext* context);
+/*
+            ///<summary>List the contents of an url or path.</summary>
             ///<param name="url">Path to the files/directory to be listed.</param>  
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
             ///                         for more information.</param>
@@ -355,7 +356,7 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-	        ///<returns></returns>
+	        ///<returns>String table of the paths to be listed.</returns>
 	        static String* Ls(String* url, Revision* revision, bool recurse, ClientContext* context)[];
 
             ///<summary>List the contents of a file.</summary>

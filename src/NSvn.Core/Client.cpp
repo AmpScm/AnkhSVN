@@ -139,6 +139,16 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath,
     else
         return CommitInfo::Invalid;
 }
+// implementation of Client::Export
+void NSvn::Core::Client::Export(String* from, String* to, Revision* revision, ClientContext* context)
+{
+    Pool pool;
+    String* trueSrcPath = CanonicalizePath( from );
+    String* trueDstPath = CanonicalizePath( to );
+    
+    HandleError( svn_client_export ( StringHelper(trueSrcPath), StringHelper( trueDstPath ), 
+        revision->ToSvnOptRevision( pool ), context->ToSvnContext( pool ), pool ) );
+}
 
 // Converts array of .NET strings to apr array of const char
 apr_array_header_t* NSvn::Core::Client::StringArrayToAprArray( String* strings[], Pool& pool )
