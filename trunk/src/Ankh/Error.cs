@@ -11,7 +11,7 @@ namespace Ankh
     /// <summary>
     /// Encapsulates error handling functionality.
     /// </summary>
-    public class Error
+    internal class Error
     {
         private Error()
         {
