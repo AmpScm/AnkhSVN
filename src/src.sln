@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh", "Ankh\Ankh.csproj", 
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AnkhSetup", "Ankh\AnkhSetup\AnkhSetup.vdproj", "{D25DCD7E-FD6D-4D0E-9649-929F9A6187F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn", "NSvn\NSvn.csproj", "{1C779D04-4D97-414E-93DF-F63E52660B2C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSvn.Core", "NSvn.Core\NSvn.Core.vcproj", "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -29,8 +33,17 @@ Global
 		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Release.Build.0 = Release|.NET
 		{D25DCD7E-FD6D-4D0E-9649-929F9A6187F7}.Debug.ActiveCfg = Debug
 		{D25DCD7E-FD6D-4D0E-9649-929F9A6187F7}.Release.ActiveCfg = Release
+		{1C779D04-4D97-414E-93DF-F63E52660B2C}.Debug.ActiveCfg = Debug|.NET
+		{1C779D04-4D97-414E-93DF-F63E52660B2C}.Debug.Build.0 = Debug|.NET
+		{1C779D04-4D97-414E-93DF-F63E52660B2C}.Release.ActiveCfg = Release|.NET
+		{1C779D04-4D97-414E-93DF-F63E52660B2C}.Release.Build.0 = Release|.NET
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}.Debug.ActiveCfg = Debug|Win32
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}.Debug.Build.0 = Debug|Win32
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}.Release.ActiveCfg = Release|Win32
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		ThisSolutionNotes = 
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
