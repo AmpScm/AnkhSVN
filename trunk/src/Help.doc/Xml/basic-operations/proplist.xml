@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
-<doc title="List">
+<doc title="Property list">
     <section>
-            List directory entries of a URL.
+            Lists all properties.
             <br/><br/>
             <p>
                 <b>Description</b>
                     <br/>
-                    List directory entries of a URL. 
-                    If URL is a file, just file entry will be displayed. SVN list does not work on paths 
-                    in your working copy.
+                    Lists all properties on files, directories, or revisions.
+                    <br/>
+                    See <link url="../using-ankh/soecial_properties.xml">Special properties</link> for a list of
+                    predefined properties supported by Subversion.
                     <br/><br/>
                     <b>Changes</b>
                     <br/>
-                    Nothing.
+                    None.
             </p>
         </section>
         <section>

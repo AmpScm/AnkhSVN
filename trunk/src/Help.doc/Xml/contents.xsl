@@ -131,6 +131,10 @@
     <xsl:template match="i">
         <i><xsl:apply-templates/></i>
     </xsl:template> 
+    
+    <xsl:template match="hr">
+        <hr><xsl:apply-templates/></hr>
+    </xsl:template> 
 </xsl:stylesheet>
 
   

@@ -12,14 +12,15 @@
                     working copy. If TARGET is an URL the directory is created in the repository 
                     via an immediate commit. In both cases all the intermediate directories must 
                     already exist.
-                <br/><br/>
-                <b>Changes</b>
-                <br/>
-                Working copy, repository if operating on a URL
+                    <br/><br/>
+                    <b>Changes</b>
+                    <br/>
+                    Working copy, repository if operating on a URL.
             </p>
         </section>
         <section>
             <p>
+            <hr></hr>
                 <i>(from "Subversion:The Definitive Guide" - <link url="http://svnbook.red-bean.com/html-chunk/">
                 svnbook.red-bean.com/html-chunk/</link>)</i>
             </p>

@@ -6,18 +6,20 @@
             <br/><br/>
             <p>
                 <b>Description</b>
-                <br/>
-                Recursively clean up the working copy, removing locks resuming unfinished operations. 
-                If you ever get a working copy locked error, run this command to remove stale locks and 
-                get your working copy into a useable state again. 
-                <br/><br/><br/>
-                <b>Changes</b>
-                Working copy
+                    <br/>
+                    Recursively clean up the working copy, removing locks resuming unfinished operations. 
+                    If you ever get a working copy locked error, run this command to remove stale locks and 
+                    get your working copy into a useable state again. 
+                    <br/><br/>
+                    <b>Changes</b>
+                    <br/>
+                    Working copy.
             </p>
     
         </section>
         <section>
             <p>
+            <hr></hr>
                 <i>(from "Subversion:The Definitive Guide" - <link url="http://svnbook.red-bean.com/html-chunk/">
                 svnbook.red-bean.com/html-chunk/</link>)</i></p>
     </section>

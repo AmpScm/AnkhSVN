@@ -15,17 +15,15 @@
                     defines the two sources to be compared.
                     <br/><br/>
                     PATH is the working copy path that will receive the changes. 
-                <br/><br/>
-                <b>Changes</b>
-                <br/>
-                Working copy
-
-
+                    <br/><br/>
+                    <b>Changes</b>
+                    <br/>
+                    Working copy.
             </p>
-    
         </section>
         <section>
             <p>
+            <hr></hr>
                 <i>(from "Subversion:The Definitive Guide" - <link url="http://svnbook.red-bean.com/html-chunk/">
                 svnbook.red-bean.com/html-chunk/</link>)</i>
             </p>
