@@ -161,6 +161,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Ankh.UI.wxs"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
