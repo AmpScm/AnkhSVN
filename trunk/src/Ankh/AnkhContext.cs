@@ -25,6 +25,8 @@ namespace Ankh
             this.addin = addin;
             this.context = new SvnContext( this );
 
+            this.outputPane = new OutputPaneWriter( dte, "Subversion" );
+
             this.CreateRepositoryExplorer();
 
             // is there a solution opened?
@@ -59,6 +61,15 @@ namespace Ankh
         {
             get{ return this.solutionExplorer; }
         }
+
+        /// <summary>
+        /// The output pane.
+        /// </summary>
+        public OutputPaneWriter OutputPane
+        {
+            get{ return this.outputPane; }
+        }
+
 
         /// <summary>
         /// The SvnContext object used by the NSvn objects.
@@ -157,6 +168,8 @@ namespace Ankh
         private EnvDTE.AddIn addin;
 
         private IList eventSinks;
+
+        private OutputPaneWriter outputPane;
 
         //required to ensure events will still fire
         private SolutionEvents solutionEvents;
