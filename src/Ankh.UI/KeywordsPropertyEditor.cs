@@ -19,6 +19,9 @@ namespace Ankh.UI
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
+
+            this.components = new System.ComponentModel.Container();
+            CreateMyToolTip();
 		}
         
         /// <summary>
@@ -225,6 +228,31 @@ namespace Ankh.UI
             this.dirty = true;
             if (Changed != null)
                 Changed( this, EventArgs.Empty );
+        }
+
+        private void CreateMyToolTip()
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip conflictToolTip = new ToolTip(this.components);
+
+            // Set up the delays in milliseconds for the ToolTip.
+            conflictToolTip.AutoPopDelay = 5000;
+            conflictToolTip.InitialDelay = 1000;
+            conflictToolTip.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            conflictToolTip.ShowAlways = true;
+         
+            // Set up the ToolTip text for the Button and Checkbox.
+            conflictToolTip.SetToolTip( this.dateCheckBox, 
+                "Keyword substitution of $LastChangedDate$ in the text ($LastChangedDate: 2002-07-22 20:16:37 -0700 (Mon, 22 Jul 2002) $");
+            conflictToolTip.SetToolTip( this.revisionCheckBox, 
+                "Keyword substitution of $LastChangedRevision$ in the text ($LastChangedRevision: 144 $)");
+            conflictToolTip.SetToolTip( this.authorCheckBox, 
+                "Keyword substitution of $LastChangedBy$ in the text ($LastChangedBy: Caren $))");
+            conflictToolTip.SetToolTip( this.urlCheckBox, 
+                "Keyword substitution of $HeadURL$$ in the text ($HeadURL: http://svn.collab.net/repos/trunk/README $)");
+            conflictToolTip.SetToolTip( this.allCheckBox, 
+                "Keyword substitution of $Id$ in the text ($Id$)");
         }
 
 		private System.Windows.Forms.Label keywordLabel;

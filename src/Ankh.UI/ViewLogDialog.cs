@@ -27,7 +27,8 @@ namespace Ankh.UI
                                                                  RevisionChoice.Date,
                                                                  RevisionChoice.Base,
                                                                  RevisionChoice.Commited});
-
+            this.components = new System.ComponentModel.Container();
+            CreateMyToolTip();
 		}
 
 		/// <summary>
@@ -55,6 +56,49 @@ namespace Ankh.UI
 			base.Dispose( disposing );
 		}
 
+        private void CreateMyToolTip()
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip viewLogToolTip = new ToolTip(this.components);
+
+            // Set up the delays in milliseconds for the ToolTip.
+            viewLogToolTip.AutoPopDelay = 5000;
+            viewLogToolTip.InitialDelay = 1000;
+            viewLogToolTip.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            viewLogToolTip.ShowAlways = true;
+         
+            // Set up the ToolTip text for the Button and Checkbox.
+            viewLogToolTip.SetToolTip( this.fromRevisionComboBox, 
+                "Select or print a revision number that will start the log" ); 
+            viewLogToolTip.SetToolTip( this.toRevisionComboBox, 
+                "Select or print a revision number that will end the log" );
+            viewLogToolTip.SetToolTip( this.singleRevisionCheckBox, 
+                "Only one single revision is listed in the log ( false: activates the To revision field )" );
+            viewLogToolTip.SetToolTip( this.fromDateTimePicker, 
+                "Select a start date" );
+            viewLogToolTip.SetToolTip( this.toDateTimePicker, 
+                "Select an end date" );
+            viewLogToolTip.SetToolTip( this.showRevisionCheckBox, 
+                "Shows revision number in the log" );
+            viewLogToolTip.SetToolTip( this.showDateCheckBox, 
+                "Shows date in the log" );
+            viewLogToolTip.SetToolTip( this.showAuthorCheckBox, 
+                "Shows author in the log" ); 
+            viewLogToolTip.SetToolTip( this.showMessageCheckBox, 
+                "Shows message in the log" ); 
+            viewLogToolTip.SetToolTip( this.showModifiedFilesCheckBox, 
+                "Shows which files that have been changed" ); 
+            viewLogToolTip.SetToolTip( this.getLogButton, 
+                "Will generate a log");
+            viewLogToolTip.SetToolTip( this.logRichTextBox, 
+                "Lists log-information related to selected revisions");
+            viewLogToolTip.SetToolTip( this.closeButton, 
+                "");
+
+        }
+
+
 
 		
         #region Windows Form Designer generated code
@@ -81,6 +125,7 @@ namespace Ankh.UI
             this.showModifiedFilesCheckBox = new System.Windows.Forms.CheckBox();
             this.fromDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.toDateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.selectRevisionLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -93,7 +138,7 @@ namespace Ankh.UI
             // 
             // fromRevisionComboBox
             // 
-            this.fromRevisionComboBox.Location = new System.Drawing.Point(147, 8);
+            this.fromRevisionComboBox.Location = new System.Drawing.Point(41, 24);
             this.fromRevisionComboBox.Name = "fromRevisionComboBox";
             this.fromRevisionComboBox.Size = new System.Drawing.Size(121, 21);
             this.fromRevisionComboBox.TabIndex = 1;
@@ -103,7 +148,7 @@ namespace Ankh.UI
             // toRevisionComboBox
             // 
             this.toRevisionComboBox.Enabled = false;
-            this.toRevisionComboBox.Location = new System.Drawing.Point(147, 40);
+            this.toRevisionComboBox.Location = new System.Drawing.Point(41, 56);
             this.toRevisionComboBox.Name = "toRevisionComboBox";
             this.toRevisionComboBox.Size = new System.Drawing.Size(121, 21);
             this.toRevisionComboBox.TabIndex = 3;
@@ -114,7 +159,7 @@ namespace Ankh.UI
             // 
             this.showRevisionCheckBox.Checked = true;
             this.showRevisionCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showRevisionCheckBox.Location = new System.Drawing.Point(0, 96);
+            this.showRevisionCheckBox.Location = new System.Drawing.Point(0, 122);
             this.showRevisionCheckBox.Name = "showRevisionCheckBox";
             this.showRevisionCheckBox.Size = new System.Drawing.Size(88, 24);
             this.showRevisionCheckBox.TabIndex = 4;
@@ -122,7 +167,7 @@ namespace Ankh.UI
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(107, 8);
+            this.label2.Location = new System.Drawing.Point(1, 24);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 23);
             this.label2.TabIndex = 7;
@@ -130,7 +175,7 @@ namespace Ankh.UI
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(107, 40);
+            this.label3.Location = new System.Drawing.Point(1, 56);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(24, 23);
             this.label3.TabIndex = 8;
@@ -140,7 +185,7 @@ namespace Ankh.UI
             // 
             this.singleRevisionCheckBox.Checked = true;
             this.singleRevisionCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.singleRevisionCheckBox.Location = new System.Drawing.Point(272, 8);
+            this.singleRevisionCheckBox.Location = new System.Drawing.Point(166, 24);
             this.singleRevisionCheckBox.Name = "singleRevisionCheckBox";
             this.singleRevisionCheckBox.Size = new System.Drawing.Size(112, 24);
             this.singleRevisionCheckBox.TabIndex = 2;
@@ -151,16 +196,18 @@ namespace Ankh.UI
             // 
             this.logRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
-            this.logRichTextBox.Location = new System.Drawing.Point(0, 128);
+            this.logRichTextBox.Location = new System.Drawing.Point(0, 160);
             this.logRichTextBox.Name = "logRichTextBox";
+            this.logRichTextBox.ReadOnly = true;
             this.logRichTextBox.Size = new System.Drawing.Size(592, 296);
             this.logRichTextBox.TabIndex = 11;
             this.logRichTextBox.Text = "";
             // 
             // closeButton
             // 
+            this.closeButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.closeButton.Location = new System.Drawing.Point(488, 440);
+            this.closeButton.Location = new System.Drawing.Point(488, 472);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(94, 23);
             this.closeButton.TabIndex = 10;
@@ -168,7 +215,7 @@ namespace Ankh.UI
             // 
             // getLogButton
             // 
-            this.getLogButton.Location = new System.Drawing.Point(472, 96);
+            this.getLogButton.Location = new System.Drawing.Point(472, 122);
             this.getLogButton.Name = "getLogButton";
             this.getLogButton.Size = new System.Drawing.Size(99, 23);
             this.getLogButton.TabIndex = 9;
@@ -178,7 +225,7 @@ namespace Ankh.UI
             // 
             this.showDateCheckBox.Checked = true;
             this.showDateCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showDateCheckBox.Location = new System.Drawing.Point(96, 96);
+            this.showDateCheckBox.Location = new System.Drawing.Point(96, 122);
             this.showDateCheckBox.Name = "showDateCheckBox";
             this.showDateCheckBox.Size = new System.Drawing.Size(48, 24);
             this.showDateCheckBox.TabIndex = 5;
@@ -188,7 +235,7 @@ namespace Ankh.UI
             // 
             this.showAuthorCheckBox.Checked = true;
             this.showAuthorCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showAuthorCheckBox.Location = new System.Drawing.Point(152, 96);
+            this.showAuthorCheckBox.Location = new System.Drawing.Point(152, 122);
             this.showAuthorCheckBox.Name = "showAuthorCheckBox";
             this.showAuthorCheckBox.Size = new System.Drawing.Size(64, 24);
             this.showAuthorCheckBox.TabIndex = 6;
@@ -196,8 +243,9 @@ namespace Ankh.UI
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(0, 67);
+            this.label4.Location = new System.Drawing.Point(0, 105);
             this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(100, 15);
             this.label4.TabIndex = 17;
             this.label4.Text = "Show:";
             // 
@@ -205,14 +253,14 @@ namespace Ankh.UI
             // 
             this.showMessageCheckBox.Checked = true;
             this.showMessageCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showMessageCheckBox.Location = new System.Drawing.Point(224, 96);
+            this.showMessageCheckBox.Location = new System.Drawing.Point(224, 122);
             this.showMessageCheckBox.Name = "showMessageCheckBox";
             this.showMessageCheckBox.TabIndex = 7;
             this.showMessageCheckBox.Text = "Message";
             // 
             // showModifiedFilesCheckBox
             // 
-            this.showModifiedFilesCheckBox.Location = new System.Drawing.Point(336, 96);
+            this.showModifiedFilesCheckBox.Location = new System.Drawing.Point(328, 122);
             this.showModifiedFilesCheckBox.Name = "showModifiedFilesCheckBox";
             this.showModifiedFilesCheckBox.TabIndex = 8;
             this.showModifiedFilesCheckBox.Text = "Modified files";
@@ -220,23 +268,30 @@ namespace Ankh.UI
             // fromDateTimePicker
             // 
             this.fromDateTimePicker.Enabled = false;
-            this.fromDateTimePicker.Location = new System.Drawing.Point(384, 8);
+            this.fromDateTimePicker.Location = new System.Drawing.Point(384, 28);
             this.fromDateTimePicker.Name = "fromDateTimePicker";
             this.fromDateTimePicker.TabIndex = 20;
             // 
             // toDateTimePicker
             // 
             this.toDateTimePicker.Enabled = false;
-            this.toDateTimePicker.Location = new System.Drawing.Point(384, 41);
+            this.toDateTimePicker.Location = new System.Drawing.Point(384, 61);
             this.toDateTimePicker.Name = "toDateTimePicker";
             this.toDateTimePicker.TabIndex = 21;
+            // 
+            // selectRevisionLabel
+            // 
+            this.selectRevisionLabel.Name = "selectRevisionLabel";
+            this.selectRevisionLabel.TabIndex = 22;
+            this.selectRevisionLabel.Text = "Select:";
             // 
             // ViewLogDialog
             // 
             this.AcceptButton = this.getLogButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(592, 469);
+            this.ClientSize = new System.Drawing.Size(592, 501);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.selectRevisionLabel,
                                                                           this.toDateTimePicker,
                                                                           this.fromDateTimePicker,
                                                                           this.showModifiedFilesCheckBox,
@@ -279,6 +334,7 @@ namespace Ankh.UI
         private System.Windows.Forms.CheckBox showModifiedFilesCheckBox;
         private System.Windows.Forms.CheckBox singleRevisionCheckBox;
         private System.ComponentModel.IContainer components;
+        private System.Windows.Forms.Label selectRevisionLabel;
         private static readonly Regex validateRevisionNumber = 
             new Regex(@"\w{1,}", RegexOptions.Compiled);
        

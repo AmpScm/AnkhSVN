@@ -21,6 +21,9 @@ namespace Ankh.UI
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
 
+            this.components = new System.ComponentModel.Container();
+            CreateMyToolTip();
+
 			// TODO: Add any initialization after the InitForm call
 
 		}
@@ -126,7 +129,23 @@ namespace Ankh.UI
                 Changed( this, EventArgs.Empty );
         }
 
-       
+
+        private void CreateMyToolTip()
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip conflictToolTip = new ToolTip(this.components);
+
+            // Set up the delays in milliseconds for the ToolTip.
+            conflictToolTip.AutoPopDelay = 5000;
+            conflictToolTip.InitialDelay = 1000;
+            conflictToolTip.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            conflictToolTip.ShowAlways = true;
+         
+            // Set up the ToolTip text for the Button and Checkbox.
+            conflictToolTip.SetToolTip( this.valueTextBox, 
+                "Enter value of your self defined property" );      
+        }
 	}
 }
 

@@ -20,6 +20,9 @@ namespace Ankh.UI
 			//
 			InitializeComponent();
 
+            this.components = new System.ComponentModel.Container();
+            CreateMyToolTip();
+
             SetNewEditor(new PlainPropertyEditor());
 			
             this.propItems = new ArrayList();
@@ -433,6 +436,27 @@ namespace Ankh.UI
                 }
             }   
         }
+
+        private void CreateMyToolTip()
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip conflictToolTip = new ToolTip(this.components);
+
+            // Set up the delays in milliseconds for the ToolTip.
+            conflictToolTip.AutoPopDelay = 5000;
+            conflictToolTip.InitialDelay = 1000;
+            conflictToolTip.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            conflictToolTip.ShowAlways = true;
+         
+            // Set up the ToolTip text for the Button and Checkbox.
+            conflictToolTip.SetToolTip( this.nameCombo, "Select or compose your own property name");
+            conflictToolTip.SetToolTip( this.newButton, "Clear name and value fields");
+            conflictToolTip.SetToolTip( this.saveButton, "Save property name and value");
+            conflictToolTip.SetToolTip( this.deleteButton, "Delete selected property");
+            conflictToolTip.SetToolTip( this.propListView, "List of defined properties");
+         }
+
 
         private ArrayList propItems;
 
