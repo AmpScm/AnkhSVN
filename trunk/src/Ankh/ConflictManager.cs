@@ -16,6 +16,17 @@ namespace Ankh
         public ConflictManager (AnkhContext context)
         {                         
             this.context = context;
+
+            // Get the task event list and add an event for this task list item to it.
+            // This needs to be kept around so that there is a reference to it and
+            // won't get garbage collected because it's in unmanaged code
+            this.taskListEvents = (TaskListEvents)  this.context.DTE.Events.get_TaskListEvents(
+                ConflictTaskItemCategory);
+
+            // add an event for this task list item to the taskEventList.
+            this.taskListEvents.TaskNavigated +=new 
+                _dispTaskListEvents_TaskNavigatedEventHandler(TaskNavigated);
+
         }
 
         /// <summary>
@@ -37,10 +48,8 @@ namespace Ankh
                 vsTaskPriority.vsTaskPriorityHigh, 
                 vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
 
-            // Get the task event list and add an event for this task list item to it.
-            TaskListEvents taskListEvents = (TaskListEvents)  this.context.DTE.Events.get_TaskListEvents(
-                "ConflictTaskItemCategory");
-            taskListEvents.TaskNavigated +=new 
+            // add an event for this task list item to the taskEventList.
+            this.taskListEvents.TaskNavigated +=new 
                 _dispTaskListEvents_TaskNavigatedEventHandler(TaskNavigated);
 
         }
@@ -156,5 +165,6 @@ namespace Ankh
         private const string ConflictTaskItemCategory = "Conflict"; 
         private const string SvnConflictString = "<<<<<<< .mine"; 
         private const int NotFound = -1;
+        private TaskListEvents taskListEvents; 
     }
 }
