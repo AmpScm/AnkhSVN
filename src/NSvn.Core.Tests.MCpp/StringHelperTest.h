@@ -22,6 +22,10 @@ namespace NSvn{
                     //Test that the string can be copied
                     [Test]
                     void TestCopying();
+
+                    ///<summary>Test that the string can be copied</summary>
+                    [Test]
+                    void TestAssignment();
                 };
             }
         }
