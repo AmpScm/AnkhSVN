@@ -102,7 +102,8 @@ namespace Ankh.UI
             this.plainLabel.Name = "plainLabel";
             this.plainLabel.Size = new System.Drawing.Size(264, 23);
             this.plainLabel.TabIndex = 1;
-            this.plainLabel.Text = "Value:";
+            this.plainLabel.Text = "Enter values:";
+            this.plainLabel.Click += new System.EventHandler(this.plainLabel_Click);
             // 
             // PlainPropertyEditor
             // 
@@ -145,6 +146,11 @@ namespace Ankh.UI
             // Set up the ToolTip text for the Button and Checkbox.
             conflictToolTip.SetToolTip( this.valueTextBox, 
                 "Enter value of your self defined property" );      
+        }
+
+        private void plainLabel_Click(object sender, System.EventArgs e)
+        {
+        
         }
 	}
 }

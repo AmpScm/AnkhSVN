@@ -10,15 +10,14 @@ namespace Ankh.UI
 	/// <summary>
 	/// Dialog for editing svn properties. 
 	/// </summary>
-	public class PropertyEditorDialog : System.Windows.Forms.Form
-	{
-        
-		public PropertyEditorDialog()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+    public class PropertyEditorDialog : System.Windows.Forms.Form
+    {
+        public PropertyEditorDialog()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
@@ -33,8 +32,10 @@ namespace Ankh.UI
             this.nameCombo.Items.Add(new KeywordsPropertyEditor());
             this.nameCombo.Items.Add(new EolStylePropertyEditor());
             this.nameCombo.Items.Add(new ExternalsPropertyEditor()); 
-            //this.nameCombo.SelectedIndex = this.nameCombo.Items.IndexOf();
-         }
+           
+            //Set default value in list to first item in nameCombo 
+            this.nameCombo.SelectedIndex = 0;        
+        }
 
         /// <summary>
         /// Sets and gets property items.
@@ -54,28 +55,28 @@ namespace Ankh.UI
             }
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameCombo = new System.Windows.Forms.ComboBox();
             this.propListView = new System.Windows.Forms.ListView();
@@ -87,6 +88,7 @@ namespace Ankh.UI
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
             this.editorPanel = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -191,6 +193,14 @@ namespace Ankh.UI
             this.editorPanel.TabIndex = 2;
             this.editorPanel.TabStop = true;
             // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(192, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(328, 23);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Select an item from the list or type in your own property name";
+            // 
             // PropertyEditorDialog
             // 
             this.AcceptButton = this.saveButton;
@@ -198,6 +208,7 @@ namespace Ankh.UI
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(538, 447);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.label1,
                                                                           this.editorPanel,
                                                                           this.saveButton,
                                                                           this.cancelButton,
@@ -244,8 +255,8 @@ namespace Ankh.UI
 
             public void VisitTextPropertyItem(TextPropertyItem item)
             {
-                                              AddItem( new string[]{ item.Name, 
-                    item.Text.Replace("\t", "    ").Replace( "\r\n", "[NL]") }, item );
+                AddItem( new string[]{ item.Name, 
+                                         item.Text.Replace("\t", "    ").Replace( "\r\n", "[NL]") }, item );
             }
 
             public void VisitBinaryPropertyItem(BinaryPropertyItem item)
@@ -441,22 +452,50 @@ namespace Ankh.UI
         private void CreateMyToolTip()
         {
             // Create the ToolTip and associate with the Form container.
-            ToolTip conflictToolTip = new ToolTip(this.components);
+            ToolTip ToolTip = new ToolTip(this.components);
 
             // Set up the delays in milliseconds for the ToolTip.
-            conflictToolTip.AutoPopDelay = 5000;
-            conflictToolTip.InitialDelay = 1000;
-            conflictToolTip.ReshowDelay = 500;
+            ToolTip.AutoPopDelay = 5000;
+            ToolTip.InitialDelay = 1000;
+            ToolTip.ReshowDelay = 500;
             // Force the ToolTip text to be displayed whether or not the form is active.
-            conflictToolTip.ShowAlways = true;
+            ToolTip.ShowAlways = true;
          
             // Set up the ToolTip text for the Button and Checkbox.
-            conflictToolTip.SetToolTip( this.nameCombo, "Select or compose your own property name");
-            conflictToolTip.SetToolTip( this.newButton, "Clear name and value fields");
-            conflictToolTip.SetToolTip( this.saveButton, "Save property name and value");
-            conflictToolTip.SetToolTip( this.deleteButton, "Delete selected property");
-           conflictToolTip.SetToolTip( this.propListView, "List of defined properties");
-         }
+            ToolTip.SetToolTip( this.nameCombo, "Select or compose your own property name");
+            ToolTip.SetToolTip( this.newButton, "Clear name and value fields");
+            ToolTip.SetToolTip( this.saveButton, "Save property name and value");
+            ToolTip.SetToolTip( this.deleteButton, "Delete selected property");
+            ToolTip.SetToolTip( this.propListView, "List of defined properties");
+        }
+
+        private void propListViewDefaultValue()
+        {
+            IgnorePropertyEditor def = new IgnorePropertyEditor();
+            this.nameCombo.SelectedItem = def;
+
+            IPropertyEditor selectedItem = (IPropertyEditor)this.nameCombo.SelectedItem; 
+
+            // is the selection a special svn: keyword?
+            if ( selectedItem != null)
+        {
+            SetNewEditor(selectedItem);
+
+            //clear any existing selection in the list view
+            this.propListView.SelectedItems.Clear();
+
+            // is there already set a property of this type?
+            //HACK: find better way
+            foreach( ListViewItem item in this.propListView.Items )
+        {
+                if ( item.Text == selectedItem.ToString() )
+            {                        
+                currentEditor.PropertyItem = (PropertyItem)item.Tag;
+                item.Selected = true;
+            }
+    }
+} 
+    }
 
 
         private ArrayList propItems;
@@ -471,10 +510,10 @@ namespace Ankh.UI
         private System.Windows.Forms.ListView propListView;
         private System.Windows.Forms.Button newButton;
         private System.Windows.Forms.Button saveButton;
-      
-
+    
         private IPropertyEditor currentEditor;
         private System.Windows.Forms.Panel editorPanel;
+        private System.Windows.Forms.Label label1;
 
         /// <summary>
         /// Required designer variable.
