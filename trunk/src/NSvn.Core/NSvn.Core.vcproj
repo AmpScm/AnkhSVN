@@ -97,6 +97,9 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
+				RelativePath="AprFileAdapter.cpp">
+			</File>
+			<File
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
@@ -135,6 +138,9 @@
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
 				RelativePath="AdminAccessBaton.h">
+			</File>
+			<File
+				RelativePath="AprFileAdapter.h">
 			</File>
 			<File
 				RelativePath="Client.h">

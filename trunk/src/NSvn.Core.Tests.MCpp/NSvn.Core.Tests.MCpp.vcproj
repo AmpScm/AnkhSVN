@@ -96,6 +96,9 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
+				RelativePath="AprFileAdapterTest.cpp">
+			</File>
+			<File
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
@@ -138,6 +141,9 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
+			<File
+				RelativePath="AprFileAdapterTest.h">
+			</File>
 			<File
 				RelativePath="ClientContextTest.h">
 			</File>
