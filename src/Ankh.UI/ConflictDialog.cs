@@ -121,16 +121,17 @@ namespace Ankh.UI
             this.fileRadioButton = new System.Windows.Forms.RadioButton();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.conflictLabel = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // mineFileRadioButton
             // 
             this.mineFileRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.mineFileRadioButton.Location = new System.Drawing.Point(16, 24);
+            this.mineFileRadioButton.Location = new System.Drawing.Point(8, 24);
             this.mineFileRadioButton.Name = "mineFileRadioButton";
-            this.mineFileRadioButton.Size = new System.Drawing.Size(288, 24);
+            this.mineFileRadioButton.Size = new System.Drawing.Size(280, 24);
             this.mineFileRadioButton.TabIndex = 0;
             this.mineFileRadioButton.TabStop = true;
             this.mineFileRadioButton.Text = "test.mine";
@@ -140,9 +141,9 @@ namespace Ankh.UI
             // 
             this.oldRevRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.oldRevRadioButton.Location = new System.Drawing.Point(16, 48);
+            this.oldRevRadioButton.Location = new System.Drawing.Point(8, 48);
             this.oldRevRadioButton.Name = "oldRevRadioButton";
-            this.oldRevRadioButton.Size = new System.Drawing.Size(288, 24);
+            this.oldRevRadioButton.Size = new System.Drawing.Size(280, 24);
             this.oldRevRadioButton.TabIndex = 1;
             this.oldRevRadioButton.TabStop = true;
             this.oldRevRadioButton.Text = "test.r1";
@@ -152,9 +153,9 @@ namespace Ankh.UI
             // 
             this.newRevRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.newRevRadioButton.Location = new System.Drawing.Point(16, 72);
+            this.newRevRadioButton.Location = new System.Drawing.Point(8, 72);
             this.newRevRadioButton.Name = "newRevRadioButton";
-            this.newRevRadioButton.Size = new System.Drawing.Size(288, 24);
+            this.newRevRadioButton.Size = new System.Drawing.Size(280, 24);
             this.newRevRadioButton.TabIndex = 2;
             this.newRevRadioButton.TabStop = true;
             this.newRevRadioButton.Text = "test.r2";
@@ -164,9 +165,9 @@ namespace Ankh.UI
             // 
             this.fileRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileRadioButton.Location = new System.Drawing.Point(16, 96);
+            this.fileRadioButton.Location = new System.Drawing.Point(8, 96);
             this.fileRadioButton.Name = "fileRadioButton";
-            this.fileRadioButton.Size = new System.Drawing.Size(288, 24);
+            this.fileRadioButton.Size = new System.Drawing.Size(280, 24);
             this.fileRadioButton.TabIndex = 3;
             this.fileRadioButton.TabStop = true;
             this.fileRadioButton.Text = "test.txt";
@@ -176,7 +177,7 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(220, 137);
+            this.cancelButton.Location = new System.Drawing.Point(228, 145);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "Cancel";
@@ -185,38 +186,42 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(140, 137);
+            this.okButton.Location = new System.Drawing.Point(148, 145);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 0;
             this.okButton.Text = "Resolve";
             // 
-            // conflictLabel
+            // groupBox1
             // 
-            this.conflictLabel.Location = new System.Drawing.Point(16, 5);
-            this.conflictLabel.Name = "conflictLabel";
-            this.conflictLabel.Size = new System.Drawing.Size(352, 16);
-            this.conflictLabel.TabIndex = 7;
-            this.conflictLabel.Text = "Select file:";
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.oldRevRadioButton);
+            this.groupBox1.Controls.Add(this.newRevRadioButton);
+            this.groupBox1.Controls.Add(this.fileRadioButton);
+            this.groupBox1.Controls.Add(this.mineFileRadioButton);
+            this.groupBox1.Location = new System.Drawing.Point(8, 8);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(296, 128);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Select file";
             // 
             // ConflictDialog
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(304, 168);
-            this.Controls.Add(this.conflictLabel);
+            this.ClientSize = new System.Drawing.Size(312, 176);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.fileRadioButton);
-            this.Controls.Add(this.newRevRadioButton);
-            this.Controls.Add(this.oldRevRadioButton);
-            this.Controls.Add(this.mineFileRadioButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MinimumSize = new System.Drawing.Size(312, 192);
             this.Name = "ConflictDialog";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Resolve conflicted file";
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -230,7 +235,7 @@ namespace Ankh.UI
 
         private System.Windows.Forms.RadioButton oldRevRadioButton;
         private System.Windows.Forms.RadioButton newRevRadioButton;
-        private System.Windows.Forms.Label conflictLabel;
+        private System.Windows.Forms.GroupBox groupBox1;
 
         private System.ComponentModel.IContainer components = null;
     }
