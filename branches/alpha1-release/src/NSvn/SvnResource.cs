@@ -30,7 +30,7 @@ namespace NSvn
         /// <returns>An ILocalResource object.</returns>
         public static ILocalResource FromLocalPath( string path )
         {
-            if ( !IsVersionedPath( path ) )
+            if ( !Utils.IsWorkingCopyPath( path ) )
                 return Unversionable;
 
             Status status  = Client.SingleStatus( path );
@@ -63,20 +63,7 @@ namespace NSvn
             }
         }
 
-        /// <summary>
-        /// Checks whether a given path is versioned.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static bool IsVersionedPath( string path )
-        {
-            string baseDir = File.Exists( path ) ? Path.GetDirectoryName( path ) : 
-                path;
-            
-            return Directory.Exists( Path.Combine( baseDir, WCAREA ) );
-        }
-
-        
+               
 
         /// <summary>
         /// The ClientContext to be used in version control operations.
