@@ -46,8 +46,6 @@
             <ComponentRef Id="C_Ankh.dll" />
             <ComponentRef Id="C_Ankh_RegAsm" />
             <ComponentRef Id="C_Ankh_RegVS" />
-            <ComponentRef Id="C_AboutBoxDetails_7.0" />
-            <ComponentRef Id="C_AboutBoxDetails_7.1" />
             <ComponentRef Id="C_Bitmap.dll" />
             <ComponentRef Id="C_Ankh.UI.dll" />
             <ComponentRef Id="C_Utils.dll" />
