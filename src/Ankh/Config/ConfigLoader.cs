@@ -10,6 +10,19 @@ using Ankh.RepositoryExplorer;
 namespace Ankh.Config
 {
     /// <summary>
+    /// Represents an error in the configuration file.
+    /// </summary>
+    internal class ConfigException : ApplicationException
+    {
+        public ConfigException( string msg ) : base(msg)
+        {}
+
+        public ConfigException( string msg, Exception innerException ) : 
+            base(msg, innerException)
+        {}
+    }
+
+    /// <summary>
     /// Contains functions used to load and save configuration data.
     /// </summary>
     internal sealed class ConfigLoader
@@ -48,6 +61,11 @@ namespace Ankh.Config
             }
         }
 
+        public string ConfigPath
+        {
+            get{ return Path.Combine( this.configDir, CONFIGFILENAME ); }
+        }
+
         /// <summary>
         /// Loads the Ankh configuration file from the given path.
         /// </summary>
@@ -58,25 +76,20 @@ namespace Ankh.Config
 
             // make sure there actually is a config file
             EnsureConfig( this.ConfigPath );
+            return this.DeserializeConfig( new XmlTextReader( this.ConfigPath ) );
+        }
 
+        /// <summary>
+        /// Loads the default config file. Used as a fallback if the
+        /// existing config file cannot be loaded.
+        /// </summary>
+        /// <returns></returns>
+        public Config LoadDefaultConfig()
+        {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            XmlTextReader reader = new XmlTextReader( this.ConfigPath );
-            try                                                            
-            {
-                XmlValidatingReader vr = new XmlValidatingReader( reader );
-
-                vr.ValidationType = ValidationType.Schema;
-                vr.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
-                vr.Schemas.Add( schemas );
-
-                XmlSerializer serializer = new XmlSerializer( typeof(Config) );
-                return (Config)serializer.Deserialize( vr );
-            }
-            finally
-            {
-                reader.Close();
-            }
-
+            return this.DeserializeConfig( new XmlTextReader(
+                assembly.GetManifestResourceStream( 
+                ConfigLoader.configFileResource )));         
         }
        
         /// <summary>
@@ -178,9 +191,34 @@ namespace Ankh.Config
             }
         }
 
-        private string ConfigPath
+        private Config DeserializeConfig( XmlReader reader )
         {
-            get{ return Path.Combine( this.configDir, CONFIGFILENAME ); }
+            this.errors.Clear();
+
+            try                                                            
+            {                
+                XmlValidatingReader vr = new XmlValidatingReader( reader );
+
+                vr.ValidationType = ValidationType.Schema;
+                vr.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
+                vr.Schemas.Add( schemas );
+
+                XmlSerializer serializer = new XmlSerializer( typeof(Config) );
+                return (Config)serializer.Deserialize( vr );
+            }
+            catch( InvalidOperationException ex )
+            {
+                throw new ConfigException( "Xml error: " + ex.InnerException.Message );
+            }
+            catch( XmlException ex )
+            {
+                throw new ConfigException( "Xml error: " + ex.Message );
+            }
+            finally
+            {
+                if ( reader != null )
+                    reader.Close();
+            }
         }
 
         private void ValidationEventHandler(object sender, ValidationEventArgs e)
