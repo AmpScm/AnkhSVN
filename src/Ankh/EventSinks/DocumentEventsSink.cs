@@ -19,7 +19,7 @@ namespace Ankh.EventSinks
 
         public override void Unhook()
         {
-            this.events.DocumentSaved += new _dispDocumentEvents_DocumentSavedEventHandler(
+            this.events.DocumentSaved -= new _dispDocumentEvents_DocumentSavedEventHandler(
                 this.DocumentSaved );
         }
 
