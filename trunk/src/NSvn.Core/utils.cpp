@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "utils.h"
 #include "SvnClientException.h"
 #include <svn_path.h>

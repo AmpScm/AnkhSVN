@@ -1,7 +1,11 @@
 // $Id$
+
+#include "stdafx.h"
+
 #include "ClientContext.h"
 #include "UsernameCredential.h"
 #include "CommitItem.h"
+
 //#include <svn_client.h>
 //#include <apr_pools.h>
 #include "Notification.h"
