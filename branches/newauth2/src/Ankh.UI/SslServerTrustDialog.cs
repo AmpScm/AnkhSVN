@@ -7,26 +7,26 @@ using NSvn.Core;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// A dialog that queries the user whether to trust a certain certificate.
-	/// </summary>
-	public class SslServerTrustDialog : System.Windows.Forms.Form
-	{     
+    /// <summary>
+    /// A dialog that queries the user whether to trust a certain certificate.
+    /// </summary>
+    public class SslServerTrustDialog : System.Windows.Forms.Form
+    {     
 
-		public SslServerTrustDialog( )
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        public SslServerTrustDialog( )
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
             this.invalidDateImage.Image = icons.Images[1];
             this.serverMismatchImage.Image = icons.Images[1];
             this.caUnknownImage.Image = icons.Images[1];
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
-		}
+            //
+            // TODO: Add any constructor code after InitializeComponent call
+            //
+        }
 
         /// <summary>
         /// Information about the certificate.
@@ -54,28 +54,28 @@ namespace Ankh.UI
             }
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SslServerTrustDialog));
             this.icons = new System.Windows.Forms.ImageList(this.components);
@@ -331,7 +331,7 @@ namespace Ankh.UI
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         static void Main()
         {
@@ -395,6 +395,7 @@ namespace Ankh.UI
         #endregion
         
 
+        #region private data
         private System.Windows.Forms.ImageList icons;
         private System.Windows.Forms.Label headerLabel;
         private System.Windows.Forms.PictureBox caUnknownImage;
@@ -425,5 +426,6 @@ namespace Ankh.UI
         private System.Windows.Forms.PictureBox serverMismatchImage;
         private System.Windows.Forms.PictureBox invalidDateImage;
         private const int OKIMAGE = 1;
-	}
+        #endregion
+    }
 }

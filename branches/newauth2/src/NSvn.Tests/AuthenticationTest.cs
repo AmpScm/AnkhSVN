@@ -16,7 +16,7 @@ namespace NSvn.Tests
         [Test]
         public void TestSimplePromptProvider()
         {
-            AuthenticationProviderObject provider = Authentication.GetSimplePromptProvider(
+            AuthenticationProvider provider = AuthenticationProvider.GetSimplePromptProvider(
                 new SimplePromptDelegate( this.SuccessPrompt ), 1 );
             RepositoryDirectory dir = new RepositoryDirectory( AUTHREPOS );
             dir.Context.AddAuthenticationProvider( provider );

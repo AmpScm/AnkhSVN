@@ -29,7 +29,7 @@ namespace NSvn.Tests
         public void TestCommit()
         {
             WorkingCopyResource item  = new WorkingCopyFile( Path.Combine( this.WcPath, "Form.cs" ) );
-            item.Context.AddAuthenticationProvider( Authentication.GetUsernameProvider() );
+            item.Context.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
             
             Assertion.AssertEquals( "Wrong status. Should be normal", StatusKind.Normal,
                 item.Status.TextStatus  );
@@ -65,7 +65,7 @@ namespace NSvn.Tests
             using( StreamWriter w2 = new StreamWriter( item2.Path, true ) )
                 w2.Write( "Moo" );
 
-            AuthenticationProviderObject provider = Authentication.GetUsernameProvider();
+            AuthenticationProvider provider = AuthenticationProvider.GetUsernameProvider();
             item1.Context.AddAuthenticationProvider( provider );
             item2.Context.AddAuthenticationProvider( provider );
 
@@ -89,7 +89,7 @@ namespace NSvn.Tests
             Assertion.AssertEquals( "Wrong status. Cant copy an unversioned file", StatusKind.Normal,
                 itemWcSrc.Status.TextStatus  );
           
-            itemWcSrc.Context.AddAuthenticationProvider( Authentication.GetUsernameProvider() );
+            itemWcSrc.Context.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
             WorkingCopyResource itemWcDst = itemWcSrc.CopyTo( new WorkingCopyFile( Path.Combine( this.WcPath, @"obj" )), Revision.Head);
 
             Assertion.AssertEquals( "Wrong type returned. Should be working copy file",
@@ -146,12 +146,12 @@ namespace NSvn.Tests
                 WorkingCopyResource wc2item = new WorkingCopyFile( Path.Combine( wc2, "Form.cs" ) );
                 using( StreamWriter w = new StreamWriter( wc2item.Path, false ) )
                     w.Write( "MOO" );
-                wc2item.Context.AddAuthenticationProvider( Authentication.GetUsernameProvider() );
+                wc2item.Context.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
                 wc2item.Commit( false );
 
                 // try to update the primary wc
                 WorkingCopyResource item = new WorkingCopyFile( Path.Combine( this.WcPath, "Form.cs" ) );
-                item.Context.AddAuthenticationProvider( Authentication.GetUsernameProvider() );
+                item.Context.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
                 using( StreamWriter w2 = new StreamWriter( item.Path ) )
                     w2.Write( "BLAH" );
                 item.Update();
@@ -162,7 +162,7 @@ namespace NSvn.Tests
                 // make sure you cannot commit a conflicted wc
                 try
                 {
-                    item.Context.AddAuthenticationProvider( Authentication.GetUsernameProvider() );
+                    item.Context.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
                     item.Commit( false );
                     Assertion.Fail( "Should not be able to commit a conflicted file" );
                 }
@@ -172,7 +172,7 @@ namespace NSvn.Tests
                 WorkingCopyResource folderItem = new WorkingCopyDirectory( this.WcPath );
                 try
                 {
-                    folderItem.Context.AddAuthenticationProvider( Authentication.GetUsernameProvider() );
+                    folderItem.Context.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
 
                     folderItem.Commit(  true );
                     Assertion.Fail( "Should not be able to commit a conflicted directory" );

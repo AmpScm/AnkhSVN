@@ -5,7 +5,7 @@
 #include <svn_client.h>
 #include <svn_pools.h>
 #include <apr_tables.h>
-#include "AuthenticationProviderObject.h"
+#include "AuthenticationProvider.h"
 #include "GCPool.h"
 
 
@@ -35,7 +35,7 @@ namespace NSvn
             }            
 
             /// <summary>Add an authentication provider</summary>
-            void Add( AuthenticationProviderObject* obj )
+            void Add( AuthenticationProvider* obj )
             {                
                 this->providerObjects->Add( obj );
                 this->dirty = true;
@@ -100,7 +100,7 @@ namespace NSvn
 
                 for( int i = 0; i < this->providerObjects->Count; i++ )
                     APR_ARRAY_PUSH( providers, svn_auth_provider_object_t* ) = 
-                        static_cast<AuthenticationProviderObject*>(
+                        static_cast<AuthenticationProvider*>(
                             this->providerObjects->get_Item(i))->GetProvider();
 
 

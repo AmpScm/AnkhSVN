@@ -2,8 +2,7 @@
 #include <apr_hash.h>
 #include <apr_tables.h>
 #include ".\authenticationtest.h"
-#include "../NSvn.Core/Authentication.h"
-#include "../NSvn.Core/AuthenticationProviderObject.h"
+#include "../NSvn.Core/AuthenticationProvider.h"
 #include "../NSvn.Core/credentials.h"
 #include "../NSvn.Core/Pool.h"
 #include "../NSvn.Core/SvnClientException.h"
@@ -36,7 +35,7 @@ struct svn_auth_iterstate_t
 
 void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
 {
-    AuthenticationProviderObject* obj = Authentication::GetSimplePromptProvider( 
+    AuthenticationProvider* obj = AuthenticationProvider::GetSimplePromptProvider( 
         new SimplePromptDelegate(this, SimplePrompt), 3);
 
     Pool pool;
@@ -54,7 +53,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
     Assertion::AssertEquals( "Password not correct", S"Fines", StringHelper( creds->password ) );
 
 
-    obj = Authentication::GetSimplePromptProvider( 
+    obj = AuthenticationProvider::GetSimplePromptProvider( 
         new SimplePromptDelegate(this, NullSimplePrompt), 3);
     authBaton = GetBaton( obj->GetProvider(), pool );
 
@@ -67,7 +66,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
 void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetUsernameProvider()
 {
     // first get the username through the managed interface
-    AuthenticationProviderObject* obj = Authentication::GetUsernameProvider();
+    AuthenticationProvider* obj = AuthenticationProvider::GetUsernameProvider();
 
     Pool pool;
 

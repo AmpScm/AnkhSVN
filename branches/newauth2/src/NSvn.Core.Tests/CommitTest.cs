@@ -65,7 +65,7 @@ namespace NSvn.Core.Tests
             ClientContext ctx = new ClientContext();
 
             AuthenticationBaton baton = new AuthenticationBaton();
-            baton.Add( Authentication.GetUsernameProvider() );
+            baton.Add( AuthenticationProvider.GetUsernameProvider() );
             baton.SetParameter( AuthenticationBaton.ParamDefaultUsername, Environment.UserName );
 
             ctx.AuthBaton = baton;

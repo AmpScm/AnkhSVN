@@ -9,7 +9,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestSingleProvider()
     Pool pool;
 
     AuthenticationBaton* baton = new AuthenticationBaton();
-    baton->Add( Authentication::GetSimplePromptProvider(
+    baton->Add( AuthenticationProvider::GetSimplePromptProvider(
         new SimplePromptDelegate( this, SimplePrompt ), 1 ) );
 
     svn_auth_cred_simple_t* creds;
@@ -38,7 +38,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestDefaultUsernameAndPas
 
     AuthenticationBaton* baton = new AuthenticationBaton();
 
-    baton->Add( Authentication::GetSimplePromptProvider(
+    baton->Add( AuthenticationProvider::GetSimplePromptProvider(
         new SimplePromptDelegate( this, SimplePrompt ), 1 ) );
 
     

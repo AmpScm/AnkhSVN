@@ -136,7 +136,7 @@
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
-				RelativePath=".\Authentication.cpp">
+				RelativePath=".\AuthenticationProvider.cpp">
 			</File>
 			<File
 				RelativePath="Client.cpp">
@@ -188,7 +188,7 @@
 				RelativePath=".\AuthenticationBaton.h">
 			</File>
 			<File
-				RelativePath=".\AuthenticationProviderObject.h">
+				RelativePath=".\AuthenticationProvider.h">
 			</File>
 			<File
 				RelativePath="ChangedPath.h">

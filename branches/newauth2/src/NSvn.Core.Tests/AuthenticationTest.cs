@@ -31,7 +31,7 @@ namespace NSvn.Core.Tests
         {
             AuthenticationBaton baton = new AuthenticationBaton();
             baton.SetParameter( AuthenticationBaton.ParamConfigDir, this.configDir );
-            baton.Add( Authentication.GetSslServerTrustPromptProvider( new 
+            baton.Add( AuthenticationProvider.GetSslServerTrustPromptProvider( new 
                 SslServerTrustPromptDelegate( this.SslServerTrustFailCallback  ) ) );
 
             ClientContext ctx = new ClientContext();
@@ -60,7 +60,7 @@ namespace NSvn.Core.Tests
         {
             AuthenticationBaton baton = new AuthenticationBaton();
             baton.SetParameter( AuthenticationBaton.ParamConfigDir, this.configDir );
-            baton.Add( Authentication.GetSslServerTrustPromptProvider( new 
+            baton.Add( AuthenticationProvider.GetSslServerTrustPromptProvider( new 
                 SslServerTrustPromptDelegate( this.SslServerTrustAcceptCallback  ) ) );
 
             ClientContext ctx = new ClientContext();
@@ -80,8 +80,8 @@ namespace NSvn.Core.Tests
         {
             AuthenticationBaton baton = new AuthenticationBaton();
             baton.SetParameter( AuthenticationBaton.ParamConfigDir, this.configDir );
-            baton.Add( Authentication.GetSslServerTrustFileProvider() );
-            baton.Add( Authentication.GetSslServerTrustPromptProvider( new 
+            baton.Add( AuthenticationProvider.GetSslServerTrustFileProvider() );
+            baton.Add( AuthenticationProvider.GetSslServerTrustPromptProvider( new 
                 SslServerTrustPromptDelegate( this.SslServerTrustAcceptCallback  ) ) );
             
 
@@ -101,7 +101,7 @@ namespace NSvn.Core.Tests
 
             // now try to get them to take it from the config dir
             baton = new AuthenticationBaton();
-            baton.Add( Authentication.GetSslServerTrustFileProvider() );
+            baton.Add( AuthenticationProvider.GetSslServerTrustFileProvider() );
 
             ctx.AuthBaton = baton;
             DirectoryEntry[] entries = Client.List( SSLTESTREPOS,

@@ -46,7 +46,7 @@ namespace NSvn
         /// Add an authentication provider,
         /// </summary>
         /// <param name="provider">The provider to add.</param>
-        public void AddAuthenticationProvider( AuthenticationProviderObject provider )
+        public void AddAuthenticationProvider( AuthenticationProvider provider )
         {
             this.clientContext.AuthBaton.Add( provider );
         }
@@ -55,7 +55,7 @@ namespace NSvn
         /// Remove an authentication provider.
         /// </summary>
         /// <param name="provider">The provider to remove.</param>
-        public void RemoveAuthenticationProvider( AuthenticationProviderObject provider )
+        public void RemoveAuthenticationProvider( AuthenticationProvider provider )
         {
             this.clientContext.AuthBaton.Add( provider );
         }
