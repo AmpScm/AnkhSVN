@@ -18,6 +18,12 @@ namespace Ankh
         EnvDTE._DTE DTE { get; }
 
         /// <summary>
+        /// The UI shell.
+        /// </summary>
+        IUIShell UIShell { get; }
+
+
+        /// <summary>
         /// The addin object.
         /// </summary>
         EnvDTE.AddIn AddIn { get; }

@@ -20,7 +20,7 @@ namespace Ankh.Commands
 		
         public override void Execute(Ankh.IContext context, string parameters)
         {
-            context.RepositoryExplorer.Window.Visible = true;
+            context.UIShell.ShowRepositoryExplorer( true );
         }        
    
 	}

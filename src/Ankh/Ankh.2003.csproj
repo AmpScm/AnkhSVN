@@ -201,6 +201,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IUIShell.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "OutputPaneWriter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -231,6 +236,11 @@
                 />
                 <File
                     RelPath = "SvnItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "UIShell.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
