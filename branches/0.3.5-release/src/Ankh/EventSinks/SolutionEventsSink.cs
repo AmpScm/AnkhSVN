@@ -68,6 +68,10 @@ namespace Ankh.EventSinks
                 Error.Handle( ex );
                 throw;
             }
+            finally
+            {
+                EventSink.AddingProject = false;
+            }
         }
 
         protected void ProjectRemoved( Project project )
