@@ -106,7 +106,7 @@ namespace Ankh.UI
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 5;
             this.okButton.Text = "Ok";
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+
             // 
             // cancelButton
             // 
@@ -116,7 +116,6 @@ namespace Ankh.UI
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "Cancel";
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // LoginDialog
             // 
@@ -144,5 +143,7 @@ namespace Ankh.UI
         private System.Windows.Forms.Button savePasswordButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
+
+      
 	}
 }
