@@ -118,14 +118,16 @@
             <MigrateFeatureStates Sequence="1200"/>
             <InstallValidate Sequence="1400"/>
             <InstallInitialize Sequence="1500"/>            
-            <RemoveExistingProducts Sequence="1525">PREVIOUSVERSIONSINSTALLED AND NOT NEWERVERSIONINSTALLED</RemoveExistingProducts>
+            
+            <Custom Action="ReposInstaller_Uninstall.SetProperty" Sequence="1760">NEWERPRODUCTFOUND</Custom>
+            <Custom Action="ReposInstaller_Uninstall" Sequence="1765">NEWERPRODUCTFOUND</Custom>
+            
+            <RemoveExistingProducts Sequence="1525">NEWERPRODUCTFOUND</RemoveExistingProducts>
             <AllocateRegistrySpace Sequence="1550">NOT Installed</AllocateRegistrySpace>
             <ProcessComponents Sequence="1600"/>
             <UnpublishComponents Sequence="1700"/>
             <MsiUnpublishAssemblies Sequence="1750"/>
 
-            <Custom Action="ReposInstaller_Uninstall.SetProperty" Sequence="1760">Installed</Custom>
-            <Custom Action="ReposInstaller_Uninstall" Sequence="1765">Installed</Custom>
 
             <UnpublishFeatures Sequence="1800"/>
             <StopServices Sequence="1900">VersionNT</StopServices>
