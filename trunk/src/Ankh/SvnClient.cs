@@ -69,7 +69,7 @@ namespace Ankh
                 }
                 else
                 {
-                    this.logMessage = null;
+                    this.logMessage = dialog.LogMessage;
                     return null;
                 }
             }
