@@ -143,7 +143,7 @@
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\Interop.esproj.dll" />
                 <File Id="CF_Interop.SHDocVw.dll" Name="INTERO~2.DLL" LongName="Interop.SHDocVw.dll"
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\Interop.SHDocVw.dll" />
-                <File Id="CF_libdb.dll" Name="LIBDB42.DLL" LongName="LibBDB42.dll"
+                <File Id="CF_libdb.dll" Name="LIBDB42.DLL" LongName="LibDB42.dll"
                     Vital="yes" DiskId="1" src="$(var.svndir)\db4-win32\bin\libdb42.dll" />
                 <File Id="CF_office.dll" Name="OFFICE.DLL" LongName="office.dll"
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\office.dll" />
