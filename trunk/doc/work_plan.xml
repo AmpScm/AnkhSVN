@@ -29,7 +29,6 @@
  
     <section header="Employer's specifications">
         <list>
-            <item>Find a name for the plugin</item>
             <item>Write specifications for Visual Studio.NET addin for svn</item>
         </list>
     </section>
