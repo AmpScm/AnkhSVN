@@ -4,10 +4,10 @@ using System.Configuration;
 using System.Collections;
 using System.ComponentModel;
 using Utils;
-using NSvn;
 using System.IO;
 using System.Windows.Forms;
 using System.Web;
+using NSvn.Core;
 using EnvDTE;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
@@ -72,10 +72,10 @@ namespace ReposInstaller
 			string reposUrl = Path.Combine( reposPath, "trunk" );
 			reposUrl = "file:///" + reposUrl.Replace( "\\", "/" ).Replace(" ", "%20" );
 
-			RepositoryDirectory dir = new RepositoryDirectory( reposUrl ); 
-			dir.Context.AddAuthenticationProvider(
+			Client client = new Client();
+			client.AuthBaton.Add(
 				NSvn.Core.AuthenticationProvider.GetUsernameProvider() );
-			dir.Checkout( wcPath, true );
+			client.Checkout( reposUrl, wcPath, Revision.Head, true );
 
 			state[ "wcpath" ] = wcPath;
 		}

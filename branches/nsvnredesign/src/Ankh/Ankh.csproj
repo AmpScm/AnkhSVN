@@ -181,6 +181,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ProgressRunner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ResourceBitmaps.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -193,6 +198,11 @@
                 <File
                     RelPath = "status_icons.bmp"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SvnClient.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "SvnContext.cs"
@@ -281,6 +291,11 @@
                 />
                 <File
                     RelPath = "Commands\ItemInfoCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\LocalDiffCommandBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
