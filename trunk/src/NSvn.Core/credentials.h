@@ -6,6 +6,7 @@
 #include "StringHelper.h"
 #include <apr_strings.h>
 #include "svnenums.h"
+#include "utils.h"
 
 namespace NSvn
 {
@@ -47,8 +48,8 @@ namespace NSvn
           {
               svn_auth_cred_simple_t* cred = static_cast<svn_auth_cred_simple_t*>( 
                   apr_palloc( pool, sizeof(*cred) ) );
-              cred->username = apr_pstrdup( pool, StringHelper( username ) );
-              cred->password = apr_pstrdup( pool, StringHelper( password ) );
+              cred->username = StringHelper( username ).CopyToPoolUtf8( pool );
+              cred->password = StringHelper( password ).CopyToPoolUtf8( pool );
               cred->may_save = this->maySave;
               return cred;
           }
@@ -93,7 +94,8 @@ namespace NSvn
                 svn_auth_cred_ssl_client_cert_t* cred = 
                     static_cast<svn_auth_cred_ssl_client_cert_t*>(
                         apr_pcalloc(pool, sizeof(*cred) ) );
-                cred->cert_file = StringHelper( this->CertificateFile ).CopyToPool( pool );
+                cred->cert_file = StringHelper( 
+                    this->CertificateFile ).CopyToPoolUtf8(pool);
                 cred->may_save = this->MaySave;
 
                 return cred;
@@ -101,7 +103,7 @@ namespace NSvn
 
         };
 
-        /// <summary>Represents a password phrase for aclient certificate.</summary>
+        /// <summary>Represents a password phrase for a client certificate.</summary>
         public __gc class SslClientCertificatePasswordCredential
         {
         public:
@@ -113,7 +115,7 @@ namespace NSvn
                 svn_auth_cred_ssl_client_cert_pw_t* cred = 
                     static_cast<svn_auth_cred_ssl_client_cert_pw_t*>(
                         apr_pcalloc(pool, sizeof(*cred) ) );
-                cred->password = StringHelper( this->Password ).CopyToPool( pool );
+                cred->password = StringHelper( this->Password ).CopyToPoolUtf8( pool );
                 cred->may_save = this->MaySave;
 
                 return cred;
