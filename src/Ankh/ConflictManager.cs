@@ -31,20 +31,18 @@ namespace Ankh
             // At the task item 
             Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
             TaskList taskList = (TaskList) win.Object;
-            if(!TaskExists(path, taskList))
-            {
-                TaskItem taskListItem;
-                taskListItem = taskList.TaskItems.Add(ConflictTaskItemCategory, " ", 
-                    "AnkhSVN: file has a conflict. ", 
-                    vsTaskPriority.vsTaskPriorityHigh, 
-                    vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
+            TaskItem taskListItem;
+            taskListItem = taskList.TaskItems.Add(ConflictTaskItemCategory, " ", 
+                "AnkhSVN: file has a conflict. ", 
+                vsTaskPriority.vsTaskPriorityHigh, 
+                vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
 
-                // Get the task event list and add an event for this task list item to it.
-                TaskListEvents taskListEvents = (TaskListEvents)  this.context.DTE.Events.get_TaskListEvents(
-                    "ConflictTaskItemCategory");
-                taskListEvents.TaskNavigated +=new 
-                    _dispTaskListEvents_TaskNavigatedEventHandler(TaskNavigated);
-            }
+            // Get the task event list and add an event for this task list item to it.
+            TaskListEvents taskListEvents = (TaskListEvents)  this.context.DTE.Events.get_TaskListEvents(
+                "ConflictTaskItemCategory");
+            taskListEvents.TaskNavigated +=new 
+                _dispTaskListEvents_TaskNavigatedEventHandler(TaskNavigated);
+
         }
 
 
@@ -60,6 +58,20 @@ namespace Ankh
                 AddTask(item.Path);
             }
         }
+
+        /// <summary>
+        ///  Find all the tasks for conflicts and delete
+        ///          /// </summary>
+        public void RemoveAllTaskItems()
+        {
+            Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+            TaskList taskList = (TaskList) win.Object;
+            foreach(TaskItem item in taskList.TaskItems)
+            {
+                if(item.Category == ConflictTaskItemCategory) 
+                    item.Delete(); 
+            }
+        }
         /// <summary>
         ///  Filter for getting conflicted items from the solution
         /// </summary>
@@ -69,27 +81,6 @@ namespace Ankh
         {
             return (item.Status.TextStatus == NSvn.Core.StatusKind.Conflicted);
         }
-
-        /// <summary>
-        ///  Look through the task items and return true is a conflict task item already exists for a file
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private bool TaskExists(String path, TaskList taskList)
-        {
-            bool exists = false; 
-            foreach(TaskItem item in taskList.TaskItems)
-            {
-                if(item.Category == ConflictTaskItemCategory &&
-                    item.FileName == path)
-                {
-                    exists = true; 
-                    break;
-                }
-            }
-            return exists;
-        }
-
 
 
         /// <summary>

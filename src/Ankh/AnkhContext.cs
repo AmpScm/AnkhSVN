@@ -230,7 +230,7 @@ namespace Ankh
                 //MessageBox.Show( timer.ToString() );
 
                 // Add Conflict tasks for all conflicts in solution
-                conflictManager.CreateTaskItems(); 
+                this.conflictManager.CreateTaskItems(); 
             }
             catch( Exception ex )
             {
@@ -247,6 +247,7 @@ namespace Ankh
         /// </summary>
         public void SolutionClosing()
         {
+            this.conflictManager.RemoveAllTaskItems();
             this.SolutionExplorer.Unload();
 
             // unhook events.
