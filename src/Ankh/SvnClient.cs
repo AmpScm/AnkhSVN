@@ -29,15 +29,6 @@ namespace Ankh
             this.Init( ankhContext );
         }
 
-        /// <summary>
-        /// This object is used to synchronize notification callbacks.
-        /// </summary>
-        public System.ComponentModel.ISynchronizeInvoke SynchronizingObject
-        {
-            get{ return this.invoker; }
-            set{ this.invoker = value; }
-        }
-
         
         /// <summary>
         /// Invokes the LogMessage dialog.
@@ -302,7 +293,7 @@ namespace Ankh
 
             // assume we're on the main thread now.
             this.invoker = new Control();
-            ((Control)this.invoker).CreateControl();
+            this.invoker.CreateControl();
         }
 
         /// <summary>
@@ -334,6 +325,6 @@ namespace Ankh
         private IContext ankhContext;
         private static IDictionary map = new Hashtable();
         private string logMessage = null;
-        private System.ComponentModel.ISynchronizeInvoke invoker;
+        private Control invoker;
     }
 }

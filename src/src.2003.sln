@@ -42,16 +42,6 @@ Project("{D4EFD700-BBAA-11D2-8EE0-00C04F5E0C38}") = "Ankh help.2003", "Help.doc\
 	EndProjectSection
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.2003", "Utils\Utils.2003.csproj", "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -143,16 +133,10 @@ Global
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
-		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
-		WiX\Ankh.msm.build = WiX\Ankh.msm.build
-		WiX\Ankh.msm.wxs = WiX\Ankh.msm.wxs
 		ankh.reg = ankh.reg
-		WiX\apr-iconv.wxs = WiX\apr-iconv.wxs
 		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
 		CHANGES = CHANGES
 		..\deploy.build = ..\deploy.build
-		lib\lib.build = lib\lib.build
-		lib\lib.wxs = lib\lib.wxs
 		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
 		master.build = master.build
 		WiX\NSvn.msm.build = WiX\NSvn.msm.build
@@ -163,8 +147,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection

@@ -45,25 +45,5 @@ namespace Ankh
         /// </summary>
         /// <param name="selection"></param>
         void SetRepositoryExplorerSelection( object[] selection );
-
-        /// <summary>
-        /// Display a message box.
-        /// </summary>
-        /// <param name="caption"></param>
-        /// <param name="text"></param>
-        /// <param name="buttons"></param>
-        /// <returns></returns>
-        DialogResult ShowMessageBox( string text, string caption, 
-            MessageBoxButtons buttons );
-
-        /// <summary>
-        /// Display a message box.
-        /// </summary>
-        /// <param name="caption"></param>
-        /// <param name="text"></param>
-        /// <param name="buttons"></param>
-        /// <returns></returns>
-        DialogResult ShowMessageBox( string text, string caption, 
-            MessageBoxButtons buttons, MessageBoxIcon icon );
 	}
 }

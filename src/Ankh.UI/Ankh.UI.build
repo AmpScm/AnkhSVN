@@ -59,7 +59,6 @@
     </target>
     
     <target name="build-WiX">
-        <property name="build.dir" value="${path::get-full-path(build.dir)}" />
         <exec workingdir="${src.dir}" program="candle.exe"
             commandline="-nologo -dbuilddir=${build.dir} -w0 Ankh.UI.wxs -out ${installsource.dir}\Ankh.UI.wixobj" />
     </target>

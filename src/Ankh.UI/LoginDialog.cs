@@ -130,7 +130,7 @@ namespace Ankh.UI
             this.usernameTextBox.Location = new System.Drawing.Point(72, 80);
             this.usernameTextBox.Name = "usernameTextBox";
             this.usernameTextBox.Size = new System.Drawing.Size(144, 20);
-            this.usernameTextBox.TabIndex = 0;
+            this.usernameTextBox.TabIndex = 2;
             this.usernameTextBox.Text = "";
             // 
             // passwordTextBox
@@ -139,7 +139,7 @@ namespace Ankh.UI
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.PasswordChar = '*';
             this.passwordTextBox.Size = new System.Drawing.Size(144, 20);
-            this.passwordTextBox.TabIndex = 1;
+            this.passwordTextBox.TabIndex = 3;
             this.passwordTextBox.Text = "";
             // 
             // okButton
@@ -149,7 +149,7 @@ namespace Ankh.UI
             this.okButton.Location = new System.Drawing.Point(49, 168);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(79, 23);
-            this.okButton.TabIndex = 3;
+            this.okButton.TabIndex = 5;
             this.okButton.Text = "Ok";
             // 
             // cancelButton
@@ -159,7 +159,7 @@ namespace Ankh.UI
             this.cancelButton.Location = new System.Drawing.Point(137, 168);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(79, 23);
-            this.cancelButton.TabIndex = 4;
+            this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "Cancel";
             // 
             // label1
@@ -184,7 +184,7 @@ namespace Ankh.UI
             this.saveCredentialsCheckBox.Location = new System.Drawing.Point(72, 139);
             this.saveCredentialsCheckBox.Name = "saveCredentialsCheckBox";
             this.saveCredentialsCheckBox.Size = new System.Drawing.Size(128, 24);
-            this.saveCredentialsCheckBox.TabIndex = 2;
+            this.saveCredentialsCheckBox.TabIndex = 10;
             this.saveCredentialsCheckBox.Text = "Save credentials?";
             // 
             // LoginDialog
@@ -193,20 +193,19 @@ namespace Ankh.UI
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(226, 199);
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.saveCredentialsCheckBox,
-                                                                          this.realmLabel,
-                                                                          this.label1,
-                                                                          this.cancelButton,
-                                                                          this.okButton,
-                                                                          this.passwordTextBox,
-                                                                          this.usernameTextBox,
-                                                                          this.passwordLabel,
-                                                                          this.usernameLabel});
+            this.Controls.Add(this.saveCredentialsCheckBox);
+            this.Controls.Add(this.realmLabel);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.passwordTextBox);
+            this.Controls.Add(this.usernameTextBox);
+            this.Controls.Add(this.passwordLabel);
+            this.Controls.Add(this.usernameLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "LoginDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Authenticate";
+            this.Text = "Login";
             this.ResumeLayout(false);
 
         }

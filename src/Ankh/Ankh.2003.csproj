@@ -156,10 +156,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Ankh.wxs"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "AnkhContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -149,11 +149,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ContextBase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "DteFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -65,33 +65,6 @@ namespace Ankh
             this.repositoryExplorerWindow.SetSelectionContainer( ref selection );
         }
 
-        /// <summary>
-        /// Display a message box.
-        /// </summary>
-        /// <param name="caption"></param>
-        /// <param name="text"></param>
-        /// <param name="buttons"></param>
-        /// <returns></returns>
-        public DialogResult ShowMessageBox( string text, string caption, 
-            MessageBoxButtons buttons )
-        {
-            return MessageBox.Show( this.Context.HostWindow, text, caption,
-                buttons );
-        }
-
-        /// <summary>
-        /// Display a message box.
-        /// </summary>
-        /// <param name="caption"></param>
-        /// <param name="text"></param>
-        /// <param name="buttons"></param>
-        /// <returns></returns>
-        public DialogResult ShowMessageBox( string text, string caption, 
-            MessageBoxButtons buttons, MessageBoxIcon icon )
-        {
-            return MessageBox.Show( this.Context.HostWindow, text, caption,
-                buttons, icon );
-        }
 
         #endregion
 

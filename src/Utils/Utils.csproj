@@ -28,7 +28,6 @@
         <File RelPath="Timer.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="UriUtils.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="Utils.build" BuildAction="None" />
-        <File RelPath="Utils.wxs" BuildAction="None" />
         <File RelPath="Zip.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="Win32\Constants.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="Win32\delegates.cs" SubType="Code" BuildAction="Compile" />

@@ -1,76 +1,46 @@
-Microsoft Visual Studio Solution File, Format Version 7.10
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.UI.2003", "Ankh.UI\Ankh.UI.csproj", "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A3248E1E-8272-4227-AF02-BB86040FBED9}
-		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
-	EndProjectSection
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.UI", "Ankh.UI\Ankh.UI.csproj", "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.2003", "Ankh\Ankh.csproj", "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A3248E1E-8272-4227-AF02-BB86040FBED9}
-		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
-		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE} = {AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh", "Ankh\Ankh.csproj", "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSvn.Core", "NSvn.Core\NSvn.Core.vcproj", "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn.Core.Tests.2003", "NSvn.Core.Tests\NSvn.Core.Tests.csproj", "{1882FE23-6EE3-46AF-82B2-929E371E6218}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn.Core.Tests", "NSvn.Core.Tests\NSvn.Core.Tests.csproj", "{1882FE23-6EE3-46AF-82B2-929E371E6218}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn.Common.2003", "NSvn.Common\NSvn.Common.csproj", "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn.Common", "NSvn.Common\NSvn.Common.csproj", "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSvn.Core.Tests.MCpp", "NSvn.Core.Tests.MCpp\NSvn.Core.Tests.MCpp.vcproj", "{05E011D8-54B5-4558-80BF-A8AD64DDAC97}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
-	EndProjectSection
 EndProject
-Project("{D4EFD700-BBAA-11D2-8EE0-00C04F5E0C38}") = "Ankh help.2003", "Help.doc\Ankh help.HWProj", "{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{D4EFD700-BBAA-11D2-8EE0-00C04F5E0C38}") = "Ankh help", "Help.doc\Ankh help.HWProj", "{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.2003", "Utils\Utils.csproj", "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReposInstaller.2003", "ReposInstaller\ReposInstaller.csproj", "{6D2A5456-0DB3-4795-8005-7E591AB2A221}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReposInstaller", "ReposInstaller\ReposInstaller.csproj", "{6D2A5456-0DB3-4795-8005-7E591AB2A221}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Tests", "Ankh.Tests\Ankh.Tests.csproj", "{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AnkhSetup", "Ankh\AnkhSetup\AnkhSetup.vdproj", "{0916DBA2-135E-40A6-AE12-E370C8D08A4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
-		Debug = Debug
-		Debug run = Debug run
-		NSvn.Tests = NSvn.Tests
-		Release = Release
+		ConfigName.0 = Debug
+		ConfigName.1 = Debug run
+		ConfigName.2 = NSvn.Tests
+		ConfigName.3 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.0 = {A3248E1E-8272-4227-AF02-BB86040FBED9}
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.1 = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.2 = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.0 = {AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.1 = {A3248E1E-8272-4227-AF02-BB86040FBED9}
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.2 = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.3 = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}.0 = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
+		{1882FE23-6EE3-46AF-82B2-929E371E6218}.0 = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
+		{1882FE23-6EE3-46AF-82B2-929E371E6218}.1 = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
+		{1882FE23-6EE3-46AF-82B2-929E371E6218}.2 = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
+		{1882FE23-6EE3-46AF-82B2-929E371E6218}.3 = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
+		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.0 = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
+		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.1 = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Debug.ActiveCfg = Debug|.NET
@@ -117,9 +87,11 @@ Global
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Release.ActiveCfg = Release|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Release.Build.0 = Release|Win32
 		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Debug.ActiveCfg = Release
+		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Debug.Build.0 = Release
 		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Debug run.ActiveCfg = Release
 		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.NSvn.Tests.ActiveCfg = Release
 		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Release.ActiveCfg = Release
+		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Release.Build.0 = Release
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Debug.ActiveCfg = Debug|.NET
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Debug.Build.0 = Debug|.NET
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Debug run.ActiveCfg = Debug|.NET
@@ -133,38 +105,24 @@ Global
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.NSvn.Tests.ActiveCfg = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.NSvn.Tests.Build.0 = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.Release.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.ActiveCfg = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.Build.0 = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug run.ActiveCfg = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug run.Build.0 = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.NSvn.Tests.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.NSvn.Tests.Build.0 = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.Build.0 = Release|.NET
+		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.Release.Build.0 = Release|.NET
+		{0916DBA2-135E-40A6-AE12-E370C8D08A4F}.Debug.ActiveCfg = Debug
+		{0916DBA2-135E-40A6-AE12-E370C8D08A4F}.Debug.Build.0 = Debug
+		{0916DBA2-135E-40A6-AE12-E370C8D08A4F}.Debug run.ActiveCfg = Debug
+		{0916DBA2-135E-40A6-AE12-E370C8D08A4F}.NSvn.Tests.ActiveCfg = Release
+		{0916DBA2-135E-40A6-AE12-E370C8D08A4F}.NSvn.Tests.Build.0 = Release
+		{0916DBA2-135E-40A6-AE12-E370C8D08A4F}.Release.ActiveCfg = Release
+		{0916DBA2-135E-40A6-AE12-E370C8D08A4F}.Release.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
-		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
-		WiX\Ankh.msm.build = WiX\Ankh.msm.build
-		WiX\Ankh.msm.wxs = WiX\Ankh.msm.wxs
-		ankh.reg = ankh.reg
-		WiX\apr-iconv.wxs = WiX\apr-iconv.wxs
-		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
-		CHANGES = CHANGES
-		..\deploy.build = ..\deploy.build
-		lib\lib.build = lib\lib.build
-		lib\lib.wxs = lib\lib.wxs
-		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
-		master.build = master.build
-		WiX\NSvn.msm.build = WiX\NSvn.msm.build
-		WiX\NSvn.msm.wxs = WiX\NSvn.msm.wxs
-		Ankh\AnkhSetup\README.rtf = Ankh\AnkhSetup\README.rtf
-		readme.txt = readme.txt
-		register.bat = register.bat
-		removeankh.reg = removeankh.reg
+		Item:1 = ..\deploy.build
+		Item:2 = Ankh\AnkhSetup\LICENCE.rtf
+		Item:3 = master.build
+		Item:4 = Ankh\AnkhSetup\README.rtf
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection

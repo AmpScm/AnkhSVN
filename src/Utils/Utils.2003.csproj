@@ -158,10 +158,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Utils.wxs"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "Zip.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

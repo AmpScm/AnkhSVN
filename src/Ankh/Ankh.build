@@ -4,29 +4,8 @@
     <property name="src.dir" value="."/>
     <property name="lib.dir" value="..\lib"/>
     <property name="warninglevel" value="/warn:3"/>
-    <property name="installsource.dir" value="..\${installsource.dir}"/>
     
-    <target name="version" depends="build">    
-        <script language="C#">
-            <imports>
-               <import name="System.Reflection" />
-            </imports>
-            
-            <code><![CDATA[
-            public static void ScriptMain( Project project )
-            {
-               string buildDir = Path.GetFullPath(project.Properties[ "build.dir" ]);
-               string ankhPath = Path.Combine(buildDir, "Ankh.dll");
-
-               //retrieve the Ankh.dll version, for use in installer
-               string ankhversion = Assembly.LoadFile(ankhPath).GetName().Version.ToString();
-               
-               project.Log(Level.Info, "Detected Ankh.dll version: {0}", ankhversion);
-               project.Properties.Add("ankh.version", ankhversion);
-            }]]></code>   
-        </script>
     
-    </target>
     <target name="rebuild">
         <call target="clean"/>
         <call target="build"/>
@@ -88,12 +67,6 @@
             <arg value="${warninglevel}"/>
         </csc>
         
-    </target>
-    
-    <target name="build-WiX" depends="version">
-        <property name="build.dir" value="${path::get-full-path(build.dir)}" />
-        <exec workingdir="${src.dir}" program="candle.exe"
-            commandline="-nologo -dbuilddir=${build.dir} -dankhversion=${ankh.version} -w0 Ankh.wxs -out ${installsource.dir}\Ankh.wixobj" />
     </target>
     
 </project>

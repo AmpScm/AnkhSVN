@@ -31,7 +31,7 @@ namespace Ankh
         /// <summary>
         /// The SolutionExplorer object.
         /// </summary>
-        ISolutionExplorer SolutionExplorer { get; }
+        Explorer SolutionExplorer { get; }
 
         /// <summary>
         /// The output pane.

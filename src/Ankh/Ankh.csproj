@@ -27,7 +27,6 @@
     <Files>
       <Include>
         <File RelPath="Ankh.build" BuildAction="None" />
-        <File RelPath="Ankh.wxs" BuildAction="None" />
         <File RelPath="AnkhContext.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="AssemblyInfo.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="CommandMap.cs" SubType="Code" BuildAction="Compile" />
