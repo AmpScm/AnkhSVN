@@ -76,7 +76,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
@@ -84,6 +84,16 @@
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\nunit20\build\nunit.framework.dll"
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
+                />
+                <Reference
+                    Name = "Ankh.2003"
+                    Project = "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "NSvn.Core.Tests.2003"
+                    Project = "{1882FE23-6EE3-46AF-82B2-929E371E6218}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
