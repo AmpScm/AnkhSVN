@@ -93,7 +93,7 @@ namespace Ankh.Tests
             }
             finally
             {
-                this.RecursiveDelete( otherWc );
+                Utils.PathUtils.RecursiveDelete( otherWc );
             }
             this.Client.Update( this.WcPath, Revision.Head, true );
             item1.Refresh( this.Client );
@@ -120,6 +120,37 @@ namespace Ankh.Tests
             SvnItem none = new SvnItem(nonePath, this.Client.SingleStatus(nonePath));
             Assert.AreEqual( StatusKind.None, none.Status.TextStatus );
             Assert.IsFalse( none.IsVersioned );
+
+        }
+
+        /// <summary>
+        /// Test that an incomplete working copy is also marked as versioned.
+        /// </summary>
+        [Test]
+        public void TestIncompleteIsVersioned()
+        {
+            this.Client.Cancel += new CancelDelegate(this.Cancel);
+            try
+            {
+                string incompletePath = this.GetTempFile();    
+                try
+                {
+                     this.Client.Checkout( this.ReposUrl, incompletePath, Revision.Head, true );
+                }
+                catch( OperationCancelledException )
+                {
+                    // empty
+                }
+
+                SvnItem item = new SvnItem( incompletePath, 
+                    this.Client.SingleStatus(incompletePath) );
+                Assert.AreEqual( StatusKind.Incomplete, item.Status.TextStatus );
+                Assert.IsTrue( item.IsVersioned );
+            }
+            finally
+            {
+                this.Client.Cancel -= new CancelDelegate(this.Cancel);
+            }
         }
 
         /// <summary>
@@ -157,7 +188,7 @@ namespace Ankh.Tests
             }
             finally
             {
-                this.RecursiveDelete( otherWc );
+                Utils.PathUtils.RecursiveDelete( otherWc );
             }
             this.Client.Update( this.WcPath, Revision.Head, true );
             item1.Refresh( this.Client );
@@ -241,7 +272,7 @@ namespace Ankh.Tests
             }
             finally
             {
-                this.RecursiveDelete( otherWc );
+                Utils.PathUtils.RecursiveDelete( otherWc );
             }
             this.Client.Update( this.WcPath, Revision.Head, true );
             item1.Refresh( this.Client );
@@ -365,6 +396,22 @@ namespace Ankh.Tests
             return item.IsDirectory;
         }
 
+        private void NullStatusCallback( string s, Status s2 )
+        {
+            // empty
+        }
+
+
+        private void Cancel(object sender, CancelEventArgs args)
+        {
+            // we'll cancel after 30 callbacks
+            this.counter++;
+            if ( this.counter > 30 )
+                args.Cancel = true;
+        }
+
+        private int counter = 0;
         private bool itemChanged = false;
+
     }
 }
