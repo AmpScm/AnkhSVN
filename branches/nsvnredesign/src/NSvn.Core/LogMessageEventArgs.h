@@ -11,7 +11,7 @@ namespace NSvn
         public __gc class LogMessageEventArgs : public System::EventArgs
         {
         public:
-            LogMessageEventArgs( CommitItem* items[] ) : items(items), message(S"")
+            LogMessageEventArgs( CommitItem* items[] ) : items(items), message(0)
             {;}
 
             __property CommitItem* get_CommitItems() []
