@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.UI", "Ankh.UI\Ankh.UI.csproj", "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Commands", "Ankh.Commands\Ankh.Commands.csproj", "{5F991CB9-8371-4A34-8038-C921C8EC4F25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh", "Ankh\Ankh.csproj", "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AnkhSetup", "Ankh\AnkhSetup\AnkhSetup.vdproj", "{D25DCD7E-FD6D-4D0E-9649-929F9A6187F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Debug.ActiveCfg = Debug|.NET
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Debug.Build.0 = Debug|.NET
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Release.ActiveCfg = Release|.NET
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Release.Build.0 = Release|.NET
+		{5F991CB9-8371-4A34-8038-C921C8EC4F25}.Debug.ActiveCfg = Debug|.NET
+		{5F991CB9-8371-4A34-8038-C921C8EC4F25}.Debug.Build.0 = Debug|.NET
+		{5F991CB9-8371-4A34-8038-C921C8EC4F25}.Release.ActiveCfg = Release|.NET
+		{5F991CB9-8371-4A34-8038-C921C8EC4F25}.Release.Build.0 = Release|.NET
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Debug.ActiveCfg = Debug|.NET
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Debug.Build.0 = Debug|.NET
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Release.ActiveCfg = Release|.NET
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Release.Build.0 = Release|.NET
+		{D25DCD7E-FD6D-4D0E-9649-929F9A6187F7}.Debug.ActiveCfg = Debug
+		{D25DCD7E-FD6D-4D0E-9649-929F9A6187F7}.Release.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
