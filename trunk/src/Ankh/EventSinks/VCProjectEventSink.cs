@@ -29,14 +29,14 @@ namespace Ankh.EventSinks
 
         protected void ItemAdded( object item, object parent )
         {
-            this.Context.SolutionExplorer.SyncWithTreeView();
+            VCFile file = item as VCFile;
+            string s = file.ToString();
+            //this.Context.SolutionExplorer.SyncWithTreeView();
         }
 
         protected void ItemRemoved( object item, object parent )
         {
-            string s = item.ToString();
-            if ( parent is Project )
-                s = item.ToString();
+            
         }
 
         private VCProjectEngineEvents events;

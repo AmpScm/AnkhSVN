@@ -338,12 +338,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "EventSinks\ItemEventSink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "EventSinks\ProjectItemsEventSink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "EventSinks\ProjectsEventSink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "EventSinks\SolutionEventsSink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

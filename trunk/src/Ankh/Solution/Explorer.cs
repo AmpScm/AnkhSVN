@@ -95,6 +95,17 @@ namespace Ankh.Solution
             }
         }
 
+        /// <summary>
+        /// Refreshes all subnodes of a specific project.
+        /// </summary>
+        /// <param name="project"></param>
+        public void Refresh( Project project )
+        {
+            TreeNode node = this.GetNode( project );
+            if ( node != null )
+                node.Refresh();
+        }
+
 
         /// <summary>
         /// Updates the status of the given item.
@@ -252,8 +263,8 @@ namespace Ankh.Solution
         {        
             public int Compare(object x, object y)
             {
-                return ((ProjectItem)x).get_FileNames(0).CompareTo(
-                    ((ProjectItem)y).get_FileNames(0) );
+                return ((ProjectItem)x).get_FileNames(1).CompareTo(
+                    ((ProjectItem)y).get_FileNames(1) );
             }
         }
         #endregion
