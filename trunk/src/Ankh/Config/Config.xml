@@ -5,7 +5,20 @@
             <Url>http://ankhsvn.com:8088/svn/test</Url>
             <Url>http://svn.collab.net/repos/svn</Url>
         </MruUrls>
-    </RepositoryExplorer>
+    </RepositoryExplorer>    
+    
+    <!--This command line will be used for spawning an external diff program.
+    The options are %base and %mine, which will be replaced with the respective paths when
+    a diff is executed.
+    If you've installed TortoiseSVN to the default location, you can uncomment the line below
+    to use its diff tool -->
+    <!--<DiffExePath>"C:\Program Files\TortoiseSVN\TortoiseMerge.exe" /base:%base /yours:%mine</DiffExePath>-->
+
+    <!--This command line will be used for spawning an external merge program.
+    The options are %base %theirs %mine %merged, which will be replaced with the respective
+    paths when a merge is executed. -->
+    <!--<MergeExePath>"C:\Program Files\TortoiseSVN\TortoiseMerge.exe" /base:%base /theirs:%theirs /yours:%mine /merged:%merged</MergeExePath>-->
+        
     <LogMessageTemplate><![CDATA[# All lines starting with a # will be ignored
 # This template can be modified by editing the Ankh config file, located in %APPDATA%\AnkhSVN
 *** # %path%]]>

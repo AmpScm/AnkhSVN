@@ -202,6 +202,8 @@ namespace NSvn
                 bool noDiffDeleted, 
                 Stream* outfile, Stream* errFile);
 
+            String* GetPristinePath(String* path);
+
             ///<summary>Apply file differences into a working copy. Merge changes 
             ///         from url1/revision1 to url2/revision2 into a working-copy. 
             ///</summary>
