@@ -72,6 +72,7 @@ namespace Ankh.UI
                 switch( value.Type )
                 {
                     case RevisionType.Number:
+                        this.revisionTypeBox.SelectedItem = null;
                         this.revisionTypeBox.Text = value.Number.ToString();
                         break;
                     case RevisionType.Date:
