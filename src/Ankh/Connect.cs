@@ -99,8 +99,6 @@ namespace Ankh
                 // register the new ones
                 this.commands= 
                     Ankh.CommandMap.LoadCommands( this.context, register );  
-
-                this.CreateAboutBoxText( ((_DTE)application).RegistryRoot );
                
                 // is there already a solution open? 
                 // can happen if we are loaded after startup
@@ -294,33 +292,7 @@ namespace Ankh
             {   
                 Error.Handle( ex );
             }
-        }
-
-        /// <summary>
-        /// Create the text that goes in the VS.NET about box, with the 
-        /// version numbers of Ankh and the linked libraries.
-        /// </summary>
-        private void CreateAboutBoxText( string registryRoot )
-        {
-            string text = "";			
-
-            // get the assembly version
-            string ankhVersion = 
-                typeof(NSvn.Core.Client).Assembly.GetName().Version.ToString();
-			
-            text += String.Format( "AnkhSVN {0}{1}", 
-                ankhVersion, Environment.NewLine );
-
-            // get the library versions
-            object[] attributes = typeof(NSvn.Core.Client).Assembly.GetCustomAttributes(
-                typeof(NSvn.Common.LibraryAttribute), true );
-            foreach( NSvn.Common.LibraryAttribute version in attributes )
-                text += version.ToString() + Environment.NewLine;
-
-            // set the registry value
-            RegistryKey key = Registry.CurrentUser.CreateSubKey( registryRoot + @"\AddIns\Ankh" );
-            key.SetValue( "AboutBoxDetails", text );
-        }
+        }        
         
         private AnkhContext context;
         Ankh.CommandMap commands;
