@@ -177,7 +177,7 @@ void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* r
 
     HandleError( svn_client_revprop_set(  StringHelper(property->Name), &propv, 
         truePath, revision->ToSvnOptRevision( pool ), &setRev, 
-        context->ToSvnContext (pool), force, pool));
+        force, context->ToSvnContext (pool), pool));
 
     *revisionNumber = setRev;
 }
