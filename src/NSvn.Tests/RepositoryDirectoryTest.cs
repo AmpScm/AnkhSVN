@@ -78,6 +78,19 @@ namespace NSvn.Tests
             }
         }
 
+        [Test]
+        public void TestName()
+        {
+            RepositoryDirectory dir = new RepositoryDirectory( "file:///tmp/repos" );
+            Assertion.AssertEquals( "Directory name is wrong", "repos", dir.Name );
+
+            dir = new RepositoryDirectory( "http://moo.porn.com/svn/trunk/directory" );
+            Assertion.AssertEquals( "Directory name is wrong", "directory", dir.Name );
+
+            dir = new RepositoryDirectory( "http://moo.porn.com:8088/svn/moo/foo" );
+            Assertion.AssertEquals( "Directory name is wrong", "foo", dir.Name );
+        }
+
         private string localDir;
 	}
 }
