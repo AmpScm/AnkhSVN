@@ -72,6 +72,9 @@ namespace Ankh
                 this.OnChanged();
         }
 
+        /// <summary>
+        /// Is this item versioned?
+        /// </summary>
         public bool IsVersioned
         {
             get
@@ -79,6 +82,36 @@ namespace Ankh
                 return this.status.TextStatus != StatusKind.None &&
                     this.status.TextStatus != StatusKind.Unversioned;
             }
+        }
+
+        /// <summary>
+        /// Is this resource modified(implies that it is versioned)?
+        /// </summary>
+        public bool IsModified
+        {
+            get
+            {
+                return (this.Status.TextStatus != StatusKind.Normal &&
+                  this.Status.TextStatus != StatusKind.Unversioned) ||
+                (this.Status.PropertyStatus != StatusKind.Normal &&
+                this.Status.PropertyStatus != StatusKind.None);
+            }
+        }
+
+        /// <summary>
+        /// Is this item a directory?
+        /// </summary>
+        public bool IsDirectory
+        {
+            get{ return this.status.Entry.Kind == NodeKind.Directory; }
+        }
+
+        /// <summary>
+        /// Is this item a file?
+        /// </summary>
+        public bool IsFile
+        {
+            get{ return this.status.Entry.Kind == NodeKind.File; }
         }
 
         /// <summary>

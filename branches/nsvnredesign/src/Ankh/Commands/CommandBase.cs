@@ -44,13 +44,7 @@ namespace Ankh.Commands
         /// <returns></returns>
         protected static bool ModifiedFilter( SvnItem item )
         {
-            if ( (item.Status.TextStatus != StatusKind.Normal &&
-                  item.Status.TextStatus != StatusKind.Unversioned) ||
-                (item.Status.PropertyStatus != StatusKind.Normal &&
-                item.Status.PropertyStatus != StatusKind.None) )
-                return true;
-            else
-                return false;
+            return item.IsModified;
         }
 
         /// <summary>
@@ -60,20 +54,12 @@ namespace Ankh.Commands
         /// <returns></returns>
         protected static bool DirectoryFilter( SvnItem item )
         {
-            if ( item.Status.Entry != null && 
-                item.Status.Entry.Kind == NodeKind.Directory &&
-                item.Status.TextStatus != StatusKind.None )
-                return true;
-            else
-                return false;
+            return item.IsVersioned && item.IsDirectory;
         }
 
         protected static bool UnversionedFilter( SvnItem item )
         {
-            if ( item.Status.TextStatus == StatusKind.Unversioned )
-                return true;
-            else
-                return false;
+            return !item.IsVersioned;
         }
 
         private EnvDTE.Command command;
