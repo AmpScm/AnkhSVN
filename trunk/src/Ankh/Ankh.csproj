@@ -96,6 +96,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "AnkhContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -132,6 +137,11 @@
                 />
                 <File
                     RelPath = "Commands\CleanupCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\CommandBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

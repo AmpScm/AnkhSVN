@@ -10,7 +10,7 @@ namespace Ankh
 	/// <summary>
 	/// Responsible for registering the ICommand implementations in this assembly.
 	/// </summary>
-    public class CommandMap : DictionaryBase
+    internal class CommandMap : DictionaryBase
     {
         /// <summary>
         /// Private constructor to avoid instantiation.
@@ -32,10 +32,10 @@ namespace Ankh
         /// Registers all commands present in this DLL.
         /// </summary>
         /// <param name="dte">TODO: what to do, what to do?</param>
-        public static CommandMap RegisterCommands( _DTE dte, AddIn addin )
+        public static CommandMap RegisterCommands( AnkhContext context )
         {
             // delete old commands
-            DeleteCommands( dte, addin );
+            DeleteCommands( context );
 
 
             CommandMap commands = new CommandMap();
@@ -46,7 +46,7 @@ namespace Ankh
             {
                 foreach( Type type in module.FindTypes( 
                     new TypeFilter( CommandMap.CommandTypeFilter ), null ) )
-                    RegisterCommand( type, commands, dte, addin );
+                    RegisterCommand( type, commands, context );
             }
 
             return commands;            
@@ -55,14 +55,14 @@ namespace Ankh
         /// <summary>
         /// Get rid of any old commands hanging around.
         /// </summary>
-        private static void DeleteCommands( _DTE dte, AddIn addin )
+        private static void DeleteCommands( AnkhContext context )
         {
-            if ( dte.Commands != null )
+            if ( context.DTE.Commands != null )
             {
                 // we only want to delete our own commands
-                foreach( Command cmd in dte.Commands )
+                foreach( Command cmd in context.DTE.Commands )
                 {
-                    if ( cmd.Name != null && cmd.Name.StartsWith( addin.ProgID ) )
+                    if ( cmd.Name != null && cmd.Name.StartsWith( context.AddIn.ProgID ) )
                         cmd.Delete();
                 }
             }
@@ -84,19 +84,19 @@ namespace Ankh
         /// </summary>
         /// <param name="type">A Type object representing the command to register.</param>
         /// <param name="commands">A Commands collection in which to put the command.</param>
-        private static void RegisterCommand( Type type, CommandMap commands, _DTE dte, AddIn addin )
+        private static void RegisterCommand( Type type, CommandMap commands, AnkhContext context )
         {
             VSNetCommandAttribute attr = (VSNetCommandAttribute)(
                 type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) )[0];
             ICommand cmd = (ICommand)Activator.CreateInstance( type );
-            commands.Dictionary[ addin.ProgID + "." + attr.Name ] = cmd;
+            commands.Dictionary[ context.AddIn.ProgID + "." + attr.Name ] = cmd;
 
             // register the command with the environment
             object []contextGuids = new object[] { };
-            Command command = dte.Commands.AddNamedCommand( addin, attr.Name, attr.Text, attr.Tooltip, false,
+            cmd.Command = context.DTE.Commands.AddNamedCommand( context.AddIn, attr.Name, attr.Text, attr.Tooltip, false,
                 1, ref contextGuids, (int)vsCommandStatus.vsCommandStatusUnsupported );
 
-            RegisterControl( command, type );           
+            RegisterControl( cmd, type );           
 
             System.Windows.Forms.MessageBox.Show( "Registering command " + attr.Name );
         }
@@ -104,16 +104,16 @@ namespace Ankh
         /// <summary>
         /// Registers a commandbar. 
         /// </summary>
-        /// <param name="command">The Command to attach the command bar to.</param>
+        /// <param name="command">The ICommand to attach the command bar to.</param>
         /// <param name="type">The type that handles the command.</param>
-        private static void RegisterControl( Command command, Type type )
+        private static void RegisterControl( ICommand cmd, Type type )
         {
             // register the command bars
             foreach( VSNetControlAttribute control in type.GetCustomAttributes( 
                 typeof(VSNetControlAttribute), false) ) 
             {
-                CommandBar cmdBar = (CommandBar)command.DTE.CommandBars[ control.CommandBar ];
-                command.AddControl( cmdBar, control.Position );
+                CommandBar cmdBar = (CommandBar)cmd.Command.DTE.CommandBars[ control.CommandBar ];
+                cmd.Command.AddControl( cmdBar, control.Position );
             }
         }
 	}

@@ -7,19 +7,18 @@ namespace Ankh.Commands
 	/// Commits an item.
 	/// </summary>
 	[VSNetCommand("CommitItem", Text = "Commit", Tooltip = "Commits an item")]
-	internal class CommitItem : ICommand
-	{		
-	
+	internal class CommitItem : CommandBase
+	{	
         #region Implementation of ICommand
-        public EnvDTE.vsCommandStatus QueryStatus(EnvDTE._DTE dte)
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
             return new EnvDTE.vsCommandStatus();
         }
-        public void Execute(EnvDTE._DTE dte)
+        public override void Execute(Ankh.AnkhContext context)
         {
         
         }
-    
+        
         #endregion
     }
 }
