@@ -49,9 +49,6 @@ namespace Ankh.Commands
 
             Debug.Assert( this.result != null );
 
-            using( StreamWriter w = new StreamWriter( @"T:\log.xml" ))
-                w.Write( this.result.XmlDocument.InnerXml );
-
             // transform it to HTML and display it
             XslTransform transform = CommandBase.GetTransform( context, "log.xsl" );
             StringWriter writer = new StringWriter();
