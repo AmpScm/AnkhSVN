@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <project name="Utils" default="rebuild">
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
@@ -31,6 +31,7 @@
         
         <csc target="library" output="${build.dir}/Utils.dll" verbose="${verbose}" define="${define}">
             <references>
+                <includes name="${lib.dir}\nunit.framework.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
