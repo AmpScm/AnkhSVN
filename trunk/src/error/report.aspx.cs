@@ -24,6 +24,8 @@ namespace error
         protected System.Web.UI.WebControls.TextBox emailBox;
         protected System.Web.UI.WebControls.Label Label4;
         protected System.Web.UI.WebControls.TextBox commentsBox;
+        //protected System.Web.UI.WebControls.TextBox versionBox;
+        protected System.Web.UI.WebControls.Image Image1;
         protected System.Web.UI.WebControls.TextBox versionBox;
         protected System.Web.UI.WebControls.Label Label1;
     
@@ -49,7 +51,6 @@ namespace error
 		/// </summary>
 		private void InitializeComponent()
 		{    
-            this.commentsBox.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
             this.Load += new System.EventHandler(this.Page_Load);
 
@@ -84,9 +85,5 @@ namespace error
             Response.Redirect( "thanks.html" );
         }
 
-        private void TextBox1_TextChanged(object sender, System.EventArgs e)
-        {
-        
-        }
 	}
 }
