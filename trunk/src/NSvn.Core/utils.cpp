@@ -103,9 +103,9 @@ const char* NSvn::Core::CanonicalizePath( String* path, Pool& pool )
 // Converts Byte array to svn_string_t
 void NSvn::Core::ByteArrayToSvnString( svn_string_t* string, Byte array[], const Pool& pool  )
 {
-    string->len = array.Length;
-    string->data = static_cast<char*>(pool.Alloc( array.Length));
-    Marshal::Copy( array, 0, const_cast<char*>(string->data), array.Length );
+    string->len = array->Length;
+    string->data = static_cast<char*>(pool.Alloc( array->Length));
+    Marshal::Copy( array, 0, const_cast<char*>(string->data), array->Length );
 
 }
 
