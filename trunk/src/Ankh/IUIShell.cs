@@ -46,7 +46,22 @@ namespace Ankh
         /// <param name="selection"></param>
         void SetRepositoryExplorerSelection( object[] selection );
 
-        CommitContext ShowCommitDialog( CommitContext ctx );
+        /// <summary>
+        /// Displays the commit dialog modally.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
+        CommitContext ShowCommitDialogModal( CommitContext ctx );
+
+        /// <summary>
+        /// Shows/hides the commit dialog
+        /// </summary>
+        void ToggleCommitDialog( bool show );
+
+        /// <summary>
+        /// Resets the commit dialog.
+        /// </summary>
+        void ResetCommitDialog();
 
         /// <summary>
         /// Display a message box.
