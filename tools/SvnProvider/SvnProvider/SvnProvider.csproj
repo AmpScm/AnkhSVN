@@ -24,6 +24,10 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NSvn.Core, Version=0.5.5.1653, Culture=neutral">
+      <HintPath>D:\Program Files\AnkhSVN\NSvn.Core.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management.Automation, Version=6.0.4093.0, Culture=neutral, PublicKeyToken=365143bb27e7ac8b, processorArchitecture=MSIL">
@@ -55,5 +59,14 @@
     <Compile Include="SvnProvider.cs" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="init.msh" />
+    <Content Include="postbuild.msh" />
+    <Content Include="SvnProvider.display.xml" />
+    <Content Include="SvnProvider.types.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup Condition="">
+    <PostBuildEvent>"D:\Program Files\Windows command shell preview\msh.exe" -command $(ProjectDir)\postbuild.msh $(ProjectDir) $(TargetPath)</PostBuildEvent>
+  </PropertyGroup>
 </Project>
