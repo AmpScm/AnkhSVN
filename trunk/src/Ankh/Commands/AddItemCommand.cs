@@ -43,7 +43,7 @@ namespace Ankh.Commands
             bool recursive = false;
 
             // are we shifted?
-            if ( this.Shift )
+            if ( !this.Shift )
             {
                 using( PathSelector sel = this.GetPathSelector( "Select items to add" ) )
                 {
