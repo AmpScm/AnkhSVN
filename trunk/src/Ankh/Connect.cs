@@ -1,4 +1,4 @@
-// $Id
+// $Id$
 namespace Ankh
 {
 	using System;
