@@ -72,12 +72,13 @@ namespace Ankh.UI
             this.propListView = new System.Windows.Forms.ListView();
             this.nameColumn = new System.Windows.Forms.ColumnHeader();
             this.valueColumn = new System.Windows.Forms.ColumnHeader();
-            this.addButton = new System.Windows.Forms.Button();
+            this.newButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.modifyButton = new System.Windows.Forms.Button();
-            this.valueTextBox = new System.Windows.Forms.TextBox();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.propertyEditor = new Ankh.UI.PlainPropertyEditor();
+            this.valueLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -94,16 +95,17 @@ namespace Ankh.UI
             this.nameCombo.Name = "nameCombo";
             this.nameCombo.Size = new System.Drawing.Size(121, 21);
             this.nameCombo.TabIndex = 1;
-            this.nameCombo.TextChanged += new System.EventHandler(this.valueTextBox_TextChanged);
+            this.nameCombo.TextChanged += new System.EventHandler(this.nameCombo_TextChanged);
             // 
             // propListView
             // 
             this.propListView.Anchor = ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
+            this.propListView.AutoArrange = false;
             this.propListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
                                                                                            this.nameColumn,
                                                                                            this.valueColumn});
-            this.propListView.Location = new System.Drawing.Point(0, 144);
+            this.propListView.Location = new System.Drawing.Point(0, 224);
             this.propListView.Name = "propListView";
             this.propListView.Size = new System.Drawing.Size(480, 97);
             this.propListView.TabIndex = 6;
@@ -120,21 +122,20 @@ namespace Ankh.UI
             this.valueColumn.Text = "Value";
             this.valueColumn.Width = 308;
             // 
-            // addButton
+            // newButton
             // 
-            this.addButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
-            this.addButton.Enabled = false;
-            this.addButton.Location = new System.Drawing.Point(224, 112);
-            this.addButton.Name = "addButton";
-            this.addButton.TabIndex = 3;
-            this.addButton.Text = "&Add";
-            this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            this.newButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
+            this.newButton.Location = new System.Drawing.Point(224, 192);
+            this.newButton.Name = "newButton";
+            this.newButton.TabIndex = 3;
+            this.newButton.Text = "&New";
+            this.newButton.Click += new System.EventHandler(this.newButton_Click);
             // 
             // deleteButton
             // 
             this.deleteButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
             this.deleteButton.Enabled = false;
-            this.deleteButton.Location = new System.Drawing.Point(392, 112);
+            this.deleteButton.Location = new System.Drawing.Point(392, 192);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.TabIndex = 5;
             this.deleteButton.Text = "&Delete";
@@ -144,7 +145,7 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(304, 264);
+            this.okButton.Location = new System.Drawing.Point(304, 344);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 7;
             this.okButton.Text = "&Ok";
@@ -153,39 +154,51 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(392, 264);
+            this.cancelButton.Location = new System.Drawing.Point(392, 344);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 8;
             this.cancelButton.Text = "&Cancel";
             // 
-            // modifyButton
+            // saveButton
             // 
-            this.modifyButton.Location = new System.Drawing.Point(308, 112);
-            this.modifyButton.Name = "modifyButton";
-            this.modifyButton.TabIndex = 4;
-            this.modifyButton.Text = "&Modify";
+            this.saveButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
+            this.saveButton.Enabled = false;
+            this.saveButton.Location = new System.Drawing.Point(308, 192);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.TabIndex = 4;
+            this.saveButton.Text = "&Save";
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // valueTextBox
+            // propertyEditor
             // 
-            this.valueTextBox.Location = new System.Drawing.Point(72, 56);
-            this.valueTextBox.Name = "valueTextBox";
-            this.valueTextBox.TabIndex = 2;
-            this.valueTextBox.Text = "";
-            this.valueTextBox.TextChanged += new System.EventHandler(this.valueTextBox_TextChanged);
+            this.propertyEditor.Location = new System.Drawing.Point(68, 48);
+            this.propertyEditor.Name = "propertyEditor";
+            this.propertyEditor.Size = new System.Drawing.Size(240, 128);
+            this.propertyEditor.TabIndex = 9;
+            this.propertyEditor.Changed += new System.EventHandler(this.propertyEditor_Changed);
+            // 
+            // valueLabel
+            // 
+            this.valueLabel.Location = new System.Drawing.Point(24, 56);
+            this.valueLabel.Name = "valueLabel";
+            this.valueLabel.Size = new System.Drawing.Size(40, 16);
+            this.valueLabel.TabIndex = 10;
+            this.valueLabel.Text = "Value:";
             // 
             // PropertyEditorDialog
             // 
-            this.AcceptButton = this.okButton;
+            this.AcceptButton = this.saveButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(474, 295);
+            this.ClientSize = new System.Drawing.Size(474, 375);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.valueTextBox,
-                                                                          this.modifyButton,
+                                                                          this.valueLabel,
+                                                                          this.propertyEditor,
+                                                                          this.saveButton,
                                                                           this.cancelButton,
                                                                           this.okButton,
                                                                           this.deleteButton,
-                                                                          this.addButton,
+                                                                          this.newButton,
                                                                           this.propListView,
                                                                           this.nameCombo,
                                                                           this.nameLabel});
@@ -223,7 +236,8 @@ namespace Ankh.UI
 
             public void VisitTextPropertyItem(TextPropertyItem item)
             {
-               this.AddItem( new string[]{ item.Name, item.Text }, item );
+               this.AddItem( new string[]{ item.Name, 
+                    item.Text.Replace("\t", "    ").Replace( "\r\n", "[NL]") }, item );
             }
 
             public void VisitBinaryPropertyItem(BinaryPropertyItem item)
@@ -245,15 +259,11 @@ namespace Ankh.UI
 
 
 
-        private void addButton_Click(object sender, System.EventArgs e)
+        private void newButton_Click(object sender, System.EventArgs e)
         {
-            PropertyItem item= new TextPropertyItem(valueTextBox.Text);
-            item.Name = nameCombo.Text;
-            this.propItems.Add(item);
-            this.PopulateListView();
-
-            valueTextBox.Text ="";
+            this.propertyEditor.Clear();
             nameCombo.Text = "";
+            this.propListView.SelectedItems.Clear();
         }
         private void deleteButton_Click(object sender, System.EventArgs e)
         {
@@ -266,12 +276,47 @@ namespace Ankh.UI
         }
 
 
+        private void saveButton_Click(object sender, System.EventArgs e)
+        {
+            
+            PropertyItem item= this.propertyEditor.PropertyItem;
+            item.Name = nameCombo.Text;
+            
+            if (this.propListView.SelectedItems.Count > 0)
+            {
+                object selectedItem = this.propListView.SelectedItems[0].Tag;
+                int index = this.propItems.IndexOf(selectedItem);
+                this.propItems[index] = item;
+            }
+            else
+            {
+                this.propItems.Add(item);
+            }
+
+            this.PopulateListView();
+            this.propertyEditor.Clear();
+            nameCombo.Text = "";
+
+        }
+
         private void propListView_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            if (this.propListView.SelectedItems.Count > 0)
+            {
+                TextPropertyItem item = (TextPropertyItem)this.propListView.SelectedItems[0].Tag;
+                this.nameCombo.Text = item.Name;
+ 
+                this.propertyEditor.PropertyItem = item;
+            }
+            this.ValidateForm();
+        }   
+
+        private void propertyEditor_Changed(object sender, System.EventArgs e)
         {
             this.ValidateForm();
         }
-        
-        private void valueTextBox_TextChanged(object sender, System.EventArgs e)
+
+        private void nameCombo_TextChanged(object sender, System.EventArgs e)
         {
             this.ValidateForm();
         }
@@ -279,11 +324,10 @@ namespace Ankh.UI
         private void ValidateForm ()
         {
             this.deleteButton.Enabled = this.propListView.SelectedItems.Count > 0;
-            this.addButton.Enabled = this.nameCombo.Text.Trim() != "" && 
-                this.valueTextBox.Text.Trim() != "";
-        }
+            this.saveButton.Enabled = this.nameCombo.Text.Trim() != "" && 
+              this.propertyEditor.Valid;
 
-        
+        }  
 
 
         private ArrayList propItems;
@@ -292,27 +336,21 @@ namespace Ankh.UI
         private System.Windows.Forms.ComboBox nameCombo;
         private System.Windows.Forms.ColumnHeader nameColumn;
         private System.Windows.Forms.ColumnHeader valueColumn;
-        private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button deleteButton;
-        private System.Windows.Forms.Button modifyButton;
         private System.Windows.Forms.ListView propListView;
-        private System.Windows.Forms.TextBox valueTextBox;
+        private System.Windows.Forms.Button newButton;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Label valueLabel;
+        private Ankh.UI.PlainPropertyEditor propertyEditor;
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        
-
-        
-
-        
-
-        
-
-	}
+       
+  	}
 
     /// <summary>
     /// Represents a property item.

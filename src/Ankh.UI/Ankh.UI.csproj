@@ -102,6 +102,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "IPropertyEditor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "LogMessageControl.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -109,6 +114,16 @@
                 <File
                     RelPath = "LogMessageControl.resx"
                     DependentUpon = "LogMessageControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "PlainPropertyEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PlainPropertyEditor.resx"
+                    DependentUpon = "PlainPropertyEditor.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
