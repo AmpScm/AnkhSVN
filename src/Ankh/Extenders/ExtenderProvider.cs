@@ -11,7 +11,7 @@ namespace Ankh.Extenders
     /// This is the class factory for extender objects
     /// </summary>
     [GuidAttribute("BAB7BC93-6097-486e-B29D-CFEA4AB9107B"), ProgId("Ankh.ExtenderProvider")]	
-    public class ExtenderProvider : IExtenderProvider
+    internal class ExtenderProvider : IExtenderProvider
     {
         private ExtenderProvider( AnkhContext context )
         {

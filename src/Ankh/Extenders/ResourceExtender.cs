@@ -9,7 +9,7 @@ namespace Ankh.Extenders
 {
 
     [InterfaceType( ComInterfaceType.InterfaceIsDual )]
-    public interface IResourceExtender
+    internal interface IResourceExtender
     {
         string Url
         {
@@ -58,7 +58,7 @@ namespace Ankh.Extenders
     /// Summary description for TestExtender.
     /// </summary>
     [ClassInterface(ClassInterfaceType.None)]
-    public class ResourceExtender : IResourceExtender
+    internal class ResourceExtender : IResourceExtender
     {
         internal ResourceExtender( Status status )
         {
