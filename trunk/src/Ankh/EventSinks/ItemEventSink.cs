@@ -66,7 +66,7 @@ namespace Ankh.EventSinks
         {
             public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
             {
-                // Checks if file doesn't exists. 
+                // Checks if file doesn't exist. This should not trigger if we are renaming.
                 if ( !File.Exists( resource.Path ) )
                 {
                     resource.Remove( true );

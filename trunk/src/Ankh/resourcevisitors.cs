@@ -24,6 +24,19 @@ namespace Ankh
         }
     }
 
+    internal class RenamableVisitor : LocalResourceVisitorBase
+    {
+        public bool Renamable = false;
+        public override void VisitWorkingCopyFile(WorkingCopyFile file)
+        {   
+            if ( file.Status.TextStatus == StatusKind.Normal &&
+                (file.Status.PropertyStatus == StatusKind.Normal ||
+                file.Status.PropertyStatus == StatusKind.None ) )
+                this.Renamable = true;
+        }
+    }
+
+
     /// <summary>
     /// A visitor that checks if all the visitees are versioned.
     /// </summary>

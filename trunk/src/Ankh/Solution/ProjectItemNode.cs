@@ -45,6 +45,14 @@ namespace Ankh.Solution
             this.FindResources();
             base.Refresh();
         }
+
+        /// <summary>
+        /// The project item associated with this node.
+        /// </summary>
+        public ProjectItem ProjectItem
+        {
+            get{ return this.projectItem; }
+        }
  
 
         protected override StatusKind GetStatus()
