@@ -340,22 +340,21 @@ namespace Ankh
         
         private bool CheckWhetherAnkhShouldLoad()
         {
-            // no point in doing anything if the solution dir isn't a wc
+            // no point in doing anything if the solution dir doesn't exist
             string solutionPath = this.dte.Solution.FullName;
-            if ( solutionPath == String.Empty || 
-                !SvnUtils.IsWorkingCopyPath( Path.GetDirectoryName( solutionPath ) ) )
+            if ( solutionPath == String.Empty || !File.Exists(solutionPath))
                 return false;
 
-            string adminDir = Path.Combine( Path.GetDirectoryName( solutionPath ),
-                NSvn.Core.Client.AdminDirectoryName );
+            string solutionDir = Path.GetDirectoryName( solutionPath );
 
             // maybe this solution has never been loaded before with Ankh?
-            if ( File.Exists( Path.Combine( adminDir, "Ankh.Load" ) ) )
+            if ( File.Exists( Path.Combine( solutionDir, "Ankh.Load" ) ) )
             {
                 Debug.WriteLine( "Found Ankh.Load", "Ankh" );
                 return true;
             }
-            else if ( File.Exists( Path.Combine(adminDir, "Ankh.NoLoad") ) )
+            //  user has expressly specified that this solution should load?
+            else if ( File.Exists( Path.Combine(solutionDir, "Ankh.NoLoad") ) )
             {
                 Debug.WriteLine( "Found Ankh.NoLoad", "Ankh" );
                 return false;
@@ -363,11 +362,17 @@ namespace Ankh
             else
             {
                 Debug.WriteLine( "Found neither Ankh.Load nor Ankh.NoLoad", "Ankh" );
-                return this.QueryWhetherAnkhShouldLoad( adminDir );
+
+                // is this a wc?
+                // the user must manually enable Ankh if soln dir is not vc
+                if ( SvnUtils.IsWorkingCopyPath( solutionDir ) )
+                    return this.QueryWhetherAnkhShouldLoad( solutionDir );
+                else 
+                    return false;
             }
         }
 
-        private bool QueryWhetherAnkhShouldLoad( string adminDir )
+        private bool QueryWhetherAnkhShouldLoad( string solutionDir )
         {
             string nl = Environment.NewLine;
             string msg = "Ankh has detected that the solution file for this solution " + 
@@ -383,13 +388,13 @@ namespace Ankh
             if ( res == DialogResult.Yes )
             {
                 Debug.WriteLine( "Creating Ankh.Load", "Ankh" );
-                File.Create( Path.Combine(adminDir, "Ankh.Load") ).Close();
+                File.Create( Path.Combine(solutionDir, "Ankh.Load") ).Close();
                 return true;
             }
             else if ( res == DialogResult.No )
             {
                 Debug.WriteLine( "Creating Ankh.NoLoad", "Ankh" );
-                File.Create( Path.Combine(adminDir, "Ankh.NoLoad") ).Close();
+                File.Create( Path.Combine(solutionDir, "Ankh.NoLoad") ).Close();
             }
 
             return false;

@@ -37,21 +37,34 @@ namespace Ankh.Commands
                 if ( !File.Exists( solutionPath ) )
                     return Disabled;
 
-                if ( ( !context.SolutionIsOpen || (!SvnUtils.IsWorkingCopyPath(
-                    Path.GetDirectoryName(solutionPath)))))
+                string solutionDir = Path.GetDirectoryName(solutionPath);
+
+                if ( ( !context.SolutionIsOpen ) )
                 {
                     // we want it to show "Enable" if we're not in a wc
                     cntl.Caption = cntl.TooltipText = "Enable Ankh for this solution";
                     return Disabled;
                 }
 
-                // now we have to figure out what text to set for the command           
-                string adminDir = Path.Combine( Path.GetDirectoryName(solutionPath),
-                    Client.AdminDirectoryName );
-                if ( File.Exists( Path.Combine( adminDir, "Ankh.Load" ) ) )            
+                // now we have to figure out what text to set for the command    
+                if ( File.Exists( Path.Combine( solutionDir, "Ankh.Load" ) ) ) 
+                {
                     cntl.Caption = cntl.TooltipText = "Disable Ankh for this solution";
+                }
                 else 
-                    cntl.Caption = cntl.TooltipText = "Enable Ankh for this solution";
+                {
+                    // we will allow the user to load for a solution where the 
+                    // solution dir is not versioned
+                    if (!SvnUtils.IsWorkingCopyPath(
+                        solutionDir))
+                    {
+                        cntl.Caption = cntl.TooltipText = "Force Ankh to load for this solution";
+                    }
+                    else
+                    { 
+                        cntl.Caption = cntl.TooltipText = "Enable Ankh for this solution";
+                    }
+                }               
 
                 return Enabled;
             }
@@ -63,11 +76,9 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context, string parameters)
         {
-            string adminDir = Path.Combine( 
-                Path.GetDirectoryName(context.DTE.Solution.FullName), 
-                Client.AdminDirectoryName );
-            string noLoad = Path.Combine(adminDir, "Ankh.NoLoad");
-            string load = Path.Combine(adminDir, "Ankh.Load");
+            string solutionDir = Path.GetDirectoryName(context.DTE.Solution.FullName);
+            string noLoad = Path.Combine(solutionDir, "Ankh.NoLoad");
+            string load = Path.Combine(solutionDir, "Ankh.Load");
 
             // disable or enable?
             if ( File.Exists( load ) )
