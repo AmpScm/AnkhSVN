@@ -64,6 +64,13 @@ namespace Ankh
         void ResetCommitDialog();
 
         /// <summary>
+        /// Executes the worker.Work method while displaying a progress dialog.
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <returns>True if the operation completed successfully without user cancellation.</returns>
+        bool RunWithProgressDialog( IProgressWorker worker, string caption );
+
+        /// <summary>
         /// Display a message box.
         /// </summary>
         /// <param name="caption"></param>

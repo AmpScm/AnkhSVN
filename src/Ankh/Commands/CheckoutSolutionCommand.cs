@@ -47,8 +47,8 @@ namespace Ankh.Commands
                 INode node = context.RepositoryExplorer.SelectedNode;
                 INode parent = node.Parent;
 
-                CheckoutRunner runner = new CheckoutRunner(context, browser.DirectoryPath, parent.Revision, parent.Url);
-                runner.Start( "Checking out solution" );
+                CheckoutRunner runner = new CheckoutRunner( browser.DirectoryPath, parent.Revision, parent.Url);
+                context.UIShell.RunWithProgressDialog( runner, "Checking out solution" );
 
                 context.DTE.Solution.Open( System.IO.Path.Combine( browser.DirectoryPath, node.Name ) );
             }

@@ -37,10 +37,12 @@ namespace Ankh.Commands
         /// <summary>
         /// This class handles the actual creation of the new dir.
         /// </summary>
-        private class NewDirHandler : ProgressRunner, INewDirectoryHandler
+        private class NewDirHandler : IProgressWorker, INewDirectoryHandler
         {
-            public NewDirHandler( IContext context ) : base(context)
-            {}
+            public NewDirHandler( IContext context ) 
+            {
+                this.context = context;
+            }
 
             public bool MakeDir(IRepositoryTreeNode parent, string dirname)
             {
@@ -54,9 +56,10 @@ namespace Ankh.Commands
                 this.Context.StartOperation( "Creating directory " + url );
                 try
                 {
-                    this.Start( "Creating directory" );
+                    bool completed= 
+                        this.Context.UIShell.RunWithProgressDialog( this, "Creating directory" );
                     this.Context.Client.CommitCompleted();
-                    return !this.Cancelled;
+                    return completed;
                 }
                 catch( Exception ex )
                 {
@@ -69,14 +72,20 @@ namespace Ankh.Commands
                 }
             }
 
-            protected override void DoRun()
+            protected IContext Context
+            {
+                get{ return this.context; }
+            }
+
+            public void Work( IContext context )
             {
                 // create the dir.
-                this.Context.Client.MakeDir( new string[]{this.url} );
+                context.Client.MakeDir( new string[]{this.url} );
             }
 
 
             private string url;
+            private IContext context;
         }
     }
 }

@@ -31,9 +31,9 @@ namespace Ankh.Commands
                 context.StartOperation( "Checking out" );
                 try
                 {
-                    CheckoutRunner runner = new CheckoutRunner( context, 
+                    CheckoutRunner runner = new CheckoutRunner(
                         dlg.LocalPath, dlg.Revision, dlg.Url, !dlg.NonRecursive );
-                    runner.Start( "Checking out" );
+                    context.UIShell.RunWithProgressDialog( runner, "Checking out" );
 
                     // make sure it's remembered
                     RegistryUtils.CreateNewTypedUrl( dlg.Url );

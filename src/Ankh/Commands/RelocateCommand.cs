@@ -45,11 +45,10 @@ namespace Ankh.Commands
                     // we need it on another thread because it actually
                     // contacts the repos to verify 
                     RelocateRunner runner = new RelocateRunner(
-                        context,
                         dir.Path, dlg.FromSegment, dlg.ToSegment, 
                         dlg.Recursive );
 
-                    runner.Start( "Relocating" );
+                    context.UIShell.RunWithProgressDialog( runner, "Relocating" );
 
                     dir.Refresh( context.Client );
                 }
@@ -63,11 +62,10 @@ namespace Ankh.Commands
         /// <summary>
         /// Progress runner for the relocate operation.
         /// </summary>
-        private class RelocateRunner : ProgressRunner
+        private class RelocateRunner : IProgressWorker
         {
-            public RelocateRunner( IContext context, 
-                string path, string from, string to, 
-                bool recurse ) : base( context )
+            public RelocateRunner( string path, string from, string to, 
+                bool recurse ) 
             {
                 this.path = path;
                 this.from = from; 
@@ -75,9 +73,9 @@ namespace Ankh.Commands
                 this.recurse = recurse;
             }
 
-            protected override void DoRun()
+            public void Work( IContext context )
             {
-                this.Context.Client.Relocate( this.path, this.from, this.to,
+                context.Client.Relocate( this.path, this.from, this.to,
                     this.recurse );
             }
 

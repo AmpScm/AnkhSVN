@@ -52,9 +52,9 @@ namespace Ankh.Commands
                     context.ProjectFileWatcher.StartWatchingForChanges();
                
                     ReverseMergeRunner runner = new ReverseMergeRunner(
-                        context, dlg.CheckedItems, dlg.Revision, dlg.Recursive,
+                        dlg.CheckedItems, dlg.Revision, dlg.Recursive,
                         dlg.DryRun );
-                    runner.Start( "Merging" );
+                    context.UIShell.RunWithProgressDialog( runner, "Merging" );
 
                     // we need to refresh every item, not just those selected since 
                     // the operation might be recursive
@@ -74,10 +74,10 @@ namespace Ankh.Commands
         /// <summary>
         /// A progressrunner for reverse merges.
         /// </summary>
-        private class ReverseMergeRunner : ProgressRunner
+        private class ReverseMergeRunner : IProgressWorker
         {
-            public ReverseMergeRunner( IContext context, IList items, Revision revision,
-                bool recursive, bool dryRun ) : base(context)
+            public ReverseMergeRunner(  IList items, Revision revision,
+                bool recursive, bool dryRun ) 
             {
                 this.items = items;
                 this.revision = revision;
@@ -85,11 +85,11 @@ namespace Ankh.Commands
                 this.dryRun = dryRun;
             }
 
-            protected override void DoRun()
+            public void Work( IContext context )
             {
                 foreach( SvnItem item in this.items )
                 {
-                    this.Context.Client.Merge( 
+                    context.Client.Merge( 
                         item.Path, Revision.Working,
                         item.Path, this.revision,
                         item.Path, this.recursive,

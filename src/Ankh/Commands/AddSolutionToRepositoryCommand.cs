@@ -71,9 +71,10 @@ namespace Ankh.Commands
                     try
                     {
                         url = UriUtils.Combine( url, dlg.SubDirectoryName );
-                        MakeDirRunner makeDirRunner = new MakeDirRunner( url, 
+                        MakeDirWorker makeDirWorker = new MakeDirWorker( url, 
                             dlg.LogMessage, context );
-                        makeDirRunner.Start( "Creating directory" );
+                        context.UIShell.RunWithProgressDialog( makeDirWorker, 
+                            "Creating directory" ); 
                     }
                     finally
                     {
@@ -89,9 +90,9 @@ namespace Ankh.Commands
             try
             {
                 // check out the repository directory specified               
-                CheckoutRunner checkoutRunner = new CheckoutRunner( context, 
+                CheckoutRunner checkoutRunner = new CheckoutRunner(  
                     solutionDir, Revision.Head, url );
-                checkoutRunner.Start( "Checking out" );
+                context.UIShell.RunWithProgressDialog( checkoutRunner, "Checking out" );
             }
             finally
             {
@@ -155,9 +156,14 @@ namespace Ankh.Commands
                 context.StartOperation( "Committing added files" );
                 try
                 {
-                    new ProgressRunner( context, 
-                        new ProgressRunnerCallback(this.DoCommit) ).Start( "Committing" ); 
-                    context.Client.CommitCompleted();
+                    bool completed = context.UIShell.RunWithProgressDialog( 
+                        new SimpleProgressWorker( 
+                        new SimpleProgressWorkerCallback(this.DoCommit)), "Committing" ); 
+
+                    if ( completed )
+                        context.Client.CommitCompleted();
+                    else
+                        return;
                 }
                 finally
                 {
@@ -391,11 +397,7 @@ namespace Ankh.Commands
             }            
         }
 
-        private void DoCommit( IContext context )
-        {
-            string[] paths = (string[])(new ArrayList(this.paths).ToArray(typeof(string)));
-            context.Client.Commit( paths, true );
-        }
+        
 
         private bool IsSpecialProject( Project project )
         {
@@ -409,13 +411,18 @@ namespace Ankh.Commands
             return false;
         }
 
+        private void DoCommit( IContext context )
+        {
+            string[] paths = (string[])(new ArrayList(this.paths).ToArray(typeof(string)));
+            context.Client.Commit( paths, true );
+        }
+
         /// <summary>
         /// A progress runner for creating repository directories.
         /// </summary>
-        private class MakeDirRunner : ProgressRunner
+        private class MakeDirWorker : IProgressWorker
         {
-            public MakeDirRunner( string url, string logMessage, IContext context ) : 
-                base( context )
+            public MakeDirWorker( string url, string logMessage, IContext context ) 
             {
                 this.url = url;
                 this.logMessage = logMessage;
@@ -423,9 +430,9 @@ namespace Ankh.Commands
                     new NSvn.Core.LogMessageDelegate(this.LogMessage);
             }
 
-            protected override void DoRun()
+            public void Work( IContext context )
             {
-                this.Context.Client.MakeDir( new string[]{ this.url } );
+                context.Client.MakeDir( new string[]{ this.url } );
             }
 
             private void LogMessage(object sender, NSvn.Core.LogMessageEventArgs args)

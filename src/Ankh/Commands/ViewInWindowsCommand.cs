@@ -22,10 +22,10 @@ namespace Ankh.Commands
 
                 // make the catrunner get it on a separate thread.
                 INode node = context.RepositoryExplorer.SelectedNode;
-                CatRunner runner = new CatRunner( context, node.Name, 
+                CatRunner runner = new CatRunner( node.Name, 
                     node.Revision, node.Url );
 
-                runner.Start( "Retrieving" );
+                context.UIShell.RunWithProgressDialog( runner, "Retrieving" );
                  
                 // now have windows try to start it.
                 Process process = new Process();

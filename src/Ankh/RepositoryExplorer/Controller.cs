@@ -126,9 +126,10 @@ namespace Ankh.RepositoryExplorer
                     Debug.WriteLine( "Repository directory listing *NOT* found in cache" );
 
                     // we want to run this in a separate thread
-                    ListRunner runner = new ListRunner( parent, this.context );
-                    runner.Start( "Retrieving directory info." );
-                    if ( !runner.Cancelled )
+                    ListRunner runner = new ListRunner( parent );
+                    bool completed = this.context.UIShell.RunWithProgressDialog( runner, 
+                        "Retrieving directory info." );
+                    if ( completed )
                     {
                         DirectoryEntry[] entries = runner.Entries;
                         children = new INode[entries.Length];
@@ -264,10 +265,9 @@ namespace Ankh.RepositoryExplorer
         /// <summary>
         /// Used for running the list action in a separate thread.
         /// </summary>
-        private class ListRunner : ProgressRunner
+        private class ListRunner : IProgressWorker
         {
-            public ListRunner( INode node, IContext context ) : 
-                base(context)
+            public ListRunner( INode node ) 
             {
                 this.node = node;
             }
@@ -280,9 +280,9 @@ namespace Ankh.RepositoryExplorer
                 get{ return this.entries; }
             }
 
-            protected override void DoRun()
+            public void Work( IContext context )
             {
-                this.entries = this.Context.Client.List( this.node.Url, 
+                this.entries = context.Client.List( this.node.Url, 
                     this.node.Revision, false );
             }
 

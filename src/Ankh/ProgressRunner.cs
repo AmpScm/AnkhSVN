@@ -5,7 +5,27 @@ using NSvn.Core;
 
 namespace Ankh
 {
-    public delegate void ProgressRunnerCallback( IContext context );
+    public interface IProgressWorker
+    {        
+        void Work( IContext context );
+    }
+
+    public delegate void SimpleProgressWorkerCallback( IContext context );
+
+
+    public class SimpleProgressWorker : IProgressWorker
+    {
+        public SimpleProgressWorker( SimpleProgressWorkerCallback cb )
+        {
+            this.callback = cb;
+        }
+        public void Work(IContext context)
+        {
+            this.callback( context );
+        }
+
+        private SimpleProgressWorkerCallback callback;
+    }
 
     /// <summary>
     /// Used to run lengthy operations in a separate thread while 
@@ -19,10 +39,10 @@ namespace Ankh
         /// <param name="context"></param>
         /// <param name="callback">The callback which performs 
         /// the actual operation.</param>
-        public ProgressRunner( IContext context, ProgressRunnerCallback callback )
+        public ProgressRunner( IContext context, IProgressWorker worker )
         {
             this.context = context;
-            this.callback = callback;
+            this.worker = worker;
         }
 
         public ProgressRunner( IContext context ) : this( context, null )
@@ -62,19 +82,9 @@ namespace Ankh
                 throw new ProgressRunnerException(this.exception);
         }  
       
-        protected IContext Context
+        private IContext Context
         {
             get{ return this.context; }
-        }
-
-
-        /// <summary>
-        /// Override this to perform the operation in a derived class.
-        /// </summary>
-        protected virtual void DoRun()
-        {
-            if ( this.callback != null )
-                this.callback( this.Context );
         }
 
         private void Run()
@@ -82,7 +92,7 @@ namespace Ankh
             try
             {
                 this.Context.Client.Cancel += new NSvn.Core.CancelDelegate(this.Cancel);
-                this.DoRun();
+                this.worker.Work( this.Context );
             }
             catch( OperationCancelledException )
             {
@@ -126,6 +136,6 @@ namespace Ankh
         private bool cancelled = false;
         private Exception exception;
         private IContext context;
-        private ProgressRunnerCallback callback;
+        private IProgressWorker worker;
     }
 }

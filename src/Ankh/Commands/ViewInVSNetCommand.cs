@@ -20,8 +20,8 @@ namespace Ankh.Commands
 
                 INode node = context.RepositoryExplorer.SelectedNode;
 
-                CatRunner runner = new CatRunner(context, node.Name, node.Revision, node.Url);
-                runner.Start( "Retrieving file" );
+                CatRunner runner = new CatRunner(node.Name, node.Revision, node.Url);
+                context.UIShell.RunWithProgressDialog( runner, "Retrieving file" );
 
                 context.DTE.ItemOperations.OpenFile( runner.Path, 
                     Constants.vsViewKindPrimary );

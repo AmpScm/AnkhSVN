@@ -31,9 +31,9 @@ namespace Ankh.Commands
                 context.StartOperation( "Exporting" );
                 try
                 {
-                    ExportRunner runner = new ExportRunner( context, 
+                    ExportRunner runner = new ExportRunner( 
                         dlg.LocalPath, dlg.Revision, dlg.Source, !dlg.NonRecursive );
-                    runner.Start( "Exporting" );
+                    context.UIShell.RunWithProgressDialog( runner, "Exporting" );
 
                     // make sure it's remembered
                     RegistryUtils.CreateNewTypedUrl( dlg.Source);

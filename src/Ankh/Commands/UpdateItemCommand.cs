@@ -51,10 +51,10 @@ namespace Ankh.Commands
 
                 // run the actual update on another thread
                 context.ProjectFileWatcher.StartWatchingForChanges();
-                visitor.Start( "Updating" );
+                bool completed = context.UIShell.RunWithProgressDialog( visitor, "Updating" );
 
                 // this *must* happen on the primary thread.
-                if ( !visitor.Cancelled )
+                if ( completed )
                 {
                     if ( !context.ReloadSolutionIfNecessary() )
                         context.SolutionExplorer.RefreshSelection();
@@ -71,10 +71,17 @@ namespace Ankh.Commands
         #endregion
 
         #region UpdateVisitor
-        private class UpdateRunner : ProgressRunner, INodeVisitor
+        private class UpdateRunner : IProgressWorker, INodeVisitor
         {
-            public UpdateRunner( IContext context ) : base(context)
-            {}
+            public UpdateRunner( IContext context ) 
+            {
+                this.context = context;
+            }
+
+            public IContext Context
+            {
+                get{ return this.context; }
+            }
 
             /// <summary>
             /// Show the update dialog if wanted.
@@ -114,25 +121,25 @@ namespace Ankh.Commands
             /// <summary>
             /// The actual updating happens here.
             /// </summary>
-            protected override void DoRun()
+            public void Work( IContext context )
             {   
-                this.Context.Client.Notification +=new NotificationDelegate(this.OnNotificationEventHandler );
+                context.Client.Notification +=new NotificationDelegate(this.OnNotificationEventHandler );
 
                 try
                 {
                     foreach( SvnItem item in this.resources )
                     {
                         Debug.WriteLine( "Updating " + item.Path, "Ankh" );
-                        this.Context.Client.Update( item.Path, revision, recursive );                    
+                        context.Client.Update( item.Path, revision, recursive );                    
                     }
                 }
                 finally
                 {       
-                    this.Context.Client.Notification  -= new NotificationDelegate(this.OnNotificationEventHandler );
+                    context.Client.Notification  -= new NotificationDelegate(this.OnNotificationEventHandler );
                 }
               
                 if (this.conflictsOccurred) 
-                    this.Context.ConflictManager.NavigateTaskList();
+                    context.ConflictManager.NavigateTaskList();
                 
 
 
@@ -186,7 +193,7 @@ namespace Ankh.Commands
             {
                 if ( args.ContentState == NSvn.Core.NotifyState.Conflicted)
                 {
-                    base.Context.ConflictManager.AddTask(args.Path);
+                    this.Context.ConflictManager.AddTask(args.Path);
                     this.conflictsOccurred = true;
                 }
             }
@@ -195,6 +202,7 @@ namespace Ankh.Commands
             private Revision revision;
             private bool recursive;
             private bool conflictsOccurred = false; 
+            private IContext context;
         }            
         #endregion
 

@@ -44,8 +44,9 @@ namespace Ankh.Commands
 
                 INode node = context.RepositoryExplorer.SelectedNode;
 
-                CheckoutRunner runner = new CheckoutRunner(context, browser.DirectoryPath, node.Revision, node.Url);
-                runner.Start( "Checking out folder" );
+                CheckoutRunner runner = new CheckoutRunner( 
+                    browser.DirectoryPath, node.Revision, node.Url);
+                context.UIShell.RunWithProgressDialog( runner, "Checking out folder" );
 
             }
             finally

@@ -60,8 +60,8 @@ namespace Ankh.Commands
             try
             {
                 SwitchRunner runner = new SwitchRunner(path, url, revision,
-                    recursive, context);
-                runner.Start( "Switching" );
+                    recursive );
+                context.UIShell.RunWithProgressDialog( runner, "Switching" );
                 if ( !context.ReloadSolutionIfNecessary() )
                 {
                     context.SolutionExplorer.RefreshSelection();
@@ -76,11 +76,10 @@ namespace Ankh.Commands
         /// <summary>
         /// A progress runner that runs the switch operation.
         /// </summary>
-        private class SwitchRunner : ProgressRunner
+        private class SwitchRunner : IProgressWorker
         {
             public SwitchRunner( string path, string url, Revision revision,
-                bool recursive, IContext context ) :
-                base(context)
+                bool recursive )                 
             {
                 this.path = path;
                 this.url = url;
@@ -88,9 +87,9 @@ namespace Ankh.Commands
                 this.recursive = recursive;
             }
 
-            protected override void DoRun()
+            public void Work( IContext context )
             {
-                this.Context.Client.Switch( this.path, this.url, 
+                context.Client.Switch( this.path, this.url, 
                     this.revision, this.recursive );                
             }
 
