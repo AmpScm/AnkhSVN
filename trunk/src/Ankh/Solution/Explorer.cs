@@ -253,13 +253,24 @@ namespace Ankh.Solution
             get{ return this.dte; }
         }
 
+        /// <summary>
+        /// Retrieves the window handle to the solution explorer treeview and uses it
+        /// to replace it's imagelist with our own.
+        /// </summary>
         internal void SetUpTreeview()
         {
+            // dragons be here - modify with care
+
             Window solutionExplorerWindow = this.dte.Windows.Item(
                 EnvDTE.Constants.vsWindowKindSolutionExplorer);
 
-            // we need to make sure its not hidden
+            // we need to make sure its not hidden and that it is dockable
+            bool linkable = solutionExplorerWindow.Linkable;
             bool hidden = solutionExplorerWindow.AutoHides;
+
+            // this needs to be done in this *EXACT* order
+            // you cannot set AutoHides for a window that has Linkable=true
+            solutionExplorerWindow.Linkable = true;
             solutionExplorerWindow.AutoHides = false;
             
             // find the solution explorer window
@@ -267,8 +278,30 @@ namespace Ankh.Solution
             string slnExplorerCaption = solutionExplorerWindow.Caption;
             //            string vsnetCaption = this.dte.MainWindow.C
             IntPtr vsnet = (IntPtr)this.dte.MainWindow.HWnd;//Win32.FindWindow( VSNETWINDOW, null );
+
+            // first try finding it as a child of the main VS.NET window
             IntPtr slnExplorer = Win32.FindWindowEx( vsnet, IntPtr.Zero, GENERICPANE, 
                 slnExplorerCaption );
+
+            // not there? Try looking for a floating palette. These are toplevel windows for 
+            // some reason
+            if ( slnExplorer == IntPtr.Zero )
+            {
+                // we need to search for the caption of any of the potentially linked windows
+                IntPtr floatingPalette = IntPtr.Zero;
+                foreach( Window win in solutionExplorerWindow.LinkedWindowFrame.LinkedWindows )
+                {
+                    floatingPalette = Win32.FindWindow( VBFLOATINGPALETTE, 
+                        win.Caption );
+                    if ( floatingPalette != IntPtr.Zero )
+                        break;
+                }
+                
+                // the solution explorer should be a direct child of the palette
+                slnExplorer = Win32.FindWindowEx( floatingPalette, IntPtr.Zero, GENERICPANE,
+                    slnExplorerCaption );
+            }
+
             IntPtr uiHierarchy = Win32.FindWindowEx( slnExplorer, IntPtr.Zero, 
                 UIHIERARCHY, null );
             this.treeview = Win32.FindWindowEx( uiHierarchy, IntPtr.Zero, TREEVIEW, 
@@ -278,8 +311,10 @@ namespace Ankh.Solution
                 throw new ApplicationException( 
                     "Could not attach to solution explorer treeview" );
 
-            // reset back to the original hiding-state(!?)
-            solutionExplorerWindow.AutoHides = hidden;
+            // reset back to the original hiding-state and dockable state
+            solutionExplorerWindow.Linkable = linkable;
+            if ( solutionExplorerWindow.Linkable )
+                solutionExplorerWindow.AutoHides = hidden;
 
             // load the status images image strip
             Bitmap statusImages = (Bitmap)Image.FromStream( 
@@ -474,6 +509,7 @@ namespace Ankh.Solution
         private const string GENERICPANE = "GenericPane";
         private const string UIHIERARCHY = "VsUIHierarchyBaseWin";
         private const string TREEVIEW = "SysTreeView32";
+        private const string VBFLOATINGPALETTE = "VBFloatingPalette";
         private IDictionary projectItems;
         private IDictionary projects;
         private TreeNode solutionNode;
