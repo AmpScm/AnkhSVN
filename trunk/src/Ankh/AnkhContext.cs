@@ -24,7 +24,8 @@ namespace Ankh
             this.dte = dte;
             this.addin = addin;
 
-            this.config = Ankh.Config.ConfigLoader.LoadConfig( "AnkhSVN", "ankh.config" );
+            this.config = Ankh.Config.ConfigLoader.LoadConfig( AnkhContext.CONFIGDIR, 
+                AnkhContext.CONFIGFILE );
 
             // should we use a custom configuration directory?
             if ( this.config.Subversion.ConfigDir != null )
@@ -174,7 +175,8 @@ namespace Ankh
         /// </summary>
         public void Shutdown()
         {            
-            Ankh.Config.ConfigLoader.SaveConfig( this.config, @"T:\ankhconfig.xml" );
+            Ankh.Config.ConfigLoader.SaveConfig( this.config, AnkhContext.CONFIGDIR, 
+                AnkhContext.CONFIGFILE );
             this.SolutionClosing();
         }
 
@@ -306,6 +308,8 @@ namespace Ankh
         private RepositoryExplorerControl repositoryExplorer;
         private EnvDTE.Window reposExplorerWindow;
         private AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl objControl;
+        private const string CONFIGDIR = "AnkhSVN";
+        private const string CONFIGFILE = "ankhsvn.xml";
         public static readonly string REPOSEXPLORERGUID = 
             "{1C5A739C-448C-4401-9076-5990300B0E1B}";
     }
