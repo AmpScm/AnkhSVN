@@ -26,6 +26,9 @@ namespace NSvn{
                     ///<summary>Test that the string can be copied</summary>
                     [Test]
                     void TestAssignment();
+
+                    [Test]
+                    void TestCopyToPool();
                 };
             }
         }

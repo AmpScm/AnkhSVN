@@ -14,10 +14,10 @@ public:
     }
 };
 
-void NSvn::Core::Tests::MCpp::PoolTest::TestAllocate()
+void NSvn::Core::Tests::MCpp::PoolTest::TestAllocateObject()
 {
     Pool* p = new Pool();
-    Class* ptr = p->Allocate( Class() );
+    Class* ptr = p->AllocateObject( Class() );
 
     Assertion::Assert( ptr != 0 );
 

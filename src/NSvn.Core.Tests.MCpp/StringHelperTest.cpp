@@ -62,6 +62,16 @@ namespace MCpp
         Assertion::Assert( ptr1 != ptr2 );
 
     }
+
+    void StringHelperTest::TestCopyToPool()
+    {
+        StringHelper s( "Moo world" );
+        Pool pool;
+
+        char* ptr = s.CopyToPool( pool );
+        Assertion::Assert( "pool string is not equal to original string", 
+            std::strcmp( s, "Moo world" ) == 0 );
+    }
 }
 }
 }

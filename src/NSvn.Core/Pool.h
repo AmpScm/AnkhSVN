@@ -39,8 +39,25 @@ namespace NSvn
                 return this->pool; 
             }
 
+            /// <summary>Allocate memory on this pool</summary>
+            void* Alloc( int size ) const
+            { 
+                return apr_palloc( this->pool, size );
+            }
+
+            /// <summary>Allocate memory on this pool, zeroing it before use</summary>
+            void* PCalloc( int size ) const
+            { 
+                return apr_pcalloc( this->pool, size );
+            }
+
+
+
+            /// <summary>Allocate an object on this pool. The object will be copied onto the 
+            /// pool, so it must define a copy constructor. The pool will call the destructor
+            /// of the object when the pool is destroyed</summary>
             template<class T>
-            T* Allocate( const T& t ) const
+            T* AllocateObject( const T& t ) const
             {
                 void* raw = apr_palloc( this->pool, sizeof( T ) );
                 T* newT = new(raw)T(t);

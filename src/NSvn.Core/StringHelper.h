@@ -1,5 +1,7 @@
 #pragma once
 #include <vcclr.h>
+#include "Pool.h"
+#include <apr_strings.h>
 
 namespace NSvn
 {
@@ -56,6 +58,24 @@ namespace NSvn
 
                 return *this;
             }
+
+            /// <summary>Copy the string to Pool</summary>
+            char* CopyToPool( Pool& pool )
+            {
+                //TODO: unicode issues
+
+                char* hglobal = this->ConvertToCharPtr( this->string );
+
+                //make room in the pool and copy our string there
+                char* ptr = static_cast<char*>(pool.Alloc( this->string->Length + 1));
+                apr_cpystrn( ptr, hglobal, this->string->Length );
+
+                // free the hglobal
+                this->FreeCharPtr( hglobal );
+
+                return ptr;
+            }
+                
                 
 
             /// <summary>implicit conversion to a const char*</summary>

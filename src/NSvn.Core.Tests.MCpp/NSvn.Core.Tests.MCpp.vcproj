@@ -127,9 +127,6 @@
 			<File
 				RelativePath="StringHelperTest.cpp">
 			</File>
-			<File
-				RelativePath="TestEnums.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -151,9 +148,6 @@
 			</File>
 			<File
 				RelativePath="StringHelperTest.h">
-			</File>
-			<File
-				RelativePath="TestEnums.h">
 			</File>
 		</Filter>
 		<Filter
