@@ -82,6 +82,11 @@
                     AssemblyName = "System.Windows.Forms"
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
                 />
+                <Reference
+                    Name = "SharpZipLib"
+                    AssemblyName = "SharpZipLib"
+                    HintPath = "..\lib\SharpZipLib.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -104,6 +109,11 @@
                 <File
                     RelPath = "Utils.build"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "Zip.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Win32\Constants.cs"

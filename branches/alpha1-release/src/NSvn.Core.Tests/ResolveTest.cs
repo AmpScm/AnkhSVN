@@ -2,6 +2,7 @@
 using System;
 using NUnit.Framework;
 using System.IO;
+using Utils;
 
 namespace NSvn.Core.Tests
 {
@@ -17,7 +18,7 @@ namespace NSvn.Core.Tests
             base.SetUp();
             this.path = Path.GetTempFileName();
             File.Delete ( this.path );
-            this.ExtractZipFile( this.path, "NSvn.Core.Tests.conflictwc.zip" );
+            Zip.ExtractZipResource( this.path, this.GetType(), "NSvn.Core.Tests.conflictwc.zip" );
         }
 
         [TearDown]

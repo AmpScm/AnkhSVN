@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using Utils;
 
 namespace NSvn.Core.Tests
 {
@@ -85,7 +86,7 @@ namespace NSvn.Core.Tests
         {
             // modify the file in another working copy and commit
             string wc2 = this.FindDirName( "wc2" );
-            this.ExtractZipFile( wc2, WC_FILE );
+            Zip.ExtractZipResource( wc2, this.GetType(), WC_FILE );
             using( StreamWriter w = new StreamWriter( 
                        Path.Combine(wc2, "Form.cs"), true ) )
                 w.Write( "Hell worl" );
