@@ -2,12 +2,13 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Removing files">
     <section>
+    <hr></hr>
     </section> 
     <section>
         <p>
             <hr></hr>
             <link url="adding_files.xml">back </link>
-            <link url="moving_files.xml">next</link>
+            <link url="examine_changes.xml">next</link>
         </p>
     </section>    
 </doc>

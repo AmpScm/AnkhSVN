@@ -2,11 +2,8 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc  title="Adding files to revision control">
     <section>
-    </section>
-    <section>
         <p>
-            <hr>
-            </hr>
+            <hr></hr>
               <img src="../../img/wc_solution_explorer.png" align="left"/>
              <list>
                 <item><b>1.</b> Right click on the selected unversioned item(s) 
@@ -35,6 +32,7 @@
             <br></br>
             <img src="../../img/added_file.png"/></p><br></br>
         <p>
+        <hr></hr>
             <link url="make_changes.xml">back </link>
             <link url="removing_files.xml">next</link>
         </p>

@@ -2,6 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Properties">
     <section>
+    <hr></hr>
         <p>
             Subversion has no particular policy regarding properties. You can use them for any purpose. 
             Subversion asks only that you not use property names that begin with the prefix svn:. That's the namespace that its sets aside for its own use. In fact, Subversion defines certain properties that have magical effects on the files and directories to which they are attached. In this section, we'll untangle the mystery, and describe how these special properties make your life just a little easier.
