@@ -3,6 +3,7 @@
 #using <mscorlib.dll>
 
 #include "delegates.h"
+#include "AuthenticationBaton.h"
 #include "AdminAccessBaton.h"
 #include "ClientConfig.h"
 #include "ManagedPointer.h"
@@ -12,43 +13,12 @@
 #include <apr_pools.h>
 #include <apr_tables.h>
 
-namespace
-{
-    void notify_func( void *baton, const char *path, 
-        svn_wc_notify_action_t action, svn_node_kind_t kind, 
-        const char *mime_type, svn_wc_notify_state_t content_state, 
-        svn_wc_notify_state_t prop_state, svn_revnum_t revision );
-    svn_error_t * first_credentials  (void **credentials,
-        void **iter_baton,
-        void *provider_baton,
-        apr_hash_t *parameters,
-        const char* realmstring,
-        apr_pool_t *pool);
-    svn_error_t * next_credentials (void **credentials,
-        void *iter_baton,
-        apr_hash_t *parameters,
-        apr_pool_t *pool);
-    svn_error_t * save_credentials (svn_boolean_t *saved,
-        void *credentials,
-        void *provider_baton,
-        apr_hash_t *parameters,
-        apr_pool_t *pool);
-
-    svn_error_t* log_msg_func( const char **log_msg, 
-        const char **tmp_file, 
-        apr_array_header_t *commit_items, 
-        void *baton, 
-        apr_pool_t *pool);  
-
-
-
-}
 
 namespace NSvn
 {
     namespace Core
     {
-        using namespace NSvn::Common;
+
 
         // .NET representation of the svn_client_ctx_t structure
         public __gc class ClientContext
@@ -59,12 +29,13 @@ namespace NSvn
             {;}
 
 
-            ClientContext( NotifyCallback* callback ) : notifyCallback( callback ), 
+            ClientContext( NSvn::Core::NotifyCallback* callback ) : notifyCallback( callback ), 
                 authBaton( 0 ), clientConfig( 0 ),
                 logMessageCallback( 0 ), promptCallback( 0 )
             {;}
 
-            ClientContext( NotifyCallback* callback, AuthenticationBaton* authBaton ) :
+            ClientContext( NSvn::Core::NotifyCallback* callback, 
+                NSvn::Core::AuthenticationBaton* authBaton ) :
             notifyCallback( callback ), authBaton( authBaton ), clientConfig( 0 ),
                 logMessageCallback( 0 ), promptCallback( 0 )
             {;}
@@ -77,11 +48,11 @@ namespace NSvn
 
             // An authentication baton
             [System::Diagnostics::DebuggerStepThrough]
-            __property AuthenticationBaton* get_AuthBaton()
+            __property NSvn::Core::AuthenticationBaton* get_AuthBaton()
             { return this->authBaton; }
 
             [System::Diagnostics::DebuggerStepThrough]
-            __property void set_AuthBaton( AuthenticationBaton* value )
+            __property void set_AuthBaton( NSvn::Core::AuthenticationBaton* value )
             { this->authBaton = value; }
 
             // A callback delegate for prompts
@@ -120,19 +91,12 @@ namespace NSvn
             __property void set_ClientConfig( NSvn::Core::ClientConfig* value )
             { this->clientConfig = value; }
 
+        private public:
             svn_client_ctx_t* ToSvnContext( const Pool& pool );
 
         private:
-            /// <summary> Creates an svn_auth_baton_t* from a 
-            /// AuthenticationBaton object</summary>
-            svn_auth_baton_t* CreateAuthBaton( const Pool& pool, AuthenticationBaton* baton );
 
-            /// <summary> Creates an svn_auth_provider_object_t* from an IAuthenticationProvider
-            /// </summary>
-            svn_auth_provider_object_t* CreateProvider( 
-                const Pool& pool, IAuthenticationProvider* authProvider );
-
-            NSvn::Common::AuthenticationBaton* authBaton;
+            NSvn::Core::AuthenticationBaton* authBaton;
             NSvn::Core::PromptCallback* promptCallback;
             NSvn::Core::NotifyCallback* notifyCallback;
             NSvn::Core::LogMessageCallback* logMessageCallback;
