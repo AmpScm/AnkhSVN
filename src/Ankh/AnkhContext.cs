@@ -69,7 +69,11 @@ namespace Ankh
             this.repositoryController = new RepositoryExplorer.Controller( this, 
                 this.repositoryExplorer, this.reposExplorerWindow );
 
+            this.ankhLoadedForSolution = false;
+
             this.SetUpEvents();
+
+           
         }
 
         
@@ -151,6 +155,12 @@ namespace Ankh
             get{ return this.dte.Solution.IsOpen; }
         }
 
+        public bool AnkhLoadedForSolution
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.ankhLoadedForSolution; }
+        }
+
 
         /// <summary>
         /// The Ankh configuration.
@@ -203,6 +213,7 @@ namespace Ankh
                 this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
 
                 timer.End( "Solution opened", "Ankh" );
+                this.ankhLoadedForSolution = true;
                 //MessageBox.Show( timer.ToString() );
             }
             catch( Exception ex )
@@ -228,6 +239,8 @@ namespace Ankh
                 foreach( EventSinks.EventSink sink in this.eventSinks )
                     sink.Unhook();
             }
+
+            this.ankhLoadedForSolution = false;
         }
 
         /// <summary>
@@ -388,6 +401,8 @@ namespace Ankh
         private Explorer solutionExplorer = null;
 
         private Ankh.Config.Config config;
+
+        private bool ankhLoadedForSolution;
 
         private ProgressDialog progressDialog;
         private SvnClient client;
