@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 
 using NSvn.Core;
+using NSvn.Common;
 using EnvDTE;
 using System.Diagnostics;
 using System.IO;
@@ -104,8 +105,11 @@ namespace Ankh.Solution
             {
                 foreach( ProjectItem subItem in item.ProjectItems )
                 {
-                    this.AddResourcesFromProjectItem( subItem, del );
-                    this.AddSubItems( subItem, del );
+                    if ( subItem.Name != SvnUtils.WC_ADMIN_AREA )
+                    {
+                        this.AddResourcesFromProjectItem( subItem, del );
+                        this.AddSubItems( subItem, del );
+                    }
                 }
             }
             catch( InvalidCastException )
