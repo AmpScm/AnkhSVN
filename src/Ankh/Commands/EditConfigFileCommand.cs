@@ -7,7 +7,7 @@ namespace Ankh.Commands
 	/// <summary>
 	/// A command that lets you edit the AnkhSVN config file.
 	/// </summary>
-    [VSNetCommand("EditConfigFIle", Tooltip="Edit the AnkhSVN config file", 
+    [VSNetCommand("EditConfigFile", Tooltip="Edit the AnkhSVN config file", 
          Text = "Edit the AnkhSVN config file" ),
     VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 ) ]
 	internal class EditConfigFileCommand : CommandBase
