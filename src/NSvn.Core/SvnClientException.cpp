@@ -31,6 +31,9 @@ namespace
         case SVN_ERR_WC_NOT_FILE:
             return new NotVersionControlledException( child );
             break;
+        case SVN_ERR_FS_TXN_OUT_OF_DATE:
+            return new ResourceOutOfDateException( child );
+            break;
         default:
             return new SvnClientException( FormatMessage( err ), child );
             break;
