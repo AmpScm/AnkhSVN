@@ -390,7 +390,7 @@ namespace Ankh.Solution
             {
                 if ( this.CurrentStatus == NodeStatus.None )
                     this.CurrentStatus = status;
-                else if ( status != NodeStatus.None )
+                else if ( status != NodeStatus.None && status != NodeStatus.Ignored )
                 {
                     if ( this.CurrentStatus == NodeStatus.Normal )
                     {
@@ -430,6 +430,7 @@ namespace Ankh.Solution
             Conflicted = StatusKind.Conflicted,
             Unversioned = StatusKind.Unversioned,
             Modified = StatusKind.Modified,
+            Ignored = StatusKind.Ignored,
             IndividualStatusesConflicting
         }
 
