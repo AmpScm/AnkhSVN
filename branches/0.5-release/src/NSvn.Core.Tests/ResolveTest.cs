@@ -25,7 +25,7 @@ namespace NSvn.Core.Tests
         public override void TearDown()
         {
             base.TearDown();
-            this.RecursiveDelete( this.path );
+            PathUtils.RecursiveDelete( this.path );
         }
 
         /// <summary>
