@@ -80,7 +80,9 @@ namespace Ankh.UI
         private void InsertDiffView()
         {
             // is there already a diffview there?
-            if ( this.SelectedTab != null && !((DiffTabPage)this.SelectedTab).Initialized )
+            if ( this.TabPages.Count > 0 &&
+                this.SelectedTab != null && 
+                !((DiffTabPage)this.SelectedTab).Initialized )
             {
                 string path = (string)this.SelectedTab.Tag;
                 DiffWantedEventArgs args = new DiffWantedEventArgs(path);
