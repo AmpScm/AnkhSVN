@@ -43,7 +43,7 @@ namespace NSvn
                 this.ClientContext );
             foreach( DirectoryEntry entry in entries )
             {
-                string url = System.IO.Path.Combine( this.Url, entry.Path );
+                string url = System.IO.Path.Combine( this.Url, entry.Path ).Replace( "\\", "/" );
                 // dir or file?
                 if ( entry.NodeKind == NodeKind.Directory )
                     dict[entry.Path] = new RepositoryDirectory( url, this.Revision );
