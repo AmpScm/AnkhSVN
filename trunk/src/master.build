@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
-<!--<project default="build">-->
+<project default="build">
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
     <property name="build.dir" value="build/Debug" if="${debug}"/>
