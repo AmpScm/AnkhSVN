@@ -71,10 +71,13 @@ namespace Ankh
         /// <param name="path"></param>
         public void AddFile( string path )
         {
-            if ( File.Exists( path ) )
+            lock( this.projectWatchers )
             {
-                Watcher w = new Watcher( path, this );
-                this.projectWatchers.Add( w );
+                if ( File.Exists( path ) )
+                {
+                    Watcher w = new Watcher( path, this );
+                    this.projectWatchers.Add( w );
+                }
             }
         }
 
@@ -83,7 +86,10 @@ namespace Ankh
         /// </summary>
         public void Clear()
         {
-            this.projectWatchers.Clear();
+            lock( this.projectWatchers )
+            {
+                this.projectWatchers.Clear();
+            }
             this.dirty = false;
         }
 
@@ -128,10 +134,13 @@ namespace Ankh
         /// <returns></returns>
         private bool IsWatchee( string path )
         {
-            foreach( Watcher w in this.projectWatchers )
+            lock( this.projectWatchers )
             {
-                if ( PathUtils.NormalizePath(w.FilePath) == PathUtils.NormalizePath(path) )
-                    return true;
+                foreach( Watcher w in this.projectWatchers )
+                {
+                    if ( PathUtils.NormalizePath(w.FilePath) == PathUtils.NormalizePath(path) )
+                        return true;
+                }
             }
             return false;
         }
@@ -142,8 +151,11 @@ namespace Ankh
         /// <param name="state"></param>
         private void DoPoll( object state )
         {
-            foreach( Watcher w in this.projectWatchers )
-                w.Poll();
+            lock( this.projectWatchers )
+            {
+                foreach( Watcher w in this.projectWatchers )
+                    w.Poll();
+            }
         }
 
         #region class Watcher
