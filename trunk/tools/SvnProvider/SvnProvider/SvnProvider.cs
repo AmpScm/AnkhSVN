@@ -127,8 +127,12 @@ namespace Rogue.Monad
 		/// <returns></returns>
 		protected override string MakePath( string parent, string child )
 		{
-			if ( parent.EndsWith( ":" ) )
-				return parent + PathSeparator + PathSeparator + child;
+            // FIX: path to local repositories mangled
+            if (parent.CompareTo("file:") == 0)
+                return parent + "///" + child.Replace("//", "/");
+
+            if (parent.EndsWith(":"))
+                return parent + PathSeparator + PathSeparator + child;
 			else if ( parent.EndsWith( PathSeparator ) ^ child.StartsWith( PathSeparator ) )
 				return parent + child;
 			else if ( parent.EndsWith( PathSeparator ) && child.StartsWith( PathSeparator ) )
