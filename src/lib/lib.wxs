@@ -112,7 +112,7 @@
                     Name="" Value="Xtreme Simplicity AnkhUserControlHost 1.0 Type Library" />
             </Component>
             <Component Id="AUCH_Reg_component23" DiskId="1">
-                <Registry Id="AUCH_Reg_registry22" Root="HKCR" 
+                <Registry Id="AUCH_Reg_registry22" Root="HKCR"
                 Key="TypeLib\{A346E700-CCD2-4377-A4E5-5B30275493B1}\1.0\0\win32" 
                 Name="" Value="C:\projects\Ankh\src\lib\AnkhUserControlHost.dll" />
             </Component>
@@ -143,16 +143,10 @@
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\Interop.esproj.dll" />
                 <File Id="CF_Interop.SHDocVw.dll" Name="INTERO~2.DLL" LongName="Interop.SHDocVw.dll"
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\Interop.SHDocVw.dll" />
-                <File Id="CF_libdb.dll" Name="LIBDB42.DLL" LongName="LibDB42.dll"
-                    Vital="yes" DiskId="1" src="$(var.svndir)\db4-win32\bin\libdb42.dll" />
                 <File Id="CF_office.dll" Name="OFFICE.DLL" LongName="office.dll"
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\office.dll" />
                 <File Id="CF_SharpZipLib.dll" Name="SHARPZ~1.DLL" LongName="SharpZipLib.dll"
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\SharpZipLib.dll" />
-                <File Id="CF_MSVCP70.dll" Name="MSVCP7~1.DLL" LongName="msvcp70.dll"
-                    Vital="yes" DiskId="1" src="..\$(var.builddir)\msvcp70.dll" />
-                <File Id="CF_MSVCR70.dll" Name="MSVCR7~1.DLL" LongName="msvcr70.dll"
-                    Vital="yes" DiskId="1" src="..\$(var.builddir)\msvcr70.dll" />
             </Component>
         </DirectoryRef>
     </Fragment>

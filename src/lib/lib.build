@@ -12,7 +12,7 @@
 
     <target name="build-WiX">
         <exec workingdir="${src.dir}" program="candle.exe"
-            commandline="-nologo -dbuilddir=\lib -dsvndir=${svndir} -w0 lib.wxs -out ${installsource.dir}\lib.wixobj" />
+            commandline="-nologo -dbuilddir=\lib -w0 lib.wxs -out ${installsource.dir}\lib.wixobj" />
     </target>
     
 </project>
