@@ -5,9 +5,49 @@
     </section>   
     <section>
         <p>
+			<img src="../../img/wc_solution_explorer.png" align="left"/>
+             <list>
+                <item><b>1.</b> Right click on the selected versioned item(s) 
+					you want to commit in Solution Explorer. An item could be a file
+					 directory or project. <br></br>
+				</item>
+			</list>
+			<br clear="ALL"/>
+			<br></br>
+			
+			 <img src="../../img/item_menu.png" align="left"/>   <br></br><br></br>                    
+             <list>
+                <item><b>2.</b> Select <b>commit</b> from the item menu that pops up.<br></br>
+				</item>
+			</list>
+			<br clear="ALL"/>
+			<br></br>
+			
+			 <img src="../../img/commit_dialog.png" align="left"/>   <br></br><br></br>                    
+             <list>
+                <item><b>3.</b> Print a log message in the commit dialog that 
+                appears. <br></br><br></br>
+                A list of the items to be commited is visible in the 
+                upper area of the dialog box. If <b>show diff</b>-button is clicked 
+                a <b>diff</b> will be displayed. A diff shows the difference between 
+                modified (green), removed (red) and unchanged (blue) text.</item>
+			</list>
+			<br clear="ALL"/>
+			<br></br>
+			
+			<b>3.</b> Notice that the status symbol has changed in front of the 
+            item(s) committed in Solution Explorer to
+            <img src="../../img/ok.png"/>
+            <br></br><br></br>
+            
+            I.e. after having committed a file Ankh will show the file status as: 
+            <br></br>
+            <img src="../../img/ok_file.png"/>
+            
+        </p><br></br>			
             <hr></hr>
             <link url="resolving_conflicts.xml">back </link>
-        </p>
+        
     </section>   
 </doc>
 

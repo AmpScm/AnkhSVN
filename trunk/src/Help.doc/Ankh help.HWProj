@@ -72,6 +72,12 @@
     <File Url="img\modified.png"/>
     <File Url="img\ok.png"/>
     <File Url="img\add.png"/>
+    <File Url="img\unrevisioned_file.png"/>
+    <File Url="img\wc_solution_explorer.png"/>
+    <File Url="img\added_file.png"/>
+    <File Url="img\commit_dialog.png"/>
+    <File Url="img\item_menu.png"/>
+    <File Url="img\ok_file.png"/>
     </Files>
 	<Dirs>
 		<Dir Url="html"/>
