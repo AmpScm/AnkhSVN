@@ -136,7 +136,7 @@ namespace NSvn.Core.Tests
 
         private class Info
         {
-            private static readonly Regex INFO = new Regex(@"Path:\s(?'path'\S+)\s+Name:\s(?'name'\S+)\s+Url:\s(?'url'\S+)\s+Revision:\s(?'revision'\S+)\s+Node Kind:\s(?'nodekind'\S+)\s+Schedule:\s(?'schedule'\S+)\s+Last Changed Author:\s+(?'lastchangedauthor'\S+)", 
+            private static readonly Regex INFO = new Regex(@"Path:\s(?'path'\S+)\s+Name:\s(?'name'\S+)\s+Url:\s(?'url'\S+)\s+Repository UUID:\s(?'reposuuid'\S+)\s+Revision:\s(?'revision'\S+)\s+Node Kind:\s(?'nodekind'\S+)\s+Schedule:\s(?'schedule'\S+)\s+Last Changed Author:\s+(?'lastchangedauthor'\S+)", 
                 (RegexOptions) 0);
 
             public Info( string output )
@@ -157,6 +157,8 @@ namespace NSvn.Core.Tests
                     int.Parse(match.Groups["revision"].Value), entry.Revision );
                 Assertion.AssertEquals( "Node kind differs", 
                     match.Groups["nodekind"].Value.ToLower(), entry.Kind.ToString().ToLower() );
+                Assertion.AssertEquals( "Repository UUID differs", 
+                    match.Groups["reposuuid"].Value, entry.Uuid );
                 Assertion.AssertEquals( "Schedule differs",
                     match.Groups["schedule"].Value.ToLower(), entry.Schedule.ToString().ToLower() );
                 Assertion.AssertEquals( "Last changed author differs", 
