@@ -8,8 +8,9 @@
     <property name="vs.2003" value="false"/>
     <property name="major.version" value="0" />
     <property name="minor.version" value="2" />
+    <property name="patch.version" value="0" />
     <property name="url" 
-        value="http://arild.no-ip.com:8088/svn/finalproject/branches/alpha2-release/src"/>
+        value="http://arild.no-ip.com:8088/svn/finalproject/trunk/src"/>
         
    
     
@@ -56,7 +57,7 @@
                   revision = int.Parse( first );
                
                return project.ExpandProperties( 
-                    "${major.version}.${minor.version}.42." + revision, location );
+                    "${major.version}.${minor.version}.${patch.version}." + revision, location );
             }
             
             public static void ScriptMain( Project project )
@@ -115,17 +116,17 @@
     </target>
     
     <target name="msi" depends="source">
-        <nant buildfile="${checkout.dir}\master.build" inheritall="true" target="rebuild,msi"/>
+        <!--<nant buildfile="${checkout.dir}\master.build" inheritall="true" target="rebuild,msi"/>
         
         <copy todir="${deploy.dir}">
             <fileset basedir="${checkout.dir}\installsource">
                 <includes name="*.msi"/>
             </fileset>
-        </copy>
+        </copy>-->
     
     
             
-    <!--
+    
         <property name="config" value="Debug" if="${debug}"/>
         <property name="config" value="Release" unless="${debug}" />
         
@@ -140,7 +141,7 @@
             <fileset basedir="${checkout.dir}\Ankh\AnkhSetup\${config}\">
                 <includes name="*.msi"/>
             </fileset>
-        </copy>-->
+        </copy>
         
     </target>
     
