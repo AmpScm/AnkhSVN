@@ -18,7 +18,7 @@
     <property name="alt.admin.dir" value="true"/>
     <ifnot propertyexists="svndir">
         <sysinfo />
-        <ifnot propertyexists="${sys.env.svnsrc}">
+        <ifnot propertyexists="sys.env.SVNSRC">
             <fail message="Either provide the svndir property, or set the SVNSRC env var to point to the Subversion source tree" />
         </ifnot>
         <property name="svndir" value="${sys.env.SVNSRC}" />
