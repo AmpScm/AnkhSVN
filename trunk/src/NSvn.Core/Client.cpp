@@ -61,7 +61,7 @@ void NSvn::Core::Client::Resolve(String* path, bool recursive, ClientContext* co
 
 
 // implementation of Client::Status
-//TO-DO:   Core::StringDictionary to be reconsidered
+//TODO: StringDictionary to be reconsidered
 StringDictionary* NSvn::Core::Client::Status( long* youngest, String* path, bool descend,
                                 bool getAll, bool update, bool noIgnore, ClientContext* context )
 {
