@@ -63,7 +63,9 @@ namespace Ankh.Solution
             else
             {
                 StatusKind status = StatusFromResource( this.solutionFile );
-                if ( status != StatusKind.Normal )
+                // no point in checking substatuses if we already have a Normal status
+                // on the solution file
+                if ( status == StatusKind.Normal )
                 {
                     // check the status on the projects
                     ModifiedVisitor v = new ModifiedVisitor();
