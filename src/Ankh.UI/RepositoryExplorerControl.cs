@@ -43,18 +43,6 @@ namespace Ankh.UI
         }
 
         /// <summary>
-        /// The NSvnContext to use for authentication, notifications etc.
-        /// </summary>
-        public NSvnContext Context
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.context; }
-
-            [System.Diagnostics.DebuggerStepThrough]
-            set{ this.context = value; }
-        }
-
-        /// <summary>
         /// The command bar to be used for a context menu.
         /// </summary>
         public CommandBar CommandBar
@@ -65,6 +53,19 @@ namespace Ankh.UI
             [System.Diagnostics.DebuggerStepThrough]
             set{ this.commandBar = value; }
         }        
+
+        /// <summary>
+        /// The IRepositoryTreeController that controls the view.
+        /// </summary>
+        public IRepositoryTreeController Controller
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.treeView.Controller; }
+
+            [System.Diagnostics.DebuggerStepThrough]
+            set{ this.treeView.Controller = value; }
+        }
+
         
         /// <summary> 
         /// Clean up any resources being used.
@@ -103,34 +104,38 @@ namespace Ankh.UI
         //Gives a tree view of repository if valid revision is selected
         private void goButton_Click(object sender, System.EventArgs e)
         {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
+            this.treeView.Controller.SetRepository( this.urlTextBox.Text, this.revisionPicker.Revision );
+            this.treeView.Go();
+            this.treeView.Enabled = true;
 
-                RepositoryDirectory dir = new RepositoryDirectory(
-                    this.urlTextBox.Text, this.revisionPicker.Revision );
-
-                if ( this.context != null )
-                    dir.Context = this.context;
-
-                this.treeView.RepositoryRoot = dir;
-                this.treeView.Enabled = true;
-            }
-            catch( AuthorizationFailedException )
-            {
-                MessageBox.Show( "Could not authorize against repository " + 
-                    this.urlTextBox.Text, "Authorization failed", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning );
-            }
-            catch( SvnClientException ex )
-            {
-                MessageBox.Show( "An error occurred: " + ex.Message, "Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error );
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
+//            try
+//            {
+//                this.Cursor = Cursors.WaitCursor;
+//
+//                RepositoryDirectory dir = new RepositoryDirectory(
+//                    this.urlTextBox.Text, this.revisionPicker.Revision );
+//
+//                if ( this.context != null )
+//                    dir.Context = this.context;
+//
+//                this.treeView.RepositoryRoot = dir;
+//                this.treeView.Enabled = true;
+//            }
+//            catch( AuthorizationFailedException )
+//            {
+//                MessageBox.Show( "Could not authorize against repository " + 
+//                    this.urlTextBox.Text, "Authorization failed", MessageBoxButtons.OK,
+//                    MessageBoxIcon.Warning );
+//            }
+//            catch( SvnClientException ex )
+//            {
+//                MessageBox.Show( "An error occurred: " + ex.Message, "Error", 
+//                    MessageBoxButtons.OK, MessageBoxIcon.Error );
+//            }
+//            finally
+//            {
+//                this.Cursor = Cursors.Default;
+//            }
         }
 
         private void revisionPicker_Changed(object sender, System.EventArgs e)
@@ -212,7 +217,6 @@ namespace Ankh.UI
             this.treeView.ImageIndex = -1;
             this.treeView.Location = new System.Drawing.Point(0, 80);
             this.treeView.Name = "treeView";
-            this.treeView.RepositoryRoot = null;
             this.treeView.SelectedImageIndex = -1;
             this.treeView.Size = new System.Drawing.Size(368, 288);
             this.treeView.TabIndex = 6;
@@ -247,7 +251,6 @@ namespace Ankh.UI
         private Ankh.UI.RepositoryTreeView treeView;
         private System.Windows.Forms.Button goButton;
         private Ankh.UI.RevisionPicker revisionPicker;
-        private NSvnContext context;
         private CommandBar commandBar;
 		
 						
