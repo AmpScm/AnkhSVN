@@ -21,8 +21,7 @@ namespace Ankh.Commands
             // we must prevent infinite recursion
             if ( this.updating ) 
             {
-                return vsCommandStatus.vsCommandStatusSupported |
-                    vsCommandStatus.vsCommandStatusEnabled;
+                return Enabled;
             }
 
             this.updating = true;
@@ -38,7 +37,7 @@ namespace Ankh.Commands
                 {
                     // we want it to show "Enable" if we're not in a wc
                     cntl.Caption = cntl.TooltipText = "Enable Ankh for this solution";
-                    return vsCommandStatus.vsCommandStatusSupported;
+                    return Disabled;
                 }
 
                 // now we have to figure out what text to set for the command           
@@ -49,8 +48,7 @@ namespace Ankh.Commands
                 else 
                     cntl.Caption = cntl.TooltipText = "Enable Ankh for this solution";
 
-                return vsCommandStatus.vsCommandStatusSupported | 
-                    vsCommandStatus.vsCommandStatusEnabled;
+                return Enabled;
             }
             finally
             {

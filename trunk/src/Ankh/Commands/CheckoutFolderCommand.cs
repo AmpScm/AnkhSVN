@@ -18,10 +18,13 @@ namespace Ankh.Commands
         #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
-            return context.RepositoryExplorer.SelectedNode.IsDirectory ? 
-                vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled :
-                vsCommandStatus.vsCommandStatusSupported;
-
+            if ( context.RepositoryExplorer.SelectedNode != null &&
+                context.RepositoryExplorer.SelectedNode.IsDirectory )
+            {
+                return Enabled;
+            } 
+            else
+                return Disabled;
         }
         #endregion
 

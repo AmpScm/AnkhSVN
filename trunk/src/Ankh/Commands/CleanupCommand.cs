@@ -19,8 +19,7 @@ namespace Ankh.Commands
     
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
-            return vsCommandStatus.vsCommandStatusEnabled | 
-                vsCommandStatus.vsCommandStatusSupported;
+            return Enabled;
         }
     
         public override void Execute(AnkhContext context, string parameters)
