@@ -20,9 +20,10 @@ namespace Ankh
     {
         public SvnContext( AnkhContext ankhContext )
         {
+
+            //Clears the pane when opening new solutions.
             this.ankhContext = ankhContext;
             this.AddAuthenticationProvider( new DialogProvider() );           
-           
         }
         /// <summary>
         /// Invokes the LogMessage dialog.
@@ -52,7 +53,7 @@ namespace Ankh
 
         protected override void NotifyCallback(NSvn.Core.Notification notification)
         {
-            if (((string)actionStatus[notification.Action.ToString()]) != "ignoretext")
+            if (((string)actionStatus[notification.Action]) != null)
             {
                 this.ankhContext.OutputPane.Write("{0} - {2}: {1}{3}"
                     ,actionStatus[notification.Action].ToString() 
@@ -141,13 +142,13 @@ namespace Ankh
             actionStatus[NotifyAction.UpdateDelete] =           "Update deleted";
             actionStatus[NotifyAction.UpdateAdd] =              "Update added";
             actionStatus[NotifyAction.UpdateUpdate] =           "Updated";
-            actionStatus[NotifyAction.UpdateCompleted] =        "ignoretext";
+            actionStatus[NotifyAction.UpdateCompleted] =        null;
             actionStatus[NotifyAction.UpdateExternal] =         "Updated external";
             actionStatus[NotifyAction.CommitModified] =         "Commit modified";
             actionStatus[NotifyAction.CommitAdded] =            "Commit added";
             actionStatus[NotifyAction.CommitDeleted] =          "Commit deleted";
             actionStatus[NotifyAction.CommitReplaced] =         "Commit replaced";
-            actionStatus[NotifyAction.CommitPostfixTxDelta] =   "ignoretext";
+            actionStatus[NotifyAction.CommitPostfixTxDelta] =   null;
         }
         
         static readonly Hashtable actionStatus = new Hashtable();
