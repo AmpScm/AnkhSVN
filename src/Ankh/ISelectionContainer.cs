@@ -47,12 +47,9 @@ namespace Ankh
         /// <summary>
         /// Returns all  the SvnItem resources from root
         /// </summary>
-        /// <param name="getChildItems">Whether children of the items in 
-        /// question should be included.</param>
         /// <param name="filter">A callback used to filter the items
         /// that are added.</param>
         /// <returns>A list of SvnItem instances.</returns>
-        IList GetAllResources( bool getChildItems, 
-            ResourceFilterCallback filter );
+        IList GetAllResources( ResourceFilterCallback filter );
     }
 }

@@ -226,19 +226,16 @@ namespace Ankh.Solution
         /// <summary>
         /// Returns all  the SvnItem resources from root
         /// </summary>
-        /// <param name="getChildItems">Whether children of the items in 
-        /// question should be included.</param>
         /// <param name="filter">A callback used to filter the items
         /// that are added.</param>
         /// <returns>A list of SvnItem instances.</returns>
-        public IList GetAllResources( bool getChildItems, 
-            ResourceFilterCallback filter )
+        public IList GetAllResources( ResourceFilterCallback filter )
         {
             ArrayList list = new ArrayList();
 
             TreeNode node = solutionNode; 	
             if ( node != null )	 	
-                node.GetResources( list, getChildItems, filter );	 	
+                node.GetResources( list, true, filter );	 	
 
             return list;
         }

@@ -59,7 +59,7 @@ namespace Ankh
         /// </summary>
         public void CreateTaskItems()
         {
-            IList conflictItems =  this.context.SolutionExplorer.GetAllResources(true,   new ResourceFilterCallback(ConflictedFilter)); 
+            IList conflictItems =  this.context.SolutionExplorer.GetAllResources(new ResourceFilterCallback(ConflictedFilter)); 
             foreach(SvnItem item in conflictItems)
             {
                 this.AddTask(item.Path);
