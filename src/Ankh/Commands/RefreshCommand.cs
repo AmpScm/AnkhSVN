@@ -25,7 +25,7 @@ namespace Ankh.Commands
         {
             try
             {
-                context.StartOperation( "Refreshing solution explorer..." );
+                context.StartOperation( "Refreshing solution explorer" );
 
                 context.SolutionExplorer.RefreshSelection();
             }

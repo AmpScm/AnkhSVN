@@ -52,7 +52,7 @@ namespace Ankh.Commands
 
             try
             {
-                context.StartOperation( "Committing..." );
+                context.StartOperation( "Committing" );
 
                 commitInfo = WorkingCopyResource.Commit( resources, true );
                 context.Context.CommitCompleted();
