@@ -84,8 +84,11 @@ namespace Ankh
                     Ankh.CommandMap.LoadCommands( this.context, register );  
 
                 this.CreateAboutBoxText( ((_DTE)application).RegistryRoot );
-
-                
+               
+                // is there already a solution open? 
+                // can happen if we are loaded after startup
+                if ( this.context.DTE.Solution.IsOpen )
+                    this.context.SolutionOpened();
   
                 
             }

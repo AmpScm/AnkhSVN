@@ -49,10 +49,6 @@ namespace Ankh
             this.repositoryController = new RepositoryExplorer.Controller( this, 
                 this.repositoryExplorer, this.reposExplorerWindow );
 
-            // is there a solution opened?
-            if ( this.dte.Solution.IsOpen )
-                this.SolutionOpened();
-
             this.SetUpEvents();
         }
 
@@ -149,6 +145,49 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Event handler for the SolutionOpened event. Can also be called at
+        /// addin load time, or if Ankh is enabled for a solution.
+        /// </summary>
+        public void SolutionOpened()
+        {
+            try
+            {
+                System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
+
+                Utils.DebugTimer timer = DebugTimer.Start();
+                this.StartOperation( "Synchronizing with solution explorer");
+
+                this.solutionExplorer.Load();
+                this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
+
+                timer.End( "Solution opened", "Ankh" );
+            }
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+            }
+            finally
+            {
+                this.EndOperation();   
+            }
+        }
+
+        /// <summary>
+        /// Called when a solution is closed.
+        /// </summary>
+        public void SolutionClosing()
+        {
+            this.SolutionExplorer.Unload();
+
+            // unhook events.
+            if ( this.eventSinks != null )
+            {
+                foreach( EventSinks.EventSink sink in this.eventSinks )
+                    sink.Unhook();
+            }
+        }
+
+        /// <summary>
         /// Should be called before starting any lengthy operation
         /// </summary>
         public void StartOperation( string description )
@@ -199,49 +238,9 @@ namespace Ankh
         }
         #endregion        
 
-        /// <summary>
-        /// Event handler for the SolutionOpened event.
-        /// </summary>
-        private void SolutionOpened()
-        {
-            try
-            {
-                System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
-
-                Utils.DebugTimer timer = DebugTimer.Start();
-
-                this.StartOperation( "Synchronizing with solution explorer");
-
-                this.solutionExplorer.Load();
-
-                this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
-
-                timer.End( "Solution opened", "Ankh" );
-            }
-            catch( Exception ex )
-            {
-                Error.Handle( ex );
-            }
-            finally
-            {
-                this.EndOperation();   
-            }
-        }
         
-        /// <summary>
-        /// Called when a solution is closed.
-        /// </summary>
-        private void SolutionClosing()
-        {
-            this.SolutionExplorer.Unload();
-
-            // unhook events.
-            if ( this.eventSinks != null )
-            {
-                foreach( EventSinks.EventSink sink in this.eventSinks )
-                    sink.Unhook();
-            }
-        }
+        
+        
 
         private void CreateRepositoryExplorer()
         {   
