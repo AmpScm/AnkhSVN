@@ -42,31 +42,52 @@ namespace Ankh.Commands
             IList resources = context.SolutionExplorer.GetSelectionResources( true,
                 new ResourceFilterCallback( CommandBase.ModifiedFilter ) );
 
-            // does the user really want to revert these items?
-            string[] paths = SvnItem.GetPaths( resources );
-            string msg = "Do you really want to reverse these item(s)?" + 
-                Environment.NewLine + Environment.NewLine;            
-            msg += string.Join( Environment.NewLine, paths );
-
-            if( MessageBox.Show( context.HostWindow, msg, "Revert", MessageBoxButtons.YesNo,
-                MessageBoxIcon.Information ) == 
-                DialogResult.Yes )
+            bool recursive = false;
+            bool confirmed = false;
+            // is Shift down?
+            if ( this.Shift )
             {
-                
-                context.OutputPane.StartActionText("Reverting");               
-                try
+                using(PathSelector p = this.GetPathSelector( "Select items to revert" ))
                 {
-                    context.Client.Revert( paths, false );
+                    p.Items = resources;
+                    p.CheckedItems = resources;
+                    if ( p.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                        return;
+                    confirmed = true;
+                    recursive = p.Recursive;
+                    resources = p.CheckedItems;
                 }
-                catch( NotVersionControlledException )
+            }
+            string[] paths = SvnItem.GetPaths( resources );
+            
+            // ask for confirmation if the Shift dialog hasn't been used
+            if ( !confirmed )
+            {
+                string msg = "Do you really want to reverse these item(s)?" + 
+                    Environment.NewLine + Environment.NewLine;            
+                msg += string.Join( Environment.NewLine, paths );
+
+                if( MessageBox.Show( context.HostWindow, msg, "Revert", MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Information ) != DialogResult.Yes )
                 {
-                    // empty
+                    return;
                 }
-                foreach( SvnItem item in resources )
-                    item.Refresh( context.Client );
-                context.OutputPane.EndActionText();
-            }               
-        }
+            }
+               
+            // perform the actual revert 
+            context.OutputPane.StartActionText("Reverting");               
+            try
+            {
+                context.Client.Revert( paths, recursive );
+            }
+            catch( NotVersionControlledException )
+            {
+                // empty
+            }
+            foreach( SvnItem item in resources )
+                item.Refresh( context.Client );
+            context.OutputPane.EndActionText();
+        }               
         #endregion       
     }
 }
