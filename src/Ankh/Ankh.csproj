@@ -82,6 +82,11 @@
                     AssemblyName = "EnvDTE"
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\EnvDTE.dll"
                 />
+                <Reference
+                    Name = "Ankh.Commands"
+                    Project = "{5F991CB9-8371-4A34-8038-C921C8EC4F25}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -93,11 +98,6 @@
                 />
                 <File
                     RelPath = "Connect.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ICommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -4,9 +4,10 @@ using System;
 namespace Ankh.Commands
 {
 	/// <summary>
-	/// Summary description for CommitItem.
+	/// Commits an item.
 	/// </summary>
-	public class CommitItem
+	[VSNetCommand("CommitItem", Text = "Commit", Tooltip = "Commits an item")]
+	internal class CommitItem : ICommand
 	{
 		public CommitItem()
 		{

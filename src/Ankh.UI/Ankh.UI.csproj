@@ -92,6 +92,16 @@
                     Project = "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Ankh.Commands"
+                    Project = "{5F991CB9-8371-4A34-8038-C921C8EC4F25}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "envdte"
+                    AssemblyName = "envdte"
+                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\envdte.dll"
+                />
             </References>
         </Build>
         <Files>

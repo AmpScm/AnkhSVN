@@ -1,21 +1,21 @@
 // $Id$
 using System;
 
-namespace Ankh.Commands
-{
-	/// <summary>
-	/// Summary description for AddItem.
-	/// </summary>
-	public class AddItem
-	{
-		public AddItem()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
-	}
-}
+//namespace Ankh.Commands
+//{
+//	/// <summary>
+//	/// Summary description for AddItem.
+//	/// </summary>
+//	internal class AddItemCommand : ICommand
+//	{
+//		public AddItemCommand()
+//		{
+//			//
+//			// TODO: Add constructor logic here
+//			//
+//		}
+//	}
+//}
 
 
 
