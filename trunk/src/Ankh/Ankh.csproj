@@ -280,11 +280,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Commands\CopyItemCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Commands\CopyReposExplorerUrl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -300,32 +295,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Commands\DiffRepositoryItemCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Commands\EditConfigFileCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Commands\EditPropertiesCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Commands\ExportItemCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Commands\ImportSolutionCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Commands\ItemInfoCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -336,21 +311,6 @@
                 />
                 <File
                     RelPath = "Commands\MakeDirectoryCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Commands\MakePatchCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Commands\MergeItemCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Commands\MoveItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -400,11 +360,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Commands\ShowLocalChangesCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Commands\ShowRepositoryExplorerCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -431,11 +386,6 @@
                 />
                 <File
                     RelPath = "Commands\ViewInWindowsCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Commands\ViewLogCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
