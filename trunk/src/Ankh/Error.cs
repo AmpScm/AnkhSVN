@@ -2,7 +2,8 @@ using System;
 using NSvn.Core;
 using System.Windows.Forms;
 using Utils;
-
+using System.Reflection;
+using System.Diagnostics;
 
 
 
@@ -25,39 +26,58 @@ namespace Ankh
         /// <param name="ex"></param>
         public static void Handle( Exception ex )
         {
-            if ( ex is WorkingCopyLockedException )
+            try
             {
-                MessageBox.Show( "Your working copy appear to be locked. " + NL + 
-                    "Run Cleanup to amend the situation.", 
-                    "Working copy locked", MessageBoxButtons.OK, 
-                    MessageBoxIcon.Warning );
+                Type t = typeof(Error);
+                t.InvokeMember( "DoHandle", BindingFlags.InvokeMethod |BindingFlags.Static |
+                    BindingFlags.NonPublic, null, 
+                    null, new object[]{ ex } );
             }
-            else if ( ex is AuthorizationFailedException )
+            catch( Exception x )
             {
-                MessageBox.Show( 
-                    "You failed to authorize against the remote repository. ",
-                    "Authorization failed", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning );
+                Debug.WriteLine( x );
             }
-            else if ( ex is ResourceOutOfDateException )
-            {
-                MessageBox.Show(
-                    "One or more of your local resources are out of date. " + 
-                    "You need to run Update before you can proceed with the operation",
-                    "Resource(s) out of date", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning );
-            }
-            else if ( ex is IllegalTargetException )
-            {
-                MessageBox.Show(  
-                    "One or more of the resources selected are not valid targets for this operation" + 
-                    Environment.NewLine + 
-                    "(Are you trying to commit a child of a newly added, but not committed resource?)",
-                    "Illegal target for this operation",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning );
-            }
-            else
+        }
+
+
+        private static void DoHandle( WorkingCopyLockedException ex )
+        {
+            MessageBox.Show( "Your working copy appear to be locked. " + NL + 
+                "Run Cleanup to amend the situation.", 
+                "Working copy locked", MessageBoxButtons.OK, 
+                MessageBoxIcon.Warning );
+        }
+
+        private static void DoHandle( AuthorizationFailedException ex )
+        {
+            MessageBox.Show( 
+                "You failed to authorize against the remote repository. ",
+                "Authorization failed", MessageBoxButtons.OK,
+                MessageBoxIcon.Warning );
+        }
+        
+        private static void DoHandle( ResourceOutOfDateException ex )
+        {
+            MessageBox.Show(
+                "One or more of your local resources are out of date. " + 
+                "You need to run Update before you can proceed with the operation",
+                "Resource(s) out of date", MessageBoxButtons.OK,
+                MessageBoxIcon.Warning );
+        }
+
+        private static void DoHandle( IllegalTargetException ex )
+        {
+            MessageBox.Show(  
+                "One or more of the resources selected are not valid targets for this operation" + 
+                Environment.NewLine + 
+                "(Are you trying to commit a child of a newly added, but not committed resource?)",
+                "Illegal target for this operation",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning );
+        }
+
+        private static void DoHandle( Exception ex )
+        {
             {
 #if REPORTERROR
                 Utils.ErrorMessage.QuerySendByWeb( "http://arild.no-ip.com/error/report.aspx", ex,
@@ -69,6 +89,7 @@ namespace Ankh
                
             }
         }
+
         private static readonly string NL = Environment.NewLine;
     }
 }
