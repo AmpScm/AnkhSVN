@@ -151,10 +151,10 @@ namespace NSvn
 
 	        static CommitInfo* Copy(String* srcPath, Revision* srcRevision, String* dst, 
                 ClientContext* context);
-
+*/
 	        static CommitInfo* Move(String* srcPath, Revision* srcRevision, String* dstPath, 
                 bool force, ClientContext* context);
-*/
+
             ///<summary>Set a property to a file/directory</summary>
             ///<param name="propName">Name of property</param>
             ///<param name="propval">Value of property</param>
