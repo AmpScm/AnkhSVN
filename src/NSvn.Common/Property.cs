@@ -4,18 +4,18 @@ using System.Text;
 
 namespace NSvn.Common
 {
-	/// <summary>
-	/// Represents an SVN property
-	/// </summary>
-	public class Property
-	{
+    /// <summary>
+    /// Represents an SVN property
+    /// </summary>
+    public class Property
+    {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the property</param>
         /// <param name="text">The text of the property. This will be UTF8-encoded</param>
-		public Property( string name, string text ) : this( name, text, Encoding.UTF8 )
-		{}
+        public Property( string name, string text ) : this( name, text, Encoding.UTF8 )
+        {}
 
         /// <summary>
         /// Constructor
@@ -82,5 +82,5 @@ namespace NSvn.Common
         private byte[] data;
         private string name;
 
-	}
+    }
 }

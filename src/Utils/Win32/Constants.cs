@@ -3,17 +3,17 @@ using System;
 
 namespace Utils.Win32
 {
-	/// <summary>
-	/// Contains Win32 constants.
-	/// </summary>
-	public class Constants
-	{
+    /// <summary>
+    /// Contains Win32 constants.
+    /// </summary>
+    public class Constants
+    {
         /// <summary>
         /// Private ctor to avoid instantiation.
         /// </summary>
-		private Constants()
-		{			
-		}
+        private Constants()
+        {			
+        }
 
         // SHGetFileInfo constants
 
@@ -220,5 +220,5 @@ namespace Utils.Win32
         /// </summary>
         public const int HC_ACTION = 0;
 
-	}
+    }
 }

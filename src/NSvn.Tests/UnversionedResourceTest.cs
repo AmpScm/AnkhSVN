@@ -7,12 +7,12 @@ using System.IO;
 
 namespace NSvn.Tests
 {
-	/// <summary>
-	/// Tests the UnversionedItem class.
-	/// </summary>
-	[TestFixture]
-	public class UnversionedResourceTest : TestBase
-	{
+    /// <summary>
+    /// Tests the UnversionedItem class.
+    /// </summary>
+    [TestFixture]
+    public class UnversionedResourceTest : TestBase
+    {
 
         public override void SetUp()
         {            
@@ -36,8 +36,8 @@ namespace NSvn.Tests
             // this.SetupEventHandlers( item.Notifications );
 
             //TODO: fix this
-//            Assertion.AssertEquals( "Expected only one notification", 1,
-//                this.NotificationCount );
+            //            Assertion.AssertEquals( "Expected only one notification", 1,
+            //                this.NotificationCount );
             WorkingCopyResource wcItem = item.Add( false );
             Assertion.AssertEquals( "Wrong type returned. Should be working copy file",
                 typeof( WorkingCopyFile ), wcItem.GetType() );
@@ -68,5 +68,5 @@ namespace NSvn.Tests
         private string newFile;
         private string newDir;
         private string fileInNewDir;
-	}
+    }
 }

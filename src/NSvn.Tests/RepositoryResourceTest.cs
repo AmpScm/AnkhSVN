@@ -4,12 +4,12 @@ using NUnit.Framework;
 
 namespace NSvn.Tests
 {
-	/// <summary>
-	/// Tests the RepositoryResource class.
-	/// </summary>
-	[TestFixture]
-	public class RepositoryResourceTest
-	{
+    /// <summary>
+    /// Tests the RepositoryResource class.
+    /// </summary>
+    [TestFixture]
+    public class RepositoryResourceTest
+    {
         /// <summary>
         /// Tests the Name property.
         /// </summary>
@@ -27,5 +27,5 @@ namespace NSvn.Tests
                 new RepositoryDirectory( "http://www.porn.com:666/foo/shoo/moo" ).Name );
         }
 
-	}
+    }
 }

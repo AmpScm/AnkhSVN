@@ -5,17 +5,17 @@ using EnvDTE;
 
 namespace Ankh
 {
-	/// <summary>
-	/// A TextWriter backed by the VS.NET output window.
-	/// </summary>
-	public class OutputPaneWriter : TextWriter
-	{
-		public OutputPaneWriter( _DTE dte, string caption )
-		{
+    /// <summary>
+    /// A TextWriter backed by the VS.NET output window.
+    /// </summary>
+    public class OutputPaneWriter : TextWriter
+    {
+        public OutputPaneWriter( _DTE dte, string caption )
+        {
             OutputWindow window = (OutputWindow)dte.Windows.Item( 
                 EnvDTE.Constants.vsWindowKindOutput).Object;
             this.outputPane = window.OutputWindowPanes.Add( caption );			
-		}
+        }
 
         public override Encoding Encoding
         {
@@ -82,5 +82,5 @@ namespace Ankh
 
         private const string line = "---------------------- ";
         private OutputWindowPane outputPane;
-	}
+    }
 }

@@ -41,7 +41,7 @@ void NSvn::Core::Tests::MCpp::StreamTest::TestRead()
 
     memStream->Seek( 0, SeekOrigin::Begin );
 
-    
+
     Pool pool;
     svn_stream_t* svnStream = CreateSvnStream( memStream, pool );
 
@@ -50,12 +50,12 @@ void NSvn::Core::Tests::MCpp::StreamTest::TestRead()
     HandleError( svn_stream_read( svnStream, reinterpret_cast<char*>(buf), &len ) );
 
     Assertion::AssertEquals( "Returned buffer wrong size", 1000, len );
-    
+
     Byte memStreamBuf[] = memStream->ToArray();
     for( int i = 0; i < 1000; i++ )
         Assertion::AssertEquals( "Byte not equal", buf[i], memStreamBuf[i] );
 
-    
+
 }
 
 void NSvn::Core::Tests::MCpp::StreamTest::TestReadFromNullStream()

@@ -5,15 +5,15 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace Utils
 {
-	/// <summary>
-	/// Summary description for Zip.
-	/// </summary>
-	public class Zip
-	{
-		private Zip()
-		{
-			// empty
-		}
+    /// <summary>
+    /// Summary description for Zip.
+    /// </summary>
+    public class Zip
+    {
+        private Zip()
+        {
+            // empty
+        }
 
         /// <summary>
         /// Extracts a ZIP file that is embedded as a resource.
@@ -77,5 +77,5 @@ namespace Utils
 
         private const int BUF_SIZE = 4096;
 
-	}
+    }
 }

@@ -4,19 +4,19 @@ using System.IO;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Represents a versioned file in an SVN working copy.
-	/// </summary>
-	public class WorkingCopyFile : WorkingCopyResource
-	{
+    /// <summary>
+    /// Represents a versioned file in an SVN working copy.
+    /// </summary>
+    public class WorkingCopyFile : WorkingCopyResource
+    {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="path">The path to the file.</param>
-		public WorkingCopyFile( string path ) : base( path )
-		{ 
+        public WorkingCopyFile( string path ) : base( path )
+        { 
             // empty
-		}
+        }
 
         /// <summary>
         /// Is this a folder?
@@ -59,5 +59,5 @@ namespace NSvn
             }
         }
      
-	}
+    }
 }

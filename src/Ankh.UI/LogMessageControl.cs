@@ -8,20 +8,20 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Summary description for LogMessageControl.
-	/// </summary>
-	public class LogMessageControl : System.Windows.Forms.UserControl
-	{
+    /// <summary>
+    /// Summary description for LogMessageControl.
+    /// </summary>
+    public class LogMessageControl : System.Windows.Forms.UserControl
+    {
       
-		public LogMessageControl()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public LogMessageControl()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
-			// TODO: Add any initialization after the InitForm call
+            // TODO: Add any initialization after the InitForm call
 
-		}
+        }
 
 
         public string LogMessage
@@ -35,28 +35,28 @@ namespace Ankh.UI
 
 
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.logTextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
@@ -85,7 +85,7 @@ namespace Ankh.UI
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-	}
+    }
 }
 
 

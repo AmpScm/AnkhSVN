@@ -6,19 +6,19 @@ using NSvn.Common;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Represents an unversioned item in a working copy.
-	/// </summary>
-	public abstract class UnversionedResource : SvnResource, ILocalResource
-	{
+    /// <summary>
+    /// Represents an unversioned item in a working copy.
+    /// </summary>
+    public abstract class UnversionedResource : SvnResource, ILocalResource
+    {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="path">The path to the item.</param>
-		protected UnversionedResource( string path )
-		{
-			this.path = System.IO.Path.GetFullPath(path);
-		}
+        protected UnversionedResource( string path )
+        {
+            this.path = System.IO.Path.GetFullPath(path);
+        }
 
         /// <summary>
         /// Factory method
@@ -56,29 +56,29 @@ namespace NSvn
         {
             return FromPath( path ).Add( recursive );     
         }        
-/*
-        /// <summary>
-        /// Import local changes to the repository.
-        /// </summary>
-        /// <param name="logMessage">The log message to accompany the commit.</param>
-        /// <param name="recursive">Whether subresources should be recursively committed.</param>
-        public void Import( string logMessage, bool nonRecursive )
-        {
-            this.Import( new SimpleLogMessageProvider(logMessage), nonRecursive );
-        }
+        /*
+                /// <summary>
+                /// Import local changes to the repository.
+                /// </summary>
+                /// <param name="logMessage">The log message to accompany the commit.</param>
+                /// <param name="recursive">Whether subresources should be recursively committed.</param>
+                public void Import( string logMessage, bool nonRecursive )
+                {
+                    this.Import( new SimpleLogMessageProvider(logMessage), nonRecursive );
+                }
 
-        /// <summary>
-        /// Import local changes to the repository.
-        /// </summary>
-        /// <param name="logMessageProvider">An object that can provide a log message.</param>
-        /// <param name="recursive">Whether subresources should be recursively committed.</param>
-        public void Import( ILogMessageProvider logMessageProvider, RepositoryResource url, 
-            string newEntry, bool nonRecursive )
-        {
-            this.logMessageProvider = logMessageProvider;
-            Client.Import( new string[]{ this.Path }, url.ToString(), newEntry, nonRecursive, this.ClientContext );
-        }
-*/
+                /// <summary>
+                /// Import local changes to the repository.
+                /// </summary>
+                /// <param name="logMessageProvider">An object that can provide a log message.</param>
+                /// <param name="recursive">Whether subresources should be recursively committed.</param>
+                public void Import( ILogMessageProvider logMessageProvider, RepositoryResource url, 
+                    string newEntry, bool nonRecursive )
+                {
+                    this.logMessageProvider = logMessageProvider;
+                    Client.Import( new string[]{ this.Path }, url.ToString(), newEntry, nonRecursive, this.ClientContext );
+                }
+        */
         
 
         /// <summary>
@@ -120,5 +120,5 @@ namespace NSvn
 
 
         private string path;      
-	}
+    }
 }

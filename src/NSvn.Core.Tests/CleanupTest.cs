@@ -6,12 +6,12 @@ using NUnit.Framework;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests the Client::Cleanup method
-	/// </summary>
-	[TestFixture]
-	public class CleanupTest : TestBase
-	{
+    /// <summary>
+    /// Tests the Client::Cleanup method
+    /// </summary>
+    [TestFixture]
+    public class CleanupTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -36,5 +36,5 @@ namespace NSvn.Core.Tests
                 !File.Exists( lockPath ) );
         }
 		
-	}
+    }
 }

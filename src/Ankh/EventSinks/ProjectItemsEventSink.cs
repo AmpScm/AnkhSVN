@@ -6,15 +6,15 @@ using NSvn;
 
 namespace Ankh.EventSinks
 {
-	/// <summary>
-	/// Event sink for the ProjectItemsEvent
-	/// </summary>
-	internal class ProjectItemsEventSink : ItemEventSink
-	{
-		internal ProjectItemsEventSink( ProjectItemsEvents events, 
+    /// <summary>
+    /// Event sink for the ProjectItemsEvent
+    /// </summary>
+    internal class ProjectItemsEventSink : ItemEventSink
+    {
+        internal ProjectItemsEventSink( ProjectItemsEvents events, 
             AnkhContext context )
             : base( context  )
-		{
+        {
             this.events = events;
             events.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
                 this.ItemAdded );
@@ -36,5 +36,5 @@ namespace Ankh.EventSinks
 
         private ProjectItemsEvents events;
 
-	}
+    }
 }

@@ -3,12 +3,12 @@ using System;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Convenience base class for ILocalResourceVisitor implementations, stubbing out
-	/// the operations.
-	/// </summary>
-	public class LocalResourceVisitorBase : ILocalResourceVisitor
-	{	
+    /// <summary>
+    /// Convenience base class for ILocalResourceVisitor implementations, stubbing out
+    /// the operations.
+    /// </summary>
+    public class LocalResourceVisitorBase : ILocalResourceVisitor
+    {	
         #region Implementation of ILocalResourceVisitor
         public virtual void VisitUnversionedDirectory(NSvn.UnversionedDirectory dir)
         {

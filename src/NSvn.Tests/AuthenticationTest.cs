@@ -7,12 +7,12 @@ using System.Collections;
 
 namespace NSvn.Tests
 {
-	/// <summary>
-	/// Tests authentication issues.
+    /// <summary>
+    /// Tests authentication issues.
     /// </summary>
     [TestFixture]
-	public class AuthenticationTest
-	{
+    public class AuthenticationTest
+    {
         [Test]
         public void TestSimpleProvider()
         {

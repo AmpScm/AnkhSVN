@@ -3,16 +3,16 @@ using EnvDTE;
 
 namespace Ankh.EventSinks
 {
-	/// <summary>
-	/// Event sink for command events
-	/// </summary>
-	internal class CommandsEventSink : EventSink
-	{
-		public CommandsEventSink( AnkhContext context ) : base( context )
-		{
+    /// <summary>
+    /// Event sink for command events
+    /// </summary>
+    internal class CommandsEventSink : EventSink
+    {
+        public CommandsEventSink( AnkhContext context ) : base( context )
+        {
             
-			this.RegisterCommandEvents( );
-		}
+            this.RegisterCommandEvents( );
+        }
 
         public override void Unhook()
         {
@@ -56,5 +56,5 @@ namespace Ankh.EventSinks
         private CommandEvents projectShowAll;
         private const string PROJECTSHOWALLGUID = "{1496A755-94DE-11D0-8C3F-00C04FC2AAE2}";
 
-	}
+    }
 }

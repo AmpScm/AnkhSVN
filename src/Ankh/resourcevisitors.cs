@@ -46,7 +46,7 @@ namespace Ankh
             get
             { 
                 return !this.workingCopyResourceFound && 
-                     this.unversionedResourceFound; 
+                    this.unversionedResourceFound; 
             }
         }   
         /// <summary>
@@ -90,14 +90,14 @@ namespace Ankh
 
     internal class DiffVisitor : LocalResourceVisitorBase
     {
-//        public string DiffFile
-//        {
-//            get
-//            {
-//                this.stream.Close();
-//                return this.GenerateHtmlFile();
-//            }
-//        }
+        //        public string DiffFile
+        //        {
+        //            get
+        //            {
+        //                this.stream.Close();
+        //                return this.GenerateHtmlFile();
+        //            }
+        //        }
 
         public string Diff
         {

@@ -14,64 +14,64 @@ using System.Collections;
 
 namespace NSvn
 {
-	public
-	class LocalResourceDictionary : IDictionary, ICollection, IEnumerable, ICloneable
-	{
-		protected Hashtable innerHash;
+    public
+        class LocalResourceDictionary : IDictionary, ICollection, IEnumerable, ICloneable
+    {
+        protected Hashtable innerHash;
 		
 		#region "Constructors"
-		public  LocalResourceDictionary()
-		{
-			innerHash = new Hashtable();
-		}
-		public LocalResourceDictionary(LocalResourceDictionary original)
-		{
-			innerHash = new Hashtable (original.innerHash);
-		}
-		public LocalResourceDictionary(IDictionary dictionary)
-		{
-			innerHash = new Hashtable (dictionary);
-		}
+        public  LocalResourceDictionary()
+        {
+            innerHash = new Hashtable();
+        }
+        public LocalResourceDictionary(LocalResourceDictionary original)
+        {
+            innerHash = new Hashtable (original.innerHash);
+        }
+        public LocalResourceDictionary(IDictionary dictionary)
+        {
+            innerHash = new Hashtable (dictionary);
+        }
 
-		public LocalResourceDictionary(int capacity)
-		{
-			innerHash = new Hashtable(capacity);
-		}
+        public LocalResourceDictionary(int capacity)
+        {
+            innerHash = new Hashtable(capacity);
+        }
 
-		public LocalResourceDictionary(IDictionary dictionary, float loadFactor)
-		{
-			innerHash = new Hashtable(dictionary, loadFactor);
-		}
+        public LocalResourceDictionary(IDictionary dictionary, float loadFactor)
+        {
+            innerHash = new Hashtable(dictionary, loadFactor);
+        }
 
-		public LocalResourceDictionary(IHashCodeProvider codeProvider, IComparer comparer)
-		{
-			innerHash = new Hashtable (codeProvider, comparer);
-		}
+        public LocalResourceDictionary(IHashCodeProvider codeProvider, IComparer comparer)
+        {
+            innerHash = new Hashtable (codeProvider, comparer);
+        }
 
-		public LocalResourceDictionary(int capacity, int loadFactor)
-		{
-			innerHash = new Hashtable(capacity, loadFactor);
-		}
+        public LocalResourceDictionary(int capacity, int loadFactor)
+        {
+            innerHash = new Hashtable(capacity, loadFactor);
+        }
 
-		public LocalResourceDictionary(IDictionary dictionary, IHashCodeProvider codeProvider, IComparer comparer)
-		{
-			innerHash = new Hashtable (dictionary, codeProvider, comparer);
-		}
+        public LocalResourceDictionary(IDictionary dictionary, IHashCodeProvider codeProvider, IComparer comparer)
+        {
+            innerHash = new Hashtable (dictionary, codeProvider, comparer);
+        }
 		
-		public LocalResourceDictionary(int capacity, IHashCodeProvider codeProvider, IComparer comparer)
-		{
-			innerHash = new Hashtable (capacity, codeProvider, comparer);
-		}
+        public LocalResourceDictionary(int capacity, IHashCodeProvider codeProvider, IComparer comparer)
+        {
+            innerHash = new Hashtable (capacity, codeProvider, comparer);
+        }
 
-		public LocalResourceDictionary(IDictionary dictionary, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
-		{
-			innerHash = new Hashtable (dictionary, loadFactor, codeProvider, comparer);
-		}
+        public LocalResourceDictionary(IDictionary dictionary, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
+        {
+            innerHash = new Hashtable (dictionary, loadFactor, codeProvider, comparer);
+        }
 
-		public LocalResourceDictionary(int capacity, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
-		{
-			innerHash = new Hashtable (capacity, loadFactor, codeProvider, comparer);
-		}
+        public LocalResourceDictionary(int capacity, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
+        {
+            innerHash = new Hashtable (capacity, loadFactor, codeProvider, comparer);
+        }
 
 		
 #endregion
@@ -79,249 +79,249 @@ namespace NSvn
 		#region Implementation of IDictionary
         public LocalResourceDictionaryEnumerator GetEnumerator()
         {
-	        return new LocalResourceDictionaryEnumerator(this);
+            return new LocalResourceDictionaryEnumerator(this);
         }
         
-		System.Collections.IDictionaryEnumerator IDictionary.GetEnumerator()
-		{
-			return new LocalResourceDictionaryEnumerator(this);
-		}
+        System.Collections.IDictionaryEnumerator IDictionary.GetEnumerator()
+        {
+            return new LocalResourceDictionaryEnumerator(this);
+        }
 		
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-		public void Remove(string key)
-		{
-			innerHash.Remove (key);
-		}
-		void IDictionary.Remove(object key)
-		{
-			Remove ((string)key);
-		}
+        public void Remove(string key)
+        {
+            innerHash.Remove (key);
+        }
+        void IDictionary.Remove(object key)
+        {
+            Remove ((string)key);
+        }
 
-		public bool Contains(string key)
-		{
-			return innerHash.Contains(key);
-		}
-		bool IDictionary.Contains(object key)
-		{
-			return Contains((string)key);
-		}
+        public bool Contains(string key)
+        {
+            return innerHash.Contains(key);
+        }
+        bool IDictionary.Contains(object key)
+        {
+            return Contains((string)key);
+        }
 
-		public void Clear()
-		{
-			innerHash.Clear();		
-		}
+        public void Clear()
+        {
+            innerHash.Clear();		
+        }
 
-		public void Add(string key, ILocalResource value)
-		{
-			innerHash.Add (key, value);
-		}
-		void IDictionary.Add(object key, object value)
-		{
-			Add ((string)key, (ILocalResource)value);
-		}
+        public void Add(string key, ILocalResource value)
+        {
+            innerHash.Add (key, value);
+        }
+        void IDictionary.Add(object key, object value)
+        {
+            Add ((string)key, (ILocalResource)value);
+        }
 
-		public bool IsReadOnly
-		{
-			get
-			{
-				return innerHash.IsReadOnly;
-			}
-		}
+        public bool IsReadOnly
+        {
+            get
+            {
+                return innerHash.IsReadOnly;
+            }
+        }
 
-		public ILocalResource this[string key]
-		{
-			get
-			{
-				return (ILocalResource) innerHash[key];
-			}
-			set
-			{
-				innerHash[key] = value;
-			}
-		}
-		object IDictionary.this[object key]
-		{
-			get
-			{
-				return this[(string)key];
-			}
-			set
-			{
-				this[(string)key] = (ILocalResource)value;
-			}
-		}
+        public ILocalResource this[string key]
+        {
+            get
+            {
+                return (ILocalResource) innerHash[key];
+            }
+            set
+            {
+                innerHash[key] = value;
+            }
+        }
+        object IDictionary.this[object key]
+        {
+            get
+            {
+                return this[(string)key];
+            }
+            set
+            {
+                this[(string)key] = (ILocalResource)value;
+            }
+        }
         
-		public System.Collections.ICollection Values
-		{
-			get
-			{
-				return innerHash.Values;
-			}
-		}
+        public System.Collections.ICollection Values
+        {
+            get
+            {
+                return innerHash.Values;
+            }
+        }
 
-		public System.Collections.ICollection Keys
-		{
-			get
-			{
-				return innerHash.Keys;
-			}
-		}
+        public System.Collections.ICollection Keys
+        {
+            get
+            {
+                return innerHash.Keys;
+            }
+        }
 
-		public bool IsFixedSize
-		{
-			get
-			{
-				return innerHash.IsFixedSize;
-			}
-		}
+        public bool IsFixedSize
+        {
+            get
+            {
+                return innerHash.IsFixedSize;
+            }
+        }
 		#endregion
 
 		#region Implementation of ICollection
-		public void CopyTo(System.Array array, int index)
-		{
-			innerHash.CopyTo (array, index);
-		}
+        public void CopyTo(System.Array array, int index)
+        {
+            innerHash.CopyTo (array, index);
+        }
 
-		public bool IsSynchronized
-		{
-			get
-			{
-				return innerHash.IsSynchronized;
-			}
-		}
+        public bool IsSynchronized
+        {
+            get
+            {
+                return innerHash.IsSynchronized;
+            }
+        }
 
-		public int Count
-		{
-			get
-			{
-				return innerHash.Count;
-			}
-		}
+        public int Count
+        {
+            get
+            {
+                return innerHash.Count;
+            }
+        }
 
-		public object SyncRoot
-		{
-			get
-			{
-				return innerHash.SyncRoot;
-			}
-		}
+        public object SyncRoot
+        {
+            get
+            {
+                return innerHash.SyncRoot;
+            }
+        }
 		#endregion
 
 		#region Implementation of ICloneable
-		public LocalResourceDictionary Clone()
-		{
-			LocalResourceDictionary clone = new LocalResourceDictionary();
-			clone.innerHash = (Hashtable) innerHash.Clone();
+        public LocalResourceDictionary Clone()
+        {
+            LocalResourceDictionary clone = new LocalResourceDictionary();
+            clone.innerHash = (Hashtable) innerHash.Clone();
 			
-			return clone;
-		}
-		object ICloneable.Clone()
-		{
-			return Clone();
-		}
+            return clone;
+        }
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
 		#endregion
 		
 		#region "HashTable Methods"
-		public bool ContainsKey (string key)
-		{
-			return innerHash.ContainsKey(key);
-		}
-		public bool ContainsValue (ILocalResource value)
-		{
-			return innerHash.ContainsValue(value);
-		}
-		public static LocalResourceDictionary Synchronized(LocalResourceDictionary nonSync)
-		{
-			LocalResourceDictionary sync = new LocalResourceDictionary();
-			sync.innerHash = Hashtable.Synchronized(nonSync.innerHash);
+        public bool ContainsKey (string key)
+        {
+            return innerHash.ContainsKey(key);
+        }
+        public bool ContainsValue (ILocalResource value)
+        {
+            return innerHash.ContainsValue(value);
+        }
+        public static LocalResourceDictionary Synchronized(LocalResourceDictionary nonSync)
+        {
+            LocalResourceDictionary sync = new LocalResourceDictionary();
+            sync.innerHash = Hashtable.Synchronized(nonSync.innerHash);
 
-			return sync;
-		}
+            return sync;
+        }
 		#endregion
 
-		internal Hashtable InnerHash
-		{
-			get
-			{
-				return innerHash;
-			}
-		}
-	}
+        internal Hashtable InnerHash
+        {
+            get
+            {
+                return innerHash;
+            }
+        }
+    }
 	
-	public class LocalResourceDictionaryEnumerator : IDictionaryEnumerator
-	{
-		private IDictionaryEnumerator innerEnumerator;
+    public class LocalResourceDictionaryEnumerator : IDictionaryEnumerator
+    {
+        private IDictionaryEnumerator innerEnumerator;
 			
-		internal LocalResourceDictionaryEnumerator (LocalResourceDictionary enumerable)
-		{
-			innerEnumerator = enumerable.InnerHash.GetEnumerator();
-		}
+        internal LocalResourceDictionaryEnumerator (LocalResourceDictionary enumerable)
+        {
+            innerEnumerator = enumerable.InnerHash.GetEnumerator();
+        }
 
 		#region Implementation of IDictionaryEnumerator
-		public string Key
-		{
-			get
-			{
-				return (string)innerEnumerator.Key;
-			}
-		}
-		object IDictionaryEnumerator.Key
-		 {
-			 get
-			 {
-				 return Key;
-			 }
-		 }
+        public string Key
+        {
+            get
+            {
+                return (string)innerEnumerator.Key;
+            }
+        }
+        object IDictionaryEnumerator.Key
+        {
+            get
+            {
+                return Key;
+            }
+        }
 
 
-		public ILocalResource Value
-		{
-			get
-			{
-				return (ILocalResource)innerEnumerator.Value;
-			}
-		}
-		object IDictionaryEnumerator.Value
-		{
-			get
-			{
-				return Value;
-			}
-		}
+        public ILocalResource Value
+        {
+            get
+            {
+                return (ILocalResource)innerEnumerator.Value;
+            }
+        }
+        object IDictionaryEnumerator.Value
+        {
+            get
+            {
+                return Value;
+            }
+        }
 
-		public System.Collections.DictionaryEntry Entry
-		{
-			get
-			{
-				return innerEnumerator.Entry;
-			}
-		}
+        public System.Collections.DictionaryEntry Entry
+        {
+            get
+            {
+                return innerEnumerator.Entry;
+            }
+        }
 
 		#endregion
 
 		#region Implementation of IEnumerator
-		public void Reset()
-		{
-			innerEnumerator.Reset();
-		}
+        public void Reset()
+        {
+            innerEnumerator.Reset();
+        }
 
-		public bool MoveNext()
-		{
-			return innerEnumerator.MoveNext();
-		}
+        public bool MoveNext()
+        {
+            return innerEnumerator.MoveNext();
+        }
 
-		public object Current
-		{
-			get
-			{
-				return innerEnumerator.Current;
-			}
-		}
+        public object Current
+        {
+            get
+            {
+                return innerEnumerator.Current;
+            }
+        }
 		#endregion
-	}
+    }
 
 }

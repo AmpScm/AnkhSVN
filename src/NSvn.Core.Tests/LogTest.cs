@@ -9,12 +9,12 @@ using System.Text.RegularExpressions;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests Client::Log
-	/// </summary>
-	[TestFixture]
-	public class LogTest : TestBase
-	{
+    /// <summary>
+    /// Tests Client::Log
+    /// </summary>
+    [TestFixture]
+    public class LogTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -109,5 +109,5 @@ namespace NSvn.Core.Tests
         }
 
         private ArrayList logMessages = new ArrayList();
-	}
+    }
 }

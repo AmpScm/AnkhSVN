@@ -4,11 +4,11 @@ using NSvn.Core;
 
 namespace NSvn
 {
-	/// <summary>
-	/// TODO: doc-comment here
-	/// </summary>
-	public interface ILocalResource
-	{
+    /// <summary>
+    /// TODO: doc-comment here
+    /// </summary>
+    public interface ILocalResource
+    {
         /// <summary>
         /// The file system path to the item.
         /// </summary>
@@ -55,5 +55,5 @@ namespace NSvn
             get;
             set;
         }
-	}
+    }
 }

@@ -11,28 +11,28 @@ using System.Text.RegularExpressions;
 namespace Ankh.UI
 {
 
-	/// <summary>
-	/// A control that allows the user to pick a revision.
-	/// </summary>
-	public class RevisionPicker : System.Windows.Forms.UserControl
-	{
+    /// <summary>
+    /// A control that allows the user to pick a revision.
+    /// </summary>
+    public class RevisionPicker : System.Windows.Forms.UserControl
+    {
         public event EventHandler Changed;
 
-		public RevisionPicker()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public RevisionPicker()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
             this.revisionTypeBox.Items.AddRange( new object[]{
-                 RevisionChoice.Head,
-                 RevisionChoice.Committed,
-                 RevisionChoice.Base,
-                 RevisionChoice.Previous,
-                 RevisionChoice.Working } );
+                                                                 RevisionChoice.Head,
+                                                                 RevisionChoice.Committed,
+                                                                 RevisionChoice.Base,
+                                                                 RevisionChoice.Previous,
+                                                                 RevisionChoice.Working } );
             this.revisionTypeBox.SelectedItem = RevisionChoice.Head;
             this.dateRevisionChoice = new DateRevisionChoice( this.datePicker );
             this.revisionTypeBox.Items.Add( this.dateRevisionChoice ); 
-		}
+        }
 
         /// <summary>
         /// Whether the control has a valid revision.
@@ -99,28 +99,28 @@ namespace Ankh.UI
             set{ this.Toggle( this.dateRevisionChoice, value ); }
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.revisionTypeBox = new System.Windows.Forms.ComboBox();
             this.datePicker = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
@@ -257,5 +257,5 @@ namespace Ankh.UI
         
 
         
-	}
+    }
 }

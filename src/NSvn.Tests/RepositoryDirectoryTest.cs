@@ -6,11 +6,11 @@ using NUnit.Framework;
 
 namespace NSvn.Tests
 {
-	/// <summary>
-	/// Tests the RepositoryDirectory class
-	/// </summary>
-	public class RepositoryDirectoryTest : TestBase
-	{
+    /// <summary>
+    /// Tests the RepositoryDirectory class
+    /// </summary>
+    public class RepositoryDirectoryTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -93,5 +93,5 @@ namespace NSvn.Tests
         }
 
         private string localDir;
-	}
+    }
 }

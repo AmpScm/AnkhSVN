@@ -6,9 +6,9 @@ using Utils;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests Client::Update
-	/// </summary>
+    /// <summary>
+    /// Tests Client::Update
+    /// </summary>
     [TestFixture]
     public class UpdateTest : TestBase
     {
@@ -65,5 +65,5 @@ namespace NSvn.Core.Tests
         }
 
         private string wc2;
-	}
+    }
 }

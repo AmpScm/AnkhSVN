@@ -14,64 +14,64 @@ using System.Collections;
 
 namespace NSvn.Common
 {
-	public
-	class PropertyDictionary : IDictionary, ICollection, IEnumerable, ICloneable
-	{
-		protected Hashtable innerHash;
+    public
+        class PropertyDictionary : IDictionary, ICollection, IEnumerable, ICloneable
+    {
+        protected Hashtable innerHash;
 		
 		#region "Constructors"
-		public  PropertyDictionary()
-		{
-			innerHash = new Hashtable();
-		}
-		public PropertyDictionary(PropertyDictionary original)
-		{
-			innerHash = new Hashtable (original.innerHash);
-		}
-		public PropertyDictionary(IDictionary dictionary)
-		{
-			innerHash = new Hashtable (dictionary);
-		}
+        public  PropertyDictionary()
+        {
+            innerHash = new Hashtable();
+        }
+        public PropertyDictionary(PropertyDictionary original)
+        {
+            innerHash = new Hashtable (original.innerHash);
+        }
+        public PropertyDictionary(IDictionary dictionary)
+        {
+            innerHash = new Hashtable (dictionary);
+        }
 
-		public PropertyDictionary(int capacity)
-		{
-			innerHash = new Hashtable(capacity);
-		}
+        public PropertyDictionary(int capacity)
+        {
+            innerHash = new Hashtable(capacity);
+        }
 
-		public PropertyDictionary(IDictionary dictionary, float loadFactor)
-		{
-			innerHash = new Hashtable(dictionary, loadFactor);
-		}
+        public PropertyDictionary(IDictionary dictionary, float loadFactor)
+        {
+            innerHash = new Hashtable(dictionary, loadFactor);
+        }
 
-		public PropertyDictionary(IHashCodeProvider codeProvider, IComparer comparer)
-		{
-			innerHash = new Hashtable (codeProvider, comparer);
-		}
+        public PropertyDictionary(IHashCodeProvider codeProvider, IComparer comparer)
+        {
+            innerHash = new Hashtable (codeProvider, comparer);
+        }
 
-		public PropertyDictionary(int capacity, int loadFactor)
-		{
-			innerHash = new Hashtable(capacity, loadFactor);
-		}
+        public PropertyDictionary(int capacity, int loadFactor)
+        {
+            innerHash = new Hashtable(capacity, loadFactor);
+        }
 
-		public PropertyDictionary(IDictionary dictionary, IHashCodeProvider codeProvider, IComparer comparer)
-		{
-			innerHash = new Hashtable (dictionary, codeProvider, comparer);
-		}
+        public PropertyDictionary(IDictionary dictionary, IHashCodeProvider codeProvider, IComparer comparer)
+        {
+            innerHash = new Hashtable (dictionary, codeProvider, comparer);
+        }
 		
-		public PropertyDictionary(int capacity, IHashCodeProvider codeProvider, IComparer comparer)
-		{
-			innerHash = new Hashtable (capacity, codeProvider, comparer);
-		}
+        public PropertyDictionary(int capacity, IHashCodeProvider codeProvider, IComparer comparer)
+        {
+            innerHash = new Hashtable (capacity, codeProvider, comparer);
+        }
 
-		public PropertyDictionary(IDictionary dictionary, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
-		{
-			innerHash = new Hashtable (dictionary, loadFactor, codeProvider, comparer);
-		}
+        public PropertyDictionary(IDictionary dictionary, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
+        {
+            innerHash = new Hashtable (dictionary, loadFactor, codeProvider, comparer);
+        }
 
-		public PropertyDictionary(int capacity, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
-		{
-			innerHash = new Hashtable (capacity, loadFactor, codeProvider, comparer);
-		}
+        public PropertyDictionary(int capacity, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
+        {
+            innerHash = new Hashtable (capacity, loadFactor, codeProvider, comparer);
+        }
 
 		
 #endregion
@@ -79,249 +79,249 @@ namespace NSvn.Common
 		#region Implementation of IDictionary
         public PropertyDictionaryEnumerator GetEnumerator()
         {
-	        return new PropertyDictionaryEnumerator(this);
+            return new PropertyDictionaryEnumerator(this);
         }
         
-		System.Collections.IDictionaryEnumerator IDictionary.GetEnumerator()
-		{
-			return new PropertyDictionaryEnumerator(this);
-		}
+        System.Collections.IDictionaryEnumerator IDictionary.GetEnumerator()
+        {
+            return new PropertyDictionaryEnumerator(this);
+        }
 		
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-		public void Remove(string key)
-		{
-			innerHash.Remove (key);
-		}
-		void IDictionary.Remove(object key)
-		{
-			Remove ((string)key);
-		}
+        public void Remove(string key)
+        {
+            innerHash.Remove (key);
+        }
+        void IDictionary.Remove(object key)
+        {
+            Remove ((string)key);
+        }
 
-		public bool Contains(string key)
-		{
-			return innerHash.Contains(key);
-		}
-		bool IDictionary.Contains(object key)
-		{
-			return Contains((string)key);
-		}
+        public bool Contains(string key)
+        {
+            return innerHash.Contains(key);
+        }
+        bool IDictionary.Contains(object key)
+        {
+            return Contains((string)key);
+        }
 
-		public void Clear()
-		{
-			innerHash.Clear();		
-		}
+        public void Clear()
+        {
+            innerHash.Clear();		
+        }
 
-		public void Add(string key, Property value)
-		{
-			innerHash.Add (key, value);
-		}
-		void IDictionary.Add(object key, object value)
-		{
-			Add ((string)key, (Property)value);
-		}
+        public void Add(string key, Property value)
+        {
+            innerHash.Add (key, value);
+        }
+        void IDictionary.Add(object key, object value)
+        {
+            Add ((string)key, (Property)value);
+        }
 
-		public bool IsReadOnly
-		{
-			get
-			{
-				return innerHash.IsReadOnly;
-			}
-		}
+        public bool IsReadOnly
+        {
+            get
+            {
+                return innerHash.IsReadOnly;
+            }
+        }
 
-		public Property this[string key]
-		{
-			get
-			{
-				return (Property) innerHash[key];
-			}
-			set
-			{
-				innerHash[key] = value;
-			}
-		}
-		object IDictionary.this[object key]
-		{
-			get
-			{
-				return this[(string)key];
-			}
-			set
-			{
-				this[(string)key] = (Property)value;
-			}
-		}
+        public Property this[string key]
+        {
+            get
+            {
+                return (Property) innerHash[key];
+            }
+            set
+            {
+                innerHash[key] = value;
+            }
+        }
+        object IDictionary.this[object key]
+        {
+            get
+            {
+                return this[(string)key];
+            }
+            set
+            {
+                this[(string)key] = (Property)value;
+            }
+        }
         
-		public System.Collections.ICollection Values
-		{
-			get
-			{
-				return innerHash.Values;
-			}
-		}
+        public System.Collections.ICollection Values
+        {
+            get
+            {
+                return innerHash.Values;
+            }
+        }
 
-		public System.Collections.ICollection Keys
-		{
-			get
-			{
-				return innerHash.Keys;
-			}
-		}
+        public System.Collections.ICollection Keys
+        {
+            get
+            {
+                return innerHash.Keys;
+            }
+        }
 
-		public bool IsFixedSize
-		{
-			get
-			{
-				return innerHash.IsFixedSize;
-			}
-		}
+        public bool IsFixedSize
+        {
+            get
+            {
+                return innerHash.IsFixedSize;
+            }
+        }
 		#endregion
 
 		#region Implementation of ICollection
-		public void CopyTo(System.Array array, int index)
-		{
-			innerHash.CopyTo (array, index);
-		}
+        public void CopyTo(System.Array array, int index)
+        {
+            innerHash.CopyTo (array, index);
+        }
 
-		public bool IsSynchronized
-		{
-			get
-			{
-				return innerHash.IsSynchronized;
-			}
-		}
+        public bool IsSynchronized
+        {
+            get
+            {
+                return innerHash.IsSynchronized;
+            }
+        }
 
-		public int Count
-		{
-			get
-			{
-				return innerHash.Count;
-			}
-		}
+        public int Count
+        {
+            get
+            {
+                return innerHash.Count;
+            }
+        }
 
-		public object SyncRoot
-		{
-			get
-			{
-				return innerHash.SyncRoot;
-			}
-		}
+        public object SyncRoot
+        {
+            get
+            {
+                return innerHash.SyncRoot;
+            }
+        }
 		#endregion
 
 		#region Implementation of ICloneable
-		public PropertyDictionary Clone()
-		{
-			PropertyDictionary clone = new PropertyDictionary();
-			clone.innerHash = (Hashtable) innerHash.Clone();
+        public PropertyDictionary Clone()
+        {
+            PropertyDictionary clone = new PropertyDictionary();
+            clone.innerHash = (Hashtable) innerHash.Clone();
 			
-			return clone;
-		}
-		object ICloneable.Clone()
-		{
-			return Clone();
-		}
+            return clone;
+        }
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
 		#endregion
 		
 		#region "HashTable Methods"
-		public bool ContainsKey (string key)
-		{
-			return innerHash.ContainsKey(key);
-		}
-		public bool ContainsValue (Property value)
-		{
-			return innerHash.ContainsValue(value);
-		}
-		public static PropertyDictionary Synchronized(PropertyDictionary nonSync)
-		{
-			PropertyDictionary sync = new PropertyDictionary();
-			sync.innerHash = Hashtable.Synchronized(nonSync.innerHash);
+        public bool ContainsKey (string key)
+        {
+            return innerHash.ContainsKey(key);
+        }
+        public bool ContainsValue (Property value)
+        {
+            return innerHash.ContainsValue(value);
+        }
+        public static PropertyDictionary Synchronized(PropertyDictionary nonSync)
+        {
+            PropertyDictionary sync = new PropertyDictionary();
+            sync.innerHash = Hashtable.Synchronized(nonSync.innerHash);
 
-			return sync;
-		}
+            return sync;
+        }
 		#endregion
 
-		internal Hashtable InnerHash
-		{
-			get
-			{
-				return innerHash;
-			}
-		}
-	}
+        internal Hashtable InnerHash
+        {
+            get
+            {
+                return innerHash;
+            }
+        }
+    }
 	
-	public class PropertyDictionaryEnumerator : IDictionaryEnumerator
-	{
-		private IDictionaryEnumerator innerEnumerator;
+    public class PropertyDictionaryEnumerator : IDictionaryEnumerator
+    {
+        private IDictionaryEnumerator innerEnumerator;
 			
-		internal PropertyDictionaryEnumerator (PropertyDictionary enumerable)
-		{
-			innerEnumerator = enumerable.InnerHash.GetEnumerator();
-		}
+        internal PropertyDictionaryEnumerator (PropertyDictionary enumerable)
+        {
+            innerEnumerator = enumerable.InnerHash.GetEnumerator();
+        }
 
 		#region Implementation of IDictionaryEnumerator
-		public string Key
-		{
-			get
-			{
-				return (string)innerEnumerator.Key;
-			}
-		}
-		object IDictionaryEnumerator.Key
-		 {
-			 get
-			 {
-				 return Key;
-			 }
-		 }
+        public string Key
+        {
+            get
+            {
+                return (string)innerEnumerator.Key;
+            }
+        }
+        object IDictionaryEnumerator.Key
+        {
+            get
+            {
+                return Key;
+            }
+        }
 
 
-		public Property Value
-		{
-			get
-			{
-				return (Property)innerEnumerator.Value;
-			}
-		}
-		object IDictionaryEnumerator.Value
-		{
-			get
-			{
-				return Value;
-			}
-		}
+        public Property Value
+        {
+            get
+            {
+                return (Property)innerEnumerator.Value;
+            }
+        }
+        object IDictionaryEnumerator.Value
+        {
+            get
+            {
+                return Value;
+            }
+        }
 
-		public System.Collections.DictionaryEntry Entry
-		{
-			get
-			{
-				return innerEnumerator.Entry;
-			}
-		}
+        public System.Collections.DictionaryEntry Entry
+        {
+            get
+            {
+                return innerEnumerator.Entry;
+            }
+        }
 
 		#endregion
 
 		#region Implementation of IEnumerator
-		public void Reset()
-		{
-			innerEnumerator.Reset();
-		}
+        public void Reset()
+        {
+            innerEnumerator.Reset();
+        }
 
-		public bool MoveNext()
-		{
-			return innerEnumerator.MoveNext();
-		}
+        public bool MoveNext()
+        {
+            return innerEnumerator.MoveNext();
+        }
 
-		public object Current
-		{
-			get
-			{
-				return innerEnumerator.Current;
-			}
-		}
+        public object Current
+        {
+            get
+            {
+                return innerEnumerator.Current;
+            }
+        }
 		#endregion
-	}
+    }
 
 }

@@ -9,7 +9,7 @@ namespace NSvn
 {
     namespace Core
     {
-            
+
         public __value enum NodeKind
         { 
             /// <summary>Node doesn't exist.</summary>     
@@ -23,7 +23,7 @@ namespace NSvn
         };
         ///TODO: Review comments.
         /// <summary>The type of action occuring. </summary> 
-         public __value enum NotifyAction
+        public __value enum NotifyAction
         {
             /// <summary>Got an add.</summary>         
             Add = svn_wc_notify_add,
@@ -67,9 +67,9 @@ namespace NSvn
             ///<summary>Delta was sent to the repository.</summary>              
             CommitPostfixTxDelta = svn_wc_notify_commit_postfix_txdelta
         };
-        
-         ///<summary>The type of notification that is occuring. </summary>
-         public __value enum NotifyState
+
+        ///<summary>The type of notification that is occuring. </summary>
+        public __value enum NotifyState
         {
             ///<summary>Modified state in working copy's item is inapplicable (not usable).</summary>    
             Inapplicable = svn_wc_notify_state_inapplicable, 

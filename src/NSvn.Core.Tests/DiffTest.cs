@@ -6,12 +6,12 @@ using System.Text;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests Client::Diff
-	/// </summary>
-	[TestFixture]
-	public class DiffTest : TestBase
-	{
+    /// <summary>
+    /// Tests Client::Diff
+    /// </summary>
+    [TestFixture]
+    public class DiffTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -67,5 +67,5 @@ namespace NSvn.Core.Tests
         }
 
         		
-	}
+    }
 }

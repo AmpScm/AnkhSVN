@@ -8,15 +8,15 @@ using Utils;
 
 namespace Ankh
 {
-	/// <summary>
-	/// Encapsulates error handling functionality.
-	/// </summary>
-	public class Error
-	{
-		private Error()
-		{
-			// nothing to see here
-		}
+    /// <summary>
+    /// Encapsulates error handling functionality.
+    /// </summary>
+    public class Error
+    {
+        private Error()
+        {
+            // nothing to see here
+        }
 
 
         /// <summary>

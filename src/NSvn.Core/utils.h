@@ -19,7 +19,7 @@ namespace NSvn
         apr_time_t DateTimeToAprTime( System::DateTime& dateTime );
 
         System::DateTime ParseDate( const char* date, apr_pool_t* pool );
-        
+
 
         void ByteArrayToSvnString( svn_string_t* string, Byte array[], 
             const Pool& pool );

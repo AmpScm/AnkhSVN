@@ -8,33 +8,33 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Summary description for EolStylePropertyEditor.
-	/// </summary>
-	internal class EolStylePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
-	{
-		public event EventHandler Changed;
+    /// <summary>
+    /// Summary description for EolStylePropertyEditor.
+    /// </summary>
+    internal class EolStylePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    {
+        public event EventHandler Changed;
 
-		public EolStylePropertyEditor()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public EolStylePropertyEditor()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
 
             this.selectedValue = "native";
 
-			// TODO: Add any initialization after the InitForm call
+            // TODO: Add any initialization after the InitForm call
 
-		}
+        }
 
-		public void Reset()
-		{
-		}
+        public void Reset()
+        {
+        }
 
-		public bool Valid
-		{
+        public bool Valid
+        {
             get 
             {
                 if (!this.dirty)
@@ -45,55 +45,55 @@ namespace Ankh.UI
                     return true;
             }
 
-		}
+        }
 
-		public PropertyItem PropertyItem
-		{
+        public PropertyItem PropertyItem
+        {
 
-			get
-			{
-				if( !this.Valid)
-				{
-					throw new InvalidOperationException(
-						"Can not get a property item when Valid is false");
-				}
+            get
+            {
+                if( !this.Valid)
+                {
+                    throw new InvalidOperationException(
+                        "Can not get a property item when Valid is false");
+                }
           
-				return new TextPropertyItem(selectedValue);
-			}
-			set
-			{
+                return new TextPropertyItem(selectedValue);
+            }
+            set
+            {
                 TextPropertyItem item = (TextPropertyItem)value;
                 this.dirty = false;
-			}
-		}
+            }
+        }
 
         public override string ToString()
         {
             return "eol-style";
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.nativeRadioButton = new System.Windows.Forms.RadioButton();
             this.eolLabel = new System.Windows.Forms.Label();
             this.lfRadioButton = new System.Windows.Forms.RadioButton();
@@ -183,11 +183,11 @@ namespace Ankh.UI
             conflictToolTip.SetToolTip( this.lfRadioButton, "End of line style is LF (Line Feed)");
             conflictToolTip.SetToolTip( this.crRadioButton, "End of line style is CR");
             conflictToolTip.SetToolTip( this.crlfRdioButton, "End of line style is CRLF");
-         }
+        }
 
 
-		private System.Windows.Forms.RadioButton nativeRadioButton;
-		private System.Windows.Forms.Label eolLabel;
+        private System.Windows.Forms.RadioButton nativeRadioButton;
+        private System.Windows.Forms.Label eolLabel;
         private System.Windows.Forms.RadioButton lfRadioButton;
         private System.Windows.Forms.RadioButton crRadioButton;
         private System.Windows.Forms.RadioButton crlfRdioButton;
@@ -197,14 +197,14 @@ namespace Ankh.UI
         /// </summary>
         private bool dirty;
 		
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
       
 
        
-	}
+    }
 }
 

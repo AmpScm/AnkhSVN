@@ -6,15 +6,15 @@ using System.Windows.Forms;
 using System.Reflection;
 namespace Utils
 {
-	/// <summary>
-	/// Performs error handling and reporting.
-	/// </summary>
-	public class ErrorMessage
-	{
+    /// <summary>
+    /// Performs error handling and reporting.
+    /// </summary>
+    public class ErrorMessage
+    {
         private ErrorMessage()
-		{
-			// empty
-		}
+        {
+            // empty
+        }
 
         /// <summary>
         /// Concatenates the error messages and exception types from (potentially)
@@ -130,5 +130,5 @@ namespace Utils
             }
 
         }
-	}
+    }
 }

@@ -4,16 +4,16 @@ using System.Collections.Specialized;
 
 namespace NSvn.Common
 {
-	/// <summary>
-	/// Represents a set of authentication providers and their parameters
-	/// </summary>
-	public class AuthenticationBaton
-	{
-		public AuthenticationBaton()
-		{
+    /// <summary>
+    /// Represents a set of authentication providers and their parameters
+    /// </summary>
+    public class AuthenticationBaton
+    {
+        public AuthenticationBaton()
+        {
             this.parameters = new StringDictionary();
             this.providers = new AuthenticationProviderCollection();
-		}
+        }
 
         /// <summary>
         /// The authentication providers associated with this authentication 
@@ -37,6 +37,6 @@ namespace NSvn.Common
 
         private AuthenticationProviderCollection providers;
         private StringDictionary parameters;
-	}
+    }
 }
 

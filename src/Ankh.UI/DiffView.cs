@@ -10,18 +10,18 @@ using System.Diagnostics;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// This is a control that displays unified diffs.
-	/// </summary>
-	public class DiffView : System.Windows.Forms.UserControl
-	{
-		public DiffView()
-		{
+    /// <summary>
+    /// This is a control that displays unified diffs.
+    /// </summary>
+    public class DiffView : System.Windows.Forms.UserControl
+    {
+        public DiffView()
+        {
             this.diffHtmlModel = new DiffHtmlModel();
 
             this.components = new System.ComponentModel.Container();
             this.InitializeComponent();
-		}
+        }
 
         /// <summary>
         /// The diff itself.
@@ -45,20 +45,20 @@ namespace Ankh.UI
             }
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}            
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }            
 
         private void InitializeComponent()
         {

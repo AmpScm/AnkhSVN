@@ -58,7 +58,7 @@ namespace NSvn
             NSvn::Core::NotifyState contentState;
             NSvn::Core::NotifyState propertyState;
             int revisionNumber;
-            
+
         };
 
     }

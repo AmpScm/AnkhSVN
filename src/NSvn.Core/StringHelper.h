@@ -71,10 +71,10 @@ namespace NSvn
 
                 return const_cast<char*>(utf8String);
             }
-            
+
             char* CopyToPool( apr_pool_t* pool )
             {
-               //TODO: unicode issues
+                //TODO: unicode issues
 
                 char* hglobal = this->ConvertToCharPtr( this->string );
 
@@ -86,8 +86,8 @@ namespace NSvn
 
                 return ptr;
             }
-                
-                
+
+
 
             /// <summary>implicit conversion to a const char*</summary>
             operator const char* () const

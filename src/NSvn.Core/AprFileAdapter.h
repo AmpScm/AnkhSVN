@@ -14,8 +14,8 @@ namespace NSvn
             AprFileAdapter( System::IO::Stream* stream  ) :
               stream(stream), errorMessage( 0 )
               {;}
-            apr_file_t* Start(Pool& pool);
-            void WaitForExit();            
+              apr_file_t* Start(Pool& pool);
+              void WaitForExit();            
         private:
             void Read();
             System::Threading::Thread* thread;

@@ -3,16 +3,16 @@ using System;
 
 namespace Ankh
 {
-	/// <summary>
-	/// An attribute that describes a VS.NET command.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class VSNetCommandAttribute : Attribute
-	{
-		public VSNetCommandAttribute( string name )
-		{
-			this.name = name;
-		}
+    /// <summary>
+    /// An attribute that describes a VS.NET command.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
+    public class VSNetCommandAttribute : Attribute
+    {
+        public VSNetCommandAttribute( string name )
+        {
+            this.name = name;
+        }
 
         /// <summary>
         /// The registered name of the command.
@@ -53,5 +53,5 @@ namespace Ankh
         private string text = "This should have been replaced...";
         private string tooltip = "This is a tooltip.";
         private int bitmap = ResourceBitmaps.Default;
-	}
+    }
 }

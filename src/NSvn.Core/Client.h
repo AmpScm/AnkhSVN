@@ -53,7 +53,7 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-	        static void Update(String* path, Revision* revision, bool recurse, ClientContext* context);
+            static void Update(String* path, Revision* revision, bool recurse, ClientContext* context);
 
             ///<summary>Switch working tree path to url at revision, authenticating with the 
             ///         authentication baton </summary>
@@ -68,7 +68,7 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-	        static void Switch(String* path, String* url, Revision* revision, bool recurse, 
+            static void Switch(String* path, String* url, Revision* revision, bool recurse, 
                 ClientContext* context);
 
             ///<summary>Add a file/directory, not already under revision control to a working copy.</summary>
@@ -79,8 +79,8 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-             static void Add(String* path, bool recursive, ClientContext* context);
-            
+            static void Add(String* path, bool recursive, ClientContext* context);
+
             ///<summary>Create a directory, either in a repository or a working copy.</summary>
             ///<param name="path">Path to the directory.</param>
             ///<param name="context">A client context object, which holds client specific 
@@ -89,16 +89,16 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
-	        static CommitInfo* MakeDir(String* path, ClientContext* context);
-        
+            static CommitInfo* MakeDir(String* path, ClientContext* context);
+
             ///<summary>Delete a file/directory, either in a repository or a working copy.</summary>
             ///<param name="path">Path to the file/directory.</param>
             ///<param name="admAccessBaton">Either a baton that holds a write 
-			///								lock for the parent of path in 
-			///								working copy, or NULL.</param>
+            ///								lock for the parent of path in 
+            ///								working copy, or NULL.</param>
             ///<param name="force">If force is set all the files and all 
-			///						unversioned items in a directory in a 
-			///						working copy  will be removed.</param>
+            ///						unversioned items in a directory in a 
+            ///						working copy  will be removed.</param>
             ///<param name="context">A client context object, which holds client specific 
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various data. <see cref="NSvn.Core.ClientContext"/> 
@@ -106,15 +106,15 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
-			//TODO: Implement the variable admAccessBaton   
-             static CommitInfo* Delete(String* path, bool force, ClientContext* context);
+            //TODO: Implement the variable admAccessBaton   
+            static CommitInfo* Delete(String* path, bool force, ClientContext* context);
 
             ///<summary>Import file or directory path into repository directory url at head, 
             ///         authenticating with the authentication baton</summary>
             ///<param name="path">Path to the file/directory.</param>
             ///<param name="url">Path to the files/directory in the repository.</param>
             ///<param name="newEntry">New entry (directory) created in the repository  
-			///	 					identified by url, may be null.</param>
+            ///	 					identified by url, may be null.</param>
             ///<param name="nonRecursive">Indicate that subdirectories of directory targets 
             ///                           should be ignored.</param>
             ///<param name="context">A client context object, which holds client specific 
@@ -124,7 +124,7 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns> 
-	        static CommitInfo* Import(String* path, String* url, String* newEntry, bool nonRecursive, 
+            static CommitInfo* Import(String* path, String* url, String* newEntry, bool nonRecursive, 
                 ClientContext* context);
 
             ///<summary>Commit file/directory into repository, authenticating with the 
@@ -139,7 +139,7 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
-             static CommitInfo* Commit(String __gc* targets[], bool nonRecursive, ClientContext* context);
+            static CommitInfo* Commit(String __gc* targets[], bool nonRecursive, ClientContext* context);
 
             /// TODO: doc comments
             static Status* SingleStatus( String* path );
@@ -168,8 +168,8 @@ namespace NSvn
                 String* path, bool descend, bool getAll, bool upDate,  
                 bool noIgnore, ClientContext* context);
 
-            
-         
+
+
             ///<summary>Obtain log information from the repository.</summary>
             ///<param name="targets">Targets contains all the working copy paths for 
             ///                      desired log messages.</param>
@@ -185,9 +185,9 @@ namespace NSvn
             ///                      and other various things.<see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>   
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-	        static void Log(String* targets[], Revision* start, Revision* end, bool discoverChangePath, 
+            static void Log(String* targets[], Revision* start, Revision* end, bool discoverChangePath, 
                 bool strictNodeHistory, LogMessageReceiver* receiver, ClientContext* context);
-            
+
             ///<summary>Produce diff output which describes the delta between path1/revision1 
             ///         and path2/revision2.</summary>
             ///<param name="path1">Path to first file/directory in working copy or repository.</param> 
@@ -213,7 +213,7 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>   
-	        static void Diff(String* diffOptions[], String* path1, Revision* revision1, 
+            static void Diff(String* diffOptions[], String* path1, Revision* revision1, 
                 String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, 
                 bool noDiffDeleted, 
                 Stream* outfile, Stream* errFile, ClientContext* context);
@@ -244,7 +244,7 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-	        static void Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
+            static void Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
                 String* targetWcPath, bool recurse, bool ignoreAncestry, bool force, bool dryRun, ClientContext* context);
 
             ///<summary>Cleanup a working copy directory, finishing any incomplete operations, 
@@ -260,7 +260,7 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-	        static void Revert(String* path, bool recursive, ClientContext* context);
+            static void Revert(String* path, bool recursive, ClientContext* context);
 
             ///<summary>Resolve conflict. Remove the 'conflicted' state on a working copy path.</summary>
             ///<param name="path">Path to the file(/directory)</param>
@@ -270,7 +270,7 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-	        static void Resolve(String* path, bool recursive, ClientContext* context);       
+            static void Resolve(String* path, bool recursive, ClientContext* context);       
 
             ///<summary>Copy a file/directory.</summary>
             ///<param name="srcPath">Path to the file/directory to be copied.</param>
@@ -285,7 +285,7 @@ namespace NSvn
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns> 
             //TODO: Implement the variable optionalAdmAccess
-	        static CommitInfo* Copy(String* srcPath, Revision* srcRevision, String* dstPath,
+            static CommitInfo* Copy(String* srcPath, Revision* srcRevision, String* dstPath,
                 ClientContext* context); 
 
             ///<summary>Move a file/directory.</summary>
@@ -301,7 +301,7 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
-	        static CommitInfo* Move(String* srcPath, Revision* srcRevision, String* dstPath, 
+            static CommitInfo* Move(String* srcPath, Revision* srcRevision, String* dstPath, 
                 bool force, ClientContext* context);
 
             ///<summary>Set a property to a file/directory</summary>
@@ -310,12 +310,12 @@ namespace NSvn
             ///<param name="target">Target of property. Which file/directory to set the property.</param>
             ///<param name="recurse">If recurse is true, then propname will be set recursively 
             ///                      on target and all children.</param>  
-	        static void PropSet(Property* property, String* target, bool recurse);
+            static void PropSet(Property* property, String* target, bool recurse);
 
             ///<summary>Set a property to a revision in the repository.</summary>
             ///<param name="property">Object that contain a value and a name.
             ///         <see cref="NSvn.Common.Property"/></param>
-	        ///<param name="url">Path to the "revision" in the repository.</param>
+            ///<param name="url">Path to the "revision" in the repository.</param>
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
             ///                         for more information.</param>
             ///<param name="setRev">A revision number.</param>
@@ -324,8 +324,8 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
             static void RevPropSet(Property* property, String* url, Revision* revision, 
-			[System::Runtime::InteropServices::Out]System::Int32* setRev, ClientContext* context);
-            
+                [System::Runtime::InteropServices::Out]System::Int32* setRev, ClientContext* context);
+
             ///<summary>Get properties from an entry in a working copy or repository.</summary>
             ///<param name="propName">Name of property.</param>
             ///<param name="target">Target of property. Which file/directory to get the property.</param>         
@@ -339,11 +339,11 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>PropertyDictionary object that contain a list of names and values of properties.
             ///         <see cref="NSvn.Common.PropertyDictionary"/></returns>
-	        static PropertyDictionary* PropGet(String* propName, String* target, Revision* revision, 
+            static PropertyDictionary* PropGet(String* propName, String* target, Revision* revision, 
                 bool recurse, ClientContext* context);
 
-            
-   
+
+
             ///<summary>Get a revision property from a repository.</summary>
             ///<param name="propName">Name of property.</param>
             ///<param name="url">Path to the "revision" in the repository.</param>
@@ -356,9 +356,9 @@ namespace NSvn
             ///                      for more information.</param>  
             ///<returns>Property object that contain a value and a name.
             ///         <see cref="NSvn.Common.Property"/></returns>
-	        static Property* RevPropGet(String* propName, String* url, 
-				Revision* revision, [System::Runtime::InteropServices::Out]System::Int32* setRev, 
-				ClientContext* context);
+            static Property* RevPropGet(String* propName, String* url, 
+                Revision* revision, [System::Runtime::InteropServices::Out]System::Int32* setRev, 
+                ClientContext* context);
 
             ///<summary>List the properties on an entry in a working copy or repository.</summary>          
             ///<param name="target">An url or working copy path.</param>         
@@ -372,7 +372,7 @@ namespace NSvn
             ///                      for more information.</param>  
             ///<returns>PropListItem object that contain a list of names and values of properties.
             ///         <see cref="NSvn.Common.PropListItem"/> </returns>
-	        static PropListItem* PropList(String* target, Revision* revision, bool recurse, ClientContext* context)[];
+            static PropListItem* PropList(String* target, Revision* revision, bool recurse, ClientContext* context)[];
 
             ///<summary>List the revision properties on an entry in a repository.</summary>
             ///<param name="url">Path to the "revision" in the repository.</param>
@@ -400,7 +400,7 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>       
-	        static void Export(String* from, String* to, Revision* revision, ClientContext* context);
+            static void Export(String* from, String* to, Revision* revision, ClientContext* context);
 
             ///<summary>List the contents of an url or path.</summary>
             ///<param name="path">Path to the files/directory to be listed.</param>  
@@ -412,8 +412,8 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-	        ///<returns>String table of the paths to be listed.</returns>
-	        static DirectoryEntry* List(String* path, Revision* revision, bool recurse, 
+            ///<returns>String table of the paths to be listed.</returns>
+            static DirectoryEntry* List(String* path, Revision* revision, bool recurse, 
                 ClientContext* context) [];
 
             ///<summary>List the contents of a file.</summary>
@@ -425,25 +425,25 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-	        static void Cat(Stream* out, String*path, Revision* revision, ClientContext* context);
+            static void Cat(Stream* out, String*path, Revision* revision, ClientContext* context);
         private:
             // ctor made private to avoid instantiation of this class
             Client(){;}
-           
+
             static NSvn::Common::PropertyDictionary* ConvertToPropertyDictionary( 
                 apr_hash_t* propertyHash, String* propertyName, Pool& pool );
 
             static NSvn::Common::PropListItem* ConvertPropListArray( 
                 apr_array_header_t* propListItems, Pool& pool ) [];
 
-            
-            
+
+
         };
-        
+
         /// callback function for Client::Log
         svn_error_t* svn_log_message_receiver(void *baton, 
-                apr_hash_t *changed_paths, svn_revnum_t revision, 
-                const char *author, const char *date, const char *message, 
-                apr_pool_t *pool); 
+            apr_hash_t *changed_paths, svn_revnum_t revision, 
+            const char *author, const char *date, const char *message, 
+            apr_pool_t *pool); 
     }
 }

@@ -7,12 +7,12 @@ using Utils;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests Client::Status
-	/// </summary>
-	[TestFixture]
-	public class StatusTest : TestBase
-	{
+    /// <summary>
+    /// Tests Client::Status
+    /// </summary>
+    [TestFixture]
+    public class StatusTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -165,5 +165,5 @@ namespace NSvn.Core.Tests
 
             private string output;
         }
-	}
+    }
 }

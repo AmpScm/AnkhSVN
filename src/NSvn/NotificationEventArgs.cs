@@ -4,15 +4,15 @@ using NSvn.Core;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Contains the arguments passed to a notification event.
-	/// </summary>
-	public class NotificationEventArgs : EventArgs
-	{
-		public NotificationEventArgs( Notification notification )
-		{
-			this.notification = notification;
-		}
+    /// <summary>
+    /// Contains the arguments passed to a notification event.
+    /// </summary>
+    public class NotificationEventArgs : EventArgs
+    {
+        public NotificationEventArgs( Notification notification )
+        {
+            this.notification = notification;
+        }
 
         /// <summary>
         /// The Notification object associated with this event.
@@ -24,7 +24,7 @@ namespace NSvn
 
 
         private Notification notification;
-	}
+    }
 
     public delegate void NotificationEventHandler( object sender, NotificationEventArgs e );
 

@@ -4,20 +4,20 @@ using System.Collections;
 
 namespace NSvn.Common
 {
-	/// <summary>
-	/// Represents a simple provider that only has one set of credentials
-	/// </summary>
-	public class SimpleProvider : IAuthenticationProvider
-	{
+    /// <summary>
+    /// Represents a simple provider that only has one set of credentials
+    /// </summary>
+    public class SimpleProvider : IAuthenticationProvider
+    {
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="credential">The single credential provided by this provider</param>
         /// <param name="kind">The kind of credential this is</param>
-		public SimpleProvider( ICredential credential )
-		{
+        public SimpleProvider( ICredential credential )
+        {
             this.credential = credential;
-		}
+        }
 
         #region Implementation of IAuthenticationProvider
         public NSvn.Common.ICredential FirstCredentials( string realm, ICollection parameters )
@@ -42,5 +42,5 @@ namespace NSvn.Common
         #endregion
 
         private ICredential credential;
-	}
+    }
 }

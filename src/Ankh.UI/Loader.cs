@@ -6,53 +6,53 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Summary description for Loader.
-	/// </summary>
-	public class Loader : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// Summary description for Loader.
+    /// </summary>
+    public class Loader : System.Windows.Forms.Form
+    {
         private System.Windows.Forms.Label LoaderText;
         private System.Windows.Forms.PictureBox animatedGif;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
         /// <summary>
         /// Loader Form
         /// </summary>
         /// <param name="inText">Text to be printed in the form.</param>
-		public Loader(string inText)
-		{
-			//
-			// Required for Windows Form Designer support
-			//
+        public Loader(string inText)
+        {
+            //
+            // Required for Windows Form Designer support
+            //
             this.outText = inText;
-			InitializeComponent();
-		}
+            InitializeComponent();
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(Loader));
             this.LoaderText = new System.Windows.Forms.Label();
             this.animatedGif = new System.Windows.Forms.PictureBox();
@@ -105,5 +105,5 @@ namespace Ankh.UI
         {
         
         }
-	}
+    }
 }

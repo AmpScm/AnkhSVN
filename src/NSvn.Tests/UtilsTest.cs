@@ -4,11 +4,11 @@ using System.IO;
 
 namespace NSvn.Tests
 {
-	/// <summary>
-	/// Tests the Utils class
-	/// </summary>
-	public class UtilsTest : TestBase
-	{
+    /// <summary>
+    /// Tests the Utils class
+    /// </summary>
+    public class UtilsTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -27,5 +27,5 @@ namespace NSvn.Tests
             root = Utils.GetWorkingCopyRootedPath( potential );
             Assertion.AssertEquals( "Rooted path not unwrong", @"\Form.cs", root );
         }
-	}
+    }
 }

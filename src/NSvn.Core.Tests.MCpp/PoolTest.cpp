@@ -11,7 +11,7 @@ public:
     int a;
     ~Class()
     {
-       destructorCalled = true;
+        destructorCalled = true;
     }
 };
 

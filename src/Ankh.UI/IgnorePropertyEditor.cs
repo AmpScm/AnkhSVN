@@ -8,34 +8,34 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Property editor for the predefined ignore property.
-	/// </summary>
-	public class IgnorePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
-	{
-		public event EventHandler Changed;
+    /// <summary>
+    /// Property editor for the predefined ignore property.
+    /// </summary>
+    public class IgnorePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    {
+        public event EventHandler Changed;
 
-		public IgnorePropertyEditor()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public IgnorePropertyEditor()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
-             this.components = new System.ComponentModel.Container();
+            this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
 
-			// TODO: Add any initialization after the InitForm call
+            // TODO: Add any initialization after the InitForm call
 
-		}
+        }
 
-		public void Reset()
-		{
-			this.ignoreTextBox.Text = "";
+        public void Reset()
+        {
+            this.ignoreTextBox.Text = "";
             this.dirty = false;
-		}
+        }
 
-		public bool Valid
-		{
-			get
+        public bool Valid
+        {
+            get
             { 
                 if (!this.dirty)
                 {
@@ -48,53 +48,53 @@ namespace Ankh.UI
             }
         }
 
-		public PropertyItem PropertyItem
-		{
-			get
-			{
-				if ( !this.Valid )
-				{
-					throw new InvalidOperationException(
-						"Can not get a property item when Valid is false");
-				}
+        public PropertyItem PropertyItem
+        {
+            get
+            {
+                if ( !this.Valid )
+                {
+                    throw new InvalidOperationException(
+                        "Can not get a property item when Valid is false");
+                }
 				
-				return new TextPropertyItem(this.ignoreTextBox.Text);
-			}
-			set
-			{
-				TextPropertyItem item = (TextPropertyItem) value;
+                return new TextPropertyItem(this.ignoreTextBox.Text);
+            }
+            set
+            {
+                TextPropertyItem item = (TextPropertyItem) value;
                 this.ignoreTextBox.Text = item.Text;
                 this.dirty = false;
-			}
-		}
+            }
+        }
 
         public override string ToString()
         {
             return "ignore";
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.ignoreTextBox = new System.Windows.Forms.TextBox();
             this.ignoreLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -154,19 +154,19 @@ namespace Ankh.UI
             // Set up the ToolTip text for the Button and Checkbox.
             conflictToolTip.SetToolTip( this.ignoreTextBox, 
                 "Eks *.obj, subdir. Names of file-categories and directories to be ignored.");
-         }
+        }
 
-	    private System.Windows.Forms.TextBox ignoreTextBox;
+        private System.Windows.Forms.TextBox ignoreTextBox;
         private System.Windows.Forms.Label ignoreLabel;
         /// <summary>
         /// Flag for enabling/disabling save button
         /// </summary>
         private bool dirty;
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
-	}
+    }
 }
 

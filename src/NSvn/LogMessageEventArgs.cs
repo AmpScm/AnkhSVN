@@ -4,11 +4,11 @@ using NSvn.Core;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Represents the EventArgs passed to the LogMessage event.
-	/// </summary>
-	public class LogMessageEventArgs : EventArgs
-	{
+    /// <summary>
+    /// Represents the EventArgs passed to the LogMessage event.
+    /// </summary>
+    public class LogMessageEventArgs : EventArgs
+    {
         public LogMessageEventArgs( CommitItem[] targets )
         {
             this.commitTargets = targets;
@@ -42,7 +42,7 @@ namespace NSvn
         private string logMessage = "";
         private bool canceled = false;
         private CommitItem[] commitTargets;
-	}
+    }
 
     public delegate void LogMessageEventHandler( object sender, LogMessageEventArgs args );
 }

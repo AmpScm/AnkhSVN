@@ -42,7 +42,7 @@ DateTime NSvn::Core::ParseDate( const char* date, apr_pool_t* pool )
 apr_array_header_t* NSvn::Core::StringArrayToAprArray( String* strings[], bool isPath, Pool& pool )
 {
     apr_array_header_t* array = apr_array_make( pool, strings->Length, sizeof( char* ) );
-    
+
     // put the strings in the apr array
     for( int i = 0; i < strings->Length; ++i )
     {
@@ -75,29 +75,29 @@ String* NSvn::Core::AprArrayToStringArray( apr_array_header_t* aprArray ) []
 // Canonicalizes a path to the correct format expected by SVN
 const char* NSvn::Core::CanonicalizePath( String* path, Pool& pool )
 {
-     const char* utf8path = StringHelper( path ).CopyToPoolUtf8( pool );
+    const char* utf8path = StringHelper( path ).CopyToPoolUtf8( pool );
 
-     // is this an URL?
-     if ( !svn_path_is_url( utf8path ) )
-     {
-         // no we need to canonicalize and stuff
-         // (most of this stuff was ripped from libsvn_subr/opt.c)
-         const char* aprTarget;
-         char* trueNamedTarget;
-         // now we convert to the native APR encoding before canonicalizing the path
-         HandleError( svn_path_cstring_from_utf8( &aprTarget, utf8path, pool ) );
-         apr_status_t err = apr_filepath_merge( &trueNamedTarget, "", aprTarget, 
-             APR_FILEPATH_TRUENAME, pool );
+    // is this an URL?
+    if ( !svn_path_is_url( utf8path ) )
+    {
+        // no we need to canonicalize and stuff
+        // (most of this stuff was ripped from libsvn_subr/opt.c)
+        const char* aprTarget;
+        char* trueNamedTarget;
+        // now we convert to the native APR encoding before canonicalizing the path
+        HandleError( svn_path_cstring_from_utf8( &aprTarget, utf8path, pool ) );
+        apr_status_t err = apr_filepath_merge( &trueNamedTarget, "", aprTarget, 
+            APR_FILEPATH_TRUENAME, pool );
 
-         // ENOENT means the file doesnt exist - we don't care
-         if( err && !APR_STATUS_IS_ENOENT(err) )
-             // TODO: fix this
-             throw new SvnClientException( path );
+        // ENOENT means the file doesnt exist - we don't care
+        if( err && !APR_STATUS_IS_ENOENT(err) )
+            // TODO: fix this
+            throw new SvnClientException( path );
 
-         HandleError( svn_path_cstring_to_utf8( &utf8path, trueNamedTarget, pool ) );
-     }
+        HandleError( svn_path_cstring_to_utf8( &utf8path, trueNamedTarget, pool ) );
+    }
 
-     return svn_path_canonicalize( utf8path, pool );
+    return svn_path_canonicalize( utf8path, pool );
 }
 
 // Converts Byte array to svn_string_t

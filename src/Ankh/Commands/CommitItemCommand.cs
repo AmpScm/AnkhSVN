@@ -8,17 +8,17 @@ using EnvDTE;
 
 namespace Ankh.Commands
 {
-	/// <summary>
-	/// Commits an item. 
-	/// </summary>
-	[VSNetCommand("CommitItem", Text = "Commit", Tooltip = "Commits an item",
+    /// <summary>
+    /// Commits an item. 
+    /// </summary>
+    [VSNetCommand("CommitItem", Text = "Commit", Tooltip = "Commits an item",
          Bitmap = ResourceBitmaps.Commit),
-     VSNetControl( "Item", Position = 2 ),
-     VSNetControl( "Project", Position = 2 ),
-     VSNetControl( "Folder", Position = 2 ),
-     VSNetControl( "Solution", Position = 2)]
-	internal class CommitItem : CommandBase
-	{	
+    VSNetControl( "Item", Position = 2 ),
+    VSNetControl( "Project", Position = 2 ),
+    VSNetControl( "Folder", Position = 2 ),
+    VSNetControl( "Solution", Position = 2)]
+    internal class CommitItem : CommandBase
+    {	
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {

@@ -17,14 +17,14 @@ using Swf = System.Windows.Forms;
 
 namespace Ankh.Solution
 {
-	/// <summary>
-	/// Represents the Solution Explorer window in the VS.NET IDE
-	/// </summary>
-	internal class Explorer
-	{
-		public Explorer( _DTE dte, SvnContext context )
-		{
-			this.dte = dte;
+    /// <summary>
+    /// Represents the Solution Explorer window in the VS.NET IDE
+    /// </summary>
+    internal class Explorer
+    {
+        public Explorer( _DTE dte, SvnContext context )
+        {
+            this.dte = dte;
             this.context = context;
             this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
                 new ItemComparer() );
@@ -33,7 +33,7 @@ namespace Ankh.Solution
             this.solutionNode = null;
             this.SetUpTreeview();
             this.SyncWithTreeView();
-		}
+        }
 
         
 
@@ -207,7 +207,7 @@ namespace Ankh.Solution
             // Get the caption of the solution explorer
             string slnExplorerCaption = this.dte.Windows.Item(
                 EnvDTE.Constants.vsWindowKindSolutionExplorer).Caption;
-//            string vsnetCaption = this.dte.MainWindow.C
+            //            string vsnetCaption = this.dte.MainWindow.C
             IntPtr vsnet = (IntPtr)this.dte.MainWindow.HWnd;//Win32.FindWindow( VSNETWINDOW, null );
             IntPtr slnExplorer = Win32.FindWindowEx( vsnet, IntPtr.Zero, GENERICPANE, 
                 slnExplorerCaption );
@@ -218,7 +218,7 @@ namespace Ankh.Solution
  
             if ( this.treeview == IntPtr.Zero )
                 throw new ApplicationException( 
-                "Could not attach to solution explorer treeview" );
+                    "Could not attach to solution explorer treeview" );
 
             // load the status images image strip
             Bitmap statusImages = (Bitmap)Image.FromStream( 
@@ -349,5 +349,5 @@ namespace Ankh.Solution
         private SvnContext context;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
-	}
+    }
 }

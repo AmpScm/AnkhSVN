@@ -9,38 +9,38 @@ using System.Text.RegularExpressions;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Editor for the mime-type properties.
-	/// </summary>
-	public class MimeTypePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
-	{
-		public event EventHandler Changed;
+    /// <summary>
+    /// Editor for the mime-type properties.
+    /// </summary>
+    public class MimeTypePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    {
+        public event EventHandler Changed;
 
-		public MimeTypePropertyEditor()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public MimeTypePropertyEditor()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
-		}
+        }
 
         /// <summary>
         /// Resets the textbox.
         /// </summary>
-		public void Reset()
-		{
-			this.mimeTextBox.Text = "";
+        public void Reset()
+        {
+            this.mimeTextBox.Text = "";
             this.dirty = false;
-		}
+        }
 
         /// <summary>
         /// Indicates whether the property is valid.
         /// </summary>
-		public bool Valid
-		{
-			get
-			{
+        public bool Valid
+        {
+            get
+            {
                 if (!this.dirty)
                 {
                     return false;
@@ -49,31 +49,31 @@ namespace Ankh.UI
                 {
                     return validateMimeType.IsMatch(this.mimeTextBox.Text);
                 }
-			} 
-		}
+            } 
+        }
 
         /// <summary>
         /// Sets and gets the property item.
         /// </summary>
-		public PropertyItem PropertyItem
-		{
-			get
-			{
-				if ( !this.Valid )
-				{
-					throw new InvalidOperationException(
-						"Can not get a property item when Valid is false");
-				}	
-					return new TextPropertyItem(this.mimeTextBox.Text);
-			}
+        public PropertyItem PropertyItem
+        {
+            get
+            {
+                if ( !this.Valid )
+                {
+                    throw new InvalidOperationException(
+                        "Can not get a property item when Valid is false");
+                }	
+                return new TextPropertyItem(this.mimeTextBox.Text);
+            }
 
-			set
-			{
-				TextPropertyItem item = (TextPropertyItem)value;
+            set
+            {
+                TextPropertyItem item = (TextPropertyItem)value;
                 this.mimeTextBox.Text = item.Text;
                 this.dirty = false;
-			}
-		}
+            }
+        }
 
         /// <summary>
         /// Indicates the type of property.
@@ -84,28 +84,28 @@ namespace Ankh.UI
             return "mime-type";
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.mimeLabel = new System.Windows.Forms.Label();
             this.mimeTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
@@ -164,7 +164,7 @@ namespace Ankh.UI
             // Set up the ToolTip text for the Button and Checkbox.
             conflictToolTip.SetToolTip( this.mimeTextBox, 
                 "Defult is text/*, everything else is binary");
-            }
+        }
 
         private System.Windows.Forms.Label mimeLabel;
         private System.Windows.Forms.TextBox mimeTextBox;
@@ -175,15 +175,15 @@ namespace Ankh.UI
         /// </summary>
         private bool dirty;
 
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
 
        
 
         
-	}
+    }
 }
 

@@ -31,7 +31,7 @@ namespace NSvn.Core.Tests
             CommitInfo info = Client.MakeDir( path, ctx );
             
             Assertion.AssertEquals( "MakeDir should return CommitInfo::Invalid for local operations",
-               CommitInfo.Invalid, info );
+                CommitInfo.Invalid, info );
             Assertion.AssertEquals( "Wrong number of notifications", 1, this.Notifications.Length );
             Assertion.AssertEquals( "Wrong status code", 'A', this.GetSvnStatus( path ) );
         }

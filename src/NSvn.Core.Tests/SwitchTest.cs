@@ -11,13 +11,13 @@ namespace NSvn.Core.Tests
     [TestFixture]
     public class SwitchTest : TestBase
     {
-       [SetUp]
+        [SetUp]
         public override void SetUp() 
         {
-           base.SetUp();
-           this.path = Path.GetTempPath();
-           base.ExtractRepos();
-           base.ExtractWorkingCopy();
+            base.SetUp();
+            this.path = Path.GetTempPath();
+            base.ExtractRepos();
+            base.ExtractWorkingCopy();
         }
 
         /// <summary>

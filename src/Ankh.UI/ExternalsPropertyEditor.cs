@@ -8,21 +8,21 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Editor for externals properties.
-	/// </summary>
-	public class ExternalsPropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
-	{
+    /// <summary>
+    /// Editor for externals properties.
+    /// </summary>
+    public class ExternalsPropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    {
         public event EventHandler Changed;
 
-		public ExternalsPropertyEditor()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public ExternalsPropertyEditor()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
-		}
+        }
         
         /// <summary>
         /// Resets the textbox.
@@ -31,7 +31,7 @@ namespace Ankh.UI
         {
             this.externalsTextBox.Text = "";
             this.dirty = false;
-         }
+        }
 
         /// <summary>
         /// Indicates whether the property item is valid.
@@ -51,10 +51,10 @@ namespace Ankh.UI
             }
         }
         
-            /// <summary>
-            /// Sets and gets the property item.
-            /// </summary>
-            public PropertyItem PropertyItem
+        /// <summary>
+        /// Sets and gets the property item.
+        /// </summary>
+        public PropertyItem PropertyItem
         {
             get
             {
@@ -69,7 +69,7 @@ namespace Ankh.UI
 
             set
             {
-              TextPropertyItem item = (TextPropertyItem)value;
+                TextPropertyItem item = (TextPropertyItem)value;
                 this.externalsTextBox.Text = item.Text;
                 this.dirty = false;
             }
@@ -84,28 +84,28 @@ namespace Ankh.UI
             return "externals";
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if( components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if( components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.externalsTextBox = new System.Windows.Forms.TextBox();
             this.externalsLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -187,6 +187,6 @@ namespace Ankh.UI
 
        
 
-	}
+    }
 }
 
