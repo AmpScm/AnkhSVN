@@ -28,12 +28,10 @@ namespace ReposInstaller
 
         public override void Install(IDictionary stateSaver)
         {
-            MessageBox.Show( "Uninstall" );
-            base.Install (stateSaver);
-
 #if DEBUG
-            
+            MessageBox.Show( "Uninstall" );
 #endif
+            base.Install (stateSaver);
 
             // create the about box text
             string text = "";			
