@@ -14,6 +14,7 @@
 #include "LogMessageEventArgs.h"
 #include "CancelEventArgs.h"
 //#include "ManagedPointer.h"
+#include "Utils.h"
 
 namespace
 {
@@ -97,7 +98,11 @@ namespace
         const char *mime_type, svn_wc_notify_state_t content_state, 
         svn_wc_notify_state_t prop_state, svn_revnum_t revision )
     {
-        NotificationEventArgs* args = new NotificationEventArgs( path, action, kind,
+        // TODO: isn't it a bit inefficient to create a pool here?
+        Pool pool;
+        String* nativePath = ToNativePath( path, pool );
+
+        NotificationEventArgs* args = new NotificationEventArgs( nativePath, action, kind,
             mime_type, content_state, prop_state, revision );
         Client* client = 
             *(static_cast<ManagedPointer<Client*>* >(baton) );
