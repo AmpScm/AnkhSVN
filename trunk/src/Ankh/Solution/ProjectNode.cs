@@ -71,9 +71,7 @@ namespace Ankh.Solution
                 this.projectFolder = this.Explorer.Context.StatusCache[ parentPath ];                
                 this.projectFile = this.Explorer.Context.StatusCache[ fullname ];
 
-                
-
-                this.Explorer.AddResource( project, this ); 
+                this.Explorer.AddResource( project, this, fullname ); 
 
                 // attach event handlers
                 StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
