@@ -12,7 +12,7 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.Refresh),
     VSNetControl( "Solution.Ankh", Position = 1 ),
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
-    VSNetControl( "Folder.Ankh", Position = 1)]
+    VSNetFolderNodeControl( "Ankh", Position = 1)]
     internal class RefreshCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)

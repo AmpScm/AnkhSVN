@@ -18,7 +18,7 @@ namespace Ankh.Commands
     VSNetControl( "Item", Position = 2 ),
     VSNetProjectNodeControl( "", Position = 2 ),
     VSNetControl( "Solution", Position = 2 ),
-    VSNetControl( "Folder", Position = 2 )]
+    VSNetFolderNodeControl( "", Position = 2)]
     internal class UpdateItem : CommandBase
     {		
         #region Implementation of ICommand
