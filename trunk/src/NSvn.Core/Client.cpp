@@ -109,8 +109,13 @@ NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
     Pool pool;
 
     // lock the directory
-    HandleError( svn_wc_adm_probe_open( &admAccess, 0, CanonicalizePath( path, pool ), 
-        false, false, pool ) );
+    svn_error_t* err = svn_wc_adm_probe_open( &admAccess, 0, CanonicalizePath( path, pool ), 
+        false, false, pool );
+
+    if( err && err->apr_err == SVN_ERR_WC_NOT_DIRECTORY )
+        return Status::None;
+    else
+        HandleError( err );
 
     //retrieve the status
     svn_wc_status_t* status;    
