@@ -4,6 +4,11 @@
 #include "stdafx.h"
 #include "Autorun.h"
 #include "AutorunDlg.h"
+#include "utils.h"
+#include <string>
+#include <shlobj.h>
+#include <stdlib.h>
+using namespace std;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -15,7 +20,9 @@
 BEGIN_DHTML_EVENT_MAP(CAutorunDlg)
 	DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
 
-    DHTML_EVENT_ONCLICK(_T("pdoc"), Launch )
+    DHTML_EVENT_ONCLICK(_T("processdoc"), Launch )
+    DHTML_EVENT_ONCLICK(_T("log"), LaunchIE )
+    DHTML_EVENT_ONCLICK(_T("ankhsetup"), LaunchExplorer )
 END_DHTML_EVENT_MAP()
 
 
@@ -102,9 +109,46 @@ HRESULT CAutorunDlg::Launch( IHTMLElement* pElement )
 {
     COleVariant path;
     pElement->getAttribute( CComBSTR( "path" ), 0, &path );
+
+    string baseDir = GetModuleDirectory();
    
-    HINSTANCE ret = ShellExecute( NULL, "open", COLE2T(path.bstrVal), NULL, "", SW_SHOW );
+    HINSTANCE ret = ShellExecute( NULL, "open", COLE2T(path.bstrVal), NULL, baseDir.c_str(), SW_SHOW );
 
     return S_OK;
+
+}
+
+HRESULT CAutorunDlg::LaunchIE( IHTMLElement* pElement )
+{
+    COleVariant path;
+    pElement->getAttribute( CComBSTR("path"), 0, &path );
+    string baseDir = GetModuleDirectory();
+    ::SetCurrentDirectory( baseDir.c_str() );
+
+    TCHAR absPath[ MAX_PATH ];
+    ::_fullpath( absPath, COLE2T( path.bstrVal ), MAX_PATH );
+
+    HINSTANCE ret = ShellExecute( NULL, "open", "iexplore.exe", absPath, baseDir.c_str(), SW_SHOW );
+
+    return S_OK;
+}
+
+HRESULT CAutorunDlg::LaunchExplorer( IHTMLElement* pElement )
+{
+    COleVariant path;
+    pElement->getAttribute( CComBSTR( "path" ), 0, &path );
+
+    string baseDir = GetModuleDirectory();
+    ::SetCurrentDirectory( baseDir.c_str() );
+
+     TCHAR absPath[ MAX_PATH ];
+    ::_fullpath( absPath, COLE2T( path.bstrVal ), MAX_PATH );
+
+    string args = "/e,/select," + string(absPath);
+   
+    HINSTANCE ret = ShellExecute( NULL, "open", "explorer.exe", args.c_str(), baseDir.c_str(), SW_SHOW );
+
+    return S_OK;
+
 
 }
