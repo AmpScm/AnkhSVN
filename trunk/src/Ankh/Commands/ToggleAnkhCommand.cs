@@ -11,7 +11,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("ToggleAnkh", Text="Enable Ankh for this solution", 
          Tooltip= "Enable Ankh for this solution", 
-         Bitmap=ResourceBitmaps.Default ),
+         Bitmap=ResourceBitmaps.ToggleAnkh ),
     VSNetControl( "Solution.Ankh", Position=1 )]
     internal class ToggleAnkhCommand : CommandBase
     {

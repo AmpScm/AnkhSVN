@@ -24,6 +24,8 @@ namespace Ankh
         public const int Update         = 108;
         public const int ReposExplorer  = 109;
         public const int ChangeAdminDirName = 110;
+        public const int ToggleAnkh = 111;
+        public const int Switch = 112;
 
     }
 }

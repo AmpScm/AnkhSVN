@@ -12,7 +12,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("SwitchItem", Text="Switch...", 
          Tooltip= "Switch this item to a different URL", 
-         Bitmap=ResourceBitmaps.Default ),
+         Bitmap=ResourceBitmaps.Switch ),
     VSNetControl( "Solution.Ankh", Position=1 ),
     VSNetControl( "Project Node.Ankh", Position=1 ),
     VSNetControl( "Cab Project Node.Ankh", Position = 1 ),
