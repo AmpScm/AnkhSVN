@@ -208,6 +208,11 @@ namespace Ankh.Solution
 
         public void SyncWithTreeView()
         {
+            // no point in doing anything if the solution dir isn't a wc
+            string solutionDir = Path.GetDirectoryName( this.dte.Solution.FullName );
+            if ( !SvnUtils.IsWorkingCopyPath( solutionDir ) )
+                return;
+
             this.projectItems.Clear();
             this.projects.Clear();
             // find the root in the treeview
