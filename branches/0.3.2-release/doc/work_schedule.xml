@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gant>
+	<title>Gantt diagram</title>
+	<defaultyear>2003</defaultyear>
+	<start week="43" year="2002" />
+	<end week="22" />
+	<item>
+		<text>Pilot project</text>
+		<start week="43" year="2002" />
+		<end week="5"/>
+		<item>
+			<text>Write progress report </text>
+			<start week="43" year="2002" />
+			<end week="43" year="2002" />
+		</item>
+		<item>
+			<text>Write project proposal </text>
+			<start week="49" year="2002" />
+			<end week="49" year="2002" />
+		</item>
+		<item>
+			<text>Maintain website for project </text>
+			<start week="1" year="2002" />
+			<end week="22" />
+		</item>
+		<item>
+			<text>Create project diary</text>
+			<start week="48" year="2002" />
+			<end week="5" />
+		</item>
+		<item>
+			<text>Write pilot project report</text>
+			<start week="1" />
+			<end week="5" />
+		</item>
+		<item>
+			<text>Make work plan</text>
+			<start week="1" />
+			<end week="5" />
+		</item>
+		<item>
+			<text>Make work schedule</text>
+			<start week="1" />
+			<end week="5" />
+		</item>
+	</item>
+	<item>
+		<text>Learning</text>
+		<start week="1" />
+		<end week="8" />
+		<item>
+			<text>Get familiar with Subversion</text>
+			<start week="1" />
+			<end week="8" />
+		</item>
+		<item>
+			<text>Get familiar with Visual Studio.NET </text>
+			<start week="1" />
+			<end week="8" />
+		</item>
+		<item>
+			<text>Get familiar with  NUnit V2.0</text>
+			<start week="1" />
+			<end week="8" />
+		</item>
+		<item>
+			<text>Get familiar with  Visual Studio .NET plugin architecture</text>
+			<start week="3" />
+			<end week="12" />
+		</item>
+		<item>
+			<text>Get familiar with  NAnt</text>
+			<start week="1" />
+			<end week="8"/>
+		</item>
+		<item>
+			<text>Learn C# programming</text>
+			<start week="1" />
+			<end week="10" />
+		</item>
+		<item>
+			<text>Get better understanding of Subversion client API</text>
+			<start week="3" />
+			<end week="12" />
+		</item>
+	</item>
+	<item>
+		<text>Employer's specifications</text>
+		<start week="1" />
+		<end week="8" />
+		<item>
+			<text>Write specifications for Visual Studio.NET addin for svn</text>
+			<start week="3" />
+			<end week="8" />
+		</item>
+	</item>
+	<item>
+		<text>Design/Development</text>
+		<start week="1"/>
+		<end week="20" />
+		<item>
+			<text>Install software</text>
+			<start week="1" />
+			<end week="4" />
+		</item>
+		<item>
+			<text>Develop use cases/domain analysis</text>
+			<start week="3" />
+			<end week="8" />
+		</item>
+		<item>
+			<text>Programming</text>
+			<start week="7" />
+			<end week="21" />
+		</item>
+	</item>
+	<item>
+		<text>Testing</text>
+		<start week="10" />
+		<end week="21" />
+		<item>
+			<text>Unit testing</text>
+			<start week="10" />
+			<end week="21" />
+		</item>
+		<item>
+			<text>Functional testing</text>
+			<start week="14" />
+			<end week="21" />
+		</item>
+		<item>
+			<text>(Public?)Alpha release</text>
+			<start week="16" />
+			<end week="16" />
+		</item>
+		<item>
+			<text>(Public?)Beta release</text>
+			<start week="19" />
+			<end week="19" />
+		</item>
+	</item>
+	<item>
+		<text>Documentation</text>
+		<start week="1" />
+		<end week="19" />
+		<item>
+			<text>Document functional testing</text>
+			<start week="14" />
+			<end week="19" />
+		</item>
+		<item>
+			<text>Write user guide</text>
+			<start week="12" />
+			<end week="19" />
+		</item>
+		<item>
+			<text>Write product documentation</text>
+			<start week="8" />
+			<end week="19" />
+		</item>
+		<item>
+			<text>Write process documentation</text>
+			<start week="1"/>
+			<end week="19" />
+		</item>
+	</item>
+	<item>
+		<text>Completion</text>
+		<start week="19" />
+		<end week="25" />
+		<item>
+			<text>Proofreading final report</text>
+			<start week="19" />
+			<end week="21" />
+		</item>
+		<item>
+			<text>Prepare for presentation</text>
+			<start week="22" />
+			<end week="23" />
+		</item>
+		<item>
+			<text>Presentation</text>
+			<start week="25" />
+			<end week="25" />
+		</item>
+	</item>
+</gant>
