@@ -20,7 +20,9 @@ public:
 	HRESULT OnButtonOK(IHTMLElement *pElement);
 	HRESULT OnButtonCancel(IHTMLElement *pElement);
 
-    HRESULT Launch( IHTMLElement* pElement );
+    HRESULT Launch( IHTMLElement* pElement );    
+    HRESULT LaunchIE( IHTMLElement* pElement );
+    HRESULT LaunchExplorer( IHTMLElement* pElement );
 
 // Implementation
 protected:

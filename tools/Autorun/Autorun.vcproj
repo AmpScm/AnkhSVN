@@ -135,6 +135,9 @@
 						UsePrecompiledHeader="1"/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="utils.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -150,6 +153,9 @@
 			</File>
 			<File
 				RelativePath="stdafx.h">
+			</File>
+			<File
+				RelativePath="utils.h">
 			</File>
 		</Filter>
 		<Filter
