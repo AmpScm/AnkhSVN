@@ -2,57 +2,78 @@
 <?xml-stylesheet type="text/xsl" href="doc.xsl"?>
 <doc title="Pilot Project Report">
 
-    <p>"Title: Subversion plugin for Visual Studio .NET</p>
-    <p>Employer:  CollabNet - http://www.collab.net</p>
-    <p>Developers:  </p>
+    <p><b>Title:</b> Subversion plugin for Visual Studio .NET</p>
+    <p><b>Employer:</b>  CollabNet - http://www.collab.net</p>
+    <p><b>Developers:  </b></p>
     <list>
         <item>Arild Fines -       </item>
         <item> Per August Kramer - per@perkramer.com</item>
         <item>Kristin Borud - s106855@iu.hio.no</item>
     </list>
-    <p>Duration of project: 09.01.2003 - 19.06.2003</p>
+    <p><b>Duration of project:</b> 09.01.2003 - 19.06.2003</p>
      
      
      <section header="Background">
+       
      </section>
         
      
 
     <section header="Aim">
         <p>The aim of this project is to provid an integration platform for Subversion into 
-        the existing environment Visual Studio .NET. By making a plugin in Visual Studio .NET 
-        the revision control system could be available
-        for a huge amount of new programmers. The intention is to make the .NET wrapper
-        layer platform independent so that it easily could be used in other applications.</p>
+        the existing environment Visual Studio .NET. By making a plugin for Visual Studio .NET 
+        the revision control system could be made available
+        for a huge amount of new programmers. We also hope to make the .NET wrapper
+        available as a standalone component so that it easily could be used 
+        in other applications.</p>
     </section>
 
     <section header="External conditions"> 
             <p>The group will have weekly meetings with the HIO/IU supervisor, Eva H.Vihovde 
             Fridays at 2am.</p>
+            
             <p>Every Monday from 8:30 and Fridays from 13:30 am the group will work at the dedicated
             school PC. The group will work together until all the group members are
-            familiar with the software to be used. At a later stage in the project it
+            familiar with the software used. At a later stage in the project it
             would be possible to work separately at individual home computers as the
             communication easily could happen via instant messaging systems.</p>
             <p>To enforce an overall consistent look of the code common guidelines for 
             source code is composed.</p> 
+            
             <p>Subversion will be used for revision control. </p>
+            
             <p>To verify the sanity of the system at any given moment, and to catch
             regression bugs (things that used to work, but breaks due to later changes)
-            we will conduct continuous unit tests using the NUnit testing
-            framework.</p>
+            we will conduct continuous unit tests using the 
+            <link url="http://nunit.sourceforge.net/">NUnit testing framework.</link></p>
+            
             <p>We hope to make the .NET wrapper layer available as a standalone unit for
-            use in other applications. We will provide NAnt build scripts that will
+            use in other applications. We hope to provide 
+            <link url="http://nant.sourceforge.net/">NAnt </link> build scripts that will
             enable it to be built without requiring the user to have Visual Studio.NET
             installed.
             </p>
+            
             <p>Code reviews will be performed. (Guidelines for code review to be discussed)</p>
-            <p>Guidelines for how the documentation to be written in xml will be composed. The intention 
-            is to transform theses XML documents into both HTML and into a format suitable for 
+            
+            <p>Guidelines for how the documentation to be written in XML will be composed. The intention 
+            is to transform these XML documents into both HTML and into a format suitable for 
             printing(XSL Formatting Objects) using XSL.</p>
-            <p>The coding required to make the plugin is classified as advanced
-            programming. There are some open source code for addins of
+            
+            <p>There are some open source code for addins of
             common revision control systems and available code of addins in .NET
-            in general.</p> 
+            in general which we hope to learn from.</p> 
+    </section>
+    
+    <section header="Implementation choices">
+        <p>We primarily intend to write most of the system in the C# programming language. 
+        However, it might be beneficial to consider alternative approaches in certain areas of 
+        the project. For example, it might be a better alternative to write .NET wrapper layer 
+        in Managed C++(C++ extensions for the .NET environment) since this offers better integration
+        with the C-based API of Subversion. Another alternative might be to use a tool called 
+        <link url="http://www.swig.org">SWIG</link>(Simplified Wrapper and Interface Generator)
+        - a tool that generates wrappers for C and C++-based APIs automagically. We will
+        have to research these alternatives more thoroughly and also seek advice from other
+        people with knowledge in the area.</p>
     </section>
 </doc>
