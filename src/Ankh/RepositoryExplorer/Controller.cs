@@ -158,10 +158,11 @@ namespace Ankh.RepositoryExplorer
         /// <param name="args"></param>
         private void AddClicked(object sender, EventArgs args )
         {           
-            string url = this.repositoryExplorer.Url;
-            Revision revision = this.repositoryExplorer.Revision;
-            INode rootNode = new RootNode(url, revision);
-            this.repositoryExplorer.AddRoot( url, rootNode );
+            INode rootNode = new RootNode(
+                this.repositoryExplorer.Url, this.repositoryExplorer.Revision);
+            string label = String.Format( "{0} [{1}]", 
+                rootNode.Url, rootNode.Revision );
+            this.repositoryExplorer.AddRoot( label, rootNode );
         }
 
         /// <summary>
@@ -195,7 +196,8 @@ namespace Ankh.RepositoryExplorer
                 else
                     continue;
 
-                this.repositoryExplorer.AddRoot( node.Url, node );
+                string label = String.Format( "{0} [{1}]", node.Url, node.Revision );
+                this.repositoryExplorer.AddRoot( label, node );
             }
         }
 
