@@ -91,6 +91,15 @@ namespace NSvn
             __property void set_ClientConfig( NSvn::Core::ClientConfig* value )
             { this->clientConfig = value; }
 
+            // callback delegate for cancellations
+            [System::Diagnostics::DebuggerStepThrough]
+            __property CancelCallback* get_CancelCallback()
+            { return this->cancelCallback; }
+
+            [System::Diagnostics::DebuggerStepThrough]
+            __property void set_CancelCallback( NSvn::Core::CancelCallback* value )
+            { this->cancelCallback = value; }
+
         private public:
             svn_client_ctx_t* ToSvnContext( const Pool& pool );
 
@@ -101,6 +110,7 @@ namespace NSvn
             NSvn::Core::NotifyCallback* notifyCallback;
             NSvn::Core::LogMessageCallback* logMessageCallback;
             NSvn::Core::ClientConfig* clientConfig;
+            NSvn::Core::CancelCallback* cancelCallback;
 
 
         };

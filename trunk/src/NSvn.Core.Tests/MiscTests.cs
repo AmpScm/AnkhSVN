@@ -60,11 +60,44 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "UUID wrong", realUuid, uuid );
         }
 
+        [Test]
+        [ExpectedException( typeof(WorkingCopyLockedException) )]
+        public void TestCancel()
+        {
+            ClientContext ctx = new ClientContext();
+            AuthenticationBaton baton = new AuthenticationBaton();
+            ctx.AuthBaton = baton;
+            ctx.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
+            ctx.CancelCallback = new CancelCallback( this.CancelCallback );
+
+            Client.Update( this.WcPath, Revision.Head, true, ctx );
+            
+            Assertion.Assert( "No cancellation callbacks", this.cancels > 0 );
+
+            // no idea why this throws *WorkingCopyLockedException*...
+            ctx.CancelCallback = new CancelCallback( this.ReallyCancelCallback );
+            Client.Update( this.WcPath, Revision.Head, true, ctx );
+        }
+
         private string GetUrl( string path )
         {
             string info = this.RunCommand( "svn", "info " + path );
             return Regex.Match( info, @"URL: (.*)", RegexOptions.IgnoreCase ).Groups[1].ToString().Trim();
         }
+
+        private CancelOperation CancelCallback()
+        {
+            this.cancels++;
+            return CancelOperation.DontCancel;
+        }
+
+        private CancelOperation ReallyCancelCallback()
+        {
+            this.cancels++;
+            return CancelOperation.Cancel;
+        }
+
+        private int cancels = 0;
 
     }
 }
