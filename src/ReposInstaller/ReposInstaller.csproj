@@ -97,6 +97,11 @@
                     AssemblyName = "System.Web"
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Web.dll"
                 />
+                <Reference
+                    Name = "envdte"
+                    AssemblyName = "EnvDTE"
+                    HintPath = "D:\WINDOWS\Microsoft.NET\Framework\v1.0.3705\envdte.dll"
+                />
             </References>
         </Build>
         <Files>
