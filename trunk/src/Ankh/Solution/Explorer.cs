@@ -52,6 +52,20 @@ namespace Ankh.Solution
             }
         }
 
+        public void VisitResources( ProjectItem item, ILocalResourceVisitor visitor )
+        {
+            TreeNode node = this.GetNode( item );
+            if ( node != null )
+                node.VisitResources( visitor );
+        }
+
+        public void VisitResources( Project project, ILocalResourceVisitor visitor )
+        {
+            TreeNode node = this.GetNode( project );
+            if ( node != null )
+                node.VisitResources( visitor );
+        }
+
         /// <summary>
         /// Updates the status of selected items.
         /// </summary>
@@ -200,6 +214,23 @@ namespace Ankh.Solution
             else
                 return null;
         }
+        
+        private TreeNode GetNode( ProjectItem item )
+        {
+            if (this.projectItems.Contains( item ) )
+                return ((TreeNode)this.projectItems[item]);
+            else
+                return null;
+        }
+
+        private TreeNode GetNode( Project project )
+        {
+            if ( this.projects.Contains( project ) )
+                return ((TreeNode)this.projects[project]);
+            else
+                return null;
+        }
+
 
 
         #region class TreeNode
