@@ -32,6 +32,7 @@ namespace Ankh.Commands
         }
         public override void Execute(Ankh.AnkhContext context)
         {
+            
             ResourceGathererVisitor v = new ResourceGathererVisitor();
             context.SolutionExplorer.VisitSelectedItems( v, true );
 
@@ -40,7 +41,6 @@ namespace Ankh.Commands
                 v.WorkingCopyResources.ToArray( typeof(WorkingCopyResource) );
 
             WorkingCopyResource.Commit( resources, true );
-       
 
             context.SolutionExplorer.UpdateSelectionStatus();
         }
