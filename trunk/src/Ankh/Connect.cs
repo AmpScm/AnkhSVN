@@ -100,8 +100,15 @@ namespace Ankh
         /// <seealso class='IDTExtensibility2' />
         public void OnDisconnection(Extensibility.ext_DisconnectMode disconnectMode, ref System.Array custom)
         {
-            Extenders.ExtenderProvider.Unregister( this.context.DTE );
-            this.context.Shutdown();
+            try
+            {
+                Extenders.ExtenderProvider.Unregister( this.context.DTE );
+                this.context.Shutdown();
+            }
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+            }
         }
 
         /// <summary>
