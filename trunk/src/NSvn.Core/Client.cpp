@@ -9,6 +9,8 @@
 #include <apr_general.h>
 #include <apr_hash.h>
 #include "SvnClientException.h"
+#include "stream.h"
+#include <svn_io.h>
 
 
 // implementation of Client::Add
@@ -240,6 +242,18 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, St
         return new CommitInfo( commitInfoPtr );
     else
         return CommitInfo::Invalid;
+}
+
+// implementation of Client::Cat
+void NSvn::Core::Client::Cat( Stream* out, String* path, Revision* revision, ClientContext* context )
+{
+    Pool pool; 
+
+    const char* truePath = CanonicalizePath( path, pool );
+    svn_stream_t* svnStream = CreateSvnStream( out, pool );
+
+    HandleError( svn_client_cat( svnStream, truePath, revision->ToSvnOptRevision( pool ), 
+        context->ToSvnContext( pool ), pool ) );
 }
 
 // Converts array of .NET strings to apr array of const char
