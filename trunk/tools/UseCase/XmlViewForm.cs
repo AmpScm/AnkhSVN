@@ -75,7 +75,7 @@ namespace UseCase
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
                                                                           this.textBox});
             this.Name = "XmlViewForm";
-            this.Text = "XmlViewForm";
+            this.Text = "XML";
             this.ResumeLayout(false);
 
         }

@@ -4,38 +4,70 @@ namespace UseCase
 {
     public interface IElementVisitor
     {
-        void VisitFlowElement( IElement element );
+        void VisitStepElement( StepElement element );
+        void VisitIncludeElement( IncludeElement element );
     }
 
-    public interface IElement
+
+    public interface IElement : IItem
     {
         string Text
         {
             get;
         }
+
+        string TagName
+        {
+            get;
+        }
+
+        void AcceptVisitor( IElementVisitor visitor );        
+           
     }
+
+    public abstract class FlowElement : Item, IElement
+    {
+        public FlowElement( string text ) : base( text )
+        { }
+
+        public abstract void AcceptVisitor( IElementVisitor visitor );
+        public abstract string TagName{ get; }
+
+    }
+
 
 	/// <summary>
 	/// Summary description for FlowElement.
 	/// </summary>
-	public class FlowElement : IElement
+	public class StepElement : FlowElement
 	{
-		public FlowElement( string text )
-		{
-            this.text = text;			
-		}
+        public StepElement( string text ) : base( text )
+        {}
 
-        public string Text
+        public override string TagName
         {
-            get{ return this.text; }
+            get{ return "Step"; }
         }
 
-        public void AcceptVisitor( IElementVisitor visitor )
+        public override void AcceptVisitor( IElementVisitor visitor )
         {
-            visitor.VisitFlowElement( this );
+            visitor.VisitStepElement( this );
         }
-
-
-        private string text;
 	}
+
+    public class IncludeElement : FlowElement
+    {
+        public IncludeElement( string text ) : base( text )
+        {}
+
+        public override string TagName
+        {
+            get{ return "Include"; }
+        }
+
+        public override void AcceptVisitor( IElementVisitor visitor )
+        {
+            visitor.VisitIncludeElement( this );
+        }
+    }
 }
