@@ -17,14 +17,14 @@ namespace Ankh.RepositoryExplorer
     /// </summary>
     public class Controller
     {
-        public Controller( IContext context, 
-            RepositoryExplorerControl repositoryExplorer, Window window )
+        public Controller( IContext context )
         {
-            this.repositoryExplorer = repositoryExplorer;
-            this.enableBackgroundListing = repositoryExplorer.EnableBackgroundListing;
-
             this.context = context;
             this.window = window;
+
+            this.CreateRepositoryExplorer();
+
+            this.enableBackgroundListing = repositoryExplorer.EnableBackgroundListing;
 
             this.repositoryExplorer.EnableBackgroundListingChanged += 
                 new EventHandler( this.BackgroundListingChanged );
@@ -79,6 +79,14 @@ namespace Ankh.RepositoryExplorer
             }
 
             this.repositoryExplorer.RefreshNode( node );
+        }
+
+        /// <summary>
+        /// The EnvDTE.Window hosting the repository explorer.
+        /// </summary>
+        public EnvDTE.Window Window
+        {
+            get{ return this.window; }
         }
 
         /// <summary>
@@ -240,6 +248,26 @@ namespace Ankh.RepositoryExplorer
 
             this.context.ConfigLoader.SaveReposExplorerRoots(
                 (string[])list.ToArray(typeof(string)));
+        }
+
+        private void CreateRepositoryExplorer()
+        {   
+            Debug.WriteLine( "Creating repository explorer", "Ankh" );
+            object control = null;
+            this.window = this.context.DTE.Windows.CreateToolWindow( 
+                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl", 
+                "Repository Explorer", REPOSEXPLORERGUID, ref control );
+            
+            this.window.Visible = true;
+            this.window.Caption = "Repository Explorer";
+            
+            this.objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
+            
+            this.repositoryExplorer = new RepositoryExplorerControl();
+            this.objControl.HostUserControl( this.repositoryExplorer );
+            
+            System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
+                "Could not create tool window" );
         }
 
         /// <summary>
@@ -414,6 +442,11 @@ namespace Ankh.RepositoryExplorer
         private Hashtable directories;
         private IContext context;
         private Window window;
+        private AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl objControl;
+
+        
+        public const string REPOSEXPLORERGUID = 
+            "{1C5A739C-448C-4401-9076-5990300B0E1B}";
 
         private bool enableBackgroundListing = false;
 
