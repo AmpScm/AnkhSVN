@@ -54,7 +54,10 @@ namespace Ankh.Commands
 
                 // this *must* happen on the primary thread.
                 if ( !visitor.Cancelled )
-                    context.SolutionExplorer.RefreshSelection();
+                {
+                    if ( !context.ReloadSolutionIfNecessary() )
+                        context.SolutionExplorer.RefreshSelection();
+                }
             }
             finally
             {

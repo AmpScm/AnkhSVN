@@ -61,7 +61,10 @@ namespace Ankh.Commands
                 SwitchRunner runner = new SwitchRunner(path, url, revision,
                     recursive, context);
                 runner.Start( "Switching" );
-                context.SolutionExplorer.RefreshSelection();
+                if ( !context.ReloadSolutionIfNecessary() )
+                {
+                    context.SolutionExplorer.RefreshSelection();
+                }
             }
             finally
             {
