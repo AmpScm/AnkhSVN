@@ -101,6 +101,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "FlowElementOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ItemListUserControl.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -122,11 +127,6 @@
                 />
                 <File
                     RelPath = "UseCaseModel.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "XmlModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

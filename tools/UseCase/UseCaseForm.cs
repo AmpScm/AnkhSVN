@@ -24,34 +24,22 @@ namespace UseCase
             this.useCaseModel = new UseCaseModel();
 
             
-            this.useCaseModel.PostConditionsChanged +=
-                new EventHandler( this.ModelChanged );
-            this.useCaseModel.PreConditionsChanged +=
-                new EventHandler( this.ModelChanged );                   
-            this.useCaseModel.ActorsChanged += 
-               new EventHandler( this.ModelChanged );
-
-            this.useCaseModel.ElementsChanged +=
-                new EventHandler( this.ElementsChanged );
+            SubscribeToEvents();
 
             this.idTextBox.Leave += new EventHandler( 
                     this.IdChanged );
-		}
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+            this.stepRadioButton.Tag = new StepElementOption();
+            this.includeRadioButton.Tag = new IncludeElementOption();
+
+            this.elementTypeChosen( this.stepRadioButton, EventArgs.Empty );
+
+            this.isDirty = false;
+        }
+
+        
+
+		
 
 		#region Windows Form Designer generated code
 		/// <summary>
@@ -74,11 +62,22 @@ namespace UseCase
             this.moveElementDownButton = new System.Windows.Forms.Button();
             this.viewXmlButton = new System.Windows.Forms.Button();
             this.fileNameTextBox = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.browseButton = new System.Windows.Forms.Button();
             this.actorList = new UseCase.ItemListUserControl();
             this.preConditionsList = new UseCase.ItemListUserControl();
             this.postConditionsList = new UseCase.ItemListUserControl();
+            this.elementPanel = new System.Windows.Forms.Panel();
+            this.includeRadioButton = new System.Windows.Forms.RadioButton();
+            this.stepRadioButton = new System.Windows.Forms.RadioButton();
+            this.elementLabel = new System.Windows.Forms.Label();
+            this.mainMenu = new System.Windows.Forms.MainMenu();
+            this.fileItem = new System.Windows.Forms.MenuItem();
+            this.openItem = new System.Windows.Forms.MenuItem();
+            this.saveItem = new System.Windows.Forms.MenuItem();
+            this.exitItem = new System.Windows.Forms.MenuItem();
+            this.saveAsItem = new System.Windows.Forms.MenuItem();
+            this.newItem = new System.Windows.Forms.MenuItem();
+            this.elementPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // nameTextBox
@@ -121,8 +120,8 @@ namespace UseCase
             this.summaryTextBox.Location = new System.Drawing.Point(120, 176);
             this.summaryTextBox.Multiline = true;
             this.summaryTextBox.Name = "summaryTextBox";
-            this.summaryTextBox.Size = new System.Drawing.Size(144, 48);
-            this.summaryTextBox.TabIndex = 4;
+            this.summaryTextBox.Size = new System.Drawing.Size(272, 48);
+            this.summaryTextBox.TabIndex = 3;
             this.summaryTextBox.Text = "";
             this.summaryTextBox.Leave += new System.EventHandler(this.SummaryEntered);
             // 
@@ -143,7 +142,7 @@ namespace UseCase
             this.elementsView.SelectedImageIndex = -1;
             this.elementsView.ShowPlusMinus = false;
             this.elementsView.ShowRootLines = false;
-            this.elementsView.Size = new System.Drawing.Size(408, 96);
+            this.elementsView.Size = new System.Drawing.Size(312, 96);
             this.elementsView.TabIndex = 11;
             // 
             // addElementTextBox
@@ -152,7 +151,7 @@ namespace UseCase
             this.addElementTextBox.Location = new System.Drawing.Point(120, 352);
             this.addElementTextBox.Name = "addElementTextBox";
             this.addElementTextBox.Size = new System.Drawing.Size(280, 20);
-            this.addElementTextBox.TabIndex = 6;
+            this.addElementTextBox.TabIndex = 5;
             this.addElementTextBox.Text = "";
             // 
             // addElementButton
@@ -168,7 +167,7 @@ namespace UseCase
             // deleteElementButton
             // 
             this.deleteElementButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.deleteElementButton.Location = new System.Drawing.Point(536, 384);
+            this.deleteElementButton.Location = new System.Drawing.Point(568, 384);
             this.deleteElementButton.Name = "deleteElementButton";
             this.deleteElementButton.TabIndex = 17;
             this.deleteElementButton.Text = "Delete";
@@ -177,7 +176,7 @@ namespace UseCase
             // moveElementUpButton
             // 
             this.moveElementUpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.moveElementUpButton.Location = new System.Drawing.Point(536, 416);
+            this.moveElementUpButton.Location = new System.Drawing.Point(568, 416);
             this.moveElementUpButton.Name = "moveElementUpButton";
             this.moveElementUpButton.TabIndex = 18;
             this.moveElementUpButton.Text = "Up";
@@ -186,7 +185,7 @@ namespace UseCase
             // moveElementDownButton
             // 
             this.moveElementDownButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.moveElementDownButton.Location = new System.Drawing.Point(536, 448);
+            this.moveElementDownButton.Location = new System.Drawing.Point(568, 448);
             this.moveElementDownButton.Name = "moveElementDownButton";
             this.moveElementDownButton.TabIndex = 19;
             this.moveElementDownButton.Text = "Down";
@@ -211,16 +210,6 @@ namespace UseCase
             this.fileNameTextBox.TabIndex = 21;
             this.fileNameTextBox.Text = "";
             // 
-            // button1
-            // 
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(32, 600);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 20);
-            this.button1.TabIndex = 22;
-            this.button1.Text = "Save as...";
-            this.button1.Click += new System.EventHandler(this.saveButtonClicked);
-            // 
             // browseButton
             // 
             this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -236,7 +225,7 @@ namespace UseCase
             this.actorList.Location = new System.Drawing.Point(24, 72);
             this.actorList.Name = "actorList";
             this.actorList.Size = new System.Drawing.Size(456, 104);
-            this.actorList.TabIndex = 24;
+            this.actorList.TabIndex = 2;
             this.actorList.Title = "Actors";
             this.actorList.Delete += new UseCase.ItemRemovedEventHandler(this.DeleteItem);
             this.actorList.Add += new UseCase.ItemAddedEventHandler(this.AddItem);
@@ -246,7 +235,7 @@ namespace UseCase
             this.preConditionsList.Location = new System.Drawing.Point(24, 232);
             this.preConditionsList.Name = "preConditionsList";
             this.preConditionsList.Size = new System.Drawing.Size(456, 112);
-            this.preConditionsList.TabIndex = 25;
+            this.preConditionsList.TabIndex = 4;
             this.preConditionsList.Title = "Preconditions";
             this.preConditionsList.Delete += new UseCase.ItemRemovedEventHandler(this.DeleteItem);
             this.preConditionsList.Add += new UseCase.ItemAddedEventHandler(this.AddItem);
@@ -256,10 +245,94 @@ namespace UseCase
             this.postConditionsList.Location = new System.Drawing.Point(24, 480);
             this.postConditionsList.Name = "postConditionsList";
             this.postConditionsList.Size = new System.Drawing.Size(456, 112);
-            this.postConditionsList.TabIndex = 26;
+            this.postConditionsList.TabIndex = 6;
             this.postConditionsList.Title = "Postconditions";
             this.postConditionsList.Delete += new UseCase.ItemRemovedEventHandler(this.DeleteItem);
             this.postConditionsList.Add += new UseCase.ItemAddedEventHandler(this.AddItem);
+            // 
+            // elementPanel
+            // 
+            this.elementPanel.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                                       this.includeRadioButton,
+                                                                                       this.stepRadioButton});
+            this.elementPanel.Location = new System.Drawing.Point(440, 376);
+            this.elementPanel.Name = "elementPanel";
+            this.elementPanel.Size = new System.Drawing.Size(120, 96);
+            this.elementPanel.TabIndex = 27;
+            // 
+            // includeRadioButton
+            // 
+            this.includeRadioButton.Location = new System.Drawing.Point(8, 32);
+            this.includeRadioButton.Name = "includeRadioButton";
+            this.includeRadioButton.Size = new System.Drawing.Size(88, 24);
+            this.includeRadioButton.TabIndex = 1;
+            this.includeRadioButton.Text = "Include";
+            this.includeRadioButton.Click += new System.EventHandler(this.elementTypeChosen);
+            // 
+            // stepRadioButton
+            // 
+            this.stepRadioButton.Checked = true;
+            this.stepRadioButton.Location = new System.Drawing.Point(8, 8);
+            this.stepRadioButton.Name = "stepRadioButton";
+            this.stepRadioButton.Size = new System.Drawing.Size(48, 24);
+            this.stepRadioButton.TabIndex = 0;
+            this.stepRadioButton.TabStop = true;
+            this.stepRadioButton.Text = "Step";
+            this.stepRadioButton.Click += new System.EventHandler(this.elementTypeChosen);
+            // 
+            // elementLabel
+            // 
+            this.elementLabel.Location = new System.Drawing.Point(32, 352);
+            this.elementLabel.Name = "elementLabel";
+            this.elementLabel.Size = new System.Drawing.Size(80, 23);
+            this.elementLabel.TabIndex = 28;
+            this.elementLabel.Text = "label4";
+            // 
+            // mainMenu
+            // 
+            this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+                                                                                     this.fileItem});
+            // 
+            // fileItem
+            // 
+            this.fileItem.Index = 0;
+            this.fileItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+                                                                                     this.newItem,
+                                                                                     this.openItem,
+                                                                                     this.saveItem,
+                                                                                     this.saveAsItem,
+                                                                                     this.exitItem});
+            this.fileItem.Text = "&File";
+            this.fileItem.Popup += new System.EventHandler(this.FilePopup);
+            // 
+            // openItem
+            // 
+            this.openItem.Index = 1;
+            this.openItem.Text = "&Open...";
+            this.openItem.Click += new System.EventHandler(this.OpenItemClick);
+            // 
+            // saveItem
+            // 
+            this.saveItem.Index = 2;
+            this.saveItem.Text = "&Save...";
+            this.saveItem.Click += new System.EventHandler(this.SaveItemClick);
+            // 
+            // exitItem
+            // 
+            this.exitItem.Index = 4;
+            this.exitItem.Text = "&Exit";
+            // 
+            // saveAsItem
+            // 
+            this.saveAsItem.Index = 3;
+            this.saveAsItem.Text = "Save as...";
+            this.saveAsItem.Click += new System.EventHandler(this.SaveAsItemClick);
+            // 
+            // newItem
+            // 
+            this.newItem.Index = 0;
+            this.newItem.Text = "New";
+            this.newItem.Click += new System.EventHandler(this.NewItemClick);
             // 
             // UseCaseForm
             // 
@@ -267,11 +340,12 @@ namespace UseCase
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(656, 635);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.elementLabel,
+                                                                          this.elementPanel,
                                                                           this.postConditionsList,
                                                                           this.preConditionsList,
                                                                           this.actorList,
                                                                           this.browseButton,
-                                                                          this.button1,
                                                                           this.fileNameTextBox,
                                                                           this.viewXmlButton,
                                                                           this.moveElementDownButton,
@@ -286,8 +360,10 @@ namespace UseCase
                                                                           this.label2,
                                                                           this.label1,
                                                                           this.nameTextBox});
+            this.Menu = this.mainMenu;
             this.Name = "UseCaseForm";
-            this.Text = "UseCaseForm";
+            this.Text = "Use case";
+            this.elementPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -298,28 +374,97 @@ namespace UseCase
             Application.Run( new UseCaseForm() );
         }
 
-             
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+
+            this.UnsubscribeFromEvents();
+        }
+
+        private void SubscribeToEvents()
+        {
+            this.useCaseModel.PostConditionsChanged +=
+                new EventHandler( this.ModelChanged );
+            this.useCaseModel.PreConditionsChanged +=
+                new EventHandler( this.ModelChanged );                   
+            this.useCaseModel.ActorsChanged += 
+                new EventHandler( this.ModelChanged );
+
+            this.useCaseModel.Changed += 
+                new EventHandler( this.Changed );
+
+            this.useCaseModel.ElementsChanged +=
+                new EventHandler( this.ElementsChanged );
+
+            this.useCaseModel.AtomsChanged +=
+                new EventHandler( this.AtomsChanged );
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            this.useCaseModel.PostConditionsChanged -=
+                new EventHandler( this.ModelChanged );
+            this.useCaseModel.PreConditionsChanged -=
+                new EventHandler( this.ModelChanged );                   
+            this.useCaseModel.ActorsChanged -= 
+                new EventHandler( this.ModelChanged );
+
+            this.useCaseModel.ElementsChanged -=
+                new EventHandler( this.ElementsChanged );
+
+            this.useCaseModel.AtomsChanged -=
+                new EventHandler( this.AtomsChanged );
+        }
+
+        private void RefreshFromModel()
+        {
+            this.ModelChanged( this.useCaseModel, EventArgs.Empty );
+            this.ElementsChanged( this.useCaseModel, EventArgs.Empty );
+            this.AtomsChanged( this.useCaseModel, EventArgs.Empty );
+
+        }
+
+        private void Changed( object sender, EventArgs e )
+        {
+            this.isDirty = true;
+        }
+        
+        private void AtomsChanged( object sender, EventArgs e )
+        {
+            this.nameTextBox.Text = this.useCaseModel.Name;
+            this.idTextBox.Text = this.useCaseModel.Id;
+            this.summaryTextBox.Text = this.useCaseModel.Summary;
+
+        }
 
         private void ModelChanged( object sender, EventArgs e )
         {
             this.actorList.Items = this.useCaseModel.Actors;
             this.postConditionsList.Items = this.useCaseModel.PostConditions;
             this.preConditionsList.Items = this.useCaseModel.PreConditions;
+
         }
 
         private void ElementsChanged( object sender, EventArgs e )
         {
             this.elementsView.Nodes.Clear();
-            int i = 1;
-            foreach( IItem element in this.useCaseModel.Elements )
-            {
-                TreeNode node = new TreeNode( 
-                    String.Format( "{0:0#}: {1}", i, element ) );
-                node.Tag = element;
-                this.elementsView.Nodes.Add( node );
+            ElementVisitor visitor = new ElementVisitor( this.elementsView.Nodes );
 
-                ++i;
-            }
+            IElement[] elts = this.useCaseModel.Elements;
+            
+            foreach( IElement element in elts )
+                element.AcceptVisitor( visitor );
+
         }
 
 
@@ -361,8 +506,10 @@ namespace UseCase
         {
             if ( this.addElementTextBox.Text.Trim() != string.Empty )
             {
-                this.useCaseModel.AppendElement( 
-                    new FlowElement( this.addElementTextBox.Text ) );
+                IElement element = this.selectedOption.CreateElement(
+                    this.addElementTextBox.Text );
+
+                this.useCaseModel.AppendElement( element );
                 this.addElementTextBox.Text = string.Empty;
             }
                 
@@ -436,20 +583,165 @@ namespace UseCase
         {
             using( SaveFileDialog sfd = new SaveFileDialog() )
             {
-                sfd.DefaultExt = ".xml";
+                sfd.Filter = "XML Files (*.xml)|*.xml";
+                sfd.FilterIndex = 1;
+                sfd.RestoreDirectory = true;
+
                 if ( sfd.ShowDialog() == DialogResult.OK )
                     fileNameTextBox.Text = sfd.FileName;
             }      
         }
 
-        private void saveButtonClicked(object sender, System.EventArgs e)
+        private void elementTypeChosen(object sender, System.EventArgs e)
         {
-//            XmlModel model = new XmlModel( this.useCaseModel );
-//            model.Xsl = "UseCaseXSL1.xsl";
-//            model.Save( fileNameTextBox.Text );        
+            RadioButton btn = (RadioButton)sender;
+            this.selectedOption = (IFlowElementOption)btn.Tag;
+
+            elementLabel.Text = this.selectedOption.LabelText;
         }
 
+        private void OpenItemClick(object sender, System.EventArgs e)
+        {
+            using( OpenFileDialog ofd = new OpenFileDialog() )
+            {
+                ofd.Filter = "XML Files (*.xml)|*.xml";
+                if ( ofd.ShowDialog() == DialogResult.OK )
+                {
+                    this.UnsubscribeFromEvents();
+                    this.useCaseModel = UseCaseModel.FromFile( ofd.FileName ); 
+                    this.filename = ofd.FileName;
+                    this.Text += " " + ofd.FileName;
+                    this.SubscribeToEvents();
+                    this.RefreshFromModel();
+
+                    this.isDirty = false;
+                }
+            }
+        }
+
+        private void SaveItemClick(object sender, System.EventArgs e)
+        {
+            Save();
+        
+        }
+
+        private bool Save()
+        {
+            if( this.filename == null )
+                return SaveAs();
+            else
+            {
+                this.useCaseModel.Save( this.filename, "" );
+                return true;
+            }
+        }
+
+        private void SaveAsItemClick(object sender, System.EventArgs e)
+        {
+            this.SaveAs();
+        }
+
+        private void NewItemClick(object sender, System.EventArgs e)
+        {
+            if ( this.isDirty )
+            {
+                DialogResult dr = MessageBox.Show( "Save now?", "Use case not saved", 
+                    MessageBoxButtons.YesNoCancel );
+                if ( dr == DialogResult.Cancel )
+                    return;
+                else if ( dr == DialogResult.Yes && !this.Save() )
+                    return;
+            }
+
+            this.UnsubscribeFromEvents();
+            this.useCaseModel = new UseCaseModel();
+            this.SubscribeToEvents();
+            this.RefreshFromModel();
+        }
+
+        private bool SaveAs()
+        {
+            using( SaveFileDialog sfd = new SaveFileDialog() )
+            {
+                sfd.DefaultExt = ".xml";
+                sfd.Filter = "XML files (*.xml)|*.xml";
+
+                if ( this.idTextBox.Text.Trim() != string.Empty )
+                    sfd.FileName = this.idTextBox.Text + ".xml";
+
+                if( sfd.ShowDialog() == DialogResult.OK )
+                {
+                    this.useCaseModel.Save( sfd.FileName, "" );
+                    this.filename = sfd.FileName;
+
+                    this.Text += " " + this.filename;
+
+                    this.isDirty = false;
+
+                    return true;
+                }
+                else
+                    return false;
+            }
+
+        }
+
+        private void FilePopup(object sender, System.EventArgs e)
+        {
+            if ( this.isDirty )
+                this.saveItem.Enabled = true;
+            else
+                this.saveItem.Enabled = false;
+
+        }
+
+        #region private class ElementVisitor : IElementVisitor
+        private class ElementVisitor : IElementVisitor
+        {
+            public ElementVisitor( TreeNodeCollection coll )
+            {
+                this.coll = coll;
+                this.count = 1;
+            }
+
+            public void VisitStepElement(UseCase.StepElement element)
+            {
+                TreeNode node = new TreeNode( string.Format( "{0:0#}: {1}", 
+                    this.count, element.Text ) );
+                node.Tag = element;
+                this.coll.Add( node );      
+ 
+                this.count++;
+            }
+
+            public void VisitIncludeElement(UseCase.IncludeElement element)
+            {
+                TreeNode node = new TreeNode( String.Format( "{0:0#}: <Include '{1}'>", 
+                    this.count, element.Text ) );
+                node.Tag = element;
+
+                this.coll.Add( node );   
+         
+                this.count++;
+            }
+
+            public TreeNodeCollection Nodes
+            {
+                get{ return this.coll; }
+            }
+
+
+            private TreeNodeCollection coll;
+            private int count;
+        }
+        #endregion
+
+        #region private data
         private UseCaseModel useCaseModel;
+        private bool isDirty;
+
+        private IFlowElementOption selectedOption;
+        private string filename = null;
 
         private XmlViewForm xmlViewForm;
         private System.Windows.Forms.Label label1;
@@ -466,18 +758,25 @@ namespace UseCase
         private System.Windows.Forms.TextBox summaryTextBox;
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.TextBox fileNameTextBox;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button browseButton;
         private UseCase.ItemListUserControl actorList;
         private UseCase.ItemListUserControl preConditionsList;
         private UseCase.ItemListUserControl postConditionsList;
+        private System.Windows.Forms.Panel elementPanel;
+        private System.Windows.Forms.RadioButton stepRadioButton;
+        private System.Windows.Forms.RadioButton includeRadioButton;
+        private System.Windows.Forms.Label elementLabel;
+        private System.Windows.Forms.MainMenu mainMenu;
+        private System.Windows.Forms.MenuItem fileItem;
+        private System.Windows.Forms.MenuItem openItem;
+        private System.Windows.Forms.MenuItem saveItem;
+        private System.Windows.Forms.MenuItem exitItem;
+        private System.Windows.Forms.MenuItem saveAsItem;
+        private System.Windows.Forms.MenuItem newItem;
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-
-
-
-        
+        #endregion
 	}
 }

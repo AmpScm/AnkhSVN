@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Xml;
 using System.Text;
+using System.IO;
 
 namespace UseCase
 {
@@ -17,6 +18,9 @@ namespace UseCase
             this.text = text;
             this.node = node;
         }
+
+        public Item( string text ) : this( text, null )
+        {}
 
         public override string ToString()
         {
@@ -57,11 +61,21 @@ namespace UseCase
             this.doc = new XmlDocument();  
             this.PopulateDocument();
 
-            this.ActorsChanged += new EventHandler( this.OnChanged );
-            this.PreConditionsChanged += new EventHandler( this.OnChanged );
-            this.PostConditionsChanged += new EventHandler( this.OnChanged );
-            this.ElementsChanged += new EventHandler( this.OnChanged );
-            this.AtomsChanged += new EventHandler( this.OnChanged );
+            this.SetupEventHandlers();
+        }
+
+        protected UseCaseModel( XmlDocument doc )
+        {
+            this.doc = doc;
+            this.SetupEventHandlers();
+        }
+
+        public static UseCaseModel FromFile( string filename )
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load( filename );
+            
+            return new UseCaseModel( doc );
         }
 
         public string AsXml
@@ -69,7 +83,7 @@ namespace UseCase
             get
             { 
                 StringBuilder builder = new StringBuilder();
-                this.FormatXml( this.doc, builder, 0 );
+                this.FormatXml( this.doc.DocumentElement, builder, 0 );
                 return builder.ToString();
             }
         }
@@ -87,7 +101,7 @@ namespace UseCase
 
         public IItem[] PostConditions
         {
-            get { return this.GetItems( "/UseCase/MainFlow/Preconditions/Precondition" ); }
+            get { return this.GetItems( "/UseCase/MainFlow/Postconditions/Postcondition" ); }
         }
 
         public string Name
@@ -120,9 +134,9 @@ namespace UseCase
             }
         }
 
-        public IItem[] Elements
+        public IElement[] Elements
         {
-            get{ return this.GetItems( "/UseCase/MainFlow/FlowElements/FlowElement" ); }
+            get{ return this.GetElements(); }
         }
 
         public void AddActor( string actorId )
@@ -164,10 +178,11 @@ namespace UseCase
 
         public void AppendElement( IElement element )
         {
-            XmlNode step = this.doc.CreateElement( "Step" );
-            step.InnerText = element.Text;
+            NodeCreatorVisitor visitor = new NodeCreatorVisitor( this.doc );
+            element.AcceptVisitor( visitor );
+
             XmlNode node = this.doc["UseCase"]["MainFlow"]["FlowElements"].AppendChild( 
-                    this.doc.CreateElement( "FlowElement" ) ).AppendChild( step );
+                this.doc.CreateElement( "FlowElement" ) ).AppendChild( visitor.Node );
 
             this.OnElementsChanged();
         }
@@ -199,11 +214,16 @@ namespace UseCase
             parent.InsertAfter( node, ((Item)other).Node );
         }
 
-  
-        
+        public void Save( string filename, string xsl )
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat( @"<?xml version='1.0'?>
+<?xml-stylesheet type='text/xsl' href='{0}'?>{1}", xsl, Environment.NewLine );
+            this.FormatXml( this.doc.DocumentElement, builder, 0 );
 
-
-        
+            using( StreamWriter writer = new StreamWriter( filename ) )
+                writer.Write( builder.ToString() );
+        }
 
         protected virtual void OnAtomsChanged()
         {
@@ -241,6 +261,42 @@ namespace UseCase
         {
             if ( this.Changed != null )
                 this.Changed( sender, e );
+        }
+
+        private void SetupEventHandlers()
+        {
+            this.ActorsChanged += new EventHandler( this.OnChanged );
+            this.PreConditionsChanged += new EventHandler( this.OnChanged );
+            this.PostConditionsChanged += new EventHandler( this.OnChanged );
+            this.ElementsChanged += new EventHandler( this.OnChanged );
+            this.AtomsChanged += new EventHandler( this.OnChanged );
+        }
+
+        private IElement[] GetElements()
+        {
+            XmlNodeList list = this.doc.SelectNodes( 
+                "/UseCase/MainFlow/FlowElements/FlowElement/*" );
+            ArrayList elements = new ArrayList();
+            foreach( XmlNode node in list )
+            {
+                FlowElement element = null;
+                switch( node.Name )
+                {
+                    case "Step":
+                        element = new StepElement( node.InnerText );
+                        break;
+                    case "Include":
+                        element = new IncludeElement( node.Attributes["useCaseID"].InnerText );
+                        break;
+                    default:
+                        throw new Exception( "SHould not happen" );
+                }
+
+                element.Node = node;     
+                elements.Add( element );
+            }
+
+            return (IElement[])elements.ToArray( typeof(IElement) );
         }
 
         private void AddItem( string parentPath, string nodeName, string value )
@@ -284,7 +340,8 @@ namespace UseCase
                 return;
 
             const int INDENT = 4;
-            text.AppendFormat( "{0}<{1}>", new String( ' ', INDENT*level), node.Name );
+            text.AppendFormat( "{0}<{1}{2}>", new String( ' ', INDENT*level), node.Name,
+                this.FormatAttributes( node ) );
 
             if ( (node.ChildNodes.Count == 1 && node.ChildNodes[0] is XmlText) ||
                 node.ChildNodes.Count == 0 )
@@ -301,6 +358,46 @@ namespace UseCase
                     new String( ' ', INDENT*level), node.Name, Environment.NewLine );
             }           
 
+        }
+
+        private string FormatAttributes( XmlNode node )
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach( XmlAttribute attr in node.Attributes )
+                builder.AppendFormat( " {0}='{1}'", attr.Name, attr.Value );
+            
+            return builder.ToString();
+        }
+
+
+        private class NodeCreatorVisitor : IElementVisitor
+        {
+            public NodeCreatorVisitor( XmlDocument doc )
+            {
+                this.doc = doc;
+            }
+
+            public void VisitStepElement( StepElement element)
+            {
+                this.node = doc.CreateElement( "Step" );
+                node.InnerText = element.Text;
+            }
+            public void VisitIncludeElement( IncludeElement element)
+            {
+                this.node = doc.CreateElement( "Include" );
+                XmlAttribute attr = doc.CreateAttribute( "useCaseID" );
+                attr.Value = element.Text;
+                this.node.Attributes.Append( attr );            
+            }
+
+            public XmlNode Node
+            {
+                get{ return this.node; }
+            }
+
+            private XmlNode node;
+            private XmlDocument doc;
+            
         }
 
         private XmlDocument doc;
