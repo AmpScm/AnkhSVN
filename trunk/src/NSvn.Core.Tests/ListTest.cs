@@ -28,18 +28,22 @@ namespace NSvn.Core.Tests
             string list = this.RunCommand( "svn", "list -v " + this.ReposUrl );           
 
             // clean out whitespace
-            string[] entries = list.Trim().Split( '\n' );
+            string[] entries = Regex.Split( list, @"\r\n" );
+            //string[] entries = list.Trim().Split( '\n' );
             Hashtable ht = new Hashtable();
             foreach( string e in entries)
-            {
-                Entry ent = new Entry( e );
-                ht[ ent.Path ] = ent;
+            { 
+                if ( e != String.Empty )
+                {
+                    Entry ent = new Entry( e );
+                    ht[ ent.Path ] = ent;
+                }
             }
 
             DirectoryEntry[] dirents = Client.List( this.ReposUrl, Revision.Head, false, 
                 new ClientContext() );
 
-            Assertion.AssertEquals( "Wrong number of entries returned", entries.Length, 
+            Assertion.AssertEquals( "Wrong number of entries returned", ht.Count, 
                 dirents.Length );
 
             foreach( DirectoryEntry ent in dirents )
@@ -73,7 +77,8 @@ namespace NSvn.Core.Tests
                 System.IFormatProvider format =
                     new System.Globalization.CultureInfo("en-US", true);
 
-                this.time = DateTime.ParseExact( match.Groups[5].ToString(), "MMM' 'dd' 'HH':'mm", 
+                string date = match.Groups[5].ToString();
+                this.time = DateTime.ParseExact( date, "MMM' 'dd'  'yyyy", 
                     format );
                 this.path = match.Groups[6].ToString();                
             }
@@ -87,9 +92,13 @@ namespace NSvn.Core.Tests
                 Assertion.AssertEquals( "Size differs", this.size, 
                     ent.Size );
 
-                long delta =  Math.Abs( this.time.Ticks - ent.Time.ToLocalTime().Ticks );
+                // strip off time portion
+                DateTime entryTime = ent.Time.ToLocalTime();
+                entryTime = entryTime - entryTime.TimeOfDay;
+
+                long delta =  Math.Abs( this.time.Ticks - entryTime.Ticks );
                 Assertion.Assert( "Time differs: " + this.time + " vs " + 
-                    ent.Time.ToLocalTime() + " Delta is " + delta, 
+                    entryTime + " Delta is " + delta, 
                     delta < TICKS_PER_MINUTE );
                 Assertion.AssertEquals( "Last author differs", this.author, ent.LastAuthor );
             }
@@ -108,7 +117,7 @@ namespace NSvn.Core.Tests
             private DateTime time;
             private string path;
             private static readonly Regex Reg = new Regex(
-                @"(\w)\s+(\d+)\s+(\w+)\s+(\d+)\s+(\w+\s\d+\s\d\d:\d\d)\s+(\S+)" );
+                @"(\w)\s+(\d+)\s+(\w+)\s+(\d+)\s+(\w+\s\d+\s+\d{4})\s+(\S+)" );
         }
     }
 }
