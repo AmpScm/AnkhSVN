@@ -36,10 +36,34 @@ namespace NSvn.Core.Tests
                 output );
         }
 
-        [Ignore("We need to implement this" )]
         [Test]
         public void TestCommitWithLogMessage()
         {
+            this.filepath = Path.Combine( this.WcPath, "Form.cs" );
+            using ( StreamWriter w = new StreamWriter( filepath ) )
+                w.Write( "Moo" );
+            ClientContext ctx = new ClientContext();
+            ctx.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
+            CommitInfo info = Client.Commit( new string[]{ this.WcPath }, false, ctx );
+
+            Assertion.AssertEquals( "Wrong username", Environment.UserName, info.Author );
+            string output = this.RunCommand( "svn", "log " + this.filepath + " -r HEAD" );
+            Assertion.Assert( "Log message not set", 
+                output.IndexOf( "Moo is the log message" ) >= 0 );
+
         } 
+
+        private string LogMessageCallback( CommitItem[] items )
+        {
+            Assertion.AssertEquals( "Wrong number of commit items", 1, items.Length );
+            Assertion.Assert( "Wrong path", items[0].Path.IndexOf( 
+                this.filepath.Replace( "\\", "/" ) ) >= 0 );
+            Assertion.AssertEquals( "Wrong kind", NodeKind.File, items[0].Kind );
+            Assertion.AssertEquals( "Wrong revision", 1, items[0].Revision );
+
+            return "Moo is the log message";
+        }
+
+        private string filepath;
 	}
 }
