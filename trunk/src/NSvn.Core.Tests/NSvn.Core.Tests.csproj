@@ -15,7 +15,7 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Library"
+                OutputType = "Exe"
                 RootNamespace = "NSvn.Core.Tests"
                 StartupObject = ""
             >
@@ -69,7 +69,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
@@ -82,12 +82,26 @@
                     AssemblyName = "nunit.framework"
                     HintPath = "I:\Program Files\NUnit V2.0\bin\nunit.framework.dll"
                 />
+                <Reference
+                    Name = "SharpZipLib"
+                    AssemblyName = "SharpZipLib"
+                    HintPath = "bin\Debug\SharpZipLib.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "repos.zip"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TestBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
