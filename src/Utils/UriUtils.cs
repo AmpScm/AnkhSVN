@@ -54,6 +54,8 @@ namespace Utils
             return components;
         }
 
+        public static readonly Regex ValidUrl = new Regex(@"\S*?://\S+");
+
         private static readonly Regex URLPARSE = 
             new Regex(@"(?'host'[^:]+://[^/]*)/(?'rest'.*)", 
             RegexOptions.IgnoreCase);
