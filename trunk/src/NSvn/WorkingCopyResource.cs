@@ -78,7 +78,7 @@ namespace NSvn
         /// <param name="recursive">Whether subitems should be recursively reverted</param>
         public void Revert( bool recursive )
         {
-            Client.Revert( this.Path, recursive, this.ClientContext );          
+            Client.Revert( new string[]{this.Path}, recursive, this.ClientContext );          
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace NSvn
         /// <param name="recursive">Whether subitems should be reverted recursively</param>
         public static void Revert( WorkingCopyResource resource, bool recursive )
         {
-            Client.Revert( resource.Path, recursive, resource.ClientContext);     
+            Client.Revert( new string[]{resource.Path}, recursive, resource.ClientContext);     
         }    
 
         /// <summary>
