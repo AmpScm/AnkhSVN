@@ -39,8 +39,36 @@
         <nant buildfile="WiX\NSvn.msm.build" target="build-WiX" inheritall="true" />
     </target>
     
-    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm">
-        <nant buildfile="Ankh.UI/Ankh.UI.build" target="build-WiX" inheritall="true"/>
+    <target name="build-apr-iconv.wxs">
+        <exec workingdir="." program="candle.exe"
+            commandline="-nologo -w0 -dsvndir=${svndir} WiX\apr-iconv.wxs -out ${installsource.dir}\apr-iconv.wixobj" />
+    </target>
+    
+    <target name="wix-MSI">
+        <property name="installsource.fullpath" value="${path::get-full-path(installsource.dir)}" />
+        
+        <exec workingdir="${installsource.dir}" program="candle.exe"
+            commandline="-nologo -w0 ..\WiX\Ankh.msi.wxs -dinstalldir=${installsource.fullpath} -out Ankh.msi.wixobj" />
+            
+        <!-- Build the Ankh msi -->
+        <exec workingdir="${installsource.dir}" program="light.exe"
+            commandline="-nologo -w0 Ankh.msi.wixobj -out Ankh.msi" />
+        
+        <!-- Build the NSvn-dev msi -->
+<!--            <exec workingdir="${installsource.dir}" program="light.exe"
+        commandline="-nologo -w0 Ankh.msi.wixobj -out NSvn-dev.msi" />-->
+    </target>
+    
+    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm, build-apr-iconv.wxs">
+        <nant buildfile="Ankh.UI\Ankh.UI.build" target="build-WiX" inheritall="true"/>
+        <nant buildfile="Ankh\Ankh.build" target="build-WiX" inheritall="true" />
+        <nant buildfile="lib\lib.build" target="build-WiX" inheritall="true" />
+        <nant buildfile="ReposInstaller\ReposInstaller.build" target="build-WiX" inheritall="true" />
+        <nant buildfile="Utils\Utils.build" target="build-WiX" inheritall="true" />
+        
+        <nant buildfile="WiX\Ankh.msm.build" target="build-WiX" inheritall="true" />
+        
+        <call target="wix-MSI" />
     </target>
     
     <target name="clean" description="Cleans all output directories">
@@ -202,7 +230,7 @@
                 <include name="*.dll"/>
             </fileset>
         </copy>
-        <nunit2 failonerror="false" haltonerror="false">
+        <nunit2 failonerror="true" haltonerror="false">
             <formatter type="Plain" />
             <test assemblyname="${build.dir}/NSvn.Core.Tests.dll"/>
         </nunit2>
