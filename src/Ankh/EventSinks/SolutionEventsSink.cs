@@ -61,7 +61,7 @@ namespace Ankh.EventSinks
         {
             try
             {
-                this.Context.SolutionExplorer.SyncWithTreeView();
+                this.Context.SolutionExplorer.SyncAll();
             }   
             catch( Exception ex )
             {
