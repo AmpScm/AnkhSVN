@@ -212,7 +212,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonR
     HandleError( svn_client_commit( &commitInfoPtr, aprArrayTargets, nonRecursive, 
         context->ToSvnContext( pool ), pool ) );
 
-    if ( commitInfoPtr != 0 )
+    if ( commitInfoPtr->revision != SVN_INVALID_REVNUM )
         return new CommitInfo( commitInfoPtr );
     else 
         return 0;
