@@ -157,6 +157,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ClientCertPassphraseDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClientCertPassphraseDialog.resx"
+                    DependentUpon = "ClientCertPassphraseDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "CommitDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"

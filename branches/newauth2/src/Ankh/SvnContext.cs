@@ -29,6 +29,13 @@ namespace Ankh
             this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustFileProvider() );
             this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustPromptProvider(
                 new SslServerTrustPromptDelegate( this.SslServerTrustPrompt ) ) );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertPasswordFileProvider() );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertPasswordPromptProvider(
+                    new SslClientCertPasswordPromptDelegate( 
+                        this.ClientCertificatePasswordPrompt ) ) );
+
 
         }
         /// <summary>
@@ -168,6 +175,26 @@ namespace Ankh
 
                 // anything else means trust temporarily
                 return cred;
+            }
+        }
+
+        /// <summary>
+        /// Prompt the user for a passphrase for a client cert.
+        /// </summary>
+        /// <returns></returns>
+        private SslClientCertificatePasswordCredential ClientCertificatePasswordPrompt()
+        {
+            using( ClientCertPassphraseDialog dialog = new ClientCertPassphraseDialog() )
+            {
+                if ( dialog.ShowDialog() == DialogResult.OK )
+                {
+                    SslClientCertificatePasswordCredential cred = new 
+                        SslClientCertificatePasswordCredential();
+                    cred.Password = dialog.Passphrase;
+                    return cred;
+                }
+                else
+                    return null;
             }
         }
         
