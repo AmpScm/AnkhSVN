@@ -114,6 +114,7 @@ namespace Ankh
             // restore the pre-modal state.
             this.commitDialog.ButtonsEnabled = false;
             this.commitDialogWindow.Visible = originalVisibility;
+            this.commitDialog.CommitItems = new object[]{};
 
             return ctx;
         }

@@ -190,6 +190,7 @@ namespace Ankh.UI
         public void Reset()
         {
             this.logMessageBox.Text = "";
+            this.CommitItems = new object[]{};
         }
 
         private void ItemChecked(object sender, TreeViewEventArgs e )
