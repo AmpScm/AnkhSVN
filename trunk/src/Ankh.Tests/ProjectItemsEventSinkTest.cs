@@ -81,7 +81,7 @@ namespace Ankh.Tests
         [Test]
         public void TestItemAutoAddedTwice()
         {
-            ContextBase ctx = CreateContextAndLoad();
+            ContextBase ctx = this.CreateContextAndLoad();
 
             string path = Path.Combine( this.WcPath, "File.cs" );
             File.CreateText( path ).Close();  
