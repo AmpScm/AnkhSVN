@@ -17,7 +17,7 @@ namespace Ankh.Commands
             {
                 context.StartOperation( "Opening" );
 
-                INode node = (INode)context.RepositoryExplorer.SelectedNode;
+                INode node = context.RepositoryExplorer.SelectedNode;
 
                 CatRunner runner = new CatRunner(context, node.Name, node.Revision, node.Url);
                 runner.Start( "Retrieving file" );

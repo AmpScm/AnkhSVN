@@ -7,6 +7,7 @@ using System.Collections;
 using System.Diagnostics;
 using Ankh.Solution;
 using NSvn.Core;
+using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
@@ -37,10 +38,42 @@ namespace Ankh.Commands
         {
             try
             {
+                context.StartOperation( "Updating" );
+
+                if ( this.Shift )
+                {
+                    IList resources = context.SolutionExplorer.GetSelectionResources( true,
+                        new ResourceFilterCallback(CommandBase.VersionedFilter) );
+                
+                    this.form = new Form();
+                    this.tree = new PathSelectionTreeView();
+                    form.Controls.Add( tree );
+                    tree.Dock = DockStyle.Top;
+                    tree.Height = 400;
+                    tree.GetPathInfo +=new GetPathInfoDelegate(tree_GetPathInfo);
+                    tree.UrlPaths = false;
+                    tree.Items = resources;
+
+                    this.check = new CheckBox();
+                    this.check.Text = "Recursive";
+                    form.Controls.Add( check );
+                    form.Height = 500;
+                    check.Top = 420;
+                    check.CheckedChanged += new EventHandler(check_CheckedChanged);
+
+                    if ( form.ShowDialog() != DialogResult.Ignore )
+                    {
+                        MessageBox.Show( String.Join( "\r\n", SvnItem.GetPaths( tree.CheckedItems ) ) );
+                        return;
+                    }
+                }
+                else if ( !this.Shift )
+                    return;
+                    
+
                 // save all files
                 context.DTE.Documents.SaveAll();
 
-                context.StartOperation( "Updating" );
                 // we assume by now that all items are working copy resources.
 
                 // run this on another thread
@@ -53,6 +86,10 @@ namespace Ankh.Commands
                 context.EndOperation();
             }
         }    
+
+        private CheckBox check;
+        private Form form;
+        private PathSelectionTreeView tree;
         #endregion
 
         #region UpdateVisitor
@@ -99,7 +136,7 @@ namespace Ankh.Commands
                 }
 
                 // update all projects whose folder is not under the solution root
-                foreach( TreeNode n in node.Children )
+                foreach( Ankh.Solution.TreeNode n in node.Children )
                 {
                     ProjectNode pNode = n as ProjectNode;
 
@@ -120,6 +157,18 @@ namespace Ankh.Commands
             private ArrayList resources = new ArrayList();
         }            
         #endregion
+
+        private void check_CheckedChanged(object sender, EventArgs e)
+        {
+            this.tree.Recursive = this.check.Checked;
+        }
+
+        private void tree_GetPathInfo(object sender, GetPathInfoEventArgs args)
+        {
+            SvnItem item = (SvnItem)args.Item;
+            args.IsDirectory = item.IsDirectory;
+            args.Path = item.Path;
+        }
     }
 }
 
