@@ -17,9 +17,14 @@ namespace NSvn
                 this->author = StringHelper( info->author );
                 try
                 {
-                    this->date = DateTime::ParseExact( StringHelper(info->date),  
-                        "yyyy-MM-dd\\THH:mm:ss.ffffff\\Z", 
-                        System::Globalization::CultureInfo::InvariantCulture );
+                    if ( info->date )
+                    {
+                        this->date = DateTime::ParseExact( StringHelper(info->date),  
+                            "yyyy-MM-dd\\THH:mm:ss.ffffff\\Z", 
+                            System::Globalization::CultureInfo::InvariantCulture );
+                    }
+                    else
+                        this->date = DateTime::MinValue;
                 }
                 catch( System::FormatException* )
                 {
