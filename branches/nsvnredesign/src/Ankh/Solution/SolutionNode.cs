@@ -4,6 +4,7 @@ using System.IO;
 
 using EnvDTE;
 using NSvn.Core;
+using System.Collections;
 
 namespace Ankh.Solution
 {
@@ -30,11 +31,16 @@ namespace Ankh.Solution
             this.FindChildren();
         }   
     
-        public override void GetResources( System.Collections.ArrayList list, bool getChildItems )
+        public override void GetResources( IList list, 
+            bool getChildItems, ResourceFilterCallback filter )
         {
-            list.Add( this.solutionFolder );
-            list.Add( this.solutionFile );
-            this.GetChildResources(list, getChildItems);
+            if ( filter == null || filter( this.solutionFolder ) )
+                list.Add( this.solutionFolder );
+
+            if ( filter == null || filter( this.solutionFile ) )
+                list.Add( this.solutionFile );
+
+            this.GetChildResources(list, getChildItems, filter );
         }
 
         

@@ -20,11 +20,15 @@ namespace Ankh.Solution
             this.FindChildren();
         }
 
-        public override void GetResources( System.Collections.ArrayList list, bool getChildItems )
+        public override void GetResources( System.Collections.IList list, 
+            bool getChildItems, ResourceFilterCallback filter )
         {
-            list.Add( this.projectFile );
-            list.Add (this.projectFolder );
-            this.GetChildResources( list, getChildItems );
+            if ( filter == null || filter( this.projectFolder ) )
+                list.Add (this.projectFolder );
+            if ( filter == null || filter( this.projectFile ) )
+                list.Add( this.projectFile );
+
+            this.GetChildResources( list, getChildItems, filter );
         }
 
 

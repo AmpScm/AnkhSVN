@@ -148,7 +148,8 @@ namespace Ankh.Solution
         /// to the list.
         /// </summary>
         /// <param name="list"></param>
-        public abstract void GetResources( ArrayList list, bool getChildItems );
+        public abstract void GetResources( IList list, bool getChildItems, 
+            ResourceFilterCallback filter );
         
 
        /// <summary>
@@ -336,12 +337,13 @@ namespace Ankh.Solution
             return statusMerger.CurrentStatus;
         }
 
-        protected void GetChildResources(System.Collections.ArrayList list, bool getChildItems)
+        protected void GetChildResources(System.Collections.IList list, bool getChildItems,
+            ResourceFilterCallback filter )
         {
             if ( getChildItems )
             {
                 foreach( TreeNode node in this.Children )
-                    node.GetResources( list, getChildItems );
+                    node.GetResources( list, getChildItems, filter );
             }
         }
 

@@ -18,6 +18,7 @@ using Swf = System.Windows.Forms;
 
 namespace Ankh.Solution
 {
+
     /// <summary>
     /// Represents the Solution Explorer window in the VS.NET IDE
     /// </summary>
@@ -156,14 +157,24 @@ namespace Ankh.Solution
                 this.solutionItem, root, this );
         }
 
-        public void GetSelectionResources( ArrayList list, bool getChildItems )
+        public void GetSelectionResources( IList list, bool getChildItems )
         {
+            this.GetSelectionResources( list, getChildItems, null );
+        }
+
+
+        public void GetSelectionResources( IList list, bool getChildItems, 
+            ResourceFilterCallback filter )
+        {
+            Debug.Assert( !list.IsFixedSize && !list.IsReadOnly, 
+                "list is read only or fixed size" );
+
             object o = this.uiHierarchy.SelectedItems;	 	
             foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )	 	
             {	 	
                 TreeNode node = this.GetNode( item );	 	
                 if ( node != null )	 	
-                    node.GetResources( list, getChildItems );	 	
+                    node.GetResources( list, getChildItems, filter );	 	
             }
         }
 

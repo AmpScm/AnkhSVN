@@ -1,6 +1,7 @@
 // $Id$
 using System;
 using EnvDTE;
+using NSvn.Core;
 
 namespace Ankh.Commands
 {
@@ -34,6 +35,21 @@ namespace Ankh.Commands
             {
                 this.command = value;
             }
+        }
+
+        /// <summary>
+        /// A ResourceFilterCallback method that filters for modified items.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected static bool ModifiedFilter( SvnItem item )
+        {
+            if ( item.Status.TextStatus != StatusKind.Normal ||
+                (item.Status.PropertyStatus != StatusKind.Normal &&
+                item.Status.PropertyStatus != StatusKind.None) )
+                return true;
+            else
+                return false;
         }
 
         private EnvDTE.Command command;

@@ -7,6 +7,12 @@ namespace Ankh
 
     internal delegate void StatusChanged( object sender, EventArgs e );
 
+    
+    /// <summary>
+    /// Used to decide whether this particular SvnItem should be included in a collection.
+    /// </summary>
+    internal delegate bool ResourceFilterCallback( SvnItem item );
+
     /// <summary>
     /// Represents a version controlled path on disk, caching it's status.
     /// </summary>
@@ -64,6 +70,21 @@ namespace Ankh
 
             if ( !oldStatus.Equals( this.status ) )
                 this.OnChanged();
+        }
+
+        /// <summary>
+        /// Retrieves the paths from an IList of SvnItem instances.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public static string[] GetPaths( System.Collections.IList items )
+        {
+            string[] paths = new string[items.Count];
+            int i = 0;
+            foreach( SvnItem item in items )
+                paths[i++] = item.Path;
+
+            return paths;
         }
 
 

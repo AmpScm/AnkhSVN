@@ -24,10 +24,15 @@ namespace Ankh.Solution
             this.FindChildren();                        
         }
 
-        public override void GetResources(ArrayList list, bool getChildItems)
+        public override void GetResources(IList list, bool getChildItems, 
+            ResourceFilterCallback filter )
         {
-            list.AddRange( this.resources );
-            this.GetChildResources( list, getChildItems );
+            foreach( SvnItem item in this.resources )
+            {
+                if ( filter == null || filter(item) )
+                    list.Add(item);
+            }
+            this.GetChildResources( list, getChildItems, filter );
         }
 
 
