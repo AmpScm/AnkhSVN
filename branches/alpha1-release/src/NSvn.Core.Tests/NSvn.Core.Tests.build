@@ -39,6 +39,7 @@
             <references>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <includes name="..\Utils\${build.dir}\Utils.dll"/>
                 <includes name="${lib.dir}\nunit.framework.dll"/>
                 <includes name="${lib.dir}\Sharpziplib.dll"/>
                 
