@@ -73,7 +73,7 @@ namespace Ankh.UI
             StringBuilder builder = new StringBuilder();
             foreach( CommitItem item in items )
             { 
-                string line = linePattern.Replace( "%path%", NSvn.Utils.GetWorkingCopyRootedPath(
+                string line = linePattern.Replace( "%path%", NSvn.SvnUtils.GetWorkingCopyRootedPath(
                     item.Path ) );
                 line = line.Replace( "%basepath%", Path.GetFileName( item.Path ) );
 

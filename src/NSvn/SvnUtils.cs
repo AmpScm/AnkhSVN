@@ -8,9 +8,9 @@ namespace NSvn
     /// Contains utility methods for SVN
     /// TODO: rename to SvnUtils
     /// </summary>
-    public class Utils
+    public class SvnUtils
     {
-        private Utils()
+        private SvnUtils()
         {
             // move along - nothing to see here
         } 

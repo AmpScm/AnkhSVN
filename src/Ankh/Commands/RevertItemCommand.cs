@@ -70,7 +70,7 @@ namespace Ankh.Commands
                 // make the user confirm that he really wants to revert.
                 StringBuilder builder = new StringBuilder();
                 foreach( WorkingCopyResource r in this.revertables )
-                    builder.Append( NSvn.Utils.GetWorkingCopyRootedPath( r.Path ) + 
+                    builder.Append( NSvn.SvnUtils.GetWorkingCopyRootedPath( r.Path ) + 
                         Environment.NewLine );
                 string msg = "Do you really want to revert the following item(s)?" + 
                     Environment.NewLine + Environment.NewLine + builder.ToString();

@@ -20,11 +20,11 @@ namespace NSvn.Tests
             Console.WriteLine( Directory.GetCurrentDirectory() );
 
             string potential = Path.Combine( this.WcPath, @"bin\debug" );
-            string root = Utils.GetWorkingCopyRootedPath( potential );
+            string root = SvnUtils.GetWorkingCopyRootedPath( potential );
             Assertion.AssertEquals( "Rooted path not unwrong", @"\bin\debug", root );
  
             potential = Path.Combine( this.WcPath, "Form.cs" );
-            root = Utils.GetWorkingCopyRootedPath( potential );
+            root = SvnUtils.GetWorkingCopyRootedPath( potential );
             Assertion.AssertEquals( "Rooted path not unwrong", @"\Form.cs", root );
         }
     }

@@ -206,7 +206,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Utils.cs"
+                    RelPath = "SvnUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
