@@ -119,8 +119,11 @@ namespace Utils
         /// be used to extract version information.</param>
         public static void QuerySendByWeb( string url, Exception ex, Assembly assembly )
         {
-            if ( MessageBox.Show( "An error has occurred. Do you wish to send an error report" + 
-                "(This will open your default web browser)?",
+            string message = GetMessage( ex );
+            if ( MessageBox.Show( "An error has occurred. Do you wish to send an error report?" + 
+                Environment.NewLine + 
+                "(This will open your default web browser)" + Environment.NewLine + Environment.NewLine +
+                message,
                 "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error ) == DialogResult.Yes )
             {
                 SendByWeb( url, ex, assembly );
