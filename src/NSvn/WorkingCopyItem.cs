@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using NSvn.Core;
 
 namespace NSvn
@@ -14,7 +15,7 @@ namespace NSvn
         /// <param name="path">Path to the item.</param>
 		public WorkingCopyItem( string path )
 		{
-			this.path = path;
+			this.path = System.IO.Path.GetFullPath(path);
             this.clientContext = new ClientContext();
             this.clientContext.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
 		}
@@ -91,7 +92,11 @@ namespace NSvn
             get{ return this.clientContext; }
         }
 
-        
+        /// <summary>
+        /// Callback function for log messages
+        /// </summary>
+        /// <param name="targets"></param>
+        /// <returns></returns>
         private string LogMessageCallback( CommitItem[] targets )
         {
             return this.logMessageProvider.GetLogMessage( targets );
