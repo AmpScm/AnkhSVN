@@ -214,6 +214,7 @@ namespace Ankh.UI
             this.Nodes.Clear();
 
             TreeNode root = new TreeNode( this.controller.RootText, this.openFolderIndex, this.openFolderIndex );
+            root.Tag = this.controller.RootNode;
             root.Expand();
 
             this.Nodes.Add( root );
