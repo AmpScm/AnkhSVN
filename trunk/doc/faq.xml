@@ -3,22 +3,39 @@
 
 <doc title="AnkhSVN FAQ">
     <section header="AnkhSVN Frequently Asked Questions">
-        <section header="Does AnkhSVN work with VS.NET 2003?">
-            <p>The first release does not "officially" support VS.NET 2003. It will work for the most part, but 
-            you may run into problems with C++ projects since 2003 uses a different version of VCProjectEngine.dll. The
-            next release will support 2003 fully.</p>
+        <section header="What versions of VS.NET does Ankh run on?">
+            <p>Ankh currently supports both VS.NET 2002 and VS.NET 2003.  It is the same install file (msi)  for both versions. </p>
         </section>
-        
         <section header="I get a message about not being able to attach to Solution Explorer?">
             <p>This is a known bug. It happens if you have your solution explorer window set to auto-hide. The only
             workaround is to not have it set on auto-hide while a project loads. Once the project is fully loaded you can
             set it back on auto-hide again. This bug is fixed in HEAD and the fix will be incorporated in the next release.</p>
-        </section>     
-        
-        <section header="There is nothing about my problem here!">
+        </section>
+        <section header="What else do I need to have installed to use Ankh?">
+            <p>Ankh links into the same libraries that svn.exe does, so if the Subversion repository is already created it is possible to use Ankh
+             without ever installing Subversion at all.  However, with Ankh you cannot yet do some things, including but not limited to creating a repository,
+              merging, copying or moving. It is highly recommended that Subversion be installed as well at this point.
+              You can install Subversion from  <link  url="http://subversion.tigris.org">http://subversion.tigris.org</link>.  
+                   Other than that all you need is VS.NET. </p>
+        </section>
+        <section header="I have Ankh installed but the menu entries are disabled or I don't see any at all.">
+            <p>It is possible that Ankh was somehow disabled in the VS.NET Add-in Manager.  
+            To enable it, in VS.NET go to the Tools menu and select Add-in Manager.   There should be an entry for  the AnkhSVN add-in that you need to check. 
+            You should check the Startup box as well so Ankh will load when VS.NET starts, but not the Command Line box.
+             After doing so green checks and other icons will become visible in the Solution Explorer form next to the files in your project that are 
+             in your Subversion working copy.  </p>
+        </section>
+               <section header="I uninstalled Ankh, but the menu entries are still there, how can I get rid of them?">
+            <p>You can run devenv /setup from the command line which will set VS.NET back to the default state. However 
+            if you have any VS.NET customizations you may lose them.  </p>
+        </section>
+          <section header="Can I use Ankh with CVS?">
+            <p>No, Ankh only works with subversion, it will not work with CVS. To use CVS with VS.NET Jalindi Igloo is available at 
+                   <link  url="http://www.jalindi.com/igloo">http://www.jalindi.com/igloo</link>. </p>
+        </section>
+                <section header="There is nothing about my problem here!">
             <p>Don't despair. Either send a mail to our developers mailing list(dev AT ankhsvn.tigris.org) describing the 
-            problem(in as much detail as possible) or visit us in our IRC channel #ankhsvn on the irc.freenode.net server.</p>
-         </section>   
-        
+            problem (in as much detail as possible) or visit us in our IRC channel #ankhsvn on the irc.freenode.net server.</p>
+        </section>
     </section>
 </doc>
