@@ -34,7 +34,7 @@ namespace Ankh.Commands
                 string solutionPath = context.DTE.Solution.FullName;
                 
                 // if this path isn't valid, we don't wanna enable anything
-                if ( !Directory.Exists( solutionPath ) )
+                if ( !File.Exists( solutionPath ) )
                     return Disabled;
 
                 if ( ( !context.SolutionIsOpen || (!SvnUtils.IsWorkingCopyPath(
