@@ -77,6 +77,16 @@ namespace NSvn.Core.Tests
 
         }
 
+        [Test]
+        [ExpectedException( typeof(WorkingCopyLockedException) )]
+        public void TestLockedWc()
+        {
+            string lockPath = Path.Combine( this.WcPath, @".svn\lock" );
+            File.CreateText( lockPath );
+            Client.Commit( new string[]{ this.WcPath }, true, 
+                new ClientContext() );            
+        }
+
         private string LogMessageCallback( CommitItem[] items )
         {
             Assertion.AssertEquals( "Wrong number of commit items", 1, items.Length );

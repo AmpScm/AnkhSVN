@@ -36,10 +36,16 @@ namespace NSvn.Tests
             Assertion.Assert( "Expected more results", dict.Count > 0 );
         }
 
+        [Test]
+        [ExpectedException(typeof(AuthorizationFailedException))]
+        public void TestFailedAuthentication()
+        {
+            RepositoryDirectory dir = new RepositoryDirectory( AUTHREPOS );
+            dir.GetChildren();
+        }
+
         private class AuthProvider : IAuthenticationProvider
         {
-
-        
             #region Implementation of IAuthenticationProvider
             public NSvn.Common.ICredential NextCredentials( ICollection parameters )
             {
