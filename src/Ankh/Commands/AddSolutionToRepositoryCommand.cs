@@ -102,6 +102,20 @@ namespace Ankh.Commands
 
                 this.AddProjects( context.DTE.Solution.Projects, context, solutionDir );  
             }
+            catch( Exception )
+            {
+                // oops, bad stuff happened
+                context.StartOperation( "Error: Reverting changes" );
+                try
+                {
+                    context.Client.Revert( new string[]{ solutionDir }, true );
+                }
+                finally
+                {
+                    context.EndOperation();
+                }
+                throw;                
+            }
             finally
             {
                 context.EndOperation();
@@ -344,7 +358,9 @@ namespace Ankh.Commands
             foreach( string guid in SpecialProjects )
             {
                 if ( String.Compare( project.Kind, guid, true ) == 0 )
+                {
                     return true;
+                }
             }
             return false;
         }
