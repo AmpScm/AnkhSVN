@@ -214,20 +214,13 @@ Global
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.ActiveCfg = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.Build.0 = Release|.NET
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Debug.ActiveCfg = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Debug.Build.0 = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Debug run.ActiveCfg = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Debug run.Build.0 = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) NSvn.Tests.ActiveCfg = Release
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) NSvn.Tests.Build.0 = Release
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Release.ActiveCfg = Release
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Release.Build.0 = Release
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug.ActiveCfg = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug.Build.0 = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug run.ActiveCfg = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.NSvn.Tests.ActiveCfg = Release
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.NSvn.Tests.Build.0 = Release
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Release.ActiveCfg = Release
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Release.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
@@ -251,8 +244,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
