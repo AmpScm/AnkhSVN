@@ -18,7 +18,10 @@ namespace NSvn
         /// </summary>
         public string LogMessage
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.logMessage; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.logMessage = value; }
         }
 
@@ -27,7 +30,10 @@ namespace NSvn
         /// </summary>
         public bool Canceled
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.canceled; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.canceled = value; }
         }
 
@@ -36,6 +42,7 @@ namespace NSvn
         /// </summary>
         public CommitItem[] CommitTargets
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.commitTargets; }
         }
 

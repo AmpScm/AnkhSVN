@@ -19,6 +19,7 @@ namespace NSvn
 
         public override bool IsDirectory
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return false; }
         }
 

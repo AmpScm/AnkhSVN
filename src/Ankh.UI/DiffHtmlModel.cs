@@ -21,7 +21,10 @@ namespace Ankh.UI
 
         public string Diff
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.diff; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.diff = value; }
         }
 
@@ -30,7 +33,10 @@ namespace Ankh.UI
         /// </summary>
         public Color AddedLine
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.addedLine; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.addedLine = value; }
         }
 
@@ -39,7 +45,10 @@ namespace Ankh.UI
         /// </summary>
         public Color RemovedLine
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.removedLine; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.removedLine = value; }
         }
 
@@ -48,7 +57,10 @@ namespace Ankh.UI
         /// </summary>
         public Color NormalLine
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.normalLine; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.normalLine = value; }
         }
 
@@ -57,7 +69,10 @@ namespace Ankh.UI
         /// </summary>
         public Color AtLine
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.atLine; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.AtLine = value; }
         }
 

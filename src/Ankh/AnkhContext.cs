@@ -43,6 +43,7 @@ namespace Ankh
         /// </summary>
         public EnvDTE._DTE DTE
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.dte; }
         }
 
@@ -51,6 +52,7 @@ namespace Ankh
         /// </summary>
         public EnvDTE.AddIn AddIn
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.addin; }
         }
 
@@ -59,6 +61,7 @@ namespace Ankh
         /// </summary>
         public Explorer SolutionExplorer
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.solutionExplorer; }
         }
 
@@ -67,6 +70,7 @@ namespace Ankh
         /// </summary>
         public OutputPaneWriter OutputPane
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.outputPane; }
         }
 
@@ -76,6 +80,7 @@ namespace Ankh
         /// </summary>
         public SvnContext Context
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.context; }
         }
 
@@ -84,16 +89,19 @@ namespace Ankh
         /// </summary>
         public RepositoryExplorerControl RepositoryExplorer
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.repositoryExplorer; }
         }
 
         public EnvDTE.Window RepositoryExplorerWindow
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.reposExplorerWindow; }
         }   
      
         public IntPtr Handle
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get
             {
                 return new IntPtr(this.DTE.MainWindow.HWnd);

@@ -47,7 +47,10 @@ namespace Ankh.UI
         /// </summary>
         public NSvnContext Context
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.context; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.context = value; }
         }
 
@@ -56,7 +59,10 @@ namespace Ankh.UI
         /// </summary>
         public CommandBar CommandBar
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.commandBar; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.commandBar = value; }
         }        
         

@@ -19,6 +19,7 @@ namespace Ankh
         /// </summary>
         public string Name
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return name; }
         }
 
@@ -27,7 +28,9 @@ namespace Ankh
         /// </summary>
         public string Tooltip
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return tooltip; }
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.tooltip = value; }
         }
 
@@ -36,7 +39,10 @@ namespace Ankh
         /// </summary>
         public string Text
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.text; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.text = value; }
         }
 
@@ -45,7 +51,10 @@ namespace Ankh
         /// </summary>
         public int Bitmap
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.bitmap; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.bitmap = value; }
         }
         

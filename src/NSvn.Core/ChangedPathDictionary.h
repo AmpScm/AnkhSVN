@@ -21,20 +21,23 @@ namespace NSvn
         virtual ChangedPath* Get( String* path )
         { return static_cast<ChangedPath*>(this->Dictionary->Item[ path ]); }
 
-
-
+        [System::Diagnostics::DebuggerStepThrough]
         virtual void Add( String* path, ChangedPath* status )
         { this->Dictionary->Add( path, status ); }
 
+        [System::Diagnostics::DebuggerStepThrough]
         virtual bool Contains( ChangedPath* status )
         { return this->Dictionary->Contains( status ); }
 
+        [System::Diagnostics::DebuggerStepThrough]
         virtual void Remove( String* path )
         { this->Dictionary->Remove( path ); }
 
+        [System::Diagnostics::DebuggerStepThrough]
         __property virtual System::Collections::ICollection* get_Keys()
         { return this->Dictionary->Keys; }
 
+        [System::Diagnostics::DebuggerStepThrough]
         __property virtual System::Collections::ICollection* get_Values()
         { return this->Dictionary->Values; }
 

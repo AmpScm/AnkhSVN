@@ -27,7 +27,10 @@ namespace Ankh.UI
         /// </summary>
         public string Template
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.template; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set
             { 
                 this.template = value; 

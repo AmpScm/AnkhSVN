@@ -57,43 +57,53 @@ namespace NSvn
 
         public:
             /// <summary></summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property Entry* get_Entry()
             { return this->entry; }
 
             /// <summary>The status of the file itself</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property StatusKind get_TextStatus()
             { return this->textStatus; }
 
             /// <summary>The status of the file's properties</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property StatusKind get_PropertyStatus()
             { return this->propertyStatus; }
 
             /// <summary>The directory is locked(usually happens when 
             /// an update is interrupted)</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property bool get_Locked()
             { return this->locked; }
 
             /// <summary>The item has been copied</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property bool get_Copied()
             { return this->copied; }
 
             /// <summary>The item has been switched</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property bool get_Switched()
             { return this->switched; }
 
             /// <summary>The entry's text status in the repository</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property StatusKind get_RepositoryTextStatus()
             { return this->repositoryTextStatus; }
 
             /// <summary>The entry's property status in the repository
+            [System::Diagnostics::DebuggerStepThrough]
             __property StatusKind get_RepositoryPropertyStatus()
             { return this->repositoryPropertyStatus; }
 
             /// <summary>Represents the status of an unversioned item</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property static Status* get_Unversioned()
             { return Status::unversioned; }
 
             /// <summary>Represents the status of an item with no status at all.</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property static Status* get_None()
             { return Status::none; }
 

@@ -27,26 +27,35 @@ namespace NSvn
                 this->revisionNumber = revision;
             }
 
+            //TODO: doc comments
+
 
             ///<summary>The path affected in this notification</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property String* get_Path()
             { return this->path; }
 
+            [System::Diagnostics::DebuggerStepThrough]
             __property NotifyAction get_Action()
             { return this->action; }
 
+            [System::Diagnostics::DebuggerStepThrough]
             __property NodeKind get_NodeKind()
             { return this->nodeKind; }
 
+            [System::Diagnostics::DebuggerStepThrough]
             __property String* get_MimeType()
             { return this->mimeType; }
 
+            [System::Diagnostics::DebuggerStepThrough]
             __property NotifyState get_ContentState()
             { return this->contentState; }
 
+            [System::Diagnostics::DebuggerStepThrough]
             __property NotifyState get_PropertyState()
             { return this->propertyState; }
 
+            [System::Diagnostics::DebuggerStepThrough]
             __property int get_RevisionNumber()
             { return this->revisionNumber; }
 

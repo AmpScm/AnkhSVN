@@ -16,11 +16,13 @@ namespace NSvn.Common
 
         public PropertyDictionary Properties
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.properties; }
         }
 
         public string NodeName
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.nodeName; }
         }
 

@@ -50,6 +50,7 @@ namespace NSvn
         /// </summary>
         public NSvnContext Context
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get
             {
                 if ( this.context == null )
@@ -57,6 +58,7 @@ namespace NSvn
                 return this.context;
             }
 
+            [System.Diagnostics.DebuggerStepThrough]
             set
             {
                 this.context = value; 
@@ -70,6 +72,7 @@ namespace NSvn
         /// </summary>
         protected ClientContext ClientContext
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get
             { 
                 return this.Context.ClientContext;
@@ -89,6 +92,7 @@ namespace NSvn
 
             public string Path
             {
+                [System.Diagnostics.DebuggerStepThrough]
                 get
                 {
                     return "";
@@ -97,6 +101,7 @@ namespace NSvn
 
             public bool IsDirectory
             {
+                [System.Diagnostics.DebuggerStepThrough]
                 get
                 {
                     return false;
@@ -105,6 +110,7 @@ namespace NSvn
 
             public bool IsVersioned
             {
+                [System.Diagnostics.DebuggerStepThrough]
                 get
                 {
                     return false;
@@ -113,6 +119,7 @@ namespace NSvn
 
             public NSvn.Core.Status Status
             {
+                [System.Diagnostics.DebuggerStepThrough]
                 get
                 {
                     return Status.None;
@@ -121,10 +128,12 @@ namespace NSvn
 
             public NSvn.NSvnContext Context
             {
+                [System.Diagnostics.DebuggerStepThrough]
                 get
                 {
                     return null;
                 }
+                [System.Diagnostics.DebuggerStepThrough]
                 set
                 {
                 }

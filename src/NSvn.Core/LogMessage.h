@@ -35,22 +35,27 @@ namespace NSvn
         public:
 
             /// <summary>The paths changed in this revision.</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property ChangedPathDictionary* get_ChangedPaths()
             { return this->changedPaths; }
 
             /// <summary>The revision of this log message.</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property svn_revnum_t get_Revision()
             { return this->revision; }
 
             /// <summary>The author of this log message</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property String* get_Author()
             { return this->author; }
 
             /// <summary>The date this commit was made.</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property DateTime get_Date()
             { return this->date; }
 
             /// <summary>The actual log message</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property String* get_Message()
             { return this->message; }
 

@@ -25,14 +25,17 @@ namespace NSvn
               }
 
               /// <summary>Source path of copy(if any)</summary>
+              [System::Diagnostics::DebuggerStepThrough]
               __property String* get_CopyFromPath()
               { return this->copyFromPath; }
 
               /// <summary>Source revision of copy(if any)</summary>
+              [System::Diagnostics::DebuggerStepThrough]
               __property svn_revnum_t get_CopyFromRevision()
               { return this->copyFromRevision; }
 
               /// <summary>The action performed on the changed path</summary>
+              [System::Diagnostics::DebuggerStepThrough]
               __property ChangedPathAction get_Action()
               { return this->action; }
 
