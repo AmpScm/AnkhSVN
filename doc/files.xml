@@ -25,6 +25,43 @@
             <name>Pilot project report</name>
             <description>Report due the end of January describing the project</description>            
         </file>
+
+        <file path="productDocumentation.doc">
+            <name>Product documentation</name>
+            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/productDocumentation.doc</realpath>
+            <description>The Product documentation in Word format.</description>
+        </file>
+
+        <file path="productDocumentation.pdf">
+            <name>Product documentation</name>
+            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/pdf/productDocumentation.pdf</realpath>
+            <description>The Product documentation in PDF format</description>
+        </directory>
+
+        <file path="prosessDocumentation.doc">
+            <name>Prosess documentation</name>
+            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/prosessDocumentation.doc</realpath>
+            <description>The Prosess documentation in Word format.</description>
+        </file>
+
+        <file path="prosessDocumentation.pdf">
+            <name>Prosess documentation</name>
+            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/pdf/prosessDocumentation.pdf</realpath>
+            <description>The Prosess documentation in PDF format.</description>
+        </file>
+
+        <file path="testDocumentation.doc">
+            <name>Ankh source code</name>
+            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/testDocumentation.doc</realpath>
+            <description>The Test documentation in Word format.</description>
+        </file>
+        
+        <file path="testDocumentation.pdf">
+            <name>Ankh source code</name>
+            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/pdf/testDocumentation.pdf</realpath>
+            <description>The Test documentation in PDF format.</description>
+        </file>
+
         <directory path="scheduling">
             <name>Scheduling documents</name>
             <permissions>group,supervisor</permissions>
@@ -40,6 +77,7 @@
                 <name>Gant diagram</name>
                 <description>A Gant diagram</description>
             </file>
+
         </directory>          
     </directory>
     
@@ -77,4 +115,5 @@
         <realpath>/hovedprosjekter/2003/data/10/src/index.html</realpath>
         <description>The Ankh source code</description>
     </directory>
+
 </root>
