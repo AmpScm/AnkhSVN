@@ -58,7 +58,7 @@ using namespace System::Runtime::CompilerServices;
 [assembly:AssemblyKeyNameAttribute("")];
 
 
-[assembly:NSvn::Common::LibraryAttribute( "Subversion", 1, 0, 4 )];
+[assembly:NSvn::Common::LibraryAttribute( "Subversion", 1, 0, 5 )];
 [assembly:NSvn::Common::LibraryAttribute( "Berkeley DB", 4, 2, 52 )];
 [assembly:NSvn::Common::LibraryAttribute( "apr", 0, 9, 5 )];
 [assembly:NSvn::Common::LibraryAttribute( "apr-util", 0, 9, 5 )];
