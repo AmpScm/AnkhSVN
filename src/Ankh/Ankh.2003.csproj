@@ -230,12 +230,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Commands\CheckoutCommand.cs"
+                    RelPath = "Commands\AddSolutionToRepositoryCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Commands\CheckoutFolderCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\CheckoutRunner.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
