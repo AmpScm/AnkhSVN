@@ -24,7 +24,7 @@ namespace Ankh.UI
         /// <summary>
         /// Resets the textbox.
         /// </summary>
-        public void Clear()
+        public void Reset()
         {
             this.externalsTextBox.Text = "";
             this.dirty = false;

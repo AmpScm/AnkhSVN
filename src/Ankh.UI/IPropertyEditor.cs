@@ -25,11 +25,14 @@ namespace Ankh.UI
             set;
         }
 
-        void Clear();
+        /// <summary>
+        /// Reset the property editor to its default state
+        /// </summary>
+        void Reset();
 
         
         /// <summary>
-        /// Fired whenever editor state changes
+        /// Fired whenever the editor's state changes
         /// </summary>
         event EventHandler Changed;
 

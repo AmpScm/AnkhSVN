@@ -25,7 +25,7 @@ namespace Ankh.UI
 
 		}
 
-        public void Clear()
+        public void Reset()
         {
             this.valueTextBox.Text = "";
         }

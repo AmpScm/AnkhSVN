@@ -24,7 +24,7 @@ namespace Ankh.UI
 
 		}
 
-		public void Clear()
+		public void Reset()
 		{
 			this.ignoreTextBox.Text = "";
             this.dirty = false;
