@@ -96,7 +96,6 @@ namespace Ankh
                     item.FileName == path)   
                 {
                     item.Delete();
-                    break;
                 }
             }   
         } 
