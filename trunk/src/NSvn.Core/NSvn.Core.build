@@ -7,17 +7,64 @@
     <property name="build.dir" value="build-Debug" if="${debug}"/>
     <property name="warninglevel" value="/warn:3"/>
     
-
     
-    <property name="cl.options" value='/Od /I "${svndir}\apr\include" /I "${svndir}\apr-iconv\include" /I "${svndir}\apr-util\include" /I "${svndir}\subversion\include" /AI "..\NSvn.Common\bin\Debug" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /FD /EHsc /MDd /GS   /W3 /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\'
+    <property name="cl.options" value='/Od /I "${svndir}\apr\include" 
+    /I "${svndir}\apr-iconv\include" /I "${svndir}\apr-util\include" 
+    /I "${svndir}\subversion\include" /AI "..\NSvn.Common\bin\Debug" 
+    /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /FD /EHsc /MDd /GS /W3 
+    /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\' 
         if="${debug}"/>
-    <property name="cl.options" value='/Od /I "${svndir}\apr\include" /I "${svndir}\apr-iconv\include" /I "${svndir}\apr-util\include" /I "${svndir}\subversion\include" /AI "..\NSvn.Common\bin\Release" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /FD /EHsc /MD /GS  /W3 /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\'
+    
+    <property name="cl.options" value='/Od /I "${svndir}\apr\include" 
+    /I "${svndir}\apr-iconv\include" /I "${svndir}\apr-util\include" 
+    /I "${svndir}\subversion\include" /AI "..\NSvn.Common\bin\Release" 
+    /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /FD /EHsc /MD /GS  /W3 
+    /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\'
         unless="${debug}"/>
 
-    <property name="link.options" value='/NOLOGO /DLL /DEBUG /DELAYLOAD:{bdb.dll} /INCREMENTAL:NO /LIBPATH:"${svndir}\debug /PDB:"${build.dir}/NSvn.Core.pdb" comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib ${bdb.lib} ${svndir}Debug\subversion\libsvn_repos\libsvn_repos-1.lib ${svndir}\Debug\subversion\libsvn_fs\libsvn_fs-1.lib ${svndir}\Debug\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib ${svndir}\\subversion\libsvn_ra_local\libsvn_ra_local-1.lib ${svndir}\Debug\subversion\libsvn_ra\libsvn_ra-1.lib ${svndir}\Debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib ${svndir}\neon\libneonD.lib ${svndir}\Debug\subversion\libsvn_wc\libsvn_wc-1.lib ${svndir}\Debug\subversion\libsvn_subr\libsvn_subr-1.lib ${svndir}\Debug\subversion\libsvn_client\libsvn_client-1.lib ${svndir}\Debug\subversion\libsvn_delta\libsvn_delta-1.lib ${svndir}\Debug\subversion\libsvn_diff\libsvn_diff-1.lib ${svndir}\apr\LibD\apr.lib ${svndir}\apr-util\LibD\aprutil.lib ${svndir}\apr-iconv\LibD\apriconv.lib ${svndir}\apr-util\xml\expat\lib\LibD\xml.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib DelayImp.lib'
+    <property name="link.options" value='/NOLOGO /DLL /DEBUG 
+    /DELAYLOAD:{bdb.dll} /INCREMENTAL:NO /LIBPATH:"${svndir}\debug 
+    /PDB:"${build.dir}/NSvn.Core.pdb" comctl32.lib mswsock.lib ws2_32.lib 
+    rpcrt4.lib shlwapi.lib ${bdb.lib} 
+    ${svndir}Debug\subversion\libsvn_repos\libsvn_repos-1.lib 
+    ${svndir}\Debug\subversion\libsvn_fs\libsvn_fs-1.lib 
+    ${svndir}\Debug\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib 
+    ${svndir}\\subversion\libsvn_ra_local\libsvn_ra_local-1.lib 
+    ${svndir}\Debug\subversion\libsvn_ra\libsvn_ra-1.lib 
+    ${svndir}\Debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib 
+    ${svndir}\neon\libneonD.lib 
+    ${svndir}\Debug\subversion\libsvn_wc\libsvn_wc-1.lib 
+    ${svndir}\Debug\subversion\libsvn_subr\libsvn_subr-1.lib 
+    ${svndir}\Debug\subversion\libsvn_client\libsvn_client-1.lib 
+    ${svndir}\Debug\subversion\libsvn_delta\libsvn_delta-1.lib 
+    ${svndir}\Debug\subversion\libsvn_diff\libsvn_diff-1.lib 
+    ${svndir}\apr\LibD\apr.lib ${svndir}\apr-util\LibD\aprutil.lib 
+    ${svndir}\apr-iconv\LibD\apriconv.lib 
+    ${svndir}\apr-util\xml\expat\lib\LibD\xml.lib
+     kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib 
+     shell32.lib ole32.lib oleaut32.lib uuid.lib DelayImp.lib' 
         if="${debug}"/>
     
-    <property name="link.options" value='/NOLOGO /DLL /DEBUG /DELAYLOAD:${bdb.dll} /INCREMENTAL:NO /LIBPATH:"${svndir}\release comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib ${bdb.lib} ${svndir}\Release\subversion\libsvn_repos\libsvn_repos-1.lib ${svndir}\Release\subversion\libsvn_fs\libsvn_fs-1.lib ${svndir}\Release\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib ${svndir}\Release\subversion\libsvn_ra_local\libsvn_ra_local-1.lib ${svndir}\Release\subversion\libsvn_ra\libsvn_ra-1.lib ${svndir}\Release\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib ${svndir}\neon\libneonD.lib ${svndir}\Release\subversion\libsvn_wc\libsvn_wc-1.lib ${svndir}\Release\subversion\libsvn_subr\libsvn_subr-1.lib ${svndir}\Release\subversion\libsvn_client\libsvn_client-1.lib ${svndir}Release\subversion\libsvn_delta\libsvn_delta-1.lib ${svndir}\Release\subversion\libsvn_diff\libsvn_diff-1.lib ${svndir}\apr\LibR\apr.lib ${svndir}\apr-util\LibR\aprutil.lib ${svndir}\apr-iconv\LibD\apriconv.lib ${svndir}\apr-util\xml\expat\lib\LibD\xml.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib DelayImp.lib'
+    <property name="link.options" value='/NOLOGO /DLL /DEBUG 
+    /DELAYLOAD:${bdb.dll} /INCREMENTAL:NO /LIBPATH:"${svndir}\release 
+    comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib ${bdb.lib} 
+    ${svndir}\Release\subversion\libsvn_repos\libsvn_repos-1.lib 
+    ${svndir}\Release\subversion\libsvn_fs\libsvn_fs-1.lib 
+    ${svndir}\Release\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib 
+    ${svndir}\Release\subversion\libsvn_ra_local\libsvn_ra_local-1.lib 
+    ${svndir}\Release\subversion\libsvn_ra\libsvn_ra-1.lib 
+    ${svndir}\Release\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib 
+    ${svndir}\neon\libneonD.lib 
+    ${svndir}\Release\subversion\libsvn_wc\libsvn_wc-1.lib 
+    ${svndir}\Release\subversion\libsvn_subr\libsvn_subr-1.lib 
+    ${svndir}\Release\subversion\libsvn_client\libsvn_client-1.lib 
+    ${svndir}Release\subversion\libsvn_delta\libsvn_delta-1.lib 
+    ${svndir}\Release\subversion\libsvn_diff\libsvn_diff-1.lib 
+    ${svndir}\apr\LibR\apr.lib ${svndir}\apr-util\LibR\aprutil.lib 
+    ${svndir}\apr-iconv\LibD\apriconv.lib 
+    ${svndir}\apr-util\xml\expat\lib\LibD\xml.lib  kernel32.lib user32.lib 
+    gdi32.lib winspool.lib comdlg32.lib advapi32.lib 
+    shell32.lib ole32.lib oleaut32.lib uuid.lib DelayImp.lib'
         unless="${debug}"/>
 
     

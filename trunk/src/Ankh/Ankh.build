@@ -15,9 +15,12 @@
     </target>
     
     <target name="clean">
-	    <delete dir="build-Release" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
-	    <delete dir="build-Debug" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
-        <comregister file="${lib.dir}\Ankh.ToolWindow.dll" unregister="true" failonerror="false"/>
+        <delete dir="build-Release" verbose="${verbose}" failonerror="false" 
+            includeEmptyDirs="true"/>
+        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" 
+            includeEmptyDirs="true"/>
+        <comregister file="${lib.dir}\Ankh.ToolWindow.dll" unregister="true" 
+            failonerror="false"/>
     </target>
     
     <target name="init">
@@ -30,19 +33,23 @@
     
     <target name="compile" depends="init">
         <property name="define" value="REPORTERROR;TRACE"/>
-        <property name="define" value="ALWAYSREGISTER;DEBUG;${define}" if="${debug}"/>
+        <property name="define" value="ALWAYSREGISTER;DEBUG;${define}" 
+            if="${debug}"/>
         
         <property name="define" value="VS2002;${define}" unless="${vs.2003}"/>
         <property name="define" value="VS2003;${define}" if="${vs.2003}"/>
 
-        <property name="define" value="ALT_ADMIN_DIR;${define}" if="${alt.admin.dir}"/>
+        <property name="define" value="ALT_ADMIN_DIR;${define}" 
+            if="${alt.admin.dir}"/>
         
         
         <comregister file="${lib.dir}\AnkhUserControlHost.dll"/>
 
-        <tlbimp typelib="${lib.dir}\AnkhUserControlHost.dll" output="${build.dir}/AnkhUserControlHostLib.dll" />
+        <tlbimp typelib="${lib.dir}\AnkhUserControlHost.dll" 
+            output="${build.dir}/AnkhUserControlHostLib.dll" />
         
-        <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}" debug="true">
+        <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" 
+            define="${define}" debug="true">
             <references>
                 <includes name="${lib.dir}\EnvDTE.dll"/>
                 <includes name="${lib.dir}\extensibility.dll"/>
