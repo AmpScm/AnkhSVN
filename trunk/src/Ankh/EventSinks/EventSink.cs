@@ -134,9 +134,10 @@ Please report this error.", kind, objectName, projectsEvents.GetType(),
         private static ProjectItemsEventSink GetProjectItemsEvents( string kind, AnkhContext context )
         {
             string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );   
-            object events = context.DTE.Events.GetObject( objectName );
+            
             if ( objectName != null )
             {
+				object events = context.DTE.Events.GetObject( objectName );
                 if ( events is ProjectItemsEvents )
                 {
                     return new ProjectItemsEventSink( (ProjectItemsEvents)
