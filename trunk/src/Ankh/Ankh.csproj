@@ -338,11 +338,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Commands\ViewRepositoryFileCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "EventSinks\DocumentEventsSink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -374,6 +369,11 @@
                 />
                 <File
                     RelPath = "EventSinks\VCProjectEventSink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "EventSinks\ViewRepositoryFileCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -5,6 +5,9 @@ using NSvn.Core;
 using NSvn.Common;
 using EnvDTE;
 using Ankh.UI;
+using System.Text;
+using System.Windows.Forms;
+using System.Collections;
 
 namespace Ankh.Commands
 {
@@ -36,7 +39,9 @@ namespace Ankh.Commands
 
             public override void Execute(Ankh.AnkhContext context)
             {
-                context.SolutionExplorer.VisitSelectedItems( new RevertVisitor(), true );
+                RevertVisitor v = new RevertVisitor();
+                context.SolutionExplorer.VisitSelectedItems( v, true );
+                v.Revert();
                 context.SolutionExplorer.UpdateSelectionStatus();
             }
         #endregion
@@ -45,14 +50,35 @@ namespace Ankh.Commands
             /// A visitor reverts visited item in the Working copy.
             /// </summary>
             private class RevertVisitor : LocalResourceVisitorBase
-            {
+            { 
                 public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
                 {
                     if ( resource.Status.TextStatus != StatusKind.Normal ||
                         (resource.Status.PropertyStatus != StatusKind.Normal && 
                         resource.Status.PropertyStatus != StatusKind.None ) )
-                        resource.Revert( true );
+                        this.revertables.Add( resource );
                 }
+
+                public void Revert()
+                {
+                    // make the user confirm that he really wants to revert.
+                    StringBuilder builder = new StringBuilder();
+                    foreach( WorkingCopyResource r in this.revertables )
+                        builder.Append( NSvn.Utils.GetWorkingCopyRootedPath( r.Path ) + 
+                            Environment.NewLine );
+                    string msg = "Do you really want to revert the following item(s)?" + 
+                        Environment.NewLine + Environment.NewLine + builder.ToString();
+
+                    if( MessageBox.Show( msg, "Revert", MessageBoxButtons.YesNo ) == 
+                        DialogResult.Yes )
+                    {
+                        // do the actual revert
+                        foreach( WorkingCopyResource r in this.revertables )
+                            r.Revert( true );
+                    }
+                }
+
+                private ArrayList revertables = new ArrayList();
             }
     }
 }
