@@ -108,8 +108,31 @@ void NSvn::Core::Client::Update( String* path, Revision* revision, bool recurse,
         recurse, ctx->ToSvnContext( pool ), pool ) );
 }
 
+// implementation of Client::Commit
+NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonRecursive, ClientContext* ctx )
+{
+    Pool pool;
+    apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, pool );
+    svn_client_commit_info_t* commitInfoPtr;
 
+    HandleError( svn_client_commit( &commitInfoPtr, aprArrayTargets, nonRecursive, 
+        ctx->ToSvnContext( pool ), pool ) );
 
+    return new CommitInfo( commitInfoPtr );
+}
+
+apr_array_header_t* NSvn::Core::Client::StringArrayToAprArray( String* strings[], Pool& pool )
+{
+    apr_array_header_t* array = apr_array_make( pool, strings->Length, sizeof( char* ) );
+    
+    // put the strings in the apr array
+    for( int i = 0; i < strings->Length; ++i )
+    {
+        *((char**)apr_array_push(array)) = StringHelper( strings[i] ).CopyToPool( pool );
+    }
+
+    return array;
+}
 
 
 
