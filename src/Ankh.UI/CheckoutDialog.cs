@@ -22,9 +22,9 @@ namespace Ankh.UI
 			InitializeComponent();	
 
             Win32.SHAutoComplete( this.urlTextBox.Handle, 
-                Shacf.UrlAll | Shacf.Filesystem );
+                Shacf.UrlAll );
             Win32.SHAutoComplete( this.localDirTextBox.Handle, 
-                Shacf.UrlAll | Shacf.Filesystem );
+                Shacf.Filesystem );
 	
             this.ControlsChanged( this, EventArgs.Empty );
 		}

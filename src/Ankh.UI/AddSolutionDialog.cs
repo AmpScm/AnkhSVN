@@ -20,7 +20,7 @@ namespace Ankh.UI
 			InitializeComponent();
 
             Win32.SHAutoComplete( this.urlTextBox.Handle, 
-                Shacf.UrlAll | Shacf.Filesystem );
+                Shacf.UrlAll );
 		}
 
         /// <summary>
