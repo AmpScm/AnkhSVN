@@ -13,7 +13,8 @@ namespace NSvn.Common
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the property</param>
-        /// <param name="text">The text of the property. This will be UTF8-encoded</param>
+        /// <param name="text">The text of the property. This will be encoded in the default encoding
+        /// for the machine.</param>
         public Property( string name, string text ) : this( name, text, Encoding.Default )
         {}
 
