@@ -45,7 +45,7 @@ namespace Ankh
         public int Bitmap
         {
             get{ return this.bitmap; }
-            set{ this.Bitmap = bitmap; }
+            set{ this.bitmap = value; }
         }
         
         private string name;
