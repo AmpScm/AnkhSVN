@@ -28,10 +28,11 @@ namespace NSvn
 	        static void Update(String* path, Revision* revision, bool recurse, ClientContext* context);
 
 	        static void Switch(String* path, String* url, Revision* revision, bool recurse, 
-                ClientContext* context);
+                ClientContext* context);*/
 
 	        static void Add(String* path, bool recursive, ClientContext* context);
-
+            
+            /*
 	        static CommitInfo* MakeDir(String* path, ClientContext* context);
 
 	        static CommitInfo* Delete(String* path, AdminAccessBaton* admAccessBaton, bool force, 
@@ -92,6 +93,8 @@ namespace NSvn
         private:
             // ctor made private to avoid instantiation of this class
             Client(){;}
+
+            static String* CanonicalizePath( String* path );
         };
     }
 }

@@ -6,5 +6,6 @@
 #pragma once
 
 #using <mscorlib.dll>
+#using <NSvn.Common.dll>
 
 

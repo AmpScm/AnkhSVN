@@ -142,28 +142,27 @@ namespace NSvn.Core.Tests
         
        
 
-        private static void Main()
-        {
-            TestBase test = new TestBase();
-            test.ExtractRepos();
-
-            Console.WriteLine( "repos url: {0}", test.ReposUrl );
-
-            Process p = Process.Start( "svn", string.Format( "ls {0}", test.ReposUrl ) );
-            p.WaitForExit();
-            Debug.Assert( p.ExitCode == 0, "svn lsexit code not 0" );
-            
-            
-
-            test.ExtractWorkingCopy();
-
-            Console.WriteLine( "working copy path: {0}", test.WcPath );
-            p = Process.Start( "svn", string.Format( "status {0}", test.WcPath ) );
-            p.WaitForExit();
-            Debug.Assert( p.ExitCode == 0, "svn status exit code not 0");
-            
-            
-        }
+//        private static void Main()
+//        {
+//            TestBase test = new TestBase();
+//            test.ExtractRepos();
+//
+//            Console.WriteLine( "repos url: {0}", test.ReposUrl );
+//
+//            Process p = Process.Start( "svn", string.Format( "ls {0}", test.ReposUrl ) );
+//            p.WaitForExit();
+//            Debug.Assert( p.ExitCode == 0, "svn ls exit code not 0" );
+//            
+//
+//            test.ExtractWorkingCopy();
+//
+//            Console.WriteLine( "working copy path: {0}", test.WcPath );
+//            p = Process.Start( "svn", string.Format( "status {0}", test.WcPath ) );
+//            p.WaitForExit();
+//            Debug.Assert( p.ExitCode == 0, "svn status exit code not 0");
+//            
+//            
+//        }
         private const int BUF_SIZE = 4096;
         private const string REPOS_FILE="NSvn.Core.Tests.repos.zip";
         private const string REPOS_NAME = "repos";

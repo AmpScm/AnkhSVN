@@ -15,7 +15,7 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Exe"
+                OutputType = "Library"
                 RootNamespace = "NSvn.Core.Tests"
                 StartupObject = ""
             >
@@ -91,6 +91,11 @@
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "AddTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"

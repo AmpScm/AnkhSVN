@@ -30,6 +30,17 @@ namespace NSvn
                 ctx->auth_baton = this->CreateAuthBaton( pool, this->AuthBaton );
             }
 
+            // client configu
+            if ( this->ClientConfig != 0 )
+            {
+                throw new Exception( "This isnt implemented yet" );
+            }
+            else
+            {  
+                // TODO: We just put an empty table here for now
+                ctx->config = apr_hash_make( pool );
+            }
+
             return ctx; 
 
 
@@ -93,6 +104,9 @@ struct apr_pool_t
 {};
 
 struct svn_auth_baton_t
+{};
+
+struct apr_hash_t
 {};
 
 namespace
