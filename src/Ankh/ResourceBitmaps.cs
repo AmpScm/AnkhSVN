@@ -26,6 +26,14 @@ namespace Ankh
         public const int ChangeAdminDirName = 110;
         public const int ToggleAnkh = 111;
         public const int Switch = 112;
+        public const int ViewInWindows = 113;
+        public const int ViewInVSNet = 114;
+        public const int MakeDirectory = 115;
+        public const int CheckoutSolution = 116;
+        public const int CheckoutDirectory = 117;
+        public const int CopyUrlToClipboard = 118;
+        public const int EditConfigFile = 119;
+        public const int SaveToFile = 120;
 
     }
 }

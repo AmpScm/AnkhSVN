@@ -12,7 +12,8 @@ namespace Ankh.Commands
     /// Summary description for MakeDirectory.
     /// </summary>
     [VSNetCommand("MakeDirectoryCommand", 
-         Tooltip="Create new directory here", Text = "New directory..." ),
+         Tooltip="Create new directory here", Text = "New directory...",
+         Bitmap = ResourceBitmaps.MakeDirectory ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
     internal class MakeDirectoryCommand : CommandBase
     {

@@ -10,7 +10,8 @@ namespace Ankh.Commands
 	/// <summary>
 	/// Summary description for ViewInVSNetCommand.
 	/// </summary>
-    [VSNetCommand("CheckoutFolder", Tooltip="Checkout this folder", Text = "Checkout Folder..." ),
+    [VSNetCommand("CheckoutFolder", Tooltip="Checkout this folder", 
+         Text = "Checkout Folder...", Bitmap = ResourceBitmaps.CheckoutDirectory ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
 	internal class CheckoutFolderCommand : 
         CommandBase
