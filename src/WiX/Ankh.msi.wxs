@@ -89,6 +89,12 @@
                 <Show Dialog="ProgressForm" Sequence="1280" />
                 <ExecuteAction Sequence="1300" />
             </InstallUISequence>
+            <AdminUISequence>
+                <!-- Error, Exit and Finished forms -->
+                <Show Dialog="FatalErrorForm" OnExit="error">NOT HideFatalErrorForm</Show>
+                <Show Dialog="UserExitForm" OnExit="cancel" />
+                <Show Dialog="FinishedForm" OnExit="success" />
+            </AdminUISequence>
         </UI>
         <InstallExecuteSequence>
             <LaunchConditions Sequence="100"/>
