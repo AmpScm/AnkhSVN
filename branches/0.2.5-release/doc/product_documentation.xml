@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" ?> 
+<?xml-stylesheet type="text/xsl" href="doc.xsl"?>
+<doc title="Product documentation">
+     <section header="Title page">
+     </section>
+     
+     <section header="Preface"> 
+     
+		<p>This report is written for the computer personnel responsible for 
+		marketing, maintenance, updating, support and modifications to the 
+		system. The purpose of this document is to 
+		give a description of how the Ankh project is constructed, how to install
+		and configure the addin and what type of testing the system have been exposed to.</p>
+		
+		<p>It is an advantage to have knowledge about revision control systems and VS.NET 
+		to get a better understanding of this document. </p>   
+		
+		<p>The system contains an addin/GUI layer written in the coding language C#, and
+		a .NET wrapper layer divided in a thinner layer covering the SVN's client API 
+        coded in Managed C++ and a more object-oriented part coded in C#. The code is 
+        documented in detail in the Code Comment Web Report available on our internet site and on
+        the enclosed CD.</p>
+        
+     </section>
+     
+      <section header="Table of contents">    
+     </section>
+      
+      <section header="Introduction">
+			<section header="Why use Ankh ?">
+				<p>Description of Ankh</p> 
+			</section>	
+		
+			<section header="How the program works"> 
+				<p>What the program can do for you.</p> 
+			</section>	
+			
+			<section header="Menues and navigations"> 
+				<p>Navigation model</p> 
+			</section>	
+	</section>
+	
+	<section header="Installation and configuration"> 
+		<p>Required OS, RAM, platform etc. Installation. Assumptions 
+		(svnadmin not implemented)</p> 
+	</section>	
+	
+	<section header="The Ankh project overview"> 
+	
+		<section header="System architecture"> 
+			<p>The system is divided into 2 main layers, a GUI/addin layer and a .NET
+			wrapper layer. The addin/GUI layer
+			contain coding of the addin and graphical user interface in the C# language.
+			This layer is called Ankh. The wrapper is divided into a thin .NET 
+			wrapper layer for the SVN's client API 
+            coded in Managed C++ and a more object-oriented part 
+            coded in C#. The .NET wrapper is called NSvn.
+			</p>
+		</section>
+		<img src="img/layers.png" align="center" hspace="30" vspace="10"/>
+   
+	
+		<section header="Namespaces"> 
+			<p>The code contains more than
+			100 files. To better be able to locate each individual file the code is
+			divided into different namespaces. Each unique namespace contain a logical collection of
+			files closely connected to its functions. The following sections describe the
+			purpose of each namespace.</p>
+			
+			<section header="Ankh"> 
+				<p>Ankh is the name of
+				our addin. The name Ankh was selected because it is Greek and could be visualised
+				as a simple icon
+				that easily could be used in the marketing of Ankh. It was important to select 
+				an icon that could not be confused with another well known software/tool. 
+				To be able to distinguish
+				between SVN and VS.NET's own menu choices, dialog boxes, Solution Explorer,
+				Output pane etc. without deviating too much from VS.NET's GUI design an icon
+				was needed. As the Subversion group tend to use Greek words we decided to
+				follow this trend. The purpose of the namespace Ankh is to represent the
+				GUI/addin layer. The coding language in Ankh is C#. The namespace Ankh has two
+				children named Commands and UI. </p> 
+			</section>
+			
+			<section header="Ankh.Commands"> 
+				<p>The purpose of the
+				Commands namespace is to serve as a "connection" between the graphical user
+				interface and the NSvn wrapper. The Commands namespace has a filename
+				collection representing all implemented functions from SVN. The majority of the
+				filenames were derived from the Use Case Bubble diagrams enclosed and relations
+				between these files are shown in class diagrams also enclosed. </p> 
+			</section>
+			
+			<section header="Ankh.UI"> 
+				<p>The purpose of the UI namespace is to gather all files connected to the 
+				graphical user interface. The files are mainly represented by dialog-boxes 
+				and user controls.</p> 
+			</section>
+			
+			<section header="AnkhSetUp"> 
+				<p>Purpose</p> 
+			</section>
+			
+			<section header="NSvn"> 
+				<p>NSvn is the name of our VS.NET wrapper. The choise of the name selected was
+				based on the short name of Subversion, svn, combined with the letter N symbolising VS.NET.
+				NSvn includes all files related to the .NET wrapper.
+				The namespace NSvn has 2 children named Common and Core.</p> 
+			</section>
+			
+			<section header="NSvn.Common"> 
+				<p>Purpose</p> 
+			</section>
+			
+			<section header="NSvn.Core"> 
+				<p>Purpose</p> 
+			</section>
+			
+			<section header="NSvn.Core.Tests"> 
+				<p>Purpose</p> 
+			</section>
+			
+			<section header="NSvn.Core.Tests.MCpp"> 
+				<p>Purpose</p> 
+			</section>
+			
+			<section header="Solution Items"> 
+				<p>Purpose</p> 
+			</section>		
+			
+		</section>
+		
+		<section header="Testing"> 
+				<section header="Unit testing with NUnit"> 
+					<p>Purpose</p> 
+				</section>	
+				<section header="Functional testing"> 
+					<p>Purpose</p> 
+				</section>
+				<section header="Testing of GUI"> 
+					<p>Purpose</p> 
+				</section>
+		</section>
+	</section>	
+			
+	<section header="Conclusion">  
+		<p></p>  			
+	</section>
+	
+	<section header="Appendix"> 
+	
+		<section header="Dictionary">  
+		</section>
+		
+		<section header="Use case diagrams">  
+		 	<img src="uml/uc1.png" align="center" hspace="10" vspace="10"/>
+		 	<br></br>	
+		 	<img src="uml/uc2.png" align="center" hspace="10" vspace="10"/>	
+		 	<br></br>	
+		 	<img src="uml/uc3.png" align="center" hspace="10" vspace="10"/>	
+		 	<br></br>	
+		 	<img src="uml/uc4.png" align="center" hspace="10" vspace="10"/>
+		 	<br></br>	
+		 	<img src="uml/diff.png" align="center" hspace="10" vspace="10"/>
+		 	<br></br>	
+		</section> 	
+		<section header="Use case schemes">  		
+		</section> 	
+		<section header="Class diagrams"> 
+			 <p>Class diagram of Ankh</p>
+			 <img src="uml/Ankh.png" align="center" hspace="10" vspace="10"/>
+			 <p>Class diagram of Ankh.UI</p>	
+			 <img src="uml/Ankh.UI.png" align="center" hspace="10" vspace="10"/>			 
+			 <p>Class diagram of Ankh.Commands</p>
+			 <img src="uml/Commands.png" align="center" hspace="10" vspace="10"/>
+			 <p>Class diagram of NSvn</p>	
+			 <img src="uml/NSvn.ClassDiagram.png" align="center" hspace="10" vspace="10"/>
+			 <p>Class diagram of NSvn.Common</p>	
+			 <img src="uml/Common.png" align="center" hspace="10" vspace="10"/>
+			 <p>Class diagram of NSvn.Core</p>	
+			 <img src="uml/Core.png" align="center" hspace="10" vspace="10"/>
+			 <p>Class diagram of NSvn.Core.Client</p>			 
+			 <img src="uml/Client.png" align="center" hspace="10" vspace="10"/>	
+			 <p>Class diagram of NSvn.Core.Tests</p>	
+			 <!-- TODO  <img src="uml/Tests.png" align="center" hspace="10" vspace="10"/> !-->
+			 <p>Class diagram of NSvn.Core.Tests.MCpp</p>	
+			 <!-- TODO  <img src="uml/Tests.MCpp.png" align="center" hspace="10" vspace="10"/> !-->
+		</section> 
+	</section>
+		
+	
+</doc>
+    
