@@ -142,12 +142,23 @@
          </copy>
     </target>
     
+    <target name="build-ReposInstaller" depends="build-Ankh.UI, build-NSvn.Common, build-NSvn.Core, build-Utils">
+        <nant buildfile="ReposInstaller/ReposInstaller.build" inheritall="true" target="build"/>
+        <copy todir="${build.dir}"> 
+            <fileset basedir="ReposInstaller/${build.dir}">
+                <includes name="*.dll"/>
+                <includes name="*.pdb"/>
+            </fileset>
+         </copy>
+    </target>
+    
+    
     <target name="rebuild" description="Clean all output directories before rebuilding">
         <call target="clean"/>
         <call target="build"/>
     </target>
     
-    <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn.Core"
+    <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn.Core, build-ReposInstaller"
         description="Build all necessary assemblies"/>
     
 <target name="build-tests" depends="build, build-Ankh.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"
