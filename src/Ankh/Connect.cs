@@ -84,7 +84,7 @@ namespace Ankh
             {
                 
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst,
-                    new UIShell() );
+                    new UIShell(), new ErrorHandler() );
                 
 
                 Extenders.ExtenderProvider.Register( this.context );

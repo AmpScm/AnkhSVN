@@ -27,14 +27,15 @@ namespace Ankh
         public event EventHandler Unloading;
 
 
-        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell )
+        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell,
+            IErrorHandler errorHandler )
         {
             this.dte = dte;
             this.addin = addin;
             this.uiShell = uiShell;
             this.uiShell.Context = this;
 
-            this.errorHandler = new ErrorHandler();
+            this.errorHandler = errorHandler;
 
             this.hostWindow = new Win32Window( new IntPtr(dte.MainWindow.HWnd) );
 
