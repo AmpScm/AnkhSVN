@@ -169,6 +169,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CheckoutDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CheckoutDialog.resx"
+                    DependentUpon = "CheckoutDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "ClientCertDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
