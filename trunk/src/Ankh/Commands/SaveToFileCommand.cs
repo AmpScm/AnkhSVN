@@ -18,6 +18,7 @@ namespace Ankh.Commands
             context.RepositoryController.VisitSelectedNodes( v );
         }        
 
+        // override the CatVisitor class so we can pop up a save file dialog.
         protected class SaveCatVisitor : CatVisitor
         {
             protected override string GetPath(string filename)
