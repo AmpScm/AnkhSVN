@@ -58,6 +58,10 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AnkhSetup", "Ankh\AnkhSetup
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstallLib", "InstallLib\InstallLib.vcproj", "{2A753B40-AB06-4D27-A093-D1D351BC9522}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		(svnlib) Debug = (svnlib) Debug
@@ -222,6 +226,22 @@ Global
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug run.ActiveCfg = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.NSvn.Tests.ActiveCfg = Release
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Release.ActiveCfg = Release
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug.ActiveCfg = Debug|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug.Build.0 = Debug|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug run.ActiveCfg = Debug|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug run.Build.0 = Debug|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) NSvn.Tests.ActiveCfg = Release|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) NSvn.Tests.Build.0 = Release|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Release.ActiveCfg = Release|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Release.Build.0 = Release|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Debug.ActiveCfg = Debug|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Debug.Build.0 = Debug|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Debug run.ActiveCfg = Debug|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Debug run.Build.0 = Debug|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.NSvn.Tests.ActiveCfg = Release|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.NSvn.Tests.Build.0 = Release|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Release.ActiveCfg = Release|Win32
+		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		WiX\Ankh-UI.wxs = WiX\Ankh-UI.wxs
@@ -244,8 +264,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
