@@ -1,0 +1,25 @@
+Title			Colour		Total
+----------------------------------------------------------------------------------------------	
+testDocumentation.doc: 	5		  38
+processDocumentation.doc: 			  46
+productDocumentation.doc: 			  65
+Total					149		
+
+
+testDocumentation.doc
+----------------------------------------------------------------------------------------------	
+Pages in colour:		1,34,35,36,38
+Total coloured pages:		5 
+Total number of pages:	38
+
+processDocumentation.doc:
+----------------------------------------------------------------------------------------------	
+Pages in colour:		
+Total coloured pages:		 
+Total number of pages:
+
+productDocumentation.doc: 	
+----------------------------------------------------------------------------------------------	
+Pages in colour:		
+Total coloured pages:		 
+Total number of pages:
