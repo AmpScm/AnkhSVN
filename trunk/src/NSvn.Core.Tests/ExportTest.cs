@@ -45,7 +45,7 @@ namespace NSvn.Core.Tests
         /// </summary>
         public void TestExportWc()
         { 
-            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            ClientContext ctx = new ClientContext();
             
             Client.Export( this.WcPath, this.newWc, Revision.Head, ctx );
 

@@ -224,12 +224,12 @@ namespace NSvn
             ///                      for more information.</param> 
 	        static void Resolve(String* path, bool recursive, ClientContext* context);
         
-/*
+
             ///<summary>Copy a file/directory.</summary>
             ///<param name="srcPath">Path to the file/directory to be copied.</param>
             ///<param name="srcRevision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
             ///                         for more information.</param>
-            ///<param name="dst">Path to the destination.</param>
+            ///<param name="dstPath">Path to the destination.</param>
             ///<param name="optionalAdmAccess></param>  //New 6.3.2003
             ///<param name="context">A client context object, which holds client specific 
             ///                      callbacks, batons, serves as a cache for configuration options, 
@@ -237,7 +237,8 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns> 
-	        static CommitInfo* Copy(String* srcPath, Revision* srcRevision, String* dst, ? optionalAdmAccess
+            //TODO: Implement the variable optionalAdmAccess
+	        static CommitInfo* Copy(String* srcPath, Revision* srcRevision, String* dstPath,
                 ClientContext* context); 
 
 
@@ -253,7 +254,7 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
-            ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>*/
+            ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
 	        static CommitInfo* Move(String* srcPath, Revision* srcRevision, String* dstPath, 
                 bool force, ClientContext* context);
 
