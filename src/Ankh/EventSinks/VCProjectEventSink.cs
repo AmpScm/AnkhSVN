@@ -29,6 +29,10 @@ namespace Ankh.EventSinks
                 "Microsoft.VisualStudio.VCProjectEngine.VCFilter", true );
             this.vcProjectType = asm.GetType(
                 "Microsoft.VisualStudio.VCProjectEngine.VCProject", true );
+            // VCReference might not be present in 2002. Opt not to throw an 
+            // exception
+            this.vcReferenceType = asm.GetType(
+                "Microsoft.VisualStudio.VCProjectEngine.VCReference", false );
 
             // the ItemAdded event handler
             Type itemAddedType = asm.GetType( "Microsoft.VisualStudio.VCProjectEngine._dispVCProjectEngineEvents_ItemAddedEventHandler", false );
@@ -120,8 +124,15 @@ namespace Ankh.EventSinks
                 itemType = this.vcFilterType;
             else if ( this.vcFileType.IsInstanceOfType( item ) )
                 itemType = this.vcFileType;
+            else if ( this.vcReferenceType != null &&
+                this.vcReferenceType.IsInstanceOfType( item ) )
+            {
+                itemType = this.vcReferenceType;
+            }
             else
-                throw new ApplicationException( "Unknown item type added to project" );
+                // ok, we give up
+                return;
+            
 
             // both Filter and File objects have a "project" property
             object vcproj = itemType.GetProperty("project").GetValue(
@@ -166,6 +177,7 @@ namespace Ankh.EventSinks
         private readonly Type vcFileType;
         private readonly Type vcProjectType;
         private readonly Type vcFilterType;
+        private readonly Type vcReferenceType;
         private readonly object events;
     }
 }
