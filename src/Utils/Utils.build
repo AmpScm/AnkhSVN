@@ -29,8 +29,6 @@
     <target name="compile" depends="init">
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
-        
-        <echo message="Utils.debug: ${debug}"/>
 
         <csc target="library" output="${build.dir}/Utils.dll" verbose="${verbose}" 
             define="${define}" debug="${debug}">
