@@ -30,14 +30,14 @@ namespace NSvn
         /// <returns>An ILocalResource object.</returns>
         public static ILocalResource FromLocalPath( string path )
         {
-            if ( !SvnUtils.IsWorkingCopyPath( path ) )
-                return Unversionable;
 
             Status status  = Client.SingleStatus( path );
             System.Diagnostics.Debug.Assert( status != null, 
                 "Couldn't get status for " + path );
 
-            if ( status.TextStatus != StatusKind.Unversioned )
+            if ( status == Status.None )
+                return Unversionable;
+            else if ( status.TextStatus != StatusKind.Unversioned )
                 return WorkingCopyResource.FromPath( path, status );
             else
                 return UnversionedResource.FromPath( path );
