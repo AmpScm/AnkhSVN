@@ -18,7 +18,7 @@ namespace Ankh
     /// </summary>
     internal class SvnContext : NSvnContext
     {
-        public SvnContext( AnkhContext ankhContext ) : base( @"T:\foo123config" )
+        public SvnContext( AnkhContext ankhContext ) // : base( @"T:\foo123config" )
         {
             this.ankhContext = ankhContext;
             this.AddAuthenticationProvider( AuthenticationProvider.GetSimpleProvider() );           
@@ -32,12 +32,12 @@ namespace Ankh
             this.AddAuthenticationProvider( 
                 AuthenticationProvider.GetSslClientCertPasswordPromptProvider(
                     new SslClientCertPasswordPromptDelegate( 
-                        this.ClientCertificatePasswordPrompt ) ) );
+                        this.ClientCertificatePasswordPrompt ), 3 ) );
             this.AddAuthenticationProvider( 
                 AuthenticationProvider.GetSslClientCertFileProvider() );
             this.AddAuthenticationProvider( 
                 AuthenticationProvider.GetSslClientCertPromptProvider( 
-                    new SslClientCertPromptDelegate( this.ClientCertificatePrompt ) ) );
+                    new SslClientCertPromptDelegate( this.ClientCertificatePrompt ), 3 ) );
 
             this.ClientContext.CancelCallback = new CancelCallback( this.CancelCallback );
 
@@ -171,7 +171,7 @@ namespace Ankh
         /// <param name="realm"></param>
         /// <param name="username"></param>
         /// <returns></returns>
-        private SimpleCredential PasswordPrompt( String realm, String username )
+        private SimpleCredential PasswordPrompt( String realm, String username, bool maySave )
         {
             using( LoginDialog dialog = new LoginDialog() )
             {
@@ -181,10 +181,12 @@ namespace Ankh
                 if ( username != null )
                     dialog.Username = username;
 
+                dialog.MaySave = maySave;
+
                 if ( dialog.ShowDialog( this.ankhContext.HostWindow ) != DialogResult.OK )
                     return null;
 
-                return new SimpleCredential( dialog.Username, dialog.Password );
+                return new SimpleCredential( dialog.Username, dialog.Password, dialog.ShallSave );
             }
         }
 
@@ -196,12 +198,13 @@ namespace Ankh
         /// <param name="info"></param>
         /// <returns></returns>
         private SslServerTrustCredential SslServerTrustPrompt( string realm,
-            SslFailures failures, SslServerCertificateInfo info )
+            SslFailures failures, SslServerCertificateInfo info, bool maySave )
         {
             using( SslServerTrustDialog dialog = new SslServerTrustDialog() )
             {
                 dialog.Failures = failures;
                 dialog.CertificateInfo = info;
+                dialog.MaySave = maySave;
                 DialogResult result = dialog.ShowDialog();
 
                 // Cancel means reject.
@@ -211,11 +214,9 @@ namespace Ankh
                 SslServerTrustCredential cred = new SslServerTrustCredential();
                 cred.AcceptedFailures = failures;
                 
-                // OK means trust permanently
-                if ( result == DialogResult.OK )
-                    cred.TrustPermanently = true;
-
-                // anything else means trust temporarily
+                if ( dialog.ShallSave ) 
+                    cred.MaySave = true;       
+         
                 return cred;
             }
         }
@@ -224,15 +225,20 @@ namespace Ankh
         /// Prompt the user for a passphrase for a client cert.
         /// </summary>
         /// <returns></returns>
-        private SslClientCertificatePasswordCredential ClientCertificatePasswordPrompt()
+        private SslClientCertificatePasswordCredential ClientCertificatePasswordPrompt( 
+            string realm, bool maySave )
         {
             using( ClientCertPassphraseDialog dialog = new ClientCertPassphraseDialog() )
             {
+                dialog.MaySave = maySave;
+                dialog.Realm = realm;
+
                 if ( dialog.ShowDialog() == DialogResult.OK )
                 {
                     SslClientCertificatePasswordCredential cred = new 
                         SslClientCertificatePasswordCredential();
                     cred.Password = dialog.Passphrase;
+                   
                     return cred;
                 }
                 else
@@ -244,15 +250,19 @@ namespace Ankh
         /// Prompts the user for a client certificate.
         /// </summary>
         /// <returns></returns>
-        private SslClientCertificateCredential ClientCertificatePrompt()
+        private SslClientCertificateCredential ClientCertificatePrompt( string realm, bool maySave )
         {
             using( ClientCertDialog dialog = new ClientCertDialog() )
             {
+                dialog.Realm = realm;
+                dialog.MaySave = maySave;
+
                 if ( dialog.ShowDialog() == DialogResult.OK )
                 {
                     SslClientCertificateCredential cred = new 
                         SslClientCertificateCredential();
                     cred.CertificateFile = dialog.CertificateFile;
+                    cred.MaySave = dialog.ShallSave;
                     return cred;
                 }
                 else
