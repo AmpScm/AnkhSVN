@@ -170,6 +170,12 @@ namespace Ankh
             get{ return this.statusCache; }
         }
 
+        public bool OperationRunning
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.operationRunning; }
+        }
+
      
         /// <summary>
         /// An IWin32Window to be used for parenting dialogs.
@@ -243,6 +249,7 @@ namespace Ankh
         public void StartOperation( string description )
         {
             //TODO: maybe refactor this?
+            this.operationRunning = true;
             this.DTE.StatusBar.Text = description + "...";
             this.DTE.StatusBar.Animate( true, vsStatusAnimation.vsStatusAnimationSync );
 
@@ -256,10 +263,14 @@ namespace Ankh
         /// </summary>
         public void EndOperation()
         {
-            this.DTE.StatusBar.Text = "Ready";
-            this.DTE.StatusBar.Animate( false, vsStatusAnimation.vsStatusAnimationSync );
+            if ( this.operationRunning )
+            {
+                this.DTE.StatusBar.Text = "Ready";
+                this.DTE.StatusBar.Animate( false, vsStatusAnimation.vsStatusAnimationSync );
 
-            this.OutputPane.EndActionText();
+                this.OutputPane.EndActionText();
+                this.operationRunning = false;
+            }
         }
 
         /// <summary>
@@ -448,6 +459,8 @@ namespace Ankh
 
         private bool ankhLoadedForSolution;
         private StatusCache statusCache;
+
+        private bool operationRunning;
 
         private ProgressDialog progressDialog;
         private SvnClient client;
