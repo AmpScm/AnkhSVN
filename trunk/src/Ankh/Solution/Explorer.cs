@@ -52,6 +52,22 @@ namespace Ankh.Solution
             }
         }
 
+        /// <summary>
+        /// Visits all the selected nodes.
+        /// </summary>
+        /// <param name="visitor"></param>
+        public void VisitSelectedNodes( INodeVisitor visitor )
+        {
+            //foreach( SelectedItem item in items )
+            object o = this.uiHierarchy.SelectedItems;
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
+            {
+                TreeNode node = this.GetNode( item );
+                if ( node != null )
+                    node.Accept( visitor );
+            }
+        }
+
         public void VisitResources( ProjectItem item, ILocalResourceVisitor visitor,
             bool recursive )
         {
