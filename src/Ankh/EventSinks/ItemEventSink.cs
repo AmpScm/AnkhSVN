@@ -3,6 +3,7 @@ using System;
 using NSvn;
 using EnvDTE;
 using System.IO;
+using NSvn.Core;
 
 namespace Ankh.EventSinks
 {
@@ -61,10 +62,33 @@ namespace Ankh.EventSinks
                 if ( item.Name == oldName )
                     return;
 
-                // assume there is only one filename
+                // assume theres only one
                 string newPath = item.get_FileNames(1);
-                RenameVisitor v = new RenameVisitor( oldName, newPath );
-                this.Context.SolutionExplorer.VisitResources( item, v, false );
+
+                // find the parent dir
+                string noTrailing = newPath[ newPath.Length - 1 ] == '\\' ? newPath.Substring( 0, newPath.Length-1 ) : 
+                    newPath;
+                string parentDir = Path.GetDirectoryName( noTrailing );
+
+                string oldPath = Path.Combine( parentDir, oldName );
+               
+                try
+                {
+                    this.Context.OutputPane.StartActionText( "Renaming" );
+
+                    RenameVisitor v = new RenameVisitor( oldPath, newPath );
+                    this.Context.SolutionExplorer.VisitResources( item, v, false );
+                }
+                catch( SvnClientException )
+                {
+                    // unable to rename - abort.
+                    this.Context.OutputPane.WriteLine( "Ankh was unable to rename the item, most likely due to uncommitted changes." +
+                        Environment.NewLine + "The item is now out of Ankh's control. Sorry. Hope to do better next time.");
+                }
+                finally
+                {
+                    this.Context.OutputPane.EndActionText();
+                }
 
                 // we need to refresh the parents, since the actual treenode is replaced.
                this.Context.SolutionExplorer.RefreshSelectionParents();
@@ -96,19 +120,15 @@ namespace Ankh.EventSinks
         /// </summary>
         private class RenameVisitor : LocalResourceVisitorBase
         {
-            public RenameVisitor( string oldName, string newPath )
+            public RenameVisitor( string oldPath, string newPath )
             {
-                this.oldName = oldName; 
+                this.oldPath = oldPath; 
                 this.newPath = newPath;
             }
 
             public override void VisitWorkingCopyFile(WorkingCopyFile file)
             {
-
-                // we need to rename the file back to  its original name
-                string dir = Path.GetDirectoryName( file.Path );
-                string oldPath = Path.Combine( dir, oldName );
-                File.Move( this.newPath, oldPath );
+                File.Move( this.newPath, this.oldPath );
 
                 // now have SVN rename it.
                 file.Move( this.newPath, true );
@@ -117,18 +137,14 @@ namespace Ankh.EventSinks
             public override void VisitWorkingCopyDirectory(WorkingCopyDirectory dir)
             {
                 // strip off the trailing \ if necessary
-                string dirNoTrailing = dir.Path[ dir.Path.Length - 1 ] == '\\' ? dir.Path.Substring( 0, dir.Path.Length-1 ) : 
-                    dir.Path;
-                string parentDir = Path.GetDirectoryName( dirNoTrailing );
-                string oldPath = Path.Combine( parentDir, oldName );
-                Directory.Move( this.newPath, oldPath );
+                Directory.Move( this.newPath, this.oldPath );
 
                 dir.Move( this.newPath, true );
             }
 
 
 
-            private string oldName;
+            private string oldPath;
             private string newPath;
 
         }
