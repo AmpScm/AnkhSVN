@@ -133,7 +133,7 @@
                 />
                 <Reference
                     Name = "office"
-                    AssemblyName = "office"
+                    AssemblyName = "Office"
                     HintPath = "..\lib\office.dll"
                 />
             </References>
@@ -226,6 +226,11 @@
                 />
                 <File
                     RelPath = "IPropertyEditor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IRepositoryTreeView.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
