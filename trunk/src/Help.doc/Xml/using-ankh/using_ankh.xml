@@ -14,9 +14,8 @@
             <list>
                 <item>how to update your Working copy</item>
                 <item>how to do changes to your local files</item>
-                <item>how to remove, copy, rename or move your files</item>
+                <item>how to remove or rename your files</item>
                 <item>how to see differences between your local files and the ones in the repository</item>
-                <item>how to resolve conflicts between your local files and the one in the repository</item>
                 <item>how to commit changes to a repository</item>
             </list> 
         </p>

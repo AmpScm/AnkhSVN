@@ -74,4 +74,10 @@
     <File Url="img\commit_dialog.png"/>
     <File Url="img\item_menu.png"/>
     <File Url="img\ok_file.png"/>
+    <File Url="img\select_installation_folder.png"/>
+    <File Url="img\uninstall_using_installer.png"/>
+    <File Url="img\uninstall_using_ms.png"/>
+    <File Url="img\disable_ankh.png"/>
+    <File Url="img\add_remove_programs.png"/>
+    <File Url="img\ws_right_click_menu.png"/>
     </HelpFileList>
