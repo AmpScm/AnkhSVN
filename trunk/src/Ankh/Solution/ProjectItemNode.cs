@@ -99,10 +99,18 @@ namespace Ankh.Solution
         // recursively adds subitems of this projectitem.
         private void AddSubItems( ProjectItem item, StatusChanged del )
         {
-            foreach( ProjectItem subItem in item.ProjectItems )
+            // some object models might throw when accessing the .ProjectItems property
+            try
             {
-                this.AddResourcesFromProjectItem( subItem, del );
-                this.AddSubItems( subItem, del );
+                foreach( ProjectItem subItem in item.ProjectItems )
+                {
+                    this.AddResourcesFromProjectItem( subItem, del );
+                    this.AddSubItems( subItem, del );
+                }
+            }
+            catch( InvalidCastException )
+            {
+                // empty
             }
         }
 
