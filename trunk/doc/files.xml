@@ -124,7 +124,7 @@
         </file>
         
         <file path="ViewCVS">
-            <realpath>http://ankhsvn.com:8088/viewcvs/</realpath>
+            <realpath>http://ankhsvn.com:8088/viewcvs/trunk/</realpath>
             <name>ViewCVS</name>
             <description>Browse the Ankh repository using the ViewCVS tool</description>
         </file>
