@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using Utils;
 
 namespace Ankh.UI
 {
@@ -268,7 +269,7 @@ namespace Ankh.UI
             
             // special treatment for URLs - we want the hostname in one go.
             if ( this.UrlPaths )
-                components = this.UrlSplit( nodeName );
+                components = UriUtils.Split( nodeName );
             else
                 components = nodeName.Split( this.PathSeparator[0]);
 
@@ -301,29 +302,7 @@ namespace Ankh.UI
             // non-leaf nodes default to gray and are disabled
             newNode.ForeColor = DisabledColor;
             return newNode;
-        }
-
-        /// <summary>
-        /// Splits an URL. The first component in the returned array will be the
-        /// hostname, the remaining ones will be the path components split by '/'
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        private string[] UrlSplit( string url )
-        {
-            Match match = URLPARSE.Match(url);
-            if ( !match.Success )
-                throw new ApplicationException( "Not an URL: " + url );
-            
-            string host = match.Groups["host"].ToString();
-            string rest = match.Groups["rest"].ToString();
-
-            string[] restComponents = rest.Split( this.PathSeparator[0] );
-            string[] components = new string[restComponents.Length+1];
-            components[0] = host;
-            restComponents.CopyTo( components, 1 );
-            return components;
-        }
+        }        
 
         private IList items;
         private TreeNode checkedNode;
@@ -332,10 +311,7 @@ namespace Ankh.UI
 
         private static readonly Color EnabledColor = Color.Black;
         private static readonly Color DisabledColor = Color.Gray;
-        private static readonly Regex URLPARSE = 
-            new Regex(@"(?'host'[^:]+://[^/]*)/(?'rest'.*)", 
-            RegexOptions.IgnoreCase);
-
+        
        
         public static void Main()
         {
