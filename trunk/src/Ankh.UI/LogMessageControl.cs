@@ -13,11 +13,7 @@ namespace Ankh.UI
 	/// </summary>
 	public class LogMessageControl : System.Windows.Forms.UserControl
 	{
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
-
+      
 		public LogMessageControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
@@ -26,6 +22,18 @@ namespace Ankh.UI
 			// TODO: Add any initialization after the InitForm call
 
 		}
+
+
+        public string LogMessage
+        {
+       
+            get
+            {
+                return this.logTextBox.Text;
+            }
+        }
+
+
 
 		/// <summary> 
 		/// Clean up any resources being used.
@@ -49,9 +57,34 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-			components = new System.ComponentModel.Container();
-		}
+            this.logTextBox = new System.Windows.Forms.RichTextBox();
+            this.SuspendLayout();
+            // 
+            // logTextBox
+            // 
+            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logTextBox.Name = "logTextBox";
+            this.logTextBox.Size = new System.Drawing.Size(368, 312);
+            this.logTextBox.TabIndex = 0;
+            this.logTextBox.Text = "";
+            // 
+            // LogMessageControl
+            // 
+            this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.logTextBox});
+            this.Name = "LogMessageControl";
+            this.Size = new System.Drawing.Size(368, 312);
+            this.ResumeLayout(false);
+
+        }
 		#endregion
+
+        private System.Windows.Forms.RichTextBox logTextBox;
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
+
 	}
 }
 
