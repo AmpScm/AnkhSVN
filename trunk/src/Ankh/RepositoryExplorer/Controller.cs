@@ -27,6 +27,7 @@ namespace Ankh.RepositoryExplorer
             this.repositoryExplorer.EnableBackgroundListingChanged += 
                 new EventHandler( this.BackgroundListingChanged );
             this.repositoryExplorer.AddClicked += new EventHandler(AddClicked);
+            this.repositoryExplorer.RemoveClicked += new EventHandler(RemoveClicked);
             this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
             this.repositoryExplorer.SelectionChanged +=new EventHandler(SelectionChanged);
             
@@ -147,7 +148,7 @@ namespace Ankh.RepositoryExplorer
         }
 
         /// <summary>
-        /// The user wants to go to an URL.
+        /// The user wants to add an URL.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -159,6 +160,17 @@ namespace Ankh.RepositoryExplorer
             this.repositoryExplorer.AddRoot( url, rootNode );
         }
 
+        /// <summary>
+        /// The user wants to remove an URL.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void RemoveClicked(object sender, EventArgs args)
+        {
+            if ( this.repositoryExplorer.SelectedNode != null )
+                this.repositoryExplorer.RemoveRoot( 
+                    this.repositoryExplorer.SelectedNode );
+        }
 
         /// <summary>
         /// The background listing checkbox' state has changed.

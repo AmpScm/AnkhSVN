@@ -19,10 +19,7 @@ namespace Ankh.UI
     /// </summary>
     public class RepositoryExplorerControl : System.Windows.Forms.UserControl
     {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
+        
 
         public RepositoryExplorerControl()
         {
@@ -65,6 +62,12 @@ namespace Ankh.UI
         /// Fired whenever the user clicks Go.
         /// </summary>
         public event EventHandler AddClicked;
+
+        public event EventHandler RemoveClicked 
+        {
+            add{ this.removeButton.Click += value; }
+            remove{ this.removeButton.Click -= value; }
+        }
 
         /// <summary>
         /// Fired if the background listing checkbox' state is changed.
@@ -132,6 +135,19 @@ namespace Ankh.UI
         }
 
         /// <summary>
+        /// Removes the root of a given node.
+        /// </summary>
+        /// <param name="node"></param>
+        public void RemoveRoot( IRepositoryTreeNode node )
+        {
+            TreeNode root = (TreeNode)node.Tag;
+            while( root.Parent != null )
+                root = root.Parent;
+            root.Remove();
+            this.removeButton.Enabled = this.SelectedNode != null;
+        }
+
+        /// <summary>
         /// Refreshes the node.
         /// </summary>
         /// <param name="node"></param>
@@ -163,11 +179,6 @@ namespace Ankh.UI
             this.treeView.LabelEdit = true;
             node.BeginEdit();
         }
-
-        private System.Windows.Forms.Button addButton;
-        private System.Windows.Forms.Button button1;
-        private Ankh.UI.RepositoryTreeView treeView;
-        private Ankh.UI.RevisionPicker revisionPicker;
 
         private INewDirectoryHandler newDirHandler;
 
@@ -313,6 +324,7 @@ namespace Ankh.UI
         {
             if ( this.SelectionChanged != null )
                 this.SelectionChanged( this, EventArgs.Empty );
+            this.removeButton.Enabled = this.SelectedNode != null;
         }
 
 
@@ -329,7 +341,7 @@ namespace Ankh.UI
             this.browseButton = new System.Windows.Forms.Button();
             this.urlLabel = new System.Windows.Forms.Label();
             this.backgroundListingCheck = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.removeButton = new System.Windows.Forms.Button();
             this.treeView = new Ankh.UI.RepositoryTreeView();
             this.revisionPicker = new Ankh.UI.RevisionPicker();
             this.SuspendLayout();
@@ -389,14 +401,15 @@ namespace Ankh.UI
             this.backgroundListingCheck.TabIndex = 6;
             this.backgroundListingCheck.Text = "Enable background listing";
             // 
-            // button1
+            // removeButton
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(283, 99);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(88, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Remove";
+            this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.removeButton.Enabled = false;
+            this.removeButton.Location = new System.Drawing.Point(283, 99);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(88, 23);
+            this.removeButton.TabIndex = 8;
+            this.removeButton.Text = "Remove";
             // 
             // treeView
             // 
@@ -426,7 +439,7 @@ namespace Ankh.UI
             // 
             this.Controls.Add(this.revisionPicker);
             this.Controls.Add(this.treeView);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.removeButton);
             this.Controls.Add(this.backgroundListingCheck);
             this.Controls.Add(this.urlLabel);
             this.Controls.Add(this.browseButton);
@@ -440,43 +453,6 @@ namespace Ankh.UI
         }
 		#endregion
 
-        
-//        private void myInitializeComponents()
-//        {
-//            //initialize components outside of generated code area
-//
-//            this.treeView = new Ankh.UI.RepositoryTreeView();
-//            this.revisionPicker = new Ankh.UI.RevisionPicker();
-//            // 
-//            // treeView
-//            // 
-//            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-//                | System.Windows.Forms.AnchorStyles.Left) 
-//                | System.Windows.Forms.AnchorStyles.Right)));
-//            this.treeView.Enabled = false;
-//            this.treeView.ImageIndex = -1;
-//            this.treeView.Location = new System.Drawing.Point(0, 110);
-//            this.treeView.Name = "treeView";
-//            this.treeView.SelectedImageIndex = -1;
-//            this.treeView.Size = new System.Drawing.Size(407, 296);
-//            this.treeView.TabIndex = 6;
-//            // 
-//            // revisionPicker
-//            // 
-//            this.revisionPicker.Location = new System.Drawing.Point(8, 60);
-//            this.revisionPicker.Name = "revisionPicker";
-//            this.revisionPicker.Size = new System.Drawing.Size(336, 24);
-//            this.revisionPicker.TabIndex = 7;
-//            this.revisionPicker.Changed += new System.EventHandler(this.revisionPicker_Changed);
-//            // 
-//            // RepositoryExplorerControl
-//            // 
-//            this.Controls.Add(this.revisionPicker);
-//            this.Controls.Add(this.treeView);
-//
-//        }
-
- 
         private void browseButton_Click(object sender, System.EventArgs e)
         {
             // Browse to a local repository
@@ -499,6 +475,17 @@ namespace Ankh.UI
         private CommandBar commandBar;
         private System.Windows.Forms.CheckBox backgroundListingCheck;
         private System.Windows.Forms.Label urlLabel;
+        
+
+        private System.Windows.Forms.Button addButton;
+        private Ankh.UI.RepositoryTreeView treeView;
+        private Ankh.UI.RevisionPicker revisionPicker;
+        private System.Windows.Forms.Button removeButton;
+
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
         
     }
