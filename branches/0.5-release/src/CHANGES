@@ -2,6 +2,7 @@ Version 0.5.2(released 07.07.2004)
 This release was built against Subversion 1.0.6, Neon 0.24.6, 
 openssl 0.9.7 and Berkeley DB 4.2.52
 
+* New command bitmaps
 * Add new Tools->AnkhSVN->Export... command.
 * Make installer set up the Ankh version information in the Help->About
   box rather than do it at startup. Make it work for both administrative
