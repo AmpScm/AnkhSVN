@@ -45,7 +45,7 @@ namespace Ankh.Commands
                         p.Items = resources;
                         p.CheckedItems = resources;
                         if ( p.ShowDialog( context.HostWindow ) != DialogResult.OK )
-                            return String.Empty;
+                            return null;
                         resources = p.CheckedItems;
                         recurse = p.Recursive;
                     }
