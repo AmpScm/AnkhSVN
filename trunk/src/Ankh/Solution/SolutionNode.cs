@@ -15,22 +15,22 @@ namespace Ankh.Solution
             : base( item, hItem, explorer, null )
         {
             EnvDTE.Solution solution = explorer.DTE.Solution;
-            this.solutionFile = (WorkingCopyFile)SvnResource.FromLocalPath( solution.FullName );
+            this.solutionFile = SvnResource.FromLocalPath( solution.FullName );
             this.solutionFile.Context = explorer.Context;
 
-            this.solutionFolder = (WorkingCopyDirectory)WorkingCopyResource.FromPath(
+            this.solutionFolder = SvnResource.FromLocalPath(
                 Path.GetDirectoryName( solution.FullName ) );
 
             explorer.SetSolution( this );
         }
 
         
-        public WorkingCopyFile SolutionFile
+        public ILocalResource SolutionFile
         {
             get{ return this.solutionFile; }
         }
 
-        public WorkingCopyDirectory SolutionFolder
+        public ILocalResource SolutionFolder
         {
             get{ return this.solutionFolder; }
         }
@@ -74,7 +74,7 @@ namespace Ankh.Solution
             }
         }
 
-        private WorkingCopyFile solutionFile;
-        private WorkingCopyDirectory solutionFolder;
+        private ILocalResource solutionFile;
+        private ILocalResource solutionFolder;
     }
 }
