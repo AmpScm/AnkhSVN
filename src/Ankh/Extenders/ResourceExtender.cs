@@ -83,49 +83,57 @@ namespace Ankh.Extenders
         }
 
 
-        [Category( "Subversion" )]
+        [Category( "Subversion" ),
+         Description("URL" )]
         public string Url
         {
             get{ return this.status.Entry.Url; }
         }
 
-        [Category( "Subversion" )]
+        [Category( "Subversion" ),
+         Description( "Repository UUID" )]
         public string RepositoryUuid
         {
             get  {  return this.status.Entry.Uuid; }
         }
 
-        [Category( "Subversion" )]
+        [Category( "Subversion" ),
+         Description( "Last committed author" )]
         public string LastCommittedAuthor
         {
             get{ return this.status.Entry.CommitAuthor; }
         }
 
-        [Category("Subversion")]
+        [Category("Subversion"),
+         Description( "Revision" )]                
         public int Revision
         {
             get{ return this.status.Entry.Revision; }
         }
 
-        [Category("Subversion")]
+        [Category("Subversion"),
+         Description( "Last committed date" )]
         public DateTime LastCommittedDate
         {
             get{ return this.status.Entry.CommitDate; }
         }
 
-        [Category("Subversion")]
+        [Category("Subversion"),
+         Description( "Last committed revision" )]
         public int LastCommittedRevision
         {
             get{ return this.status.Entry.CommitRevision; }
         }
 
-        [Category("Subversion")]
+        [Category("Subversion"),
+         Description( "Text status" )]
         public string TextStatus
         {
             get{ return this.status.TextStatus.ToString(); }
         }
 
-        [Category("Subversion")]
+        [Category("Subversion"),
+         Description( "Property status" )]
         public string PropertyStatus
         {
             get{ return this.status.PropertyStatus.ToString(); }
