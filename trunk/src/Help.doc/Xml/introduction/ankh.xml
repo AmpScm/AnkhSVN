@@ -1,6 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Ankh">
     <section>
+    <p>
+        The aim of this project was to provide an integration for the revision control 
+        system Subversion (SVN) into the existing coding environment provided by Visual Studio .NET. 
+        Most Windows users are not found of using command prompts which is needed by the 
+        use of Subversion today. 
+        <br/><br/>
+        By creating Ankh, SVN will be made available for a huge amount of new Windows programmers, 
+        and will also ease revision control for programmers already using subversion. 
+        Benefits of the addin will be that SVN is accessed directly from within VS.NET 
+        itself which will lead to increased productivity since revision control is directly accessible 
+        in VS.NET. 
+        <br/><br/>
+        Ankh is an open source free addin tool.
+    </p>
     </section>   
 </doc>

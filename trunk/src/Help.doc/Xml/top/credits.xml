@@ -1,6 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Credits">
     <section>
+        <p>Ankh was developed as a final Year procjet in Computer Science at <link url="http://www.hio.no">Høyskolen in Oslo</link>, spring 2003
+        <br/><br/>
+            <b>All code, gfx, docs was written and developed by:</b><br/>
+            <list>  
+                <td>Arild Finnes </td>
+                <td><link url="mailto:arild.finnes@broadpark.no">arild.finnes@broadpark.no</link></td><br/>
+                <td>Kristin Borud</td>
+                <td><link url="mailto:arild.finnes@broadpark.no">arild.finnes@broadpark.no</link></td><br/>
+                <td>Per August Krämer</td>
+                <td><link url="mailto:kristin.borud@iu.hio.no">kristin.borud@iu.hio.no</link></td><br/>
+            </list>
+        </p>
+        <p><b> Employer: </b>
+            <list>  CollabNet - <link url="www.collab.net">www.collab.net </link><br/>
+                    8000 Marina Boulevard, Suite 600 <br/>
+                    Brisbane, CA 94005-1865<br/>
+                    USA<br/>
+            </list>
+        </p>
     </section>   
 </doc>
