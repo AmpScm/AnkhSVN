@@ -5,6 +5,7 @@ using NSvn;
 using NSvn.Core;
 using EnvDTE;
 using System.Diagnostics;
+using System.IO;
 
 namespace Ankh.Solution
 {
@@ -83,10 +84,14 @@ namespace Ankh.Solution
             {
                 for( short i = 1; i <= this.projectItem.FileCount; i++ ) 
                 {
-                    ILocalResource res = SvnResource.FromLocalPath( this.projectItem.get_FileNames(i) );
-                    // does this resource exist?
-                    res.Context = this.Explorer.Context;
-                    this.resources.Add( res );
+                    string filename = this.projectItem.get_FileNames(i);
+                    if ( File.Exists( filename ) || Directory.Exists( filename ) )
+                    {
+                        ILocalResource res = SvnResource.FromLocalPath( filename);
+                        // does this resource exist?
+                        res.Context = this.Explorer.Context;
+                        this.resources.Add( res );
+                    }                    
                 }
                 this.Explorer.AddResource( this.projectItem, this );                    
             }
@@ -95,10 +100,10 @@ namespace Ankh.Solution
                 Debug.WriteLine( "NullReferenceException thrown in ProjectItemNode" );
                 //swallow
             }   
-            catch( System.Runtime.InteropServices.SEHException )
+            catch( System.Runtime.InteropServices.SEHException sex )
             {
                 Debug.WriteLine( "SEHException thrown: " + this.projectItem.Name );
-                System.Windows.Forms.MessageBox.Show( "SEHException: " + this.projectItem.Name );
+                System.Windows.Forms.MessageBox.Show( "SEHException: " + this.projectItem.Name + sex.Message );
             }
         }
 
