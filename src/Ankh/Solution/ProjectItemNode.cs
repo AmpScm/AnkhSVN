@@ -84,6 +84,8 @@ namespace Ankh.Solution
 
         protected void FindResources()
         {
+            this.Explorer.AddResource( this.projectItem, this ); 
+
             this.resources = new ArrayList();
             try
             {
@@ -97,9 +99,6 @@ namespace Ankh.Solution
                 // is this a childless tree node? it might have hidden children after all
                 if ( this.Children.Count == 0 )
                     this.AddSubItems( this.projectItem, del );
-                
-                this.Explorer.AddResource( this.projectItem, this );      
-              
                
             }
             catch( NullReferenceException )
