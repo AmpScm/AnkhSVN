@@ -64,5 +64,24 @@ namespace Utils
             else 
                 return true;
         }
+
+
+        /// <summary>
+        /// Recursively deletes a directory.
+        /// </summary>
+        /// <param name="path"></param>
+        public static void RecursiveDelete( string path )
+        {
+            foreach( string dir in Directory.GetDirectories( path ) )
+            {
+                RecursiveDelete( dir );
+            }
+
+            foreach( string file in Directory.GetFiles( path ) )
+                File.SetAttributes( file, FileAttributes.Normal );
+
+            File.SetAttributes( path, FileAttributes.Normal );
+            Directory.Delete( path, true );
+        }
 	}
 }

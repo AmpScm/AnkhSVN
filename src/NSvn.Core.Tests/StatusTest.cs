@@ -124,7 +124,7 @@ namespace NSvn.Core.Tests
             }
             finally
             {
-                this.RecursiveDelete( wc2 );
+                PathUtils.RecursiveDelete( wc2 );
             }
         }
 

@@ -46,7 +46,7 @@ namespace NSvn.Core.Tests
                 if ( this.ReposPath != null )
                     Directory.Delete( this.ReposPath, true );
                 if ( this.WcPath != null )
-                    this.RecursiveDelete( this.wcPath );
+                    PathUtils.RecursiveDelete( this.wcPath );
             }
             catch( Exception )
             {
@@ -221,19 +221,7 @@ namespace NSvn.Core.Tests
 
         
 
-        protected void RecursiveDelete( string path )
-        {
-            foreach( string dir in Directory.GetDirectories( path ) )
-            {
-                this.RecursiveDelete( dir );
-            }
-
-            foreach( string file in Directory.GetFiles( path ) )
-                File.SetAttributes( file, FileAttributes.Normal );
-
-            File.SetAttributes( path, FileAttributes.Normal );
-            Directory.Delete( path, true );
-        }
+        
        
 
         

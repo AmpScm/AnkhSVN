@@ -72,7 +72,7 @@ namespace NSvn.Core.Tests
             finally
             {
                 if ( wc2 != null )
-                    this.RecursiveDelete( wc2 );
+                    PathUtils.RecursiveDelete( wc2 );
 
             }
         }
