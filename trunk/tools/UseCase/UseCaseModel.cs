@@ -13,6 +13,7 @@ namespace UseCase
         public event ModelChangedEventHandler PreConditionsChanged;
         public event ModelChangedEventHandler PostConditionsChanged;
         public event ModelChangedEventHandler ElementsChanged;
+        public event ModelChangedEventHandler AtomsChanged;
 
         public UseCaseModel()
         {
@@ -54,7 +55,37 @@ namespace UseCase
             }
         }
 
-        public IElement[] Elements
+        public string Name
+        {
+            get{ return this.name; }
+            set
+            { 
+                this.name = value;
+                this.OnAtomsChanged();
+            }
+        }
+
+        public string Id
+        {
+            get{ return this.id; }
+            set
+            {
+                this.id = value;
+                this.OnAtomsChanged();
+            }
+        }
+
+        public string Summary
+        {
+            get{ return this.summary; }
+            set
+            {
+                this.summary = value;
+                this.OnAtomsChanged();
+            }
+        }
+
+            public IElement[] Elements
         {
             get{ return (IElement[])this.elements.ToArray( typeof(IElement) ); }
         }
@@ -101,6 +132,12 @@ namespace UseCase
             private ArrayList list = new ArrayList();
         }
 
+        protected virtual void OnAtomsChanged()
+        {
+            if ( this.AtomsChanged != null )
+                this.AtomsChanged( this, EventArgs.Empty );
+        }
+
         protected virtual void OnElementsChanged( )
         {
             if ( this.ElementsChanged != null )
@@ -131,5 +168,8 @@ namespace UseCase
         private ItemCollection postConditions;
 
         private ArrayList elements;
+        private string name = "";
+        private string id = "";
+        private string summary = "";
 	}
 }

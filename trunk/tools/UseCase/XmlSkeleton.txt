@@ -1,7 +1,7 @@
 <UseCase>
     <Preface>
         <Name></Name>
-        <Id></Id>
+        <ID></ID>
         <Actors></Actors>
         <Summary></Summary>
     </Preface>
