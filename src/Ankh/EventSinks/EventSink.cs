@@ -31,33 +31,45 @@ namespace Ankh.EventSinks
             
             ArrayList foundKinds = new ArrayList();
             ArrayList sinks = new ArrayList();
+
+            Projects projects = context.DTE.Solution.Projects;
             
-            foreach( Project project in context.DTE.Solution.Projects )
+            for( int i = 1; i <= projects.Count; i++ )
             {
-                // only create one set of sinks for each project type
-                if ( foundKinds.Contains( project.Kind ) ) 
-                    continue;
-                foundKinds.Add( project.Kind );
-
-                // VC++ projects are a special case
-                if ( project.Kind == VCPROJECTGUID )
+                try
                 {
-                    object events = 
-                        context.DTE.Events.GetObject( VCPROJECT );
-                    sinks.Add( new VCProjectEventSink( events, context ) );
+                    Project project = projects.Item(1);
+                    // only create one set of sinks for each project type
+                    if ( foundKinds.Contains( project.Kind ) ) 
+                        continue;
+                    foundKinds.Add( project.Kind );
 
-                    continue;
-                }
+                    // VC++ projects are a special case
+                    if ( project.Kind == VCPROJECTGUID )
+                    {
+                        object events = 
+                            context.DTE.Events.GetObject( VCPROJECT );
+                        sinks.Add( new VCProjectEventSink( events, context ) );
+
+                        continue;
+                    }
                     
-                // all other projects should follow the normal model
-                ProjectsEventSink projectsEvents = GetProjectsEvents( project.Kind, context );
-                if ( projectsEvents != null )
-                    sinks.Add( projectsEvents );
+                    // all other projects should follow the normal model
+                    ProjectsEventSink projectsEvents = GetProjectsEvents( project.Kind, context );
+                    if ( projectsEvents != null )
+                        sinks.Add( projectsEvents );
 
-                ProjectItemsEventSink projectItemsEvents = 
-                    GetProjectItemsEvents( project.Kind, context );
-                if ( projectItemsEvents != null )
-                    sinks.Add( projectItemsEvents );
+                    ProjectItemsEventSink projectItemsEvents = 
+                        GetProjectItemsEvents( project.Kind, context );
+                    if ( projectItemsEvents != null )
+                        sinks.Add( projectItemsEvents );
+                }
+                catch( Exception ex )
+                {
+                    context.ErrorHandler.Handle( ex );
+                    context.OutputPane.WriteLine( "Error when retrieving events sink for project." + 
+                        "Manual refresh of this project may be necessary." );
+                }
             }
 
             sinks.Add( new DocumentEventsSink( context ) );

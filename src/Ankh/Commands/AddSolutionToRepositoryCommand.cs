@@ -180,8 +180,9 @@ namespace Ankh.Commands
         /// <param name="context"></param>
         private void AddProjects( Projects projects, IContext context, string solutionDir )
         {
-            foreach( Project project in projects )
+            for( int i = 1; i <= projects.Count; i++ )
             {
+                Project project = projects.Item(i);
                 string filename;
                 try
                 {
@@ -194,10 +195,14 @@ namespace Ankh.Commands
                     }
                     else
                     {
-                        // project.FileName throws an ArgumentException if the project 
-                        // hasn't been loaded.
+                        // project.FileName returns null if the filename can't be retrieved
                         filename = this.GetProjectFileName( project, 
                             context.DTE.Solution );
+                        if ( filename == null )
+                        {
+                            context.OutputPane.WriteLine( "Unable to add project" );
+                            continue;
+                        }
                     }
                 }
                 catch( ArgumentException )
@@ -352,13 +357,38 @@ namespace Ankh.Commands
         /// <returns></returns>
         private string GetProjectFileName( Project project, EnvDTE.Solution solution )
         {
-            if ( File.Exists( project.FileName ) )
-                return project.FileName;
-            else
+            // lots of things that can throw here.
+            try
+            {
+                if ( File.Exists( project.FileName ) )
+                    return project.FileName;
+            }
+            catch( Exception )
+            {
+                // swallow
+            }
+            try
+            {
+                if ( File.Exists( project.FullName ) )
+                    return project.FullName;
+            }
+            catch( Exception )
+            {
+                // swallow
+            }
+            try
             {
                 string solutionDir = Path.GetDirectoryName( solution.FullName );
-                return Path.Combine( solutionDir, project.UniqueName );
+                string filename = Path.Combine( solutionDir, project.UniqueName );
+                if ( File.Exists( filename ) )
+                    return filename;
+                else 
+                    return null;
             }
+            catch( Exception )
+            {
+                return null;
+            }            
         }
 
         private void DoCommit( IContext context )

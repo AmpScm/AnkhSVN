@@ -320,7 +320,7 @@ namespace Ankh.Solution
                 this.explorer.Context.OutputPane.StartActionText( "ERROR" );
                 this.explorer.Context.OutputPane.WriteLine( 
                     "ERROR: ArgumentException thrown by automation object. " + 
-                    "This project will not load." );
+                    "This project may not function correctly." );
                 this.explorer.Context.OutputPane.WriteLine(
                     "(Is this a third party project type?)" );
                 this.explorer.Context.OutputPane.EndActionText();

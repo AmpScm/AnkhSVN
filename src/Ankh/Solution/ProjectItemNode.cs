@@ -115,19 +115,21 @@ namespace Ankh.Solution
         // recursively adds subitems of this projectitem.
         private void AddSubItems( ProjectItem item, StatusChanged del )
         {
+            if ( item.ProjectItems == null ) 
+                return;
+
             // some object models might throw when accessing the .ProjectItems property
             try
             {
-                foreach( ProjectItem subItem in item.ProjectItems )
+                for( int i = 1; i <= item.ProjectItems.Count; i++ )
                 {
+                    ProjectItem subItem = item.ProjectItems.Item(1);
                     if ( subItem.Name != Client.AdminDirectoryName )
                     {
                         this.AddResourcesFromProjectItem( subItem, del );
                         this.AddSubItems( subItem, del );
                     }
-                }
-
-               
+                }               
             }
             catch( InvalidCastException )
             {
@@ -140,9 +142,36 @@ namespace Ankh.Solution
 
         private void AddResourcesFromProjectItem( ProjectItem item, StatusChanged del )
         {
-            for( short i = 1; i <= item.FileCount; i++ ) 
+            if ( item.FileCount == 0 )
+                return;
+
+            // HACK: figure out if we're dealing with a 0 or 1 based collection
+            short startIndex = 1;
+            
+            // try to access the high bound - if that doesn't fail, we're using a 1-based idx
+            try
             {
-                string path = item.get_FileNames(i);
+                item.get_FileNames(item.FileCount);
+            }
+            catch( ArgumentException )
+            {
+                // oops, must be a zero-based collection
+                startIndex = 0;
+            }
+            for( short i = startIndex; i < item.FileCount + startIndex; i++ ) 
+            {
+                string path = null;
+                try
+                {
+                    path = item.get_FileNames(i);
+                }
+                catch( ArgumentException )
+                {
+                    this.Explorer.Context.OutputPane.WriteLine( 
+                        "Could not retrieve filename for project item" );
+                    continue;
+                }
+
                 if ( File.Exists( path ) || System.IO.Directory.Exists( path ) )
                 {
                     SvnItem svnItem = this.Explorer.Context.StatusCache[path];

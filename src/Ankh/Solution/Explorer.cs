@@ -457,9 +457,20 @@ namespace Ankh.Solution
         {        
             public int GetHashCode(object obj)
             {
+                string filename;
                 try
                 {
-                    string str = ((ProjectItem)obj).ContainingProject.FullName + "|" + ((ProjectItem)obj).get_FileNames(1);
+                    try
+                    {
+                        filename = ((ProjectItem)obj).get_FileNames(1);
+                    }
+                    catch( ArgumentException )
+                    {
+                        // hack for those project types which use a 0-based index
+                        // (GRRRR)
+                        filename = ((ProjectItem)obj).get_FileNames(0);
+                    }
+                    string str = ((ProjectItem)obj).ContainingProject.FullName + "|" + filename;
                     return str.GetHashCode();
                 }
                 catch( Exception )
@@ -477,14 +488,31 @@ namespace Ankh.Solution
             {
                 try
                 {
-                    string str_a = ((ProjectItem)x).ContainingProject.FullName + "|" + ((ProjectItem)x).get_FileNames(1);
-                    string str_b = ((ProjectItem)y).ContainingProject.FullName + "|" + ((ProjectItem)y).get_FileNames(1);
+                    string str_a = ((ProjectItem)x).ContainingProject.FullName + "|" + GetFileName(x);
+                    string str_b = ((ProjectItem)y).ContainingProject.FullName + "|" + GetFileName(y);
                     return str_a.CompareTo(str_b);
                 }
                 catch( Exception )
                 {
                     return -1;
                 }
+            }
+
+            private static string GetFileName( object obj )
+            {
+                string filename = null;
+                try
+                {
+                    filename = ((ProjectItem)obj).get_FileNames(1);
+                }
+                catch( ArgumentException )
+                {
+                    // hack for those project types which use a 0-based index
+                    // (GRRRR)
+                    filename = ((ProjectItem)obj).get_FileNames(0);
+                }
+
+                return filename;
             }
         }
         #endregion
