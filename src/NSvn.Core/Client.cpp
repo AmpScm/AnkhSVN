@@ -645,6 +645,42 @@ bool NSvn::Core::Client::HasBinaryProp( String* path )
     }
 }
 
+__gc class StatusHolder
+{
+public:
+    StatusHolder() : Path(0), Status(0)
+    {
+    }
+
+    void Callback( String* path, NSvn::Core::Status* status )
+    {
+        // we assume that paths to files are always longer than their parent dir
+        if ( (this->Path == 0) || (path->Length < this->Path->Length) )
+        {
+            this->Path = path;
+            this->Status = status;
+        }
+    }
+    String* Path;
+    NSvn::Core::Status* Status;
+};
+
+bool NSvn::Core::Client::IsIgnored( String* path )
+{
+    StatusHolder* holder = new StatusHolder();
+
+    // Status() takes care of canonicalizing etc
+    int youngest;
+    this->Status( &youngest, path, Revision::Working, 
+        new StatusCallback( holder, StatusHolder::Callback ), false, true,
+        false, false );
+
+    if ( holder->Status != 0 )
+        return holder->Status->TextStatus == StatusKind::Ignored;
+    else
+        return false;
+}
+
 void NSvn::Core::Client::OnNotification( NotificationEventArgs* args )
 {
     if ( this->Notification != 0 )

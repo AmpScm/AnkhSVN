@@ -386,6 +386,9 @@ namespace NSvn
             /// <summary>Check whether a path has svn:mimetype set to a binary type.</summary>
             bool HasBinaryProp( String* path );
 
+            /// <summary>Whether an item is ignored.</summary>
+            bool IsIgnored( String* path );
+
         protected public:
             /// <summary>Invokes the Notification event.</summary>
             virtual void OnNotification( NotificationEventArgs* args );
