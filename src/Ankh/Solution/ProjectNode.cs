@@ -20,14 +20,14 @@ namespace Ankh.Solution
             if ( fullname != string.Empty )
             {
                 string parentPath = Path.GetDirectoryName( fullname );
-                this.projectFolder = (WorkingCopyDirectory)SvnResource.FromLocalPath( parentPath );
+                this.projectFolder = SvnResource.FromLocalPath( parentPath );
                 explorer.AddResource( project, this );                    
             }
             if ( this.projectFolder != null )
                 this.projectFolder.Context = explorer.Context;
         }
 
-        public WorkingCopyDirectory ProjectFolder
+        public ILocalResource ProjectFolder
         {
             get{ return this.projectFolder; }
         }

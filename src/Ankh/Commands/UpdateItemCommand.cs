@@ -76,8 +76,12 @@ namespace Ankh.Commands
 
             public void VisitSolutionNode(Ankh.Solution.SolutionNode node)
             {
-                this.resources.Add( node.SolutionFolder );
-                string solutionPath = node.SolutionFolder.Path.ToLower();
+                string solutionPath = ";"; // illegal in a path
+                if ( node.SolutionFolder != null )
+                {
+                    node.SolutionFolder.Accept( this );
+                    solutionPath = node.SolutionFolder.Path.ToLower();
+                }
 
                 // update all projects whose folder is not under the solution root
                 foreach( TreeNode n in node.Children )
