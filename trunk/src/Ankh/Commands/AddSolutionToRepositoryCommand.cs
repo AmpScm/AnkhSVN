@@ -26,10 +26,19 @@ namespace Ankh.Commands
     {
         public AddSolutionToRepositoryCommand()
         {
-            Assembly asm = Assembly.Load( 
-                "Microsoft.VisualStudio.VCProjectEngine");
-            this.vcFilterType = asm.GetType(
-                "Microsoft.VisualStudio.VCProjectEngine.VCFilter", true );
+            try
+            {
+                Assembly asm = Assembly.Load( 
+                    "Microsoft.VisualStudio.VCProjectEngine");
+                this.vcFilterType = asm.GetType(
+                    "Microsoft.VisualStudio.VCProjectEngine.VCFilter", true );
+            }
+            catch( FileNotFoundException )
+            {
+                // appears the user doesn't have VC++ installed
+                // oh well, we can degrade gracefully
+                this.vcFilterType = null;
+            }                     
         }
 
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
@@ -257,7 +266,8 @@ namespace Ankh.Commands
                     try
                     {
                         if ( (File.Exists( file ) || Directory.Exists( file )) &&
-                            !this.vcFilterType.IsInstanceOfType(item.Object) )
+                            ( this.vcFilterType != null && 
+                             !this.vcFilterType.IsInstanceOfType(item.Object)) )
                         {
                             // for now we only support files that are under the solution root
                             if ( !PathUtils.IsSubPathOf( file, solutionDir ) )
