@@ -54,6 +54,24 @@ namespace Ankh.UI
             }
         }
 
+        /// <summary>
+        /// The raw log message, with commented lines still embedded.
+        /// </summary>
+        public string RawLogMessage
+        {
+            get
+            {
+                return this.logMessageBox.Text;
+            }
+            set
+            {
+                this.logMessageBox.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// The template to use for log messages.
+        /// </summary>
         public LogMessageTemplate LogMessageTemplate
         {
             [System.Diagnostics.DebuggerStepThrough]
@@ -151,33 +169,33 @@ namespace Ankh.UI
 
             this.diffViewVisible = ! this.diffViewVisible;
 
-//            if ( this.diffView.Visible )
-//            {                
-//                this.diffView.Visible = false;
-//                this.Height = this.okButton.Top + this.okButton.Height + 40;
-//                this.showDiffButton.Text = "Show diff";
-//  
-//                // reanchor these things to the bottom
-//                this.showDiffButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-//                this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-//                this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-//                this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-//                    | System.Windows.Forms.AnchorStyles.Left) 
-//                    | System.Windows.Forms.AnchorStyles.Right)));
-//
-//            }
-//            else
-//            {
-//                // these items can no longer anchor to the bottom
-//                this.logMessageBox.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-//                this.showDiffButton.Anchor = AnchorStyles.Left | AnchorStyles.Top;
-//                this.okButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-//                this.cancelButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-//                this.diffView.Top = this.okButton.Top + this.okButton.Height + 10;
-//                this.Height += 400;
-//                this.diffView.Visible = true;
-//                this.showDiffButton.Text = "Hide diff";
-//            }
+            //            if ( this.diffView.Visible )
+            //            {                
+            //                this.diffView.Visible = false;
+            //                this.Height = this.okButton.Top + this.okButton.Height + 40;
+            //                this.showDiffButton.Text = "Show diff";
+            //  
+            //                // reanchor these things to the bottom
+            //                this.showDiffButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            //                this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            //                this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            //                this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            //                    | System.Windows.Forms.AnchorStyles.Left) 
+            //                    | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            //            }
+            //            else
+            //            {
+            //                // these items can no longer anchor to the bottom
+            //                this.logMessageBox.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            //                this.showDiffButton.Anchor = AnchorStyles.Left | AnchorStyles.Top;
+            //                this.okButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
+            //                this.cancelButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
+            //                this.diffView.Top = this.okButton.Top + this.okButton.Height + 10;
+            //                this.Height += 400;
+            //                this.diffView.Visible = true;
+            //                this.showDiffButton.Text = "Hide diff";
+            //            }
 
             // Center the dialog vertically
             this.Top = (Screen.FromControl(this).Bounds.Height / 2) - (this.Height/2);
@@ -194,14 +212,14 @@ namespace Ankh.UI
             
                 this.LogMessageTemplate.UrlPaths = this.commitItemsTree.UrlPaths;
                 this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( arr );
-                this.preprocessed = true;
             }
+            this.loaded = true;
         }
 
         private void ItemChecked(object sender, TreeViewEventArgs e )
         {
             // don't bother if the 
-            if ( ! this.preprocessed )
+            if ( ! this.loaded )
                 return;
             
             if ( e.Node.Checked )
@@ -373,7 +391,7 @@ namespace Ankh.UI
 
         private LogMessageTemplate logMessageTemplate;
        
-        private bool preprocessed = false;
+        private bool loaded = false;
 
         private bool diffViewVisible;
         private int diffViewHeight;
