@@ -270,11 +270,14 @@ namespace Ankh.Solution
                 {
                     Debug.Assert( childItem != IntPtr.Zero, 
                         "Could not get treeview item" );
-                    
-                    TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
-                        this );
-                    if (childNode != null )
-                        this.children.Add( childNode );
+
+                    if ( child.Name != SvnUtils.WC_ADMIN_AREA )
+                    {                    
+                        TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
+                            this );
+                        if (childNode != null )
+                            this.children.Add( childNode );
+                    }
 
                     // and the next child
                     childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
