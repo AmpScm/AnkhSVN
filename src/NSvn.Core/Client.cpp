@@ -57,6 +57,16 @@ void NSvn::Core::Client::Revert(String* path, bool recursive, ClientContext* ctx
         ctx->ToSvnContext (pool), pool));
 }    
 
+// implementation of Client::Resolve
+void NSvn::Core::Client::Resolve(String* path, bool recursive, ClientContext* ctx )
+{
+    Pool pool;
+    String* truePath = CanonicalizePath( path );
+
+    HandleError( svn_client_resolve( StringHelper( truePath ), recursive, 
+        ctx->ToSvnContext (pool), pool));
+}    
+
 
 String* NSvn::Core::Client::CanonicalizePath( String* path )
 {
