@@ -229,17 +229,23 @@ namespace Ankh.UI
         /// </summary>
         private void BuildTree()
         {
-            this.BeginUpdate();
-            this.Nodes.Clear();
+            try
+            {
+                this.BeginUpdate();
+                this.Nodes.Clear();
 
-            if ( this.paths.Count == 0 )
-                return;            
+                if ( this.paths.Count == 0 )
+                    return;            
 
-            foreach( object item in this.paths )
-                this.AddNode( item );
+                foreach( object item in this.paths )
+                    this.AddNode( item );
 
-            this.ExpandAll();
-            this.EndUpdate();
+                this.ExpandAll();
+            }
+            finally
+            {
+                this.EndUpdate();
+            }
         }
 
         /// <summary>
