@@ -31,7 +31,7 @@ namespace Ankh.Commands
                 return vsCommandStatus.vsCommandStatusEnabled |
                     vsCommandStatus.vsCommandStatusSupported;
             else
-                return vsCommandStatus.vsCommandStatusUnsupported;
+                return vsCommandStatus.vsCommandStatusSupported;
         }
 
         public override void Execute(AnkhContext context)
