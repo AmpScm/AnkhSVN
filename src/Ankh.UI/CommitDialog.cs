@@ -5,6 +5,9 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using NSvn.Core;
+using System.Text.RegularExpressions;
+using System.Text;
+using System.IO;
 
 namespace Ankh.UI
 {
@@ -23,6 +26,8 @@ namespace Ankh.UI
             InitializeComponent();
 
             this.CreateToolTips();
+
+            this.commitItems = items;
 
             foreach( CommitItem item in items )
                 this.commitItemsList.Items.Add( item.Path );
@@ -47,6 +52,18 @@ namespace Ankh.UI
             { 
                 this.diff = value; 
                 this.diffTextBox.Diff = this.diff;
+            }
+        }
+
+        /// <summary>
+        /// The template to be used for log messages.
+        /// </summary>
+        public string Template
+        {
+            get{ return this.template; }
+            set
+            { 
+                this.template = value; 
             }
         }
 
@@ -110,11 +127,36 @@ namespace Ankh.UI
 
         }
 
-        private void DiffViewClosed( object sender, System.EventArgs e )
+        private void CommitDialog_VisibleChanged(object sender, System.EventArgs e)
         {
-            this.showDiffButton.Enabled = true; 
+            if ( this.Visible && this.logMessageBox.Text == string.Empty )
+                this.ApplyTemplate();
         }
 
+        private void ApplyTemplate()
+        {
+            string text = template;
+            if ( LINETEMPLATE.IsMatch( this.template ) )
+            {
+                string linePattern = LINETEMPLATE.Match( this.template ).Groups[ "linepattern" ].Value.Trim();
+                text = LINETEMPLATE.Replace( this.template, this.SubstituteLinePattern( linePattern ) );
+            }
+            this.logMessageBox.Text = text;
+        }
+
+        private string SubstituteLinePattern( string linePattern )
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach( CommitItem item in this.commitItems )
+            {
+                string line = linePattern.Replace( "%path%", item.Path );
+                line = line.Replace( "%basepath%", Path.GetFileName( item.Path ) );
+
+                builder.Append( line + Environment.NewLine );
+            }
+
+            return builder.ToString();
+        }
 
 
 		#region Windows Form Designer generated code
@@ -217,6 +259,7 @@ namespace Ankh.UI
             this.Name = "CommitDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Commit";
+            this.VisibleChanged += new System.EventHandler(this.CommitDialog_VisibleChanged);
             this.ResumeLayout(false);
 
         }
@@ -230,10 +273,18 @@ namespace Ankh.UI
         private string diff;
         private Ankh.UI.DiffTextBox diffTextBox;
         private System.Windows.Forms.RichTextBox logMessageBox;
+        private string template = @"This is a template
+***%path%
+
+This is the end of the template";
+        private CommitItem[] commitItems;
+        private static readonly Regex LINETEMPLATE = new Regex(@"^\*\*\*(?'linepattern'.+)$", 
+            RegexOptions.Multiline | RegexOptions.ExplicitCapture);
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
+
 
         
 
