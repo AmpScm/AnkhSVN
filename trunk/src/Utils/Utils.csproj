@@ -15,7 +15,7 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Library"
+                OutputType = "Exe"
                 RootNamespace = "Utils"
                 StartupObject = ""
             >
@@ -103,6 +103,11 @@
                 />
                 <File
                     RelPath = "ErrorMessage.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Exec.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
