@@ -38,8 +38,9 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
+            /// <returns>The revision affected</returns>
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-            static void Checkout(String* url, String* path, Revision* revision, bool recurse, 
+            static int Checkout(String* url, String* path, Revision* revision, bool recurse, 
                 ClientContext* context);
 
             ///<summary>Update working tree path to revision.</summary>
@@ -52,8 +53,9 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
+            /// <returns>The revision affected</returns>
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-            static void Update(String* path, Revision* revision, bool recurse, ClientContext* context);
+            static int Update(String* path, Revision* revision, bool recurse, ClientContext* context);
 
             ///<summary>Switch working tree path to url at revision, authenticating with the 
             ///         authentication baton </summary>
@@ -67,8 +69,9 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
+            /// <returns>The revision affected</returns>
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-            static void Switch(String* path, String* url, Revision* revision, bool recurse, 
+            static int Switch(String* path, String* url, Revision* revision, bool recurse, 
                 ClientContext* context);
 
             ///<summary>Add a file/directory, not already under revision control to a working copy.</summary>
@@ -398,8 +401,9 @@ namespace NSvn
             ///<param name="context">A client context object, which holds client specific 
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
-            ///                      for more information.</param>       
-            static void Export(String* from, String* to, Revision* revision, bool force,  ClientContext* context);
+            ///                      for more information.</param>     
+            /// <returns>The revision affected</returns>
+            static int Export(String* from, String* to, Revision* revision, bool force,  ClientContext* context);
 
             ///<summary>List the contents of an url or path.</summary>
             ///<param name="path">Path to the files/directory to be listed.</param>  
