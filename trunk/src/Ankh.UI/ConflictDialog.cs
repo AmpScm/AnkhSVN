@@ -57,6 +57,8 @@ namespace Ankh.UI
                 Debug.Assert( value.Length == 4, "There should be 4 filenames" );
                 this.mineFileRadioButton.Text = Path.GetFileName(value[0]);
                 this.mineFileRadioButton.Tag = value[0];
+                this.mineFileRadioButton.Checked = true;
+                this.selectedChoice = value[0];
 
                 this.oldRevRadioButton.Text = Path.GetFileName(value[1]);
                 this.oldRevRadioButton.Tag = value[1];
@@ -66,6 +68,8 @@ namespace Ankh.UI
 
                 this.fileRadioButton.Text = Path.GetFileName(value[3]);
                 this.fileRadioButton.Tag = value[3];
+
+                
             }
         }
 
