@@ -52,15 +52,21 @@ namespace Ankh.Solution
                 Constants.TVGN_NEXT, item );
         }
 
+
         /// <summary>
         /// Sets the imagelist to be used for the status images.
         /// </summary>
-        public ImageList StatusImageList
+        public IntPtr StatusImageList
         {
+            get
+            {
+                return (IntPtr)Win32.SendMessage( this.hwnd, Msg.TVM_GETIMAGELIST,
+                    Constants.TVSIL_STATE, IntPtr.Zero );
+            }
             set
             {
                 Win32.SendMessage( this.hwnd, Msg.TVM_SETIMAGELIST, Constants.TVSIL_STATE,
-                    value.Handle );
+                    value );
             }
         }
 
