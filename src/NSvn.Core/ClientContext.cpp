@@ -24,6 +24,8 @@ namespace
         apr_array_header_t *commit_items, 
         void *baton, 
         apr_pool_t *pool);  
+
+    svn_error_t* cancel_func( void* baton );
 }
 
 namespace NSvn
@@ -56,6 +58,15 @@ namespace NSvn
                 ctx->log_msg_baton = pool.AllocateObject( 
                     ManagedPointer<NSvn::Core::LogMessageCallback*>( 
                     this->LogMessageCallback ) );
+            }
+
+            // cancellation callback?
+            if ( this->CancelCallback != 0 )
+            {
+                ctx->cancel_func = cancel_func;
+                ctx->cancel_baton = pool.AllocateObject(
+                    ManagedPointer<NSvn::Core::CancelCallback*>(
+                    this->CancelCallback) );
             }
 
             // client configuration
@@ -146,6 +157,19 @@ namespace
             *log_msg = 0;
 
         return SVN_NO_ERROR;
+    }
+
+    // Delegate the callback function into managed space
+    svn_error_t* cancel_func( void* baton )
+    {
+        CancelCallback* delegate = *(static_cast<ManagedPointer<CancelCallback*>*>(
+            baton) );
+        CancelOperation status = delegate->Invoke();
+
+        if ( status == CancelOperation::Cancel ) 
+            return svn_error_create( SVN_ERR_CANCELLED, NULL, "caught SIGINT" );
+        else
+            return SVN_NO_ERROR;
     }
 
 

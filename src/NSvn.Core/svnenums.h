@@ -166,5 +166,15 @@ namespace NSvn
             Other = SVN_AUTH_SSL_OTHER
         };
 
+        /// <summary>
+        public __value enum CancelOperation
+        {
+            /// <summary>Cancel the operation.</summary>
+            Cancel,
+
+            /// <summary>No, don't cancel the operation.</summary>
+            DontCancel
+        };
+
     }
 }

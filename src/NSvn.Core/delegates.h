@@ -36,5 +36,7 @@ namespace NSvn
             SslClientCertPasswordPromptDelegate();
 
         public __delegate void StatusCallback( System::String* path, Status* status );
+
+        public __delegate CancelOperation CancelCallback();
     }
 }
