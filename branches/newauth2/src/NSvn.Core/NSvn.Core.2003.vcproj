@@ -266,9 +266,6 @@
 				RelativePath="svnenums.h">
 			</File>
 			<File
-				RelativePath="UsernameCredential.h">
-			</File>
-			<File
 				RelativePath="utils.h">
 			</File>
 		</Filter>
