@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="doc.xsl"?>
 <doc title="Project specification">
-
- <section header="Introduction">
+    <section header="Introduction">
         <p>The development of <link url="http://subversion.tigris.org">Subversion</link> (SVN) addin for Visual Studio 
             .NET will be conducted as a final year project at HiO in 
             cooperation with CollabNet. We have named this addin Ankh. 
@@ -10,11 +9,10 @@
             an addin of the existing revision control system, SVN into the 
             programming environment Visual Studio .NET. 
         </p>
- </section>
-    
- <section header="Background">
+    </section>    
+    <section header="Background">
         <section header="CollabNet">
-                    <p><link url="http://www.collab.net">CollabNet</link> is a California-based company that provided the initial 
+            <p><link url="http://www.collab.net">CollabNet</link> is a California-based company that provided the initial 
                     founding in 2000 to begin development work on Subversion and currently has several paid 
                     developers working on the Subversion project. CollabNet 
                     offers a wide range of products and services to improve software quality and 
@@ -22,9 +20,9 @@
                     SourceCast, which is a Web-based software development platform. 
                     Subversion is aimed to be the successor of an existing revision control system called 
                     CVS and CollabNet intends to make it a part of the SourceCast platform.</p>
-         </section>
-         <section header="Subversion">
-                    <p>Subversion is a free open source tool which makes it easier
+        </section>
+        <section header="Subversion">
+            <p>Subversion is a free open source tool which makes it easier
                     for several people to work within the same set of files. The
                     files are placed into a central repository. The repository
                     is much like an ordinary file server, except that it
@@ -34,90 +32,77 @@
                     synchronised with the repository. SVN is today 
                     managed through a prompt.
                     </p>
-         </section>
- 
-         <section header="Improvements compared to today's situation">
-                 <p>The aim of this project is to provide an
+        </section>
+        <section header="Improvements compared to today's situation">
+            <p>The aim of this project is to provide an
                     integration for SVN into the existing
-                    coding environment Visual Studio .NET. Improvements:</p> 
-                    <list>
-                        <item>Most of the Windows users are not fond of using command prompts. 
+                    coding environment Visual Studio .NET. Improvements:</p>
+            <list>
+                <item>Most of the Windows users are not fond of using command prompts. 
                               By creating a GUI, SVN will be made available for
                               a huge amount of new Windows programmers. 
                               Today the audience of the SVN users are mainly Unix users we
                               hope to convert this.</item>
-                        <item>SVN is accessed directly from within VS.NET itself.</item>
-                        <item>Increased productivity since revision control is directly accessible
+                <item>SVN is accessed directly from within VS.NET itself.</item>
+                <item>Increased productivity since revision control is directly accessible
                               in VS.NET.</item>
-                    </list>
-                     
-         </section>
-</section>
-
-
-<section header="External conditions">
-                  <p></p>
-                    
-         <section header="Functional requirements">
-                  <p>The menu choices will be as functional and obviouse as possible. For example 
+            </list>
+        </section>
+    </section>
+    <section header="External conditions">
+        <p></p>
+        <section header="Functional requirements">
+            <p>The menu choices will be as functional and obviouse as possible. For example 
                   the command "svn cp" will be named "copy" in a menu context.</p>
-                  
-                  <p>There might be some programmers that already are familiar
+            <p>There might be some programmers that already are familiar
                   with SVN, the wording should therefore not deviate too much from the SVN
                   standard. We will therefore avoid new notions. It could be confusing for users
                   that already have knowledge about SVN if for example the command “commit” is
                   renamed to “publish” that has the same meaning.</p>
-                  
-                  <p>The design of the GUI/addin should not deviate too much from 
+            <p>The design of the GUI/addin should not deviate too much from 
                   the GUI design in VS.NET. Colours, dialog boxes, file tree view, menus 
                   and output windows will have the same design as used in VS.NET. We will 
-                  use predefined menues, add panes to existing output windows etc.</p>                
-                  
-         </section>
-                    
-         <section header="Requirements for system design">
-                  <p>The system will be divided into 3 layers:</p>
-                  <list>
-                        <item>A thin .NET wrapper layer (NSvn) for the SVN's client API 
+                  use predefined menues, add panes to existing output windows etc.</p>
+        </section>
+       
+        <section header="Requirements for system design">
+            <p>The system will be divided into 3 layers:</p>
+            <img src="img/layers.png" align="center" hspace="30" vspace="10"/>
+   
+            <list>
+                <item>A thin .NET wrapper layer (NSvn) for the SVN's client API 
                                 will be coded in Managed C++.</item>
-                        <item>A more object-oriented part of the .NET wrapper will be
+                <item>A more object-oriented part of the .NET wrapper will be
                                 coded in C#.</item>
-                        <item>A GUI/addin layer will be coded in C#.</item>
-                  </list>
-                  
-                  <p>To ensure the sanity and quality of the system at any given moment,
+                <item>A GUI/addin layer will be coded in C#.</item>
+            </list>
+            <p>To ensure the sanity and quality of the system at any given moment,
                     and to catch regression bugs we will conduct continuous
-                    unit tests using the <link
-                    url="http://nunit.sourceforge.net/">NUnit</link> testing
-                    framework.</p> 
-                  <p>We will make the .NET wrapper layer available as a
+                    unit tests using the <link url="http://nunit.sourceforge.net/">NUnit</link> testing
+                    framework.</p>
+            <p>We will make the .NET wrapper layer available as a
                     standalone unit for use in other applications. We also will
                     provide <link url="http://nant.sourceforge.net/">NAnt
                     </link> build scripts that will enable it to be built
                     without requiring the user to have Visual Studio.NET
                     installed. </p>
-                  <p>Common programming guidelines are composed to get an overall
+            <p>Common programming guidelines are composed to get an overall
                      consistent look of the code.</p>
-         </section>
-          
-         <section header="Limitations">
-                    <p>The .NET wrapper layer will cover the SVN client's API
+        </section>
+        <section header="Limitations">
+            <p>The .NET wrapper layer will cover the SVN client's API
                         based on last revision of SVN.</p>
-         </section>           
-         
-         <section header="Requirements for system documentation">
-                <p>Guidelines for how documentation is to be written in
+        </section>
+        <section header="Requirements for system documentation">
+            <p>Guidelines for how documentation is to be written in
                    XML have been composed. These
                    XML documents will be converted into both HTML and a format 
                    suitable for printing using XSL.</p>
-                <p>Subversion will be used for revision control both for
+            <p>Subversion will be used for revision control both for
                    the source code and documentation. Guidelines will be
-                   composed for how log messages are to be written.</p> 
-                <p>All documentation will be written in English, and a dictionary
-                   explaining relevant words used in the documentation will be made.</p>            
-         </section>
-                 
-</section>
-  
-  
+                   composed for how log messages are to be written.</p>
+            <p>All documentation will be written in English, and a dictionary
+                   explaining relevant words used in the documentation will be made.</p>
+        </section>
+    </section>
 </doc>
