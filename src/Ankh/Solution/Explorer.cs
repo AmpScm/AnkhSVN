@@ -224,6 +224,26 @@ namespace Ankh.Solution
         }
 
         /// <summary>
+        /// Returns all  the SvnItem resources from root
+        /// </summary>
+        /// <param name="getChildItems">Whether children of the items in 
+        /// question should be included.</param>
+        /// <param name="filter">A callback used to filter the items
+        /// that are added.</param>
+        /// <returns>A list of SvnItem instances.</returns>
+        public IList GetAllResources( bool getChildItems, 
+            ResourceFilterCallback filter )
+        {
+            ArrayList list = new ArrayList();
+
+            TreeNode node = solutionNode; 	
+            if ( node != null )	 	
+                node.GetResources( list, getChildItems, filter );	 	
+
+            return list;
+        }
+
+        /// <summary>
         /// Retrieves the resources associated with a project item.
         /// </summary>
         /// <param name="item"></param>
@@ -246,6 +266,8 @@ namespace Ankh.Solution
             UIHierarchyItem uiItem = (UIHierarchyItem)array.GetValue(0);
             return (ProjectItem)uiItem.Object;
         }
+
+       
 
         internal TreeView TreeView
         {
@@ -378,27 +400,6 @@ namespace Ankh.Solution
             // we assume theres only one of these
             this.solutionNode = node;
         }
-
-        /// <summary>
-        /// Returns all  the SvnItem resources from root
-        /// </summary>
-        /// <param name="getChildItems">Whether children of the items in 
-        /// question should be included.</param>
-        /// <param name="filter">A callback used to filter the items
-        /// that are added.</param>
-        /// <returns>A list of SvnItem instances.</returns>
-        public IList GetAllResources( bool getChildItems, 
-            ResourceFilterCallback filter )
-        {
-            ArrayList list = new ArrayList();
-
-            TreeNode node = solutionNode; 	
-            if ( node != null )	 	
-                node.GetResources( list, getChildItems, filter );	 	
-
-            return list;
-        }
- 
 
         private void GenerateStatusCache( string solutionPath )
         {
