@@ -269,6 +269,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "ExportDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ExportDialog.resx"
+                    DependentUpon = "ExportDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "ExternalsPropertyEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
