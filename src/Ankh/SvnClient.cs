@@ -41,26 +41,7 @@ namespace Ankh
 
             using( CommitDialog dialog = new CommitDialog() )
             {
-                foreach( SvnItem item in items )
-                {
-                    CommitAction action = CommitAction.None;
-                    Status status = 
-                        this.ankhContext.SolutionExplorer.StatusCache[item.Path].Status;
-                    switch( status.TextStatus )
-                    {
-                        case StatusKind.Added:
-                            action = CommitAction.Added;
-                            break;
-                        case StatusKind.Deleted:
-                            action = CommitAction.Deleted;
-                            break;
-                        case StatusKind.Modified:
-                            action = CommitAction.Modified;
-                            break;
-                    }
-                    if ( action != CommitAction.None )
-                        dialog.AddCommitItem( action, item.Path, item );
-                } // foreach
+                dialog.CommitItems = items;
 
                 dialog.LogMessageTemplate = template;
 
@@ -81,8 +62,7 @@ namespace Ankh
                 if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
                 {
                     this.logMessage = dialog.LogMessage;
-                    return (SvnItem[])dialog.GetSelectedTags( 
-                        typeof(SvnItem) );
+                    return dialog.CommitItems;
                 }
                 else
                 {
