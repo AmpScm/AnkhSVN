@@ -6,6 +6,7 @@ using NSvn.Core;
 using System.Diagnostics;
 using EnvDTE;
 using Utils;
+using System.Windows.Forms;
 
 using Thread = System.Threading.Thread;
 
@@ -185,7 +186,27 @@ namespace Ankh.RepositoryExplorer
         /// </summary>
         private void LoadReposRoots()
         {
-            string[] roots = this.context.ConfigLoader.LoadReposExplorerRoots();
+            string[] roots;
+            try
+            {
+                roots = this.context.ConfigLoader.LoadReposExplorerRoots();
+            }
+            catch( Ankh.Config.ConfigException ex )
+            {
+                string msg = ex.Message;
+                if ( ex.InnerException != null )
+                    msg += Environment.NewLine + ex.InnerException.Message;
+
+                MessageBox.Show( this.context.HostWindow, 
+                    @"Unable to load the %APPDATA%\AnkhSVN\reposroots.xml file." 
+                    + Environment.NewLine + 
+                    "The file may be corrupt. Edit it or delete it to have it recreated." + 
+                    Environment.NewLine + Environment.NewLine + 
+                    msg, 
+                    "Unable to load repository roots" );
+                return;
+            }
+
             foreach( string root in roots  ) 
             {                
                 string[] components = root.Split( '|' );

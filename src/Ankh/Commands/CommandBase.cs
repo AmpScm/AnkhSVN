@@ -55,8 +55,16 @@ namespace Ankh.Commands
         {
             foreach( Document doc in context.DTE.Documents )
             {
-                if ( !doc.Saved )
-                    doc.Save( doc.FullName );
+                try
+                {
+                    if ( !doc.Saved )
+                        doc.Save( doc.FullName );
+                }
+                catch( InvalidCastException )
+                {
+                    // can be thrown if the document type has a leaky automation model
+                    System.Diagnostics.Trace.WriteLine( "Unable to save document" );
+                }
             }
         }
 
