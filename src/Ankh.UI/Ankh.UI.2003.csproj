@@ -147,6 +147,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "AdminDirDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AdminDirDialog.resx"
+                    DependentUpon = "AdminDirDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Ankh.UI.build"
                     BuildAction = "None"
                 />
