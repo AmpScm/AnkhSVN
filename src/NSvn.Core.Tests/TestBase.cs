@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using System.Collections;
+using System.Threading;
 
 namespace NSvn.Core.Tests
 {
@@ -91,19 +92,34 @@ namespace NSvn.Core.Tests
         /// <returns>The output from the command</returns>
         public string RunCommand( string command, string args )
         {
-            ProcessStartInfo psi = new ProcessStartInfo( command, args );
-            psi.CreateNoWindow = true;
-            psi.RedirectStandardOutput = true;
-            psi.UseShellExecute = false;
+            Process proc = new Process();
+            proc.StartInfo.FileName = command;
+            proc.StartInfo.Arguments = args;
+            proc.StartInfo.CreateNoWindow = true;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.RedirectStandardError = true;
+            proc.StartInfo.UseShellExecute = false;
 
-            Process p = Process.Start( psi );
-            string output = p.StandardOutput.ReadToEnd();
-            p.WaitForExit();
+            proc.Start();
 
-            if ( p.ExitCode != 0 )
-                throw new ApplicationException( "command exit code was not 0" );
+            ProcessReader outreader = new ProcessReader( proc.StandardOutput );
+            ProcessReader errreader = new ProcessReader( proc.StandardError );
+            outreader.Start();
+            errreader.Start();
 
-            return output;
+            proc.WaitForExit();
+
+            outreader.Wait();
+            errreader.Wait();
+
+            if ( proc.ExitCode != 0 )
+                throw new ApplicationException( "command exit code was " + 
+                    proc.ExitCode.ToString() +
+                    Environment.NewLine + errreader.Output + Environment.NewLine +
+                    "Command was " + 
+                    proc.StartInfo.FileName + " " + proc.StartInfo.Arguments );
+
+            return outreader.Output;
         }
 
         
@@ -236,6 +252,41 @@ namespace NSvn.Core.Tests
             }
 
             return dir;
+        }
+
+        private class ProcessReader
+        {
+            public ProcessReader( StreamReader reader )
+            {
+                this.reader = reader;
+            }
+            
+            public void Start()
+            {
+                this.thread = new Thread( new ThreadStart( this.Read ) );
+                this.thread.Start();
+            }
+
+            public void Wait()
+            {
+                this.thread.Join();
+            }
+
+            public string Output
+            {
+                get{ return this.output; }
+            }
+
+            private void Read()
+            {
+                this.output = reader.ReadToEnd();
+            }
+
+            
+
+            private StreamReader reader;
+            private Thread thread;
+            private string output;
         }
         
        
