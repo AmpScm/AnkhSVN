@@ -28,7 +28,7 @@ namespace
             }
 
             *len = totalBytesRead;
-            
+
             Marshal::Copy( managedBuffer, 0,  buffer, *len );
 
             return SVN_NO_ERROR;

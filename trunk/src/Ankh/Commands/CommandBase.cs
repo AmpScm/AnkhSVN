@@ -4,11 +4,11 @@ using EnvDTE;
 
 namespace Ankh.Commands
 {
-	/// <summary>
-	/// Base class for ICommand instances
-	/// </summary>
-	internal abstract class CommandBase : ICommand
-	{
+    /// <summary>
+    /// Base class for ICommand instances
+    /// </summary>
+    internal abstract class CommandBase : ICommand
+    {
         /// <summary>
         /// Get the status of the command
         /// </summary>
@@ -35,5 +35,5 @@ namespace Ankh.Commands
         }
 
         private EnvDTE.Command command;
-	}
+    }
 }

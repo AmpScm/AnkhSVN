@@ -13,9 +13,9 @@ using System.Text;
 
 namespace Ankh
 {
-	/// <summary>
-	/// Summary description for SvnContext.
-	/// </summary>
+    /// <summary>
+    /// Summary description for SvnContext.
+    /// </summary>
     internal class SvnContext : NSvnContext
     {
         public SvnContext( AnkhContext ankhContext )
@@ -64,7 +64,7 @@ namespace Ankh
         
         private string GetTemplate()
         {
-             return @"# All lines starting with a # will be ignored
+            return @"# All lines starting with a # will be ignored
 ***# %path%";
         }
 

@@ -3,16 +3,16 @@ using System;
 
 namespace NSvn.Common
 {
-	/// <summary>
-	/// Represents an item in a property list
-	/// </summary>
-	public class PropListItem
-	{
-		public PropListItem( string nodeName, PropertyDictionary properties )
-		{
+    /// <summary>
+    /// Represents an item in a property list
+    /// </summary>
+    public class PropListItem
+    {
+        public PropListItem( string nodeName, PropertyDictionary properties )
+        {
             this.properties = properties;
             this.nodeName = nodeName;			
-		}
+        }
 
         public PropertyDictionary Properties
         {
@@ -27,5 +27,5 @@ namespace NSvn.Common
 
         private PropertyDictionary properties;
         private string nodeName;
-	}
+    }
 }

@@ -6,22 +6,22 @@ using NSvn.Core;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Represents an item in the repository.
-	/// </summary>
-	public abstract class RepositoryResource : SvnResource
-	{
+    /// <summary>
+    /// Represents an item in the repository.
+    /// </summary>
+    public abstract class RepositoryResource : SvnResource
+    {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="url">The URL to the item in the repository.</param>
         /// <param name="revision">The revision of the item.</param>
-		protected RepositoryResource( string url, Revision revision )
-		{
+        protected RepositoryResource( string url, Revision revision )
+        {
             this.url = url;
             this.revision = revision;
 			
-		}
+        }
 
         /// <summary>
         /// Constructor. Defaults to the HEAD revision.
@@ -68,5 +68,5 @@ namespace NSvn
 
         private string url;
         private Revision revision;
-	}
+    }
 }

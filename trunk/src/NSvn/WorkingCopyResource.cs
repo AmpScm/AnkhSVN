@@ -8,19 +8,19 @@ using System.Diagnostics;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Represents an resource(file or directory) in a working copy.
-	/// </summary>
-	public abstract class WorkingCopyResource : SvnResource, ILocalResource
-	{
+    /// <summary>
+    /// Represents an resource(file or directory) in a working copy.
+    /// </summary>
+    public abstract class WorkingCopyResource : SvnResource, ILocalResource
+    {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="path">Path to the resource.</param>
-		protected WorkingCopyResource( string path )
-		{
-			this.path = System.IO.Path.GetFullPath(path);
-		}
+        protected WorkingCopyResource( string path )
+        {
+            this.path = System.IO.Path.GetFullPath(path);
+        }
 
         /// <summary>
         /// Creates a WorkingCopyResource object from a given path..
@@ -115,30 +115,30 @@ namespace NSvn
             Client.Delete( resource.Path, force, resource.ClientContext );
         }
                 
-/*
-        /// <summary>
-        /// Copy resource to repository.
-        /// </summary>
-        /// <param name="logMessage">The log message to accompany the commit.</param>
-        /// <param name="revision">The revision to copy to</param>
-        /// <param name="dstPath">Path to copy to</param>
-         public void CopyTo( RepositoryResource dstUrl, string logMessage, Revision revision )
-        {
-            this.CopyTo( dstUrl, new SimpleLogMessageProvider(logMessage), revision );
-        }
+        /*
+                /// <summary>
+                /// Copy resource to repository.
+                /// </summary>
+                /// <param name="logMessage">The log message to accompany the commit.</param>
+                /// <param name="revision">The revision to copy to</param>
+                /// <param name="dstPath">Path to copy to</param>
+                 public void CopyTo( RepositoryResource dstUrl, string logMessage, Revision revision )
+                {
+                    this.CopyTo( dstUrl, new SimpleLogMessageProvider(logMessage), revision );
+                }
 
-        /// <summary>
-        /// Copy resource to repository.
-        /// </summary>
-        /// <param name="logMessageProvider">An object that can provide a log message.</param>
-        /// <param name="revision">The revision to copy to</param>
-        /// <param name="dstPath">Path to copy to</param>
-        public RepositoryResource CopyTo( RepositoryResource dstUrl, ILogMessageProvider logMessage, Revision revision  )
-        {
-            this.logMessageProvider = logMessageProvider;
-            Client.Copy( this.Path, revision, dstUrl.ToString(), this.ClientContext );
-            return RepositoryResource.ReferenceEquals (this.Path );   
-        }*/
+                /// <summary>
+                /// Copy resource to repository.
+                /// </summary>
+                /// <param name="logMessageProvider">An object that can provide a log message.</param>
+                /// <param name="revision">The revision to copy to</param>
+                /// <param name="dstPath">Path to copy to</param>
+                public RepositoryResource CopyTo( RepositoryResource dstUrl, ILogMessageProvider logMessage, Revision revision  )
+                {
+                    this.logMessageProvider = logMessageProvider;
+                    Client.Copy( this.Path, revision, dstUrl.ToString(), this.ClientContext );
+                    return RepositoryResource.ReferenceEquals (this.Path );   
+                }*/
 
         /// <summary>
         /// Copy resource to working copy file.
@@ -243,8 +243,8 @@ namespace NSvn
 
                 // we'll have to get a new status...
                 this.status = null;
-//                Trace.WriteLine( "Cached value for WorkingCopyResource object invalidated",
-//                    "NSvn" );
+                //                Trace.WriteLine( "Cached value for WorkingCopyResource object invalidated",
+                //                    "NSvn" );
                 this.DoInvalidate();
             }
         }
@@ -282,5 +282,5 @@ namespace NSvn
         private string path;
         private Status status;
         private DateTime lastModTime;
-	}
+    }
 }

@@ -35,7 +35,7 @@ namespace NSvn
 
             __property static CommitInfo* get_Invalid()
             { return CommitInfo::invalid; }
-            
+
         private:
             CommitInfo() : date( 0 ), author( "" ), revision( 0 )
             {}
@@ -45,7 +45,7 @@ namespace NSvn
             DateTime date;
             String* author;
             int revision;
-            
+
         };
     }
 }

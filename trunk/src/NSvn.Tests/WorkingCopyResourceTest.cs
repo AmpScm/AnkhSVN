@@ -8,12 +8,12 @@ using Zip = Utils.Zip;
 
 namespace NSvn.Tests
 {
-	/// <summary>
-	/// Tests the WorkingCopyItem resource.
-	/// </summary>
-	[TestFixture]
-	public class WorkingCopyResourceTest : TestBase
-	{
+    /// <summary>
+    /// Tests the WorkingCopyItem resource.
+    /// </summary>
+    [TestFixture]
+    public class WorkingCopyResourceTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -87,17 +87,17 @@ namespace NSvn.Tests
             Assertion.AssertEquals( "Wrong type returned. Should be working copy file",
                 typeof( WorkingCopyFile ), itemWcDst.GetType() );
 
-      //     Assertion.AssertEquals( "Wrong status. Should be added", StatusKind.Added,
-      //          itemWcDst.Status.TextStatus );  
+            //     Assertion.AssertEquals( "Wrong status. Should be added", StatusKind.Added,
+            //          itemWcDst.Status.TextStatus );  
   
             //Tests copying a file from working copy to a file in repository
-      /*    RepositoryResource itemReposSrc  = new RepositoryFile( Path.Combine( this.ReposPath, "Form2.cs" ) );
+            /*    RepositoryResource itemReposSrc  = new RepositoryFile( Path.Combine( this.ReposPath, "Form2.cs" ) );
             
-            RepositoryResource itemReposDst = itemWcSrc.CopyTo( itemReposSrc, "Copying a file to the repository", Revision.Head ) ;
+                  RepositoryResource itemReposDst = itemWcSrc.CopyTo( itemReposSrc, "Copying a file to the repository", Revision.Head ) ;
 
-            String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-            Assertion.Assert( "File wasn't copied ", cmd.IndexOf( "Form2.cs") >= 0 );		
-            */             
+                  String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
+                  Assertion.Assert( "File wasn't copied ", cmd.IndexOf( "Form2.cs") >= 0 );		
+                  */             
   
         }
         #endregion
@@ -201,5 +201,5 @@ namespace NSvn.Tests
                 resFile.GetType() );
         }
 
-	}
+    }
 }

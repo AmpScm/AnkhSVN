@@ -14,42 +14,42 @@ namespace NSvn
         {
         private public:
             Status( svn_wc_status_t* status ) :
-                        textStatus( static_cast<StatusKind>(status->text_status) ),
-                        propertyStatus( static_cast<StatusKind>(status->prop_status) ),
-                        locked( status->locked != 0 ),
-                        copied( status->copied != 0 ),
-                        repositoryTextStatus( 
-                            static_cast<StatusKind>(status->repos_text_status) ),
-                        repositoryPropertyStatus(
-                            static_cast<StatusKind>(status->repos_prop_status) )
+        textStatus( static_cast<StatusKind>(status->text_status) ),
+            propertyStatus( static_cast<StatusKind>(status->prop_status) ),
+            locked( status->locked != 0 ),
+            copied( status->copied != 0 ),
+            repositoryTextStatus( 
+            static_cast<StatusKind>(status->repos_text_status) ),
+            repositoryPropertyStatus(
+            static_cast<StatusKind>(status->repos_prop_status) )
 
-                        {
-                            if ( status->entry != 0)
-                                this->entry = new NSvn::Core::Entry(status->entry);
-                            else
-                                this->entry = 0;
-                        }
-            Status()                         
-                {;}
+        {
+            if ( status->entry != 0)
+                this->entry = new NSvn::Core::Entry(status->entry);
+            else
+                this->entry = 0;
+        }
+        Status()                         
+        {;}
 
-            static Status()
-            {
-                unversioned->textStatus = StatusKind::Unversioned;
-                unversioned->propertyStatus = StatusKind::Unversioned;
-                unversioned->locked = false;
-                unversioned->copied = false;
-                unversioned->repositoryTextStatus = StatusKind::Unversioned;
-                unversioned->repositoryPropertyStatus = StatusKind::Unversioned;
-                unversioned->entry = 0;
+        static Status()
+        {
+            unversioned->textStatus = StatusKind::Unversioned;
+            unversioned->propertyStatus = StatusKind::Unversioned;
+            unversioned->locked = false;
+            unversioned->copied = false;
+            unversioned->repositoryTextStatus = StatusKind::Unversioned;
+            unversioned->repositoryPropertyStatus = StatusKind::Unversioned;
+            unversioned->entry = 0;
 
-                none->textStatus = StatusKind::None;
-                none->propertyStatus = StatusKind::None;
-                none->locked = false;
-                none->copied = false;
-                none->repositoryTextStatus = StatusKind::None;
-                none->repositoryPropertyStatus = StatusKind::None;
-                none->entry = 0;                
-            }
+            none->textStatus = StatusKind::None;
+            none->propertyStatus = StatusKind::None;
+            none->locked = false;
+            none->copied = false;
+            none->repositoryTextStatus = StatusKind::None;
+            none->repositoryPropertyStatus = StatusKind::None;
+            none->entry = 0;                
+        }
 
 
 

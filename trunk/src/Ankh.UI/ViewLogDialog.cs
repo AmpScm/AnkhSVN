@@ -9,37 +9,37 @@ using NSvn.Core;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Summary description for ViewLogDialog.
-	/// </summary>
-	public class ViewLogDialog : System.Windows.Forms.Form
-	{
-   //     public event EventHandler GetLog;
+    /// <summary>
+    /// Summary description for ViewLogDialog.
+    /// </summary>
+    public class ViewLogDialog : System.Windows.Forms.Form
+    {
+        //     public event EventHandler GetLog;
 		
         public ViewLogDialog()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
             this.components = new System.ComponentModel.Container();
             this.SetToolTips();
-		}
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
         protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
         private void SetToolTips()
         {
@@ -79,12 +79,12 @@ namespace Ankh.UI
 
 		
         #region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.label1 = new System.Windows.Forms.Label();
             this.showRevisionCheckBox = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -299,7 +299,7 @@ namespace Ankh.UI
         {
             ViewLogDialog the = new ViewLogDialog();
             the.ShowDialog();
-         }
+        }
 
         
         private void singleRevisionCheckBoxChecked(object sender, System.EventArgs e)
@@ -318,7 +318,7 @@ namespace Ankh.UI
                 this.singleRevisionCheckBox.Checked = true;            
         }                                     
  
-	}
+    }
 
 }
 

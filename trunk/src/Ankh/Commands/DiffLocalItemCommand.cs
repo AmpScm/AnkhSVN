@@ -13,7 +13,7 @@ namespace Ankh.Commands
     /// Summary description for DiffLocalItem.
     /// </summary>
     [VSNetCommand( "DiffLocalItem", Text="Diff", 
-        Tooltip="Diff against local text base.", 
+         Tooltip="Diff against local text base.", 
          Bitmap = ResourceBitmaps.Diff),
     VSNetControl( "Item", Position=2 ),
     VSNetControl( "Project", Position = 2 ),

@@ -5,12 +5,12 @@ using System.IO;
 
 namespace NSvn.Tests
 {
-	/// <summary>
-	/// Tests the WorkingCopyDirectory class.
-	/// </summary>
-	[TestFixture]
-	public class WorkingCopyDirectoryTest : TestBase
-	{
+    /// <summary>
+    /// Tests the WorkingCopyDirectory class.
+    /// </summary>
+    [TestFixture]
+    public class WorkingCopyDirectoryTest : TestBase
+    {
         /// <summary>
         /// 
         /// </summary>
@@ -66,5 +66,5 @@ namespace NSvn.Tests
             Assertion.Assert( "moo should not be versioned", !(dir.Children["moo"].IsVersioned) );
 
         }
-	}
+    }
 }

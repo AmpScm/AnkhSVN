@@ -6,15 +6,15 @@ using System.IO;
 
 namespace Ankh.EventSinks
 {
-	/// <summary>
-	/// Base class serving as event sink for all item related events.
-	/// </summary>
-	internal abstract class ItemEventSink : EventSink
-	{
-		protected ItemEventSink( AnkhContext context ) : base( context )
-		{
-			// empty
-		}
+    /// <summary>
+    /// Base class serving as event sink for all item related events.
+    /// </summary>
+    internal abstract class ItemEventSink : EventSink
+    {
+        protected ItemEventSink( AnkhContext context ) : base( context )
+        {
+            // empty
+        }
      
  
 
@@ -74,5 +74,5 @@ namespace Ankh.EventSinks
                 
             }
         }
-	}
+    }
 }

@@ -5,12 +5,12 @@ using NUnit.Framework;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests the Client.Commit method.
-	/// </summary>
-	[TestFixture]
-	public class CommitTest : TestBase
-	{
+    /// <summary>
+    /// Tests the Client.Commit method.
+    /// </summary>
+    [TestFixture]
+    public class CommitTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -123,5 +123,5 @@ namespace NSvn.Core.Tests
         }
 
         private string filepath;
-	}
+    }
 }

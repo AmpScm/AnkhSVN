@@ -8,41 +8,41 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Property editor for keywords.
-	/// </summary>
-	public class KeywordsPropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
-	{
-		public event EventHandler Changed;
+    /// <summary>
+    /// Property editor for keywords.
+    /// </summary>
+    public class KeywordsPropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    {
+        public event EventHandler Changed;
 
-		public KeywordsPropertyEditor()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public KeywordsPropertyEditor()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
-		}
+        }
         
         /// <summary>
         /// Resets the checkboxes.
         /// </summary>
-		public void Reset()
-		{
-			this.dateCheckBox.Checked = false;
+        public void Reset()
+        {
+            this.dateCheckBox.Checked = false;
             this.authorCheckBox.Checked = false;
             this.revisionCheckBox.Checked = false;
             this.urlCheckBox.Checked = false;
             this.allCheckBox.Checked = false;
             this.dirty = false;
-		}
+        }
 
         /// <summary>
         /// Indicates whether the selection is valid.
         /// </summary>
-		public bool Valid
-		{
-			get
+        public bool Valid
+        {
+            get
             { 
                 if (!this.dirty)
                 {
@@ -57,21 +57,21 @@ namespace Ankh.UI
                         this.allCheckBox.Checked; 
                 }
             }
-		}
+        }
         /// <summary>
         /// Sets and gets the property item.
         /// </summary>
-		public PropertyItem PropertyItem
-		{
-			get
-			{
+        public PropertyItem PropertyItem
+        {
+            get
+            {
                 string selectedText = "";
 				
                 if( !this.Valid )
-				{
-					throw new InvalidOperationException(
-						"Can not get a property item when Valid is false");
-				}
+                {
+                    throw new InvalidOperationException(
+                        "Can not get a property item when Valid is false");
+                }
                 if ( this.dateCheckBox.Checked )
                 {
                     selectedText = "Date ";
@@ -97,20 +97,20 @@ namespace Ankh.UI
                     selectedText += "Id ";
                 }
 
-				return new TextPropertyItem(selectedText);
-			}
+                return new TextPropertyItem(selectedText);
+            }
 
-			set
-			{
+            set
+            {
                 TextPropertyItem item = (TextPropertyItem)value;
                 this.authorCheckBox.Checked = (item.Text).IndexOf( "Author" ) != -1;
                 this.dateCheckBox.Checked = (item.Text).IndexOf( "Date" ) != -1;
                 this.revisionCheckBox.Checked = (item.Text).IndexOf( "Revision" ) != -1;
                 this.urlCheckBox.Checked = (item.Text).IndexOf( "URL") != -1;
                 this.allCheckBox.Checked = (item.Text).IndexOf( "Id" ) != -1;
-			    this.dirty = false;
+                this.dirty = false;
             }
-		}
+        }
 
         /// <summary>
         /// The type of property for this editor.
@@ -122,28 +122,28 @@ namespace Ankh.UI
         }
 
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.keywordLabel = new System.Windows.Forms.Label();
             this.urlCheckBox = new System.Windows.Forms.CheckBox();
             this.revisionCheckBox = new System.Windows.Forms.CheckBox();
@@ -255,7 +255,7 @@ namespace Ankh.UI
                 "Keyword substitution of $Id$ in the text ($Id$)");
         }
 
-		private System.Windows.Forms.Label keywordLabel;
+        private System.Windows.Forms.Label keywordLabel;
         private System.Windows.Forms.CheckBox dateCheckBox;
         private System.Windows.Forms.CheckBox urlCheckBox;
         private System.Windows.Forms.CheckBox revisionCheckBox;
@@ -265,13 +265,13 @@ namespace Ankh.UI
         /// Flag for enabling/disabling save button
         /// </summary>
         private bool dirty;	
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
        
    
-	}
+    }
 }
 

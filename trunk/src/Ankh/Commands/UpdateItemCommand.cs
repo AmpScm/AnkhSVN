@@ -9,17 +9,17 @@ using Ankh.Solution;
 
 namespace Ankh.Commands
 {
-	/// <summary>
-	/// A command that updates an item.
-	/// </summary>
-	[VSNetCommand("UpdateItem", Text = "Update", Tooltip = "Updates the local item",
+    /// <summary>
+    /// A command that updates an item.
+    /// </summary>
+    [VSNetCommand("UpdateItem", Text = "Update", Tooltip = "Updates the local item",
          Bitmap = ResourceBitmaps.Update),
-     VSNetControl( "Item", Position = 2 ),
-     VSNetControl( "Project", Position = 2 ),
-     VSNetControl( "Solution", Position = 2 ),
-     VSNetControl( "Folder", Position = 2 )]
-	internal class UpdateItem : CommandBase
-	{		
+    VSNetControl( "Item", Position = 2 ),
+    VSNetControl( "Project", Position = 2 ),
+    VSNetControl( "Solution", Position = 2 ),
+    VSNetControl( "Folder", Position = 2 )]
+    internal class UpdateItem : CommandBase
+    {		
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
@@ -29,7 +29,7 @@ namespace Ankh.Commands
             
             if ( v.IsVersioned )
                 return vsCommandStatus.vsCommandStatusEnabled |
-                vsCommandStatus.vsCommandStatusSupported;
+                    vsCommandStatus.vsCommandStatusSupported;
             else
                 return vsCommandStatus.vsCommandStatusUnsupported;
         }

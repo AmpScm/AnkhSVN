@@ -5,22 +5,22 @@ using NSvn;
 
 namespace Ankh.EventSinks
 {
-	/// <summary>
-	/// Event sink for the ProjectEvents events.
-	/// </summary>
-	internal class ProjectsEventSink : EventSink
-	{
-		internal ProjectsEventSink( ProjectsEvents events, AnkhContext context ) :
+    /// <summary>
+    /// Event sink for the ProjectEvents events.
+    /// </summary>
+    internal class ProjectsEventSink : EventSink
+    {
+        internal ProjectsEventSink( ProjectsEvents events, AnkhContext context ) :
             base( context )
-		{
-			this.events = events;
+        {
+            this.events = events;
             events.ItemAdded += new _dispProjectsEvents_ItemAddedEventHandler(
                 this.ItemAdded );
             events.ItemRemoved += new _dispProjectsEvents_ItemRemovedEventHandler(
                 this.ItemRemoved );
             events.ItemRenamed += new _dispProjectsEvents_ItemRenamedEventHandler(
                 this.ItemRenamed );           
-		}
+        }
 
         public override void Unhook()
         {
@@ -68,5 +68,5 @@ namespace Ankh.EventSinks
         }
        
         private ProjectsEvents events;
-	}
+    }
 }

@@ -11,15 +11,15 @@ using System.Web;
 
 namespace ReposInstaller
 {
-	/// <summary>
-	/// Installs a repos and extracts a working copy from it.
-	/// </summary>
-	[RunInstaller(true)]
-	public class ReposInstaller : Installer
-	{
-		public ReposInstaller()
-		{			
-		}
+    /// <summary>
+    /// Installs a repos and extracts a working copy from it.
+    /// </summary>
+    [RunInstaller(true)]
+    public class ReposInstaller : Installer
+    {
+        public ReposInstaller()
+        {			
+        }
 
         public override void Install( IDictionary state )
         {
@@ -89,5 +89,5 @@ namespace ReposInstaller
             File.SetAttributes( path, FileAttributes.Normal );
             Directory.Delete( path, true );
         }
-	}
+    }
 }

@@ -6,11 +6,11 @@ using NSvn.Common;
 
 namespace NSvn.Tests
 {
-	/// <summary>
-	/// Summary description for TestBase.
-	/// </summary>
-	public class TestBase : NSvn.Core.Tests.TestBase
-	{
+    /// <summary>
+    /// Summary description for TestBase.
+    /// </summary>
+    public class TestBase : NSvn.Core.Tests.TestBase
+    {
         #region SetupEventHandlers
         protected void SetupEventHandlers( Notifications n )
         {
@@ -178,5 +178,5 @@ namespace NSvn.Tests
 
 
 
-	}
+    }
 }

@@ -36,7 +36,7 @@ namespace NSvn.Core.Tests
             Client.RevPropSet( new Property( "cow", propval ), this.ReposUrl, 
                 Revision.Head, out rev, ctx );
             Assertion.AssertEquals( "Couldn't set prop on selected Repos!", 
-            	"moo", this.RunCommand( "svn", "propget cow --revprop -r head " + this.ReposUrl).Trim() );
+                "moo", this.RunCommand( "svn", "propget cow --revprop -r head " + this.ReposUrl).Trim() );
         }
     }
 }

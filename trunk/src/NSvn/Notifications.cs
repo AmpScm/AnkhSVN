@@ -4,11 +4,11 @@ using NSvn.Core;
 
 namespace NSvn
 {
-	/// <summary>
-	/// An object dispatching notification events from SVN operations.
-	/// </summary>
-	public class Notifications 
-	{
+    /// <summary>
+    /// An object dispatching notification events from SVN operations.
+    /// </summary>
+    public class Notifications 
+    {
         #region event declarations
         /// <summary>Got an add.</summary>         
         public event NotificationEventHandler AddReceived;
@@ -203,5 +203,5 @@ namespace NSvn
                 return "";
         }
 
-	}
+    }
 }

@@ -6,12 +6,12 @@ using NSvn.Common;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Summary description for PropGetTest.
-	/// </summary>
-	[TestFixture]
-	public class PropGetTest : TestBase
-	{
+    /// <summary>
+    /// Summary description for PropGetTest.
+    /// </summary>
+    [TestFixture]
+    public class PropGetTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -35,5 +35,5 @@ namespace NSvn.Core.Tests
                 Assertion.AssertEquals( "No entry found", "bar", mapping[key].GetString() );
             }            
         }
-	}
+    }
 }

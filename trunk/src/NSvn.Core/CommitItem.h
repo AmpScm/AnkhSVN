@@ -14,35 +14,35 @@ namespace NSvn
         {
         public:
             CommitItem( svn_client_commit_item_t* item, apr_pool_t* pool ) :                 
-                kind( static_cast<NodeKind>(item->kind) ),
-                url( StringHelper( item->url ) ),
-                revision( item->revision ),
-                copyFromUrl( StringHelper( item->copyfrom_url ) )
+              kind( static_cast<NodeKind>(item->kind) ),
+                  url( StringHelper( item->url ) ),
+                  revision( item->revision ),
+                  copyFromUrl( StringHelper( item->copyfrom_url ) )
 
-                {
-                    // convert to a native path
-                    this->path = StringHelper( svn_path_local_style(item->path, pool) );
-                }
-                
-            ///<summary>The working copy path to this item</summary>
-            __property String* get_Path()
-            { return this->path; }
+              {
+                  // convert to a native path
+                  this->path = StringHelper( svn_path_local_style(item->path, pool) );
+              }
 
-            /// <summary>The kind of node - file or dir</summary>
-            __property NodeKind get_Kind()
-            { return this->kind; }
+              ///<summary>The working copy path to this item</summary>
+              __property String* get_Path()
+              { return this->path; }
 
-            /// <summary>The repository URL to this item</summary>
-            __property String* get_Url()
-            { return this->url; }
+              /// <summary>The kind of node - file or dir</summary>
+              __property NodeKind get_Kind()
+              { return this->kind; }
 
-            /// <summary>The revision number associated with this commit</summary>
-            __property int get_Revision()
-            { return this->revision; }
+              /// <summary>The repository URL to this item</summary>
+              __property String* get_Url()
+              { return this->url; }
 
-            /// <summary>The copy from URL</summary>
-            __property String* get_CopyFromUrl()
-            { return this->copyFromUrl; }
+              /// <summary>The revision number associated with this commit</summary>
+              __property int get_Revision()
+              { return this->revision; }
+
+              /// <summary>The copy from URL</summary>
+              __property String* get_CopyFromUrl()
+              { return this->copyFromUrl; }
 
         private:
             String* path;

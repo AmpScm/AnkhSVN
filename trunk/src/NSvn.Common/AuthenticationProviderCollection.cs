@@ -15,60 +15,60 @@ namespace NSvn.Common
 {
 	
 
-	/// <summary>
-	///		A strongly-typed collection of <see cref="IAuthenticationProvider"/> objects.
-	/// </summary>
-	[Serializable]
-public 
-  class AuthenticationProviderCollection : ICollection, IList, IEnumerable, ICloneable
-	{
+    /// <summary>
+    ///		A strongly-typed collection of <see cref="IAuthenticationProvider"/> objects.
+    /// </summary>
+    [Serializable]
+    public 
+        class AuthenticationProviderCollection : ICollection, IList, IEnumerable, ICloneable
+    {
         #region Interfaces
-	    /// <summary>
-	    ///		Supports type-safe iteration over a <see cref="AuthenticationProviderCollection"/>.
-	    /// </summary>
+        /// <summary>
+        ///		Supports type-safe iteration over a <see cref="AuthenticationProviderCollection"/>.
+        /// </summary>
         public interface IAuthenticationProviderCollectionEnumerator
         {
-		    /// <summary>
-		    ///		Gets the current element in the collection.
-		    /// </summary>
+            /// <summary>
+            ///		Gets the current element in the collection.
+            /// </summary>
             IAuthenticationProvider Current {get;}
 
-		    /// <summary>
-		    ///		Advances the enumerator to the next element in the collection.
-		    /// </summary>
-		    /// <exception cref="InvalidOperationException">
-		    ///		The collection was modified after the enumerator was created.
-		    /// </exception>
-		    /// <returns>
-		    ///		<c>true</c> if the enumerator was successfully advanced to the next element; 
-		    ///		<c>false</c> if the enumerator has passed the end of the collection.
-		    /// </returns>
+            /// <summary>
+            ///		Advances the enumerator to the next element in the collection.
+            /// </summary>
+            /// <exception cref="InvalidOperationException">
+            ///		The collection was modified after the enumerator was created.
+            /// </exception>
+            /// <returns>
+            ///		<c>true</c> if the enumerator was successfully advanced to the next element; 
+            ///		<c>false</c> if the enumerator has passed the end of the collection.
+            /// </returns>
             bool MoveNext();
 
-		    /// <summary>
-		    ///		Sets the enumerator to its initial position, before the first element in the collection.
-		    /// </summary>
+            /// <summary>
+            ///		Sets the enumerator to its initial position, before the first element in the collection.
+            /// </summary>
             void Reset();
         }
         #endregion
 
-		private const int DEFAULT_CAPACITY = 16;
+        private const int DEFAULT_CAPACITY = 16;
 
 		#region Implementation (data)
-		private IAuthenticationProvider[] m_array;
-		private int m_count = 0;
-		[NonSerialized]
-		private int m_version = 0;
+        private IAuthenticationProvider[] m_array;
+        private int m_count = 0;
+        [NonSerialized]
+        private int m_version = 0;
 		#endregion
 	
         #region Static Wrappers
-		/// <summary>
-		///		Creates a synchronized (thread-safe) wrapper for a 
-		///     <c>AuthenticationProviderCollection</c> instance.
-		/// </summary>
-		/// <returns>
-		///     An <c>AuthenticationProviderCollection</c> wrapper that is synchronized (thread-safe).
-		/// </returns>
+        /// <summary>
+        ///		Creates a synchronized (thread-safe) wrapper for a 
+        ///     <c>AuthenticationProviderCollection</c> instance.
+        /// </summary>
+        /// <returns>
+        ///     An <c>AuthenticationProviderCollection</c> wrapper that is synchronized (thread-safe).
+        /// </returns>
         public static AuthenticationProviderCollection Synchronized(AuthenticationProviderCollection list)
         {
             if(list==null)
@@ -76,13 +76,13 @@ public
             return new SyncAuthenticationProviderCollection(list);
         }
         
-		/// <summary>
-		///		Creates a read-only wrapper for a 
-		///     <c>AuthenticationProviderCollection</c> instance.
-		/// </summary>
-		/// <returns>
-		///     An <c>AuthenticationProviderCollection</c> wrapper that is read-only.
-		/// </returns>
+        /// <summary>
+        ///		Creates a read-only wrapper for a 
+        ///     <c>AuthenticationProviderCollection</c> instance.
+        /// </summary>
+        /// <returns>
+        ///     An <c>AuthenticationProviderCollection</c> wrapper that is read-only.
+        /// </returns>
         public static AuthenticationProviderCollection ReadOnly(AuthenticationProviderCollection list)
         {
             if(list==null)
@@ -92,50 +92,51 @@ public
         #endregion
 
 	    #region Construction
-		/// <summary>
-		///		Initializes a new instance of the <c>AuthenticationProviderCollection</c> class
-		///		that is empty and has the default initial capacity.
-		/// </summary>
-		public AuthenticationProviderCollection()
-		{
-			m_array = new IAuthenticationProvider[DEFAULT_CAPACITY];
-		}
+        /// <summary>
+        ///		Initializes a new instance of the <c>AuthenticationProviderCollection</c> class
+        ///		that is empty and has the default initial capacity.
+        /// </summary>
+        public AuthenticationProviderCollection()
+        {
+            m_array = new IAuthenticationProvider[DEFAULT_CAPACITY];
+        }
 		
-		/// <summary>
-		///		Initializes a new instance of the <c>AuthenticationProviderCollection</c> class
-		///		that has the specified initial capacity.
-		/// </summary>
-		/// <param name="capacity">
-		///		The number of elements that the new <c>AuthenticationProviderCollection</c> is initially capable of storing.
-		///	</param>
-		public AuthenticationProviderCollection(int capacity)
-		{
-			m_array = new IAuthenticationProvider[capacity];
-		}
+        /// <summary>
+        ///		Initializes a new instance of the <c>AuthenticationProviderCollection</c> class
+        ///		that has the specified initial capacity.
+        /// </summary>
+        /// <param name="capacity">
+        ///		The number of elements that the new <c>AuthenticationProviderCollection</c> is initially capable of storing.
+        ///	</param>
+        public AuthenticationProviderCollection(int capacity)
+        {
+            m_array = new IAuthenticationProvider[capacity];
+        }
 
-		/// <summary>
-		///		Initializes a new instance of the <c>AuthenticationProviderCollection</c> class
-		///		that contains elements copied from the specified <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		/// <param name="c">The <c>AuthenticationProviderCollection</c> whose elements are copied to the new collection.</param>
-		public AuthenticationProviderCollection(AuthenticationProviderCollection c)
-		{
-			m_array = new IAuthenticationProvider[c.Count];
-			AddRange(c);
-		}
+        /// <summary>
+        ///		Initializes a new instance of the <c>AuthenticationProviderCollection</c> class
+        ///		that contains elements copied from the specified <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        /// <param name="c">The <c>AuthenticationProviderCollection</c> whose elements are copied to the new collection.</param>
+        public AuthenticationProviderCollection(AuthenticationProviderCollection c)
+        {
+            m_array = new IAuthenticationProvider[c.Count];
+            AddRange(c);
+        }
 
-		/// <summary>
-		///		Initializes a new instance of the <c>AuthenticationProviderCollection</c> class
-		///		that contains elements copied from the specified <see cref="IAuthenticationProvider"/> array.
-		/// </summary>
-		/// <param name="a">The <see cref="IAuthenticationProvider"/> array whose elements are copied to the new list.</param>
-		public AuthenticationProviderCollection(IAuthenticationProvider[] a)
-		{
-			m_array = new IAuthenticationProvider[a.Length];
-			AddRange(a);
-		}
+        /// <summary>
+        ///		Initializes a new instance of the <c>AuthenticationProviderCollection</c> class
+        ///		that contains elements copied from the specified <see cref="IAuthenticationProvider"/> array.
+        /// </summary>
+        /// <param name="a">The <see cref="IAuthenticationProvider"/> array whose elements are copied to the new list.</param>
+        public AuthenticationProviderCollection(IAuthenticationProvider[] a)
+        {
+            m_array = new IAuthenticationProvider[a.Length];
+            AddRange(a);
+        }
 		
-        protected enum Tag {
+        protected enum Tag 
+        {
             Default
         }
 
@@ -146,50 +147,50 @@ public
 		#endregion
 		
 		#region Operations (type-safe ICollection)
-		/// <summary>
-		///		Gets the number of elements actually contained in the <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		public virtual int Count
-		{
-			get { return m_count; }
-		}
+        /// <summary>
+        ///		Gets the number of elements actually contained in the <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        public virtual int Count
+        {
+            get { return m_count; }
+        }
 
-		/// <summary>
-		///		Copies the entire <c>AuthenticationProviderCollection</c> to a one-dimensional
-		///		<see cref="IAuthenticationProvider"/> array.
-		/// </summary>
-		/// <param name="array">The one-dimensional <see cref="IAuthenticationProvider"/> array to copy to.</param>
-		public virtual void CopyTo(IAuthenticationProvider[] array)
-		{
-			this.CopyTo(array, 0);
-		}
+        /// <summary>
+        ///		Copies the entire <c>AuthenticationProviderCollection</c> to a one-dimensional
+        ///		<see cref="IAuthenticationProvider"/> array.
+        /// </summary>
+        /// <param name="array">The one-dimensional <see cref="IAuthenticationProvider"/> array to copy to.</param>
+        public virtual void CopyTo(IAuthenticationProvider[] array)
+        {
+            this.CopyTo(array, 0);
+        }
 
-		/// <summary>
-		///		Copies the entire <c>AuthenticationProviderCollection</c> to a one-dimensional
-		///		<see cref="IAuthenticationProvider"/> array, starting at the specified index of the target array.
-		/// </summary>
-		/// <param name="array">The one-dimensional <see cref="IAuthenticationProvider"/> array to copy to.</param>
-		/// <param name="start">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-		public virtual void CopyTo(IAuthenticationProvider[] array, int start)
-		{
-			if (m_count > array.GetUpperBound(0) + 1 - start)
-				throw new System.ArgumentException("Destination array was not long enough.");
+        /// <summary>
+        ///		Copies the entire <c>AuthenticationProviderCollection</c> to a one-dimensional
+        ///		<see cref="IAuthenticationProvider"/> array, starting at the specified index of the target array.
+        /// </summary>
+        /// <param name="array">The one-dimensional <see cref="IAuthenticationProvider"/> array to copy to.</param>
+        /// <param name="start">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+        public virtual void CopyTo(IAuthenticationProvider[] array, int start)
+        {
+            if (m_count > array.GetUpperBound(0) + 1 - start)
+                throw new System.ArgumentException("Destination array was not long enough.");
 			
-			Array.Copy(m_array, 0, array, start, m_count); 
-		}
+            Array.Copy(m_array, 0, array, start, m_count); 
+        }
 
-		/// <summary>
-		///		Gets a value indicating whether access to the collection is synchronized (thread-safe).
-		/// </summary>
-		/// <returns>true if access to the ICollection is synchronized (thread-safe); otherwise, false.</returns>
+        /// <summary>
+        ///		Gets a value indicating whether access to the collection is synchronized (thread-safe).
+        /// </summary>
+        /// <returns>true if access to the ICollection is synchronized (thread-safe); otherwise, false.</returns>
         public virtual bool IsSynchronized
         {
             get { return m_array.IsSynchronized; }
         }
 
         /// <summary>
-		///		Gets an object that can be used to synchronize access to the collection.
-		/// </summary>
+        ///		Gets an object that can be used to synchronize access to the collection.
+        /// </summary>
         public virtual object SyncRoot
         {
             get { return m_array.SyncRoot; }
@@ -197,184 +198,184 @@ public
 		#endregion
 		
 		#region Operations (type-safe IList)
-		/// <summary>
-		///		Gets or sets the <see cref="IAuthenticationProvider"/> at the specified index.
-		/// </summary>
-		/// <param name="index">The zero-based index of the element to get or set.</param>
-		/// <exception cref="ArgumentOutOfRangeException">
-		///		<para><paramref name="index"/> is less than zero</para>
-		///		<para>-or-</para>
-		///		<para><paramref name="index"/> is equal to or greater than <see cref="AuthenticationProviderCollection.Count"/>.</para>
-		/// </exception>
-		public virtual IAuthenticationProvider this[int index]
-		{
-			get
-			{
-				ValidateIndex(index); // throws
-				return m_array[index]; 
-			}
-			set
-			{
-				ValidateIndex(index); // throws
-				++m_version; 
-				m_array[index] = value; 
-			}
-		}
+        /// <summary>
+        ///		Gets or sets the <see cref="IAuthenticationProvider"/> at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the element to get or set.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///		<para><paramref name="index"/> is less than zero</para>
+        ///		<para>-or-</para>
+        ///		<para><paramref name="index"/> is equal to or greater than <see cref="AuthenticationProviderCollection.Count"/>.</para>
+        /// </exception>
+        public virtual IAuthenticationProvider this[int index]
+        {
+            get
+            {
+                ValidateIndex(index); // throws
+                return m_array[index]; 
+            }
+            set
+            {
+                ValidateIndex(index); // throws
+                ++m_version; 
+                m_array[index] = value; 
+            }
+        }
 
-		/// <summary>
-		///		Adds a <see cref="IAuthenticationProvider"/> to the end of the <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		/// <param name="item">The <see cref="IAuthenticationProvider"/> to be added to the end of the <c>AuthenticationProviderCollection</c>.</param>
-		/// <returns>The index at which the value has been added.</returns>
-		public virtual int Add(IAuthenticationProvider item)
-		{
-			if (m_count == m_array.Length)
-				EnsureCapacity(m_count + 1);
+        /// <summary>
+        ///		Adds a <see cref="IAuthenticationProvider"/> to the end of the <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        /// <param name="item">The <see cref="IAuthenticationProvider"/> to be added to the end of the <c>AuthenticationProviderCollection</c>.</param>
+        /// <returns>The index at which the value has been added.</returns>
+        public virtual int Add(IAuthenticationProvider item)
+        {
+            if (m_count == m_array.Length)
+                EnsureCapacity(m_count + 1);
 
-			m_array[m_count] = item;
-			m_version++;
+            m_array[m_count] = item;
+            m_version++;
 
-			return m_count++;
-		}
+            return m_count++;
+        }
 		
-		/// <summary>
-		///		Removes all elements from the <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		public virtual void Clear()
-		{
-			++m_version;
-			m_array = new IAuthenticationProvider[DEFAULT_CAPACITY];
-			m_count = 0;
-		}
+        /// <summary>
+        ///		Removes all elements from the <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        public virtual void Clear()
+        {
+            ++m_version;
+            m_array = new IAuthenticationProvider[DEFAULT_CAPACITY];
+            m_count = 0;
+        }
 		
-		/// <summary>
-		///		Creates a shallow copy of the <see cref="AuthenticationProviderCollection"/>.
-		/// </summary>
-		public virtual object Clone()
-		{
-			AuthenticationProviderCollection newColl = new AuthenticationProviderCollection(m_count);
-			Array.Copy(m_array, 0, newColl.m_array, 0, m_count);
-			newColl.m_count = m_count;
-			newColl.m_version = m_version;
+        /// <summary>
+        ///		Creates a shallow copy of the <see cref="AuthenticationProviderCollection"/>.
+        /// </summary>
+        public virtual object Clone()
+        {
+            AuthenticationProviderCollection newColl = new AuthenticationProviderCollection(m_count);
+            Array.Copy(m_array, 0, newColl.m_array, 0, m_count);
+            newColl.m_count = m_count;
+            newColl.m_version = m_version;
 
-			return newColl;
-		}
+            return newColl;
+        }
 
-		/// <summary>
-		///		Determines whether a given <see cref="IAuthenticationProvider"/> is in the <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		/// <param name="item">The <see cref="IAuthenticationProvider"/> to check for.</param>
-		/// <returns><c>true</c> if <paramref name="item"/> is found in the <c>AuthenticationProviderCollection</c>; otherwise, <c>false</c>.</returns>
-		public virtual bool Contains(IAuthenticationProvider item)
-		{
-			for (int i=0; i != m_count; ++i)
-				if (m_array[i].Equals(item))
-					return true;
-			return false;
-		}
+        /// <summary>
+        ///		Determines whether a given <see cref="IAuthenticationProvider"/> is in the <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        /// <param name="item">The <see cref="IAuthenticationProvider"/> to check for.</param>
+        /// <returns><c>true</c> if <paramref name="item"/> is found in the <c>AuthenticationProviderCollection</c>; otherwise, <c>false</c>.</returns>
+        public virtual bool Contains(IAuthenticationProvider item)
+        {
+            for (int i=0; i != m_count; ++i)
+                if (m_array[i].Equals(item))
+                    return true;
+            return false;
+        }
 
-		/// <summary>
-		///		Returns the zero-based index of the first occurrence of a <see cref="IAuthenticationProvider"/>
-		///		in the <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		/// <param name="item">The <see cref="IAuthenticationProvider"/> to locate in the <c>AuthenticationProviderCollection</c>.</param>
-		/// <returns>
-		///		The zero-based index of the first occurrence of <paramref name="item"/> 
-		///		in the entire <c>AuthenticationProviderCollection</c>, if found; otherwise, -1.
-		///	</returns>
-		public virtual int IndexOf(IAuthenticationProvider item)
-		{
-			for (int i=0; i != m_count; ++i)
-				if (m_array[i].Equals(item))
-					return i;
-			return -1;
-		}
+        /// <summary>
+        ///		Returns the zero-based index of the first occurrence of a <see cref="IAuthenticationProvider"/>
+        ///		in the <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        /// <param name="item">The <see cref="IAuthenticationProvider"/> to locate in the <c>AuthenticationProviderCollection</c>.</param>
+        /// <returns>
+        ///		The zero-based index of the first occurrence of <paramref name="item"/> 
+        ///		in the entire <c>AuthenticationProviderCollection</c>, if found; otherwise, -1.
+        ///	</returns>
+        public virtual int IndexOf(IAuthenticationProvider item)
+        {
+            for (int i=0; i != m_count; ++i)
+                if (m_array[i].Equals(item))
+                    return i;
+            return -1;
+        }
 
-		/// <summary>
-		///		Inserts an element into the <c>AuthenticationProviderCollection</c> at the specified index.
-		/// </summary>
-		/// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param>
-		/// <param name="item">The <see cref="IAuthenticationProvider"/> to insert.</param>
-		/// <exception cref="ArgumentOutOfRangeException">
-		///		<para><paramref name="index"/> is less than zero</para>
-		///		<para>-or-</para>
-		///		<para><paramref name="index"/> is equal to or greater than <see cref="AuthenticationProviderCollection.Count"/>.</para>
-		/// </exception>
-		public virtual void Insert(int index, IAuthenticationProvider item)
-		{
-			ValidateIndex(index, true); // throws
+        /// <summary>
+        ///		Inserts an element into the <c>AuthenticationProviderCollection</c> at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param>
+        /// <param name="item">The <see cref="IAuthenticationProvider"/> to insert.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///		<para><paramref name="index"/> is less than zero</para>
+        ///		<para>-or-</para>
+        ///		<para><paramref name="index"/> is equal to or greater than <see cref="AuthenticationProviderCollection.Count"/>.</para>
+        /// </exception>
+        public virtual void Insert(int index, IAuthenticationProvider item)
+        {
+            ValidateIndex(index, true); // throws
 			
-			if (m_count == m_array.Length)
-				EnsureCapacity(m_count + 1);
+            if (m_count == m_array.Length)
+                EnsureCapacity(m_count + 1);
 
-			if (index < m_count)
-			{
-				Array.Copy(m_array, index, m_array, index + 1, m_count - index);
-			}
+            if (index < m_count)
+            {
+                Array.Copy(m_array, index, m_array, index + 1, m_count - index);
+            }
 
-			m_array[index] = item;
-			m_count++;
-			m_version++;
-		}
+            m_array[index] = item;
+            m_count++;
+            m_version++;
+        }
 
-		/// <summary>
-		///		Removes the first occurrence of a specific <see cref="IAuthenticationProvider"/> from the <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		/// <param name="item">The <see cref="IAuthenticationProvider"/> to remove from the <c>AuthenticationProviderCollection</c>.</param>
-		/// <exception cref="ArgumentException">
-		///		The specified <see cref="IAuthenticationProvider"/> was not found in the <c>AuthenticationProviderCollection</c>.
-		/// </exception>
-		public virtual void Remove(IAuthenticationProvider item)
-		{		   
-			int i = IndexOf(item);
-			if (i < 0)
-				throw new System.ArgumentException("Cannot remove the specified item because it was not found in the specified Collection.");
+        /// <summary>
+        ///		Removes the first occurrence of a specific <see cref="IAuthenticationProvider"/> from the <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        /// <param name="item">The <see cref="IAuthenticationProvider"/> to remove from the <c>AuthenticationProviderCollection</c>.</param>
+        /// <exception cref="ArgumentException">
+        ///		The specified <see cref="IAuthenticationProvider"/> was not found in the <c>AuthenticationProviderCollection</c>.
+        /// </exception>
+        public virtual void Remove(IAuthenticationProvider item)
+        {		   
+            int i = IndexOf(item);
+            if (i < 0)
+                throw new System.ArgumentException("Cannot remove the specified item because it was not found in the specified Collection.");
 			
-			++m_version;
-			RemoveAt(i);
-		}
+            ++m_version;
+            RemoveAt(i);
+        }
 
-		/// <summary>
-		///		Removes the element at the specified index of the <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		/// <param name="index">The zero-based index of the element to remove.</param>
-		/// <exception cref="ArgumentOutOfRangeException">
-		///		<para><paramref name="index"/> is less than zero</para>
-		///		<para>-or-</para>
-		///		<para><paramref name="index"/> is equal to or greater than <see cref="AuthenticationProviderCollection.Count"/>.</para>
-		/// </exception>
-		public virtual void RemoveAt(int index)
-		{
-			ValidateIndex(index); // throws
+        /// <summary>
+        ///		Removes the element at the specified index of the <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        /// <param name="index">The zero-based index of the element to remove.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///		<para><paramref name="index"/> is less than zero</para>
+        ///		<para>-or-</para>
+        ///		<para><paramref name="index"/> is equal to or greater than <see cref="AuthenticationProviderCollection.Count"/>.</para>
+        /// </exception>
+        public virtual void RemoveAt(int index)
+        {
+            ValidateIndex(index); // throws
 			
-			m_count--;
+            m_count--;
 
-			if (index < m_count)
-			{
-				Array.Copy(m_array, index + 1, m_array, index, m_count - index);
-			}
+            if (index < m_count)
+            {
+                Array.Copy(m_array, index + 1, m_array, index, m_count - index);
+            }
 			
-			// We can't set the deleted entry equal to null, because it might be a value type.
-			// Instead, we'll create an empty single-element array of the right type and copy it 
-			// over the entry we want to erase.
-			IAuthenticationProvider[] temp = new IAuthenticationProvider[1];
-			Array.Copy(temp, 0, m_array, m_count, 1);
-			m_version++;
-		}
+            // We can't set the deleted entry equal to null, because it might be a value type.
+            // Instead, we'll create an empty single-element array of the right type and copy it 
+            // over the entry we want to erase.
+            IAuthenticationProvider[] temp = new IAuthenticationProvider[1];
+            Array.Copy(temp, 0, m_array, m_count, 1);
+            m_version++;
+        }
 
-		/// <summary>
-		///		Gets a value indicating whether the collection has a fixed size.
-		/// </summary>
-		/// <value>true if the collection has a fixed size; otherwise, false. The default is false</value>
+        /// <summary>
+        ///		Gets a value indicating whether the collection has a fixed size.
+        /// </summary>
+        /// <value>true if the collection has a fixed size; otherwise, false. The default is false</value>
         public virtual bool IsFixedSize
         {
             get { return false; }
         }
 
-		/// <summary>
-		///		gets a value indicating whether the IList is read-only.
-		/// </summary>
-		/// <value>true if the collection is read-only; otherwise, false. The default is false</value>
+        /// <summary>
+        ///		gets a value indicating whether the IList is read-only.
+        /// </summary>
+        /// <value>true if the collection is read-only; otherwise, false. The default is false</value>
         public virtual bool IsReadOnly
         {
             get { return false; }
@@ -383,259 +384,259 @@ public
 
 		#region Operations (type-safe IEnumerable)
 		
-		/// <summary>
-		///		Returns an enumerator that can iterate through the <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		/// <returns>An <see cref="Enumerator"/> for the entire <c>AuthenticationProviderCollection</c>.</returns>
-		public virtual IAuthenticationProviderCollectionEnumerator GetEnumerator()
-		{
-			return new Enumerator(this);
-		}
+        /// <summary>
+        ///		Returns an enumerator that can iterate through the <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        /// <returns>An <see cref="Enumerator"/> for the entire <c>AuthenticationProviderCollection</c>.</returns>
+        public virtual IAuthenticationProviderCollectionEnumerator GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
 		#endregion
 
 		#region Public helpers (just to mimic some nice features of ArrayList)
 		
-		/// <summary>
-		///		Gets or sets the number of elements the <c>AuthenticationProviderCollection</c> can contain.
-		/// </summary>
-		public virtual int Capacity
-		{
-			get { return m_array.Length; }
+        /// <summary>
+        ///		Gets or sets the number of elements the <c>AuthenticationProviderCollection</c> can contain.
+        /// </summary>
+        public virtual int Capacity
+        {
+            get { return m_array.Length; }
 			
-			set
-			{
-				if (value < m_count)
-					value = m_count;
+            set
+            {
+                if (value < m_count)
+                    value = m_count;
 
-				if (value != m_array.Length)
-				{
-					if (value > 0)
-					{
-						IAuthenticationProvider[] temp = new IAuthenticationProvider[value];
-						Array.Copy(m_array, temp, m_count);
-						m_array = temp;
-					}
-					else
-					{
-						m_array = new IAuthenticationProvider[DEFAULT_CAPACITY];
-					}
-				}
-			}
-		}
+                if (value != m_array.Length)
+                {
+                    if (value > 0)
+                    {
+                        IAuthenticationProvider[] temp = new IAuthenticationProvider[value];
+                        Array.Copy(m_array, temp, m_count);
+                        m_array = temp;
+                    }
+                    else
+                    {
+                        m_array = new IAuthenticationProvider[DEFAULT_CAPACITY];
+                    }
+                }
+            }
+        }
 
-		/// <summary>
-		///		Adds the elements of another <c>AuthenticationProviderCollection</c> to the current <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		/// <param name="x">The <c>AuthenticationProviderCollection</c> whose elements should be added to the end of the current <c>AuthenticationProviderCollection</c>.</param>
-		/// <returns>The new <see cref="AuthenticationProviderCollection.Count"/> of the <c>AuthenticationProviderCollection</c>.</returns>
-		public virtual int AddRange(AuthenticationProviderCollection x)
-		{
-			if (m_count + x.Count >= m_array.Length)
-				EnsureCapacity(m_count + x.Count);
+        /// <summary>
+        ///		Adds the elements of another <c>AuthenticationProviderCollection</c> to the current <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        /// <param name="x">The <c>AuthenticationProviderCollection</c> whose elements should be added to the end of the current <c>AuthenticationProviderCollection</c>.</param>
+        /// <returns>The new <see cref="AuthenticationProviderCollection.Count"/> of the <c>AuthenticationProviderCollection</c>.</returns>
+        public virtual int AddRange(AuthenticationProviderCollection x)
+        {
+            if (m_count + x.Count >= m_array.Length)
+                EnsureCapacity(m_count + x.Count);
 			
-			Array.Copy(x.m_array, 0, m_array, m_count, x.Count);
-			m_count += x.Count;
-			m_version++;
+            Array.Copy(x.m_array, 0, m_array, m_count, x.Count);
+            m_count += x.Count;
+            m_version++;
 
-			return m_count;
-		}
+            return m_count;
+        }
 
-		/// <summary>
-		///		Adds the elements of a <see cref="IAuthenticationProvider"/> array to the current <c>AuthenticationProviderCollection</c>.
-		/// </summary>
-		/// <param name="x">The <see cref="IAuthenticationProvider"/> array whose elements should be added to the end of the <c>AuthenticationProviderCollection</c>.</param>
-		/// <returns>The new <see cref="AuthenticationProviderCollection.Count"/> of the <c>AuthenticationProviderCollection</c>.</returns>
-		public virtual int AddRange(IAuthenticationProvider[] x)
-		{
-			if (m_count + x.Length >= m_array.Length)
-				EnsureCapacity(m_count + x.Length);
+        /// <summary>
+        ///		Adds the elements of a <see cref="IAuthenticationProvider"/> array to the current <c>AuthenticationProviderCollection</c>.
+        /// </summary>
+        /// <param name="x">The <see cref="IAuthenticationProvider"/> array whose elements should be added to the end of the <c>AuthenticationProviderCollection</c>.</param>
+        /// <returns>The new <see cref="AuthenticationProviderCollection.Count"/> of the <c>AuthenticationProviderCollection</c>.</returns>
+        public virtual int AddRange(IAuthenticationProvider[] x)
+        {
+            if (m_count + x.Length >= m_array.Length)
+                EnsureCapacity(m_count + x.Length);
 
-			Array.Copy(x, 0, m_array, m_count, x.Length);
-			m_count += x.Length;
-			m_version++;
+            Array.Copy(x, 0, m_array, m_count, x.Length);
+            m_count += x.Length;
+            m_version++;
 
-			return m_count;
-		}
+            return m_count;
+        }
 		
-		/// <summary>
-		///		Sets the capacity to the actual number of elements.
-		/// </summary>
-		public virtual void TrimToSize()
-		{
-			this.Capacity = m_count;
-		}
+        /// <summary>
+        ///		Sets the capacity to the actual number of elements.
+        /// </summary>
+        public virtual void TrimToSize()
+        {
+            this.Capacity = m_count;
+        }
 
 		#endregion
 
 		#region Implementation (helpers)
 
-		/// <exception cref="ArgumentOutOfRangeException">
-		///		<para><paramref name="index"/> is less than zero</para>
-		///		<para>-or-</para>
-		///		<para><paramref name="index"/> is equal to or greater than <see cref="AuthenticationProviderCollection.Count"/>.</para>
-		/// </exception>
-		private void ValidateIndex(int i)
-		{
-			ValidateIndex(i, false);
-		}
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///		<para><paramref name="index"/> is less than zero</para>
+        ///		<para>-or-</para>
+        ///		<para><paramref name="index"/> is equal to or greater than <see cref="AuthenticationProviderCollection.Count"/>.</para>
+        /// </exception>
+        private void ValidateIndex(int i)
+        {
+            ValidateIndex(i, false);
+        }
 
-		/// <exception cref="ArgumentOutOfRangeException">
-		///		<para><paramref name="index"/> is less than zero</para>
-		///		<para>-or-</para>
-		///		<para><paramref name="index"/> is equal to or greater than <see cref="AuthenticationProviderCollection.Count"/>.</para>
-		/// </exception>
-		private void ValidateIndex(int i, bool allowEqualEnd)
-		{
-			int max = (allowEqualEnd)?(m_count):(m_count-1);
-			if (i < 0 || i > max)
-				throw new System.ArgumentOutOfRangeException("Index was out of range.  Must be non-negative and less than the size of the collection.", (object)i, "Specified argument was out of the range of valid values.");
-		}
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///		<para><paramref name="index"/> is less than zero</para>
+        ///		<para>-or-</para>
+        ///		<para><paramref name="index"/> is equal to or greater than <see cref="AuthenticationProviderCollection.Count"/>.</para>
+        /// </exception>
+        private void ValidateIndex(int i, bool allowEqualEnd)
+        {
+            int max = (allowEqualEnd)?(m_count):(m_count-1);
+            if (i < 0 || i > max)
+                throw new System.ArgumentOutOfRangeException("Index was out of range.  Must be non-negative and less than the size of the collection.", (object)i, "Specified argument was out of the range of valid values.");
+        }
 
-		private void EnsureCapacity(int min)
-		{
-			int newCapacity = ((m_array.Length == 0) ? DEFAULT_CAPACITY : m_array.Length * 2);
-			if (newCapacity < min)
-				newCapacity = min;
+        private void EnsureCapacity(int min)
+        {
+            int newCapacity = ((m_array.Length == 0) ? DEFAULT_CAPACITY : m_array.Length * 2);
+            if (newCapacity < min)
+                newCapacity = min;
 
-			this.Capacity = newCapacity;
-		}
+            this.Capacity = newCapacity;
+        }
 
 		#endregion
 		
 		#region Implementation (ICollection)
 
-		void ICollection.CopyTo(Array array, int start)
-		{
-			Array.Copy(m_array, 0, array, start, m_count);
-		}
+        void ICollection.CopyTo(Array array, int start)
+        {
+            Array.Copy(m_array, 0, array, start, m_count);
+        }
 
 		#endregion
 
 		#region Implementation (IList)
 
-		object IList.this[int i]
-		{
-			get { return (object)this[i]; }
-			set { this[i] = (IAuthenticationProvider)value; }
-		}
+        object IList.this[int i]
+        {
+            get { return (object)this[i]; }
+            set { this[i] = (IAuthenticationProvider)value; }
+        }
 
-		int IList.Add(object x)
-		{
-			return this.Add((IAuthenticationProvider)x);
-		}
+        int IList.Add(object x)
+        {
+            return this.Add((IAuthenticationProvider)x);
+        }
 
-    	bool IList.Contains(object x)
-		{
-			return this.Contains((IAuthenticationProvider)x);
-		}
+        bool IList.Contains(object x)
+        {
+            return this.Contains((IAuthenticationProvider)x);
+        }
 
-		int IList.IndexOf(object x)
-		{
-			return this.IndexOf((IAuthenticationProvider)x);
-		}
+        int IList.IndexOf(object x)
+        {
+            return this.IndexOf((IAuthenticationProvider)x);
+        }
 
-		void IList.Insert(int pos, object x)
-		{
-			this.Insert(pos, (IAuthenticationProvider)x);
-		}
+        void IList.Insert(int pos, object x)
+        {
+            this.Insert(pos, (IAuthenticationProvider)x);
+        }
 
-		void IList.Remove(object x)
-		{
-			this.Remove((IAuthenticationProvider)x);
-		}
+        void IList.Remove(object x)
+        {
+            this.Remove((IAuthenticationProvider)x);
+        }
 
-		void IList.RemoveAt(int pos)
-		{
-			this.RemoveAt(pos);
-		}
+        void IList.RemoveAt(int pos)
+        {
+            this.RemoveAt(pos);
+        }
 
 		#endregion
 
 		#region Implementation (IEnumerable)
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return (IEnumerator)(this.GetEnumerator());
-		}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return (IEnumerator)(this.GetEnumerator());
+        }
 
 		#endregion
 
 		#region Nested enumerator class
-		/// <summary>
-		///		Supports simple iteration over a <see cref="AuthenticationProviderCollection"/>.
-		/// </summary>
-		private class Enumerator : IEnumerator, IAuthenticationProviderCollectionEnumerator
-		{
+        /// <summary>
+        ///		Supports simple iteration over a <see cref="AuthenticationProviderCollection"/>.
+        /// </summary>
+        private class Enumerator : IEnumerator, IAuthenticationProviderCollectionEnumerator
+        {
 			#region Implementation (data)
 			
-			private AuthenticationProviderCollection m_collection;
-			private int m_index;
-			private int m_version;
+            private AuthenticationProviderCollection m_collection;
+            private int m_index;
+            private int m_version;
 			
 			#endregion
 		
 			#region Construction
 			
-			/// <summary>
-			///		Initializes a new instance of the <c>Enumerator</c> class.
-			/// </summary>
-			/// <param name="tc"></param>
-			internal Enumerator(AuthenticationProviderCollection tc)
-			{
-				m_collection = tc;
-				m_index = -1;
-				m_version = tc.m_version;
-			}
+            /// <summary>
+            ///		Initializes a new instance of the <c>Enumerator</c> class.
+            /// </summary>
+            /// <param name="tc"></param>
+            internal Enumerator(AuthenticationProviderCollection tc)
+            {
+                m_collection = tc;
+                m_index = -1;
+                m_version = tc.m_version;
+            }
 			
 			#endregion
 	
 			#region Operations (type-safe IEnumerator)
 			
-			/// <summary>
-			///		Gets the current element in the collection.
-			/// </summary>
-			public IAuthenticationProvider Current
-			{
-				get { return m_collection[m_index]; }
-			}
+            /// <summary>
+            ///		Gets the current element in the collection.
+            /// </summary>
+            public IAuthenticationProvider Current
+            {
+                get { return m_collection[m_index]; }
+            }
 
-			/// <summary>
-			///		Advances the enumerator to the next element in the collection.
-			/// </summary>
-			/// <exception cref="InvalidOperationException">
-			///		The collection was modified after the enumerator was created.
-			/// </exception>
-			/// <returns>
-			///		<c>true</c> if the enumerator was successfully advanced to the next element; 
-			///		<c>false</c> if the enumerator has passed the end of the collection.
-			/// </returns>
-			public bool MoveNext()
-			{
-				if (m_version != m_collection.m_version)
-					throw new System.InvalidOperationException("Collection was modified; enumeration operation may not execute.");
+            /// <summary>
+            ///		Advances the enumerator to the next element in the collection.
+            /// </summary>
+            /// <exception cref="InvalidOperationException">
+            ///		The collection was modified after the enumerator was created.
+            /// </exception>
+            /// <returns>
+            ///		<c>true</c> if the enumerator was successfully advanced to the next element; 
+            ///		<c>false</c> if the enumerator has passed the end of the collection.
+            /// </returns>
+            public bool MoveNext()
+            {
+                if (m_version != m_collection.m_version)
+                    throw new System.InvalidOperationException("Collection was modified; enumeration operation may not execute.");
 
-				++m_index;
-				return (m_index < m_collection.Count) ? true : false;
-			}
+                ++m_index;
+                return (m_index < m_collection.Count) ? true : false;
+            }
 
-			/// <summary>
-			///		Sets the enumerator to its initial position, before the first element in the collection.
-			/// </summary>
-			public void Reset()
-			{
-				m_index = -1;
-			}
+            /// <summary>
+            ///		Sets the enumerator to its initial position, before the first element in the collection.
+            /// </summary>
+            public void Reset()
+            {
+                m_index = -1;
+            }
 			#endregion
 	
 			#region Implementation (IEnumerator)
 			
-			object IEnumerator.Current
-			{
-				get { return (object)(this.Current); }
-			}
+            object IEnumerator.Current
+            {
+                get { return (object)(this.Current); }
+            }
 			
 			#endregion
-		}
+        }
         #endregion
         
         #region Nested Syncronized Wrapper class
@@ -915,6 +916,6 @@ public
             #endregion
         }
         #endregion
-	}
+    }
 
 }

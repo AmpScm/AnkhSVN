@@ -7,12 +7,12 @@ using System.Text;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests Client::Cat
-	/// </summary>
-	[TestFixture]
-	public class CatTest : TestBase
-	{
+    /// <summary>
+    /// Tests Client::Cat
+    /// </summary>
+    [TestFixture]
+    public class CatTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {

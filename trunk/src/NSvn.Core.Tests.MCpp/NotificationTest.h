@@ -17,7 +17,7 @@ namespace NSvn
                 public:
                     [Test]
                     void TestBasic();
-                    
+
                 };
             }
         }

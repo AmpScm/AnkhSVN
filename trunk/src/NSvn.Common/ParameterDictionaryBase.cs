@@ -4,11 +4,11 @@ using System.Collections;
 
 namespace NSvn.Common
 {
-	/// <summary>
-	/// This class is intended for internal use.
-	/// </summary>
-	public abstract class ParameterDictionaryBase : IDictionary
-	{
+    /// <summary>
+    /// This class is intended for internal use.
+    /// </summary>
+    public abstract class ParameterDictionaryBase : IDictionary
+    {
         #region Implementation of IDictionary
         public System.Collections.IDictionaryEnumerator GetEnumerator()
         {

@@ -5,12 +5,12 @@ using NUnit.Framework;
 
 namespace NSvn.Tests
 {
-	/// <summary>
-	/// Tests the SvnResource class
-	/// </summary>
-	[TestFixture]
-	public class SvnResourceTest : TestBase
-	{
+    /// <summary>
+    /// Tests the SvnResource class
+    /// </summary>
+    [TestFixture]
+    public class SvnResourceTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -46,5 +46,5 @@ namespace NSvn.Tests
             Assertion.AssertEquals( "Expected SvnResource.Unversionable", 
                 SvnResource.Unversionable, totallyUnversionedFile );
         }
-	}
+    }
 }

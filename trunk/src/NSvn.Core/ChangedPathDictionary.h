@@ -10,59 +10,59 @@ namespace NSvn
 {
     namespace Core
     {
-        public __gc class ChangedPathDictionary : public System::Collections::DictionaryBase
+    public __gc class ChangedPathDictionary : public System::Collections::DictionaryBase
+    {
+    public:
+
+        /* __property virtual void set_Item( String* path, Status* status )
+        { this->Dictionary->Item[ path ] = status; }*/
+
+        //TODO: straighten out this fucking mess
+        virtual ChangedPath* Get( String* path )
+        { return static_cast<ChangedPath*>(this->Dictionary->Item[ path ]); }
+
+
+
+        virtual void Add( String* path, ChangedPath* status )
+        { this->Dictionary->Add( path, status ); }
+
+        virtual bool Contains( ChangedPath* status )
+        { return this->Dictionary->Contains( status ); }
+
+        virtual void Remove( String* path )
+        { this->Dictionary->Remove( path ); }
+
+        __property virtual System::Collections::ICollection* get_Keys()
+        { return this->Dictionary->Keys; }
+
+        __property virtual System::Collections::ICollection* get_Values()
+        { return this->Dictionary->Values; }
+
+    public private:
+        /// <summary>Creates a StatusDictionary from an apr_hash_t</summary>
+        static ChangedPathDictionary* FromChangedPathsHash( apr_hash_t* changedPaths, 
+            apr_pool_t* pool )
         {
-        public:
-            
-           /* __property virtual void set_Item( String* path, Status* status )
-            { this->Dictionary->Item[ path ] = status; }*/
+            ChangedPathDictionary* dict = new ChangedPathDictionary();
 
-            //TODO: straighten out this fucking mess
-            virtual ChangedPath* Get( String* path )
-            { return static_cast<ChangedPath*>(this->Dictionary->Item[ path ]); }
-
-            
-
-            virtual void Add( String* path, ChangedPath* status )
-            { this->Dictionary->Add( path, status ); }
-
-            virtual bool Contains( ChangedPath* status )
-            { return this->Dictionary->Contains( status ); }
-
-            virtual void Remove( String* path )
-            { this->Dictionary->Remove( path ); }
-
-            __property virtual System::Collections::ICollection* get_Keys()
-            { return this->Dictionary->Keys; }
-
-            __property virtual System::Collections::ICollection* get_Values()
-            { return this->Dictionary->Values; }
-
-        public private:
-            /// <summary>Creates a StatusDictionary from an apr_hash_t</summary>
-            static ChangedPathDictionary* FromChangedPathsHash( apr_hash_t* changedPaths, 
-                apr_pool_t* pool )
+            apr_hash_index_t* idx = apr_hash_first( pool, changedPaths );
+            while( idx != 0 )
             {
-                ChangedPathDictionary* dict = new ChangedPathDictionary();
-                
-                apr_hash_index_t* idx = apr_hash_first( pool, changedPaths );
-                while( idx != 0 )
-                {
-                    const char* path;
-                    apr_ssize_t keyLength;
-                    svn_log_changed_path_t* changedPath;
+                const char* path;
+                apr_ssize_t keyLength;
+                svn_log_changed_path_t* changedPath;
 
-                    apr_hash_this( idx, reinterpret_cast<const void**>(&path), &keyLength,
-                        reinterpret_cast<void**>(&changedPath) );
-                    String* managedPath = StringHelper( 
-                        svn_path_local_style(path, pool) );
-                    dict->Add( managedPath, new ChangedPath(changedPath) );
+                apr_hash_this( idx, reinterpret_cast<const void**>(&path), &keyLength,
+                    reinterpret_cast<void**>(&changedPath) );
+                String* managedPath = StringHelper( 
+                    svn_path_local_style(path, pool) );
+                dict->Add( managedPath, new ChangedPath(changedPath) );
 
-                    idx = apr_hash_next( idx );
-                }
-
-                return dict;
+                idx = apr_hash_next( idx );
             }
-        };
+
+            return dict;
+        }
+    };
     }
 }

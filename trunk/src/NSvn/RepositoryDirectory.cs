@@ -6,19 +6,19 @@ using System.Text.RegularExpressions;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Represents a directory in a repository.
-	/// </summary>
-	public class RepositoryDirectory : RepositoryResource
-	{
+    /// <summary>
+    /// Represents a directory in a repository.
+    /// </summary>
+    public class RepositoryDirectory : RepositoryResource
+    {
         /// <summary>
         /// Constructor. Defaults to the HEAD revision.
         /// </summary>
         /// <param name="url">The URL to the directory in the repository.</param>
-		public RepositoryDirectory( string url ) : base( url )
-		{
-			// empty
-		}
+        public RepositoryDirectory( string url ) : base( url )
+        {
+            // empty
+        }
 
         /// <summary>
         /// Constructor.
@@ -103,5 +103,5 @@ namespace NSvn
 
         private readonly Regex NAME = new Regex( 
             @"\w{3,4}:///?[\w\-\.\:]+(:\d+)?(/\w+)*/(\w+)+/?" );
-	}
+    }
 }

@@ -4,13 +4,13 @@ using EnvDTE;
 
 namespace Ankh.Commands
 {
-	/// <summary>
-	/// Summary description for MergeItem.
-	/// </summary>
-	internal class MergeItem : CommandBase
-	{
+    /// <summary>
+    /// Summary description for MergeItem.
+    /// </summary>
+    internal class MergeItem : CommandBase
+    {
 		
-	    public override void Execute(Ankh.AnkhContext context)
+        public override void Execute(Ankh.AnkhContext context)
         {
         
         }

@@ -7,14 +7,14 @@
 namespace
 {
     template<class T>
-    static apr_status_t CallDestructor( void* data );
+        static apr_status_t CallDestructor( void* data );
 }
 
 
 
 namespace NSvn
 {
-    
+
     namespace Core
     {
 
@@ -30,9 +30,9 @@ namespace NSvn
 
             // uses an existing pool - 
             Pool( apr_pool_t* pool, bool ownsPool ) :
-                pool( pool ), ownsPool( ownsPool )
+            pool( pool ), ownsPool( ownsPool )
             {;}
-            
+
 
             // ctor destroys the existing pool if it owns it
             ~Pool()
@@ -65,16 +65,16 @@ namespace NSvn
             /// pool, so it must define a copy constructor. The pool will call the destructor
             /// of the object when the pool is destroyed</summary>
             template<class T>
-            T* AllocateObject( const T& t ) const
+                T* AllocateObject( const T& t ) const
             {
                 return AllocateObject( t, this->pool );
             }
 
-             /// <summary>Allocate an object in the given apr pool. The object will be copied onto the 
+            /// <summary>Allocate an object in the given apr pool. The object will be copied onto the 
             /// pool, so it must define a copy constructor. The pool will call the destructor
             /// of the object when the pool is destroyed</summary>
             template<class T>
-            static T* AllocateObject( const T& t, apr_pool_t* pool )
+                static T* AllocateObject( const T& t, apr_pool_t* pool )
             {
                 void* raw = apr_palloc( pool, sizeof( T ) );
                 T* newT = new(raw)T(t);
@@ -86,7 +86,7 @@ namespace NSvn
                 return newT;
             }
 
-                
+
 
         private:
 
@@ -104,7 +104,7 @@ namespace NSvn
 namespace
 {
     template <class T>
-    static apr_status_t CallDestructor( void* data )
+        static apr_status_t CallDestructor( void* data )
     {
         //call the dtor explicitly
         T* t = static_cast<T*>(data);

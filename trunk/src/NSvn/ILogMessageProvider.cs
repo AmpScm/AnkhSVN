@@ -4,18 +4,18 @@ using NSvn.Core;
 
 namespace NSvn
 {
-	/// <summary>
-	/// This represents an object that can provide a log message.
-	/// </summary>
-	public interface ILogMessageProvider
-	{
+    /// <summary>
+    /// This represents an object that can provide a log message.
+    /// </summary>
+    public interface ILogMessageProvider
+    {
         /// <summary>
         /// Retrieve the log message.
         /// </summary>
         /// <param name="targets">The items that will be committed.</param>
         /// <returns>The log message.</returns>
-		string GetLogMessage( CommitItem[] targets );
-	}
+        string GetLogMessage( CommitItem[] targets );
+    }
 
     /// <summary>
     /// Represents a simple ILogMessageProvider that can be initialized with a 

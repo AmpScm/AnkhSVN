@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 
 namespace Utils
 {
-	/// <summary>
-	/// A high precision timer for performance measurement purposes.
-	/// </summary>
-	public class Timer
-	{
+    /// <summary>
+    /// A high precision timer for performance measurement purposes.
+    /// </summary>
+    public class Timer
+    {
         public Timer()
         {
             this.startTime = 0;
@@ -42,5 +42,5 @@ namespace Utils
         private long startTime;
         private long endTime;
         private long frequency;
-	}
+    }
 }

@@ -7,12 +7,12 @@ using System.Text;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests Client::PropList
-	/// </summary>
-	[TestFixture]
-	public class PropListTest : TestBase
-	{
+    /// <summary>
+    /// Tests Client::PropList
+    /// </summary>
+    [TestFixture]
+    public class PropListTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -36,5 +36,5 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "Wrong property", "foo", 
                 items[0].Properties["kung"].ToString() );
         }
-	}
+    }
 }

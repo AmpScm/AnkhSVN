@@ -14,29 +14,29 @@ namespace NSvn
         {
         private public:
             Entry( svn_wc_entry_t* entry ) : 
-                    name( StringHelper(entry->name) ),
-                    revision( entry->revision ),
-                    url( StringHelper(entry->url) ),
-                    repository( StringHelper(entry->repos) ),
-                    uuid( StringHelper(entry->uuid) ),
-                    kind( static_cast<NodeKind>(entry->kind) ),
-                    schedule( static_cast<NSvn::Core::Schedule>(entry->schedule) ),
-                    copied( entry->copied != 0 ),
-                    deleted( entry->deleted != 0 ),
-                    copyFromUrl( StringHelper(entry->copyfrom_url) ),
-                    copyFromRevision( entry->copyfrom_rev ),
-                    conflictOld( StringHelper(entry->conflict_old) ),
-                    conflictNew( StringHelper(entry->conflict_new) ),
-                    conflictWorking( StringHelper(entry->conflict_wrk) ),
-                    propertyRejectFile( StringHelper(entry->prejfile) ),
-                    textTime( AprTimeToDateTime(entry->text_time) ),
-                    propertyTime( AprTimeToDateTime(entry->prop_time) ),
-                    checkSum( StringHelper(entry->checksum) ),
-                    commitRevision( entry->cmt_rev ),
-                    commitDate( AprTimeToDateTime(entry->cmt_date) ),
-                    commitAuthor( StringHelper(entry->cmt_author) )
+        name( StringHelper(entry->name) ),
+            revision( entry->revision ),
+            url( StringHelper(entry->url) ),
+            repository( StringHelper(entry->repos) ),
+            uuid( StringHelper(entry->uuid) ),
+            kind( static_cast<NodeKind>(entry->kind) ),
+            schedule( static_cast<NSvn::Core::Schedule>(entry->schedule) ),
+            copied( entry->copied != 0 ),
+            deleted( entry->deleted != 0 ),
+            copyFromUrl( StringHelper(entry->copyfrom_url) ),
+            copyFromRevision( entry->copyfrom_rev ),
+            conflictOld( StringHelper(entry->conflict_old) ),
+            conflictNew( StringHelper(entry->conflict_new) ),
+            conflictWorking( StringHelper(entry->conflict_wrk) ),
+            propertyRejectFile( StringHelper(entry->prejfile) ),
+            textTime( AprTimeToDateTime(entry->text_time) ),
+            propertyTime( AprTimeToDateTime(entry->prop_time) ),
+            checkSum( StringHelper(entry->checksum) ),
+            commitRevision( entry->cmt_rev ),
+            commitDate( AprTimeToDateTime(entry->cmt_date) ),
+            commitAuthor( StringHelper(entry->cmt_author) )
 
-                    {;}
+        {;}
 
 
         public:

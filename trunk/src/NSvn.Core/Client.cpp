@@ -84,14 +84,14 @@ void NSvn::Core::Client::Resolve(String* path, bool recursive, ClientContext* co
 
 // implementation of Client::Status
 NSvn::Core::StatusDictionary* NSvn::Core::Client::Status( 
-                [System::Runtime::InteropServices::Out]System::Int32* youngest, 
-                String* path, bool descend, bool getAll, bool update,  
-                bool noIgnore, ClientContext* context )
+    [System::Runtime::InteropServices::Out]System::Int32* youngest, 
+    String* path, bool descend, bool getAll, bool update,  
+    bool noIgnore, ClientContext* context )
 {
     apr_hash_t* statushash = 0;
     Pool pool;
     const char* truePath = CanonicalizePath( path, pool );
-    
+
     svn_revnum_t revnum;
     HandleError( svn_client_status( &statushash, &revnum, truePath, descend,
         getAll, update, noIgnore, context->ToSvnContext( pool ), pool ) );
@@ -137,19 +137,19 @@ void NSvn::Core::Client::PropSet(Property* property, String* target, bool recurs
 
 // implementation of Client::RevPropSet
 void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* revision, 
-    [System::Runtime::InteropServices::Out]System::Int32*
-    revisionNumber, ClientContext* context)
+                                    [System::Runtime::InteropServices::Out]System::Int32*
+                                    revisionNumber, ClientContext* context)
 {
-	Pool pool;
-    
+    Pool pool;
+
     const char* truePath = CanonicalizePath( url, pool );
     svn_string_t propv;
     ByteArrayToSvnString( &propv, property->Data, pool );
-	svn_revnum_t setRev; 
+    svn_revnum_t setRev; 
 
     HandleError( svn_client_revprop_set(  StringHelper(property->Name), &propv, 
-		truePath, revision->ToSvnOptRevision( pool ), &setRev, 
-		context->ToSvnContext (pool), pool));
+        truePath, revision->ToSvnOptRevision( pool ), &setRev, 
+        context->ToSvnContext (pool), pool));
 
     *revisionNumber = setRev;
 }
@@ -191,8 +191,8 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonR
 }
 // implementation of Client::Move
 NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath, 
-                                                         Revision* srcRevision, String* dstPath, 
-                                                         bool force, ClientContext* context )
+                                                 Revision* srcRevision, String* dstPath, 
+                                                 bool force, ClientContext* context )
 {
     Pool pool;
     const char* trueSrcPath = CanonicalizePath( srcPath, pool );
@@ -204,7 +204,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath,
         srcRevision->ToSvnOptRevision( pool ), trueDstPath, force, 
         context->ToSvnContext( pool ), pool ) );
 
-     if ( commitInfoPtr != 0 )
+    if ( commitInfoPtr != 0 )
         return new CommitInfo( commitInfoPtr );
     else
         return CommitInfo::Invalid;
@@ -215,14 +215,14 @@ void NSvn::Core::Client::Export(String* from, String* to, Revision* revision, Cl
     Pool pool;
     const char* trueSrcPath = CanonicalizePath( from, pool );
     const char* trueDstPath = CanonicalizePath( to, pool );
-    
+
     HandleError( svn_client_export ( trueSrcPath, trueDstPath, 
         revision->ToSvnOptRevision( pool ), context->ToSvnContext( pool ), pool ) );
 }
 //TODO: Implement the variable optionalAdmAccess
 // implementation of Client::Copy
 NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcRevision, String* dstPath,
-                ClientContext* context)
+                                                 ClientContext* context)
 {
     Pool pool;
     const char* trueSrcPath = CanonicalizePath( srcPath, pool );
@@ -234,7 +234,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcR
         srcRevision->ToSvnOptRevision( pool ), trueDstPath, 0,  
         context->ToSvnContext( pool ), pool ) );
 
-     if ( commitInfoPtr != 0 )
+    if ( commitInfoPtr != 0 )
         return new CommitInfo( commitInfoPtr );
     else
         return CommitInfo::Invalid;
@@ -242,8 +242,8 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcR
 
 // implementation of Client::Merge
 void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
-                String* targetWcPath, bool recurse, bool ignoreAncestry,
-                bool force, bool dryRun, ClientContext* context)
+                               String* targetWcPath, bool recurse, bool ignoreAncestry,
+                               bool force, bool dryRun, ClientContext* context)
 {
     Pool pool;
     const char* trueSrcPath1 = CanonicalizePath( url1, pool );
@@ -257,8 +257,8 @@ void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, 
 }
 // implementation of Client::PropGet
 NSvn::Common::PropertyDictionary* NSvn::Core::Client::PropGet(String* propName, 
-                                                         String* target, Revision* revision, 
-                                                        bool recurse, ClientContext* context)
+                                                              String* target, Revision* revision, 
+                                                              bool recurse, ClientContext* context)
 {
     Pool pool;
     apr_hash_t* propertyHash;
@@ -274,17 +274,17 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::PropGet(String* propName,
 }
 // implementation of Client::RevPropGet
 NSvn::Common::Property*  NSvn::Core::Client::RevPropGet(String* propName, String* url, Revision* revision,
-                System::Int32* revisionNumber, ClientContext* context)
+                                                        System::Int32* revisionNumber, ClientContext* context)
 {
-	Pool pool;
-    
+    Pool pool;
+
     const char* truePath = CanonicalizePath( url, pool );
     svn_string_t* propv;
-  	svn_revnum_t setRev; 
+    svn_revnum_t setRev; 
 
     HandleError( svn_client_revprop_get(  StringHelper( propName ), &propv, 
-		truePath, revision->ToSvnOptRevision( pool ), &setRev, 
-		context->ToSvnContext (pool), pool));
+        truePath, revision->ToSvnOptRevision( pool ), &setRev, 
+        context->ToSvnContext (pool), pool));
 
     *revisionNumber = setRev;
     Byte array[] = SvnStringToByteArray( propv );
@@ -296,36 +296,36 @@ NSvn::Common::Property*  NSvn::Core::Client::RevPropGet(String* propName, String
 //TODO: Implement the variable admAccessBaton
 // implementation of Client::Delete
 NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* path, bool force, 
-                ClientContext* context)
+                                                   ClientContext* context)
 {
-	Pool pool;
+    Pool pool;
     const char* trueSrcPath = CanonicalizePath( path, pool );
-    
+
     svn_client_commit_info_t* commitInfoPtr = 0;
 
     HandleError( svn_client_delete( &commitInfoPtr, trueSrcPath, false, 
         context->ToSvnContext( pool ), pool ) );
 
-     if ( commitInfoPtr != 0 )
+    if ( commitInfoPtr != 0 )
         return new CommitInfo( commitInfoPtr );
     else
         return CommitInfo::Invalid;
 }
 // implementation of Client::Import
 NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, String* newEntry, bool nonRecursive, 
-                ClientContext* context)
+                                                   ClientContext* context)
 {
-	Pool pool;
+    Pool pool;
     const char* trueSrcPath = CanonicalizePath( path, pool );
     const char* trueDstUrl = CanonicalizePath( url, pool );
-	const char* trueNewEntry = CanonicalizePath( newEntry, pool );
+    const char* trueNewEntry = CanonicalizePath( newEntry, pool );
 
     svn_client_commit_info_t* commitInfoPtr = 0;
 
     HandleError( svn_client_import( &commitInfoPtr, trueSrcPath, trueDstUrl, trueNewEntry, nonRecursive,
         context->ToSvnContext( pool ), pool ) );
 
-     if ( commitInfoPtr != 0 )
+    if ( commitInfoPtr != 0 )
         return new CommitInfo( commitInfoPtr );
     else
         return CommitInfo::Invalid;
@@ -359,7 +359,7 @@ void NSvn::Core::Client::Switch( String* path, String* url, Revision* revision, 
 
 // implementation of Client::PropList
 NSvn::Common::PropListItem* NSvn::Core::Client::PropList( String* path, Revision* revision, bool recurse, 
-                                  ClientContext* context ) []
+                                                         ClientContext* context ) []
 {
     Pool pool;
 
@@ -375,10 +375,10 @@ NSvn::Common::PropListItem* NSvn::Core::Client::PropList( String* path, Revision
 
 // Implementation of Client::RevPropList
 NSvn::Common::PropertyDictionary* NSvn::Core::Client::RevPropList( String* path,
-    Revision* revision, System::Int32* revisionNumber, ClientContext* context ) 
+                                                                  Revision* revision, System::Int32* revisionNumber, ClientContext* context ) 
 {
     Pool pool;
-    
+
     const char* truePath = CanonicalizePath( path, pool );
     apr_hash_t* propListItems;
 
@@ -394,7 +394,7 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::RevPropList( String* path,
 
 // Implementation of Client::List
 NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* revision, 
-    bool recurse, ClientContext* context) []
+                                                     bool recurse, ClientContext* context) []
 {
     Pool pool;
 
@@ -428,8 +428,8 @@ NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* rev
 
 // implementation of Client::Diff
 void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* revision1,
-    String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, bool noDiffDeleted, 
-    Stream* outfile, Stream* errfile, ClientContext* context )
+                              String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, bool noDiffDeleted, 
+                              Stream* outfile, Stream* errfile, ClientContext* context )
 {
     Pool pool;
 
@@ -456,10 +456,10 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
 
 // Implementation of Client::Log
 void NSvn::Core::Client::Log( String* targets[], Revision* start, Revision* end, bool discoverChangePath, 
-                bool strictNodeHistory, LogMessageReceiver* receiver, ClientContext* context )
+                             bool strictNodeHistory, LogMessageReceiver* receiver, ClientContext* context )
 {
     Pool pool;
-    
+
     apr_array_header_t* aprTargets = StringArrayToAprArray( targets, true, pool );
 
     ManagedPointer<NSvn::Core::LogMessageReceiver*> ptr(receiver);
@@ -543,9 +543,9 @@ NSvn::Common::PropListItem* NSvn::Core::Client::ConvertPropListArray(
 
 /// marshall the callback into managed space
 svn_error_t* NSvn::Core::svn_log_message_receiver(void *baton, 
-                apr_hash_t *changed_paths, svn_revnum_t revision, 
-                const char *author, const char *date, const char *message, 
-                apr_pool_t *pool)
+                                                  apr_hash_t *changed_paths, svn_revnum_t revision, 
+                                                  const char *author, const char *date, const char *message, 
+                                                  apr_pool_t *pool)
 {
     using namespace NSvn::Core;
     LogMessageReceiver* receiver = *(static_cast<ManagedPointer<LogMessageReceiver*>* >
@@ -554,17 +554,17 @@ svn_error_t* NSvn::Core::svn_log_message_receiver(void *baton,
     // convert message to native EOL style
     const char* nativeMessage;
     HandleError(svn_subst_translate_cstring (message, &nativeMessage,
-                                        APR_EOL_STR, /* the 'native' eol */
-                                        FALSE,       /* no need to repair */
-                                        NULL,        /* no keywords */
-                                        FALSE,       /* no expansion */
-                                        pool));
+        APR_EOL_STR, /* the 'native' eol */
+        FALSE,       /* no need to repair */
+        NULL,        /* no keywords */
+        FALSE,       /* no expansion */
+        pool));
 
     LogMessage* logMessage = new LogMessage( changed_paths, revision,
         author, date, nativeMessage, pool );
 
     receiver->Invoke( logMessage );
-    
+
     return SVN_NO_ERROR;
 }
 

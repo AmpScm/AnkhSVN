@@ -7,11 +7,11 @@ using System.IO;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Base class for all entity classes
-	/// </summary>
-	public class SvnResource
-	{       
+    /// <summary>
+    /// Base class for all entity classes
+    /// </summary>
+    public class SvnResource
+    {       
         protected SvnResource()
         {
         }
@@ -72,7 +72,7 @@ namespace NSvn
         {
             get
             { 
-               return this.Context.ClientContext;
+                return this.Context.ClientContext;
             }
         }      
   
@@ -138,5 +138,5 @@ namespace NSvn
         
         private NSvnContext context;
         private const string WCAREA=".svn";
-	}
+    }
 }

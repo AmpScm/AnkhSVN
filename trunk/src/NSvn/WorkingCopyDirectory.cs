@@ -6,18 +6,18 @@ using System.IO;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Represents a versioned directory in an SVN working copy.
-	/// </summary>
-	public class WorkingCopyDirectory : WorkingCopyResource
-	{
+    /// <summary>
+    /// Represents a versioned directory in an SVN working copy.
+    /// </summary>
+    public class WorkingCopyDirectory : WorkingCopyResource
+    {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="path">The path to the directory.</param>
-		public WorkingCopyDirectory( string path ) : base( path )
-		{
-		}
+        public WorkingCopyDirectory( string path ) : base( path )
+        {
+        }
 
         /// <summary>
         /// Is this a directory?
@@ -116,5 +116,5 @@ namespace NSvn
         }
 
         private LocalResourceDictionary children;    
-	}
+    }
 }

@@ -8,9 +8,9 @@ namespace NSvn.Core.Tests
     /// <summary>
     /// Tests for the Client::Checkout method
     /// </summary>
-	[TestFixture]
-	public class CheckoutTest : TestBase
-	{
+    [TestFixture]
+    public class CheckoutTest : TestBase
+    {
         [SetUp]
         public override void SetUp() 
         {
@@ -45,5 +45,5 @@ namespace NSvn.Core.Tests
 
         private string newWc;
 
-	}
+    }
 }

@@ -7,11 +7,11 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Summary description for ConflictDialog.
-	/// </summary>
-	public class ConflictDialog : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// Summary description for ConflictDialog.
+    /// </summary>
+    public class ConflictDialog : System.Windows.Forms.Form
+    {
         public event EventHandler EditClicked;
 
         public enum Choice
@@ -23,20 +23,20 @@ namespace Ankh.UI
         }
 
         
-		public ConflictDialog()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        public ConflictDialog()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
-			this.mineFileRadioButton.Checked = true;
+            this.mineFileRadioButton.Checked = true;
             this.mineFileRadioButton.Tag = Choice.Mine;
             this.oldRevRadioButton.Tag = Choice.OldRev;
             this.newRevRadioButton.Tag = Choice.NewRev;
             this.fileRadioButton.Tag = Choice.ConflictMarkers;
             CreateMyToolTip();
-            }
+        }
 
         public Choice Selection
         {
@@ -83,20 +83,20 @@ namespace Ankh.UI
                 this.filename);
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
         private void selectedButton(object sender, System.EventArgs e)
         {
@@ -133,12 +133,12 @@ namespace Ankh.UI
 
 
 		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             this.mineFileRadioButton = new System.Windows.Forms.RadioButton();
             this.oldRevRadioButton = new System.Windows.Forms.RadioButton();
@@ -290,7 +290,7 @@ namespace Ankh.UI
 
   
         
-	}
+    }
 
 }
 

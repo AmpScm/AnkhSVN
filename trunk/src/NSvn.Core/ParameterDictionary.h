@@ -19,7 +19,7 @@ namespace NSvn
         public:
             ParameterDictionary( apr_hash_t* aprHash, apr_pool_t* pool ) : 
               aprHash( aprHash ), pool( pool ), innerDictionary(0)
-            {;}           
+              {;}           
 
 
         protected:
@@ -61,7 +61,7 @@ namespace NSvn
             IDictionary* innerDictionary;
             apr_hash_t* aprHash;
             apr_pool_t* pool;
-            
+
         };
     }
 }

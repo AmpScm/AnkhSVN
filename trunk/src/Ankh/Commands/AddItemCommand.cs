@@ -9,9 +9,9 @@ using Ankh.Solution;
 
 namespace Ankh.Commands
 {
-	/// <summary>
-	/// Adds an unversioned item to a working copy
-	/// </summary>
+    /// <summary>
+    /// Adds an unversioned item to a working copy
+    /// </summary>
     [VSNetCommand("AddItem", Text = "Add", Tooltip = "Adds selected item to a working copy",
          Bitmap = ResourceBitmaps.Add),
     VSNetControl( "Item.Ankh", Position = 1 ),
@@ -19,8 +19,8 @@ namespace Ankh.Commands
     VSNetControl( "Folder.Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1)]
     
-	internal class AddItemCommand : CommandBase
-	{
+    internal class AddItemCommand : CommandBase
+    {
         #region Implementation of ICommand
 
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)

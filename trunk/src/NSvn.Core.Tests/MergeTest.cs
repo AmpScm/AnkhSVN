@@ -37,7 +37,7 @@ namespace NSvn.Core.Tests
 
             ClientContext ctx = new ClientContext() ;
             Client.Merge( srcPath, Revision.FromNumber(5) , srcPath, Revision.FromNumber(4) ,
-                 dstPath, true, true, false, false, ctx ); 
+                dstPath, true, true, false, false, ctx ); 
 
             Assertion.AssertEquals( "Wrong status", 'D', this.GetSvnStatus( comparePath ) );
        

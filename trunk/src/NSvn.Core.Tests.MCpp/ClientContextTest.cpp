@@ -34,7 +34,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotifyCallback()
     Assertion::AssertEquals( this->notification->ContentState, NotifyState::Unchanged );
     Assertion::AssertEquals( this->notification->PropertyState, NotifyState::Changed );
     Assertion::AssertEquals( this->notification->RevisionNumber, 42 );    
-    
+
 }
 
 __gc class DummyProvider : public IAuthenticationProvider
@@ -78,14 +78,14 @@ struct svn_auth_iterstate_t
 void NSvn::Core::Tests::MCpp::ClientContextTest::TestEmptyAuthBaton()
 {
     Pool pool;
-    
+
     ClientContext* c = new ClientContext( 0 );
     svn_client_ctx_t* ctx = c->ToSvnContext( pool );
 
     svn_auth_cred_simple_t* cred;
     svn_auth_iterstate_t* iterState;
 
-   
+
 
     HandleError( svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, 
         SVN_AUTH_CRED_SIMPLE, "Realm of terror",
@@ -155,12 +155,12 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessageCallback()
     // TODO: deal with wcprop_changes
     svn_client_commit_item_t item1 = { "/foo/bar", svn_node_file,  "http://www.porn.com",
         42, "http://copy.from.url", 42, 0 };
-     svn_client_commit_item_t item2 = { "/kung/fu", svn_node_dir,  "http://www.42.com",
+    svn_client_commit_item_t item2 = { "/kung/fu", svn_node_dir,  "http://www.42.com",
         42, "http://copy.from.url", 43, 0 };
 
-     *((svn_client_commit_item_t**)apr_array_push( commitItems ) ) = &item1;
-     *((svn_client_commit_item_t**)apr_array_push( commitItems ) ) = &item2;
-    
+    *((svn_client_commit_item_t**)apr_array_push( commitItems ) ) = &item1;
+    *((svn_client_commit_item_t**)apr_array_push( commitItems ) ) = &item2;
+
     const char* logMsg;
     const char* tmpFile;
     ctx->log_msg_func( &logMsg, &tmpFile, commitItems, ctx->log_msg_baton, pool );

@@ -8,15 +8,15 @@ using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Ankh.EventSinks
 {
-	/// <summary>
-	/// Base class for event sink classes.
-	/// </summary>
-	internal abstract class EventSink
-	{
-		protected EventSink( AnkhContext context )
-		{
-			this.context = context;
-		}
+    /// <summary>
+    /// Base class for event sink classes.
+    /// </summary>
+    internal abstract class EventSink
+    {
+        protected EventSink( AnkhContext context )
+        {
+            this.context = context;
+        }
 
         /// <summary>
         /// Unhooks from the events.
@@ -154,5 +154,5 @@ namespace Ankh.EventSinks
             @"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
         private const string VCPROJECT = "VCProjectEngineEventsObject";
 
-	}
+    }
 }

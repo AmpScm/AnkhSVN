@@ -11,11 +11,11 @@ using System.IO;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Summary description for CommitDialog.
-	/// </summary>
-	public class CommitDialog : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// Summary description for CommitDialog.
+    /// </summary>
+    public class CommitDialog : System.Windows.Forms.Form
+    {
         public event EventHandler DiffWanted;		
 
         public CommitDialog( CommitItem[] items )
@@ -69,20 +69,20 @@ namespace Ankh.UI
 
         
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
         /// <summary>
         /// Makes tooltips on buttons and fields. 
@@ -100,11 +100,11 @@ namespace Ankh.UI
             commitToolTip.ShowAlways = true;
          
             // Set up the ToolTip text for the Button and Checkbox.
-//            commitToolTip.SetToolTip( this.fileTreeView, 
-//                "Three view of files you attempt to publish/commit. Files will be added into the repository." ); 
-             //Doesn't work:(. Don't understand why.
-//            commitToolTip.SetToolTip( this.logMessageControl, 
-//                "Write changes you have performed since last revision or update" ); 
+            //            commitToolTip.SetToolTip( this.fileTreeView, 
+            //                "Three view of files you attempt to publish/commit. Files will be added into the repository." ); 
+            //Doesn't work:(. Don't understand why.
+            //            commitToolTip.SetToolTip( this.logMessageControl, 
+            //                "Write changes you have performed since last revision or update" ); 
             commitToolTip.SetToolTip( this.okButton, 
                 "Files and comment will be added to the repository and made available for your collegues." ); 
             commitToolTip.SetToolTip( this.cancelButton, "The commit will be cancelled" );  
@@ -139,12 +139,12 @@ namespace Ankh.UI
 
 
 		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.logLabel = new System.Windows.Forms.Label();
@@ -262,16 +262,16 @@ namespace Ankh.UI
 
         
 
-//        [STAThread] 
-//        public static void Main()
-//        {
-//            CommitDialog the = new CommitDialog();
-//            the.ShowDialog();
-//        }
+        //        [STAThread] 
+        //        public static void Main()
+        //        {
+        //            CommitDialog the = new CommitDialog();
+        //            the.ShowDialog();
+        //        }
 
 
 
-	}
+    }
 }
 
 

@@ -18,22 +18,22 @@ namespace NSvn
             LogMessage( apr_hash_t* changedPaths, svn_revnum_t revision,
                 const char* author, const char* date, const char* message,
                 apr_pool_t* pool ) :
-                    revision( revision ),
-                    author( StringHelper(author) ),
-                    date( ParseDate(date, pool) ),
-                    message( StringHelper(message) )
+            revision( revision ),
+                author( StringHelper(author) ),
+                date( ParseDate(date, pool) ),
+                message( StringHelper(message) )
 
-                    {
-                        if ( changedPaths != 0 )
-                            this->changedPaths = 
-                            ChangedPathDictionary::FromChangedPathsHash( changedPaths, pool );
-                        else
-                            this->changedPaths = 0;
-                    }
+            {
+                if ( changedPaths != 0 )
+                    this->changedPaths = 
+                    ChangedPathDictionary::FromChangedPathsHash( changedPaths, pool );
+                else
+                    this->changedPaths = 0;
+            }
 
 
         public:
-            
+
             /// <summary>The paths changed in this revision.</summary>
             __property ChangedPathDictionary* get_ChangedPaths()
             { return this->changedPaths; }

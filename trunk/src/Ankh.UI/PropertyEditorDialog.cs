@@ -7,9 +7,9 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Dialog for editing svn properties. 
-	/// </summary>
+    /// <summary>
+    /// Dialog for editing svn properties. 
+    /// </summary>
     public class PropertyEditorDialog : System.Windows.Forms.Form
     {
         public PropertyEditorDialog()
@@ -494,7 +494,7 @@ namespace Ankh.UI
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-  	}
+    }
 
     /// <summary>
     /// Represents a property item.

@@ -11,11 +11,11 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Treeview that shows the layout of a SVN repository
-	/// </summary>
-	public class RepositoryTreeView : System.Windows.Forms.TreeView
-	{
+    /// <summary>
+    /// Treeview that shows the layout of a SVN repository
+    /// </summary>
+    public class RepositoryTreeView : System.Windows.Forms.TreeView
+    {
         public RepositoryTreeView()
         {
             this.GetSystemImageList();
@@ -121,9 +121,9 @@ namespace Ankh.UI
                 // set the icon
                 SHFILEINFO fi = new SHFILEINFO();
                 Win32.SHGetFileInfo( file.Name, 0, ref fi, (uint)Marshal.SizeOf(fi),
-                     Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
-                     Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON |
-                        Constants.SHGFI_USEFILEATTRIBUTES );
+                    Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
+                    Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON |
+                    Constants.SHGFI_USEFILEATTRIBUTES );
                 node.ImageIndex = fi.iIcon.ToInt32(); 
                 node.SelectedImageIndex = fi.iIcon.ToInt32();
             }

@@ -6,12 +6,12 @@ using System.Text.RegularExpressions;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests Client::List
-	/// </summary>
-	[TestFixture]
-	public class ListTest : TestBase
-	{
+    /// <summary>
+    /// Tests Client::List
+    /// </summary>
+    [TestFixture]
+    public class ListTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {

@@ -1,4 +1,4 @@
-// $Id: StringHelperTest.h 128 2003-02-16 15:37:11Z Arild $
+// $Id$
 #pragma once
 #include "stdafx.h"
 using namespace NUnit::Framework;

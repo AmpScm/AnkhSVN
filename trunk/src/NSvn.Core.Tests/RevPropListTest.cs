@@ -6,11 +6,11 @@ using NSvn.Common;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests Client::RevPropList
-	/// </summary>
-	public class RevPropListTest : TestBase
-	{
+    /// <summary>
+    /// Tests Client::RevPropList
+    /// </summary>
+    public class RevPropListTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -36,5 +36,5 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "Wrong property value", "bar", dict["foo"].ToString() );
             Assertion.AssertEquals( "Wrong property value", "foo", dict["kung"].ToString() );
         }
-	}
+    }
 }

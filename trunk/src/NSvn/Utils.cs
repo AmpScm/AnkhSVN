@@ -50,8 +50,8 @@ namespace NSvn
             if ( path.Length == 1 )
                 return null;
             else return path[ path.Length - 1 ] == Path.DirectorySeparatorChar ?
-                Path.GetDirectoryName( path.Substring( 0, path.Length - 1 ) ) :
-                Path.GetDirectoryName( path );
+                     Path.GetDirectoryName( path.Substring( 0, path.Length - 1 ) ) :
+                     Path.GetDirectoryName( path );
         }
 
         /// <summary>

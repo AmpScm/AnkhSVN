@@ -4,13 +4,13 @@ using EnvDTE;
 
 namespace Ankh.EventSinks
 {
-	/// <summary>
-	/// Event sink for solution related events.
-	/// </summary>
-	internal class SolutionEventsSink : ItemEventSink
-	{
-		internal SolutionEventsSink( AnkhContext context ) : base( context )
-		{
+    /// <summary>
+    /// Event sink for solution related events.
+    /// </summary>
+    internal class SolutionEventsSink : ItemEventSink
+    {
+        internal SolutionEventsSink( AnkhContext context ) : base( context )
+        {
             this.solutionEvents = context.DTE.Events.SolutionEvents;
             this.solutionEvents.ProjectAdded += new _dispSolutionEvents_ProjectAddedEventHandler(
                 this.ProjectAdded );
@@ -34,7 +34,7 @@ namespace Ankh.EventSinks
                 this.ItemRenamed );
 
 
-		}
+        }
 
         public override void Unhook()
         {
@@ -77,5 +77,5 @@ namespace Ankh.EventSinks
         private SolutionEvents solutionEvents;
         private ProjectItemsEvents solutionItemsEvents;
         private ProjectItemsEvents miscFilesEvents;
-	}
+    }
 }

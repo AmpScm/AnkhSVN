@@ -3,19 +3,19 @@ using System;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Represents an unversioned directory in a working copy.
-	/// </summary>
-	public class UnversionedDirectory : UnversionedResource
-	{
+    /// <summary>
+    /// Represents an unversioned directory in a working copy.
+    /// </summary>
+    public class UnversionedDirectory : UnversionedResource
+    {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="path">File system path to the item.</param>
-		public UnversionedDirectory( string path ) : base( path )
-		{
-			//empty
-		}
+        public UnversionedDirectory( string path ) : base( path )
+        {
+            //empty
+        }
 
         /// <summary>
         /// Is this a directory?
@@ -32,5 +32,5 @@ namespace NSvn
         {
             visitor.VisitUnversionedDirectory( this );
         }
-	}
+    }
 }

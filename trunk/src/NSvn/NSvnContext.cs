@@ -5,24 +5,24 @@ using NSvn.Common;
 
 namespace NSvn
 {
-	/// <summary>
-	/// Represents a general context object for NSvn operations. To deal with the various
-	/// callbacks from SVN, you need to derive from this class and override the callback
-	/// methods.
-	/// </summary>
-	public class NSvnContext
-	{
+    /// <summary>
+    /// Represents a general context object for NSvn operations. To deal with the various
+    /// callbacks from SVN, you need to derive from this class and override the callback
+    /// methods.
+    /// </summary>
+    public class NSvnContext
+    {
         /// <summary>
         /// Constructor.
         /// </summary>
-		public NSvnContext()
-		{
-			this.clientContext = new ClientContext( 
+        public NSvnContext()
+        {
+            this.clientContext = new ClientContext( 
                 new NotifyCallback( this.NotifyCallback ),
                 new AuthenticationBaton() );
             this.clientContext.LogMessageCallback = new LogMessageCallback(
                 this.LogMessageCallback );
-		}
+        }
 
         /// <summary>
         /// Add an authentication provider,
@@ -72,5 +72,5 @@ namespace NSvn
         }
 
         private ClientContext clientContext;
-	}
+    }
 }

@@ -5,17 +5,17 @@ using System.Text;
 
 namespace Utils.Win32
 {
-	/// <summary>
-	/// Contains P/Invoke declarations for Win32 API calls.
-	/// </summary>
-	public abstract class Win32
-	{
+    /// <summary>
+    /// Contains P/Invoke declarations for Win32 API calls.
+    /// </summary>
+    public abstract class Win32
+    {
         /// <summary>
         /// Private ctor to avoid instantiation.
         /// </summary>
-		private Win32()
-		{			
-		}
+        private Win32()
+        {			
+        }
 
         /// <summary>
         /// Retrieves information about an object in the file system, 

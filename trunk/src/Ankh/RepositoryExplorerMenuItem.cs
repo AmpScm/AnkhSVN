@@ -5,17 +5,17 @@ using EnvDTE;
 
 namespace Ankh
 {
-	/// <summary>
-	/// A MenuItem that invokes an ICommand.
-	/// </summary>
-	internal class RepositoryExplorerMenuItem : MenuItem
-	{
-		public RepositoryExplorerMenuItem( AnkhContext context, ICommand command )
-		{	
-	        this.context = context;
-	        this.command = command;
+    /// <summary>
+    /// A MenuItem that invokes an ICommand.
+    /// </summary>
+    internal class RepositoryExplorerMenuItem : MenuItem
+    {
+        public RepositoryExplorerMenuItem( AnkhContext context, ICommand command )
+        {	
+            this.context = context;
+            this.command = command;
             
-		}
+        }
 
         internal void RegisterWithParent()
         {
@@ -41,5 +41,5 @@ namespace Ankh
 
 
 
-	}
+    }
 }

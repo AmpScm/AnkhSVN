@@ -5,17 +5,17 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.EventSinks
 {
-	/// <summary>
-	/// Event sink for the DocumentEvents events.
-	/// </summary>
-	internal class DocumentEventsSink : EventSink
-	{
-		public DocumentEventsSink( AnkhContext context ) : base( context )
-		{
-			this.events = context.DTE.Events.get_DocumentEvents( null );
+    /// <summary>
+    /// Event sink for the DocumentEvents events.
+    /// </summary>
+    internal class DocumentEventsSink : EventSink
+    {
+        public DocumentEventsSink( AnkhContext context ) : base( context )
+        {
+            this.events = context.DTE.Events.get_DocumentEvents( null );
             this.events.DocumentSaved += new _dispDocumentEvents_DocumentSavedEventHandler(
                 this.DocumentSaved );
-		}
+        }
 
         public override void Unhook()
         {
@@ -41,5 +41,5 @@ namespace Ankh.EventSinks
         }
 
         private DocumentEvents events;
-	}
+    }
 }

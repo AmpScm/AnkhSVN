@@ -37,7 +37,7 @@ void NSvn::Core::Tests::MCpp::MiscTests::TestRevisionFromNumber()
 {
     Pool pool;
     Revision* rev = Revision::FromNumber( 42 );
-    
+
     svn_opt_revision_t* svnRev = rev->ToSvnOptRevision( pool );
 
     Assertion::AssertEquals( "Wrong revision number", 42, svnRev->value.number );
@@ -50,7 +50,7 @@ void NSvn::Core::Tests::MCpp::MiscTests::TestRevisionFromDate()
     DateTime dt = DateTime::Now;
 
     Revision* rev = Revision::FromDate( dt );
-    
+
     svn_opt_revision_t* svnRev = rev->ToSvnOptRevision( pool );
 
     // Create a date string, so we can compare
@@ -61,7 +61,7 @@ void NSvn::Core::Tests::MCpp::MiscTests::TestRevisionFromDate()
     apr_strftime( dateString, &length, 49, "%H:%M:%S %d.%m.%Y", &expTime );
 
     String* nowString = dt.ToString( "HH':'mm':'ss dd'.'MM'.'yyyy" );
-    
+
 
     Assertion::AssertEquals( "Wrong revision kind", svn_opt_revision_date, svnRev->kind );
     Assertion::AssertEquals( "Wrong date", nowString, StringHelper( dateString ) );
@@ -74,11 +74,11 @@ void NSvn::Core::Tests::MCpp::MiscTests::TestParameterDictionary()
     apr_hash_t* hash = apr_hash_make( pool );
     ParameterDictionary* dict1 = new ParameterDictionary( hash, pool );
     dict1->Item[S"Hello"] = S"World";
-    
+
     Assertion::AssertEquals( "Item not working", S"World", 
         dict1->Item[S"Hello"] );
     Assertion::Assert( "Contains not working", dict1->Contains( S"Hello" ) );
-  
+
     ParameterDictionary* dict2 = new ParameterDictionary( hash, pool );
     Assertion::AssertEquals( "Item not working in new dict", S"World", 
         dict2->Item[S"Hello"] );

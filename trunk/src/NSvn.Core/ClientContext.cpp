@@ -17,7 +17,7 @@ namespace NSvn
 {
     namespace Core
     {
-   
+
         svn_client_ctx_t* ClientContext::ToSvnContext( const Pool& pool )
         {
             // PCalloc zeros out the returned mem
@@ -44,7 +44,7 @@ namespace NSvn
                     this->LogMessageCallback ) );
             }
 
-            
+
             // client configuration
             if ( this->ClientConfig != 0 )
             {
@@ -83,7 +83,7 @@ namespace NSvn
                 this->CreateProvider( pool, new SimpleProvider( 
                 UsernameCredential::LoggedInUser ) );
             *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
-                    providerObject;
+                providerObject;
 
 
             // put our providers in the array
@@ -95,7 +95,7 @@ namespace NSvn
                 *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
                     providerObject;
             }
-         
+
 
 
             // create the actual baton
@@ -174,11 +174,11 @@ namespace
 
 
     svn_error_t * first_credentials  (void **credentials,
-                                      void **iter_baton,
-                                      void *provider_baton,
-                                      apr_hash_t *parameters,
-                                      const char* realmstring,
-                                      apr_pool_t *pool)
+        void **iter_baton,
+        void *provider_baton,
+        apr_hash_t *parameters,
+        const char* realmstring,
+        apr_pool_t *pool)
     {
         // delegate to the IAuth.. object
         IAuthenticationProvider* provider = 
@@ -188,7 +188,7 @@ namespace
         String* managedRealmString = StringHelper( realmstring );
         *credentials = GetCredentials( 
             provider->FirstCredentials( managedRealmString, params ), pool );
-       
+
         // next_creds doesnt have a provider_baton param, so we store it in
         // the iter baton. We don't need it for anything else, since 
         // the IAuth... object can maintain it's own context
@@ -200,9 +200,9 @@ namespace
     }
 
     svn_error_t * next_credentials (void **credentials,
-                                     void *iter_baton,
-                                     apr_hash_t *parameters,
-                                     apr_pool_t *pool)
+        void *iter_baton,
+        apr_hash_t *parameters,
+        apr_pool_t *pool)
     {
         IAuthenticationProvider* provider = 
             *(static_cast<ManagedPointer<IAuthenticationProvider*>*>(iter_baton) );
@@ -216,10 +216,10 @@ namespace
 
 
     svn_error_t * save_credentials (svn_boolean_t *saved,
-                                     void *credentials,
-                                     void *provider_baton,
-                                     apr_hash_t *parameters,
-                                     apr_pool_t *pool)
+        void *credentials,
+        void *provider_baton,
+        apr_hash_t *parameters,
+        apr_pool_t *pool)
     {
         IAuthenticationProvider* provider = 
             *( static_cast<ManagedPointer<IAuthenticationProvider*>* >(provider_baton) );

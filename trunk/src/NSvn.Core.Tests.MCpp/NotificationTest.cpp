@@ -26,7 +26,7 @@ void NSvn::Core::Tests::MCpp::NotificationTest::TestBasic()
 
 
 
-   
+
 }
 
 

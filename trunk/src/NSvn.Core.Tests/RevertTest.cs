@@ -5,13 +5,13 @@ using System.IO;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Tests Client::Revert 
-	/// </summary>
+    /// <summary>
+    /// Tests Client::Revert 
+    /// </summary>
 	
-	[TestFixture]
+    [TestFixture]
     public class RevertTest : TestBase
-	{
+    {
 
         [SetUp]
         public override void SetUp()
@@ -69,5 +69,5 @@ namespace NSvn.Core.Tests
                 newContents = reader.ReadToEnd();
         } 
 		    
-	}
+    }
 }

@@ -20,12 +20,12 @@ namespace NSvn.Core.Tests
             this.ExtractRepos();
             this.ExtractWorkingCopy();
             this.notifications = new ArrayList();
-         }
+        }
 
         [TearDown]
         public override void TearDown()
         {
-           base.TearDown();
+            base.TearDown();
         }
 
 		
@@ -54,31 +54,31 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestImportDir()
         {
-			string dir1, dir2, testFile1, testFile2;
-			this.CreateSubdirectories(out dir1, out dir2, out testFile1, out testFile2);
+            string dir1, dir2, testFile1, testFile2;
+            this.CreateSubdirectories(out dir1, out dir2, out testFile1, out testFile2);
 
-			string trueDstUrl = this.ReposUrl;
-			string trueNewEntry = "newDir2";
-			ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            string trueDstUrl = this.ReposUrl;
+            string trueNewEntry = "newDir2";
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
 
-			CommitInfo info = Client.Import( dir1, trueDstUrl, trueNewEntry, false, ctx );
+            CommitInfo info = Client.Import( dir1, trueDstUrl, trueNewEntry, false, ctx );
 
-			String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-			Assertion.Assert( "File wasn't imported ", cmd.IndexOf( trueNewEntry ) >= 0 );		   
+            String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
+            Assertion.Assert( "File wasn't imported ", cmd.IndexOf( trueNewEntry ) >= 0 );		   
       
         }
 
-		private void CreateSubdirectories(out string dir1, out string dir2, out string testFile1, out string testFile2)
-		{
-			dir1 = Path.Combine( this.WcPath, "subdir" );
-			Directory.CreateDirectory( dir1 );
+        private void CreateSubdirectories(out string dir1, out string dir2, out string testFile1, out string testFile2)
+        {
+            dir1 = Path.Combine( this.WcPath, "subdir" );
+            Directory.CreateDirectory( dir1 );
 
-			dir2 = Path.Combine( dir1, "subsubdir" );
-			Directory.CreateDirectory( dir2 );
+            dir2 = Path.Combine( dir1, "subsubdir" );
+            Directory.CreateDirectory( dir2 );
 
-			testFile1 = this.CreateTextFile( @"subdir\testfile.txt" );
-			testFile2 = this.CreateTextFile( @"subdir\subsubdir\testfile2.txt" );
-		}   
+            testFile1 = this.CreateTextFile( @"subdir\testfile.txt" );
+            testFile2 = this.CreateTextFile( @"subdir\subsubdir\testfile2.txt" );
+        }   
     }
 	
 }
