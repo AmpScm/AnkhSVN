@@ -5,7 +5,7 @@ Ankh – Subversion Addin for Visual Studio.NET           ========================
 
 This is the second release of the Ankh addin for Visual Studio .NET. It is not quite finished, but the most common operations are implemented. You will still need to use the svn command line client for some of the more advanced tasks(fortunately, these are the ones you don’t perform very often). The command line tools can be downloaded from http://subversion.tigris.org/servlets/ProjectDocumentList 
 
-This release officially supports VS.NET 2003. However, you need to make sure that you download the correct installer for your version of VS.NET. The 2002 installer will NOT work with VS.NET 2003, and vice versa.
+This release officially supports both VS.NET 2002 and VS.NET 2003. The installer will set up the correct registry entries for both environments.
 
 If you have any problems with Ankh, there is a mailing list set up at http://ankhsvn.tigris.org. To subscribe, send a mail to users-subscribe@ankhsvn.tigris.org - if you don’t want to subscribe, you can mail users@ankhsvn.tigris.org and we will accommodate any requests to CC you directly.
 
@@ -20,14 +20,12 @@ What is currently supported:
 ·	Ankh calls svn delete on files deleted from the IDE.
 ·	You can clean up a locked working copy(svn cleanup)
 ·   You can resolve a conflict(svn resolve)
-·   You can rename a file.
 ·   The Properties window displays svn info-style information about a file.
 
 
 Known issues:
 
 ·	If installed on a clean machine, the Ankh menu entries sometimes don’t get registered on the first run. We have not been able to figure out why this happens only in some cases; however, restarting VS.NET will usually fix it. If you encounter this, and restarting doesn’t work, please let us know. 
-·	Support for VC++ projects is weaker than support for VB and VC# projects. If you add a new file to the project through the IDE, you may need to run Ankh->Refresh on the project manually for Ankh to detect the new file.
 ·	If you delete a file, the status on the project node will not change. To be able to commit a delete, you need to change something else, then run commit on the project or solution.
 ·	Adding a (web)form will not automatically add the corresponding .resx(or code behind) file. To add these files, click the Show All Files button in the solution explorer, and then add them the usual way.
 ·	No support for checkout and import – you will need to create your repository and import your source to it using the command line tools. For details on how to use these, see http://svnbook.red-bean.com
@@ -74,13 +72,3 @@ When it comes to web projects, the situation is even worse. VS.NET will by defau
 Thank you and enjoy.
 
 Sincerely, the AnkhSVN team
-      
-		
-
-
- 
-
-
-
-
-
