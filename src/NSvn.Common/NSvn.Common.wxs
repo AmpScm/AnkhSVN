@@ -13,7 +13,7 @@
             <Component Id="C_NSvn.Common_2" DiskId="1" Guid="BD79FA8E-25A9-4C4E-BA7A-06339CFB2491">
                 <Registry Id="NSvn.Common.registry1" Root="HKMU"
                     Type="string" Value="[TARGETDIR]"
-                    Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\NSvn"/>
+                    Key="SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\NSvn"/>
             </Component>
         </DirectoryRef>
     </Fragment>
