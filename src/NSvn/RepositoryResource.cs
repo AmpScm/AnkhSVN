@@ -36,7 +36,7 @@ namespace NSvn
         /// Accept a RepositoryResourceVisitor.
         /// </summary>
         /// <param name="visitor">The RepositoryResourceVisitor to accept.</param>
-        public abstract void Accept( RepositoryResourceVisitor visitor );
+        public abstract void Accept( IRepositoryResourceVisitor visitor );
 
 
 
