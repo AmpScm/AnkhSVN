@@ -99,7 +99,7 @@
                 <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Disabled="yes"
                     Text="[ButtonText_Cancel]" />
             </Dialog>
-            <Dialog Id="FatalErrorForm" Width="370" Height="270" Title="[Setup] - [ProductName]" NoMinimize="yes" ErrorDialog="yes">
+	    <Dialog Id="FatalErrorForm" Width="370" Height="270" Title="[Setup] - [ProductName]" NoMinimize="yes">
                 <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="234" FixedSize="yes" Text="[DialogBitmap]" />
                 <Control Id="Title" Type="Text" X="130" Y="20" Width="230" Height="50" Transparent="yes"
                     NoPrefix="yes">
