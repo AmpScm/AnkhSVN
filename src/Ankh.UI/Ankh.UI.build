@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Ankh.UI" default="rebuild">
     <property name="verbose" value="false"/>
-    <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
     <property name="build.dir" value="build-Release" unless="${debug}"/>
     <property name="build.dir" value="build-Debug" if="${debug}"/>
