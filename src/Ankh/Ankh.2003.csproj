@@ -230,6 +230,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "VSNetProjectNodeControlAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\AddItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

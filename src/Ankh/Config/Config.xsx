@@ -6,8 +6,9 @@
             <Url_XmlElement left="317" top="7196" width="5292" height="2963" selected="0" zOrder="5" index="0" expanded="1" />
         </MruUrls_XmlElement>
     </RepositoryExplorer_XmlElement>
-    <MergeExePath_XmlElement left="18095" top="1000" width="5292" height="847" selected="0" zOrder="12" index="1" expanded="1" />
+    <MergeExePath_XmlElement left="18095" top="1000" width="5292" height="847" selected="0" zOrder="8" index="1" expanded="1" />
     <DiffExePath_XmlElement left="24021" top="1000" width="5292" height="847" selected="0" zOrder="14" index="2" expanded="1" />
-    <LogMessageTemplate_XmlElement left="6243" top="254" width="5292" height="847" selected="0" zOrder="8" index="3" expanded="1" />
-    <Subversion_XmlElement left="12169" top="254" width="5292" height="2963" selected="0" zOrder="10" index="4" expanded="1" />
+    <LogMessageTemplate_XmlElement left="6243" top="254" width="5292" height="847" selected="0" zOrder="10" index="3" expanded="1" />
+    <AutoAddNewFiles_XmlElement left="29947" top="1000" width="5292" height="847" selected="0" zOrder="15" index="4" expanded="1" />
+    <Subversion_XmlElement left="12169" top="254" width="5292" height="2963" selected="0" zOrder="12" index="5" expanded="1" />
 </XSDDesignerLayout>

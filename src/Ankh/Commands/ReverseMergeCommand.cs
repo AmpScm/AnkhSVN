@@ -15,9 +15,7 @@ namespace Ankh.Commands
          Tooltip="Go back to a previous version of this item.", 
          Bitmap = ResourceBitmaps.Diff),
     VSNetControl( "Item.Ankh", Position=2 ),
-    VSNetControl( "Project Node.Ankh", Position = 2 ),
-    VSNetControl( "Project.Ankh", Position = 2 ),
-    VSNetControl( "Cab Project Node.Ankh", Position = 2 ),
+    VSNetProjectNodeControl( "Ankh", Position = 2 ),
     VSNetControl( "Solution.Ankh", Position = 2 ),
     VSNetControl( "Folder.Ankh", Position = 2 )]
     internal class ReverseMergeCommand : CommandBase

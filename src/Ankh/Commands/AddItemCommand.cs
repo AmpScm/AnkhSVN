@@ -13,9 +13,7 @@ namespace Ankh.Commands
     [VSNetCommand("AddItem", Text = "Add", Tooltip = "Adds selected item to a working copy",
          Bitmap = ResourceBitmaps.Add),
     VSNetControl( "Item.Ankh", Position = 1 ),
-    VSNetControl( "Project Node.Ankh", Position = 1 ),
-    VSNetControl( "Cab Project Node.Ankh", Position = 1 ),
-    VSNetControl( "Project.Ankh", Position = 1 ),
+    VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetControl( "Folder.Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1)]    
     internal class AddItemCommand : CommandBase

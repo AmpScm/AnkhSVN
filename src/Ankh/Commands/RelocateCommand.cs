@@ -11,7 +11,7 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.Refresh),
     VSNetControl( "Folder.Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1 ),
-    VSNetControl( "Project.Ankh", Position = 1)]
+    VSNetProjectNodeControl( "Ankh", Position = 1 )]
     internal class RelocateCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)

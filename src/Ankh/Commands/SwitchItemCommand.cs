@@ -14,9 +14,7 @@ namespace Ankh.Commands
          Tooltip= "Switch this item to a different URL", 
          Bitmap=ResourceBitmaps.Switch ),
     VSNetControl( "Solution.Ankh", Position=1 ),
-    VSNetControl( "Project Node.Ankh", Position=1 ),
-    VSNetControl( "Cab Project Node.Ankh", Position = 1 ),
-    VSNetControl( "Project.Ankh", Position = 1 ),
+    VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetControl( "Folder.Ankh", Position=1 ),
     VSNetControl( "Item.Ankh", Position=1 )]
     internal class SwitchItemCommand : CommandBase

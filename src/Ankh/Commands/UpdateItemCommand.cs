@@ -16,9 +16,7 @@ namespace Ankh.Commands
     [VSNetCommand("UpdateItem", Text = "Update...", Tooltip = "Updates the local item",
          Bitmap = ResourceBitmaps.Update),
     VSNetControl( "Item", Position = 2 ),
-    VSNetControl( "Project Node", Position = 2 ),
-    VSNetControl( "Cab Project Node", Position = 2 ),
-    VSNetControl( "Project", Position = 2 ),
+    VSNetProjectNodeControl( "", Position = 2 ),
     VSNetControl( "Solution", Position = 2 ),
     VSNetControl( "Folder", Position = 2 )]
     internal class UpdateItem : CommandBase
