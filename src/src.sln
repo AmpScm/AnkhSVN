@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn.Common", "NSvn.Common\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSvn.Core.Tests.MCpp", "NSvn.Core.Tests.MCpp\NSvn.Core.Tests.MCpp.vcproj", "{05E011D8-54B5-4558-80BF-A8AD64DDAC97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn.Tests", "NSvn.Tests\NSvn.Tests.csproj", "{EC6D73BC-8445-4400-B910-784720330F05}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -62,6 +64,10 @@ Global
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Debug.Build.0 = Debug|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Release.ActiveCfg = Release|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Release.Build.0 = Release|Win32
+		{EC6D73BC-8445-4400-B910-784720330F05}.Debug.ActiveCfg = Debug|.NET
+		{EC6D73BC-8445-4400-B910-784720330F05}.Debug.Build.0 = Debug|.NET
+		{EC6D73BC-8445-4400-B910-784720330F05}.Release.ActiveCfg = Release|.NET
+		{EC6D73BC-8445-4400-B910-784720330F05}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Item:1 = master.build

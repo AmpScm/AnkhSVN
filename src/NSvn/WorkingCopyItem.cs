@@ -62,6 +62,20 @@ namespace NSvn
 
 
         /// <summary>
+        /// The status of the item.
+        /// </summary>
+        public Status Status
+        {
+            get
+            {
+                int youngest;
+                StatusDictionary dict = Client.Status( out youngest, this.Path, 
+                    false, true, false, true, this.ClientContext );
+                return dict.Get( this.Path );
+            }
+        }
+
+        /// <summary>
         /// The local path of the item.
         /// </summary>
         public string Path
@@ -69,6 +83,9 @@ namespace NSvn
             get{ return this.path; }
         }
 
+        /// <summary>
+        /// The ClientContext object used by this item.
+        /// </summary>
         protected ClientContext ClientContext
         {
             get{ return this.clientContext; }
