@@ -120,7 +120,7 @@ namespace Ankh.RepositoryExplorer
         /// <param name="uri1"></param>
         /// <param name="uri2"></param>
         /// <returns></returns>
-        private static string UriCombine( string uri1, string uri2 )
+        public static string UriCombine( string uri1, string uri2 )
         {
             
             bool uri1HasSlash = uri1.EndsWith("/");

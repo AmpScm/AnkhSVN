@@ -38,7 +38,7 @@ namespace Ankh.Commands
             IList resources = context.SolutionExplorer.GetSelectionResources( true, 
                 new ResourceFilterCallback(CommandBase.ModifiedFilter) );
 
-            resources = context.Client.ShowLogMessageDialog( resources );
+            resources = context.Client.ShowLogMessageDialog( resources, false );
 
             // did the user cancel?
             if ( resources == null ) 

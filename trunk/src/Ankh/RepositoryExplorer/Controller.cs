@@ -51,6 +51,15 @@ namespace Ankh.RepositoryExplorer
         }
 
         /// <summary>
+        /// Start the create directory operation.
+        /// </summary>
+        /// <param name="handler"></param>
+        public void MakeDir( INewDirectoryHandler handler )
+        {
+            this.repositoryExplorer.MakeDir( handler );
+        }
+
+        /// <summary>
         /// Forces a node to refresh.
         /// </summary>
         /// <param name="node"></param>

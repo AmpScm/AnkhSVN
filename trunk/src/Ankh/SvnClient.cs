@@ -34,14 +34,16 @@ namespace Ankh
         /// </summary>
         /// <param name="commitItems"></param>
         /// <returns></returns>
-        internal IList ShowLogMessageDialog(IList items)
+        internal IList ShowLogMessageDialog(IList items, bool urlPaths)
         {
             string templateText = this.GetTemplate();
             LogMessageTemplate template = new LogMessageTemplate( templateText );
 
             using( CommitDialog dialog = new CommitDialog() )
             {
+                dialog.UrlPaths = urlPaths;
                 dialog.CommitItems = items;
+
 
                 dialog.LogMessageTemplate = template;
 

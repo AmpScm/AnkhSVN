@@ -139,10 +139,77 @@ namespace Ankh.UI
             this.treeView.AddRoot( node, url );
         }
 
+        /// <summary>
+        /// Refreshes the node.
+        /// </summary>
+        /// <param name="node"></param>
         public void RefreshNode( IRepositoryTreeNode node )
         {
             this.treeView.RefreshNode( node );
         }
+
+        /// <summary>
+        /// Start the "create a new dir" operation under the current node.
+        /// </summary>
+        /// <param name="handler"></param>
+        public void MakeDir( INewDirectoryHandler handler )
+        {
+            if ( this.treeView.SelectedNode == null )
+                return;
+
+            // store the handler so we have it in the callback
+            this.newDirHandler = handler;
+            this.treeView.AfterLabelEdit += new NodeLabelEditEventHandler(MakeDirAfterEdit);
+
+            // create a new node.
+            TreeNode node = new TreeNode( "Newdir" );
+            node.SelectedImageIndex = this.treeView.ClosedFolderIndex;
+            node.ImageIndex = this.treeView.ClosedFolderIndex;
+            this.treeView.SelectedNode.Nodes.Add( node );
+
+            // start editing it
+            this.treeView.LabelEdit = true;
+            node.BeginEdit();
+        }
+
+        private INewDirectoryHandler newDirHandler;
+
+        /// <summary>
+        /// This will be called when the user finishes editing the new node.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MakeDirAfterEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            // disconnect the event handler - we don't want it fired more than once.
+            this.treeView.AfterLabelEdit -= new NodeLabelEditEventHandler(
+                this.MakeDirAfterEdit );
+            this.treeView.LabelEdit = false;
+
+            bool cancel = true;
+            try
+            {
+                // did the user actually enter a name?
+                if ( this.newDirHandler != null && e.Label != null )
+                {  
+                    // create the new dir and refresh the parent dir.
+                    cancel = !this.newDirHandler.MakeDir(
+                        (IRepositoryTreeNode)e.Node.Parent.Tag, e.Label );
+                    if ( !cancel )
+                        this.RefreshNode( (IRepositoryTreeNode)e.Node.Parent.Tag );
+                }
+                // if the user cancelled, just get rid of the new node.
+                if ( cancel ) 
+                    e.Node.Remove();
+            }
+            finally
+            {
+                this.newDirHandler = null;
+                e.CancelEdit = cancel;
+            }
+        }
+
+
 
         /// <summary>
         /// The user wants to expand a node. Let him, but we have to list whats under it
@@ -400,5 +467,13 @@ namespace Ankh.UI
         private System.Windows.Forms.Label urlLabel;
 
         
+    }
+
+    /// <summary>
+    /// An object that handles the actual creation of a directory.
+    /// </summary>
+    public interface INewDirectoryHandler
+    {
+        bool MakeDir( IRepositoryTreeNode parent, string dirname );
     }
 }
