@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<HelpWorkshopProject>
+	<ProjectFile Name="Ankh help.HxC"/>
+	<IncludeFile Name="Ankh.HxF"/>
+	<Files>
+		<File Url="Xml\contents.xsl"/>
+    <File Url="Xml\doc.xsl"/>
+    <File Url="global.HxT"/>
+    <File Url="Keywords.HxK"/>
+    <File Url="Xml\Basic-operations\add.xml"/>
+    <File Url="Xml\Basic-operations\switch.xml"/>
+    <File Url="Xml\toc.xsl"/>
+    <File Url="Xml\Basic-operations\update.xml"/>
+    <File Url="Xml\Basic-operations\cat.xml"/>
+    <File Url="Xml\Basic-operations\check_out.xml"/>
+    <File Url="Xml\Basic-operations\cleanup.xml"/>
+    <File Url="Xml\Basic-operations\commit.xml"/>
+    <File Url="Xml\Basic-operations\copy.xml"/>
+    <File Url="Xml\Basic-operations\diff.xml"/>
+    <File Url="Xml\Basic-operations\export.xml"/>
+    <File Url="Xml\Basic-operations\get_properties.xml"/>
+    <File Url="Xml\Basic-operations\import.xml"/>
+    <File Url="Xml\Basic-operations\list.xml"/>
+    <File Url="Xml\Basic-operations\log.xml"/>
+    <File Url="Xml\Basic-operations\make_directory.xml"/>
+    <File Url="Xml\Basic-operations\merge.xml"/>
+    <File Url="Xml\Basic-operations\move.xml"/>
+    <File Url="Xml\Basic-operations\remove.xml"/>
+    <File Url="Xml\Basic-operations\set_properties.xml"/>
+    <File Url="Xml\Basic-operations\status.xml"/>
+    <File Url="Xml\configuration\configuration.xml"/>
+    <File Url="Xml\basic-operations\basic_operations.xml"/>
+    <File Url="Xml\introduction\introduction.xml"/>
+    <File Url="Xml\using-ankh\using_ankh.xml"/>
+    <File Url="Xml\helpstyle.css"/>
+    <File Url="Xml\top\About_the_Ankh_help_file.xml"/>
+    <File Url="Xml\top\credits.xml"/>
+    </Files>
+	<Dirs>
+		<Dir Url="html"/>
+    <Dir Url="Xml"/>
+    <Dir Url="Xml\basic-operations"/>
+    <Dir Url="Xml\configuration"/>
+    <Dir Url="Xml\introduction"/>
+    <Dir Url="Xml\top"/>
+    <Dir Url="Xml\using-ankh"/>
+    </Dirs>
+	<Options/>
+</HelpWorkshopProject>
