@@ -40,22 +40,6 @@ EndProject
 Project("{D4EFD700-BBAA-11D2-8EE0-00C04F5E0C38}") = "Ankh help.2003", "Help.doc\Ankh help.2003.HWProj", "{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.2003", "Utils\Utils.2003.csproj", "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -204,7 +188,6 @@ Global
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug.ActiveCfg = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug.Build.0 = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug run.ActiveCfg = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug run.Build.0 = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) NSvn.Tests.ActiveCfg = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) NSvn.Tests.Build.0 = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Release.ActiveCfg = Release|.NET
@@ -239,8 +222,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
