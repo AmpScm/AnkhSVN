@@ -1,6 +1,9 @@
 #include "Stdafx.h"
 #include "ClientContextTest.h"
 
+// necessary since a .NET assembly does not export methods with native signatures
+#include "ClientContext.cpp"
+
 
 void NSvn::Core::Tests::MCpp::ClientContextTest::NotifyCallback( 
     Notification* notification )
