@@ -1,6 +1,7 @@
 using System;
 using NSvn.Common;
 using NSvn.Core;
+using System.Text.RegularExpressions;
 
 namespace NSvn
 {
@@ -87,5 +88,19 @@ namespace NSvn
         {
             visitor.VisitDirectory( this );
         }
+
+        /// <summary>
+        /// The name of the directory
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                return NAME.Match( this.Url ).Groups[3].Value;
+            }
+        }
+
+        private readonly Regex NAME = new Regex( 
+            @"\w{3,4}:///?[\w\-\.\:]+(:\d+)?(/\w+)*/(\w+)+/?" );
 	}
 }

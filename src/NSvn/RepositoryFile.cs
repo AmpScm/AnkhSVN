@@ -27,6 +27,17 @@ namespace NSvn
         }
 
         /// <summary>
+        /// The name of the file.
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                return System.IO.Path.GetFileName( this.Url );
+            }
+        }
+
+        /// <summary>
         /// Accept a RepositoryResourceVisitor.
         /// </summary>
         /// <param name="visitor">The RepositoryResourceVisitor to accept.</param>

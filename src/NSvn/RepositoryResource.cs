@@ -41,11 +41,19 @@ namespace NSvn
 
 
         /// <summary>
-        /// The URL to the item in the repository.
+        /// The URL to the resource in the repository.
         /// </summary>
         public string Url
         {
             get{ return this.url; }
+        }
+
+        /// <summary>
+        /// The name of the resource.
+        /// </summary>
+        public abstract string Name
+        {
+            get;
         }
 
         /// <summary>
