@@ -54,6 +54,8 @@ namespace Ankh
         /// <param name="action">Action.</param>
         public void StartActionText( string action )
         {
+            this.Activate();
+
             this.outputPane.OutputString( Environment.NewLine + 
                 line + action + " " + line + Environment.NewLine 
                 + Environment.NewLine);
