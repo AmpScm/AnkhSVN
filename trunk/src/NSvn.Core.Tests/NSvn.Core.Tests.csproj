@@ -102,6 +102,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NSvn.Core.Tests.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "repos.zip"
                     BuildAction = "EmbeddedResource"
                 />

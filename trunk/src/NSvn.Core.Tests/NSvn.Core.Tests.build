@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="NSvn.Core.Tests" default="rebuild">
+    <property name="verbose" value="false"/>
+    <property name="debug" value="false"/>
+    <property name="src.dir" value="."/>
+    <property name="build.dir" value="build/Release" unless="${debug}"/>
+    <property name="build.dir" value="build/Debug" if="${debug}"/>
+    <property name="warninglevel" value="/warn:3"/>
+    <property name="lib.dir" value="../../lib"/>
+    
+    
+    <target name="rebuild">
+        <call target="clean"/>
+        <call target="build"/>
+    </target>
+    
+    <target name="clean">
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
+    </target>
+    
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+    </target>
+    
+    <target name="build">
+        <call target="compile"/>                
+    </target>
+    
+    <target name="resources" depends="init">
+    </target>
+    
+    <target name="compile" depends="init">
+        <property name="define" value="TRACE"/>
+        <property name="define" value="DEBUG;${define}" if="${debug}"/>
+        
+        <echo message="${lib.dir}/nunit.framework.dll"/>
+        
+        <csc target="library" output="${build.dir}/NSvn.Core.Tests.dll" verbose="${verbose}" define="${define}">
+            <references>
+                <includes name="moo.dll"/>
+                <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
+                <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <includes name="${lib.dir}\nunit.framework.dll"/>
+                <includes name="${lib.dir}\Sharpziplib.dll"/>
+                
+            </references>
+            
+            <sources basedir="${src.dir}">
+                <includes name="**/*.cs"/>
+            </sources>
+            
+            <resources>
+                <includes name="repos.zip"/>
+                <includes name="wc.zip"/>
+            </resources>
+            
+            <arg value="${warninglevel}"/>
+        </csc>
+        
+                
+    </target>
+    
+</project>
+

@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<project default="build">
+    <property name="verbose" value="false"/>
+    <property name="debug" value="false"/>
+    <property name="build.dir" value="build/Debug" if="${debug}"/>
+    <property name="build.dir" value="build/Release" unless="${debug}"/>
+    <property name="lib.dir" value="lib"/>
+    
+    <target name="clean">
+        <nant buildfile="NSvn/NSvn.build" target="clean" inheritall="true" />
+        <nant buildfile="NSvn.Common/NSvn.Common.build" target="clean" inheritall="true" />
+        <nant buildfile="NSvn.Core/NSvn.Core.build" target="clean" inheritall="true" />
+        <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" target="clean" inheritall="true" />
+        <nant buildfile="NSvn.Core.Tests.MCpp/NSvn.Core.Tests.MCpp.build" target="clean" inheritall="true" />
+    </target>
+    
+    <target name="build-NSvn.Common">
+        <nant buildfile="NSvn.Common/NSvn.Common.build" inheritall="true" target="build"/>
+        <copy file="NSvn.Common/${build.dir}/NSvn.Common.dll" tofile="${build.dir}/NSvn.Common.dll"/>
+    </target>
+    
+    <target name="build-NSvn" depends="build-NSvn.Common">
+        <nant buildfile="NSvn/NSvn.build" inheritall="true" target="build"/>
+        <copy file="NSvn/${build.dir}/NSvn.dll" tofile="${build.dir}/NSvn.dll"/>
+    </target>
+    
+    <target name="build-NSvn.Core" depends="build-NSvn.Common">
+        <nant buildfile="NSvn.Core/NSvn.Core.build" inheritall="true" target="build"/>
+        <copy file="NSvn.Core/${build.dir}/NSvn.Core.dll" tofile="${build.dir}/NSvn.Core.dll"/>
+    </target>
+    
+    <target name="build-NSvn.Core.Tests" depends="build-NSvn.Common, build-NSvn.Core">
+        <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" inheritall="true" target="build"/>
+        <copy file="NSvn.Core.Tests/${build.dir}/NSvn.Core.Tests.dll" tofile="${build.dir}/NSvn.Core.Tests.dll"/>
+    </target>
+    
+    <target name="build-NSvn.Core.Tests.MCpp" depends="build-NSvn.Common, build-NSvn.Core">
+        <nant buildfile="NSvn.Core.Tests.MCpp/NSvn.Core.Tests.MCpp.build" inheritall="true" target="build"/>
+        <copy file="NSvn.Core.Tests.MCpp/${build.dir}/NSvn.Core.Tests.MCpp.dll" tofile="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
+    </target>
+    
+    <target name="rebuild">
+        <call target="clean"/>
+        <call target="build"/>
+    </target>
+    
+    <target name="build" depends="build-NSvn.Common, build-NSvn, build-NSvn.Core, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"/>
+    
+    <target name="test" depends="build">
+      
+        <exec program="nunit-console.exe"
+              commandline="/assembly:${build.dir}/NSvn.Core.Tests.dll"/>
+    </target>
+    
+</project>
