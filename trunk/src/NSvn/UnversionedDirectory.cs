@@ -15,5 +15,13 @@ namespace NSvn
 		{
 			//empty
 		}
+
+        /// <summary>
+        /// Is this a directory?
+        /// </summary>
+        public override bool IsDirectory
+        {
+            get{ return true; }
+        }
 	}
 }

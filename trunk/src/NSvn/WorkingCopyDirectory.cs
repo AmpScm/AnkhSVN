@@ -5,7 +5,7 @@ namespace NSvn
 	/// <summary>
 	/// Represents a versioned directory in an SVN working copy.
 	/// </summary>
-	public class WorkingCopyDirectory : WorkingCopyItem, ILocalItem
+	public class WorkingCopyDirectory : WorkingCopyItem
 	{
         /// <summary>
         /// Constructor.
@@ -15,5 +15,13 @@ namespace NSvn
 		{
 			
 		}
+
+        /// <summary>
+        /// Is this a directory?
+        /// </summary>
+        public override bool IsDirectory
+        {
+            get{ return true; }
+        }
 	}
 }

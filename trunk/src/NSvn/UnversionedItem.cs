@@ -8,7 +8,7 @@ namespace NSvn
 	/// <summary>
 	/// Represents an unversioned item in a working copy.
 	/// </summary>
-	public class UnversionedItem : SvnItem, ILocalItem
+	public abstract class UnversionedItem : SvnItem, ILocalItem
 	{
         /// <summary>
         /// Constructor
@@ -20,13 +20,29 @@ namespace NSvn
 		}
 
         /// <summary>
+        /// Factory method
+        /// </summary>
+        /// <param name="path">Path to the resource.</param>
+        /// <returns>An UnversionedItem object representing the resource.</returns>
+        public static UnversionedItem FromPath( string path )
+        {
+            if ( System.IO.File.Exists( path ) )
+                return new UnversionedFile( path );
+            else if ( System.IO.Directory.Exists( path ) )
+                return new UnversionedDirectory( path );
+            else
+                throw new ArgumentException( "Path must be a file or a directory", "path" );  
+        }
+
+        /// <summary>
         /// Adds the item to version control.
         /// </summary>
         /// <param name="recursive">Whether subitems should be recursively added.</param>
         /// <returns>A WorkingCopyItem object representing the added resource.</returns>
         public WorkingCopyItem Add( bool recursive )
         {
-            return UnversionedItem.Add( this.Path, recursive );
+            Client.Add( this.Path, recursive, this.ClientContext );
+            return WorkingCopyItem.FromPath( this.Path );            
         }
 
         /// <summary>
@@ -37,15 +53,8 @@ namespace NSvn
         /// <returns>A WorkingCopyItem object pointing to the added path</returns>
         public static WorkingCopyItem Add( string path, bool recursive )
         {
-            // TODO: Figure out how to deal with ClientContext here
-            Client.Add( path, recursive, new ClientContext() );
-            if ( System.IO.File.Exists( path ) )
-                return new WorkingCopyFile( path );
-            else if ( System.IO.Directory.Exists( path ) )
-                return new WorkingCopyDirectory( path );
-            else
-                throw new ArgumentException( "Path must be a file or a directory", "path" );
-        }
+            return FromPath( path ).Add( recursive );     
+        }        
 
         /// <summary>
         /// The path to the item.
@@ -54,6 +63,22 @@ namespace NSvn
         {
             get{ return path; }
         }
+
+        /// <summary>
+        /// Is this a versioned resource?
+        /// </summary>
+        public bool IsVersioned
+        {
+            get{ return false; }
+        }
+
+        /// <summary>
+        /// Is this a directory?
+        /// </summary>
+        public abstract bool IsDirectory
+        { 
+            get;
+        }       
 
 
         private string path;

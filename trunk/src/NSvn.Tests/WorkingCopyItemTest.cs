@@ -68,7 +68,7 @@ namespace NSvn.Tests
         public void TestUpdate()
         {
             // create a second wc and change a file
-            string wc2 = this.FindDirName( "wc2" );
+            string wc2 = this.FindDirName( @"\tmp\wc2" );
             this.ExtractZipFile( wc2, this.WC_FILE );
             WorkingCopyItem wc2item = new WorkingCopyFile( Path.Combine( wc2, "Form.cs" ) );
             using( StreamWriter w = new StreamWriter( wc2item.Path, false ) )
@@ -101,6 +101,8 @@ namespace NSvn.Tests
             }
             catch( SvnClientException )
             { /* empty */ }
+
+            
         }
         #endregion
 
@@ -109,7 +111,7 @@ namespace NSvn.Tests
         public void TestStatus()
         {
             // text status has been tested in other tests
-            WorkingCopyItem file = new WorkingCopyItem(Path.Combine(this.WcPath, "Form.cs") );
+            WorkingCopyItem file = new WorkingCopyFile(Path.Combine(this.WcPath, "Form.cs") );
             this.RunCommand( "svn",  "ps foo moo " + file.Path );
             Assertion.AssertEquals( "property status should have been modified", 
                 StatusKind.Modified, file.Status.PropertyStatus );

@@ -7,18 +7,33 @@ namespace NSvn
 	/// <summary>
 	/// Represents an item(file or directory) in a working copy.
 	/// </summary>
-	public class WorkingCopyItem : SvnItem, ILocalItem
+	public abstract class WorkingCopyItem : SvnItem, ILocalItem
 	{
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="path">Path to the item.</param>
-		public WorkingCopyItem( string path )
+		protected WorkingCopyItem( string path )
 		{
 			this.path = System.IO.Path.GetFullPath(path);
             //TODO: pull this up
             this.ClientContext.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
 		}
+
+        /// <summary>
+        /// Factory method.
+        /// </summary>
+        /// <param name="path">Path to the resource.</param>
+        /// <returns>An WorkingCopyItem object representing the resource.</returns>
+        public static WorkingCopyItem FromPath( string path )
+        {
+            if ( System.IO.File.Exists( path ) )
+                return new WorkingCopyFile( path );
+            else if ( System.IO.Directory.Exists( path ) )
+                return new WorkingCopyDirectory( path );
+            else
+                throw new ArgumentException( "Path must be a file or a directory", "path" );  
+        }
 
 
         /// <summary>
@@ -83,6 +98,23 @@ namespace NSvn
         {
             get{ return this.path; }
         }
+
+        /// <summary>
+        /// Is this a versioned resource?
+        /// </summary>
+        public bool IsVersioned
+        {
+            get{ return true; }
+        }
+
+        /// <summary>
+        /// Is this a directory
+        /// </summary>
+        public abstract bool IsDirectory
+        {
+            get;
+        }
+
 
 
         /// <summary>

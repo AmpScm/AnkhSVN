@@ -14,5 +14,21 @@ namespace NSvn
         { 
             get;
         }
+
+        /// <summary>
+        /// Is this a directory?
+        /// </summary>
+        bool IsDirectory
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Is this a versioned item?
+        /// </summary>
+        bool IsVersioned
+        {
+            get;
+        }
 	}
 }
