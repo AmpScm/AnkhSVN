@@ -29,7 +29,7 @@
         <Registry Id="Ankh_registry16" Root="HKCR" Type="string"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
           Name="RuntimeVersion" Value="v1.0.3705" />
-        <Registry Id="Ankh_registry17" Root="HKCR" 
+        <Registry Id="Ankh_registry17" Root="HKCR" Type="string"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
           Name="CodeBase" Value="[TARGETDIR]Ankh.dll" />
         <Registry Id="Ankh_registry18" Root="HKCR" Type="string"
@@ -41,7 +41,7 @@
         <Registry Id="Ankh_registry20" Root="HKCR" Type="string"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
           Name="RuntimeVersion" Value="v1.0.3705" />
-        <Registry Id="Ankh_registry21" Root="HKCR" 
+        <Registry Id="Ankh_registry21" Root="HKCR" Type="string"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
           Name="CodeBase" Value="[TARGETDIR]Ankh.dll" />
         <Registry Id="Ankh_registry22" Root="HKCR" Type="string"
