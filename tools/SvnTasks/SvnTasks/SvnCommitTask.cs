@@ -41,19 +41,9 @@ namespace SvnTasks
 				if ( this.Revision != -1 )
 					revision = NSvn.Core.Revision.FromNumber( this.Revision );
 
-				ClientContext clientContext = new ClientContext();
-				clientContext.AuthBaton = new AuthenticationBaton();
-				clientContext.AuthBaton.Add(AuthenticationProvider.GetUsernameProvider());
-				clientContext.AuthBaton.Add(AuthenticationProvider.GetSimpleProvider());
-				if ( this.Username != null && this.Password != null )
-				{
-					clientContext.AuthBaton.Add(
-						AuthenticationProvider.GetSimplePromptProvider(
-						new SimplePromptDelegate(this.SimplePrompt),1));
-				}
 				string[] targets = new string[1];
 				targets[0] = this.LocalDir;
-				Client.Commit(targets, !this.Recursive, clientContext);
+				this.client.Commit(targets, !this.Recursive);
 			}
 			catch( AuthorizationFailedException )
 			{

@@ -33,25 +33,15 @@ namespace SvnTasks
 		/// </summary>
 		protected override void ExecuteTask()
 		{
-			Log(Level.Info, "{0} {1} to {2}",this.Name, this.Url, this.LocalDir);
+			Log(Level.Info, "{0} {1} to {2}", this.Name, this.Url, this.LocalDir);
 			try
 			{
 				Revision revision = NSvn.Core.Revision.Head;
 				if ( this.Revision != -1 )
 					revision = NSvn.Core.Revision.FromNumber( this.Revision );
-
-				ClientContext clientContext = new ClientContext();
-				clientContext.AuthBaton = new AuthenticationBaton();
-				clientContext.AuthBaton.Add(AuthenticationProvider.GetUsernameProvider());
-				clientContext.AuthBaton.Add(AuthenticationProvider.GetSimpleProvider());
-				if ( this.Username != null && this.Password != null )
-				{
-					clientContext.AuthBaton.Add(
-						AuthenticationProvider.GetSimplePromptProvider(
-						new SimplePromptDelegate(this.SimplePrompt),1));
-				}
 				
-				Client.Export(this.Url, this.LocalDir, revision, this.Force, clientContext );
+				this.client.Export(this.Url, this.LocalDir, revision, 
+                    this.Force);
 
 			}
 			catch( AuthorizationFailedException )
@@ -76,7 +66,7 @@ namespace SvnTasks
 			}
 			catch( SvnException ex )
 			{	
-				throw new BuildException( "Unable to export. Does the local directory already exsist? Use force option to overwrite.\n" + ex );
+				throw new BuildException( "Unable to export. Does the local directory already exist? Use force option to overwrite.\n" + ex );
 			}
 			catch( Exception ex )
 			{

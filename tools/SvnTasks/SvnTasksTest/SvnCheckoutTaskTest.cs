@@ -44,8 +44,8 @@ namespace Tests.SvnTasks
 			string checkFilePath = Path.Combine(m_localTestDir, m_checkFile );
 
 			string result = this.RunBuild(FormatBuildFile(m_checkoutXml, args), Level.Debug);
-			Assertion.Assert("File does not exist, checkout probably did not work.", 
-				File.Exists(checkFilePath));
+			Assert.IsTrue(File.Exists(checkFilePath), 
+                "File does not exist, checkout probably did not work.");
 		}
 
        
