@@ -3,6 +3,8 @@
 #include "SimpleCredential.h"
 #include "UsernameCredential.h"
 #include "Pool.h"
+#include "StringHelper.h"
+#include "Revision.h"
 #include <svn_auth.h>
 
 void NSvn::Core::Tests::MCpp::MiscTests::TestSimpleCredential()
@@ -25,4 +27,39 @@ void NSvn::Core::Tests::MCpp::MiscTests::TestUsernameCredential()
         ucred->GetCredential( static_cast<apr_pool_t*>(pool) ).ToPointer() );
 
     Assertion::AssertEquals( StringHelper( cred->username ), S"Foo" );
+}
+
+void NSvn::Core::Tests::MCpp::MiscTests::TestRevisionFromNumber()
+{
+    Pool pool;
+    Revision* rev = Revision::FromNumber( 42 );
+    
+    svn_opt_revision_t* svnRev = rev->ToSvnOptRevision( pool );
+
+    Assertion::AssertEquals( "Wrong revision number", 42, svnRev->value.number );
+    Assertion::AssertEquals( "Wrong revision kind", svn_opt_revision_number, svnRev->kind );
+}
+
+void NSvn::Core::Tests::MCpp::MiscTests::TestRevisionFromDate()
+{
+    Pool pool;
+    DateTime dt = DateTime::Now;
+
+    Revision* rev = Revision::FromDate( dt );
+    
+    svn_opt_revision_t* svnRev = rev->ToSvnOptRevision( pool );
+
+    // Create a date string, so we can compare
+    char dateString[50];
+    apr_time_exp_t expTime;
+    apr_time_exp_gmt( &expTime, svnRev->value.date );
+    apr_size_t length;
+    apr_strftime( dateString, &length, 49, "%H:%M:%S %d.%m.%Y", &expTime );
+
+    String* nowString = dt.ToString( "HH':'mm':'ss dd'.'MM'.'yyyy" );
+    
+
+    Assertion::AssertEquals( "Wrong revision kind", svn_opt_revision_date, svnRev->kind );
+    Assertion::AssertEquals( "Wrong date", nowString, StringHelper( dateString ) );
+
 }
