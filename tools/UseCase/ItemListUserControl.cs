@@ -7,31 +7,20 @@ using System.Windows.Forms;
 
 namespace UseCase
 {
-    public class ActionPerformedEventArgs : EventArgs
-    {
-        public ActionPerformedEventArgs( string text )
-        {
-            this.text = text;
-        }
-
-        public string Text
-        {
-            get{ return this.text; }
-        }
-
-        private string text;
-    }
+    
 
 
-    public delegate void ActionPerformedEventHandler( object sender, 
-        ActionPerformedEventArgs e );
+    public delegate void ItemAddedEventHandler( object sender, 
+        string item );
+    public delegate void ItemRemovedEventHandler( object sender, 
+        object item );
 	/// <summary>
 	/// Summary description for ItemListUserControl.
 	/// </summary>
 	public class ItemListUserControl : System.Windows.Forms.UserControl
 	{
-        public event ActionPerformedEventHandler Add;
-        public event ActionPerformedEventHandler Delete;
+        public event ItemAddedEventHandler Add;
+        public event ItemRemovedEventHandler Delete;
         
 
 		public ItemListUserControl()
@@ -98,7 +87,7 @@ namespace UseCase
             // deleteButton
             // 
             this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.deleteButton.Location = new System.Drawing.Point(256, 32);
+            this.deleteButton.Location = new System.Drawing.Point(376, 32);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(75, 20);
             this.deleteButton.TabIndex = 15;
@@ -116,7 +105,7 @@ namespace UseCase
             // addButton
             // 
             this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addButton.Location = new System.Drawing.Point(208, 0);
+            this.addButton.Location = new System.Drawing.Point(360, 0);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 20);
             this.addButton.TabIndex = 12;
@@ -128,6 +117,7 @@ namespace UseCase
             this.addTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.addTextBox.Location = new System.Drawing.Point(96, 0);
             this.addTextBox.Name = "addTextBox";
+            this.addTextBox.Size = new System.Drawing.Size(248, 20);
             this.addTextBox.TabIndex = 11;
             this.addTextBox.Text = "";
             // 
@@ -136,7 +126,7 @@ namespace UseCase
             this.listBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listBox.Location = new System.Drawing.Point(96, 32);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(144, 54);
+            this.listBox.Size = new System.Drawing.Size(272, 67);
             this.listBox.TabIndex = 13;
             this.listBox.TabStop = false;
             // 
@@ -149,23 +139,13 @@ namespace UseCase
                                                                           this.addTextBox,
                                                                           this.listBox});
             this.Name = "ItemListUserControl";
-            this.Size = new System.Drawing.Size(336, 88);
+            this.Size = new System.Drawing.Size(456, 112);
             this.ResumeLayout(false);
 
         }
 		#endregion
 
-        protected virtual void OnAdd( ActionPerformedEventArgs e )
-        {
-            if ( this.Add != null )
-                this.Add( this, e );
-        }
-
-        protected virtual void OnDelete( ActionPerformedEventArgs e )
-        {
-            if ( this.Delete != null )
-                this.Delete( this, e );
-        }
+        
 
 
         private System.Windows.Forms.TextBox addTextBox;
@@ -183,7 +163,7 @@ namespace UseCase
             if ( this.addTextBox.Text.Trim() != string.Empty &&
                 this.Add != null )
             {
-                this.Add( this, new ActionPerformedEventArgs( this.addTextBox.Text ) );  
+                this.Add( this, this.addTextBox.Text );  
                 this.addTextBox.Text = string.Empty;
             }
         }
@@ -191,8 +171,7 @@ namespace UseCase
         private void deleteClick(object sender, System.EventArgs e)
         {
             if ( this.listBox.SelectedItem != null && this.Delete != null )
-                this.Delete( this, 
-                    new ActionPerformedEventArgs( (string)this.listBox.SelectedItem ) );
+                this.Delete( this, this.listBox.SelectedItem  );
         }
 
 

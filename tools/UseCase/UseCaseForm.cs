@@ -25,14 +25,14 @@ namespace UseCase
 
             
             this.useCaseModel.PostConditionsChanged +=
-                new ModelChangedEventHandler( this.ModelChanged );
+                new EventHandler( this.ModelChanged );
             this.useCaseModel.PreConditionsChanged +=
-                new ModelChangedEventHandler( this.ModelChanged );                   
+                new EventHandler( this.ModelChanged );                   
             this.useCaseModel.ActorsChanged += 
-               new ModelChangedEventHandler( this.ModelChanged );
+               new EventHandler( this.ModelChanged );
 
             this.useCaseModel.ElementsChanged +=
-                new ModelChangedEventHandler( this.ElementsChanged );
+                new EventHandler( this.ElementsChanged );
 
             this.idTextBox.Leave += new EventHandler( 
                     this.IdChanged );
@@ -67,9 +67,6 @@ namespace UseCase
             this.summaryTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.elementsView = new System.Windows.Forms.TreeView();
-            this.actorList = new UseCase.ItemListUserControl();
-            this.preConditionsList = new UseCase.ItemListUserControl();
-            this.postConditionsList = new UseCase.ItemListUserControl();
             this.addElementTextBox = new System.Windows.Forms.TextBox();
             this.addElementButton = new System.Windows.Forms.Button();
             this.deleteElementButton = new System.Windows.Forms.Button();
@@ -79,6 +76,9 @@ namespace UseCase
             this.fileNameTextBox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.browseButton = new System.Windows.Forms.Button();
+            this.actorList = new UseCase.ItemListUserControl();
+            this.preConditionsList = new UseCase.ItemListUserControl();
+            this.postConditionsList = new UseCase.ItemListUserControl();
             this.SuspendLayout();
             // 
             // nameTextBox
@@ -118,7 +118,7 @@ namespace UseCase
             // summaryTextBox
             // 
             this.summaryTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.summaryTextBox.Location = new System.Drawing.Point(120, 168);
+            this.summaryTextBox.Location = new System.Drawing.Point(120, 176);
             this.summaryTextBox.Multiline = true;
             this.summaryTextBox.Name = "summaryTextBox";
             this.summaryTextBox.Size = new System.Drawing.Size(144, 48);
@@ -128,7 +128,7 @@ namespace UseCase
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(32, 168);
+            this.label3.Location = new System.Drawing.Point(32, 176);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 23);
             this.label3.TabIndex = 5;
@@ -138,48 +138,18 @@ namespace UseCase
             // 
             this.elementsView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.elementsView.ImageIndex = -1;
-            this.elementsView.Location = new System.Drawing.Point(120, 368);
+            this.elementsView.Location = new System.Drawing.Point(120, 376);
             this.elementsView.Name = "elementsView";
             this.elementsView.SelectedImageIndex = -1;
             this.elementsView.ShowPlusMinus = false;
             this.elementsView.ShowRootLines = false;
-            this.elementsView.Size = new System.Drawing.Size(408, 97);
+            this.elementsView.Size = new System.Drawing.Size(408, 96);
             this.elementsView.TabIndex = 11;
-            // 
-            // actorList
-            // 
-            this.actorList.Location = new System.Drawing.Point(24, 72);
-            this.actorList.Name = "actorList";
-            this.actorList.Size = new System.Drawing.Size(336, 96);
-            this.actorList.TabIndex = 3;
-            this.actorList.Title = "Actors";
-            this.actorList.Delete += new UseCase.ActionPerformedEventHandler(this.DeleteItem);
-            this.actorList.Add += new UseCase.ActionPerformedEventHandler(this.AddItem);
-            // 
-            // preConditionsList
-            // 
-            this.preConditionsList.Location = new System.Drawing.Point(24, 240);
-            this.preConditionsList.Name = "preConditionsList";
-            this.preConditionsList.Size = new System.Drawing.Size(336, 88);
-            this.preConditionsList.TabIndex = 5;
-            this.preConditionsList.Title = "Preconditions";
-            this.preConditionsList.Delete += new UseCase.ActionPerformedEventHandler(this.DeleteItem);
-            this.preConditionsList.Add += new UseCase.ActionPerformedEventHandler(this.AddItem);
-            // 
-            // postConditionsList
-            // 
-            this.postConditionsList.Location = new System.Drawing.Point(24, 480);
-            this.postConditionsList.Name = "postConditionsList";
-            this.postConditionsList.Size = new System.Drawing.Size(336, 88);
-            this.postConditionsList.TabIndex = 7;
-            this.postConditionsList.Title = "Postconditions";
-            this.postConditionsList.Delete += new UseCase.ActionPerformedEventHandler(this.DeleteItem);
-            this.postConditionsList.Add += new UseCase.ActionPerformedEventHandler(this.AddItem);
             // 
             // addElementTextBox
             // 
             this.addElementTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.addElementTextBox.Location = new System.Drawing.Point(120, 344);
+            this.addElementTextBox.Location = new System.Drawing.Point(120, 352);
             this.addElementTextBox.Name = "addElementTextBox";
             this.addElementTextBox.Size = new System.Drawing.Size(280, 20);
             this.addElementTextBox.TabIndex = 6;
@@ -188,7 +158,7 @@ namespace UseCase
             // addElementButton
             // 
             this.addElementButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addElementButton.Location = new System.Drawing.Point(408, 344);
+            this.addElementButton.Location = new System.Drawing.Point(408, 352);
             this.addElementButton.Name = "addElementButton";
             this.addElementButton.Size = new System.Drawing.Size(75, 20);
             this.addElementButton.TabIndex = 16;
@@ -198,7 +168,7 @@ namespace UseCase
             // deleteElementButton
             // 
             this.deleteElementButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.deleteElementButton.Location = new System.Drawing.Point(536, 376);
+            this.deleteElementButton.Location = new System.Drawing.Point(536, 384);
             this.deleteElementButton.Name = "deleteElementButton";
             this.deleteElementButton.TabIndex = 17;
             this.deleteElementButton.Text = "Delete";
@@ -207,7 +177,7 @@ namespace UseCase
             // moveElementUpButton
             // 
             this.moveElementUpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.moveElementUpButton.Location = new System.Drawing.Point(536, 408);
+            this.moveElementUpButton.Location = new System.Drawing.Point(536, 416);
             this.moveElementUpButton.Name = "moveElementUpButton";
             this.moveElementUpButton.TabIndex = 18;
             this.moveElementUpButton.Text = "Up";
@@ -216,7 +186,7 @@ namespace UseCase
             // moveElementDownButton
             // 
             this.moveElementDownButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.moveElementDownButton.Location = new System.Drawing.Point(536, 440);
+            this.moveElementDownButton.Location = new System.Drawing.Point(536, 448);
             this.moveElementDownButton.Name = "moveElementDownButton";
             this.moveElementDownButton.TabIndex = 19;
             this.moveElementDownButton.Text = "Down";
@@ -235,7 +205,7 @@ namespace UseCase
             // fileNameTextBox
             // 
             this.fileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.fileNameTextBox.Location = new System.Drawing.Point(120, 576);
+            this.fileNameTextBox.Location = new System.Drawing.Point(120, 600);
             this.fileNameTextBox.Name = "fileNameTextBox";
             this.fileNameTextBox.Size = new System.Drawing.Size(392, 20);
             this.fileNameTextBox.TabIndex = 21;
@@ -244,7 +214,7 @@ namespace UseCase
             // button1
             // 
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(32, 576);
+            this.button1.Location = new System.Drawing.Point(32, 600);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 20);
             this.button1.TabIndex = 22;
@@ -254,19 +224,52 @@ namespace UseCase
             // browseButton
             // 
             this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.browseButton.Location = new System.Drawing.Point(528, 576);
+            this.browseButton.Location = new System.Drawing.Point(528, 600);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(75, 20);
             this.browseButton.TabIndex = 23;
             this.browseButton.Text = "Browse...";
             this.browseButton.Click += new System.EventHandler(this.browseButtonClick);
             // 
+            // actorList
+            // 
+            this.actorList.Location = new System.Drawing.Point(24, 72);
+            this.actorList.Name = "actorList";
+            this.actorList.Size = new System.Drawing.Size(456, 104);
+            this.actorList.TabIndex = 24;
+            this.actorList.Title = "Actors";
+            this.actorList.Delete += new UseCase.ItemRemovedEventHandler(this.DeleteItem);
+            this.actorList.Add += new UseCase.ItemAddedEventHandler(this.AddItem);
+            // 
+            // preConditionsList
+            // 
+            this.preConditionsList.Location = new System.Drawing.Point(24, 232);
+            this.preConditionsList.Name = "preConditionsList";
+            this.preConditionsList.Size = new System.Drawing.Size(456, 112);
+            this.preConditionsList.TabIndex = 25;
+            this.preConditionsList.Title = "Preconditions";
+            this.preConditionsList.Delete += new UseCase.ItemRemovedEventHandler(this.DeleteItem);
+            this.preConditionsList.Add += new UseCase.ItemAddedEventHandler(this.AddItem);
+            // 
+            // postConditionsList
+            // 
+            this.postConditionsList.Location = new System.Drawing.Point(24, 480);
+            this.postConditionsList.Name = "postConditionsList";
+            this.postConditionsList.Size = new System.Drawing.Size(456, 112);
+            this.postConditionsList.TabIndex = 26;
+            this.postConditionsList.Title = "Postconditions";
+            this.postConditionsList.Delete += new UseCase.ItemRemovedEventHandler(this.DeleteItem);
+            this.postConditionsList.Add += new UseCase.ItemAddedEventHandler(this.AddItem);
+            // 
             // UseCaseForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(656, 611);
+            this.ClientSize = new System.Drawing.Size(656, 635);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.postConditionsList,
+                                                                          this.preConditionsList,
+                                                                          this.actorList,
                                                                           this.browseButton,
                                                                           this.button1,
                                                                           this.fileNameTextBox,
@@ -276,9 +279,6 @@ namespace UseCase
                                                                           this.deleteElementButton,
                                                                           this.addElementButton,
                                                                           this.addElementTextBox,
-                                                                          this.postConditionsList,
-                                                                          this.preConditionsList,
-                                                                          this.actorList,
                                                                           this.elementsView,
                                                                           this.label3,
                                                                           this.summaryTextBox,
@@ -302,19 +302,19 @@ namespace UseCase
 
         private void ModelChanged( object sender, EventArgs e )
         {
-            this.actorList.Items = this.useCaseModel.Actors.Items;
-            this.postConditionsList.Items = this.useCaseModel.PostConditions.Items;
-            this.preConditionsList.Items = this.useCaseModel.PreConditions.Items;
+            this.actorList.Items = this.useCaseModel.Actors;
+            this.postConditionsList.Items = this.useCaseModel.PostConditions;
+            this.preConditionsList.Items = this.useCaseModel.PreConditions;
         }
 
         private void ElementsChanged( object sender, EventArgs e )
         {
             this.elementsView.Nodes.Clear();
             int i = 1;
-            foreach( IElement element in this.useCaseModel.Elements )
+            foreach( IItem element in this.useCaseModel.Elements )
             {
                 TreeNode node = new TreeNode( 
-                    String.Format( "{0:0#}: {1}", i, element.Text ) );
+                    String.Format( "{0:0#}: {1}", i, element ) );
                 node.Tag = element;
                 this.elementsView.Nodes.Add( node );
 
@@ -323,14 +323,14 @@ namespace UseCase
         }
 
 
-        private void AddItem(object sender, UseCase.ActionPerformedEventArgs e)
+        private void AddItem(object sender, string value )
         {
             if ( sender == this.actorList )
-                this.useCaseModel.Actors.Add( e.Text );
+                this.useCaseModel.AddActor( value);
             else if ( sender == this.preConditionsList )
-                this.useCaseModel.PreConditions.Add( e.Text );
+                this.useCaseModel.AddPrecondition( value );
             else if ( sender == this.postConditionsList )
-                this.useCaseModel.PostConditions.Add( e.Text );
+                this.useCaseModel.AddPostcondition( value );
         
         }
 
@@ -346,14 +346,14 @@ namespace UseCase
             }
         }
 
-        private void DeleteItem(object sender, UseCase.ActionPerformedEventArgs e)
+        private void DeleteItem(object sender, object item )
         {
             if ( sender == this.actorList )
-                this.useCaseModel.Actors.Delete( e.Text );
+                this.useCaseModel.RemoveActor( ((IItem)item) );
             else if ( sender == this.preConditionsList )
-                this.useCaseModel.PreConditions.Delete( e.Text );
+                this.useCaseModel.RemovePrecondition( ((IItem)item) );
             else if ( sender == this.postConditionsList )
-                this.useCaseModel.PostConditions.Delete( e.Text );
+                this.useCaseModel.RemovePostcondition( ((IItem)item) );
         
         }
 
@@ -415,8 +415,8 @@ namespace UseCase
                 this.elementsView.SelectedNode.PrevNode != null )
             {
                 this.useCaseModel.MoveElementBefore( 
-                    (IElement)this.elementsView.SelectedNode.Tag,
-                    (IElement)this.elementsView.SelectedNode.PrevNode.Tag );
+                    (IItem)this.elementsView.SelectedNode.Tag,
+                    (IItem)this.elementsView.SelectedNode.PrevNode.Tag );
             }
         }
 
@@ -426,8 +426,8 @@ namespace UseCase
                 this.elementsView.SelectedNode.NextNode != null )
             {
                 this.useCaseModel.MoveElementAfter(
-                    (IElement)this.elementsView.SelectedNode.Tag,
-                    (IElement)this.elementsView.SelectedNode.NextNode.Tag );
+                    (IItem)this.elementsView.SelectedNode.Tag,
+                    (IItem)this.elementsView.SelectedNode.NextNode.Tag );
             }
         
         }
@@ -444,9 +444,9 @@ namespace UseCase
 
         private void saveButtonClicked(object sender, System.EventArgs e)
         {
-            XmlModel model = new XmlModel( this.useCaseModel );
-            model.Xsl = "UseCaseXSL1.xsl";
-            model.Save( fileNameTextBox.Text );        
+//            XmlModel model = new XmlModel( this.useCaseModel );
+//            model.Xsl = "UseCaseXSL1.xsl";
+//            model.Save( fileNameTextBox.Text );        
         }
 
         private UseCaseModel useCaseModel;
@@ -456,9 +456,6 @@ namespace UseCase
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox idTextBox;
-        private UseCase.ItemListUserControl actorList;
-        private UseCase.ItemListUserControl preConditionsList;
-        private UseCase.ItemListUserControl postConditionsList;
         private System.Windows.Forms.TextBox addElementTextBox;
         private System.Windows.Forms.Button deleteElementButton;
         private System.Windows.Forms.Button moveElementUpButton;
@@ -471,18 +468,16 @@ namespace UseCase
         private System.Windows.Forms.TextBox fileNameTextBox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button browseButton;
+        private UseCase.ItemListUserControl actorList;
+        private UseCase.ItemListUserControl preConditionsList;
+        private UseCase.ItemListUserControl postConditionsList;
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        
 
-       
 
-        
-
-        
         
 	}
 }
