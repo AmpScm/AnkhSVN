@@ -13,7 +13,7 @@ namespace Ankh.Commands
          Tooltip="Diff against local text base.", 
          Bitmap = ResourceBitmaps.Diff),
     VSNetControl( "Item", Position=2 ),
-    VSNetControl( "Project", Position = 2 ),
+    VSNetControl( "Project Node", Position = 2 ),
     VSNetControl( "Solution", Position = 2 ),
     VSNetControl( "Folder", Position = 2 )]
     internal class DiffLocalItem : LocalDiffCommandBase

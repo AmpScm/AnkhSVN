@@ -11,7 +11,7 @@ namespace Ankh.Commands
     [VSNetCommand("Refresh", Text = "Refresh", Tooltip = "Refresh this view.", 
          Bitmap = ResourceBitmaps.Refresh),
     VSNetControl( "Solution.Ankh", Position = 1 ),
-    VSNetControl( "Project.Ankh", Position = 1),
+    VSNetControl( "Project Node.Ankh", Position = 1),
     VSNetControl( "Folder.Ankh", Position = 1)]
     internal class RefreshCommand : CommandBase
     {
