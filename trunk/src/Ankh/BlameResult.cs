@@ -25,7 +25,7 @@ namespace Ankh
 
         public void Transform( XslTransform transform, TextWriter writer )
         {
-            transform.Transform( this.XmlDocument, new XsltArgumentList(), writer, null );
+            transform.Transform( this.XmlDocument, new XsltArgumentList(), writer );
         }
 
         public void Start()
