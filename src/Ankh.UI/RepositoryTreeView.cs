@@ -76,16 +76,15 @@ namespace Ankh.UI
     /// <summary>
     /// Treeview that shows the layout of a SVN repository
     /// </summary>
-    public class RepositoryTreeView : System.Windows.Forms.TreeView
+    public class RepositoryTreeView : PathTreeView
     {
         public RepositoryTreeView()
         {
-            this.GetSystemImageList();       
         }   
      
         public void AddRoot( IRepositoryTreeNode node, string url )
         {
-            TreeNode root = new TreeNode( url, this.openFolderIndex, this.openFolderIndex );
+            TreeNode root = new TreeNode( url, this.OpenFolderIndex, this.OpenFolderIndex );
 
             root.Tag = node;
             node.Tag = root;          
@@ -105,73 +104,6 @@ namespace Ankh.UI
             TreeNode parentNode = (TreeNode)parent.Tag;
             this.BuildSubTree( parentNode.Nodes, childNodes );
         }
-        
-        
-        
-
-        /// <summary>
-        /// Retrieve the system image list and assign it to this treeview.
-        /// </summary>
-        private void GetSystemImageList()
-        {
-            // get the system image list
-            SHFILEINFO fileinfo = new SHFILEINFO();;
-            IntPtr sysImageList = Win32.SHGetFileInfo( "", 0, ref fileinfo, 
-                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
-                Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON );
-
-            // assign it to this treeview
-            Win32.SendMessage( this.Handle, Msg.TVM_SETIMAGELIST, Constants.TVSIL_NORMAL,
-                sysImageList );
-
-            // get the open folder icon
-            Win32.SHGetFileInfo( "", Constants.FILE_ATTRIBUTE_DIRECTORY, ref fileinfo, 
-                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
-                Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON | Constants.SHGFI_OPENICON |
-                Constants.SHGFI_USEFILEATTRIBUTES );
-            this.openFolderIndex = fileinfo.iIcon.ToInt32();
-
-            // get the closed folder icon
-            Win32.SHGetFileInfo( "", Constants.FILE_ATTRIBUTE_DIRECTORY, ref fileinfo, 
-                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
-                Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON | 
-                Constants.SHGFI_USEFILEATTRIBUTES );
-            this.closedFolderIndex = fileinfo.iIcon.ToInt32();
-
-
-        }        
-
-        /// <summary>
-        /// Event handler for the Expand event.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected override void OnBeforeExpand(
-            System.Windows.Forms.TreeViewCancelEventArgs e)
-        {
-            base.OnBeforeExpand( e );
-
-            // switch to the open folder icon
-            e.Node.ImageIndex = this.openFolderIndex;
-            e.Node.SelectedImageIndex = this.openFolderIndex;           
-        } 
-
-        /// <summary>
-        /// Handle the collapse event.
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnAfterCollapse( 
-            System.Windows.Forms.TreeViewEventArgs e )
-        {
-            base.OnAfterCollapse( e );
-
-            // switch to the closed folder icon
-            e.Node.ImageIndex = this.closedFolderIndex;
-            e.Node.SelectedImageIndex = this.closedFolderIndex;
-        }
-
-        
-
 
         private void BuildSubTree( TreeNodeCollection nodes, IList nodeList )
         {
@@ -195,22 +127,15 @@ namespace Ankh.UI
                             new TreeNode[]{ dummy } );
 
                         // start with the closed folder icon
-                        newNode.ImageIndex = this.closedFolderIndex;
-                        newNode.SelectedImageIndex = this.closedFolderIndex;
+                        newNode.ImageIndex = this.ClosedFolderIndex;
+                        newNode.SelectedImageIndex = this.ClosedFolderIndex;
                     }
                     else
                     {
                         newNode = new TreeNode( child.Name);
 
                         // set the icon
-                        SHFILEINFO fi = new SHFILEINFO();
-                        Win32.SHGetFileInfo( child.Name, 0, ref fi, (uint)Marshal.SizeOf(fi),
-                            Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
-                            Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON |
-                            Constants.SHGFI_USEFILEATTRIBUTES );
-                        newNode.ImageIndex = fi.iIcon.ToInt32(); 
-                        newNode.SelectedImageIndex = fi.iIcon.ToInt32();
-
+                        this.SetIcon( newNode, child.Name );
                     }
 
                     newNode.Tag = child;
@@ -223,7 +148,8 @@ namespace Ankh.UI
             catch( ApplicationException )
             {
                 this.Nodes.Clear();
-                this.Nodes.Add( new TreeNode( "An error occurred",  this.openFolderIndex, this.openFolderIndex ) );
+                this.Nodes.Add( new TreeNode( "An error occurred",  
+                    this.OpenFolderIndex, this.OpenFolderIndex ) );
             }
             finally
             {           
@@ -235,8 +161,6 @@ namespace Ankh.UI
         /// Required designer variable.
         /// </summary>
         public static readonly object DUMMY_NODE = new object();
-        private int openFolderIndex;
-        private int closedFolderIndex;
     }
 
     
