@@ -207,7 +207,7 @@ namespace Ankh
 
                 Utils.DebugTimer timer = DebugTimer.Start();
 
-                this.StartOperation( "Synchronizing with solution explorer...");
+                this.StartOperation( "Synchronizing with solution explorer");
 
                 this.solutionExplorer.Load();
 
