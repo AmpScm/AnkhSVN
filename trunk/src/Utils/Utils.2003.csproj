@@ -94,6 +94,18 @@
                     AssemblyName = "SharpZipLib"
                     HintPath = "..\lib\SharpZipLib.dll"
                 />
+                <Reference
+                    Name = "Microsoft.mshtml"
+                    AssemblyName = "Microsoft.mshtml"
+                    HintPath = "D:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll"
+                    AssemblyFolderKey = "hklm\primary interop assemblies"
+                />
+                <Reference
+                    Name = "stdole"
+                    AssemblyName = "stdole"
+                    HintPath = "D:\Program Files\Microsoft.NET\Primary Interop Assemblies\stdole.dll"
+                    AssemblyFolderKey = "hklm\primary interop assemblies"
+                />
             </References>
         </Build>
         <Files>
@@ -168,6 +180,51 @@
                 />
                 <File
                     RelPath = "Zip.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\ICustomDoc.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\ICustomMethods.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IDocHostShowUI.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IDocHostUIHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IOleClientSite.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IOleDocumentSite.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IOleInPlaceSite.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IOleObject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\Site.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
