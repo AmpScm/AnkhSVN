@@ -350,6 +350,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\RelocateCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\RenameFileCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

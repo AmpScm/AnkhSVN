@@ -161,6 +161,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ExceptionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ExportTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -191,6 +196,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MiscTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MoveTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -211,6 +221,11 @@
                 />
                 <File
                     RelPath = "PropSetTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RelocateTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
