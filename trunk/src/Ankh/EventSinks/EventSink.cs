@@ -94,9 +94,26 @@ namespace Ankh.EventSinks
         {
             string objectName = GetName( kind, "ProjectsEvents", context.DTE );    
             if ( objectName != null )
-                return new ProjectsEventSink( (ProjectsEvents)
-                    context.DTE.Events.GetObject( objectName ),
-                    context );
+            {
+                object projectsEvents = context.DTE.Events.GetObject( objectName );
+                if ( projectsEvents is ProjectsEvents )
+                {
+                    return new ProjectsEventSink( (ProjectsEvents)
+                        context.DTE.Events.GetObject( objectName ),
+                        context );
+                }
+                else
+                {
+                    throw new ApplicationException( String.Format(
+                        @"Could not retrieve ProjectsEvents.
+kind: {0} 
+objectName: {1}
+type: {2}
+ToString(): {3}
+Please report this error.", kind, objectName, projectsEvents.GetType(), 
+                        projectsEvents.ToString() ) );
+                }
+            }
             else
                 return null;
         }
