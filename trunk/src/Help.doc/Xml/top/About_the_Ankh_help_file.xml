@@ -2,11 +2,13 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="About this Help file">
     <section>
-     <hr></hr>
         <p>This is the documentation for Ankh, a Microsoft Visualstudio .NET addin.
            Here you will find information on installing, configuring and using the application. 
+           <br/>
            Use the navigation bar to find the right topic, or search for keywords.
-           If you still can’t find what you where looking for you can check out the Ankh homepages at:
+           <br/><br/>
+           If you still can’t find what you where looking for you can check out Ankhs homepages at:
+           <br/>
            <link url="http://ankhsvn.tigris.org">ankhsvn.tigris.org</link>
         </p> 
     </section>

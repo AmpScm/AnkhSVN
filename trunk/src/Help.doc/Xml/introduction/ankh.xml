@@ -2,7 +2,6 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Ankh">
     <section>
-    <hr></hr>
     <p>
         The aim of this project was to provide an integration for the revision control 
         system Subversion (SVN) into the existing coding environment provided by Visual Studio .NET. 

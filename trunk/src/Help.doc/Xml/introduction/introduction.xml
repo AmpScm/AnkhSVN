@@ -2,7 +2,6 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Introduction">
     <section>
-        <hr></hr>
         <p>
             <b>Why Ankh ? </b><br/><br/>
 		    Subversion is the successor of a widely used revision control system 

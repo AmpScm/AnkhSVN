@@ -2,10 +2,9 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Credits">
     <section>
-     <hr></hr>
         <p>Ankh was developed as a final Year procjet in Computer Science at <link url="http://www.hio.no">Høyskolen in Oslo</link>, spring 2003
         <br/><br/>
-            <b>All code, gfx, docs was written and developed by:</b><br/>
+            <b>All code, gfx and docs was written and developed by:</b><br/>
             <list>  
                 <td>Arild Finnes </td>
                 <td><link url="mailto:arild.finnes@broadpark.no">arild.finnes@broadpark.no</link></td><br/>

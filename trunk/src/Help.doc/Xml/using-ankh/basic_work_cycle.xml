@@ -2,14 +2,13 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Basic Work Cycle">
     <section>
-    <hr></hr>
         <p>
-            Ankh and Subverison has numerous features, options, but on a day-to-day basis, 
+            Ankh and Subversion has numerous features, options, but on a day-to-day basis, 
             odds are that you will only use a few of them. 
             In this section we'll run through the most common things that you might 
             find yourself doing with Ankh in the course of a day's work.
             <br/><br/>
-            <b>The typical work cycle looks like this:</b><br/>
+            <b>A typical work cycle looks like this :</b><br/>
             <list>
                 <item><link url="update_wc.xml">Update your working copy</link></item>
                 <item><link url="make_changes.xml">Make changes</link></item>

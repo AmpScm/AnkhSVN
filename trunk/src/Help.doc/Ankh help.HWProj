@@ -96,6 +96,8 @@
     <File Url="img\anksvn_output.png"/>
     <File Url="img\modified_file.png"/>
     <File Url="img\login.png"/>
+    <File Url="img\Ankh_logo_shadow.png"/>
+    <File Url="img\Ankh_logo.png"/>
     </Files>
 	<Dirs>
 		<Dir Url="html"/>

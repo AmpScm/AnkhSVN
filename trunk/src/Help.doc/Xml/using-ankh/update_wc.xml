@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
-<doc title="Updating files in Working copy">
+<doc title="Updating files in the Working copy">
     <section>
-        <hr></hr>
         <p>
            Update brings changes from the repository into your working copy. <br />
            It brings your working copy up-to-date with the HEAD (latest) revision from the repository. 
@@ -19,7 +18,7 @@
                       update will be done recursively on all files under the item.
                 </item>
                 <item>
-                    <b>3.</b>Select 'Update' from the items menu.
+                    <b>3.</b>Select <b>'Update'</b> from the items menu.
                     <br/><br/>
                     <img src="../../img/menu-items/update.png" align="left" />
                     <br clear="all"/>

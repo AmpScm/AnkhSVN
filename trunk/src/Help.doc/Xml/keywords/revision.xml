@@ -2,12 +2,10 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Revisions: Numbers, Keywords, and Dates">
     <section>
-    <hr></hr>
         <p>
-            Revisions: Numbers, Keywords, and Dates.
-            Before we go on, you should know a bit about how to identify a particular revision in your repository. 
             A revision is a “snapshot” of the repository at a particular moment in time. 
-            As you continue to commit and grow your repository, you need a mechanism for identifying these snapshots.
+            As you continue to commit and grow your repository, 
+            you need a mechanism for identifying these snapshots.
             <br/><br/>
             <b>Revision Numbers</b>
             <br/>
@@ -17,25 +15,23 @@
             <br/><br/>
             $ svn commit --message "Corrected number of cheese slices."
             <br/>
-            Sending        sandwich.txt
+            Sending sandwich.txt
             <br/>
             Transmitting file data .
             <br/>
             Committed revision 3.
             <br/><br/>                  
-            If at any point in the future you want to refer to that revision (
-            We'll see how and why we might want to do that later in this chapter), 
-            you can refer to it as “3”.
+            If at any point in the future you want to refer to that revision, you can refer to it as “3”.
             <br/><br/>
             <b>Revision Keywords</b>
             <br/>
-            The Subversion client understands a number of revision keywords. 
+            Subversion understands a number of revision keywords. 
             <br/><br/>
             <list>
-                <item>HEAD - The latest revision in the repository.</item>
-                <item>BASE  - The “pristine” revision of an item in a working copy.</item>
+                <item>HEAD      - The latest revision in the repository.</item>
+                <item>BASE      - The “pristine” revision of an item in a working copy.</item>
                 <item>COMMITTED - The last revision in which an item changed.</item>
-                <item>PREV  - The revision just before the last revision in which an item changed. (Technically, COMMITTED - 1).</item>
+                <item>PREV      - The revision just before the last revision in which an item changed. (Technically, COMMITTED - 1).</item>
             </list>
         </p>
     </section>   

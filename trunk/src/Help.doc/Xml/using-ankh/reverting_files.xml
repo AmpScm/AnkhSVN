@@ -2,7 +2,6 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Reverting files">
     <section>
-    <hr></hr>
         <p>
             It is possible to revert changes done to a file. 
             The file will then be reverted to the exact state it was in before you started working on it.  
@@ -14,7 +13,7 @@
                 <b>1.</b>Select and right click on the file(s) you want to revert.
             </item>
             <item>
-                <b>2.</b>Select 'Revert' from the items menu.
+                <b>2.</b>Select <b>'Revert'</b> from the items menu.
                 <br/><br/>
                 <img src="../../img/menu-items/revert.png" align="left"/>
                 <br clear="all"/>

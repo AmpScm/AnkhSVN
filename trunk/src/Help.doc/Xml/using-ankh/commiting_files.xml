@@ -2,7 +2,6 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Commiting files">
     <section>
-    <hr></hr>
         <p>
             A commit operation can publish changes to any number of files and directories as a single atomic transaction. 
             In your working copy, you can change files, contents, create, delete, rename and copy files and directories,
@@ -12,13 +11,13 @@
             place, or none of them take place. Subversion tries to retain this atomicity in the face of program crashes, 
             system crashes, network problems, and other users' actions.
             <br/><br/>
-            Each time the repository accepts a commit, this creates a new state of the filesystem tree, called a revision. 
+            Each time the repository accepts a commit, this creates a new state of the file system tree, called a revision. 
             Each revision is assigned a unique natural number, one greater than the number of the previous revision. 
             The initial revision of a freshly created repository is numbered zero, and consists of nothing but an 
             empty root directory.
             <br/><br/>
             A nice way to visualize the repository is as a series of trees. Imagine an array of revision numbers, 
-            starting at 0, stretching from left to right. Each revision number has a filesystem tree hanging below it, 
+            starting at 0, stretching from left to right. Each revision number has a file system tree hanging below it, 
             and each tree is a snapshot of the way the repository looked after each commit. 
             <br/>
             <img src="../../img/repository.png"/>
@@ -38,7 +37,7 @@
 			        <br/><br/>                    
 				</item>
 			</list>
-			<br></br>
+			<br/><br/>
 			<b>1.The Commit dialog:</b>
 			<br/><br/>
 			 <img src="../../img/commit_dialog.png" align="left"/>   
@@ -56,12 +55,14 @@
                 </item>
 			</list>
 			<br clear="ALL"/>
+			<br/><br/>
 			<b>2. The login dialog:</b>
 			<img src="../../img/login.png" align="left"/>   
 			<list>
-			    <item>Type in your username and password.</item>
+			    <item><b>1.</b>Enter your username and password.</item>
 			</list>
-			<br></br>
+			<br clear="all"/>
+			<br/><br/>
 			Notice how the status symbol has changed in front of the 
             item(s) committed in Solution Explorer to<img src="../../img/ok_file.png"/>
             <br/>

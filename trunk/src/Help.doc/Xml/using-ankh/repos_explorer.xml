@@ -2,7 +2,6 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Basic Work Cycle">
     <section>
-    <hr></hr>
         <p>
            The Repository Explorer displays a file tree view of repository with file-type 
            icons corresponding to those used by VS .NET for a valid URL and revision. 
