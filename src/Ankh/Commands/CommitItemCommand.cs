@@ -13,7 +13,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Commits an item. 
     /// </summary>
-    [VSNetCommand("CommitItem", Text = "Commit", Tooltip = "Commits an item",
+    [VSNetCommand("CommitItem", Text = "Commit...", Tooltip = "Commits an item",
          Bitmap = ResourceBitmaps.Commit),
     VSNetControl( "Item", Position = 2 ),
     VSNetControl( "Project Node", Position = 2 ),
