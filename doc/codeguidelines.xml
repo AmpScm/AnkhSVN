@@ -45,7 +45,7 @@
                 as the underlying type:
                     <code>public Color Color
 {
-get{ return this.color; }
+    get{ return this.color; }
 }
                     </code>
                 </item>
@@ -97,25 +97,25 @@ public void Foo()
 //yes
 public void FooBar()
 {
-//...
+    //...
 }
 
 //no
 public void FooBar(){
-//...
+    //...
 }
 
 //no
 public void FooBar()
-{
-//...
-]
+    {
+    //...
+    }
 
 //no
 public void FooBar()
-{
-    //...
-]      
+    {
+        //...
+    }      
 
 </code>
             </item>
