@@ -96,6 +96,7 @@ namespace NSvn
             {;}
     };
 
-    #define HandleError( err ) if ( (err) != 0 ) throw NSvn::Core::SvnClientException::FromSvnError( (err) )
+#define HandleError( func ) { svn_error_t* err__ = func; \
+        if ( (err__) != 0 ) throw NSvn::Core::SvnClientException::FromSvnError( (err__) ); }
     }
 }
