@@ -1,6 +1,7 @@
 // $Id$
 using System;
 using System.IO;
+using NSvn.Core;
 
 namespace NSvn
 {
@@ -32,6 +33,11 @@ namespace NSvn
         public override void Accept( ILocalResourceVisitor visitor )
         {
             visitor.VisitWorkingCopyFile( this );
+        }
+
+        public void Resolve()
+        {
+            Client.Resolve( this.Path, false, this.ClientContext );
         }
 
         /// <summary>
