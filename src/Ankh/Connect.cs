@@ -165,7 +165,7 @@ namespace Ankh
                         status = cmd.QueryStatus( this.context );
                 }
             }
-            catch( StatusException stex )
+            catch( StatusException )
             {
                 // couldn't get status for an item on disk - maybe its been renamed etc from
                 // outside VS
@@ -217,7 +217,7 @@ namespace Ankh
                     }
                 }
             }
-            catch( StatusException stex )
+            catch( StatusException )
             {
                 // couldn't get status for an item on disk - maybe its been renamed etc from
                 // outside VS

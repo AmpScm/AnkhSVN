@@ -76,7 +76,7 @@ namespace Ankh.RepositoryExplorer
 
         private Node rootNode;
         private AnkhContext context;
-        private string rootText;		
+        //private string rootText;		
         private IRepositoryTreeView treeView;
 	}
 }
