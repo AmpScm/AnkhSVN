@@ -49,10 +49,10 @@
                 <includes name="**/*.cs"/>
             </sources>
             
-            <resources>
-                <includes name="repos.zip"/>
-                <includes name="wc.zip"/>
-            </resources>
+            <arg value="/resource:repos.zip,NSvn.Core.Tests.repos.zip"/>
+            <arg value="/resource:wc.zip,NSvn.Core.Tests.wc.zip"/>
+            
+            
             
             <arg value="${warninglevel}"/>
         </csc>
