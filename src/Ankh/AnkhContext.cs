@@ -174,8 +174,7 @@ namespace Ankh
             {
                 System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
 
-                Utils.Timer timer = new Utils.Timer();
-                timer.Start();
+                Utils.DebugTimer timer = DebugTimer.Start();
 
                 this.StartOperation( "Synchronizing with solution explorer...");
 
@@ -183,8 +182,7 @@ namespace Ankh
 
                 this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
 
-                timer.End();
-                System.Diagnostics.Trace.WriteLine( "Solution opened: " + timer.Interval, "Ankh" );
+                timer.End( "Solution opened", "Ankh" );
             }
             catch( Exception ex )
             {
