@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "WinExe"
                 RootNamespace = "Ankh.UI"
-                StartupObject = "Ankh.UI.ViewLogDialog"
+                StartupObject = "Ankh.UI.ConflictDialog"
             >
                 <Config
                     Name = "Debug"
