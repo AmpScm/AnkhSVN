@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE HelpCollection>
-<HelpCollection DTDVersion="1.0" LangId="1033" Title="Ankh" Copyright="HiO 2003">
+<HelpCollection DTDVersion="1.0" LangId="1033" Title="Ankh" Copyright="CollabNet">
 	
 	<TOCDef File="global.HxT"/>
 	<KeywordIndexDef File="Keywords.HxK"/>

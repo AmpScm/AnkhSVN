@@ -1,14 +1,42 @@
-<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
-<doc title="Adding files">
+<doc  title="Adding files to revision control">
     <section>
-    </section>  
-     <section>
+    </section>
+    <section>
         <p>
-            <hr></hr>
+            <hr>
+            </hr>
+              <img src="../../img/wc_solution_explorer.png" align="left"/>
+             <list>
+                <item><b>1.</b> Right click on the selected unversioned item(s) 
+					you want to add in Solution Explorer. An item could be a file
+					 directory or project. <br></br>
+				</item>
+			</list>
+			<br clear="ALL"/>
+			<br></br>
+			
+			 <img src="../../img/item_menu.png" align="left"/>   <br></br><br></br>                    
+             <list>
+                <item><b>2.</b> Select <b>add</b> from the item menu that pops up.<br></br>
+				</item>
+			</list>
+			<br clear="ALL"/>
+			<br></br>
+				
+			<b>3.</b> Notice that the status symbol has changed in front of the 
+            item(s) added in Solution Explorer from 
+            <img src="../../img/unrevisioned.png"/>
+            to <img src="../../img/add.png"/>
+            <br></br><br></br>
+            
+            I.e. after having added a file Ankh will show the file status as: 
+            <br></br>
+            <img src="../../img/added_file.png"/></p><br></br>
+        <p>
             <link url="make_changes.xml">back </link>
             <link url="removing_files.xml">next</link>
         </p>
-    </section>  
+    </section>
 </doc>
-

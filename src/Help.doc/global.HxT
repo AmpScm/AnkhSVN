@@ -6,10 +6,11 @@
 		<ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
 	<HelpTOCNode Title="Credits" Url="\Xml\top\credits.xml"/>
 	<HelpTOCNode Title="Introduction" Url="\Xml\introduction\introduction.xml">
-		<HelpTOCNode Title="Ankh" Url="\Xml\introduction\ankh.xml"/>
+		<HelpTOCNode Title="introduction" Url="\Xml\introduction\introduction.xml"/>
+    <HelpTOCNode Title="Ankh" Url="\Xml\introduction\ankh.xml"/>
 		<HelpTOCNode Title="About Subversion" Url="\Xml\introduction\about_subversion.xml"/>
 		<HelpTOCNode Title="Revision controll" Url="\Xml\introduction\revision_controll.xml"/>
-	</HelpTOCNode>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
 	<HelpTOCNode Title="Configuration" Url="\Xml\configuration\configuration.xml">
 		<HelpTOCNode Title="Setting up the Ankh addin" Url="\Xml\configuration\setting_up_anhk.xml"/>
 	</HelpTOCNode>
@@ -28,9 +29,7 @@
 			<HelpTOCNode Title="Resolving conflicts" Url="\Xml\using-ankh\resolving_conflicts.xml"/>
 			<HelpTOCNode Title="Merging files" Url="\Xml\using-ankh\merging_files.xml"/>
 			<HelpTOCNode Title="Commiting files" Url="\Xml\using-ankh\commiting_files.xml"/>
-    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
-    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
 	<HelpTOCNode Title="Basic operations" Url="\Xml\basic-operations\basic_operations.xml">
 		<HelpTOCNode Title="Add" Url="\Xml\basic-operations\add.xml"/>
@@ -59,13 +58,9 @@
 	</HelpTOCNode>
 	<HelpTOCNode Title="Keywords" Url="\Xml\Keywords\keywords.xml">
 		<HelpTOCNode Title="Status icons" Url="\Xml\keywords\status_icons.xml"/>
-    <HelpTOCNode Title="Properties" Url="\Xml\keywords\properties.xml"/>
+		<HelpTOCNode Title="Properties" Url="\Xml\keywords\properties.xml"/>
 		<HelpTOCNode Title="Revisions: numbers, keywords and dates" Url="\Xml\Keywords\revision.xml"/>
-    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
-	
-	
-    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/>
-    <ToolData Name="MSTOCMRUDIR" Value="C:\gr03-10\finalproject\src\Help.doc\Xml\keywords\"/>
+    <ToolData Name="MSTOCMRUDIR" Value="C:\gr03-10\finalproject\src\Help.doc\Xml\introduction\"/>
     <ToolData Name="MSTOCMRUFT" Value="0"/></HelpTOC>
