@@ -34,7 +34,7 @@ namespace Ankh
         /// Registers all commands present in this DLL.
         /// </summary>
         /// <param name="dte">TODO: what to do, what to do?</param>
-        public static CommandMap RegisterCommands( AnkhContext context )
+        public static CommandMap LoadCommands( AnkhContext context, bool register )
         {
             CreateReposExplorerPopup( context );
 
@@ -46,13 +46,20 @@ namespace Ankh
             {
                 foreach( Type type in module.FindTypes( 
                     new TypeFilter( CommandMap.CommandTypeFilter ), null ) )
-                {
-                   
+                {  
                     // is this a VS.NET command?
                     VSNetCommandAttribute[] vsattrs = (VSNetCommandAttribute[])(
                         type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) );
                     if ( vsattrs.Length > 0 )
-                        RegisterVSNetCommand( vsattrs[0], type, commands, context );
+                    {
+                        // put it in the dict
+                        ICommand cmd = (ICommand)Activator.CreateInstance( type );
+                        commands.Dictionary[ context.AddIn.ProgID + "." + vsattrs[0].Name ] = cmd;
+
+                        // do we want to register it?
+                        if ( register )
+                            RegisterVSNetCommand( vsattrs[0], cmd,  context );
+                    }
                 }
             }
 
@@ -107,18 +114,14 @@ namespace Ankh
         /// <param name="type">A Type object representing the command to register.</param>
         /// <param name="commands">A Commands collection in which to put the command.</param>
         private static void RegisterVSNetCommand( VSNetCommandAttribute attr, 
-            Type type, CommandMap commands, AnkhContext context )
+            ICommand cmd, AnkhContext context )
         {
-            
-            ICommand cmd = (ICommand)Activator.CreateInstance( type );
-            commands.Dictionary[ context.AddIn.ProgID + "." + attr.Name ] = cmd;
-
             // register the command with the environment
             object []contextGuids = new object[] { };
             cmd.Command = context.DTE.Commands.AddNamedCommand( context.AddIn, attr.Name, attr.Text, attr.Tooltip, false,
                 attr.Bitmap, ref contextGuids, (int)vsCommandStatus.vsCommandStatusUnsupported );
 
-            RegisterControl( cmd, type, context );     
+            RegisterControl( cmd, context );     
         }
 
         /// <summary>
@@ -126,10 +129,10 @@ namespace Ankh
         /// </summary>
         /// <param name="command">The ICommand to attach the command bar to.</param>
         /// <param name="type">The type that handles the command.</param>
-        private static void RegisterControl( ICommand cmd, Type type, AnkhContext context )
+        private static void RegisterControl( ICommand cmd, AnkhContext context )
         {
             // register the command bars
-            foreach( VSNetControlAttribute control in type.GetCustomAttributes( 
+            foreach( VSNetControlAttribute control in cmd.GetType().GetCustomAttributes( 
                 typeof(VSNetControlAttribute), false) ) 
             {
              

@@ -60,12 +60,18 @@ namespace Ankh
             {
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
 
+#if REGISTER
+                bool register = true;
+#else
+                bool register = connectMode == ext_ConnectMode.ext_cm_UISetup;
+#endif
                 // get rid of the old ones
-                Ankh.CommandMap.DeleteCommands( this.context );
+                if( register )
+                    Ankh.CommandMap.DeleteCommands( this.context );
 
                 // register the new ones
                 this.commands= 
-                    Ankh.CommandMap.RegisterCommands( this.context );    
+                    Ankh.CommandMap.LoadCommands( this.context, register );    
             }
             catch( Exception ex )
             {
