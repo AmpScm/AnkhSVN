@@ -104,6 +104,11 @@
                     AssemblyName = "EnvDTE"
                     HintPath = "D:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\envdte.dll"
                 />
+                <Reference
+                    Name = "NSvn.Core"
+                    AssemblyName = "NSvn.Core"
+                    HintPath = "..\NSvn.Core\Debug\NSvn.Core.dll"
+                />
             </References>
         </Build>
         <Files>
