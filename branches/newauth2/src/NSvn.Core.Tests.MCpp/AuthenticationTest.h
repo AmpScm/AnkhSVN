@@ -26,6 +26,8 @@ namespace NSvn
                 private:
                     NSvn::Core::SimpleCredential* SimplePrompt( System::String* realm, 
                         System::String* username );
+                    NSvn::Core::SimpleCredential* NullSimplePrompt( System::String* realm, 
+                        System::String* username );
                 };
             }
         }

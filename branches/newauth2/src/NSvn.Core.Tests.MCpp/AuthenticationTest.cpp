@@ -52,6 +52,16 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
 
     Assertion::AssertEquals( "Username not correct", S"Arild", StringHelper( creds->username ) );
     Assertion::AssertEquals( "Password not correct", S"Fines", StringHelper( creds->password ) );
+
+
+    obj = Authentication::GetSimplePromptProvider( 
+        new SimplePromptDelegate(this, NullSimplePrompt), 3);
+    authBaton = GetBaton( obj->GetProvider(), pool );
+
+    HandleError( svn_auth_first_credentials( ((void**)&creds), &iterstate, SVN_AUTH_CRED_SIMPLE,
+        0, authBaton, pool ) );
+
+    Assertion::Assert( "Creds should be null", creds==0 );
 }
 
 void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetUsernameProvider()
@@ -95,4 +105,12 @@ SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::SimplePrompt(
     Assertion::AssertEquals( "Username is wrong", Environment::UserName, username );
 
     return new SimpleCredential( S"Arild", S"Fines" );
+}
+
+SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::NullSimplePrompt( 
+    String* realm, String* username )
+{
+    Assertion::AssertNull( "Realm should be null", realm );
+
+    return 0;
 }

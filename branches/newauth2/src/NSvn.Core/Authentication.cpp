@@ -105,9 +105,15 @@ svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton,
     // get hold of the delegate and call it
     SimplePromptDelegate* delegate = *(static_cast<ManagedPointer<SimplePromptDelegate*>* >(
         baton ));
-    SimpleCredential* simpleCred = delegate->Invoke( StringHelper(realm), StringHelper(username) );
+    String* realmString = (realm != 0) ? static_cast<String*>(StringHelper(realm)) : 0;
+    String* usernameString = (username != 0) ? static_cast<String*>(StringHelper(username)) : 0;
 
-    *cred = simpleCred->GetCredential( pool );
+    SimpleCredential* simpleCred = delegate->Invoke( realmString, usernameString );
+
+    if ( simpleCred != 0 )
+        *cred = simpleCred->GetCredential( pool );
+    else 
+        *cred = 0;
 
     return SVN_NO_ERROR;
 }
