@@ -211,14 +211,14 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath,
         return CommitInfo::Invalid;
 }
 // implementation of Client::Export
-void NSvn::Core::Client::Export(String* from, String* to, Revision* revision, ClientContext* context)
+void NSvn::Core::Client::Export(String* from, String* to, Revision* revision, bool force, ClientContext* context)
 {
     Pool pool;
     const char* trueSrcPath = CanonicalizePath( from, pool );
     const char* trueDstPath = CanonicalizePath( to, pool );
 
     HandleError( svn_client_export ( trueSrcPath, trueDstPath, 
-        revision->ToSvnOptRevision( pool ), context->ToSvnContext( pool ), pool ) );
+        revision->ToSvnOptRevision( pool ), force, context->ToSvnContext( pool ), pool ) );
 }
 //TODO: Implement the variable optionalAdmAccess
 // implementation of Client::Copy
@@ -314,17 +314,16 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* paths[], bool force,
         return CommitInfo::Invalid;
 }
 // implementation of Client::Import
-NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, String* newEntry, bool nonRecursive, 
+NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, bool nonRecursive, 
                                                    ClientContext* context)
 {
     Pool pool;
     const char* trueSrcPath = CanonicalizePath( path, pool );
     const char* trueDstUrl = CanonicalizePath( url, pool );
-    const char* trueNewEntry = CanonicalizePath( newEntry, pool );
 
     svn_client_commit_info_t* commitInfoPtr = 0;
 
-    HandleError( svn_client_import( &commitInfoPtr, trueSrcPath, trueDstUrl, trueNewEntry, nonRecursive,
+    HandleError( svn_client_import( &commitInfoPtr, trueSrcPath, trueDstUrl, nonRecursive,
         context->ToSvnContext( pool ), pool ) );
 
     if ( commitInfoPtr != 0 )
