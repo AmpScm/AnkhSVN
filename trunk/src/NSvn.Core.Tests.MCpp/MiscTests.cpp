@@ -7,6 +7,8 @@
 #include "Revision.h"
 #include <svn_auth.h>
 
+#include "utils.cpp"
+
 void NSvn::Core::Tests::MCpp::MiscTests::TestSimpleCredential()
 {
     Pool pool;

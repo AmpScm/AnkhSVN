@@ -69,21 +69,23 @@ void NSvn::Core::Client::Resolve(String* path, bool recursive, ClientContext* co
 
 
 // implementation of Client::Status
-//TODO: StringDictionary to be reconsidered
-StringDictionary* NSvn::Core::Client::Status( long* youngest, String* path, bool descend,
-                                bool getAll, bool update, bool noIgnore, ClientContext* context )
+NSvn::Core::StatusDictionary* NSvn::Core::Client::Status( 
+                [System::Runtime::InteropServices::Out]System::Int32* youngest, 
+                String* path, bool descend, bool getAll, bool update,  
+                bool noIgnore, ClientContext* context )
 {
     apr_hash_t* statushash = 0;
     Pool pool;
     const char* truePath = CanonicalizePath( path, pool );
     
-    HandleError( svn_client_status( &statushash, youngest, StringHelper( truePath ), descend,
+    svn_revnum_t revnum;
+    HandleError( svn_client_status( &statushash, &revnum, truePath, descend,
         getAll, update, noIgnore, context->ToSvnContext( pool ), pool ) );
 
-    if ( statushash != 0 )
-        return new StringDictionary();
-    else
-        return 0;
+    *youngest = revnum;
+
+    // convert to a StatusDictionary
+    return StatusDictionary::FromStatusHash( statushash, pool );
 }
 // implementation of Client::PropSet
 void NSvn::Core::Client::PropSet(Property* property, String* target, bool recurse)

@@ -126,6 +126,9 @@
 			<File
 				RelativePath="stream.cpp">
 			</File>
+			<File
+				RelativePath="utils.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -152,6 +155,9 @@
 				RelativePath="DirectoryEntry.h">
 			</File>
 			<File
+				RelativePath="Entry.h">
+			</File>
+			<File
 				RelativePath="ManagedPointer.h">
 			</File>
 			<File
@@ -165,6 +171,12 @@
 			</File>
 			<File
 				RelativePath="SimpleCredential.h">
+			</File>
+			<File
+				RelativePath="Status.h">
+			</File>
+			<File
+				RelativePath="StatusDictionary.h">
 			</File>
 			<File
 				RelativePath="Stdafx.h">
@@ -186,6 +198,9 @@
 			</File>
 			<File
 				RelativePath="svnenums.h">
+			</File>
+			<File
+				RelativePath="utils.h">
 			</File>
 		</Filter>
 		<Filter

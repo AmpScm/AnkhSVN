@@ -2,6 +2,7 @@
 #using <mscorlib.dll>
 #include "svnenums.h"
 #include "Pool.h"
+#include "utils.h"
 
 namespace NSvn
 {
@@ -56,10 +57,7 @@ namespace NSvn
                 {
                 case svn_opt_revision_date:
                     {
-                        DateTime epoch( 1970, 1, 1 );
-                        TimeSpan t = this->date - epoch;
-                        //apr_time_t is the number of microseconds since the epoch
-                        rev->value.date = static_cast<Int64>(t.TotalMilliseconds * 1000);
+                        rev->value.date = DateTimeToAprTime( this->date );
                         break;
                     }
                 case svn_opt_revision_number:
