@@ -30,6 +30,14 @@ namespace Ankh.EventSinks
                     {
                         string file = item.get_FileNames(i);
 
+                        // we don't want to (automatically) add the .svn(_svn) dir 
+                        // or its contents
+                        if ( Path.GetDirectoryName( file ).IndexOf( 
+                            Client.AdminDirectoryName ) >= 0 )
+                        {
+                            return;
+                        }
+
                         // is this an URI?
                         if ( file.ToLower().StartsWith( "file://" ) )
                         {
@@ -147,7 +155,7 @@ namespace Ankh.EventSinks
                 this.Context.ErrorHandler.Handle( ex );
             }            
         }
-            
+           
         private bool renaming = false;
     }
 }
