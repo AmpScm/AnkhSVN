@@ -4,7 +4,7 @@
     <property name="src.dir" value="."/>
     <property name="warninglevel" value="/warn:3"/>
     <property name="lib.dir" value="../lib"/>
-    <property name="installsource.dir" value="..\${installsource.dir}"/>
+    <!--<property name="installsource.dir" value="..\${installsource.dir}"/>-->
     
     <target name="rebuild">
         <call target="clean"/>
@@ -32,6 +32,8 @@
             define="${define}" debug="${debug}">
             <references>
                 <include name="${lib.dir}\Sharpziplib.dll"/>
+                <include name="${lib.dir}\Microsoft.mshtml.dll"/>
+                <include name="${lib.dir}\stdole.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
