@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Office.Core;
 using System.Diagnostics;
 using System.Web;
+using Utils.Win32;
 
 namespace Ankh.UI
 {
@@ -110,6 +111,21 @@ namespace Ankh.UI
                     this.treeView.SelectedNode != null ? 
                     (IRepositoryTreeNode)this.treeView.SelectedNode.Tag :
                     null;
+            }
+        }
+
+        /// <summary>
+        /// The current roots in the treeview.
+        /// </summary>
+        public IRepositoryTreeNode[] Roots
+        {
+            get
+            {
+                ArrayList list = new ArrayList();
+                foreach( TreeNode node in this.treeView.Nodes )
+                    list.Add( node.Tag );
+                return (IRepositoryTreeNode[])
+                    list.ToArray(typeof(IRepositoryTreeNode));
             }
         }
 
