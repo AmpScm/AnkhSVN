@@ -401,6 +401,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "RelocateDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RelocateDialog.resx"
+                    DependentUpon = "RelocateDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "RenameDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
