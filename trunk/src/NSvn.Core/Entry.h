@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "StringHelper.h"
 #include <svn_wc.h>
 #include "utils.h"
 

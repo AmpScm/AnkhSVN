@@ -100,6 +100,37 @@ namespace NSvn.Core.Tests
                 dict.Get(form).RepositoryTextStatus, StatusKind.Modified );
         }
 
+        [Test]
+        public void TestSingleStatus()
+        {
+            string unversioned = this.CreateTextFile( "unversioned.cs" );
+            string added = this.CreateTextFile( "added.cs" );
+            this.RunCommand( "svn", "add " + added );
+
+            string changed = this.CreateTextFile( "Form.cs" );
+
+            string propChange = Path.Combine( this.WcPath, "App.ico" );
+
+            this.RunCommand( "svn", "ps foo bar " + propChange );
+
+            Status status = Client.SingleStatus( unversioned );
+            Assertion.AssertEquals( "Wrong text status on " + unversioned, 
+                status.TextStatus, StatusKind.Unversioned );
+
+            status = Client.SingleStatus( added );
+            Assertion.AssertEquals( "Wrong text status on " + added, 
+                status.TextStatus, StatusKind.Added );
+
+            status = Client.SingleStatus( changed );
+            Assertion.AssertEquals( "Wrong text status " + changed, 
+                status.TextStatus, StatusKind.Modified );
+
+            status = Client.SingleStatus( propChange );
+            Assertion.AssertEquals( "Wrong property status " + propChange, 
+                status.PropertyStatus, StatusKind.Modified );
+
+        }
+
         private class Info
         {
             private static readonly Regex INFO = new Regex(@"Path:\s(?'path'\S+)\s+Name:\s(?'name'\S+)\s+Url:\s(?'url'\S+)\s+Revision:\s(?'revision'\S+)\s+Node Kind:\s(?'nodekind'\S+)\s+Schedule:\s(?'schedule'\S+)\s+Last Changed Author:\s+(?'lastchangedauthor'\S+)", 

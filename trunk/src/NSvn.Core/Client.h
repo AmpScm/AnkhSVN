@@ -4,6 +4,7 @@
 #using <System.dll>
 #include <apr_tables.h>
 
+#include "Status.h"
 #include "Revision.h"
 #include "CommitInfo.h"
 #include "ClientContext.h"
@@ -140,6 +141,9 @@ namespace NSvn
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
              static CommitInfo* Commit(String __gc* targets[], bool nonRecursive, ClientContext* context);
 
+            /// TODO: doc comments
+            static Status* SingleStatus( String* path );
+
             ///<summary>Obtain the statuses of all the items in a working copy path.</summary>
             ///<param name="youngest">A revision number</param>
             ///<param name="path">Path to the file/directory.</param>
@@ -163,6 +167,8 @@ namespace NSvn
                 [System::Runtime::InteropServices::Out]System::Int32* youngest, 
                 String* path, bool descend, bool getAll, bool upDate,  
                 bool noIgnore, ClientContext* context);
+
+            
          
             ///<summary>Obtain log information from the repository.</summary>
             ///<param name="targets">Targets contains all the working copy paths for 
