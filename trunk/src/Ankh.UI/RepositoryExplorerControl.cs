@@ -226,6 +226,8 @@ namespace Ankh.UI
 		//Gives a tree view of repository if valid revision is selected
 		private void goButton_Click(object sender, System.EventArgs e)
 		{
+            this.Cursor = Cursors.WaitCursor;
+            this.goButton.Enabled = false;
 			if ( this.revisionComboBox.SelectedItem != null )
 			{
 				this.treeView.Enabled = true;
@@ -271,6 +273,9 @@ namespace Ankh.UI
 					this.treeView.RepositoryRoot = 
 						new RepositoryDirectory( this.urlTextBox.Text, revision );
 				}
+
+                this.Cursor = Cursors.Default;
+                this.goButton.Enabled = true;
 
 			}
 		}
