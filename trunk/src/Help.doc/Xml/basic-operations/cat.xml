@@ -2,15 +2,18 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Cat">
     <section>
-            <p>
-            <b>Description</b>
-            <br/>
-            Outputs the contents of the specified files or URLs. 
-            For listing the contents of directories, see svn list.
-            <br/><br/><br/>
-            <b>Changes</b>
+             Outputs the contents of the specified files or URLs.
+    
             <br/><br/>
-            Nothing
+            <p>
+                <b>Description</b>
+                <br/>
+                Outputs the contents of the specified files or URLs. 
+                For listing the contents of directories, see svn <link url="list.xml">list</link>
+                <br/><br/><br/>
+                <b>Changes</b>
+                <br/>
+                Nothing
             </p>
     
         </section>

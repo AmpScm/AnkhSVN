@@ -2,8 +2,20 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Remove">
     <section>
+            Delete an item from a working copy or the repository
+            <br/><br/>
             <p>
-            
+                <b>Description</b>
+                <br/>
+                Items specified on the command line are scheduled for deletion upon the next commit. 
+                Files (and directories that have not been committed) are immediately removed from the working copy. 
+                If run on an URL, the item is deleted from the repository via an immediate commit.
+
+                <br/><br/>
+                <b>Changes</b>
+                <br/>
+                Working copy if operating on files, Repository if operating on URLs
+
             </p>
     
         </section>

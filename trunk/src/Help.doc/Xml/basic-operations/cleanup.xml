@@ -2,8 +2,17 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Cleanup">
     <section>
+            Recursively clean up the working copy.
+            <br/><br/>
             <p>
-            
+                <b>Description</b>
+                <br/>
+                Recursively clean up the working copy, removing locks resuming unfinished operations. 
+                If you ever get a working copy locked error, run this command to remove stale locks and 
+                get your working copy into a useable state again. 
+                <br/><br/><br/>
+                <b>Changes</b>
+                Working copy
             </p>
     
         </section>

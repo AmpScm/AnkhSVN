@@ -3,6 +3,9 @@
 <doc title="Add">
     <section>
         <p>
+            Adds files and directories
+            <br/><br/>
+        
             <b>Description</b>
             <br/>
             Adds files and directories to your working copy and schedules them for addition to the repository. 
