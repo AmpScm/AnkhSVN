@@ -197,20 +197,22 @@ namespace UseCase
 
         public void MoveElementBefore( IItem element, IItem other )
         {
-            XmlNode node = ((Item)element).Node;
+            XmlNode node = ((Item)element).Node.ParentNode;
             XmlNode parent = node.ParentNode;
             parent.RemoveChild( node );
-            parent.InsertBefore( node, ((Item)other).Node );
+            parent.InsertBefore( node, ((Item)other).Node.ParentNode );
 
             this.OnElementsChanged();
         }
 
         public void MoveElementAfter( IItem element, IItem other )
         {
-            XmlNode node = ((Item)element).Node;
+            XmlNode node = ((Item)element).Node.ParentNode;
             XmlNode parent = node.ParentNode;
             parent.RemoveChild( node );
-            parent.InsertAfter( node, ((Item)other).Node );
+            parent.InsertAfter( node, ((Item)other).Node.ParentNode );
+
+            this.OnElementsChanged();
         }
 
         public void Save( string filename, string xsl )
@@ -411,7 +413,7 @@ namespace UseCase
 			public void VisitIncludeElement( IncludeElement element )
 			{
 				XmlNode node = this.doc.SelectSingleNode( 
-					string.Format( "/UseCase/MainFlow/FlowElements/FlowElement/Include[@useCaseID='{0}']",
+					string.Format( "/UseCase/MainFlow/FlowElements/FlowElement[Include/@useCaseID='{0}']",
 					element.Text ) );
 
 				node.ParentNode.RemoveChild( node );
@@ -420,7 +422,7 @@ namespace UseCase
 			public void VisitStepElement( StepElement element )
 			{
 				XmlNode node = this.doc.SelectSingleNode( 
-					string.Format( "/UseCase/MainFlow/FlowElements/FlowElement[Step='{0}']/Step",
+					string.Format( "/UseCase/MainFlow/FlowElements/FlowElement[Step='{0}']",
 					element.Text ) );
 
 				node.ParentNode.RemoveChild( node );
