@@ -1,7 +1,9 @@
 using EnvDTE;
 using System.Diagnostics;
 using System;
+using System.Collections;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using Utils;
 
@@ -52,12 +54,13 @@ namespace Ankh.Commands
 
         private string ParseIntrinsicCommand( string parameters )
         {
-            if ( !INTRINSIC.IsMatch( parameters ) )
+            string[] args = this.ParseArguments( parameters );
+
+            if ( args.Length < 1 )
                 return null;
 
-            string output = "";
-            string intrinsic = INTRINSIC.Match( parameters ).ToString();
-            switch( intrinsic )
+            string output;
+            switch( args[0] )
             {
                 case "/?":
                     output = Usage();
@@ -66,10 +69,13 @@ namespace Ankh.Commands
                     output = WorkingDirectory();
                     break;
                 case "cd":
-                    output = ChangeWorkingDirectory( parameters );
+                    output = ChangeWorkingDirectory( args );
                     break;
                 case "dir":
                     output = DirectoryListing();
+                    break;
+                default:
+                    output = null;
                     break;
             }
 
@@ -145,14 +151,12 @@ dir     List the contents of the working directory
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>The new path.</returns>
-        private string ChangeWorkingDirectory( string parameters )
+        private string ChangeWorkingDirectory( string[] parameters )
         {
-            // get the path portion
-            int firstBlank = parameters.IndexOf( ' ' );
-            if ( firstBlank < 0 )
-                return CDUsage();
+            if ( parameters.Length <= 1 )
+                return "Invalid path";
 
-            string path = parameters.Substring( firstBlank + 1 );
+            string path = string.Join( " ", parameters, 1, parameters.Length-1 );
 
             // absolute or relative?
             if ( !Path.IsPathRooted( path ) )
@@ -173,7 +177,8 @@ dir     List the contents of the working directory
         /// <returns>A list of the directory.</returns>
         private string DirectoryListing()
         {
-            return this.RunCommand( "cmd.exe", "/k dir " + this.workingDirectory );
+            return this.RunCommand( "cmd.exe", "/k dir \"" + 
+                this.workingDirectory + "\"" );
         }
 
         /// <summary>
@@ -183,6 +188,59 @@ dir     List the contents of the working directory
         private string CDUsage()
         {
             return "svn cd DIR";
+        }
+
+        /// <summary>
+        /// Splits the argument list into a string array, according to the 
+        /// " and ' quotes.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private string[] ParseArguments( string args )
+        {
+            bool inSingleQuote = false, inQuote = false;
+            StringBuilder builder = new StringBuilder();
+            ArrayList arglist = new ArrayList();
+
+            foreach( char c in args )
+            {
+                if ( c == '\'' )
+                {
+                    if ( inSingleQuote )
+                    {
+                        arglist.Add( builder.ToString() );
+                        builder.Length = 0;
+                        inSingleQuote = true;
+                    }
+                    else
+                        inSingleQuote = true;
+                }
+                else if ( c== '\"' )
+                {
+                    if ( inQuote )
+                    {
+                        arglist.Add( builder.ToString() );
+                        builder.Length = 0;
+                        inQuote = true;
+                    }
+                    else
+                        inQuote = true;
+                }
+                else if ( Char.IsWhiteSpace( c ) && !inQuote && !inSingleQuote )
+                {
+                    if ( builder.Length > 0 )
+                    {
+                        arglist.Add( builder.ToString() );
+                        builder.Length = 0;
+                    }
+                }
+                else
+                    builder.Append( c );
+            }
+            if ( builder.Length > 0 )
+                arglist.Add( builder.ToString() );
+
+            return (string[])arglist.ToArray( typeof(String) );
         }
 
         private AnkhContext context;
