@@ -110,8 +110,10 @@ namespace Ankh.UI
             this.propListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
                                                                                            this.nameColumn,
                                                                                            this.valueColumn});
+            this.propListView.GridLines = true;
             this.propListView.Location = new System.Drawing.Point(0, 296);
             this.propListView.Name = "propListView";
+            this.propListView.Scrollable = false;
             this.propListView.Size = new System.Drawing.Size(544, 112);
             this.propListView.TabIndex = 6;
             this.propListView.View = System.Windows.Forms.View.Details;
@@ -125,7 +127,7 @@ namespace Ankh.UI
             // valueColumn
             // 
             this.valueColumn.Text = "Value";
-            this.valueColumn.Width = 308;
+            this.valueColumn.Width = 544;
             // 
             // newButton
             // 
@@ -133,7 +135,7 @@ namespace Ankh.UI
             this.newButton.Location = new System.Drawing.Point(288, 264);
             this.newButton.Name = "newButton";
             this.newButton.TabIndex = 3;
-            this.newButton.Text = "&New";
+            this.newButton.Text = "New";
             this.newButton.Click += new System.EventHandler(this.newButton_Click);
             // 
             // deleteButton
@@ -143,7 +145,7 @@ namespace Ankh.UI
             this.deleteButton.Location = new System.Drawing.Point(456, 264);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.TabIndex = 5;
-            this.deleteButton.Text = "&Delete";
+            this.deleteButton.Text = "Delete";
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
             // okButton
@@ -153,7 +155,7 @@ namespace Ankh.UI
             this.okButton.Location = new System.Drawing.Point(368, 416);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 7;
-            this.okButton.Text = "&Ok";
+            this.okButton.Text = "Ok";
             // 
             // cancelButton
             // 
@@ -162,7 +164,7 @@ namespace Ankh.UI
             this.cancelButton.Location = new System.Drawing.Point(456, 416);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 8;
-            this.cancelButton.Text = "&Cancel";
+            this.cancelButton.Text = "Cancel";
             // 
             // saveButton
             // 
@@ -171,7 +173,7 @@ namespace Ankh.UI
             this.saveButton.Location = new System.Drawing.Point(372, 264);
             this.saveButton.Name = "saveButton";
             this.saveButton.TabIndex = 4;
-            this.saveButton.Text = "&Save";
+            this.saveButton.Text = "Save";
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // editorPanel
