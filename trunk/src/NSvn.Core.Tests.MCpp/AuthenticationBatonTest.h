@@ -34,7 +34,7 @@ namespace NSvn
                     public void TestMultipleProviders();*/
                 private:
                     NSvn::Core::SimpleCredential* SimplePrompt( System::String* realm, 
-                        System::String* username );
+                        System::String* username, bool maySave );
                 };
 
             }

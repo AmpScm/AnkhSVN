@@ -81,12 +81,13 @@ void NSvn::Core::Client::Cleanup( String* directory, ClientContext* context )
 }
 
 // implementation of Client::Revert
-void NSvn::Core::Client::Revert(String* path, bool recursive, ClientContext* context )
+void NSvn::Core::Client::Revert(String* paths[], bool recursive, ClientContext* context )
 {
     Pool pool;
-    const char* truePath = CanonicalizePath( path, pool );
+    
+    const apr_array_header_t* aprArray = StringArrayToAprArray( paths, true, pool );
 
-    HandleError( svn_client_revert( truePath, recursive, 
+    HandleError( svn_client_revert( aprArray, recursive, 
         context->ToSvnContext (pool), pool));
 }    
 
@@ -452,7 +453,7 @@ NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* rev
     {
         const char* path;
         apr_ssize_t keyLength;
-        svn_dirent* dirent;
+        svn_dirent_t* dirent;
 
         apr_hash_this( idx, reinterpret_cast<const void**>(&path), &keyLength,
             reinterpret_cast<void**>(&dirent) );

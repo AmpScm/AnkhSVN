@@ -254,14 +254,14 @@ namespace NSvn
             static void Cleanup( String* dir, ClientContext* context );
 
             ///<summary>Restore the pristine version of a working copy path.</summary>
-            ///<param name="path">Path to the file/directory</param>
+            ///<param name="path">Paths to the files/directories</param>
             ///<param name="recursive">If recursive is set, assuming path is a directory 
             ///                        all of its contents will be scheduled for revert as well.</param>
             ///<param name="context">A client context object, which holds client specific 
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-            static void Revert(String* path, bool recursive, ClientContext* context);
+            static void Revert(String* paths[], bool recursive, ClientContext* context);
 
             ///<summary>Resolve conflict. Remove the 'conflicted' state on a working copy path.</summary>
             ///<param name="path">Path to the file(/directory)</param>
