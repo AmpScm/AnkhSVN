@@ -18,7 +18,7 @@ namespace Ankh.Solution
             // find the directory containing the project
             string fullname = project.FullName;
             // the Solution Items project has no path
-            if ( fullname != string.Empty )
+            if ( fullname != string.Empty && File.Exists( fullname ) )
             {
                 string parentPath = Path.GetDirectoryName( fullname );
                 this.projectFolder = SvnResource.FromLocalPath( parentPath );

@@ -4,6 +4,7 @@ using System.Collections;
 using NSvn;
 using NSvn.Core;
 using EnvDTE;
+using System.Diagnostics;
 
 namespace Ankh.Solution
 {
@@ -81,7 +82,6 @@ namespace Ankh.Solution
             {
                 for( short i = 1; i <= this.projectItem.FileCount; i++ ) 
                 {
-                    
                     ILocalResource res = SvnResource.FromLocalPath( this.projectItem.get_FileNames(i) );
                     // does this resource exist?
                     res.Context = this.Explorer.Context;
@@ -91,6 +91,7 @@ namespace Ankh.Solution
             }
             catch( NullReferenceException )
             {
+                Debug.WriteLine( "NullReferenceException thrown in ProjectItemNode" );
                 //swallow
             }    
         }
