@@ -59,6 +59,7 @@
             
             <arg value="/resource:status_icons.bmp,Ankh.status_icons.bmp"/>
             <arg value="/resource:Config/Config.xsd,Ankh.Config.Config.xsd"/>
+            <arg value="/resource:Config/Config.xml,Ankh.Config.Config.xml"/>
             <arg value="/resource:Commands/blame.xsl,Ankh.Commands.blame.xsl"/>
             <arg value="/debug:pdbonly" unless="${debug}"/>
             
