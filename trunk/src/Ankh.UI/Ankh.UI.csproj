@@ -295,6 +295,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "ProgressDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProgressDialog.resx"
+                    DependentUpon = "ProgressDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "PropertyEditorDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
