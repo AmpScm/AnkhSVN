@@ -17,7 +17,7 @@ namespace Ankh
         /// Updates the status of the given item.
         /// </summary>
         /// <param name="item"></param>
-        void UpdateStatus( ProjectItem item );
+        void Refresh( ProjectItem item );
 
         /// <summary>
         /// Retrieves the resources associated with a project item.
