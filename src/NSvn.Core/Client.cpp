@@ -843,9 +843,14 @@ svn_error_t* svn_blame_func(void *baton, apr_int64_t line_no, svn_revnum_t revis
     DateTime dt;
     try
     {
-        dt = DateTime::ParseExact( StringHelper(date),
-            "yyyy-MM-dd\\THH:mm:ss.ffffff\\Z",
-            System::Globalization::CultureInfo::CurrentCulture ).ToLocalTime();
+        if ( date != 0 )
+        {
+            dt = DateTime::ParseExact( StringHelper(date),
+                "yyyy-MM-dd\\THH:mm:ss.ffffff\\Z",
+                System::Globalization::CultureInfo::CurrentCulture ).ToLocalTime();
+        }
+        else
+            dt = DateTime::MinValue;
     }
     catch( FormatException* ex )
     {
@@ -855,7 +860,11 @@ svn_error_t* svn_blame_func(void *baton, apr_int64_t line_no, svn_revnum_t revis
 
     try
     {
-        receiver->Invoke( line_no, revision, StringHelper(author), dt, 
+        String* authorString = StringHelper(author);
+        if ( authorString == 0 )
+            authorString = "";
+
+        receiver->Invoke( line_no, revision, authorString, dt, 
             StringHelper(line) );
     }
     catch( Exception* ex )
