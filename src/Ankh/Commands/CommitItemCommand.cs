@@ -52,6 +52,7 @@ namespace Ankh.Commands
                 context.StartOperation( "Committing..." );
 
                 commitInfo = WorkingCopyResource.Commit( resources, true );
+                context.Context.CommitCompleted();
             }
             catch( NSvn.Common.SvnException )
             {

@@ -46,6 +46,10 @@ namespace Ankh.UI
             { 
                 return this.LogMessageTemplate.PostProcess( this.logMessageBox.Text );
             }
+            set
+            {
+                this.logMessageBox.Text = value;
+            }
         }
 
         public LogMessageTemplate LogMessageTemplate
