@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
+<doc title="Output Window">
+    <section>
+        <hr></hr>
+        <p>
+             All actions done by Ankh are printed out to the AnkhSVN output window. 
+             <br /><br/>
+             <img src="../../img/anksvn_output.png" />
+        </p>
+    </section>
+</doc>
+

@@ -4,12 +4,27 @@
     <section>
     <hr></hr>
         <p>
-            Besides the status icons in front of files in the Solution Explorer, 
+            Besides the <link url="../keywords/status_icons.xml">status icons</link>
+            in front of files in the Solution Explorer, 
             Ankh gives you a more detailed view of the changes made to files. 
             This is done with the ‘Diff’ command. 
         </p>
-        <br/><br/><br/>
+        <br/><br/>
         <b>How to diff files:</b>
+        <p>
+            <list>
+                <item>
+                    <b>1.</b> Select and the right click the file(s) you want to diff.
+                </item>
+                <item>
+                    <b>2.</b> Click the 'Diff' command. 
+                    <br/><br/>
+                    <img src="../../img/menu-items/diff.png" />
+                    <br clear="all"/><br/>
+               </item>
+            </list>
+                <b>The following page will appear in Visual Studios web browser.</b>
+        </p>
         <p>
             <img src="../../img/diff_file.png" align="left" />
             <list>
@@ -20,6 +35,10 @@
                 <item><b>5.</b> '-' indicates removed text fragment. </item>
             </list>
             <br clear="all"/>
+        </p>
+        <br/><br/><br/>
+        <p>
+            <b>NOTE:</b> In the <link url="commiting_files.xml">Commit dialog</link> you can also see diff on all files you are committing. 
         </p>
 
     </section>   

@@ -77,4 +77,14 @@
     <File Url="img\revert_menu.png"/>
     <File Url="Xml\configuration\configuration.xml"/>
     <File Url="Xml\using-ankh\creating_repositories.xml"/>
+    <File Url="img\right_arrow.png"/>
+    <File Url="img\left_arrow.png"/>
+    <File Url="img\menu-items\update.png"/>
+    <File Url="img\menu-items\add.png"/>
+    <File Url="img\menu-items\commit.png"/>
+    <File Url="img\menu-items\diff.png"/>
+    <File Url="img\menu-items\refresh.png"/>
+    <File Url="img\menu-items\revert.png"/>
+    <File Url="Xml\keywords\output_window.xml"/>
+    <File Url="img\menu-items\delete.png"/>
     </HelpFileList>

@@ -1,38 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
-<doc  title="Adding files to revision control">
+<doc title="Adding files to revision control">
     <section>
         <p>
             <hr></hr>
-              <img src="../../img/wc_solution_explorer.png" align="left"/>
-             <list>
-                <item><b>1.</b> Right click on the selected unversioned item(s) 
-					you want to add in Solution Explorer. An item could be a file
-					 directory or project. <br></br>
-				</item>
-			</list>
-			<br clear="ALL"/>
-			<br></br>
-			
-			 <img src="../../img/item_menu.png" align="left"/>   <br></br><br></br>                    
-             <list>
-                <item><b>2.</b> Select <b>add</b> from the item menu that pops up.<br></br>
-				</item>
-			</list>
-			<br clear="ALL"/>
-			<br></br>
-				
-			<b>3.</b> Notice that the status symbol has changed in front of the 
-            item(s) added in Solution Explorer from 
-            <img src="../../img/unrevisioned.png"/>
-            to <img src="../../img/add.png"/>
-            <br></br><br></br>
+                 Add will schedule files and directories to your working copy. 
+                 They will be uploaded and added to the repository on your next
+                 <link url="commiting_files.xml">commit.</link>
+            <br/><br/><br/>
+            <b>How to add file:</b>
+            <br/>
             
-            I.e. after having added a file Ankh will show the file status as: 
-            <br></br>
-            <img src="../../img/added_file.png"/></p><br></br>
+             <list>
+                <item>
+                    <b>1.</b> Select and right click the unversioned item(s) you want to add to the working copy.
+                </item>
+                <item>
+                    <b>2.</b>Select <b>Add</b> from the item menu.
+					 <br/><br/>
+                    <img src="../../img/menu-items/add.png" align="left" />
+                    <br clear="all" /> 
+                    <br/>
+				</item>
+                <item>
+			        <b>3.</b> Commit if you want to add the files to the repository.
+				</item>
+
+            </list>
+			<br /><br />
+				
+			Notice that the status symbol has changed in front of the 
+            item(s) added in Solution Explorer from 
+            <img src="../../img/unrevisioned_file.png" />
+            to <img src="../../img/added_file.png" /><br/>
+            Ankhs <link url="../keywords/output_window.xml">output window </link>
+            will show all the files that has been added to the working copy. 
+            <br></br><br></br>
+            <b>NOTE:</b> If you add something and change your mind before committing,
+                 you can unschedule the addition using the 
+            <link url="reverting_files.xml">revert</link> command.
+        </p>
+    </section>
+    <section>
         <p>
-        <hr></hr>
+            <hr></hr>
             <link url="make_changes.xml">back </link>
             <link url="removing_files.xml">next</link>
         </p>
