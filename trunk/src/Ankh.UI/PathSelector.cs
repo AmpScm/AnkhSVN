@@ -130,9 +130,9 @@ namespace Ankh.UI
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.pathSelectionTreeView.CheckBoxes = true;
             this.pathSelectionTreeView.ImageIndex = -1;
+            this.pathSelectionTreeView.Items = new object[0];
             this.pathSelectionTreeView.Location = new System.Drawing.Point(0, 0);
             this.pathSelectionTreeView.Name = "pathSelectionTreeView";
-            //this.pathSelectionTreeView.Paths = new object[0];
             this.pathSelectionTreeView.Recursive = false;
             this.pathSelectionTreeView.SelectedImageIndex = -1;
             this.pathSelectionTreeView.SingleCheck = false;
@@ -189,6 +189,7 @@ namespace Ankh.UI
             this.Controls.Add(this.pathSelectionTreeView);
             this.Name = "PathSelector";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "PathSelector";
             this.ResumeLayout(false);
 
