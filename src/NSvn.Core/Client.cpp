@@ -608,6 +608,33 @@ String* NSvn::Core::Client::UuidFromUrl( String* url )
     return (String*)StringHelper( uuid );
 }
 
+
+bool NSvn::Core::Client::HasBinaryProp( String* path )
+{
+    Pool pool;
+    const char* realPath = CanonicalizePath( path, pool );
+
+    // lock the directory
+    svn_wc_adm_access_t* admAccess;
+    svn_error_t* err = svn_wc_adm_probe_open( &admAccess, 0, CanonicalizePath( path, pool ), 
+        false, false, pool );    
+
+    if( err != 0 && err->apr_err == SVN_ERR_WC_NOT_DIRECTORY )
+        return false;
+    else
+        HandleError( err );
+    try
+    {
+        svn_boolean_t hasBinaryProp = 0;
+        HandleError(svn_wc_has_binary_prop( &hasBinaryProp, realPath, admAccess, pool ));
+        return hasBinaryProp != 0;
+    }
+    __finally
+    {
+        svn_wc_adm_close( admAccess );
+    }
+}
+
 void NSvn::Core::Client::OnNotification( NotificationEventArgs* args )
 {
     if ( this->Notification != 0 )

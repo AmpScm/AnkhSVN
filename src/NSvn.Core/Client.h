@@ -383,6 +383,9 @@ namespace NSvn
             /// <param name="url">The URL to the repository.</param>
             String* UuidFromUrl( String* url);
 
+            /// <summary>Check whether a path has svn:mimetype set to a binary type.</summary>
+            bool HasBinaryProp( String* path );
+
         protected public:
             /// <summary>Invokes the Notification event.</summary>
             virtual void OnNotification( NotificationEventArgs* args );
