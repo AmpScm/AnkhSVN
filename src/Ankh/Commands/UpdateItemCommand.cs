@@ -17,6 +17,7 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.Update),
     VSNetControl( "Item", Position = 2 ),
     VSNetControl( "Project Node", Position = 2 ),
+    VSNetControl( "Project", Position = 1 ),
     VSNetControl( "Solution", Position = 2 ),
     VSNetControl( "Folder", Position = 2 )]
     internal class UpdateItem : CommandBase

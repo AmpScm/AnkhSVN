@@ -13,6 +13,7 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.Diff),
     VSNetControl( "Item.Ankh", Position=1 ),
     VSNetControl( "Project Node.Ankh", Position = 1 ),
+    VSNetControl( "Project.Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1 ),
     VSNetControl( "Folder.Ankh", Position = 1 )]
     internal class CreatePatchCommand : LocalDiffCommandBase
