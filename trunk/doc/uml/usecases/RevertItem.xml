@@ -19,7 +19,7 @@
                 <Include useCaseID='SelectLocalItem'></Include>
             </FlowElement>
             <FlowElement>
-                <Step>Developer chooses "Revert" from menu</Step>
+                <Step>Developer selects "Revert" from menu</Step>
             </FlowElement>
             <FlowElement>
                 <Step>Ask developer to confirm the revert</Step>

@@ -20,7 +20,7 @@
                 <Include useCaseID='SelectLocalItem'></Include>
             </FlowElement>
             <FlowElement>
-                <Step>The user chooses Commit item from a menu</Step>
+                <Step>The user selects Commit item from a menu</Step>
             </FlowElement>
             <FlowElement>
                 <Include useCaseID='WriteLogMessage'></Include>

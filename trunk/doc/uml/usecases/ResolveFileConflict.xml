@@ -19,7 +19,7 @@
                 <Include useCaseID='SelectLocalItem'></Include>
             </FlowElement>
             <FlowElement>
-                <Step>Developer chooses which of the revisions he wants to retain</Step>
+                <Step>Developer selects which of the revisions he wants to retain</Step>
             </FlowElement>
             <FlowElement>
                 <Step>svn delets the remaining files</Step>

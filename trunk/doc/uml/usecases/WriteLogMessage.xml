@@ -15,7 +15,7 @@
         </Preconditions>
         <FlowElements>
             <FlowElement>
-                <Step>Developer chooses whether he wants to see diff</Step>
+                <Step>Developer selects whether he wants to see diff</Step>
             </FlowElement>
             <FlowElement>
                 <Step>Developer writes log message</Step>
