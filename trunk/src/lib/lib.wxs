@@ -3,133 +3,133 @@
     <Fragment Id="FR_Lib">
         <DirectoryRef Id="appDir">
             <!-- Register AnkhUserControlHost -->
-            <Component Id="AUCH_Reg_component1" DiskId="1">
+            <Component Id="AUCH_Reg_component1" DiskId="1" Guid="37DAC5C0-D247-4ffd-83F7-4E66840766EC">
                 <Registry Id="AUCH_Reg_registry0" Root="HKCR" Type="string" KeyPath="yes"
                     Key="AnkhUserControlHost.AnkhUserControlHostCtl" 
                     Value="AnkhUserControlHostCtl Class" />
             </Component>
-            <Component Id="AUCH_Reg_component2" DiskId="1">
+            <Component Id="AUCH_Reg_component2" DiskId="1" Guid="8FC28445-EAB2-42e2-9474-C52985CD7D8A">
                 <Registry Id="AUCH_Reg_registry1" Root="HKCR" Type="string" KeyPath="yes"
                     Key="AnkhUserControlHost.AnkhUserControlHostCtl\CLSID" 
                     Value="{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}" />
             </Component>
-            <Component Id="AUCH_Reg_component3" DiskId="1">
+            <Component Id="AUCH_Reg_component3" DiskId="1" Guid="6E0F0E00-DC4E-469a-AD8E-63E9D5414894">
                 <Registry Id="AUCH_Reg_registry2" Root="HKCR" Type="string" KeyPath="yes"
                     Key="AnkhUserControlHost.AnkhUserControlHostCtl\CurVer" 
                     Value="AnkhUserControlHost.AnkhUserControlHostCtl.1" />
             </Component>
-            <Component Id="AUCH_Reg_component4" DiskId="1">
+            <Component Id="AUCH_Reg_component4" DiskId="1" Guid="C5F3DF7B-0CCD-4a04-9983-CE4DA765996C">
                 <Registry Id="AUCH_Reg_registry3" Root="HKCR" Type="string" KeyPath="yes"
                     Key="AnkhUserControlHost.AnkhUserControlHostCtl.1" 
                     Value="AnkhUserControlHostCtl Class" />
             </Component>
-            <Component Id="AUCH_Reg_component5" DiskId="1">
+            <Component Id="AUCH_Reg_component5" DiskId="1" Guid="C6693F8F-D707-4cbd-93E0-758767489822">
                 <Registry Id="AUCH_Reg_registry4" Root="HKCR" Type="string" KeyPath="yes"
                     Key="AnkhUserControlHost.AnkhUserControlHostCtl.1\CLSID" 
                     Value="{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}" />
             </Component>
-            <Component Id="AUCH_Reg_component6" DiskId="1">
+            <Component Id="AUCH_Reg_component6" DiskId="1" Guid="50C17766-3C85-4f62-A50F-5382F60CCF38">
                 <Registry Id="AUCH_Reg_registry5" Root="HKCR" Type="string" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}"
                     Value="AnkhUserControlHostCtl Class" />
             </Component>
-            <Component Id="AUCH_Reg_component7" DiskId="1">
+            <Component Id="AUCH_Reg_component7" DiskId="1" Guid="BC7426AB-574F-4cd8-B9B3-5CDEE1BC84F9">
                 <Registry Id="AUCH_Reg_registry6" Root="HKCR" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}\Control" />
             </Component>
-            <Component Id="AUCH_Reg_component8" DiskId="1">
+            <Component Id="AUCH_Reg_component8" DiskId="1" Guid="39543D04-BA60-4d96-BF03-193CF644556B">
                 <Registry Id="AUCH_Reg_registry7" Root="HKCR" Type="string" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}\InprocServer32" 
                     Value="[appDir]\AnkhUserControlHost.dll" />
             </Component>
-            <Component Id="AUCH_Reg_component9" DiskId="1">
+            <Component Id="AUCH_Reg_component9" DiskId="1" Guid="1B27D698-862F-4584-88A1-7B4F3C32A873">
                 <Registry Id="AUCH_Reg_registry8" Root="HKCR" Type="string" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}\InprocServer32" 
                     Name="ThreadingModel" Value="Apartment" />
             </Component>
-            <Component Id="AUCH_Reg_component10" DiskId="1">
+            <Component Id="AUCH_Reg_component10" DiskId="1" Guid="1D45F570-4195-49a3-8BBD-7A130AADC67E">
                 <Registry Id="AUCH_Reg_registry9" Root="HKCR" Type="string" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}\MiscStatus" 
                     Value="0" />
             </Component>
-            <Component Id="AUCH_Reg_component11" DiskId="1">
+            <Component Id="AUCH_Reg_component11" DiskId="1" Guid="03FB47A7-9982-4f4c-B440-E1D4A1912A98">
                 <Registry Id="AUCH_Reg_registry10" Root="HKCR" Type="string" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}\MiscStatus\1" 
                     Value="131473" />
             </Component>
-            <Component Id="AUCH_Reg_component12" DiskId="1">
+            <Component Id="AUCH_Reg_component12" DiskId="1" Guid="F3FA57A4-C7F9-4bc0-AF20-D830345F83FD">
                 <Registry Id="AUCH_Reg_registry11" Root="HKCR" Type="string" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}\ProgID" 
                     Value="AnkhUserControlHost.AnkhUserControlHostCtl.1" />
             </Component>
-            <Component Id="AUCH_Reg_component13" DiskId="1">
+            <Component Id="AUCH_Reg_component13" DiskId="1" Guid="098F2611-FC94-47e1-9115-FCA91C420035">
                 <Registry Id="AUCH_Reg_registry12" Root="HKCR" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}\Programmable" />
             </Component>
-            <Component Id="AUCH_Reg_component14" DiskId="1">
+            <Component Id="AUCH_Reg_component14" DiskId="1" Guid="A95C82C0-EBD8-4d65-B18F-148977979408">
                 <Registry Id="AUCH_Reg_registry13" Root="HKCR" Type="string" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}\TypeLib" 
                     Value="{a346e700-ccd2-4377-a4e5-5b30275493b1}" />
             </Component>
-            <Component Id="AUCH_Reg_component15" DiskId="1">
+            <Component Id="AUCH_Reg_component15" DiskId="1" Guid="82D3A3AA-22B2-4b52-976A-97BA7445183C">
                 <Registry Id="AUCH_Reg_registry14" Root="HKCR" Type="string" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}\Version" 
                     Value="1.01" />
             </Component>
-            <Component Id="AUCH_Reg_component16" DiskId="1">
+            <Component Id="AUCH_Reg_component16" DiskId="1" Guid="AE3D5492-E8EF-4122-A117-75E7D69C0317">
                 <Registry Id="AUCH_Reg_registry15" Root="HKCR" Type="string" KeyPath="yes"
                     Key="CLSID\{88e212e9-dba6-4ca8-a820-05a9b54a3ba5}\VersionIndependentProgID" 
                     Value="AnkhUserControlHost.AnkhUserControlHostCtl" />
             </Component>
-            <Component Id="AUCH_Reg_component17" DiskId="1">
+            <Component Id="AUCH_Reg_component17" DiskId="1" Guid="5F40EA3B-00D6-49b5-AF58-33BC331AAF12">
                 <Registry Id="AUCH_Reg_registry16" Root="HKCR" Type="string" KeyPath="yes"
                     Key="Interface\{412B14B5-B2FC-463B-A97D-EE072F939A38}" 
                     Value="IAnkhUserControlHostCtlCtl" />
             </Component>
-            <Component Id="AUCH_Reg_component18" DiskId="1">
+            <Component Id="AUCH_Reg_component18" DiskId="1" Guid="C0DDE5C0-0DFF-44cb-8DA4-693E6727AF02">
                 <Registry Id="AUCH_Reg_registry17" Root="HKCR" Type="string" KeyPath="yes"
                     Key="Interface\{412B14B5-B2FC-463B-A97D-EE072F939A38}\ProxyStubClsid" 
                     Value="{00020424-0000-0000-C000-000000000046}" />
             </Component>
-            <Component Id="AUCH_Reg_component19" DiskId="1">
+            <Component Id="AUCH_Reg_component19" DiskId="1" Guid="20AB9623-3996-435a-96CB-BDFE19B4D32C">
                 <Registry Id="AUCH_Reg_registry18" Root="HKCR" Type="string" KeyPath="yes"
                     Key="Interface\{412B14B5-B2FC-463B-A97D-EE072F939A38}\ProxyStubClsid32" 
                     Value="{00020424-0000-0000-C000-000000000046}" />
             </Component>
-            <Component Id="AUCH_Reg_component20" DiskId="1">
+            <Component Id="AUCH_Reg_component20" DiskId="1" Guid="72BA46BF-C978-423c-9FA4-59CD8C36F462">
                 <Registry Id="AUCH_Reg_registry19" Root="HKCR" Type="string" KeyPath="yes"
                     Key="Interface\{412B14B5-B2FC-463B-A97D-EE072F939A38}\TypeLib" 
                     Value="{A346E700-CCD2-4377-A4E5-5B30275493B1}" />
             </Component>
-            <Component Id="AUCH_Reg_component21" DiskId="1">
+            <Component Id="AUCH_Reg_component21" DiskId="1" Guid="B8D14754-57F2-42dc-A964-8F24690DDCE7">
                 <Registry Id="AUCH_Reg_registry20" Root="HKCR" Type="string" KeyPath="yes"
                     Key="Interface\{412B14B5-B2FC-463B-A97D-EE072F939A38}\TypeLib" 
                     Name="Version" Value="1.0" />
             </Component>
-            <Component Id="AUCH_Reg_component22" DiskId="1">
+            <Component Id="AUCH_Reg_component22" DiskId="1" Guid="A904244F-39F0-4eca-95E4-D0D885F84AF9">
                 <Registry Id="AUCH_Reg_registry21" Root="HKCR" Type="string" KeyPath="yes"
                     Key="TypeLib\{A346E700-CCD2-4377-A4E5-5B30275493B1}\1.0" 
                     Value="Xtreme Simplicity AnkhUserControlHost 1.0 Type Library" />
             </Component>
-            <Component Id="AUCH_Reg_component23" DiskId="1">
+            <Component Id="AUCH_Reg_component23" DiskId="1" Guid="7893BAF1-4100-4156-B455-1BC41F5E084A">
                 <Registry Id="AUCH_Reg_registry22" Root="HKCR" Type="string" KeyPath="yes"
                     Key="TypeLib\{A346E700-CCD2-4377-A4E5-5B30275493B1}\1.0\0\win32" 
                     Value="[appDir]\AnkhUserControlHost.dll" />
             </Component>
-            <Component Id="AUCH_Reg_component24" DiskId="1">
+            <Component Id="AUCH_Reg_component24" DiskId="1" Guid="BC04B8C8-1DDF-4ea6-9399-80D5E22F6E9A">
                 <Registry Id="AUCH_Reg_registry23" Root="HKCR" Type="string" KeyPath="yes"
                     Key="TypeLib\{A346E700-CCD2-4377-A4E5-5B30275493B1}\1.0\FLAGS" 
                     Value="0" />
             </Component>
-            <Component Id="AUCH_Reg_component25" DiskId="1">
+            <Component Id="AUCH_Reg_component25" DiskId="1" Guid="671800F3-2E45-4c77-90F7-4BF2EB7311D5">
                 <Registry Id="AUCH_Reg_registry24" Root="HKCR" Type="string" KeyPath="yes"
                     Key="TypeLib\{A346E700-CCD2-4377-A4E5-5B30275493B1}\1.0\HELPDIR" 
                     Value="[appDir]" />
             </Component>
             
-            <Component Id="Libs">
+            <Component Id="Libs" Guid="6EB4C04C-5B15-4fc3-99E9-4CC9302C3CD4" KeyPath="yes">
                 <File Id="CF_AnkhUserControlHost.dll" 
-                    KeyPath="yes" Name="ANKHUS~1.DLL" LongName="AnkhUserControlHost.dll"
+                    Name="ANKHUS~1.DLL" LongName="AnkhUserControlHost.dll"
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\AnkhUserControlHost.dll"/>
                 <File Id="CF_AnkhUserControlHostLib.dll" Name="ANKHUS~2.DLL" LongName="AnkhUserControlHostLib.dll"
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\AnkhUserControlHostLib.dll"/>

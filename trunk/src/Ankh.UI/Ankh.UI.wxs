@@ -1,12 +1,14 @@
 ﻿<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
   <Fragment Id="FR_Ankh.UI">
     <DirectoryRef Id="appDir">
-      <Component Id="Ankh.UI_comp0" DiskId="1">
+      <Component Id="Ankh.UI_comp0" DiskId="1" Guid="BE3BF683-9D60-444a-923F-3A2891F628B7">
         <File Id="Ankh.UI_file0" Name="ANKHUI~1.DLL" LongName="Ankh.UI.dll"
             Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
             src="$(var.builddir)\Ankh.UI.dll" />
+      </Component>
+      <Component Id="Ankh.UI_comp1" DiskId="1" Guid="198DD445-31B2-4d4e-9907-28EE6BA6E047">
         <File Id="Ankh.UI_file1" Name="ANKHUI~1.PDB" LongName="Ankh.UI.pdb"
-            Checksum="yes" Compressed="yes" Vital="yes"
+            Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
             src="$(var.builddir)\Ankh.UI.pdb" />
       </Component>
     </DirectoryRef>

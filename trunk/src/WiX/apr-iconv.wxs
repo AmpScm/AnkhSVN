@@ -2,7 +2,7 @@
   <Fragment Id="FR_apr-iconv">
     <DirectoryRef Id="appDir">
       <Directory Id="directory0" Name="iconv">
-        <Component Id="apr-iconv" DiskId="1">
+        <Component Id="apr-iconv" DiskId="1" Guid="5D2BC6FB-E6CB-47ec-B8BC-E2A54F56E8BA" KeyPath="yes">
           <File Id="iconv0" Name="ADOBE-~1.SO" LongName="adobe-stdenc.so" Checksum="yes" Compressed="yes" Vital="yes" src="$(var.svndir)\apr-iconv\Release\iconv\adobe-stdenc.so" />
           <File Id="iconv1" Name="ADOBE-~2.SO" LongName="adobe-symbol.so" Checksum="yes" Compressed="yes" Vital="yes" src="$(var.svndir)\apr-iconv\Release\iconv\adobe-symbol.so" />
           <File Id="iconv2" Name="ADOBE-~3.SO" LongName="adobe-zdingbats.so" Checksum="yes" Compressed="yes" Vital="yes" src="$(var.svndir)\apr-iconv\Release\iconv\adobe-zdingbats.so" />
@@ -216,7 +216,6 @@
           <File Id="iconv210" Name="WI40D3~1.SO" LongName="windows-1258.so" Checksum="yes" Compressed="yes" Vital="yes" src="$(var.svndir)\apr-iconv\Release\iconv\windows-1258.so" />
           <File Id="iconv211" Name="_TBL_S~1.SO" LongName="_tbl_simple.so" Checksum="yes" Compressed="yes" Vital="yes" src="$(var.svndir)\apr-iconv\Release\iconv\_tbl_simple.so" />
         </Component>
-        <Directory Id="directory1" Name="objs" />
       </Directory>
     </DirectoryRef>
   </Fragment>
