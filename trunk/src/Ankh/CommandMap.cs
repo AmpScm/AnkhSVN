@@ -103,7 +103,7 @@ namespace Ankh
             // register the command with the environment
             object []contextGuids = new object[] { };
             cmd.Command = context.DTE.Commands.AddNamedCommand( context.AddIn, attr.Name, attr.Text, attr.Tooltip, false,
-                1, ref contextGuids, (int)vsCommandStatus.vsCommandStatusUnsupported );
+                101, ref contextGuids, (int)vsCommandStatus.vsCommandStatusUnsupported );
 
             RegisterControl( cmd, type, context );     
         }
