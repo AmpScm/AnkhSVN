@@ -105,6 +105,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Utils.Tests.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "Win32Tests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
