@@ -24,5 +24,28 @@ namespace Utils.Win32
         /// removes the specified image list from the tree-view control.</param>         /// 
         /// <return>Returns the handle to the previous image list, if any, or NULL otherwise.</return>
         public const uint TVM_SETIMAGELIST = 0x1109;
+
+        /// <summary>
+        /// Retrieves the handle to the normal 
+        /// or state image list associated with a tree-view control. 
+        /// </summary>
+        public const uint TVM_GETIMAGELIST = 4360;
+
+
+        /// <summary>
+        /// Retrieves some or all of a tree-view item's attributes. 
+        /// </summary>
+        public const uint TVM_GETITEM = 4364;
+
+        /// <summary>
+        /// The TVM_SETITEM message sets some or all of a tree-view item's attributes.
+        /// </summary>
+        public const uint TVM_SETITEM = 4365;
+
+        /// <summary>
+        /// Retrieves the tree-view item that bears the specified relationship to 
+        /// a specified item. 
+        /// </summary>
+        public const uint TVM_GETNEXTITEM = 4362;
 	}
 }
