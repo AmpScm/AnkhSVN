@@ -34,10 +34,6 @@ namespace Ankh
         /// <param name="dte">TODO: what to do, what to do?</param>
         public static CommandMap RegisterCommands( AnkhContext context )
         {
-            // delete old commands
-            DeleteCommands( context );
-
-
             CommandMap commands = new CommandMap();
 
             // find all the ICommand subclasses in all modules
@@ -109,7 +105,7 @@ namespace Ankh
             cmd.Command = context.DTE.Commands.AddNamedCommand( context.AddIn, attr.Name, attr.Text, attr.Tooltip, false,
                 1, ref contextGuids, (int)vsCommandStatus.vsCommandStatusUnsupported );
 
-            RegisterControl( cmd, type );     
+            RegisterControl( cmd, type, context );     
         }
 
         /// <summary>
@@ -117,19 +113,25 @@ namespace Ankh
         /// </summary>
         /// <param name="command">The ICommand to attach the command bar to.</param>
         /// <param name="type">The type that handles the command.</param>
-        private static void RegisterControl( ICommand cmd, Type type )
+        private static void RegisterControl( ICommand cmd, Type type, AnkhContext context )
         {
             // register the command bars
             foreach( VSNetControlAttribute control in type.GetCustomAttributes( 
                 typeof(VSNetControlAttribute), false) ) 
             {
              
-                CommandBar cmdBar = (CommandBar)cmd.Command.DTE.CommandBars[ control.CommandBar ];
+                CommandBar cmdBar = GetCommandBar( control.CommandBar, context );
                 cmd.Command.AddControl( cmdBar, control.Position );
                 
             }
         }
 
+        /// <summary>
+        /// Registers a right click menu item for the repository explorer control.
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <param name="type"></param>
+        /// <param name="context"></param>
         private static void RegisterRepositoryExplorerCommand( 
             RepositoryExplorerMenuAttribute attr, Type type, AnkhContext context )
         {
@@ -143,5 +145,35 @@ namespace Ankh
 
             item.RegisterWithParent();           
         }
+
+        /// <summary>
+        /// Retrieve the command bar associated with a given path, creating them if missing.
+        /// </summary>
+        /// <param name="name">The path to the command bar, components separated by .</param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static CommandBar GetCommandBar( string name, AnkhContext context )
+        {
+            string[] path = name.Split( '.' );
+            CommandBar bar = (CommandBar)context.DTE.CommandBars[ path[0] ];;
+            for( int i = 1; i < path.Length; i++ )
+            {
+                try
+                {
+                    // does this command bar already exist?
+                    CommandBarControl ctrl = bar.Controls[ path[i] ];
+                    bar = (CommandBar)((CommandBarPopup)ctrl).CommandBar;
+                }
+                catch( Exception )
+                {
+                    // no, create it
+                    bar = (CommandBar)context.DTE.Commands.AddCommandBar( path[i], 
+                        vsCommandBarType.vsCommandBarTypeMenu, bar, bar.Controls.Count + 1 );
+                }                
+            }
+
+            return bar;
+        }
+
 	}
 }
