@@ -264,7 +264,6 @@ namespace Ankh.UI
             this.topSplitter.BackColor = System.Drawing.SystemColors.Control;
             this.topSplitter.Dock = System.Windows.Forms.DockStyle.Top;
             this.topSplitter.Location = new System.Drawing.Point(0, 112);
-            this.topSplitter.MinSize = 100;
             this.topSplitter.Name = "topSplitter";
             this.topSplitter.Size = new System.Drawing.Size(808, 3);
             this.topSplitter.TabIndex = 3;
@@ -292,7 +291,7 @@ namespace Ankh.UI
             this.logMessageBox.Multiline = true;
             this.logMessageBox.Name = "logMessageBox";
             this.logMessageBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.logMessageBox.Size = new System.Drawing.Size(808, 112);
+            this.logMessageBox.Size = new System.Drawing.Size(808, 123);
             this.logMessageBox.TabIndex = 3;
             this.logMessageBox.Text = "";
             // 
@@ -300,7 +299,7 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(720, 118);
+            this.cancelButton.Location = new System.Drawing.Point(720, 125);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Cancel";
@@ -310,7 +309,7 @@ namespace Ankh.UI
             // 
             this.commitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.commitButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.commitButton.Location = new System.Drawing.Point(640, 118);
+            this.commitButton.Location = new System.Drawing.Point(640, 125);
             this.commitButton.Name = "commitButton";
             this.commitButton.TabIndex = 0;
             this.commitButton.Text = "Commit";
