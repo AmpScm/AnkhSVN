@@ -63,6 +63,13 @@ namespace NSvn.Core.Tests
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
             ClientContext ctx = new ClientContext();
+
+            AuthenticationBaton baton = new AuthenticationBaton();
+            baton.Add( AuthenticationProvider.GetUsernameProvider() );
+            baton.SetParameter( AuthenticationBaton.ParamDefaultUsername, Environment.UserName );
+
+            ctx.AuthBaton = baton;
+
             ctx.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
             this.logMessage = "Moo ";
             CommitInfo info = Client.Commit( new string[]{ this.WcPath }, false, ctx );

@@ -14,27 +14,16 @@ namespace NSvn.Tests
     public class AuthenticationTest
     {
         [Test]
-        public void TestSimpleProvider()
+        public void TestSimplePromptProvider()
         {
-            SimpleCredential cred = new SimpleCredential( USER, PASS );
-            IAuthenticationProvider provider = new SimpleProvider( cred );
-
+            AuthenticationProvider provider = AuthenticationProvider.GetSimplePromptProvider(
+                new SimplePromptDelegate( this.SuccessPrompt ), 1 );
             RepositoryDirectory dir = new RepositoryDirectory( AUTHREPOS );
             dir.Context.AddAuthenticationProvider( provider );
 
             RepositoryResourceDictionary dict = dir.GetChildren();
             Assertion.Assert( "Expected some more results", dict.Count > 0 );            
-        }
-
-        [Test]
-        public void TestCustomProvider()
-        {
-            RepositoryDirectory dir = new RepositoryDirectory( AUTHREPOS );
-            dir.Context.AddAuthenticationProvider( new AuthProvider() );
-
-            RepositoryResourceDictionary dict = dir.GetChildren();
-            Assertion.Assert( "Expected more results", dict.Count > 0 );
-        }
+        }       
 
         [Test]
         [ExpectedException(typeof(AuthorizationFailedException))]
@@ -44,38 +33,9 @@ namespace NSvn.Tests
             dir.GetChildren();
         }
 
-        private class AuthProvider : IAuthenticationProvider
+        public SimpleCredential SuccessPrompt( string realm, string username )
         {
-            #region Implementation of IAuthenticationProvider
-            public NSvn.Common.ICredential NextCredentials( ICollection parameters )
-            {
-                if ( this.time++ > 3 )
-                    return new SimpleCredential( USER, PASS );
-                else
-                    return new SimpleCredential( "", "" );
-            }
-
-            public NSvn.Common.ICredential FirstCredentials( string realm, ICollection parameters )
-            {
-                // this is wrong
-                return new SimpleCredential( "kung", "foo" );
-            }
-
-            public bool SaveCredentials( ICollection parameters )
-            {
-                return false;
-            }
-
-
-            public string Kind
-            {
-                get
-                {
-                    return SimpleCredential.AuthKind;
-                }
-            }
-            private int time = 0;
-            #endregion
+            return new SimpleCredential( "foo", "bar" );
         }
 
 

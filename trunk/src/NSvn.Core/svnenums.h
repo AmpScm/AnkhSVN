@@ -144,5 +144,27 @@ namespace NSvn
             Replace,
             Modify
         };
+
+
+        /// <summary>SSL failures</summary>
+        [System::FlagsAttribute]
+        public __value enum SslFailures
+        {
+            /// <summary>The certificate is not yet valid.</summary>
+            NotYetValid = SVN_AUTH_SSL_NOTYETVALID,
+
+            /// <summary>The certificate has expired.</summary>
+            Expired = SVN_AUTH_SSL_EXPIRED,
+
+            /// <summary>The certificate hostname does not match.</summary>
+            CertificateNameMismatch = SVN_AUTH_SSL_CNMISMATCH,
+
+            /// <summary>The certificate authority is unknown.</summary>
+            CertificateAuthorityUnknown = SVN_AUTH_SSL_UNKNOWNCA,
+
+            /// <summary>Some other error.</summary>
+            Other = SVN_AUTH_SSL_OTHER
+        };
+
     }
 }

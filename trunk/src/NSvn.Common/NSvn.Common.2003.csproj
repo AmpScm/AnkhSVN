@@ -99,30 +99,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AuthenticationBaton.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AuthenticationProviderCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AuthenticationProviderCollection.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "IAuthenticationProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ICredential.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "NSvn.Common.build"
                     BuildAction = "None"
                 />
@@ -147,11 +123,6 @@
                 />
                 <File
                     RelPath = "PropListItem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SimpleProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

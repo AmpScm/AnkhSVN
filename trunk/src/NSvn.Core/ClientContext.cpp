@@ -3,7 +3,6 @@
 #include "stdafx.h"
 
 #include "ClientContext.h"
-#include "UsernameCredential.h"
 #include "CommitItem.h"
 #include "ParameterDictionary.h"
 
@@ -12,6 +11,20 @@
 //#include <apr_pools.h>
 #include "Notification.h"
 //#include "ManagedPointer.h"
+
+namespace
+{
+    void notify_func( void *baton, const char *path, 
+        svn_wc_notify_action_t action, svn_node_kind_t kind, 
+        const char *mime_type, svn_wc_notify_state_t content_state, 
+        svn_wc_notify_state_t prop_state, svn_revnum_t revision );
+    
+    svn_error_t* log_msg_func( const char **log_msg, 
+        const char **tmp_file, 
+        apr_array_header_t *commit_items, 
+        void *baton, 
+        apr_pool_t *pool);  
+}
 
 namespace NSvn
 {
@@ -33,7 +46,8 @@ namespace NSvn
             }
 
             // is there an auth baton? (should be)
-            ctx->auth_baton = this->CreateAuthBaton( pool, this->AuthBaton );
+            if ( this->authBaton != 0 )
+                ctx->auth_baton = this->authBaton->GetAuthBaton();
 
             // log message callback?
             if ( this->LogMessageCallback != 0 )
@@ -44,92 +58,17 @@ namespace NSvn
                     this->LogMessageCallback ) );
             }
 
-
             // client configuration
-            if ( this->ClientConfig != 0 )
-            {
-                throw new Exception( "This isnt implemented yet" );
-            }
-            else
-            {  
-                // TODO: We just put an empty table here for now
-                ctx->config = apr_hash_make( pool );
-            }
-
+            if ( this->ClientConfig == 0 )
+                this->ClientConfig = new NSvn::Core::ClientConfig();
+            
+            ctx->config = this->clientConfig->GetHash();
+           
             return ctx; 
 
 
         }
-
-        svn_auth_baton_t* ClientContext::CreateAuthBaton( const Pool& pool, 
-            AuthenticationBaton* baton )
-        {
-            apr_array_header_t* providers = 0;
-
-            // any providers provided?
-            if ( baton == 0 )
-            {
-                // Create one anyway
-                baton = new AuthenticationBaton();
-            }
-
-            // create an array to put our providers in, leaving room for the LoggedInUser provider
-            providers = apr_array_make( pool, baton->Providers->Count + 1, 
-                sizeof( svn_auth_provider_object_t* ) );
-
-            // always put this one in, since it seems to be needed
-            // TODO: is there a better way?
-            svn_auth_provider_object_t* providerObject =
-                this->CreateProvider( pool, new SimpleProvider( 
-                UsernameCredential::LoggedInUser ) );
-            *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
-                providerObject;
-
-
-            // put our providers in the array
-            for( int i = 0; i < baton->Providers->Count; i++ )
-            {
-                svn_auth_provider_object_t* providerObject = 
-                    this->CreateProvider( pool, baton->Providers->Item[i] );
-
-                *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
-                    providerObject;
-            }
-
-
-
-            // create the actual baton
-            svn_auth_baton_t* ab;
-            svn_auth_open( &ab, providers, pool );
-
-            return ab;
-        }
-
-        svn_auth_provider_object_t* ClientContext::CreateProvider( 
-            const Pool& pool, IAuthenticationProvider* authProvider )
-        {            
-
-            svn_auth_provider_t* provider = static_cast<svn_auth_provider_t*>(
-                pool.PCalloc( sizeof(*provider) ) );
-            provider->cred_kind = StringHelper( authProvider->Kind ).CopyToPool( pool );
-
-            // these simple callback functions merely delegate to our IAuth object
-            provider->first_credentials = first_credentials;
-            provider->next_credentials = next_credentials;
-            provider->save_credentials = save_credentials;
-
-            // create a simple provider - we handle the complexity on our end
-            svn_auth_provider_object_t* providerObject = static_cast<svn_auth_provider_object_t*>(
-                pool.PCalloc( sizeof(*provider) ) );
-            providerObject->vtable = provider;
-
-            //store a pointer to our .NET IAuth... object in the baton
-            providerObject->provider_baton = pool.AllocateObject( 
-                ManagedPointer<IAuthenticationProvider*>( authProvider ) );
-
-            return providerObject;
-
-        }
+        
     }
 }
 
@@ -141,6 +80,9 @@ struct svn_auth_baton_t
 {};
 
 struct apr_hash_t
+{};
+
+struct svn_config_t
 {};
 
 namespace
@@ -158,76 +100,6 @@ namespace
             *(static_cast<ManagedPointer<NotifyCallback*>* >(baton) );
         callback->Invoke( notification );
 
-    }
-
-    void* GetCredentials( ICredential* credential, apr_pool_t* pool  )
-    {
-        // did we get a valid credential?
-        if ( credential != 0 )
-        {            
-            return credential->GetCredential( pool ).ToPointer();
-        }
-        else 
-            return 0;
-    }
-
-
-
-    svn_error_t * first_credentials  (void **credentials,
-        void **iter_baton,
-        void *provider_baton,
-        apr_hash_t *parameters,
-        const char* realmstring,
-        apr_pool_t *pool)
-    {
-        // delegate to the IAuth.. object
-        IAuthenticationProvider* provider = 
-            *( static_cast<ManagedPointer<IAuthenticationProvider*>* >(provider_baton) );
-
-        ParameterDictionary* params = new ParameterDictionary( parameters, pool );
-        String* managedRealmString = StringHelper( realmstring );
-        *credentials = GetCredentials( 
-            provider->FirstCredentials( managedRealmString, params ), pool );
-
-        // next_creds doesnt have a provider_baton param, so we store it in
-        // the iter baton. We don't need it for anything else, since 
-        // the IAuth... object can maintain it's own context
-        *iter_baton = provider_baton;
-
-
-        // everything is aok
-        return SVN_NO_ERROR;
-    }
-
-    svn_error_t * next_credentials (void **credentials,
-        void *iter_baton,
-        apr_hash_t *parameters,
-        apr_pool_t *pool)
-    {
-        IAuthenticationProvider* provider = 
-            *(static_cast<ManagedPointer<IAuthenticationProvider*>*>(iter_baton) );
-
-        ParameterDictionary* params = new ParameterDictionary( parameters, pool );
-        *credentials = GetCredentials( provider->NextCredentials( params ), pool );
-
-        // nothing can ever go wrong here
-        return SVN_NO_ERROR;
-    }
-
-
-    svn_error_t * save_credentials (svn_boolean_t *saved,
-        void *credentials,
-        void *provider_baton,
-        apr_hash_t *parameters,
-        apr_pool_t *pool)
-    {
-        IAuthenticationProvider* provider = 
-            *( static_cast<ManagedPointer<IAuthenticationProvider*>* >(provider_baton) );
-
-        ParameterDictionary* params = new ParameterDictionary( parameters, pool );
-
-        *saved = provider->SaveCredentials( params );
-        return SVN_NO_ERROR;
     }
 
     // delegate the log message callback back into managed space

@@ -29,6 +29,8 @@ namespace NSvn.Tests
             string clientOutput = this.RunCommand( "svn", "cat " + formUrl );
             
             RepositoryFile file = new RepositoryFile( formUrl );
+            file.Context.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
+
             MemoryStream stream = new MemoryStream( 1000 );
             file.Cat( stream );
 

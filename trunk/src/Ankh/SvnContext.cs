@@ -18,12 +18,29 @@ namespace Ankh
     /// </summary>
     internal class SvnContext : NSvnContext
     {
-        public SvnContext( AnkhContext ankhContext )
+        public SvnContext( AnkhContext ankhContext ) : base( @"T:\foo123config" )
         {
-
-            //Clears the pane when opening new solutions.
             this.ankhContext = ankhContext;
-            this.AddAuthenticationProvider( new DialogProvider( ankhContext.HostWindow ) );           
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSimpleProvider() );           
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSimplePromptProvider(
+                new SimplePromptDelegate( this.PasswordPrompt ), 3 ) );
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustFileProvider() );
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustPromptProvider(
+                new SslServerTrustPromptDelegate( this.SslServerTrustPrompt ) ) );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertPasswordFileProvider() );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertPasswordPromptProvider(
+                    new SslClientCertPasswordPromptDelegate( 
+                        this.ClientCertificatePasswordPrompt ) ) );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertFileProvider() );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertPromptProvider( 
+                    new SslClientCertPromptDelegate( this.ClientCertificatePrompt ) ) );
+
+
+
         }
         /// <summary>
         /// Invokes the LogMessage dialog.
@@ -146,64 +163,104 @@ namespace Ankh
             dialog.Diff = visitor.Diff;    
         }
 
-        #region DialogProvider
-        private class DialogProvider : IAuthenticationProvider
+        /// <summary>
+        /// Prompt the user for a username and password.
+        /// </summary>
+        /// <param name="realm"></param>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        private SimpleCredential PasswordPrompt( String realm, String username )
         {
-            public DialogProvider( IWin32Window hostWindow )
+            using( LoginDialog dialog = new LoginDialog() )
             {
-                this.hostWindow = hostWindow;
+                if ( realm != null )
+                    dialog.Realm = realm;
+
+                if ( username != null )
+                    dialog.Username = username;
+
+                if ( dialog.ShowDialog( this.ankhContext.HostWindow ) != DialogResult.OK )
+                    return null;
+
+                return new SimpleCredential( dialog.Username, dialog.Password );
             }
-            
-
-            #region Implementation of IAuthenticationProvider
-            public NSvn.Common.ICredential NextCredentials( ICollection parameters )
-            {              
-
-                if ( loginDialog.ShowDialog( this.hostWindow ) == DialogResult.OK )
-                    return this.lastCredential = new SimpleCredential( loginDialog.Username, 
-                        loginDialog.Password );
-                else
-                    return this.lastCredential = null;
-            }
-            public NSvn.Common.ICredential FirstCredentials(  string realm, ICollection parameters )
-            {
-                if ( this.savedCredential != null )
-                    return this.savedCredential;
-
-                loginDialog.Realm = realm;
-
-                if ( loginDialog.ShowDialog( this.hostWindow ) == DialogResult.OK )
-                    return this.lastCredential = new SimpleCredential( loginDialog.Username, 
-                        loginDialog.Password );
-                else
-                    return this.lastCredential = null;
-            }
-
-            public bool SaveCredentials( ICollection parameters )
-            {
-                this.savedCredential = this.lastCredential;
-                return true;
-            }
-            public string Kind
-            {
-                get
-                {
-                    return SimpleCredential.AuthKind;
-                }
-            }
-            #endregion
-
-            private LoginDialog loginDialog = new LoginDialog();
-            private ICredential lastCredential;
-            private ICredential savedCredential;
-            private IWin32Window hostWindow;
         }
-        #endregion
+
+        /// <summary>
+        /// Prompt the user whether to accept a certain server certificate.
+        /// </summary>
+        /// <param name="realm"></param>
+        /// <param name="failures"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private SslServerTrustCredential SslServerTrustPrompt( string realm,
+            SslFailures failures, SslServerCertificateInfo info )
+        {
+            using( SslServerTrustDialog dialog = new SslServerTrustDialog() )
+            {
+                dialog.Failures = failures;
+                dialog.CertificateInfo = info;
+                DialogResult result = dialog.ShowDialog();
+
+                // Cancel means reject.
+                if ( result == DialogResult.Cancel )
+                    return null;
+
+                SslServerTrustCredential cred = new SslServerTrustCredential();
+                cred.AcceptedFailures = failures;
+                
+                // OK means trust permanently
+                if ( result == DialogResult.OK )
+                    cred.TrustPermanently = true;
+
+                // anything else means trust temporarily
+                return cred;
+            }
+        }
+
+        /// <summary>
+        /// Prompt the user for a passphrase for a client cert.
+        /// </summary>
+        /// <returns></returns>
+        private SslClientCertificatePasswordCredential ClientCertificatePasswordPrompt()
+        {
+            using( ClientCertPassphraseDialog dialog = new ClientCertPassphraseDialog() )
+            {
+                if ( dialog.ShowDialog() == DialogResult.OK )
+                {
+                    SslClientCertificatePasswordCredential cred = new 
+                        SslClientCertificatePasswordCredential();
+                    cred.Password = dialog.Passphrase;
+                    return cred;
+                }
+                else
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Prompts the user for a client certificate.
+        /// </summary>
+        /// <returns></returns>
+        private SslClientCertificateCredential ClientCertificatePrompt()
+        {
+            using( ClientCertDialog dialog = new ClientCertDialog() )
+            {
+                if ( dialog.ShowDialog() == DialogResult.OK )
+                {
+                    SslClientCertificateCredential cred = new 
+                        SslClientCertificateCredential();
+                    cred.CertificateFile = dialog.CertificateFile;
+                    return cred;
+                }
+                else
+                    return null;
+            }
+        }        
 
         /// <summary>
         /// Pupulates actionStatus Hashtable.
         /// </summary>
-        /// 
         static SvnContext()
         {
             actionStatus[NotifyAction.Add] =                    "Added";
