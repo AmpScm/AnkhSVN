@@ -245,6 +245,12 @@
         <name>Rename Item</name>
         <description/>
       </file>
+    <file path="MakePatch.xml">
+        <handler>showusecase.html</handler>
+        <realpath>uml/usecases/MakePatch.xml</realpath>
+        <name>Make patch</name>
+        <description/>
+      </file>
     </directory>
     </directory>
     
