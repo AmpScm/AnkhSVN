@@ -197,6 +197,48 @@
         <name>Write Log Message</name>
         <description/>
       </file>
+    <file path="ExportItem.xml">
+        <handler>showusecase.html</handler>
+        <realpath>uml/usecases/ExportItem.xml</realpath>
+        <name>Export Item</name>
+        <description/>
+      </file>
+      <file path="ImportSolution.xml">
+        <handler>showusecase.html</handler>
+        <realpath>uml/usecases/ImportSolution.xml</realpath>
+        <name>Import Solution</name>
+        <description/>
+      </file>
+      <file path="MakeDir.xml">
+        <handler>showusecase.html</handler>
+        <realpath>uml/usecases/MakeDir.xml</realpath>
+        <name>Make directory</name>
+        <description/>
+      </file>
+      <file path="MergeItem.xml">
+        <handler>showusecase.html</handler>
+        <realpath>uml/usecases/MergeItem.xml</realpath>
+        <name>Merge Item</name>
+        <description/>
+      </file>
+      <file path="SelectItem.xml">
+        <handler>showusecase.html</handler>
+        <realpath>uml/usecases/SelectItem.xml</realpath>
+        <name>Select Item</name>
+        <description/>
+      </file>
+      <file path="ShowSvnFeedback.xml">
+        <handler>showusecase.html</handler>
+        <realpath>uml/usecases/ShowSvnFeedback.xml</realpath>
+        <name>Show SVN feedback</name>
+        <description/>
+      </file>
+      <file path="ViewRepositoryFile.xml">
+        <handler>showusecase.html</handler>
+        <realpath>uml/usecases/ViewRepositoryFile.xml</realpath>
+        <name>View Repository File</name>
+        <description/>
+      </file>
     </directory>
     </directory>
     
