@@ -65,25 +65,7 @@ namespace Ankh.Solution
                 originalImageList = IntPtr.Zero;
             }
             this.solutionNode = null;
-        }
-
-
-        
-
-        /// <summary>
-        /// Updates the status of selected items.
-        /// </summary>
-        public void UpdateSelectionStatus()
-        {
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
-            {
-                TreeNode node = this.GetNode( item );
-                if ( node != null )
-                    node.Refresh();
-            }
-        }
-
-        
+        }        
 
         /// <summary>
         /// Refreshes the parents of the selected items.
