@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 7.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "error", "http://localhost/error/error.csproj", "{4E8A6E6C-0BEA-44B2-B17F-F47E863074C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "error", "http://10.0.0.3/error/error.csproj", "{4E8A6E6C-0BEA-44B2-B17F-F47E863074C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
