@@ -4,6 +4,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace NSvn.Core.Tests
 {
@@ -41,6 +42,43 @@ namespace NSvn.Core.Tests
 
         }
 
+        /// <summary>
+        /// Determines the SVN status of a given path
+        /// </summary>
+        /// <param name="path">The path to check</param>
+        /// <returns>Same character codes as used by svn st</returns>
+        public char GetSvnStatus( string path )
+        {            
+            string output = this.RunCommand( "svn", "st " + path );
+
+            // status code is the first character
+            return output[ 0 ];
+
+        }
+
+        /// <summary>
+        /// Runs a command
+        /// </summary>
+        /// <param name="command">The command to run</param>
+        /// <param name="args">Arguments to the command</param>
+        /// <returns>The output from the command</returns>
+        public string RunCommand( string command, string args )
+        {
+            ProcessStartInfo psi = new ProcessStartInfo( "svn", args );
+            psi.CreateNoWindow = true;
+            psi.RedirectStandardOutput = true;
+            psi.UseShellExecute = false;
+
+            Process p = Process.Start( psi );
+            string output = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
+
+            if ( p.ExitCode != 0 )
+                throw new ApplicationException( "svn exit code was not 0" );
+
+            return output;
+        }
+
         
 
         /// <summary>
@@ -66,6 +104,8 @@ namespace NSvn.Core.Tests
         {
             get{ return this.wcPath; }
         }
+
+        
 
         private void ExtractToTempPath( string destinationPath, string resource )
         {
