@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="NSvn.msm" default="rebuild">
+    <property name="verbose" value="false"/>
+    <property name="src.dir" value="."/>
+    <property name="installsource.dir" value="..\${installsource.dir}"/>
+    
+    <target name="copy">
+        <move todir="${installsource.dir}" flatten="true"> 
+            <fileset basedir="..">
+                <includes name="NSvn.Common\*.wixobj"/>
+                <includes name="NSvn.Core\*.wixobj"/>
+            </fileset>
+        </move>
+    </target>
+    
+    <target name="clean">
+        <delete verbose="true" failonerror="false">
+            <fileset basedir="${installsource.dir}">
+                <includes name="*.wixobj"/>
+                <includes name="*.wixlib"/>
+            </fileset>
+        </delete>
+    </target>
+    
+    <target name="precompile" depends="copy">
+        <exec workingdir="${installsource.dir}" program="lit.exe"
+            commandline="-nologo -out NSvn.wixlib NSvn.Core.wixobj NSvn.Common.wixobj"/>
+    </target>
+    
+    <target name="compile" depends="precompile">
+        <exec workingdir="${src.dir}" program="candle.exe"
+            commandline="-nologo NSvn.msm.wxs -out ${installsource.dir}\NSvn.wixobj" />
+    </target>
+    
+    <target name="link" depends="precompile, compile">
+        <exec workingdir="${installsource.dir}" program="light.exe"
+            commandline="-nologo -out NSvn.msm NSvn.wixobj NSvn.wixlib" />
+    </target>
+    
+    <target name="build-WiX" depends="precompile, compile, link">
+        <call target="clean"/>
+    </target>
+
+</project>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+    <Module Id="NSvn" Guid="0DE8324A-FD3A-49ba-AC66-8AF628ED74D8" Language="1033" 
+        Version="1">
+        <Package Description="NSvn" Comments="NSvn Merge Module" 
+            Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud" 
+            InstallerVersion="200" Platforms="Intel"
+            Languages="1033" Compressed="yes" SummaryCodepage="1252"/>
+            
+        <Directory Id='TARGETDIR'   Name='SourceDir'>
+            <Directory  Id='appDir' Name='.'/>
+        </Directory>
+        
+        <!-- Include the Fragments needed for the merge module -->
+        <FragmentRef Id="FR_NSvn.Common" />
+        <FragmentRef Id="FR_NSvn.Core" />
+    </Module>
+</Wix>
