@@ -21,7 +21,6 @@ namespace NSvn.Core.Tests
             this.ExtractWorkingCopy();
         }
 
-        [Ignore("Cannot delete the directory for now")]
         [Test]
         public void TestLocalDiff()
         {  
@@ -29,7 +28,7 @@ namespace NSvn.Core.Tests
 
             
             using( StreamWriter w = new StreamWriter( form, false ) )
-                w.Write( "Moo moo moo moo moo\nmon\r\nmooo moo moo \r\nssdgo" );
+                w.Write( "Moo moo moo moo moo\r\nmon\r\nmooo moo moo \r\nssdgo" );
 
             //Necessary for some weird reason
             Directory.SetCurrentDirectory( this.WcPath );
