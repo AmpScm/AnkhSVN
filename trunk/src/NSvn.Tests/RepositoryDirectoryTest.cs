@@ -22,8 +22,8 @@ namespace NSvn.Tests
         public override void TearDown()
         {
             base.TearDown();
-            try{ Directory.Delete( this.localDir ); }
-            catch( Exception ){}
+            if ( Directory.Exists( this.localDir ) )
+                this.RecursiveDelete( this.localDir );
         }
 
         [Test]
