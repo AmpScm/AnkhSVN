@@ -9,7 +9,7 @@ using NSvn;
 namespace Ankh.UI
 {
 	/// <summary>
-	/// This is a control that shows a treeview of a remote repository
+	/// This is a control that shows a treeview of a remote repository.
 	/// </summary>
 	public class RepositoryExplorer : System.Windows.Forms.UserControl
 	{       
@@ -141,7 +141,6 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void ExpandNode(object sender, System.Windows.Forms.TreeViewCancelEventArgs e)
         {
-                       
             // is this uninitialized?
             if ( e.Node.Nodes[0].Tag == DUMMY_NODE )
             {
