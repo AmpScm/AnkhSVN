@@ -1,6 +1,6 @@
 using System;
-using SourceForge.NAnt;
-using SourceForge.NAnt.Attributes;
+using NAnt.Core;
+using NAnt.Core.Attributes;
 using NSvn;
 using NSvn.Common;
 using NSvn.Core;
@@ -75,15 +75,17 @@ namespace Rogue.SvnTasks
                     revision = NSvn.Core.Revision.FromNumber( this.Revision );
 
                 RepositoryDirectory dir = new RepositoryDirectory( this.Url, revision );
-
+				dir.Context.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
+				dir.Context.AddAuthenticationProvider( AuthenticationProvider.GetSimpleProvider() );
+				
                 if( this.Verbose )
-                    dir.Context = new Context( this.LogPrefix );
+                    dir.Context = new Context( this.LogPrefix, this );
 
                 if ( this.Username != null && this.Password != null )
                 {
-                    dir.Context.AddAuthenticationProvider( 
-                        new SimpleProvider( new SimpleCredential(this.Username, this.Password) ) );  
-                }
+					dir.Context.AddAuthenticationProvider( AuthenticationProvider.GetSimplePromptProvider(
+						new SimplePromptDelegate( this.SimplePrompt ), 1 ) );
+				}
 
                 dir.Checkout( this.LocalDir, true );
             }
@@ -101,20 +103,27 @@ namespace Rogue.SvnTasks
             }
         }
 
+		private SimpleCredential SimplePrompt( string realm, string password )
+		{
+			return new SimpleCredential( this.Username, this.Password );
+		}
+
         #region class Context	
         private class Context : NSvnContext
         {
-            public Context( string logPrefix )
+            public Context( string logPrefix, SvnCheckoutTask parent )
             {
                 this.logPrefix = logPrefix;
+				this.parent = parent;
             }
 
             protected override void NotifyCallback(NSvn.Core.Notification notification)
             {
-                Log.WriteLine( "{0}Checked out {1}", this.logPrefix, notification.Path + Environment.NewLine);
+                this.parent.Log( Level.Verbose, "{0}Checked out {1}", this.logPrefix, notification.Path + Environment.NewLine);
             }
 
             private string logPrefix;
+			private SvnCheckoutTask parent;
         }
         #endregion
 

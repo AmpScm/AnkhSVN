@@ -69,7 +69,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
@@ -78,19 +78,24 @@
                     HintPath = "I:\bin\NAnt.Core.dll"
                 />
                 <Reference
-                    Name = "NSvn.Common"
-                    AssemblyName = "NSvn.Common"
-                    HintPath = "..\..\src\NSvn\bin\Debug\NSvn.Common.dll"
+                    Name = "Utils"
+                    AssemblyName = "Utils"
+                    HintPath = "I:\bin\Utils.dll"
                 />
                 <Reference
-                    Name = "NSvn"
-                    AssemblyName = "NSvn"
-                    HintPath = "..\..\src\NSvn\bin\Debug\NSvn.dll"
+                    Name = "NSvn.Common"
+                    AssemblyName = "NSvn.Common"
+                    HintPath = "I:\bin\NSvn.Common.dll"
                 />
                 <Reference
                     Name = "NSvn.Core"
                     AssemblyName = "NSvn.Core"
-                    HintPath = "..\..\src\NSvn\bin\Debug\NSvn.Core.dll"
+                    HintPath = "I:\bin\NSvn.Core.dll"
+                />
+                <Reference
+                    Name = "NSvn"
+                    AssemblyName = "NSvn"
+                    HintPath = "I:\bin\NSvn.dll"
                 />
             </References>
         </Build>
