@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Ankh.Solution;
 using System.Collections;
+using System.IO;
 
 namespace Ankh
 {
@@ -113,7 +114,17 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.reposExplorerWindow; }
-        }   
+        }  
+ 
+        /// <summary>
+        /// Whether a solution is open.
+        /// </summary>
+        public bool SolutionIsOpen
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.dte.Solution.IsOpen; }
+        }
+
 
         /// <summary>
         /// The Ankh configuration.
@@ -145,6 +156,9 @@ namespace Ankh
         {
             try
             {
+                if ( !this.CheckWhetherAnkhShouldLoad() )
+                    return;
+
                 System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
 
                 Utils.DebugTimer timer = DebugTimer.Start();
@@ -232,7 +246,51 @@ namespace Ankh
         #endregion        
 
         
-        
+        private bool CheckWhetherAnkhShouldLoad()
+        {
+            // no point in doing anything if the solution dir isn't a wc
+            string solutionPath = this.dte.Solution.FullName;
+            if ( solutionPath == String.Empty || 
+                !SvnUtils.IsWorkingCopyPath( Path.GetDirectoryName( solutionPath ) ) )
+                return false;
+
+            string adminDir = Path.Combine( Path.GetDirectoryName( solutionPath ),
+                SvnUtils.WC_ADMIN_AREA );
+
+            // maybe this solution has never been loaded before with Ankh?
+            if ( File.Exists( Path.Combine( adminDir, "Ankh.Load" ) ) )
+                return true;
+            else if ( File.Exists( Path.Combine(adminDir, "Ankh.NoLoad") ) )
+                return false;
+            else
+                return this.QueryWhetherAnkhShouldLoad( adminDir );
+        }
+
+        private bool QueryWhetherAnkhShouldLoad( string adminDir )
+        {
+            string nl = Environment.NewLine;
+            string msg = "Ankh has detected that the solution file for this solution " + 
+                "is in a Subversion working copy." + nl + 
+                "Do you want to enable Ankh for this solution?" + nl +
+                "(If you select Cancel, Ankh will not be enabled, " + nl +
+                "but you will " +
+                "be asked this question again the next time you open the solution)";
+
+            DialogResult res = MessageBox.Show( 
+                this.HostWindow, msg, "Ankh", 
+                MessageBoxButtons.YesNoCancel );
+            if ( res == DialogResult.Yes )
+            {
+                File.Create( Path.Combine(adminDir, "Ankh.Load") ).Close();
+                return true;
+            }
+            else if ( res == DialogResult.No )
+            {
+                File.Create( Path.Combine(adminDir, "Ankh.NoLoad") ).Close();
+            }
+
+            return false;
+        }
         
 
         private void CreateRepositoryExplorer()
