@@ -205,11 +205,16 @@ namespace Ankh.Solution
 
         internal void SetUpTreeview()
         {
-            // TODO: error checking here
+            Window solutionExplorerWindow = this.dte.Windows.Item(
+                EnvDTE.Constants.vsWindowKindSolutionExplorer);
+
+            // we need to make sure its not hidden
+            bool hidden = solutionExplorerWindow.AutoHides;
+            solutionExplorerWindow.AutoHides = false;
+            
             // find the solution explorer window
-            // Get the caption of the solution explorer
-            string slnExplorerCaption = this.dte.Windows.Item(
-                EnvDTE.Constants.vsWindowKindSolutionExplorer).Caption;
+            // Get the caption of the solution explorer            
+            string slnExplorerCaption = solutionExplorerWindow.Caption;
             //            string vsnetCaption = this.dte.MainWindow.C
             IntPtr vsnet = (IntPtr)this.dte.MainWindow.HWnd;//Win32.FindWindow( VSNETWINDOW, null );
             IntPtr slnExplorer = Win32.FindWindowEx( vsnet, IntPtr.Zero, GENERICPANE, 
@@ -222,6 +227,9 @@ namespace Ankh.Solution
             if ( this.treeview == IntPtr.Zero )
                 throw new ApplicationException( 
                     "Could not attach to solution explorer treeview" );
+
+            // reset back to the original hiding-state(!?)
+            solutionExplorerWindow.AutoHides = hidden;
 
             // load the status images image strip
             Bitmap statusImages = (Bitmap)Image.FromStream( 
