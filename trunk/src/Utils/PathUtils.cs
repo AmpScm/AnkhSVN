@@ -83,5 +83,40 @@ namespace Utils
             File.SetAttributes( path, FileAttributes.Normal );
             Directory.Delete( path, true );
         }
+
+        /// <summary>
+        /// Retrieves the parent directory of a path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>The parent directory.</returns>
+        public static string GetParent( string path )
+        {
+            path = PathUtils.StripTrailingSlash( path );            
+            return Path.GetDirectoryName( path );
+        }
+
+        /// <summary>
+        /// Get the name of the item(file or folder).
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetName( string path )
+        {
+            path = PathUtils.StripTrailingSlash( path );
+            return Path.GetFileName( path );
+        }
+
+        /// <summary>
+        /// Strips the trailing slash off a path, if present.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string StripTrailingSlash( string path )
+        {
+            if ( path.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
+                path = path.Substring( 0, path.Length-1 );
+            return path;
+        }
+
 	}
 }
