@@ -46,6 +46,7 @@
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
                 <includes name="${build.dir}/VSUserControlHostLib.dll"/>
+                <includes name="${lib.dir}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
