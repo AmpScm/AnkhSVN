@@ -2,6 +2,7 @@
 using System;
 using NSvn;
 using EnvDTE;
+using System.IO;
 
 namespace Ankh.EventSinks
 {
@@ -36,11 +37,20 @@ namespace Ankh.EventSinks
         /// <param name="item">Projectitem to be scheduled for removal.</param>
         protected void ItemRemoved( ProjectItem item )
         {
-            this.Context.OutputPane.StartActionText( "Delete" );
-            this.Context.SolutionExplorer.VisitResources( 
-                item, new RemoveProjectVisitor(), false );
-            this.Context.SolutionExplorer.Refresh ( item.ContainingProject );
-            this.Context.OutputPane.EndActionText();
+            try
+            {
+                //this.Context.OutputPane.StartActionText( "Delete" );
+                this.Context.SolutionExplorer.VisitResources( 
+                    item, new RemoveProjectVisitor(), false );
+                this.Context.SolutionExplorer.Refresh ( item.ContainingProject );
+                //this.Context.OutputPane.EndActionText();
+
+            }
+            catch ( Exception ex )
+            {
+                Connect.HandleError( ex );
+                throw;
+            }
         }
 
         protected void ItemRenamed( ProjectItem item, string oldName )
@@ -55,7 +65,13 @@ namespace Ankh.EventSinks
         {
             public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
             {
-                resource.Remove( true );
+                // Checks if file doesn't exists. 
+                if ( !File.Exists( resource.Path ) )
+                {
+                    resource.Remove( true );
+                }
+               
+                
             }
         }
 	}
