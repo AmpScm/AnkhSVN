@@ -315,6 +315,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "RenameDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RenameDialog.resx"
+                    DependentUpon = "RenameDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "RepositoryExplorerControl.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
