@@ -40,7 +40,7 @@ namespace Ankh.Commands
                 bool recurse = false;
                 if ( CommandBase.Shift )
                 {
-                    using( PathSelector p = this.GetPathSelector( "Select items for diffing" ) )
+                    using( PathSelector p = CommandBase.GetPathSelector( "Select items for diffing" ) )
                     {
                         p.Items = resources;
                         p.CheckedItems = resources;

@@ -43,9 +43,9 @@ namespace Ankh.Commands
             bool recursive = false;
 
             // are we shifted?
-            if ( !this.Shift )
+            if ( !CommandBase.Shift )
             {
-                using( PathSelector sel = this.GetPathSelector( "Select items to add" ) )
+                using( PathSelector sel = CommandBase.GetPathSelector( "Select items to add" ) )
                 {
                     sel.EnableRecursive = true;
                     sel.Recursive = false;

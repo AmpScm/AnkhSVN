@@ -60,7 +60,7 @@ namespace Ankh.Commands
             }
         }
 
-        protected PathSelector GetPathSelector( string text )
+        protected static PathSelector GetPathSelector( string text )
         {
             PathSelector p = new PathSelector();
             p.Caption = text;
@@ -121,7 +121,7 @@ namespace Ankh.Commands
             return item.IsVersioned && !item.IsModified && item.IsFile;
         }
 
-        protected void GetPathInfo(object sender, GetPathInfoEventArgs args)
+        protected static void GetPathInfo(object sender, GetPathInfoEventArgs args)
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;
