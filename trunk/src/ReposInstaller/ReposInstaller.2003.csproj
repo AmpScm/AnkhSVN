@@ -15,7 +15,7 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Exe"
+                OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
                 RootNamespace = "ReposInstaller"
@@ -106,7 +106,7 @@
                 />
                 <Reference
                     Name = "envdte"
-                    AssemblyName = "envdte"
+                    AssemblyName = "EnvDTE"
                     HintPath = "D:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\envdte.dll"
                 />
             </References>
@@ -131,11 +131,6 @@
                     RelPath = "ReposInstaller.resx"
                     DependentUpon = "ReposInstaller.cs"
                     BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Test.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
             </Include>
         </Files>
