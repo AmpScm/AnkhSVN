@@ -83,7 +83,7 @@ namespace Ankh
                 this.commitDialog.LogMessage = ctx.LogMessage;
 
             // we want to preserve the original state.
-            bool originalVisibility = this.commitDialog.Visible;
+            bool originalVisibility = this.commitDialogWindow.Visible;
 
             this.commitDialogWindow.Visible = true;
             this.commitDialogModal = true;
