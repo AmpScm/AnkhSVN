@@ -95,6 +95,11 @@
                     Project = "{1882FE23-6EE3-46AF-82B2-929E371E6218}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "NSvn.Core"
+                    Project = "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
+                    Package = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
+                />
             </References>
         </Build>
         <Files>
