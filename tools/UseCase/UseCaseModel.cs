@@ -33,26 +33,17 @@ namespace UseCase
 
         public ItemCollection Actors
         {
-            get
-            { 
-                return this.actors;
-            }
+            get { return this.actors; }
         }
 
         public ItemCollection PreConditions
         {
-            get
-            {
-                return this.preConditions;
-            }
+            get { return this.preConditions; }
         }
 
         public ItemCollection PostConditions
         {
-            get
-            {
-                return this.postConditions;
-            }
+            get { return this.postConditions; }
         }
 
         public string Name
@@ -85,7 +76,7 @@ namespace UseCase
             }
         }
 
-            public IElement[] Elements
+        public IElement[] Elements
         {
             get{ return (IElement[])this.elements.ToArray( typeof(IElement) ); }
         }
@@ -101,6 +92,25 @@ namespace UseCase
             this.elements.Remove( element );
             this.OnElementsChanged();
         }
+
+        public void MoveElementBefore( IElement element, IElement other )
+        {
+            this.elements.Remove( element );
+            int index = this.elements.IndexOf( other );
+            this.elements.Insert( index, element );
+
+            this.OnElementsChanged();
+        }
+
+        public void MoveElementAfter( IElement element, IElement other )
+        {
+            this.elements.Remove( element );
+            int index = this.elements.IndexOf( other );
+            this.elements.Insert( index + 1, element );
+
+            this.OnElementsChanged();
+        }
+
   
         
 
@@ -162,6 +172,7 @@ namespace UseCase
             if ( this.PostConditionsChanged != null )
                 this.PostConditionsChanged( this, e );
         }
+
 
         private ItemCollection actors;
         private ItemCollection preConditions;
