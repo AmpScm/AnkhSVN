@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
+<doc title="Examining changes">
+    <section>
+    </section>   
+    <section>
+        <p>
+            <hr></hr>
+            <link url="copying_files.xml">back </link>
+            <link url="reverting_files.xml">next</link>
+        </p>
+    </section>   
+</doc>
+

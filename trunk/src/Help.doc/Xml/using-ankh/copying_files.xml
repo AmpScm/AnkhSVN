@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
-<doc title="Adding files">
+<doc title="Copying files">
     <section>
     </section>  
-     <section>
+    <section>
         <p>
             <hr></hr>
-            <link url="make_changes.xml">back </link>
-            <link url="removing_files.xml">next</link>
+            <link url="moving_files.xml">back </link>
+            <link url="examine_changes.xml">next</link>
         </p>
-    </section>  
+    </section>    
 </doc>
 
