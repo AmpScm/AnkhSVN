@@ -47,9 +47,16 @@
     <target name="build" depends="build-NSvn.Common, build-NSvn, build-NSvn.Core, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"/>
     
     <target name="test" depends="build">
-      
+	    <copy todir="${build.dir}">
+			<fileset basedir="${lib.dir}">
+				<includes name="*.dll"/>
+			</fileset>
+		</copy>
+		
         <exec program="nunit-console.exe"
-              commandline="/assembly:${build.dir}/NSvn.Core.Tests.dll"/>
+				commandline="/assembly:${build.dir}/NSvn.Core.Tests.dll"/>
+		<exec program="nunit-console.exe"
+              commandline="/assembly:${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
     </target>
     
 </project>
