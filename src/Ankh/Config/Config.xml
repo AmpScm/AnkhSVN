@@ -34,5 +34,16 @@
         svn command in the VS.NET command window. It is optional. 
         If left out, Ankh will attempt to spawn svn.exe from PATH -->
         <!--<SvnExePath>C:\bin\svn.exe</SvnExePath>-->
+        
+        <!--This is the name of the administrative subdirectory used by
+        Subversion to maintain metadata for the working copy. You should 
+        *ONLY* modify this if you know what you are doing and you are 
+        experiencing specific problems with Subversion's use of ".svn" for
+        the meta-data directory. Working copies checked out using any other
+        name than ".svn" will be incompatible with any other Subversion clients
+        unless they are also configured to accept alternate directory names.
+        If this element is left out, Ankh will default to using the standard
+        ".svn" --> 
+        <!--<AdminDirectoryName>_svn</AdminDirectoryName>-->
     </Subversion>
 </Config>

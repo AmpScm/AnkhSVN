@@ -32,6 +32,7 @@
                         <xs:sequence>
                             <xs:element name="ConfigDir" type="xs:string" minOccurs="0" maxOccurs="1" />
                             <xs:element name="SvnExePath" type="xs:string" minOccurs="0" maxOccurs="1" />
+                            <xs:element name="AdminDirectoryName" type="xs:string" minOccurs="0" maxOccurs="1" />
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>

@@ -63,5 +63,8 @@ namespace Ankh.Config {
         
         /// <remarks/>
         public string SvnExePath;
+        
+        /// <remarks/>
+        public string AdminDirectoryName;
     }
 }
