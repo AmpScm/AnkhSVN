@@ -14,5 +14,13 @@
         <!-- Include the Fragments needed for the merge module -->
         <FragmentRef Id="FR_NSvn.Common" />
         <FragmentRef Id="FR_NSvn.Core" />
+
+        <!-- Include the Licence file -->
+        <DirectoryRef Id="appDir">
+            <Component Id="C__LICENCE.rtf" Guid="FE638B20-C4C1-4694-9701-CE26F30DDE90">
+                <File Id="CF_LICENCE.rtf" Name="LICENCE.rtf" LongName="LICENCE.rtf"
+                    Vital="yes" KeyPath="yes" src="..\LICENCE.rtf"/>
+            </Component>
+        </DirectoryRef>
     </Module>
 </Wix>
