@@ -100,6 +100,11 @@
                     Project = "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
                     Package = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
                 />
+                <Reference
+                    Name = "Utils.2003"
+                    Project = "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -113,6 +118,11 @@
                     RelPath = "repos.zip"
                     Link = "..\NSvn.Core.Tests\repos.zip"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SvnItemTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "wc.zip"
