@@ -258,15 +258,19 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonR
 {
     Pool pool;
     apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
-    svn_client_commit_info_t* commitInfoPtr;
+    svn_client_commit_info_t* commitInfoPtr = 0;
 
     HandleError( svn_client_commit( &commitInfoPtr, aprArrayTargets, nonRecursive, 
         this->context->ToSvnContext( pool ), pool ) );
-
-    if ( commitInfoPtr )
+    
+    if ( commitInfoPtr && commitInfoPtr->revision != SVN_INVALID_REVNUM )
+    {
         return new CommitInfo( commitInfoPtr );
+    }
     else 
-        return 0;
+    {
+        return CommitInfo::Invalid;
+    }
 }
 // implementation of Client::Move
 NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath, 

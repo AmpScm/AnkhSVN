@@ -90,6 +90,17 @@ namespace NSvn.Core.Tests
             this.logMessage = "ֶ e i a ז ו. Mרררר! über";
             CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
         }
+
+        /// <summary>
+        /// Tests that a commit on an unmodified repos returns CommitInfo.Invalid.
+        /// </summary>
+        [Test]
+        public void TestCommitWithNoModifications()
+        {
+            this.Client.LogMessage += new LogMessageDelegate(this.LogMessageCallback);
+            CommitInfo ci = this.Client.Commit( new string[]{ this.WcPath }, false );
+            Assert.AreSame( CommitInfo.Invalid, ci );
+        }
         
         /// <summary>
         /// Tests that you can cancel a commit.
