@@ -33,8 +33,8 @@ namespace Ankh.UI
             this.commitItems = new ArrayList();
 
             this.diffView.Visible = false;
-
             
+            this.pathColumnHeader.Width = this.commitItemsView.Width - this.actionColumnHeader.Width - 5;
         }
 
         /// <summary>
