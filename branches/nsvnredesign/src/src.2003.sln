@@ -125,11 +125,10 @@ Global
 		master.build = master.build
 		Ankh\AnkhSetup\README.rtf = Ankh\AnkhSetup\README.rtf
 		readme.txt = readme.txt
-		..\doc\src.2003.vsd = ..\doc\src.2003.vsd
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
