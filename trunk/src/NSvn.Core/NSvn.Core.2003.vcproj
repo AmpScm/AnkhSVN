@@ -89,7 +89,7 @@
 				OutputFile="$(OutDir)/NSvn.Core.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SVNSRC)\release"
-				DelayLoadDLLs="ssleay32.dll;libdb42.dll;libeay32.dll"
+				DelayLoadDLLs=""
 				GenerateDebugInformation="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
