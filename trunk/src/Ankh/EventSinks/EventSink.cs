@@ -4,7 +4,7 @@ using System.Collections;
 using EnvDTE;
 using Microsoft.Win32;
 using Microsoft;
-using Microsoft.VisualStudio.VCProjectEngine;
+//using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Ankh.EventSinks
 {
@@ -40,7 +40,7 @@ namespace Ankh.EventSinks
                 // VC++ projects are a special case
                 if ( project.Kind == VCPROJECTGUID )
                 {
-                    VCProjectEngineEvents events = (VCProjectEngineEvents)
+                    object events = 
                         context.DTE.Events.GetObject( VCPROJECT );
                     sinks.Add( new VCProjectEventSink( events, context ) );
 
