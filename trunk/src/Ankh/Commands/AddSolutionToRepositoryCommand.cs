@@ -266,7 +266,6 @@ namespace Ankh.Commands
                                     file + ": AnkhSVN does not currently support automatically " + 
                                     "importing files " +  
                                     "that are not under the solution root directory." );
-                                throw new Exception();
                                 continue;
                             }
 
