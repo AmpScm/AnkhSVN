@@ -190,7 +190,43 @@ NSvn::Common::PropertyMapping* NSvn::Core::Client::PropGet(String* propName,
     return ConvertPropertyHash( propertyHash, propName, pool );
 
 }
+//TODO: Implement the variable admAccessBaton
+// implementation of Client::Delete
+NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* path, bool force, 
+                ClientContext* context)
+{
+	Pool pool;
+    const char* trueSrcPath = CanonicalizePath( path, pool );
+    
+    svn_client_commit_info_t* commitInfoPtr = 0;
 
+    HandleError( svn_client_delete( &commitInfoPtr, trueSrcPath,  0, false, 
+        context->ToSvnContext( pool ), pool ) );
+
+     if ( commitInfoPtr != 0 )
+        return new CommitInfo( commitInfoPtr );
+    else
+        return CommitInfo::Invalid;
+}
+
+NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, String* newEntry, bool nonRecursive, 
+                ClientContext* context)
+{
+	Pool pool;
+    const char* trueSrcPath = CanonicalizePath( path, pool );
+    const char* trueDstUrl = CanonicalizePath( url, pool );
+	const char* trueNewEntry = CanonicalizePath( newEntry, pool );
+
+    svn_client_commit_info_t* commitInfoPtr = 0;
+
+    HandleError( svn_client_import( &commitInfoPtr, trueSrcPath, trueDstUrl, trueNewEntry, nonRecursive,
+        context->ToSvnContext( pool ), pool ) );
+
+     if ( commitInfoPtr != 0 )
+        return new CommitInfo( commitInfoPtr );
+    else
+        return CommitInfo::Invalid;
+}
 
 // Converts array of .NET strings to apr array of const char
 apr_array_header_t* NSvn::Core::Client::StringArrayToAprArray( String* strings[], Pool& pool )

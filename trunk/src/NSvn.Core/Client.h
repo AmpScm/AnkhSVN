@@ -86,11 +86,15 @@ namespace NSvn
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
 	        static CommitInfo* MakeDir(String* path, ClientContext* context);
-/*          
+        
             ///<summary>Delete a file/directory, either in a repository or a working copy.</summary>
             ///<param name="path">Path to the file/directory.</param>
-            ///<param name="admAccessBaton"></param>
-            ///<param name="force"></param>
+            ///<param name="admAccessBaton">Either a baton that holds a write 
+			///								lock for the parent of path in 
+			///								working copy, or NULL.</param>
+            ///<param name="force">If force is set all the files and all 
+			///						unversioned items in a directory in a 
+			///						working copy  will be removed.</param>
             ///<param name="context">A client context object, which holds client specific 
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various data. <see cref="NSvn.Core.ClientContext"/> 
@@ -98,14 +102,15 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
-             static CommitInfo* Delete(String* path, AdminAccessBaton* admAccessBaton, bool force, 
-                ClientContext* context);
+			//TODO: Implement the variable admAccessBaton   
+             static CommitInfo* Delete(String* path, bool force, ClientContext* context);
 
             ///<summary>Import file or directory path into repository directory url at head, 
             ///         authenticating with the authentication baton</summary>
             ///<param name="path">Path to the file/directory.</param>
             ///<param name="url">Path to the files/directory in the repository.</param>
-            ///<param name="newEntry"></param>
+            ///<param name="newEntry">New entry created in the repository directory 
+			///	 					identified by url, may be null.</param>
             ///<param name="nonRecursive">Indicate that subdirectories of directory targets 
             ///                           should be ignored.</param>
             ///<param name="context">A client context object, which holds client specific 
@@ -117,7 +122,7 @@ namespace NSvn
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns> 
 	        static CommitInfo* Import(String* path, String* url, String* newEntry, bool nonRecursive, 
                 ClientContext* context);
-*/
+
             ///<summary>Commit file/directory into repository, authenticating with the 
             ///         authentication baton.</summary>
             ///<param name="targets">Array of paths to commit.</param>
