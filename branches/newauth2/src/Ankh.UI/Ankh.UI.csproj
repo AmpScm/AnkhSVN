@@ -355,6 +355,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "SslServerTrustDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SslServerTrustDialog.resx"
+                    DependentUpon = "SslServerTrustDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "TestRepositoryExplorer.cs"
                     SubType = "Form"
                     BuildAction = "Compile"

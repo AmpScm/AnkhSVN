@@ -2,7 +2,6 @@
 
 #include "AuthenticationBatonTest.h"
 #include "AuthenticationBaton.h"
-#include "Authentication.h"
 
 void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestSingleProvider()
 {

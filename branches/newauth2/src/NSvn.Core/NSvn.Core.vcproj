@@ -109,7 +109,7 @@
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
-				RelativePath="Authentication.cpp">
+				RelativePath="AuthenticationProvider.cpp">
 			</File>
 			<File
 				RelativePath="Client.cpp">
@@ -155,7 +155,7 @@
 				RelativePath="AprFileAdapter.h">
 			</File>
 			<File
-				RelativePath="Authentication.h">
+				RelativePath="AuthenticationProvider.h">
 			</File>
 			<File
 				RelativePath="ChangedPath.h">
