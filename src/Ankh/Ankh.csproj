@@ -179,6 +179,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "ResourceBitmaps.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "resourcevisitors.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

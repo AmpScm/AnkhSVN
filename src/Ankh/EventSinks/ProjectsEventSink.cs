@@ -49,17 +49,7 @@ namespace Ankh.EventSinks
         {
             string s = item.FileName;
         }
-
-        /// <summary>
-        /// A visitor that schedules a remove of visited items on commit.
-        /// </summary>
-        private class RemoveProjectVisitor : LocalResourceVisitorBase
-        {
-            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
-            {
-                resource.Remove( true );
-            }
-        }
+       
         private ProjectsEvents events;
 	}
 }
