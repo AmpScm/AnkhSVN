@@ -1,0 +1,212 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+  <Fragment Id="FR_Ankh">
+    <DirectoryRef Id="appDir">
+      <!-- RegAsm reg settings -->
+      <Component Id="Ankh_component8" DiskId="1">
+        <Registry Id="Ankh_registry8" Root="HKCR" 
+          Key="Ankh" 
+          Name="" Value="Ankh.Connect" />
+      </Component>
+      <Component Id="Ankh_component9" DiskId="1">
+        <Registry Id="Ankh_registry9" Root="HKCR" 
+          Key="Ankh\CLSID" 
+          Name="" Value="{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}" />
+      </Component>
+      <Component Id="Ankh_component10" DiskId="1">
+        <Registry Id="Ankh_registry10" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}" 
+          Name="" Value="Ankh.Connect" />
+      </Component>
+      <Component Id="Ankh_component11" DiskId="1">
+        <Registry Id="Ankh_registry11" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" />
+      </Component>
+      <Component Id="Ankh_component12" DiskId="1">
+        <Registry Id="Ankh_registry12" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
+          Name="" Value="mscoree.dll" />
+      </Component>
+      <Component Id="Ankh_component13" DiskId="1">
+        <Registry Id="Ankh_registry13" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
+          Name="ThreadingModel" Value="Both" />
+      </Component>
+      <Component Id="Ankh_component14" DiskId="1">
+        <Registry Id="Ankh_registry14" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
+          Name="Class" Value="Ankh.Connect" />
+      </Component>
+      <Component Id="Ankh_component15" DiskId="1">
+        <Registry Id="Ankh_registry15" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
+          Name="Assembly" Value="Ankh, Version=$(var.ankhversion), Culture=neutral, PublicKeyToken=null" />
+      </Component>
+      <Component Id="Ankh_component16" DiskId="1">
+        <Registry Id="Ankh_registry16" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
+          Name="RuntimeVersion" Value="v1.0.3705" />
+      </Component>
+      
+      <!-- No codebase for now, as it isn't in the old setup either -->
+      <!--<Component Id="Ankh_component17" DiskId="1">
+      <Registry Id="Ankh_registry17" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
+          Name="CodeBase" Value="file:///C:/projects/Ankh/src/build-Release/Ankh.dll" />
+      </Component>-->
+      <Component Id="Ankh_component18" DiskId="1">
+        <Registry Id="Ankh_registry18" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
+          Name="Class" Value="Ankh.Connect" />
+      </Component>
+      <Component Id="Ankh_component19" DiskId="1">
+        <Registry Id="Ankh_registry19" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
+          Name="Assembly" Value="Ankh, Version=$(var.ankhversion), Culture=neutral, PublicKeyToken=null" />
+      </Component>
+      <Component Id="Ankh_component20" DiskId="1">
+        <Registry Id="Ankh_registry20" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
+          Name="RuntimeVersion" Value="v1.0.3705" />
+      </Component>
+      <!-- No codebase for now, as it isn't in the old setup either -->
+      <!--<Component Id="Ankh_component21" DiskId="1">
+        <Registry Id="Ankh_registry21" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
+          Name="CodeBase" Value="file:///C:/projects/Ankh/src/build-Release/Ankh.dll" />
+      </Component>-->
+      <Component Id="Ankh_component22" DiskId="1">
+        <Registry Id="Ankh_registry22" Root="HKCR" 
+          Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\ProgId" 
+          Name="" Value="Ankh" />
+      </Component>
+      <Component Id="Ankh_component23" DiskId="1">
+        <Registry Id="Ankh_registry23" Root="HKCR" 
+          Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" 
+          Name="0" Value=".NET Category" />
+      </Component>
+
+      <!-- Visual Studio reg settings -->
+      <Component Id="Ankh_register_comp0" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
+          Name="SatelliteDllPath" Type="string" Value="[appDir]" 
+          Id="_008A3D8ACC7C418BBA42A60F997428BF" />
+      </Component>
+      <Component Id="Ankh_register_comp1" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
+          Name="LoadBehavior" Type="integer" Value="1" 
+          Id="_352F2A9FD88540A99E7BAA10389BDEF7" />
+      </Component>
+      <Component Id="Ankh_register_comp2" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
+          Name="CommandPreload" Type="integer" Value="1" 
+          Id="_5B6D86B7749D43C7A89C4A4976E64241" />
+      </Component>
+      <Component Id="Ankh_register_comp3" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
+          Name="AboutBoxIcon" Type="string" Value="[appDir]\1033\BitmapDll.dll,101"
+          Id="_653330477C2B4294AEEDBA1C043EB41B" />
+      </Component>
+      <Component Id="Ankh_register_comp4" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
+          Name="CommandLineSafe" Type="integer" Value="0"
+          Id="_678D00950AB146CDA07C5E0DE1B72B20" />
+      </Component>
+      <Component Id="Ankh_register_comp5" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
+          Name="Description" Type="string" Value="Subversion addin for Visual Studio .NET"
+          Id="_7540CF47F42C43F59211F23BA3E49E8D" />
+      </Component>
+      <Component Id="Ankh_register_comp6" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
+          Name="FriendlyName" Type="string" Value="AnkhSVN  Addin"
+          Id="_7A53D8342A1745CCBDC537B2FE952D2A" />
+      </Component>
+      <Component Id="Ankh_register_comp7" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
+          Name="SatelliteDllName" Type="string" Value="BitmapDll.dll"
+          Id="_AA431B0DB49845CFB814442A956D875B" />
+      </Component>
+      <Component Id="Ankh_register_comp8" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
+          Name="AboutBoxDetails" Type="string"
+          Id="_CEF7FF5E3BFE43C6934EACE6A662811D" />
+      </Component>
+       
+      <Component Id="Ankh_register_comp9" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
+          Name="SatelliteDllPath" Type="string" Value="[appDir]"
+          Id="_671746B8A40547A7A502F7D64CCBFE2E" />        
+      </Component>
+      <Component Id="Ankh_register_comp10" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
+          Name="LoadBehavior" Type="integer" Value="1"
+          Id="_EBDDF52053274EB8A6FC2795FC7BE6AE" />
+      </Component>
+      <Component Id="Ankh_register_comp11" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
+          Name="CommandPreload" Type="integer" Value="1"
+          Id="_3B7342E61FDC42EC81F9176F598E4C6A" />
+      </Component>
+      <Component Id="Ankh_register_comp12" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
+          Name="AboutBoxIcon" Type="string" Id="_E6E61958F7774F41B43B3DAFBE68116D" />
+      </Component>
+      <Component Id="Ankh_register_comp13" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
+          Name="CommandLineSafe" Type="integer" Value="0"
+          Id="_57DAEBE95B4047FCAF9F5EE336AC61C4" />
+      </Component>
+      <Component Id="Ankh_register_comp14" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
+          Name="Description" Type="string" Value="Subversion addin for Visual Studio .NET"
+          Id="_EE3DA771810843CCB564B23198CBB53E" />
+      </Component>
+      <Component Id="Ankh_register_comp15" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
+          Name="FriendlyName" Type="string" Value="AnkhSVN Addin"  
+          Id="_8C17B03BE4F14CA496008D0798B5830C" />
+      </Component>
+      <Component Id="Ankh_register_comp16" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
+          Name="SatelliteDllName" Type="string" Value="BitmapDll.dll"
+          Id="_56557FC97236437087F1F4B72627B3D2" />
+      </Component>
+      <Component Id="Ankh_register_comp17" DiskId="1">
+        <Registry KeyPath="yes" Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
+          Name="AboutBoxDetails" Type="string"
+          Id="_8A2A6E99964F4519A46862AD81634E49" />
+      </Component>
+      
+
+      <Component Id="Ankh_comp0" DiskId="1">
+        <File Id="Ankh_file0" Name="Ankh.dll"
+          Checksum="yes" Compressed="yes" KeyPath="yes" Vital="yes" src="$(var.builddir)\Ankh.dll" />
+        <File Id="Ankh_file2" Name="Ankh.pdb" Checksum="yes" Compressed="yes" Vital="yes" src="$(var.builddir)\Ankh.pdb" />
+      </Component>
+
+      <Directory Id="Ankh_directory1" Name="1033">
+        <Component Id="Ankh_comp3" DiskId="1">
+          <File Id="Ankh_file3" KeyPath="yes" Name="BITMAP~1.DLL" LongName="BitmapDll.dll" Checksum="yes" Compressed="yes" Vital="yes" src="$(var.builddir)\..\1033\BitmapDll.dll" />
+        </Component>
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
