@@ -120,6 +120,9 @@
 						UsePrecompiledHeader="1"/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="SvnClientException.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -159,6 +162,9 @@
 			</File>
 			<File
 				RelativePath="StringHelper.h">
+			</File>
+			<File
+				RelativePath="SvnClientException.h">
 			</File>
 			<File
 				RelativePath="delegates.h">
