@@ -8,7 +8,8 @@ namespace Ankh.Commands
 	/// <summary>
 	/// Summary description for ViewLog.
 	/// </summary>
-    [VSNetCommand("ViewLog", Text = "Repos Explorer", Tooltip = "Show the repository explorer"),
+    [VSNetCommand("ViewLog", Text = "Repos Explorer", Tooltip = "Show the repository explorer",
+         Bitmap = ResourceBitmaps.ReposExplorer),
     VSNetControl( "MenuBar.View", Position = 1 )]
 	internal class ViewLog : CommandBase
 	{

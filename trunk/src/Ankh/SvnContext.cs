@@ -42,7 +42,7 @@ namespace Ankh
                 dialog.DiffWanted += new EventHandler( this.DiffWanted );
                 if ( dialog.ShowDialog() == DialogResult.OK )
                 {
-                    ankhContext.OutputPane.StartActionText("Commit");
+                    ankhContext.OutputPane.StartActionText("Committing");
                     return dialog.LogMessage;
                 }
                 else
@@ -55,7 +55,7 @@ namespace Ankh
             if (((string)actionStatus[notification.Action.ToString()]) != "ignoretext")
             {
                 this.ankhContext.OutputPane.Write("{0} - {2}: {1}{3}"
-                    ,actionStatus[notification.Action.ToString()] 
+                    ,actionStatus[notification.Action].ToString() 
                     ,notification.Path, notification.NodeKind.ToString()
                     ,Environment.NewLine );
             }
@@ -130,23 +130,24 @@ namespace Ankh
         /// 
         static SvnContext()
         {
-            actionStatus["Add"] =                   "ADDED";
-            actionStatus["Copy"] =                  "COPIED";
-            actionStatus["Delete"] =                "DELETED";
-            actionStatus["Restore"] =               "RESTORED";
-            actionStatus["Revert"] =                "REVERTED";
-            actionStatus["FailedRevert"] =          "REVERT FAILED";
-            actionStatus["Resolve"] =               "RESOLVED";
-            actionStatus["Skip"] =                  "SKIPPED";
-            actionStatus["UpdateDelete"] =          "UPDATE DELETED";
-            actionStatus["UpdateAdd"] =             "UPDATE ADDED";
-            actionStatus["UpdateUpdate"] =          "UPDATED";
-            actionStatus["UpdateCompleted"] =       "ignoretext";
-            actionStatus["UpdateExternal"] =        "UPDATED EXTERNAL";
-            actionStatus["CommitModified"] =        "COMMIT MODIFIED";
-            actionStatus["CommitAdded"] =           "COMMIT ADDED";
-            actionStatus["CommitDeleted"] =         "COMMIT DELETED";
-            actionStatus["CommitPostfixTxDelta"] =  "ignoretext";
+            actionStatus[NotifyAction.Add] =                    "Added";
+            actionStatus[NotifyAction.Copy] =                   "Copied";
+            actionStatus[NotifyAction.Delete] =                 "Deleted";
+            actionStatus[NotifyAction.Restore] =                "Restored";
+            actionStatus[NotifyAction.Revert] =                 "Reverted";
+            actionStatus[NotifyAction.FailedRevert] =           "Revert failed";
+            actionStatus[NotifyAction.Resolve] =                "Resolved";
+            actionStatus[NotifyAction.Skip] =                   "Skipped";
+            actionStatus[NotifyAction.UpdateDelete] =           "Update deleted";
+            actionStatus[NotifyAction.UpdateAdd] =              "Update added";
+            actionStatus[NotifyAction.UpdateUpdate] =           "Updated";
+            actionStatus[NotifyAction.UpdateCompleted] =        "ignoretext";
+            actionStatus[NotifyAction.UpdateExternal] =         "Updated external";
+            actionStatus[NotifyAction.CommitModified] =         "Commit modified";
+            actionStatus[NotifyAction.CommitAdded] =            "Commit added";
+            actionStatus[NotifyAction.CommitDeleted] =          "Commit deleted";
+            actionStatus[NotifyAction.CommitReplaced] =         "Commit replaced";
+            actionStatus[NotifyAction.CommitPostfixTxDelta] =   "ignoretext";
         }
         
         static readonly Hashtable actionStatus = new Hashtable();
