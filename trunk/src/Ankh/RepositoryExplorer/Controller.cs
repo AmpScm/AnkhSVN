@@ -33,15 +33,55 @@ namespace Ankh.RepositoryExplorer
             this.directories = new Hashtable();
         }
 
+        /// <summary>
+        /// The selected node in the repository explorer.
+        /// </summary>
         public INode SelectedNode
         {
             get{ return (INode)this.repositoryExplorer.SelectedNode; }
         }
 
+        /// <summary>
+        /// The command bar associated with the repository explorer.
+        /// </summary>
         public Microsoft.Office.Core.CommandBar CommandBar
         {
             get{ return this.repositoryExplorer.CommandBar; }
             set{ this.repositoryExplorer.CommandBar = value; }
+        }
+
+        /// <summary>
+        /// Forces a node to refresh.
+        /// </summary>
+        /// <param name="node"></param>
+        public void Refresh( INode node )
+        {
+            // first invalidate our cache
+            lock( this.directories )
+            {
+                this.Invalidate( node.Url );
+            }
+
+            this.repositoryExplorer.RefreshNode( node );
+        }
+
+        /// <summary>
+        /// Recursively removes all children beneath a node.
+        /// </summary>
+        /// <param name="url"></param>
+        private void Invalidate( string url )
+        {
+            INode[] children = (INode[])this.directories[url];
+            if ( children != null )
+            {
+                foreach( INode node in children )
+                {
+                    if ( node.IsDirectory )
+                        this.Invalidate( node.Url );
+                }
+            }
+            // now remove the item
+            this.directories.Remove( url );
         }
 
         /// <summary>

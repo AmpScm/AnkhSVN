@@ -139,6 +139,11 @@ namespace Ankh.UI
             this.treeView.AddRoot( node, url );
         }
 
+        public void RefreshNode( IRepositoryTreeNode node )
+        {
+            this.treeView.RefreshNode( node );
+        }
+
         /// <summary>
         /// The user wants to expand a node. Let him, but we have to list whats under it
         /// first.
