@@ -7,21 +7,22 @@
     
     <property name="vs.2003" value="false"/>
     <property name="major.version" value="0" />
-    <property name="minor.version" value="3" />
-    <property name="patch.version" value="0" />
+    <property name="minor.version" value="5" />
+    <property name="patch.version" value="2" />
+    <property name="preserve.checkout.dir" value="false"/>
     <property name="zip.file" value="Ankh-${major.version}.${minor.version}.${patch.version}.zip" />
     <property name="msi.file" value="AnkhSetup-${major.version}.${minor.version}.${patch.version}.msi" />
     <property name="url" 
-        value="http://10.0.0.3:8088/svn/finalproject/branches/0.3-release/src"/>
+        value="http://10.0.0.3/svn/finalproject/branches/0.5-release/src"/>
         
    
     
     
     <target name="checkout">
-        <svn-checkout destination="${checkout.dir}" uri="${url}" verbose="true" />
+        <svncheckout url="${url}" localDir="${checkout.dir}"/>
     </target>
     
-    <target name="version" depends="source">    
+    <target name="version">    
         <script language="C#">
         
             <code><![CDATA[
@@ -29,9 +30,6 @@
             {
                Location location = new Location( "GetVersionString" );
                string dirname = project.ExpandProperties( "${checkout.dir}", location );
-               
-               // because of bug in Nant svn task:
-               dirname = Path.Combine( dirname, "src" );
                
                System.Diagnostics.Process proc = new System.Diagnostics.Process();
                proc.StartInfo.RedirectStandardOutput = true; 
@@ -48,12 +46,14 @@
                if ( proc.ExitCode != 0 )
                   throw new ApplicationException( "svnversion returned an error code" );   
                   
-               Regex rex = new Regex( @"(?'first'\d*)?:?(?'second'\d*)?[MS]*" );
+               Regex rex = new Regex( @"(?'first'\d+):?(?'second'\d+)?[MS]*" );
                if ( !rex.IsMatch( output ) )
-                  throw new ApplicationException( "svnversion output not as expected: " + output );
+                  throw new ApplicationException( "svnversion output not as expected: '" + output.Trim() + "'" );
                
                string first = rex.Match( output ).Groups["first"].Value;
                string second = rex.Match( output ).Groups["second"].Value;
+               
+               Console.WriteLine( "First: {0}, Second: {1}\r\nOutput: {2}", first, second, output );
                
                int revision;
                if ( second != "" )
@@ -67,16 +67,18 @@
             
             public static void ScriptMain( Project project )
             {
-               DirectoryInfo di = new DirectoryInfo(Path.GetFullPath(project.Properties[ "checkout.dir" ]));
-
                DirectoryScanner scanner = new DirectoryScanner();
-               scanner.BaseDirectory = di;
-               
+               scanner.BaseDirectory = new DirectoryInfo( project.Properties[ "checkout.dir" ] );
                scanner.Includes.Add( @"**\AssemblyInfo.cs" );
                scanner.Includes.Add( @"**\AssemblyInfo.cpp" );
                
-               string versionString = "AssemblyVersionAttribute( \"" + GetVersionString( project ) +"\")";
-                              
+               string version = GetVersionString( project );
+               
+               project.Properties["msi.file"] = String.Format( "AnkhSetup-{0}.msi", version );
+               project.Properties["zip.file"] = String.Format( "AnkhSvn-{0}.zip", version );
+               
+               string versionString = "AssemblyVersionAttribute( \"" + version +"\")";
+
                foreach( string file in scanner.FileNames )
                {
                   string fileContents = null;
@@ -98,23 +100,28 @@
     </target>
     
     <target name="source">
-        <ifnot test="${directory::exists(checkout.dir)}">
+        <ifnot test="${preserve.checkout.dir}">
+            <echo message="Deleting ${checkout.dir}" />
+            <delete dir="${checkout.dir}"/>
             <call target="checkout" /> 
-        </ifnot>
+        </ifnot> 
+        
+        <call target="version" />
     </target>
     
     <target name="clean">
+        <echo message="Deleting ${checkout.dir}"/>
         <delete dir="${checkout.dir}" />   
     </target>
     
     
     <target name="svndir">
-        <ifnot test="${property::exists('svndir')}">
+        <ifnot propertyexists="svn.dir">
             <sysinfo/>
-            <ifnot test="${property::exists('sys.env.SVNSRC')}">
-                <fail message="Either provide the svndir property, or set the SVNSRC env var to point to the Subversion source tree" />
+            <ifnot propertyexists="sys.env.SVNSRC">
+                <fail message="Either provide the svn.dir property, or set the SVNSRC env var to point to the Subversion source tree" />
             </ifnot>
-            <property name="svndir" value="${sys.env.SVNSRC}" />
+            <property name="svn.dir" value="${sys.env.SVNSRC}" />
         </ifnot>
         
     </target>
@@ -123,12 +130,12 @@
         <mkdir dir="${deploy.dir}"/>
     </target>
     
-    <target name="msi" depends="source, version, deploydir, svndir">
+    <target name="msi" depends="source, deploydir">
         <!--<nant buildfile="${checkout.dir}\master.build" inheritall="true" target="rebuild,msi"/>
         
         <copy todir="${deploy.dir}">
             <fileset basedir="${checkout.dir}\installsource">
-                <include name="*.msi"/>
+                <includes name="*.msi"/>
             </fileset>
         </copy>-->
     
@@ -167,13 +174,13 @@
     <target name="zip" depends="source, deploydir">
         <zip zipfile="${deploy.dir}\${zip.file}" verbose="${verbose}">
             <fileset basedir="${checkout.dir}">
-                <include name="**/*"/>
-                <exclude name="**/.svn/**" />
-                <exclude name="**/bin/**" />
-                <exclude name="**/obj/**" />
-                <exclude name="**/*.tmp" />
-                <exclude name="**/Debug/**" />
-                <exclude name="**/Release/**" />
+                <includes name="**/*"/>
+                <excludes name="**/.svn/**" />
+                <excludes name="**/bin/**" />
+                <excludes name="**/obj/**" />
+                <excludes name="**/*.tmp" />
+                <excludes name="**/Debug/**" />
+                <excludes name="**/Release/**" />
             </fileset>
         </zip>
     </target>
