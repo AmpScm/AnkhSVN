@@ -5,6 +5,7 @@ using NSvn.Core;
 using EnvDTE;
 using System.IO;
 using System.Collections;
+using System.Diagnostics;
 
 namespace Ankh.Solution
 {

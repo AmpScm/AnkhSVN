@@ -61,7 +61,13 @@ namespace Ankh
             // we don't want to load on command line builds.
             if ( Regex.IsMatch( Environment.CommandLine, "/build" ) )
                 return;
-
+#if LOGTOFILE
+            string logfile = Path.Combine( Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData ), 
+                Path.Combine("AnkhSVN", "ankhsvn.log" ) );
+            Debug.Listeners.Add( new TextWriterTraceListener( logfile ) );
+            Debug.AutoFlush = true;
+#endif
             try
             {
                 
@@ -222,7 +228,7 @@ namespace Ankh
             {   
                 Error.Handle( ex );
             }
-            t.End( "Query status for " + commandName, "Ankh" );
+            t.End( "Query status for " + commandName + ": " + status, "Ankh" );
         }
 
         /// <summary>

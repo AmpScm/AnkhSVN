@@ -3,6 +3,7 @@ using System;
 using NSvn.Core;
 using System.Collections;
 using System.IO;
+using System.Diagnostics;
 
 namespace Ankh.Solution
 {
@@ -22,6 +23,7 @@ namespace Ankh.Solution
         {
             lock(this)
             {
+                Debug.WriteLine( "Generating status cache for " + dir, "Ankh" );
                 this.currentPath = dir;
                 int youngest;
                 this.client.Status( out youngest, dir, Revision.Unspecified, 
@@ -39,13 +41,14 @@ namespace Ankh.Solution
                 if ( item == null )
                 {
                     System.Diagnostics.Debug.WriteLine( 
-                        "Ankh", "Cached item not found for " + normPath );
+                        "Cached item not found for " + normPath, "Ankh" );
                     Status status = this.client.SingleStatus( normPath );
                     this.table[normPath] = item = new SvnItem( path, status );
                 }
                 else
                     System.Diagnostics.Debug.WriteLine( 
-                        "Ankh", "Cached item found for " + path );
+                        "Cached item found for " + path,  
+                        "Ankh" );
 
                 return item;
             }                
@@ -72,6 +75,8 @@ namespace Ankh.Solution
         /// <param name="status"></param>
         private void Callback( string path, Status status )
         {
+            Debug.WriteLine( "Received status for " + path + ": " + status.TextStatus, 
+                "Ankh" );
             // we need all paths to be on ONE form
             string normPath = this.NormalizePath( path );
 

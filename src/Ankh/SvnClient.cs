@@ -132,7 +132,8 @@ namespace Ankh
         protected override void OnCancel(CancelEventArgs args)
         {
             base.OnCancel( args );
-            System.Diagnostics.Debug.WriteLine( "Cancel called" );
+            System.Diagnostics.Debug.WriteLine( "Cancel called. Cancelled: " + args.Cancel, 
+                "Ankh" );
         }
 
         

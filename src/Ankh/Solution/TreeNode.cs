@@ -46,9 +46,15 @@ namespace Ankh.Solution
             TreeNode node = null;
             // what kind of node is this?
             if ( item.Object is Project )
+            {
+                Debug.WriteLine( "Creating ProjectNode for " + item.Name, "Ankh" );
                 node = new ProjectNode( item, hItem, explorer, parent );
+            }
             else if ( item.Object is ProjectItem )
+            {
+                Debug.WriteLine( "Creating ProjectItemNode for " + item.Name, "Ankh" );
                 node = new ProjectItemNode( item, hItem, explorer, parent );           
+            }
 
             return node;
         }
@@ -58,13 +64,17 @@ namespace Ankh.Solution
         {
             if ( explorer.DTE.Solution.FullName != string.Empty )
             {
+                Debug.WriteLine( "Creating solution node " + item.Name, "Ankh" );
                 TreeNode node = new SolutionNode( item, explorer.TreeView.GetRoot(), 
                     explorer );
                 node.Refresh( false );
                 return node;
             }
             else
+            {
+                Debug.WriteLine( "No solution found", "Ankh" );
                 return null;
+            }
         }
 
         public abstract void Accept( INodeVisitor visitor );
@@ -77,7 +87,9 @@ namespace Ankh.Solution
         public virtual void Refresh( bool rescan )
         {
             try
-            {                
+            {  
+                Debug.WriteLine( "Refreshing " + this.uiItem.Name + ". rescan=" + rescan,
+                    "Ankh" );
                 if ( rescan )
                 {
                     this.explorer.Context.StatusCache.Status( this.Directory );                    
@@ -267,6 +279,10 @@ namespace Ankh.Solution
         {
             try
             {
+                Debug.WriteLine( "Retrieving child items of node " + this.uiItem.Name, "Ankh" );
+
+                Debug.Indent();
+
                 // retain the original expansion state
                 bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
 
@@ -286,6 +302,7 @@ namespace Ankh.Solution
                 {
                     Debug.Assert( childItem != IntPtr.Zero, 
                         "Could not get treeview item" );
+                    Debug.WriteLine( "Found child node " + child.Name, "Ankh" );
 
                     if ( child.Name != Client.AdminDirectoryName )
                     {                    
@@ -302,7 +319,9 @@ namespace Ankh.Solution
                     // and the next child
                     childItem = this.explorer.TreeView.GetNextSibling( childItem );               
                 }
-
+                Debug.Unindent();
+                Debug.WriteLine( "Finished retrieving child items of node " + 
+                    this.uiItem.Name, "Ankh" );
                 this.uiItem.UIHierarchyItems.Expanded = isExpanded;
             }
             catch( ArgumentException ex )
