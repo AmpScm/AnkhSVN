@@ -18,6 +18,7 @@ namespace Ankh.EventSinks
 
         protected void ItemAdded( ProjectItem item )
         {
+            this.Context.SolutionExplorer.Refresh( item.ContainingProject );
         }
 
         /// <summary>

@@ -33,7 +33,7 @@ namespace Ankh.EventSinks
 
         protected void ItemAdded( Project project )
         {
-            this.Context.SolutionExplorer.Refresh( project );
+            
         }
 
         /// <summary>
