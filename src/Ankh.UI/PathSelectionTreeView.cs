@@ -261,8 +261,8 @@ namespace Ankh.UI
             string nodeName = item.ToString();
 
             // get rid of any trailing path separators
-            if ( nodeName[nodeName.Length-1] == this.PathSeparator[0] )
-                nodeName = nodeName.Substring(0, nodeName.Length-1);
+            if ( nodeName != String.Empty && nodeName[nodeName.Length-1] == this.PathSeparator[0] )
+                    nodeName = nodeName.Substring(0, nodeName.Length-1);
 
             string[] components;
             
