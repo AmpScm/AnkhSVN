@@ -136,7 +136,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Commands.cs"
+                    RelPath = "CallbackTargets.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CommandMap.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

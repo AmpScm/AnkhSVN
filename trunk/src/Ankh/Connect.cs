@@ -54,6 +54,7 @@ namespace Ankh
 
             this.commands= 
                 Ankh.CommandMap.RegisterCommands( this.context );    
+            System.Windows.Forms.MessageBox.Show( "Registered commands" );
 
 			if(connectMode == Extensibility.ext_ConnectMode.ext_cm_UISetup)
 			{

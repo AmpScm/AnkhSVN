@@ -97,9 +97,6 @@ namespace Ankh
                 1, ref contextGuids, (int)vsCommandStatus.vsCommandStatusUnsupported );
 
             RegisterControl( cmd, type );     
-      
-
-            System.Windows.Forms.MessageBox.Show( "Registering command " + attr.Name );
         }
 
         /// <summary>

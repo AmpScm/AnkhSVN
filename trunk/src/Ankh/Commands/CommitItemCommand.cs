@@ -1,5 +1,7 @@
 // $Id$
+using Ankh.UI;
 using System;
+using System.Windows.Forms;
 using NSvn;
 using NSvn.Core;
 using EnvDTE;
@@ -32,12 +34,17 @@ namespace Ankh.Commands
             ILocalResource[] resources = context.SolutionExplorer.GetSelectedItems();
             WorkingCopyResource[] wcResources = new WorkingCopyResource[ resources.Length ];
             resources.CopyTo( wcResources, 0 );
+
+            wcResources[0].Notifications = context.Notifications;
+
             WorkingCopyResource.Commit( wcResources, false );
-           
+
             context.SolutionExplorer.UpdateSelectionStatus();
         }
         
         #endregion
+
+        
 
         private const StatusKind commitCandidates = StatusKind.Added | 
             StatusKind.Modified;
