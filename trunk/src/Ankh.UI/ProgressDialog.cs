@@ -64,7 +64,6 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ProgressDialog));
             this.textLabel = new System.Windows.Forms.Label();
             this.animatedGif = new System.Windows.Forms.PictureBox();
             this.SuspendLayout();
@@ -83,7 +82,6 @@ namespace Ankh.UI
             // 
             this.animatedGif.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.animatedGif.Image = ((System.Drawing.Image)(resources.GetObject("animatedGif.Image")));
             this.animatedGif.Location = new System.Drawing.Point(152, 8);
             this.animatedGif.Name = "animatedGif";
             this.animatedGif.Size = new System.Drawing.Size(64, 40);
