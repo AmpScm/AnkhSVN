@@ -29,6 +29,12 @@ namespace Ankh.Solution
             this.FindChildren();  
         }
 
+
+        public Explorer Explorer
+        {
+            get{ return this.explorer; }
+        }
+
         public abstract void VisitResources( ILocalResourceVisitor visitor, bool recursive );        
         
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
@@ -233,23 +239,7 @@ namespace Ankh.Solution
 
             this.uiItem.UIHierarchyItems.Expanded = isExpanded;
         }
-
-        #region ProjectNode
-        /// <summary>
-        /// Represents a node containing subnodes, such as a project or a solution.
-        /// </summary>
-        #endregion
-   
-        #region SolutionNode
-
-            
-
-            
-        #endregion
-
-        #region ProjectItemNode
-        #endregion
-
+        
         private UIHierarchyItem uiItem;
         private TreeNode parent;
         private IntPtr hItem;

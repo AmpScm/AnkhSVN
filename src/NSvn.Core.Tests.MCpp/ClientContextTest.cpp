@@ -43,9 +43,11 @@ public:
     DummyProvider() : Saved(false)
     {;}
     bool Saved;
+    String* Realm;
 
-    ICredential* FirstCredentials( ICollection* params )
+    ICredential* FirstCredentials( String* realm, ICollection* params )
     {
+        this->Realm = realm;
         return new SimpleCredential( "foo", "bar" );
     }
 
@@ -86,8 +88,8 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestEmptyAuthBaton()
    
 
     HandleError( svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, 
-        SVN_AUTH_CRED_SIMPLE, 
-        ctx->auth_baton, pool ) );
+        SVN_AUTH_CRED_SIMPLE, "Realm of terror",
+        ctx->auth_baton,  pool ) );
 }
 
 
@@ -107,7 +109,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
 
     // first the first
     svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, SVN_AUTH_CRED_SIMPLE, 
-        ctx->auth_baton, pool );
+        "Realm of terror", ctx->auth_baton,  pool );
 
     Assertion::Assert( S"Username not foo", strcmp( cred->username, "foo" ) == 0 );
     Assertion::Assert( S"Password not bar", strcmp( cred->password, "bar" ) == 0 );
@@ -121,6 +123,8 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
     // now try to save
     svn_auth_save_credentials( iterState, pool );
     Assertion::Assert( S"Credentials not saved", provider->Saved );
+
+    Assertion::AssertEquals( "Wrong realm", S"Realm of terror", provider->Realm );
 
 }
 

@@ -35,7 +35,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                Connect.HandleError( ex );
+                Error.Handle( ex );
                 throw;
             }
         }

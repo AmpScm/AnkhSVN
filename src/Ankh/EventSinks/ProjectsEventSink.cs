@@ -49,7 +49,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                Connect.HandleError( ex );
+                Error.Handle( ex );
                 throw;
             }
         }
@@ -62,7 +62,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                Connect.HandleError( ex );
+                Error.Handle( ex );
                 throw;
             }
         }

@@ -24,9 +24,6 @@ namespace error
         protected System.Web.UI.WebControls.TextBox emailBox;
         protected System.Web.UI.WebControls.Label Label4;
         protected System.Web.UI.WebControls.TextBox commentsBox;
-        //protected System.Web.UI.WebControls.TextBox versionBox;
-        protected System.Web.UI.WebControls.Image Image1;
-        protected System.Web.UI.WebControls.TextBox versionBox;
         protected System.Web.UI.WebControls.Label Label1;
     
 		private void Page_Load(object sender, System.EventArgs e)
@@ -51,6 +48,7 @@ namespace error
 		/// </summary>
 		private void InitializeComponent()
 		{    
+            this.commentsBox.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
             this.Load += new System.EventHandler(this.Page_Load);
 
@@ -61,9 +59,6 @@ namespace error
         {
             if ( this.Request["message"] != null )
                 this.errorMessageBox.Text = this.Request["message"];
-
-            if ( this.Request["version"] != null )
-                this.versionBox.Text = this.Request["version"];
         }
 
         private void sendButton_Click(object sender, System.EventArgs e)
@@ -77,13 +72,16 @@ namespace error
             msg.Subject = "Exception";
             msg.Body = this.errorMessageBox.Text + 
                 Environment.NewLine + Environment.NewLine + 
-                this.commentsBox.Text + Environment.NewLine + Environment.NewLine + 
-                "Version: " + this.versionBox.Text;
+                this.commentsBox.Text;
 
             SmtpMail.SmtpServer = ConfigurationSettings.AppSettings["smtpserver"];
             SmtpMail.Send( msg );
             Response.Redirect( "thanks.html" );
         }
 
+        private void TextBox1_TextChanged(object sender, System.EventArgs e)
+        {
+        
+        }
 	}
 }

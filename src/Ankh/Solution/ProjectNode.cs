@@ -13,27 +13,39 @@ namespace Ankh.Solution
             TreeNode parent ) : 
             base( item, hItem, explorer, parent )
         {
-            Project project = (Project)item.Object;
+            this.project = (Project)item.Object;
 
+            this.FindProjectResources(explorer);
+
+            this.projectFile.Context = explorer.Context;
+            this.projectFolder.Context = explorer.Context;
+        }
+
+        public override void Refresh()
+        {
+            this.FindProjectResources( this.Explorer );
+            base.Refresh();
+        }
+
+
+        private void FindProjectResources(Explorer explorer)
+        {
             // find the directory containing the project
             string fullname = project.FullName;
             // the Solution Items project has no path
-            if ( fullname != string.Empty )
+            if ( fullname != string.Empty && File.Exists( fullname ) )
             {
                 string parentPath = Path.GetDirectoryName( fullname );
                 this.projectFolder = SvnResource.FromLocalPath( parentPath );
                 this.projectFile = SvnResource.FromLocalPath( fullname );
 
-                explorer.AddResource( project, this );                    
+                this.Explorer.AddResource( project, this );                    
             }
             else
             {
                 this.projectFile = SvnResource.Unversionable;
                 this.projectFolder = SvnResource.Unversionable;
             }
-
-            this.projectFile.Context = explorer.Context;
-            this.projectFolder.Context = explorer.Context;
         }
 
         /// <summary>
@@ -64,11 +76,12 @@ namespace Ankh.Solution
         
 
         public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
-        {
-            this.projectFolder.Accept( visitor );
-            this.projectFile.Accept( visitor );
+        {            
             if ( recursive )
                 this.VisitChildResources( visitor );
+
+            this.projectFolder.Accept( visitor );
+            this.projectFile.Accept( visitor );
         } 
             
         protected override StatusKind GetStatus()
@@ -92,6 +105,7 @@ namespace Ankh.Solution
 
         private ILocalResource projectFolder;
         private ILocalResource projectFile;
+        private Project project;
     }  
 
 }

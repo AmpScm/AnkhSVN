@@ -20,7 +20,7 @@ namespace NSvn.Core.Tests
         }
 
         /// <summary>
-        /// Modifies a file in the working copy and commits it
+        /// Modifies a file in the working copy and commits the containing directory.
         /// </summary>
         [Test]
         public void TestBasicCommit()
@@ -32,9 +32,28 @@ namespace NSvn.Core.Tests
             ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
             Client.Commit( new string[]{ this.WcPath }, false, ctx );
            
-            string output = this.RunCommand( "svn", "st " + this.WcPath ).Trim();
-            Assertion.AssertEquals( "File not committed", "", 
-                output );
+            string output = this.RunCommand( "svn", "st " + filepath );
+            Assertion.AssertEquals( "File not committed", ' ', 
+                output[0] );
+        }
+
+        /// <summary>
+        /// Commits a single file
+        /// </summary>
+        [Test]
+        public void TestCommitFile()
+        {
+            string filepath = Path.Combine( this.WcPath, "Form.cs" );
+            using ( StreamWriter w = new StreamWriter( filepath ) )
+                w.Write( "Moo" );
+
+            ClientContext ctx = new ClientContext();
+            CommitInfo info = Client.Commit( new string[]{ filepath }, true, ctx );
+
+            string output = this.RunCommand( "svn", "st " + filepath );
+            Assertion.AssertEquals( "File not committed", ' ', 
+                output[0] );
+
         }
 
         [Test]
@@ -93,7 +112,7 @@ namespace NSvn.Core.Tests
             Assertion.Assert( "Wrong path", items[0].Path.IndexOf( 
                 this.filepath ) >= 0 );
             Assertion.AssertEquals( "Wrong kind", NodeKind.File, items[0].Kind );
-            Assertion.AssertEquals( "Wrong revision", 5, items[0].Revision );
+            Assertion.AssertEquals( "Wrong revision", 6, items[0].Revision );
 
             return "Moo is the log message";
         }

@@ -10,9 +10,10 @@ namespace NSvn.Common
         /// <summary>
         /// Retrieve the first set of credentials.
         /// </summary>
+        /// <param name="realm">The realm for which to authenticate.</param>
         /// <param name="parameters">Contains parameters that are passed among the 
         /// providers.</param>
-        ICredential FirstCredentials( System.Collections.ICollection parameters );
+        ICredential FirstCredentials( string realm, System.Collections.ICollection parameters );
 
         /// <summary>
         /// Retrieve the next set of credentials.

@@ -5,6 +5,8 @@ using NSvn.Core;
 using NSvn.Common;
 using EnvDTE;
 using Ankh.UI;
+using Ankh.Solution;
+
 namespace Ankh.Commands
 {
 	/// <summary>
@@ -26,7 +28,7 @@ namespace Ankh.Commands
             UnversionedVisitor a = new UnversionedVisitor();
             context.SolutionExplorer.VisitSelectedItems( a, true );
             
-            if ( !a.IsVersioned )
+            if ( a.IsUnversioned )
                 return vsCommandStatus.vsCommandStatusEnabled |
                     vsCommandStatus.vsCommandStatusSupported;
             else
@@ -36,7 +38,7 @@ namespace Ankh.Commands
         public override void Execute(Ankh.AnkhContext context)
         {
             context.OutputPane.StartActionText( "Adding" );
-            context.SolutionExplorer.VisitSelectedItems( new AddVisitor(), true );
+            context.SolutionExplorer.VisitSelectedNodes( new AddVisitor() );
             context.OutputPane.EndActionText();
             context.SolutionExplorer.RefreshSelectionParents();
         }
@@ -45,13 +47,29 @@ namespace Ankh.Commands
         /// <summary>
         /// A visitor that adds visited item to the Working copy.
         /// </summary>
-        private class AddVisitor : LocalResourceVisitorBase
+        private class AddVisitor : LocalResourceVisitorBase, INodeVisitor
         {
             public override void VisitUnversionedResource(NSvn.UnversionedResource resource)
             {
-                resource.Add( true );
+                resource.Add( false );
             }
        
+            public void VisitProject(  ProjectNode node )
+            {
+                node.VisitResources( this, false );
+                node.Refresh();
+                node.VisitResources( this, false );
+            }    
+    
+            public void VisitSolutionNode(  SolutionNode node )
+            {
+                // empty
+            }    
+
+            public void VisitProjectItem(Ankh.Solution.ProjectItemNode node)
+            {
+                node.VisitResources( this, true );
+            }
         }
     }
 }

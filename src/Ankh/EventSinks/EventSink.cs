@@ -80,7 +80,7 @@ namespace Ankh.EventSinks
         /// <returns></returns>
         private static ProjectsEventSink GetProjectsEvents( string kind, AnkhContext context )
         {
-            string objectName = GetName( kind, "ProjectsEvents" );    
+            string objectName = GetName( kind, "ProjectsEvents", context.DTE );    
             if ( objectName != null )
                 return new ProjectsEventSink( (ProjectsEvents)
                     context.DTE.Events.GetObject( objectName ),
@@ -97,7 +97,7 @@ namespace Ankh.EventSinks
         /// <returns></returns>
         private static ProjectItemsEventSink GetProjectItemsEvents( string kind, AnkhContext context )
         {
-            string objectName = GetName( kind, "ProjectItemsEvents" );    
+            string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );    
             if ( objectName != null )
                 return new ProjectItemsEventSink( (ProjectItemsEvents)
                     context.DTE.Events.GetObject( objectName ),
@@ -111,13 +111,13 @@ namespace Ankh.EventSinks
         /// </summary>
         /// <param name="substring">The substring to search for</param>
         /// <returns></returns>
-        private static string GetName( string kind, string substring )
+        private static string GetName( string kind, string substring, _DTE dte )
         {
-            string packageGuid = GetPackageGuid( kind );
+            string packageGuid = GetPackageGuid( kind, dte );
             if ( packageGuid == null )
                 return null;
 
-            string keyName = PACKAGEPATH + packageGuid + "\\AutomationEvents";
+            string keyName = dte.RegistryRoot + PACKAGEPATH + packageGuid + "\\AutomationEvents";
             RegistryKey key = Registry.LocalMachine.OpenSubKey( keyName );
             if ( key == null )
                 return null;
@@ -135,9 +135,9 @@ namespace Ankh.EventSinks
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
-        private static string GetPackageGuid( string kind )
+        private static string GetPackageGuid( string kind, _DTE dte )
         {
-            string path = PROJECTPATH + kind;
+            string path = dte.RegistryRoot + PROJECTPATH + kind;
             RegistryKey key = Registry.LocalMachine.OpenSubKey( path );
             if ( key == null ) 
                 return null;
@@ -147,9 +147,9 @@ namespace Ankh.EventSinks
         
 
         private AnkhContext context;
-        private const string PROJECTPATH = @"SOFTWARE\Microsoft\VisualStudio\7.0\Projects\";
+        private const string PROJECTPATH = @"\Projects\";
         private const string PACKAGEPATH = 
-            @"SOFTWARE\Microsoft\VisualStudio\7.0\Packages\";
+            @"\Packages\";
         private const string VCPROJECTGUID = 
             @"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
         private const string VCPROJECT = "VCProjectEngineEventsObject";

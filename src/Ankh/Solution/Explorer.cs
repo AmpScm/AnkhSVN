@@ -26,8 +26,10 @@ namespace Ankh.Solution
 		{
 			this.dte = dte;
             this.context = context;
-            this.projectItems = new Hashtable();
-            this.projects = new Hashtable();
+            this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
+                new ItemComparer() );
+            this.projects = new Hashtable( new ProjectHashCodeProvider(), 
+                new ProjectComparer() );
             this.solutionNode = null;
             this.SetUpTreeview();
             this.SyncWithTreeView();
@@ -107,7 +109,12 @@ namespace Ankh.Solution
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
-                    node.Parent.Refresh();
+                {
+                    if ( node == this.solutionNode )
+                        node.Refresh();
+                    else
+                        node.Parent.Refresh();
+                }
             }
         }
 

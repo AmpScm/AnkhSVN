@@ -53,7 +53,7 @@ namespace Ankh
 
         protected override void NotifyCallback(NSvn.Core.Notification notification)
         {
-            if (((string)actionStatus[notification.Action]) != null)
+            if ( actionStatus[notification.Action] != null)
             {
                 this.ankhContext.OutputPane.Write("{0} - {2}: {1}{3}"
                     ,actionStatus[notification.Action].ToString() 
@@ -78,14 +78,14 @@ namespace Ankh
             dialog.Diff = visitor.Diff;    
         }
 
-            #region DialogProvider
+        #region DialogProvider
         private class DialogProvider : IAuthenticationProvider
         {
             
 
             #region Implementation of IAuthenticationProvider
             public NSvn.Common.ICredential NextCredentials( ICollection parameters )
-            {               
+            {              
 
                 if ( loginDialog.ShowDialog() == DialogResult.OK )
                     return this.lastCredential = new SimpleCredential( loginDialog.Username, 
@@ -93,10 +93,12 @@ namespace Ankh
                 else
                     return this.lastCredential = null;
             }
-            public NSvn.Common.ICredential FirstCredentials( ICollection parameters )
+            public NSvn.Common.ICredential FirstCredentials(  string realm, ICollection parameters )
             {
                 if ( this.savedCredential != null )
                     return this.savedCredential;
+
+                loginDialog.Realm = realm;
 
                 if ( loginDialog.ShowDialog() == DialogResult.OK )
                     return this.lastCredential = new SimpleCredential( loginDialog.Username, 

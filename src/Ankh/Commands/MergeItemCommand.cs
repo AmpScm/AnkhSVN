@@ -7,7 +7,6 @@ namespace Ankh.Commands
 	/// <summary>
 	/// Summary description for MergeItem.
 	/// </summary>
-	[RepositoryExplorerMenu("Merge", Position = 0)]
 	internal class MergeItem : CommandBase
 	{
 		

@@ -26,12 +26,11 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestSwitchUrl()
         {
-            string workingPath = Path.Combine( this.path, this.WcPath );
             string switchUrl = Path.Combine( this.ReposUrl, "doc" );
             string checkFile = Path.Combine( this.WcPath, "text_r5.txt" );
             ClientContext ctx = new ClientContext( new NotifyCallback ( this.NotifyCallback ) );
 
-            Client.Switch( workingPath, switchUrl, Revision.Head, true, ctx );
+            Client.Switch( this.WcPath, switchUrl, Revision.Head, true, ctx );
             Assertion.Assert( " Didn't switch to repos/doc", File.Exists( checkFile ) );
 
         }

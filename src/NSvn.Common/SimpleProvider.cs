@@ -20,7 +20,7 @@ namespace NSvn.Common
 		}
 
         #region Implementation of IAuthenticationProvider
-        public NSvn.Common.ICredential FirstCredentials( ICollection parameters )
+        public NSvn.Common.ICredential FirstCredentials( string realm, ICollection parameters )
         {
             return this.credential;
         }
