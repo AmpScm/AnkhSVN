@@ -13,30 +13,34 @@
         <Upgrade Id="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
             <UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" Minimum="0.5.0" 
                 Maximum="$(var.ankhversion)" MigrateFeatures="yes" />
-            <UpgradeVersion Property="NEWERPRODUCTFOUND" Minimum="$(var.ankhversion)" Maximum="99.0.0"/>
+            <UpgradeVersion Property="NEWERPRODUCTFOUND" Minimum="$(var.ankhversion)" 
+                Maximum="99.0.0"/>
         </Upgrade>
-            
+
         <Property Id="ShortProductName">AnkhSvn</Property>
         <Property Id="ARPCONTACT">Arild Fines, Per Krämer &amp; Kristin Borud</Property>
         <Property Id="ARPURLINFOABOUT">http://ankhsvn.tigris.org/</Property>
         <Property Id="ARPHELPLINK">http://ankhsvn.tigris.org/</Property>
         <Property Id="ARPURLUPDATEINFO">http://ankhsvn.tigris.org/</Property>
-        
+
         <!-- Error messages -->
         <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
         <Property Id="VSDUIANDADVERTISED">This advertised application will not be installed because it might be unsafe. Contact your administrator to change the installation user interface option of the package to basic.</Property>
-        
+
         <!-- Secure these -->
         <Property Id="NEWERPRODUCTFOUND" Secure="yes" />
 
         <!-- Try to divide cab size, because win 2000 and below don't like large cab's -->
         <Media Id="1" Cabinet="Ankh.cab" EmbedCab="yes" CompressionLevel="high" />
         <Media Id="2" Cabinet="NSvn.cab" EmbedCab="yes" CompressionLevel="high" />
+
         <CustomAction Id="DIRCA_TARGETDIR" Property="TARGETDIR" Value="[ProgramFilesFolder]\AnkhSVN\"
             Execute="firstSequence" />
+
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Merge Id="MSM_NSvn_msm" src="$(var.installdir)\NSvn.msm" Language="1033" DiskId="2" />
         </Directory>
+
         <Feature Id="DefaultFeature" Title="AnkhSVN" Level="1">
             <MergeRef Id="MSM_NSvn_msm" />
             <ComponentRef Id="C_Ankh.dll" />
@@ -49,12 +53,13 @@
             <FeatureRef Id="F_ReposInstaller" />
             <ComponentRef Id="apr_iconv" />
         </Feature>
+
         <CustomAction Id="ReposInstaller_Install" BinaryKey="InstallUtil" 
             DllEntry="ManagedInstall" Execute="deferred" />
         <CustomAction Id="ReposInstaller_Install.SetProperty" 
             Property="ReposInstaller_Install" 
             Value="/installtype=notransaction /action=install /LogFile= &quot;[#CF_ReposInstaller.dll]&quot;" />
-        
+
         <CustomAction Id="ReposInstaller_Uninstall" BinaryKey="InstallUtil" 
             DllEntry="ManagedInstall" Execute="deferred" />
         <CustomAction Id="ReposInstaller_Uninstall.SetProperty" 
@@ -162,9 +167,9 @@
             <RegisterComPlus Sequence="5700"/>
             <InstallServices Sequence="5800">VersionNT</InstallServices>
             <StartServices Sequence="5900">VersionNT</StartServices>
-
-            <Custom Action="ReposInstaller_Install.SetProperty" Sequence="5960"><![CDATA[$C_ReposInstaller.dll>2]]></Custom>
-            <Custom Action="ReposInstaller_Install" Sequence="5965"><![CDATA[$C_ReposInstaller.dll>2]]></Custom>
+            
+            <Custom Action="ReposInstaller_Install.SetProperty" After="StartServices"><![CDATA[$C_ReposInstaller.dll>2]]></Custom>
+            <Custom Action="ReposInstaller_Install" After="ReposInstaller_Install.SetProperty"><![CDATA[$C_ReposInstaller.dll>2]]></Custom>
 
             <RegisterUser Sequence="6000"/>
             <RegisterProduct Sequence="6100"/>
