@@ -4,6 +4,7 @@
 #include "UsernameCredential.h"
 #include "Pool.h"
 #include "StringHelper.h"
+#include "ParameterDictionary.h"
 #include "Revision.h"
 #include <svn_auth.h>
 
@@ -64,4 +65,25 @@ void NSvn::Core::Tests::MCpp::MiscTests::TestRevisionFromDate()
     Assertion::AssertEquals( "Wrong revision kind", svn_opt_revision_date, svnRev->kind );
     Assertion::AssertEquals( "Wrong date", nowString, StringHelper( dateString ) );
 
+}
+
+void NSvn::Core::Tests::MCpp::MiscTests::TestParameterDictionary()
+{
+    Pool pool;
+    apr_hash_t* hash = apr_hash_make( pool );
+    ParameterDictionary* dict1 = new ParameterDictionary( hash, pool );
+    dict1->Item[S"Hello"] = S"World";
+    
+    Assertion::AssertEquals( "Item not working", S"World", 
+        dict1->Item[S"Hello"] );
+    Assertion::Assert( "Contains not working", dict1->Contains( S"Hello" ) );
+  
+    ParameterDictionary* dict2 = new ParameterDictionary( hash, pool );
+    Assertion::AssertEquals( "Item not working in new dict", S"World", 
+        dict2->Item[S"Hello"] );
+
+    dict2->Remove( S"Hello" );
+
+    ParameterDictionary* dict3 = new ParameterDictionary( hash, pool );
+    Assertion::Assert( "Remove not working", !dict3->Contains( S"Hello" ) );
 }

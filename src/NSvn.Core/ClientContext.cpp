@@ -5,6 +5,7 @@
 #include "ClientContext.h"
 #include "UsernameCredential.h"
 #include "CommitItem.h"
+#include "ParameterDictionary.h"
 
 #include <svn_subst.h>
 //#include <svn_client.h>
@@ -182,7 +183,8 @@ namespace
         IAuthenticationProvider* provider = 
             *( static_cast<ManagedPointer<IAuthenticationProvider*>* >(provider_baton) );
 
-        *credentials = GetCredentials( provider->FirstCredentials(), pool );
+        ParameterDictionary* params = new ParameterDictionary( parameters, pool );
+        *credentials = GetCredentials( provider->FirstCredentials( params ), pool );
        
         // next_creds doesnt have a provider_baton param, so we store it in
         // the iter baton. We don't need it for anything else, since 
@@ -202,7 +204,8 @@ namespace
         IAuthenticationProvider* provider = 
             *(static_cast<ManagedPointer<IAuthenticationProvider*>*>(iter_baton) );
 
-        *credentials = GetCredentials( provider->NextCredentials(), pool );
+        ParameterDictionary* params = new ParameterDictionary( parameters, pool );
+        *credentials = GetCredentials( provider->NextCredentials( params ), pool );
 
         // nothing can ever go wrong here
         return SVN_NO_ERROR;
@@ -215,8 +218,12 @@ namespace
                                      apr_hash_t *parameters,
                                      apr_pool_t *pool)
     {
-        // TODO: implement this
-        *saved = false;
+        IAuthenticationProvider* provider = 
+            *( static_cast<ManagedPointer<IAuthenticationProvider*>* >(provider_baton) );
+
+        ParameterDictionary* params = new ParameterDictionary( parameters, pool );
+
+        *saved = provider->SaveCredentials( params );
         return SVN_NO_ERROR;
     }
 

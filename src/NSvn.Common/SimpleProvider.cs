@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace NSvn.Common
 {
@@ -18,14 +19,19 @@ namespace NSvn.Common
 		}
 
         #region Implementation of IAuthenticationProvider
-        public NSvn.Common.ICredential FirstCredentials()
+        public NSvn.Common.ICredential FirstCredentials( ICollection parameters )
         {
             return this.credential;
         }
 
-        public NSvn.Common.ICredential NextCredentials()
+        public NSvn.Common.ICredential NextCredentials( ICollection parameters )
         {
             return null;
+        }
+
+        public bool SaveCredentials( ICollection parameters)
+        {
+            return false;
         }
 
         public string Kind

@@ -1,6 +1,6 @@
 // $Id$
 #pragma once
-#using <mscorlib.dll>
+#include "stdafx.h"
 #include <svn_types.h>
 #include <svn_wc.h>
 #include <svn_opt.h>

@@ -1,10 +1,8 @@
 // $Id$
 #pragma once
-
+#include "stdafx.h"
 #include "StringHelper.h"
 #include "svnenums.h"
-
-#using <mscorlib.dll>
 
 namespace NSvn
 {

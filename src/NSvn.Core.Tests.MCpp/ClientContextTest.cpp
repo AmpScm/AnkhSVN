@@ -39,15 +39,27 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotifyCallback()
 
 __gc class DummyProvider : public IAuthenticationProvider
 {
-    ICredential* FirstCredentials()
+public:
+    DummyProvider() : Saved(false)
+    {;}
+    bool Saved;
+
+    ICredential* FirstCredentials( ICollection* params )
     {
         return new SimpleCredential( "foo", "bar" );
     }
 
-    ICredential* NextCredentials()
+    ICredential* NextCredentials( ICollection* params )
     {
         return new SimpleCredential( "kung", "fu" );
     }
+
+    bool SaveCredentials( ICollection* params )
+    {
+        this->Saved = true;
+        return true;
+    }
+
 
     String* get_Kind()
     {
@@ -83,7 +95,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
 {
     Pool pool;
 
-    IAuthenticationProvider* provider = new DummyProvider();
+    DummyProvider* provider = new DummyProvider();
     AuthenticationBaton* bat = new AuthenticationBaton();
     bat->Providers->Add( provider );
 
@@ -106,6 +118,9 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
     Assertion::Assert( S"Username not kung", strcmp( cred->username, "kung" ) == 0 );
     Assertion::Assert( S"Password not fu", strcmp( cred->password, "fu" ) == 0 );
 
+    // now try to save
+    svn_auth_save_credentials( iterState, pool );
+    Assertion::Assert( S"Credentials not saved", provider->Saved );
 
 }
 
