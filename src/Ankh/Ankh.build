@@ -30,7 +30,11 @@
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
         
-        <csc target="library" output="${build.dir}/NSvn.dll" verbose="${verbose}" define="${define}">
+        <exec program="regsvr32" commandline="/s ${lib.dir}\VSUserControlHost.dll"/>
+        
+        <exec program="tlbimp" commandline="/out:${build.dir}/VSUserControlHostLib.dll ${lib.dir}\VSUserControlHost.dll"/>
+        
+        <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}">
             <references>
                 <includes name="${lib.dir}\EnvDTE.dll"/>
                 <includes name="${lib.dir}\extensibility.dll"/>
@@ -40,6 +44,7 @@
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
+                <includes name="${build.dir}/VSUserControlHostLib.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
