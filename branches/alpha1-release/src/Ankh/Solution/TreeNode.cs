@@ -239,23 +239,7 @@ namespace Ankh.Solution
 
             this.uiItem.UIHierarchyItems.Expanded = isExpanded;
         }
-
-        #region ProjectNode
-        /// <summary>
-        /// Represents a node containing subnodes, such as a project or a solution.
-        /// </summary>
-        #endregion
-   
-        #region SolutionNode
-
-            
-
-            
-        #endregion
-
-        #region ProjectItemNode
-        #endregion
-
+        
         private UIHierarchyItem uiItem;
         private TreeNode parent;
         private IntPtr hItem;
