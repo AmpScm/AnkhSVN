@@ -48,6 +48,9 @@ namespace Ankh.Solution
             this.context.ProjectFileWatcher.AddFile( this.DTE.Solution.FullName );
             this.SetUpTreeview();
             this.SyncAll();
+
+            Trace.WriteLine( String.Format( "Cache hit rate: {0}%", 
+                this.context.StatusCache.CacheHitSuccess ), "Ankh" );
         }
 
         /// <summary>
