@@ -119,16 +119,19 @@ Global
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.Release.ActiveCfg = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
+		ankh.reg = ankh.reg
 		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
 		..\deploy.build = ..\deploy.build
 		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
 		master.build = master.build
 		Ankh\AnkhSetup\README.rtf = Ankh\AnkhSetup\README.rtf
 		readme.txt = readme.txt
+		register.bat = register.bat
+		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
