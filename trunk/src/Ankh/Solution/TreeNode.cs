@@ -265,10 +265,10 @@ namespace Ankh.Solution
 
                 this.uiItem.UIHierarchyItems.Expanded = isExpanded;
             }
-            catch( ArgumentException )
+            catch( ArgumentException ex )
             {
                 // thrown some times if the uiitem is invalid for some reason
-                throw new SvnException( "Invalid UIHierarchyItem" );
+                throw new SvnException( "Invalid UIHierarchyItem", ex );
             }
         }
         
