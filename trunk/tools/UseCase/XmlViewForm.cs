@@ -26,9 +26,9 @@ namespace UseCase
 			//
 			InitializeComponent();  
            
-            this.xmlModel = new XmlModel( useCaseModel );
+            this.useCaseModel = useCaseModel;
 
-            this.xmlModel.Changed += new EventHandler( this.Changed );
+            this.useCaseModel.Changed += new EventHandler( this.Changed );
             this.RefreshView();
         }
 
@@ -45,8 +45,7 @@ namespace UseCase
 				}
 			}
 			base.Dispose( disposing );
-
-            
+            this.useCaseModel.Changed -= new EventHandler( this.Changed );
 		}
 
 		#region Windows Form Designer generated code
@@ -92,7 +91,7 @@ namespace UseCase
         private void RefreshView()
         {
             this.textBox.Clear();
-            this.textBox.Text = xmlModel.Text;
+            this.textBox.Text = this.useCaseModel.AsXml;
         }
 
         
@@ -100,7 +99,7 @@ namespace UseCase
 
         #region private data
         private System.Windows.Forms.RichTextBox textBox;
-        private XmlModel xmlModel;
+        private UseCaseModel useCaseModel;
         #endregion
 	}
 }
