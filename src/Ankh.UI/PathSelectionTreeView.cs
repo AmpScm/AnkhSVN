@@ -9,8 +9,13 @@ namespace Ankh.UI
 	/// <summary>
 	/// Represents a TreeView that can be used to choose from a set of paths.
 	/// </summary>
-	public class PathSelectionTreeView : TreeView
+	public class PathSelectionTreeView : PathTreeView
 	{
+        /// <summary>
+        /// Fired when the treeview needs information about a path.
+        /// </summary>
+        public event GetPathInfoDelegate GetPathInfo;
+
 		public PathSelectionTreeView()
 		{
 			this.CheckBoxes = true;
@@ -118,6 +123,22 @@ namespace Ankh.UI
         {
             base.OnBeforeCheck (e);
             e.Cancel = e.Node.ForeColor == DisabledColor;
+        }
+
+        protected void OnGetPathInfo( TreeNode node )
+        {
+            if ( this.GetPathInfo != null )
+            {
+                GetPathInfoEventArgs args = new GetPathInfoEventArgs( node.Tag );
+                this.GetPathInfo( this, args );
+                if ( args.IsDirectory )
+                {
+                    node.SelectedImageIndex = this.ClosedFolderIndex;
+                    node.ImageIndex = this.ClosedFolderIndex;
+                }
+                else
+                    this.SetIcon( node, args.Path );
+            }
         }
 
        
@@ -249,6 +270,7 @@ namespace Ankh.UI
             {
                 node.ForeColor = EnabledColor;
                 node.Tag = item;
+                this.OnGetPathInfo( node );
             }
         }
 
@@ -307,6 +329,37 @@ namespace Ankh.UI
 
         }
 	}
+
+    public class GetPathInfoEventArgs
+    {
+        public GetPathInfoEventArgs( object item )
+        {
+            this.item = item;
+        }
+
+        public object Item
+        {
+            get{ return this.item; }
+        }
+
+        public bool IsDirectory
+        {
+            get{ return this.isDirectory; }
+            set{ this.isDirectory = value; }
+        }
+
+        public string Path
+        {
+            get{ return this.path; }
+            set{ this.path = value; }
+        }
+        private bool isDirectory = false;
+        private string path = "";
+        private object item;
+    }
+
+    public delegate void GetPathInfoDelegate( 
+        object sender, GetPathInfoEventArgs args );
 
    
 }
