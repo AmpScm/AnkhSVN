@@ -61,7 +61,7 @@ namespace Ankh.Solution
             this.additionalResources = new ArrayList();
 
             // special treatment for VDs
-            if ( project.Kind == ProjectNode.VDPROJKIND )
+            if ( String.Compare( project.Kind, ProjectNode.VDPROJKIND, true ) == 0 )
                 fullname += ".vdproj";
 
             // the Solution Items project has no path
