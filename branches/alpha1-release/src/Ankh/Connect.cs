@@ -87,7 +87,6 @@ namespace Ankh
 		/// <seealso class='IDTExtensibility2' />
 		public void OnDisconnection(Extensibility.ext_DisconnectMode disconnectMode, ref System.Array custom)
 		{
-            Ankh.CommandMap.DeleteCommands( this.context );
 		}
 
 		/// <summary>
