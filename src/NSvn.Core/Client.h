@@ -109,7 +109,7 @@ namespace NSvn
             ///         authenticating with the authentication baton</summary>
             ///<param name="path">Path to the file/directory.</param>
             ///<param name="url">Path to the files/directory in the repository.</param>
-            ///<param name="newEntry">New entry created in the repository directory 
+            ///<param name="newEntry">New entry (directory) created in the repository  
 			///	 					identified by url, may be null.</param>
             ///<param name="nonRecursive">Indicate that subdirectories of directory targets 
             ///                           should be ignored.</param>
