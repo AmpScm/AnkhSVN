@@ -26,6 +26,9 @@ namespace NSvn
 
                     [Test]
                     void TestGetSslClientCertFileProvider();
+
+                    [Test]
+                    void TestGetSslClientCertPasswordFileProvider();
                 private:
                     NSvn::Core::SimpleCredential* SimplePrompt( System::String* realm, 
                         System::String* username );

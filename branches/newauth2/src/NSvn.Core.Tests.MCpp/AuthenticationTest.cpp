@@ -115,6 +115,23 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertFileProvid
         "Realm", baton, pool ) );
 }
 
+void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordFileProvider()
+{
+    AuthenticationProvider* provider = AuthenticationProvider::GetSslClientCertPasswordFileProvider();
+
+    Pool pool;
+
+    svn_auth_cred_ssl_client_cert_t* cred;
+    svn_auth_iterstate_t* iterstate;
+    apr_hash_t* params = apr_hash_make( pool );
+
+    svn_auth_baton_t* baton = GetBaton( provider->GetProvider(), pool );
+
+    HandleError( svn_auth_first_credentials( ((void**)&cred), &iterstate, 
+        SVN_AUTH_CRED_SSL_CLIENT_CERT_PW,
+        "Realm", baton, pool ) );
+}
+
 
 SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::SimplePrompt( 
     String* realm, String* username )
