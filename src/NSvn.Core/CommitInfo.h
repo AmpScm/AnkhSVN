@@ -15,7 +15,6 @@ namespace NSvn
             CommitInfo( svn_client_commit_info_t* info ) 
             {
                 this->author = StringHelper( info->author );
-                Console::WriteLine( StringHelper( info->date ) );
                 try
                 {
                     this->date = DateTime::ParseExact( StringHelper(info->date),  
