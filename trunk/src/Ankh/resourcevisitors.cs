@@ -62,13 +62,16 @@ namespace Ankh
     }
 
     /// <summary>
-    /// A visitor that adds visited item to the Working copy.
+    /// Checks if the visited item is versioned.
     /// </summary>
-    internal class AddVisitor : LocalResourceVisitorBase
-    {
-        public override void VisitUnversionedResource(NSvn.UnversionedResource resource)
-        {
-            resource.Add( true );
-        }
+    internal class AddCandidateVisitor : LocalResourceVisitorBase
+            {
+                public bool Addable = false;
+
+                public override void VisitUnversionedResource(NSvn.UnversionedResource resource)
+                {
+                    //nothing to check for when adding unversioned files.
+                    Addable = true;
+                }
     }
 }

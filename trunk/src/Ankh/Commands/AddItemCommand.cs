@@ -40,17 +40,15 @@ namespace Ankh.Commands
         #endregion
         
         /// <summary>
-        /// Checks if the visited item is versioned.
+        /// A visitor that adds visited item to the Working copy.
         /// </summary>
-        private class AddCandidateVisitor : LocalResourceVisitorBase
+        private class AddVisitor : LocalResourceVisitorBase
         {
-            public bool Addable = false;
-
             public override void VisitUnversionedResource(NSvn.UnversionedResource resource)
             {
-                //nothing to check for when adding unversioned files.
-                Addable = true;
+                resource.Add( true );
             }
+       
         }
     }
 }
