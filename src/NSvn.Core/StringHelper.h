@@ -26,17 +26,17 @@ namespace NSvn
             }
 
             // implicit conversion to a System::String
-            operator String*()
+            operator String*() const
             {
                 return this->string;
             }
 
             // implicit conversion to a const char*
-            operator const char* ()
+            operator const char* () const
             {
                 // lazy creation of the char* - we might not need it
                 if ( this->charPtr == 0 )
-                    this->charPtr = ConvertToCharPtr( this->string );
+                    this->charPtr = this->ConvertToCharPtr( this->string );
 
                 return this->charPtr;
             }
@@ -45,7 +45,7 @@ namespace NSvn
             ~StringHelper()
             {
                 if ( this->charPtr != 0 )
-                    FreeCharPtr( this->charPtr );
+                    this->FreeCharPtr( this->charPtr );
             }
 
         private:
@@ -56,7 +56,7 @@ namespace NSvn
             }
 
             // convert a System::String to a char*
-            char* ConvertToCharPtr( String __gc* string )
+            char* ConvertToCharPtr( String __gc* string ) const
             {
                 return static_cast<char*>( Marshal::StringToHGlobalAnsi( string ).ToPointer() );
             }
@@ -68,7 +68,7 @@ namespace NSvn
             }
 
             gcroot<String*> string;
-            char* charPtr;
+            mutable char* charPtr;
         };
     }
 }
