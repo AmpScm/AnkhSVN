@@ -21,18 +21,33 @@ namespace NSvn
 		}
 
         /// <summary>
-        /// Factory method.
+        /// Creates a WorkingCopyResource object from a given path..
         /// </summary>
         /// <param name="path">Path to the resource.</param>
         /// <returns>An WorkingCopyresource object representing the resource.</returns>
         public static WorkingCopyResource FromPath( string path )
         {
+            return FromPath( path, null );
+        }
+
+        /// <summary>
+        /// Creates a WorkingCopyResource object from a given path..
+        /// </summary>
+        /// <param name="path">Path to the resource.</param>
+        /// <param name="status">A status object with which to initialize the object.</param>
+        /// <returns>An WorkingCopyresource object representing the resource.</returns>
+        internal static WorkingCopyResource FromPath( string path, Status status )
+        {
+            WorkingCopyResource resource;
             if ( System.IO.File.Exists( path ) )
-                return new WorkingCopyFile( path );
+                resource = new WorkingCopyFile( path );
             else if ( System.IO.Directory.Exists( path ) )
-                return new WorkingCopyDirectory( path );
+                resource = new WorkingCopyDirectory( path );
             else
                 throw new ArgumentException( "Path must be a file or a directory", "path" );  
+
+            resource.status = status;
+            return resource;
         }
 
 
@@ -84,10 +99,15 @@ namespace NSvn
         {
             get
             {
-                int youngest;
-                StatusDictionary dict = Client.Status( out youngest, this.Path, 
-                    false, true, false, true, this.ClientContext );
-                return dict.Get( this.Path );
+                this.CheckForModifications();
+                if ( this.status == null )
+                {
+                    int youngest;
+                    StatusDictionary dict = Client.Status( out youngest, this.Path, 
+                        false, true, false, true, this.ClientContext );
+                    return dict.Get( this.Path );
+                }
+                return this.status;
             }
         }
 
@@ -108,14 +128,44 @@ namespace NSvn
         }
 
         /// <summary>
-        /// Is this a directory
+        /// Is this a directory?
         /// </summary>
         public abstract bool IsDirectory
         {
             get;
         }
 
+        /// <summary>
+        /// Checks if the resource has been modified since information was
+        /// retrieved from it. Invalidates such information if so.
+        /// </summary>
+        protected void CheckForModifications()
+        {
+            if ( this.IsModified )
+            {
+                // we'll have to get a new status...
+                this.status = null;
 
+                this.DoInvalidate();
+            }
+        }
+
+        /// <summary>
+        /// A method that can be overridden by derived classes in order to invalidate
+        /// instance data and reset modification times.
+        /// </summary>
+        protected virtual void DoInvalidate()
+        {
+            // empty here
+        }
+
+        /// <summary>
+        /// Whether the resource has been modified.
+        /// </summary>
+        protected abstract bool IsModified
+        {
+            get;
+        }
 
         /// <summary>
         /// Callback function for log messages
@@ -129,6 +179,7 @@ namespace NSvn
 
 
         private string path;
+        private Status status;
         private ILogMessageProvider logMessageProvider;
 	}
 }

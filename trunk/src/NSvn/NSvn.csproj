@@ -112,6 +112,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LocalResourceDictionary.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "NotificationEventArgs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
