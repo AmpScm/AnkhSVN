@@ -5,6 +5,7 @@ using NSvn.Common;
 using NSvn.Core;
 using Ankh.UI;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Ankh
 {
@@ -19,8 +20,10 @@ namespace Ankh
 			this.dte = dte;
             this.addin = addin;
             this.context = new SvnContext( this );
-            this.repositoryExplorer = new TestRepositoryExplorer();
-            SetUpEvents();
+
+            this.CreateRepositoryExplorer();
+
+            this.SetUpEvents();
         }
 
         
@@ -60,9 +63,14 @@ namespace Ankh
         /// <summary>
         /// The repository explorer control.
         /// </summary>
-        public TestRepositoryExplorer RepositoryExplorer
+        public RepositoryExplorerControl RepositoryExplorer
         {
             get{ return this.repositoryExplorer; }
+        }
+
+        public EnvDTE.Window RepositoryExplorerWindow
+        {
+            get{ return this.reposExplorerWindow; }
         }
 
         
@@ -159,6 +167,50 @@ namespace Ankh
                 this.SolutionExplorer.SyncWithTreeView();
         }
 
+//        private void CreateRepositoryExplorer()
+//        {
+//            
+//            ProgIdAttribute attr = (ProgIdAttribute)
+//                typeof(RepositoryExplorerControl).GetCustomAttributes(
+//                typeof(ProgIdAttribute), false )[0];
+//
+//            object control = null;
+//
+//            this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
+//                this.addin, attr.Value, 
+//                "Repository Explorer", REPOSEXPLORERGUID, ref control );
+//
+//            System.Diagnostics.Debug.Assert( control != null, 
+//                "Could not create tool window" );
+//            this.reposExplorerWindow.Visible = true;
+//
+//            this.repositoryExplorer = (RepositoryExplorerControl)control;
+//            this.repositoryExplorer.Visible = true;
+//        }
+
+        private void CreateRepositoryExplorer()
+        {   
+            object control = null;
+            this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
+                this.addin, "VSUserControlHost.VSUserControlHostCtl", 
+                "Repository Explorer", REPOSEXPLORERGUID, ref control );
+
+            this.reposExplorerWindow.Visible = true;
+            this.reposExplorerWindow.Caption = "Repository Explorer";
+
+            this.objControl = (VSUserControlHostLib.IVSUserControlHostCtl)control;
+
+            this.repositoryExplorer = (RepositoryExplorerControl)this.objControl.HostUserControl( 
+                typeof(RepositoryExplorerControl).Assembly.Location, 
+                "Ankh.UI.RepositoryExplorerControl" );
+
+            System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
+                "Could not create tool window" );
+            
+
+            //this.repositoryExplorer.Visible = true;
+        }
+
         private EnvDTE._DTE dte;
         private EnvDTE.AddIn addin;
 
@@ -172,6 +224,10 @@ namespace Ankh
         private SolutionExplorer solutionExplorer = null;
 
         private SvnContext context;
-        private TestRepositoryExplorer repositoryExplorer;
+        private RepositoryExplorerControl repositoryExplorer;
+        private EnvDTE.Window reposExplorerWindow;
+        private VSUserControlHostLib.IVSUserControlHostCtl objControl;
+        public static readonly string REPOSEXPLORERGUID = 
+            "{1C5A739C-448C-4401-9076-5990300B0E1B}";
 	}
 }
