@@ -30,7 +30,7 @@
             <ComponentRef Id="C_Utils.dll" />
             <ComponentRef Id="Libs" />
             <ComponentRef Id="AUCH_RegAsm" />
-            <ComponentRef Id="apr-iconv" />
+            <ComponentRef Id="apr_iconv" />
         </Feature>
         <CustomAction Id="ReposInstaller_Install" BinaryKey="InstallUtil" DllEntry="ManagedInstall" Execute="deferred" />
         <CustomAction Id="ReposInstaller_Install.SetProperty" Property="ReposInstaller_Install" Value="/action=install /LogFile= &quot;[#CF_ReposInstaller.dll]&quot;" />

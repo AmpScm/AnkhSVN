@@ -2,7 +2,7 @@
   <Fragment Id="FR_apr-iconv">
     <DirectoryRef Id="TARGETDIR">
       <Directory Id="directory0" Name="iconv">
-        <Component Id="apr-iconv" DiskId="1" Guid="5D2BC6FB-E6CB-47ec-B8BC-E2A54F56E8BA" KeyPath="yes">
+        <Component Id="apr_iconv" DiskId="1" Guid="5D2BC6FB-E6CB-47ec-B8BC-E2A54F56E8BA" KeyPath="yes">
           <File Id="iconv0" Name="ADOBE-~1.SO" LongName="adobe-stdenc.so" Checksum="yes" Compressed="yes" Vital="yes" src="$(var.svndir)\apr-iconv\Release\iconv\adobe-stdenc.so" />
           <File Id="iconv1" Name="ADOBE-~2.SO" LongName="adobe-symbol.so" Checksum="yes" Compressed="yes" Vital="yes" src="$(var.svndir)\apr-iconv\Release\iconv\adobe-symbol.so" />
           <File Id="iconv2" Name="ADOBE-~3.SO" LongName="adobe-zdingbats.so" Checksum="yes" Compressed="yes" Vital="yes" src="$(var.svndir)\apr-iconv\Release\iconv\adobe-zdingbats.so" />
