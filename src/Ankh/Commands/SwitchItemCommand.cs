@@ -56,6 +56,7 @@ namespace Ankh.Commands
             }
 
             context.StartOperation( "Switching" );
+            context.ProjectFileWatcher.StartWatchingForChanges();
             try
             {
                 SwitchRunner runner = new SwitchRunner(path, url, revision,

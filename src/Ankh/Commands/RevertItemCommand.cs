@@ -77,7 +77,8 @@ namespace Ankh.Commands
             }
                
             // perform the actual revert 
-            context.OutputPane.StartActionText("Reverting");               
+            context.OutputPane.StartActionText("Reverting");  
+            context.ProjectFileWatcher.StartWatchingForChanges(); 
             try
             {
                 context.Client.Revert( paths, recursive );
