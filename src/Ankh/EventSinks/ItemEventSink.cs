@@ -29,6 +29,14 @@ namespace Ankh.EventSinks
                     for( short i = 1; i <= item.FileCount; i++ )
                     {
                         string file = item.get_FileNames(i);
+
+                        // is this an URI?
+                        if ( file.ToLower().StartsWith( "file://" ) )
+                        {
+                            Uri uri = new Uri( file );
+                            file = uri.LocalPath;
+                        }
+
                         SvnItem svnItem = this.Context.StatusCache[ file ];
                         if ( !svnItem.IsVersioned && svnItem.IsVersionable )
                             this.Context.Client.Add( file, false );
