@@ -125,6 +125,11 @@
                     Project = "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "NSvn.Common.2003"
+                    Project = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
