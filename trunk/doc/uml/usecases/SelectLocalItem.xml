@@ -1,12 +1,11 @@
 <?xml version='1.0'?>
-<?xml-stylesheet type='text/xsl' href='..\UseCaseXSL1.xsl'?>
+<?xml-stylesheet type='text/xsl' href=''?>
 <UseCase>
     <Preface>
         <Name>Select Local Item</Name>
         <ID>SelectRepositoryItem</ID>
         <Actors>
             <ActorID>Developer</ActorID>
-            <ActorID>Repository</ActorID>
         </Actors>
         <Summary>Select a working copy item</Summary>
     </Preface>
