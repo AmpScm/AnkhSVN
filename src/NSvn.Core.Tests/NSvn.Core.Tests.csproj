@@ -136,6 +136,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MoveTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NSvn.Core.Tests.build"
                     BuildAction = "None"
                 />
@@ -155,11 +160,6 @@
                 />
                 <File
                     RelPath = "RevertTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "StatusTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
