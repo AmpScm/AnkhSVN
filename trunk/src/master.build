@@ -211,9 +211,9 @@
         
         <!-- copy the readme and license files(maybe move these?) -->
         <copy todir="${installsource.dir}\${ankh.folder}">
-            <fileset basedir="Ankh\AnkhSetup\">
+            <fileset basedir=".">
                 <includes name="licence.rtf"/>
-                <includes name="readme.rtf" />                
+                <includes name="readme.txt"/>            
             </fileset>
         </copy>
         
@@ -252,7 +252,7 @@
             output="AnkhSVN${vsnet.ver}.msi"
             sourcedir="${installsource.dir}"
             debug="true"
-            license="Ankh\AnkhSetup\licence.rtf"
+            license="${installsource.dir}\${ankh.folder}\licence.rtf"
             verbose="true"
         >
         
@@ -284,7 +284,8 @@
                         <includes name="*.dll"/>
                         <includes name="*.pdb" />
                         <includes name="*.tlb" />
-                        <includes name="*.rtf" />         
+                        <includes name="*.rtf" />  
+                        <includes name="*.txt" />       
                         <excludes name="*.msi"/>   
                         <excludes name="*.Tests.*"/>            
                     </fileset>     
