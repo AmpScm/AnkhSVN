@@ -116,11 +116,6 @@
                     Private = "True"
                 />
                 <Reference
-                    Name = "Microsoft.VisualStudio.VCProjectEngine"
-                    AssemblyName = "Microsoft.VisualStudio.VCProjectEngine"
-                    HintPath = "I:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.VCProjectEngine.dll"
-                />
-                <Reference
                     Name = "Ankh.UI"
                     Project = "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -395,11 +390,6 @@
                 />
                 <File
                     RelPath = "Extenders\ResourceExtender.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Extenders\TestExtender.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

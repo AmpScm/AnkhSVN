@@ -151,11 +151,6 @@
                     Lcid = "0"
                     WrapperTool = "tlbimp"
                 />
-                <Reference
-                    Name = "Microsoft.VisualStudio.VCProjectEngine"
-                    AssemblyName = "Microsoft.VisualStudio.VCProjectEngine"
-                    HintPath = "..\lib\2003\Microsoft.VisualStudio.VCProjectEngine.dll"
-                />
             </References>
         </Build>
         <Files>

@@ -26,11 +26,7 @@ namespace Ankh
     ///   The object for implementing an Add-in.
     /// </summary>
     /// <seealso class='IDTExtensibility2' />
-#if VS2002
-    [GuidAttribute("DA979B20-78DF-45BC-A7D7-F5EF9DC77D30"), ProgId("Ankh.2002")]
-#else
-    [GuidAttribute("55B6D63B-0963-414a-B2F7-BA38F1C95406"), ProgId("Ankh.2003")]
-#endif
+    [GuidAttribute("DA979B20-78DF-45BC-A7D7-F5EF9DC77D30"), ProgId("Ankh")]
     public class Connect : Object, Extensibility.IDTExtensibility2, IDTCommandTarget
     {
         /// <summary>
