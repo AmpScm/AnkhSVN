@@ -161,7 +161,7 @@ namespace Ankh.Solution
 
 
             // we assume there is a single root node
-            this.root = TreeNode.CreateSolutionNode( 
+            this.solutionNode = TreeNode.CreateSolutionNode( 
                 this.uiHierarchy.UIHierarchyItems.Item(1), this );
  
             Debug.WriteLine( "Created solution node", "Ankh" );
@@ -506,7 +506,6 @@ namespace Ankh.Solution
 
 
         private _DTE dte;
-        private TreeNode root;
         private UIHierarchy uiHierarchy;
         private const string VSNETWINDOW = "wndclass_desked_gsk";
         private const string GENERICPANE = "GenericPane";
