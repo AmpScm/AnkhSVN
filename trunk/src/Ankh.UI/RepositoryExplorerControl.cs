@@ -29,10 +29,8 @@ namespace Ankh.UI
 			//Set revision choices in combobox
 			this.revisionComboBox.Items.AddRange( new object[]{
 																	  RevisionChoice.Head,
-																	  RevisionChoice.Prev,
-																	  RevisionChoice.Base,
-																	  RevisionChoice.Committed,
-																	  RevisionChoice.Date});
+                                                                  //    RevisionChoice.Prev,
+        															  RevisionChoice.Date});
 			//Head is set to default revision
 			this.revisionComboBox.SelectedIndex = 0;
 			
@@ -65,36 +63,46 @@ namespace Ankh.UI
 			base.Dispose( disposing );
 		}
 
+        //Committed and Base revision were removed because these revisions are 
+        //related to wc and gives an error message from svn 04.04.2003
+        //Prev revision is commented out because it sometimes could be useful to
+        //see prev revision (Head - 1). Prev revision gives an error message from 
+        //svn 04.04.2003
+        /// <summary>
+        /// Defines revision choices
+        /// </summary>                                               
 		private enum RevisionChoice
 		{
 			Date,
+            //Prev,
 			Head,
-			Base,
-			Committed,
-			Prev
 		}
 	
 		//Enables the DateTimePicker if date is selected
 		private void EnableAndDisableDateTimePicker()
 		{
-			if (this.revisionComboBox.SelectedItem != null)
-			{
-				if ((RevisionChoice) this.revisionComboBox.SelectedItem == 
-					RevisionChoice.Date)
-				{
-					this.dateTimePicker.Enabled = true;
-				}
-				else
-				{
-					this.dateTimePicker.Enabled = false;
-				}	
-			}
+            if (this.revisionComboBox.SelectedItem != null)
+            {
+                if ((RevisionChoice) this.revisionComboBox.SelectedItem == 
+                    RevisionChoice.Date)
+                {
+                    this.dateTimePicker.Enabled = true;
+                }
+                else
+                {
+                    this.dateTimePicker.Enabled = false;
+                }	
+            }
+            else
+            {
+                this.dateTimePicker.Enabled = false;
+            }
 		}
 
 		//Checks whether the selected revision is a number
 		private bool ValidateRevisionNumber(string text)
 		{
-			return validRevisionNumber.IsMatch( text );
+     		return validRevisionNumber.IsMatch( text );
 		}
 
 		private void RepositoryExplorerToolTip()
@@ -127,90 +135,91 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.urlLabel = new System.Windows.Forms.Label();
-			this.urlTextBox = new System.Windows.Forms.TextBox();
-			this.revisionLabel = new System.Windows.Forms.Label();
-			this.revisionComboBox = new System.Windows.Forms.ComboBox();
-			this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
-			this.goButton = new System.Windows.Forms.Button();
-			this.treeView = new Ankh.UI.RepositoryTreeView();
-			this.SuspendLayout();
-			// 
-			// urlLabel
-			// 
-			this.urlLabel.Location = new System.Drawing.Point(1, 8);
-			this.urlLabel.Name = "urlLabel";
-			this.urlLabel.Size = new System.Drawing.Size(24, 23);
-			this.urlLabel.TabIndex = 0;
-			this.urlLabel.Text = "Url:";
-			// 
-			// urlTextBox
-			// 
-			this.urlTextBox.Location = new System.Drawing.Point(28, 5);
-			this.urlTextBox.Name = "urlTextBox";
-			this.urlTextBox.Size = new System.Drawing.Size(220, 20);
-			this.urlTextBox.TabIndex = 1;
-			this.urlTextBox.Text = "http://arild.no-ip.com:8088/svn/test";
-			// 
-			// revisionLabel
-			// 
-			this.revisionLabel.Location = new System.Drawing.Point(1, 29);
-			this.revisionLabel.Name = "revisionLabel";
-			this.revisionLabel.TabIndex = 2;
-			this.revisionLabel.Text = "Select Revision:";
-			// 
-			// revisionComboBox
-			// 
-			this.revisionComboBox.Location = new System.Drawing.Point(2, 45);
-			this.revisionComboBox.Name = "revisionComboBox";
-			this.revisionComboBox.Size = new System.Drawing.Size(121, 21);
-			this.revisionComboBox.TabIndex = 3;
-			this.revisionComboBox.SelectedIndexChanged += new System.EventHandler(this.revisionComboBox_SelectedIndexChanged);
-			// 
-			// dateTimePicker
-			// 
-			this.dateTimePicker.Enabled = false;
-			this.dateTimePicker.Location = new System.Drawing.Point(136, 45);
-			this.dateTimePicker.Name = "dateTimePicker";
-			this.dateTimePicker.TabIndex = 4;
-			// 
-			// goButton
-			// 
-			this.goButton.Location = new System.Drawing.Point(256, 4);
-			this.goButton.Name = "goButton";
-			this.goButton.TabIndex = 5;
-			this.goButton.Text = "Go";
-			this.goButton.Click += new System.EventHandler(this.goButton_Click);
-			// 
-			// treeView
-			// 
-			this.treeView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
-			this.treeView.Enabled = false;
-			this.treeView.ImageIndex = -1;
-			this.treeView.Location = new System.Drawing.Point(0, 72);
-			this.treeView.Name = "treeView";
-			this.treeView.RepositoryRoot = null;
-			this.treeView.SelectedImageIndex = -1;
-			this.treeView.Size = new System.Drawing.Size(336, 240);
-			this.treeView.TabIndex = 6;
-			// 
-			// RepositoryExplorerControl
-			// 
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this.treeView,
-																		  this.goButton,
-																		  this.dateTimePicker,
-																		  this.revisionComboBox,
-																		  this.revisionLabel,
-																		  this.urlTextBox,
-																		  this.urlLabel});
-			this.Name = "RepositoryExplorerControl";
-			this.Size = new System.Drawing.Size(344, 320);
-			this.ResumeLayout(false);
+            this.urlLabel = new System.Windows.Forms.Label();
+            this.urlTextBox = new System.Windows.Forms.TextBox();
+            this.revisionLabel = new System.Windows.Forms.Label();
+            this.revisionComboBox = new System.Windows.Forms.ComboBox();
+            this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.goButton = new System.Windows.Forms.Button();
+            this.treeView = new Ankh.UI.RepositoryTreeView();
+            this.SuspendLayout();
+            // 
+            // urlLabel
+            // 
+            this.urlLabel.Location = new System.Drawing.Point(1, 8);
+            this.urlLabel.Name = "urlLabel";
+            this.urlLabel.Size = new System.Drawing.Size(24, 23);
+            this.urlLabel.TabIndex = 0;
+            this.urlLabel.Text = "Url:";
+            // 
+            // urlTextBox
+            // 
+            this.urlTextBox.Location = new System.Drawing.Point(28, 5);
+            this.urlTextBox.Name = "urlTextBox";
+            this.urlTextBox.Size = new System.Drawing.Size(220, 20);
+            this.urlTextBox.TabIndex = 1;
+            this.urlTextBox.Text = "http://arild.no-ip.com:8088/svn/test";
+            // 
+            // revisionLabel
+            // 
+            this.revisionLabel.Location = new System.Drawing.Point(1, 29);
+            this.revisionLabel.Name = "revisionLabel";
+            this.revisionLabel.TabIndex = 2;
+            this.revisionLabel.Text = "Select Revision:";
+            // 
+            // revisionComboBox
+            // 
+            this.revisionComboBox.Location = new System.Drawing.Point(2, 45);
+            this.revisionComboBox.Name = "revisionComboBox";
+            this.revisionComboBox.Size = new System.Drawing.Size(121, 21);
+            this.revisionComboBox.TabIndex = 3;
+            this.revisionComboBox.TextChanged += new System.EventHandler(this.revisionComboBox_TextChanged);
+            this.revisionComboBox.SelectedIndexChanged += new System.EventHandler(this.revisionComboBox_SelectedIndexChanged);
+            // 
+            // dateTimePicker
+            // 
+            this.dateTimePicker.Enabled = false;
+            this.dateTimePicker.Location = new System.Drawing.Point(136, 45);
+            this.dateTimePicker.Name = "dateTimePicker";
+            this.dateTimePicker.TabIndex = 4;
+            // 
+            // goButton
+            // 
+            this.goButton.Location = new System.Drawing.Point(256, 4);
+            this.goButton.Name = "goButton";
+            this.goButton.TabIndex = 5;
+            this.goButton.Text = "Go";
+            this.goButton.Click += new System.EventHandler(this.goButton_Click);
+            // 
+            // treeView
+            // 
+            this.treeView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+                | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right);
+            this.treeView.Enabled = false;
+            this.treeView.ImageIndex = -1;
+            this.treeView.Location = new System.Drawing.Point(0, 72);
+            this.treeView.Name = "treeView";
+            this.treeView.RepositoryRoot = null;
+            this.treeView.SelectedImageIndex = -1;
+            this.treeView.Size = new System.Drawing.Size(336, 240);
+            this.treeView.TabIndex = 6;
+            // 
+            // RepositoryExplorerControl
+            // 
+            this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.treeView,
+                                                                          this.goButton,
+                                                                          this.dateTimePicker,
+                                                                          this.revisionComboBox,
+                                                                          this.revisionLabel,
+                                                                          this.urlTextBox,
+                                                                          this.urlLabel});
+            this.Name = "RepositoryExplorerControl";
+            this.Size = new System.Drawing.Size(344, 320);
+            this.ResumeLayout(false);
 
-		}
+        }
 		#endregion
 
 		private System.Windows.Forms.Label urlLabel;
@@ -220,70 +229,66 @@ namespace Ankh.UI
 		private System.Windows.Forms.DateTimePicker dateTimePicker;
 		private Ankh.UI.RepositoryTreeView treeView;
         private System.Windows.Forms.Button goButton;
-		private static readonly Regex validRevisionNumber = 
-			new Regex(@"\d+", RegexOptions.Compiled);
+		private readonly Regex validRevisionNumber = new Regex( @"\d+");
 		
 		//Gives a tree view of repository if valid revision is selected
 		private void goButton_Click(object sender, System.EventArgs e)
 		{
+            EnableAndDisableDateTimePicker();
             this.Cursor = Cursors.WaitCursor;
             this.goButton.Enabled = false;
-			if ( this.revisionComboBox.SelectedItem != null )
-			{
-				this.treeView.Enabled = true;
-				Revision revision = Revision.Head;	 
 
-				//if revision is a number
-				if ( ValidateRevisionNumber( this.revisionComboBox.Text ))
-				{
-					this.treeView.RepositoryRoot = 
-						new RepositoryDirectory( this.urlTextBox.Text
-						,NSvn.Core.Revision.FromNumber( int.Parse( this.revisionComboBox.ToString() )));
-				}
-					//if revision is a date
-				else if ((RevisionChoice) this.revisionComboBox.SelectedItem == 
-					RevisionChoice.Date)
-				{
-					this.treeView.RepositoryRoot = 
-						new RepositoryDirectory( this.urlTextBox.Text
-					//TODO - this part don't work yet. Don't know what to do cause I dont get any error message
-						,NSvn.Core.Revision.FromDate( this.dateTimePicker.Value ));
-				}
-				else //if revision is a text
-				{
-					if (this.revisionComboBox.SelectedItem.ToString().Equals("Head"))
-					{
-						revision = Revision.Head;
-					}
-					//Throws an exception from svn 2.4.2003
-					else if (this.revisionComboBox.SelectedItem.ToString().Equals("Base"))
-					{
-						revision = Revision.Base;
-					}
-					//Throws an exception from svn 2.4.2003
-					else if (this.revisionComboBox.SelectedItem.ToString().Equals("Committed"))
-					{
-						revision = Revision.Committed;
-					}
-					//Throws an exception from svn 2.4.2003
-					else if (this.revisionComboBox.SelectedItem.ToString().Equals("Prev"))
-					{
-						revision = Revision.Previous;
-					}
-					this.treeView.RepositoryRoot = 
-						new RepositoryDirectory( this.urlTextBox.Text, revision );
-				}
+            if ( this.revisionComboBox.SelectedItem != null )
+            {
+                this.treeView.Enabled = true;
+                Revision revision = Revision.Head;	 
+				
+                //if revision is a date
+                if ((RevisionChoice) this.revisionComboBox.SelectedItem == 
+                    RevisionChoice.Date)
+                {
+                    this.treeView.RepositoryRoot = 
+                        new RepositoryDirectory( this.urlTextBox.Text
+                        ,NSvn.Core.Revision.FromDate( this.dateTimePicker.Value ));
+                }
+                
+                else //if revision is a text
+                {
+                    if ((RevisionChoice) this.revisionComboBox.SelectedItem == 
+                        RevisionChoice.Head)
+                    {
+                        this.treeView.RepositoryRoot = 
+                            new RepositoryDirectory( this.urlTextBox.Text, Revision.Head );
+                    }/*
+                    else  ((RevisionChoice) this.revisionComboBox.SelectedItem == 
+                        RevisionChoice.Prev)
+                    {
+                        this.treeView.RepositoryRoot = 
+                            new RepositoryDirectory( this.urlTextBox.Text, Revision.Prev );
+                    }*/
+                }               
+            }
 
-                this.Cursor = Cursors.Default;
-                this.goButton.Enabled = true;
-
-			}
+            //if revision is a number
+            if ( ValidateRevisionNumber( this.revisionComboBox.Text ))
+            {
+                this.treeView.RepositoryRoot = 
+                    new RepositoryDirectory( this.urlTextBox.Text
+                    ,NSvn.Core.Revision.FromNumber( int.Parse( this.revisionComboBox.Text )));
+            }
+            this.Cursor = Cursors.Default;
+            this.goButton.Enabled = true;
 		}
 
 		private void revisionComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
 			EnableAndDisableDateTimePicker();
-		}		
+		}
+
+        private void revisionComboBox_TextChanged(object sender, System.EventArgs e)
+        {
+            EnableAndDisableDateTimePicker();
+        }		
 	}
 }
 
