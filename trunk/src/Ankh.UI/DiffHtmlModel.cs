@@ -91,6 +91,9 @@ namespace Ankh.UI
         /// <returns></returns>
         private string GetClass( string line )
         {
+            if ( line.Length == 0 )
+                return "default";
+
             switch( line[0] )
             {
                 case '+':
