@@ -13,7 +13,7 @@ namespace Ankh.Commands
     [VSNetCommand("ExportFolder", Tooltip="Export this folder", 
          Text = "Export Folder...", Bitmap = ResourceBitmaps.Export ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
-    public class ExportFolderCommand : 
+    internal class ExportFolderCommand : 
         CommandBase
     {
         #region ICommand Members
