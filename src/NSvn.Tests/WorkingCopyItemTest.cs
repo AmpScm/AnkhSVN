@@ -19,6 +19,7 @@ namespace NSvn.Tests
             this.ExtractWorkingCopy();
         }
 
+        #region TestCommit
         [Test]
         public void TestCommit()
         {
@@ -39,6 +40,7 @@ namespace NSvn.Tests
                 StatusKind.Normal );
            
         }
+        #endregion
 
         #region LogMessageProvider
         private class LogMessageProvider : ILogMessageProvider
@@ -62,6 +64,7 @@ namespace NSvn.Tests
         }
         #endregion
 
+        #region TestUpdate
         [Test]
         public void TestUpdate()
         {
@@ -100,7 +103,9 @@ namespace NSvn.Tests
             catch( SvnClientException )
             { /* empty */ }
         }
+        #endregion
 
+        #region TestStatus
         [Test]
         public void TestStatus()
         {
@@ -112,6 +117,7 @@ namespace NSvn.Tests
 
             //TODO: more here?
         }
+        #endregion
 
 	}
 }
