@@ -61,7 +61,7 @@ namespace Ankh
                     ,Environment.NewLine );
             }
             if (notification.Action == NotifyAction.UpdateCompleted)
-                this.ankhContext.OutputPane.WriteLine("\nUpdated at revision {0}.", notification.RevisionNumber);
+                this.ankhContext.OutputPane.WriteLine("\nUpdated to revision {0}.", notification.RevisionNumber);
         }
         
         private string GetTemplate()
