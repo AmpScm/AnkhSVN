@@ -348,20 +348,21 @@ namespace NSvn
             ///                      for more information.</param>  
             ///<returns></returns>
 	        static PropListItem* PropList(String* target, Revision* revision, bool recurse, ClientContext* context)[];
-/*
+
             ///<summary>List the revision properties on an entry in a repository.</summary>
             ///<param name="url">Path to the "revision" in the repository.</param>
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
             ///                         for more information.</param>
-            ///<param name="setRev">A revision number.</param>        
+            ///<param name="setRev">Set to the actual revision number affected upon return.</param>        
             ///<param name="context">A client context object, which holds client specific 
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>  
             ///<returns></returns>
-	        static StringDictionary* RevPropList(String* url, Revision* revision, RevisionNumber* setRev, 
+            static PropertyDictionary* RevPropList(String* url, Revision* revision, 
+                [System::Runtime::InteropServices::Out]System::Int32* setRev, 
                 ClientContext* context);
-*/
+
             ///<summary>Export the contents of either a subversion repository or a subversion. </summary>
             ///         working copy into a directory with no svn administrative directories (.svn).</summary> 
             ///<param name="from">Path to the files/directory to be exported.</param>
