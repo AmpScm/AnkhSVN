@@ -37,7 +37,7 @@ namespace Ankh.UI
         /// </summary>
         public string LogMessage
         {
-            get{ return this.logMessageControl.LogMessage; }
+            get{ return this.logMessageBox.Text; }
         }
 
         public string Diff
@@ -84,8 +84,8 @@ namespace Ankh.UI
 //            commitToolTip.SetToolTip( this.fileTreeView, 
 //                "Three view of files you attempt to publish/commit. Files will be added into the repository." ); 
              //Doesn't work:(. Don't understand why.
-            commitToolTip.SetToolTip( this.logMessageControl, 
-                "Write changes you have performed since last revision or update" ); 
+//            commitToolTip.SetToolTip( this.logMessageControl, 
+//                "Write changes you have performed since last revision or update" ); 
             commitToolTip.SetToolTip( this.okButton, 
                 "Files and comment will be added to the repository and made available for your collegues." ); 
             commitToolTip.SetToolTip( this.cancelButton, "The commit will be cancelled" );  
@@ -126,11 +126,11 @@ namespace Ankh.UI
 		{
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.logMessageControl = new Ankh.UI.LogMessageControl();
             this.logLabel = new System.Windows.Forms.Label();
             this.commitItemsList = new System.Windows.Forms.ListBox();
             this.showDiffButton = new System.Windows.Forms.Button();
             this.diffTextBox = new Ankh.UI.DiffTextBox();
+            this.logMessageBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -150,15 +150,6 @@ namespace Ankh.UI
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 2;
             this.okButton.Text = "Ok";
-            // 
-            // logMessageControl
-            // 
-            this.logMessageControl.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right);
-            this.logMessageControl.Location = new System.Drawing.Point(0, 144);
-            this.logMessageControl.Name = "logMessageControl";
-            this.logMessageControl.Size = new System.Drawing.Size(812, 128);
-            this.logMessageControl.TabIndex = 1;
             // 
             // logLabel
             // 
@@ -197,6 +188,17 @@ namespace Ankh.UI
             this.diffTextBox.TabIndex = 7;
             this.diffTextBox.Text = "";
             // 
+            // logMessageBox
+            // 
+            this.logMessageBox.AcceptsTab = true;
+            this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right);
+            this.logMessageBox.Location = new System.Drawing.Point(0, 136);
+            this.logMessageBox.Name = "logMessageBox";
+            this.logMessageBox.Size = new System.Drawing.Size(816, 128);
+            this.logMessageBox.TabIndex = 8;
+            this.logMessageBox.Text = "";
+            // 
             // CommitDialog
             // 
             this.AcceptButton = this.okButton;
@@ -204,11 +206,11 @@ namespace Ankh.UI
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(816, 315);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.logMessageBox,
                                                                           this.diffTextBox,
                                                                           this.showDiffButton,
                                                                           this.commitItemsList,
                                                                           this.logLabel,
-                                                                          this.logMessageControl,
                                                                           this.okButton,
                                                                           this.cancelButton});
             this.MinimumSize = new System.Drawing.Size(390, 320);
@@ -223,11 +225,11 @@ namespace Ankh.UI
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label logLabel;
-        private Ankh.UI.LogMessageControl logMessageControl;
         private System.Windows.Forms.ListBox commitItemsList;
         private System.Windows.Forms.Button showDiffButton;
         private string diff;
         private Ankh.UI.DiffTextBox diffTextBox;
+        private System.Windows.Forms.RichTextBox logMessageBox;
         /// <summary>
         /// Required designer variable.
         /// </summary>
