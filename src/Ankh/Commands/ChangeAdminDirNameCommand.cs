@@ -15,7 +15,7 @@ namespace Ankh.Commands
          Text="Temporarily change the Subversion admin directory...", 
          Tooltip= "Temporarily change the name of the Subversion administrative directory", 
          Bitmap=ResourceBitmaps.ChangeAdminDirName ),
-    VSNetControl( "MenuBar.Tools.AnkhSVN", Position=1 ),]
+    VSNetControl( "Tools.AnkhSVN", Position=1 ),]
     public class ChangeAdminDirNameCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)

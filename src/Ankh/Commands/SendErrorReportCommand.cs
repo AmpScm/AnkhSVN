@@ -8,7 +8,7 @@ namespace Ankh.Commands
     [VSNetCommand("SendErrorReport", Text = "Send suggestion/error report", 
          Tooltip = "Show the repository explorer window",
          Bitmap = ResourceBitmaps.Default),
-    VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 )]
+    VSNetControl( "Tools.AnkhSVN", Position = 1 )]
     public class SendErrorReportCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)

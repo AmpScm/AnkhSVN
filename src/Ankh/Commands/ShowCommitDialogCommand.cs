@@ -9,7 +9,7 @@ namespace Ankh.Commands
     [VSNetCommand("ShowCommitDialog", Text = "Show the commit log dialog", 
          Tooltip = "Show the commit log dialog",
          Bitmap = ResourceBitmaps.Default),
-    VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 )]
+    VSNetControl( "Tools.AnkhSVN", Position = 1 )]
     public class ShowCommitDialogCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
