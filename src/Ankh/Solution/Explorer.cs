@@ -26,10 +26,8 @@ namespace Ankh.Solution
         {
             this.dte = dte;
             this.context = context;
-            this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
-                new ItemComparer() );
-            this.projects = new Hashtable( new ProjectHashCodeProvider(), 
-                new ProjectComparer() );
+            this.projectItems = new Hashtable( );
+            this.projects = new Hashtable( );
             this.solutionNode = null;
             this.SetUpTreeview();
             this.SyncWithTreeView();
@@ -295,51 +293,6 @@ namespace Ankh.Solution
             else
                 return null;
         }
-
-        
-
-
-        #region class ItemHashCodeProvider
-        private class ItemHashCodeProvider : IHashCodeProvider
-        {        
-            public int GetHashCode(object obj)
-            {
-                return ((ProjectItem)obj).get_FileNames(1).GetHashCode();
-            }
-        }
-        #endregion
-
-        #region class ItemComparer
-        private class ItemComparer : IComparer
-        {        
-            public int Compare(object x, object y)
-            {
-                return ((ProjectItem)x).get_FileNames(1).CompareTo(
-                    ((ProjectItem)y).get_FileNames(1) );
-            }
-        }
-        #endregion
-        #region class ProjectHashCodeProvider
-        private class ProjectHashCodeProvider : IHashCodeProvider
-        {        
-            public int GetHashCode(object obj)
-            {
-                return ((Project)obj).FullName.GetHashCode();
-            }
-        }
-        #endregion
-
-        #region class ProjectComparer
-        private class ProjectComparer : IComparer
-        {        
-            public int Compare(object x, object y)
-            {
-                return ((Project)x).FullName.CompareTo(
-                    ((Project)y).FullName );
-            }
-        }
-        #endregion
-
 
         private _DTE dte;
         private IntPtr treeview;
