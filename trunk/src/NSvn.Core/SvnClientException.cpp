@@ -34,6 +34,9 @@ namespace
         case SVN_ERR_FS_TXN_OUT_OF_DATE:
             return new ResourceOutOfDateException( child );
             break;
+        case SVN_ERR_ILLEGAL_TARGET:
+            return new IllegalTargetException( child );
+            break;
         default:
             return new SvnClientException( FormatMessage( err ), child );
             break;

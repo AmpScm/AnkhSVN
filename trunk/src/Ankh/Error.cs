@@ -47,6 +47,16 @@ namespace Ankh
                     "Resource(s) out of date", MessageBoxButtons.OK,
                     MessageBoxIcon.Warning );
             }
+            else if ( ex is IllegalTargetException )
+            {
+                MessageBox.Show(  
+                    "One or more of the resources selected are not valid targets for this operation" + 
+                    Environment.NewLine + 
+                    "(Are you trying to commit a child of a newly added, but not committed resource?)",
+                    "Illegal target for this operation",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning );
+            }
             else
             {
 #if REPORTERROR
