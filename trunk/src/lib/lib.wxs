@@ -149,6 +149,10 @@
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\office.dll" />
                 <File Id="CF_SharpZipLib.dll" Name="SHARPZ~1.DLL" LongName="SharpZipLib.dll"
                     Vital="yes" DiskId="1" src="..\$(var.builddir)\SharpZipLib.dll" />
+                <File Id="CF_MSVCP70.dll" Name="MSVCP7~1.DLL" LongName="msvcp70.dll"
+                    Vital="yes" DiskId="1" src="..\$(var.builddir)\msvcp70.dll" />
+                <File Id="CF_MSVCR70.dll" Name="MSVCR7~1.DLL" LongName="msvcr70.dll"
+                    Vital="yes" DiskId="1" src="..\$(var.builddir)\msvcr70.dll" />
             </Component>
         </DirectoryRef>
     </Fragment>
