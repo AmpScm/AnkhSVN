@@ -205,11 +205,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SvnContext.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "SvnItem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
