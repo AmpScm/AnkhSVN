@@ -60,9 +60,7 @@ namespace NSvn.Core.Tests
         }
 
         private class Entry
-        {
-            
-            
+        {   
             public Entry( string line )
             {
                 if ( !Reg.IsMatch( line ) )
@@ -84,23 +82,24 @@ namespace NSvn.Core.Tests
                 // get the month and day
                 string date = match.Groups[4].ToString();
                 this.time = DateTime.ParseExact( date, "MMM' 'dd", 
-                    format );
+                    format );                
 
                 // the year
                 if ( match.Groups[5].Success )
-                    this.time.AddYears( int.Parse( match.Groups[5].ToString() ) );
-                else
-                    this.time.AddYears( DateTime.Now.Year );
+                {
+                    this.time = this.time.AddYears( -this.time.Year + 
+                        int.Parse(match.Groups[5].ToString()) );
+                }
 
                 // or the time of day?
-                DateTime timeOfDay = DateTime.Now;
+                DateTime timeOfDay = DateTime.Today;
                 if ( match.Groups[6].Success )
                 {
                     timeOfDay = DateTime.ParseExact( match.Groups[6].ToString(), 
                         "HH':'mm", format );
                 }
-                this.time.AddHours( timeOfDay.Hour );
-                this.time.AddMinutes( timeOfDay.Minute );
+                this.time = this.time.AddHours( timeOfDay.Hour );
+                this.time = this.time.AddMinutes( timeOfDay.Minute );
  
                 this.path = match.Groups[7].ToString();                
             }
