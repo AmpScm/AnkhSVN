@@ -1,6 +1,8 @@
 // $Id$
 using System;
 using NSvn.Core;
+using NSvn.Common;
+using System.IO;
 
 namespace Ankh
 {
@@ -104,7 +106,13 @@ namespace Ankh
         /// </summary>
         public virtual bool IsDirectory
         {
-            get{ return this.status.Entry.Kind == NodeKind.Directory; }
+            get
+            { 
+                if ( this.status.Entry != null )
+                    return this.status.Entry.Kind == NodeKind.Directory;
+                else
+                    return Directory.Exists( this.path );
+            }
         }
 
         /// <summary>
@@ -112,7 +120,39 @@ namespace Ankh
         /// </summary>
         public virtual bool IsFile
         {
-            get{ return this.status.Entry.Kind == NodeKind.File; }
+            get
+            {
+                if ( this.status.Entry != null )
+                    return this.status.Entry.Kind == NodeKind.File;
+                else 
+                    return File.Exists( this.path );
+            }
+        }
+
+        /// <summary>
+        /// Whether the item is potentially versionable.
+        /// </summary>
+        public virtual bool IsVersionable
+        {
+            get
+            {
+                string dir;
+                if ( this.IsDirectory )
+                {
+                    // find the parent dir
+                    if ( this.path.EndsWith( System.IO.Path.DirectorySeparatorChar.ToString() ) )
+                        dir = this.path.Substring(0, this.path.Length-2); 
+                    else
+                        dir = this.path;
+                    dir = System.IO.Path.GetDirectoryName( dir );
+                }
+                else
+                    // find the containing dir
+                    dir = System.IO.Path.GetDirectoryName( this.path );
+
+                return Directory.Exists( 
+                    System.IO.Path.Combine( dir, SvnUtils.WC_ADMIN_AREA ));
+            }
         }
 
         public override string ToString()
@@ -194,6 +234,15 @@ namespace Ankh
                     return false;
                 }
             }
+
+            public override bool IsVersionable
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
 
 
 
