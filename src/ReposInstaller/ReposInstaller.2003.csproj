@@ -124,6 +124,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ReposInstaller.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "ReposInstaller.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
