@@ -36,7 +36,17 @@
         <Property Id="AdminWizard">Network Setup Wizard</Property>
         <Property Id="ButtonText_Next">&amp;Next &gt;</Property>
         <Property Id="LogoText">AnkhSVN</Property>
+
         <Property Id="WelcomeForm_NextArgs">FolderForm</Property>
+        <Property Id="WelcomeForm_InstalledNextArgs">MaintenanceForm</Property>
+        <Property Id="ApplicationUsers">AllUsers</Property>
+        <Property Id="FolderForm_PrevArgs">WelcomeForm</Property>
+        <Property Id="FolderForm_NextArgs">ConfirmInstallForm</Property>
+        <Property Id="ConfirmInstallForm_PrevArgs">FolderForm</Property>
+        <Property Id="MaintenanceForm_PrevArgs">WelcomeForm</Property>
+        <Property Id="MaintenanceForm_NextArgs">ConfirmInstallForm</Property>
+        <Property Id="MaintenanceForm_Action">Repair</Property>
+
         <UI>
             <TextStyle Id="VsdDefaultUIFont" FaceName="MS Sans Serif" Size="9" /> <!--Red="0" Green="0" Blue="0" /-->
             <TextStyle Id="VerdanaBold12" FaceName="Verdana" Size="12" Bold="yes" Red="0" Green="0" Blue="0" />
@@ -151,8 +161,7 @@
                     <Publish Event="Reinstall" Value="ALL">MaintenanceForm_Action="Repair"</Publish>
                     <Publish Property="REMOVE" Value="ALL">MaintenanceForm_Action="Remove"</Publish>
                     <Publish Event="Remove" Value="ALL">MaintenanceForm_Action="Remove"</Publish>
-                    <Publish Property="SelectFeaturesForm_PrevArgs" Value="MaintenanceForm">(MaintenanceForm_Action="Modify") AND (MaintenanceForm_NextArgs&lt;&gt;"")</Publish>
-                    <Publish Event="NewDialog" Value="[MaintenanceForm_NextArgs]">(MaintenanceForm_Action="Modify") AND (MaintenanceForm_NextArgs&lt;&gt;"")</Publish>
+		    <!--                    <Publish Event="NewDialog" Value="[MaintenanceForm_NextArgs]">(MaintenanceForm_Action="Modify") AND (MaintenanceForm_NextArgs&lt;&gt;"")</Publish>-->
                     <Publish Event="EndDialog" Value="Return">(MaintenanceForm_Action="Repair") OR (MaintenanceForm_Action="Remove") OR (MaintenanceForm_NextArgs="")</Publish>
                 </Control>
                 <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes"
@@ -824,9 +833,9 @@ Click Install to start the installation.</Text>
                     Text="[ButtonText_Cancel]" />
             </Dialog>
             <RadioGroup Property="MaintenanceForm_Action">
-                <RadioButton Text="&amp;Modify installation of[ProductName]" X="0" Y="0" Width="348" Height="17" Value="Modify"></RadioButton>
-                <RadioButton Text="Re&amp;pair [ProductName]" X="0" Y="18" Width="348" Height="17" Value="Repair"></RadioButton>
-                <RadioButton Text="&amp;Remove [ProductName]" X="0" Y="36" Width="348" Height="17" Value="Remove"></RadioButton>
+		    <!--                <RadioButton Text="&amp;Modify installation of[ProductName]" X="0" Y="0" Width="348" Height="17" Value="Modify"></RadioButton>-->
+		    <RadioButton Text="Re&amp;pair [ProductName]" X="0" Y="0" Width="348" Height="17" Value="Repair"></RadioButton>
+		    <RadioButton Text="&amp;Remove [ProductName]" X="0" Y="18" Width="348" Height="17" Value="Remove"></RadioButton>
             </RadioGroup>
             <RadioGroup Property="ApplicationUsers">
                 <RadioButton Text="&amp;Anyone who uses this computer" X="0" Y="0" Width="200" Height="18" Value="AllUsers"></RadioButton>
