@@ -2,5 +2,15 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Get properties">
     <section>
+            <p>
+            
+            </p>
+    
+        </section>
+        <section>
+            <p>
+                <i>(from "Subversion:The Definitive Guide" - <link url="http://svnbook.red-bean.com/html-chunk/">
+                svnbook.red-bean.com/html-chunk/</link>)</i>
+            </p>
     </section>
 </doc>

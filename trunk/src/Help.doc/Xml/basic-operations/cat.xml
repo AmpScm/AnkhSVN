@@ -2,5 +2,22 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Cat">
     <section>
+            <p>
+            <b>Description</b>
+            <br/>
+            Outputs the contents of the specified files or URLs. 
+            For listing the contents of directories, see svn list.
+            <br/><br/><br/>
+            <b>Changes</b>
+            <br/><br/>
+            Nothing
+            </p>
+    
+        </section>
+        <section>
+            <p>
+                <i>(from "Subversion:The Definitive Guide" - <link url="http://svnbook.red-bean.com/html-chunk/">
+                svnbook.red-bean.com/html-chunk/</link>)</i>
+            </p>
     </section>
 </doc>
