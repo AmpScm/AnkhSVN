@@ -6,7 +6,7 @@
     <property name="checkout.dir" value="Ankh-Release" />
     <property name="zip.file" value="Ankh.zip" />
     <property name="major.version" value="0" />
-    <property name="minor.version" value="2" />
+    <property name="minor.version" value="1" />
     <property name="url" 
         value="http://arild.no-ip.com:8088/svn/finalproject/branches/alpha1-release/src"/>
         
