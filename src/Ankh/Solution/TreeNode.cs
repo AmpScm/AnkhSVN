@@ -53,14 +53,14 @@ namespace Ankh.Solution
             return node;
         }
 
-        public static TreeNode CreateSolutionNode( UIHierarchyItem item, IntPtr hItem,
+        public static TreeNode CreateSolutionNode( UIHierarchyItem item, 
             Explorer explorer )
         {
             if ( explorer.DTE.Solution.FullName != string.Empty )
             {
-                TreeNode node = new SolutionNode( item, hItem, explorer );
+                TreeNode node = new SolutionNode( item, explorer.TreeView.GetRoot(), 
+                    explorer );
                 node.Refresh( false );
-                //node.UpdateStatus( true, false );
                 return node;
             }
             else
@@ -201,18 +201,7 @@ namespace Ankh.Solution
             if ( statusMap.Contains(status) )
                 statusImage = (int)statusMap[status];
 
-            TVITEMEX tvitem = new TVITEMEX();
-            tvitem.mask = C.TVIF_STATE | C.TVIF_HANDLE;
-            tvitem.hItem = this.hItem;
-            // bits 12-15 indicate the state image
-            tvitem.state = (uint)(statusImage << 12);
-            tvitem.stateMask = C.TVIS_STATEIMAGEMASK;
-
-            int retval = Win32.SendMessage( this.explorer.TreeView, Msg.TVM_SETITEM, IntPtr.Zero, 
-                tvitem ).ToInt32();
-            Debug.Assert( Convert.ToBoolean( retval ), 
-                "Could not set treeview state image" );
-                
+            this.explorer.TreeView.SetStatusImage( this.hItem, statusImage );                
         }
 
         /// <summary>
@@ -281,15 +270,13 @@ namespace Ankh.Solution
                 bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
 
                 // get the treeview child
-                IntPtr childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
-                    C.TVGN_CHILD, this.hItem );
+                IntPtr childItem = this.explorer.TreeView.GetChild( this.hItem );
 
                 // a node needs to be expanded at least once in order to have child nodes
                 if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
                 {
                     this.uiItem.UIHierarchyItems.Expanded = true;
-                    childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
-                        C.TVGN_CHILD, this.hItem );
+                    childItem = this.explorer.TreeView.GetChild( this.hItem );
                 }
 
                 // iterate over the ui items and the treeview items in parallell
@@ -312,8 +299,7 @@ namespace Ankh.Solution
                     }
 
                     // and the next child
-                    childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
-                        C.TVGN_NEXT, childItem );                    
+                    childItem = this.explorer.TreeView.GetNextSibling( childItem );               
                 }
 
                 this.uiItem.UIHierarchyItems.Expanded = isExpanded;
