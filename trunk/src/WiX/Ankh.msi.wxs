@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
     <Product UpgradeCode="D35F7A64-E1AA-46eb-8835-36401261EB2A" Name="AnkhSvn"
         Id="734AB425-8C5E-4ce9-8346-0C592518ACD5" 
         Version="0.5.2" Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud"
-        Language="1033">
+        Language="1033" Codepage="1252">
 
 
         <Package Description="NSvn" Comments="NSvn Merge Module" 
