@@ -15,7 +15,7 @@
             <p>Ankh links into the same libraries that svn.exe does, so if the Subversion repository is already created it is possible to use Ankh
              without ever installing Subversion at all.  However, with Ankh you cannot yet do some things, including but not limited to creating a repository,
               merging, copying or moving. It is highly recommended that Subversion be installed as well at this point.
-              You can install Subversion from  <link  url="http://subversion.tigris.org">http://subversion.tigris.org</link>.  
+              You can install Subversion from  <link url="http://subversion.tigris.org">http://subversion.tigris.org</link>.  
                    Other than that all you need is VS.NET. </p>
         </section>
         <section header="I have Ankh installed but the menu entries are disabled or I don't see any at all.">
@@ -25,15 +25,44 @@
              After doing so green checks and other icons will become visible in the Solution Explorer form next to the files in your project that are 
              in your Subversion working copy.  </p>
         </section>
-               <section header="I uninstalled Ankh, but the menu entries are still there, how can I get rid of them?">
+        <section header="I uninstalled Ankh, but the menu entries are still there, how can I get rid of them?">
             <p>You can run devenv /setup from the command line which will set VS.NET back to the default state. However 
             if you have any VS.NET customizations you may lose them.  </p>
         </section>
-          <section header="Can I use Ankh with CVS?">
+        <section header="Can I use Ankh with CVS?">
             <p>No, Ankh only works with subversion, it will not work with CVS. To use CVS with VS.NET Jalindi Igloo is available at 
-                   <link  url="http://www.jalindi.com/igloo">http://www.jalindi.com/igloo</link>. </p>
+                   <link url="http://www.jalindi.com/igloo">http://www.jalindi.com/igloo</link>. </p>
         </section>
-                <section header="There is nothing about my problem here!">
+        <section header="How can I set up a Subversion server on Windows?">
+            <p>Here are instructions for setting up an Apache server on Windows  <link url="http://tortoisesvn.tigris.org/serverinstall.html">http://tortoisesvn.tigris.org/serverinstall.html</link>.  </p>
+        </section>
+        <section header='I am getting the error "Unable to retrieve folder information from the server with my ASP.NET web project".'>
+            <p>This problem is described in detail <link url=
+            "http://groups.google.com/groups?hl=en&amp;lr=&amp;ie=UTF-8&amp;oe=UTF-8&amp;threadm=018901c370ad%2467041600%24a301280a%40phx.gbl&amp;rnum=1&amp;prev=/groups%3Fq%3DRefreshing%2Bthe%2Bproject%2Bfailed.%2BUnable%2Bto%2Bretrieve%2Bfolder%2Binformation%2Bfrom%2Bthe%2Bserver.%26hl%3Den%26lr%3D%26ie%3DUTF-8%26oe%3DUTF-8%26selm%3D018901c370ad%252467041600%2524a301280a%2540phx.gbl%26rnum%3D1">
+            here</link>. Mark Griffiths came up with a 
+             workaround: create two .cmd files in each web project:</p>    
+            <code>
+hide-svn.cmd:
+@ECHO OFF
+FOR /R %%f IN (.svn) DO IF EXIST "%%f" (
+   ATTRIB -h "%%f"
+   RENAME "%%f" _svn
+)
+
+restore-svn.cmd:
+@ECHO OFF
+FOR /R %%f IN (_svn) DO IF EXIST "%%f" (
+   RENAME "%%f" .svn
+   ATTRIB +h "%%~pf\.svn"
+    )      </code>
+            <p>Before opening the web project, run hide-svn.  After the project is loaded (and refreshed it's vswebcache),  run restore-svn.  
+                  It is only during initial loading and when using the refresh button in solution explorer that the .svn directories get in the way.</p>
+            <p>An alternative workaround suggested by Matthew Mastracci is to convert your "Web" projects to "Local" projects.  Change the "Web" string to "Local" 
+                  within your web .csproj, then you can reference it as a normal project, without worrying about any of the web mapping items. Debugging works as 
+                  expected, with the manual step of changing the debug application to "URL" and pointing it at your local share.  Note that these debug settings are stored 
+                  locally in the .suo file.</p>
+        </section>
+        <section header="There is nothing about my problem here!">
             <p>Don't despair. Either send a mail to our developers mailing list(dev AT ankhsvn.tigris.org) describing the 
             problem (in as much detail as possible) or visit us in our IRC channel #ankhsvn on the irc.freenode.net server.</p>
         </section>
