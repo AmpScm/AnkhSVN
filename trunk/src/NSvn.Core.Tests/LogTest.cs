@@ -58,6 +58,9 @@ namespace NSvn.Core.Tests
             return (ClientLogMessage[])list.ToArray( typeof(ClientLogMessage) );
         }
 
+        /// <summary>
+        /// Represents a log message gotten from the command line client
+        /// </summary>
         private class ClientLogMessage
         {
             public ClientLogMessage( XmlNode node )
@@ -77,10 +80,12 @@ namespace NSvn.Core.Tests
                 this.author = node["author"].InnerText;
             }
 
+            /// <summary>
+            /// Does it match the LogMessage object
+            /// </summary>
+            /// <param name="msg"></param>
             public void CheckMatch( LogMessage msg )
             {
-                Console.WriteLine( "From xml: " + this.message );
-                Console.WriteLine( "From api: " + msg.Message );
                 Assertion.AssertEquals( "Author differs", this.author, msg.Author );
                 Assertion.AssertEquals( "Message differs", this.message, msg.Message );
                 Assertion.AssertEquals( "Revision differs", this.revision, msg.Revision );
