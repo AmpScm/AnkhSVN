@@ -114,6 +114,17 @@
                     Project = "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
                     Package = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
                 />
+                <Reference
+                    Name = "Ankh.2003"
+                    Project = "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "extensibility"
+                    AssemblyName = "extensibility"
+                    HintPath = "I:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\PublicAssemblies\extensibility.dll"
+                    AssemblyFolderKey = "hklm\publicassemblies"
+                />
             </References>
         </Build>
         <Files>
