@@ -2,7 +2,7 @@
 using System.Collections;
 using EnvDTE;
 
-namespace Ankh.Solution
+namespace Ankh
 {
     public interface ISelectionContainer
     {
