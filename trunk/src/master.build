@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?> 
-<!-- this is a comment -->
 <project default="build">
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
