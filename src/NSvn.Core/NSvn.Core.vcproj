@@ -123,6 +123,9 @@
 			<File
 				RelativePath="SvnClientException.cpp">
 			</File>
+			<File
+				RelativePath="stream.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -177,6 +180,9 @@
 			</File>
 			<File
 				RelativePath="delegates.h">
+			</File>
+			<File
+				RelativePath="stream.h">
 			</File>
 			<File
 				RelativePath="svnenums.h">
