@@ -19,8 +19,8 @@
     /I "${svndir}\apr\include" /I "${svndir}\apr-iconv\include" 
     /I "${svndir}\apr-util\include" /I "${svndir}\subversion\include" 
     /AI "..\NSvn.Common\bin\Release" /D "WIN32" /D "_MBCS" /D "_WINDLL" 
-    /FD /EHsc /MD /GS  /W3 /nologo /c /Zi /clr /TP /AI ${lib.dir} /AI 
-    ..\NSvn.Core\${build.dir}\ /AI ..\NSvn.Common\${build.dir}'
+    /FD /EHsc /MD /GS  /W3 /nologo /c /Zi /clr /TP /AI ${lib.dir} 
+    /AI ..\NSvn.Core\${build.dir}\ /AI ..\NSvn.Common\${build.dir}'
         unless="${debug}"/>
         
     <property name="link.options" value='/NOLOGO /DLL /DEBUG 
@@ -45,8 +45,8 @@
     shell32.lib ole32.lib oleaut32.lib uuid.lib DelayImp.lib'
         if="${debug}"/>
     
-    <property name="link.options" value='/NOLOGO /DLL /DELAYLOAD:
-    ${bdb.dll} comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib 
+    <property name="link.options" value='/NOLOGO /DLL /DELAYLOAD:${bdb.dll} 
+    comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib 
     ${bdb.lib} ${svndir}\Release\subversion\libsvn_repos\libsvn_repos-1.lib 
     ${svndir}\Release\subversion\libsvn_fs\libsvn_fs-1.lib 
     ${svndir}\Release\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib 
