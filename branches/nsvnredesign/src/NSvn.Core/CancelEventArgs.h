@@ -11,6 +11,8 @@ namespace NSvn
         public __gc class CancelEventArgs : public System::EventArgs
         {
         public:
+            CancelEventArgs() : cancel( false )
+            {;}
            
             __property bool get_Cancel()
             { return this->cancel; }
