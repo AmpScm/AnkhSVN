@@ -40,9 +40,7 @@
         
         <comregister file="${lib.dir}\AnkhUserControlHost.dll"/>
 
-        <!-- Sander Rijken: Somehow <tlbimp> doesn't work. Therefore this hack -->
-        <exec program="tlbimp" commandline="${lib.dir}\AnkhUserControlHost.dll /out:${build.dir}/AnkhUserControlHostLib.dll" />
-        <!--<tlbimp typelib="${lib.dir}\AnkhUserControlHost.dll" output="${build.dir}/AnkhUserControlHostLib.dll" />-->
+        <tlbimp typelib="${lib.dir}\AnkhUserControlHost.dll" output="${build.dir}/AnkhUserControlHostLib.dll" />
         
         <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
