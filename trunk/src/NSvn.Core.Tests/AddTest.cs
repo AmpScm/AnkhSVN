@@ -43,7 +43,6 @@ namespace NSvn.Core.Tests
         /// <summary>
         /// Attempts to add a file with non-ansi characters in the filename
         /// </summary>
-        [Ignore( "We cannot do non-Ansi characters for now" )]
         [Test]
         public void TestAwkwardName()
         {
