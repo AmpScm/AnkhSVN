@@ -33,6 +33,18 @@ namespace Ankh
         }
     }
 
+    /// <summary>
+    /// A visitor that checks if all the visitees are unversioned.
+    /// </summary>
+    internal class UnversionedVisitor : LocalResourceVisitorBase
+    {
+        public bool IsVersioned = false;
+        public override void VisitWorkingCopyResource( WorkingCopyResource r )
+        {
+            this.IsVersioned = true;
+        }
+    }
+
     internal class ResourceGathererVisitor : LocalResourceVisitorBase
     {
         public ArrayList WorkingCopyResources = new ArrayList();

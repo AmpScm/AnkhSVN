@@ -224,7 +224,8 @@ namespace Ankh
 
         public static void HandleError( Exception ex )
         {
-            Utils.ErrorMessage.QuerySendByWeb( "http://arild.no-ip.com/error/report.aspx", ex );
+            System.Windows.Forms.MessageBox.Show( ex.ToString() );
+            //Utils.ErrorMessage.QuerySendByWeb( "http://arild.no-ip.com/error/report.aspx", ex );
         }
 
         
