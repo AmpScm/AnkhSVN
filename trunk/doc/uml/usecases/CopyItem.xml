@@ -29,7 +29,7 @@
                 <Include useCaseID='WriteLogMessage'></Include>
             </FlowElement>
             <FlowElement>
-                <Include useCaseID='Developer chooses "Paste" from menu'></Include>
+                <Step>Developer invokes "Paste"</Step>
             </FlowElement>
             <FlowElement>
                 <Step>svn copies item</Step>
