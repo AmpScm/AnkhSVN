@@ -170,11 +170,12 @@ namespace Ankh
                             
                     }
                 
-                    catch( Exception ex ) 
+                    catch( NullReferenceException ex ) 
                     {
                         Swf.MessageBox.Show( ex.GetType().ToString() + ": " + 
                             ex.Message + Environment.NewLine + 
-                            ex.StackTrace );
+                            ex.StackTrace + Environment.NewLine + 
+                            item.Name );
                     }
                 }
                 else
@@ -299,7 +300,7 @@ namespace Ankh
             #region Implementation of IHashCodeProvider
             public int GetHashCode(object obj)
             {
-                return ((ProjectItem)obj).get_FileNames(0).GetHashCode();
+                return ((ProjectItem)obj).get_FileNames(1).GetHashCode();
             }
         
             #endregion
