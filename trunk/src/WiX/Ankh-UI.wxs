@@ -36,6 +36,7 @@
 		<Property Id="AdminWizard">Network Setup Wizard</Property>
 		<Property Id="ButtonText_Next">&amp;Next &gt;</Property>
 		<Property Id="LogoText">AnkhSVN</Property>
+		<Property Id="WelcomeForm_NextArgs">FolderForm</Property>
 		<UI>
 			<TextStyle Id="VsdDefaultUIFont" FaceName="MS Sans Serif" Size="9" /> <!--Red="0" Green="0" Blue="0" /-->
 			<TextStyle Id="VerdanaBold12" FaceName="Verdana" Size="12" Bold="yes" Red="0" Green="0" Blue="0" />
