@@ -14,7 +14,7 @@ namespace Ankh.UI
 	{
         private System.Windows.Forms.TextBox urlTextBox;
         private System.Windows.Forms.Button goButton;
-        private Ankh.UI.RepositoryExplorer explorer;
+        private Ankh.UI.RepositoryTreeView repositoryTreeView1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -54,19 +54,10 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.explorer = new Ankh.UI.RepositoryExplorer();
             this.urlTextBox = new System.Windows.Forms.TextBox();
             this.goButton = new System.Windows.Forms.Button();
+            this.repositoryTreeView1 = new Ankh.UI.RepositoryTreeView();
             this.SuspendLayout();
-            // 
-            // explorer
-            // 
-            this.explorer.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.explorer.Location = new System.Drawing.Point(0, 31);
-            this.explorer.Name = "explorer";
-            this.explorer.RepositoryRoot = null;
-            this.explorer.Size = new System.Drawing.Size(292, 240);
-            this.explorer.TabIndex = 0;
             // 
             // urlTextBox
             // 
@@ -78,11 +69,26 @@ namespace Ankh.UI
             // 
             // goButton
             // 
+            this.goButton.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right);
             this.goButton.Location = new System.Drawing.Point(152, 2);
             this.goButton.Name = "goButton";
             this.goButton.TabIndex = 2;
             this.goButton.Text = "Go";
             this.goButton.Click += new System.EventHandler(this.goButton_Click);
+            // 
+            // repositoryTreeView1
+            // 
+            this.repositoryTreeView1.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+                | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right);
+            this.repositoryTreeView1.ImageIndex = -1;
+            this.repositoryTreeView1.Location = new System.Drawing.Point(0, 32);
+            this.repositoryTreeView1.Name = "repositoryTreeView1";
+            this.repositoryTreeView1.RepositoryRoot = null;
+            this.repositoryTreeView1.SelectedImageIndex = -1;
+            this.repositoryTreeView1.Size = new System.Drawing.Size(296, 240);
+            this.repositoryTreeView1.TabIndex = 3;
             // 
             // TestRepositoryExplorer
             // 
@@ -90,9 +96,9 @@ namespace Ankh.UI
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(292, 271);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.repositoryTreeView1,
                                                                           this.goButton,
-                                                                          this.urlTextBox,
-                                                                          this.explorer});
+                                                                          this.urlTextBox});
             this.Name = "TestRepositoryExplorer";
             this.Text = "TestRepositoryExplorer";
             this.ResumeLayout(false);
@@ -102,7 +108,8 @@ namespace Ankh.UI
 
         private void goButton_Click(object sender, System.EventArgs e)
         {
-            this.explorer.RepositoryRoot = new RepositoryDirectory( this.urlTextBox.Text );
+            this.repositoryTreeView1.RepositoryRoot = 
+                new RepositoryDirectory( this.urlTextBox.Text );
         }
 
         public static void Main()
