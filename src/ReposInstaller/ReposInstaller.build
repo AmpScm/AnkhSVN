@@ -41,6 +41,8 @@
                 <include name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <include name="..\Utils\${build.dir}\Utils.dll"/>
                 <include name="..\Ankh\${build.dir}\Ankh.dll"/>
+                <include name="${lib.dir}\EnvDTE.dll"/>
+                <include name="${lib.dir}\extensibility.dll"/>
             </references>
             
             <arg value="/debug:pdbonly" unless="${debug}"/>
