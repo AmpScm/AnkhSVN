@@ -351,7 +351,9 @@ namespace Ankh.Solution
  
             if ( treeHwnd == IntPtr.Zero )
                 throw new ApplicationException( 
-                    "Could not attach to solution explorer treeview" );
+                    "Could not attach to solution explorer treeview. If the solution explorer " + 
+                    "window is on a secondary monitor, " +
+                    "try moving it to the primary during solution loading." );
 
             this.treeview = new TreeView( treeHwnd );
 
