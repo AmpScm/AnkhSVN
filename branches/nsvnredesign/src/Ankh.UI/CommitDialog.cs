@@ -331,7 +331,6 @@ namespace Ankh.UI
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label logLabel;
         private System.Windows.Forms.Button showDiffButton;
-        private string diff;
         private Ankh.UI.DiffTab diffTab;
         private System.Windows.Forms.RichTextBox logMessageBox;
         private LogMessageTemplate logMessageTemplate;
