@@ -156,8 +156,8 @@ namespace NSvn.Core.Tests
 
         private class Info
         {
-            private static readonly Regex INFO = new Regex(@"Path:\s(?'path'.+?)\s+Name:\s(?'name'\S+)\s+Url:\s(?'url'\S+)\s+Repository UUID:\s(?'reposuuid'\S+)\s+Revision:\s(?'revision'\S+)\s+Node Kind:\s(?'nodekind'\S+)\s+Schedule:\s(?'schedule'\S+)\s+Last Changed Author:\s+(?'lastchangedauthor'\S+)", 
-                RegexOptions.IgnoreCase );
+            private static readonly Regex INFO = new Regex(@"Path:\s(?'path'\S+)\s+Name:\s(?'name'\S+)\s+Url:\s(?'url'\S+)\s+Repository UUID:\s(?'reposuuid'\S+)\s+Revision:\s(?'revision'\S+)\s+Node Kind:\s(?'nodekind'\S+)\s+Schedule:\s(?'schedule'\S+)\s+Last Changed Author:\s+(?'lastchangedauthor'\S+)", 
+                (RegexOptions) 0);
 
             public Info( string output )
             {

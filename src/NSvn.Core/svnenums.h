@@ -98,7 +98,7 @@ namespace NSvn
             Added = svn_wc_status_added,
 
             /// <summary>The item is under version control, but is missing.</summary>
-            Missing = svn_wc_status_missing,
+            Absent = svn_wc_status_absent,
 
             /// <summary>The item is scheduled for deletion.</summary>
             Deleted = svn_wc_status_deleted,

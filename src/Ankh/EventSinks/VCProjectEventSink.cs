@@ -51,24 +51,12 @@ namespace Ankh.EventSinks
 
         protected void ItemAdded( object item, object parent )
         {
-            // is this a project being added?
-            if ( parent == null ) 
-            {
-                EventSink.AddingProject = true;
-            }
-
-            // is there a project currently being added?
-            if ( EventSink.AddingProject )
-                return;
-
             this.Context.SolutionExplorer.RefreshSelectionParents();
         }
 
         protected void ItemRemoved( object item, object parent )
         {
-            // this a project being removed?
-            if ( parent != null )
-                this.Context.SolutionExplorer.RefreshSelectionParents();
+            this.Context.SolutionExplorer.RefreshSelectionParents();
         }
 
         private readonly Delegate itemAddedDelegate;

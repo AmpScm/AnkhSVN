@@ -35,9 +35,9 @@
         <property name="define" value="VS2003;${define}" if="${vs.2003}"/>
         
         
-        <comregister file="${lib.dir}\AnkhUserControlHost.dll"/>
+        <comregister file="${lib.dir}\Ankh.ToolWindow.dll"/>
         
-        <tlbimp output="${build.dir}/AnkhUserControlHostLib.dll" typelib="${lib.dir}\AnkhUserControlHost.dll"/>
+        <tlbimp output="${build.dir}/AnkhToolWindowLib.dll" typelib="${lib.dir}\Ankh.ToolWindow.dll"/>
         
         <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
@@ -49,7 +49,7 @@
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
-                <includes name="${build.dir}/AnkhUserControlHostLib.dll"/>
+                <includes name="${build.dir}/AnkhToolWindowLib.dll"/>
                 <includes name="${lib.dir}\${vsnet.ver}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
                 <includes name="${lib.dir}\Interop.SHDocVw.dll"/>
             </references>

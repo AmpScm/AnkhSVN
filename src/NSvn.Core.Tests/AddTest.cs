@@ -38,7 +38,22 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "svn st does not report the file as added", 
                 'A', this.GetSvnStatus( testFile ) );
                         
-        }        
+        }
+
+        /// <summary>
+        /// Attempts to add a file with non-ansi characters in the filename
+        /// </summary>
+        [Test]
+        public void TestAwkwardName()
+        {
+            string testFile = this.CreateTextFile( "månedslønn.tæxt");
+            
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            Client.Add( testFile, false, ctx );
+
+            Assertion.AssertEquals( "svn st does not report the file as added", 
+                'A', this.GetSvnStatus( testFile ) );
+        }
 
         /// <summary>
         /// Creates a subdirectory with items in it, tries to add it non-recursively.
