@@ -24,10 +24,11 @@ namespace Ankh.UI
             this.fromRevisionComboBox.Items.AddRange( new object[]{
                                                                  RevisionChoice.Head,
                                                                  RevisionChoice.Prev,
-                                                                 RevisionChoice.Date,
                                                                  RevisionChoice.Base,
-                                                                 RevisionChoice.Commited});
+                                                                 RevisionChoice.Commited,
+                                                                 RevisionChoice.Date});
             this.components = new System.ComponentModel.Container();
+            this.fromRevisionComboBox.SelectedIndex = 0;
             CreateMyToolTip();
 		}
 
@@ -381,16 +382,18 @@ namespace Ankh.UI
                 if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
                     == RevisionChoice.Date)
                 {
-                   // this.toRevisionComboBox.SelectedItem = RevisionChoice.Date;
                     this.fromDateTimePicker.Enabled = true;
                     this.toDateTimePicker.Enabled = false;
 
+                    // populates the toRevisionComoBox if fromRevisionComboBox.Date is selected
                     if (!this.singleRevisionCheckBox.Checked)
                     {
                         this.toDateTimePicker.Enabled = true;
                         this.toRevisionComboBox.Enabled = true;
                         this.toRevisionComboBox.Items.Clear();
-                        this.toRevisionComboBox.Items.Add(RevisionChoice.Date);
+                        this.toRevisionComboBox.SelectedIndex = 
+                            this.toRevisionComboBox.Items.Add(RevisionChoice.Date);
+
                     }
                 }
                 else
@@ -405,8 +408,9 @@ namespace Ankh.UI
                         if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
                             == RevisionChoice.Head)
                         {
-                            this.toRevisionComboBox.Enabled = false;
-                        }
+                            // checkes the singleRevisionCheckBox when Head is selected
+                            this.singleRevisionCheckBox.Checked = true;
+                         }
                     }
                 } 
             }
@@ -430,6 +434,7 @@ namespace Ankh.UI
                                                                      RevisionChoice.Commited}); 
                        
             this.toRevisionComboBox.Enabled = true;
+            this.toRevisionComboBox.SelectedIndex = this.fromRevisionComboBox.SelectedIndex;
         }
 
         private void toRevisionComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
