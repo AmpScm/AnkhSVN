@@ -20,6 +20,7 @@ namespace Ankh.Solution
 
             this.solutionFolder = SvnResource.FromLocalPath(
                 Path.GetDirectoryName( solution.FullName ) );
+            this.solutionFolder.Context = explorer.Context;
 
             explorer.SetSolution( this );
         }
