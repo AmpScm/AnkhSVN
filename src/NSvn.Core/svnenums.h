@@ -3,6 +3,7 @@
 #using <mscorlib.dll>
 #include <svn_types.h>
 #include <svn_wc.h>
+#include <svn_opt.h>
 
 namespace NSvn
 {
@@ -61,5 +62,16 @@ namespace NSvn
             Conflicted = svn_wc_notify_state_conflicted 
         };
 
+        public __value enum RevisionKind
+        {
+            Unspecified = svn_opt_revision_unspecified,  
+            Number = svn_opt_revision_number,
+            Date = svn_opt_revision_date,
+            Committed = svn_opt_revision_committed,
+            Previous = svn_opt_revision_previous,
+            Base = svn_opt_revision_base,
+            Current = svn_opt_revision_working,
+            Head = svn_opt_revision_head  
+        };
     }
 }

@@ -16,6 +16,12 @@ namespace NSvn{
 
                     [Test]
                     void TestUsernameCredential();
+
+                    [Test]
+                    void TestRevisionFromNumber();
+
+                    [Test]
+                    void TestRevisionFromDate();
                 };
             }
         }
