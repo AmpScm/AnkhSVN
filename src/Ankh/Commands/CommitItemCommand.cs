@@ -30,9 +30,9 @@ namespace Ankh.Commands
         public override void Execute(Ankh.AnkhContext context)
         {
             ILocalResource[] resources = context.SolutionExplorer.GetSelectedItems();
-            foreach( ILocalResource resource in resources )
-                if ( resource.IsVersioned )
-                    ((WorkingCopyResource)resource).Commit( "", false );
+            WorkingCopyResource[] wcResources = new WorkingCopyResource[ resources.Length ];
+            resources.CopyTo( wcResources, 0 );
+            WorkingCopyResource.Commit( wcResources, false );
            
             context.SolutionExplorer.UpdateSelectionStatus();
         }

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections;
 using NSvn.Core;
 
 namespace NSvn
@@ -16,8 +17,6 @@ namespace NSvn
 		protected WorkingCopyResource( string path )
 		{
 			this.path = System.IO.Path.GetFullPath(path);
-            //TODO: pull this up
-            this.ClientContext.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
 		}
 
         /// <summary>
@@ -51,25 +50,30 @@ namespace NSvn
         }
 
 
+        
+
         /// <summary>
         /// Commit local changes to the repository.
         /// </summary>
-        /// <param name="logMessage">The log message to accompany the commit.</param>
         /// <param name="recursive">Whether subresources should be recursively committed.</param>
-        public void Commit( string logMessage, bool recursive )
+        public void Commit( bool recursive )
         {
-            this.Commit( new SimpleLogMessageProvider(logMessage), recursive );
+            Client.Commit( new string[]{ this.Path }, recursive, this.ClientContext );
         }
 
         /// <summary>
         /// Commit local changes to the repository.
         /// </summary>
-        /// <param name="logMessageProvider">An object that can provide a log message.</param>
-        /// <param name="recursive">Whether subresources should be recursively committed.</param>
-        public void Commit( ILogMessageProvider logMessageProvider, bool recursive )
+        /// <param name="resources">The resources to commit.</param>
+        /// <param name="recursive">Whether subitems should be recursively committed.</param>
+        public static void Commit( WorkingCopyResource[] resources, bool recursive )
         {
-            this.logMessageProvider = logMessageProvider;
-            Client.Commit( new string[]{ this.Path }, recursive, this.ClientContext );
+            ArrayList targets = new ArrayList();
+            foreach( WorkingCopyResource resource in resources )
+                targets.Add( resource.Path );
+
+            Client.Commit( (string[])targets.ToArray(typeof(string)), !recursive, 
+                resources[0].ClientContext );
         }
 /*
         /// <summary>
@@ -214,21 +218,12 @@ namespace NSvn
             get;
         }
 
-        /// <summary>
-        /// Callback function for log messages
-        /// </summary>
-        /// <param name="targets"></param>
-        /// <returns></returns>
-        private string LogMessageCallback( CommitItem[] targets )
-        {
-            return this.logMessageProvider.GetLogMessage( targets );
-        }
+        
 
         protected const string ADMIN_AREA = ".svn";
         protected const int MODIFICATION_DELTA = 5;
         private string path;
         private Status status;
-        private ILogMessageProvider logMessageProvider;
         private DateTime lastModTime;
 	}
 }
