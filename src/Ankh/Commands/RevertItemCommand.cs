@@ -4,6 +4,7 @@ using NSvn;
 using NSvn.Core;
 using NSvn.Common;
 using EnvDTE;
+using Ankh.UI;
 
 namespace Ankh.Commands
 {
@@ -16,11 +17,8 @@ namespace Ankh.Commands
     VSNetControl( "Project", Position = 4 ),
     VSNetControl( "Folder", Position = 4 ),
     VSNetControl( "Solution", Position = 4)]
-
-    public class RevertItem
-	{
-        internal class RevertItemCommand : CommandBase
-        {
+    internal class RevertItemCommand : CommandBase
+    {
         #region Implementation of ICommand
 
             public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
@@ -52,8 +50,7 @@ namespace Ankh.Commands
                     resource.Revert( true );
                 }
             }
-        }
-	}
+    }
 }
 
 
