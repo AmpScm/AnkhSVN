@@ -42,7 +42,6 @@
     <File Url="xml\basic-operations\propdel.xml"/>
     <File Url="xml\basic-operations\propedit.xml"/>
     <File Url="xml\basic-operations\proplist.xml"/>
-    <File Url="xml\keywords\special_properties.xml"/>
     <File Url="xml\keywords\revision.xml"/>
     <File Url="xml\using-ankh\copying_files.xml"/>
     <File Url="xml\using-ankh\make_changes.xml"/>
@@ -57,4 +56,8 @@
     <File Url="xml\using-ankh\commiting_files.xml"/>
     <File Url="xml\using-ankh\setting_properties.xml"/>
     <File Url="xml\using-ankh\creating_repositories.xml"/>
+    <File Url="img\propeditor_3.png"/>
+    <File Url="img\propeditor_1.png"/>
+    <File Url="img\propeditor_2.png"/>
+    <File Url="Xml\keywords\properties.xml"/>
     </HelpFileList>

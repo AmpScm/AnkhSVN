@@ -28,7 +28,9 @@
 			<HelpTOCNode Title="Resolving conflicts" Url="\Xml\using-ankh\resolving_conflicts.xml"/>
 			<HelpTOCNode Title="Merging files" Url="\Xml\using-ankh\merging_files.xml"/>
 			<HelpTOCNode Title="Commiting files" Url="\Xml\using-ankh\commiting_files.xml"/>
+    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
+    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
 	<HelpTOCNode Title="Basic operations" Url="\Xml\basic-operations\basic_operations.xml">
 		<HelpTOCNode Title="Add" Url="\Xml\basic-operations\add.xml"/>
@@ -56,9 +58,12 @@
 		<HelpTOCNode Title="Update" Url="\Xml\basic-operations\update.xml"/>
 	</HelpTOCNode>
 	<HelpTOCNode Title="Keywords" Url="\Xml\Keywords\keywords.xml">
-		<HelpTOCNode Title="Special Properties" Url="\Xml\Keywords\special_properties.xml"/>
+		<HelpTOCNode Title="Properties" Url="\Xml\keywords\properties.xml"/>
 		<HelpTOCNode Title="Revisions: numbers, keywords and dates" Url="\Xml\Keywords\revision.xml"/>
+    
+    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
 	<ToolData Name="MSTOCMRUDIR" Value="C:\finalproject\Ankh\src\Help.doc\Xml\Keywords\"/>
 	<ToolData Name="MSTOCMRUFT" Value="0"/>
+    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOC>

@@ -46,7 +46,6 @@
     <File Url="xml\basic-operations\propdel.xml"/>
     <File Url="xml\basic-operations\propedit.xml"/>
     <File Url="xml\basic-operations\proplist.xml"/>
-    <File Url="xml\keywords\special_properties.xml"/>
     <File Url="xml\keywords\revision.xml"/>
     <File Url="xml\using-ankh\copying_files.xml"/>
     <File Url="xml\using-ankh\make_changes.xml"/>
@@ -61,17 +60,21 @@
     <File Url="xml\using-ankh\commiting_files.xml"/>
     <File Url="xml\using-ankh\setting_properties.xml"/>
     <File Url="xml\using-ankh\creating_repositories.xml"/>
+    <File Url="img\propeditor_3.png"/>
+    <File Url="img\propeditor_1.png"/>
+    <File Url="img\propeditor_2.png"/>
+    <File Url="Xml\keywords\properties.xml"/>
     </Files>
 	<Dirs>
 		<Dir Url="html"/>
     <Dir Url="img"/>
-    <Dir Url="xml"/>
-    <Dir Url="xml\basic-operations"/>
-    <Dir Url="xml\configuration"/>
-    <Dir Url="xml\introduction"/>
-    <Dir Url="xml\keywords"/>
-    <Dir Url="xml\top"/>
-    <Dir Url="xml\using-ankh"/>
+    <Dir Url="Xml"/>
+    <Dir Url="Xml\basic-operations"/>
+    <Dir Url="Xml\configuration"/>
+    <Dir Url="Xml\introduction"/>
+    <Dir Url="Xml\keywords"/>
+    <Dir Url="Xml\top"/>
+    <Dir Url="Xml\using-ankh"/>
     </Dirs>
 	<Options/>
 </HelpWorkshopProject>
