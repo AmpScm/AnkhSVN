@@ -5,7 +5,23 @@
         <name>Process documents</name>
         
         
+        <file path="status_report.xml">
+            <handler>viewdoc.html</handler>
+            <realpath>status_report.xml</realpath>
+            <name>Status report</name>
+            <description>The first piece of documentation submitted in this project</description>
+        </file>
+
+        <file path="projectsketch.xml">
+            <handler>viewdoc.html</handler>
+            <realpath>projectsketch.xml</realpath>
+            <name>Project sketch</name>
+            <description>The second document we had to submit, which
+            contained a more detailed description of the project</description>
+        </file>
+        
         <file path="pilot_project.xml">
+            <permissions>group</permissions>
             <handler>viewdoc.html</handler>
             <realpath>pilot_project.xml</realpath>
             <name>Pilot project report</name>
@@ -16,6 +32,7 @@
         
         <directory path="scheduling">
             <name>Scheduling documents</name>
+            <permissions>group</permissions>
             
            <file path="work_plan.xml">
                 <realpath>work_plan.xml</realpath>
