@@ -164,11 +164,11 @@
 		</copy>
 		
         <exec program="nunit-console.exe"
-				commandline="/assembly:${build.dir}/NSvn.Core.Tests.dll"/>
+				commandline="${build.dir}/NSvn.Core.Tests.dll"/>
 		<exec program="nunit-console.exe"
-              commandline="/assembly:${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
+              commandline="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
         <exec program="nunit-console.exe"
-              commandline="/assembly:${build.dir}/NSvn.Tests.dll"/>
+              commandline="${build.dir}/NSvn.Tests.dll"/>
     </target>
     
     <target name="deploy" depends = "rebuild, test" description="Run all tests, then create the MSI installer if the tests pass">
