@@ -1,0 +1,59 @@
+** Ankh source code **
+
+* Subversion *
+
+Currently, to get a copy of the Ankh source code, you need to check it out using another SVN client. Further, in order to actually build it, you will also need to build Subversion itself. It then makes sense to start the process by building your own copy of the Subversion commandline client.
+
+Note: The current source tree only builds against the 0.22 release of SVN.
+
+Start by getting the 0.22 source tarball. You will also need the VS.NET version of the Berkeley DB binaries, which can be found here . We are currently using the 4.0.14 version. Make sure you don't get the VC6.0 versions, since they will cause spurious access violations at runtime.
+
+Extract the subversion tarball(using Winzip or similar). Then, extract the Berkeley zip into a directory called db4-win32 at the root of the tree(alongside the doc and build directories).
+
+
+* APR *
+
+Subversion relies on the Apache Portable Runtime(APR) library. Most of APR is included in the tarball, but to get Subversion to build on Win32 you will also need the apr-iconv module. You can check this out from the Apache CVS repository using a CVS client:
+
+cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic login 
+    (password: 'anoncvs')
+cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic co apr-iconv
+    
+You may run into a problem with the supplied .dsp files in the tarball. If the person packaging it was using a UNIX machine, the line endings will probably be wrong and VS.NET will refuse to convert them. You can use an utility like unix2dos to fix this, or you can check out those modules from CVS using the approach described above(just substitute apr and apr-util for apr-iconv). All the modules need to be in the top-level directory of the Subversion source tree. 
+
+
+* Building Neon *
+
+Open a VS.NET command shell (Start->Programs->Microsoft Visual Studio.NET->Tools->VS-NET Command Prompt), go into the neon directory at the root of the Subversion tree, and type the following:
+
+   cmd /c ..\build\win32\build_neon.bat debug 
+   cmd /c ..\build\win32\build_neon.bat release
+
+Building Subversion
+Building Subversion requires you to have Python installed. Run gen-make.py -t dsp from the root of the Subversion tree.
+
+Open the solution by clicking on subversion_msvc.dsw at the root. VS.NET will prompt you to convert the workspace to the new VS.NET format. Answer yes to this.
+
+Now you can disable the neon project in the VS.NET solution, as well as the tests_* projects and mod_dav_svn. If you chose to use the 4.1.25 version of the Berkeley binaries, you will need to change the svn, svnadmin, svnlook, svnserve and svnversion projects to link against libdb41(d).lib instead of libdb40(d).lib. The linker settings can be accessed through project properties, Linker->Input->Additional Dependencies.
+
+The whole solution should build now. Build both debug and release versions. Put the generated binaries somewhere in your PATH.
+
+Create a new system environment variable, SVNSRC, to point to the Subversion source tree. This is necessary to get the Ankh build to locate the Subversion libraries and headers.
+
+
+* Ankh *
+
+Now you are ready to check out Ankh itself.
+
+Type the following:
+
+    svn checkout http://www.ankhsvn.com:8088/svn/finalproject/trunk/src ankh
+
+Open and build src.sln. Run the ReCreateCommands.reg file in the Ankh directory.
+
+To get VS.NET to recognize the custom menu icons, you need to edit SatelliteDll.reg in the same directory. Set the path for SatelliteDllPath to the correct one for your system, then run the .reg file.
+
+Go into the Project Properties of the Ankh project. Choose Configuration Properties->Debug. Set Debug Mode to Program, and set Start Application to the path to devenv.exe on your system.
+
+Starting the Ankh project should now create a new instance of VS.NET with Ankh loaded.
+
