@@ -208,6 +208,7 @@ namespace Ankh.UI
             this.Controls.Add(this.okButton);
             this.MinimumSize = new System.Drawing.Size(266, 280);
             this.Name = "UpdateDialog";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Update";
             this.revisionGroupBox.ResumeLayout(false);
