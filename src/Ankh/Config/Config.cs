@@ -54,5 +54,8 @@ namespace Ankh.Config {
         
         /// <remarks/>
         public string ConfigDir;
+        
+        /// <remarks/>
+        public string SvnExePath;
     }
 }
