@@ -4,49 +4,71 @@
     <section>
     <hr></hr>
         <p>
-			<img src="../../img/wc_solution_explorer.png" align="left"/>
+            A commit operation can publish changes to any number of files and directories as a single atomic transaction. 
+            In your working copy, you can change files, contents, create, delete, rename and copy files and directories,
+            and then commit the complete set of changes as a unit.
+            <br/><br/>
+            In the repository, each commit is treated as an atomic transaction: either all the commit's changes take 
+            place, or none of them take place. Subversion tries to retain this atomicity in the face of program crashes, 
+            system crashes, network problems, and other users' actions.
+            <br/><br/>
+            Each time the repository accepts a commit, this creates a new state of the filesystem tree, called a revision. 
+            Each revision is assigned a unique natural number, one greater than the number of the previous revision. 
+            The initial revision of a freshly created repository is numbered zero, and consists of nothing but an 
+            empty root directory.
+            <br/><br/>
+            A nice way to visualize the repository is as a series of trees. Imagine an array of revision numbers, 
+            starting at 0, stretching from left to right. Each revision number has a filesystem tree hanging below it, 
+            and each tree is a snapshot of the way the repository looked after each commit. 
+            <br/>
+            <img src="../../img/repository.png"/>
+            <br/><br/>
+            <br/>
+            <b>How to commit files:</b>
              <list>
-                <item><b>1.</b> Right click on the selected versioned item(s) 
-					you want to commit in Solution Explorer. An item could be a file
-					 directory or project. <br></br>
+                <item>
+                    <b>1.</b>Select and right click on the versioned item(s) 
+					you want to commit in the Solution Explorer. 
+				</item>
+                <item>
+                    <b>2.</b> Select <b>commit</b> from the item menu.
+                    <br/><br/>
+			        <img src="../../img/menu-items/commit.png" align="left"/>   
+			        <br clear="all"/>
+			        <br/><br/>                    
 				</item>
 			</list>
-			<br clear="ALL"/>
 			<br></br>
-			
-			 <img src="../../img/item_menu.png" align="left"/>   <br></br><br></br>                    
+			<b>1.The Commit dialog:</b>
+			<br/><br/>
+			 <img src="../../img/commit_dialog.png" align="left"/>   
+			 <br/>                    
              <list>
-                <item><b>2.</b> Select <b>commit</b> from the item menu that pops up.<br></br>
-				</item>
+                <item>
+                    <b>1.</b> Shows a list of all the files being committed. 
+                </item>
+                <item>
+                    <b>2.</b>Type in your log message. All Lines starting with ‘#’ will be ignored.
+                </item>
+                <item>
+                    <b>3.</b>Shows the <link url="examine_changes.xml">differences</link> between the 
+                    modified (green), removed (red) and unchanged (blue) text.
+                </item>
 			</list>
 			<br clear="ALL"/>
-			<br></br>
-			
-			 <img src="../../img/commit_dialog.png" align="left"/>   <br></br><br></br>                    
-             <list>
-                <item><b>3.</b> Print a log message in the commit dialog that 
-                appears. <br></br><br></br>
-                A list of the items to be commited is visible in the 
-                upper area of the dialog box. If <b>show diff</b>-button is clicked 
-                a <b>diff</b> will be displayed. A diff shows the difference between 
-                modified (green), removed (red) and unchanged (blue) text.</item>
+			<b>2. The login dialog:</b>
+			<img src="../../img/login.png" align="left"/>   
+			<list>
+			    <item>Type in your username and password.</item>
 			</list>
-			<br clear="ALL"/>
 			<br></br>
-			
-			<b>3.</b> Notice that the status symbol has changed in front of the 
-            item(s) committed in Solution Explorer to
-            <img src="../../img/ok.png"/>
-            <br></br><br></br>
-            
-            I.e. after having committed a file Ankh will show the file status as: 
-            <br></br>
-            <img src="../../img/ok_file.png"/>
-            
-        </p><br></br>			
-            <hr></hr>
-            <link url="resolving_conflicts.xml">back </link>
-        
+			Notice how the status symbol has changed in front of the 
+            item(s) committed in Solution Explorer to<img src="../../img/ok_file.png"/>
+            <br/>
+             Ankhs <link url="../keywords/output_window.xml">output window </link>
+             will show all the files that have been committed. 
+            <br/>
+        </p>
     </section>   
 </doc>
 

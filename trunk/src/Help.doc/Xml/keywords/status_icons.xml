@@ -22,7 +22,7 @@
             <item><img src="../../img/ok.png"/>  - Item under revision controll, and unchanged.</item>
             <item><img src="../../img/unrevisioned.png"/>  - Item NOT under revision controll.</item>
         </list>
-        <b> Tip!</b> Ankh updates the status icons AFTER files have been saved. 
+        <b>NOTE:</b> Ankh updates the status icons AFTER files have been saved. 
         </p>
     </section>   
     <section>

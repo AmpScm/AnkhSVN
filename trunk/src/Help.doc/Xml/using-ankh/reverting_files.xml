@@ -9,16 +9,23 @@
             This is done with the ‘Revert’ command. 
         </p>
         <b>How to revert files:</b>
-        <img src="../../img/revert_menu.png" align="left"/>
         <list>
-            <item><b>1.</b></item>
-            <item><b>2.</b></item>
-            <item><b>3.</b></item>
-            <item><b>4.</b></item>
-            <item><b>5.</b></item>
-            <item><b>6.</b></item>
+            <item>
+                <b>1.</b>Select and right click on the file(s) you want to revert.
+            </item>
+            <item>
+                <b>2.</b>Select 'Revert' from the items menu.
+                <br/><br/>
+                <img src="../../img/menu-items/revert.png" align="left"/>
+                <br clear="all"/>
+                <br/>
+            </item>
         </list>
-    <br clear="all" />    
+        Notice how the status icons in front of the files change from 
+        <img src="../../img/modified_file.png"/> back to <img src="../../img/ok_file.png" />.
+        <br clear="all"/>        
+         Ankhs <link url="../keywords/output_window.xml">output window </link>
+        will show all the files that have been reverted. 
     </section>   
     <section>
         <p>

@@ -6,20 +6,49 @@
     <Jump Url = "xml\top\About_the_Ankh_help_file.xml"/>
   </Keyword>
 
-  <Keyword Term = "introduction">
+ <Keyword Term = "Credits">
+    <Jump Url = "xml\top\credits.xml"/>
+  </Keyword>
+
+  <Keyword Term = "Introduction">
     <Jump Url = "xml\introduction\introduction.xml"/>
   </Keyword>
   
-  <Keyword Term = "configuration">
-    <Jump Url = "xml\using-ankh\using_ankh.xml"/>
+  <Keyword Term = "Committing items">
+    <Jump Url = "xml\using-ankh\commiting_files.xml"/>
+  </Keyword>
+
+  <Keyword Term = "Logg messages">
+    <Jump Url = "xml\using-ankh\commiting_files.xml"/>
   </Keyword>
   
-  <Keyword Term = "operations">
-    <Jump Url = "xml\basic-operations\basic_operations.xml"/>
+  <Keyword Term = "Diff during commit">
+    <Jump Url = "xml\using-ankh\commiting_files.xml"/>
   </Keyword>
-  
-  <Keyword Term = "using">
-    <Jump Url = "xml\using-ankh\using_ankh.xml"/>
+
+  <Keyword Term = "Adding items">
+    <Jump Url = "xml\using-ankh\adding_files.xml"/>
   </Keyword>
+
+  <Keyword Term = "Examining changes">
+    <Jump Url = "xml\using-ankh\examine_changes.xml"/>
+  </Keyword>
+
+  <Keyword Term = "Making changes">
+    <Jump Url = "xml\using-ankh\make_changes.xml"/>
+  </Keyword>
+
+  <Keyword Term = "Delete items">
+    <Jump Url = "xml\using-ankh\removing_files.xml"/>
+  </Keyword>
+
+  <Keyword Term = "Reverting items">
+    <Jump Url = "xml\using-ankh\reverting_files.xml"/>
+  </Keyword>
+
+  <Keyword Term = "Update items">
+    <Jump Url = "xml\using-ankh\update_wc.xml"/>
+  </Keyword>
+
   
 </HelpIndex>

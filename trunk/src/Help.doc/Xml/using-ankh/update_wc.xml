@@ -7,14 +7,27 @@
            Update brings changes from the repository into your working copy. <br />
            It brings your working copy up-to-date with the HEAD (latest) revision from the repository. 
             <br /><br /><br />
-            <img src="../../img/ws_right_click_menu.png" align="left" />
+            <b>How to update a working copy:</b>
+            <br/>
             <list>
-                <item>1. Open the solution/project you want to work with. </item>
-                <item>2. Right click on a item you want to update.</item>
-                <item>3. Select 'Update' from the menu.</item>
-                <item></item>
+                <item>
+                    <b>1.</b>Open the solution/project you want to work with. 
+                </item>
+                <item>
+                    <b>2.</b>Select and right click on a item you want to update. 
+                      By selecting a solution/project, 
+                      update will be done recursively on all files under the item.
+                </item>
+                <item>
+                    <b>3.</b>Select 'Update' from the items menu.
+                    <br/><br/>
+                    <img src="../../img/menu-items/update.png" align="left" />
+                    <br clear="all"/>
+                </item>
             </list>
-            <br clear="all" />
+            <br/><br/>
+            Ankhs <link url="../keywords/output_window.xml">output window </link>
+            will show all the files that has been updated. 
          </p>
     </section>
     <section>
