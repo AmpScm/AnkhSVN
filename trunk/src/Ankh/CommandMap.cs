@@ -6,6 +6,7 @@ using EnvDTE;
 using System.Diagnostics;
 using Microsoft.Office.Core;
 using System.Runtime.InteropServices;
+using System.Globalization;
 
 namespace Ankh
 {
@@ -36,35 +37,48 @@ namespace Ankh
         /// <param name="dte">TODO: what to do, what to do?</param>
         public static CommandMap LoadCommands( IContext context, bool register )
         {
-            CreateReposExplorerPopup( context );
-            CreateAnkhSubMenu( context );
-
-            CommandMap commands = new CommandMap();
-
-            // find all the ICommand subclasses in all modules
-            foreach( Module module in 
-                typeof( CommandMap ).Assembly.GetModules( false ) )
+            // change the culture, so we don't have to deal with localized names
+            // for command bars
+            CultureInfo currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+            System.Threading.Thread.CurrentThread.CurrentCulture = 
+                new CultureInfo( "en-US", false );
+            try
             {
-                foreach( Type type in module.FindTypes( 
-                    new TypeFilter( CommandMap.CommandTypeFilter ), null ) )
-                {  
-                    // is this a VS.NET command?
-                    VSNetCommandAttribute[] vsattrs = (VSNetCommandAttribute[])(
-                        type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) );
-                    if ( vsattrs.Length > 0 )
-                    {
-                        // put it in the dict
-                        ICommand cmd = (ICommand)Activator.CreateInstance( type );
-                        commands.Dictionary[ context.AddIn.ProgID + "." + vsattrs[0].Name ] = cmd;
+                CreateReposExplorerPopup( context );
+                CreateAnkhSubMenu( context );
 
-                        // do we want to register it?
-                        if ( register )
-                            RegisterVSNetCommand( vsattrs[0], cmd,  context );
+                CommandMap commands = new CommandMap();
+
+                // find all the ICommand subclasses in all modules
+                foreach( Module module in 
+                    typeof( CommandMap ).Assembly.GetModules( false ) )
+                {
+                    foreach( Type type in module.FindTypes( 
+                        new TypeFilter( CommandMap.CommandTypeFilter ), null ) )
+                    {  
+                        // is this a VS.NET command?
+                        VSNetCommandAttribute[] vsattrs = (VSNetCommandAttribute[])(
+                            type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) );
+                        if ( vsattrs.Length > 0 )
+                        {
+                            // put it in the dict
+                            ICommand cmd = (ICommand)Activator.CreateInstance( type );
+                            commands.Dictionary[ context.AddIn.ProgID + "." + vsattrs[0].Name ] = cmd;
+
+                            // do we want to register it?
+                            if ( register )
+                                RegisterVSNetCommand( vsattrs[0], cmd,  context );
+                        }
                     }
                 }
-            }
 
-            return commands;            
+                return commands; 
+            }
+            finally
+            {
+                // restore the old culture
+                System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            }
         }
 
         /// <summary>
