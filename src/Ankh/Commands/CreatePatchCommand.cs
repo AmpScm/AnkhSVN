@@ -27,26 +27,34 @@ namespace Ankh.Commands
     
         public override void Execute(AnkhContext context)
         {
-            DiffVisitor v = new DiffVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v, true );
-
-            if ( v.Diff.Trim() == String.Empty )
+            context.StartOperation( "Creating patch" );
+            try
             {
-                MessageBox.Show( context.HostWindow, "Nothing to diff here. Move along." );
-                return;
-            }
+                DiffVisitor v = new DiffVisitor();
+                context.SolutionExplorer.VisitSelectedItems( v, true );
 
-            using( SaveFileDialog dlg = new SaveFileDialog() )
-            {
-                dlg.Filter = "Patch files(*.patch)|*.patch|Diff files(*.diff)|*.diff|" +
-                    "Text files(*.txt)|*.txt|All files(*.*)|*.*";
-                dlg.AddExtension = true;
-
-                if ( dlg.ShowDialog( context.HostWindow ) == DialogResult.OK )
+                if ( v.Diff.Trim() == String.Empty )
                 {
-                    using( StreamWriter w = File.CreateText(dlg.FileName) )
-                        w.Write( v.Diff );
+                    MessageBox.Show( context.HostWindow, "Nothing to diff here. Move along." );
+                    return;
                 }
+
+                using( SaveFileDialog dlg = new SaveFileDialog() )
+                {
+                    dlg.Filter = "Patch files(*.patch)|*.patch|Diff files(*.diff)|*.diff|" +
+                        "Text files(*.txt)|*.txt|All files(*.*)|*.*";
+                    dlg.AddExtension = true;
+
+                    if ( dlg.ShowDialog( context.HostWindow ) == DialogResult.OK )
+                    {
+                        using( StreamWriter w = File.CreateText(dlg.FileName) )
+                            w.Write( v.Diff );
+                    }
+                }
+            }
+            finally
+            {
+                context.EndOperation();
             }
         } // Execute
     } 

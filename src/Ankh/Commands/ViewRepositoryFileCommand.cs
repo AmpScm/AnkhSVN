@@ -27,7 +27,12 @@ namespace Ankh.Commands
 
         #region CatVisitor
         protected class CatVisitor : RepositoryResourceVisitorBase
-        {          
+        {    
+            public CatVisitor( AnkhContext context )
+            {
+                this.context = context;
+            }
+
             public virtual IEnumerable FileNames
             {
                 get{ return this.fileNames; }
@@ -38,6 +43,7 @@ namespace Ankh.Commands
                 string filename = this.GetPath( file.Name );
                 if ( filename != null )
                 {
+                    this.context.OutputPane.WriteLine( "Retrieving {0}", file.Url );
                     using( FileStream fs = new FileStream( filename, FileMode.Create, FileAccess.Write ) )
                         file.Cat( fs );  
 
@@ -51,6 +57,7 @@ namespace Ankh.Commands
             }
 
             private ArrayList fileNames = new ArrayList();
+            private AnkhContext context;
         }
         #endregion
     }

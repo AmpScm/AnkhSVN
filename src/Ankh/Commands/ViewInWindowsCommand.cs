@@ -14,29 +14,38 @@ namespace Ankh.Commands
     {
         public override void Execute(AnkhContext context)
         {
-            CatVisitor v = new CatVisitor( );
-            context.RepositoryController.VisitSelectedNodes( v );
-
-            // shell execute each file.
-            foreach( string filename in v.FileNames )
+            try
             {
-                Process process = new Process();
-                process.StartInfo.FileName = filename;
-                process.StartInfo.UseShellExecute = true;
+                context.StartOperation( "Opening" );
 
-                try
+                CatVisitor v = new CatVisitor( context );
+                context.RepositoryController.VisitSelectedNodes( v );
+
+                // shell execute each file.
+                foreach( string filename in v.FileNames )
                 {
-                    process.Start();
+                    Process process = new Process();
+                    process.StartInfo.FileName = filename;
+                    process.StartInfo.UseShellExecute = true;
+
+                    try
+                    {
+                        process.Start();
+                    }
+                    catch( Win32Exception ex )
+                    {
+                        // no application is associated with the file type
+                        if ( ex.NativeErrorCode == NOASSOCIATEDAPP )
+                            MessageBox.Show( "Windows could not find an application associated with the file type", 
+                                "No associated application", MessageBoxButtons.OK );
+                        else
+                            throw;
+                    }
                 }
-                catch( Win32Exception ex )
-                {
-                    // no application is associated with the file type
-                    if ( ex.NativeErrorCode == NOASSOCIATEDAPP )
-                        MessageBox.Show( "Windows could not find an application associated with the file type", 
-                            "No associated application", MessageBoxButtons.OK );
-                    else
-                        throw;
-                }
+            }
+            finally
+            {
+                context.EndOperation();
             }
         }        
 

@@ -37,9 +37,9 @@ namespace Ankh.Commands
 
         public override void Execute(Ankh.AnkhContext context)
         {
-            context.OutputPane.StartActionText( "Adding" );
+            context.StartOperation( "Adding" );
             context.SolutionExplorer.VisitSelectedNodes( new AddVisitor() );
-            context.OutputPane.EndActionText();
+            context.EndOperation();
             context.SolutionExplorer.RefreshSelectionParents();
         }
         #endregion

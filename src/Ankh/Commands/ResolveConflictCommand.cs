@@ -34,9 +34,18 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context)
         {
-            ResolveVisitor v = new ResolveVisitor( context );
-            context.SolutionExplorer.VisitSelectedItems( v, false );
-            context.SolutionExplorer.RefreshSelection();
+            context.StartOperation( "Resolving" );
+
+            try
+            {
+                ResolveVisitor v = new ResolveVisitor( context );
+                context.SolutionExplorer.VisitSelectedItems( v, false );
+                context.SolutionExplorer.RefreshSelection();
+            }
+            finally
+            {
+                context.EndOperation();
+            }
         }
 
         private class ResolveVisitor : LocalResourceVisitorBase
@@ -84,6 +93,7 @@ namespace Ankh.Commands
                     }
 
                     file.Resolved();
+                    this.context.OutputPane.WriteLine( "Resolved conflicted state of {0}", file.Path );
                 }
                 catch( StatusException )
                 {

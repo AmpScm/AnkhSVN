@@ -131,8 +131,10 @@ namespace Ankh
         public void StartOperation( string description )
         {
             //TODO: maybe refactor this?
-            this.DTE.StatusBar.Text = description;
+            this.DTE.StatusBar.Text = description + "...";
             this.DTE.StatusBar.Animate( true, vsStatusAnimation.vsStatusAnimationSync );
+
+            this.OutputPane.StartActionText( description );
 
             this.progressDialog.Caption = description;
         }
@@ -144,6 +146,8 @@ namespace Ankh
         {
             this.DTE.StatusBar.Text = "Ready";
             this.DTE.StatusBar.Animate( false, vsStatusAnimation.vsStatusAnimationSync );
+
+            this.OutputPane.EndActionText();
         }
 
         #region SetUpEvents

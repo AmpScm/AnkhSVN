@@ -51,6 +51,12 @@ namespace Ankh
             this.outputPane.OutputString( s );
         }
 
+        public override void WriteLine( string s )
+        {
+            this.outputPane.OutputString( s + Environment.NewLine );
+        }
+
+
         /// <summary>
         /// Writes Start text to outputpane.
         /// </summary>
@@ -59,7 +65,8 @@ namespace Ankh
         {
             
             this.Activate();
-            this.outputPane.OutputString( FormatMessage( action ) );
+            this.outputPane.OutputString( this.FormatMessage( action ) + Environment.NewLine + 
+                Environment.NewLine );
         }
 
         /// <summary>
@@ -67,7 +74,8 @@ namespace Ankh
         /// </summary>
         public void EndActionText()
         {
-            this.outputPane.OutputString( FormatMessage( "Done" ));
+            this.outputPane.OutputString( this.FormatMessage( "Done" ) + Environment.NewLine + 
+                Environment.NewLine );
         }
         
 
@@ -80,8 +88,7 @@ namespace Ankh
         {
             int left = (LINELENGTH / 2) - (action.Length / 2);
             int right = LINELENGTH - ( left + action.Length );
-            return Environment.NewLine 
-                + new string( '-', left ) + action + new string( '-', right ) + Environment.NewLine + Environment.NewLine;
+            return new string( '-', left ) + action + new string( '-', right );
         }
 
         private const int LINELENGTH = 70;

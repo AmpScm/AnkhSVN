@@ -4,7 +4,7 @@ using EnvDTE;
 namespace Ankh.Commands
 {
 	/// <summary>
-	/// Summary description for ViewInVSNetCommand.
+	/// A command that opens a file from the server in VS.NET
 	/// </summary>
     [VSNetCommand("ViewInVsNet", Tooltip="View this file in VS.NET", Text = "In VS.NET" ),
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
@@ -12,11 +12,21 @@ namespace Ankh.Commands
 	{
         public override void Execute(AnkhContext context)
         {
-            CatVisitor v = new CatVisitor( );
-            context.RepositoryController.VisitSelectedNodes( v );
+            try
+            {
+                context.StartOperation( "Opening" );
 
-            foreach( string filename in v.FileNames )
-                context.DTE.ItemOperations.OpenFile( filename, Constants.vsViewKindPrimary );
+                CatVisitor v = new CatVisitor( context );
+                context.RepositoryController.VisitSelectedNodes( v );
+
+                foreach( string filename in v.FileNames )
+                    context.DTE.ItemOperations.OpenFile( filename, Constants.vsViewKindPrimary );
+
+            }
+            finally
+            {
+                context.EndOperation();
+            }
         }        
 	}
 }
