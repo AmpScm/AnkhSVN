@@ -23,57 +23,57 @@ namespace Ankh.Extenders
 
         public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, IExtenderSite ExtenderSite, int Cookie)
         {
-            return null;
-//            try
-//            {
-//                // get the selected items
-//                ResourceGathererVisitor v = new ResourceGathererVisitor();
-//                this.context.SolutionExplorer.VisitSelectedItems( v, false );
-//
-//               
-//                // have the extender know about the selected item.
-//                if ( v.WorkingCopyResources.Count > 0 )
-//                {
-//                    WorkingCopyResource resource = (WorkingCopyResource)v.WorkingCopyResources[0];
-//                    ResourceExtender extender = (ResourceExtender)this.extenders[ resource.Path ];
-//                    if ( extender == null )
-//                    {
-//                        extender = new ResourceExtender();
-//                        this.extenders[resource.Path] = extender;
-//                    }
-//                    extender.Status = resource.Status;
-// 
-//                    return extender;
-//                }
-//                else
-//                    return null;
-//            }
-//            catch( StatusException )
-//            {
-//                return null;
-//            }
-//            catch( Exception ex )
-//            {
-//                Error.Handle( ex );
-//                throw;
-//            }
+            try
+            {
+                IList resources = this.context.SolutionExplorer.GetSelectionResources(false);
+                if ( resources.Count > 0 )
+                {
+                    SvnItem resource = (SvnItem)resources[0];
+
+                    // is this resource already cached?
+                    ResourceExtender extender = (ResourceExtender)this.extenders[ 
+                        resource.Path ];
+                    if ( extender == null )
+                    {
+                        extender = new ResourceExtender();
+                        this.extenders[resource.Path] = extender;
+                    }
+
+                    // make sure it's up to date
+                    resource.Refresh( this.context.Client );
+                    extender.Status = resource.Status;
+ 
+                    return extender;
+                }
+                else
+                    return null;
+            }
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+                throw;
+            }
         }
 
         public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
         {
-            return false;
-//            try
-//            {
-//                // ensure all selected items are versioned
-//                VersionedVisitor v = new VersionedVisitor();
-//                this.context.SolutionExplorer.VisitSelectedItems( v, false );
-//                return v.IsVersioned;
-//            }
-//            catch( Exception ex )
-//            {
-//                Error.Handle( ex );
-//                throw;
-//            }
+            try
+            {
+                IList resources = 
+                    this.context.SolutionExplorer.GetSelectionResources(false);
+                if ( resources.Count > 0 )
+                {
+                    SvnItem resource = (SvnItem)resources[0];
+                    return resource.IsVersioned;
+                }
+                else
+                    return false;
+            }
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+                throw;
+            }
         }
 
         #endregion

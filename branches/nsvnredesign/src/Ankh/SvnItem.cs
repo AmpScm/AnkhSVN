@@ -72,6 +72,15 @@ namespace Ankh
                 this.OnChanged();
         }
 
+        public bool IsVersioned
+        {
+            get
+            { 
+                return this.status.TextStatus != StatusKind.None &&
+                    this.status.TextStatus != StatusKind.Unversioned;
+            }
+        }
+
         /// <summary>
         /// Retrieves the paths from an IList of SvnItem instances.
         /// </summary>
