@@ -40,6 +40,16 @@ namespace Ankh.UI
 			RepositoryExplorerToolTip();
 		}
 
+        /// <summary>
+        /// Adds a new menu item.
+        /// </summary>
+        /// <param name="item">The item to add.</param>
+        /// <param name="position">The The position to put the new item.</param>
+        public void AddMenuItem( MenuItem item, int position )
+        {
+            this.treeView.ContextMenu.MenuItems.Add( position, item );
+        }
+
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>

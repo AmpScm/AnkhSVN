@@ -46,7 +46,20 @@ namespace Ankh
             {
                 foreach( Type type in module.FindTypes( 
                     new TypeFilter( CommandMap.CommandTypeFilter ), null ) )
-                    RegisterCommand( type, commands, context );
+                {
+                    // is this a VS.NET command?
+                    VSNetCommandAttribute[] vsattrs = (VSNetCommandAttribute[])(
+                        type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) );
+                    if ( vsattrs.Length > 0 )
+                        RegisterVSNetCommand( vsattrs[0], type, commands, context );
+
+                    // solution explorer?
+                    RepositoryExplorerMenuAttribute [] reattrs = 
+                        (RepositoryExplorerMenuAttribute[])(type.GetCustomAttributes(
+                        typeof(RepositoryExplorerMenuAttribute), false ) );
+                    if ( reattrs.Length > 0 )
+                        RegisterRepositoryExplorerCommand( reattrs[0], type, context );
+                }
             }
 
             return commands;            
@@ -84,10 +97,10 @@ namespace Ankh
         /// </summary>
         /// <param name="type">A Type object representing the command to register.</param>
         /// <param name="commands">A Commands collection in which to put the command.</param>
-        private static void RegisterCommand( Type type, CommandMap commands, AnkhContext context )
+        private static void RegisterVSNetCommand( VSNetCommandAttribute attr, 
+            Type type, CommandMap commands, AnkhContext context )
         {
-            VSNetCommandAttribute attr = (VSNetCommandAttribute)(
-                type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) )[0];
+            
             ICommand cmd = (ICommand)Activator.CreateInstance( type );
             commands.Dictionary[ context.AddIn.ProgID + "." + attr.Name ] = cmd;
 
@@ -115,6 +128,20 @@ namespace Ankh
                 cmd.Command.AddControl( cmdBar, control.Position );
                 
             }
+        }
+
+        private static void RegisterRepositoryExplorerCommand( 
+            RepositoryExplorerMenuAttribute attr, Type type, AnkhContext context )
+        {
+            ICommand cmd = (ICommand)Activator.CreateInstance( type );
+            RepositoryExplorerMenuItem item = new RepositoryExplorerMenuItem( context,
+                cmd );
+
+            item.Text = attr.Text;
+
+            context.RepositoryExplorer.AddMenuItem( item, attr.Position );
+
+            item.RegisterWithParent();           
         }
 	}
 }

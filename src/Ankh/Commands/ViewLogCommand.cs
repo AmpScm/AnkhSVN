@@ -21,8 +21,7 @@ namespace Ankh.Commands
 		
 	    public override void Execute(Ankh.AnkhContext context)
         {
-            TestRepositoryExplorer exp = new TestRepositoryExplorer();
-            exp.ShowDialog();
+           context.RepositoryExplorer.ShowDialog();
         }        
     }
 }

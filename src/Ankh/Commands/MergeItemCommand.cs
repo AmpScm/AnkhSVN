@@ -1,20 +1,28 @@
 // $Id$
 using System;
+using EnvDTE;
 
 namespace Ankh.Commands
 {
 	/// <summary>
 	/// Summary description for MergeItem.
 	/// </summary>
-	public class MergeItem
+	[RepositoryExplorerMenu("Merge", Position = 0)]
+	internal class MergeItem : CommandBase
 	{
-		public MergeItem()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
-	}
+		
+	    public override void Execute(Ankh.AnkhContext context)
+        {
+        
+        }
+
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
+        {
+            return vsCommandStatus.vsCommandStatusEnabled | 
+                vsCommandStatus.vsCommandStatusSupported;
+
+        }
+    }
 }
 
 

@@ -15,10 +15,12 @@ namespace Ankh.UI
 	/// </summary>
 	public class RepositoryTreeView : System.Windows.Forms.TreeView
 	{
-		public RepositoryTreeView()
-		{
+        public RepositoryTreeView()
+        {
             this.GetSystemImageList();
-		}
+            
+            this.ContextMenu = new ContextMenu();
+        }        
 
         /// <summary>
         /// The root folder of the repository to be explored by this treeview.

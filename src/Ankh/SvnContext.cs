@@ -36,7 +36,7 @@ namespace Ankh
         {        
         }
 
-        #region DialogProvider
+            #region DialogProvider
         private class DialogProvider : IAuthenticationProvider
         {
             
