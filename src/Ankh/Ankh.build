@@ -47,6 +47,7 @@
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
                 <includes name="${build.dir}/VSUserControlHostLib.dll"/>
                 <includes name="${lib.dir}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
+                <includes name="${lib.dir}\Interop.SHDocVw.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
