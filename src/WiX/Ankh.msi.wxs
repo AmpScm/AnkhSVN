@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
-    <Product UpgradeCode="D35F7A64-E1AA-46eb-8835-36401261EB2A" Name="AnkhSvn"
+    <Product UpgradeCode="FFE67D45-DC1F-45C6-BF0D-ABC579868168" Name="AnkhSvn" 
         Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud" Language="1033"
         Version="$(var.ankhversion)" Id="????????-????-????-????-????????????">
 
@@ -9,11 +9,11 @@
             InstallerVersion="200" Platforms="Intel" Languages="1033" 
             Compressed="yes" SummaryCodepage="1252"
             Id="????????-????-????-????-????????????" />
-        
-        <Upgrade Id="D35F7A64-E1AA-46eb-8835-36401261EB2A">
+
+        <Upgrade Id="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
             <UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" Minimum="0.5.0" 
                 Maximum="$(var.ankhversion)" MigrateFeatures="yes" />
-            <UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhversion)" />
+            <UpgradeVersion Property="NEWERPRODUCTFOUND" Minimum="$(var.ankhversion)" Maximum="99.0.0"/>
         </Upgrade>
             
         <Property Id="ShortProductName">AnkhSvn</Property>
@@ -447,7 +447,6 @@
             <UIText Id="VolumeCostRequired">Required</UIText>
             <UIText Id="VolumeCostSize">Disk Size</UIText>
             <UIText Id="VolumeCostVolume">Volume</UIText>
-
             <!-- Errors -->
             <Error Id="1936">An error occurred during the installation of assembly '[6]'. The assembly is not strongly named or is not signed with the minimal key length. HRESULT: [3]. {{assembly interface: [4], function: [5], component: [2]}}</Error>
             <Error Id="1937">An error occurred during the installation of assembly '[6]'. The signature or catalog could not be verified or is not valid. HRESULT: [3]. {{assembly interface: [4], function: [5], component: [2]}} </Error>
