@@ -55,7 +55,7 @@ namespace Ankh.Commands
                 Revision revisionStart = Revision.Base;
                 Revision revisionEnd = Revision.Working;
 
-                if ( CommandBase.Shift )
+                if ( !CommandBase.Shift )
                 {
                     PathSelectorInfo info = new PathSelectorInfo( "Select items for diffing", 
                         resources, resources );
