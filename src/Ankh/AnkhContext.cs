@@ -104,10 +104,10 @@ namespace Ankh
         /// <summary>
         /// The repository explorer control.
         /// </summary>
-        public RepositoryExplorerControl RepositoryExplorer
+        public RepositoryExplorer.Controller RepositoryExplorer
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.repositoryExplorer; }
+            get{ return this.repositoryController; }
         }
 
         public EnvDTE.Window RepositoryExplorerWindow
