@@ -82,9 +82,9 @@ namespace Ankh.UI
         {
         }   
      
-        public void AddRoot( IRepositoryTreeNode node, string url )
+        public void AddRoot( IRepositoryTreeNode node, string label )
         {
-            TreeNode root = new TreeNode( url, this.OpenFolderIndex, this.OpenFolderIndex );
+            TreeNode root = new TreeNode( label, this.OpenFolderIndex, this.OpenFolderIndex );
 
             root.Tag = node;
             node.Tag = root;          

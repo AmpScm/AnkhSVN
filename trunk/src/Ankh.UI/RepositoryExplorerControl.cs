@@ -143,14 +143,14 @@ namespace Ankh.UI
         /// <summary>
         /// Add a new URL root to the tree.
         /// </summary>
-        /// <param name="url"></param>
+        /// <param name="text"></param>
         /// <param name="node"></param>
-        public void AddRoot( string url, IRepositoryTreeNode node)
+        public void AddRoot( string text, IRepositoryTreeNode node)
         {
             if ( !node.IsDirectory )
                 throw new ArgumentException( "The root needs to be a directory.", "node" );
 
-            this.treeView.AddRoot( node, url );
+            this.treeView.AddRoot( node, text );
         }
 
         /// <summary>
