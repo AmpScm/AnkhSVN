@@ -14,47 +14,62 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
     <p><b>Duration of project:</b>09.01.2003 - 19.06.2003</p>
 
      <section header="Abstract"> 
-        <p>The development of Subversion
-        plugin for Visual Studio .NET will be conducted as a
-        final project at HIO in cooperation with CollabNet.
-        First step is to make a .NET wrapper for the
-        Subversion's client API, thereby use this wrapper to
-        create a Visual Studio .NET addin for svn. We
-        intend to write most of the system in the C#
-        programming language.</p> 
+		<p>The development of Subversion
+		plugin for Visual Studio .NET will be conducted as a
+		final project at HIO in cooperation with CollabNet.
+		First step is to make a .NET wrapper for the
+		Subversion's client API, thereby use this wrapper to
+		create a Visual Studio .NET addin for svn. We
+		intend to write most of the system in the C#
+		programming language.</p> 
      </section>
 
      <section header="Background"> 
-        <p>
-            Subversion is a free open source tool which makes it easier
-            for several people to work within the same set of files. The
-            files are placed into a central repository. The repository
-            is much like an ordinary file server, except that it
-            remembers every change ever made to your files. Each
-            individual programmer checks out a working copy. During the
-            project period these working copies can be updated and
-            synchronised with the repository. </p>
-        <p>The background for this specific
-        project is that we wanted to do a project in the Microsoft's
-        .NET environment. One of the group member had used the revision control system
-        Subversion for several school and private projects in the last year.</p>
-        <p>We decided to do a project
-        where both technologies were represented. After having
-        defined the project we contacted CollabNet. CollabNet pays several
-        developers that works on the Subversion project fulltime. CollabNet 
-        agreed to be the employer and provides the external supervisor, 
-        Karl Fogel to our project.</p> 
+		<p>Subversion is a free open source tool which makes it easier
+        for several people to work within the same set of files. The
+        files are placed into a central repository. The repository
+        is much like an ordinary file server, except that it
+        remembers every change ever made to your files. Each
+        individual programmer checks out a workingcopy. During the
+        project period these working copies can be updated and
+        synchronised with the repository. Today you have to write
+        commands in a prompt while using Subversion. Our 
+        intention is to integrate the revision control system into the platform
+        where the programming actually is performed, and make it more user friendly
+        by offering menus instead of commands. We therefor intend to make both a 
+        "GUI/plugin layer" and a .NET wrapper layer.</p>
+
+		<p>The background for this specific
+		project is that we wanted to do a project in the Microsoft's
+		.NET environment. One of the group member had used
+		Subversion for several school and private projects in the last year.</p>
+		
+		<p>We decided to do a project
+		where both technologies were represented. After having
+		defined the project we contacted CollabNet. CollabNet provided the initial 
+		founding in 2000 to begin development work of Subversion and today pays 
+		the salary for several people that works on the Subversion project. CollabNet 
+		offers a wide range of products and services to improve software quality and 
+		accelerate time-to-market during product development. Their main product is 
+		SourceCast which is a Web-based software development platform. SourceCast combines 
+		software development applications, communications 
+		features and your choice of third-party resources into an intuitive solution. 
+		Subversion is aimed to be the successor of the existing revision control system (CVS)
+		integrated in the SourceCast platform. Our intention is to integrate Subversion into 
+		a "second" platform environment named Visual Studio .NET. CollabNet provides our external 
+		supervisor, Karl Fogel.
+		</p> 
     </section>
 
     <section header="Aim"> 
-        <p>The aim of this project is to provide an
-        integration for Subversion into the existing
-        environment Visual Studio .NET. By making a plugin for
-        Visual Studio .NET the revision control system can be
-        made available for a huge amount of new programmers. We
-        also hope to make the .NET wrapper layer available as a
-        standalone component so that it easily can be used in
-        other applications.</p> 
+		<p>The aim of this project is to provide an
+		integration for Subversion into the existing
+		coding environment Visual Studio .NET. By making a plugin for
+		Visual Studio .NET the revision control system can be
+		made available for a huge amount of new users. We
+		also hope to make the .NET wrapper layer available as a
+		standalone component so that it easily can be used in
+		other applications in the future.</p> 
    </section>
 
     <section header="External conditions"> 
@@ -96,12 +111,12 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         <p>To ensure the sanity and quality of the system at any given moment,
         and to catch regression bugs we intend to conduct continuous
         unit tests using the <link
-        url="http://nunit.sourceforge.net/">NUnit</link> testing
+        url="http://nunit.sourceforge.net/">Nunit</link> testing
         framework.</p>
 
         <p>We hope to make the .NET wrapper layer available as a
         standalone unit for use in other applications. We also hope
-        to provide <link url="http://nant.sourceforge.net/">NAnt
+        to provide <link url="http://nant.sourceforge.net/">Nant
         </link> build scripts that will enable it to be built
         without requiring the user to have Visual Studio.NET
         installed. </p>

@@ -52,11 +52,13 @@
     <section header="Documentation">
         <list>
             <item>Make process documentation (diary)</item>
+            <item>Make documentation of functional testing</item>
+            <item>Make user guide</item>
             <item>Make product documentation</item>
         </list>
     </section>
 
-    <section header="Ending">
+    <section header="Completion">
         <list>
             <item>Deliver final report - 28.05.2003</item>
             <item>Prepare for presentation - 10.06.2003</item>
