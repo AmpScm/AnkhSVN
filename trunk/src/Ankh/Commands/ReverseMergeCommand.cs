@@ -83,7 +83,7 @@ namespace Ankh.Commands
                 foreach( SvnItem item in this.items )
                 {
                     this.Context.Client.Merge( 
-                        item.Path, Revision.Base,
+                        item.Path, Revision.Working,
                         item.Path, this.revision,
                         item.Path, this.recursive,
                         false, false, this.dryRun );
