@@ -15,9 +15,9 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Library"
+                OutputType = "WinExe"
                 RootNamespace = "Ankh.UI"
-                StartupObject = "Ankh.UI.ViewLogDialog"
+                StartupObject = "Ankh.UI.Loader"
             >
                 <Config
                     Name = "Debug"
@@ -232,6 +232,16 @@
                 <File
                     RelPath = "KeywordsPropertyEditor.resx"
                     DependentUpon = "KeywordsPropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Loader.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Loader.resx"
+                    DependentUpon = "Loader.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
