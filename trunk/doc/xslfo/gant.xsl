@@ -76,7 +76,7 @@
                 number($defaultyear), 
                 number(start/@week), number(start/@year),
                 number(end/@week), number(end/@year) )">
-                <fo:table-cell border="solid 0.2pt black">  
+                <fo:table-cell border="solid 0.1pt black">  
                     <xsl:choose>
                         <xsl:when test=".='busy'">
                             <xsl:attribute name="background-color">red</xsl:attribute>
