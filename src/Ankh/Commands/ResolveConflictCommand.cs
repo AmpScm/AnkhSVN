@@ -119,9 +119,10 @@ namespace Ankh.Commands
                 string oldPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictOld ));
                 string newPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictNew ));
                 string workingPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictWorking ));
+                string mergedPath = String.Format("\"{0}\"", item.Path);
 
                 string mergeString = mergeExe;
-                mergeString = mergeString.Replace( "%merged", item.Path );
+                mergeString = mergeString.Replace( "%merged", mergedPath );
                 mergeString = mergeString.Replace( "%base", oldPath );
                 mergeString = mergeString.Replace( "%theirs", newPath );
                 mergeString = mergeString.Replace( "%mine", workingPath );
