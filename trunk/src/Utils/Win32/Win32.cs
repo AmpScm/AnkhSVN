@@ -269,6 +269,24 @@ namespace Utils.Win32
         [DllImport("Kernel32.dll")]
         public static extern bool SetEnvironmentVariable( string name, string value );
 
+        [DllImport("shlwapi.dll", CharSet=CharSet.Unicode)]
+        private static extern bool PathRelativePathToW( StringBuilder result, string from,
+            FileAttribute fromAttr, string to, FileAttribute toAttr );
 
+        public static string PathRelativePathTo( string from, FileAttribute fromAttr,
+            string to, FileAttribute toAttr )
+        {
+            if ( from == null ) 
+                throw new ArgumentNullException( "from" );
+            if ( to == null )
+                throw new ArgumentNullException( "to" );
+
+
+            StringBuilder builder = new StringBuilder( Constants.MAX_PATH, Constants.MAX_PATH );
+            if ( !PathRelativePathToW( builder, from, fromAttr, to, toAttr ) )
+                return null;
+            else
+                return builder.ToString();
+        }
     }
 }

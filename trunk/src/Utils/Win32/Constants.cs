@@ -220,5 +220,7 @@ namespace Utils.Win32
         /// </summary>
         public const int HC_ACTION = 0;
 
+        public const int MAX_PATH = 260;
+
     }
 }
