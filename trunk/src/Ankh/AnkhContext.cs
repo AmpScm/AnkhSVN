@@ -225,8 +225,11 @@ namespace Ankh
             this.SolutionExplorer.Unload();
 
             // unhook events.
-            foreach( EventSinks.EventSink sink in this.eventSinks )
-                sink.Unhook();
+            if ( this.eventSinks != null )
+            {
+                foreach( EventSinks.EventSink sink in this.eventSinks )
+                    sink.Unhook();
+            }
         }
 
         private void CreateRepositoryExplorer()
