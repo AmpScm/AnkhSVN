@@ -4,6 +4,10 @@ using EnvDTE;
 using NSvn.Core;
 using Microsoft.Office.Core;
 using Ankh.UI;
+using System.Xml.Xsl;
+using System.Xml.XPath;
+using System.IO;
+using System.Diagnostics;
 
 namespace Ankh.Commands
 {
@@ -71,6 +75,42 @@ namespace Ankh.Commands
             CommandBarControl cntl = bar.FindControl( Type.Missing, Type.Missing, 
                 barName + "." + name, Type.Missing, Type.Missing );
             return cntl;
+        }
+
+        protected static XslTransform GetTransform( IContext context, string name )
+        {
+            // is the file already there?
+            string configDir = Path.GetDirectoryName(context.ConfigLoader.ConfigPath);
+            string path = Path.Combine( configDir, name  );
+
+            //if ( !File.Exists( path ) )
+            CreateTransformFile( path, name );
+
+            Debug.Assert( File.Exists( path ) );
+
+            XPathDocument doc = new XPathDocument( new StreamReader( path) );
+            
+            XslTransform transform = new XslTransform();
+            transform.Load( doc );
+
+            return transform;
+        }
+
+        protected static void CreateTransformFile( string path, string name )
+        {
+            // get the embedded resource and copy it to path
+            string resourceName = "Ankh.Commands." + name;
+            Stream ins = 
+                typeof(CommandBase).Assembly.GetManifestResourceStream( resourceName );
+            int len;
+            byte[] buffer = new byte[ 4096 ];
+            using( FileStream outs = new FileStream( path, FileMode.Create, FileAccess.Write ) )
+            {
+                while( (len = ins.Read( buffer, 0, 4096 )) > 0 )
+                {
+                    outs.Write( buffer, 0, len );
+                }
+            }
         }
 
 

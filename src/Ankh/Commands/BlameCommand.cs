@@ -55,7 +55,8 @@ namespace Ankh.Commands
                 resources = info.CheckedItems;
             }
 
-            XslTransform transform = this.GetTransform( context );
+            XslTransform transform = CommandBase.GetTransform( 
+                context, BlameTransform );
 
             foreach( SvnItem item in resources )
             {
@@ -78,40 +79,7 @@ namespace Ankh.Commands
             }
         }
 
-        private XslTransform GetTransform( IContext context )
-        {
-            // is the file already there?
-            string configDir = Path.GetDirectoryName(context.ConfigLoader.ConfigPath);
-            string path = Path.Combine( configDir, BlameTransform );
-
-            //if ( !File.Exists( path ) )
-                this.CreateTransformFile( path );
-
-            Debug.Assert( File.Exists( path ) );
-
-            XPathDocument doc = new XPathDocument( new StreamReader( path) );
-            
-            XslTransform transform = new XslTransform();
-            transform.Load( doc );
-
-            return transform;
-        }
-
-        private void CreateTransformFile( string path )
-        {
-            // get the embedded resource and copy it to path
-            Stream ins = 
-                this.GetType().Assembly.GetManifestResourceStream( "Ankh.Commands.blame.xsl" );
-            int len;
-            byte[] buffer = new byte[ 4096 ];
-            using( FileStream outs = new FileStream( path, FileMode.Create, FileAccess.Write ) )
-            {
-                while( (len = ins.Read( buffer, 0, 4096 )) > 0 )
-                {
-                    outs.Write( buffer, 0, len );
-                }
-            }
-        }
+        
 
         private class BlameRunner : IProgressWorker
         {

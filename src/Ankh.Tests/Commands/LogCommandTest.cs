@@ -1,26 +1,27 @@
 // $Id$
 using System;
-using Ankh.Commands;
-using System.IO;
+using NSvn.Core;
 using NUnit.Framework;
 using EnvDTE;
+using Ankh.Commands;
+using System.IO;
 
 namespace Ankh.Tests
 {
     /// <summary>
-    /// Tests the BlameCommand class.
+    /// Tests for the LogCommand class.
     /// </summary>
     [TestFixture]
-    public class BlameCommandTest : NSvn.Core.Tests.TestBase
+    public class LogCommandTest : NSvn.Core.Tests.TestBase
     {
         [SetUp]
         public override void SetUp()
         {
-            base.SetUp ();
-            this.ExtractRepos();
+            base.SetUp();
             this.ExtractWorkingCopy();
+            this.ExtractRepos();
 
-            this.cmd = new BlameCommand();
+            this.cmd = new LogCommand();
 
             this.uiShell = new MyUIShellImpl();
             this.ctx = new ContextBase( );
@@ -35,9 +36,9 @@ namespace Ankh.Tests
         [Test]
         public void TestQueryStatus()
         {
-            // not enabled for an empty selection
+            // should not be enabled for no selection at all
             Assert.AreEqual( vsCommandStatus.vsCommandStatusSupported, 
-                cmd.QueryStatus( this.ctx ) );
+                this.cmd.QueryStatus( this.ctx ) );
 
             // 1 item selection - should be enabled
             string path = Path.Combine( this.WcPath, "Class1.cs" );
@@ -58,67 +59,65 @@ namespace Ankh.Tests
             Assert.AreEqual( vsCommandStatus.vsCommandStatusSupported, 
                 cmd.QueryStatus( this.ctx ) );
 
-            // not enabled for multiple items
+            // enabled for multiple items
             string path2 = Path.Combine( this.WcPath, "Class2.cs" );
             SvnItem item2 = this.ctx.StatusCache[path2];
             this.explorer.Selection = new SvnItem[]{ item, item2 };
-            Assert.AreEqual( vsCommandStatus.vsCommandStatusSupported, 
+            Assert.AreEqual( vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled, 
                 cmd.QueryStatus( this.ctx ) );
 
-            // not enabled for folders
+            // enabled for folders
             SvnItem folder = this.ctx.StatusCache[this.WcPath];
             this.explorer.Selection = new SvnItem[]{ folder };
-            Assert.AreEqual( vsCommandStatus.vsCommandStatusSupported, 
-                cmd.QueryStatus( this.ctx ) );
+            Assert.AreEqual( vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled, 
+                cmd.QueryStatus( this.ctx ) );            
         }
 
         [Test]
-        public void TestSimpleBlame()
+        public void TestLogSingleItem()
         {
+            // single item
             string path = Path.Combine( this.WcPath, "Class1.cs" );
             SvnItem item = this.ctx.StatusCache[path];
             this.explorer.Selection = new SvnItem[]{ item };
 
             this.cmd.Execute( this.ctx, "" );
-            Assert.IsTrue( this.uiShell.Called );
-            Assert.IsFalse( this.uiShell.Html == String.Empty );
-            Assert.IsFalse( this.uiShell.Reuse );
-            Assert.IsTrue( this.uiShell.ProgressDialogCalled );
-            Assert.IsTrue( this.uiShell.ShowPathSelectorCalled );
-            Assert.AreEqual( this.uiShell.Caption, "Class1.cs" );
 
+            Assert.IsTrue( this.uiShell.ProgressDialogCalled );
+
+            Assert.IsNotNull( this.uiShell.Info );
+            Assert.AreEqual( 1, this.uiShell.Info.Items.Count );
+            Assert.AreSame( item, this.uiShell.Info.Items[0] );
+
+            Assert.IsNotNull( this.uiShell.Html );
+            
         }
+         
 
         private class MyUIShellImpl : ContextBase.UIShellImpl
         {
-            public override void DisplayHtml(string caption, string html, bool reuse)
-            {
-                this.Called = true;     
-                this.Caption = caption;
-                this.Html = html;
-                this.Reuse = reuse;
-            }
-
             public override bool RunWithProgressDialog(IProgressWorker worker, string caption)
             {
                 this.ProgressDialogCalled = true;
-                return base.RunWithProgressDialog (worker, caption);
+                return base.RunWithProgressDialog( worker, caption );
             }
 
-            public override PathSelectorInfo ShowPathSelector(PathSelectorInfo info)
+            public override LogDialogInfo ShowLogDialog(LogDialogInfo info)
             {
-                this.ShowPathSelectorCalled = true;
+                this.Info = info;
                 return info;
             }
 
+            public override void DisplayHtml(string caption, string html, bool reuse)
+            {
+                this.Html = html;
+            }
 
 
-            public bool ShowPathSelectorCalled = false;
+            public string Html = null;
+            public LogDialogInfo Info = null;
             public bool ProgressDialogCalled = false;
-            public bool Called = false;
-            public string Caption ;
-            public string Html;
-            public bool Reuse;
+
         }
 
         private MyUIShellImpl uiShell;
@@ -127,6 +126,6 @@ namespace Ankh.Tests
 
         private ICommand cmd;
 
-        
+
     }
 }

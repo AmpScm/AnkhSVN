@@ -216,7 +216,7 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(192, 344);
+            this.okButton.Location = new System.Drawing.Point(208, 344);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 4;
             this.okButton.Text = "OK";
@@ -225,7 +225,7 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(272, 344);
+            this.cancelButton.Location = new System.Drawing.Point(288, 344);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 5;
             this.cancelButton.Text = "Cancel";
@@ -266,16 +266,15 @@ namespace Ankh.UI
             this.revisionPickerEnd.Size = new System.Drawing.Size(352, 24);
             this.revisionPickerEnd.TabIndex = 2;
             // 
-            // panel1
+            // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-                )));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(0, 304);
-            this.groupBox1.Name = "panel1";
-            this.groupBox1.Text = "";
+            this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(368, 32);
             this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
             // 
             // label1
             // 

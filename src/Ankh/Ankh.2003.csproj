@@ -275,6 +275,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LogDialogInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LogResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "OutputPaneWriter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -335,6 +345,11 @@
                 />
                 <File
                     RelPath = "VSNetProjectNodeControlAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "XmlResultBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -444,6 +459,15 @@
                 />
                 <File
                     RelPath = "Commands\LocalDiffCommandBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\log.xsl"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Commands\LogCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

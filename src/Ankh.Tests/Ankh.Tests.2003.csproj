@@ -164,6 +164,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LogResultTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "OutputPaneWriterTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -212,6 +217,11 @@
                 />
                 <File
                     RelPath = "Commands\CommitItemTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\LogCommandTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

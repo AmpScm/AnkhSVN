@@ -486,6 +486,11 @@ namespace Ankh.Tests
                 return null;
             }
 
+            public virtual LogDialogInfo ShowLogDialog( LogDialogInfo info )
+            {
+                return null;
+            }
+
             private IContext context;
 
             #endregion
