@@ -96,6 +96,19 @@ AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslServerTrustFil
     return new AuthenticationProvider( provider, pool );
 }
 
+// implementation of GetSslServerTrustFileProvider
+AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertFileProvider()
+{
+    GCPool* pool = new GCPool();
+    svn_auth_provider_object_t* provider;
+
+    svn_client_get_ssl_client_cert_file_provider( &provider, 
+        pool->ToAprPool() );
+
+    return new AuthenticationProvider( provider, pool );
+}
+
+
 
 // callback function for a simple prompt provider
 svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton,

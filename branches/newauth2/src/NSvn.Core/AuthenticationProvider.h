@@ -42,6 +42,10 @@ namespace NSvn
             /// the user's config area for certificate trust stuff.</summary>
             static AuthenticationProvider* GetSslServerTrustFileProvider();
 
+            /// <summary>Create and return an authentication provider that queries 
+            /// the user's config area for client certificates.</summary>
+            static AuthenticationProvider* GetSslClientCertFileProvider();
+
         private public:
             /// <summary>Note that provider *must* be allocated on pool</summary>
             AuthenticationProvider( svn_auth_provider_object_t* provider, GCPool* pool ) :
