@@ -59,5 +59,12 @@
                 <ExecuteAction Sequence="1300" />
             </InstallUISequence>
         </UI>
+        <InstallExecuteSequence>
+        <Custom Action="ReposInstaller_Uninstall.SetProperty" After="MsiUnpublishAssemblies"><![CDATA[$C_ReposInstaller.dll=2]]></Custom>
+        <Custom Action="ReposInstaller_Uninstall" After="ReposInstaller_Uninstall.SetProperty"><![CDATA[$C_ReposInstaller.dll=2]]></Custom>
+        <Custom Action="ReposInstaller_Install.SetProperty" After="StartServices"><![CDATA[$C_ReposInstaller.dll>2]]></Custom>
+        <Custom Action="ReposInstaller_Install" After="ReposInstaller_Install.SetProperty"><![CDATA[$C_ReposInstaller.dll>2]]></Custom>
+        </InstallExecuteSequence>
+        <Binary Id="InstallUtil" src="$(var.setupfiles)\InstallUtil.exe" />
     </Product>
 </Wix>
