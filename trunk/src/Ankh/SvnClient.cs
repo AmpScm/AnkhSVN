@@ -127,11 +127,6 @@ namespace Ankh
                     Environment.NewLine, 
                     notification.Path, 
                     notification.RevisionNumber);
-
-            // If a conflict occurred here add a task item for it
-            if ( notification.ContentState == NSvn.Core.NotifyState.Conflicted)
-                 ankhContext.ConflictManager.AddTask(notification.Path);
-
         }
 
         protected override void OnCancel(CancelEventArgs args)
