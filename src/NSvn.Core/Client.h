@@ -263,7 +263,7 @@ namespace NSvn
             ///<param name="target">Target of property. Which file/directory to set the property.</param>
             ///<param name="recurse">If recurse is true, then propname will be set recursively 
             ///                      on target and all children.</param>  
-	        static void PropSet(String* propName, Byte propval[], String* target, bool recurse);
+	        static void PropSet(Property* property, String* target, bool recurse);
 /*
             ///<summary>Set a property to a revision in the repository.</summary>
             ///<param name="propName">Name of property.</param>
