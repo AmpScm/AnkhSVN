@@ -1,0 +1,338 @@
+
+# The URL to build from
+$ANKHSVN = "http://10.0.0.3/svn/finalproject/branches/0.5-release/src"
+
+# The URL of the Subversion version
+$SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.0.8/"
+
+# The URL of neon
+$NEON = "http://www.webdav.org/neon/neon-0.24.7.tar.gz"
+
+# Berkeley DB
+$BDB = "ftp://sleepycat1.inetu.net/releases/db-4.2.52.tar.gz"
+$BDB_DIR = "db-4.2.52"
+
+# OpenSSL
+$OPENSSL = "http://www.openssl.org/source/openssl-0.9.7d.tar.gz"
+
+# Whether to build openssl as a static library
+# Must be an environment variable so that neon.mak picks up on it
+$env:OPENSSL_STATIC = 1
+
+# The build directory
+$BUILDDIR = "build"
+
+# The location of the vsvars file
+$VSVARS="n:\vsvars2002.msh"
+
+# APR
+$APACHE_CVS = ":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
+
+$APR_BRANCH = "APR_0_9_BRANCH"
+$APR_MODULE = "apr"
+
+$APR_UTIL_BRANCH = "APU_0_9_BRANCH"
+$APR_UTIL_MODULE = "apr-util"
+
+$APR_ICONV_BRANCH = "API_0_9_BRANCH"
+$APR_ICONV_MODULE = "apr-iconv"
+
+
+$TMP = "T:"
+
+$CONFIG = "Release"
+
+$ErrorContinue = 0
+
+filter qq
+{
+	'"' + $_.ToString() + '"' 
+}
+
+function checkout 
+{
+    svn co $args[0] $args[1]
+}
+
+function get_basename
+{
+    # find the base name
+    $brace = $args[0].LastIndexOf( '/' )
+    return $args[0].Substring( ($brace+1), ($args[0].Length-$brace-1) )
+}
+
+
+function create_build_directory
+{
+    $dir = $BUILDDIR
+    $num = 0
+    while( test-path $dir )
+    {
+        $dir = "{0}-{1}" -f $BUILDDIR, $num
+        $num += 1
+    }
+
+    return $dir
+}
+
+
+# Downloads and extracts a zip or a tarball
+function download_and_extract($url, $dir, $targetname)
+{
+    push-location
+
+    # move to the dir where we want it
+    set-location $dir    
+
+
+    "Downloading {0} to {1}" -f $url, $(get-cwd)
+
+    # get the file
+    wget -nv $url
+
+    $basename = get_basename $url
+
+    # extract it
+    $dirname = $basename
+
+    # what type of file?
+    switch ($basename)
+    {
+        { $_ -like "*.tar.gz" } 
+        {
+			"Unzipping {0} using gunzip"
+			gunzip $basename
+
+			$basename = $basename.Substring(0, ($basename.Length - 2));
+            "Extracting {0} using tar" -f $basename
+            tar -xf $basename
+            $dirname = $basename.Substring(0, $basename.LastIndexOf( ".tar"))
+        }
+        
+        { $_ -like "*.zip" } 
+        {
+            "Extracting {0} using gunzip" -f $basename
+            gunzip $basename
+        }
+
+        default 
+        {
+            "$basename: unrecognized filetype"
+            exit
+        }
+            
+    }
+
+    # if provided, rename the directory
+	if ( $dirname -ne $targetname )
+    {
+        "Moving {0} to {1}" -f $dirname, $targetname
+        move-item $dirname $targetname
+	}
+
+    # we don't need the tarball(zipball) any more
+    #remove-item $basename
+    pop-location
+}
+
+function checkout( $url, $dirname )
+{
+	"Checking out $url to $dirname"
+	svn co $url $dirname
+}
+
+function do_neon
+{
+    download_and_extract $NEON "." neon
+	$script:neon_target_dir = "neon"
+    
+}
+
+function do_openssl
+{
+    push-location    
+    download_and_extract $OPENSSL "." "openssl"
+
+	
+	""
+    "** Building OpenSSL **"
+    ""
+
+    # now build it
+	$script:openssl_target_dir = convert-path "openssl"
+
+    set-location $openssl_target_dir
+    perl Configure VC-WIN32
+    ms\do_masm
+    if ( $env:OPENSSL_STATIC )
+    {
+		"Building static OpenSSL libraries"
+        nmake -f ms\nt.mak
+    }
+    else
+    {
+		"Building dynamic OpenSSL libraries"
+        nmake -f ms\ntdll.mak 
+    }
+
+    pop-location
+    
+}
+
+function do_berkeley
+{
+    push-location
+
+	""
+	"** Berkeley DB **"
+	""
+	
+	$bdb_src = combine-path $TMP $BDB_DIR
+	"Looking for BDB sources in $bdb_src"
+	if ( -not (test-path $bdb_src) )
+	{
+		"Not found"
+		download_and_extract $BDB $TMP $BDB_DIR
+	}
+
+	$slnfile = combine-path ( combine-path $bdb_src "build_win32" ) "Berkeley_DB.sln"
+	"Looking for $slnfile"
+
+	if ( ! ( test-path $slnfile ))
+	{
+		"Not found. Now convert the Berkeley DB workspace to a VS.NET solution"
+		die
+	}
+
+	$bdb_build_dir = (combine-path "." $BDB_DIR)
+	"Copying $bdb_src to $bdb_build_dir"
+	copy-item -recurse $bdb_src $bdb_build_dir
+	
+    
+	$slnfile = combine-path ( combine-path $bdb_build_dir "build_win32" ) "Berkeley_DB.sln"
+	
+	"Building $slnfile"
+	devenv $slnfile /Build $CONFIG
+
+	$script:bdb_target_dir = convert-path "db4-win32"
+	"Creating $bdb_target_dir"
+	new-directory $bdb_target_dir
+	
+	$dirs = "$bdb_target_dir\include", "$bdb_target_dir\lib" 
+	$dirs | foreach { "Creating $_"; new-directory $_ }
+
+	"Copying header files to $bdb_target_dir\include"
+	copy-item "$bdb_build_dir\build_win32\*.h" "$bdb_target_dir\include"
+
+	"Copying lib files to $bdb_target_dir\lib"
+	copy-item "$bdb_build_dir\build_win32\$CONFIG\*.lib" "$bdb_target_dir\lib"
+
+	pop-location
+    
+}
+
+function do_apr
+{
+	""
+	"** APR **"
+	""
+	
+	"Checking out $APR_MODULE from $APACHE_CVS, the $APR_BRANCH branch"
+	cvs -d $APACHE_CVS co -r $APR_BRANCH $APR_MODULE 
+
+	"Checking out $APR_UTIL_MODULE from $APACHE_CVS, the $APR_UTIL_BRANCH branch"
+	cvs -d $APACHE_CVS co -r $APR_UTIL_BRANCH $APR_UTIL_MODULE
+
+	"Checking out $APR_ICONV_MODULE from $APACHE_CVS, the $APR_ICONV_BRANCH branch"
+	cvs -d $APACHE_CVS co -r $APR_ICONV_BRANCH $APR_ICONV_MODULE
+
+}
+
+function do_subversion
+{
+	
+	do_openssl
+
+	push-location	
+	
+    checkout $SUBVERSION subversion 
+
+	set-location subversion
+
+	do_apr
+	do_berkeley
+
+	""
+	""
+	"*** And finally - Subversion! ***"
+	
+    do_neon
+	echo "$bdb_target_dir | $openssl_target_dir | $APR_MODULE | $APR_ICONV_MODULE |  $APR_UTIL_MODULE"  
+	
+	$gen_make = convert-path "gen-make.py"
+	
+	$opts="-t vcproj "
+	$opts+=	"--with-berkeley-db=$bdb_target_dir --with-openssl=$openssl_target_dir"
+	
+	# quote appropriately
+	$opts = $opts.Split() | qq 
+	
+	"Generating VC++ solution files"
+	echo "python gen-make.py $opts"
+    python "gen-make.py" $opts
+
+	# make sure our built subversion lets us set the admin dir
+	patch -p0 --input "..\src\NSvn.Core\admindir.patch"
+
+	"Building Subversion"
+	devenv "subversion_vcnet.sln" /Build $CONFIG /project "__ALL__"
+
+	pop-location
+
+	# so that the Ankh  build will pick up on it.
+	$env:svnsrc = convert-path "subversion"
+	 
+}
+
+function do_ankh
+{
+	# do_subversion
+	#
+	checkout $ANKHSVN
+
+	#$env:svnsrc="N:\tmp\build-0\subversion"
+	do_subversion 
+
+	set-location "src"
+	devenv src.sln /build $CONFIG /project "AnkhSetup"
+}
+
+$starttime = [DateTime].Now
+
+# first set the environment for VC++ tools
+#. $VSVARS
+
+push-location
+
+$dir = create_build_directory
+new-directory $dir
+set-location $dir
+
+"Created build directory {0}" -f $dir
+
+
+
+
+#do_subversion
+#do_openssl
+#do_berkeley
+# do_apr
+do_ankh
+pop-location
+
+"{0}" -f ([DateTime].Now.Subtract($starttime))
+
+
+
+
+

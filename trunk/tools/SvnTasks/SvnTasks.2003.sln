@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvnTasksTest.2003", "SvnTas
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{2413AF14-0AC0-41E6-AEA8-FAF1504DB794}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -25,10 +21,6 @@ Global
 		{87D904BF-2696-4EEA-9064-E758AE0712BE}.Debug.Build.0 = Debug|.NET
 		{87D904BF-2696-4EEA-9064-E758AE0712BE}.Release.ActiveCfg = Release|.NET
 		{87D904BF-2696-4EEA-9064-E758AE0712BE}.Release.Build.0 = Release|.NET
-		{2413AF14-0AC0-41E6-AEA8-FAF1504DB794}.Debug.ActiveCfg = Debug|.NET
-		{2413AF14-0AC0-41E6-AEA8-FAF1504DB794}.Debug.Build.0 = Debug|.NET
-		{2413AF14-0AC0-41E6-AEA8-FAF1504DB794}.Release.ActiveCfg = Release|.NET
-		{2413AF14-0AC0-41E6-AEA8-FAF1504DB794}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
