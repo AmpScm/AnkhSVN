@@ -50,14 +50,14 @@
         <property name="setupfiles.fullpath" value="${path::combine(path::combine(src.fullpath,'WiX'),'SetupFiles')}" />
         
         <exec workingdir="${installsource.dir}" program="candle.exe"
-            commandline="-nologo -w0 -dinstalldir=${installsource.fullpath} ..\WiX\Ankh.msi.wxs -out Ankh.msi.wixobj" />
+            commandline="-nologo -w0 -dsetupfiles=${setupfiles.fullpath} -dinstalldir=${installsource.fullpath} ..\WiX\Ankh.msi.wxs -out Ankh.msi.wixobj" />
         <echo message="building UI" />
         <exec workingdir="${installsource.dir}" program="candle.exe"
             commandline="-nologo -w0 -dsetupfiles=${setupfiles.fullpath} ..\WiX\Ankh-UI.wxs -out Ankh-UI.wixobj" />
             
         <!-- Build the Ankh msi -->
         <exec workingdir="${installsource.dir}" program="light.exe"
-            commandline="-nologo -w0 Ankh-UI.wixobj Ankh.msi.wixobj -out Ankh.msi" />
+            commandline="-nologo -w0 Ankh-UI.wixobj Ankh.msi.wixobj apr-iconv.wixobj Ankh.wixobj Ankh.UI.wixobj ReposInstaller.wixobj Utils.wixobj lib.wixobj -out Ankh.msi" />
     </target>
     
     <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm, build-apr-iconv.wxs">
