@@ -3,8 +3,8 @@
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
-    <property name="build.dir" value="build/Release" unless="${debug}"/>
-    <property name="build.dir" value="build/Debug" if="${debug}"/>
+    <property name="build.dir" value="build-Release" unless="${debug}"/>
+    <property name="build.dir" value="build-Debug" if="${debug}"/>
     <property name="warninglevel" value="/warn:3"/>
     <property name="lib.dir" value="../lib"/>
     
@@ -35,7 +35,7 @@
         
         <echo message="${lib.dir}/nunit.framework.dll"/>
         
-        <csc target="library" output="${build.dir}/NSvn.Core.Tests.dll" verbose="${verbose}" define="${define}">
+        <csc target="library" output="${build.dir}/NSvn.Core.Tests.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
