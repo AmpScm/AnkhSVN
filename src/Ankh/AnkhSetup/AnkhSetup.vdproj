@@ -1533,6 +1533,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E76BB066F9604185BC869A20BD84C34D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:N:\\SRC\\LIB\\ANKHUSERCONTROLHOST.DLL"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E898FD008DC44A46BDE0B2144FBCE38F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\CP1006.SO"
@@ -6194,6 +6200,26 @@
             "TargetName" = "8:windows-1256.so"
             "Tag" = "8:"
             "Folder" = "8:_E8E9BA20AB094D8AB01DE260DB7ECDF5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_E76BB066F9604185BC869A20BD84C34D"
+            {
+            "SourcePath" = "8:..\\..\\lib\\AnkhUserControlHost.dll"
+            "TargetName" = "8:AnkhUserControlHost.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
