@@ -42,6 +42,7 @@ namespace Ankh.Commands
 
                 context.StartOperation( "Updating" );
 
+
                 // we assume by now that all items are working copy resources.                
                 UpdateRunner visitor = new UpdateRunner( context );
                 context.SolutionExplorer.VisitSelectedNodes( visitor );
@@ -58,8 +59,11 @@ namespace Ankh.Commands
             finally
             {
                 context.EndOperation();
+
             }
+
         }    
+
         #endregion
 
         #region UpdateVisitor
@@ -103,11 +107,26 @@ namespace Ankh.Commands
             /// </summary>
             protected override void DoRun()
             {   
-                foreach( SvnItem item in this.resources )
+                this.Context.Client.Notification +=new NotificationDelegate(this.OnNotificationEventHandler );
+
+                try
                 {
-                    Debug.WriteLine( "Updating " + item.Path, "Ankh" );
-                    this.Context.Client.Update( item.Path, revision, recursive );                    
+                    foreach( SvnItem item in this.resources )
+                    {
+                        Debug.WriteLine( "Updating " + item.Path, "Ankh" );
+                        this.Context.Client.Update( item.Path, revision, recursive );                    
+                    }
                 }
+                finally
+                {       
+                    this.Context.Client.Notification  -= new NotificationDelegate(this.OnNotificationEventHandler );
+                }
+              
+                if (this.conflictsOccurred) 
+                    this.Context.ConflictManager.NavigateTaskList();
+                
+
+
             }
 
             public void VisitProject(Ankh.Solution.ProjectNode node)
@@ -148,11 +167,28 @@ namespace Ankh.Commands
                 }
             }
 
+            
+            /// <summary>
+            ///  Handlke event for onNotification that conflicts occurred from update
+            /// </summary>
+            /// <param name="taskItem"></param>
+            /// <param name="navigateHandled"></param>
+            private void  OnNotificationEventHandler(Object sender, NotificationEventArgs args)
+            {
+                if ( args.ContentState == NSvn.Core.NotifyState.Conflicted)
+                {
+                    base.Context.ConflictManager.AddTask(args.Path);
+                    this.conflictsOccurred = true;
+                }
+            }
+
             private IList resources = new ArrayList();
             private Revision revision;
             private bool recursive;
+            private bool conflictsOccurred = false; 
         }            
         #endregion
+
     }
 }
 

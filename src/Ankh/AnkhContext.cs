@@ -52,7 +52,10 @@ namespace Ankh
 
             this.ankhLoadedForSolution = false;
 
-            this.SetUpEvents();           
+            this.SetUpEvents();    
+            
+            this.conflictManager = new ConflictManager(this);
+
         }
 
         
@@ -190,6 +193,16 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Manage issues related to conflicts.
+        /// </summary>
+        public ConflictManager ConflictManager
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get {  return this.conflictManager;  }
+        }
+
+
+        /// <summary>
         /// Event handler for the SolutionOpened event. Can also be called at
         /// addin load time, or if Ankh is enabled for a solution.
         /// </summary>
@@ -215,6 +228,9 @@ namespace Ankh
                 this.OutputPane.WriteLine( "Time: {0}", DateTime.Now - startTime );
                 this.ankhLoadedForSolution = true;
                 //MessageBox.Show( timer.ToString() );
+
+                // Add Conflict tasks for all conflicts in solution
+                this.conflictManager.CreateTaskItems(); 
             }
             catch( Exception ex )
             {
@@ -231,6 +247,7 @@ namespace Ankh
         /// </summary>
         public void SolutionClosing()
         {
+            this.conflictManager.RemoveAllTaskItems();
             this.SolutionExplorer.Unload();
 
             // unhook events.
@@ -466,6 +483,8 @@ namespace Ankh
         private StatusCache statusCache;
 
         private bool operationRunning;
+
+        private ConflictManager conflictManager; 
 
         private ProgressDialog progressDialog;
         private SvnClient client;

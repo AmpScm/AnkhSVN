@@ -121,6 +121,7 @@ Global
 	GlobalSection(SolutionItems) = postSolution
 		ankh.reg = ankh.reg
 		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
+		CHANGES = CHANGES
 		..\deploy.build = ..\deploy.build
 		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
 		master.build = master.build

@@ -7,15 +7,15 @@ using Ankh.RepositoryExplorer;
 
 namespace Ankh.Commands
 {
-	/// <summary>
-	/// Command for checking out a folder
-	/// </summary>
-    [VSNetCommand("CheckoutFolder", Tooltip="Checkout this folder", 
-         Text = "Checkout Folder...", Bitmap = ResourceBitmaps.CheckoutDirectory ),
+    /// <summary>
+    /// Command for exporting a folder
+    /// </summary>
+    [VSNetCommand("ExportFolder", Tooltip="Export this folder", 
+         Text = "Export Folder...", Bitmap = ResourceBitmaps.Export ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
-	internal class CheckoutFolderCommand : 
+    public class ExportFolderCommand : 
         CommandBase
-	{
+    {
         #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
@@ -40,12 +40,12 @@ namespace Ankh.Commands
 
             try
             {
-                context.StartOperation( "Checking out" );
+                context.StartOperation( "Exporting" );
 
                 INode node = context.RepositoryExplorer.SelectedNode;
 
-                CheckoutRunner runner = new CheckoutRunner(context, browser.DirectoryPath, node.Revision, node.Url);
-                runner.Start( "Checking out folder" );
+                ExportRunner runner = new ExportRunner(context, browser.DirectoryPath, node.Revision, node.Url);
+                runner.Start( "Exporting folder" );
 
             }
             finally
@@ -53,5 +53,5 @@ namespace Ankh.Commands
                 context.EndOperation();
             }
         }  
-	}
+    }
 }
