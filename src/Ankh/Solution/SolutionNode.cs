@@ -26,6 +26,9 @@ namespace Ankh.Solution
             this.solutionFile.Changed += del;
             this.solutionFolder.Changed += del;
 
+            this.additionalResources = new ArrayList();
+            this.AddDeletions( this.solutionFolder.Path, this.additionalResources, del );
+
             explorer.SetSolution( this );
         }   
 
@@ -43,6 +46,13 @@ namespace Ankh.Solution
 
             if ( filter == null || filter( this.solutionFile ) )
                 list.Add( this.solutionFile );
+
+            // add deleted items.
+            foreach( SvnItem item in this.additionalResources )
+            {
+                if ( filter == null || filter( item ) )
+                    list.Add( item );
+            }
 
             this.GetChildResources(list, getChildItems, filter );
         }
@@ -71,11 +81,14 @@ namespace Ankh.Solution
                 return NodeStatus.None;               
             else
             {
-                return this.MergeStatuses( this.solutionFolder, this.solutionFile );
+                return this.MergeStatuses(
+                    this.MergeStatuses( this.solutionFolder, this.solutionFile ),
+                    this.MergeStatuses( this.additionalResources ) );
             }
         }
 
         private SvnItem solutionFile;
         private SvnItem solutionFolder;
+        private ArrayList additionalResources;
     }
 }

@@ -128,6 +128,12 @@ namespace Ankh.Solution
                     SvnItem svnItem = this.Explorer.Context.StatusCache[path];
                     this.resources.Add( svnItem );
                     svnItem.Changed += del;
+
+                    // if its a dir, we want the deleted paths too
+                    if ( System.IO.Directory.Exists( path ) )
+                    {
+                        this.AddDeletions( path, this.resources, del );
+                    }
                 }                    
             }
         }

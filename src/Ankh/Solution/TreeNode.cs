@@ -335,6 +335,23 @@ namespace Ankh.Solution
             }
         }
 
+        /// <summary>
+        /// Add the deleted items from "dir" to "list".
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="list"></param>
+        /// <param name="del"></param>
+        protected void AddDeletions( string dir, IList list, StatusChanged del )
+        {
+            IList deletions = this.Explorer.Context.StatusCache.GetDeletions( 
+                dir );
+            foreach( SvnItem deletedItem in deletions )
+            {
+                list.Add( deletedItem );
+                deletedItem.Changed += del;
+            } 
+        }
+
 
         /// <summary>
         /// Used for merging several NodeStatuses into a single NodeStatus.

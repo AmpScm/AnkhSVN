@@ -15,6 +15,7 @@ namespace Ankh.Solution
         {
             this.client = client;
             this.table = new Hashtable();
+            this.deletions = new Hashtable();
         }
 
         public void Status( string dir )
@@ -51,6 +52,20 @@ namespace Ankh.Solution
         }
 
         /// <summary>
+        /// Returns a list of deleted items in the specified directory.
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        public IList GetDeletions( string dir )
+        {
+            string normdir = this.NormalizePath(dir);
+            if ( this.deletions.ContainsKey( normdir ) )
+                return (IList)this.deletions[normdir];
+            else
+                return new SvnItem[]{};
+        }
+
+        /// <summary>
         /// Status callback.
         /// </summary>
         /// <param name="path"></param>
@@ -60,12 +75,40 @@ namespace Ankh.Solution
             // we need all paths to be on ONE form
             string normPath = this.NormalizePath( path );
 
-            // is there already an item for this path?
-            SvnItem existingItem = (SvnItem)this.table[normPath];
-            if ( existingItem != null )
-                existingItem.Refresh( status );
+            
+            if ( status.TextStatus != StatusKind.Deleted )
+            {
+                // is there already an item for this path?
+                SvnItem existingItem = (SvnItem)this.table[normPath];
+                if ( existingItem != null )
+                    existingItem.Refresh( status );
+                else
+                    this.table[normPath] = new SvnItem( path, status );
+            }
             else
-                this.table[normPath] = new SvnItem( path, status );
+            {
+                string containingDir;
+                // find the parent directory
+                if ( path[path.Length-1 ] == '\\' )
+                {
+                    containingDir = Path.GetDirectoryName(
+                        path.Substring(0, path.Length-1) );
+                }
+                else
+                {
+                    containingDir = Path.GetDirectoryName( path );
+                }
+
+                containingDir = this.NormalizePath( containingDir );
+
+                // store the deletions keyed on the parent directory
+                IList list = (IList)this.deletions[ containingDir ];
+                if ( list == null )
+                    list = new ArrayList();
+                list.Add( new SvnItem( path, status ) );
+
+                this.deletions[ containingDir ] = list;
+            }
         }
 
         /// <summary>
@@ -82,6 +125,7 @@ namespace Ankh.Solution
             return normPath.ToLower();
         }
 
+        private Hashtable deletions;
         private Hashtable table;
         private Client client;
         private string currentPath;
