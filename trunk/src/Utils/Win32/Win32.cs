@@ -259,6 +259,9 @@ namespace Utils.Win32
         [DllImport("Kernel32.dll")]
         public static extern bool CloseHandle( IntPtr handle );
 
+        [DllImport("Kernel32.dll")]
+        public static extern bool SetEnvironmentVariable( string name, string value );
+
 
     }
 }
