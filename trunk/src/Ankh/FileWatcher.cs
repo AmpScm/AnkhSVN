@@ -42,7 +42,7 @@ namespace Ankh
         public void Clear()
         {
             this.watchees.Clear();
-            this.dirty = true;
+            this.dirty = false;
         }
 
         /// <summary>
