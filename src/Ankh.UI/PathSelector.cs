@@ -40,11 +40,10 @@ namespace Ankh.UI
         {
             get
             {
-                return this.textLabel.Text;
+                return this.Text;
             }
             set
             {
-                this.textLabel.Text = value; 
                 this.Text = value;
             }
         }
@@ -121,7 +120,6 @@ namespace Ankh.UI
             this.recursiveCheckBox = new System.Windows.Forms.CheckBox();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.textLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // pathSelectionTreeView
@@ -137,16 +135,16 @@ namespace Ankh.UI
             this.pathSelectionTreeView.Recursive = false;
             this.pathSelectionTreeView.SelectedImageIndex = -1;
             this.pathSelectionTreeView.SingleCheck = false;
-            this.pathSelectionTreeView.Size = new System.Drawing.Size(400, 272);
+            this.pathSelectionTreeView.Size = new System.Drawing.Size(344, 320);
             this.pathSelectionTreeView.TabIndex = 0;
             this.pathSelectionTreeView.UrlPaths = false;
             // 
             // recursiveCheckBox
             // 
             this.recursiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.recursiveCheckBox.Location = new System.Drawing.Point(8, 273);
+            this.recursiveCheckBox.Location = new System.Drawing.Point(8, 324);
             this.recursiveCheckBox.Name = "recursiveCheckBox";
-            this.recursiveCheckBox.Size = new System.Drawing.Size(152, 24);
+            this.recursiveCheckBox.Size = new System.Drawing.Size(88, 24);
             this.recursiveCheckBox.TabIndex = 1;
             this.recursiveCheckBox.Text = "Recursive";
             this.recursiveCheckBox.CheckedChanged += new System.EventHandler(this.RecursiveCheckedChanged);
@@ -155,7 +153,7 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(224, 328);
+            this.okButton.Location = new System.Drawing.Point(168, 328);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 2;
             this.okButton.Text = "OK";
@@ -164,26 +162,16 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(320, 328);
+            this.cancelButton.Location = new System.Drawing.Point(248, 328);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Cancel";
             // 
-            // textLabel
-            // 
-            this.textLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right)));
-            this.textLabel.Location = new System.Drawing.Point(8, 304);
-            this.textLabel.Name = "textLabel";
-            this.textLabel.Size = new System.Drawing.Size(384, 16);
-            this.textLabel.TabIndex = 4;
-            // 
             // PathSelector
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(400, 357);
+            this.ClientSize = new System.Drawing.Size(344, 357);
             this.ControlBox = false;
-            this.Controls.Add(this.textLabel);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.recursiveCheckBox);
@@ -201,7 +189,6 @@ namespace Ankh.UI
         private System.Windows.Forms.CheckBox recursiveCheckBox;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Label textLabel;
         /// <summary>
         /// Required designer variable.
         /// </summary>
