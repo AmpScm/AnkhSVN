@@ -4,7 +4,7 @@
     <property name="src.dir" value="."/>
     <property name="lib.dir" value="..\lib"/>
     <property name="warninglevel" value="/warn:3"/>
-    
+    <property name="installsource.dir" value="..\${installsource.dir}"/>
     
     <target name="rebuild">
         <call target="clean"/>
@@ -51,6 +51,12 @@
             <arg value="${warninglevel}"/>
         </csc>
         
+    </target>
+    
+    <target name="build-WiX">
+        <property name="build.dir" value="${path::get-full-path(build.dir)}" />
+        <exec workingdir="${src.dir}" program="candle.exe"
+            commandline="-nologo -dbuilddir=${build.dir} -w0 ReposInstaller.wxs -out ${installsource.dir}\ReposInstaller.wixobj" />
     </target>
     
 </project>
