@@ -43,6 +43,9 @@
                 <includes name="**/*.cs"/>
             </sources>
             
+            <arg value="/resource:..\NSvn.Core.Tests\repos.zip,NSvn.Tests.repos.zip"/>
+            <arg value="/resource:..\NSvn.Core.Tests\wc.zip,NSvn.Tests.wc.zip"/>
+            
             <arg value="${warninglevel}"/>
         </csc>
         
