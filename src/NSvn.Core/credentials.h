@@ -19,11 +19,11 @@ namespace NSvn
         public __gc class SimpleCredential
         {
         public:
-            SimpleCredential( String* username, String* password ) :
-                username(username), password(password)
+            SimpleCredential( String* username, String* password, bool maySave ) :
+                username(username), password(password), maySave(maySave)
             {;}
 
-            __property String* get_UserName()
+            __property String* get_Username()
             { return this->username; }
 
             __property void set_Username( String* username )
@@ -35,6 +35,12 @@ namespace NSvn
             __property void set_Password( String* password )
             { this->password = password; }
 
+            __property bool get_MaySave()
+            { return this->maySave; }
+
+            __property void set_MaySave( bool maySave )
+            { this->maySave = maySave; }
+
         public private:
             /// <summary>Convert to an svn_auth_cred_simple_t*</summary>
           svn_auth_cred_simple_t* GetCredential( apr_pool_t* pool )
@@ -43,11 +49,13 @@ namespace NSvn
                   apr_palloc( pool, sizeof(*cred) ) );
               cred->username = apr_pstrdup( pool, StringHelper( username ) );
               cred->password = apr_pstrdup( pool, StringHelper( password ) );
+              cred->may_save = this->maySave;
               return cred;
           }
         private:
             String* username;
             String* password;
+            bool maySave;
         };
 
         /// <summary>Represents a credential stating which certificates to trust.
