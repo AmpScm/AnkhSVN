@@ -26,6 +26,10 @@ namespace Ankh
 
             this.CreateRepositoryExplorer();
 
+            // is there a solution opened?
+            if ( this.dte.Solution.IsOpen )
+                this.SolutionOpened();
+
             this.SetUpEvents();
         }
 
