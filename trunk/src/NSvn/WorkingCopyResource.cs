@@ -5,15 +5,15 @@ using NSvn.Core;
 namespace NSvn
 {
 	/// <summary>
-	/// Represents an item(file or directory) in a working copy.
+	/// Represents an resource(file or directory) in a working copy.
 	/// </summary>
-	public abstract class WorkingCopyItem : SvnItem, ILocalItem
+	public abstract class WorkingCopyResource : SvnResource, ILocalResource
 	{
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="path">Path to the item.</param>
-		protected WorkingCopyItem( string path )
+        /// <param name="path">Path to the resource.</param>
+		protected WorkingCopyResource( string path )
 		{
 			this.path = System.IO.Path.GetFullPath(path);
             //TODO: pull this up
@@ -24,8 +24,8 @@ namespace NSvn
         /// Factory method.
         /// </summary>
         /// <param name="path">Path to the resource.</param>
-        /// <returns>An WorkingCopyItem object representing the resource.</returns>
-        public static WorkingCopyItem FromPath( string path )
+        /// <returns>An WorkingCopyresource object representing the resource.</returns>
+        public static WorkingCopyResource FromPath( string path )
         {
             if ( System.IO.File.Exists( path ) )
                 return new WorkingCopyFile( path );
@@ -40,7 +40,7 @@ namespace NSvn
         /// Commit local changes to the repository.
         /// </summary>
         /// <param name="logMessage">The log message to accompany the commit.</param>
-        /// <param name="recursive">Whether subitems should be recursively committed.</param>
+        /// <param name="recursive">Whether subresources should be recursively committed.</param>
         public void Commit( string logMessage, bool recursive )
         {
             this.Commit( new SimpleLogMessageProvider(logMessage), recursive );
@@ -50,7 +50,7 @@ namespace NSvn
         /// Commit local changes to the repository.
         /// </summary>
         /// <param name="logMessageProvider">An object that can provide a log message.</param>
-        /// <param name="recursive">Whether subitems should be recursively committed.</param>
+        /// <param name="recursive">Whether subresources should be recursively committed.</param>
         public void Commit( ILogMessageProvider logMessageProvider, bool recursive )
         {
             this.logMessageProvider = logMessageProvider;
@@ -58,7 +58,7 @@ namespace NSvn
         }
 
         /// <summary>
-        /// Updates the item recursively to the HEAD revision in the repository.
+        /// Updates the resource recursively to the HEAD revision in the repository.
         /// </summary>
         public void Update()
         {
@@ -66,10 +66,10 @@ namespace NSvn
         }
 
         /// <summary>
-        /// Updates the item to the given revision
+        /// Updates the resource to the given revision
         /// </summary>
         /// <param name="revision">The revision to update to</param>
-        /// <param name="recursive">Whether subitems of the item should
+        /// <param name="recursive">Whether subresources of the resource should
         /// also be updated</param>
         public void Update( Revision revision, bool recursive )
         {
@@ -78,7 +78,7 @@ namespace NSvn
 
 
         /// <summary>
-        /// The status of the item.
+        /// The status of the resource.
         /// </summary>
         public Status Status
         {
@@ -92,7 +92,7 @@ namespace NSvn
         }
 
         /// <summary>
-        /// The local path of the item.
+        /// The local path of the resource.
         /// </summary>
         public string Path
         {

@@ -5,7 +5,7 @@ namespace NSvn
 	/// <summary>
 	/// Represents a versioned file in an SVN working copy.
 	/// </summary>
-	public class WorkingCopyFile : WorkingCopyItem
+	public class WorkingCopyFile : WorkingCopyResource
 	{
         /// <summary>
         /// Constructor.

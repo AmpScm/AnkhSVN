@@ -8,11 +8,11 @@ namespace NSvn
 	/// <summary>
 	/// Base class for all entity classes
 	/// </summary>
-	public class SvnItem
+	public class SvnResource
 	{
         
         
-        protected SvnItem()
+        protected SvnResource()
         {
             this.clientContext = new ClientContext();
             this.dispatchMapping = new Hashtable();
