@@ -41,6 +41,39 @@ namespace NSvn.Tests
         }
         #endregion
 
+        [Ignore( "Doesn't work yet" )]
+        #region TestCopy
+        [Test]
+        public void TestCopy()
+        {
+            //Tests copying a file to a directory within the working copy
+            WorkingCopyResource itemWcSrc  = new WorkingCopyFile( Path.Combine( this.WcPath, "Form.cs" ) );
+            WorkingCopyResource itemWcDst  = new WorkingCopyDirectory( Path.Combine( this.WcPath, @"obj" ) );
+            
+            Assertion.AssertEquals( "Wrong status. Cant copy an unversioned file", StatusKind.Normal,
+                itemWcSrc.Status.TextStatus  );
+          
+            itemWcSrc.Copy( itemWcDst.Path ) ;
+
+            Assertion.AssertEquals( "Wrong status. Should be added", StatusKind.Added,
+                itemWcDst.Status.TextStatus );  
+  
+            //Tests copying a file from working copy to a file in repository
+      /*      RepositoryResource itemReposDst  = new RepositoryFile( Path.Combine( this.ReposPath, "Form2.cs" ) );
+            
+            Assertion.AssertEquals( "Wrong status. Cant copy an unversioned file", StatusKind.Normal,
+                itemWcSrc.Status.TextStatus  );
+          
+            itemWcSrc.Copy( "Copying a file to the repository", Revision.Head, itemReposDst.Url ) ;
+
+            String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
+            Assertion.Assert( "File wasn't imported ", cmd.IndexOf( "Form2.cs") >= 0 );		
+            */             
+  
+        }
+        #endregion
+
+
         #region LogMessageProvider
         private class LogMessageProvider : ILogMessageProvider
         {

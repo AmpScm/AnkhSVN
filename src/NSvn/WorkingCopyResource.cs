@@ -73,6 +73,38 @@ namespace NSvn
         }
 
         /// <summary>
+        /// Copy resource to repository.
+        /// </summary>
+        /// <param name="logMessage">The log message to accompany the commit.</param>
+        /// <param name="revision">The revision to copy to</param>
+        /// <param name="dstPath">Path to copy to</param>
+         public void Copy( string logMessage, Revision revision, string dstPath )
+        {
+            this.Copy( new SimpleLogMessageProvider(logMessage), Revision.Head, dstPath );
+        }
+
+        /// <summary>
+        /// Copy resource to repository.
+        /// </summary>
+        /// <param name="logMessageProvider">An object that can provide a log message.</param>
+        /// <param name="revision">The revision to copy to</param>
+        /// <param name="dstPath">Path to copy to</param>
+        public void Copy( ILogMessageProvider logMessage, Revision revision, string dstPath )
+        {
+            this.logMessageProvider = logMessageProvider;
+            Client.Copy( this.path, revision, dstPath, this.ClientContext );
+        }
+
+        /// <summary>
+        /// Copy resource to working copy file.
+        /// </summary>
+        /// <param name="dstPath">Path to copy to</param>
+        public void Copy( string dstPath )
+        {
+            Client.Copy( this.path, Revision.Head, dstPath, this.ClientContext );
+        }
+
+        /// <summary>
         /// Updates the resource recursively to the HEAD revision in the repository.
         /// </summary>
         public void Update()
@@ -90,7 +122,6 @@ namespace NSvn
         {
             Client.Update( this.Path, revision, recursive, this.ClientContext );
         }
-
 
         /// <summary>
         /// The status of the resource.
@@ -164,8 +195,6 @@ namespace NSvn
             // empty here
         }
 
-
-
         /// <summary>
         /// Whether the resource has been modified.
         /// </summary>
@@ -182,8 +211,6 @@ namespace NSvn
         {
             get;
         }
-
-
 
         /// <summary>
         /// Callback function for log messages
