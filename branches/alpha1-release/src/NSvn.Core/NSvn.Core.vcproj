@@ -69,7 +69,7 @@
 				AdditionalUsingDirectories="..\NSvn.Common\bin\Release"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				MinimalRebuild="FALSE"
-				RuntimeLibrary="3"
+				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"/>
 			<Tool
