@@ -292,7 +292,7 @@ namespace Ankh.UI
         {
             foreach( TreeNode node in nodes )
             {
-                if ( node.Text == pathComponent )
+                if ( String.Compare( node.Text, pathComponent, true ) == 0 )
                     return node;
             }
 
