@@ -51,14 +51,22 @@ namespace Ankh
 		/// <seealso class='IDTExtensibility2' />
 		public void OnConnection(object application, Extensibility.ext_ConnectMode connectMode, object addInInst, ref System.Array custom)
 		{
-            this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
+            try
+            {
+                this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
 
-            // get rid of the old ones
-            Ankh.CommandMap.DeleteCommands( this.context );
+                // get rid of the old ones
+                Ankh.CommandMap.DeleteCommands( this.context );
 
-            // register the new ones
-            this.commands= 
-                Ankh.CommandMap.RegisterCommands( this.context );    
+                // register the new ones
+                this.commands= 
+                    Ankh.CommandMap.RegisterCommands( this.context );    
+            }
+            catch( Exception ex )
+            {
+                HandleError( ex );
+                throw;
+            }
 		}
 
 		/// <summary>
