@@ -115,24 +115,11 @@
   <data name="animatedGif.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Private</value>
   </data>
-  <data name="animatedGif.Image" type="System.Drawing.Bitmap, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        R0lGODlhLQA0AJEAAPHv4uzp2AAAAP4BAiH/C05FVFNDQVBFMi4wAwEUAAAh+QQFAwADACwAAAAALQA0
-        AAACYoyPqcvtD6OctNqLs968+w+G4kiW5okJqooaLBDArCkYsO3STU3ye//whYQL4seYQHqUAWbHB7s1
-        T69Y0wlazUrarreF5baKY0UYWEacR2tRe5hWx+f0uv2Oz+v3/L7/T1IAACH5BAUDAAMALA8ADgAPAA0A
-        AAIkjD95u5IjWHspSkcrw1kf3lkGmIkBSZlnB0lr6gbswtZyTQUFACH5BAUDAAMALBAADgANAA0AAAIf
-        jC+nmrkmXIhPwmURe3NXj4UgAwRAhpQnB1FVBMdBAQAh+QQFAwADACwSABAACgALAAACFExkl7poniB8
-        cbFLa264Tm4J4ugUACH5BAUDAAMALBMAEQAHAAoAAAIQjIJnuN36mILULZgYEJyDAgAh+QQFAwADACwU
-        ABAABQALAAACDoQigLvX8eJxE1YLjUgFACH5BAUDAAMALBUADwADAAwAAAILhBASucrvlAGTzQIAIfkE
-        BQMAAwAsFQAPAAMADAAAAglUZHjJ6wrPEgUAIfkEBQMAAwAsFAAQAAUACwAAAg5ULoYaec3cemLYi3Pa
-        BQAh+QQFAwADACwTABEABwAKAAACEFR+YhjKvZBjYtiLs96qqwIAIfkEBQMAAwAsEgAQAAoACwAAAhqM
-        FHlprO8eim1GZN3MjQkQANwXcsbiHepaAAAh+QQFAwADACwQAA4ADQANAAACIYwteYsQIFg7kEV5Q8ZI
-        nrtZnad9Xhg5TliqJZYoX0zXBQAh+QQFAwADACwPAA4ADwANAAACJpwtl8cicYJjI0EGF7pUKt55Fdgt
-        T2iIJyqOYTuSGaU16F3RulAAADs=
-</value>
-  </data>
   <data name="$this.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
+  </data>
+  <data name="$this.Name">
+    <value>ProgressDialog</value>
   </data>
   <data name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>(Default)</value>
@@ -151,9 +138,6 @@
   </data>
   <data name="$this.TrayHeight" type="System.Int32, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>80</value>
-  </data>
-  <data name="$this.Name">
-    <value>ProgressDialog</value>
   </data>
   <data name="$this.SnapToGrid" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
