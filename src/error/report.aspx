@@ -17,20 +17,19 @@
                     report page</FONT></DIV>
             <P><asp:image id="Image1" style="Z-INDEX: 105; LEFT: 8px; POSITION: absolute; TOP: 8px" runat="server" Width="634px" Height="74px" ImageUrl="ankh.png"></asp:image></P>
             <P><asp:textbox id="commentsBox" style="Z-INDEX: 104; LEFT: 16px; POSITION: absolute; TOP: 520px" runat="server" Columns="40" Rows="6" TextMode="MultiLine"></asp:textbox></P>
-            <DIV style="DISPLAY: inline; Z-INDEX: 108; LEFT: 16px; WIDTH: 144px; POSITION: absolute; TOP: 496px; HEIGHT: 24px" ms_positioning="FlowLayout"><FONT face="Arial Narrow">* 
-                    Additional comments:</FONT></DIV>
+            <DIV style="DISPLAY: inline; Z-INDEX: 108; LEFT: 16px; WIDTH: 256px; POSITION: absolute; TOP: 496px; HEIGHT: 24px" ms_positioning="FlowLayout"><FONT face="Arial Narrow">Additional 
+                    comments (Optional):</FONT></DIV>
             <P><asp:button id="sendButton" style="Z-INDEX: 103; LEFT: 16px; POSITION: absolute; TOP: 640px" runat="server" Width="80px" Text="Send"></asp:button></P>
             <DIV style="DISPLAY: inline; Z-INDEX: 107; LEFT: 16px; WIDTH: 120px; POSITION: absolute; TOP: 152px; HEIGHT: 24px" ms_positioning="FlowLayout"><FONT face="Arial Narrow" size="4">Error 
                     message:</FONT></DIV>
             <HR style="Z-INDEX: 109; LEFT: 16px; WIDTH: 60.16%; POSITION: absolute; TOP: 488px; HEIGHT: 1px" width="60.16%" SIZE="1">
-            <DIV style="DISPLAY: inline; Z-INDEX: 110; LEFT: 400px; WIDTH: 192px; POSITION: absolute; TOP: 496px; HEIGHT: 25px" ms_positioning="FlowLayout"><FONT face="Arial Narrow">* 
-                    Your email adress:</FONT></DIV>
+            <DIV style="DISPLAY: inline; Z-INDEX: 110; LEFT: 400px; WIDTH: 192px; POSITION: absolute; TOP: 496px; HEIGHT: 25px" ms_positioning="FlowLayout"><FONT face="Arial Narrow">Your 
+                    email adress (Optional):</FONT></DIV>
             <HR style="Z-INDEX: 111; LEFT: 16px; POSITION: absolute; TOP: 136px; HEIGHT: 1px" width="60.16%" SIZE="1">
             <asp:TextBox id="versionBox" style="Z-INDEX: 112; LEFT: 464px; POSITION: absolute; TOP: 584px" runat="server" Width="64px" ReadOnly="True" BackColor="#E0E0E0"></asp:TextBox>
             <asp:Label id="Label1" runat="server">Label</asp:Label>
             <asp:Label id="Label2" runat="server">Label</asp:Label>
             <DIV style="DISPLAY: inline; Z-INDEX: 113; LEFT: 400px; WIDTH: 56px; POSITION: absolute; TOP: 584px; HEIGHT: 24px" ms_positioning="FlowLayout"><FONT face="Arial Narrow" size="4">Version:</FONT></DIV>
-            <DIV style="DISPLAY: inline; Z-INDEX: 114; LEFT: 400px; WIDTH: 192px; COLOR: maroon; POSITION: absolute; TOP: 632px; HEIGHT: 25px" ms_positioning="FlowLayout"><FONT face="Arial Narrow">*&nbsp;Optional</FONT></DIV>
         </form>
     </body>
 </HTML>
