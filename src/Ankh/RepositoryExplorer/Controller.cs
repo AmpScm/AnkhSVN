@@ -5,6 +5,7 @@ using System.Threading;
 using NSvn.Core;
 using System.Diagnostics;
 using EnvDTE;
+using Utils;
 
 using Thread = System.Threading.Thread;
 
@@ -162,6 +163,9 @@ namespace Ankh.RepositoryExplorer
             string label = String.Format( "{0} [{1}]", 
                 rootNode.Url, rootNode.Revision );
             this.repositoryExplorer.AddRoot( label, rootNode );
+
+            // Create a registry key for it
+            RegistryUtils.CreateNewTypedUrl( rootNode.Url );
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System;
 using Ankh.UI;
 using System.Windows.Forms;
+using Utils;
 
 
 namespace Ankh.Commands
@@ -32,6 +33,9 @@ namespace Ankh.Commands
                     CheckoutRunner runner = new CheckoutRunner( context, 
                         dlg.LocalPath, dlg.Revision, dlg.Url, !dlg.NonRecursive );
                     runner.Start( "Checking out" );
+
+                    // make sure it's remembered
+                    RegistryUtils.CreateNewTypedUrl( dlg.Url );
                 }
                 finally
                 {
