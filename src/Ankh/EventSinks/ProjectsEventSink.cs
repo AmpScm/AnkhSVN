@@ -1,5 +1,6 @@
 using System;
 using EnvDTE;
+using NSvn;
 
 namespace Ankh.EventSinks
 {
@@ -35,9 +36,15 @@ namespace Ankh.EventSinks
             this.Context.SolutionExplorer.SyncWithTreeView();
         }
 
+        /// <summary>
+        /// Schedules a Project for removal on commit.
+        /// </summary>
+        /// <param name="item">Projectitem to be scheduled for removal.</param>
         protected void ItemRemoved( Project item )
         {
-            string s = item.FileName;
+            this.Context.SolutionExplorer.VisitResources( 
+                item, new RemoveProjectVisitor() );
+            this.Context.SolutionExplorer.SyncWithTreeView();
         }
 
         protected void ItemRenamed( Project item, string oldName )
@@ -45,6 +52,16 @@ namespace Ankh.EventSinks
             string s = item.FileName;
         }
 
+        /// <summary>
+        /// A visitor that schedules a remove of visited items on commit.
+        /// </summary>
+        private class RemoveProjectVisitor : LocalResourceVisitorBase
+        {
+            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
+            {
+                resource.Remove( true );
+            }
+        }
         private ProjectsEvents events;
 	}
 }
