@@ -30,7 +30,7 @@ namespace Ankh.Commands
             else
                 return vsCommandStatus.vsCommandStatusSupported;
         }
-        public override void Execute(Ankh.AnkhContext context)
+        public override void Execute(Ankh.AnkhContext context, string parameters)
         {
             // make sure all files are saved
             context.DTE.Documents.SaveAll();

@@ -21,7 +21,7 @@ namespace Ankh.Commands
                 vsCommandStatus.vsCommandStatusSupported;
         }
 
-        public override void Execute(Ankh.AnkhContext context)
+        public override void Execute(Ankh.AnkhContext context, string parameters)
         {
             try
             {

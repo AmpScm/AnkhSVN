@@ -244,7 +244,7 @@ namespace Ankh
                     ICommand cmd;
                     if ( (cmd = (ICommand)this.commands[commandName]) != null )
                     { 
-                        cmd.Execute( this.context );
+                        cmd.Execute( this.context, (string)varIn );
                         handled = true;
                     }
                 }

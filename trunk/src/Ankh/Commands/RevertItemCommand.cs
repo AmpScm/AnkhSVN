@@ -37,7 +37,7 @@ namespace Ankh.Commands
                 return vsCommandStatus.vsCommandStatusSupported;
         }
 
-        public override void Execute(Ankh.AnkhContext context)
+        public override void Execute(Ankh.AnkhContext context, string parameters)
         {
             RevertVisitor v = new RevertVisitor();
             context.SolutionExplorer.VisitSelectedItems( v, true );
