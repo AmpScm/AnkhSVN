@@ -4,6 +4,8 @@
       <Settings ApplicationIcon="" AssemblyKeyContainerName="" AssemblyName="Ankh" AssemblyOriginatorKeyFile="" DefaultClientScript="JScript" DefaultHTMLPageLayout="Grid" DefaultTargetSchema="IE50" DelaySign="false" OutputType="Library" PreBuildEvent="" PostBuildEvent="" RootNamespace="Ankh" RunPostBuildEvent="OnBuildSuccess" StartupObject="">
         <Config Name="Debug" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="DEBUG;TRACE;REPORTERROR;ALWAYSREGISTER;VS2003;ALT_ADMIN_DIR" DocumentationFile="" DebugSymbols="true" FileAlignment="4096" IncrementalBuild="true" NoStdLib="false" NoWarn="" Optimize="false" OutputPath="bin\Debug\" RegisterForComInterop="true" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
         <Config Name="Release" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="TRACE;REPORTERROR;ALWAYSREGISTER;VS2003;ALT_ADMIN_DIR" DocumentationFile="" DebugSymbols="true" FileAlignment="4096" IncrementalBuild="true" NoStdLib="false" NoWarn="" Optimize="true" OutputPath="bin\Release\" RegisterForComInterop="true" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
+        <Config Name="(svnlib) Release" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="TRACE;REPORTERROR;ALWAYSREGISTER;VS2003" DocumentationFile="" DebugSymbols="true" FileAlignment="4096" IncrementalBuild="true" NoStdLib="false" NoWarn="" Optimize="true" OutputPath="bin\(svnlib) Release\" RegisterForComInterop="true" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
+        <Config Name="(svnlib) Debug" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="DEBUG;TRACE;REPORTERROR;ALWAYSREGISTER;VS2003" DocumentationFile="" DebugSymbols="true" FileAlignment="4096" IncrementalBuild="true" NoStdLib="false" NoWarn="" Optimize="false" OutputPath="bin\(svnlib) Debug\" RegisterForComInterop="true" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
       </Settings>
       <References>
         <Reference Name="System" AssemblyName="System" />
@@ -16,12 +18,12 @@
         <Reference Name="NSvn.Core" Project="{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}" Package="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" Private="True" />
         <Reference Name="Ankh.UI" Project="{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}" Package="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}" />
         <Reference Name="Interop.SHDocVw" AssemblyName="Interop.SHDocVw" HintPath="..\lib\Interop.SHDocVw.dll" />
-        <Reference Name="envdte" AssemblyName="EnvDTE" HintPath="I:\WINNT\Microsoft.NET\Framework\v1.1.4322\envdte.dll" />
         <Reference Name="extensibility" AssemblyName="Extensibility" HintPath="I:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\PublicAssemblies\extensibility.dll" AssemblyFolderKey="hklm\publicassemblies" />
         <Reference Name="office" AssemblyName="Office" HintPath="I:\WINNT\Microsoft.NET\Framework\v1.1.4322\office.dll" />
         <Reference Name="stdole" Guid="{00020430-0000-0000-C000-000000000046}" VersionMajor="2" VersionMinor="0" Lcid="0" WrapperTool="primary" />
         <Reference Name="AnkhUserControlHostLib" AssemblyName="AnkhUserControlHostLib" HintPath="..\lib\AnkhUserControlHostLib.dll" />
         <Reference Name="Interop.esproj" AssemblyName="Interop.esproj" HintPath="..\lib\Interop.esproj.dll" />
+        <Reference Name="envdte" AssemblyName="envdte" HintPath="..\lib\envdte.dll" />
       </References>
     </Build>
     <Files>
