@@ -76,12 +76,14 @@ namespace Ankh
         /// <returns>Formatet text string</returns>
         private string FormatMessage( string action )
         {
-            string message = line + action + " ";
+            int left = (LINELENGTH / 2) - (action.Length / 2);
+            int right = LINELENGTH - ( left + action.Length );
             return Environment.NewLine 
-                + message.PadRight(50, '-') + Environment.NewLine + Environment.NewLine;
+                + new string( '-', left ) + action + new string( '-', right ) + Environment.NewLine + Environment.NewLine;
         }
 
-        private const string line = "---------------------- ";
+        private const int LINELENGTH = 70;
+        private const char LINECHAR = '-';
         private OutputWindowPane outputPane;
     }
 }
