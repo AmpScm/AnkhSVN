@@ -12,7 +12,8 @@ namespace Ankh.Commands
 	/// <summary>
 	/// A command that updates an item.
 	/// </summary>
-	[VSNetCommand("UpdateItem", Text = "Update", Tooltip = "Updates the local item"),
+	[VSNetCommand("UpdateItem", Text = "Update", Tooltip = "Updates the local item",
+         Bitmap = ResourceBitmaps.Update),
      VSNetControl( "Item", Position = 2 ),
      VSNetControl( "Project", Position = 2 ),
      VSNetControl( "Solution", Position = 2 ),
@@ -35,11 +36,13 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context)
         {
+            context.OutputPane.StartActionText("Updating");
             // we assume by now that all items are working copy resources.
             UpdateVisitor v = new UpdateVisitor();
             context.SolutionExplorer.VisitSelectedNodes( v );
             v.Update();
             context.SolutionExplorer.UpdateSelectionStatus();
+            context.OutputPane.EndActionText();
         }    
         #endregion
 

@@ -22,12 +22,14 @@ namespace Ankh
         {
             this.ankhContext = ankhContext;
             this.AddAuthenticationProvider( new DialogProvider() );           
+           
         }
         /// <summary>
         /// Invokes the LogMessage dialog.
         /// </summary>
         /// <param name="commitItems"></param>
         /// <returns></returns>
+        
         protected override string LogMessageCallback(NSvn.Core.CommitItem[] commitItems)
         {
             string templateText = this.GetTemplate();
@@ -40,6 +42,7 @@ namespace Ankh
                 dialog.DiffWanted += new EventHandler( this.DiffWanted );
                 if ( dialog.ShowDialog() == DialogResult.OK )
                 {
+                    ankhContext.OutputPane.StartActionText("Commit");
                     return dialog.LogMessage;
                 }
                 else
@@ -49,8 +52,13 @@ namespace Ankh
 
         protected override void NotifyCallback(NSvn.Core.Notification notification)
         {
-            this.ankhContext.OutputPane.Write( "File: {0}\tAction: {1}{2}", 
-                notification.Path, notification.Action, Environment.NewLine );
+            if (((string)actionStatus[notification.Action.ToString()]) != "ignoretext")
+            {
+                this.ankhContext.OutputPane.Write("{0} - {2}: {1}{3}"
+                    ,actionStatus[notification.Action.ToString()] 
+                    ,notification.Path, notification.NodeKind.ToString()
+                    ,Environment.NewLine );
+            }
         }
         
         private string GetTemplate()
@@ -58,7 +66,6 @@ namespace Ankh
              return @"# All lines starting with a # will be ignored
 ***# %path%";
         }
-
 
         private void DiffWanted( object sender, EventArgs args )
         {  
@@ -117,7 +124,32 @@ namespace Ankh
         }
         #endregion
 
-       
+        /// <summary>
+        /// Pupulates actionStatus Hashtable.
+        /// </summary>
+        /// 
+        static SvnContext()
+        {
+            actionStatus["Add"] =                   "ADDED";
+            actionStatus["Copy"] =                  "COPIED";
+            actionStatus["Delete"] =                "DELETED";
+            actionStatus["Restore"] =               "RESTORED";
+            actionStatus["Revert"] =                "REVERTED";
+            actionStatus["FailedRevert"] =          "REVERT FAILED";
+            actionStatus["Resolve"] =               "RESOLVED";
+            actionStatus["Skip"] =                  "SKIPPED";
+            actionStatus["UpdateDelete"] =          "UPDATE DELETED";
+            actionStatus["UpdateAdd"] =             "UPDATE ADDED";
+            actionStatus["UpdateUpdate"] =          "UPDATED";
+            actionStatus["UpdateCompleted"] =       "ignoretext";
+            actionStatus["UpdateExternal"] =        "UPDATED EXTERNAL";
+            actionStatus["CommitModified"] =        "COMMIT MODIFIED";
+            actionStatus["CommitAdded"] =           "COMMIT ADDED";
+            actionStatus["CommitDeleted"] =         "COMMIT DELETED";
+            actionStatus["CommitPostfixTxDelta"] =  "ignoretext";
+        }
+        
+        static readonly Hashtable actionStatus = new Hashtable();
         private AnkhContext ankhContext;
         private static IDictionary map = new Hashtable();
     }

@@ -48,6 +48,27 @@ namespace Ankh
             this.outputPane.OutputString( s );
         }
 
+        /// <summary>
+        /// Writes Start text to outputpane.
+        /// </summary>
+        /// <param name="action">Action.</param>
+        public void StartActionText( string action )
+        {
+            this.outputPane.OutputString( Environment.NewLine + 
+                this.line + action + " " + this.line + Environment.NewLine 
+                + Environment.NewLine);
+        }
+
+        /// <summary>
+        /// Writes end text to outputpane.
+        /// </summary>
+        public void EndActionText()
+        {
+            this.outputPane.OutputString( Environment.NewLine + this.line + "Done " + 
+                this.line + Environment.NewLine);
+        }
+
+        private string line = "---------------------- ";
         private OutputWindowPane outputPane;
 	}
 }

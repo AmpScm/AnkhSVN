@@ -41,8 +41,10 @@ namespace Ankh.Commands
             {
                 RevertVisitor v = new RevertVisitor();
                 context.SolutionExplorer.VisitSelectedItems( v, true );
-                v.Revert();
+                
+                v.Revert( context );
                 context.SolutionExplorer.UpdateSelectionStatus();
+               
             }
         #endregion
         
@@ -59,7 +61,7 @@ namespace Ankh.Commands
                         this.revertables.Add( resource );
                 }
 
-                public void Revert()
+                public void Revert(Ankh.AnkhContext context)
                 {
                     // make the user confirm that he really wants to revert.
                     StringBuilder builder = new StringBuilder();
@@ -72,9 +74,11 @@ namespace Ankh.Commands
                     if( MessageBox.Show( msg, "Revert", MessageBoxButtons.YesNo ) == 
                         DialogResult.Yes )
                     {
+                        context.OutputPane.StartActionText("Reverting");
                         // do the actual revert
                         foreach( WorkingCopyResource r in this.revertables )
                             r.Revert( true );
+                         context.OutputPane.EndActionText();
                     }
                 }
 
