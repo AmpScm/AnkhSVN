@@ -131,6 +131,11 @@
                     Lcid = "0"
                     WrapperTool = "aximp"
                 />
+                <Reference
+                    Name = "office"
+                    AssemblyName = "office"
+                    HintPath = "..\lib\office.dll"
+                />
             </References>
         </Build>
         <Files>

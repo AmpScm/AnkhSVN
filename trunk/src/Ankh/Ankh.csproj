@@ -182,21 +182,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RepositoryExplorerMenuAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RepositoryExplorerMenuItem.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RepositoryExplorerMenuItem.resx"
-                    DependentUpon = "RepositoryExplorerMenuItem.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "ResourceBitmaps.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -377,6 +362,16 @@
                 />
                 <File
                     RelPath = "EventSinks\VCProjectEventSink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RepositoryExplorer\Controller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RepositoryExplorer\Node.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
