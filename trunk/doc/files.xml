@@ -28,43 +28,42 @@
 
         <file path="productDocumentation.doc">
             <name>Product documentation</name>
-            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/productDocumentation.doc</realpath>
+            <realpath>doc/productDocumentation.doc</realpath>
             <description>The Product documentation in Word format.</description>
         </file>
 
         <file path="productDocumentation.pdf">
             <name>Product documentation</name>
-            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/pdf/productDocumentation.pdf</realpath>
+            <realpath>doc/pdf/productDocumentation.pdf</realpath>
             <description>The Product documentation in PDF format</description>
-        </directory>
+        </file>
 
         <file path="processDocumentation.doc">
             <name>Process documentation</name>
-            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/processDocumentation.doc</realpath>
+            <realpath>doc/processDocumentation.doc</realpath>
             <description>The Process documentation in Word format.</description>
         </file>
 
         <file path="processDocumentation.pdf">
             <name>Process documentation</name>
-            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/pdf/processDocumentation.pdf</realpath>
+            <realpath>doc/pdf/processDocumentation.pdf</realpath>
             <description>The Process documentation in PDF format.</description>
         </file>
 
         <file path="testDocumentation.doc">
-            <name>Ankh source code</name>
-            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/testDocumentation.doc</realpath>
+            <name>Test documentation</name>
+            <realpath>doc/testDocumentation.doc</realpath>
             <description>The Test documentation in Word format.</description>
         </file>
         
         <file path="testDocumentation.pdf">
-            <name>Ankh source code</name>
-            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/pdf/testDocumentation.pdf</realpath>
+            <name>Test documentation</name>
+            <realpath>doc/pdf/testDocumentation.pdf</realpath>
             <description>The Test documentation in PDF format.</description>
         </file>
 
         <directory path="scheduling">
             <name>Scheduling documents</name>
-            <permissions>group,supervisor</permissions>
            <file path="work_plan.xml">
                 <realpath>work_plan.xml</realpath>
                 <handler>viewdoc.html</handler>
@@ -101,7 +100,7 @@
     <directory path="design">
         <name>Design documents</name>
         <include>doc/usecases.xml</include> 
-        <include>doc/umldiagrams.xml</include>
+        <!--<include>doc/umldiagrams.xml</include>-->
     </directory>
     
     <directory path="Help">
@@ -112,8 +111,48 @@
 
     <directory path="src">
         <name>Ankh source code</name>
-        <realpath>/hovedprosjekter/2003/data/10/src/index.html</realpath>
-        <description>The Ankh source code</description>
+        <file path="Ankh source code">
+            <realpath>/src/index.html</realpath>
+            <name>Ankh source code</name>
+            <description>The Ankh source code, colorized and organized.</description>
+        </file>
+        
+        <file path="Repository head">
+            <realpath>http://ankhsvn.com:8088/svn/finalproject/</realpath>
+            <name>Repository head</name>
+            <description>Browse the head of the Ankh repository</description>
+        </file>
+        
+        <file path="ViewCVS">
+            <realpath>http://ankhsvn.com:8088/viewcvs/</realpath>
+            <name>ViewCVS</name>
+            <description>Browse the Ankh repository using the ViewCVS tool</description>
+        </file>
     </directory>
-
+    
+    <directory path="links">
+        <name>Links</name>
+        <file path="Ankh project site">
+            <realpath>http://ankhsvn.tigris.org/</realpath>
+            <name>Ankh project site</name>
+            <description>The Ankh project site on tigris.org. This contains facilities such as
+            issue tracking and mailing lists.</description>
+        </file>
+        <file path="Ankh FAQ">
+            <realpath>http://ankhsvn.tigris.org/faq.html</realpath>
+            <name>Ankh FAQ</name>
+            <description>A frequently asked questions document for Ankh users.</description>
+        </file>
+        <file path="Ankh Blog">
+            <realpath>http://ankhsvn.com/blog</realpath>
+            <name>Ankh Blog</name>
+            <description>A weblog(blog) about the development of Ankh.</description>
+        </file>
+        <file path="IRC Channel">
+            <realpath>irc://irc.freenode.net/ankhsvn</realpath>
+            <name>#ankhsvn IRC channel</name>
+            <description>Some of the Ankh developers hang out in the #ankhsvn
+            channel on the Freenode IRC network.</description>
+        </file>
+    </directory>
 </root>
