@@ -99,7 +99,7 @@
                 <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Disabled="yes"
                     Text="[ButtonText_Cancel]" />
             </Dialog>
-	    <Dialog Id="FatalErrorForm" Width="370" Height="270" Title="[Setup] - [ProductName]" NoMinimize="yes">
+            <Dialog Id="FatalErrorForm" Width="370" Height="270" Title="[Setup] - [ProductName]" NoMinimize="yes">
                 <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="234" FixedSize="yes" Text="[DialogBitmap]" />
                 <Control Id="Title" Type="Text" X="130" Y="20" Width="230" Height="50" Transparent="yes"
                     NoPrefix="yes">
@@ -161,7 +161,7 @@
                     <Publish Event="Reinstall" Value="ALL">MaintenanceForm_Action="Repair"</Publish>
                     <Publish Property="REMOVE" Value="ALL">MaintenanceForm_Action="Remove"</Publish>
                     <Publish Event="Remove" Value="ALL">MaintenanceForm_Action="Remove"</Publish>
-		    <!--                    <Publish Event="NewDialog" Value="[MaintenanceForm_NextArgs]">(MaintenanceForm_Action="Modify") AND (MaintenanceForm_NextArgs&lt;&gt;"")</Publish>-->
+                    <!--                    <Publish Event="NewDialog" Value="[MaintenanceForm_NextArgs]">(MaintenanceForm_Action="Modify") AND (MaintenanceForm_NextArgs&lt;&gt;"")</Publish>-->
                     <Publish Event="EndDialog" Value="Return">(MaintenanceForm_Action="Repair") OR (MaintenanceForm_Action="Remove") OR (MaintenanceForm_NextArgs="")</Publish>
                 </Control>
                 <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes"
@@ -309,7 +309,7 @@ Click Install to start the installation.</Text>
                     NoPrefix="yes">
                     <Text>WARNING: This computer program is protected by copyright law and international treaties. Unauthorized duplication or distribution of this program, or any portion of it, may result in severe civil or criminal penalties, and will be prosecuted to the maximum extent possible under the law.</Text>
                 </Control>
-		<Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+                <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
                 <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Disabled="yes"
                     Text="[ButtonText_Back]" />
                 <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes"
@@ -794,15 +794,15 @@ Click Install to start the installation.</Text>
                 <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Disabled="yes"
                     Text="[ButtonText_Cancel]" />
             </Dialog>
-            <RadioGroup Property="MaintenanceForm_Action">
-		    <!--                <RadioButton Text="&amp;Modify installation of[ProductName]" X="0" Y="0" Width="348" Height="17" Value="Modify"></RadioButton>-->
-		    <RadioButton Text="Re&amp;pair [ProductName]" X="0" Y="0" Width="348" Height="17" Value="Repair"></RadioButton>
-		    <RadioButton Text="&amp;Remove [ProductName]" X="0" Y="18" Width="348" Height="17" Value="Remove"></RadioButton>
-            </RadioGroup>
-            <RadioGroup Property="ApplicationUsers">
+            <RadioButtonGroup Property="MaintenanceForm_Action">
+<!--                <RadioButton Text="&amp;Modify installation of[ProductName]" X="0" Y="0" Width="348" Height="17" Value="Modify"></RadioButton>-->
+                <RadioButton Text="Re&amp;pair [ProductName]" X="0" Y="0" Width="348" Height="17" Value="Repair"></RadioButton>
+                <RadioButton Text="&amp;Remove [ProductName]" X="0" Y="18" Width="348" Height="17" Value="Remove"></RadioButton>
+            </RadioButtonGroup>
+            <RadioButtonGroup Property="ApplicationUsers">
                 <RadioButton Text="&amp;Anyone who uses this computer" X="0" Y="0" Width="200" Height="18" Value="AllUsers"></RadioButton>
                 <RadioButton Text="Only for &amp;me ([USERNAME])" X="0" Y="15" Width="200" Height="18" Value="OnlyCurrentUser"></RadioButton>
-            </RadioGroup>
+            </RadioButtonGroup>
             <UIText Id="NewFolder">Folder|New Folder</UIText>
         </UI>
     </Fragment>
