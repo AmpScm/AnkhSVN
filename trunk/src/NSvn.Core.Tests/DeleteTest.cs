@@ -17,7 +17,6 @@ namespace NSvn.Core.Tests
             base.SetUp();
             this.ExtractRepos();
             this.ExtractWorkingCopy();
-            this.ExtractWorkingCopy();
         }
 
         [TearDown]
@@ -28,19 +27,24 @@ namespace NSvn.Core.Tests
 
 		
         /// <summary>
-        /// Tests deleting a file in a working copy
+        /// Tests deleting files in a working copy
         /// </summary>
         /// //TODO: Implement the variable admAccessBaton
         [Test]
-        public void TestDeleteWCFile()
+        public void TestDeleteWCFiles()
         {
-            string path = Path.Combine( this.WcPath, "Form.cs" );
+            string path1 = Path.Combine( this.WcPath, "Form.cs" );
+            string path2 = Path.Combine( this.WcPath, "AssemblyInfo.cs" );
             ClientContext ctx = new ClientContext( );
 
-            CommitInfo info = Client.Delete( path, false, ctx );
+            CommitInfo info = Client.Delete( new string[]{ path1, path2 }, false, ctx );
 
-            Assertion.Assert( "File not deleted", !File.Exists( path ) );
-            Assertion.AssertEquals( "File not deleted", 'D', this.GetSvnStatus( path ) );
+            Assertion.Assert( "File not deleted", !File.Exists( path1 ) );
+            Assertion.Assert( "File not deleted", !File.Exists( path2 ) );
+
+            Assertion.AssertEquals( "File not deleted", 'D', this.GetSvnStatus( path1 ) );
+            Assertion.AssertEquals( "File not deleted", 'D', this.GetSvnStatus( path2 ) );
+            Assertion.AssertSame( "CommitInfo should be invalid", CommitInfo.Invalid, info );
            
         }
 
@@ -49,15 +53,21 @@ namespace NSvn.Core.Tests
         /// </summary>
         //TODO: Implement the variable admAccessBaton
         [Test]
-        public void TestDeleteReposDir()
+        public void TestDeleteFromRepos()
         {
-            string path = Path.Combine( this.ReposUrl, @"doc" );
+            string path1 = Path.Combine( this.ReposUrl, @"doc" );
+            string path2 = Path.Combine( this.ReposUrl, "Form.cs" );
             ClientContext ctx = new ClientContext( );
 
-            CommitInfo info = Client.Delete( path, false, ctx );
+            CommitInfo info = Client.Delete( new string[]{path1, path2}, false, ctx );
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
             Assertion.Assert( "Directory wasn't deleted ", cmd.IndexOf( "doc" ) == -1 );
+            Assertion.Assert( "Directory wasn't deleted", cmd.IndexOf( "Form.cs" ) == -1 );
+
+            Assertion.Assert( "CommitInfo is invalid", CommitInfo.Invalid != info );
+
+
         }
 
     }

@@ -89,7 +89,7 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
-            static CommitInfo* MakeDir(String* path, ClientContext* context);
+            static CommitInfo* MakeDir(String* paths[], ClientContext* context);
 
             ///<summary>Delete a file/directory, either in a repository or a working copy.</summary>
             ///<param name="path">Path to the file/directory.</param>
@@ -107,7 +107,7 @@ namespace NSvn
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
             //TODO: Implement the variable admAccessBaton   
-            static CommitInfo* Delete(String* path, bool force, ClientContext* context);
+            static CommitInfo* Delete(String* paths[], bool force, ClientContext* context);
 
             ///<summary>Import file or directory path into repository directory url at head, 
             ///         authenticating with the authentication baton</summary>

@@ -69,13 +69,12 @@ namespace NSvn
         /// <param name="recursive">Whether subitems should be recursively committed.</param>
         public static void Commit( WorkingCopyResource[] resources, bool recursive )
         {
-            ArrayList targets = new ArrayList();
-            foreach( WorkingCopyResource resource in resources )
-                targets.Add( resource.Path );
+            string[] targets = GetPaths(resources);
 
-            Client.Commit( (string[])targets.ToArray(typeof(string)), !recursive, 
+            Client.Commit( targets, recursive, 
                 resources[0].ClientContext );
         }
+
 
         /// <summary>
         /// Reverts resources to the state before they where modified.
@@ -102,7 +101,7 @@ namespace NSvn
         /// <param name="force">Whether items should be deleted with force.</param>
         public void Remove( bool force )
         {
-            Client.Delete( this.Path, force, this.ClientContext );
+            Client.Delete( new string[]{ this.Path }, force, this.ClientContext );
         }
 
         /// <summary>
@@ -110,9 +109,13 @@ namespace NSvn
         /// </summary>
         /// <param name="resource">Items to be deleted.</param>
         /// <param name="force">Whether items should be deleted with force.</param>
-        public static void Remove( WorkingCopyResource resource, bool force)
+        public static void Remove( WorkingCopyResource[] resources, bool force)
         {
-            Client.Delete( resource.Path, force, resource.ClientContext );
+            if ( resources.Length == 0 )
+                return;
+
+            string[] paths = GetPaths( resources );
+            Client.Delete( paths, force, resources[0].ClientContext );
         }
                 
         /*
@@ -250,6 +253,20 @@ namespace NSvn
                 this.DoInvalidate();
             }
         }
+
+        /// <summary>
+        /// Get the paths from a set of WorkingCopyResource objects.
+        /// </summary>
+        /// <param name="resources"></param>
+        /// <returns>An array of strings containing the paths.</returns>
+        protected static string[] GetPaths(WorkingCopyResource[] resources)
+        {
+            ArrayList targets = new ArrayList();
+            foreach( WorkingCopyResource resource in resources )
+                targets.Add( resource.Path );
+            return (string[])targets.ToArray( typeof( string ) );
+        }
+
 
         /// <summary>
         /// A method that can be overridden by derived classes in order to invalidate
