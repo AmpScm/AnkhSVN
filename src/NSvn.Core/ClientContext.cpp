@@ -25,12 +25,9 @@ namespace NSvn
             }
 
             // is there an auth baton? (should be)
-            if ( this->AuthBaton != 0 )
-            {
-                ctx->auth_baton = this->CreateAuthBaton( pool, this->AuthBaton );
-            }
-
-            // client configu
+            ctx->auth_baton = this->CreateAuthBaton( pool, this->AuthBaton );
+            
+            // client configuration
             if ( this->ClientConfig != 0 )
             {
                 throw new Exception( "This isnt implemented yet" );
@@ -49,24 +46,39 @@ namespace NSvn
         svn_auth_baton_t* ClientContext::CreateAuthBaton( const Pool& pool, 
             AuthenticationBaton* baton )
         {
-            // create an array to put our providers in
-            apr_array_header_t* providers = apr_array_make( pool, baton->Providers->Count, 
-                sizeof( svn_auth_provider_object_t* ) );
-
-            // put our providers in the array
-            for( int i = 0; i < baton->Providers->Count; i++ )
+            apr_array_header_t* providers = 0;
+            // any providers provided?
+            if ( baton != 0 )
             {
-                svn_auth_provider_object_t* providerObject = 
-                    this->CreateProvider( pool, baton->Providers->Item[i] );
+                 // create an array to put our providers in
+                providers = apr_array_make( pool, baton->Providers->Count, 
+                    sizeof( svn_auth_provider_object_t* ) );
 
-                *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
-                    providerObject;
+                // put our providers in the array
+                for( int i = 0; i < baton->Providers->Count; i++ )
+                {
+                    svn_auth_provider_object_t* providerObject = 
+                        this->CreateProvider( pool, baton->Providers->Item[i] );
+
+                    *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
+                        providerObject;
+                }
             }
+            else
+            {
+                // no providers - just give them the invalid provider
+                providers = apr_array_make( pool, 1, 
+                    sizeof( svn_auth_provider_object_t* ) );
+                svn_auth_provider_object_t* providerObject = 
+                    this->CreateProvider( pool, InvalidProvider::Instance );
+                *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
+                        providerObject;
+            }
+
 
             // create the actual baton
             svn_auth_baton_t* ab;
             svn_auth_open( &ab, providers, pool );
-
 
             return ab;
         }
@@ -195,4 +207,14 @@ namespace
     }
 
 
+    // global object that ensures that APR is initialized
+    class Initializer
+    {
+    public:
+        Initializer()
+        {
+            apr_initialize();
+        }
+
+    } initializerDummy;
 }

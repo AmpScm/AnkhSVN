@@ -143,6 +143,9 @@
 				RelativePath="CommitInfo.h">
 			</File>
 			<File
+				RelativePath="ICredential.h">
+			</File>
+			<File
 				RelativePath="ManagedPointer.h">
 			</File>
 			<File
@@ -156,6 +159,9 @@
 			</File>
 			<File
 				RelativePath="Revision.h">
+			</File>
+			<File
+				RelativePath="SimpleCredential.h">
 			</File>
 			<File
 				RelativePath="Stdafx.h">

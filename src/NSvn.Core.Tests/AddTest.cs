@@ -13,9 +13,10 @@ namespace NSvn.Core.Tests
     public class AddTest : TestBase
     {
         [SetUp]
-        public void SetUp()
+        public override void SetUp()
         {
             this.ExtractWorkingCopy();
+           
 
             this.notifications = new ArrayList();
         }

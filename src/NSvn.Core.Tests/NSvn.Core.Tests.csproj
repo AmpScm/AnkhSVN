@@ -87,6 +87,16 @@
                     AssemblyName = "SharpZipLib"
                     HintPath = "bin\Debug\SharpZipLib.dll"
                 />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -102,12 +112,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CleanupTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MakeDirTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NSvn.Core.Tests.build"
                     BuildAction = "None"
                 />
                 <File
                     RelPath = "repos.zip"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "RevertTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "TestBase.cs"

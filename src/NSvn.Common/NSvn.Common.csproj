@@ -116,6 +116,16 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "ICredential.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InvalidProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NSvn.Common.build"
                     BuildAction = "None"
                 />

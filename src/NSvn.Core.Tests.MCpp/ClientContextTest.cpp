@@ -46,22 +46,28 @@ __gc class DummyProvider : public IAuthenticationProvider
     }
 };
 
-__gc class InvalidProvider : public IAuthenticationProvider
-{
-    Credential* FirstCredentials()
-    {
-        return Credential::Invalid;
-    }
 
-    Credential* NextCredentials()
-    {
-        return Credential::Invalid;
-    }
-};
 
 
 struct svn_auth_iterstate_t
 {};
+
+void NSvn::Core::Tests::MCpp::ClientContextTest::TestEmptyAuthBaton()
+{
+    Pool pool;
+    
+    ClientContext* c = new ClientContext( 0 );
+    svn_client_ctx_t* ctx = c->ToSvnContext( pool );
+
+    svn_auth_cred_simple_t* cred;
+    svn_auth_iterstate_t* iterState;
+
+    svn_error_t* err = svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, 
+        SVN_AUTH_CRED_SIMPLE, 
+        ctx->auth_baton, pool );
+    Assertion::Assert( "Error returned", err == 0 );
+    Assertion::Assert( "cred not null", cred == 0 );
+}
 
 
 void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
@@ -93,9 +99,8 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
 
 
     // now try with the invalid credentials
-    provider = new InvalidProvider();
     bat = new AuthenticationBaton();
-    bat->Providers->Add( provider );
+    bat->Providers->Add( InvalidProvider::Instance );
 
     c = new ClientContext( 0, bat );
 
