@@ -41,7 +41,7 @@ namespace NSvn.Core.Tests
                 if ( this.WcPath != null )
                     this.RecursiveDelete( this.wcPath );
             }
-            catch( NSvn.Common.SvnException )
+            catch( Exception )
             {
                 // swallow 
             }
