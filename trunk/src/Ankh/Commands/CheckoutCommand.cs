@@ -9,8 +9,6 @@ namespace Ankh.Commands
     /// <summary>
     /// A command that lets you view a repository file.
     /// </summary>
-    [VSNetCommand("Checkout", Tooltip="Checkout this file or foder", Text = "Checkout" ),
-    VSNetControl( "ReposExplorer", Position = 1 ) ]
     internal abstract class CheckoutCommand : CommandBase
     {
         #region ICommand Members
