@@ -27,7 +27,11 @@ namespace Ankh.Solution
         public override void GetResources(IList list, bool getChildItems, 
             ResourceFilterCallback filter )
         {
-            if ( this.resources == null ) return;
+            // If an action on an uninitialized item is desired, initialize it now.
+            // This is too cpu intensive for projects and solutions and therefore
+            // only done for ProjectItems.
+            if ( this.CurrentStatus == NodeStatus.StatusPending && this.resources == null )
+                FindResources();
 
             foreach( SvnItem item in this.resources )
             {
