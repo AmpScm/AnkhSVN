@@ -42,10 +42,10 @@ namespace NSvn
 
 	        static CommitInfo* Import(String* path, String* url, String* newEntry, bool nonRecursive, 
                 ClientContext* context);
-
+*/
 	        static CommitInfo* Commit(String __gc* targets[], bool nonRecursive, ClientContext* context);
 
-            TO-DO:  Core::Revision to be implemented */
+            //TO-DO:  Core::Revision to be implemented 
 	        static StringDictionary* Status(long* youngest, String* path, bool descend, 
                 bool getAll, bool upDate,  bool noIgnore, ClientContext* context);
  /*           
@@ -101,6 +101,8 @@ namespace NSvn
             static void ByteArrayToSvnString( svn_string_t* string, Byte array[], 
                 const Pool& pool );
             static String* CanonicalizePath( String* path );
+
+            static apr_array_header_t* StringArrayToAprArray( String* strings[], Pool& pool );
         };
     }
 }
