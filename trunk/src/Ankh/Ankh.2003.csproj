@@ -157,12 +157,6 @@
                     Lcid = "0"
                     WrapperTool = "tlbimp"
                 />
-                <Reference
-                    Name = "VSLangProj"
-                    AssemblyName = "VSLangProj"
-                    HintPath = "I:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\PublicAssemblies\VSLangProj.dll"
-                    AssemblyFolderKey = "hklm\publicassemblies"
-                />
             </References>
         </Build>
         <Files>
