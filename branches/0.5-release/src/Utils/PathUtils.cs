@@ -14,6 +14,35 @@ namespace Utils
         }
 
         /// <summary>
+        /// Make sure all paths are on the same form, lower case and rooted.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string NormalizePath( string path )
+        {
+            return NormalizePath( path, Environment.CurrentDirectory );           
+        }
+
+        /// <summary>
+        /// Make sure all paths are on the same form, lower case and rooted.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string NormalizePath( string path, string basepath )
+        {
+            string normPath = path.Replace( "/", "\\" );
+            if ( !Path.IsPathRooted( normPath ) )
+                normPath = Path.Combine( basepath, normPath );
+
+            if ( normPath[normPath.Length-1] == '\\' )
+                normPath = normPath.Substring(0, normPath.Length-1);
+
+            return normPath.ToLower();
+        }
+
+
+
+        /// <summary>
         /// Determines whether path is in the tree under directory.
         /// </summary>
         /// <param name="path"></param>
