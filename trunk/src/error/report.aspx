@@ -9,13 +9,13 @@
         <meta content="JavaScript" name="vs_defaultClientScript">
         <meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
     </HEAD>
-    <body bgColor="#fef2be" ms_positioning="GridLayout">
+    <body bgColor="#ffffff" ms_positioning="GridLayout">
         <form id="Form1" method="post" runat="server">
             <P><asp:textbox id="emailBox" style="Z-INDEX: 102; LEFT: 400px; POSITION: absolute; TOP: 528px" runat="server" Width="192px"></asp:textbox></P>
             <P><asp:textbox id="errorMessageBox" style="Z-INDEX: 101; LEFT: 11px; POSITION: absolute; TOP: 176px" runat="server" ReadOnly="True" Height="292px" Columns="80" Rows="18" TextMode="MultiLine"></asp:textbox></P>
             <DIV style="DISPLAY: inline; Z-INDEX: 106; LEFT: 16px; WIDTH: 224px; POSITION: absolute; TOP: 88px; HEIGHT: 32px" ms_positioning="FlowLayout"><FONT face="Arial Narrow" size="5">Error 
                     report page</FONT></DIV>
-            <P><asp:image id="Image1" style="Z-INDEX: 105; LEFT: 8px; POSITION: absolute; TOP: 16px" runat="server" Width="640px" Height="48px" ImageUrl="Ankh.png"></asp:image></P>
+            <P><asp:image id="Image1" style="Z-INDEX: 105; LEFT: 8px; POSITION: absolute; TOP: 8px" runat="server" Width="634px" Height="74px" ImageUrl="file:///C:\gr03-10\finalproject\src\error\ankh.png"></asp:image></P>
             <P><asp:textbox id="commentsBox" style="Z-INDEX: 104; LEFT: 16px; POSITION: absolute; TOP: 520px" runat="server" Columns="40" Rows="6" TextMode="MultiLine"></asp:textbox></P>
             <DIV style="DISPLAY: inline; Z-INDEX: 108; LEFT: 16px; WIDTH: 136px; POSITION: absolute; TOP: 496px; HEIGHT: 24px" ms_positioning="FlowLayout"><FONT face="Arial Narrow">Additional 
                     comments:</FONT></DIV>
