@@ -121,7 +121,7 @@ namespace Ankh.UI
         private void NewNameChanged(object sender, System.EventArgs e)
         {
             if ( this.newNameTextBox.Text != String.Empty &&
-                this.newNameTextBox.Text != this.oldName )
+                String.Compare(this.newNameTextBox.Text, this.oldName, true) != 0 )
                 this.okButton.Enabled = true;
             else 
                 this.okButton.Enabled = false;
