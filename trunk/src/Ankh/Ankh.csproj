@@ -326,6 +326,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\RunSvnCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\SaveToFileCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -1,3 +1,3 @@
 REGEDIT4
-[HKEY_CURRENT_USER\SOFTWARE\Microsoft\VisualStudio\7.0\AddIns\Ankh]
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\VisualStudio\7.1\AddIns\Ankh]
 "CommandPreload"=dword:1
