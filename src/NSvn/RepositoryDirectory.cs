@@ -108,7 +108,7 @@ namespace NSvn
 
         
 
-        private readonly Regex NAME = new Regex( 
-            @"\w{3,4}:///?[\w\-\.\:]+(:\d+)?(/\w+)*/(\w+)+/?" );
+        private static readonly Regex NAME = new Regex( 
+            @"[\w\+\-]+:///?[\w\-\.\:]+(:\d+)?(/\w+)*/([\w\.]+)+/?" );
     }
 }
