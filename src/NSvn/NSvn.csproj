@@ -92,7 +92,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ILocalItem.cs"
+                    RelPath = "ILocalResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -107,13 +107,9 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "LocalItemDictionary.cs"
+                    RelPath = "LocalResourceDictionary.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LocalItemDictionary.xml"
-                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "NotificationEventArgs.cs"
@@ -140,12 +136,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RepositoryItem.cs"
+                    RelPath = "RepositoryResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SvnItem.cs"
+                    RelPath = "SvnResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -160,7 +156,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "UnversionedItem.cs"
+                    RelPath = "UnversionedResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -175,7 +171,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WorkingCopyItem.cs"
+                    RelPath = "WorkingCopyResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

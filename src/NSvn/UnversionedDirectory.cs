@@ -5,7 +5,7 @@ namespace NSvn
 	/// <summary>
 	/// Represents an unversioned directory in a working copy.
 	/// </summary>
-	public class UnversionedDirectory : UnversionedItem
+	public class UnversionedDirectory : UnversionedResource
 	{
         /// <summary>
         /// Constructor.

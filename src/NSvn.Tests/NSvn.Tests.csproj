@@ -126,7 +126,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "UnversionedItemTest.cs"
+                    RelPath = "UnversionedResourceTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -136,7 +136,7 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "WorkingCopyItemTest.cs"
+                    RelPath = "WorkingCopyResourceTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

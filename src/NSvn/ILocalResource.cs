@@ -5,7 +5,7 @@ namespace NSvn
 	/// <summary>
 	/// TODO: doc-comment here
 	/// </summary>
-	public interface ILocalItem
+	public interface ILocalResource
 	{
         /// <summary>
         /// The file system path to the item.
