@@ -8,7 +8,7 @@ namespace NSvn
 	/// <summary>
 	/// Represents an item in the repository.
 	/// </summary>
-	public class RepositoryResource : SvnResource
+	public abstract class RepositoryResource : SvnResource
 	{
         /// <summary>
         /// Constructor.
@@ -31,6 +31,12 @@ namespace NSvn
         {
             // empty
         }
+
+        /// <summary>
+        /// Accept a RepositoryResourceVisitor.
+        /// </summary>
+        /// <param name="visitor">The RepositoryResourceVisitor to accept.</param>
+        public abstract void Accept( RepositoryResourceVisitor visitor );
 
 
 

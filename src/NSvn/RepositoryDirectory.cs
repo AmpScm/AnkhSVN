@@ -78,5 +78,14 @@ namespace NSvn
             return new RepositoryDirectory( url, revision ).Checkout( 
                 localPath, recurse );
         }
+
+        /// <summary>
+        /// Accept a RepositoryResourceVisitor.
+        /// </summary>
+        /// <param name="visitor">The RepositoryResourceVisitor to accept.</param>
+        public override void Accept( RepositoryResourceVisitor visitor )
+        {
+            visitor.VisitDirectory( this );
+        }
 	}
 }
