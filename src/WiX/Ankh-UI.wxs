@@ -449,12 +449,12 @@ Click Install to start the installation.</Text>
                     <Text>&amp;Virtual directory:</Text>
                 </Control>
                 <Control Id="VDirEdit" Type="Edit" X="18" Y="126" Width="252" Height="18" Property="TARGETVDIR"
-                    Sunken="yes" Text="" />
+                    Sunken="yes" />
                 <Control Id="PortLabel" Type="Text" X="18" Y="150" Width="348" Height="12" TabSkip="no">
                     <Text>&amp;Port:</Text>
                 </Control>
                 <Control Id="PortEdit" Type="Edit" X="18" Y="162" Width="48" Height="18" Property="TARGETPORT"
-                    Sunken="yes" Text="" />
+                    Sunken="yes" />
                 <Control Id="Logo" Type="Text" X="4" Y="228" Width="44" Height="12" Disabled="yes" Text="[LogoText]" />
                 <Control Id="BottomLine" Type="Line" X="4" Y="234" Width="370" Height="0" />
                 <Control Id="OKButton" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes"
@@ -697,7 +697,7 @@ Click Install to start the installation.</Text>
                     <Subscribe Event="ScriptInProgress" Attribute="ScriptInProgress" />
                     <Subscribe Event="ActionText" Attribute="Text" />
                 </Control>
-                <Control Id="RemainingLabel" Type="Text" X="64" Y="125" Width="300" Height="12" Text="">
+                <Control Id="RemainingLabel" Type="Text" X="64" Y="125" Width="300" Height="12" >
                     <Subscribe Event="TimeRemaining" Attribute="TimeRemaining" />
                 </Control>
                 <Control Id="InstalledBody" Type="Text" X="32" Y="63" Width="300" Height="12">
