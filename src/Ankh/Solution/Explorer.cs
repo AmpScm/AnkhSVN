@@ -95,7 +95,7 @@ namespace Ankh.Solution
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
-                    node.UpdateStatus();
+                    node.UpdateStatus( true );
             }
         }
 
@@ -132,7 +132,7 @@ namespace Ankh.Solution
         /// <param name="item"></param>
         public void UpdateStatus( ProjectItem item )
         {
-            ((TreeNode)this.projectItems[item]).UpdateStatus();
+            ((TreeNode)this.projectItems[item]).UpdateStatus( true );
         }
 
  

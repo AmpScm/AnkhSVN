@@ -39,11 +39,7 @@ namespace Ankh.Solution
             if ( item.Object is Project )
                 node = new ProjectNode( item, hItem, explorer, parent );
             else if ( item.Object is ProjectItem )
-                node = new ProjectItemNode( item, hItem, explorer, parent );
-
-            // make sure it has the correct status
-            if ( node != null )
-                node.UpdateStatus();
+                node = new ProjectItemNode( item, hItem, explorer, parent );           
 
             return node;
         }
@@ -54,7 +50,7 @@ namespace Ankh.Solution
             if ( explorer.DTE.Solution.FullName != string.Empty )
             {
                 TreeNode node = new SolutionNode( item, hItem, explorer );
-                node.UpdateStatus();
+                node.UpdateStatus( true );
                 return node;
             }
             else
@@ -90,17 +86,25 @@ namespace Ankh.Solution
         }
 
         /// <summary>
-        /// Updates the status icon of this node.
+        /// Updates the status icon of this node and parents.
         /// </summary>
-        public void UpdateStatus()
-        {
+        public void UpdateStatus( bool recursive )
+        {      
+
             // update status on the children first
-            foreach( TreeNode node in this.Children )
-                node.UpdateStatus();
+            if ( recursive )
+            {
+                foreach( TreeNode node in this.Children )
+                    node.UpdateStatus( true );
+            }
 
             // text or property changes on the project file itself?
-            StatusKind status = this.GetStatus();
-            this.SetStatusImage( status );
+            this.currentStatus = this.GetStatus();
+            this.SetStatusImage( this.currentStatus );
+
+            // propagate to the parent nodes.
+            if ( this.Parent != null )
+                this.Parent.PropagateStatus( this.currentStatus );
         }
 
         /// <summary>
@@ -129,6 +133,17 @@ namespace Ankh.Solution
         protected virtual StatusKind GetStatus()
         {
             return StatusKind.None;
+        }
+
+        /// <summary>
+        /// Intended to be called from child nodes if their status has changed.
+        /// </summary>
+        /// <param name="status"></param>
+        protected virtual void PropagateStatus( StatusKind status )
+        {
+            // only propagate if there is a new status
+            if ( status != this.currentStatus )
+                this.UpdateStatus( false );
         }
 
         /// <summary>
@@ -233,6 +248,7 @@ namespace Ankh.Solution
         private IntPtr hItem;
         private IList children;
         private Explorer explorer;
+        private StatusKind currentStatus;
         private static IDictionary statusMap = new Hashtable();
     }
 }

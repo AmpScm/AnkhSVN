@@ -203,8 +203,12 @@ namespace Ankh
 
         public static void HandleError( Exception ex )
         {
+#if REPORTERROR
+            Utils.ErrorMessage.QuerySendByWeb( "http://arild.no-ip.com/error/report.aspx", ex );
+#else
             System.Windows.Forms.MessageBox.Show( ex.ToString() );
-            //Utils.ErrorMessage.QuerySendByWeb( "http://arild.no-ip.com/error/report.aspx", ex );
+#endif
+            //
         }        
         
 
