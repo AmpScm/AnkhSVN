@@ -824,13 +824,13 @@ Click Install to start the installation.</Text>
                     Text="[ButtonText_Cancel]" />
             </Dialog>
             <RadioGroup Property="MaintenanceForm_Action">
-                <RadioButton Text="&amp;Modify installation of[ProductName]" X="0" Y="0" Width="348" Height="17">Modify</RadioButton>
-                <RadioButton Text="Re&amp;pair [ProductName]" X="0" Y="18" Width="348" Height="17">Repair</RadioButton>
-                <RadioButton Text="&amp;Remove [ProductName]" X="0" Y="36" Width="348" Height="17">Remove</RadioButton>
+                <RadioButton Text="&amp;Modify installation of[ProductName]" X="0" Y="0" Width="348" Height="17" Value="Modify"></RadioButton>
+                <RadioButton Text="Re&amp;pair [ProductName]" X="0" Y="18" Width="348" Height="17" Value="Repair"></RadioButton>
+                <RadioButton Text="&amp;Remove [ProductName]" X="0" Y="36" Width="348" Height="17" Value="Remove"></RadioButton>
             </RadioGroup>
             <RadioGroup Property="ApplicationUsers">
-                <RadioButton Text="&amp;Anyone who uses this computer" X="0" Y="0" Width="200" Height="18">AllUsers</RadioButton>
-                <RadioButton Text="Only for &amp;me ([USERNAME])" X="0" Y="15" Width="200" Height="18">OnlyCurrentUser</RadioButton>
+                <RadioButton Text="&amp;Anyone who uses this computer" X="0" Y="0" Width="200" Height="18" Value="AllUsers"></RadioButton>
+                <RadioButton Text="Only for &amp;me ([USERNAME])" X="0" Y="15" Width="200" Height="18" Value="OnlyCurrentUser"></RadioButton>
             </RadioGroup>
             <UIText Id="NewFolder">Folder|New Folder</UIText>
         </UI>
