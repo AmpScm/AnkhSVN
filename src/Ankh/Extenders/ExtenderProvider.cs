@@ -1,7 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
 using EnvDTE;
-using VSLangProj;
 using System.Reflection;
 using System.Collections;
 using NSvn;
