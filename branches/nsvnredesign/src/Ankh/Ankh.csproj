@@ -235,6 +235,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\CheckoutSolutionCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\CleanupCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
