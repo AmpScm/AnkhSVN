@@ -72,6 +72,16 @@
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
+                <Reference
+                    Name = "NSvn.Core"
+                    Project = "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
+                    Package = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
+                />
+                <Reference
+                    Name = "NSvn.Common"
+                    Project = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -82,8 +92,33 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ILocalItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ILogMessageProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NSvn.build"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "WorkingCopyDirectory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkingCopyFile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkingCopyItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
             </Include>
         </Files>
