@@ -56,48 +56,7 @@ namespace Ankh.EventSinks
 
         protected void ItemRenamed( ProjectItem item, string oldName )
         {
-            try
-            {
-                // rename on a folder will call rename on all subitems.
-                if ( item.Name == oldName )
-                    return;
-
-                // assume theres only one
-                string newPath = item.get_FileNames(1);
-
-                // find the parent dir
-                string noTrailing = newPath[ newPath.Length - 1 ] == '\\' ? newPath.Substring( 0, newPath.Length-1 ) : 
-                    newPath;
-                string parentDir = Path.GetDirectoryName( noTrailing );
-
-                string oldPath = Path.Combine( parentDir, oldName );
-               
-                try
-                {
-                    this.Context.OutputPane.StartActionText( "Renaming" );
-
-                    RenameVisitor v = new RenameVisitor( oldPath, newPath );
-                    this.Context.SolutionExplorer.VisitResources( item, v, false );
-                }
-                catch( SvnClientException )
-                {
-                    // unable to rename - abort.
-                    this.Context.OutputPane.WriteLine( "Ankh was unable to rename the item, most likely due to uncommitted changes." +
-                        Environment.NewLine + "The item is now out of Ankh's control. Sorry. Hope to do better next time.");
-                }
-                finally
-                {
-                    this.Context.OutputPane.EndActionText();
-                }
-
-                // we need to refresh the parents, since the actual treenode is replaced.
-               this.Context.SolutionExplorer.RefreshSelectionParents();
-            }
-            catch( Exception ex )
-            {
-                Error.Handle( ex );
-                throw;
-            }
+            // nothing here.
         }
 
         /// <summary>
@@ -113,40 +72,6 @@ namespace Ankh.EventSinks
                     resource.Remove( true );
                 }
             }
-        }
-
-        /// <summary>
-        /// A visitor that renames an item.
-        /// </summary>
-        private class RenameVisitor : LocalResourceVisitorBase
-        {
-            public RenameVisitor( string oldPath, string newPath )
-            {
-                this.oldPath = oldPath; 
-                this.newPath = newPath;
-            }
-
-            public override void VisitWorkingCopyFile(WorkingCopyFile file)
-            {
-                File.Move( this.newPath, this.oldPath );
-
-                // now have SVN rename it.
-                file.Move( this.newPath, true );
-            }
-
-            public override void VisitWorkingCopyDirectory(WorkingCopyDirectory dir)
-            {
-                // strip off the trailing \ if necessary
-                Directory.Move( this.newPath, this.oldPath );
-
-                dir.Move( this.newPath, true );
-            }
-
-
-
-            private string oldPath;
-            private string newPath;
-
         }
     }
 }
