@@ -24,33 +24,12 @@ namespace Ankh.Commands
             if ( browser.ShowDialog() != DialogResult.OK) 
                 return;
 
-            /// save parent folder path
-            this.parentPath = browser.DirectoryPath;
-
             CheckoutVisitor v = new CheckoutVisitor( );
             context.RepositoryController.VisitSelectedNodes( v );
 
             /// checkout all selected folders recurively
             foreach( RepositoryDirectory directory in v.Directories )
-            {
-                string directoryPath = GetPath( directory.Name );
-                directory.Checkout( directoryPath, true );
-            }
+                directory.Checkout( browser.DirectoryPath, true );
         }  
-
-        /// <summary>
-        /// Compines the current parent path with a foldername
-        /// </summary>
-        /// <param name="foldername">The foldername to combine</param>
-        /// <returns>The full path</returns>
-        protected virtual string GetPath( string foldername )
-        {
-            return Path.Combine( this.parentPath, foldername );
-        }
-
-        /// <summary>
-        /// This is where the checkout wil be placed
-        /// </summary>
-        private string parentPath;
 	}
 }
