@@ -91,6 +91,7 @@ namespace Ankh
             }
             if (notification.Action == NotifyAction.UpdateCompleted)
                 this.ankhContext.OutputPane.WriteLine("\nUpdated to revision {0}.", notification.RevisionNumber);
+            Application.DoEvents();
         }
         
         private string GetTemplate()
