@@ -23,14 +23,10 @@
         <Media Id="2" Cabinet="NSvn.cab" EmbedCab="yes" CompressionLevel="high" />
         
         <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id='ProgramFilesFolder' Name='PFiles'>
-                <Directory Id='AnkhInstallDir' Name='AnkhSVN' LongName='AnkhSVN'>
-                    <Merge Id="MSM_Ankh_msm" src="$(var.installdir)\Ankh.msm" Language="1033"
-                        DiskId="1" />
-                    <Merge Id="MSM_NSvn_msm" src="$(var.installdir)\NSvn.msm" Language="1033"
-                        DiskId="2" />
-                </Directory>
-            </Directory>
+            <Merge Id="MSM_Ankh_msm" src="$(var.installdir)\Ankh.msm" Language="1033"
+                DiskId="1" />
+            <Merge Id="MSM_NSvn_msm" src="$(var.installdir)\NSvn.msm" Language="1033"
+                DiskId="2" />
         </Directory>
         
         <Feature Id="DefaultFeature" Title="AnkhSVN" Level="1">
