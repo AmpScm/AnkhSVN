@@ -58,7 +58,7 @@
             
             
             
-            <arg value="/debug:pdbonly"/ unless="${debug}">
+            <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="${warninglevel}"/>
         </csc>
         
