@@ -63,7 +63,28 @@ namespace Ankh.Solution
         {
             string normdir = this.NormalizePath(dir);
             if ( this.deletions.ContainsKey( normdir ) )
-                return (IList)this.deletions[normdir];
+            {
+                // we need to make sure at this point that they are still valid
+                IList list = (IList)this.deletions[normdir];
+                IList newList = new ArrayList();
+                foreach( SvnItem item in list )
+                {
+                    // this item still valid?
+                    item.Refresh(this.client);
+                    if ( item.Status.TextStatus == StatusKind.Deleted )
+                        newList.Add( item );
+                }
+                if ( newList.Count > 0 )
+                {
+                    this.deletions[normdir] = newList;
+                    return (IList)this.deletions[normdir];
+                }
+                else
+                {
+                    this.deletions.Remove(normdir);             
+                    return new SvnItem[]{};
+                }
+            }
             else
                 return new SvnItem[]{};
         }
