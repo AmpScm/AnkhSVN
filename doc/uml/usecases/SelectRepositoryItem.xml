@@ -19,6 +19,12 @@
                 <Step>The developer specifies an URL to the repository</Step>
             </FlowElement>
             <FlowElement>
+                <Step>Developer provides login credentials if required</Step>
+            </FlowElement>
+            <FlowElement>
+                <Step>SVN connects to repository and requests a list of files</Step>
+            </FlowElement>
+            <FlowElement>
                 <Step>The repository files are displayed in a tree-view</Step>
             </FlowElement>
             <FlowElement>
