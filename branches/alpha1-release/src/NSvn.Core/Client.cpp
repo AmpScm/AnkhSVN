@@ -104,15 +104,12 @@ NSvn::Core::StatusDictionary* NSvn::Core::Client::Status(
 
 NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
 {
-    String* directory;
-    
     svn_wc_adm_access_t* admAccess;
     Pool pool;
 
-    const char* trueDir = CanonicalizePath( directory, pool );
-
     // lock the directory
-    HandleError( svn_wc_adm_probe_open( &admAccess, 0, trueDir, false, false, pool ) );
+    HandleError( svn_wc_adm_probe_open( &admAccess, 0, CanonicalizePath( path, pool ), 
+        false, false, pool ) );
 
     //retrieve the status
     svn_wc_status_t* status;    
