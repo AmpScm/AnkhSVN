@@ -3,6 +3,7 @@ using System;
 using EnvDTE;
 using NSvn.Core;
 using Microsoft.Office.Core;
+using Ankh.UI;
 
 namespace Ankh.Commands
 {
@@ -36,6 +37,26 @@ namespace Ankh.Commands
             {
                 this.command = value;
             }
+        }
+
+        /// <summary>
+        /// Whether the Shift key is down.
+        /// </summary>
+        protected bool Shift
+        {
+            get
+            { 
+                return Utils.Win32.Win32.GetAsyncKeyState( 
+                    (int)System.Windows.Forms.Keys.ShiftKey ) != 0;
+            }
+        }
+
+        protected PathSelector GetPathSelector( string text )
+        {
+            PathSelector p = new PathSelector();
+            p.LabelText = text;
+            p.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
+            return p;
         }
 
         protected const vsCommandStatus Enabled = 
@@ -91,6 +112,15 @@ namespace Ankh.Commands
             return item.IsVersioned && !item.IsModified && item.IsFile;
         }
 
+        private void GetPathInfo(object sender, GetPathInfoEventArgs args)
+        {
+            SvnItem item = (SvnItem)args.Item;
+            args.IsDirectory = item.IsDirectory;
+            args.Path = item.Path;
+        }
+
         private EnvDTE.Command command;
+
+        
     }
 }
