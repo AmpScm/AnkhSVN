@@ -220,12 +220,7 @@ namespace Ankh.UI
 
                 this.Height -= diff;
                 this.messageLabel.Height = (int)size.Height;
-                this.stackTraceTextBox.Top = this.messageLabel.Bottom + STACKTRACEOFFSET;
-
-                this.errorIconPictureBox.Top = (this.messageLabel.Top + 
-                    (this.messageLabel.Height / 2) ) - 
-                    (this.errorIconPictureBox.Height/2) - STACKTRACEOFFSET;
-                
+                this.stackTraceTextBox.Top = this.messageLabel.Bottom + STACKTRACEOFFSET;                
             }
         }
 
