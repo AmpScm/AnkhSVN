@@ -5,6 +5,9 @@ using System.Collections;
 using System.ComponentModel;
 using Utils;
 using NSvn;
+using System.IO;
+using System.Windows.Forms;
+using System.Web;
 
 namespace ReposInstaller
 {
@@ -20,12 +23,30 @@ namespace ReposInstaller
 
         public override void Install( IDictionary state )
         {
-            string reposPath = this.Context.Parameters[ "repospath" ];
+            string reposPath = Context.Parameters[ "repospath" ];
+            string wcPath = Context.Parameters[ "wcpath" ];
+            
+
+
+//            if (Directory.Exists( reposPath) )
+//                System.Windows.Forms.MessageBox.Show(" Deleting: " + reposPath);
+//
+//                Directory.Delete(reposPath, true);
+//
+//            if (Directory.Exists( wcPath ) )
+//                System.Windows.Forms.MessageBox.Show(" Deleting: " + wcPath );
+//                Directory.Delete( wcPath, true );
+
+
             Zip.ExtractZipResource( reposPath, this.GetType(), "ReposInstaller.repos.zip" );
-
-            string reposUrl = "file:///" + reposPath.Replace( "\\", "/" );
-            string wcPath = this.Context.Parameters[ "wcpath" ];
-
+            System.Windows.Forms.MessageBox.Show( "Directory exisists:" 
+                + Directory.Exists( reposPath ).ToString() );
+            reposPath = Path.Combine( reposPath, "trunk" );
+            string reposUrl = "file:///" + reposPath.Replace( "\\", "/" ).Replace(" ", "%20" );
+            
+            System.Windows.Forms.MessageBox.Show( "reposPath: " + reposPath + Environment.NewLine
+                + "wcPath: " + wcPath + Environment.NewLine + "reposUrl:" + reposUrl);
+            
             RepositoryDirectory dir = new RepositoryDirectory( reposUrl );           
             dir.Checkout( wcPath, true );
         }

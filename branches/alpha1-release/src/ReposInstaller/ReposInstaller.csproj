@@ -87,6 +87,16 @@
                     AssemblyName = "System.Configuration.Install"
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Configuration.Install.dll"
                 />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Web.dll"
+                />
             </References>
         </Build>
         <Files>
