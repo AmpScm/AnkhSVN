@@ -23,32 +23,36 @@ namespace ReposInstaller
 
         public override void Install( IDictionary state )
         {
-            string reposPath = Context.Parameters[ "repospath" ];
-            string wcPath = Context.Parameters[ "wcpath" ];
-            
+            if ( MessageBox.Show( "Do you want to extract a test repository?", "Test repository",
+                MessageBoxButtons.YesNo ) == DialogResult.No )
+                return;
 
+            FolderBrowser folderBrowser = new FolderBrowser();
+            folderBrowser.OnlyFilesystem = true;
 
-//            if (Directory.Exists( reposPath) )
-//                System.Windows.Forms.MessageBox.Show(" Deleting: " + reposPath);
-//
-//                Directory.Delete(reposPath, true);
-//
-//            if (Directory.Exists( wcPath ) )
-//                System.Windows.Forms.MessageBox.Show(" Deleting: " + wcPath );
-//                Directory.Delete( wcPath, true );
+            if ( folderBrowser.ShowDialog() == DialogResult.Cancel )
+                return;
 
-
+            string reposPath = folderBrowser.DirectoryPath;
             Zip.ExtractZipResource( reposPath, this.GetType(), "ReposInstaller.repos.zip" );
-            System.Windows.Forms.MessageBox.Show( "Directory exisists:" 
-                + Directory.Exists( reposPath ).ToString() );
-            reposPath = Path.Combine( reposPath, "trunk" );
-            string reposUrl = "file:///" + reposPath.Replace( "\\", "/" ).Replace(" ", "%20" );
-            
-            System.Windows.Forms.MessageBox.Show( "reposPath: " + reposPath + Environment.NewLine
-                + "wcPath: " + wcPath + Environment.NewLine + "reposUrl:" + reposUrl);
-            
+            state["repospath"] = reposPath;
+
+            if ( MessageBox.Show( "Do you want to check out a test working copy from the " + 
+                "repository?", "Working copy", MessageBoxButtons.YesNo ) == DialogResult.No )
+                return;
+
+            if ( folderBrowser.ShowDialog() == DialogResult.Cancel )
+                return;
+
+            string wcPath = folderBrowser.DirectoryPath;
+
+            string reposUrl = Path.Combine( reposPath, "trunk" );
+            reposUrl = "file:///" + reposPath.Replace( "\\", "/" ).Replace(" ", "%20" );
+
             RepositoryDirectory dir = new RepositoryDirectory( reposUrl );           
             dir.Checkout( wcPath, true );
+
+            state[ "wcpath" ] = wcPath;
         }
 	}
 }
