@@ -8,7 +8,7 @@ using Ankh.RepositoryExplorer;
 namespace Ankh.Commands
 {
 	/// <summary>
-	/// Summary description for ViewInVSNetCommand.
+	/// Command for checking out a folder
 	/// </summary>
     [VSNetCommand("CheckoutFolder", Tooltip="Checkout this folder", 
          Text = "Checkout Folder...", Bitmap = ResourceBitmaps.CheckoutDirectory ),
