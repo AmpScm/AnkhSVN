@@ -32,6 +32,9 @@ namespace Ankh.Commands
         }
         public override void Execute(Ankh.AnkhContext context)
         {
+            // make sure all files are saved
+            context.DTE.Documents.SaveAll();
+
             ResourceGathererVisitor v = new ResourceGathererVisitor();
             context.SolutionExplorer.VisitSelectedItems( v, true );
 

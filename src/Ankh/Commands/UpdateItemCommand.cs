@@ -38,6 +38,9 @@ namespace Ankh.Commands
         {
             try
             {
+                // save all files
+                context.DTE.Documents.SaveAll();
+
                 context.StartOperation( "Updating" );
                 // we assume by now that all items are working copy resources.
                 UpdateVisitor v = new UpdateVisitor();
