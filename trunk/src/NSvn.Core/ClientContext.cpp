@@ -6,6 +6,7 @@
 #include "UsernameCredential.h"
 #include "CommitItem.h"
 
+#include <svn_subst.h>
 //#include <svn_client.h>
 //#include <apr_pools.h>
 #include "Notification.h"
@@ -237,19 +238,25 @@ namespace
             ManagedPointer<LogMessageCallback*>* >( baton ) );
 
         // get the log message
-        String* logMessage = callback->Invoke( items );
+        StringHelper logMessage( callback->Invoke( items ) );
 
-        // get rid of all \r\n's
-        logMessage = logMessage->Replace( Environment::NewLine, "\n" );
+        // a null indicates a canceled commit
+        if ( static_cast<const char*>(logMessage) != 0 )
+        {
+            svn_string_t *logMsgString = svn_string_create ("", pool);
 
-        // the log message must be in UTF 8
-        Byte bytes[] = System::Text::Encoding::UTF8->GetBytes( logMessage );
-        *log_msg = static_cast<const char*>(apr_pcalloc( pool, bytes->Length + 1 ));
-        System::Runtime::InteropServices::Marshal::Copy( bytes, 0, 
-            const_cast<char*>(*log_msg), bytes->Length );
+            logMsgString->data = logMessage;
+            logMsgString->len = strlen(logMessage);
 
-        //make sure to terminate the string
-        (const_cast<char*>(*log_msg))[ bytes->Length ] = 0;
+            svn_string_t* encodedString = svn_string_create( "", pool );
+
+            HandleError( svn_subst_translate_string( &encodedString, 
+                logMsgString, NULL, pool ) );
+
+            *log_msg = encodedString->data;
+        }
+        else
+            *log_msg = 0;
 
         return SVN_NO_ERROR;
     }
