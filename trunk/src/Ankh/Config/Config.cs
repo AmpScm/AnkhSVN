@@ -46,19 +46,6 @@ namespace Ankh.Config {
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ankhsvn.com/Config.xsd")]
     public class ConfigRepositoryExplorer {
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("Url")]
-        public ConfigRepositoryExplorerUrl[] MruUrls;
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ankhsvn.com/Config.xsd")]
-    public class ConfigRepositoryExplorerUrl {
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string Value;
     }
     
     /// <remarks/>

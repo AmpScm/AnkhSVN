@@ -1,10 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Config xmlns="http://ankhsvn.com/Config.xsd">
     <RepositoryExplorer>
-        <MruUrls>
-            <Url>http://ankhsvn.com:8088/svn/test</Url>
-            <Url>http://svn.collab.net/repos/svn</Url>
-        </MruUrls>
     </RepositoryExplorer>    
     
     <!--This command line will be used for spawning an external diff program.
