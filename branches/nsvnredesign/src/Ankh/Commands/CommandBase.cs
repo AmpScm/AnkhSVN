@@ -67,6 +67,14 @@ namespace Ankh.Commands
                 return false;
         }
 
+        protected static bool UnversionedFilter( SvnItem item )
+        {
+            if ( item.Status.TextStatus == StatusKind.Unversioned )
+                return true;
+            else
+                return false;
+        }
+
         private EnvDTE.Command command;
     }
 }
