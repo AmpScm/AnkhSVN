@@ -22,11 +22,11 @@ namespace Ankh
         ///  Add a Conflict item the the Task List
         /// </summary>
         /// <param name="path">Path to the file containing the conflict.</param>
-        public void AddTask(String path)
+        public void AddTask(string path)
         {
             // Get the line number for adding to the task so that when the user clicks on 
             // the task it opens the file and goes to the line the conflict text starts on
-            int lineNumber = GetConflictLine(path);
+            int lineNumber = this.GetConflictLine(path);
 
             // At the task item 
             Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
@@ -55,7 +55,7 @@ namespace Ankh
             IList conflictItems =  this.context.SolutionExplorer.GetAllResources(true,   new ResourceFilterCallback(ConflictedFilter)); 
             foreach(SvnItem item in conflictItems)
             {
-                AddTask(item.Path);
+                this.AddTask(item.Path);
             }
         }
 
@@ -72,6 +72,29 @@ namespace Ankh
                     item.Delete(); 
             }
         }
+
+        /// <summary>   
+        ///  Look through the task items and delete the item
+        ///  associated with path
+        /// <param name="path">string: Path to file with a conflict</param>   
+        /// <returns>void</returns>   
+        public void RemoveTaskItem(string path)   
+        {   
+            Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+            TaskList taskList = (TaskList) win.Object;
+
+            foreach(TaskItem item in taskList.TaskItems)   
+            {   
+                if(item.Category == ConflictTaskItemCategory &&   
+                    item.FileName == path)   
+                {
+                    item.Delete();
+                    break;
+                }
+            }   
+        } 
+
+
         /// <summary>
         ///  Filter for getting conflicted items from the solution
         /// </summary>
@@ -96,13 +119,12 @@ namespace Ankh
             navigateHandled = true;
         }
 
-
         /// <summary>
         ///  Find the line that the conflict occurs on in the file with a conflict
         /// </summary>
-        /// <param name="path">String: Path to file with a conflict</param>
+        /// <param name="path">string: Path to file with a conflict</param>
         /// <returns>int: Line number conflict </returns>
-        private int GetConflictLine(String path) 
+        private int GetConflictLine(string path) 
         {
             int lineNumber = 1; 
             StreamReader sr = null;
@@ -113,7 +135,7 @@ namespace Ankh
                 // The using statement also closes the StreamReader.
                 sr = new StreamReader(path);
 
-                String line;
+                string line;
                 // Read and display lines from the file until the end of 
                 // the file is reached and not match
                 while ((line = sr.ReadLine()) != null && 
@@ -121,7 +143,6 @@ namespace Ankh
                     lineNumber++;
                 if(index == NotFound) 
                     lineNumber = 0;
-
             }
             catch (Exception ) 
             {
@@ -132,8 +153,8 @@ namespace Ankh
         }
 
         private AnkhContext context; 
-        private const String ConflictTaskItemCategory = "Conflict"; 
-        private const String SvnConflictString = "<<<<<<< .mine"; 
+        private const string ConflictTaskItemCategory = "Conflict"; 
+        private const string SvnConflictString = "<<<<<<< .mine"; 
         private const int NotFound = -1;
     }
 }

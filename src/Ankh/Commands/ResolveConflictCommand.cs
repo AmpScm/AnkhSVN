@@ -92,6 +92,10 @@ namespace Ankh.Commands
                 context.Client.Resolved( item.Path, false );
                 context.OutputPane.WriteLine( 
                     "Resolved conflicted state of {0}", item.Path );
+                
+                // delete the associated conflict task item
+                context.ConflictManager.RemoveTaskItem(item.Path);
+
             }
             else
             {
