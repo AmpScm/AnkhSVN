@@ -1,6 +1,6 @@
 using System;
 
-namespace Ankh.Commands
+namespace Ankh
 {
 	/// <summary>
 	/// An attribute that describes a VS.NET command.

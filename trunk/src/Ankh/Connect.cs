@@ -54,7 +54,7 @@ namespace Ankh
 			addInInstance = (AddIn)addInInst;
 
             this.commands= 
-                Ankh.Commands.Commands.RegisterCommands( applicationObject, addInInstance );           
+                Ankh.CommandMap.RegisterCommands( applicationObject, addInInstance );           
             
 
 			if(connectMode == Extensibility.ext_ConnectMode.ext_cm_UISetup)
@@ -162,7 +162,7 @@ namespace Ankh
 		{
 			if(neededText == EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedNone)
 			{
-                Ankh.Commands.ICommand cmd;
+                Ankh.ICommand cmd;
                 if ( (cmd = (ICommand)this.commands[commandName]) != null )
                     status = cmd.QueryStatus( this.applicationObject );
 
@@ -209,7 +209,7 @@ namespace Ankh
 		}
 		private _DTE applicationObject;
 		private AddIn addInInstance;
-        Ankh.Commands.Commands commands;
+        Ankh.CommandMap commands;
 		
 	}
 }

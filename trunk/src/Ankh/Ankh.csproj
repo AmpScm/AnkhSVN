@@ -82,6 +82,11 @@
                     AssemblyName = "EnvDTE"
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\EnvDTE.dll"
                 />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -92,12 +97,33 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Connect.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ICommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "VSNetCommandAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "VSNetControlAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\AddItemCommand.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

@@ -1,6 +1,6 @@
 using System;
 
-namespace Ankh.Commands
+namespace Ankh
 {
 	/// <summary>
 	/// An attribute used to describe where a command appears in the VS.NET IDE.

@@ -2,7 +2,7 @@
 
 using EnvDTE;
 
-namespace Ankh.Commands 
+namespace Ankh
 {
     /// <summary>
     /// Represents an Ankh command.
