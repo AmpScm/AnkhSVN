@@ -39,9 +39,21 @@
       <description>Logical
 </description>
     </file>
+    <file path="Client.png">
+      <realpath>doc/uml/Client.png</realpath>
+      <name>Client</name>
+      <description>Logical
+</description>
+    </file>
     <file path="UI.png">
       <realpath>doc/uml/UI.png</realpath>
       <name>UI</name>
+      <description>Logical
+</description>
+    </file>
+    <file path="Common.png">
+      <realpath>doc/uml/Common.png</realpath>
+      <name>Common</name>
       <description>Logical
 </description>
     </file>
