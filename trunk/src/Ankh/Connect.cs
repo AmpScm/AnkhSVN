@@ -101,6 +101,7 @@ namespace Ankh
         public void OnDisconnection(Extensibility.ext_DisconnectMode disconnectMode, ref System.Array custom)
         {
             Extenders.ExtenderProvider.Unregister( this.context.DTE );
+            this.context.Shutdown();
         }
 
         /// <summary>
