@@ -14,7 +14,7 @@ namespace Ankh.Commands
          Text = "Export a repository or local directory...", 
          Bitmap = ResourceBitmaps.Export),
     VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 ) ]
-    public class ExportCommand : CommandBase
+    internal class ExportCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
