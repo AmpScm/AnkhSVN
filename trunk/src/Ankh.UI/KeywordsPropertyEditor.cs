@@ -24,7 +24,7 @@ namespace Ankh.UI
         /// <summary>
         /// Resets the checkboxes.
         /// </summary>
-		public void Clear()
+		public void Reset()
 		{
 			this.dateCheckBox.Checked = false;
             this.authorCheckBox.Checked = false;

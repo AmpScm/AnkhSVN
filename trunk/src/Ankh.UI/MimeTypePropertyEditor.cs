@@ -25,7 +25,7 @@ namespace Ankh.UI
         /// <summary>
         /// Resets the textbox.
         /// </summary>
-		public void Clear()
+		public void Reset()
 		{
 			this.mimeTextBox.Text = "";
             this.dirty = false;

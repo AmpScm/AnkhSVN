@@ -268,7 +268,7 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void newButton_Click(object sender, System.EventArgs e)
         {
-            this.currentEditor.Clear();
+            this.currentEditor.Reset();
             nameCombo.Text = "";
             this.propListView.SelectedItems.Clear();
         }
@@ -312,7 +312,7 @@ namespace Ankh.UI
             }
 
             this.PopulateListView();
-            this.currentEditor.Clear();
+            this.currentEditor.Reset();
             nameCombo.Text = "";
         }
 
