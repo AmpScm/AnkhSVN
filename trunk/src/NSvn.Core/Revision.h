@@ -28,47 +28,16 @@ namespace NSvn
             static Revision* const Head = new Revision( svn_opt_revision_head );
 
             /// <summary>Creates a revision from a revision number</summary>
-            static Revision* FromNumber( int revision )
-            {
-                Revision* rev = new Revision( svn_opt_revision_number );
-                rev->revision = revision;
-                return rev;
-            }
+            static Revision* FromNumber( int revision );
 
             /// <summary>Creates a revision from a date</summary>
-            static Revision* FromDate( DateTime date )
-            {
-                Revision* rev = new Revision( svn_opt_revision_date);
-                rev->date = date;
-                return rev;
-            }
-
+            static Revision* FromDate( DateTime date );
 
             // convert to an svn_opt_revision_t*
             // allocate in pool
-            svn_opt_revision_t* ToSvnOptRevision( const Pool& pool )
-            {
-                svn_opt_revision_t* rev = static_cast<svn_opt_revision_t*>(
-                    pool.PCalloc( sizeof(*rev) ) );
-                rev->kind = this->kind;
+            svn_opt_revision_t* ToSvnOptRevision( const Pool& pool );
 
-                //what kind?                
-                switch( this->kind )
-                {
-                case svn_opt_revision_date:
-                    {
-                        rev->value.date = DateTimeToAprTime( this->date );
-                        break;
-                    }
-                case svn_opt_revision_number:
-                    rev->value.number = this->revision;
-                    break;
-                default:
-                    break;
-                }
-
-                return rev;
-            }
+            String* ToString();
 
         private:
             Revision( svn_opt_revision_kind kind ) : kind( kind )
