@@ -1,9 +1,10 @@
 
 # The URL to build from
-$ANKHSVN = "http://10.0.0.3/svn/finalproject/trunk/src"
+$ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/trunk"
+$ANKHSVN = "$ANKHSVN_ROOT/src"
 
 # version numbers to put in the filename
-$MAJOR, $MINOR, $PATCH, $LABEL = 0, 5, 6, "test"
+$MAJOR, $MINOR, $PATCH, $LABEL = 0, 6, 0, "rc1"
 
 # The URL of the Subversion version
 $SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.1.0/"
@@ -433,6 +434,15 @@ function do_subversion
 	 
 }
 
+function checkout_tools
+{
+    checkout "$ANKHSVN_ROOT/tools/WiX"
+    checkout "$ANKHSVN_ROOT/tools/nant"
+    $curdir=$(get-cwd)
+    $env:path = "$curdir\nant;$env:path"    
+    $script:wix_binary_dir = convert-path "WiX"
+}
+
 
 
 function do_ankh
@@ -440,17 +450,25 @@ function do_ankh
 	# do_subversion
 	#
 	checkout $ANKHSVN
+    
+    $REVISION = $(svnversion src)
 
 	do_subversion
 
-	$toname = "..\AnkhSetup-{0}.{1}.{2}{3}.msi" -f $MAJOR, $MINOR, $PATCH, $LABEL
+	$toname = "..\AnkhSetup-{0}.{1}.{2}.{3}-{4}.msi" -f $MAJOR, $MINOR, $PATCH, $REVISION, $LABEL
 
-	
+	checkout_tools
+
+    # get the version thing done
+    cmd /c "svn cat $ANKHSVN_ROOT/deploy.build > deploy.build" # must use cmd here since msh screws up file redir
+    nant /f:deploy.build version /D:checkout.dir=src /D:major.version=$MAJOR /D:minor.version=$MINOR /D:patch.version=$PATCH
+    
 	set-location "src"
 
 	if ( $USE_NANT )
-	{
-		nant /t:"net-1.0" /v wix "-D:svndir=$subversion_dir"
+	{      
+        
+		nant /t:"net-1.0" /v wix "-D:svndir=$subversion_dir" "-D:wix-binary.dir=$wix_binary_dir"
 
 		if ( ! $? ){ exit }
 
