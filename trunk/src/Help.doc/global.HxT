@@ -8,15 +8,15 @@
 	<HelpTOCNode Title="Introduction" Url="\Xml\introduction\introduction.xml">
 		<HelpTOCNode Title="Ankh" Url="\Xml\introduction\ankh.xml"/>
 		<HelpTOCNode Title="About Subversion" Url="\Xml\introduction\about_subversion.xml"/>
-		<HelpTOCNode Title="Revision controll" Url="\Xml\introduction\revision_controll.xml"/>
+		<HelpTOCNode Title="Revision control" Url="\Xml\introduction\revision_controll.xml"/>
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
 	<HelpTOCNode Title="Configuration" Url="\Xml\configuration\configuration.xml">
 		<HelpTOCNode Title="Setting up the Ankh addin" Url="\Xml\configuration\setting_up_anhk.xml"/>
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
 	<HelpTOCNode Title="Using Ankh" Url="\Xml\using-ankh\using_ankh.xml">
 		<HelpTOCNode Title="Output Window" Url="\Xml\keywords\output_window.xml"/>
-    <HelpTOCNode Title="Repository Explorer" Url="\Xml\using-ankh\repos_explorer.xml"/>
-    <HelpTOCNode Title="Basic work Cycle" Url="\Xml\using-ankh\basic_work_cycle.xml">
+		<HelpTOCNode Title="Repository Explorer" Url="\Xml\using-ankh\repos_explorer.xml"/>
+		<HelpTOCNode Title="Basic work Cycle" Url="\Xml\using-ankh\basic_work_cycle.xml">
 			<HelpTOCNode Title="Update the Working Copy" Url="\Xml\using-ankh\update_wc.xml"/>
 			<HelpTOCNode Title="Making changes" Url="\Xml\using-ankh\make_changes.xml"/>
 			<HelpTOCNode Title="Adding files" Url="\Xml\using-ankh\adding_files.xml"/>
@@ -31,8 +31,6 @@
 		<HelpTOCNode Title="Output window" Url="\Xml\keywords\output_window.xml"/>
 		<HelpTOCNode Title="Revisions: numbers, keywords and dates" Url="\Xml\Keywords\revision.xml"/>
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
-    <ToolData Name="MSTOCEXPST" Value="Expanded"/>
-    
-    
-    <ToolData Name="MSTOCMRUDIR" Value="C:\finalproject\ankh\src\Help.doc\Xml\keywords\"/>
-    <ToolData Name="MSTOCMRUFT" Value="0"/></HelpTOC>
+	<ToolData Name="MSTOCMRUDIR" Value="C:\finalproject\ankh\src\Help.doc\Xml\keywords\"/>
+	<ToolData Name="MSTOCMRUFT" Value="0"/>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOC>

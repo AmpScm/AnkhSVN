@@ -16,28 +16,28 @@
             <b>How to install:</b>
             <list>
                 <item>1. Start the installer.</item>
-                <item>2. Click the 'Next' button.</item>
-                <item>3. Read through and accept the license agreement. Select 'I agree' and then click the 'Next' button, or 'Cancel' if you do not agree to the license agreement.</item>
+                <item>2. Click the <b>Next</b> button.</item>
+                <item>3. Read through and accept the license agreement. Select <b>I agree</b> and then click the <b>Next</b>button, or <b>Cancel</b> if you do not agree to the license agreement.</item>
                 <item>4. Choose the destination folder where you want the Ankh addin to be installed.<br /></item>
-                <item>5. Click 'Next' to start the installation, or 'Cancel' to exit.</item>
-                <item>6. Click 'Yes' if you want to install a test repository and a working copy.</item>
+                <item>5. Click <b>Next</b> to start the installation, or <b>Cancel</b> to exit.</item>
+                <item>6. Click <b>Yes</b> if you want to install a test repository and a working copy.</item>
                 <item>7. Select the destination for the test repository and the working copy.</item>
-                <item>8. Please read through the 'README' file for known issues, installation problems and other issues conserning the Ankh addin.</item>
+                <item>8. Please read through the <b>README</b> file for known issues, installation problems and other issues conserning the Ankh addin.</item>
             </list>
           <br clear="ALL" />
           <b>How to disable the addin:</b>
           <img src="../../img/disable_ankh.png" align="left" />
           <br clear="all" /><br />
           <list>
-                <item>1. Open the 'Add-in manager' in Visual Studio .NET (It can be found under the 'Tools' menu). </item>
-                <item>2. Deselect Ankh under 'Available add-ins' . </item>
+                <item>1. Open the <b>Add-in manager</b>in Visual Studio .NET (It can be found under the 'Tools' menu). </item>
+                <item>2. Deselect Ankh under <b>Available add-ins</b>.</item>
             </list>
           <br clear="all" />
           <br /><br />
             
             <b>How to uninstall:</b>
             <br /><br />
-            There are to ways to uninstall Ankh. You can use Ankh installer, or you can use Windows 'Add/remove program' wizard.
+            There are to ways to uninstall Ankh. You can use Ankh installer, or you can use Windows <b>Add/remove program</b> wizard.
             Both will completly remove the Ankh Addin from your system.
             <br /><br />
             <b>Uninstallation with the Ankh installer:</b>
@@ -45,18 +45,18 @@
             <br clear="all" /><br />
             <list>
                 <item>1. Start Ankh intaller.</item>
-                <item>2. Select the 'Remove AnkhSVN addin' button.</item>
-                <item>3. Press 'Next'.</item>
+                <item>2. Select the <b>Remove AnkhSVN addin</b> button.</item>
+                <item>3. Press <b>Next</b>.</item>
             </list>
             <br clear="all" /><br />
             
-            <b>Uninstalling with Windows 'Add/remove program' wizard <img src="../../img/add_remove_programs.png" />:</b>
+            <b>Uninstalling with Windows <b>Add/remove program</b> wizard <img src="../../img/add_remove_programs.png" />:</b>
             <img src="../../img/uninstall_using_ms.png" align="left" />
             <br clear="all" /><br />
             <list>
-                <item>1. Start the 'Add/Remove programs' wizard (Found under Start -> Settings -> Control Panel </item>
-                <item>2. Locate 'AnkhSVN Addin'.</item>
-                <item>3. Select 'Remove'.</item>
+                <item>1. Start the <b>Add/Remove programs</b> wizard (Found under Start -> Settings -> Control Panel </item>
+                <item>2. Locate <b>AnkhSVN Addin</b>from the list.</item>
+                <item>3. Select <b>Remove</b>.</item>
             </list>
         </p>
     </section>

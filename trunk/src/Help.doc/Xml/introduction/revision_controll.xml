@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
-<doc title="Revision Controll">
+<doc title="Revision Control">
     <section>
         <p>
         In a typical software development environment, many developers will be engaged in work on 
@@ -11,7 +11,6 @@
         Version control tools allow an individual developer to maintain control over an item 
         such as a source file while they implement and test changes to it. 
         <br/><br/> 
-         
         </p>
     </section>   
     

@@ -6,20 +6,20 @@
             Besides the <link url="../keywords/status_icons.xml">status icons</link>
             in front of files in the Solution Explorer, 
             Ankh gives you a more detailed view of the changes made to files. 
-            This is done with the ‘Diff’ command. 
+            This is done with the <b>Diff</b> command. 
         </p>
         <br/><br/>
         <b>How to diff files:</b>
         <p>
+            <img src="../../img/menu-items/diff.png" align="left"/>
             <list>
                 <item>
                     <b>1.</b> Select and right click the file(s) you want to diff in 
-                              Solution Explorer. A menu will pop up.
+                              Solution Explorer.
                 </item>
                 <item>
                     <b>2.</b> Click the <b>Diff</b> command in the menu. 
                     <br/><br/>
-                    <img src="../../img/menu-items/diff.png" />
                     <br clear="all"/><br/>
                </item>
             </list>
@@ -31,8 +31,8 @@
                 <item><b>1.</b> Shows which file that has been diff'ed.</item>
                 <item><b>2.</b> Shows which revision the file is beeing diff'ed against.</item>
                 <item><b>3.</b> Shows the line number and position of a section that differs.</item>
-                <item><b>4.</b> '+' indicates added text fragment. </item>
-                <item><b>5.</b> '-' indicates removed text fragment. </item>
+                <item><b>4.</b> <b>+</b> indicates added text fragment. </item>
+                <item><b>5.</b> <b>-</b> indicates removed text fragment. </item>
             </list>
             <br clear="all"/>
         </p>
@@ -45,7 +45,7 @@
     <section>
         <p>
             <hr></hr>
-            <link url="removing_files.xml">back </link>
+            <link url="removing_files.xml">back</link> - 
             <link url="reverting_files.xml">next</link>
         </p>
     </section>   
