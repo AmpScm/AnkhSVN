@@ -25,6 +25,18 @@ namespace Ankh.EventSinks
         {
             try
             {
+                // do we want to automatically add it?
+                if ( this.Context.Config.AutoAddNewFiles )
+                {
+                    for( short i = 1; i <= item.FileCount; i++ )
+                    {
+                        string file = item.get_FileNames(i);
+                        SvnItem svnItem = this.Context.SolutionExplorer.StatusCache[ file ];
+                        if ( !svnItem.IsVersioned && svnItem.IsVersionable )
+                            this.Context.Client.Add( file, false );
+                    }
+                }
+
                 this.Context.SolutionExplorer.Refresh( item.ContainingProject );
             }
             catch( Exception ex )

@@ -33,6 +33,13 @@ namespace Ankh.Config {
         public string LogMessageTemplate;
         
         /// <remarks/>
+        public bool AutoAddNewFiles;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool AutoAddNewFilesSpecified;
+        
+        /// <remarks/>
         public ConfigSubversion Subversion;
     }
     
