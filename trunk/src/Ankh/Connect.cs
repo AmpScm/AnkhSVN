@@ -6,6 +6,7 @@ namespace Ankh
 	using Extensibility;
 	using System.Runtime.InteropServices;
 	using EnvDTE;
+    using System.Diagnostics;
 
     using Ankh.Commands;
 
@@ -131,8 +132,11 @@ namespace Ankh
 		/// <seealso class='Exec' />
 		public void QueryStatus(string commandName, EnvDTE.vsCommandStatusTextWanted neededText, ref EnvDTE.vsCommandStatus status, ref object commandText)
 		{
+            this.timer.Start();
             try
             {
+                
+
                 if( this.commands != null && 
                     neededText == EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedNone)
                 {
@@ -151,6 +155,9 @@ namespace Ankh
             {   
                 HandleError( ex );
             }
+            this.timer.End();
+
+            Trace.WriteLine( commandName + ": " + this.timer.Interval, "Ankh" );
 		}
 
 		/// <summary>
@@ -212,6 +219,7 @@ namespace Ankh
             }
             return msg;
         }
+        private Utils.Timer timer = new Utils.Timer();
         private AnkhContext context;
         Ankh.CommandMap commands;
 		

@@ -27,7 +27,7 @@
                     ConfigurationOverrideFile = ""
                     DefineConstants = "DEBUG;TRACE"
                     DocumentationFile = ""
-                    DebugSymbols = "false"
+                    DebugSymbols = "true"
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
                     Optimize = "false"
@@ -115,6 +115,22 @@
                     AssemblyName = "Microsoft.VisualC"
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\Microsoft.VisualC.dll"
                 />
+                <Reference
+                    Name = "SHDocVw"
+                    Guid = "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}"
+                    VersionMajor = "1"
+                    VersionMinor = "1"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
+                />
+                <Reference
+                    Name = "AxSHDocVw"
+                    Guid = "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}"
+                    VersionMajor = "1"
+                    VersionMinor = "1"
+                    Lcid = "0"
+                    WrapperTool = "aximp"
+                />
             </References>
         </Build>
         <Files>
@@ -149,8 +165,13 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "DiffHtmlModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DiffView.cs"
-                    SubType = "Component"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File

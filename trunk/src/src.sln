@@ -80,8 +80,8 @@ Global
 		Item:1 = master.build
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 6
 		ThisSolutionNotes = 
+		DPBuild = 6
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection

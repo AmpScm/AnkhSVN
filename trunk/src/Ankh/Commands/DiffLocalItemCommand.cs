@@ -5,6 +5,7 @@ using NSvn;
 using System.IO;
 using System.Text;
 using SHDocVw;
+using Ankh.UI;
 
 namespace Ankh.Commands
 {
@@ -37,7 +38,11 @@ namespace Ankh.Commands
             context.SolutionExplorer.VisitSelectedItems( v, true );
 
             // convert it to HTML and store in a temp file
-            string htmlFile = this.GetColoredHtmlFile( v.Diff );
+            DiffHtmlModel model = new DiffHtmlModel( v.Diff );
+            string html = model.GetHtml();
+            string htmlFile = Path.GetTempFileName();
+            using( StreamWriter w = new StreamWriter( htmlFile ) )
+                w.Write( html );
 
             // the Start Page window is a web browser
             Window browserWindow = context.DTE.Windows.Item( 
@@ -49,77 +54,8 @@ namespace Ankh.Commands
             object nullObject = null;
             browser.Navigate2( ref url, ref nullObject, ref nullObject,
                 ref nullObject, ref nullObject );
-            browserWindow.Activate();
+            browserWindow.Activate();            
         } 
-     
-        private string GetColoredHtmlFile( string diff )
-        {
-            string file = Path.GetTempFileName();
-            using( StreamWriter writer = new StreamWriter( file ) )
-            {
-                this.WriteProlog( writer );
-                using( StringReader reader = new StringReader( diff ) )
-                {
-                    string line;
-                    while( (line=reader.ReadLine()) != null )
-                    {
-                        // get the css class for this line
-                        string cssClass = this.GetClass( line );
-                        writer.WriteLine( "<span class='{0}'>{1}</span>", cssClass, line );
-                    }
-                }
-                this.WriteEpilog( writer );
-            }
-            return file;    
-        }
-
-        /// <summary>
-        /// Retrieve the CSS class for a line, based on it's first chars.
-        /// </summary>
-        /// <param name="line"></param>
-        /// <returns></returns>
-        private string GetClass( string line )
-        {
-            switch( line[0] )
-            {
-                case '+':
-                    return "plus";
-                case '-':
-                    return "minus";                            
-                default:
-                    return "default";
-            }           
-        }
-
-        /// <summary>
-        /// Write out the standard housekeeping stuff, and the inline stylesheet
-        /// </summary>
-        private void WriteProlog( StreamWriter writer )
-        {
-            writer.WriteLine( 
-                @"<html>
-   <head> 
-      <title>Diff</title>
-      <style type='text/css'>
-       <!--
-          .plus {  color: blue;  }
-          .minus { color: red; }
-          .default { color: green;}
-       -->
-      </style>
-</head>
-<body>
-    <pre>" );
-        }
-
-        /// <summary>
-        /// Standard housekeeping stuff to round off the html doc.
-        /// </summary>
-        /// <param name="writer"></param>
-        private void WriteEpilog( StreamWriter writer )
-        {
-            writer.WriteLine( "</pre></body></html>" );
-        }
     }
 }
 

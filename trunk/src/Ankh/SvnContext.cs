@@ -37,16 +37,18 @@ namespace Ankh
             string templateText = this.GetTemplate();
             LogMessageTemplate template = new LogMessageTemplate( templateText );
 
-            CommitDialog dialog = new CommitDialog( commitItems );
-            dialog.LogMessageTemplate = template;
-
-            dialog.DiffWanted += new EventHandler( this.DiffWanted );
-            if ( dialog.ShowDialog() == DialogResult.OK )
+            using( CommitDialog dialog = new CommitDialog( commitItems ) )
             {
-                return dialog.LogMessage;
+                dialog.LogMessageTemplate = template;
+
+                dialog.DiffWanted += new EventHandler( this.DiffWanted );
+                if ( dialog.ShowDialog() == DialogResult.OK )
+                {
+                    return dialog.LogMessage;
+                }
+                else
+                    return null;
             }
-            else
-                return null;
         }
 
         protected override void NotifyCallback(NSvn.Core.Notification notification)
