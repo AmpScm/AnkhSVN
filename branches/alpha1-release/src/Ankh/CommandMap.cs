@@ -54,7 +54,7 @@ namespace Ankh
                     }
                     catch( Exception ex )
                     {
-                        Connect.HandleError( ex );
+                        Error.Handle( ex );
                     }
 
                     // solution explorer?

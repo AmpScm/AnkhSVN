@@ -64,7 +64,7 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                HandleError( ex );
+                Error.Handle( ex );
                 throw;
             }
 		}
@@ -161,7 +161,7 @@ namespace Ankh
             }
             catch( Exception ex )
             {   
-                HandleError( ex );
+                Error.Handle( ex );
                 throw;
             }
             this.timer.End();
@@ -206,34 +206,11 @@ namespace Ankh
             }
             catch( Exception ex )
             {   
-                HandleError( ex );
+                Error.Handle( ex );
                 throw;
             }
 		}
-
-        public static void HandleError( Exception ex )
-        {
-#if REPORTERROR
-            Utils.ErrorMessage.QuerySendByWeb( "http://arild.no-ip.com/error/report.aspx", ex,
-                typeof(Connect).Assembly );
-#else
-            System.Windows.Forms.MessageBox.Show( ex.ToString() );
-#endif
-            //
-        }        
         
-
-        private string GenerateNestedExceptionMessage( Exception ex )
-        {
-            string msg = ex.Message;
-            Exception innerEx = ex.InnerException;
-            while ( innerEx != null )
-            {
-                msg += innerEx.Message;
-                innerEx = innerEx.InnerException;
-            }
-            return msg;
-        }
         private Utils.Timer timer = new Utils.Timer();
         private AnkhContext context;
         Ankh.CommandMap commands;
