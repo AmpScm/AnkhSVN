@@ -295,6 +295,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\EditConfigFileCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\EditPropertiesCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
