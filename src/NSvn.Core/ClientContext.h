@@ -58,16 +58,25 @@ namespace NSvn
         public __gc class ClientContext
         {
         public:
-            ClientContext( NotifyCallback* callback ) : notifyCallback( callback )
+            ClientContext() : notifyCallback( 0 ), authBaton( 0 ), clientConfig( 0 ),
+                logMessageCallback( 0 ), promptCallback( 0 )
+            {;}
+
+
+            ClientContext( NotifyCallback* callback ) : notifyCallback( callback ), 
+                authBaton( 0 ), clientConfig( 0 ),
+                logMessageCallback( 0 ), promptCallback( 0 )
             {;}
 
             ClientContext( NotifyCallback* callback, AuthenticationBaton* authBaton ) :
-                notifyCallback( callback ), authBaton( authBaton )
+                notifyCallback( callback ), authBaton( authBaton ), clientConfig( 0 ),
+                logMessageCallback( 0 ), promptCallback( 0 )
                 {;}
 
             ClientContext( NotifyCallback* callback, AuthenticationBaton* authBaton, 
                 ClientConfig* config ) :
-                notifyCallback( callback ), authBaton( authBaton ), clientConfig( config ) 
+                notifyCallback( callback ), authBaton( authBaton ), clientConfig( config ),
+                    logMessageCallback( 0 ), promptCallback( 0 )
                 {;}
 
             // An authentication baton
