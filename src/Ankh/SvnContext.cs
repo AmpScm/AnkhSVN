@@ -267,6 +267,7 @@ namespace Ankh
         private void Init(AnkhContext ankhContext)
         {
             this.ankhContext = ankhContext;
+            this.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
             this.AddAuthenticationProvider( AuthenticationProvider.GetSimpleProvider() );           
             this.AddAuthenticationProvider( AuthenticationProvider.GetSimplePromptProvider(
                 new SimplePromptDelegate( this.PasswordPrompt ), 3 ) );
@@ -286,6 +287,7 @@ namespace Ankh
                 new SslClientCertPromptDelegate( this.ClientCertificatePrompt ), 3 ) );
 
             this.ClientContext.CancelCallback = new CancelCallback( this.CancelCallback );
+
         }
 
         /// <summary>
