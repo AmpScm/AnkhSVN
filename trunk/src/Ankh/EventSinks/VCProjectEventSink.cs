@@ -81,6 +81,7 @@ namespace Ankh.EventSinks
                         if ( !svnItem.IsVersioned && svnItem.IsVersionable )
                         {
                             this.Context.Client.Add( path, false );
+                            this.Context.SolutionExplorer.RefreshSelection();
                         }
                     }
                 }
