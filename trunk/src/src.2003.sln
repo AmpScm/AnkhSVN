@@ -135,7 +135,6 @@ Global
 		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Debug run.ActiveCfg = Release
 		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.NSvn.Tests.ActiveCfg = Release
 		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Release.ActiveCfg = Release
-		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Release.Build.0 = Release
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Debug.ActiveCfg = Debug|.NET
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Debug.Build.0 = Debug|.NET
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Debug run.ActiveCfg = Debug|.NET
@@ -160,8 +159,8 @@ Global
 		readme.txt = readme.txt
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
