@@ -234,6 +234,10 @@ namespace Utils.Win32
         [DllImport("User32.DLL")]
         public static extern IntPtr GetActiveWindow ( );
 
+        [DllImport("Kernel32.Dll")]
+        public static extern int GetLongPathName( string shortPath,
+            StringBuilder longPath, int bufSize );
+
 
     }
 }
