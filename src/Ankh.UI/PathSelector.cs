@@ -36,7 +36,7 @@ namespace Ankh.UI
         /// <summary>
         /// The text to display in the label area.
         /// </summary>
-        public string LabelText
+        public string Caption
         {
             get
             {
@@ -45,6 +45,7 @@ namespace Ankh.UI
             set
             {
                 this.textLabel.Text = value; 
+                this.Text = value;
             }
         }
 
