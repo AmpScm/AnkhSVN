@@ -24,12 +24,24 @@ namespace Ankh.Commands
             if ( browser.ShowDialog() != DialogResult.OK) 
                 return;
 
-            CheckoutVisitor v = new CheckoutVisitor( );
-            context.RepositoryController.VisitSelectedNodes( v );
+            context.StartOperation( "Checking out..." );
 
-            /// checkout all selected folders recurively
-            foreach( RepositoryDirectory directory in v.Directories )
-                directory.Checkout( browser.DirectoryPath, true );
+            try
+            {
+                CheckoutVisitor v = new CheckoutVisitor( );
+                context.RepositoryController.VisitSelectedNodes( v );
+
+                /// checkout all selected folders recurively
+                foreach( RepositoryDirectory directory in v.Directories )
+                {
+                    context.OutputPane.WriteLine( "Checking out {0}", directory.Url );
+                    directory.Checkout( browser.DirectoryPath, true );
+                }
+            }
+            finally
+            {
+                context.EndOperation();
+            }
         }  
 	}
 }
