@@ -15,7 +15,7 @@
     <property name="nant.default.framework" value="net-1.0"/>
     <property name="installsource.dir" value="installsource"/>
     <property name="deploy.dir" value="Deploy"/>
-    <property name="alt.admin.dir" value="false"/>
+    <property name="alt.admin.dir" value="true"/>
     <ifnot propertyexists="svndir">
         <sysinfo />
         <ifnot propertyexists="${sys.env.svnsrc}">
