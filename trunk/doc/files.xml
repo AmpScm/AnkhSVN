@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<root>
+    <permissions/>
+    <directory path="processdocs">
+        <name>Process documents</name>
+        
+        
+        <file path="pilot_project.xml">
+            <handler>viewdoc.html</handler>
+            <realpath>pilot_project.xml</realpath>
+            <name>Pilot project report</name>
+            <description>Report due the end of January describing the project</description>            
+        </file>
+        
+        
+        
+        <directory path="scheduling">
+            <name>Scheduling documents</name>
+            
+           <file path="work_plan.xml">
+                <realpath>work_plan.xml</realpath>
+                <handler>viewdoc.html</handler>
+                <name>Work plan</name>
+                <description>A work plan</description>            
+            </file>  
+            
+            <file path="work_schedule.xml">
+                <realpath>work_schedule.xml</realpath>
+                <name>Gant diagram</name>
+                <description>A Gant diagram</description>
+            </file>
+            
+        </directory>          
+        
+    </directory>
+    
+    <directory path="guidelines">
+        <name>Guidelines</name>
+        
+        <file path="docguidelines.xml">
+            <realpath>docguidelines.xml</realpath>
+            <handler>viewdoc.html</handler>
+            <name>Documentation guidelines</name>
+            <description>A set of guidelines for how documentation is to be written</description>
+        </file>
+        
+        <file path="codeguidelines.xml">
+            <realpath>codeguidelines.xml</realpath>
+            <handler>viewdoc.html</handler>
+            <name>Code guidelines</name>
+            <name>Common guidelines for how C# code is to be written</name>
+        </file>      
+        
+    </directory>
+    
+</root>
