@@ -1,7 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Using Ankh">
     <section>
+        <p>This section is about using the Ankh addin. </p>
+        <p>
+            <link url="creating_repositories.xml">Creating repositories</link> - 
+            Will teach you how to create repositories and how to 
+            control the with the Ankh addin under Visual Studio .NET
+        </p>
+        <p>
+            <link url="basic_work_cycle.xml">Basic work cycle</link> - 
+            Will teach you how a ordinary work cycle is done. It will teach you:
+            <list>
+                <item>how to update your Working copy</item>
+                <item>how to do changes to your local files</item>
+                <item>how to remove, copy, rename or move your files</item>
+                <item>how to see differences between your local files and the ones in the repository</item>
+                <item>how to resolve conflicts between your local files and the one in the repository</item>
+                <item>how to commit changes to a repository</item>
+            </list> 
+        </p>
+        <p>
+            <link url="setting_properties.xml">Setting properties</link> - Will teach you how to 
+            to sett properties on files, directories or repisitories.
+        </p>
+                      
     </section>   
 </doc>
 

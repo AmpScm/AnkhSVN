@@ -11,29 +11,23 @@
             <b>The typical work cycle looks like this:</b><br/>
             <list>
                 <item>Update your working copy</item>
-                <item>svn update</item>
                 <item>Make changes</item>
-                <item>svn add</item>
-                <item>svn delete</item>
-                <item>svn move</item>
-                <item>svn copy</item>
+                <item>Adding files to the repository</item>
+                <item>Removing/deleting files from the repository</item>
+                <item>Moving files in the repository</item>
+                <item>Copying files</item>
                 <item>Examine your changes</item>
-                <item>svn status</item>
-                <item>svn diff</item>
-                <item>svn revert</item>
+                <item>Reverting changes</item>
                 <item>Merge others' changes</item>
-                <item>svn merge</item>
-                <item>svn resolve</item>
-                <item>Commit your changes</item>
-                <item>svn commit</item>
+                <item>Resolving files</item>
+                <item>Commit your changes to the repository</item>
             </list>
         </p>
     </section>   
     <section>
         <p>
-        <hr></hr>
-            <i>(from "Subversion:The Definitive Guide" - <link url="http://svnbook.red-bean.com/html-chunk/">
-            svnbook.red-bean.com/html-chunk/</link>)</i>
+            <hr></hr>
+           <link url="update_wc.xml">next</link>
         </p>
     </section>
 </doc>

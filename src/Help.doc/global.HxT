@@ -9,27 +9,26 @@
 		<HelpTOCNode Title="Ankh" Url="\Xml\introduction\ankh.xml"/>
 		<HelpTOCNode Title="About Subversion" Url="\Xml\introduction\about_subversion.xml"/>
 		<HelpTOCNode Title="Revision controll" Url="\Xml\introduction\revision_controll.xml"/>
-		<HelpTOCNode Title="Why Revision controll ?" Url="\Xml\introduction\why_revision_controll.xml"/>
-		<HelpTOCNode Title="Why Ankh ?" Url="\Xml\introduction\why_ankh.xml"/>
-    </HelpTOCNode>
+	</HelpTOCNode>
 	<HelpTOCNode Title="Configuration" Url="\Xml\configuration\configuration.xml">
 		<HelpTOCNode Title="Setting up the Ankh addin" Url="\Xml\configuration\setting_up_anhk.xml"/>
 	</HelpTOCNode>
 	<HelpTOCNode Title="Using Ankh" Url="\Xml\using-ankh\using_ankh.xml">
-    
-    <HelpTOCNode Title="Adding files" Url="\Xml\using-ankh\adding_files.xml"/>
-    <HelpTOCNode Title="Basic work Cycle" Url="\Xml\using-ankh\basic_work_cycle.xml"/>
-    
-    
-    <HelpTOCNode Title="Keywords" Url="\keywords.xml">
-    
-    
-    
-    
-    <HelpTOCNode Title="Special Properties" Url="\Xml\using-ankh\special_properties.xml"/>
-    <HelpTOCNode Title="Revisions: numbers, keywords and dates" Url="\Xml\using-ankh\revision.xml"/>
+		<HelpTOCNode Title="Setting properties" Url="\Xml\using-ankh\setting_properties.xml"/>
+		<HelpTOCNode Title="Creating repositories" Url="\Xml\using-ankh\creating_repositories.xml"/>
+		<HelpTOCNode Title="Basic work Cycle" Url="\Xml\using-ankh\basic_work_cycle.xml">
+			<HelpTOCNode Title="Update the Working Copy" Url="\Xml\using-ankh\update_wc.xml"/>
+			<HelpTOCNode Title="Making changes" Url="\Xml\using-ankh\make_changes.xml"/>
+			<HelpTOCNode Title="Adding files" Url="\Xml\using-ankh\adding_files.xml"/>
+			<HelpTOCNode Title="Removing files" Url="\Xml\using-ankh\removing_files.xml"/>
+			<HelpTOCNode Title="Moving files" Url="\Xml\using-ankh\moving_files.xml"/>
+			<HelpTOCNode Title="Copying files" Url="\Xml\using-ankh\copying_files.xml"/>
+			<HelpTOCNode Title="Reverting files" Url="\Xml\using-ankh\reverting_files.xml"/>
+			<HelpTOCNode Title="Examine changes" Url="\Xml\using-ankh\examine_changes.xml"/>
+			<HelpTOCNode Title="Resolving conflicts" Url="\Xml\using-ankh\resolving_conflicts.xml"/>
+			<HelpTOCNode Title="Merging files" Url="\Xml\using-ankh\merging_files.xml"/>
+			<HelpTOCNode Title="Commiting files" Url="\Xml\using-ankh\commiting_files.xml"/>
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
-    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
 	<HelpTOCNode Title="Basic operations" Url="\Xml\basic-operations\basic_operations.xml">
 		<HelpTOCNode Title="Add" Url="\Xml\basic-operations\add.xml"/>
@@ -55,9 +54,11 @@
 		<HelpTOCNode Title="Status" Url="\Xml\basic-operations\status.xml"/>
 		<HelpTOCNode Title="Switch" Url="\Xml\basic-operations\switch.xml"/>
 		<HelpTOCNode Title="Update" Url="\Xml\basic-operations\update.xml"/>
-    </HelpTOCNode>
-    <ToolData Name="MSTOCEXPST" Value="Expanded"/>
-    
-    
-    <ToolData Name="MSTOCMRUDIR" Value="C:\finalproject\Ankh\src\Help.doc\Xml\using-ankh\"/>
-    <ToolData Name="MSTOCMRUFT" Value="0"/></HelpTOC>
+	</HelpTOCNode>
+	<HelpTOCNode Title="Keywords" Url="\Xml\Keywords\keywords.xml">
+		<HelpTOCNode Title="Special Properties" Url="\Xml\Keywords\special_properties.xml"/>
+		<HelpTOCNode Title="Revisions: numbers, keywords and dates" Url="\Xml\Keywords\revision.xml"/>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
+	<ToolData Name="MSTOCMRUDIR" Value="C:\finalproject\Ankh\src\Help.doc\Xml\Keywords\"/>
+	<ToolData Name="MSTOCMRUFT" Value="0"/>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOC>
