@@ -189,9 +189,8 @@ namespace UseCase
 
         public void RemoveElement( IElement element )
         {
-            XmlNode node = this.doc["UseCase"]["MainFlow"]["FlowElements"].
-                SelectSingleNode( string.Format("FlowElement[Step={0}]", element.Text ) );
-            this.doc["UseCase"]["MainFlow"]["FlowElements"].RemoveChild( node );            
+            NodeDestroyerVisitor visitor = new NodeDestroyerVisitor( this.doc );
+            element.AcceptVisitor( visitor );
             
             this.OnElementsChanged();
         }
@@ -369,7 +368,7 @@ namespace UseCase
             return builder.ToString();
         }
 
-
+		#region private class NodeCreatorVisitor
         private class NodeCreatorVisitor : IElementVisitor
         {
             public NodeCreatorVisitor( XmlDocument doc )
@@ -399,6 +398,39 @@ namespace UseCase
             private XmlDocument doc;
             
         }
+		#endregion
+
+		#region private class NodeDestroyerVisitor
+		private class NodeDestroyerVisitor : IElementVisitor
+		{
+			public NodeDestroyerVisitor( XmlDocument doc )
+			{
+				this.doc = doc;
+			}
+
+			public void VisitIncludeElement( IncludeElement element )
+			{
+				XmlNode node = this.doc.SelectSingleNode( 
+					string.Format( "/UseCase/MainFlow/FlowElements/FlowElement/Include[@useCaseID='{0}']",
+					element.Text ) );
+
+				node.ParentNode.RemoveChild( node );
+			}
+
+			public void VisitStepElement( StepElement element )
+			{
+				XmlNode node = this.doc.SelectSingleNode( 
+					string.Format( "/UseCase/MainFlow/FlowElements/FlowElement[Step='{0}']/Step",
+					element.Text ) );
+
+				node.ParentNode.RemoveChild( node );
+			}
+
+
+			private XmlDocument doc;
+
+		}
+		#endregion
 
         private XmlDocument doc;
 	}
