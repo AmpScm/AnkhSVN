@@ -58,12 +58,13 @@ namespace Ankh
         /// </summary>
         public void CreateTaskItems()
         {
-
             IList conflictItems =  this.context.SolutionExplorer.GetAllResources(true,   new ResourceFilterCallback(ConflictedFilter)); 
             foreach(SvnItem item in conflictItems)
             {
                 this.AddTask(item.Path);
             }
+            if(conflictItems.Count > 0) 
+                this.NavigateTaskList(); 
         }
 
         /// <summary>
@@ -98,8 +99,24 @@ namespace Ankh
                     item.Delete();
                 }
             }   
-        } 
+        }
+ 
+ 
 
+        /// <summary>
+        ///  Navigate to task list wondow and filter for conflicts
+        ///       
+        public void  NavigateTaskList()
+        {
+            //object o = null;
+            Window win = this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+            win.Activate();
+            // doesn't work - doesn't set filter to just show conflicts :(
+            // win.DTE.Commands.Raise("{4A9B7E50-AA16-11D0-A8C5-00A0C921A4D2}", 678, ref o, ref o) ;
+            // set to all since we can't filter it to just conflicts
+                win.DTE.ExecuteCommand("View.ALL", "");
+
+        }
 
         /// <summary>
         ///  Filter for getting conflicted items from the solution
