@@ -111,7 +111,7 @@ namespace Rogue.SvnTasks
 
             protected override void NotifyCallback(NSvn.Core.Notification notification)
             {
-                Log.WriteLine( "{0}Checked out {1}", this.logPrefix, notification.Path );
+                Log.WriteLine( "{0}Checked out {1}", this.logPrefix, notification.Path + Environment.NewLine);
             }
 
             private string logPrefix;
