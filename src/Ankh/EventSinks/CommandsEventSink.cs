@@ -6,7 +6,7 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Event sink for command events
     /// </summary>
-    public class CommandsEventSink : EventSink
+    internal class CommandsEventSink : EventSink
     {
         public CommandsEventSink( AnkhContext context ) : base( context )
         {

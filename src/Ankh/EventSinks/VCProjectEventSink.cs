@@ -9,9 +9,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Sink for VCProjectEngineEvents events.
     /// </summary>
-    public class VCProjectEventSink : EventSink
+    internal class VCProjectEventSink : EventSink
     {
-        public VCProjectEventSink( object events, AnkhContext context )
+        internal VCProjectEventSink( object events, AnkhContext context )
             : base( context )
         {
             this.events = events;

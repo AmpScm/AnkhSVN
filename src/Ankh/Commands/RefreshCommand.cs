@@ -13,7 +13,7 @@ namespace Ankh.Commands
     VSNetControl( "Solution.Ankh", Position = 1 ),
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetFolderNodeControl( "Ankh", Position = 1)]
-    public class RefreshCommand : CommandBase
+    internal class RefreshCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {

@@ -13,7 +13,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("ViewRepositoryFile", Tooltip="View this file", Text = "In VS.NET" ),
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
-    public abstract class ViewRepositoryFileCommand : CommandBase
+    internal abstract class ViewRepositoryFileCommand : CommandBase
     {
         #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)

@@ -12,7 +12,7 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Base class serving as event sink for all item related events.
     /// </summary>
-    public abstract class ItemEventSink : EventSink
+    internal abstract class ItemEventSink : EventSink
     {
         protected ItemEventSink( AnkhContext context ) : base( context )
         {

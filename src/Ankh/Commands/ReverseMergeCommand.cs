@@ -18,7 +18,7 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 2 ),
     VSNetControl( "Solution.Ankh", Position = 2 ),
     VSNetFolderNodeControl( "Ankh", Position = 2)]
-    public class ReverseMergeCommand : CommandBase
+    internal class ReverseMergeCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {

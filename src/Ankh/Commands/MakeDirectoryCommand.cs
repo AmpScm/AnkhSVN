@@ -15,7 +15,7 @@ namespace Ankh.Commands
          Tooltip="Create new directory here", Text = "New directory...",
          Bitmap = ResourceBitmaps.MakeDirectory ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
-    public class MakeDirectoryCommand : CommandBase
+    internal class MakeDirectoryCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {

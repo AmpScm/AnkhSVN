@@ -13,7 +13,7 @@ namespace Ankh.Commands
          Tooltip= "Enable Ankh for this solution", 
          Bitmap=ResourceBitmaps.ToggleAnkh ),
     VSNetControl( "Solution.Ankh", Position=1 )]
-    public class ToggleAnkhCommand : CommandBase
+    internal class ToggleAnkhCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {

@@ -14,7 +14,7 @@ namespace Ankh.Commands
     [VSNetCommand("CheckoutSolution", Tooltip="Checkout this solution", 
          Bitmap = ResourceBitmaps.CheckoutSolution, Text = "Checkout Solution..." ),
     VSNetControl( "ReposExplorer", Position = 2 ) ]
-	public class CheckoutSolutionCommand : 
+	internal class CheckoutSolutionCommand : 
         CommandBase
 	{
         #region ICommand Members

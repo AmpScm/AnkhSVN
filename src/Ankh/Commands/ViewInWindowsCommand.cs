@@ -12,7 +12,7 @@ namespace Ankh.Commands
     [VSNetCommand("ViewInWindows", Tooltip="Have Windows launch the associated application.", 
          Text = "In Windows", Bitmap = ResourceBitmaps.ViewInWindows ),
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
-    public class ViewInWindowsCommand : ViewRepositoryFileCommand
+    internal class ViewInWindowsCommand : ViewRepositoryFileCommand
     {
         public override void Execute(AnkhContext context, string parameters)
         {
