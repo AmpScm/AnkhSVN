@@ -131,12 +131,6 @@
                     AssemblyFolderKey = "hklm\publicassemblies"
                 />
                 <Reference
-                    Name = "Microsoft.VisualStudio.VCProjectEngine"
-                    AssemblyName = "Microsoft.VisualStudio.VCProjectEngine"
-                    HintPath = "I:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.VCProjectEngine.dll"
-                    AssemblyFolderKey = "hklm\publicassemblies"
-                />
-                <Reference
                     Name = "office"
                     AssemblyName = "Office"
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.1.4322\office.dll"
@@ -156,6 +150,11 @@
                     VersionMinor = "0"
                     Lcid = "0"
                     WrapperTool = "tlbimp"
+                />
+                <Reference
+                    Name = "Microsoft.VisualStudio.VCProjectEngine"
+                    AssemblyName = "Microsoft.VisualStudio.VCProjectEngine"
+                    HintPath = "..\lib\2003\Microsoft.VisualStudio.VCProjectEngine.dll"
                 />
             </References>
         </Build>

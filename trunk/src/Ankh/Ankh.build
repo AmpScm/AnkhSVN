@@ -29,7 +29,7 @@
     
     <target name="compile" depends="init">
         <property name="define" value="REPORTERROR;TRACE"/>
-        <property name="define" value="DEBUG;${define}" if="${debug}"/>
+        <property name="define" value="ALWAYSREGISTER;DEBUG;${define}" if="${debug}"/>
         
         <property name="define" value="VS2002;${define}" unless="${vs.2003}"/>
         <property name="define" value="VS2003;${define}" if="${vs.2003}"/>
@@ -50,7 +50,7 @@
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
                 <includes name="${build.dir}/AnkhToolWindowLib.dll"/>
-                <includes name="${lib.dir}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
+                <includes name="${lib.dir}\${vsnet.ver}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
                 <includes name="${lib.dir}\Interop.SHDocVw.dll"/>
             </references>
             
