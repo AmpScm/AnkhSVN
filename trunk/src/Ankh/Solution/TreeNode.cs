@@ -17,7 +17,7 @@ namespace Ankh.Solution
     /// </summary>
     internal abstract class TreeNode
     {
-        private TreeNode( UIHierarchyItem item, IntPtr hItem, 
+        protected TreeNode( UIHierarchyItem item, IntPtr hItem, 
             Explorer explorer, TreeNode parent )
         {     
             this.uiItem = item;
@@ -209,150 +209,16 @@ namespace Ankh.Solution
         /// <summary>
         /// Represents a node containing subnodes, such as a project or a solution.
         /// </summary>
-        private class ProjectNode : TreeNode
-        {
-            public ProjectNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
-                TreeNode parent ) : 
-                base( item, hItem, explorer, parent )
-            {
-                Project project = (Project)item.Object;
-
-                // find the directory containing the project
-                string fullname = project.FullName;
-                // the Solution Items project has no path
-                if ( fullname != string.Empty )
-                {
-                    string parentPath = Path.GetDirectoryName( fullname );
-                    this.projectFolder = SvnResource.FromLocalPath( parentPath );
-                    explorer.AddResource( project, this );                    
-                }
-                if ( this.projectFolder != null )
-                    this.projectFolder.Context = explorer.Context;
-            }
-
-            public override void VisitResources( ILocalResourceVisitor visitor )
-            {
-                if ( this.projectFolder != null )
-                    this.projectFolder.Accept( visitor );
-                this.VisitChildren( visitor );
-            } 
-            
-            protected override StatusKind GetStatus()
-            {
-                if ( this.projectFolder == null )
-                    return StatusKind.None;               
-                else
-                    return StatusFromResource( this.projectFolder );
-            }                    
-
-            private ILocalResource projectFolder;
-        }  
         #endregion
    
         #region SolutionNode
-        /// <summary>
-        /// A node representing a solution.
-        /// </summary>
-        private class SolutionNode : TreeNode
-        {
-            public SolutionNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer )
-                : base( item, hItem, explorer, null )
-            {
-                EnvDTE.Solution solution = explorer.DTE.Solution;
-                this.solutionFile = SvnResource.FromLocalPath( solution.FullName );
-                this.solutionFile.Context = explorer.Context;
-
-                explorer.SetSolution( this );
-            }
-
-            public override void VisitResources( ILocalResourceVisitor visitor )
-            {
-                this.solutionFile.Accept( visitor );
-                this.VisitChildren( visitor );
-            } 
-
-            protected override StatusKind GetStatus()
-            {
-                if ( this.solutionFile == null )
-                    return StatusKind.None;               
-                else
-                {
-                    StatusKind status = StatusFromResource( this.solutionFile );
-                    if ( status != StatusKind.Normal )
-                    {
-                        // check the status on the projects
-                        ModifiedVisitor v = new ModifiedVisitor();
-                        this.VisitChildren( v );
-                        if ( v.Modified )
-                            status = StatusKind.Modified;
-                    }
-
-                    return status;
-                }
-            }
 
             
 
-            private ILocalResource solutionFile;
-        }
+            
         #endregion
 
         #region ProjectItemNode
-        /// <summary>
-        /// Represents a node containing a project item.
-        /// </summary>
-        private class ProjectItemNode : TreeNode
-        {
-            public ProjectItemNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
-                TreeNode parent ) :
-                base( item, hItem, explorer, parent )
-            {
-                ProjectItem pitem = (ProjectItem)item.Object;
-                this.resources = new ArrayList();
-                try
-                {
-                    for( short i = 1; i <= pitem.FileCount; i++ ) 
-                    {
-                    
-                        ILocalResource res = SvnResource.FromLocalPath( pitem.get_FileNames(i) );
-                        // does this resource exist?
-                        if ( res != null )
-                        {
-                            res.Context = explorer.Context;
-                            this.resources.Add( res );
-                        }
-                    }
-                    explorer.AddResource( pitem, this );                    
-                }
-                catch( NullReferenceException )
-                {
-                    //swallow
-                }                
-            }
-
-            protected override StatusKind GetStatus()
-            {
-                // go through the resources belonging to this node
-                foreach( ILocalResource resource in this.resources )
-                {
-                    StatusKind status = StatusFromResource( resource );
-                    if ( status != StatusKind.Normal )
-                        return status;
-                }
-                                
-                return StatusKind.Normal;            
-            }
-
-            public override void VisitResources( ILocalResourceVisitor visitor )
-            {
-                foreach( ILocalResource resource in this.resources )
-                    resource.Accept( visitor );
-
-                this.VisitChildren( visitor );
-            }
-
-            private IList resources;
-        }    
         #endregion
 
         private UIHierarchyItem uiItem;
