@@ -95,12 +95,7 @@ namespace Ankh.Solution
             else if (  folderStatus != StatusKind.Normal )
                 return folderStatus;
             else
-            {
-                // check statuses on child resources
-                ModifiedVisitor v = new ModifiedVisitor();
-                this.VisitChildResources( v );
-                return v.Modified ? StatusKind.Modified : StatusKind.Normal;
-            }
+                return StatusKind.Normal;
         }                    
 
         private ILocalResource projectFolder;

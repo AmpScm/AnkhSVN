@@ -68,18 +68,7 @@ namespace Ankh.Solution
             {
                 StatusKind fileStatus = StatusFromResource( this.solutionFile );
                 StatusKind folderStatus = StatusFromResource( this.solutionFolder );
-                // no point in checking substatuses if we already have an abNormal status
-                // on the solution file
-                if ( fileStatus == StatusKind.Normal && folderStatus == 
-                    StatusKind.Normal )
-                {
-                    // check the status on the projects
-                    ModifiedVisitor v = new ModifiedVisitor();
-                    this.VisitChildResources( v );
-                    if ( v.Modified )
-                        return StatusKind.Modified;
-                }
-
+                
                 return fileStatus == StatusKind.Normal ? folderStatus : fileStatus;
             }
         }
