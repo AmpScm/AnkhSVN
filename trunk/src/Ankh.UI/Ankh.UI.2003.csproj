@@ -237,6 +237,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IRepositoryTreeView.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "KeywordsPropertyEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
