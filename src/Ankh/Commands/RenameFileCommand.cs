@@ -34,6 +34,8 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context, string parameters)
         {
+            context.DTE.Documents.SaveAll();
+
             IList items = context.SolutionExplorer.GetSelectionResources( false,
                 new ResourceFilterCallback(CommandBase.UnmodifiedSingleFileFilter) );
             

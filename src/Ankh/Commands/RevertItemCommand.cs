@@ -40,6 +40,8 @@ namespace Ankh.Commands
 
         public override void Execute(Ankh.AnkhContext context, string parameters)
         {
+            context.DTE.Documents.SaveAll();
+
             // get the modified resources
             IList resources = context.SolutionExplorer.GetSelectionResources( true,
                 new ResourceFilterCallback( CommandBase.ModifiedFilter ) );
