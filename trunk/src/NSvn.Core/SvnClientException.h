@@ -24,11 +24,16 @@ namespace NSvn
             NSvn::Common::SvnException( message, innerException )
             {;}
 
+            /// <summary>The SVN error code associated with this exception</summary>
+            __property int get_ErrorCode()
+            { return this->errorCode; }
+
 
         protected:
 
         private:
             static SvnClientException* CreateExceptionsRecursively( svn_error_t* err );
+            int errorCode;
 
         };
 
