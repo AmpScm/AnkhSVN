@@ -13,7 +13,9 @@ namespace Ankh.Commands
 	/// </summary>
 	[VSNetCommand("CommitItem", Text = "Commit", Tooltip = "Commits an item"),
      VSNetControl( "Item", Position = 2 ),
-     VSNetControl( "Project", Position = 2 )]
+     VSNetControl( "Project", Position = 2 ),
+     VSNetControl( "Folder", Position = 2 ),
+     VSNetControl( "Solution", Position = 2)]
 	internal class CommitItem : CommandBase
 	{	
         #region Implementation of ICommand
@@ -34,7 +36,7 @@ namespace Ankh.Commands
 
             WorkingCopyResource.Commit( (WorkingCopyResource[])
                 v.WorkingCopyResources.ToArray( typeof(WorkingCopyResource) ), 
-                false );
+                true );
 
             context.SolutionExplorer.UpdateSelectionStatus();
         }
