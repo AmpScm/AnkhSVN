@@ -24,8 +24,10 @@ namespace Ankh.Solution
                 this.projectFolder = SvnResource.FromLocalPath( parentPath );
                 explorer.AddResource( project, this );                    
             }
-            if ( this.projectFolder != null )
-                this.projectFolder.Context = explorer.Context;
+            else
+                this.projectFolder = SvnResource.Unversionable;
+
+            this.projectFolder.Context = explorer.Context;
         }
 
         public ILocalResource ProjectFolder
@@ -46,29 +48,24 @@ namespace Ankh.Solution
 
         public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
         {
-            if ( this.projectFolder != null )
-                this.projectFolder.Accept( visitor );
+            this.projectFolder.Accept( visitor );
             if ( recursive )
                 this.VisitChildResources( visitor );
         } 
             
         protected override StatusKind GetStatus()
         {
-            if ( this.projectFolder == null )
-                return StatusKind.None;               
+            
+            // check status on the project folder
+            StatusKind folderStatus = StatusFromResource( this.projectFolder );
+            if (  folderStatus != StatusKind.Normal )
+                return folderStatus;
             else
             {
-                // check status on the project folder
-                StatusKind folderStatus = StatusFromResource( this.projectFolder );
-                if (  folderStatus != StatusKind.Normal )
-                    return folderStatus;
-                else
-                {
-                    // check statuses on child resources
-                    ModifiedVisitor v = new ModifiedVisitor();
-                    this.VisitChildResources( v );
-                    return v.Modified ? StatusKind.Modified : StatusKind.Normal;
-                }
+                // check statuses on child resources
+                ModifiedVisitor v = new ModifiedVisitor();
+                this.VisitChildResources( v );
+                return v.Modified ? StatusKind.Modified : StatusKind.Normal;
             }
         }                    
 

@@ -17,6 +17,13 @@ namespace NSvn
         }
 
         /// <summary>
+        /// This is essentially a null object, representing a resource
+        /// that cannot be versioned.
+        /// </summary>
+        public static readonly ILocalResource Unversionable = 
+            new UnversionableResource();
+
+        /// <summary>
         /// Create a ILocalResource from a local path.
         /// </summary>
         /// <param name="path">The path to the file/directory.</param>
@@ -24,7 +31,7 @@ namespace NSvn
         public static ILocalResource FromLocalPath( string path )
         {
             if ( !IsVersionedPath( path ) )
-                return null;
+                return Unversionable;
 
             Status status  = Client.SingleStatus( path );
             System.Diagnostics.Debug.Assert( status != null, 
@@ -35,6 +42,8 @@ namespace NSvn
             else
                 return UnversionedResource.FromPath( path );
         }
+
+
 
         /// <summary>
         /// The context object used in version control operations.
@@ -78,7 +87,67 @@ namespace NSvn
             { 
                return this.Context.ClientContext;
             }
-        }        
+        }      
+  
+        
+        #region class UnversionableResource
+        private class UnversionableResource : ILocalResource
+        {
+
+            #region Implementation of ILocalResource
+            public void Accept(NSvn.ILocalResourceVisitor visitor)
+            {
+                // nothing        
+            }
+
+            public string Path
+            {
+                get
+                {
+                    return "";
+                }
+            }
+
+            public bool IsDirectory
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            public bool IsVersioned
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            public NSvn.Core.Status Status
+            {
+                get
+                {
+                    return Status.None;
+                }
+            }
+
+            public NSvn.NSvnContext Context
+            {
+                get
+                {
+                    return null;
+                }
+                set
+                {
+                }
+            }
+        #endregion
+
+
+
+        }
+        #endregion
         
         private NSvnContext context;
         private const string WCAREA=".svn";

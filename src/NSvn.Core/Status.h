@@ -29,15 +29,27 @@ namespace NSvn
                             else
                                 this->entry = 0;
                         }
-            Status() :
-                            textStatus( StatusKind::Unversioned ),
-                            propertyStatus( StatusKind::Unversioned ),
-                            locked( false ),
-                            copied( false ),
-                            repositoryTextStatus( StatusKind::Unversioned ),
-                            repositoryPropertyStatus( StatusKind::Unversioned ),
-                            entry( 0 )
-                        {;}
+            Status()                         
+                {;}
+
+            static Status()
+            {
+                unversioned->textStatus = StatusKind::Unversioned;
+                unversioned->propertyStatus = StatusKind::Unversioned;
+                unversioned->locked = false;
+                unversioned->copied = false;
+                unversioned->repositoryTextStatus = StatusKind::Unversioned;
+                unversioned->repositoryPropertyStatus = StatusKind::Unversioned;
+                unversioned->entry = 0;
+
+                none->textStatus = StatusKind::None;
+                none->propertyStatus = StatusKind::None;
+                none->locked = false;
+                none->copied = false;
+                none->repositoryTextStatus = StatusKind::None;
+                none->repositoryPropertyStatus = StatusKind::None;
+                none->entry = 0;                
+            }
 
 
 
@@ -81,6 +93,10 @@ namespace NSvn
             __property static Status* get_Unversioned()
             { return Status::unversioned; }
 
+            /// <summary>Represents the status of an item with no status at all.</summary>
+            __property static Status* get_None()
+            { return Status::none; }
+
         private:
             NSvn::Core::Entry* entry;
             StatusKind textStatus;
@@ -92,6 +108,7 @@ namespace NSvn
             StatusKind repositoryPropertyStatus;
 
             static Status* unversioned = new Status();
+            static Status* none = new Status();
         };
     }
 }
