@@ -33,12 +33,35 @@
             </Directory>
         </Directory>
         
-        <FragmentRef Id="UI_Ankh"/>
-        
         <Feature Id="DefaultFeature" Title="AnkhSVN" Level="1">
             <MergeRef Id="MSM_Ankh_msm" />
             <MergeRef Id="MSM_NSvn_msm" />
         </Feature>
+        <UI>
+            <InstallUISequence>
+                <!-- Error, Exit and Finished forms -->
+                <Show Dialog="FatalErrorForm" OnExit="error">NOT HideFatalErrorForm</Show>
+                <Show Dialog="UserExitForm" OnExit="cancel" />
+                <Show Dialog="FinishedForm" OnExit="success" />
+                <!-- UI Install sequence-->
+                <LaunchConditions Sequence="100" />
+                <FindRelatedProducts Sequence="200" />
+                <AppSearch Sequence="400" />
+                <CCPSearch Sequence="500">NOT Installed</CCPSearch>
+                <RMCCPSearch Sequence="600">NOT Installed</RMCCPSearch>
+                <ValidateProductID Sequence="700" />
+                <CostInitialize Sequence="800" />
+                <FileCost Sequence="900" />
+                <IsolateComponents Sequence="950" />
+                <CostFinalize Sequence="1000" />
+                <MigrateFeatureStates Sequence="1200" />
+                <Show Dialog="WelcomeForm" Sequence="1230">NOT RESUME AND ((NOT Installed) OR (Installed AND NOT Preselected))</Show>
+                <Show Dialog="ResumeForm" Sequence="1240">Installed AND (RESUME OR Preselected)</Show>
+                <Show Dialog="ProgressForm" Sequence="1280" />
+                
+                <ExecuteAction Sequence="1300" />
+            </InstallUISequence>
+        </UI>
         
         
 
