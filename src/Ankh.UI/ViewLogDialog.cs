@@ -13,7 +13,7 @@ namespace Ankh.UI
 	/// </summary>
 	public class ViewLogDialog : System.Windows.Forms.Form
 	{
-        public event EventHandler GetLog;
+   //     public event EventHandler GetLog;
 		
         public ViewLogDialog()
 		{
@@ -21,11 +21,12 @@ namespace Ankh.UI
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-            this.fromRevisionComboBox.Items.Add( RevisionChoice.Head );
-            this.fromRevisionComboBox.Items.Add( RevisionChoice.Prev );
-            this.fromRevisionComboBox.Items.Add( RevisionChoice.Base );
-            this.fromRevisionComboBox.Items.Add( RevisionChoice.Commited);
-            this.fromRevisionComboBox.Items.Add( RevisionChoice.Date );
+            this.fromRevisionComboBox.Items.AddRange( new object[]{
+                                                                 RevisionChoice.Head,
+                                                                 RevisionChoice.Prev,
+                                                                 RevisionChoice.Date,
+                                                                 RevisionChoice.Base,
+                                                                 RevisionChoice.Commited});
 
 		}
 
@@ -55,7 +56,8 @@ namespace Ankh.UI
 		}
 
 
-		#region Windows Form Designer generated code
+		
+        #region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
@@ -105,6 +107,7 @@ namespace Ankh.UI
             this.toRevisionComboBox.Name = "toRevisionComboBox";
             this.toRevisionComboBox.Size = new System.Drawing.Size(121, 21);
             this.toRevisionComboBox.TabIndex = 3;
+            this.toRevisionComboBox.TextChanged += new System.EventHandler(this.toRevisionComboBox_TextChanged);
             this.toRevisionComboBox.SelectedIndexChanged += new System.EventHandler(this.toRevisionComboBox_SelectedIndexChanged);
             // 
             // showRevisionCheckBox
@@ -276,9 +279,9 @@ namespace Ankh.UI
         private System.Windows.Forms.CheckBox showModifiedFilesCheckBox;
         private System.Windows.Forms.CheckBox singleRevisionCheckBox;
         private System.ComponentModel.IContainer components;
-//        private static readonly Regex validateRevisionNumber = 
-//            new Regex(@"\s{1})", RegexOptions.Compiled);
-//       
+        private static readonly Regex validateRevisionNumber = 
+            new Regex(@"\w{1,}", RegexOptions.Compiled);
+       
         [STAThread] 
         public static void Main()
         {
@@ -289,81 +292,104 @@ namespace Ankh.UI
         
         private void singleRevisionCheckBoxChecked(object sender, System.EventArgs e)
         {
+            this.toRevisionComboBox.SelectedItem = null;
+
             if (this.singleRevisionCheckBox.Checked)
             {
                 this.toRevisionComboBox.Items.Clear();
                 this.toRevisionComboBox.Enabled = false;
+                this.toDateTimePicker.Enabled = false;
             }
             else
             {
                 this.toRevisionComboBox.Items.Clear();
-                EnableDisable();
+                EnableAndDisableToCombo();
             }
-
         }
 
         private void fromRevisionComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             this.toRevisionComboBox.Items.Clear(); 
+            this.toRevisionComboBox.SelectedItem = null;
                
-            EnableDisable();
+            EnableAndDisableToCombo();
         }
 
-        public void EnableDisable()
+        private void EnableAndDisableToCombo()
         {
-            if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
-                == RevisionChoice.Date)
+            if (this.fromRevisionComboBox.SelectedItem != null )
             {
-                this.fromDateTimePicker.Enabled = true;
 
-                if (!this.singleRevisionCheckBox.Checked)
+                if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
+                    == RevisionChoice.Date)
                 {
-                    this.toDateTimePicker.Enabled = true;
-                    this.toRevisionComboBox.Enabled = true;
-                    this.toRevisionComboBox.Items.Clear();
-                    this.toRevisionComboBox.Items.Add(RevisionChoice.Date);
-                }
-            }
-            else
-            {
-                this.fromDateTimePicker.Enabled = false;
-                this.toDateTimePicker.Enabled = false;
+                   // this.toRevisionComboBox.SelectedItem = RevisionChoice.Date;
+                    this.fromDateTimePicker.Enabled = true;
+                    this.toDateTimePicker.Enabled = false;
 
-                if (!this.singleRevisionCheckBox.Checked)
-                {
-                    this.toRevisionComboBox.Items.Clear();
-                    this.toRevisionComboBox.Items.Add( RevisionChoice.Head );
-                    this.toRevisionComboBox.Items.Add( RevisionChoice.Prev );
-                    this.toRevisionComboBox.Items.Add( RevisionChoice.Base );
-                    this.toRevisionComboBox.Items.Add( RevisionChoice.Commited);
-
-                    this.toRevisionComboBox.Enabled = true;
-
-                    if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
-                        == RevisionChoice.Head)
+                    if (!this.singleRevisionCheckBox.Checked)
                     {
-                        this.toRevisionComboBox.Enabled = false;
+                        this.toDateTimePicker.Enabled = true;
+                        this.toRevisionComboBox.Enabled = true;
+                        this.toRevisionComboBox.Items.Clear();
+                        this.toRevisionComboBox.Items.Add(RevisionChoice.Date);
                     }
                 }
+                else
+                {
+                    this.fromDateTimePicker.Enabled = false;
+                    this.toDateTimePicker.Enabled = false;
+
+                    if (!this.singleRevisionCheckBox.Checked)
+                    {
+                        SetToCombo();
+
+                        if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
+                            == RevisionChoice.Head)
+                        {
+                            this.toRevisionComboBox.Enabled = false;
+                        }
+                    }
+                } 
             }
-    
+
+            else if (ValidateForm( this.fromRevisionComboBox.Text ) && 
+                    !this.singleRevisionCheckBox.Checked && 
+                this.fromRevisionComboBox.SelectedItem == null )
+                {
+                    SetToCombo();
+                }
+        }
+
+
+        private void SetToCombo()
+        {
+            this.toRevisionComboBox.Items.Clear();
+            this.toRevisionComboBox.Items.AddRange(  new object[]{
+                                                                     RevisionChoice.Head,
+                                                                     RevisionChoice.Prev,
+                                                                     RevisionChoice.Base,
+                                                                     RevisionChoice.Commited}); 
+                       
+            this.toRevisionComboBox.Enabled = true;
         }
 
         private void toRevisionComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
-                == RevisionChoice.Date)
+            if (this.fromRevisionComboBox.SelectedItem != null)
             {
-                this.toDateTimePicker.Enabled = true;       
-                
-            }
-            else
-            {
-                this.toDateTimePicker.Enabled = 
-                    ((RevisionChoice)this.toRevisionComboBox.SelectedItem )==
-                    RevisionChoice.Date;   
-            }
-        
+                if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
+                    == RevisionChoice.Date )
+                {
+                    this.toDateTimePicker.Enabled = true;                
+                }
+            
+                else
+                {
+                    this.toDateTimePicker.Enabled = false;
+                        
+                }
+            } 
         }
 
         /// <summary>
@@ -374,17 +400,37 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void fromRevisionComboBox_TextChanged(object sender, System.EventArgs e)
         {
-//            if (this.fromRevisionComboBox.Items.ToString() != "")
-//            {
-//                Validate();
-//            }
+           if (this.fromRevisionComboBox.Text != "" )
+               //&& this.fromRevisionComboBox.SelectedItem == null)
+            {
+               this.toRevisionComboBox.SelectedItem = null;
+               EnableTextCombo(this.fromRevisionComboBox.Text);
+            }
+        }
+
+        private void EnableTextCombo( string text)
+        {
+            if(ValidateForm(text))
+            {
+                if (!this.singleRevisionCheckBox.Checked)
+                    this.toRevisionComboBox.Enabled = true;
+            }
         }
         
-//        public bool Validate()
-//        {
-//                    return this.validateRevisionNumber.IsMatch(
-//                        this.fromRevisionComboBox.Items.ToString());
-//        }                                     
+        private bool ValidateForm(string text)
+        {
+
+            return validateRevisionNumber.IsMatch( text );
+        }
+
+        private void toRevisionComboBox_TextChanged(object sender, System.EventArgs e)
+        {
+            if (this.fromRevisionComboBox.Text != "" || 
+                this.fromRevisionComboBox.SelectedItem != null)
+            {
+                EnableTextCombo(this.toRevisionComboBox.Text);
+            }
+        }                                     
  
 	}
 
