@@ -9,12 +9,12 @@ namespace Ankh.Tests
     {        
         #region IContext Members
 
-        public void EndOperation()
+        public virtual void EndOperation()
         {
             // TODO:  Add ContextBase.EndOperation implementation
         }
 
-        public OutputPaneWriter OutputPane
+        public virtual OutputPaneWriter OutputPane
         {
             get
             {
@@ -23,7 +23,7 @@ namespace Ankh.Tests
             }
         }
 
-        public System.Windows.Forms.IWin32Window HostWindow
+        public virtual System.Windows.Forms.IWin32Window HostWindow
         {
             get
             {
@@ -32,7 +32,7 @@ namespace Ankh.Tests
             }
         }
 
-        public EnvDTE._DTE DTE
+        public virtual EnvDTE._DTE DTE
         {
             get
             {
@@ -41,7 +41,7 @@ namespace Ankh.Tests
             }
         }
 
-        public Ankh.RepositoryExplorer.Controller RepositoryExplorer
+        public virtual Ankh.RepositoryExplorer.Controller RepositoryExplorer
         {
             get
             {
@@ -50,18 +50,18 @@ namespace Ankh.Tests
             }
         }
 
-        public void SolutionClosing()
+        public virtual void SolutionClosing()
         {
             // TODO:  Add ContextBase.SolutionClosing implementation
         }
 
-        public bool ReloadSolutionIfNecessary()
+        public virtual bool ReloadSolutionIfNecessary()
         {
             // TODO:  Add ContextBase.ReloadSolutionIfNecessary implementation
             return false;
         }
 
-        public Ankh.Config.Config Config
+        public virtual Ankh.Config.Config Config
         {
             get
             {
@@ -70,7 +70,7 @@ namespace Ankh.Tests
             }
         }
 
-        public ConflictManager ConflictManager
+        public virtual ConflictManager ConflictManager
         {
             get
             {
@@ -79,7 +79,7 @@ namespace Ankh.Tests
             }
         }
 
-        public StatusCache StatusCache
+        public virtual StatusCache StatusCache
         {
             get
             {
@@ -88,7 +88,7 @@ namespace Ankh.Tests
             }
         }
 
-        public IUIShell UIShell
+        public virtual IUIShell UIShell
         {
             get
             {
@@ -97,7 +97,7 @@ namespace Ankh.Tests
             }
         }
 
-        public IErrorHandler ErrorHandler
+        public virtual IErrorHandler ErrorHandler
         {
             get
             {
@@ -106,7 +106,7 @@ namespace Ankh.Tests
             }
         }
 
-        public FileWatcher ProjectFileWatcher
+        public virtual FileWatcher ProjectFileWatcher
         {
             get
             {
@@ -115,17 +115,17 @@ namespace Ankh.Tests
             }
         }
 
-        public void StartOperation(string description)
+        public virtual void StartOperation(string description)
         {
             // TODO:  Add ContextBase.StartOperation implementation
         }
 
-        public void Shutdown()
+        public virtual void Shutdown()
         {
             // TODO:  Add ContextBase.Shutdown implementation
         }
 
-        public Ankh.Config.ConfigLoader ConfigLoader
+        public virtual Ankh.Config.ConfigLoader ConfigLoader
         {
             get
             {
@@ -134,12 +134,12 @@ namespace Ankh.Tests
             }
         }
 
-        public void SolutionOpened()
+        public virtual void SolutionOpened()
         {
             // TODO:  Add ContextBase.SolutionOpened implementation
         }
 
-        public SvnClient Client
+        public virtual SvnClient Client
         {
             get
             {
@@ -148,7 +148,7 @@ namespace Ankh.Tests
             }
         }
 
-        public bool OperationRunning
+        public virtual bool OperationRunning
         {
             get
             {
@@ -157,7 +157,7 @@ namespace Ankh.Tests
             }
         }
 
-        public bool SolutionIsOpen
+        public virtual bool SolutionIsOpen
         {
             get
             {
@@ -166,7 +166,7 @@ namespace Ankh.Tests
             }
         }
 
-        public EnvDTE.AddIn AddIn
+        public virtual EnvDTE.AddIn AddIn
         {
             get
             {
@@ -175,7 +175,7 @@ namespace Ankh.Tests
             }
         }
 
-        public Ankh.Solution.Explorer SolutionExplorer
+        public virtual Ankh.Solution.Explorer SolutionExplorer
         {
             get
             {
@@ -186,7 +186,7 @@ namespace Ankh.Tests
 
         public event System.EventHandler Unloading;
 
-        public bool AnkhLoadedForSolution
+        public virtual bool AnkhLoadedForSolution
         {
             get
             {
