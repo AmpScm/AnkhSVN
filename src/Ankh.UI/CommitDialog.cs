@@ -228,6 +228,7 @@ namespace Ankh.UI
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(816, 315);
+            this.ControlBox = false;
             this.Controls.Add(this.logMessageBox);
             this.Controls.Add(this.diffView);
             this.Controls.Add(this.showDiffButton);
@@ -236,6 +237,8 @@ namespace Ankh.UI
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(390, 320);
             this.Name = "CommitDialog";
             this.ShowInTaskbar = false;
