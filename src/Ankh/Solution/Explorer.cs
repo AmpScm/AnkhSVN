@@ -152,8 +152,6 @@ namespace Ankh.Solution
             // generate a status cache
             this.GenerateStatusCache( this.dte.Solution.FullName );
             
-            this.solutionItem = this.uiHierarchy.UIHierarchyItems.Item(1);
-
             // store the original image list
             this.originalImageList = this.treeview.StatusImageList;
             
@@ -164,7 +162,7 @@ namespace Ankh.Solution
 
             // we assume there is a single root node
             this.root = TreeNode.CreateSolutionNode( 
-                this.solutionItem, this );
+                this.uiHierarchy.UIHierarchyItems.Item(1), this );
  
             Debug.WriteLine( "Created solution node", "Ankh" );
         }
@@ -406,7 +404,7 @@ namespace Ankh.Solution
                 return ((TreeNode)this.projectItems[item.Object]);
             else if ( item.Object is Project && this.projects.Contains(item.Object) )
                 return ((TreeNode)this.projects[item.Object]); 
-            else if ( item == this.solutionItem )
+            else if ( item == this.uiHierarchy.UIHierarchyItems.Item(1) )
                 return this.solutionNode;
             else
                 return null;
@@ -508,7 +506,6 @@ namespace Ankh.Solution
 
 
         private _DTE dte;
-        private UIHierarchyItem solutionItem;
         private TreeNode root;
         private UIHierarchy uiHierarchy;
         private const string VSNETWINDOW = "wndclass_desked_gsk";
