@@ -239,6 +239,12 @@
         <name>View Repository File</name>
         <description/>
       </file>
+    <file path="RenameItem.xml">
+        <handler>showusecase.html</handler>
+        <realpath>uml/usecases/RenameItem.xml</realpath>
+        <name>Rename Item</name>
+        <description/>
+      </file>
     </directory>
     </directory>
     
