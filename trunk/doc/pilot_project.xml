@@ -56,7 +56,7 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
 		    approach for UNIX developers, but developers on Windows are more accustomed to graphical 
 		    clients. The dominant developer tool on Windows is currently Microsoft Visual Studio.NET, 
 		    and integration into this environment would make Subversion a viable alternative to
-		    a large number of Windows developers. We decided this would be a worthwhile thing to for our
+		    a large number of Windows developers. We decided this would be a worthwhile thing to do for our
 		    final year project.</p>
     		
 		    <p> After having defined the project we contacted CollabNet through the Subversion developer
@@ -68,7 +68,7 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
     <section header="Aim"> 
 		<p>The aim of this project is to provide an
 		integration for Subversion into the existing
-		coding environment Visual Studio .NET. By making a addin for
+		coding environment Visual Studio .NET. By making an addin for
 		Visual Studio .NET the revision control system can be
 		made available for a huge amount of new users. We
 		also hope to make the .NET wrapper layer available as a
