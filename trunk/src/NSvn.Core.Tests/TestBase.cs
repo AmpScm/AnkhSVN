@@ -224,7 +224,7 @@ namespace NSvn.Core.Tests
                 ++i;
             }
 
-            return dir;
+            return Path.GetFullPath( dir );
         }
 
         private class ProcessReader
