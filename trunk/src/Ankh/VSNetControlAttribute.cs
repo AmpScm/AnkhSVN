@@ -89,6 +89,34 @@ namespace Ankh
             return bar;
         }
 
+        /// <summary>
+        /// Add a control to a set of bars.
+        /// </summary>
+        /// <param name="baseBars"></param>
+        /// <param name="cmd"></param>
+        /// <param name="context"></param>
+        /// <param name="tag"></param>
+        protected void AddControls( string[] baseBars, ICommand cmd, 
+            AnkhContext context, string tag)
+        {
+            // Use each of the 
+            foreach( string baseBar in baseBars )
+            {
+                string barName;
+
+                // avoid a trailing period if it's to go on the base bar
+                if ( this.CommandBar == String.Empty )
+                    barName = baseBar;
+                else
+                    barName = baseBar + "." + this.CommandBar;
+
+                CommandBar bar = 
+                    VSNetControlAttribute.GetCommandBar(barName, context);
+                CommandBarControl cntrl = cmd.Command.AddControl( bar, this.Position );
+                cntrl.Tag = tag;
+            }
+        }
+
         private string commandBar;
         private int position;
     }
