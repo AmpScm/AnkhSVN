@@ -20,7 +20,7 @@
                 PostBuildEvent = ""
                 RootNamespace = "Ankh.UI"
                 RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = "Ankh.UI.SslServerTrustDialog"
+                StartupObject = "Ankh.UI.ClientCertDialog"
             >
                 <Config
                     Name = "Debug"
@@ -155,6 +155,16 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClientCertDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClientCertDialog.resx"
+                    DependentUpon = "ClientCertDialog.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "ClientCertPassphraseDialog.cs"

@@ -20,8 +20,6 @@ namespace Ankh
     {
         public SvnContext( AnkhContext ankhContext ) : base( @"T:\foo123config" )
         {
-
-            //Clears the pane when opening new solutions.
             this.ankhContext = ankhContext;
             this.AddAuthenticationProvider( AuthenticationProvider.GetSimpleProvider() );           
             this.AddAuthenticationProvider( AuthenticationProvider.GetSimplePromptProvider(
@@ -35,6 +33,12 @@ namespace Ankh
                 AuthenticationProvider.GetSslClientCertPasswordPromptProvider(
                     new SslClientCertPasswordPromptDelegate( 
                         this.ClientCertificatePasswordPrompt ) ) );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertFileProvider() );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertPromptProvider( 
+                    new SslClientCertPromptDelegate( this.ClientCertificatePrompt ) ) );
+
 
 
         }
@@ -197,12 +201,30 @@ namespace Ankh
                     return null;
             }
         }
-        
+
+        /// <summary>
+        /// Prompts the user for a client certificate.
+        /// </summary>
+        /// <returns></returns>
+        private SslClientCertificateCredential ClientCertificatePrompt()
+        {
+            using( ClientCertDialog dialog = new ClientCertDialog() )
+            {
+                if ( dialog.ShowDialog() == DialogResult.OK )
+                {
+                    SslClientCertificateCredential cred = new 
+                        SslClientCertificateCredential();
+                    cred.CertificateFile = dialog.CertificateFile;
+                    return cred;
+                }
+                else
+                    return null;
+            }
+        }        
 
         /// <summary>
         /// Pupulates actionStatus Hashtable.
         /// </summary>
-        /// 
         static SvnContext()
         {
             actionStatus[NotifyAction.Add] =                    "Added";
