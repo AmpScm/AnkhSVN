@@ -16,7 +16,7 @@ namespace NSvn.Core.Tests
             base.SetUp();
 
             this.ExtractRepos();
-            this.ExtractWorkingCopy();            
+            this.ExtractWorkingCopy();  
         }
 
         /// <summary>

@@ -22,17 +22,19 @@ namespace NSvn
         public __gc class Client
         {
         public:            
-            /*static void Checkout(String* url, String* path, Revision* revision, bool recurse, 
+            static void Checkout(String* url, String* path, Revision* revision, bool recurse, 
                 ClientContext* context);
 
-	        static void Update(String* path, Revision* revision, bool recurse, ClientContext* context);
+	        /*static void Update(String* path, Revision* revision, bool recurse, ClientContext* context);
 
 	        static void Switch(String* path, String* url, Revision* revision, bool recurse, 
                 ClientContext* context);*/
 
 	        static void Add(String* path, bool recursive, ClientContext* context);
             
-            
+            ///<summary>Make a dir</summary>
+            ///<param name="path">Path to the directory</param>
+            ///<return>A commit
 	        static CommitInfo* MakeDir(String* path, ClientContext* context);
 /*
 	        static CommitInfo* Delete(String* path, AdminAccessBaton* admAccessBaton, bool force, 
