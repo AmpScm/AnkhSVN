@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Web;
 using System.Windows.Forms;
+using System.Reflection;
 namespace Utils
 {
 	/// <summary>
@@ -42,9 +43,15 @@ namespace Utils
         /// <param name="recipient"></param>
         /// <param name="subject"></param>
         /// <param name="ex"></param>
-        public static void SendByMail( string recipient, string subject, Exception ex )
+        /// <param name="assembly">The assembly where the error originated. This will 
+        /// be used to extract version information.</param>
+        public static void SendByMail( string recipient, string subject, Exception ex, 
+            Assembly assembly )
         {
             string msg = GetMessage( ex );
+            msg += Environment.NewLine + Environment.NewLine + "Version: " + 
+                assembly.GetName().Version.ToString();
+
             string command = string.Format( "mailto:{0}?subject={1}&body={2}",
                 recipient, HttpUtility.UrlEncode(subject), 
                 msg );
@@ -61,13 +68,16 @@ namespace Utils
         /// </summary>
         /// <param name="url"></param>
         /// <param name="ex"></param>
-        public static void SendByWeb( string url, Exception ex )
+        /// <param name="assembly">The assembly where the error originated. This will 
+        /// be used to extract version information.</param>
+        public static void SendByWeb( string url, Exception ex, Assembly assembly )
         {
             try
             {
                 string msg = GetMessage( ex );
-                string command = string.Format( "{0}?message={1}", 
-                    url, HttpUtility.UrlEncode( msg ) );
+                string command = string.Format( "{0}?message={1}&version={2}", 
+                    url, HttpUtility.UrlEncode( msg ), 
+                    HttpUtility.UrlEncode( assembly.GetName().Version.ToString() ) );
 
                 Process p = new Process();
                 p.StartInfo.FileName = command;
@@ -87,12 +97,15 @@ namespace Utils
         /// <param name="recipient"></param>
         /// <param name="subject"></param>
         /// <param name="ex"></param>
-        public static void QuerySendByMail( string recipient, string subject, Exception ex )
+        /// <param name="assembly">The assembly where the error originated. This will 
+        /// be used to extract version information.</param>
+        public static void QuerySendByMail( string recipient, string subject, Exception ex,
+            Assembly assembly )
         {
             if ( MessageBox.Show( "An error has occurred. Do you wish to send an error report?",
                 "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error ) == DialogResult.Yes )
             {
-                SendByMail( recipient, subject, ex );
+                SendByMail( recipient, subject, ex, assembly );
             }
 
         }
@@ -102,12 +115,15 @@ namespace Utils
         /// </summary>
         /// <param name="url"></param>
         /// <param name="ex"></param>
-        public static void QuerySendByWeb( string url, Exception ex )
+        /// <param name="assembly">The assembly where the error originated. This will 
+        /// be used to extract version information.</param>
+        public static void QuerySendByWeb( string url, Exception ex, Assembly assembly )
         {
-            if ( MessageBox.Show( "An error has occurred. Do you wish to send an error report?",
+            if ( MessageBox.Show( "An error has occurred. Do you wish to send an error report" + 
+                "(This will open your default web browser)?",
                 "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error ) == DialogResult.Yes )
             {
-                SendByWeb( url, ex );
+                SendByWeb( url, ex, assembly );
             }
 
         }
