@@ -47,6 +47,7 @@ namespace Ankh.Solution
             this.Unload();
             this.SetUpTreeview();
             this.SyncWithTreeView();
+            this.CreateTaskItems();
         }
 
         /// <summary>
@@ -377,6 +378,49 @@ namespace Ankh.Solution
         {
             // we assume theres only one of these
             this.solutionNode = node;
+        }
+
+        /// <summary>
+        /// Returns all  the SvnItem resources from root
+        /// </summary>
+        /// <param name="getChildItems">Whether children of the items in 
+        /// question should be included.</param>
+        /// <param name="filter">A callback used to filter the items
+        /// that are added.</param>
+        /// <returns>A list of SvnItem instances.</returns>
+        public IList GetAllResources( bool getChildItems, 
+            ResourceFilterCallback filter )
+        {
+            ArrayList list = new ArrayList();
+
+            TreeNode node = solutionNode; 	
+            if ( node != null )	 	
+                node.GetResources( list, getChildItems, filter );	 	
+
+            return list;
+        }
+        /// <summary>
+        ///  Filter for getting conflicted items from the solution
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+       private  bool ConflictedFilter( SvnItem item )
+        {
+            return (item.Status.TextStatus == NSvn.Core.StatusKind.Conflicted);
+        }
+
+        /// <summary>
+        ///  Find all the files with conflicts and create conflict items in the task list for them
+        /// </summary>
+        private void CreateTaskItems()
+        {
+            ConflictTasks conflictTasks =  new ConflictTasks(context);
+
+            IList conflictItems =  this.GetAllResources(true,   new ResourceFilterCallback(ConflictedFilter)); 
+            foreach(SvnItem item in conflictItems)
+            {
+                conflictTasks.AddTask( item.Path);
+            }
         }
 
         private void GenerateStatusCache( string solutionPath )
