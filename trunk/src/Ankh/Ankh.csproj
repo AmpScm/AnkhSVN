@@ -169,6 +169,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "OutputPaneWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RepositoryExplorerMenuAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
