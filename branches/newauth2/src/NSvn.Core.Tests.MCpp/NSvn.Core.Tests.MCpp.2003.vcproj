@@ -46,7 +46,8 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				CommandLine="copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.dll $(OutDir)
-copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)"/>
+copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)
+"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -124,6 +125,9 @@ copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)"/>
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
+				RelativePath=".\AuthenticationBatonTest.cpp">
+			</File>
+			<File
 				RelativePath=".\AuthenticationTest.cpp">
 			</File>
 			<File
@@ -168,6 +172,9 @@ copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)"/>
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
 				RelativePath="AprFileAdapterTest.h">
+			</File>
+			<File
+				RelativePath=".\AuthenticationBatonTest.h">
 			</File>
 			<File
 				RelativePath=".\AuthenticationTest.h">

@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="NSvn.Core"
 	ProjectGUID="{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
+	RootNamespace="NSvn.Core"
 	Keyword="ManagedCProj">
 	<Platforms>
 		<Platform
@@ -111,6 +112,18 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<AssemblyReference
+			RelativePath="mscorlib.dll"/>
+		<AssemblyReference
+			RelativePath="System.dll"/>
+		<AssemblyReference
+			RelativePath="System.Data.dll"/>
+		<AssemblyReference
+			RelativePath="System.Drawing.dll"/>
+		<AssemblyReference
+			RelativePath="System.Windows.Forms.dll"/>
+		<AssemblyReference
+			RelativePath="System.XML.dll"/>
 	</References>
 	<Files>
 		<Filter
@@ -170,6 +183,9 @@
 			</File>
 			<File
 				RelativePath=".\Authentication.h">
+			</File>
+			<File
+				RelativePath=".\AuthenticationBaton.h">				
 			</File>
 			<File
 				RelativePath=".\AuthenticationProviderObject.h">
