@@ -24,10 +24,19 @@ namespace SvnTasks
             base.InitializeTask (taskNode);
 
             this.client = new Client();
-            this.client.AuthBaton.Add( AuthenticationProvider.GetSimplePromptProvider(
-                new SimplePromptDelegate(this.SimplePrompt), 1 ) );
-            this.client.AuthBaton.Add( AuthenticationProvider.GetSimpleProvider() );
+
+			if ((this.Username == null) || (this.Username == String.Empty))
+			{
+				this.client.AuthBaton.Add( AuthenticationProvider.GetSimpleProvider() );
+			} 
+			else
+			{
+				this.client.AuthBaton.Add( AuthenticationProvider.GetSimplePromptProvider(
+					new SimplePromptDelegate(this.SimplePrompt), 1 ) );
+			}
+            
             this.client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
+
             this.client.Notification += new NotificationDelegate(this.Notify);
         }
 
@@ -86,10 +95,12 @@ namespace SvnTasks
 			this.ExecuteTask();
 		}
 
-		protected SimpleCredential SimplePrompt(string realm, string password, bool maySave)
-		{
+		protected SimpleCredential SimplePrompt(string realmString, string username, bool maySave)
+		{	
 			return new SimpleCredential(this.Username, this.Password, maySave);
 		}
+
+		
 
         protected void Notify( object sender, NSvn.Core.NotificationEventArgs args )
         {

@@ -16,7 +16,8 @@ namespace Tests.SvnTasks
             <project>
 				<svncommit 
 						localDir='{0}'
-						recursive='true' />
+						recursive='true'
+						logmessage='test log message' />
             </project>";
 
 		/// <summary>

@@ -85,19 +85,13 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "D:\Program Files\NUnit 2.2\\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
                     Name = "NAnt.Core"
                     AssemblyName = "NAnt.Core"
                     HintPath = "..\..\ConfigMgmt\NAnt\bin\NAnt.Core.dll"
                 />
                 <Reference
                     Name = "NAnt.Tests"
-                    AssemblyName = "NAnt.Tests"
+                    AssemblyName = "Nant.Tests"
                     HintPath = "..\..\ConfigMgmt\NAnt\bin\NAnt.Tests.dll"
                 />
                 <Reference
@@ -107,8 +101,13 @@
                 />
                 <Reference
                     Name = "NAnt.Win32Tasks"
-                    AssemblyName = "NAnt.Win32Tasks"
+                    AssemblyName = "Nant.Win32Tasks"
                     HintPath = "..\..\ConfigMgmt\NAnt\bin\NAnt.Win32Tasks.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\ConfigMgmt\NAnt\bin\nunit.framework.dll"
                 />
             </References>
         </Build>
