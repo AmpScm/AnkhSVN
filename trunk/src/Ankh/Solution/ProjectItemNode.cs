@@ -105,7 +105,7 @@ namespace Ankh.Solution
             {
                 foreach( ProjectItem subItem in item.ProjectItems )
                 {
-                    if ( subItem.Name != SvnUtils.WC_ADMIN_AREA )
+                    if ( subItem.Name != Client.AdminDirectoryName )
                     {
                         this.AddResourcesFromProjectItem( subItem, del );
                         this.AddSubItems( subItem, del );

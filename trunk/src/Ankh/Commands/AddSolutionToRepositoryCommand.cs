@@ -89,8 +89,6 @@ namespace Ankh.Commands
                 this.paths.Add( context.DTE.Solution.FullName );
 
                 this.AddProjects( context.DTE.Solution.Projects, context, solutionDir );  
-                
-                System.Reflection.Assembly a; a.CreateInstance(
             }
             finally
             {
