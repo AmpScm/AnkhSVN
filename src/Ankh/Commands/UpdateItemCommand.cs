@@ -10,17 +10,17 @@ namespace Ankh.Commands
 	[VSNetCommand("UpdateItem", Text = "Update", Tooltip = "Updates the local item"),
      VSNetControl( "Item", Position = 2 ),
      VSNetControl( "Tools", Position = 4 )]
-	internal class UpdateItem : ICommand
+	internal class UpdateItem : CommandBase
 	{	
 	
         #region Implementation of ICommand
-        public EnvDTE.vsCommandStatus QueryStatus(EnvDTE._DTE dte)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             return vsCommandStatus.vsCommandStatusEnabled | 
                 vsCommandStatus.vsCommandStatusSupported;
         }
 
-        public void Execute(EnvDTE._DTE dte)
+        public override void Execute(AnkhContext context)
         {   
             System.Windows.Forms.MessageBox.Show( "Update invoked" );
         }

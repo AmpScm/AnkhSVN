@@ -50,11 +50,10 @@ namespace Ankh
 		/// <seealso class='IDTExtensibility2' />
 		public void OnConnection(object application, Extensibility.ext_ConnectMode connectMode, object addInInst, ref System.Array custom)
 		{
-			applicationObject = (_DTE)application;
-			addInInstance = (AddIn)addInInst;
+            this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
 
             this.commands= 
-                Ankh.CommandMap.RegisterCommands( applicationObject, addInInstance );           
+                Ankh.CommandMap.RegisterCommands( this.context );          
             
 
 			if(connectMode == Extensibility.ext_ConnectMode.ext_cm_UISetup)
@@ -164,7 +163,7 @@ namespace Ankh
 			{
                 Ankh.ICommand cmd;
                 if ( (cmd = (ICommand)this.commands[commandName]) != null )
-                    status = cmd.QueryStatus( this.applicationObject );
+                    status = cmd.QueryStatus( this.context );
 
                 //    status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
 //				if(commandName == "Ankh.Connect.Ankh")
@@ -202,13 +201,12 @@ namespace Ankh
                 ICommand cmd;
                 if ( (cmd = (ICommand)this.commands[commandName]) != null )
                 {
-                    cmd.Execute( this.applicationObject );
+                    cmd.Execute( this.context );
 					handled = true;
 				}
 			}
 		}
-		private _DTE applicationObject;
-		private AddIn addInInstance;
+        private AnkhContext context;
         Ankh.CommandMap commands;
 		
 	}

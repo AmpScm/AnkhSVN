@@ -82,6 +82,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Utils.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "Win32\Constants.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
