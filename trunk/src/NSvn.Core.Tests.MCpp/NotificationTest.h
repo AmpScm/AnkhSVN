@@ -1,5 +1,5 @@
 #pragma once
-#using <nunit.framework.dll>
+#include "stdafx.h"
 using namespace NUnit::Framework;
 
 namespace NSvn
