@@ -32,7 +32,7 @@
         
         <csc target="library" output="${build.dir}/Utils.dll" verbose="${verbose}" define="${define}">
             <references>
-                <includes name="${lib.dir}\nunit.framework.dll"/>
+                <includes name="${lib.dir}\Sharpziplib.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
