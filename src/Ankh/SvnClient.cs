@@ -49,39 +49,34 @@ namespace Ankh
             string templateText = this.GetTemplate();
             LogMessageTemplate template = new LogMessageTemplate( templateText );
 
-            using( CommitDialog dialog = new CommitDialog() )
+            CommitContext ctx = new CommitContext( template, items, urlPaths );            
+
+            // is there a previous log message?
+            if ( this.logMessage != null )
             {
-                dialog.UrlPaths = urlPaths;
-                dialog.CommitItems = items;
+                if ( ankhContext.Config.AutoReuseComment ||
+                    MessageBox.Show( this.ankhContext.HostWindow, 
+                    "The previous commit did not complete." + Environment.NewLine + 
+                    "Do you want to reuse the log message?", 
+                    "Previous log message", MessageBoxButtons.YesNo ) ==
+                    DialogResult.Yes )
 
+                    ctx.LogMessage = this.logMessage;
+            }
 
-                dialog.LogMessageTemplate = template;
+            // we must give it diffs if it wants em
+            ctx.DiffWanted += new DiffWantedDelegate( this.DiffWanted );
 
-                // is there a previous log message?
-                if ( this.logMessage != null )
-                {
-                    if ( ankhContext.Config.AutoReuseComment ||
-                        MessageBox.Show( this.ankhContext.HostWindow, 
-                        "The previous commit did not complete." + Environment.NewLine + 
-                        "Do you want to reuse the log message?", 
-                        "Previous log message", MessageBoxButtons.YesNo ) ==
-                        DialogResult.Yes )
-
-                        dialog.LogMessage = this.logMessage;
-                }
-
-                // we must give it diffs if it wants em
-                dialog.DiffWanted += new DiffWantedDelegate( this.DiffWanted );
-                if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
-                {
-                    this.logMessage = dialog.LogMessage;
-                    return dialog.CommitItems;
-                }
-                else
-                {
-                    this.logMessage = dialog.RawLogMessage;
-                    return null;
-                }
+            ctx = this.ankhContext.UIShell.ShowCommitDialog( ctx );
+            if ( ctx.Cancelled )
+            {
+                this.logMessage = ctx.RawLogMessage;
+                return null;                
+            }
+            else
+            {
+                this.logMessage = ctx.LogMessage;
+                return ctx.CommitItems;                
             }
         }
 

@@ -201,7 +201,7 @@
                 />
                 <File
                     RelPath = "CommitDialog.cs"
-                    SubType = "Form"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File

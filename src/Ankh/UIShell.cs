@@ -65,6 +65,44 @@ namespace Ankh
             this.repositoryExplorerWindow.SetSelectionContainer( ref selection );
         }
 
+        public CommitContext ShowCommitDialog( CommitContext ctx )
+        {
+            if ( this.commitDialogWindow == null ) 
+                this.CreateCommitDialog();
+            Debug.Assert( this.commitDialog != null );
+
+            this.commitDialog.CommitItems = ctx.CommitItems;
+            this.commitDialog.UrlPaths = ctx.UrlPaths;
+            this.commitDialog.LogMessageTemplate = ctx.LogMessageTemplate;
+            if ( ctx.LogMessage != null )
+                this.commitDialog.LogMessage = ctx.LogMessage;
+
+            this.commitDialogWindow.Visible = true;
+            this.commitDialogModal = true;
+
+            this.commitDialog.Proceed += new EventHandler( this.ProceedCommit );
+
+            this.commitDialog.Initialize();
+
+            while ( this.commitDialogModal ) 
+            {
+                Application.DoEvents();
+                if ( !this.commitDialogWindow.Visible && this.commitDialogModal )
+                    this.commitDialogWindow.Visible = true;
+            }
+
+            ctx.LogMessage = this.commitDialog.LogMessage;
+            ctx.RawLogMessage = this.commitDialog.RawLogMessage;
+            ctx.CommitItems = this.commitDialog.CommitItems;
+
+            if ( this.commitDialog.CommitDialogResult != CommitDialogResult.Cancel )
+            {
+                ctx.Cancelled = false;
+            }
+
+            return ctx;
+        }
+
         /// <summary>
         /// Display a message box.
         /// </summary>
@@ -116,12 +154,50 @@ namespace Ankh
                 "Could not create tool window" );
         }
 
-        private RepositoryExplorerControl repositoryExplorerControl;
+        private void CreateCommitDialog()
+        {
+            Debug.WriteLine( "Creating commit dialog user control", "Ankh" );
+            object control = null;
+            this.commitDialogWindow = this.context.DTE.Windows.CreateToolWindow( 
+                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl", 
+                "Commit", CommitDialogGuid, ref control );
+            
+            this.commitDialogWindow.Visible = true;
+            this.commitDialogWindow.Visible = false;
+
+            this.commitDialogWindow.Caption = "Commit";
+            
+            AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl 
+                objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
+            
+            this.commitDialog = new CommitDialog();
+            objControl.HostUserControl( this.commitDialog );
+            
+            System.Diagnostics.Debug.Assert( this.commitDialog != null, 
+                "Could not create tool window" );
+            
+        }
+
+        private void ProceedCommit( object sender, EventArgs e )
+        {
+            this.commitDialog.Proceed -= new EventHandler( this.ProceedCommit );
+            this.commitDialogModal = false;
+            this.commitDialogWindow.Visible = false;
+        }
+
+        private RepositoryExplorerControl repositoryExplorerControl;        
         private Window repositoryExplorerWindow;
+        private CommitDialog commitDialog;
+        private Window commitDialogWindow;
         private IContext context;
+        private bool commitDialogModal;
         
         public const string REPOSEXPLORERGUID = 
             "{1C5A739C-448C-4401-9076-5990300B0E1B}";
+        private const string CommitDialogGuid = 
+            "{08BD45A4-7716-49b0-BB41-CFEBCD098728}";
+
+
     
         
     }
