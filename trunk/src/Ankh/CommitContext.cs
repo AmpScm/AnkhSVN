@@ -35,7 +35,7 @@ namespace Ankh
         public string RawLogMessage
         {
             get{ return this.rawLogMessage; }
-            set{ this.logMessage = value; }
+            set{ this.rawLogMessage = value; }
         }
 
 
