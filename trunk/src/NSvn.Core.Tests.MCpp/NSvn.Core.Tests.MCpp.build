@@ -17,6 +17,7 @@
     <property name="cl.options" value='/Od /I "..\NSvn.Core" 
         /I "${svndir}\apr\include" /I "${svndir}\apr-iconv\include" 
         /I "${svndir}\apr-util\include" /I "${svndir}\subversion\include" 
+        /AI "..\Utils\bin\Debug"
         /AI "..\NSvn.Common\bin\Debug" /D "WIN32" /D "_DEBUG" /D "_MBCS" 
         /D "_WINDLL" /FD /EHsc /MDd /GS   /W3 /nologo /c /Zi /clr /TP /AI 
         ${lib.dir} /AI ..\NSvn.Core\${build.dir}\ /AI ..\NSvn.Common\${build.dir}'
@@ -24,6 +25,7 @@
     <property name="cl.options" value='/Od /I "..\NSvn.Core" 
         /I "${svndir}\apr\include" /I "${svndir}\apr-iconv\include" 
         /I "${svndir}\apr-util\include" /I "${svndir}\subversion\include" 
+        /AI "..\Utils\bin\Release"
         /AI "..\NSvn.Common\bin\Release" /D "WIN32" /D "_MBCS" /D "_WINDLL" 
         /FD /EHsc /MD /GS  /W3 /nologo /c /Zi /clr /TP /AI ${lib.dir} 
         /AI ..\NSvn.Core\${build.dir}\ /AI ..\NSvn.Common\${build.dir}'
