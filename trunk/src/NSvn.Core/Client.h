@@ -58,9 +58,10 @@ namespace NSvn
 
 	        */static void Cleanup(String* dir);
 
-	        static void Revert(String* path, bool recursive, ClientContext* context);/*
-
+	        static void Revert(String* path, bool recursive, ClientContext* context);
 	        static void Resolve(String* path, bool recursive, ClientContext* context);
+            /*
+
 
 	        static CommitInfo* Copy(String* srcPath, Revision* srcRevision, String* dst, 
                 ClientContext* context);

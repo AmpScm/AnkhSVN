@@ -48,7 +48,7 @@ namespace NSvn.Core.Tests
             if ( Directory.Exists( this.reposPath ) )
                 Directory.Delete( this.reposPath, true );
 
-            ExtractToTempPath(this.reposPath, REPOS_FILE );
+            ExtractZipFile(this.reposPath, REPOS_FILE );
             this.reposUrl = "file://" + 
                 this.reposPath.Replace( "\\", "/" );
             if( this.reposUrl[ this.reposUrl.Length-1 ] != '/' )
@@ -65,7 +65,7 @@ namespace NSvn.Core.Tests
         public void ExtractWorkingCopy( )
         {
             this.wcPath = this.FindDirName( Path.Combine( BASEPATH, WC_NAME ) );
-            ExtractToTempPath( this.wcPath, WC_FILE );        
+            ExtractZipFile( this.wcPath, WC_FILE );        
 
         }
 
@@ -165,7 +165,7 @@ namespace NSvn.Core.Tests
 
         
 
-        private void ExtractToTempPath( string destinationPath, string resource )
+        protected void ExtractZipFile( string destinationPath, string resource )
         {
             Directory.CreateDirectory( destinationPath );
             

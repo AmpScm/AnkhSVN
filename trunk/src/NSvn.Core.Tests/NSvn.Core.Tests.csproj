@@ -134,6 +134,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "ResolveTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RevertTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
