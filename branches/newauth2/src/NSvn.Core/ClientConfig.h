@@ -43,6 +43,13 @@ namespace NSvn
                 return StringHelper(val);
             }
 
+            /// <summary>Create a subversion configuration directory at path.</summary>
+            static void CreateConfigDir( String* path )
+            {
+                Pool pool;
+                HandleError( svn_config_ensure( StringHelper(path), pool ) );
+            }
+
         private public:
             apr_hash_t* GetHash()
             {

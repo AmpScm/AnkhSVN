@@ -185,7 +185,7 @@
 				RelativePath=".\Authentication.h">
 			</File>
 			<File
-				RelativePath=".\AuthenticationBaton.h">				
+				RelativePath=".\AuthenticationBaton.h">
 			</File>
 			<File
 				RelativePath=".\AuthenticationProviderObject.h">

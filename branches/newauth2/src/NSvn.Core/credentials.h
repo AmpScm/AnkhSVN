@@ -5,6 +5,7 @@
 #include <svn_auth.h>
 #include "StringHelper.h"
 #include <apr_strings.h>
+#include "svnenums.h"
 
 namespace NSvn
 {
@@ -12,6 +13,7 @@ namespace NSvn
     {
         using namespace System;
 
+        /// TODO: make stuff public
         /// <summary>Represents a simple credential obtained by prompting the user
         /// for a username and/or password </summary>
         public __gc class SimpleCredential
@@ -46,6 +48,29 @@ namespace NSvn
         private:
             String* username;
             String* password;
+        };
+
+        /// <summary>Represents a credential stating which certificates to trust.
+        /// </summary>
+        public __gc class SslServerTrustCredential
+        {
+        public:
+            /// <summary>Trust this certificate permanently?</summary>
+            bool TrustPermanently;
+
+            /// <summary>A collection of flags of which kinds of failures should be accepted 
+            /// permanently.</summary>
+            SslFailures AcceptedFailures;
+        public private:
+            svn_auth_cred_ssl_server_trust_t* GetCredential( apr_pool_t* pool )
+            {
+                svn_auth_cred_ssl_server_trust_t* cred = 
+                    static_cast<svn_auth_cred_ssl_server_trust_t*>( 
+                        apr_pcalloc(pool, sizeof(*cred)) );
+                cred->accepted_failures = static_cast<int>(this->AcceptedFailures);
+                cred->trust_permanently = this->TrustPermanently;
+                return cred;
+            }
         };
     }
 }

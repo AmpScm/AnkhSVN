@@ -135,6 +135,12 @@
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
+				RelativePath=".\AuthenticationBatonTest.cpp">
+			</File>
+			<File
+				RelativePath=".\AuthenticationTest.cpp">
+			</File>
+			<File
 				RelativePath="ClientContextTest.cpp">
 			</File>
 			<File
@@ -176,6 +182,12 @@
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
 				RelativePath="AprFileAdapterTest.h">
+			</File>
+			<File
+				RelativePath=".\AuthenticationBatonTest.h">
+			</File>
+			<File
+				RelativePath=".\AuthenticationTest.h">
 			</File>
 			<File
 				RelativePath="ClientContextTest.h">
