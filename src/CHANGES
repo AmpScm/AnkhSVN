@@ -1,5 +1,24 @@
+Version 0.5.2(released 07.07.2004)
+This release was built against Subversion 1.0.6, Neon 0.24.6, 
+openssl 0.9.7 and Berkeley DB 4.2.52
+
+* Add new Tools->AnkhSVN->Export... command.
+* Make installer set up the Ankh version information in the Help->About
+  box rather than do it at startup. Make it work for both administrative
+  installs and user-specific installs
+* Fix a bug where there could potentially be duplicates of the same item
+  in the task list upon conflicts.
+* Ensure that the Update command does the same when holding down Shift
+  as when you accept the defaults in the dialog box.
 ------------------------------------------------------------------------
-Version 0.5.0(released 26.01.2004)
+Version 0.5.1(released 01.07.2004)
+This release was built against Subversion 1.0.6, Neon 0.24.6, 
+openssl 0.9.7 and Berkeley DB 4.2.52
+
+* Fix a bug in the installer which caused it to not register Ankh.dll
+  for COM interop
+------------------------------------------------------------------------
+Version 0.5.0(released 30.06.2004)
 This release was built against Subversion 1.0.6, Neon 0.24.6, 
 openssl 0.9.7 and Berkeley DB 4.2.52
 
