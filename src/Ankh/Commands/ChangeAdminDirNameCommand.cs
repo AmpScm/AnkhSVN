@@ -10,7 +10,7 @@ namespace Ankh.Commands
     /// Subversion's admin directory.
     /// </summary>
     [VSNetCommand("ChangeAdminDirName", 
-         Text="Temporarily change the Subversion admin directory", 
+         Text="Temporarily change the Subversion admin directory...", 
          Tooltip= "Temporarily change the name of the Subversion administrative directory", 
          Bitmap=ResourceBitmaps.ChangeAdminDirName ),
     VSNetControl( "MenuBar.Tools.AnkhSVN", Position=1 ),]
