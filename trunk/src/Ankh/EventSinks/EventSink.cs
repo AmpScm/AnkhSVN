@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using EnvDTE;
 using Microsoft.Win32;
+using Microsoft;
+using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Ankh.EventSinks
 {
@@ -32,7 +34,19 @@ namespace Ankh.EventSinks
                 // only create one set of sinks for each project type
                 if ( foundKinds.Contains( project.Kind ) ) 
                     continue;
+                foundKinds.Add( project.Kind );
 
+                // VC++ projects are a special case
+                if ( project.Kind == VCPROJECTGUID )
+                {
+                    VCProjectEngineEvents events = (VCProjectEngineEvents)
+                        context.DTE.Events.GetObject( VCPROJECT );
+                    sinks.Add( new VCProjectEventSink( events, context ) );
+
+                    continue;
+                }
+                    
+                // all other projects should follow the normal model
                 ProjectsEventSink projectsEvents = GetProjectsEvents( project.Kind, context );
                 if ( projectsEvents != null )
                     sinks.Add( projectsEvents );
@@ -96,8 +110,13 @@ namespace Ankh.EventSinks
         private static string GetName( string kind, string substring )
         {
             string packageGuid = GetPackageGuid( kind );
+            if ( packageGuid == null )
+                return null;
+
             string keyName = PACKAGEPATH + packageGuid + "\\AutomationEvents";
             RegistryKey key = Registry.LocalMachine.OpenSubKey( keyName );
+            if ( key == null )
+                return null;
             foreach( string name in key.GetValueNames() )
             {
                 if ( name.IndexOf( substring ) >= 0 )
@@ -116,7 +135,10 @@ namespace Ankh.EventSinks
         {
             string path = PROJECTPATH + kind;
             RegistryKey key = Registry.LocalMachine.OpenSubKey( path );
-            return key.GetValue( "Package" ).ToString();
+            if ( key == null ) 
+                return null;
+            else
+                return key.GetValue( "Package" ).ToString();
         }
         
 
@@ -124,6 +146,9 @@ namespace Ankh.EventSinks
         private const string PROJECTPATH = @"SOFTWARE\Microsoft\VisualStudio\7.0\Projects\";
         private const string PACKAGEPATH = 
             @"SOFTWARE\Microsoft\VisualStudio\7.0\Packages\";
+        private const string VCPROJECTGUID = 
+            @"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
+        private const string VCPROJECT = "VCProjectEngineEventsObject";
 
 	}
 }
