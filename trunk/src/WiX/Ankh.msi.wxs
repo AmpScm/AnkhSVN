@@ -112,10 +112,6 @@
             <MigrateFeatureStates Sequence="1200"/>
             <InstallValidate Sequence="1400"/>
             <InstallInitialize Sequence="1500"/>            
-            
-            <Custom Action="ReposInstaller_Uninstall.SetProperty" Sequence="1760">NEWERPRODUCTFOUND</Custom>
-            <Custom Action="ReposInstaller_Uninstall" Sequence="1765">NEWERPRODUCTFOUND</Custom>
-            
             <RemoveExistingProducts Sequence="1525">NEWERPRODUCTFOUND</RemoveExistingProducts>
             <AllocateRegistrySpace Sequence="1550">NOT Installed</AllocateRegistrySpace>
             <ProcessComponents Sequence="1600"/>
