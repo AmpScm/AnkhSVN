@@ -132,6 +132,38 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordFi
         "Realm", baton, pool ) );
 }
 
+void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPromptProvider()
+{
+    AuthenticationProvider* provider = AuthenticationProvider::GetSslClientCertPromptProvider(
+        new SslClientCertPromptDelegate( this, CertificatePrompt ) );
+
+    Pool pool;
+
+    svn_auth_cred_ssl_client_cert_t* cred;
+    svn_auth_iterstate_t* iterstate;
+    apr_hash_t* params = apr_hash_make( pool );
+
+    svn_auth_baton_t* baton = GetBaton( provider->GetProvider(), pool );
+
+    HandleError( svn_auth_first_credentials( ((void**)&cred), &iterstate, 
+        SVN_AUTH_CRED_SSL_CLIENT_CERT,
+        "Realm", baton, pool ) );
+
+    Assertion::Assert( "Cred is null", cred != 0 );
+
+    // try a null
+    provider = AuthenticationProvider::GetSslClientCertPromptProvider(
+        new SslClientCertPromptDelegate( this, NullCertificatePrompt ) );
+    baton = GetBaton( provider->GetProvider(), pool );
+
+    HandleError( svn_auth_first_credentials( ((void**)&cred), &iterstate, 
+        SVN_AUTH_CRED_SSL_CLIENT_CERT,
+        "Realm", baton, pool ) );
+    
+    Assertion::Assert( "cred should be null", cred == 0 );
+
+}
+
 
 SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::SimplePrompt( 
     String* realm, String* username )
@@ -149,3 +181,16 @@ SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::NullSimplePrompt(
 
     return 0;
 }
+
+SslClientCertificateCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::CertificatePrompt()
+{
+    SslClientCertificateCredential* cred = new SslClientCertificateCredential();
+    cred->CertificateFile = "C:\\cert.txt";
+    return cred;
+}
+
+SslClientCertificateCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::NullCertificatePrompt()
+{
+    return 0;
+}
+

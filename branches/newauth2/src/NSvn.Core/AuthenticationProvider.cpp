@@ -23,6 +23,9 @@ svn_error_t* svn_auth_ssl_server_trust_prompt_func(
     const svn_auth_ssl_server_cert_info_t *cert_info,
     apr_pool_t *pool );
 
+svn_error_t* svn_auth_ssl_client_cert_prompt_func( svn_auth_cred_ssl_client_cert_t **cred, 
+                                                  void *baton, apr_pool_t *pool );
+
 
 
 // implementation of GetSimplePromptProvider
@@ -120,7 +123,22 @@ AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertPass
     return new AuthenticationProvider( provider, pool );
 }
 
+// implementation of GetSslServerTrustFileProvider
+AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertPromptProvider(
+    SslClientCertPromptDelegate* promptDelegate )
+{
+    GCPool* pool = new GCPool();
+    svn_auth_provider_object_t* provider;
 
+    void* baton = pool->GetPool()->AllocateObject( 
+        ManagedPointer<SslClientCertPromptDelegate*>(promptDelegate));
+
+    svn_client_get_ssl_client_cert_prompt_provider( &provider, 
+        svn_auth_ssl_client_cert_prompt_func, baton, 
+        pool->ToAprPool() );
+
+    return new AuthenticationProvider( provider, pool );
+}
 
 // callback function for a simple prompt provider
 svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton,
@@ -158,6 +176,24 @@ svn_error_t* svn_auth_ssl_server_trust_prompt_func(
     String* realmString = StringHelper(realm);
     SslServerTrustCredential* cred = delegate->Invoke( realmString, 
         static_cast<SslFailures>(failures), new SslServerCertificateInfo(cert_info) );
+
+    // null?
+    if ( cred != 0 )
+        *cred_p = cred->GetCredential( pool );
+    else
+        *cred_p = 0;
+
+    return SVN_NO_ERROR;
+}
+
+svn_error_t* svn_auth_ssl_client_cert_prompt_func( svn_auth_cred_ssl_client_cert_t **cred_p, 
+                                                  void *baton, apr_pool_t *pool )
+{
+    SslClientCertPromptDelegate* delegate = *(static_cast<ManagedPointer<
+        SslClientCertPromptDelegate*>*>(baton));
+
+    // invoke the managed callback
+    SslClientCertificateCredential* cred = delegate->Invoke();
 
     // null?
     if ( cred != 0 )

@@ -15,7 +15,9 @@ namespace NSvn
         public __gc class Status;
         public __gc class SslServerCertificateInfo;
         public __gc class SslServerTrustCredential;
+        public __gc class SslClientCertificateCredential;
         public __value enum SslFailures;
+        
 
         public __delegate void NotifyCallback( Notification* notification );
         public __delegate System::String* LogMessageCallback( CommitItem* items[] );
@@ -27,6 +29,8 @@ namespace NSvn
 
         public __delegate SslServerTrustCredential* SslServerTrustPromptDelegate(
             System::String* realm, SslFailures failures, SslServerCertificateInfo* info );
+
+        public __delegate SslClientCertificateCredential* SslClientCertPromptDelegate();
 
         public __delegate void StatusCallback( System::String* path, Status* status );
     }
