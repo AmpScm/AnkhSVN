@@ -18,6 +18,8 @@
                 <Step>An icon is displayed in the Solution Explorer next to the item signifying its status</Step>
             </FlowElement>
         </FlowElements>
-        <Postconditions></Postconditions>
+        <Postconditions>
+            <Postcondition>Developer is enlightened</Postcondition>
+        </Postconditions>
     </MainFlow>
 </UseCase>
