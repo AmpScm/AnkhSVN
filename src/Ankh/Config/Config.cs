@@ -68,7 +68,7 @@ namespace Ankh.Config {
 
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ankhsvn.com/Config.xsd")]
-    public class ConfigRepositoryExplorer {
+    public class ConfigRepositoryExplorerUrl {
     
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
