@@ -58,7 +58,12 @@ namespace Ankh.Solution
             this.Explorer.Context.StatusCache.Status( projectFolder.Path, false );
         }
     
-
+        public override ArrayList GetFileNames()
+        {
+            ArrayList files = new ArrayList(1);
+            files.Add( projectFile.Path );
+            return files;
+        }
 
         private void FindProjectResources(Explorer explorer)
         {
@@ -105,6 +110,13 @@ namespace Ankh.Solution
             get { return this.projectFolder.Path; }
         }
 
+        public bool IsVersionable
+        {
+            get 
+            {
+                return ( projectFile.IsVersionable && projectFolder.IsVersionable );
+            }
+        }
 
         /// <summary>
         /// The status of this node, not including children.

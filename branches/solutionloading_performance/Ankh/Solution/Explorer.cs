@@ -288,6 +288,22 @@ namespace Ankh.Solution
             return list;
         }
 
+        public IList GetSelectionFileNames()
+        {
+            ArrayList list = new ArrayList();
+
+            object o = this.uiHierarchy.SelectedItems;	 	
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )	 	
+            {	 	
+                TreeNode node = this.GetNode( item );	 	
+                if ( node != null )	 	
+                    list.AddRange(node.RecursiveGetFileNames());
+            }
+
+            return list;
+        }
+
+
         /// <summary>
         /// Returns all  the SvnItem resources from root
         /// </summary>

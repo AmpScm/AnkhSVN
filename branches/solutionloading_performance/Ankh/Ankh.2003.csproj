@@ -184,7 +184,7 @@
                 />
                 <Reference
                     Name = "envdte"
-                    AssemblyName = "envdte"
+                    AssemblyName = "EnvDTE"
                     HintPath = "..\lib\envdte.dll"
                 />
             </References>
@@ -384,6 +384,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\DiffExternalLocalItemCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\DiffLocalItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -405,6 +410,11 @@
                 />
                 <File
                     RelPath = "Commands\ExportRunner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\FileListCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -450,11 +460,6 @@
                 />
                 <File
                     RelPath = "Commands\ResolveConflictExternalCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Commands\DiffExternalLocalItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

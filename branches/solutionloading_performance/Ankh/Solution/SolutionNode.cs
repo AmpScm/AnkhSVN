@@ -66,6 +66,12 @@ namespace Ankh.Solution
             Refresh( false );
         }
         
+        public override ArrayList GetFileNames()
+        {
+            ArrayList files = new ArrayList(1);
+            files.Add( solutionFile.Path );
+            return files;
+        }
 
         /// <summary>
         /// The path to the solution folder.

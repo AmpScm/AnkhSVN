@@ -325,6 +325,12 @@ namespace Ankh.Tests
                 // TODO:  Add Explorer.Ankh.ISolutionExplorer.UpdateSelection implementation
             }
 
+            IList Ankh.ISolutionExplorer.GetSelectionFileNames()
+            {
+                // TODO:  Add Explorer.Ankh.ISolutionExplorer.GetSelectionFileNames implementation
+                return null;
+            }
+
             #endregion
 
             #region ISelectionContainer Members

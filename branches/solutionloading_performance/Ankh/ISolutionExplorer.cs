@@ -49,5 +49,9 @@ namespace Ankh
         /// </summary>
         void UpdateSelection();
 
+        /// <summary>
+        /// Gets the file names below and including selection
+        /// </summary>
+        IList GetSelectionFileNames();
     }
 }

@@ -30,8 +30,23 @@ namespace Ankh.Solution
             // If an action on an uninitialized item is desired, initialize it now.
             // This is too cpu intensive for projects and solutions and therefore
             // only done for ProjectItems.
-            if ( this.CurrentStatus == NodeStatus.StatusPending && this.resources == null )
-                FindResources();
+            if ( this.CurrentStatus == NodeStatus.StatusPending &&
+                this.resources == null )
+            {
+                // if this is no directory, refresh the item
+                if ( this.Children == null || this.Children.Count == 0 ) 
+                {
+                    FindResources();
+                    if ( this.resources == null ) 
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
 
             foreach( SvnItem item in this.resources )
             {
@@ -57,6 +72,22 @@ namespace Ankh.Solution
         public override void InitializeStatus()
         {
             this.FindResources();                      
+        }
+
+        public override ArrayList GetFileNames()
+        {
+            ArrayList files = new ArrayList();
+
+            for( short i = 1; i <= projectItem.FileCount; i++ ) 
+            {
+                string path = projectItem.get_FileNames(i);
+                if ( File.Exists( path ) )
+                {
+                    files.Add( path );
+                }                    
+            }
+
+            return files;
         }
 
 
@@ -105,6 +136,9 @@ namespace Ankh.Solution
 
         protected void FindResources()
         {
+            if ( this.Parent is ProjectNode && !((ProjectNode)this.Parent).IsVersionable )
+                return;
+
             this.resources = new ArrayList();
             try
             {
@@ -114,7 +148,7 @@ namespace Ankh.Solution
                 // is this a childless tree node? it might have hidden children after all
                 if ( this.Children.Count == 0 )
                     this.AddSubItems( this.projectItem, del );
-               
+                
             }
             catch( NullReferenceException )
             {

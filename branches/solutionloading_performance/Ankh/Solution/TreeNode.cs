@@ -173,6 +173,24 @@ namespace Ankh.Solution
             Refresh( false );
         }
 
+        public virtual ArrayList GetFileNames()
+        {
+            ArrayList files = new ArrayList(0);
+            return files;
+        }
+
+        public ArrayList RecursiveGetFileNames()  
+        {
+            ArrayList files = new ArrayList();
+
+            files.AddRange(GetFileNames());
+
+            foreach( TreeNode child in children ) 
+                files.AddRange(child.RecursiveGetFileNames());
+
+            return files;
+        }
+
         protected NodeStatus CurrentStatus
         {
             [System.Diagnostics.DebuggerStepThrough]
