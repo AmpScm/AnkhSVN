@@ -28,7 +28,7 @@ namespace NSvn.Core.Tests
         {
             string path = Path.Combine( this.WcPath, "foo" );
             ClientContext ctx = new ClientContext(( new NotifyCallback( this.NotifyCallback ) ) );
-            CommitInfo info = Client.MakeDir( path, ctx );
+            CommitInfo info = Client.MakeDir( new string[]{ path }, ctx );
             
             Assertion.AssertEquals( "MakeDir should return CommitInfo::Invalid for local operations",
                 CommitInfo.Invalid, info );
@@ -44,7 +44,7 @@ namespace NSvn.Core.Tests
         {
             string url = this.ReposUrl + "mooNewDirectory";
             ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
-            CommitInfo info = Client.MakeDir( url, ctx );
+            CommitInfo info = Client.MakeDir( new string[]{ url }, ctx );
 
             string output = this.RunCommand( "svn", "ls " + this.ReposUrl );
             Assertion.Assert( "No new dir found: " + output, Regex.IsMatch( output, @"mooNewDirectory/" ) );

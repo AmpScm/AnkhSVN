@@ -39,13 +39,14 @@ void NSvn::Core::Client::Add( String* path, bool recursive, ClientContext* conte
     HandleError( svn_client_add( truePath, recursive, context->ToSvnContext( pool ), pool ) );
 }
 // implementation of Client::MakeDir
-NSvn::Core::CommitInfo* NSvn::Core::Client::MakeDir( String* path, ClientContext* context )
+NSvn::Core::CommitInfo* NSvn::Core::Client::MakeDir( String* paths[], ClientContext* context )
 {
     Pool pool;
 
-    const char* truePath = CanonicalizePath( path, pool );
+    apr_array_header_t* aprPaths = StringArrayToAprArray( paths, true, pool );
+
     svn_client_commit_info_t* commitInfo = 0;
-    HandleError( svn_client_mkdir( &commitInfo, truePath, context->ToSvnContext( pool ), 
+    HandleError( svn_client_mkdir( &commitInfo, aprPaths, context->ToSvnContext( pool ), 
         pool ) );
 
     if ( commitInfo != 0 )
@@ -295,15 +296,16 @@ NSvn::Common::Property*  NSvn::Core::Client::RevPropGet(String* propName, String
 
 //TODO: Implement the variable admAccessBaton
 // implementation of Client::Delete
-NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* path, bool force, 
+NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* paths[], bool force, 
                                                    ClientContext* context)
 {
     Pool pool;
-    const char* trueSrcPath = CanonicalizePath( path, pool );
 
     svn_client_commit_info_t* commitInfoPtr = 0;
 
-    HandleError( svn_client_delete( &commitInfoPtr, trueSrcPath, false, 
+    apr_array_header_t* aprPaths = StringArrayToAprArray( paths, true, pool );
+
+    HandleError( svn_client_delete( &commitInfoPtr, aprPaths, false, 
         context->ToSvnContext( pool ), pool ) );
 
     if ( commitInfoPtr != 0 )
