@@ -16,11 +16,9 @@ namespace NSvn.Core.Tests
             this.ExtractRepos();
         }
 
-        [TearDown]
-        public override void TearDown()
-        {
-        }
-
+        /// <summary>
+        /// Sets two properties on a repos and tries to retrieve them with Client::RevPropList
+        /// </summary>
         [Test]
         public void TestBasic()
         {
