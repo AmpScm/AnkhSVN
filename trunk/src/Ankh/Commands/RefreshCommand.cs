@@ -23,7 +23,17 @@ namespace Ankh.Commands
 
         public override void Execute(Ankh.AnkhContext context)
         {
-            context.SolutionExplorer.RefreshSelection();
+            try
+            {
+                context.StartOperation();
+
+                context.SolutionExplorer.RefreshSelection();
+            }
+            finally
+            {
+                context.EndOperation();
+            }
+
         }
     }
 }

@@ -43,6 +43,8 @@ namespace Ankh.Commands
 
             try
             {
+                context.StartOperation();
+
                 commitInfo = WorkingCopyResource.Commit( resources, true );
             }
             catch( NSvn.Common.SvnException )
@@ -55,6 +57,8 @@ namespace Ankh.Commands
                 if (commitInfo != null)
                     this.context.OutputPane.WriteLine("\nCommitted revision {0}.", commitInfo.Revision);
                 this.context.OutputPane.EndActionText();
+
+                context.EndOperation();
             }
 
             context.SolutionExplorer.UpdateSelectionStatus();
