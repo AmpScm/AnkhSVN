@@ -301,7 +301,7 @@ namespace Ankh.Solution
             return statusMerger.CurrentStatus;
         }
 
-        protected object FindChildByName( string name )
+        protected TreeNode FindChildByName( string name )
         {
             // Pretty slow way to find a child by name
             // But maybe put back because mostly there are only a few items
@@ -339,9 +339,11 @@ namespace Ankh.Solution
                     Debug.Assert( childItem != IntPtr.Zero, 
                         "Could not get treeview item" );
 
-                    if ( FindChildByName( child.Name ) == null && child.Name != Client.AdminDirectoryName )
+                    TreeNode childNode = FindChildByName( child.Name );
+
+                    if ( childNode == null && child.Name != Client.AdminDirectoryName )
                     {                    
-                        TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
+                        childNode = TreeNode.CreateNode( child, childItem, this.explorer,
                             this );
                         if (childNode != null )
                         {
@@ -351,6 +353,8 @@ namespace Ankh.Solution
                             childNode.Refresh( false );
                         }
                     }
+
+                    if ( childNode != null ) childNode.UpdateChildren();
 
                     // and the next child
                     childItem = this.explorer.TreeView.GetNextSibling( childItem );               
