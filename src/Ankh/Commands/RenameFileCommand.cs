@@ -82,6 +82,8 @@ namespace Ankh.Commands
                         project.ProjectItems.AddFromDirectory( newPath );
                     else                            
                         project.ProjectItems.AddFromFile( newPath );
+
+                    project.Save( null );
                 }
             }
         }
