@@ -159,6 +159,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "UpdateTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "wc.zip"
                     BuildAction = "EmbeddedResource"
                 />

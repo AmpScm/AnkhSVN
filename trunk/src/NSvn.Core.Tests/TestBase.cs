@@ -262,11 +262,11 @@ namespace NSvn.Core.Tests
 //            
 //        }
         private const int BUF_SIZE = 4096;
-        private const string REPOS_FILE="NSvn.Core.Tests.repos.zip";
+        protected const string REPOS_FILE="NSvn.Core.Tests.repos.zip";
         private const string REPOS_NAME = "repos";
-        private const string BASEPATH = @"\tmp";
-        private const string WC_FILE = "NSvn.Core.Tests.wc.zip";
-        private const string WC_NAME = "wc";
+        protected const string BASEPATH = @"\tmp";
+        protected const string WC_FILE = "NSvn.Core.Tests.wc.zip";
+        protected const string WC_NAME = "wc";
         private string reposUrl;
         private string wcPath;
         private string reposPath;       
