@@ -25,6 +25,8 @@ namespace Ankh.EventSinks
                 true );
             this.vcFileType = asm.GetType(
                 "Microsoft.VisualStudio.VCProjectEngine.VCFile", true );
+            this.vcFilterType = asm.GetType(
+                "Microsoft.VisualStudio.VCProjectEngine.VCFilter", true );
             this.vcProjectType = asm.GetType(
                 "Microsoft.VisualStudio.VCProjectEngine.VCProject", true );
 
@@ -110,7 +112,19 @@ namespace Ankh.EventSinks
         /// <param name="item"></param>
         private void VCDelayedRefresh( object item )
         {
-            object vcproj = this.vcFileType.GetProperty("project").GetValue(
+            // what type of item has been added?
+            Type itemType;
+
+            // a "filter" is a VC folder
+            if ( this.vcFilterType.IsInstanceOfType( item ) )
+                itemType = this.vcFilterType;
+            else if ( this.vcFileType.IsInstanceOfType( item ) )
+                itemType = this.vcFileType;
+            else
+                throw new ApplicationException( "Unknown item type added to project" );
+
+            // both Filter and File objects have a "project" property
+            object vcproj = itemType.GetProperty("project").GetValue(
                 item, new object[]{} );
 
             System.Threading.Timer timer = new System.Threading.Timer(
@@ -151,6 +165,7 @@ namespace Ankh.EventSinks
         private readonly Type vcProjectEventsType;
         private readonly Type vcFileType;
         private readonly Type vcProjectType;
+        private readonly Type vcFilterType;
         private readonly object events;
     }
 }
