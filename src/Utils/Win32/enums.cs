@@ -1,4 +1,4 @@
-// $Id$
+// $Id: Win32.cs 422 2003-04-20 20:16:46Z Arild $
 using System;
 using System.Runtime.InteropServices;
 

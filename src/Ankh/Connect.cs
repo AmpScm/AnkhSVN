@@ -7,6 +7,7 @@ namespace Ankh
 	using System.Runtime.InteropServices;
 	using EnvDTE;
     using System.Diagnostics;
+    using System.Text.RegularExpressions;
 
     using Ankh.Commands;
 
@@ -51,15 +52,9 @@ namespace Ankh
 		/// <seealso class='IDTExtensibility2' />
 		public void OnConnection(object application, Extensibility.ext_ConnectMode connectMode, object addInInst, ref System.Array custom)
 		{
-            try
-            {
-                // this will throw if we are invoked from the command line
-                object m = ((_DTE)application).MainWindow;
-            }
-            catch( Exception )
-            {
+            // we don't want to load on command line builds.
+            if ( Regex.IsMatch( Environment.CommandLine, "/build" ) )
                 return;
-            }
 
             try
             {
@@ -92,7 +87,6 @@ namespace Ankh
 		/// <seealso class='IDTExtensibility2' />
 		public void OnDisconnection(Extensibility.ext_DisconnectMode disconnectMode, ref System.Array custom)
 		{
-            Ankh.CommandMap.DeleteCommands( this.context );
 		}
 
 		/// <summary>
