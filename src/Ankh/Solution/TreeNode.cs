@@ -286,7 +286,7 @@ namespace Ankh.Solution
                     Debug.Assert( childItem != IntPtr.Zero, 
                         "Could not get treeview item" );
 
-                    if ( child.Name != SvnUtils.WC_ADMIN_AREA )
+                    if ( child.Name != Client.AdminDirectoryName )
                     {                    
                         TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
                             this );

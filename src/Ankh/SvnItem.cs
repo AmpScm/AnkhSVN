@@ -151,7 +151,7 @@ namespace Ankh
                     dir = System.IO.Path.GetDirectoryName( this.path );
 
                 return Directory.Exists( 
-                    System.IO.Path.Combine( dir, SvnUtils.WC_ADMIN_AREA ));
+                    System.IO.Path.Combine( dir, Client.AdminDirectoryName ));
             }
         }
 

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using EnvDTE;
-using NSvn.Common;
+using NSvn.Core;
 using Microsoft.Office.Core;
 
 namespace Ankh.Commands
@@ -42,7 +42,7 @@ namespace Ankh.Commands
 
                 // now we have to figure out what text to set for the command           
                 string adminDir = Path.Combine( Path.GetDirectoryName(solutionPath),
-                    SvnUtils.WC_ADMIN_AREA );
+                    Client.AdminDirectoryName );
                 if ( File.Exists( Path.Combine( adminDir, "Ankh.Load" ) ) )            
                     cntl.Caption = cntl.TooltipText = "Disable Ankh for this solution";
                 else 
@@ -60,7 +60,7 @@ namespace Ankh.Commands
         {
             string adminDir = Path.Combine( 
                 Path.GetDirectoryName(context.DTE.Solution.FullName), 
-                SvnUtils.WC_ADMIN_AREA );
+                Client.AdminDirectoryName );
             string noLoad = Path.Combine(adminDir, "Ankh.NoLoad");
             string load = Path.Combine(adminDir, "Ankh.Load");
 

@@ -304,7 +304,7 @@ namespace Ankh
                 return false;
 
             string adminDir = Path.Combine( Path.GetDirectoryName( solutionPath ),
-                SvnUtils.WC_ADMIN_AREA );
+                NSvn.Core.Client.AdminDirectoryName );
 
             // maybe this solution has never been loaded before with Ankh?
             if ( File.Exists( Path.Combine( adminDir, "Ankh.Load" ) ) )

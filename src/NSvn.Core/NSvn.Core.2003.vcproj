@@ -171,6 +171,9 @@
 				RelativePath="SvnClientException.cpp">
 			</File>
 			<File
+				RelativePath=".\SvnUtils.cpp">
+			</File>
+			<File
 				RelativePath="utils.cpp">
 			</File>
 		</Filter>
@@ -269,6 +272,9 @@
 			</File>
 			<File
 				RelativePath="svnenums.h">
+			</File>
+			<File
+				RelativePath=".\SvnUtils.h">
 			</File>
 			<File
 				RelativePath="utils.h">
