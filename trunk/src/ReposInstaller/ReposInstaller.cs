@@ -11,6 +11,7 @@ using System.Web;
 using EnvDTE;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using System.Collections.Specialized;
 
 namespace ReposInstaller
 {
@@ -29,6 +30,14 @@ namespace ReposInstaller
 #if DEBUG
 			MessageBox.Show( "Install" );
 #endif
+			foreach( DictionaryEntry en in this.Context.Parameters )
+				Console.WriteLine( en.Key + "=" + en.Value );
+
+			// don't mess up unattended installs etc...
+			if ( this.Context.IsParameterTrue( "/qn" ) ||
+				this.Context.IsParameterTrue( "/qb" ) ||
+				this.Context.IsParameterTrue( "/qb-" ) )
+				return;
 
 			if ( MessageBox.Show( "Do you want to extract a test repository?", "Test repository",
 				MessageBoxButtons.YesNo ) == DialogResult.No )
@@ -63,7 +72,9 @@ namespace ReposInstaller
 			string reposUrl = Path.Combine( reposPath, "trunk" );
 			reposUrl = "file:///" + reposUrl.Replace( "\\", "/" ).Replace(" ", "%20" );
 
-			RepositoryDirectory dir = new RepositoryDirectory( reposUrl );           
+			RepositoryDirectory dir = new RepositoryDirectory( reposUrl ); 
+			dir.Context.AddAuthenticationProvider(
+				NSvn.Core.AuthenticationProvider.GetUsernameProvider() );
 			dir.Checkout( wcPath, true );
 
 			state[ "wcpath" ] = wcPath;
