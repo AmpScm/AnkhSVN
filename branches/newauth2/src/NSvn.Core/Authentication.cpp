@@ -85,6 +85,7 @@ AuthenticationProviderObject* NSvn::Core::Authentication::GetSslServerTrustPromp
     return new AuthenticationProviderObject( provider, pool );
 }
 
+// implementation of GetSslServerTrustFileProvider
 AuthenticationProviderObject* NSvn::Core::Authentication::GetSslServerTrustFileProvider()
 {
     GCPool* pool = new GCPool();
