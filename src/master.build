@@ -10,8 +10,11 @@
     <property name="vs.2003" value="false"/>
     <property name="vs.ver" value="7.0" unless="${vs.2003}"/>
     <property name="vs.ver" value="7.1" if="${vs.2003}"/>
-    <property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
-    <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>
+    <property name="vsnet.ver" value="2002" unless="${vs.2003}"/>
+    <property name="vsnet.ver" value="2003" if="${vs.2003}"/>
+    <property name="nant.default.framework" value="net-1.0"/>
+    <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
+    <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>-->
     
     
     
@@ -28,7 +31,8 @@
         <regasm assembly="${build.dir}\Ankh.dll" verbose="${verbose}" codebase="true" unregister="true" failonerror="false"/>
     </target>
     
-    <target name="build-Utils">
+    
+     <target name="build-Utils">
         <nant buildfile="Utils/Utils.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="Utils/${build.dir}">
@@ -47,7 +51,7 @@
             </fileset>
          </copy>
          
-         <regasm assembly="${build.dir}\Ankh.dll" verbose="${verbose}"/>
+         <regasm assembly="${build.dir}\Ankh.dll" typelibrary="${build.dir}\Ankh.tlb" codebase="true" exporttypelib="true" verbose="${verbose}"/>
     </target>
     
     <target name="build-Ankh.UI" depends="build-NSvn, build-Utils">
@@ -167,21 +171,13 @@
     </target>
     
     <target name="msi" depends="build">
-    
-    
-        <property name="bdb.dir" value="bdb2002" unless="${vs.2003}"/>
-        <property name="bdb.dir" value="bdb2003" if="${vs.2003}"/>
+   
         <property name="bdb.suffix" value="" unless="${debug}"/>
         <property name="bdb.suffix" value="d" if="${debug}"/>
         
         <property name="ankh.progid" value="Ankh.2002" unless="${vs.2003}"/>
         <property name="ankh.progid" value="Ankh.2003" if="${vs.2003}"/>
         
-        <property name="ankh.folder" value="AnkhSVN 2002" unless="${vs.2003}"/>
-        <property name="ankh.folder" value="AnkhSVN 2003" if="${vs.2003}"/>
-        
-        <property name="ankh.msi" value="ankhsvn.2002.msi" unless="${vs.2003}"/>
-        <property name="ankh.msi" value="ankhsvn.2003.msi" if="${vs.2003}"/>
         
         <property name="ankh.productcode" value="{62EA272B-52C6-429d-953F-75CF01B00BFF}" unless="${vs.2003}"/>
         <property name="ankh.productcode" value="{741EB3B7-BBAA-4169-BC2A-FB096F49D4B4}" if="${vs.2003}"/>
@@ -189,8 +185,10 @@
         <property name="ankh.upgradecode" value="{02C9D1B6-B362-4fb2-BA6C-5E954880D190}" unless="${vs.2003}"/>
         <property name="ankh.upgradecode" value="{62A0F0CD-90AD-49f3-95E8-1B7EA0CF2AA8}" if="${vs.2003}"/>
         
+        <property name="ankh.folder" value="AnkhSVN ${vsnet.ver}" />
+        
     
-        <property name="source.dir" value="source"/>
+        <property name="source.dir" value="installsource"/>
         
         <delete dir="${source.dir}" failonerror="false"/>
         
@@ -210,6 +208,14 @@
             </fileset>
         </copy>
         
+        <!-- copy required interop libs -->
+        <copy todir="${source.dir}\${ankh.folder}">
+            <fileset basedir="${lib.dir}">
+                <includes name="axinterop.shdocvw.dll"/>
+                <includes name="interop.shdocvw.dll"/>
+             </fileset>
+          </copy>
+        
         <!-- copy the shim control -->
         <copy todir="${source.dir}\${ankh.folder}">
             <fileset basedir="${lib.dir}">
@@ -219,7 +225,7 @@
         
         <!-- copy the BDB dll -->
         <copy todir="${source.dir}\${ankh.folder}">
-            <fileset basedir="${lib.dir}\${bdb.dir}">
+            <fileset basedir="${lib.dir}\${vsnet.ver}">
                 <includes name="libdb40${bdb.suffix}.dll"/>
             </fileset>
         </copy>
@@ -234,7 +240,7 @@
          </copy>
         
         <msi 
-            output="AnkhSVN${vs.ver}.msi"
+            output="AnkhSVN${vsnet.ver}.msi"
             sourcedir="${source.dir}"
             debug="true"
             license="Ankh\AnkhSetup\licence.rtf"
@@ -286,7 +292,7 @@
               </components>
               
               <registry>
-                <key path="Software\Microsoft\VisualStudio\${vs.ver}\Addins\${ankh.progid}" root="machine" component="AnkhFiles">
+                <key path="Software\Microsoft\VisualStudio\${vs.ver}\Addins\Ankh.${vsnet.ver}" root="machine" component="AnkhFiles">
                     <value name="SatelliteDLLName" value="BitmapDLL.dll"/>
                     <value name="SatelliteDLLPath" value="[ANKH_FOLDER]"/>
                     <value name="FriendlyName" value="AnkhSVN Addin"/>

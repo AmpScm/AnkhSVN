@@ -30,6 +30,9 @@
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
         
+           
+        
+        
         <csc target="library" output="${build.dir}/Ankh.UI.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
                 <includes name="${lib.dir}\Office.dll"/>
@@ -37,13 +40,17 @@
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
-                <includes name="${lib.dir}\AxInterop.SHDocVw.dll" />
-                <includes name="${lib.dir}\Interop.SHDocVw.dll"/>
+                <includes name="${lib.dir}\interop.shdocvw.dll"/>
+                <includes name="${lib.dir}\axinterop.shdocvw.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
                 <includes name="**/*.cs"/>
             </sources>
+            
+            <resources>
+                <includes name="*.resx"/>
+            </resources>
             
             <arg value="${warninglevel}"/>
         </csc>
