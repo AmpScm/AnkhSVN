@@ -139,10 +139,7 @@ namespace NSvn
                 this.CheckForModifications();
                 if ( this.status == null )
                 {
-                    int youngest;
-                    StatusDictionary dict = Client.Status( out youngest, this.Path, 
-                        false, true, false, true, this.ClientContext );
-                    this.status = dict.Get( this.Path );
+                    this.status = Client.SingleStatus( this.Path );
                 }
                 return this.status;
             }

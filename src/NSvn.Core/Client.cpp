@@ -3,12 +3,14 @@
 #include "stdafx.h"
 
 #include "Client.h"
+
 #include "StringHelper.h"
 #include "Notification.h"
 
 
 
 #include <svn_client.h>
+#include <svn_wc.h>
 #include <svn_path.h>
 #include <svn_subst.h>
 #include <svn_utf.h>
@@ -20,6 +22,8 @@
 #include "ManagedPointer.h"
 #include "stream.h"
 #include <svn_io.h>
+
+#include "Status.h"
 
 //TODO: clean up includes in general(not just here)
 
@@ -97,6 +101,38 @@ NSvn::Core::StatusDictionary* NSvn::Core::Client::Status(
     // convert to a StatusDictionary
     return StatusDictionary::FromStatusHash( statushash, pool );
 }
+
+NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
+{
+    String* directory;
+
+    // find the directory containing this item
+    if ( Directory::Exists( path ) )
+        directory = path;
+    else
+        directory = Path::GetDirectoryName( path );
+
+    svn_wc_adm_access_t* admAccess;
+    Pool pool;
+
+    const char* trueDir = CanonicalizePath( directory, pool );
+
+    // lock the directory
+    HandleError( svn_wc_adm_open( &admAccess, 0, trueDir, false, false, pool ) );
+
+    //retrieve the status
+    svn_wc_status_t* status;    
+    const char* truePath = CanonicalizePath( path, pool );
+
+    HandleError( svn_wc_status( &status, truePath, admAccess, pool ) );
+
+    // and unlock again
+    HandleError( svn_wc_adm_close( admAccess ) );
+
+    return new NSvn::Core::Status( status );
+}
+
+
 // implementation of Client::PropSet
 void NSvn::Core::Client::PropSet(Property* property, String* target, bool recurse)
 {
