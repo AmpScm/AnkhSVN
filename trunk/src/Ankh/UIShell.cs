@@ -67,6 +67,11 @@ namespace Ankh
             this.repositoryExplorerWindow.SetSelectionContainer( ref selection );
         }
 
+        public bool RepositoryExplorerHasFocus()
+        {
+            return this.Context.DTE.ActiveWindow == this.repositoryExplorerWindow;
+        }
+
         /// <summary>
         /// Shows the commit dialog, blocking until the user hits cancel or commit.
         /// </summary>

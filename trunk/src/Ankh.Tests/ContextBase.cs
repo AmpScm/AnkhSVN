@@ -433,6 +433,11 @@ namespace Ankh.Tests
                 // TODO:  Add UIShellImpl.ShowRepositoryExplorer implementation
             }
 
+            public virtual bool RepositoryExplorerHasFocus()
+            {
+                return false;
+            }
+
             public virtual CommitContext ShowCommitDialogModal( CommitContext ctx )
             {
                 // TODO: Add implementation
