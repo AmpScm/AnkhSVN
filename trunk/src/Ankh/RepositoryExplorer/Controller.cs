@@ -33,6 +33,17 @@ namespace Ankh.RepositoryExplorer
             this.directories = new Hashtable();
         }
 
+        public INode SelectedNode
+        {
+            get{ return (INode)this.repositoryExplorer.SelectedNode; }
+        }
+
+        public Microsoft.Office.Core.CommandBar CommandBar
+        {
+            get{ return this.repositoryExplorer.CommandBar; }
+            set{ this.repositoryExplorer.CommandBar = value; }
+        }
+
         /// <summary>
         /// Handles the event fired when a directory node is expanded and 
         /// the treeview does not have a listing for that directory.
