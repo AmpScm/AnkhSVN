@@ -42,19 +42,19 @@ namespace Ankh.Commands
 
             // are we shifted?
             if ( CommandBase.Shift )
-            {
-                using( PathSelector sel = CommandBase.GetPathSelector( "Select items to add" ) )
-                {
-                    sel.EnableRecursive = true;
-                    sel.Recursive = false;
-                    sel.CheckedItems = sel.Items = resources;
+            {                
+                PathSelectorInfo info = new PathSelectorInfo( "Select items to add",
+                    resources, resources );
+                info.EnableRecursive = true;
+                info.Recursive = false;
 
-                    if ( sel.ShowDialog() != DialogResult.OK )
-                        return;
+                info = context.UIShell.ShowPathSelector( info );
 
-                    resources = sel.CheckedItems;
-                    recursive = sel.Recursive;
-                }
+                if ( info == null )
+                    return;
+
+                resources = info.CheckedItems;
+                recursive = info.Recursive;
             }
 
             context.StartOperation( "Adding" );

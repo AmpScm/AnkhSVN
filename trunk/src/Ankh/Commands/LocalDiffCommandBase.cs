@@ -53,15 +53,13 @@ namespace Ankh.Commands
                 bool recurse = false;
                 if ( CommandBase.Shift )
                 {
-                    using( PathSelector p = CommandBase.GetPathSelector( "Select items for diffing" ) )
-                    {
-                        p.Items = resources;
-                        p.CheckedItems = resources;
-                        if ( p.ShowDialog( context.HostWindow ) != DialogResult.OK )
-                            return null;
-                        resources = p.CheckedItems;
-                        recurse = p.Recursive;
-                    }
+                    PathSelectorInfo info = new PathSelectorInfo( "Select items for diffing", 
+                        resources, resources );
+                    info = context.UIShell.ShowPathSelector( info );
+                    if ( info == null )
+                        return null;
+                    resources = info.CheckedItems;
+                    recurse = info.Recursive;
                 }
 
                 

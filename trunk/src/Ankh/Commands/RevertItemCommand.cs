@@ -49,17 +49,16 @@ namespace Ankh.Commands
             // is Shift down?
             if ( CommandBase.Shift )
             {
-                using(PathSelector p = CommandBase.GetPathSelector( "Select items to revert" ))
-                {
-                    p.Items = resources;
-                    p.CheckedItems = resources;
-                    if ( p.ShowDialog( context.HostWindow ) != DialogResult.OK )
-                        return;
-                    confirmed = true;
-                    recursive = p.Recursive;
-                    resources = p.CheckedItems;
-                }
+                PathSelectorInfo info = new PathSelectorInfo( "Select items to revert", 
+                    resources, resources );
+                info = context.UIShell.ShowPathSelector( info );
+                if ( info == null )
+                    return;
+                confirmed = true;
+                recursive = info.Recursive;
+                resources = info.CheckedItems;                
             }
+
             string[] paths = SvnItem.GetPaths( resources );
             
             // ask for confirmation if the Shift dialog hasn't been used

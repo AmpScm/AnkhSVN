@@ -210,6 +210,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BlameResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CommandMap.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -275,6 +280,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "PathSelectorInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ProgressRunner.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -335,6 +345,15 @@
                 />
                 <File
                     RelPath = "Commands\AddSolutionToRepositoryCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\blame.xsl"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Commands\BlameCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

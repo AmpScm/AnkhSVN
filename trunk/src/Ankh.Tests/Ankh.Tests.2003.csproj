@@ -149,6 +149,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BlameResultTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ContextBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -199,6 +204,11 @@
                 <File
                     RelPath = "wc.zip"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Commands\BlameCommandTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Commands\CommitItemTest.cs"
