@@ -27,7 +27,7 @@
         <xsl:param name="level"/>
         
         <a name="{generate-id()}">
-            <xsl:element name="{concat( 'h', $level )}">
+            <xsl:element name="{concat( 'h', $level+1 )}">
                 <xsl:value-of select="@header"/>
             </xsl:element>
         </a>
