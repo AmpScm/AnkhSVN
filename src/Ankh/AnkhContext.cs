@@ -20,6 +20,12 @@ namespace Ankh
     /// </summary>
     internal class AnkhContext
     {
+        /// <summary>
+        /// Fired when the addin is unloading.
+        /// </summary>
+        public event EventHandler Unloading;
+
+
         public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin )
         {
             this.dte = dte;
@@ -234,6 +240,8 @@ namespace Ankh
         public void Shutdown()
         {            
             this.configLoader.SaveConfig( this.config );
+            if ( this.Unloading != null )
+                this.Unloading( this, EventArgs.Empty );
         }
 
 
