@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="Ankh.UI" default="rebuild">
+    <property name="verbose" value="false"/>
+    <property name="debug" value="false"/>
+    <property name="src.dir" value="."/>
+    <property name="build.dir" value="build/Release" unless="${debug}"/>
+    <property name="build.dir" value="build/Debug" if="${debug}"/>
+    <property name="warninglevel" value="/warn:3"/>
+    
+    
+    <target name="rebuild">
+        <call target="clean"/>
+        <call target="build"/>
+    </target>
+    
+    <target name="clean">
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
+    </target>
+    
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+    </target>
+    
+    <target name="build">
+        <call target="compile"/>                
+    </target>
+    
+    <target name="compile" depends="init">
+        <property name="define" value="TRACE"/>
+        <property name="define" value="DEBUG;${define}" if="${debug}"/>
+        
+        <csc target="library" output="${build.dir}/Ankh.UI.dll" verbose="${verbose}" define="${define}">
+            <references>
+                <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
+                <includes name="..\Utils\${build.dir}\Utils.dll"/>
+            </references>
+            
+            <sources basedir="${src.dir}">
+                <includes name="**/*.cs"/>
+            </sources>
+            
+            <arg value="${warninglevel}"/>
+        </csc>
+        
+                
+    </target>
+    
+</project>
+
+

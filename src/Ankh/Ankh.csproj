@@ -92,6 +92,10 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "Ankh.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
