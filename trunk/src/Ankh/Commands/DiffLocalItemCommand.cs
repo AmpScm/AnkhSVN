@@ -24,7 +24,7 @@ namespace Ankh.Commands
         {
             try
             {
-                context.DTE.Documents.SaveAll();
+                this.SaveAllDirtyDocuments( context );
 
                 context.StartOperation( "Diffing" );
 

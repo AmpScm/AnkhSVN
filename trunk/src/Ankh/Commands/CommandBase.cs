@@ -51,6 +51,15 @@ namespace Ankh.Commands
             }
         }
 
+        protected void SaveAllDirtyDocuments( AnkhContext context )
+        {
+            foreach( Document doc in context.DTE.Documents )
+            {
+                if ( !doc.Saved )
+                    doc.Save( doc.FullName );
+            }
+        }
+
         protected PathSelector GetPathSelector( string text )
         {
             PathSelector p = new PathSelector();
