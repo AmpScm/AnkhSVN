@@ -187,12 +187,14 @@ namespace Ankh
                 System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
 
                 Utils.DebugTimer timer = DebugTimer.Start();
+                DateTime startTime = DateTime.Now;
                 this.StartOperation( "Synchronizing with solution explorer");
 
                 this.solutionExplorer.Load();
                 this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
 
                 timer.End( "Solution opened", "Ankh" );
+                this.OutputPane.WriteLine( "Time: {0}", DateTime.Now - startTime );
                 this.ankhLoadedForSolution = true;
                 //MessageBox.Show( timer.ToString() );
             }
