@@ -51,7 +51,7 @@ namespace Ankh.Commands
             // is Shift down?
             if ( CommandBase.Shift )
             {
-                using(PathSelector p = this.GetPathSelector( "Select items to revert" ))
+                using(PathSelector p = CommandBase.GetPathSelector( "Select items to revert" ))
                 {
                     p.Items = resources;
                     p.CheckedItems = resources;

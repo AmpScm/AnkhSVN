@@ -43,7 +43,7 @@ namespace Ankh.Commands
             {
                 using ( ReverseMergeDialog dlg = new ReverseMergeDialog() )
                 {
-                    dlg.GetPathInfo += new GetPathInfoDelegate(this.GetPathInfo);
+                    dlg.GetPathInfo += new GetPathInfoDelegate(CommandBase.GetPathInfo);
                     dlg.Items = resources;
                     dlg.CheckedItems = resources;
                     dlg.Recursive = true;
