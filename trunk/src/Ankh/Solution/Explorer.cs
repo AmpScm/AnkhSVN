@@ -54,6 +54,7 @@ namespace Ankh.Solution
         /// </summary>
         public void Unload()
         {
+            Debug.WriteLine( "Unloading existing solution information", "Ankh" );
             this.projectItems.Clear();
             this.projects.Clear();
             if ( this.treeview != null )
@@ -137,6 +138,8 @@ namespace Ankh.Solution
 
         public void SyncWithTreeView()
         {
+            Debug.WriteLine( "Synchronizing with treeview", "Ankh" );
+
             this.projectItems.Clear();
             this.projects.Clear();
             
@@ -152,6 +155,8 @@ namespace Ankh.Solution
             // we assume there is a single root node
             this.root = TreeNode.CreateSolutionNode( 
                 this.solutionItem, this );
+
+            Debug.WriteLine( "Created solution node", "Ankh" );
         }
 
         /// <summary>
@@ -258,7 +263,7 @@ namespace Ankh.Solution
         internal void SetUpTreeview()
         {
             // dragons be here - modify with care
-
+            Debug.WriteLine( "Setting up treeview", "Ankh" );
             Window solutionExplorerWindow = this.dte.Windows.Item(
                 EnvDTE.Constants.vsWindowKindSolutionExplorer);
 
@@ -285,6 +290,8 @@ namespace Ankh.Solution
             // find the solution explorer window
             // Get the caption of the solution explorer            
             string slnExplorerCaption = solutionExplorerWindow.Caption;
+            Debug.WriteLine( "Caption of solution explorer window is " + slnExplorerCaption, 
+                "Ankh" );
             //            string vsnetCaption = this.dte.MainWindow.C
             IntPtr vsnet = (IntPtr)this.dte.MainWindow.HWnd;//Win32.FindWindow( VSNETWINDOW, null );
 
@@ -296,6 +303,8 @@ namespace Ankh.Solution
             // some reason
             if ( slnExplorer == IntPtr.Zero )
             {
+                Debug.WriteLine( "Solution explorer not a child of VS.NET window. " + 
+                    "Searching floating windows", "Ankh" );
                 // we need to search for the caption of any of the potentially linked windows
                 IntPtr floatingPalette = IntPtr.Zero;
                 foreach( Window win in solutionExplorerWindow.LinkedWindowFrame.LinkedWindows )
@@ -319,6 +328,7 @@ namespace Ankh.Solution
             if ( treeHwnd == IntPtr.Zero )
                 throw new ApplicationException( 
                     "Could not attach to solution explorer treeview" );
+
             this.treeview = new TreeView( treeHwnd );
 
             // reset back to the original hiding-state and dockable state            
@@ -328,6 +338,7 @@ namespace Ankh.Solution
                 solutionExplorerWindow.AutoHides = hidden;
 
             // load the status images image strip
+            Debug.WriteLine( "Loading status images", "Ankh" );
             Bitmap statusImages = (Bitmap)Image.FromStream( 
                 this.GetType().Assembly.GetManifestResourceStream( STATUS_IMAGES ) );
 

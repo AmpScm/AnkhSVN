@@ -20,6 +20,7 @@ namespace Ankh.Solution
             base( item, hItem, explorer, parent )
         {
             this.projectItem = (ProjectItem)item.Object;
+            
             this.FindResources();                      
         }
 
@@ -76,6 +77,10 @@ namespace Ankh.Solution
             this.resources = new ArrayList();
             try
             {
+                Debug.WriteLine( "Adding resources from node " + 
+                    this.projectItem.Name, "Ankh" );
+                Debug.Indent();
+
                 StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
                 this.AddResourcesFromProjectItem( this.projectItem, del );
 
@@ -83,7 +88,11 @@ namespace Ankh.Solution
                 if ( this.Children.Count == 0 )
                     this.AddSubItems( this.projectItem, del );
                 
-                this.Explorer.AddResource( this.projectItem, this );                    
+                this.Explorer.AddResource( this.projectItem, this );      
+              
+                Debug.Unindent();
+                Debug.WriteLine( "Finished adding resources from node "+ 
+                    this.projectItem.Name, "Ankh" );
             }
             catch( NullReferenceException )
             {
@@ -103,6 +112,9 @@ namespace Ankh.Solution
             // some object models might throw when accessing the .ProjectItems property
             try
             {
+                Debug.WriteLine( "Adding subitems for " + item.Name, "Ankh" );
+                Debug.Indent();
+
                 foreach( ProjectItem subItem in item.ProjectItems )
                 {
                     if ( subItem.Name != Client.AdminDirectoryName )
@@ -111,6 +123,9 @@ namespace Ankh.Solution
                         this.AddSubItems( subItem, del );
                     }
                 }
+
+                Debug.Unindent();
+                Debug.WriteLine( "Finished adding subitems for " + item.Name, "Ankh" );
             }
             catch( InvalidCastException )
             {
@@ -123,6 +138,7 @@ namespace Ankh.Solution
             for( short i = 1; i <= item.FileCount; i++ ) 
             {
                 string path = item.get_FileNames(i);
+                Debug.WriteLine( "Adding path from ProjectItem: " + path, "Ankh" );
                 if ( File.Exists( path ) || System.IO.Directory.Exists( path ) )
                 {
                     SvnItem svnItem = this.Explorer.Context.StatusCache[path];

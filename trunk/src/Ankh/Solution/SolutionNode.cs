@@ -5,6 +5,7 @@ using System.IO;
 using EnvDTE;
 using NSvn.Core;
 using System.Collections;
+using System.Diagnostics;
 
 namespace Ankh.Solution
 {
@@ -21,6 +22,8 @@ namespace Ankh.Solution
 
             this.solutionFolder = this.Explorer.Context.StatusCache[
                 Path.GetDirectoryName( solution.FullName )];
+
+            Debug.WriteLine( "Creating solution node for " + this.solutionFile.Path, "Ankh" );
 
             StatusChanged del  = new StatusChanged( this.ChildOrResourceChanged );
             this.solutionFile.Changed += del;
