@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using NSvn;
 using EnvDTE;
 using NSvn.Core;
@@ -17,6 +18,9 @@ namespace Ankh.Solution
             this.solutionFile = (WorkingCopyFile)SvnResource.FromLocalPath( solution.FullName );
             this.solutionFile.Context = explorer.Context;
 
+            this.solutionFolder = (WorkingCopyDirectory)WorkingCopyResource.FromPath(
+                Path.GetDirectoryName( solution.FullName ) );
+
             explorer.SetSolution( this );
         }
 
@@ -25,6 +29,12 @@ namespace Ankh.Solution
         {
             get{ return this.solutionFile; }
         }
+
+        public WorkingCopyDirectory SolutionFolder
+        {
+            get{ return this.solutionFolder; }
+        }
+
 
 
         public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
@@ -65,5 +75,6 @@ namespace Ankh.Solution
         }
 
         private WorkingCopyFile solutionFile;
+        private WorkingCopyDirectory solutionFolder;
     }
 }

@@ -4,6 +4,8 @@ using EnvDTE;
 using NSvn;
 using Ankh.UI;
 using System.Collections;
+using System.Diagnostics;
+using Ankh.Solution;
 
 namespace Ankh.Commands
 {
@@ -35,56 +37,62 @@ namespace Ankh.Commands
         {
             // we assume by now that all items are working copy resources.
             UpdateVisitor v = new UpdateVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v, true );
+            context.SolutionExplorer.VisitSelectedNodes( v );
             v.Update();
             context.SolutionExplorer.UpdateSelectionStatus();
         }    
         #endregion
 
         #region UpdateVisitor
-        private class UpdateVisitor : LocalResourceVisitorBase
+        private class UpdateVisitor : LocalResourceVisitorBase, INodeVisitor
         {
-            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource )
-            {
-                this.resources.Add( resource );
-            }           
-
             public void Update()
             {
-                IList list = this.Filter();
-                foreach( WorkingCopyResource resource in list )
-                    resource.Update();
-            }
-
-            /// <summary>
-            /// Filter out paths that are subcomponents of other paths.
-            /// </summary>
-            /// <returns></returns>
-            private IList Filter()
-            {
-                ArrayList list = new ArrayList();
-                foreach( WorkingCopyResource outer in this.resources )
+                foreach( WorkingCopyResource resource in this.resources )
                 {
-                    bool found = false;
-                    foreach( WorkingCopyResource inner in this.resources )
-                    {
-                        if ( outer.Path.IndexOf( inner.Path ) == 0 && outer.Path != inner.Path )
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if ( !found )
-                        list.Add( outer );
+                    Trace.WriteLine( "Updating " + resource.Path, "Ankh" );
                 }
-
-                return list;
             }
 
+            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
+            {
+                this.resources.Add( resource );
+            }
+
+            public void VisitProject(Ankh.Solution.ProjectNode node)
+            {
+                // some project types dont necessarily have a project folder
+                if ( node.ProjectFolder != null )
+                    this.resources.Add( node.ProjectFolder );
+                else
+                    node.VisitResources( this, true );
+            }           
+
+            public void VisitProjectItem(Ankh.Solution.ProjectItemNode node)
+            {
+                node.VisitResources( this, false );
+            } 
+
+            public void VisitSolutionNode(Ankh.Solution.SolutionNode node)
+            {
+                this.resources.Add( node.SolutionFolder );
+                string solutionPath = node.SolutionFolder.Path.ToLower();
+
+                // update all projects whose folder is not under the solution root
+                foreach( TreeNode n in node.Children )
+                {
+                    ProjectNode pNode = n as ProjectNode;
+                    if ( pNode != null && ( pNode.ProjectFolder == null ||
+                        pNode.ProjectFolder.Path.ToLower().IndexOf( 
+                        solutionPath ) != 0 ) )
+                    {
+                        pNode.Accept( this );
+                    }
+                }
+            }
 
             private ArrayList resources = new ArrayList();
-        }
+        }            
         #endregion
     }
 }
