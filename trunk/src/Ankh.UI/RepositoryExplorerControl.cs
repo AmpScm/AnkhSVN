@@ -107,35 +107,6 @@ namespace Ankh.UI
             this.treeView.Controller.SetRepository( this.urlTextBox.Text, this.revisionPicker.Revision );
             this.treeView.Go();
             this.treeView.Enabled = true;
-
-//            try
-//            {
-//                this.Cursor = Cursors.WaitCursor;
-//
-//                RepositoryDirectory dir = new RepositoryDirectory(
-//                    this.urlTextBox.Text, this.revisionPicker.Revision );
-//
-//                if ( this.context != null )
-//                    dir.Context = this.context;
-//
-//                this.treeView.RepositoryRoot = dir;
-//                this.treeView.Enabled = true;
-//            }
-//            catch( AuthorizationFailedException )
-//            {
-//                MessageBox.Show( "Could not authorize against repository " + 
-//                    this.urlTextBox.Text, "Authorization failed", MessageBoxButtons.OK,
-//                    MessageBoxIcon.Warning );
-//            }
-//            catch( SvnClientException ex )
-//            {
-//                MessageBox.Show( "An error occurred: " + ex.Message, "Error", 
-//                    MessageBoxButtons.OK, MessageBoxIcon.Error );
-//            }
-//            finally
-//            {
-//                this.Cursor = Cursors.Default;
-//            }
         }
 
         private void revisionPicker_Changed(object sender, System.EventArgs e)

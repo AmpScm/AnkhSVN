@@ -49,14 +49,22 @@ namespace Ankh.RepositoryExplorer
 
         public System.Collections.IEnumerable GetChildren()
         {
-            if ( !this.IsDirectory )
-                return new object[]{};
-            else
+            try
             {
-                ArrayList list = new ArrayList();
-                foreach( RepositoryResource res in ((RepositoryDirectory)this.resource).GetChildren().Values )
-                    list.Add( new Node( res ) );
-                return list;
+                if ( !this.IsDirectory )
+                    return new object[]{};
+                else
+                {
+                    ArrayList list = new ArrayList();
+                    foreach( RepositoryResource res in ((RepositoryDirectory)this.resource).GetChildren().Values )
+                        list.Add( new Node( res ) );
+                    return list;
+                }
+            }
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+                throw;
             }
         }
 
