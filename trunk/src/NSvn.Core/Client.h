@@ -283,6 +283,15 @@ namespace NSvn
             ///                      on target and all children.</param>  
             void PropSet(Property* property, String* target, bool recurse);
 
+            /// <summary>Modify a working copy directory dir, changing any 
+            /// repository URLs that begin with from to begin with to instead, 
+            /// recursing into subdirectories if recurse is true.</summary>
+            /// <param name="dir">Working copy directory.</param>
+            /// <param name="from">Original URL.</param>
+            /// <param name="to">New URL.</param>
+            /// <param name="recurse">Whether to recurse into subdirectories.</a>
+            void Relocate(String* dir, String* from, String* to, bool recurse);
+
             ///<summary>Set a property to a revision in the repository.</summary>
             ///<param name="property">Object that contain a value and a name.
             ///         <see cref="NSvn.Common.Property"/></param>
