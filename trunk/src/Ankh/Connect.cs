@@ -278,7 +278,7 @@ namespace Ankh
                     ICommand cmd;
                     if ( (cmd = (ICommand)this.commands[commandName]) != null )
                     { 
-                        cmd.Execute( this.context, args );
+                        cmd.Execute(this.context, args);
                         handled = true;
                     }
                 }
@@ -295,7 +295,7 @@ namespace Ankh
             }
         }        
         
-        private AnkhContext context;
+        private IContext context;
         Ankh.CommandMap commands;
 
 

@@ -18,14 +18,14 @@ namespace Ankh.Commands
     VSNetControl( "MenuBar.Tools.AnkhSVN", Position=1 ),]
     public class ChangeAdminDirNameCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // we don't want to allow this while a solution is already open
             // it could lead to weird behavior
             return context.AnkhLoadedForSolution ? Disabled : Enabled;
         }
 
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             using( AdminDirDialog dlg = new AdminDirDialog() )
             {

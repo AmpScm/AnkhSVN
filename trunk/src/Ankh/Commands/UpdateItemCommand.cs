@@ -22,7 +22,7 @@ namespace Ankh.Commands
     public class UpdateItem : CommandBase
     {		
         #region Implementation of ICommand
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // all items must be versioned if we are going to run update.
             IList resources = context.SolutionExplorer.GetSelectionResources( true,
@@ -33,7 +33,7 @@ namespace Ankh.Commands
                 return Disabled;
         }
 
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace Ankh.Commands
         #region UpdateVisitor
         private class UpdateRunner : ProgressRunner, INodeVisitor
         {
-            public UpdateRunner( AnkhContext context ) : base(context)
+            public UpdateRunner( IContext context ) : base(context)
             {}
 
             /// <summary>

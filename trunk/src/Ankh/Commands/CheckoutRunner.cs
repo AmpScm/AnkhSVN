@@ -13,7 +13,7 @@ namespace Ankh.Commands
     /// </summary>
     public class CheckoutRunner : ProgressRunner
     {
-        public CheckoutRunner( AnkhContext context, string path, Revision revision, 
+        public CheckoutRunner( IContext context, string path, Revision revision, 
             string url, bool recurse ) 
             : base( context )
         { 
@@ -23,7 +23,7 @@ namespace Ankh.Commands
             this.recurse = recurse;
         }
 
-        public CheckoutRunner( AnkhContext context, string path, Revision revision, 
+        public CheckoutRunner( IContext context, string path, Revision revision, 
             string url ) : this( context, path, revision, url, true )
         {
             // empty

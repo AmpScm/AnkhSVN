@@ -21,12 +21,12 @@ namespace Ankh.Commands
             this.workingDirectory = Environment.CurrentDirectory;
         }
 
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             return Enabled;
         }
        
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             CommandWindow window = (CommandWindow)((Window)context.DTE.Windows.Item( 
                 EnvDTE.Constants.vsWindowKindCommandWindow )).Object;
@@ -243,7 +243,7 @@ dir     List the contents of the working directory
             return (string[])arglist.ToArray( typeof(String) );
         }
 
-        private AnkhContext context;
+        private IContext context;
         private string workingDirectory;
         private readonly Regex INTRINSIC =  new Regex( @"\/\?|pwd|cd|dir" );
     }

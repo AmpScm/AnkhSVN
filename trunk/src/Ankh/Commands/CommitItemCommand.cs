@@ -22,7 +22,7 @@ namespace Ankh.Commands
     public class CommitItem : CommandBase
     {	
         #region Implementation of ICommand
-        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             if ( context.SolutionExplorer.GetSelectionResources( true, 
                 new ResourceFilterCallback( CommandBase.ModifiedFilter) ).Count > 0 )
@@ -30,7 +30,7 @@ namespace Ankh.Commands
             else
                 return Disabled;
         }
-        public override void Execute(Ankh.AnkhContext context, string parameters)
+        public override void Execute(Ankh.IContext context, string parameters)
         {
             // make sure all files are saved
             this.SaveAllDirtyDocuments( context );
@@ -77,7 +77,7 @@ namespace Ankh.Commands
         }        
         #endregion
 
-        private void DoCommit( AnkhContext context )
+        private void DoCommit( IContext context )
         {
             this.commitInfo = context.Client.Commit( this.paths, true );
         }

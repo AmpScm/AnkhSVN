@@ -15,12 +15,12 @@ namespace Ankh.Commands
     VSNetFolderNodeControl( "Ankh", Position = 1)]
     public class RefreshCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             return context.AnkhLoadedForSolution ? Enabled : Disabled;
         }
 
-        public override void Execute(Ankh.AnkhContext context, string parameters)
+        public override void Execute(Ankh.IContext context, string parameters)
         {
             try
             {

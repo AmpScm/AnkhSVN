@@ -17,7 +17,7 @@ namespace Ankh.RepositoryExplorer
     /// </summary>
     public class Controller
     {
-        public Controller( AnkhContext context, 
+        public Controller( IContext context, 
             RepositoryExplorerControl repositoryExplorer, Window window )
         {
             this.repositoryExplorer = repositoryExplorer;
@@ -265,7 +265,7 @@ namespace Ankh.RepositoryExplorer
         /// </summary>
         private class ListRunner : ProgressRunner
         {
-            public ListRunner( INode node, AnkhContext context ) : 
+            public ListRunner( INode node, IContext context ) : 
                 base(context)
             {
                 this.node = node;
@@ -412,7 +412,7 @@ namespace Ankh.RepositoryExplorer
         private static readonly NodeComparer NODECOMPARER = new NodeComparer();
         private RepositoryExplorerControl repositoryExplorer;
         private Hashtable directories;
-        private AnkhContext context;
+        private IContext context;
         private Window window;
 
         private bool enableBackgroundListing = false;

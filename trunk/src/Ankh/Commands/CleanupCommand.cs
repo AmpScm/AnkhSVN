@@ -17,12 +17,12 @@ namespace Ankh.Commands
     public class Cleanup : CommandBase
     {  
     
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             return Enabled;
         }
     
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             context.StartOperation( "Running cleanup" );
 

@@ -34,7 +34,7 @@ namespace Ankh
         /// Registers all commands present in this DLL.
         /// </summary>
         /// <param name="dte">TODO: what to do, what to do?</param>
-        public static CommandMap LoadCommands( AnkhContext context, bool register )
+        public static CommandMap LoadCommands( IContext context, bool register )
         {
             CreateReposExplorerPopup( context );
             CreateAnkhSubMenu( context );
@@ -70,7 +70,7 @@ namespace Ankh
         /// <summary>
         /// Get rid of any old commands hanging around.
         /// </summary>
-        public static void DeleteCommands( AnkhContext context )
+        public static void DeleteCommands( IContext context )
         {
            
             if ( context.DTE.Commands != null )
@@ -115,7 +115,7 @@ namespace Ankh
         /// <param name="type">A Type object representing the command to register.</param>
         /// <param name="commands">A Commands collection in which to put the command.</param>
         private static void RegisterVSNetCommand( VSNetCommandAttribute attr, 
-            ICommand cmd, AnkhContext context )
+            ICommand cmd, IContext context )
         {
             // register the command with the environment
             object []contextGuids = new object[] { };
@@ -130,7 +130,7 @@ namespace Ankh
         /// </summary>
         /// <param name="command">The ICommand to attach the command bar to.</param>
         /// <param name="type">The type that handles the command.</param>
-        private static void RegisterControl( ICommand cmd, AnkhContext context )
+        private static void RegisterControl( ICommand cmd, IContext context )
         {
             // register the command bars
             foreach( VSNetControlAttribute control in cmd.GetType().GetCustomAttributes( 
@@ -144,7 +144,7 @@ namespace Ankh
             }
         }        
 
-        private static void CreateReposExplorerPopup( AnkhContext context )
+        private static void CreateReposExplorerPopup( IContext context )
         {
             context.RepositoryExplorer.CommandBar = (CommandBar)
                 context.DTE.Commands.AddCommandBar( "ReposExplorer", vsCommandBarType.vsCommandBarTypePopup,
@@ -155,7 +155,7 @@ namespace Ankh
         /// Creates an "AnkhSVN" submenu on the Tools menu.
         /// </summary>
         /// <param name="context"></param>
-        private static void CreateAnkhSubMenu( AnkhContext context )
+        private static void CreateAnkhSubMenu( IContext context )
         {
             CommandBar toolMenu = (CommandBar)
                 context.DTE.CommandBars[ "Tools" ];

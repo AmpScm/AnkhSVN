@@ -12,7 +12,7 @@ namespace Ankh.Commands
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
 	public class ViewInVSNetCommand : ViewRepositoryFileCommand
 	{
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             try
             {

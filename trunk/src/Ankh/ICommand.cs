@@ -12,12 +12,12 @@ namespace Ankh
         /// <summary>
         /// Get the status of the command
         /// </summary>
-        vsCommandStatus QueryStatus( AnkhContext context );
+        vsCommandStatus QueryStatus( IContext context );
 
         /// <summary>
         /// Execute the command
         /// </summary>
-        void Execute( AnkhContext context, string parameters );
+        void Execute(IContext context, string parameters);
 
         /// <summary>
         /// The EnvDTE.Command instance corresponding to this command.

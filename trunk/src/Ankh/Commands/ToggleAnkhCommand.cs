@@ -15,7 +15,7 @@ namespace Ankh.Commands
     VSNetControl( "Solution.Ankh", Position=1 )]
     public class ToggleAnkhCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // QueryStatus gets called when we set the Caption
             // we must prevent infinite recursion
@@ -74,7 +74,7 @@ namespace Ankh.Commands
             }
         }
 
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             string solutionDir = Path.GetDirectoryName(context.DTE.Solution.FullName);
             string noLoad = Path.Combine(solutionDir, "Ankh.NoLoad");

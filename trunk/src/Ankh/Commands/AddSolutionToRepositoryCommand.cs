@@ -23,7 +23,7 @@ namespace Ankh.Commands
     VSNetControl( "File", Position=14 )]
     public class AddSolutionToRepositoryCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.AnkhLoadedForSolution || 
                 !File.Exists(context.DTE.Solution.FullName))
@@ -34,7 +34,7 @@ namespace Ankh.Commands
                 return context.SolutionIsOpen ? Enabled : Disabled;
         }
 
-        public override void Execute( AnkhContext context, string parameters)
+        public override void Execute( IContext context, string parameters)
         {
             this.SaveAllDirtyDocuments( context );
 
@@ -142,7 +142,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="projects"></param>
         /// <param name="context"></param>
-        private void AddProjects( Projects projects, AnkhContext context, string solutionDir )
+        private void AddProjects( Projects projects, IContext context, string solutionDir )
         {
             foreach( Project project in projects )
             {
@@ -200,7 +200,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="items"></param>
         /// <param name="context"></param>
-        private void AddProjectItems( ProjectItems items, AnkhContext context, 
+        private void AddProjectItems( ProjectItems items, IContext context, 
             string solutionDir )
         {
             foreach( ProjectItem item in items )
@@ -258,7 +258,7 @@ namespace Ankh.Commands
             
         }
 
-        private void Add( string filename, string solutionDir, AnkhContext context )
+        private void Add( string filename, string solutionDir, IContext context )
         {
             if ( !SvnUtils.IsWorkingCopyPath( filename ) )
                 this.AddWithIntermediateDirectories( filename, solutionDir, context );
@@ -270,7 +270,7 @@ namespace Ankh.Commands
         }
 
         private void AddWithIntermediateDirectories( string filename, string solutionDir, 
-            AnkhContext context )
+            IContext context )
         {
             // we know here that filename is a subpath of solutionDir
             string path;
@@ -313,7 +313,7 @@ namespace Ankh.Commands
             }
         }
 
-        private void DoCommit( AnkhContext context )
+        private void DoCommit( IContext context )
         {
             string[] paths = (string[])(new ArrayList(this.paths).ToArray(typeof(string)));
             context.Client.Commit( paths, true );
@@ -324,7 +324,7 @@ namespace Ankh.Commands
         /// </summary>
         private class MakeDirRunner : ProgressRunner
         {
-            public MakeDirRunner( string url, string logMessage, AnkhContext context ) : 
+            public MakeDirRunner( string url, string logMessage, IContext context ) : 
                 base( context )
             {
                 this.url = url;

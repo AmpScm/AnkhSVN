@@ -19,12 +19,12 @@ namespace Ankh
     /// </summary>
     public class SvnClient : Client
     {
-        public SvnClient( AnkhContext ankhContext, string configDir ) :  base( configDir )
+        public SvnClient( IContext ankhContext, string configDir ) :  base( configDir )
         {
             this.Init( ankhContext );
         }
 
-        public SvnClient( AnkhContext ankhContext ) 
+        public SvnClient( IContext ankhContext ) 
         {
             this.Init( ankhContext );
         }
@@ -269,7 +269,7 @@ namespace Ankh
             }
         }     
    
-        private void Init(AnkhContext ankhContext)
+        private void Init(IContext ankhContext)
         {
             this.ankhContext = ankhContext;
             this.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
@@ -322,7 +322,7 @@ namespace Ankh
         }
         
         static readonly Hashtable actionStatus = new Hashtable();
-        private AnkhContext ankhContext;
+        private IContext ankhContext;
         private static IDictionary map = new Hashtable();
         private string logMessage = null;
         private Control invoker;

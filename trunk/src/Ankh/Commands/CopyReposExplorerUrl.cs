@@ -18,7 +18,7 @@ namespace Ankh.Commands
      VSNetControl( "ReposExplorer", Position=1 )]
 	public class CopyReposExplorerUrl : CommandBase
 	{
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // all we need is a selection in the repos explorer
             if ( context.RepositoryExplorer.SelectedNode != null )
@@ -28,7 +28,7 @@ namespace Ankh.Commands
 
         }
 
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             INode node = context.RepositoryExplorer.SelectedNode;
             Clipboard.SetDataObject( node.Url );
