@@ -8,7 +8,11 @@ using System.Windows.Forms;
 using NSvn.Core;
 using Utils;
 using System.Text.RegularExpressions;
+#if WHIDBEY
+using Microsoft.VisualStudio.CommandBars;
+#else
 using Microsoft.Office.Core;
+#endif
 using System.Diagnostics;
 using Utils.Win32;
 

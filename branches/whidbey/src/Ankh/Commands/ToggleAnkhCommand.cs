@@ -2,7 +2,11 @@ using System;
 using System.IO;
 using EnvDTE;
 using NSvn.Core;
+#if WHIDBEY
+using Microsoft.VisualStudio.CommandBars;
+#else
 using Microsoft.Office.Core;
+#endif
 
 namespace Ankh.Commands
 {

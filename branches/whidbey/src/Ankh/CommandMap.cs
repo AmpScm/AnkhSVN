@@ -4,7 +4,11 @@ using System.Collections;
 using System.Reflection;
 using EnvDTE;
 using System.Diagnostics;
+#if WHIDBEY
+using Microsoft.VisualStudio.CommandBars;
+#else
 using Microsoft.Office.Core;
+#endif
 using System.Runtime.InteropServices;
 
 namespace Ankh
@@ -158,7 +162,7 @@ namespace Ankh
         private static void CreateAnkhSubMenu( IContext context )
         {
             CommandBar toolMenu = (CommandBar)
-                context.DTE.CommandBars[ "Tools" ];
+                ((CommandBars)context.DTE.CommandBars)[ "Tools" ];
 
             context.DTE.Commands.AddCommandBar( "AnkhSVN", 
                 vsCommandBarType.vsCommandBarTypeMenu,

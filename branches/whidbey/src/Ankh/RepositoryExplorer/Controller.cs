@@ -7,6 +7,11 @@ using System.Diagnostics;
 using EnvDTE;
 using Utils;
 using System.Windows.Forms;
+#if WHIDBEY
+using Microsoft.VisualStudio.CommandBars;
+#else
+using Microsoft.Office.Core;
+#endif
 
 using Thread = System.Threading.Thread;
 
@@ -50,7 +55,7 @@ namespace Ankh.RepositoryExplorer
         /// <summary>
         /// The command bar associated with the repository explorer.
         /// </summary>
-        public Microsoft.Office.Core.CommandBar CommandBar
+        public CommandBar CommandBar
         {
             get{ return this.repositoryExplorer.CommandBar; }
             set{ this.repositoryExplorer.CommandBar = value; }

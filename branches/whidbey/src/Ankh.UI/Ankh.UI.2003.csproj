@@ -62,6 +62,26 @@
                     TreatWarningsAsErrors = "false"
                     WarningLevel = "4"
                 />
+                <Config
+                    Name = "debug run vsexpress"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE;WHIDBEY"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "true"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\Debug\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
             </Settings>
             <References>
                 <Reference
@@ -131,6 +151,11 @@
                     Name = "office"
                     AssemblyName = "Office"
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.1.4322\office.dll"
+                />
+                <Reference
+                    Name = "Microsoft.VisualStudio.CommandBars"
+                    AssemblyName = "Microsoft.VisualStudio.CommandBars"
+                    HintPath = "..\lib\envdte8\Microsoft.VisualStudio.CommandBars.dll"
                 />
             </References>
         </Build>

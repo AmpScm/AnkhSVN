@@ -1,7 +1,11 @@
 // $Id$
 using System;
 using EnvDTE;
+#if WHIDBEY
+using Microsoft.VisualStudio.CommandBars;
+#else
 using Microsoft.Office.Core;
+#endif
 
 namespace Ankh
 {
@@ -50,7 +54,8 @@ namespace Ankh
         public virtual void AddControl( ICommand cmd, IContext context, string tag )
         {
             CommandBar bar = GetCommandBar( this.commandBar, context );
-            CommandBarControl cntrl = cmd.Command.AddControl( bar, this.position );      
+            CommandBarControl cntrl = (CommandBarControl)
+                cmd.Command.AddControl( bar, this.position );      
             cntrl.Tag = tag;
         }
 
@@ -69,7 +74,7 @@ namespace Ankh
             if ( path[0] == context.RepositoryExplorer.CommandBar.Name )
                 bar = context.RepositoryExplorer.CommandBar;
             else
-                bar = (CommandBar)context.DTE.CommandBars[ path[0] ];;
+                bar = (CommandBar)((CommandBars)context.DTE.CommandBars)[ path[0] ];;
             for( int i = 1; i < path.Length; i++ )
             {
                 try
@@ -112,7 +117,8 @@ namespace Ankh
 
                 CommandBar bar = 
                     VSNetControlAttribute.GetCommandBar(barName, context);
-                CommandBarControl cntrl = cmd.Command.AddControl( bar, this.Position );
+                CommandBarControl cntrl = (CommandBarControl)
+                    cmd.Command.AddControl( bar, this.Position );
                 cntrl.Tag = tag;
             }
         }
