@@ -47,7 +47,6 @@ namespace Ankh.Solution
             this.Unload();
             this.SetUpTreeview();
             this.SyncWithTreeView();
-            this.CreateTaskItems();
         }
 
         /// <summary>
@@ -399,29 +398,7 @@ namespace Ankh.Solution
 
             return list;
         }
-        /// <summary>
-        ///  Filter for getting conflicted items from the solution
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-       private  bool ConflictedFilter( SvnItem item )
-        {
-            return (item.Status.TextStatus == NSvn.Core.StatusKind.Conflicted);
-        }
-
-        /// <summary>
-        ///  Find all the files with conflicts and create conflict items in the task list for them
-        /// </summary>
-        private void CreateTaskItems()
-        {
-            ConflictTasks conflictTasks =  new ConflictTasks(context);
-
-            IList conflictItems =  this.GetAllResources(true,   new ResourceFilterCallback(ConflictedFilter)); 
-            foreach(SvnItem item in conflictItems)
-            {
-                conflictTasks.AddTask( item.Path);
-            }
-        }
+ 
 
         private void GenerateStatusCache( string solutionPath )
         {
