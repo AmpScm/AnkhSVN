@@ -36,9 +36,6 @@
         <property name="define" value="ALWAYSREGISTER;DEBUG;${define}" 
             if="${debug}"/>
         
-        <property name="define" value="VS2002;${define}" unless="${vs.2003}"/>
-        <property name="define" value="VS2003;${define}" if="${vs.2003}"/>
-
         <property name="define" value="ALT_ADMIN_DIR;${define}" 
             if="${alt.admin.dir}"/>
         
