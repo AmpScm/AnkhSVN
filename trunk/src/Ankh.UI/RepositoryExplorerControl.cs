@@ -41,6 +41,7 @@ namespace Ankh.UI
 
             this.treeView.MouseUp += new MouseEventHandler( this.TreeViewMouseUp );
             this.treeView.BeforeExpand += new TreeViewCancelEventHandler(treeView_BeforeExpand);
+            this.treeView.AfterSelect += new TreeViewEventHandler(treeView_AfterSelect);
 			
             this.components = new System.ComponentModel.Container();
             this.SetToolTips();
@@ -82,6 +83,10 @@ namespace Ankh.UI
             remove{ this.backgroundListingCheck.CheckedChanged -= value; }
         }
 
+        /// <summary>
+        /// Fired when the selection changes.
+        /// </summary>
+        public event EventHandler SelectionChanged;
 
         /// <summary>
         /// Fired whenever a directory node is expanded.
@@ -233,6 +238,12 @@ namespace Ankh.UI
             Point screen = this.treeView.PointToScreen( new Point(args.X, args.Y) );
 
             this.commandBar.ShowPopup( screen.X, screen.Y );
+        }
+
+        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if ( this.SelectionChanged != null )
+                this.SelectionChanged( this, EventArgs.Empty );
         }
 
 

@@ -47,7 +47,7 @@ namespace Ankh
             this.CreateRepositoryExplorer();
 
             this.repositoryController = new RepositoryExplorer.Controller( this, 
-                this.repositoryExplorer );
+                this.repositoryExplorer, this.reposExplorerWindow );
 
             // is there a solution opened?
             if ( this.dte.Solution.IsOpen )

@@ -4,6 +4,9 @@ using System.Collections;
 using System.Threading;
 using NSvn.Core;
 using System.Diagnostics;
+using EnvDTE;
+
+using Thread = System.Threading.Thread;
 
 namespace Ankh.RepositoryExplorer
 {
@@ -13,17 +16,19 @@ namespace Ankh.RepositoryExplorer
     internal class Controller
     {
         public Controller( AnkhContext context, 
-            RepositoryExplorerControl repositoryExplorer )
+            RepositoryExplorerControl repositoryExplorer, Window window )
         {
             this.repositoryExplorer = repositoryExplorer;
             this.enableBackgroundListing = repositoryExplorer.EnableBackgroundListing;
 
             this.context = context;
+            this.window = window;
 
             this.repositoryExplorer.EnableBackgroundListingChanged += 
                 new EventHandler( this.BackgroundListingChanged );
             this.repositoryExplorer.GoClicked += new EventHandler(GoClicked);
             this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
+            this.repositoryExplorer.SelectionChanged +=new EventHandler(SelectionChanged);
             
             this.directories = new Hashtable();
         }
@@ -103,6 +108,13 @@ namespace Ankh.RepositoryExplorer
         private void BackgroundListingChanged( object sender, EventArgs args )
         {
             this.enableBackgroundListing = this.repositoryExplorer.EnableBackgroundListing;
+        }
+
+        private object[] selection = new object[]{ null };
+        private void SelectionChanged(object sender, EventArgs e)
+        {
+            this.selection[0] = this.repositoryExplorer.SelectedNode;
+            this.window.SetSelectionContainer( ref this.selection );
         }
 
         /// <summary>
@@ -255,9 +267,10 @@ namespace Ankh.RepositoryExplorer
         private RepositoryExplorerControl repositoryExplorer;
         private Hashtable directories;
         private AnkhContext context;
+        private Window window;
 
         private bool enableBackgroundListing = false;
-            
 
+        
     }
 }
