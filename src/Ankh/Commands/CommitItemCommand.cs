@@ -35,7 +35,7 @@ namespace Ankh.Commands
         public override void Execute(Ankh.AnkhContext context, string parameters)
         {
             // make sure all files are saved
-            context.DTE.Documents.SaveAll();
+            this.SaveAllDirtyDocuments( context );
 
             IList resources = context.SolutionExplorer.GetSelectionResources( true, 
                 new ResourceFilterCallback(CommandBase.ModifiedFilter) );

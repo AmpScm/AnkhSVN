@@ -34,7 +34,7 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context, string parameters)
         {
-            context.DTE.Documents.SaveAll();
+            this.SaveAllDirtyDocuments( context );
 
             IList resources = context.SolutionExplorer.GetSelectionResources(
                 true, new ResourceFilterCallback(ReverseMergeCommand.VersionedFilter) );

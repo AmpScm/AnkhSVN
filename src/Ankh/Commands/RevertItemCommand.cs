@@ -40,7 +40,7 @@ namespace Ankh.Commands
 
         public override void Execute(Ankh.AnkhContext context, string parameters)
         {
-            context.DTE.Documents.SaveAll();
+            this.SaveAllDirtyDocuments( context );
 
             // get the modified resources
             IList resources = context.SolutionExplorer.GetSelectionResources( true,

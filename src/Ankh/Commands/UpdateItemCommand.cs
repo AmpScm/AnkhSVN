@@ -40,7 +40,7 @@ namespace Ankh.Commands
             try
             {
                 // save all files
-                context.DTE.Documents.SaveAll();
+                this.SaveAllDirtyDocuments( context );
 
                 context.StartOperation( "Updating" );
                 // we assume by now that all items are working copy resources.

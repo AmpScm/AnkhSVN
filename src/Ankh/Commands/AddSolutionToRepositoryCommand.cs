@@ -33,7 +33,7 @@ namespace Ankh.Commands
 
         public override void Execute( AnkhContext context, string parameters)
         {
-            context.DTE.Documents.SaveAll();
+            this.SaveAllDirtyDocuments( context );
 
             string url;
             using( AddSolutionDialog dlg = new AddSolutionDialog() )

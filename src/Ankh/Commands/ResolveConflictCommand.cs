@@ -37,7 +37,7 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context, string parameters)
         {
-            context.DTE.Documents.SaveAll();
+            this.SaveAllDirtyDocuments( context );
 
             context.StartOperation( "Resolving" );
 
