@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<?xml-stylesheet type="text/xsl" href="doc.xsl"?> 
+<doc>
+
+<!-- <img src="subversion_logo_hor.png"/> -->
+<section header="Final Year Project in Computer Science">
+    <section header="Høyskolen i Oslo , IT-studiet, spring 2003">
+    </section>
+
+    <definitionlist>
+
+            <definition word="Date:">
+                    Oslo,  27.11.2002
+            </definition>
+            <definition word="Project title:">
+                    Subversion addin for Visual Studio .NET
+            </definition>
+            <definition word="Group members:">
+                <list>
+                    <item><link  url="mailto:arild.fines@broadpark.no">
+                    Arild Fines, s104065</link></item>        
+                    <item><link  url="mailto:per@perkramer.com">
+                    Per August Kramer, s113670</link></item>
+                    <item><link  url="mailto:s106855@iu.hio.no">
+                    Kristin Borud, s106855</link></item>
+                </list>
+            </definition>
+
+            <definition word="Employer:">
+                <inlinecode>
+                    <br/>CollabNet - <link  url="http://www.collab.net">http://www.collab.net</link>
+                    <br/>,8000 Marina Boulevard, Suite 600,
+                    <br/>Brisbane, CA 94005-1865, USA
+                </inlinecode>
+            </definition>
+
+            <definition word="Contact:"> 
+                <inlinecode>
+                    <br/>Karl Fogel, Software Collaboration Specialist
+                    <br/><link  url="mailto:kfogel@collab.net">kfogel@collab.net</link>
+                    <br/>c/o CollabNet Chicago, 407 S. Dearborn, 
+                    <br/>Chicago, IL  60605, USA
+                    <br/>+1 312 922-2784
+                </inlinecode>
+            </definition>
+    </definitionlist>   
+   
+    <section header="About CollabNet">
+           <p> <!-- <img src="collabnet_logo.gif" align=left hspace=10/> -->
+           CollabNet provides companies with solutions for Collaborative
+           Software Development (CSD) by combining a Web-based software
+           application with a suite of consulting services. </p>
+
+           <p>
+           CollabNet is currently working with several Fortune 500 and 
+           industry-leading enterprise companies, 
+           including: Barclays Global Investors (BGI), Dresdner 
+           Kleinwort Wasserstein (DrKW), Hewlett-Packard (HP), 
+           Oracle, and Sun Microsystems. Brian Behlendorf, co- founder 
+           of the Apache Software Foundation, 
+           established CollabNet in July 1999.</p>
+    </section>
+
+    <section header="Project description">
+        <p><link  url="http://subversion.tigris.org">
+         <!-- <img src="subversion_logo.png" align="left" hspace="10" vspace="2" border="0"/> -->
+         </link>Subversion
+        <link url="http://subversion.tigris.org">http://subversion.tigris.org</link>
+        is a  free/open-source revision control system that makes it easier for several
+        programmers to cooperate within a set of files. All the files are stored
+        on a server where each individual programmer checks out a working copy and
+        works with that copy. During the project period these files are updated
+        and synchronised with the repository. The repository is much like an ordinary file server, 
+        except that it remembers every change ever made to your files. 
+        This allows you to recover older versions of your files, 
+        or browse the history of how your files changed.</p>
+
+        <p>We intend to create a set of .NET assemblies that wrap the 
+        Subversion(svn) client API. Further, we will use this wrapper to 
+        create a Visual Studio.NET addin for svn. This will allow source control 
+        operations to be performed from within Visual Studio itself. Such 
+        integration with the IDE will make svn a viable alternative even for 
+        Microsoft-centric development shops, which currently mostly use Sourcesafe.
+        </p>
+    </section>
+
+    <section header="Platform/tools">
+        <p>The addin itself will primarily be written in C# on the Windows/.NET platform, 
+        with some C/C++/Managed C++ 
+        used for the glue layer against the Subversion client API(which is written in C). 
+        The natural development tool to use 
+        here is Visual Studio .NET. Other tools that might be used include
+        NUnit, a testing framework for .NET, NAnt, a build system and of course 
+        Subversion itself for source control.</p>
+    </section>
+
+</section>
+
+</doc>
