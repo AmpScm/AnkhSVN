@@ -32,14 +32,9 @@
         <File RelPath="CommandMap.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="ConflictManager.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="Connect.cs" SubType="Code" BuildAction="Compile" />
-        <File RelPath="ErrorHandler.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="Error.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="FileWatcher.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="ICommand.cs" SubType="Code" BuildAction="Compile" />
-        <File RelPath="IContext.cs" SubType="Code" BuildAction="Compile" />
-        <File RelPath="IErrorHandler.cs" SubType="Code" BuildAction="Compile" />
-        <File RelPath="ISelectionContainer.cs" SubType="Code" BuildAction="Compile" />
-        <File RelPath="ISolutionExplorer.cs" SubType="Code" BuildAction="Compile" />
-        <File RelPath="IUIShell.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="OutputPaneWriter.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="ProgressRunner.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="ResourceBitmaps.cs" SubType="Code" BuildAction="Compile" />
@@ -47,7 +42,6 @@
         <File RelPath="StatusCache.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="SvnClient.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="SvnItem.cs" SubType="Code" BuildAction="Compile" />
-        <File RelPath="UIShell.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="VSNetCommandAttribute.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="VSNetControlAttribute.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="VSNetFolderNodeControlAttribute.cs" SubType="Code" BuildAction="Compile" />

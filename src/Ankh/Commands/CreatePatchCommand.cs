@@ -15,10 +15,10 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1 ),
     VSNetFolderNodeControl( "Ankh", Position = 1)]
-    public class CreatePatchCommand : LocalDiffCommandBase
+    internal class CreatePatchCommand : LocalDiffCommandBase
     {    
     
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             this.SaveAllDirtyDocuments( context );
 
@@ -27,7 +27,7 @@ namespace Ankh.Commands
             {
                 string diff = this.GetDiff( context );
                 
-                if ( diff == null )
+                if ( diff.Trim() == String.Empty )
                 {
                     MessageBox.Show( context.HostWindow, "Nothing to diff here. Move along." );
                     return;

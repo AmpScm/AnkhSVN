@@ -14,11 +14,11 @@ namespace Ankh.Commands
     [VSNetCommand("CheckoutSolution", Tooltip="Checkout this solution", 
          Bitmap = ResourceBitmaps.CheckoutSolution, Text = "Checkout Solution..." ),
     VSNetControl( "ReposExplorer", Position = 2 ) ]
-	public class CheckoutSolutionCommand : 
+	internal class CheckoutSolutionCommand : 
         CommandBase
 	{
         #region ICommand Members
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             IRepositoryTreeNode node = context.RepositoryExplorer.SelectedNode;
             if ( node!= null && !node.IsDirectory && 
@@ -31,7 +31,7 @@ namespace Ankh.Commands
         }
         #endregion
 
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             /// first get the parent folder
             FolderBrowser browser = new FolderBrowser();

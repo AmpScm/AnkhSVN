@@ -27,7 +27,6 @@
         <File RelPath="AdminDirDialog.cs" SubType="Form" BuildAction="Compile" />
         <File RelPath="AdminDirDialog.resx" DependentUpon="AdminDirDialog.cs" BuildAction="EmbeddedResource" />
         <File RelPath="Ankh.UI.build" BuildAction="None" />
-        <File RelPath="Ankh.UI.wxs" BuildAction="None" />
         <File RelPath="AssemblyInfo.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="CheckoutDialog.cs" SubType="Form" BuildAction="Compile" />
         <File RelPath="CheckoutDialog.resx" DependentUpon="CheckoutDialog.cs" BuildAction="EmbeddedResource" />

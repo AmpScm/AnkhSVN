@@ -19,7 +19,7 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
-    public class AnkhContext : IContext
+    internal class AnkhContext
     {
         /// <summary>
         /// Fired when the addin is unloading.
@@ -27,15 +27,10 @@ namespace Ankh
         public event EventHandler Unloading;
 
 
-        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell,
-            IErrorHandler errorHandler )
+        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin )
         {
             this.dte = dte;
             this.addin = addin;
-            this.uiShell = uiShell;
-            this.uiShell.Context = this;
-
-            this.errorHandler = errorHandler;
 
             this.hostWindow = new Win32Window( new IntPtr(dte.MainWindow.HWnd) );
 
@@ -47,7 +42,10 @@ namespace Ankh
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
             this.solutionExplorer = new Solution.Explorer( this.dte, this);
-            this.progressDialog = new ProgressDialog();             
+            this.progressDialog = new ProgressDialog();            
+            this.CreateRepositoryExplorer();
+            this.repositoryController = new RepositoryExplorer.Controller( this, 
+                this.repositoryExplorer, this.reposExplorerWindow );
 
             string iconvdir = Path.Combine( 
                 Path.GetDirectoryName(this.GetType().Assembly.Location), 
@@ -61,9 +59,6 @@ namespace Ankh
             this.SetUpEvents();    
             
             this.conflictManager = new ConflictManager(this);
-
-            this.repositoryController = 
-                new RepositoryExplorer.Controller( this );
 
         }
 
@@ -87,15 +82,6 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.addin; }
-        }
-
-        /// <summary>
-        /// The UI shell.
-        /// </summary>
-        public IUIShell UIShell
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.uiShell; }
         }
 
         /// <summary>
@@ -141,6 +127,12 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.repositoryController; }
         }
+
+        public EnvDTE.Window RepositoryExplorerWindow
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.reposExplorerWindow; }
+        }  
  
         /// <summary>
         /// Whether a solution is open.
@@ -165,15 +157,6 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.config; }
-        }
-
-        /// <summary>
-        /// The error handler.
-        /// </summary>
-        public IErrorHandler ErrorHandler
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.errorHandler; }
         }
 
         /// <summary>
@@ -264,7 +247,7 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
             finally
             {
@@ -445,8 +428,17 @@ namespace Ankh
 
         private bool QueryWhetherAnkhShouldLoad( string solutionDir )
         {
-            DialogResult res = this.uiShell.QueryWhetherAnkhShouldLoad();
+            string nl = Environment.NewLine;
+            string msg = "Ankh has detected that the solution file for this solution " + 
+                "is in a Subversion working copy." + nl + 
+                "Do you want to enable Ankh for this solution?" + nl +
+                "(If you select Cancel, Ankh will not be enabled, " + nl +
+                "but you will " +
+                "be asked this question again the next time you open the solution)";
 
+            DialogResult res = MessageBox.Show( 
+                this.HostWindow, msg, "Ankh", 
+                MessageBoxButtons.YesNoCancel );
             if ( res == DialogResult.Yes )
             {
                 Debug.WriteLine( "Creating Ankh.Load", "Ankh" );
@@ -460,6 +452,27 @@ namespace Ankh
             }
 
             return false;
+        }
+        
+
+        private void CreateRepositoryExplorer()
+        {   
+            Debug.WriteLine( "Creating repository explorer", "Ankh" );
+            object control = null;
+            this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
+                this.addin, "AnkhUserControlHost.AnkhUserControlHostCtl", 
+                "Repository Explorer", REPOSEXPLORERGUID, ref control );
+            
+            this.reposExplorerWindow.Visible = true;
+            this.reposExplorerWindow.Caption = "Repository Explorer";
+            
+            this.objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
+            
+            this.repositoryExplorer = new RepositoryExplorerControl();
+            this.objControl.HostUserControl( this.repositoryExplorer );
+            
+            System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
+                "Could not create tool window" );
         }
 
         #region Win32Window class
@@ -509,15 +522,16 @@ namespace Ankh
         private bool operationRunning;
 
         private ConflictManager conflictManager; 
-        private IErrorHandler errorHandler;
 
         private FileWatcher projectFileWatcher;
 
         private ProgressDialog progressDialog;
         private SvnClient client;
-
-        private IUIShell uiShell;
-        
+        private RepositoryExplorerControl repositoryExplorer;
+        private EnvDTE.Window reposExplorerWindow;
+        private AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl objControl;
         private Ankh.Config.ConfigLoader configLoader;
+        public static readonly string REPOSEXPLORERGUID = 
+            "{1C5A739C-448C-4401-9076-5990300B0E1B}";
     }
 }

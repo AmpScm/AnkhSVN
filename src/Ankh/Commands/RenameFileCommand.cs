@@ -16,9 +16,9 @@ namespace Ankh.Commands
     [VSNetCommand("RenameFile", Text = "Rename file...", Tooltip = "Rename this file...", 
          Bitmap = ResourceBitmaps.Refresh),
     VSNetControl( "Item.Ankh", Position = 1 )]
-    public class RenameFileCommand : CommandBase
+    internal class RenameFileCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             // we can only rename a single unmodified file
             if ( context.SolutionExplorer.GetSelectionResources( false, 
@@ -32,7 +32,7 @@ namespace Ankh.Commands
             }
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             this.SaveAllDirtyDocuments( context );
 

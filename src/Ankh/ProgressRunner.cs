@@ -5,13 +5,13 @@ using NSvn.Core;
 
 namespace Ankh
 {
-    public delegate void ProgressRunnerCallback( IContext context );
+    internal delegate void ProgressRunnerCallback( AnkhContext context );
 
     /// <summary>
     /// Used to run lengthy operations in a separate thread while 
     /// displaying a modal progress dialog in the main thread.
     /// </summary>
-    public class ProgressRunner
+    internal class ProgressRunner
     {
         /// <summary>
         /// 
@@ -19,13 +19,13 @@ namespace Ankh
         /// <param name="context"></param>
         /// <param name="callback">The callback which performs 
         /// the actual operation.</param>
-        public ProgressRunner( IContext context, ProgressRunnerCallback callback )
+        public ProgressRunner( AnkhContext context, ProgressRunnerCallback callback )
         {
             this.context = context;
             this.callback = callback;
         }
 
-        public ProgressRunner( IContext context ) : this( context, null )
+        public ProgressRunner( AnkhContext context ) : this( context, null )
         {}
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Ankh
                 throw new ProgressRunnerException(this.exception);
         }  
       
-        protected IContext Context
+        protected AnkhContext Context
         {
             get{ return this.context; }
         }
@@ -125,7 +125,7 @@ namespace Ankh
         private bool cancel = false;
         private bool cancelled = false;
         private Exception exception;
-        private IContext context;
+        private AnkhContext context;
         private ProgressRunnerCallback callback;
     }
 }

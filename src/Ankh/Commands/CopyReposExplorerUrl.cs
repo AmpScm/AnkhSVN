@@ -16,9 +16,9 @@ namespace Ankh.Commands
          Tooltip = "Copy the URL of this item to the system clipboard", 
          Text = "Copy URL to clipboard", Bitmap = ResourceBitmaps.CopyUrlToClipboard ),
      VSNetControl( "ReposExplorer", Position=1 )]
-	public class CopyReposExplorerUrl : CommandBase
+	internal class CopyReposExplorerUrl : CommandBase
 	{
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             // all we need is a selection in the repos explorer
             if ( context.RepositoryExplorer.SelectedNode != null )
@@ -28,7 +28,7 @@ namespace Ankh.Commands
 
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             INode node = context.RepositoryExplorer.SelectedNode;
             Clipboard.SetDataObject( node.Url );

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Utils" default="rebuild">
     <property name="verbose" value="false"/>
+    <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
+    <property name="build.dir" value="build-Release" unless="${debug}"/>
+    <property name="build.dir" value="build-Debug" if="${debug}"/>
     <property name="warninglevel" value="/warn:3"/>
     <property name="lib.dir" value="../lib"/>
     
@@ -12,10 +15,7 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" 
-        includeEmptyDirs="true" />
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" 
-        includeEmptyDirs="true" />
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true" />
     </target>
     
     <target name="init">
@@ -29,18 +29,18 @@
     <target name="compile" depends="init">
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
-
-        <csc target="library" output="${build.dir}/Utils.dll" verbose="${verbose}" 
-            define="${define}" debug="${debug}">
+        
+        <echo message="Utils.debug: ${debug}"/>
+        
+        <csc target="library" output="${build.dir}/Utils.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
-                <include name="${lib.dir}\Sharpziplib.dll"/>
+                <includes name="${lib.dir}\Sharpziplib.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
-                <include name="**/*.cs"/>
+                <includes name="**/*.cs"/>
             </sources>
             
-            <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="${warninglevel}"/>
         </csc>
         

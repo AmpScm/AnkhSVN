@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="NSvn.Common" default="rebuild">
     <property name="verbose" value="false"/>
+    <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
+    <property name="build.dir" value="build-Release" unless="${debug}"/>
+    <property name="build.dir" value="build-Debug" if="${debug}"/>
     <property name="warninglevel" value="/warn:3"/>
-    <property name="installsource.dir" value="..\${installsource.dir}"/>
     
     
     <target name="rebuild">
@@ -12,8 +14,7 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" />
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" />
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
     </target>
     
     <target name="init">
@@ -28,25 +29,18 @@
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
         
-        <csc target="library" output="${build.dir}/NSvn.Common.dll" verbose="${verbose}" 
-            define="${define}" debug="${debug}">
+        <csc target="library" output="${build.dir}/NSvn.Common.dll" verbose="${verbose}" define="${define}"  debug="${debug}">
             <references>
             </references>
             
             <sources basedir="${src.dir}">
-                <include name="**/*.cs"/>
+                <includes name="**/*.cs"/>
             </sources>
             
-            <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="${warninglevel}"/>
         </csc>
         
                 
-    </target>
-    
-    <target name="build-WiX">
-        <exec workingdir="${src.dir}" program="candle.exe"
-            commandline="-nologo -w0 -dbuilddir=${build.dir} NSvn.Common.wxs -out ${installsource.dir}\NSvn.Common.wixobj" />
     </target>
     
 </project>

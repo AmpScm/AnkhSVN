@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="NSvn.Core.Tests" default="rebuild">
     <property name="verbose" value="false"/>
+    <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
+    <property name="build.dir" value="build-Release" unless="${debug}"/>
+    <property name="build.dir" value="build-Debug" if="${debug}"/>
     <property name="warninglevel" value="/warn:3"/>
     <property name="lib.dir" value="../lib"/>
     
@@ -12,8 +15,7 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" />
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" />
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
     </target>
     
     <target name="init">
@@ -30,26 +32,23 @@
     <target name="compile" depends="init">
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
-        <property name="define" value="ALT_ADMIN_DIR;${define}" if="${alt.admin.dir}"/>
-
+        
         <echo message="${lib.dir}/nunit.framework.dll"/>
         
-        <csc target="library" output="${build.dir}/NSvn.Core.Tests.dll" 
-            verbose="${verbose}" define="${define}" debug="${debug}">
+        <csc target="library" output="${build.dir}/NSvn.Core.Tests.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
-                <include name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
-                <include name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
-                <include name="..\Utils\${build.dir}\Utils.dll"/>
-                <include name="${lib.dir}\nunit.framework.dll"/>
-                <include name="${lib.dir}\Sharpziplib.dll"/>
+                <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
+                <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <includes name="..\Utils\${build.dir}\Utils.dll"/>
+                <includes name="${lib.dir}\nunit.framework.dll"/>
+                <includes name="${lib.dir}\Sharpziplib.dll"/>
                 
             </references>
             
             <sources basedir="${src.dir}">
-                <include name="**/*.cs"/>
+                <includes name="**/*.cs"/>
             </sources>
             
-            <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="/resource:repos.zip,NSvn.Core.Tests.repos.zip"/>
             <arg value="/resource:wc.zip,NSvn.Core.Tests.wc.zip"/>
             <arg value="/resource:conflictwc.zip,NSvn.Core.Tests.conflictwc.zip"/>

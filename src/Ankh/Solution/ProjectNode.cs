@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace Ankh.Solution
 {
-    public class ProjectNode : TreeNode
+    internal class ProjectNode : TreeNode
     {
         public ProjectNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
             TreeNode parent ) : 
