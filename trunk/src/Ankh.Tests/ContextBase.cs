@@ -397,12 +397,11 @@ namespace Ankh.Tests
             {
                 get
                 {
-                    // TODO:  Add UIShellImpl.Context getter implementation
-                    return null;
+                   return this.context;
                 }
                 set
                 {
-                    // TODO:  Add UIShellImpl.Context setter implementation
+                    this.context = value;
                 }
             }
 
@@ -458,6 +457,8 @@ namespace Ankh.Tests
                 // TODO:  Add UIShellImpl.Ankh.IUIShell.ShowMessageBox implementation
                 return new System.Windows.Forms.DialogResult ();
             }
+
+            private IContext context;
 
             #endregion
         }
