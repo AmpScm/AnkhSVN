@@ -125,7 +125,7 @@ namespace Ankh.Solution
                 string path = item.get_FileNames(i);
                 if ( File.Exists( path ) || System.IO.Directory.Exists( path ) )
                 {
-                    SvnItem svnItem = this.Explorer.StatusCache[path];
+                    SvnItem svnItem = this.Explorer.Context.StatusCache[path];
                     this.resources.Add( svnItem );
                     svnItem.Changed += del;
                 }                    

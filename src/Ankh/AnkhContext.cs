@@ -160,6 +160,15 @@ namespace Ankh
             get{ return this.configLoader; }
         }
 
+        /// <summary>
+        /// The status cache.
+        /// </summary>
+        public StatusCache StatusCache
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.statusCache; }
+        }
+
      
         /// <summary>
         /// An IWin32Window to be used for parenting dialogs.
@@ -189,6 +198,8 @@ namespace Ankh
                 Utils.DebugTimer timer = DebugTimer.Start();
                 DateTime startTime = DateTime.Now;
                 this.StartOperation( "Synchronizing with solution explorer");
+
+                this.statusCache = new StatusCache( this.Client );
 
                 this.solutionExplorer.Load();
                 this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
@@ -423,6 +434,7 @@ namespace Ankh
         private Ankh.Config.Config config;
 
         private bool ankhLoadedForSolution;
+        private StatusCache statusCache;
 
         private ProgressDialog progressDialog;
         private SvnClient client;

@@ -76,7 +76,7 @@ namespace Ankh.EventSinks
                         PropertyInfo fullPath = this.vcFileType.GetProperty( "FullPath" );
                         string path = (string)fullPath.GetValue( item, new object[]{} );
 
-                        SvnItem svnItem = this.Context.SolutionExplorer.StatusCache[path];
+                        SvnItem svnItem = this.Context.StatusCache[path];
                         if ( !svnItem.IsVersioned && svnItem.IsVersionable )
                         {
                             this.Context.Client.Add( path, false );

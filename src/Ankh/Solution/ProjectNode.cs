@@ -49,8 +49,8 @@ namespace Ankh.Solution
             if ( fullname != string.Empty && File.Exists( fullname ) )
             {
                 string parentPath = Path.GetDirectoryName( fullname );
-                this.projectFolder = this.Explorer.StatusCache[ parentPath ];                
-                this.projectFile = this.Explorer.StatusCache[ fullname ];
+                this.projectFolder = this.Explorer.Context.StatusCache[ parentPath ];                
+                this.projectFile = this.Explorer.Context.StatusCache[ fullname ];
 
                 this.Explorer.AddResource( project, this ); 
 

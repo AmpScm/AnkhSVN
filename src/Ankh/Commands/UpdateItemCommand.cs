@@ -78,7 +78,7 @@ namespace Ankh.Commands
             {
                 // some project types dont necessarily have a project folder
                 SvnItem folder = 
-                    this.Context.SolutionExplorer.StatusCache[node.Directory];
+                    this.Context.StatusCache[node.Directory];
                 if ( folder.IsVersioned )
                     this.resources.Add( folder );
             }           
@@ -93,7 +93,7 @@ namespace Ankh.Commands
             {
                 string solutionPath = ";"; // illegal in a path
                 SvnItem folder = 
-                    this.Context.SolutionExplorer.StatusCache[node.Directory];
+                    this.Context.StatusCache[node.Directory];
                 if ( folder.IsVersioned )
                 {
                     this.resources.Add( folder );
@@ -108,7 +108,7 @@ namespace Ankh.Commands
                     if ( pNode != null )
                     {
                         SvnItem folder2 = 
-                            this.Context.SolutionExplorer.StatusCache[pNode.Directory];
+                            this.Context.StatusCache[pNode.Directory];
                         if ( !folder2.IsVersioned ||
                             folder2.Path.IndexOf( 
                             solutionPath ) != 0 )

@@ -80,7 +80,7 @@ namespace Ankh.Solution
             {                
                 if ( rescan )
                 {
-                    this.explorer.StatusCache.Status( this.Directory );
+                    this.explorer.Context.StatusCache.Status( this.Directory );
                     this.FindChildren( );
                 }
                 this.currentStatus = this.MergeStatuses( this.ThisNodeStatus(), 
