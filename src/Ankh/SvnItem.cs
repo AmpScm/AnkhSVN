@@ -82,9 +82,13 @@ namespace Ankh
         {
             get
             { 
-                return this.status.TextStatus != StatusKind.None &&
-                    this.status.TextStatus != StatusKind.Unversioned && 
-                    this.status.TextStatus != StatusKind.Ignored;
+                StatusKind s = this.status.TextStatus;
+                return s == StatusKind.Added ||
+                       s == StatusKind.Conflicted ||
+                       s == StatusKind.Merged ||
+                       s == StatusKind.Modified ||
+                       s == StatusKind.Normal ||
+                       s == StatusKind.Replaced;
             }
         }
 
@@ -95,11 +99,11 @@ namespace Ankh
         {
             get
             {
-                return (this.Status.TextStatus != StatusKind.Normal &&
-                  this.Status.TextStatus != StatusKind.Unversioned &&
-                  this.status.TextStatus != StatusKind.None) ||
-                (this.Status.PropertyStatus != StatusKind.Normal &&
-                this.Status.PropertyStatus != StatusKind.None);
+                StatusKind t = this.status.TextStatus;
+                StatusKind p = this.status.PropertyStatus;
+                return this.IsVersioned &&
+                    ( t != StatusKind.Normal ||
+                      (p != StatusKind.None && p != StatusKind.Normal));
             }
         }
 
