@@ -6,13 +6,18 @@
 
 #include <svn_client.h>
 #include <svn_path.h>
+#include <svn_subst.h>
 #include <svn_utf.h>
 #include <apr_general.h>
 #include <apr_hash.h>
 #include "SvnClientException.h"
 #include "AprFileAdapter.h"
+#include "LogMessage.h"
+#include "ManagedPointer.h"
 #include "stream.h"
 #include <svn_io.h>
+
+//TODO: clean up includes in general(not just here)
 
 using namespace System::Collections;
 
@@ -142,7 +147,7 @@ void NSvn::Core::Client::Update( String* path, Revision* revision, bool recurse,
 NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonRecursive, ClientContext* context )
 {
     Pool pool;
-    apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, pool );
+    apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
     svn_client_commit_info_t* commitInfoPtr;
 
     HandleError( svn_client_commit( &commitInfoPtr, aprArrayTargets, nonRecursive, 
@@ -372,7 +377,7 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
 {
     Pool pool;
 
-    apr_array_header_t* diffOptArray = StringArrayToAprArray( diffOptions, pool );
+    apr_array_header_t* diffOptArray = StringArrayToAprArray( diffOptions, false, pool );
     const char* truePath1 = CanonicalizePath( path1, pool );
     const char* truePath2 = CanonicalizePath( path2, pool );
 
@@ -391,6 +396,22 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
 
     outAdapter->WaitForExit();
     errAdapter->WaitForExit();
+}
+
+// Implementation of Client::Log
+void NSvn::Core::Client::Log( String* targets[], Revision* start, Revision* end, bool discoverChangePath, 
+                bool strictNodeHistory, LogMessageReceiver* receiver, ClientContext* context )
+{
+    Pool pool;
+    
+    apr_array_header_t* aprTargets = StringArrayToAprArray( targets, true, pool );
+
+    ManagedPointer<NSvn::Core::LogMessageReceiver*> ptr(receiver);
+
+    HandleError( svn_client_log( aprTargets, start->ToSvnOptRevision(pool), 
+        end->ToSvnOptRevision(pool), discoverChangePath, 
+        strictNodeHistory, svn_log_message_receiver, &ptr,
+        context->ToSvnContext(pool), pool ) ); 
 }
 
 
@@ -462,5 +483,32 @@ NSvn::Common::PropListItem* NSvn::Core::Client::ConvertPropListArray(
 
     return static_cast<PropListItem*[]>(
         propList->ToArray( __typeof(NSvn::Common::PropListItem) ) );
+}
+
+/// marshall the callback into managed space
+svn_error_t* NSvn::Core::svn_log_message_receiver(void *baton, 
+                apr_hash_t *changed_paths, svn_revnum_t revision, 
+                const char *author, const char *date, const char *message, 
+                apr_pool_t *pool)
+{
+    using namespace NSvn::Core;
+    LogMessageReceiver* receiver = *(static_cast<ManagedPointer<LogMessageReceiver*>* >
+        (baton) );
+
+    // convert message to native EOL style
+    const char* nativeMessage;
+    HandleError(svn_subst_translate_cstring (message, &nativeMessage,
+                                        APR_EOL_STR, /* the 'native' eol */
+                                        FALSE,       /* no need to repair */
+                                        NULL,        /* no keywords */
+                                        FALSE,       /* no expansion */
+                                        pool));
+
+    LogMessage* logMessage = new LogMessage( changed_paths, revision,
+        author, date, nativeMessage, pool );
+
+    receiver->Invoke( logMessage );
+    
+    return SVN_NO_ERROR;
 }
 

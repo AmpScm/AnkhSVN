@@ -1,4 +1,5 @@
 // $Id$
+#pragma once
 #include <vcclr.h>
 #using <mscorlib.dll>
 

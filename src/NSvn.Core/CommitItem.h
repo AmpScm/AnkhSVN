@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include <svn_client.h>
+#include "svnenums.h"
 
 namespace NSvn
 {

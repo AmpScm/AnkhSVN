@@ -137,5 +137,14 @@ namespace NSvn
             /// <summary>Scheduled for replacement(delete+add)</summary>
             Replace
         };
+
+        /// <summary>The type of action in a changed path</summary>
+        public __value enum ChangedPathAction
+        {
+            Add,
+            Delete,
+            Replace,
+            Modify
+        };
     }
 }
