@@ -325,12 +325,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\RefreshRepositoryItemCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\RenameFileCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Commands\ResolveConflictCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\ReverseMergeCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
