@@ -111,14 +111,16 @@ namespace Ankh.Solution
             this.UpdateStatus( true, true );
         }
 
+
         /// <summary>
         /// Updates the status icon of this node and parents.
         /// </summary>
         protected void UpdateStatus( bool recursive, bool propagate )
         {      
-            // update status on the children first
+            // update status on the children first           
             if ( recursive )
             {
+                this.propagatedStatus = StatusKind.None;
                 foreach( TreeNode node in this.Children )
                     node.UpdateStatus( true, false );
             }
@@ -126,7 +128,11 @@ namespace Ankh.Solution
             // text or property changes on the project file itself?
             try
             {
-                this.currentStatus = this.GetStatus();
+                // should be set either by the recursion above or by an explicit propagation
+                if ( this.propagatedStatus != StatusKind.None )
+                    this.currentStatus = this.propagatedStatus;
+                else
+                    this.currentStatus = this.GetStatus();
             }
             catch( StatusException stex )
             {
@@ -137,8 +143,12 @@ namespace Ankh.Solution
             this.SetStatusImage( this.currentStatus );
 
             // propagate to the parent nodes.
-            if ( propagate && this.Parent != null )
+            if ( this.currentStatus != StatusKind.Normal && this.Parent != null )
                 this.Parent.PropagateStatus( this.currentStatus );
+            if ( propagate && this.parent != null )
+                this.parent.UpdateStatus( false, true );
+
+            this.propagatedStatus = StatusKind.None;
         }
 
         /// <summary>
@@ -176,9 +186,12 @@ namespace Ankh.Solution
         /// <param name="status"></param>
         protected virtual void PropagateStatus( StatusKind status )
         {
-            // only propagate if there is a new status
-            if ( status != this.currentStatus )
-                this.UpdateStatus( false, true );
+            if ( status == StatusKind.Added || status == StatusKind.Modified )
+                this.propagatedStatus = StatusKind.Modified;
+            else if ( status == StatusKind.None )
+                this.propagatedStatus = StatusKind.Normal;
+            else
+                this.propagatedStatus = status;
         }
 
         /// <summary>
@@ -211,13 +224,20 @@ namespace Ankh.Solution
         /// </summary>
         /// <param name="resource"></param>
         /// <returns></returns>
-        protected static StatusKind StatusFromResource( ILocalResource resource )
+        protected StatusKind StatusFromResource( ILocalResource resource )
         {
-            if ( resource.Status.TextStatus != StatusKind.Normal )
-                return resource.Status.TextStatus;
-            else if ( resource.Status.PropertyStatus != StatusKind.Normal &&
-                resource.Status.PropertyStatus != StatusKind.None )
-                return resource.Status.PropertyStatus;  
+            
+            Status status;
+
+            // is it cached?
+            if ( (status = this.Explorer.GetCachedStatus( resource.Path ) ) == null )
+                status = resource.Status;
+
+            if ( status.TextStatus != StatusKind.Normal )
+                return status.TextStatus;
+            else if ( status.PropertyStatus != StatusKind.Normal &&
+                status.PropertyStatus != StatusKind.None )
+                return status.PropertyStatus;  
             else
                 return StatusKind.Normal;
         }
@@ -276,6 +296,7 @@ namespace Ankh.Solution
         private IList children;
         private Explorer explorer;
         private StatusKind currentStatus;
+        private StatusKind propagatedStatus;
         private static IDictionary statusMap = new Hashtable();
     }
 }

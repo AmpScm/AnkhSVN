@@ -57,14 +57,7 @@ namespace Ankh.Solution
                 StatusKind status = StatusFromResource( resource );
                 if ( status != StatusKind.Normal )
                     return status;
-            }
-
-            // ok - now check the children
-            ModifiedVisitor v = new ModifiedVisitor();
-            this.VisitChildResources( v );
-            if ( v.Modified )
-                return StatusKind.Modified;
-                                
+            }                   
             return StatusKind.Normal;            
         }
 

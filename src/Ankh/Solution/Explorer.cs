@@ -9,6 +9,7 @@ using Utils.Win32;
 using System.Collections;
 using System.Drawing;
 using System.Diagnostics;
+using System.IO;
 
 using C = Utils.Win32.Constants;
 using DteConstants = EnvDTE.Constants;
@@ -179,6 +180,30 @@ namespace Ankh.Solution
                 node.UpdateStatus();
         }
 
+        /// <summary>
+        /// Checks if the status of an item is cached.
+        /// </summary>
+        /// <param name="path">The path to check status for</param>
+        /// <returns>A status object, or null if its not cached</returns>
+        public Status GetCachedStatus( string path )
+        {
+            Debug.WriteLine( "Checking for cached status for " + path, "Ankh" );
+            if ( this.statusCache != null ) 
+            {
+                Status status; 
+
+                if ( (status = this.statusCache.Get( path )) != null )
+                {
+                    Debug.WriteLine( "Found cached status for " + path, "Ankh" );
+                    return status;
+                }
+                else
+                    return null;
+            }
+            else
+                return null;
+        }
+
  
 
         public void SyncWithTreeView()
@@ -189,13 +214,17 @@ namespace Ankh.Solution
             IntPtr root = (IntPtr)Win32.SendMessage( this.treeview, Msg.TVM_GETNEXTITEM,
                 C.TVGN_ROOT, IntPtr.Zero );
             
-          
-
+            // generate a status cache
+            this.GenerateStatusCache( this.dte.Solution.FullName );
+            
             this.solutionItem = this.uiHierarchy.UIHierarchyItems.Item(1);
 
             // we assume there is a single root node
             this.root = TreeNode.CreateSolutionNode( 
                 this.solutionItem, root, this );
+
+            // we don't want to maintain the cache after initial load.
+            this.statusCache = null;
 
             //this.Hook();
         }
@@ -282,6 +311,18 @@ namespace Ankh.Solution
             this.solutionNode = node;
         }
 
+        private void GenerateStatusCache( string solutionPath )
+        {
+            Timer t = new Timer();
+            t.Start();
+            string solutionDir = Path.GetDirectoryName( solutionPath );
+
+            int youngest;
+            Debug.WriteLine( "Getting status cache", "Ankh" );
+            this.statusCache = Client.Status( out youngest, solutionDir, true, true, false, true, new ClientContext() );
+            t.End();
+            Debug.WriteLine( "Got status cache: " + t.Interval, "Ankh" );
+        }
 
         private TreeNode GetNode(UIHierarchyItem item)
         {
@@ -398,6 +439,7 @@ namespace Ankh.Solution
         private TreeNode solutionNode;
         private Swf.ImageList statusImageList;
         private SvnContext context;
+        private StatusDictionary statusCache;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
     }
