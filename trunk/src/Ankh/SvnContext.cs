@@ -40,6 +40,8 @@ namespace Ankh
 
         protected override void NotifyCallback(NSvn.Core.Notification notification)
         {
+            this.outputPane.Activate();
+
             this.outputPane.OutputString( string.Format( "File: {0}\tAction: {1}{2}", 
                 notification.Path, notification.Action, Environment.NewLine ) );         
        
