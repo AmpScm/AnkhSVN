@@ -1,8 +1,4 @@
-<<<<<<< .mine
-* Ankh source code **
-=======
-** Ankh source code ***
->>>>>>> .r689
+*** Ankh source code **
 
 * Subversion *
 
