@@ -79,13 +79,13 @@ StringDictionary* NSvn::Core::Client::Status( long* youngest, String* path, bool
         return 0;
 }
 // implementation of Client::PropSet
-void NSvn::Core::Client::PropSet(String* propName, Byte propval[], String* target, bool recurse)
+void NSvn::Core::Client::PropSet(Property* property, String* target, bool recurse)
 {
     Pool pool;
     svn_string_t propv;
-    ByteArrayToSvnString( &propv, propval, pool );    
+    ByteArrayToSvnString( &propv, property->Data, pool );    
     const char* truePath = CanonicalizePath( target, pool );
-    HandleError( svn_client_propset( StringHelper(propName), &propv, truePath, recurse, pool) );
+    HandleError( svn_client_propset( StringHelper(property->Name), &propv, truePath, recurse, pool) );
 }
 
 // implementation of Client::Checkout
