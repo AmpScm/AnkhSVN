@@ -126,10 +126,13 @@
 				RelativePath="Client.h">
 			</File>
 			<File
-				RelativePath="CommitInfo.h">
+				RelativePath="ClientConfig.h">
 			</File>
 			<File
-				RelativePath="NSvn.Core.h">
+				RelativePath="ClientContext.h">
+			</File>
+			<File
+				RelativePath="CommitInfo.h">
 			</File>
 			<File
 				RelativePath="PropListItem.h">
@@ -139,6 +142,9 @@
 			</File>
 			<File
 				RelativePath="Stdafx.h">
+			</File>
+			<File
+				RelativePath="StringHelper.h">
 			</File>
 			<File
 				RelativePath="delegates.h">
