@@ -54,7 +54,7 @@ namespace Ankh.Commands
         protected PathSelector GetPathSelector( string text )
         {
             PathSelector p = new PathSelector();
-            p.LabelText = text;
+            p.Caption = text;
             p.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
             return p;
         }
