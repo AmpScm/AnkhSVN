@@ -142,7 +142,7 @@ namespace NSvn
                     int youngest;
                     StatusDictionary dict = Client.Status( out youngest, this.Path, 
                         false, true, false, true, this.ClientContext );
-                    this.status = dict.GetFirst();
+                    this.status = dict.Get( this.Path );
                 }
                 return this.status;
             }
