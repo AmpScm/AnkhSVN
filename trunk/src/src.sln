@@ -224,7 +224,6 @@ Global
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug.ActiveCfg = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug.Build.0 = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug run.ActiveCfg = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug run.Build.0 = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.NSvn.Tests.ActiveCfg = Release
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.NSvn.Tests.Build.0 = Release
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Release.ActiveCfg = Release
@@ -252,8 +251,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
