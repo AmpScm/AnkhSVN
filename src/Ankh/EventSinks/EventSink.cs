@@ -4,6 +4,7 @@ using System.Collections;
 using EnvDTE;
 using Microsoft.Win32;
 using Microsoft;
+using Interop.esproj;
 //using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Ankh.EventSinks
@@ -99,7 +100,13 @@ namespace Ankh.EventSinks
                 if ( projectsEvents is ProjectsEvents )
                 {
                     return new ProjectsEventSink( (ProjectsEvents)
-                        context.DTE.Events.GetObject( objectName ),
+                        projectsEvents,
+                        context );
+                }
+                else if ( projectsEvents is ICSharpEventsRoot )
+                {
+                    return new ProjectsEventSink( (ProjectsEvents)
+                        ((ICSharpEventsRoot)projectsEvents).CSharpProjectsEvents, 
                         context );
                 }
                 else
@@ -126,11 +133,25 @@ Please report this error.", kind, objectName, projectsEvents.GetType(),
         /// <returns></returns>
         private static ProjectItemsEventSink GetProjectItemsEvents( string kind, AnkhContext context )
         {
-            string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );    
+            string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );   
+            object events = context.DTE.Events.GetObject( objectName );
             if ( objectName != null )
-                return new ProjectItemsEventSink( (ProjectItemsEvents)
-                    context.DTE.Events.GetObject( objectName ),
-                    context );
+            {
+                if ( events is ProjectItemsEvents )
+                {
+                    return new ProjectItemsEventSink( (ProjectItemsEvents)
+                        events,
+                        context );
+                }
+                else if ( events is ICSharpEventsRoot )
+                {
+                    return new ProjectItemsEventSink( (ProjectItemsEvents)
+                        ((ICSharpEventsRoot)events).get_CSharpProjectItemsEvents( null ),
+                        context );
+                }
+                else
+                    throw new ApplicationException( "Stuff" );
+            }
             else
                 return null;
         }

@@ -148,6 +148,11 @@
                     AssemblyName = "AnkhUserControlHostLib"
                     HintPath = "..\lib\AnkhUserControlHostLib.dll"
                 />
+                <Reference
+                    Name = "Interop.esproj"
+                    AssemblyName = "Interop.esproj"
+                    HintPath = "..\lib\Interop.esproj.dll"
+                />
             </References>
         </Build>
         <Files>
