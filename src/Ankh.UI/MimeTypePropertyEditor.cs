@@ -51,7 +51,7 @@ namespace Ankh.UI
 					throw new InvalidOperationException(
 						"Can not get a property item when Valid is false");
 				}	
-					return new TextPropertyItem("text/*");
+					return new TextPropertyItem(this.mimeTextBox.Text);
 			}
 
 			set
