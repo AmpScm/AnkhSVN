@@ -71,16 +71,16 @@ namespace NSvn
             this.logMessageProvider = logMessageProvider;
             Client.Commit( new string[]{ this.Path }, recursive, this.ClientContext );
         }
-
+/*
         /// <summary>
         /// Copy resource to repository.
         /// </summary>
         /// <param name="logMessage">The log message to accompany the commit.</param>
         /// <param name="revision">The revision to copy to</param>
         /// <param name="dstPath">Path to copy to</param>
-         public void Copy( string logMessage, Revision revision, string dstPath )
+         public void CopyTo( RepositoryResource dstUrl, string logMessage, Revision revision )
         {
-            this.Copy( new SimpleLogMessageProvider(logMessage), Revision.Head, dstPath );
+            this.CopyTo( dstUrl, new SimpleLogMessageProvider(logMessage), revision );
         }
 
         /// <summary>
@@ -89,19 +89,21 @@ namespace NSvn
         /// <param name="logMessageProvider">An object that can provide a log message.</param>
         /// <param name="revision">The revision to copy to</param>
         /// <param name="dstPath">Path to copy to</param>
-        public void Copy( ILogMessageProvider logMessage, Revision revision, string dstPath )
+        public RepositoryResource CopyTo( RepositoryResource dstUrl, ILogMessageProvider logMessage, Revision revision  )
         {
             this.logMessageProvider = logMessageProvider;
-            Client.Copy( this.path, revision, dstPath, this.ClientContext );
-        }
+            Client.Copy( this.Path, revision, dstUrl.ToString(), this.ClientContext );
+            return RepositoryResource.ReferenceEquals (this.Path );   
+        }*/
 
         /// <summary>
         /// Copy resource to working copy file.
         /// </summary>
         /// <param name="dstPath">Path to copy to</param>
-        public void Copy( string dstPath )
+        public WorkingCopyResource CopyTo( WorkingCopyResource dstPath, Revision revision )
         {
-            Client.Copy( this.path, Revision.Head, dstPath, this.ClientContext );
+            Client.Copy( this.Path, revision, dstPath.Path, this.ClientContext );
+            return WorkingCopyResource.FromPath( this.Path );   
         }
 
         /// <summary>
