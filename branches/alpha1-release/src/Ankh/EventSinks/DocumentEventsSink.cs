@@ -1,6 +1,7 @@
 // $Id$
 using System;
 using EnvDTE;
+using System.Runtime.InteropServices;
 
 namespace Ankh.EventSinks
 {
@@ -27,6 +28,10 @@ namespace Ankh.EventSinks
             try
             {
                 this.Context.SolutionExplorer.UpdateStatus( document.ProjectItem );
+            }
+            catch( COMException )
+            {
+                // HACK: Swallow
             }
             catch( Exception ex )
             {
