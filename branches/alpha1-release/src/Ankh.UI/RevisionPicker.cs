@@ -29,6 +29,7 @@ namespace Ankh.UI
                  RevisionChoice.Base,
                  RevisionChoice.Previous,
                  RevisionChoice.Working } );
+            this.revisionTypeBox.SelectedItem = RevisionChoice.Head;
             this.dateRevisionChoice = new DateRevisionChoice( this.datePicker );
             this.revisionTypeBox.Items.Add( this.dateRevisionChoice ); 
 		}

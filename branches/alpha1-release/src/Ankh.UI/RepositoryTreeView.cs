@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 namespace Ankh.UI
 {
 	/// <summary>
-	/// Summary description for RepositoryTreeView.
+	/// Treeview that shows the layout of a SVN repository
 	/// </summary>
 	public class RepositoryTreeView : System.Windows.Forms.TreeView
 	{
@@ -38,6 +38,7 @@ namespace Ankh.UI
                 {
                     this.Nodes.Add( new TreeNode( this.root.Url ) );
                     this.BuildSubTree( this.Nodes[0].Nodes, this.root );
+                    this.Nodes[0].Expand();
                 }
             }
         }
