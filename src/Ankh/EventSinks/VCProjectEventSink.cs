@@ -50,7 +50,7 @@ namespace Ankh.EventSinks
 
         }
 
-//
+        //
         public override void Unhook()
         {
             this.vcProjectEventsType.GetEvent( "ItemAdded" ).RemoveEventHandler( 
@@ -97,7 +97,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                Error.Handle( ex );
+                this.Context.ErrorHandler.Handle( ex );
             }
         }
 
