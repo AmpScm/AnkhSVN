@@ -136,49 +136,13 @@ namespace Ankh
             foreach( VSNetControlAttribute control in cmd.GetType().GetCustomAttributes( 
                 typeof(VSNetControlAttribute), false) ) 
             {
-             
+                // get the actual name of the command
                 string name = ((VSNetCommandAttribute)cmd.GetType().GetCustomAttributes(
                     typeof(VSNetCommandAttribute), false )[0]).Name;
-                CommandBar cmdBar = GetCommandBar( control.CommandBar, context );
-                CommandBarControl cntrl = cmd.Command.AddControl( cmdBar, control.Position );
-                cntrl.Tag = control.CommandBar + "." + name;                
+
+                control.AddControl( cmd, context, control.CommandBar + "." + name );
             }
-        }
-
-        /// <summary>
-        /// Retrieve the command bar associated with a given path, creating them if missing.
-        /// </summary>
-        /// <param name="name">The path to the command bar, components separated by .</param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public static CommandBar GetCommandBar( string name, AnkhContext context )
-        {
-            string[] path = name.Split( '.' );
-            CommandBar bar;
-
-            //TODO: is this really necessary?
-            if ( path[0] == context.RepositoryExplorer.CommandBar.Name )
-                bar = context.RepositoryExplorer.CommandBar;
-            else
-                bar = (CommandBar)context.DTE.CommandBars[ path[0] ];;
-            for( int i = 1; i < path.Length; i++ )
-            {
-                try
-                {
-                    // does this command bar already exist?
-                    CommandBarControl ctrl = bar.Controls[ path[i] ];
-                    bar = (CommandBar)((CommandBarPopup)ctrl).CommandBar;
-                }
-                catch( Exception )
-                {
-                    // no, create it
-                    bar = (CommandBar)context.DTE.Commands.AddCommandBar( path[i], 
-                        vsCommandBarType.vsCommandBarTypeMenu, bar, bar.Controls.Count + 1 );
-                }                
-            }
-
-            return bar;
-        }
+        }        
 
         private static void CreateReposExplorerPopup( AnkhContext context )
         {

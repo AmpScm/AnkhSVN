@@ -79,7 +79,7 @@ namespace Ankh.Commands
         {
             // TODO: either preload this or find a better way to map to 
             // the commandbarcontrols for a command
-            CommandBar bar = CommandMap.GetCommandBar( barName, context );           
+            CommandBar bar = VSNetControlAttribute.GetCommandBar( barName, context );           
             CommandBarControl cntl = bar.FindControl( Type.Missing, Type.Missing, 
                 barName + "." + name, Type.Missing, Type.Missing );
             return cntl;
