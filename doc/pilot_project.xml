@@ -14,7 +14,7 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
     <p><b>Duration of project:</b>09.01.2003 - 19.06.2003</p>
 
      <section header="Abstract"> 
-		<p>The development of Subversion
+		<p>The development of Subversion (svn)
 		plugin for Visual Studio .NET will be conducted as a
 		final project at HIO in cooperation with CollabNet.
 		First step is to make a .NET wrapper for the
@@ -37,12 +37,12 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         intention is to integrate the revision control system into the platform
         where the programming actually is performed, and make it more user friendly
         by offering menus instead of commands. We therefor intend to make both a 
-        "GUI/plugin layer" and a .NET wrapper layer.</p>
+        "GUI/plugin .NET layer" and a .NET wrapper layer.</p>
 
 		<p>The background for this specific
 		project is that we wanted to do a project in the Microsoft's
 		.NET environment. One of the group member had used
-		Subversion for several school and private projects in the last year.</p>
+		Subversion for several school and private projects for the last year.</p>
 		
 		<p>We decided to do a project
 		where both technologies were represented. After having
@@ -51,12 +51,12 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
 		the salary for several people that works on the Subversion project. CollabNet 
 		offers a wide range of products and services to improve software quality and 
 		accelerate time-to-market during product development. Their main product is 
-		SourceCast which is a Web-based software development platform. SourceCast combines 
-		software development applications, communications 
-		features and your choice of third-party resources into an intuitive solution. 
+		SourceCast which is a Web-based software development platform. 
 		Subversion is aimed to be the successor of the existing revision control system (CVS)
 		integrated in the SourceCast platform. Our intention is to integrate Subversion into 
-		a "second" platform environment named Visual Studio .NET. CollabNet provides our external 
+		a "second" platform environment by making an addin in Visual Studio .NET. The free 
+		useful open source tool will thereby get a new audience and hopefully a
+		huge amount of new users. CollabNet provides our external 
 		supervisor, Karl Fogel.
 		</p> 
     </section>
@@ -94,7 +94,7 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         <p>We have tried to define individual roles for each group
         member based on individual preferences and skills. Arild will
         be the main contact person towards the Employer CollabNet. Per
-        August will be the main contact person towards the computer
+        will be the main contact person towards the computer
         department. Kristin will be responsible for a weekly resume to
         the HIO/IU supervisor Eva H. Vihovde in the group meetings
         based on contribution from all the group members. The roles are
