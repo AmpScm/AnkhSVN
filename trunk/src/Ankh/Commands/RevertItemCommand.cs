@@ -65,7 +65,7 @@ namespace Ankh.Commands
             // ask for confirmation if the Shift dialog hasn't been used
             if ( !confirmed )
             {
-                string msg = "Do you really want to reverse these item(s)?" + 
+                string msg = "Do you really want to revert these item(s)?" + 
                     Environment.NewLine + Environment.NewLine;            
                 msg += string.Join( Environment.NewLine, paths );
 
