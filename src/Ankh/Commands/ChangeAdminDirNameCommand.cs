@@ -30,7 +30,9 @@ namespace Ankh.Commands
                 dlg.AdminDirName = Client.AdminDirectoryName;
                 if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
                     return;
+#if (ALT_ADMIN_DIR)
                 Client.AdminDirectoryName = dlg.AdminDirName;
+#endif
             }
         }		
 	}
