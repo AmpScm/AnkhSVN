@@ -109,7 +109,12 @@ namespace Ankh.Solution
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
-                    node.Parent.Refresh();
+                {
+                    if ( node == this.solutionNode )
+                        node.Refresh();
+                    else
+                        node.Parent.Refresh();
+                }
             }
         }
 
