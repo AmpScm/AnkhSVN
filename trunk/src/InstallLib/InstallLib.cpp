@@ -25,7 +25,7 @@ HRESULT RegRemove(const TCHAR* RegistryRoot)
     rkCurrentUser.DeleteSubKey(RegistryRoot);
     rkLocalMachine.DeleteSubKey(RegistryRoot);
 
-    return ERROR_SUCCESS;
+    return S_OK;
 }
 
 HRESULT AddAboutBoxDetails(const TCHAR* RegistryRoot)
@@ -52,20 +52,20 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
 
     if (FAILED (hr))
     {
-		return ERROR;
+		return S_OK;
     }
 		
     CComPtr<EnvDTE::Commands> pCommands;
     hr = m_pDTE->get_Commands(&pCommands);
 
     if (FAILED (hr))
-        return ERROR;
+        return S_OK;
 
     long lCount = 0;
     hr = pCommands->get_Count(&lCount);
 
     if (FAILED (hr))
-        return ERROR;
+        return S_OK;
 
     CComPtr<EnvDTE::Command> pCommand;
     BSTR bpName; 
@@ -86,7 +86,7 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
             pCommand->Delete ();
     }
 
-    return ERROR_SUCCESS;
+    return S_OK;
 }
 
 bool vsIsRunning(LPCOLESTR lpszProgID)
@@ -96,10 +96,10 @@ bool vsIsRunning(LPCOLESTR lpszProgID)
 
     CLSIDFromProgID(lpszProgID, &clsid);
 
-    CComPtr<IUnknown> punk;
+    CComPtr<IUnknown> pUnk;
 
     
-    if(SUCCEEDED(GetActiveObject(clsid, NULL, &punk)))
+    if(SUCCEEDED(GetActiveObject(clsid, NULL, &pUnk)))
     {
         // We found a running VS
         return true;
@@ -122,7 +122,7 @@ UINT __stdcall UnInstall ( MSIHANDLE hModule )
     RemoveCommands(lpszVS70PROGID);
     RemoveCommands(lpszVS71PROGID);
 
-    return S_OK;
+    return ERROR_SUCCESS;
 }
 
 UINT __stdcall Install ( MSIHANDLE hModule )
@@ -130,6 +130,6 @@ UINT __stdcall Install ( MSIHANDLE hModule )
     AddAboutBoxDetails(VS70REGPATH);
     AddAboutBoxDetails(VS71REGPATH);
 
-    return S_OK;
+    return ERROR_SUCCESS;
 }
 
