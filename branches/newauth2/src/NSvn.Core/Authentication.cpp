@@ -48,6 +48,17 @@ AuthenticationProviderObject* NSvn::Core::Authentication::GetUsernameProvider()
     return new AuthenticationProviderObject( provider, pool );
 }
 
+// implementation of GetSimpleProvider
+AuthenticationProviderObject* NSvn::Core::Authentication::GetSimpleProvider()
+{
+    GCPool* pool = new GCPool();
+    svn_auth_provider_object_t* provider;
+
+    svn_client_get_simple_provider( &provider, pool->ToAprPool() );
+
+    return new AuthenticationProviderObject( provider, pool );
+}
+
 
 // callback function for a simple prompt provider
 svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton,

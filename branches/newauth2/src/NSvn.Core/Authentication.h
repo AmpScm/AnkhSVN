@@ -22,6 +22,10 @@ namespace NSvn
             /// information from the user's ~/.subversion configuration directory </summary>
             static AuthenticationProviderObject* GetUsernameProvider();
 
+            /// <summary>Create and return an authentication provider that gets username and
+            /// password information from the user's ~/.subversion configuration directory </summary>
+            static AuthenticationProviderObject* GetSimpleProvider();
+
         };
     }
 }
