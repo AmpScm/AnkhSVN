@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet type="text/xsl" href="doc.xsl"?>
+
+<doc title="AnkhSVN FAQ">
+    <section header="AnkhSVN Frequently Asked Questions">
+        <section header="Does AnkhSVN work with VS.NET 2003?">
+            <p>The first release does not "officially" support VS.NET 2003. It will work for the most part, but 
+            you may run into problems with C++ projects since 2003 uses a different version of VCProjectEngine.dll. The
+            next release will support 2003 fully.</p>
+        </section>
+        
+        <section header="I get a message about not being able to attach to Solution Explorer?">
+            <p>This is a known bug. It happens if you have your solution explorer window set to auto-hide. The only
+            workaround is to not have it set on auto-hide while a project loads. Once the project is fully loaded you can
+            set it back on auto-hide again. This bug is fixed in HEAD and the fix will be incorporated in the next release.</p>
+        </section>        
+        
+    </section>
+</doc>
