@@ -21,8 +21,6 @@
         <property name="svndir" value="${sys.env.SVNSRC}" />
     </ifnot>
 
-    <property name="bdb.lib" value="${svndir}\db4-win32\lib\libdb42d.lib"/>
-    <property name="bdb.dll" value="libdb42d.dll"/>
     <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
     <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>-->
 
@@ -80,15 +78,28 @@
                 <includes name="*.dll"/>
                 <includes name="*.pdb"/>
             </fileset>
-         </copy>
+        </copy>
 
-         <!-- unfortunately necessary to get regasm to work -->
-         <copy todir="${build.dir}">
+        <!-- unfortunately necessary to get regasm to work -->
+        <copy todir="${build.dir}">
             <fileset basedir="${lib.dir}">
                 <includes name="envdte.dll"/>
                 <includes name="extensibility.dll"/>
             </fileset>
         </copy>        
+        
+        <copy todir="${build.dir}" flatten="true">
+            <fileset basedir="${svndir}">
+                <includes name="apr\Debug\libapr.dll" if="${debug}" />
+                <includes name="apr\Release\libapr.dll" unless="${debug}" />
+                <includes name="apr-util\Debug\libaprutil.dll" if="${debug}" />
+                <includes name="apr-util\Release\libaprutil.dll" unless="${debug}" />
+                <includes name="apr-iconv\Debug\libapriconv.dll" if="${debug}" />
+                <includes name="apr-iconv\Release\libapriconv.dll" unless="${debug}" />
+                <includes name="db4-win32\bin\libdb42d.dll" if="${debug}" />
+                <includes name="db4-win32\bin\libdb42.dll" unless="${debug}" />
+            </fileset>
+        </copy>
          
         <regasm assembly="${build.dir}\Ankh.dll" typelib="${build.dir}\Ankh.tlb" codebase="true" exporttypelib="true" verbose="${verbose}"/>
 
