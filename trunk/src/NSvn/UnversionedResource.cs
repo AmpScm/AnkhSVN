@@ -17,6 +17,8 @@ namespace NSvn
 		protected UnversionedResource( string path )
 		{
 			this.path = System.IO.Path.GetFullPath(path);
+            this.ClientContext.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
+	
 		}
 
         /// <summary>
@@ -55,6 +57,38 @@ namespace NSvn
         {
             return FromPath( path ).Add( recursive );     
         }        
+/*
+        /// <summary>
+        /// Import local changes to the repository.
+        /// </summary>
+        /// <param name="logMessage">The log message to accompany the commit.</param>
+        /// <param name="recursive">Whether subresources should be recursively committed.</param>
+        public void Import( string logMessage, bool nonRecursive )
+        {
+            this.Import( new SimpleLogMessageProvider(logMessage), nonRecursive );
+        }
+
+        /// <summary>
+        /// Import local changes to the repository.
+        /// </summary>
+        /// <param name="logMessageProvider">An object that can provide a log message.</param>
+        /// <param name="recursive">Whether subresources should be recursively committed.</param>
+        public void Import( ILogMessageProvider logMessageProvider, RepositoryResource url, 
+            string newEntry, bool nonRecursive )
+        {
+            this.logMessageProvider = logMessageProvider;
+            Client.Import( new string[]{ this.Path }, url.ToString(), newEntry, nonRecursive, this.ClientContext );
+        }
+*/
+        /// <summary>
+        /// Callback function for log messages
+        /// </summary>
+        /// <param name="targets"></param>
+        /// <returns></returns>
+        private string LogMessageCallback( CommitItem[] targets )
+        {
+            return this.logMessageProvider.GetLogMessage( targets );
+        }
 
         /// <summary>
         /// The path to the item.
@@ -82,5 +116,7 @@ namespace NSvn
 
 
         private string path;
+        private ILogMessageProvider logMessageProvider;
+      
 	}
 }

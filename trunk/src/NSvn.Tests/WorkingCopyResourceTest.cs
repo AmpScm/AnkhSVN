@@ -41,33 +41,32 @@ namespace NSvn.Tests
         }
         #endregion
 
-        [Ignore( "Doesn't work yet" )]
-        #region TestCopy
+        //[Ignore( "Doesn't work yet" )]
+        #region TestCopyTo
         [Test]
-        public void TestCopy()
+        public void TestCopyTo()
         {
             //Tests copying a file to a directory within the working copy
             WorkingCopyResource itemWcSrc  = new WorkingCopyFile( Path.Combine( this.WcPath, "Form.cs" ) );
-            WorkingCopyResource itemWcDst  = new WorkingCopyDirectory( Path.Combine( this.WcPath, @"obj" ) );
             
             Assertion.AssertEquals( "Wrong status. Cant copy an unversioned file", StatusKind.Normal,
                 itemWcSrc.Status.TextStatus  );
           
-            itemWcSrc.Copy( itemWcDst.Path ) ;
+            WorkingCopyResource itemWcDst = itemWcSrc.CopyTo( new WorkingCopyFile( Path.Combine( this.WcPath, @"obj" )), Revision.Head);
 
-            Assertion.AssertEquals( "Wrong status. Should be added", StatusKind.Added,
-                itemWcDst.Status.TextStatus );  
+            Assertion.AssertEquals( "Wrong type returned. Should be working copy file",
+                typeof( WorkingCopyFile ), itemWcDst.GetType() );
+
+      //     Assertion.AssertEquals( "Wrong status. Should be added", StatusKind.Added,
+      //          itemWcDst.Status.TextStatus );  
   
             //Tests copying a file from working copy to a file in repository
-      /*      RepositoryResource itemReposDst  = new RepositoryFile( Path.Combine( this.ReposPath, "Form2.cs" ) );
+      /*    RepositoryResource itemReposSrc  = new RepositoryFile( Path.Combine( this.ReposPath, "Form2.cs" ) );
             
-            Assertion.AssertEquals( "Wrong status. Cant copy an unversioned file", StatusKind.Normal,
-                itemWcSrc.Status.TextStatus  );
-          
-            itemWcSrc.Copy( "Copying a file to the repository", Revision.Head, itemReposDst.Url ) ;
+            RepositoryResource itemReposDst = itemWcSrc.CopyTo( itemReposSrc, "Copying a file to the repository", Revision.Head ) ;
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-            Assertion.Assert( "File wasn't imported ", cmd.IndexOf( "Form2.cs") >= 0 );		
+            Assertion.Assert( "File wasn't copied ", cmd.IndexOf( "Form2.cs") >= 0 );		
             */             
   
         }
