@@ -38,9 +38,19 @@ namespace Ankh
             get{ return this.text; }
             set{ this.text = value; }
         }
+
+        /// <summary>
+        /// The ID of the bitmap associated with this command.
+        /// </summary>
+        public int Bitmap
+        {
+            get{ return this.bitmap; }
+            set{ this.Bitmap = bitmap; }
+        }
         
         private string name;
         private string text = "This should have been replaced...";
         private string tooltip = "This is a tooltip.";
+        private int bitmap = ResourceBitmaps.Default;
 	}
 }
