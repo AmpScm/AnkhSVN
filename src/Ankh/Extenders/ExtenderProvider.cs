@@ -30,9 +30,13 @@ namespace Ankh.Extenders
                 this.context.SolutionExplorer.VisitSelectedItems( v, false );
             
                 // have the extender know about the selected item.
-                this.extender.Resource = (WorkingCopyResource)v.WorkingCopyResources[0];
-
-                return this.extender;
+                if ( v.WorkingCopyResources.Count > 0 )
+                {
+                    this.extender.Resource = (WorkingCopyResource)v.WorkingCopyResources[0];
+                    return this.extender;
+                }
+                else
+                    return null;
             }
             catch( Exception ex )
             {
