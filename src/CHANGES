@@ -6,6 +6,8 @@ openssl 0.9.7 and Berkeley DB 4.2.52
 * Make installer set up the Ankh version information in the Help->About
   box rather than do it at startup. Make it work for both administrative
   installs and user-specific installs
+* Fix a bug which would cause a NullReferenceException if you tried
+  to run Create Patch on a node with no modified items. 
 * Fix a bug where there could potentially be duplicates of the same item
   in the task list upon conflicts.
 * Ensure that the Update command does the same when holding down Shift
