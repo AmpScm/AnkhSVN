@@ -43,6 +43,7 @@
             
             <file path="work_schedule.xml">
                 <realpath>work_schedule.xml</realpath>
+                <handler>viewgant.html</handler>
                 <name>Gant diagram</name>
                 <description>A Gant diagram</description>
             </file>
