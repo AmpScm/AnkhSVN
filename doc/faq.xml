@@ -13,7 +13,12 @@
             <p>This is a known bug. It happens if you have your solution explorer window set to auto-hide. The only
             workaround is to not have it set on auto-hide while a project loads. Once the project is fully loaded you can
             set it back on auto-hide again. This bug is fixed in HEAD and the fix will be incorporated in the next release.</p>
-        </section>        
+        </section>     
+        
+        <section header="There is nothing about my problem here!">
+            <p>Don't despair. Either send a mail to our developers mailing list(dev AT ankhsvn.tigris.org) describing the 
+            problem(in as much detail as possible) or visit us in our IRC channel #ankhsvn on the irc.freenode.net server.</p>
+         </section>   
         
     </section>
 </doc>

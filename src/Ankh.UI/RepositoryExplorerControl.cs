@@ -62,8 +62,11 @@ namespace Ankh.UI
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.treeView.Controller; }
 
-            [System.Diagnostics.DebuggerStepThrough]
-            set{ this.treeView.Controller = value; }
+            set
+            { 
+                this.treeView.Controller = value; 
+                value.TreeView = this.treeView;
+            }
         }
 
         

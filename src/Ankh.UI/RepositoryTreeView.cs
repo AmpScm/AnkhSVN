@@ -25,6 +25,14 @@ namespace Ankh.UI
         }
 
         void SetRepository( string url, Revision revision );
+
+        /// <summary>
+        /// The IRepositoryTreeView associated with this controller.
+        /// </summary>
+        IRepositoryTreeView TreeView
+        {
+            set;
+        }
            
 
         IRepositoryTreeNode RootNode
@@ -73,13 +81,16 @@ namespace Ankh.UI
     /// <summary>
     /// Treeview that shows the layout of a SVN repository
     /// </summary>
-    public class RepositoryTreeView : System.Windows.Forms.TreeView
+    public class RepositoryTreeView : System.Windows.Forms.TreeView, IRepositoryTreeView
     {
         public RepositoryTreeView()
         {
             this.GetSystemImageList();       
         }    
     
+        /// <summary>
+        /// Sets or gets the IRepositoryTreeController associated with this control.
+        /// </summary>
         public IRepositoryTreeController Controller
         {
             [System.Diagnostics.DebuggerStepThrough]
@@ -91,6 +102,28 @@ namespace Ankh.UI
                 this.controller.RootChanged += new EventHandler( this.RootChanged );
 
                 this.RootChanged( null, EventArgs.Empty );
+            }
+        }
+
+        /// <summary>
+        /// The number of selected nodes.
+        /// </summary>
+        public int SelectionCount
+        {
+            get{ return this.SelectedNode != null ? 1 : 0; }
+        }
+
+        /// <summary>
+        /// Returns the selected nodes.
+        /// </summary>
+        public IRepositoryTreeNode[] SelectedNodes
+        {
+            get
+            { 
+                if ( this.SelectedNode != null )
+                    return new IRepositoryTreeNode[]{ (IRepositoryTreeNode)this.SelectedNode.Tag };
+                else
+                    return new IRepositoryTreeNode[]{};
             }
         }
 

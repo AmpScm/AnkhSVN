@@ -142,4 +142,24 @@ namespace Ankh
         private int nonConflicted = 0;
     }
 
+    internal class IsRepositoryFileVisitor : IRepositoryResourceVisitor
+    {
+        public bool IsFile
+        {
+            get{ return this.fileFound && !this.dirFound; }
+        }
+
+        public void VisitFile(RepositoryFile file)
+        {
+            this.fileFound = true;
+        }
+
+        public void VisitDirectory(RepositoryDirectory directory)
+        {
+            this.dirFound = true;
+        }
+
+        private bool fileFound = false, dirFound = false;
+    }
+
 }

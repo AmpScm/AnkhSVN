@@ -28,6 +28,11 @@ namespace Ankh.RepositoryExplorer
             get{ return this.rootNode; }
         }
 
+        public IRepositoryTreeView TreeView
+        {
+            set{ this.treeView = value; }
+        }
+
         public void SetRepository( string url, Revision revision )
         {
             RepositoryDirectory dir = new RepositoryDirectory( url, revision );
@@ -35,7 +40,23 @@ namespace Ankh.RepositoryExplorer
 
             this.rootNode = new Node( dir );
             this.OnRootChanged();
-        }        
+        }     
+   
+        /// <summary>
+        /// Visits the nodes selected in the repository explorer treeview.
+        /// </summary>
+        /// <param name="visitor"></param>
+        public void VisitSelectedNodes( IRepositoryResourceVisitor visitor )
+        {
+            if ( this.treeView.SelectionCount > 0 )
+            {
+                IRepositoryTreeNode[] nodes = this.treeView.SelectedNodes;
+                foreach( Node node in nodes )
+                {
+                    node.Resource.Accept( visitor );
+                }
+            }
+        }
 
         /// <summary>
         /// Dispatches the RootChanged event.
@@ -50,5 +71,6 @@ namespace Ankh.RepositoryExplorer
         private Node rootNode;
         private AnkhContext context;
         private string rootText;		
+        private IRepositoryTreeView treeView;
 	}
 }
