@@ -4,6 +4,7 @@ using NSvn;
 using EnvDTE;
 using System.IO;
 using NSvn.Core;
+using System.Windows.Forms;
 
 namespace Ankh.EventSinks
 {
@@ -40,6 +41,10 @@ namespace Ankh.EventSinks
         {
             try
             {
+                // is a rename back operation going on?
+                if ( this.renaming )
+                    return;
+
                 //this.Context.OutputPane.StartActionText( "Delete" );
                 this.Context.SolutionExplorer.VisitResources( 
                     item, new RemoveProjectVisitor(), false );
@@ -54,10 +59,51 @@ namespace Ankh.EventSinks
             }
         }
 
+        /// <summary>
+        /// Warn the user if he attempts to rename a versioned resource.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="oldName"></param>
         protected void ItemRenamed( ProjectItem item, string oldName )
         {
-            // nothing here.
+            try
+            {   
+                string newName = item.get_FileNames(1);
+                string dir = Path.GetDirectoryName( newName );
+
+                string oldPath = Path.Combine( dir, oldName );
+                // is the item versioned?
+                if ( Client.SingleStatus( oldPath ).TextStatus != StatusKind.None )
+                {
+                    MessageBox.Show( this.Context.HostWindow, 
+                        "You have attempted to rename a file that is under version control.\r\n" + 
+                        "Use Ankh->Rename file... to rename the file instead", 
+                        "Attempting to rename versioned item", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Stop );
+                    
+                    // rename back
+                    File.Move( newName, oldPath );
+                    
+                    // remove from project and reinstate old one
+                    Project project = item.ContainingProject;
+                    this.renaming = true;
+                    item.Remove();
+                    this.renaming = false;
+                    project.ProjectItems.AddFromFile( oldPath );                    
+                }
+                else // if item not under vc
+                {
+                    // we must still ensure that the project is rescanned, since 
+                    // it will lose it's status icon otherwise
+                    this.Context.SolutionExplorer.RefreshSelectionParents();
+                }
+            }
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+            }            
         }
+            
 
         /// <summary>
         /// A visitor that schedules a remove of visited item on commit
@@ -73,5 +119,7 @@ namespace Ankh.EventSinks
                 }
             }
         }
+
+        private bool renaming = false;
     }
 }
