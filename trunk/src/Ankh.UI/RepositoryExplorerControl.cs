@@ -10,7 +10,6 @@ using Utils;
 using System.Text.RegularExpressions;
 using Microsoft.Office.Core;
 using System.Diagnostics;
-using System.Web;
 using Utils.Win32;
 
 namespace Ankh.UI
