@@ -90,7 +90,7 @@
     <target name="compile" depends="init">
         <property name="cl.options" value="${cl.options} /D ALT_ADMIN_DIR" if="${alt.admin.dir}"/>
 
-        <cl outputdir="${build.dir}" verbose="true"
+        <cl outputdir="${build.dir}" verbose="${verbose}"
              options="${cl.options}">
             <sources>
                 <includes name="**/*.cpp"/>
@@ -100,7 +100,7 @@
     </target>
     
     <target name="link" depends="compile, init">
-        <link output="${build.dir}\NSvn.Core.dll" options="${link.options}" verbose="true">
+        <link output="${build.dir}\NSvn.Core.dll" options="${link.options}" verbose="${verbose}">
             <sources>
                 <includes name="${build.dir}\*.obj"/>
             </sources>
