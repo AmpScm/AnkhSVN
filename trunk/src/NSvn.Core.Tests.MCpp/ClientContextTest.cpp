@@ -1,5 +1,6 @@
 #include "Stdafx.h"
 #include "ClientContextTest.h"
+#using <NSvn.Common.dll>
 
 void NSvn::Core::Tests::MCpp::ClientContextTest::NotifyCallback( 
     Notification* notification )
@@ -26,5 +27,5 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestSvnContextTConversion()
     Assertion::AssertEquals( this->notification->NodeKind, NodeKind::File );
     Assertion::AssertEquals( this->notification->ContentState, NotifyState::Unchanged );
     Assertion::AssertEquals( this->notification->PropertyState, NotifyState::Changed );
-    Assertion::AssertEquals( this->notification->RevisionNumber, 43 );    
+    Assertion::AssertEquals( this->notification->RevisionNumber, 42 );    
 }

@@ -33,7 +33,7 @@ namespace NSvn.Common
         /// A special credential used to flag that this provider has
         /// exhausted all its attempts
         /// </summary>
-        public static readonly Credential InvalidCredential = 
+        public static readonly Credential Invalid = 
             new Credential( "", "" );
 
         private string username;

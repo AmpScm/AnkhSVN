@@ -25,7 +25,10 @@ namespace NSvn
                         this->notification = 0;
                     }
 
+                    /// <summary>Test that a ClientContext can be converted to a 
+                    /// svn_client_ctx_t</summary>
                     [Test]
+                    //[Ignore("Skip for now")]
                     void TestSvnContextTConversion();
 
                 private:

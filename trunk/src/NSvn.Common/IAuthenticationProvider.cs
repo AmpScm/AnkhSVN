@@ -6,8 +6,8 @@ namespace NSvn.Common
     /// </summary>
     public interface IAuthenticationProvider
     {
-        Credential FirstCredentials( AuthenticationBaton baton );
-        Credential NextCredentials( AuthenticationBaton baton );
+        Credential FirstCredentials( );
+        Credential NextCredentials( );
         Credential SaveCredentials();
     }
 }

@@ -20,7 +20,7 @@ namespace NSvn
                     /// destructors on allocated objects are run when the pool is destroyed
                     /// </summary>
                     [Test]
-                    void TestAllocate();
+                    void TestAllocateObject();
 
                 };
             }
