@@ -33,10 +33,13 @@
             </Directory>
         </Directory>
         
+        <FragmentRef Id="UI_Ankh"/>
+        
         <Feature Id="DefaultFeature" Title="AnkhSVN" Level="1">
             <MergeRef Id="MSM_Ankh_msm" />
             <MergeRef Id="MSM_NSvn_msm" />
         </Feature>
+        
         
 
     </Product>
