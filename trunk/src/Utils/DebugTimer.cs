@@ -37,6 +37,12 @@ namespace Utils
             Debug.WriteLine( String.Format("{0}: {1:G3}", message, this.timer.Interval), cathegory );
         }
 
+        public override string ToString()
+        {
+            return this.timer.Interval.ToString();
+        }
+
+
         private Timer timer;
     }
 }
