@@ -199,6 +199,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Utils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WorkingCopyDirectory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

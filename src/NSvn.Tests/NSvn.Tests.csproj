@@ -146,6 +146,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "UtilsTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "wc.zip"
                     Link = "..\NSvn.Core.Tests\wc.zip"
                     BuildAction = "EmbeddedResource"
