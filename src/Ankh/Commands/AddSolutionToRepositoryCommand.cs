@@ -16,7 +16,7 @@ namespace Ankh.Commands
     /// recursively adding all solution items
     /// </summary>
     [VSNetCommand("AddSolutionToRepository", 
-         Text="Add solution to Subversion repository", 
+         Text="Add solution to Subversion repository...", 
          Tooltip= "Add this solution to Subversion repository", 
          Bitmap=ResourceBitmaps.Default ),
     VSNetControl( "Solution.Ankh", Position=1 ),
@@ -25,8 +25,11 @@ namespace Ankh.Commands
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
-            if ( context.AnkhLoadedForSolution )
+            if ( context.AnkhLoadedForSolution || 
+                !File.Exists(context.DTE.Solution.FullName))
+            {
                 return Disabled;
+            }
             else
                 return context.SolutionIsOpen ? Enabled : Disabled;
         }
