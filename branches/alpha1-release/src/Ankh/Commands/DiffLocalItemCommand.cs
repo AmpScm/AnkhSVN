@@ -22,14 +22,10 @@ namespace Ankh.Commands
 		
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
-            // only allow diff if all selected items are modified
-            ModifiedVisitor v = new ModifiedVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v, true );
-            if ( v.Modified )
-                return vsCommandStatus.vsCommandStatusEnabled |
-                    vsCommandStatus.vsCommandStatusSupported;
-            else
-                return vsCommandStatus.vsCommandStatusUnsupported;
+            // always allow diff - worst case you get an empty diff            
+            return vsCommandStatus.vsCommandStatusEnabled |
+                vsCommandStatus.vsCommandStatusSupported;
+            
         }
 
         public override void Execute(Ankh.AnkhContext context)
