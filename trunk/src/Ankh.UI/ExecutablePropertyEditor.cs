@@ -8,34 +8,34 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Property editor for executable properties.
-	/// </summary>
-	internal class ExecutablePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
-	{
+    /// <summary>
+    /// Property editor for executable properties.
+    /// </summary>
+    internal class ExecutablePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    {
 		
-		public event EventHandler Changed;
+        public event EventHandler Changed;
 	
-		public ExecutablePropertyEditor()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public ExecutablePropertyEditor()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
 
-			// TODO: Add any initialization after the InitForm call
+            // TODO: Add any initialization after the InitForm call
 
-		}
+        }
 
-		public void Reset()
-		{
+        public void Reset()
+        {
             this.executableCheckBox.Checked = false;
             this.dirty = false;
-		}
+        }
 
-		public bool Valid
-		{
+        public bool Valid
+        {
 			
             get
             { 
@@ -48,53 +48,53 @@ namespace Ankh.UI
             }
         }
 
-		public PropertyItem PropertyItem
-		{
-			get
-			{
-				if ( !this.Valid )
-				{
-					throw new InvalidOperationException(
-						"Can not get a property item when valid is false");
-				}
+        public PropertyItem PropertyItem
+        {
+            get
+            {
+                if ( !this.Valid )
+                {
+                    throw new InvalidOperationException(
+                        "Can not get a property item when valid is false");
+                }
 				
-				return new TextPropertyItem("File is executable");
-			}
+                return new TextPropertyItem("File is executable");
+            }
 
-			set
-			{
+            set
+            {
                 this.executableCheckBox.Checked = true;
                 this.dirty = false;
-			}
-		}
+            }
+        }
 
         public override string ToString()
         {
             return "executable";
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.executableCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
@@ -109,7 +109,7 @@ namespace Ankh.UI
             // ExecutablePropertyEditor
             // 
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                             this.executableCheckBox});
+                                                                          this.executableCheckBox});
             this.Name = "ExecutablePropertyEditor";
             this.ResumeLayout(false);
 
@@ -137,7 +137,7 @@ namespace Ankh.UI
          
             // Set up the ToolTip text for the Button and Checkbox.
             conflictToolTip.SetToolTip( this.executableCheckBox, "File is executable");
-           }
+        }
 
         private System.Windows.Forms.CheckBox executableCheckBox;
         /// <summary>
@@ -145,13 +145,13 @@ namespace Ankh.UI
         /// </summary>
         private bool dirty;
 		
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
       
-	}
+    }
 	
 
 	

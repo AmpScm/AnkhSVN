@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 
 namespace Utils.Win32
 {
-	/// <summary>
-	/// Represents the SHFILEINFO struct
-	/// </summary>
-	[StructLayout(LayoutKind.Sequential)]
-	public struct SHFILEINFO
-	{
+    /// <summary>
+    /// Represents the SHFILEINFO struct
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SHFILEINFO
+    {
         public IntPtr hIcon;
         public IntPtr iIcon;
         public uint dwAttributes;
@@ -17,7 +17,7 @@ namespace Utils.Win32
         public string szDisplayName;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
         public string szTypeName;
-	}
+    }
 
     /// <summary>
     /// Represents a Win32 RECT

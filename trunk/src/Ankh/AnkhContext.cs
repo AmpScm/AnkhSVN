@@ -13,15 +13,15 @@ using System.Collections;
 
 namespace Ankh
 {
-	/// <summary>
-	/// General context object for the Ankh addin. Contains pointers to objects
-	/// required by commands.
-	/// </summary>
-	internal class AnkhContext : IWin32Window
-	{
-		public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin )
-		{
-			this.dte = dte;
+    /// <summary>
+    /// General context object for the Ankh addin. Contains pointers to objects
+    /// required by commands.
+    /// </summary>
+    internal class AnkhContext : IWin32Window
+    {
+        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin )
+        {
+            this.dte = dte;
             this.addin = addin;
             this.context = new SvnContext( this );
 
@@ -183,5 +183,5 @@ namespace Ankh
         private VSUserControlHostLib.IVSUserControlHostCtl objControl;
         public static readonly string REPOSEXPLORERGUID = 
             "{1C5A739C-448C-4401-9076-5990300B0E1B}";
-	}
+    }
 }
