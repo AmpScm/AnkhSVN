@@ -13,12 +13,14 @@
     <property name="vsnet.ver" value="2002" unless="${vs.2003}"/>
     <property name="vsnet.ver" value="2003" if="${vs.2003}"/>
     <property name="nant.default.framework" value="net-1.0"/>
+    <property name="installsource.dir" value="installsource"/>
+    <property name="deploy.dir" value="Deploy"/>
     <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
     <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>-->
     
     
     
-    <target name="clean">
+    <target name="clean" description="Cleans all output directories">
         <nant buildfile="NSvn/NSvn.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Common/NSvn.Common.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core/NSvn.Core.build" target="clean" inheritall="true" />
@@ -27,6 +29,8 @@
         <nant buildfile="NSvn.Tests/NSvn.Tests.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh.UI/Ankh.UI.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh/Ankh.build" target="clean" inheritall="true" />
+        
+        <delete dir="${installsource.dir}" failonerror="false"/>
         
         <regasm assembly="${build.dir}\Ankh.dll" verbose="${verbose}" codebase="true" unregister="true" failonerror="false"/>
     </target>
@@ -140,14 +144,19 @@
          </copy>
     </target>
     
-    <target name="rebuild">
+    <target name="rebuild" description="Clean all output directories before rebuilding">
         <call target="clean"/>
         <call target="build"/>
     </target>
     
-    <target name="build" depends="build-Ankh, build-NSvn.Common, build-NSvn, build-NSvn.Tests, build-NSvn.Core, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"/>
+    <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn, build-NSvn.Core"
+        description="Build all necessary assemblies"/>
     
-    <target name="test" depends="build">
+    <target name="build-tests" depends="build, build-NSvn.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"
+        description="Build all test assemblies"/>
+    
+    
+    <target name="test" depends="build-tests" description="Run all tests">
 	    <copy todir="${build.dir}">
 			<fileset basedir="${lib.dir}">
 				<includes name="*.dll"/>
@@ -162,31 +171,16 @@
               commandline="/assembly:${build.dir}/NSvn.Tests.dll"/>
     </target>
     
-    <target name="deploy">
-        <if propertytrue="debug">
-            <exec program="devenv.exe" 
-                commandline="src.sln /build Debug /project AnkhSetup"
-                verbose="${verbose}"/>
-            <copy todir="${deploy.dir}">
-                <fileset basedir="Ankh\AnkhSetup\Debug\">
-                    <includes name="*.msi"/>
-                </fileset>
-            </copy>
-        </if>
-        <if propertytrue="debug" if="false">
-            <exec program="devenv.exe" 
-                commandline="src.sln /build Release /project AnkhSetup"
-                verbose="${verbose}"/>
-            <copy todir="${deploy.dir}">
-                <fileset basedir="Ankh\AnkhSetup\Release\">
-                    <includes name="*.msi"/>
-                </fileset>
-            </copy>
-        </if>
-    
+    <target name="deploy" depends = "rebuild, test" description="Run all tests, then create the MSI installer if the tests pass">
+        <call target="msi"/>
     </target>
     
-    <target name="msi" depends="build">
+    <target name="deploy-daily" depends="deploy" description="Run all tests, create MSI and then deploy it to a given directory">
+        <tstamp property="msi.tstamp" pattern="dd.MM.yyyy.HH.mm" verbose="${verbose}"/>                          
+        <copy tofile="${deploy.dir}\AnkhSVN${vsnet.ver}.${msi.tstamp}.msi" file="${installsource.dir}\AnkhSVN${vsnet.ver}.msi"/>
+    </target>
+    
+    <target name="msi" depends="build" description="Build the MSI installer">
    
         <property name="bdb.suffix" value="" unless="${debug}"/>
         <property name="bdb.suffix" value="d" if="${debug}"/>
@@ -204,20 +198,19 @@
         <property name="ankh.folder" value="AnkhSVN ${vsnet.ver}" />
         
     
-        <property name="source.dir" value="installsource"/>
         
-        <delete dir="${source.dir}" failonerror="false"/>
+        <delete dir="${installsource.dir}" failonerror="false"/>
         
        
         <!-- copy the stuff in the build dir -->
-        <copy todir="${source.dir}\${ankh.folder}">
+        <copy todir="${installsource.dir}\${ankh.folder}">
             <fileset basedir="${build.dir}">
                 <includes name="**"/>
             </fileset>            
         </copy>
         
         <!-- copy the readme and license files(maybe move these?) -->
-        <copy todir="${source.dir}\${ankh.folder}">
+        <copy todir="${installsource.dir}\${ankh.folder}">
             <fileset basedir="Ankh\AnkhSetup\">
                 <includes name="licence.rtf"/>
                 <includes name="readme.rtf" />                
@@ -225,7 +218,7 @@
         </copy>
         
         <!-- copy required interop libs -->
-        <copy todir="${source.dir}\${ankh.folder}">
+        <copy todir="${installsource.dir}\${ankh.folder}">
             <fileset basedir="${lib.dir}">
                 <includes name="axinterop.shdocvw.dll"/>
                 <includes name="interop.shdocvw.dll"/>
@@ -233,14 +226,14 @@
           </copy>
         
         <!-- copy the shim control -->
-        <copy todir="${source.dir}\${ankh.folder}">
+        <copy todir="${installsource.dir}\${ankh.folder}">
             <fileset basedir="${lib.dir}">
                 <includes name="Ankh.Toolwindow.dll"/>
             </fileset>
         </copy>
         
         <!-- copy the BDB dll -->
-        <copy todir="${source.dir}\${ankh.folder}">
+        <copy todir="${installsource.dir}\${ankh.folder}">
             <fileset basedir="${lib.dir}\${vsnet.ver}">
                 <includes name="libdb40${bdb.suffix}.dll"/>
             </fileset>
@@ -248,8 +241,8 @@
         
         
         <!-- satellite dll -->
-        <mkdir dir="${source.dir}\${ankh.folder}\1033"/>
-        <copy todir="${source.dir}\${ankh.folder}\1033">
+        <mkdir dir="${installsource.dir}\${ankh.folder}\1033"/>
+        <copy todir="${installsource.dir}\${ankh.folder}\1033">
             <fileset basedir="Ankh\1033">
                 <includes name="BitmapDll.dll"/>
              </fileset>
@@ -257,7 +250,7 @@
         
         <msi 
             output="AnkhSVN${vsnet.ver}.msi"
-            sourcedir="${source.dir}"
+            sourcedir="${installsource.dir}"
             debug="true"
             license="Ankh\AnkhSetup\licence.rtf"
             verbose="true"
@@ -287,7 +280,7 @@
                 <component name="AnkhFiles" id="{909D204A-3F79-429F-AEDC-5135F02B3311}" attr="2" 
                     directory="ANKH_FOLDER" feature="DefaultFeature">
                     <key file="LICENCE.rtf"/>
-                    <fileset basedir="${source.dir}\${ankh.folder}"> 
+                    <fileset basedir="${installsource.dir}\${ankh.folder}"> 
                         <includes name="*.dll"/>
                         <includes name="*.pdb" />
                         <includes name="*.tlb" />
@@ -300,7 +293,7 @@
                  <component name="AnkhResources" id="{5B83D74E-AA83-474F-B7B5-BF8360FD09AC}" attr="2" 
                     directory="SATELLITE_FOLDER" feature="DefaultFeature">
                         <key file="BitmapDll.dll"/>
-                        <fileset basedir="${source.dir}\${ankh.folder}\1033">
+                        <fileset basedir="${installsource.dir}\${ankh.folder}\1033">
                             <includes name="BitmapDll.dll"/>
                          </fileset>
                    </component>
