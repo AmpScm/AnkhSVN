@@ -40,11 +40,14 @@ namespace Ankh.Solution
         {
             // find the directory containing the project
             string fullname = project.FullName;
+
+            // special treatment for VDs
+            if ( project.Kind == ProjectNode.VDPROJKIND )
+                fullname += ".vdproj";
+
             // the Solution Items project has no path
             if ( fullname != string.Empty && File.Exists( fullname ) )
             {
-                
-
                 string parentPath = Path.GetDirectoryName( fullname );
                 this.projectFolder = this.Explorer.StatusCache[ parentPath ];                
                 this.projectFile = this.Explorer.StatusCache[ fullname ];
@@ -86,6 +89,9 @@ namespace Ankh.Solution
         private SvnItem projectFolder;
         private SvnItem projectFile;
         private Project project;
+
+        private const string VDPROJKIND = @"{54435603-DBB4-11D2-8724-00A0C9A8B90C}";
+
     }  
 
 }
