@@ -19,7 +19,15 @@ namespace Ankh.EventSinks
 
         protected void ItemAdded( ProjectItem item )
         {
-            this.Context.SolutionExplorer.Refresh( item.ContainingProject );
+            try
+            {
+                this.Context.SolutionExplorer.Refresh( item.ContainingProject );
+            }
+            catch( Exception ex )
+            {
+                Connect.HandleError( ex );
+                throw;
+            }
         }
 
         /// <summary>

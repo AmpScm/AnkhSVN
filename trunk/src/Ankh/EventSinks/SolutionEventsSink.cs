@@ -59,7 +59,15 @@ namespace Ankh.EventSinks
 
         protected void ProjectAdded( Project project )
         {
-            this.Context.SolutionExplorer.SyncWithTreeView();
+            try
+            {
+                this.Context.SolutionExplorer.SyncWithTreeView();
+            }
+            catch( Exception ex )
+            {
+                Connect.HandleError( ex );
+                throw;
+            }
         }
 
         protected void ProjectRemoved( Project project )

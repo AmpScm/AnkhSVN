@@ -42,13 +42,29 @@ namespace Ankh.EventSinks
         /// </summary>
         /// <param name="item">Projectitem to be scheduled for removal.</param>
         protected void ItemRemoved( Project project )
-        {            
-            this.Context.SolutionExplorer.Refresh( project );
+        {   
+            try
+            {
+                this.Context.SolutionExplorer.Refresh( project );
+            }
+            catch( Exception ex )
+            {
+                Connect.HandleError( ex );
+                throw;
+            }
         }
 
         protected void ItemRenamed( Project item, string oldName )
         {
-            string s = item.FileName;
+            try
+            {
+                string s = item.FileName;
+            }
+            catch( Exception ex )
+            {
+                Connect.HandleError( ex );
+                throw;
+            }
         }
        
         private ProjectsEvents events;

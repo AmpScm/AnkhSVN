@@ -24,7 +24,15 @@ namespace Ankh.EventSinks
 
         private void DocumentSaved( Document document )
         {
-            this.Context.SolutionExplorer.UpdateStatus( document.ProjectItem );
+            try
+            {
+                this.Context.SolutionExplorer.UpdateStatus( document.ProjectItem );
+            }
+            catch( Exception ex )
+            {
+                Connect.HandleError( ex );
+                throw;
+            }
         }
 
         private DocumentEvents events;

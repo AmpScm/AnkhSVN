@@ -162,6 +162,7 @@ namespace Ankh
             catch( Exception ex )
             {   
                 HandleError( ex );
+                throw;
             }
             this.timer.End();
 
@@ -206,6 +207,7 @@ namespace Ankh
             catch( Exception ex )
             {   
                 HandleError( ex );
+                throw;
             }
 		}
 
