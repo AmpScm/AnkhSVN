@@ -258,7 +258,7 @@ void NSvn::Core::Client::Cat( Stream* out, String* path, Revision* revision, Cli
     HandleError( svn_client_cat( svnStream, truePath, revision->ToSvnOptRevision( pool ), 
         context->ToSvnContext( pool ), pool ) );
 }
-
+// implementation of Client::PropList
 NSvn::Common::PropListItem* NSvn::Core::Client::PropList( String* path, Revision* revision, bool recurse, 
                                   ClientContext* context ) []
 {
@@ -272,6 +272,25 @@ NSvn::Common::PropListItem* NSvn::Core::Client::PropList( String* path, Revision
         pool ) );
 
     return ConvertPropListArray( propListItems, pool );
+}
+
+// Implementation of Client::RevPropList
+NSvn::Common::PropertyDictionary* NSvn::Core::Client::RevPropList( String* path,
+    Revision* revision, System::Int32* revisionNumber, ClientContext* context ) 
+{
+    Pool pool;
+    
+    const char* truePath = CanonicalizePath( path, pool );
+    apr_hash_t* propListItems;
+
+    svn_revnum_t revNo;
+    HandleError( svn_client_revprop_list( &propListItems, truePath, 
+        revision->ToSvnOptRevision( pool ), &revNo, 
+        context->ToSvnContext( pool ), pool ) );
+
+    *revisionNumber = revNo;
+
+    return ConvertToPropertyDictionary( propListItems, 0, pool );
 }
 
 // Converts array of .NET strings to apr array of const char
