@@ -17,25 +17,13 @@ namespace Ankh.Solution
         {
             this.project = (Project)item.Object;
 
-            // find the directory containing the project
-            string fullname = project.FullName;
-
-            // special treatment for VDs
-            if ( String.Compare( project.Kind, ProjectNode.VDPROJKIND, true ) == 0 )
-                fullname += ".vdproj";
-
-            // the Solution Items project has no path
-            if ( fullname != string.Empty && File.Exists( fullname ) )
-            {
-                this.Explorer.AddResource( project, this, fullname ); 
-            }
+            FindProjectResources( explorer );
         }
 
         public override void GetResources( System.Collections.IList list, 
             bool getChildItems, ResourceFilterCallback filter )
         {
-            if ( this.additionalResources == null )
-                FindProjectResources( this.Explorer );
+            if ( this.additionalResources == null ) return;
 
             if ( filter == null || filter( this.projectFolder ) )
                 list.Add (this.projectFolder );
@@ -67,21 +55,7 @@ namespace Ankh.Solution
 
         public override void InitializeStatus()
         {
-            // find the directory containing the project
-            string fullname = project.FullName;
-
-            // special treatment for VDs
-            if ( String.Compare( project.Kind, ProjectNode.VDPROJKIND, true ) == 0 )
-                fullname += ".vdproj";
-
-            // the Solution Items project has no path
-            if ( fullname != string.Empty && File.Exists( fullname ) )
-            {
-                string parentPath = Path.GetDirectoryName( fullname );
-                this.Explorer.Context.StatusCache.Status( parentPath );
-            }
-
-            this.FindProjectResources(this.Explorer);
+            this.Explorer.Context.StatusCache.Status( projectFolder.Path, false );
         }
     
 
@@ -100,12 +74,11 @@ namespace Ankh.Solution
             // the Solution Items project has no path
             if ( fullname != string.Empty && File.Exists( fullname ) )
             {
+                this.Explorer.AddResource( project, this, fullname ); 
+
                 string parentPath = Path.GetDirectoryName( fullname );
                 this.projectFolder = this.Explorer.Context.StatusCache[ parentPath ];                
                 this.projectFile = this.Explorer.Context.StatusCache[ fullname ];
-
-                this.projectFolder.Node = this;
-                this.projectFile.Node = this;
 
                 // attach event handlers
                 StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );

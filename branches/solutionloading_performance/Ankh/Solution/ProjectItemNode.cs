@@ -27,8 +27,7 @@ namespace Ankh.Solution
         public override void GetResources(IList list, bool getChildItems, 
             ResourceFilterCallback filter )
         {
-            if ( this.resources == null )
-                FindResources();
+            if ( this.resources == null ) return;
 
             foreach( SvnItem item in this.resources )
             {
@@ -41,7 +40,7 @@ namespace Ankh.Solution
                 {
                     if ( filter(item) )
                     list.Add(item);
-            }
+                }
             }
             this.GetChildResources( list, getChildItems, filter );
         }

@@ -23,9 +23,6 @@ namespace Ankh.Solution
             this.solutionFolder = this.Explorer.Context.StatusCache[
                 Path.GetDirectoryName( solution.FullName )];
 
-            this.solutionFile.Node = this;
-            this.solutionFolder.Node = this;
-
             StatusChanged del  = new StatusChanged( this.ChildOrResourceChanged );
             this.solutionFile.Changed += del;
             this.solutionFolder.Changed += del;
@@ -45,6 +42,8 @@ namespace Ankh.Solution
         public override void GetResources( IList list, 
             bool getChildItems, ResourceFilterCallback filter )
         {
+            if ( this.additionalResources == null ) return;
+
             if ( filter == null || filter( this.solutionFolder ) )
                 list.Add( this.solutionFolder );
 
@@ -63,7 +62,7 @@ namespace Ankh.Solution
 
         public override void InitializeStatus()
         {
-            this.Explorer.Context.StatusCache.Status( solutionFolder.Path );
+            this.Explorer.Context.StatusCache.Status( solutionFolder.Path, false );
             Refresh( false );
         }
         

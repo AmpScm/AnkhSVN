@@ -211,18 +211,6 @@ namespace Ankh
                 this.Changed( this, EventArgs.Empty );
         }
 
-        public Solution.TreeNode Node
-        {
-            get
-            {
-                return parentnode;
-            }
-            set
-            {
-                parentnode = value;
-            }
-        }
-
         private class UnversionableItem : SvnItem
         {
             public UnversionableItem() : base( "", Status.None )
@@ -294,6 +282,5 @@ namespace Ankh
 
         private Status status;
         private string path;
-        private Solution.TreeNode parentnode;
     }
 }

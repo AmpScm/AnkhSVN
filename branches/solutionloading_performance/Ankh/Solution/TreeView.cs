@@ -35,13 +35,9 @@ namespace Ankh.Solution
         public void LockWindowUpdate( bool enable )
         {
             if (enable) 
-            {
                 Win32.LockWindowUpdate( this.hwnd );
-            } 
             else 
-            {
-                Win32.LockWindowUpdate( (IntPtr)null );
-            }
+                Win32.LockWindowUpdate( IntPtr.Zero );
         }
 
         /// <summary>

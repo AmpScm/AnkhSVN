@@ -88,7 +88,7 @@ namespace Ankh.Solution
             {                  
                 if ( rescan )
                 {
-                    this.explorer.Context.StatusCache.Status( this.Directory );                    
+                    this.explorer.Context.StatusCache.Status( this.Directory, true );                    
                     this.FindChildren( );
                     this.RescanHook();
                 }

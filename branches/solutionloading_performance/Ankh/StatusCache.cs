@@ -21,7 +21,7 @@ namespace Ankh
             this.dirs = new Hashtable();
         }
 
-        public void Status( string dir )
+        public void Status( string dir, bool force )
         {
             lock (this) 
             {
@@ -31,14 +31,15 @@ namespace Ankh
                 // ignore if directory is indexed already
                 string normPath = PathUtils.NormalizePath(dir, dir);
 
-                if ( dirs[normPath] != null ) 
+                /*
+                if ( !force && dirs[normPath] != null ) 
                 {
                     Debug.WriteLine( "Directory " + normPath + " indexed already", "Ankh" );
                     return;
                 }
 
                 // ignore if directory is indexed implicitly by another directory index
-                if ( dirs[normPath] == null ) 
+                if ( !force && dirs[normPath] == null ) 
                 {
                     if ( dirs.Count > 0 ) 
                     {
@@ -53,6 +54,7 @@ namespace Ankh
                         }
                     }
                 }
+                */
 
                 dirs[ normPath ] = normPath;
 
