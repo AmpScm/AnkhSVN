@@ -4,7 +4,6 @@
     <directory path="processdocs">
         <name>Process documents</name>
         
-        
         <file path="status_report.xml">
             <handler>viewdoc.html</handler>
             <realpath>status_report.xml</realpath>
@@ -26,29 +25,22 @@
             <name>Pilot project report</name>
             <description>Report due the end of January describing the project</description>            
         </file>
-        
-        
-        
         <directory path="scheduling">
             <name>Scheduling documents</name>
             <permissions>group,supervisor</permissions>
-            
            <file path="work_plan.xml">
                 <realpath>work_plan.xml</realpath>
                 <handler>viewdoc.html</handler>
                 <name>Work plan</name>
                 <description>A work plan</description>            
             </file>  
-            
             <file path="work_schedule.xml">
                 <realpath>work_schedule.xml</realpath>
                 <handler>viewgant.html</handler>
                 <name>Gant diagram</name>
                 <description>A Gant diagram</description>
             </file>
-            
         </directory>          
-        
     </directory>
     
     <directory path="guidelines">
@@ -60,24 +52,29 @@
             <name>Documentation guidelines</name>
             <description>A set of guidelines for how documentation is to be written</description>
         </file>
-        
         <file path="codeguidelines.xml">
             <realpath>codeguidelines.xml</realpath>
             <handler>viewdoc.html</handler>
             <name>Code guidelines</name>
             <name>Common guidelines for how C# code is to be written</name>
         </file>      
-        
     </directory>
     
     <directory path="design">
         <name>Design documents</name>
-
-            
-
         <include>doc/usecases.xml</include> 
         <include>doc/umldiagrams.xml</include>
-
     </directory>
     
+    <directory path="Help">
+        <name>Help documents</name>
+        <realpath>/hovedprosjekter/2003/data/10/Help.doc/index.html</realpath>
+        <description>A help document on how to use the Ankh addin</description>
+    </directory>
+
+    <directory path="src">
+        <name>Source code</name>
+        <realpath>/hovedprosjekter/2003/data/10/src/index.html</realpath>
+        <description>The Ankh source code</description>
+    </directory>
 </root>

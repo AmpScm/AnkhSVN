@@ -3,7 +3,7 @@ import sys
 import os, os.path
 import shutil
 
-COLORIZE = "J:/vcsharp/colorize/colorize/bin/Debug/colorize.exe"
+COLORIZE = "c:/bin/colorize.exe"
 
 def printUsage():
     print """Usage:
@@ -167,9 +167,20 @@ class Directory:
         
         index = open( os.path.join( outputdir, Directory.INDEXNAME ), "w" )
         basename = os.path.basename( outputdir )
-        print >> index, """<html>
-    <head><title>%(basename)s</title></head>
-    <body>
+        print >> index, """
+        <html>
+            <head>
+            <style type="text/css">
+            BODY
+            {
+                font-size: 10pt;
+                font-family: 'Arial Narrow';
+            }
+                <title>%(basename)s
+                </title>
+            </head>
+        <body>
+        <img src="src\Help.doc\img\logo(250x68).png"/>
         <h3>%(basename)s</h3>
         <a href="../list.html">Up</a> <br/> <br/>
         """ % locals()
