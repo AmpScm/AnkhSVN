@@ -112,7 +112,7 @@ namespace Ankh.Commands
             return item.IsVersioned && !item.IsModified && item.IsFile;
         }
 
-        private void GetPathInfo(object sender, GetPathInfoEventArgs args)
+        protected void GetPathInfo(object sender, GetPathInfoEventArgs args)
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;

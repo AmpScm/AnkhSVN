@@ -350,6 +350,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\ReverseMergeCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\RevertItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
