@@ -23,6 +23,7 @@ namespace Ankh
         public const int Diff           = 107;
         public const int Update         = 108;
         public const int ReposExplorer  = 109;
+        public const int ChangeAdminDirName = 110;
 
     }
 }
