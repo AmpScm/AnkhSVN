@@ -155,13 +155,23 @@ namespace Ankh.Commands
         {
             foreach( Project project in projects )
             {
-                // project.FileName throws an ArgumentException if the project 
-                // hasn't been loaded.
                 string filename;
                 try
                 {
-                    filename = this.GetProjectFileName( project, 
-                        context.DTE.Solution );
+                    // treat soln items and misc items specially
+                    if ( this.IsSpecialProject( project ) )
+                    {
+                        if ( project.ProjectItems != null )
+                            this.AddProjectItems( project.ProjectItems, context, solutionDir );
+                        continue;
+                    }
+                    else
+                    {
+                        // project.FileName throws an ArgumentException if the project 
+                        // hasn't been loaded.
+                        filename = this.GetProjectFileName( project, 
+                            context.DTE.Solution );
+                    }
                 }
                 catch( ArgumentException )
                 {
@@ -329,6 +339,16 @@ namespace Ankh.Commands
             context.Client.Commit( paths, true );
         }
 
+        private bool IsSpecialProject( Project project )
+        {
+            foreach( string guid in SpecialProjects )
+            {
+                if ( String.Compare( project.Kind, guid, true ) == 0 )
+                    return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// A progress runner for creating repository directories.
         /// </summary>
@@ -356,6 +376,11 @@ namespace Ankh.Commands
             private string url;
             private string logMessage;            
         }
+
+        private static readonly string[] SpecialProjects = new String[]{
+            "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}",
+            "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}" 
+                                                                       };
 
         private IList paths;
         private readonly Type vcFilterType;
