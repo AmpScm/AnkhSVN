@@ -32,8 +32,9 @@ namespace Ankh.UI
             this.nameCombo.Items.Add(new IgnorePropertyEditor());
             this.nameCombo.Items.Add(new KeywordsPropertyEditor());
             this.nameCombo.Items.Add(new EolStylePropertyEditor());
-            this.nameCombo.Items.Add(new ExternalsPropertyEditor());          
-		}
+            this.nameCombo.Items.Add(new ExternalsPropertyEditor()); 
+            //this.nameCombo.SelectedIndex = this.nameCombo.Items.IndexOf();
+         }
 
         /// <summary>
         /// Sets and gets property items.
@@ -135,10 +136,10 @@ namespace Ankh.UI
             // newButton
             // 
             this.newButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
-            this.newButton.Location = new System.Drawing.Point(288, 264);
+            this.newButton.Location = new System.Drawing.Point(8, 264);
             this.newButton.Name = "newButton";
             this.newButton.TabIndex = 3;
-            this.newButton.Text = "New";
+            this.newButton.Text = "Reset";
             this.newButton.Click += new System.EventHandler(this.newButton_Click);
             // 
             // deleteButton
@@ -158,7 +159,7 @@ namespace Ankh.UI
             this.okButton.Location = new System.Drawing.Point(368, 416);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 7;
-            this.okButton.Text = "Ok";
+            this.okButton.Text = "Save";
             // 
             // cancelButton
             // 
@@ -176,7 +177,7 @@ namespace Ankh.UI
             this.saveButton.Location = new System.Drawing.Point(372, 264);
             this.saveButton.Name = "saveButton";
             this.saveButton.TabIndex = 4;
-            this.saveButton.Text = "Save";
+            this.saveButton.Text = "Add";
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // editorPanel
@@ -243,7 +244,7 @@ namespace Ankh.UI
 
             public void VisitTextPropertyItem(TextPropertyItem item)
             {
-               this.AddItem( new string[]{ item.Name, 
+                                              AddItem( new string[]{ item.Name, 
                     item.Text.Replace("\t", "    ").Replace( "\r\n", "[NL]") }, item );
             }
 
@@ -454,7 +455,7 @@ namespace Ankh.UI
             conflictToolTip.SetToolTip( this.newButton, "Clear name and value fields");
             conflictToolTip.SetToolTip( this.saveButton, "Save property name and value");
             conflictToolTip.SetToolTip( this.deleteButton, "Delete selected property");
-            conflictToolTip.SetToolTip( this.propListView, "List of defined properties");
+           conflictToolTip.SetToolTip( this.propListView, "List of defined properties");
          }
 
 
@@ -470,6 +471,7 @@ namespace Ankh.UI
         private System.Windows.Forms.ListView propListView;
         private System.Windows.Forms.Button newButton;
         private System.Windows.Forms.Button saveButton;
+      
 
         private IPropertyEditor currentEditor;
         private System.Windows.Forms.Panel editorPanel;

@@ -70,7 +70,7 @@ namespace Ankh.UI
 
         public override string ToString()
         {
-            return "svn:ignore";
+            return "ignore";
         }
 
 		/// <summary> 
