@@ -157,7 +157,10 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonR
     HandleError( svn_client_commit( &commitInfoPtr, aprArrayTargets, nonRecursive, 
         context->ToSvnContext( pool ), pool ) );
 
-    return new CommitInfo( commitInfoPtr );
+    if ( commitInfoPtr != 0 )
+        return new CommitInfo( commitInfoPtr );
+    else 
+        return 0;
 }
 // implementation of Client::Move
 NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath, 

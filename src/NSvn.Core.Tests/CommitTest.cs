@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace NSvn.Core.Tests
 {
 	/// <summary>
-	/// Summary description for CommitTest.
+	/// Tests the Client.Commit method.
 	/// </summary>
 	[TestFixture]
 	public class CommitTest : TestBase
@@ -52,6 +52,29 @@ namespace NSvn.Core.Tests
                 output.IndexOf( "Moo is the log message" ) >= 0 );
 
         } 
+        
+        /// <summary>
+        /// Tests that you can cancel a commit.
+        /// </summary>
+        [Test]
+        public void TestCancelledCommit()
+        {
+            string path = Path.Combine( this.WcPath, "Form.cs" );
+            using( StreamWriter w = new StreamWriter( path ) )
+                w.Write( "MOO" );
+            ClientContext ctx = new ClientContext();
+            ctx.LogMessageCallback = new LogMessageCallback( this.CancelLogMessage );
+            CommitInfo info = Client.Commit( new string[]{ path }, true, ctx );
+
+            Assertion.AssertNull( "info should be null for a cancelled commit", 
+                info );
+
+            string output = this.RunCommand( "svn", "st " + this.WcPath ).Trim();
+            Assertion.AssertEquals( "File committed even for a cancelled log message", 'M', 
+                output[0] );        
+   
+
+        }
 
         private string LogMessageCallback( CommitItem[] items )
         {
@@ -62,6 +85,11 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "Wrong revision", 5, items[0].Revision );
 
             return "Moo is the log message";
+        }
+
+        private string CancelLogMessage( CommitItem[] items )
+        {
+            return null;
         }
 
         private string filepath;
