@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Ankh
 {
-    public class ConflictManager
+    internal class ConflictManager
     {           
         
         /// <summary>

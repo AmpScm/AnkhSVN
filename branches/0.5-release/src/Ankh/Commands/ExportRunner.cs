@@ -11,7 +11,7 @@ namespace Ankh.Commands
     /// <summary>
     /// A progress runner for checkouts.
     /// </summary>
-    public class ExportRunner : ProgressRunner
+    internal class ExportRunner : ProgressRunner
     {
         public ExportRunner( AnkhContext context, string path, Revision revision, 
             string url, bool recurse ) 
