@@ -18,7 +18,7 @@ namespace Ankh
     /// </summary>
     internal class SvnContext : NSvnContext
     {
-        public SvnContext( AnkhContext ankhContext )
+        public SvnContext( AnkhContext ankhContext ) : base( @"T:\foo123config" )
         {
 
             //Clears the pane when opening new solutions.
@@ -26,6 +26,9 @@ namespace Ankh
             this.AddAuthenticationProvider( Authentication.GetSimpleProvider() );           
             this.AddAuthenticationProvider( Authentication.GetSimplePromptProvider(
                 new SimplePromptDelegate( this.PasswordPrompt ), 3 ) );
+            this.AddAuthenticationProvider( Authentication.GetSslServerTrustFileProvider() );
+            this.AddAuthenticationProvider( Authentication.GetSslServerTrustPromptProvider(
+                new SslServerTrustPromptDelegate( this.SslServerTrustPrompt ) ) );
 
         }
         /// <summary>
@@ -113,6 +116,12 @@ namespace Ankh
             dialog.Diff = visitor.Diff;    
         }
 
+        /// <summary>
+        /// Prompt the user for a username and password.
+        /// </summary>
+        /// <param name="realm"></param>
+        /// <param name="username"></param>
+        /// <returns></returns>
         private SimpleCredential PasswordPrompt( String realm, String username )
         {
             using( LoginDialog dialog = new LoginDialog() )
@@ -127,6 +136,38 @@ namespace Ankh
                     return null;
 
                 return new SimpleCredential( dialog.Username, dialog.Password );
+            }
+        }
+
+        /// <summary>
+        /// Prompt the user whether to accept a certain server certificate.
+        /// </summary>
+        /// <param name="realm"></param>
+        /// <param name="failures"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private SslServerTrustCredential SslServerTrustPrompt( string realm,
+            SslFailures failures, SslServerCertificateInfo info )
+        {
+            using( SslServerTrustDialog dialog = new SslServerTrustDialog() )
+            {
+                dialog.Failures = failures;
+                dialog.CertificateInfo = info;
+                DialogResult result = dialog.ShowDialog();
+
+                // Cancel means reject.
+                if ( result == DialogResult.Cancel )
+                    return null;
+
+                SslServerTrustCredential cred = new SslServerTrustCredential();
+                cred.AcceptedFailures = failures;
+                
+                // OK means trust permanently
+                if ( result == DialogResult.OK )
+                    cred.TrustPermanently = true;
+
+                // anything else means trust temporarily
+                return cred;
             }
         }
         

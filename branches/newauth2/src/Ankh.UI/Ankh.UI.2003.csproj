@@ -20,7 +20,7 @@
                 PostBuildEvent = ""
                 RootNamespace = "Ankh.UI"
                 RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = "Ankh.UI.Loader"
+                StartupObject = "Ankh.UI.SslServerTrustDialog"
             >
                 <Config
                     Name = "Debug"
@@ -354,6 +354,16 @@
                 <File
                     RelPath = "RevisionPicker.resx"
                     DependentUpon = "RevisionPicker.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SslServerTrustDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SslServerTrustDialog.resx"
+                    DependentUpon = "SslServerTrustDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
