@@ -55,7 +55,20 @@ namespace Ankh.EventSinks
 
         protected void ItemRenamed( ProjectItem item, string oldName )
         {
-            string s = item.Kind;
+            try
+            {
+                // assume there is only one filename
+                string newPath = item.get_FileNames(1);
+                RenameVisitor v = new RenameVisitor( oldName, newPath );
+                this.Context.SolutionExplorer.VisitResources( item, v, false );
+
+                this.Context.SolutionExplorer.RefreshSelectionParents();
+            }
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+                throw;
+            }
         }
 
         /// <summary>
@@ -70,9 +83,35 @@ namespace Ankh.EventSinks
                 {
                     resource.Remove( true );
                 }
-               
-                
             }
+        }
+
+        /// <summary>
+        /// A visitor that renames an item.
+        /// </summary>
+        private class RenameVisitor : LocalResourceVisitorBase
+        {
+            public RenameVisitor( string oldName, string newPath )
+            {
+                this.oldName = oldName; 
+                this.newPath = newPath;
+            }
+
+            public override void VisitWorkingCopyFile(WorkingCopyFile file)
+            {
+                // we need to rename the file back to  its original name
+                string dir = Path.GetDirectoryName( file.Path );
+                string oldPath = Path.Combine( dir, oldName );
+                File.Move( this.newPath, oldPath );
+
+                // now have SVN rename it.
+                file.Move( this.newPath, true );
+            }
+
+
+            private string oldName;
+            private string newPath;
+
         }
     }
 }
