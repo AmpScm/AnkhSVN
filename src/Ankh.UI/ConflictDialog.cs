@@ -282,10 +282,8 @@ namespace Ankh.UI
         private System.Windows.Forms.RadioButton newRevRadioButton;
         private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.Label conflictLabel;
-        private System.ComponentModel.IContainer components;
-        
-        
-        
+
+        private System.ComponentModel.IContainer components = null;
     }
 
 }
