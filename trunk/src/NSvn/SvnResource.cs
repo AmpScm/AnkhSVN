@@ -2,6 +2,7 @@ using System;
 using NSvn.Common;
 using NSvn.Core;
 using System.Collections;
+using System.IO;
 
 namespace NSvn
 {
@@ -17,6 +18,7 @@ namespace NSvn
                 new LogMessageCallback( this.LogMessageCallback );
             this.clientContext.NotifyCallback = 
                 new NotifyCallback( this.NotifyCallback );
+            this.clientContext.AuthBaton = new AuthenticationBaton();
             this.dispatchMapping = new Hashtable();
         }
 
@@ -27,6 +29,9 @@ namespace NSvn
         /// <returns>An ILocalResource object.</returns>
         public static ILocalResource FromLocalPath( string path )
         {
+            if ( !IsVersioned( path ) )
+                return null;
+
             int youngest;
             StatusDictionary dict = Client.Status( out youngest, path, 
                 false, true, false, false, new ClientContext() );
@@ -107,6 +112,19 @@ namespace NSvn
             return this.notifications.LogMessageCallback( this, items );    
         }
 
+        /// <summary>
+        /// Checks whether a given path is versioned.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private static bool IsVersioned( string path )
+        {
+            string baseDir = File.Exists( path ) ? Path.GetDirectoryName( path ) : 
+                path;
+            
+            return Directory.Exists( Path.Combine( baseDir, WCAREA ) );
+        }
+
         
         
             
@@ -114,6 +132,7 @@ namespace NSvn
         private ClientContext clientContext;
         private IDictionary dispatchMapping;
         private Notifications notifications;
+        private const string WCAREA=".svn";
 
 	}
 }

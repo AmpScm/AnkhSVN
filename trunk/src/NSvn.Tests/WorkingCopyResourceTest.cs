@@ -185,5 +185,18 @@ namespace NSvn.Tests
         }
         #endregion
 
+        [Test]
+        public void TestFromPath()
+        {
+            ILocalResource resDir = WorkingCopyResource.FromPath( this.WcPath );
+            Assertion.AssertEquals( "Wrong type resource", typeof(WorkingCopyDirectory), 
+                resDir.GetType() );
+
+            ILocalResource resFile = WorkingCopyResource.FromPath( Path.Combine(
+                this.WcPath, "Form.cs" ) );
+            Assertion.AssertEquals( "Wrong type resource", typeof(WorkingCopyFile),
+                resFile.GetType() );
+        }
+
 	}
 }
