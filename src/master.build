@@ -255,15 +255,15 @@
                 <include name="*.dll"/>
             </fileset>
         </copy>
-        <nunit2 failonerror="true" haltonerror="false">
+        <nunit2 failonerror="true" haltonfailure="false">
             <formatter type="Plain" />
             <test assemblyname="${build.dir}/NSvn.Core.Tests.dll"/>
         </nunit2>
-        <nunit2 failonerror="false" haltonerror="false">
+        <nunit2 failonerror="false" haltonfailure="false">
             <formatter type="Plain" />
         <test assemblyname="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
         </nunit2>
-        <nunit2 failonerror="false" haltonerror="false">
+        <nunit2 failonerror="false" haltonfailure="false">
             <formatter type="Plain" />
             <test assemblyname="${build.dir}/Ankh.Tests.dll"/>
         </nunit2>
