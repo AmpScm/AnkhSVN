@@ -65,8 +65,8 @@ namespace Ankh.Commands
                 foreach( SvnItem item in resources )
                 {
                     context.Client.Add( item.Path, recursive );
-                    item.Refresh( context.Client );
                 }
+                context.SolutionExplorer.RefreshSelection();
             }
             finally
             {
