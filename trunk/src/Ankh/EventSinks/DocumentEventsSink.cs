@@ -27,7 +27,9 @@ namespace Ankh.EventSinks
         {
             try
             {
-                this.Context.SolutionExplorer.UpdateStatus( document.ProjectItem );
+                // verify that the item has a ProjectItem - see issue #87
+                if ( document.ProjectItem != null )
+                    this.Context.SolutionExplorer.UpdateStatus( document.ProjectItem );
             }
             catch( COMException )
             {
