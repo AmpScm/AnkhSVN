@@ -112,7 +112,7 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                this.context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
                 throw;
             }
         }
@@ -140,7 +140,7 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                this.context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
 
@@ -229,16 +229,16 @@ namespace Ankh
                     this.cachedStatus = status;
                 }
             }
-                //            catch( StatusException )
-                //            {
-                //                // couldn't get status for an item on disk - maybe its been renamed etc from
-                //                // outside VS
-                //                this.context.SolutionExplorer.RefreshSelection();
-                //                status = vsCommandStatus.vsCommandStatusSupported;
-                //            }
+//            catch( StatusException )
+//            {
+//                // couldn't get status for an item on disk - maybe its been renamed etc from
+//                // outside VS
+//                this.context.SolutionExplorer.RefreshSelection();
+//                status = vsCommandStatus.vsCommandStatusSupported;
+//            }
             catch( Exception ex )
             {   
-                this.context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
             t.End( "Query status for " + commandName + ": " + status, "Ankh" );
         }
@@ -285,15 +285,15 @@ namespace Ankh
                     }
                 }
             }
-                //            catch( StatusException )
-                //            {
-                //                // couldn't get status for an item on disk - maybe its been renamed etc from
-                //                // outside VS
-                //                this.context.SolutionExplorer.RefreshSelection();
-                //            }
+//            catch( StatusException )
+//            {
+//                // couldn't get status for an item on disk - maybe its been renamed etc from
+//                // outside VS
+//                this.context.SolutionExplorer.RefreshSelection();
+//            }
             catch( Exception ex )
             {   
-                this.context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
 

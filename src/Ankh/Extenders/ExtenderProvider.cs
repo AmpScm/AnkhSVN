@@ -50,7 +50,7 @@ namespace Ankh.Extenders
             }
             catch( Exception ex )
             {
-                this.context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
                 return null;
             }
         }
@@ -71,7 +71,7 @@ namespace Ankh.Extenders
             }
             catch( Exception ex )
             {
-                this.context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
                 return false;
             }
         }
@@ -103,15 +103,15 @@ namespace Ankh.Extenders
         public static void Unregister( _DTE dte )
         {
             // use the stored cookies to unregister the registered providers.
-            try
-            {
-                foreach( int cookie in cookies )
-                    dte.ObjectExtenders.UnregisterExtenderProvider( cookie );
-            }
-            catch( Exception )
-            {
-                // HACK: swallow
-            }
+			try
+			{
+				foreach( int cookie in cookies )
+					dte.ObjectExtenders.UnregisterExtenderProvider( cookie );
+			}
+			catch( Exception )
+			{
+				// HACK: swallow
+			}
         }
 
         private static ExtenderProvider provider;
@@ -135,5 +135,5 @@ namespace Ankh.Extenders
                                                                   "{EE8299CB-19B6-4f20-ABEA-E1FD9A33B683}", // C++ Project Browse Object
                                                                   "{610d4611-d0d5-11d2-8599-006097c68e81}" // generic project
                                                               };
-    }
+        }
 }

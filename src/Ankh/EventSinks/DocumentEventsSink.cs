@@ -45,7 +45,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
 

@@ -49,10 +49,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReposInstaller.2003", "Repo
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Tests", "Ankh.Tests\Ankh.Tests.csproj", "{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -121,14 +117,6 @@ Global
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.NSvn.Tests.ActiveCfg = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.NSvn.Tests.Build.0 = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.Release.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.ActiveCfg = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.Build.0 = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug run.ActiveCfg = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug run.Build.0 = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.NSvn.Tests.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.NSvn.Tests.Build.0 = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		ankh.reg = ankh.reg

@@ -60,7 +60,7 @@ namespace Ankh.Commands
                 }
                 catch( Exception ex )
                 {
-                    this.Context.ErrorHandler.Handle( ex );
+                    Error.Handle( ex );
                     return false;
                 }
                 finally

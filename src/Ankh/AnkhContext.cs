@@ -32,8 +32,6 @@ namespace Ankh
             this.dte = dte;
             this.addin = addin;
 
-            this.errorHandler = new ErrorHandler();
-
             this.hostWindow = new Win32Window( new IntPtr(dte.MainWindow.HWnd) );
 
             this.configLoader = new Ankh.Config.ConfigLoader();
@@ -158,15 +156,6 @@ namespace Ankh
         }
 
         /// <summary>
-        /// The error handler.
-        /// </summary>
-        public IErrorHandler ErrorHandler
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.errorHandler; }
-        }
-
-        /// <summary>
         /// The configloader.
         /// </summary>
         public Ankh.Config.ConfigLoader ConfigLoader
@@ -245,7 +234,7 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
             finally
             {
@@ -381,7 +370,7 @@ namespace Ankh
                 Debug.WriteLine( "Found Ankh.Load", "Ankh" );
                 return true;
             }
-                //  user has expressly specified that this solution should load?
+            //  user has expressly specified that this solution should load?
             else if ( File.Exists( Path.Combine(solutionDir, "Ankh.NoLoad") ) )
             {
                 Debug.WriteLine( "Found Ankh.NoLoad", "Ankh" );
@@ -496,7 +485,6 @@ namespace Ankh
         private bool operationRunning;
 
         private ConflictManager conflictManager; 
-        private IErrorHandler errorHandler;
 
         private ProgressDialog progressDialog;
         private SvnClient client;

@@ -148,7 +148,7 @@ namespace Ankh.RepositoryExplorer
             }
             catch( Exception ex )
             {
-                this.context.ErrorHandler.Handle(ex);
+                Error.Handle(ex);
             }
         }
 

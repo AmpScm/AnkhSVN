@@ -39,7 +39,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
 
@@ -72,7 +72,7 @@ namespace Ankh.EventSinks
             }
             catch ( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
             finally
             {
@@ -131,7 +131,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }            
         }
             
