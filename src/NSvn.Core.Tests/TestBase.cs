@@ -5,14 +5,33 @@ using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
+using System.Collections;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// Summary description for TestBase.
-	/// </summary>
-	public class TestBase
-	{
+    /// <summary>
+    /// Serves as a base class for tests for NSvn::Core::Add
+    /// </summary>
+    [TestFixture]
+    public class TestBase
+    {
+        //[TearDown]
+        public void TearDown()
+        {
+            // clean up
+            try
+            {
+                if ( this.ReposPath != null )
+                    Directory.Delete( this.ReposPath, true );
+                if ( this.WcPath != null )
+                    Directory.Delete( this.WcPath, true );
+            }
+            catch( Exception )
+            {
+                // swallow 
+            }
+        }
         /// <summary>
         /// extract our test repository
         /// </summary>
@@ -103,6 +122,37 @@ namespace NSvn.Core.Tests
         public string WcPath
         {
             get{ return this.wcPath; }
+        }
+
+        /// <summary>
+        /// The notifications generated during a call to Client::Add
+        /// </summary>
+        public Notification[] Notifications
+        {
+            get{ return (Notification[])this.notifications.ToArray( typeof(Notification) ); }
+        }
+
+        /// <summary>
+        /// Callback method to be used as ClientContext.NotifyCallback
+        /// </summary>
+        /// <param name="notification">An object containing information about the notification</param>
+        public virtual void NotifyCallback( Notification notification )
+        {
+            this.notifications.Add( notification );
+        }
+
+        /// <summary>
+        /// Creates a textfile with the given name in the WC
+        /// </summary>
+        /// <param name="name">The name of the ifle to create</param>
+        /// <returns>The path to the created text file</returns>
+        protected string CreateTextFile( string name )
+        {
+            string path = Path.Combine( this.WcPath, name );
+            using ( StreamWriter writer = File.CreateText( path ) )
+                writer.Write( "Hello world" );
+
+            return path;
         }
 
         
@@ -211,6 +261,9 @@ namespace NSvn.Core.Tests
         private const string WC_NAME = "wc";
         private string reposUrl;
         private string wcPath;
-        private string reposPath;
-	}
+        private string reposPath;       
+    
+        
+        protected ArrayList notifications;
+    }
 }
