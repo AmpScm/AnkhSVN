@@ -47,13 +47,18 @@ SvnClientException* NSvn::Core::SvnClientException::FromSvnError( svn_error_t* e
 SvnClientException* NSvn::Core::SvnClientException::CreateExceptionsRecursively( svn_error_t* err )
 {
     // is there a child error?
+    SvnClientException* exception = 0;
+
     if ( err->child != 0 )
     {
         // yes, create a nested exception
         SvnClientException* child = CreateExceptionsRecursively( err->child );
-        return CreateException( err, child );
+        exception = CreateException( err, child );
     }
     else
         // nope, just include the message
-        return CreateException( err );;
+        exception = CreateException( err );;
+
+    exception->errorCode = err->apr_err;
+    return exception;
 }
