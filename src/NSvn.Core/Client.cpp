@@ -58,6 +58,10 @@ svn_error_t* svn_log_message_receiver(void *baton,
 /// callback function for Client::Status
 void svn_status_func( void* baton, const char* path, svn_wc_status_t* status );
 
+svn_error_t* svn_blame_func( void *baton, apr_int64_t line_no, svn_revnum_t revision, 
+                            const char *author, const char *date, 
+                            const char *line, apr_pool_t *pool );
+
 NSvn::Core::Client::Client()
 {
     this->context = new ClientContext( this,
@@ -125,10 +129,24 @@ void NSvn::Core::Client::Cleanup( String* directory )
     HandleError( svn_client_cleanup( truePath, this->context->ToSvnContext( pool ), pool ) );
 }
 
+// implementation of Client::Blame
+void NSvn::Core::Client::Blame( String* pathOrUrl, Revision* start, Revision* end, 
+                BlameReceiver* receiver )
+{
+    Pool pool;
+    ManagedPointer<BlameReceiver*> receiverBaton(receiver);
+    const char* truePath = CanonicalizePath( pathOrUrl, pool );
+
+    HandleError( svn_client_blame( truePath, start->ToSvnOptRevision( pool ), 
+        end->ToSvnOptRevision( pool ), svn_blame_func, &receiverBaton, 
+        this->context->ToSvnContext(pool), pool) );
+}
+
 // implementation of Client::Revert
 void NSvn::Core::Client::Revert(String* paths[], bool recursive )
 {
     Pool pool;
+
     
     const apr_array_header_t* aprArray = StringArrayToAprArray( paths, true, pool );
 
@@ -811,5 +829,40 @@ void svn_status_func(void* baton, const char* path, svn_wc_status_t* status)
 
 
     statusCallback->Invoke( nativePath, new Status( status ) );
+}
+
+// marshall the blame callback into managed space
+svn_error_t* svn_blame_func(void *baton, apr_int64_t line_no, svn_revnum_t revision, 
+                    const char *author, const char *date, 
+                    const char *line, apr_pool_t *pool )
+{
+    using namespace NSvn::Core;
+    BlameReceiver* receiver = *(static_cast<ManagedPointer<BlameReceiver*>*>(baton));
+
+    // The date's a ISO-8601 timestamp
+    DateTime dt;
+    try
+    {
+        dt = DateTime::ParseExact( StringHelper(date),
+            "yyyy-MM-dd\\THH:mm:ss.ffffff\\Z",
+            System::Globalization::CultureInfo::CurrentCulture ).ToLocalTime();
+    }
+    catch( FormatException* ex )
+    {
+        StringHelper msg(ex->Message);
+        return svn_error_create( SVN_ERR_BAD_DATE, NULL, msg.CopyToPoolUtf8(pool) );
+    }
+
+    try
+    {
+        receiver->Invoke( line_no, revision, StringHelper(author), dt, 
+            StringHelper(line) );
+    }
+    catch( Exception* ex )
+    {
+        StringHelper msg(ex->Message);
+        return svn_error_create( SVN_ERR_BASE, NULL, msg.CopyToPoolUtf8(pool) );
+    }  
+    return SVN_NO_ERROR;
 }
 

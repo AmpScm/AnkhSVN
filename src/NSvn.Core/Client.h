@@ -98,7 +98,14 @@ namespace NSvn
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
             int Switch(String* path, String* url, Revision* revision, bool recurse);
 
-           
+            /// <summary>Receive blame  info for the given path or url at revision end, using start 
+            /// as the default source of all blame.</summary>
+            /// <param name="pathOrUrl">Path to the file/directory being blamed.</param>
+            /// <param name="start">The default source of all blame</param>
+            /// <param name="end">The revision to blame.</param>
+            /// <param name="receiver">The callback receiving the blames.</param>
+            void Blame( String* pathOrUrl, Revision* start, Revision* end, 
+                BlameReceiver* receiver );           
 
             ///<summary>Add a file/directory, not already under revision control to a working copy.</summary>
             ///<param name="path">Path to the file/directory.</param>

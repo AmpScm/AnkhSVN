@@ -25,7 +25,10 @@ namespace NSvn
         public __delegate void CancelDelegate( Object* sender, CancelEventArgs* args );
         public __delegate void NotificationDelegate( Object* sender, NotificationEventArgs* args );
         
-        public __delegate void LogMessageReceiver( LogMessage* logMessage );        
+        public __delegate void LogMessageReceiver( LogMessage* logMessage );  
+
+        public __delegate void BlameReceiver( __int64 lineNumber, int revision, String* author, 
+            DateTime date, String* line );
 
         public __delegate SimpleCredential* SimplePromptDelegate( 
             System::String* realm, String* username, bool maySave );
