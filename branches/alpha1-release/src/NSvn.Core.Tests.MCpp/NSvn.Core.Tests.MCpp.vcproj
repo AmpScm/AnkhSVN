@@ -76,7 +76,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib Advapi32.lib libsvn_repos.lib libsvn_fs.lib libsvn_ra_dav.lib libsvn_ra_local.lib libsvn_ra.lib libsvn_ra_svn.lib libsvn_wc.lib libsvn_subr.lib libsvn_client.lib libsvn_delta.lib libsvn_diff.lib $(SVNSRC)\db4-win32\lib\libdb40.lib $(SVNSRC)\neon\libneon.lib $(SVNSRC)\apr\LibR\apr.lib $(SVNSRC)\apr-util\LibR\aprutil.lib $(SVNSRC)\apr-iconv\LibR\apriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibR\xml.lib"
+				AdditionalDependencies="rpcrt4.lib shlwapi.lib Advapi32.lib libsvn_repos.lib libsvn_fs.lib libsvn_ra_dav.lib libsvn_ra_local.lib libsvn_ra.lib libsvn_ra_svn.lib libsvn_wc.lib libsvn_subr.lib libsvn_client.lib libsvn_delta.lib libsvn_diff.lib $(SVNSRC)\db4-win32\lib\libdb40.lib $(SVNSRC)\neon\libneon.lib $(SVNSRC)\apr\LibR\apr.lib $(SVNSRC)\apr-util\LibR\aprutil.lib $(SVNSRC)\apr-iconv\LibR\apriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibR\xml.lib"
 				OutputFile="$(OutDir)/NSvn.Core.Tests.MCpp.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SVNSRC)\release"
