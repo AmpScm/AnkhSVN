@@ -17,7 +17,7 @@ namespace Ankh
     /// <summary>
     /// Summary description for SvnContext.
     /// </summary>
-    internal class SvnClient : Client
+    public class SvnClient : Client
     {
         public SvnClient( AnkhContext ankhContext, string configDir ) :  base( configDir )
         {
@@ -35,7 +35,7 @@ namespace Ankh
         /// </summary>
         /// <param name="commitItems"></param>
         /// <returns></returns>
-        internal IList ShowLogMessageDialog(IList items, bool urlPaths)
+        public IList ShowLogMessageDialog(IList items, bool urlPaths)
         {
             string templateText = this.GetTemplate();
             LogMessageTemplate template = new LogMessageTemplate( templateText );

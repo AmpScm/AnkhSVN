@@ -10,7 +10,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Base class for ICommand instances
     /// </summary>
-    internal abstract class CommandBase : ICommand
+    public abstract class CommandBase : ICommand
     {
         /// <summary>
         /// Get the status of the command

@@ -11,7 +11,7 @@ namespace Ankh.RepositoryExplorer
     /// <summary>
     /// Define some extra properties we need to track.
     /// </summary>
-    internal interface INode : IRepositoryTreeNode
+    public interface INode : IRepositoryTreeNode
     {
         INode Parent
         {
@@ -31,7 +31,7 @@ namespace Ankh.RepositoryExplorer
     /// <summary>
     /// Represents a normal node in the repository treeview.
     /// </summary>
-    internal class Node : INode
+    public class Node : INode
     {  
         public Node( INode parent, DirectoryEntry entry )
         {
@@ -125,7 +125,7 @@ namespace Ankh.RepositoryExplorer
     /// Represents a root node in the treeview. This holds some information the others
     /// don't.
     /// </summary>
-    internal class RootNode : INode
+    public class RootNode : INode
     {
         public RootNode( string url, Revision revision )
         {

@@ -6,7 +6,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for ImportSolution.
     /// </summary>
-    internal class ImportSolutionCommand
+    public class ImportSolutionCommand
     {
         public ImportSolutionCommand()
         {

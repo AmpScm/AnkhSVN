@@ -9,7 +9,7 @@ namespace Ankh
     /// An attribute used to describe where a command appears in the VS.NET IDE.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    internal class VSNetControlAttribute : Attribute
+    public class VSNetControlAttribute : Attribute
     {
         /// <summary>
         /// Constructor

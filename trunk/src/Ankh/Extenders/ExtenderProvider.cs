@@ -82,7 +82,7 @@ namespace Ankh.Extenders
         /// <summary>
         /// Registers the extender provider for all the cathegories we want.
         /// </summary>
-        internal static void Register( AnkhContext context )
+        public static void Register( AnkhContext context )
         {
             ExtenderProvider.provider = new ExtenderProvider( context );
 
@@ -100,7 +100,7 @@ namespace Ankh.Extenders
         /// Unregister all extender provider registrations.
         /// </summary>
         /// <param name="dte"></param>
-        internal static void Unregister( _DTE dte )
+        public static void Unregister( _DTE dte )
         {
             // use the stored cookies to unregister the registered providers.
 			try
