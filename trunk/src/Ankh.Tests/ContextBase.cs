@@ -416,6 +416,12 @@ namespace Ankh.Tests
                 // TODO:  Add UIShellImpl.ShowRepositoryExplorer implementation
             }
 
+            public virtual CommitContext ShowCommitDialog( CommitContext ctx )
+            {
+                // TODO: Add implementation
+                return null;
+            }
+
             public virtual DialogResult QueryWhetherAnkhShouldLoad()
             {
                 // TODO:  Add UIShellImpl.QueryWhetherAnkhShouldLoad implementation

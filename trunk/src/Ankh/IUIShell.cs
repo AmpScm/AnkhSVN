@@ -46,6 +46,8 @@ namespace Ankh
         /// <param name="selection"></param>
         void SetRepositoryExplorerSelection( object[] selection );
 
+        CommitContext ShowCommitDialog( CommitContext ctx );
+
         /// <summary>
         /// Display a message box.
         /// </summary>
