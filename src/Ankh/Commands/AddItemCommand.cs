@@ -10,7 +10,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Adds an unversioned item to a working copy
     /// </summary>
-    [VSNetCommand("AddItem", Text = "Add", Tooltip = "Adds selected item to a working copy",
+    [VSNetCommand("AddItem", Text = "Add...", Tooltip = "Adds selected item to a working copy",
          Bitmap = ResourceBitmaps.Add),
     VSNetControl( "Item.Ankh", Position = 1 ),
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
@@ -41,7 +41,7 @@ namespace Ankh.Commands
             bool recursive = false;
 
             // are we shifted?
-            if ( CommandBase.Shift )
+            if ( !CommandBase.Shift )
             {                
                 PathSelectorInfo info = new PathSelectorInfo( "Select items to add",
                     resources, resources );
