@@ -115,14 +115,12 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ErrorDialog));
             this.messageLabel = new System.Windows.Forms.Label();
             this.headerLabel = new System.Windows.Forms.Label();
             this.stackTraceTextBox = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.errorReportButton = new System.Windows.Forms.Button();
-            this.errorIconPictureBox = new System.Windows.Forms.PictureBox();
             this.SuspendLayout();
             // 
             // messageLabel
@@ -189,21 +187,11 @@ namespace Ankh.UI
             this.errorReportButton.Text = "Send error report...";
             this.errorReportButton.Visible = false;
             // 
-            // errorIconPictureBox
-            // 
-            this.errorIconPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("errorIconPictureBox.Image")));
-            this.errorIconPictureBox.Location = new System.Drawing.Point(8, 48);
-            this.errorIconPictureBox.Name = "errorIconPictureBox";
-            this.errorIconPictureBox.Size = new System.Drawing.Size(40, 32);
-            this.errorIconPictureBox.TabIndex = 6;
-            this.errorIconPictureBox.TabStop = false;
-            // 
             // ErrorDialog
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(352, 183);
             this.ControlBox = false;
-            this.Controls.Add(this.errorIconPictureBox);
             this.Controls.Add(this.errorReportButton);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.okButton);
@@ -252,7 +240,6 @@ namespace Ankh.UI
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button errorReportButton;
-        private System.Windows.Forms.PictureBox errorIconPictureBox;
         /// <summary>
         /// Required designer variable.
         /// </summary>
