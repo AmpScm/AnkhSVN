@@ -61,6 +61,8 @@ namespace Ankh.EventSinks
             sinks.Add( new DocumentEventsSink( context ) );
             sinks.Add( new SolutionEventsSink( context ) );
 
+            sinks.Add( new CommandsEventSink( context ) );
+
             return sinks;
         }
 
