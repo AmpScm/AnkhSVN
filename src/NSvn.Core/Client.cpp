@@ -564,6 +564,19 @@ void NSvn::Core::Client::Log( String* targets[], Revision* start, Revision* end,
         this->context->ToSvnContext(pool), pool ) ); 
 }
 
+// Implementation of Client::Relocate
+void NSvn::Core::Client::Relocate( String* dir, String* from, String* to,
+                                  bool recurse )
+{
+    Pool pool;
+    HandleError( svn_client_relocate( 
+        StringHelper(dir),
+        StringHelper(from),
+        StringHelper(to),
+        recurse,
+        this->context->ToSvnContext(pool), pool ) );
+}
+
 // implementation of Client::UrlFromPath
 String* NSvn::Core::Client::UrlFromPath( String* path )
 {

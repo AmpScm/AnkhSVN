@@ -237,6 +237,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "RelocateTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "repos.zip"
                     BuildAction = "EmbeddedResource"
                 />
