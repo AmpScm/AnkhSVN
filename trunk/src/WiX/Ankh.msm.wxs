@@ -21,7 +21,7 @@
         <FragmentRef Id="FR_Lib" />
         <DirectoryRef Id="appDir">
           <Component Id="FR_Ankh_tlb" Guid="06EF25FC-00C4-40df-B99D-6A8DBCD630AA">
-            <File Id="Ankh.msm.file0" Name="Ankh.tlb" src="C:\projects\Ankh\src\build-Release\Ankh.tlb" />
+            <File Id="Ankh.msm.file0" Name="Ankh.tlb" src="$(var.builddir)\Ankh.tlb" />
           </Component>
           <Component Id="CF_Readme" Guid="B5147D69-DF89-4fc3-8477-4097D849B25F">
             <File Id="F_README" Name="README.RTF" LongName="readme.rtf"
