@@ -59,7 +59,7 @@ namespace NSvn
         public void Commit( bool recursive )
         {
             
-            Client.Commit( new string[]{ this.Path }, recursive, this.ClientContext );
+            Client.Commit( new string[]{ this.Path }, !recursive, this.ClientContext );
         }
 
         /// <summary>

@@ -47,7 +47,9 @@ namespace NSvn
 
         public static string GetParentDir( string path )
         {
-            return path[ path.Length - 1 ] == Path.DirectorySeparatorChar ?
+            if ( path.Length == 1 )
+                return null;
+            else return path[ path.Length - 1 ] == Path.DirectorySeparatorChar ?
                 Path.GetDirectoryName( path.Substring( 0, path.Length - 1 ) ) :
                 Path.GetDirectoryName( path );
         }

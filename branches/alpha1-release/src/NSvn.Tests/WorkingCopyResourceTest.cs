@@ -148,7 +148,7 @@ namespace NSvn.Tests
             try
             {
                 item.Commit( false );
-                Assertion.Fail( "Should not be able to commit a conflicted wc" );
+                Assertion.Fail( "Should not be able to commit a conflicted file" );
             }
             catch( SvnClientException )
             { /*empty*/ }
@@ -157,7 +157,7 @@ namespace NSvn.Tests
             try
             {
                 folderItem.Commit(  true );
-                Assertion.Fail( "Should not be able to commit a conflicted wc" );
+                Assertion.Fail( "Should not be able to commit a conflicted directory" );
             }
             catch( SvnClientException )
             { /* empty */ }
