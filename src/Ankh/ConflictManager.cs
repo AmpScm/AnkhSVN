@@ -6,16 +6,16 @@ using System.IO;
 
 namespace Ankh
 {
-    class ConflictTasks
+    public class ConflictManager
     {           
         
         /// <summary>
-        /// ConflictTaskItem.
-        /// Class to handle adding VS Task List Items for Ankh Conflicts and handling events for them.
+        /// ConflictManager
+        /// Class to handle issues related to conflicts
         /// </summary>
-        public ConflictTasks (AnkhContext context)
-        {        
-            this.context = context;                    
+        public ConflictManager (AnkhContext context)
+        {                         
+            this.context = context;
         }
 
         /// <summary>
@@ -26,25 +26,48 @@ namespace Ankh
         {
             // Get the line number for adding to the task so that when the user clicks on 
             // the task it opens the file and goes to the line the conflict text starts on
-            int lineNumber = getConflictLine(path);
+            int lineNumber = GetConflictLine(path);
 
             // At the task item 
-            Window win =  context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
-            TaskList TL = (TaskList) win.Object;
-            if(!taskExists(path, TL))
+            Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+            TaskList taskList = (TaskList) win.Object;
+            if(!TaskExists(path, taskList))
             {
-                TaskItem TLItem;
-                TLItem = TL.TaskItems.Add(ConflictTaskItemCategory, " ", 
+                TaskItem taskListItem;
+                taskListItem = taskList.TaskItems.Add(ConflictTaskItemCategory, " ", 
                     "AnkhSVN: file has a conflict. ", 
                     vsTaskPriority.vsTaskPriorityHigh, 
                     vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
 
                 // Get the task event list and add an event for this task list item to it.
-                TaskListEvents taskListEvents = (TaskListEvents) this. context.DTE.Events.get_TaskListEvents(
+                TaskListEvents taskListEvents = (TaskListEvents)  this.context.DTE.Events.get_TaskListEvents(
                     "ConflictTaskItemCategory");
                 taskListEvents.TaskNavigated +=new 
-                    _dispTaskListEvents_TaskNavigatedEventHandler(taskNavigated);
+                    _dispTaskListEvents_TaskNavigatedEventHandler(TaskNavigated);
             }
+        }
+
+
+        /// <summary>
+        ///  Find all the files with conflicts and create conflict items in the task list for them
+        /// </summary>
+        public void CreateTaskItems()
+        {
+
+            IList conflictItems =  this.context.SolutionExplorer.GetAllResources(true,   new ResourceFilterCallback(ConflictedFilter)); 
+            foreach(SvnItem item in conflictItems)
+            {
+                AddTask(item.Path);
+            }
+        }
+        /// <summary>
+        ///  Filter for getting conflicted items from the solution
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private  bool ConflictedFilter( SvnItem item )
+        {
+            return (item.Status.TextStatus == NSvn.Core.StatusKind.Conflicted);
         }
 
         /// <summary>
@@ -52,10 +75,10 @@ namespace Ankh
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        bool taskExists(String path, TaskList tl)
+        private bool TaskExists(String path, TaskList taskList)
         {
             bool exists = false; 
-            foreach(TaskItem item in tl.TaskItems)
+            foreach(TaskItem item in taskList.TaskItems)
             {
                 if(item.Category == ConflictTaskItemCategory &&
                     item.FileName == path)
@@ -72,7 +95,7 @@ namespace Ankh
         /// <summary>
         ///  Event handler for when a conflict task item is clicked in VS
         ///       
-        public void  taskNavigated(TaskItem taskItem, ref bool navigateHandled)
+        private void  TaskNavigated(TaskItem taskItem, ref bool navigateHandled)
         {
             // Debug.WriteLine("A task named '" + taskItem.Description  + "' was navigated to in the Task List.");
             Window win = taskItem.DTE.ItemOperations.OpenFile( taskItem.FileName, Constants.vsViewKindTextView);
@@ -88,7 +111,7 @@ namespace Ankh
         /// </summary>
         /// <param name="path">String: Path to file with a conflict</param>
         /// <returns>int: Line number conflict </returns>
-        private int getConflictLine(String path) 
+        private int GetConflictLine(String path) 
         {
             int lineNumber = 1; 
             StreamReader sr = null;
@@ -98,7 +121,7 @@ namespace Ankh
                 // Create an instance of StreamReader to read from a file.
                 // The using statement also closes the StreamReader.
                 sr = new StreamReader(path);
-            {
+
                 String line;
                 // Read and display lines from the file until the end of 
                 // the file is reached and not match
@@ -107,7 +130,7 @@ namespace Ankh
                     lineNumber++;
                 if(index == NotFound) 
                     lineNumber = 0;
-            }
+
             }
             catch (Exception ) 
             {
@@ -117,9 +140,8 @@ namespace Ankh
             return lineNumber;            
         }
 
-  
-        private const String ConflictTaskItemCategory = "Conflict"; 
         private AnkhContext context; 
+        private const String ConflictTaskItemCategory = "Conflict"; 
         private const String SvnConflictString = "<<<<<<< .mine"; 
         private const int NotFound = -1;
     }
