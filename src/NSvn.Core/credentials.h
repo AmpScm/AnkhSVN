@@ -86,6 +86,7 @@ namespace NSvn
         {
         public:
             String* CertificateFile;
+            bool MaySave;
         public private:
             svn_auth_cred_ssl_client_cert_t* GetCredential( apr_pool_t* pool )
             {
@@ -93,6 +94,7 @@ namespace NSvn
                     static_cast<svn_auth_cred_ssl_client_cert_t*>(
                         apr_pcalloc(pool, sizeof(*cred) ) );
                 cred->cert_file = StringHelper( this->CertificateFile ).CopyToPool( pool );
+                cred->may_save = this->MaySave;
 
                 return cred;
             }
@@ -104,6 +106,7 @@ namespace NSvn
         {
         public:
             String* Password;
+            bool MaySave;
         public private:
             svn_auth_cred_ssl_client_cert_pw_t* GetCredential( apr_pool_t* pool )
             {
@@ -111,6 +114,7 @@ namespace NSvn
                     static_cast<svn_auth_cred_ssl_client_cert_pw_t*>(
                         apr_pcalloc(pool, sizeof(*cred) ) );
                 cred->password = StringHelper( this->Password ).CopyToPool( pool );
+                cred->may_save = this->MaySave;
 
                 return cred;
             }
