@@ -9,7 +9,7 @@ namespace Ankh.Commands
 	/// Summary description for ViewLog.
 	/// </summary>
     [VSNetCommand("ViewLog", Text = "Repos Explorer", Tooltip = "Show the repository explorer"),
-    VSNetControl( "Item", Position = 4 ),
+    VSNetControl( "View", Position = 1 ),
     VSNetControl( "Tools", Position = 5 )]
 	internal class ViewLog : CommandBase
 	{
@@ -21,7 +21,7 @@ namespace Ankh.Commands
 		
 	    public override void Execute(Ankh.AnkhContext context)
         {
-           context.RepositoryExplorer.ShowDialog();
+           context.RepositoryExplorerWindow.Visible = true;
         }        
     }
 }
