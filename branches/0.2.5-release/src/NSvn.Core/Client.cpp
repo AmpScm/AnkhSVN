@@ -73,12 +73,12 @@ void NSvn::Core::Client::Revert(String* path, bool recursive, ClientContext* con
 }    
 
 // implementation of Client::Resolve
-void NSvn::Core::Client::Resolve(String* path, bool recursive, ClientContext* context )
+void NSvn::Core::Client::Resolved(String* path, bool recursive, ClientContext* context )
 {
     Pool pool;
     const char* truePath = CanonicalizePath( path, pool );
 
-    HandleError( svn_client_resolve( truePath, recursive, 
+    HandleError( svn_client_resolved( truePath, recursive, 
         context->ToSvnContext (pool), pool));
 }  
 
@@ -237,7 +237,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcR
     svn_client_commit_info_t* commitInfoPtr = 0;
 
     HandleError( svn_client_copy ( &commitInfoPtr, trueSrcPath , 
-        srcRevision->ToSvnOptRevision( pool ), trueDstPath, 0,  
+        srcRevision->ToSvnOptRevision( pool ), trueDstPath, 
         context->ToSvnContext( pool ), pool ) );
 
     if ( commitInfoPtr != 0 )

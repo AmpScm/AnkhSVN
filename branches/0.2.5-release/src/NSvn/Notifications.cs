@@ -130,7 +130,7 @@ namespace NSvn
                     if ( this.FailedRevertReceived!= null )
                         this.FailedRevertReceived( this, args );
                     break;
-                case NotifyAction.Resolve:
+                case NotifyAction.Resolved:
                     if ( this.ResolveReceived!= null )
                         this.ResolveReceived( this, args );
                     break;
