@@ -88,7 +88,7 @@ namespace Ankh.UI
 
         public static void Main()
         {
-//            Application.Run( );
+            Application.Run( new TestRepositoryExplorer() );
 //            Ankh.Commands.RegisterCommands( null );
         }
 	}

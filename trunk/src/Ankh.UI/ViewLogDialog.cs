@@ -5,6 +5,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using NSvn.Core;
 
 namespace Ankh.UI
 {
@@ -21,30 +22,13 @@ namespace Ankh.UI
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-            this.fromRevisionComboBox.Items.AddRange( new object[]{
-                                                                 RevisionChoice.Head,
-                                                                 RevisionChoice.Prev,
-                                                                 RevisionChoice.Base,
-                                                                 RevisionChoice.Commited,
-                                                                 RevisionChoice.Date});
             this.components = new System.ComponentModel.Container();
-            this.fromRevisionComboBox.SelectedIndex = 0;
-            CreateMyToolTip();
+            this.SetToolTips();
 		}
 
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-
-        private enum RevisionChoice
-        {
-            Date,
-            Head,
-            Base,
-            Commited,
-            Prev
-        }
-
         protected override void Dispose( bool disposing )
 		{
 			if( disposing )
@@ -57,7 +41,7 @@ namespace Ankh.UI
 			base.Dispose( disposing );
 		}
 
-        private void CreateMyToolTip()
+        private void SetToolTips()
         {
             // Create the ToolTip and associate with the Form container.
             ToolTip viewLogToolTip = new ToolTip(this.components);
@@ -69,17 +53,9 @@ namespace Ankh.UI
             // Force the ToolTip text to be displayed whether or not the form is active.
             viewLogToolTip.ShowAlways = true;
          
-            // Set up the ToolTip text for the Button and Checkbox.
-            viewLogToolTip.SetToolTip( this.fromRevisionComboBox, 
-                "Select or print a revision number that will start the log" ); 
-            viewLogToolTip.SetToolTip( this.toRevisionComboBox, 
-                "Select or print a revision number that will end the log" );
+            // Set up the ToolTip text for the Button and Checkbox.            
             viewLogToolTip.SetToolTip( this.singleRevisionCheckBox, 
-                "Only one single revision is listed in the log ( false: activates the To revision field )" );
-            viewLogToolTip.SetToolTip( this.fromDateTimePicker, 
-                "Select a start date" );
-            viewLogToolTip.SetToolTip( this.toDateTimePicker, 
-                "Select an end date" );
+                "Only one single revision is listed in the log ( false: activates the To revision field )" );            
             viewLogToolTip.SetToolTip( this.showRevisionCheckBox, 
                 "Shows revision number in the log" );
             viewLogToolTip.SetToolTip( this.showDateCheckBox, 
@@ -110,8 +86,6 @@ namespace Ankh.UI
 		private void InitializeComponent()
 		{
             this.label1 = new System.Windows.Forms.Label();
-            this.fromRevisionComboBox = new System.Windows.Forms.ComboBox();
-            this.toRevisionComboBox = new System.Windows.Forms.ComboBox();
             this.showRevisionCheckBox = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -124,9 +98,9 @@ namespace Ankh.UI
             this.label4 = new System.Windows.Forms.Label();
             this.showMessageCheckBox = new System.Windows.Forms.CheckBox();
             this.showModifiedFilesCheckBox = new System.Windows.Forms.CheckBox();
-            this.fromDateTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.toDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.selectRevisionLabel = new System.Windows.Forms.Label();
+            this.fromRevision = new Ankh.UI.RevisionPicker();
+            this.toRevision = new Ankh.UI.RevisionPicker();
             this.SuspendLayout();
             // 
             // label1
@@ -136,25 +110,6 @@ namespace Ankh.UI
             this.label1.Size = new System.Drawing.Size(96, 23);
             this.label1.TabIndex = 2;
             this.label1.Text = "Revision";
-            // 
-            // fromRevisionComboBox
-            // 
-            this.fromRevisionComboBox.Location = new System.Drawing.Point(48, 28);
-            this.fromRevisionComboBox.Name = "fromRevisionComboBox";
-            this.fromRevisionComboBox.Size = new System.Drawing.Size(121, 21);
-            this.fromRevisionComboBox.TabIndex = 1;
-            this.fromRevisionComboBox.TextChanged += new System.EventHandler(this.fromRevisionComboBox_TextChanged);
-            this.fromRevisionComboBox.SelectedIndexChanged += new System.EventHandler(this.fromRevisionComboBox_SelectedIndexChanged);
-            // 
-            // toRevisionComboBox
-            // 
-            this.toRevisionComboBox.Enabled = false;
-            this.toRevisionComboBox.Location = new System.Drawing.Point(48, 60);
-            this.toRevisionComboBox.Name = "toRevisionComboBox";
-            this.toRevisionComboBox.Size = new System.Drawing.Size(121, 21);
-            this.toRevisionComboBox.TabIndex = 3;
-            this.toRevisionComboBox.TextChanged += new System.EventHandler(this.toRevisionComboBox_TextChanged);
-            this.toRevisionComboBox.SelectedIndexChanged += new System.EventHandler(this.toRevisionComboBox_SelectedIndexChanged);
             // 
             // showRevisionCheckBox
             // 
@@ -186,11 +141,11 @@ namespace Ankh.UI
             // 
             this.singleRevisionCheckBox.Checked = true;
             this.singleRevisionCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.singleRevisionCheckBox.Location = new System.Drawing.Point(432, 40);
+            this.singleRevisionCheckBox.Location = new System.Drawing.Point(424, 64);
             this.singleRevisionCheckBox.Name = "singleRevisionCheckBox";
             this.singleRevisionCheckBox.Size = new System.Drawing.Size(112, 24);
             this.singleRevisionCheckBox.TabIndex = 2;
-            this.singleRevisionCheckBox.Text = "Disable To";
+            this.singleRevisionCheckBox.Text = "Disable";
             this.singleRevisionCheckBox.CheckedChanged += new System.EventHandler(this.singleRevisionCheckBoxChecked);
             // 
             // logRichTextBox
@@ -268,25 +223,27 @@ namespace Ankh.UI
             this.showModifiedFilesCheckBox.TabIndex = 8;
             this.showModifiedFilesCheckBox.Text = "Modified files";
             // 
-            // fromDateTimePicker
-            // 
-            this.fromDateTimePicker.Enabled = false;
-            this.fromDateTimePicker.Location = new System.Drawing.Point(184, 28);
-            this.fromDateTimePicker.Name = "fromDateTimePicker";
-            this.fromDateTimePicker.TabIndex = 20;
-            // 
-            // toDateTimePicker
-            // 
-            this.toDateTimePicker.Enabled = false;
-            this.toDateTimePicker.Location = new System.Drawing.Point(184, 61);
-            this.toDateTimePicker.Name = "toDateTimePicker";
-            this.toDateTimePicker.TabIndex = 21;
-            // 
             // selectRevisionLabel
             // 
             this.selectRevisionLabel.Name = "selectRevisionLabel";
             this.selectRevisionLabel.TabIndex = 22;
             this.selectRevisionLabel.Text = "Select:";
+            // 
+            // fromRevision
+            // 
+            this.fromRevision.Location = new System.Drawing.Point(64, 32);
+            this.fromRevision.Name = "fromRevision";
+            this.fromRevision.Size = new System.Drawing.Size(344, 24);
+            this.fromRevision.TabIndex = 23;
+            this.fromRevision.Changed += new System.EventHandler(this.fromRevision_Changed);
+            // 
+            // toRevision
+            // 
+            this.toRevision.Enabled = false;
+            this.toRevision.Location = new System.Drawing.Point(64, 64);
+            this.toRevision.Name = "toRevision";
+            this.toRevision.Size = new System.Drawing.Size(344, 24);
+            this.toRevision.TabIndex = 24;
             // 
             // ViewLogDialog
             // 
@@ -294,9 +251,9 @@ namespace Ankh.UI
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(592, 501);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.toRevision,
+                                                                          this.fromRevision,
                                                                           this.selectRevisionLabel,
-                                                                          this.toDateTimePicker,
-                                                                          this.fromDateTimePicker,
                                                                           this.showModifiedFilesCheckBox,
                                                                           this.showMessageCheckBox,
                                                                           this.label4,
@@ -309,8 +266,6 @@ namespace Ankh.UI
                                                                           this.label3,
                                                                           this.label2,
                                                                           this.showRevisionCheckBox,
-                                                                          this.toRevisionComboBox,
-                                                                          this.fromRevisionComboBox,
                                                                           this.label1});
             this.Name = "ViewLogDialog";
             this.Text = "View Log";
@@ -323,12 +278,8 @@ namespace Ankh.UI
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox fromRevisionComboBox;
-        private System.Windows.Forms.ComboBox toRevisionComboBox;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button getLogButton;
-        private System.Windows.Forms.DateTimePicker fromDateTimePicker;
-        private System.Windows.Forms.DateTimePicker toDateTimePicker;
         private System.Windows.Forms.CheckBox showRevisionCheckBox;
         private System.Windows.Forms.RichTextBox logRichTextBox;
         private System.Windows.Forms.CheckBox showDateCheckBox;
@@ -338,6 +289,8 @@ namespace Ankh.UI
         private System.Windows.Forms.CheckBox singleRevisionCheckBox;
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.Label selectRevisionLabel;
+        private Ankh.UI.RevisionPicker fromRevision;
+        private Ankh.UI.RevisionPicker toRevision;
         private static readonly Regex validateRevisionNumber = 
             new Regex(@"\w{1,}", RegexOptions.Compiled);
        
@@ -351,153 +304,18 @@ namespace Ankh.UI
         
         private void singleRevisionCheckBoxChecked(object sender, System.EventArgs e)
         {
-            this.toRevisionComboBox.SelectedItem = null;
-
-            if (this.singleRevisionCheckBox.Checked)
-            {
-                this.toRevisionComboBox.Items.Clear();
-                this.toRevisionComboBox.Enabled = false;
-                this.toDateTimePicker.Enabled = false;
-            }
-            else
-            {
-                this.toRevisionComboBox.Items.Clear();
-                EnableAndDisableToCombo();
-            }
-        }
-
-        private void fromRevisionComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            this.toRevisionComboBox.Items.Clear(); 
-            this.toRevisionComboBox.SelectedItem = null;
-               
-            EnableAndDisableToCombo();
-        }
-
-        private void EnableAndDisableToCombo()
-        {
-            if (this.fromRevisionComboBox.SelectedItem != null )
-            {
-
-                if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
-                    == RevisionChoice.Date)
-                {
-                    this.fromDateTimePicker.Enabled = true;
-                    this.toDateTimePicker.Enabled = false;
-
-                    // populates the toRevisionComoBox if fromRevisionComboBox.Date is selected
-                    if (!this.singleRevisionCheckBox.Checked)
-                    {
-                        this.toDateTimePicker.Enabled = true;
-                        this.toRevisionComboBox.Enabled = true;
-                        this.toRevisionComboBox.Items.Clear();
-                        this.toRevisionComboBox.SelectedIndex = 
-                            this.toRevisionComboBox.Items.Add(RevisionChoice.Date);
-
-                    }
-                }
-                else
-                {
-                    this.fromDateTimePicker.Enabled = false;
-                    this.toDateTimePicker.Enabled = false;
-
-                    if (!this.singleRevisionCheckBox.Checked)
-                    {
-                        SetToCombo();
-
-                        if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
-                            == RevisionChoice.Head)
-                        {
-                            // checkes the singleRevisionCheckBox when Head is selected
-                            this.singleRevisionCheckBox.Checked = true;
-                         }
-                    }
-                } 
-            }
-
-            else if (ValidateForm( this.fromRevisionComboBox.Text ) && 
-                    !this.singleRevisionCheckBox.Checked && 
-                this.fromRevisionComboBox.SelectedItem == null )
-                {
-                    SetToCombo();
-                }
-        }
-
-
-        private void SetToCombo()
-        {
-            this.toRevisionComboBox.Items.Clear();
-            this.toRevisionComboBox.Items.AddRange(  new object[]{
-                                                                     RevisionChoice.Head,
-                                                                     RevisionChoice.Prev,
-                                                                     RevisionChoice.Base,
-                                                                     RevisionChoice.Commited}); 
-                       
-            this.toRevisionComboBox.Enabled = true;
-            this.toRevisionComboBox.SelectedIndex = this.fromRevisionComboBox.SelectedIndex;
-        }
-
-        private void toRevisionComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            if (this.fromRevisionComboBox.SelectedItem != null)
-            {
-                if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
-                    == RevisionChoice.Date )
-                {
-                    this.toDateTimePicker.Enabled = true;                
-                }
-            
-                else
-                {
-                    this.toDateTimePicker.Enabled = false;
-                        
-                }
-            } 
-        }
-
-        /// <summary>
-        /// Tried to evaluate wheteher the entered revision number is
-        /// valid (regular expression) 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void fromRevisionComboBox_TextChanged(object sender, System.EventArgs e)
-        {
-           if (this.fromRevisionComboBox.Text != "" )
-               //&& this.fromRevisionComboBox.SelectedItem == null)
-            {
-               this.toRevisionComboBox.SelectedItem = null;
-               EnableTextCombo(this.fromRevisionComboBox.Text);
-            }
-        }
-
-        private void EnableTextCombo( string text)
-        {
-            if(ValidateForm(text))
-            {
-                if (!this.singleRevisionCheckBox.Checked)
-                    this.toRevisionComboBox.Enabled = true;
-            }
-        }
-        
-        private bool ValidateForm(string text)
-        {
-
-            return validateRevisionNumber.IsMatch( text );
-        }
-
-        private void toRevisionComboBox_TextChanged(object sender, System.EventArgs e)
-        {
-            if (this.fromRevisionComboBox.Text != "" || 
-                this.fromRevisionComboBox.SelectedItem != null)
-            {
-                EnableTextCombo(this.toRevisionComboBox.Text);
-            }
+            this.toRevision.Enabled = !this.singleRevisionCheckBox.Checked;
         }
 
         private void getLogButton_Click(object sender, System.EventArgs e)
         {
             this.logRichTextBox.Enabled = true;
+        }
+
+        private void fromRevision_Changed(object sender, System.EventArgs e)
+        {
+            if ( fromRevision.Revision == Revision.Head )
+                this.singleRevisionCheckBox.Checked = true;            
         }                                     
  
 	}
