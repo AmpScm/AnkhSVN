@@ -1,7 +1,0 @@
-To enable delay-loading of libeay32.dll and ssleay32.dll for NSvn.Core,
-you need to do the following:
-
-* Open neon.mak in the neon directory. 
-* Remove the reference to libeay32.lib from line 105.
-* Rebuild neon
-* Add a reference to libeay32.lib to NSvn.Core.dll
