@@ -58,11 +58,12 @@ using namespace System::Runtime::CompilerServices;
 [assembly:AssemblyKeyNameAttribute("")];
 
 
-[assembly:NSvn::Common::LibraryAttribute( "Subversion", 1, 0, 1 )];
+[assembly:NSvn::Common::LibraryAttribute( "Subversion", 1, 0, 2 )];
 [assembly:NSvn::Common::LibraryAttribute( "Berkeley DB", 4, 2, 52 )];
 [assembly:NSvn::Common::LibraryAttribute( "apr", 0, 9, 5 )];
 [assembly:NSvn::Common::LibraryAttribute( "apr-util", 0, 9, 5 )];
 [assembly:NSvn::Common::LibraryAttribute( "apr-iconv", 0, 9, 5 )];
 [assembly:NSvn::Common::LibraryAttribute( "openssl", 0, 9, 7 )];
+[assembly:NSvn::Common::LibraryAttribute( "neon", 0, 24, 5 )];
 
 
