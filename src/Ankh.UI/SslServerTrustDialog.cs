@@ -94,9 +94,7 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SslServerTrustDialog));
-            this.icons = new System.Windows.Forms.ImageList(this.components);
             this.caUnknownImage = new System.Windows.Forms.PictureBox();
             this.serverMismatchImage = new System.Windows.Forms.PictureBox();
             this.invalidDateImage = new System.Windows.Forms.PictureBox();
@@ -120,12 +118,6 @@ namespace Ankh.UI
             this.certificateLabel = new System.Windows.Forms.Label();
             this.saveCredentialsCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
-            // 
-            // icons
-            // 
-            this.icons.ImageSize = new System.Drawing.Size(16, 16);
-            this.icons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("icons.ImageStream")));
-            this.icons.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // caUnknownImage
             // 
@@ -413,7 +405,7 @@ namespace Ankh.UI
         
 
         #region private data
-        private System.Windows.Forms.ImageList icons;
+
         private System.Windows.Forms.Label headerLabel;
         private System.Windows.Forms.PictureBox caUnknownImage;
         private System.Windows.Forms.Label caUnknownLabel;
