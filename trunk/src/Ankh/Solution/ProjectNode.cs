@@ -57,7 +57,7 @@ namespace Ankh.Solution
                 // attach event handlers
                 StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
                 this.projectFolder.Changed += del;
-                this.projectFolder.Changed += del;                                   
+                this.projectFile.Changed += del;                                   
             }
             else
             {
