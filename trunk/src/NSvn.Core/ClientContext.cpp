@@ -36,8 +36,9 @@ namespace NSvn
         svn_client_ctx_t* ClientContext::ToSvnContext( const Pool& pool )
         {
             // PCalloc zeros out the returned mem
-            svn_client_ctx_t* ctx = static_cast<svn_client_ctx_t*>(
-                pool.PCalloc( sizeof( svn_client_ctx_t ) ) );
+
+            svn_client_ctx_t* ctx;
+            HandleError( svn_client_create_context( &ctx, pool ) );
 
             // is there a notify callback? (usually is)
             if ( this->NotifyCallback != 0 )
