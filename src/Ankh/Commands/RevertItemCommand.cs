@@ -13,10 +13,10 @@ namespace Ankh.Commands
 	/// </summary>
 
     [VSNetCommand("RevertItem", Text = "Revert", Tooltip = "Reverts selected item"),
-    VSNetControl( "Item", Position = 4 ),
-    VSNetControl( "Project", Position = 4 ),
-    VSNetControl( "Folder", Position = 4 ),
-    VSNetControl( "Solution", Position = 4)]
+    VSNetControl( "Item.Ankh", Position = 1 ),
+    VSNetControl( "Project.Ankh", Position = 1 ),
+    VSNetControl( "Folder.Ankh", Position = 1 ),
+    VSNetControl( "Solution.Ankh", Position = 1)]
     internal class RevertItemCommand : CommandBase
     {
         #region Implementation of ICommand
