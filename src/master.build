@@ -15,18 +15,24 @@
     <property name="nant.default.framework" value="net-1.0"/>
     <property name="installsource.dir" value="installsource"/>
     <property name="deploy.dir" value="Deploy"/>
+    <property name="alt.admin.dir" value="false"/>
+    <ifnot propertyexists="svndir">
+        <sysinfo />
+        <ifnot propertyexists="${sys.env.svnsrc}">
+            <fail message="Either provide the svndir property, or set the SVNSRC env var to point to the Subversion source tree" />
+        </ifnot>
+        <property name="svndir" value="${sys.env.SVNSRC}" />
+    </ifnot>
     <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
     <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>-->
     
     
     
     <target name="clean" description="Cleans all output directories">
-        <nant buildfile="NSvn/NSvn.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Common/NSvn.Common.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core/NSvn.Core.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core.Tests.MCpp/NSvn.Core.Tests.MCpp.build" target="clean" inheritall="true" />
-        <nant buildfile="NSvn.Tests/NSvn.Tests.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh.UI/Ankh.UI.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh/Ankh.build" target="clean" inheritall="true" />
         
@@ -46,7 +52,7 @@
          </copy>
     </target>
     
-    <target name="build-Ankh" depends="build-Ankh.UI, build-NSvn, build-NSvn.Core, build-NSvn.Common, build-Utils">
+    <target name="build-Ankh" depends="build-Ankh.UI, build-NSvn.Core, build-NSvn.Common, build-Utils">
         <nant buildfile="Ankh/Ankh.build" inheritall="true" target="build" />
         <copy todir="${build.dir}"> 
             <fileset basedir="Ankh/${build.dir}">
@@ -74,7 +80,7 @@
         </delete>
     </target>
     
-    <target name="build-Ankh.UI" depends="build-NSvn, build-Utils">
+    <target name="build-Ankh.UI" depends="build-NSvn.Core, build-Utils">
         <nant buildfile="Ankh.UI/Ankh.UI.build" inheritall="true" target="build" />
         <copy todir="${build.dir}"> 
             <fileset basedir="Ankh.UI/${build.dir}">
@@ -88,16 +94,6 @@
         <nant buildfile="NSvn.Common/NSvn.Common.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="NSvn.Common/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
-    </target>
-    
-    <target name="build-NSvn" depends="build-NSvn.Common, build-NSvn.Core">
-        <nant buildfile="NSvn/NSvn.build" inheritall="true" target="build"/>
-       <copy todir="${build.dir}"> 
-            <fileset basedir="NSvn/${build.dir}">
                 <includes name="*.dll"/>
                 <includes name="*.pdb"/>
             </fileset>
@@ -149,7 +145,7 @@
         <call target="build"/>
     </target>
     
-    <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn, build-NSvn.Core"
+    <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn.Core"
         description="Build all necessary assemblies"/>
     
     <target name="build-tests" depends="build, build-NSvn.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"
@@ -157,15 +153,15 @@
     
     
     <target name="test" depends="build-tests" description="Run all tests">
-	    <copy todir="${build.dir}">
-			<fileset basedir="${lib.dir}">
-				<includes name="*.dll"/>
-			</fileset>
-		</copy>
-		
+        <copy todir="${build.dir}">
+            <fileset basedir="${lib.dir}">
+                <includes name="*.dll"/>
+            </fileset>
+        </copy>
+        
         <exec program="nunit-console.exe"
-				commandline="${build.dir}/NSvn.Core.Tests.dll"/>
-		<exec program="nunit-console.exe"
+                commandline="${build.dir}/NSvn.Core.Tests.dll"/>
+        <exec program="nunit-console.exe"
               commandline="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
         <exec program="nunit-console.exe"
               commandline="${build.dir}/NSvn.Tests.dll"/>
