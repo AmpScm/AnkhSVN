@@ -2,7 +2,7 @@
 <?xml-stylesheet type='text/xsl' href='..\UseCaseXSL1.xsl'?>
 <UseCase>
     <Preface>
-        <Name>DiffLocalItem</Name>
+        <Name>Diff Local Item</Name>
         <ID>DiffLocalItem</ID>
         <Actors>
             <ActorID>Developer</ActorID>
@@ -18,11 +18,6 @@
             <FlowElement>
                 <Include useCaseID='SelectLocalItem'></Include>
             </FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>Developer chooses "Diff" from menu</Step>
             </FlowElement>

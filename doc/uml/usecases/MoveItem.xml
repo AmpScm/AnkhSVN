@@ -2,7 +2,7 @@
 <?xml-stylesheet type='text/xsl' href='..\UseCaseXSL1.xsl'?>
 <UseCase>
     <Preface>
-        <Name>Move Item</Name>
+        <Name>Move Ite </Name>
         <ID>MoveItem</ID>
         <Actors>
             <ActorID>Developer</ActorID>
@@ -19,16 +19,12 @@
             <FlowElement>
                 <Include useCaseID='SelectItem'></Include>
             </FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>Developer choose "Cut" from menu</Step>
             </FlowElement>
             <FlowElement>
                 <Include useCaseID='SelectItem'></Include>
             </FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>Developer chooses "Paste" from menu</Step>
             </FlowElement>
