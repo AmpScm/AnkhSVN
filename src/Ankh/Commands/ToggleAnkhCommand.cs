@@ -32,6 +32,11 @@ namespace Ankh.Commands
                     "ToggleAnkh" );
 
                 string solutionPath = context.DTE.Solution.FullName;
+                
+                // if this path isn't valid, we don't wanna enable anything
+                if ( !Directory.Exists( solutionPath ) )
+                    return Disabled;
+
                 if ( ( !context.SolutionIsOpen || (!SvnUtils.IsWorkingCopyPath(
                     Path.GetDirectoryName(solutionPath)))))
                 {
