@@ -21,35 +21,103 @@ namespace NSvn
     {
         public __gc class Client
         {
-        public:            
+        public:   
+
+            ///<summary>Checkout a working copy.</summary>
+            ///<param name="url">Path to the files/directory in the repository to be checked out.</url>
+            ///<param name="path">Path to the destination.</param>
+            ///<param name="revision">A revision, specified in one of svn_opt_revision_kind ways.</param>
+            ///<param name="recurse">If recursive is set, assuming path is a directory 
+            ///                        all of its contents will be scheduled for addition as well.</param>            
+            ///<param name="context">A client context structure, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various things.</param> 
+            ///<exception cref="NSvn.Core.SvnClientException">Exception thrown if revision is not
+            ///                 of right kind.</exception>
             static void Checkout(String* url, String* path, Revision* revision, bool recurse, 
                 ClientContext* context);
 
+            ///<summary>Update working tree path to revision.</summary>
+            ///<param name="path">Path to the file/directory.</param>
+            ///<param name="revision">A revision, specified in one of svn_opt_revision_kind ways.</param>
+            ///<param name="recurse">If recursive is set, assuming path is a directory 
+            ///                        all of its contents will be scheduled for addition as well.</param>            
+            ///<param name="context">A client context structure, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various things.</param> 
+            ///<exception cref="NSvn.Core.SvnClientException">Exception thrown if revision is not
+            ///                 of right kind.</exception>
 	        static void Update(String* path, Revision* revision, bool recurse, ClientContext* context);
 
+            ///<summary>Switch working tree path to url at revision, authenticating with the 
+            ///         authentication baton </summary>
+            ///<param name="path">Path to the file/directory.</param>
+            ///<param name="url">Path to the files/directory in the repository.</url>
+            ///<param name="revision">A revision, specified in one of svn_opt_revision_kind ways.</param>
+            ///<param name="recurse">If recursive is set, assuming path is a directory 
+            ///                        all of its contents will be scheduled for addition as well.</param>            
+            ///<param name="context">A client context structure, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various things.</param> 
+            ///<exception cref="NSvn.Core.SvnClientException">Exception thrown if revision is not
+            ///                 of right kind.</exception>
 	        /*static void Switch(String* path, String* url, Revision* revision, bool recurse, 
                 ClientContext* context);*/
 
-	        static void Add(String* path, bool recursive, ClientContext* context);
+            ///<summary>Add a file/directory, not already under revision control to a working copy.</summary>
+            ///<param name="path">Path to the file/directory.</param>
+            ///<param name="recursive">If recursive is set, assuming path is a directory 
+            ///                        all of its contents will be scheduled for addition as well.</param>
+            ///<param name="context">A client context structure, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various things.</param> 
+             static void Add(String* path, bool recursive, ClientContext* context);
             
-            ///<summary>Make a dir</summary>
-            ///<param name="path">Path to the directory</param>
-            ///<return>A commit
+            ///<summary>Create a directory, either in a repository or a working copy.</summary>
+            ///<param name="path">Path to the directory.</param>
+            ///<param name="context">A client context structure, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various data.</param> 
+            ///<returns>Commit info about revision, date and author</returns>
 	        static CommitInfo* MakeDir(String* path, ClientContext* context);
-/*
+/*          
 	        static CommitInfo* Delete(String* path, AdminAccessBaton* admAccessBaton, bool force, 
                 ClientContext* context);
 
 	        static CommitInfo* Import(String* path, String* url, String* newEntry, bool nonRecursive, 
                 ClientContext* context);
 */
-	        static CommitInfo* Commit(String __gc* targets[], bool nonRecursive, ClientContext* context);
+            ///<summary>Commit file/directory into repository, authenticating with the 
+            ///         authentication baton.</summary>
+            ///<param name="targets">Array of paths to commit.</param>
+            ///<param name="nonRecursive">Indicate that subdirectories of directory targets 
+            ///                           should be ignored.</param>
+            ///<param name="context">A client context structure, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various things.</param> 
+            ///<returns>Commit info about revision, date and author.</returns>
+             static CommitInfo* Commit(String __gc* targets[], bool nonRecursive, ClientContext* context);
 
-            //TO-DO:  Core::Revision to be implemented 
+            ///<summary>Obtain the statuses of all the items in a working copy path.</summary>
+            ///<param name="youngest">A revision number</param>
+            ///<param name="path">Path to the directory.</param>
+            ///<param name="descend">If descend is non-zero, recurse fully, else do only 
+            ///                      immediate children. (-n flag: nonrecursive)</param>
+            ///<param name="getAll">If get_all is set, then all entries are retrieved; otherwise 
+            ///                     only "interesting" entries will be fetched. (-v flag: verbose)</param>
+            ///<param name="upDate">If update is set, then the repository will be contacted, so that 
+            ///                     the structures in statushash are augmented with information 
+            ///                     about out-of-dateness, and *youngest is set to the youngest 
+            ///                     repository revision. (-u flag: show update) </param>
+            ///<param name="noIgnore">?</param>
+            ///<param name="context">A client context structure, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various things.</param> 
+            ///<returns>A hash statushash table which maps paths to (svn_wc_status_t *) structures.</returns>
+            //TO-DO:  StringDictionary to be reconsidered
 	        static StringDictionary* Status(long* youngest, String* path, bool descend, 
                 bool getAll, bool upDate,  bool noIgnore, ClientContext* context);
  /*           
-
 	        static void Log(String* targets[], Revision* start, Revision* end, bool discoverChangePath, 
                 bool strictNodeHistory, LogMessageReceiver* receiver, ClientContext* context);
 
@@ -60,12 +128,29 @@ namespace NSvn
 	        static void Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
                 String* targetWcPath, bool recurse, bool force, bool dryRun, ClientContext* context);
 
-	        */static void Cleanup(String* dir);
+            ///<summary>Cleanup a working copy directory, finishing any incomplete operations, 
+            ///         removing lockfiles, etc.</summary>
+            ///<param name="dir">Path to the directory.</url>
+              */static void Cleanup(String* dir);
 
+            ///<summary>Restore the pristine version of a working copy path.</summary>
+            ///<param name="path">Path to the file/directory</param>
+            ///<param name="recursive">If recursive is set, assuming path is a directory 
+            ///                        all of its contents will be scheduled for revert as well.</param>
+            ///<param name="context">A client context structure, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various things.</param> 
 	        static void Revert(String* path, bool recursive, ClientContext* context);
+
+            ///<summary>Resolve conflict. Remove the 'conflicted' state on a working copy path.</summary>
+            ///<param name="path">Path to the file(/directory)</param>
+            ///<param name="recursive">If recursive is set, recurse below path, looking for 
+            ///                         conflicts to resolve. (To be implemented in the future.)</param>
+            ///<param name="context">A client context structure, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various things.</param> 
 	        static void Resolve(String* path, bool recursive, ClientContext* context);
             /*
-
 
 	        static CommitInfo* Copy(String* srcPath, Revision* srcRevision, String* dst, 
                 ClientContext* context);
@@ -73,6 +158,13 @@ namespace NSvn
 	        static CommitInfo* Move(String* srcPath, Revision* srcRevision, String* dstPath, 
                 bool force, ClientContext* context);
 */
+            ///<summary>Set a property to a file/directory</summary>
+            ///<param name="propName">Name of property</param>
+            ///<param name="propval">Value of property</param>
+            ///<param name="target">Target of property. Which file/directory to set the property.</param>
+            ///<param name="recurse">If recurse is true, then propname will be set on recursively 
+            ///                      on target and all children. If recurse is false, and target is 
+            ///                      a directory, propname will be set on _only_ target. </param>  
 	        static void PropSet(String* propName, Byte propval[], String* target, bool recurse);
 /*
 	        static void RevPropSet(String* propName, Byte propval[], String* url, Revision* revision, 

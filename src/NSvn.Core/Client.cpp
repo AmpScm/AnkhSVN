@@ -61,7 +61,7 @@ void NSvn::Core::Client::Resolve(String* path, bool recursive, ClientContext* ct
 
 
 // implementation of Client::Status
-//TO-DO:   Core::Revision to be implemented
+//TO-DO:   Core::StringDictionary to be reconsidered
 StringDictionary* NSvn::Core::Client::Status( long* youngest, String* path, bool descend,
                                 bool getAll, bool update, bool noIgnore, ClientContext* ctx )
 {
@@ -69,7 +69,6 @@ StringDictionary* NSvn::Core::Client::Status( long* youngest, String* path, bool
     Pool pool;
     String* truePath = CanonicalizePath( path );
     
-
     HandleError( svn_client_status( &statushash, youngest, StringHelper( truePath ), descend,
         getAll, update, noIgnore, ctx->ToSvnContext( pool ), pool ) );
 
