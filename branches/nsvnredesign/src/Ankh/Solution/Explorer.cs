@@ -227,6 +227,13 @@ namespace Ankh.Solution
             return list;
         }
 
+        public ProjectItem GetSelectedProjectItem()
+        {
+            Array array = (Array)this.uiHierarchy.SelectedItems;
+            UIHierarchyItem uiItem = (UIHierarchyItem)array.GetValue(0);
+            return (ProjectItem)uiItem.Object;
+        }
+
         internal IntPtr TreeView
         {
             [System.Diagnostics.DebuggerStepThrough]

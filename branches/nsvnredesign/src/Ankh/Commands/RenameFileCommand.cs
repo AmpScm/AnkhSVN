@@ -1,89 +1,74 @@
-//using System;
-//using EnvDTE;
-//using Ankh.UI;
-//
-//using System.IO;
-//using System.Windows.Forms;
-//using Ankh.Solution;
-//
-//namespace Ankh.Commands
-//{
-//    /// <summary>
-//    /// Summary description for RenameCommand.
-//    /// </summary>
-//    [VSNetCommand("RenameFile", Text = "Rename file...", Tooltip = "Rename this file...", 
-//         Bitmap = ResourceBitmaps.Refresh),
-//    VSNetControl( "Item.Ankh", Position = 1 )]
-//    internal class RenameFileCommand : CommandBase
-//    {
-//        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
-//        {
-//            RenamableVisitor v = new RenamableVisitor();
-//            context.SolutionExplorer.VisitSelectedItems( v, false );
-//            return v.Renamable ? 
-//                (   vsCommandStatus.vsCommandStatusEnabled | 
-//                    vsCommandStatus.vsCommandStatusSupported ) 
-//                : vsCommandStatus.vsCommandStatusSupported;
-//        }
-//
-//        public override void Execute(AnkhContext context, string parameters)
-//        {
-//            context.StartOperation( "Renaming" );
-//            try
-//            {
-//                RenameVisitor v = new RenameVisitor( context );
-//                context.SolutionExplorer.VisitSelectedNodes( v );
-//            }
-//            finally
-//            {
-//                context.EndOperation();
-//            }
-//        }
-//
-//        private class RenameVisitor : INodeVisitor
-//        {
-//            public RenameVisitor( AnkhContext context )
-//            {
-//                this.context = context;
-//            }
-//
-//            public void VisitProjectItem( ProjectItemNode node )
-//            {
-//                // we can only rename a single item
-//                if ( node.Resources.Count > 1 || node.Resources.Count == 0 )
-//                    return;
-//
-//                WorkingCopyFile file = (WorkingCopyFile)node.Resources[0];
-//
-//                string filename = Path.GetFileName( file.Path );
-//                string dirname = Path.GetDirectoryName( file.Path );
-//                using( RenameDialog dialog = new RenameDialog( filename ) )
-//                {
-//                    if ( dialog.ShowDialog() == DialogResult.OK )
-//                    {
-//                        string newPath = Path.Combine( dirname, dialog.NewName );
-//                        context.OutputPane.WriteLine( "Renaming {0} to {1}", file.Path, newPath );
-//                        file.Move( newPath, true );
-//
-//                        // remove the old file and add the new to the project
-//                        Project project = node.ProjectItem.ContainingProject;
-//                        node.ProjectItem.Remove();
-//                        project.ProjectItems.AddFromFile( newPath );
-//                    }
-//                }
-//            }
-//
-//            public void VisitProject( ProjectNode node )
-//            {
-//                // empty
-//            }
-//
-//            public void VisitSolutionNode( SolutionNode node )
-//            {
-//                // empty
-//            }
-//
-//            private AnkhContext context;
-//        }
-//    }
-//}
+using System;
+using EnvDTE;
+using Ankh.UI;
+using NSvn.Core;
+
+using System.IO;
+using System.Windows.Forms;
+using Ankh.Solution;
+using System.Collections;
+
+namespace Ankh.Commands
+{
+    /// <summary>
+    /// Summary description for RenameCommand.
+    /// </summary>
+    [VSNetCommand("RenameFile", Text = "Rename file...", Tooltip = "Rename this file...", 
+         Bitmap = ResourceBitmaps.Refresh),
+    VSNetControl( "Item.Ankh", Position = 1 )]
+    internal class RenameFileCommand : CommandBase
+    {
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        {
+            // we can only rename a single unmodified file
+            if ( context.SolutionExplorer.GetSelectionResources( false, 
+                new ResourceFilterCallback(RenameFileCommand.UnmodifiedSingleFileFilter) ).Count == 1 )
+            {
+                return vsCommandStatus.vsCommandStatusEnabled | 
+                    vsCommandStatus.vsCommandStatusSupported; 
+            }
+            else
+            {
+                return vsCommandStatus.vsCommandStatusSupported;
+            }
+        }
+
+        public override void Execute(AnkhContext context, string parameters)
+        {
+            IList items = context.SolutionExplorer.GetSelectionResources( false,
+                new ResourceFilterCallback(CommandBase.UnmodifiedSingleFileFilter) );
+            
+            // should only ever be 1
+            System.Diagnostics.Debug.Assert( items.Count == 1, "Should only be 1" );
+            SvnItem item = (SvnItem)items[0];
+
+            context.StartOperation( "Renaming" );
+            try
+            {
+                string filename = Path.GetFileName( item.Path );
+                string dirname = Path.GetDirectoryName( item.Path );
+                using( RenameDialog dialog = new RenameDialog( filename ) )
+                {
+                    if ( dialog.ShowDialog() == DialogResult.OK )
+                    {
+                        string newPath = Path.Combine( dirname, dialog.NewName );
+                        context.OutputPane.WriteLine( "Renaming {0} to {1}", item.Path, newPath );
+                        context.Client.Move( item.Path, Revision.Unspecified, newPath, true );
+
+                        // remove the old file and add the new to the project
+                        ProjectItem prjItem = context.SolutionExplorer.GetSelectedProjectItem();
+
+                        Project project = prjItem.ContainingProject;
+                        prjItem.Remove();
+                        project.ProjectItems.AddFromFile( newPath );
+                    }
+                }
+                                
+            }
+            finally
+            {
+                context.EndOperation();
+            }
+        }
+    }
+}

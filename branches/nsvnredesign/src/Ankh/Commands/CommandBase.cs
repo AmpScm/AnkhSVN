@@ -79,6 +79,11 @@ namespace Ankh.Commands
             return !item.IsVersioned;
         }
 
+        protected static bool UnmodifiedSingleFileFilter( SvnItem item )
+        {
+            return item.IsVersioned && !item.IsModified && item.IsFile;
+        }
+
         private EnvDTE.Command command;
     }
 }
