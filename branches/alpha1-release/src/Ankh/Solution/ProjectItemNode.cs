@@ -16,24 +16,9 @@ namespace Ankh.Solution
             TreeNode parent ) :
             base( item, hItem, explorer, parent )
         {
-            ProjectItem pitem = (ProjectItem)item.Object;
-            this.resources = new ArrayList();
-            try
-            {
-                for( short i = 1; i <= pitem.FileCount; i++ ) 
-                {
-                    
-                    ILocalResource res = SvnResource.FromLocalPath( pitem.get_FileNames(i) );
-                    // does this resource exist?
-                    res.Context = explorer.Context;
-                    this.resources.Add( res );
-                }
-                explorer.AddResource( pitem, this );                    
-            }
-            catch( NullReferenceException )
-            {
-                //swallow
-            }                
+            this.projectItem = (ProjectItem)item.Object;
+            this.FindResources();
+                        
         }
 
         public IList Resources
@@ -49,6 +34,13 @@ namespace Ankh.Solution
         {
             visitor.VisitProjectItem( this );
         }
+
+        public override void Refresh()
+        {
+            this.FindResources();
+            base.Refresh();
+        }
+ 
 
         protected override StatusKind GetStatus()
         {
@@ -82,6 +74,28 @@ namespace Ankh.Solution
                 this.VisitChildResources( visitor );
         }
 
+        protected void FindResources()
+        {
+            this.resources = new ArrayList();
+            try
+            {
+                for( short i = 1; i <= this.projectItem.FileCount; i++ ) 
+                {
+                    
+                    ILocalResource res = SvnResource.FromLocalPath( this.projectItem.get_FileNames(i) );
+                    // does this resource exist?
+                    res.Context = this.Explorer.Context;
+                    this.resources.Add( res );
+                }
+                this.Explorer.AddResource( this.projectItem, this );                    
+            }
+            catch( NullReferenceException )
+            {
+                //swallow
+            }    
+        }
+
+        private ProjectItem projectItem;
         private IList resources;
     }    
 

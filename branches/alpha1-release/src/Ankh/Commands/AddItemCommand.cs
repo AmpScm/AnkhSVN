@@ -26,7 +26,7 @@ namespace Ankh.Commands
             UnversionedVisitor a = new UnversionedVisitor();
             context.SolutionExplorer.VisitSelectedItems( a, true );
             
-            if ( !a.IsVersioned )
+            if ( a.IsUnversioned )
                 return vsCommandStatus.vsCommandStatusEnabled |
                     vsCommandStatus.vsCommandStatusSupported;
             else
@@ -49,7 +49,7 @@ namespace Ankh.Commands
         {
             public override void VisitUnversionedResource(NSvn.UnversionedResource resource)
             {
-                resource.Add( true );
+                resource.Add( false );
             }
        
         }

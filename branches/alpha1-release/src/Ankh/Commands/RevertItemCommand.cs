@@ -8,6 +8,7 @@ using Ankh.UI;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+using Ankh.Solution;
 
 namespace Ankh.Commands
 {
@@ -40,7 +41,7 @@ namespace Ankh.Commands
             public override void Execute(Ankh.AnkhContext context)
             {
                 RevertVisitor v = new RevertVisitor();
-                context.SolutionExplorer.VisitSelectedItems( v, true );
+                context.SolutionExplorer.VisitSelectedNodes( v );
                 
                 v.Revert( context );
                 context.SolutionExplorer.RefreshSelection();
@@ -51,16 +52,18 @@ namespace Ankh.Commands
             /// <summary>
             /// A visitor reverts visited item in the Working copy.
             /// </summary>
-            private class RevertVisitor : LocalResourceVisitorBase
+            private class RevertVisitor : LocalResourceVisitorBase, INodeVisitor
             { 
                 public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
-                {
-                    if ( resource.Status.TextStatus != StatusKind.Normal ||
-                        (resource.Status.PropertyStatus != StatusKind.Normal && 
-                        resource.Status.PropertyStatus != StatusKind.None ) )
-                        this.revertables.Add( resource );
+                {                    
+                    this.revertables.Add( resource );
                 }
 
+
+                /// <summary>
+                /// Revert selected items.
+                /// </summary>
+                /// <param name="context"></param>
                 public void Revert(Ankh.AnkhContext context)
                 {
                     // make the user confirm that he really wants to revert.
@@ -83,6 +86,21 @@ namespace Ankh.Commands
                 }
 
                 private ArrayList revertables = new ArrayList();
+
+                public void VisitProject(Ankh.Solution.ProjectNode node)
+                {
+                    node.VisitResources( this, false );                
+                }
+
+                public void VisitProjectItem(Ankh.Solution.ProjectItemNode node)
+                {
+                    node.VisitResources( this, true );                
+                }
+
+                public void VisitSolutionNode(Ankh.Solution.SolutionNode node)
+                {
+                    node.VisitResources( this, false );
+                }
             }
     }
 }

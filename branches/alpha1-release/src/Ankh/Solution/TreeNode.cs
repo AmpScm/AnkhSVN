@@ -29,6 +29,12 @@ namespace Ankh.Solution
             this.FindChildren();  
         }
 
+
+        public Explorer Explorer
+        {
+            get{ return this.explorer; }
+        }
+
         public abstract void VisitResources( ILocalResourceVisitor visitor, bool recursive );        
         
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
