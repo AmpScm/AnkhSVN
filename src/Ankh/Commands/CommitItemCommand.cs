@@ -81,7 +81,7 @@ namespace Ankh.Commands
 
         private void DoCommit( AnkhContext context )
         {
-            this.commitInfo = context.Client.Commit( this.paths, false );
+            this.commitInfo = context.Client.Commit( this.paths, true );
         }
 
         private string[] paths;
