@@ -344,56 +344,6 @@ NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* rev
         entries->ToArray( __typeof(DirectoryEntry) ) );
 }
 
-// Converts array of .NET strings to apr array of const char
-apr_array_header_t* NSvn::Core::Client::StringArrayToAprArray( String* strings[], Pool& pool )
-{
-    apr_array_header_t* array = apr_array_make( pool, strings->Length, sizeof( char* ) );
-    
-    // put the strings in the apr array
-    for( int i = 0; i < strings->Length; ++i )
-    {
-        *((char**)apr_array_push(array)) = StringHelper( strings[i] ).CopyToPool( pool );
-    }
-
-    return array;
-}
-
-// Canonicalizes a path to the correct format expected by SVN
-const char* NSvn::Core::Client::CanonicalizePath( String* path, Pool& pool )
-{
-     const char* utf8path = StringHelper( path ).CopyToPoolUtf8( pool );
-
-     // is this an URL?
-     if ( !svn_path_is_url( utf8path ) )
-     {
-         // no we need to canonicalize and stuff
-         // (most of this stuff was ripped from libsvn_subr/opt.c)
-         const char* aprTarget;
-         char* trueNamedTarget;
-         // now we convert to the native APR encoding before canonicalizing the path
-         HandleError( svn_path_cstring_from_utf8( &aprTarget, utf8path, pool ) );
-         apr_status_t err = apr_filepath_merge( &trueNamedTarget, "", aprTarget, 
-             APR_FILEPATH_TRUENAME, pool );
-
-         // ENOENT means the file doesnt exist - we don't care
-         if( err && !APR_STATUS_IS_ENOENT(err) )
-             // TODO: fix this
-             throw new SvnClientException( path );
-
-         HandleError( svn_path_cstring_to_utf8( &utf8path, trueNamedTarget, pool ) );
-     }
-
-     return svn_path_canonicalize( utf8path, pool );
-}
-
-// Converts Byte array to svn_string_t
-void NSvn::Core::Client::ByteArrayToSvnString( svn_string_t* string, Byte array[], const Pool& pool  )
-{
-    string->len = array.Length;
-    string->data = static_cast<char*>(pool.Alloc( array.Length));
-    Marshal::Copy( array, 0, const_cast<char*>(string->data), array.Length );
-
-}
 
 struct apr_hash_index_t
 {};
@@ -464,11 +414,3 @@ NSvn::Common::PropListItem* NSvn::Core::Client::ConvertPropListArray(
         propList->ToArray( __typeof(NSvn::Common::PropListItem) ) );
 }
 
-String* NSvn::Core::Client::ToNativePath( const char* path, Pool& pool )
-{
-    // convert to a native path    
-    const char* cstringPath;
-    HandleError( svn_utf_cstring_from_utf8( &cstringPath, path, pool ) );
-    const char* nativePath = svn_path_local_style( cstringPath, pool );
-    return StringHelper( nativePath );
-}

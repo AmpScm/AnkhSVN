@@ -181,7 +181,7 @@ namespace NSvn
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
 	        static void Log(String* targets[], Revision* start, Revision* end, bool discoverChangePath, 
                 bool strictNodeHistory, LogMessageReceiver* receiver, ClientContext* context);
-            
+ */           
             ///<summary>Produce diff output which describes the delta between path1/revision1 
             ///         and path2/revision2.</summary>
             ///<param name="path1">Path to first file/directory in working copy or repository.</param> 
@@ -201,11 +201,11 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>   
             ///<returns></returns>
-	        static void Diff(String* diffOptions[], String* path1, Revision* revision1, 
+	        /*static void Diff(String* diffOptions[], String* path1, Revision* revision1, 
                 String* path2, Revision* revision2, bool recurse, bool noDiffDeleted, 
-                Stream* outfile, Stream* errFile, ClientContext* context);
+                Stream* outfile, Stream* errFile, ClientContext* context);*/
 
-*/
+
             ///<summary>Apply file differences into a working copy. Merge changes 
             ///         from url1/revision1 to url2/revision2 into a working-copy. 
             ///</summary>
@@ -408,20 +408,13 @@ namespace NSvn
         private:
             // ctor made private to avoid instantiation of this class
             Client(){;}
-            static void ByteArrayToSvnString( svn_string_t* string, Byte array[], 
-                const Pool& pool );
-            static const char* CanonicalizePath( String* path, Pool& pool );
-
+           
             static NSvn::Common::PropertyDictionary* ConvertToPropertyDictionary( 
                 apr_hash_t* propertyHash, String* propertyName, Pool& pool );
 
             static NSvn::Common::PropListItem* ConvertPropListArray( 
                 apr_array_header_t* propListItems, Pool& pool ) [];
-
-            static String* ToNativePath( const char* path, Pool& pool );
-
-            static apr_array_header_t* StringArrayToAprArray( String* strings[], 
-                Pool& pool );
+            
         };
     }
 }
