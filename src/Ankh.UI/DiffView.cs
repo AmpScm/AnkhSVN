@@ -4,29 +4,44 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
+using SHDocVw;
+using System.Diagnostics;
 
 namespace Ankh.UI
 {
 	/// <summary>
-	/// This is a rich text box that displays unified diffs.
+	/// This is a control that displays unified diffs.
 	/// </summary>
-	public class DiffTextBox : System.Windows.Forms.RichTextBox
+	public class DiffView : System.Windows.Forms.UserControl
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
-
-		public DiffTextBox()
+		public DiffView()
 		{
-            this.ReadOnly = true;
-            this.Font = new Font( "Courier New", 10 );
+            this.diffHtmlModel = new DiffHtmlModel();
+
+            this.components = new System.ComponentModel.Container();
+            this.InitializeComponent();
 		}
 
+        /// <summary>
+        /// The diff itself.
+        /// </summary>
         public string Diff
         {
-            get{ return this.Text; }
-            set{ this.Colorize( value ); }
+            get{ return this.diffHtmlModel.Diff; }
+            set
+            { 
+                this.diffHtmlModel.Diff = value;
+                
+                string path = Path.GetTempFileName();
+                Trace.WriteLine( path );
+                using ( StreamWriter w = new StreamWriter( path ) )
+                    w.Write( this.diffHtmlModel.GetHtml() );
+                
+                object url = "file://" + path;
+                object nullObj = null;
+                this.webBrowser.Navigate2( ref url, ref nullObj, ref nullObj,
+                    ref nullObj, ref nullObj );
+            }
         }
 
 		/// <summary>
@@ -42,45 +57,41 @@ namespace Ankh.UI
 				}
 			}
 			base.Dispose( disposing );
-		}
+		}            
 
-        /// <summary>
-        /// Show the diff in the box.
-        /// </summary>
-        /// <param name="code"></param>
-        private void Colorize( string code )
+        private void InitializeComponent()
         {
-            this.Text = "";
-            using( StringReader reader = new StringReader( code ) )
-            {
-                string line;
-                while( (line = reader.ReadLine()) != null )
-                {
-                    this.SetLineColor( line[0] );
-                    this.AppendText( line + Environment.NewLine );
-                }
-            }
+            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(DiffView));
+            this.webBrowser = new AxSHDocVw.AxWebBrowser();
+            ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // webBrowser
+            // 
+            this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser.Enabled = true;
+            this.webBrowser.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("webBrowser.OcxState")));
+            this.webBrowser.Size = new System.Drawing.Size(328, 184);
+            this.webBrowser.TabIndex = 0;
+            // 
+            // DiffView
+            // 
+            this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.webBrowser});
+            this.Name = "DiffView";
+            this.Size = new System.Drawing.Size(328, 184);
+            ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).EndInit();
+            this.ResumeLayout(false);
+
         }
 
         /// <summary>
-        /// Choose the color of the line depending on the first char.
+        /// Required designer variable.
         /// </summary>
-        /// <param name="firstChar"></param>
-        private void SetLineColor( char firstChar )
-        {
-            switch( firstChar )
-            {
-                case '+':
-                    this.SelectionColor = Color.Blue;
-                    break;
-                case '-':
-                    this.SelectionColor = Color.Red;
-                    break;
-                default:
-                    this.SelectionColor = Color.Green;
-                    break;
-            }
-        }
+        private System.ComponentModel.Container components = null;
+        private AxSHDocVw.AxWebBrowser webBrowser;
+
+        private DiffHtmlModel diffHtmlModel;
 
 		
     }

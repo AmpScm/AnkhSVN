@@ -32,7 +32,7 @@ namespace Ankh.UI
             foreach( CommitItem item in items )
                 this.commitItemsList.Items.Add( item.Path );
 
-            this.diffTextBox.Visible = false;
+            this.diffView.Visible = false;
 
             
         }
@@ -59,11 +59,11 @@ namespace Ankh.UI
         /// </summary>
         public string Diff
         {
-            get{ return this.diffTextBox.Diff; }
+            get{ return this.diffView.Diff; }
             set
             { 
                 this.diff = value; 
-                this.diffTextBox.Diff = this.diff;
+                this.diffView.Diff = this.diff;
             }
         }
 
@@ -112,10 +112,10 @@ namespace Ankh.UI
 
         private void showDiffButton_Click(object sender, System.EventArgs e)
         {
-            if ( this.diffTextBox.Visible )
+            if ( this.diffView.Visible )
             {
-                this.diffTextBox.Visible = false;
-                this.Height -= this.diffTextBox.Height;
+                this.diffView.Visible = false;
+                this.Height -= this.diffView.Height;
                 this.showDiffButton.Text = "Show diff";  
             }
             else
@@ -123,7 +123,7 @@ namespace Ankh.UI
                 if ( this.diff == null && this.DiffWanted != null )
                     this.DiffWanted( this, EventArgs.Empty );
                 this.Height += 400;
-                this.diffTextBox.Visible = true;
+                this.diffView.Visible = true;
                 this.showDiffButton.Text = "Hide diff";
             }
 
@@ -150,7 +150,7 @@ namespace Ankh.UI
             this.logLabel = new System.Windows.Forms.Label();
             this.commitItemsList = new System.Windows.Forms.ListBox();
             this.showDiffButton = new System.Windows.Forms.Button();
-            this.diffTextBox = new Ankh.UI.DiffTextBox();
+            this.diffView = new Ankh.UI.DiffView();
             this.logMessageBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
@@ -195,19 +195,17 @@ namespace Ankh.UI
             this.showDiffButton.Text = "Show diff";
             this.showDiffButton.Click += new System.EventHandler(this.showDiffButton_Click);
             // 
-            // diffTextBox
+            // diffView
             // 
-            this.diffTextBox.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.diffView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
                 | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
-            this.diffTextBox.Diff = "";
-            this.diffTextBox.Font = new System.Drawing.Font("Courier New", 10F);
-            this.diffTextBox.Location = new System.Drawing.Point(0, 312);
-            this.diffTextBox.Name = "diffTextBox";
-            this.diffTextBox.ReadOnly = true;
-            this.diffTextBox.Size = new System.Drawing.Size(814, 0);
-            this.diffTextBox.TabIndex = 7;
-            this.diffTextBox.Text = "";
+            this.diffView.Diff = "";
+            this.diffView.Font = new System.Drawing.Font("Courier New", 10F);
+            this.diffView.Location = new System.Drawing.Point(0, 312);
+            this.diffView.Name = "diffView";
+            this.diffView.Size = new System.Drawing.Size(814, 0);
+            this.diffView.TabIndex = 7;
             // 
             // logMessageBox
             // 
@@ -228,7 +226,7 @@ namespace Ankh.UI
             this.ClientSize = new System.Drawing.Size(816, 315);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
                                                                           this.logMessageBox,
-                                                                          this.diffTextBox,
+                                                                          this.diffView,
                                                                           this.showDiffButton,
                                                                           this.commitItemsList,
                                                                           this.logLabel,
@@ -250,7 +248,7 @@ namespace Ankh.UI
         private System.Windows.Forms.ListBox commitItemsList;
         private System.Windows.Forms.Button showDiffButton;
         private string diff;
-        private Ankh.UI.DiffTextBox diffTextBox;
+        private Ankh.UI.DiffView diffView;
         private System.Windows.Forms.RichTextBox logMessageBox;
         private LogMessageTemplate logMessageTemplate;
        
