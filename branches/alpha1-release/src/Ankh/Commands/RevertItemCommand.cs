@@ -43,7 +43,7 @@ namespace Ankh.Commands
                 context.SolutionExplorer.VisitSelectedItems( v, true );
                 
                 v.Revert( context );
-                context.SolutionExplorer.UpdateSelectionStatus();
+                context.SolutionExplorer.RefreshSelection();
                
             }
         #endregion
