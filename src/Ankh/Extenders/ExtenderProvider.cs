@@ -16,7 +16,6 @@ namespace Ankh.Extenders
         private ExtenderProvider( AnkhContext context )
         {
             this.context = context;
-            this.extender = new ResourceExtender();
         }
 
         #region IExtenderProvider Members
@@ -28,12 +27,14 @@ namespace Ankh.Extenders
                 // get the selected items
                 ResourceGathererVisitor v = new ResourceGathererVisitor();
                 this.context.SolutionExplorer.VisitSelectedItems( v, false );
-            
+
+               
                 // have the extender know about the selected item.
                 if ( v.WorkingCopyResources.Count > 0 )
                 {
-                    this.extender.Status = ((WorkingCopyResource)v.WorkingCopyResources[0]).Status;
-                    return this.extender;
+                    ResourceExtender extender = new ResourceExtender(
+                        ((WorkingCopyResource)v.WorkingCopyResources[0]).Status );
+                    return extender;
                 }
                 else
                     return null;
@@ -100,8 +101,6 @@ namespace Ankh.Extenders
         private static ArrayList cookies = new ArrayList();
 
         private AnkhContext context;
-
-        private ResourceExtender extender;
 
         private readonly static string[] CATIDS = new string[]{
                                                                   "{8D58E6AF-ED4E-48B0-8C7B-C74EF0735451}", // C# File Browse

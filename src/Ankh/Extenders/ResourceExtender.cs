@@ -60,6 +60,11 @@ namespace Ankh.Extenders
     [ClassInterface(ClassInterfaceType.None)]
     public class ResourceExtender : IResourceExtender
     {
+        internal ResourceExtender( Status status )
+        {
+            this.status = status;
+        }
+
         [Category( "Subversion" )]
         public string Url
         {
