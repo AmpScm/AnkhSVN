@@ -24,6 +24,8 @@ namespace Ankh.Commands
         {
             try
             {
+                context.DTE.Documents.SaveAll();
+
                 context.StartOperation( "Diffing" );
 
                 string diff = this.GetDiff( context );

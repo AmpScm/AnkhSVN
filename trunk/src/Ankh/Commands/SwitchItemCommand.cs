@@ -33,6 +33,8 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context, string parameters)
         {
+            context.DTE.Documents.SaveAll();
+
             IList resources = context.SolutionExplorer.GetSelectionResources(
                 false, new ResourceFilterCallback( CommandBase.VersionedFilter ) );
 
