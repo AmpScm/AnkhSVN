@@ -1,3 +1,75 @@
+------------------------------------------------------------------------
+Version 0.5.0(released 26.01.2004)
+This release was built against Subversion 1.0.6, Neon 0.24.6, 
+openssl 0.9.7 and Berkeley DB 4.2.52
+
+* Support for customizing the name of the SVN admin directory, allowing 
+  Ankh to work well with ASP.NET projects
+* Support for compound files in the solution explorer. If 
+  "Show all files" is not on, .aspx|.cs|.resx combos will be treated as
+  a single file
+* Increased solution loading performance - up to 400% faster, 
+  possibly more
+* Server operations are now run on a separate thread, leaving the UI 
+  responsive(there's a modal dialog in place to prevent you from doing 
+  anything useful with the responsiveness, though ;-))
+* Support for adding an existing solution to a repository from Ankh
+* Optionally auto-add new files to Subversion
+* Support committing SVN deletions
+* Support for switch
+* Support for relocate
+* Installer now respects the "All users"/"Myself only" dichotomy
+* Installer no longer offers to install a test repository
+* Limited support for merge - revert file or directory to previous 
+  version
+* Repository explorer selection bug has been fixed
+* New Tools->AnkhSVN submenu
+* Redesigned Repository Explorer, with support for multiple persistent 
+  roots and with autocomplete in the address field
+* Menu command for opening the Ankh config file in the VS.NET XML
+  editor
+* Support for projects with Web References
+* Patch from Sander Rijken: The original status icons in the 
+  solution explorer is preserved and restored when an Ankh solution
+  is closed. This makes it easier to use Ankh alongside projects that
+  are using a different source control system that uses SCC
+* Support for MSI installer projects and CAB projects
+* NSvn.dll has been removed, and the API in NSvn.Core.dll has 
+  been redesigned
+* If you hold down Shift while invoking the Diff, Revert 
+  commands, a dialog will appear enabling you to choose exactly which 
+  files you want to operate on
+* Add and Update displays a dialog enabling you to choose which paths to
+  run against
+* New "Checkout solution" command in the repos explorer
+* New "Refresh" command in the repos explorer
+* New "Make directory" command in the repos explorer
+* New "Background listing" feature in the repos explorer
+* Support for external diff/merge programs(by editing the config file 
+  in %APPDATA%\AnkhSVN). This feature was implemented by Colin Bonstead 
+  of cyan.com
+* Support for displaying svn info-style information about a repository
+  node in the VS Property window
+* Support for copying the URL of a repository node to the system 
+  clipboard
+* Support for enabling/disabling Ankh on a per-solution basis, even
+  if the solution directory is not version controlled.
+* Improved error handling - Subversion errors do no longer display a 
+  stack trace by default
+* Auto-completion for all textboxes which accept URLs or paths
+* The output pane now displays native style paths for all notifications
+* Log message is preserved if you cancel a commit, and you are prompted
+  whether to use it again for the next commit.
+* Commit dialog allows you to view *both* diff and the fulltext of the
+  files to be committed
+* Commit dialog contains a treeview allowing you to choose exactly 
+  which files should be committed
+* Commit dialog has two splitter controls
+* Ankh no longer modifies the timestamps on all open files when 
+  performing a commit or update
+* Support for invoking svn.exe from the VS.NET Command Window
+
+------------------------------------------------------------------------
 Version 0.4.1(released 29.01.2004)
 This release was built against Subversion 0.37.0, Neon 0.24.4, 
 openssl 0.9.7 and Berkeley DB 4.2.52
