@@ -25,7 +25,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE;REPORTERROR;VS2002"
+                    DefineConstants = "DEBUG;TRACE;REPORTERROR;VS2002;ALWAYSREGISTER"
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -43,9 +43,9 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE;VS2002"
+                    DefineConstants = "TRACE;VS2002;REPORTERROR;ALWAYSREGISTER"
                     DocumentationFile = ""
-                    DebugSymbols = "false"
+                    DebugSymbols = "true"
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
                     Optimize = "true"
@@ -310,6 +310,11 @@
                 />
                 <File
                     RelPath = "Commands\ShowLocalChangesCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\ShowRepositoryExplorerCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
