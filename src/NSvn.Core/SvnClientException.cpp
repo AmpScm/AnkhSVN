@@ -66,5 +66,6 @@ SvnClientException* NSvn::Core::SvnClientException::CreateExceptionsRecursively(
         exception = CreateException( err );;
 
     exception->errorCode = err->apr_err;
+    exception->svnError = StringHelper( err->message );
     return exception;
 }
