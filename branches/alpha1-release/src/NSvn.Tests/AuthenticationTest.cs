@@ -55,7 +55,7 @@ namespace NSvn.Tests
                     return new SimpleCredential( "", "" );
             }
 
-            public NSvn.Common.ICredential FirstCredentials( ICollection parameters )
+            public NSvn.Common.ICredential FirstCredentials( string realm, ICollection parameters )
             {
                 // this is wrong
                 return new SimpleCredential( "kung", "foo" );
