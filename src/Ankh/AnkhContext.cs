@@ -32,6 +32,8 @@ namespace Ankh
 
             this.solutionExplorer = new Solution.Explorer( this.dte, this.context );
 
+            this.progressDialog = new ProgressDialog();
+
             this.CreateRepositoryExplorer();
 
             // is there a solution opened?
@@ -131,6 +133,10 @@ namespace Ankh
             //TODO: maybe refactor this?
             this.DTE.StatusBar.Text = description;
             this.DTE.StatusBar.Animate( true, vsStatusAnimation.vsStatusAnimationSync );
+
+            this.progressDialog.Caption = description;
+            this.progressDialog.Show();
+            this.progressDialog.Refresh();
         }
 
         /// <summary>
@@ -138,6 +144,7 @@ namespace Ankh
         /// </summary>
         public void EndOperation()
         {
+            this.progressDialog.Hide();
             this.DTE.StatusBar.Text = "Ready";
             this.DTE.StatusBar.Animate( false, vsStatusAnimation.vsStatusAnimationSync );
         }
@@ -262,6 +269,7 @@ namespace Ankh
         private SolutionEvents solutionEvents;
         private Explorer solutionExplorer = null;
 
+        private ProgressDialog progressDialog;
         private SvnContext context;
         private RepositoryExplorerControl repositoryExplorer;
         private EnvDTE.Window reposExplorerWindow;
