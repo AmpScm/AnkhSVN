@@ -96,6 +96,9 @@
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
+				RelativePath="ManagedPointerTest.cpp">
+			</File>
+			<File
 				RelativePath="Stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -117,6 +120,9 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
+			<File
+				RelativePath="ManagedPointerTest.h">
+			</File>
 			<File
 				RelativePath="Stdafx.h">
 			</File>
