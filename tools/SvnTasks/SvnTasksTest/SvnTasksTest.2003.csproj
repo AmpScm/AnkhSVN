@@ -36,7 +36,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "bin\Debug\"
+                    OutputPath = ".\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -56,7 +56,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "true"
-                    OutputPath = "bin\Release\"
+                    OutputPath = ".\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -85,20 +85,30 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "NAnt.Core"
-                    AssemblyName = "NAnt.Core"
-                    HintPath = "D:\Program Files\nant-0.85\bin\NAnt.Core.dll"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "D:\Program Files\NUnit 2.2\\bin\nunit.framework.dll"
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "NAnt.Core.Tests"
-                    AssemblyName = "NAnt.Core.Tests"
-                    HintPath = "D:\Program Files\nant-0.85\build\net-1.1.win32\nant-0.85-debug\bin\NAnt.Core.Tests.dll"
+                    Name = "NAnt.Core"
+                    AssemblyName = "NAnt.Core"
+                    HintPath = "..\..\ConfigMgmt\NAnt\bin\NAnt.Core.dll"
+                />
+                <Reference
+                    Name = "NAnt.Tests"
+                    AssemblyName = "NAnt.Tests"
+                    HintPath = "..\..\ConfigMgmt\NAnt\bin\NAnt.Tests.dll"
+                />
+                <Reference
+                    Name = "NAnt.MSNetTasks"
+                    AssemblyName = "NAnt.MSNetTasks"
+                    HintPath = "..\..\ConfigMgmt\NAnt\bin\NAnt.MSNetTasks.dll"
+                />
+                <Reference
+                    Name = "NAnt.Win32Tasks"
+                    AssemblyName = "NAnt.Win32Tasks"
+                    HintPath = "..\..\ConfigMgmt\NAnt\bin\NAnt.Win32Tasks.dll"
                 />
             </References>
         </Build>
@@ -133,6 +143,10 @@
                     RelPath = "SvnRevisionTaskTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SvnTasksTest.dll.config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "SvnUpdateTaskTest.cs"
