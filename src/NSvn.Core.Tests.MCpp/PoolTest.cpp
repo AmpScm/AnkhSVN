@@ -26,3 +26,19 @@ void NSvn::Core::Tests::MCpp::PoolTest::TestAllocateObject()
 
     Assertion::Assert( "Destructor not called", destructorCalled );
 }
+
+void NSvn::Core::Tests::MCpp::PoolTest::TestAlloc()
+{
+    Pool p;
+    Assertion::Assert( p.Alloc( 100 ) != 0 );
+}
+
+void NSvn::Core::Tests::MCpp::PoolTest::TestPCalloc()
+{
+    Pool p;
+    char* ptr = static_cast<char*>(p.PCalloc( 100 ) );
+
+    for ( int i = 0; i < 100; i++ )
+        Assertion::Assert( ptr[i] == 0 );
+}
+
