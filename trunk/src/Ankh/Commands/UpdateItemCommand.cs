@@ -115,10 +115,8 @@ namespace Ankh.Commands
             public void VisitProject(Ankh.Solution.ProjectNode node)
             {
                 // some project types dont necessarily have a project folder
-                SvnItem folder = 
-                    this.Context.StatusCache[node.Directory];
-                if ( folder.IsVersioned )
-                    this.resources.Add( folder );
+                node.GetResources( this.resources, false, 
+                    new ResourceFilterCallback(CommandBase.VersionedFilter) );
             }           
 
             public void VisitProjectItem(Ankh.Solution.ProjectItemNode node)
@@ -130,13 +128,8 @@ namespace Ankh.Commands
             public void VisitSolutionNode(Ankh.Solution.SolutionNode node)
             {
                 string solutionPath = ";"; // illegal in a path
-                SvnItem folder = 
-                    this.Context.StatusCache[node.Directory];
-                if ( folder.IsVersioned )
-                {
-                    this.resources.Add( folder );
-                    solutionPath = folder.Path;
-                }
+                node.GetResources( this.resources, false, 
+                    new ResourceFilterCallback(CommandBase.VersionedFilter) );
 
                 // update all projects whose folder is not under the solution root
                 foreach( Ankh.Solution.TreeNode n in node.Children )
