@@ -117,7 +117,7 @@
                 />
                 <Reference
                     Name = "envdte"
-                    AssemblyName = "envdte"
+                    AssemblyName = "EnvDTE"
                     HintPath = "D:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\envdte.dll"
                 />
                 <Reference
@@ -145,6 +145,11 @@
                 />
                 <File
                     RelPath = "DteFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "OutputPaneWriterTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
