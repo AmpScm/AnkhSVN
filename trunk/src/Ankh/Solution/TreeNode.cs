@@ -60,6 +60,7 @@ namespace Ankh.Solution
         public virtual void Refresh()
         {
             this.FindChildren( );
+            this.UpdateStatus();
         }
 
         abstract public void Accept( INodeVisitor visitor );
