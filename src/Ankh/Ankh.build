@@ -32,9 +32,9 @@
         
         <csc target="library" output="${build.dir}/NSvn.dll" verbose="${verbose}" define="${define}">
             <references>
-                <includes name="EnvDTE.dll" asis="true"/>
+                <includes name="${lib.dir}\EnvDTE.dll"/>
                 <includes name="${lib.dir}\extensibility.dll"/>
-                <includes name="Office.dll" asis="true"/>
+                <includes name="${lib.dir}\Office.dll"/>
                 <includes name="..\Ankh.Gui\${build.dir}\Ankh.Gui.dll"/>
             </references>
             
