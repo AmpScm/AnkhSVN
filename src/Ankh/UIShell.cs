@@ -4,6 +4,8 @@ using Ankh.UI;
 using EnvDTE;
 using System.Diagnostics;
 using System.Windows.Forms;
+using SHDocVw;
+using System.IO;
 
 namespace Ankh
 {
@@ -175,6 +177,78 @@ namespace Ankh
                 buttons, icon );
         }
 
+        public void DisplayHtml( string caption, string html, bool reuse )
+        {
+            string htmlFile = Path.GetTempFileName();
+            using( StreamWriter w = new StreamWriter( htmlFile, false, System.Text.Encoding.Default ) )
+                w.Write( html );
+
+            // the Start Page window is a web browser
+            Window browserWindow = context.DTE.Windows.Item( 
+                Constants.vsWindowKindWebBrowser );
+            WebBrowser browser = (WebBrowser)browserWindow.Object;
+
+//            if ( !reuse ) 
+//                browser = this.NewBrowserWindow( browser );
+
+            // have it show the html
+            object url = "file://" + htmlFile;
+            object nullObject = null;
+
+            browser.Navigate2( ref url, ref nullObject, ref nullObject,
+                ref nullObject, ref nullObject );
+            browserWindow.Caption = caption;
+            browserWindow.Activate();
+        }
+
+        public PathSelectorInfo ShowPathSelector( PathSelectorInfo info )
+        {
+            using( PathSelector selector = new PathSelector() )
+            {
+                selector.EnableRecursive = info.EnableRecursive;
+                selector.Items = info.Items;
+                selector.CheckedItems = info.CheckedItems;
+                selector.Recursive = info.Recursive;
+                selector.SingleSelection = info.SingleSelection;
+                selector.Caption = info.Caption;
+
+                // do we need go get a revision range?
+                if ( info.RevisionStart == null && info.RevisionEnd == null )
+                {
+                    selector.Options = PathSelectorOptions.NoRevision;
+                }
+                else if ( info.RevisionEnd == null )
+                {
+                    selector.RevisionStart = info.RevisionStart;
+                    selector.Options = PathSelectorOptions.DisplaySingleRevision;
+                }
+                else
+                {
+                    selector.RevisionStart = info.RevisionStart;
+                    selector.RevisionEnd = info.RevisionEnd;
+                    selector.Options = PathSelectorOptions.DisplayRevisionRange;
+                }
+
+                // to provide information about the paths
+                selector.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
+
+                // show it
+                if ( selector.ShowDialog( this.Context.HostWindow ) == DialogResult.OK )
+                {
+                    info.CheckedItems = selector.CheckedItems;
+                    info.Recursive = selector.Recursive;
+                    info.RevisionStart = selector.RevisionStart;
+                    info.RevisionEnd = selector.RevisionEnd;
+
+                    return info;
+                }
+                else 
+                {
+                    return null;
+                }
+            }
+        }
+
         #endregion
 
         private void CreateRepositoryExplorer()
@@ -229,6 +303,36 @@ namespace Ankh
             this.commitDialogWindow.Visible = false;
         }
 
+        
+        private WebBrowser NewBrowserWindow( WebBrowser browser )
+        {
+            browser.NewWindow2 += new DWebBrowserEvents2_NewWindow2EventHandler(this.NewWindow2);
+            object nullObject = null;
+            object newWindowFlag = 0x1;
+            object aboutBlank = "about:blank";
+
+            this.newBrowser = null;
+            browser.Navigate2( ref aboutBlank, ref newWindowFlag, ref nullObject, 
+                ref nullObject, ref nullObject );
+
+            Debug.Assert( this.newBrowser != null );
+            return this.newBrowser;                
+        }
+
+        protected static void GetPathInfo(object sender, GetPathInfoEventArgs args)
+        {
+            SvnItem item = (SvnItem)args.Item;
+            args.IsDirectory = item.IsDirectory;
+            args.Path = item.Path;
+        }
+
+
+        private WebBrowser newBrowser;
+        private void NewWindow2(ref object ppDisp, ref bool Cancel)
+        {
+            this.newBrowser = (WebBrowser)ppDisp;
+        }
+
         private RepositoryExplorerControl repositoryExplorerControl;        
         private Window repositoryExplorerWindow;
         private CommitDialog commitDialog;
@@ -241,8 +345,6 @@ namespace Ankh
         private const string CommitDialogGuid = 
             "{08BD45A4-7716-49b0-BB41-CFEBCD098728}";
 
-
-    
         
     }
 }

@@ -156,8 +156,9 @@ namespace Ankh.Tests
         {
             get
             {
-                // TODO:  Add ContextBase.ConfigLoader getter implementation
-                return null;
+                if ( this.configLoader == null )
+                    this.configLoader = new ConfigLoader( Path.GetTempPath() );
+                return this.configLoader;
             }
         }
 
@@ -362,13 +363,19 @@ namespace Ankh.Tests
             public virtual System.Collections.IList GetSelectionResources(bool getChildItems, Ankh.ResourceFilterCallback filter)
             {
                 // TODO:  Add Explorer.GetSelectionResources implementation
-                return this.Selection;
+                ArrayList resources = new ArrayList();
+                foreach( SvnItem item in this.Selection )
+                {
+                    if ( filter == null || filter(item) )
+                        resources.Add(item);
+                }
+                return resources;
             }
 
             System.Collections.IList Ankh.ISelectionContainer.GetSelectionResources(bool getChildItems)
             {
                 // TODO:  Add Explorer.Ankh.ISelectionContainer.GetSelectionResources implementation
-                return this.Selection;
+                return this.GetSelectionResources( getChildItems, null );
             }
 
             public virtual void RefreshSelection()
@@ -469,6 +476,16 @@ namespace Ankh.Tests
                 return new System.Windows.Forms.DialogResult ();
             }
 
+            public virtual void DisplayHtml( string caption, string html, bool reuse )
+            {
+                // TODO: 
+            }
+
+            public virtual PathSelectorInfo ShowPathSelector( PathSelectorInfo info )
+            {
+                return null;
+            }
+
             private IContext context;
 
             #endregion
@@ -494,5 +511,6 @@ namespace Ankh.Tests
         public OutputPaneWriter outputPane;
         public ISolutionExplorer explorer;
         public IUIShell uiShell;
+        private ConfigLoader configLoader;
     }
 }

@@ -56,14 +56,6 @@ namespace Ankh.Commands
             context.DTE.ExecuteCommand( "File.SaveAll", "" );
         }
 
-        protected static PathSelector GetPathSelector( string text )
-        {
-            PathSelector p = new PathSelector();
-            p.Caption = text;
-            p.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
-            return p;
-        }
-
         protected const vsCommandStatus Enabled = 
             vsCommandStatus.vsCommandStatusEnabled |
             vsCommandStatus.vsCommandStatusSupported;
@@ -120,6 +112,11 @@ namespace Ankh.Commands
         protected static bool UnmodifiedItemFilter( SvnItem item )
         {
             return item.IsVersioned && !item.IsModified;
+        }
+
+        protected static bool VersionedSingleFileFilter( SvnItem item )
+        {
+            return item.IsVersioned && item.IsFile;
         }
 
         protected static void GetPathInfo(object sender, GetPathInfoEventArgs args)

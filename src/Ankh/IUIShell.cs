@@ -89,5 +89,14 @@ namespace Ankh
         /// <returns></returns>
         DialogResult ShowMessageBox( string text, string caption, 
             MessageBoxButtons buttons, MessageBoxIcon icon );
+
+        /// <summary>
+        /// Displays HTML in some suitable view.
+        /// </summary>
+        /// <param name="caption"></param>
+        /// <param name="html"></param>
+        void DisplayHtml( string caption, string html, bool reuse );
+
+        PathSelectorInfo ShowPathSelector( PathSelectorInfo info );
 	}
 }
