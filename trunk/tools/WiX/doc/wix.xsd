@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		   xmlns:dx="http://tempuri.org/2003/01/dx"
 	targetNamespace="http://schemas.microsoft.com/wix/2003/01/wi"
@@ -1026,7 +1026,7 @@
 			<xs:attribute name="Key" use="required" type="xs:string">
 				<xs:annotation><xs:documentation>The localizable .ini file key within the section.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="Value" use="required" type="xs:string">
+			<xs:attribute name="Value" type="xs:string">
 				<xs:annotation><xs:documentation>The localizable value to be written.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Action" use="required">
@@ -1146,8 +1146,13 @@
 			<xs:attribute name="Id" type="xs:string">
 				<xs:annotation><xs:documentation>Specify the Id when you want to find the path to a file.  Leave the Id absent if you want to find the parent directory of a file.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="Name" use="required" type="xs:string">
-				<xs:annotation><xs:documentation>The name of the file being searched for.</xs:documentation></xs:annotation>
+			<xs:attribute name="Name" type="ShortFileNameType" use="required">
+				<xs:annotation>
+					<xs:documentation>File name of the file in 8.3 format.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="LongName" type="LongFileNameType">
+				<xs:annotation><xs:documentation>Long file name; set this attribute if preferred name is not in 8.3 format.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="MinSize" type="xs:int">
 				<xs:annotation><xs:documentation>The minimum size of the file.</xs:documentation></xs:annotation>
@@ -1798,6 +1803,7 @@
 				</xs:element>
 				<xs:element ref="PerfCounter"/>
 			</xs:choice>
+
 			<xs:attribute name="Id" type="xs:string" use="required"/>
 			<xs:attribute name="CompanionFile" type="xs:string">
 				<xs:annotation>
@@ -3083,6 +3089,9 @@
 				<xs:annotation><xs:documentation>The overall install should fail if this service fails to install.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="LocalGroup" type="xs:string">
+				<xs:annotation><xs:documentation>This attribute is deprecated. Use LoadOrderGroup instead.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="LoadOrderGroup" type="xs:string">
 				<xs:annotation><xs:documentation>The load ordering group that this service should be a part of.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Account" type="xs:string">
@@ -3418,11 +3427,11 @@
 			<xs:attribute name="Location">
 				<xs:annotation>
 					<xs:documentation>
-						This attribute is ignored when the Component is a child of Feature.  Set the value to 'local' to
-						prevent the component from running from the source or the network (this is the default behavior
-						if this attribute is not set).  Set the value to 'source' to
-						enforce that the component can only be run from the source (it cannot be run from the user's
-						computer).  Set the value to 'either' to allow the component to run from source or locally.
+						Set the value to 'local' to prevent the component from running from the source or the 
+						network (this is the default behavior if this attribute is not set).  Set the value to 
+						'source' to enforce that the component can only be run from the source (it cannot be 
+						run from the user's computer).  Set the value to 'either' to allow the component to run 
+						from source or locally.
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -3683,6 +3692,12 @@
 					<xs:attribute name="ExcludeLanguages" type="YesNoType">
 						<xs:annotation><xs:documentation>Set to "yes" to detect all languages, excluding the languages listed in the Language attribute.</xs:documentation></xs:annotation>
 					</xs:attribute>
+					<xs:anyAttribute namespace="##other" processContents="lax">
+						<xs:annotation><xs:documentation>
+							Extensibility point in the WiX XML Schema.  Schema extensions can register additional
+							attributes at this point in the schema.
+						</xs:documentation></xs:annotation>
+					</xs:anyAttribute>
 				</xs:extension>
 			</xs:simpleContent>
 		</xs:complexType>
@@ -3721,6 +3736,12 @@
 				<xs:element ref="Feature"/>
 				<xs:element ref="FeatureRef"/>
 				<xs:element ref="MergeRef"/>
+				<xs:any namespace="##other" processContents="lax">
+					<xs:annotation><xs:documentation>
+						Extensibility point in the WiX XML Schema.  Schema extensions can register additional
+						elements at this point in the schema.
+					</xs:documentation></xs:annotation>
+				</xs:any>
 			</xs:choice>
 
 			<xs:attribute name="Id" type="xs:string" use="required">
@@ -3851,7 +3872,14 @@
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
 				<xs:element ref="ComponentRef"/>
 				<xs:element ref="Feature"/>
+				<xs:element ref="FeatureRef"/>
 				<xs:element ref="MergeRef"/>
+				<xs:any namespace="##other" processContents="lax">
+					<xs:annotation><xs:documentation>
+						Extensibility point in the WiX XML Schema.  Schema extensions can register additional
+						elements at this point in the schema.
+					</xs:documentation></xs:annotation>
+				</xs:any>
 			</xs:choice>
 
 			<xs:attribute name="Id" type="xs:string" use="required">
@@ -4067,14 +4095,16 @@
 					</xs:attribute>
 					<xs:attribute name="JScriptCall" type="xs:string">
 						<xs:annotation><xs:documentation>
-							Set this attribute to indicate that the custom action is written in JScript.  The source should be indicated
-							using one of the target attributes.
+							This attribute specifies the name of the JScript function to execute in a script. The script must be
+							provided in a Binary element identified by the BinaryKey attribute described above. In other words, this
+							attribute must be specified in conjunction with the BinaryKey attribute.
 						</xs:documentation></xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="VBScriptCall" type="xs:string">
 						<xs:annotation><xs:documentation>
-							Set this attribute to indicate that the custom action is written in VBScript.  The source should be indicated
-							using one of the target attributes.
+							This attribute specifies the name of the VBScript Subroutine to execute in a script. The script must be
+							provided in a Binary element identified by the BinaryKey attribute described above. In other words, this
+							attribute must be specified in conjunction with the BinaryKey attribute.
 						</xs:documentation></xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="Script">
@@ -4091,12 +4121,12 @@
 					<xs:attribute name="Value" type="xs:string">
 						<xs:annotation>
 							<xs:documentation>
-								This attribute specifies a string value to use in the custom action. 
-								This attribute is typically used with the Property attribute to set the property
-								as part of a type 51 custom action, with the Directory attribute to set a directory
-								path in that table in a type 35 custom action, or by itself to create a type 19 error message
-								custom action. The value can be a literal value or derived from a Property element using the 
-								formatted syntax. 
+								This attribute specifies a string value to use in the custom action. This attribute
+								must be used with the Property attribute to set the property as part of a
+								type 51 custom action or with the Directory attribute to set a directory path in that
+								table in a type 35 custom action. The value can be a literal value or derived from a
+								Property element using the <a href='http://msdn.microsoft.com/library/en-us/msi/setup/formatted.asp'>Formatted</a>
+								syntax. 
 							</xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
@@ -5089,7 +5119,7 @@
 					<xs:element ref="Subscribe"/>
 				</xs:choice>
 			</xs:sequence>
-			<xs:attribute name="Id" type="xs:string" use="required"/>
+			<xs:attribute name="Id" use="required" type="xs:string"/>
 			<xs:attribute name="Type" use="required" type="xs:string">
 			</xs:attribute>
 			<xs:attribute name="X" use="required" type="xs:integer">
@@ -5880,9 +5910,14 @@
 	<xs:element name="WebApplicationExtension">
 		<xs:annotation><xs:documentation>Extension for WebApplication</xs:documentation></xs:annotation>
 		<xs:complexType>
-			<xs:attribute name="Id" use="required" type="xs:string"/>
+			<xs:attribute name="Id" type="xs:string">
+				<xs:annotation><xs:documentation>Deprecated. Use Extension attribute instead.</xs:documentation></xs:annotation>
+			</xs:attribute>
 			<xs:attribute name="Executable" use="required" type="xs:string">
 			<xs:annotation><xs:documentation>usually a Property that resolves to short file name path</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="Extension" type="xs:string">
+				<xs:annotation><xs:documentation>Extension being registered. Do not prefix with a '.' (e.g. you should use "html", not ".html"). To register for all extensions, use Extension="*".</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Verbs" type="xs:string">
 			</xs:attribute>
@@ -6167,6 +6202,7 @@
 					<xs:element ref="WebVirtualDir"/>
 				</xs:choice>
 			</xs:sequence>
+
 			<xs:attribute name="Id" use="required" type="xs:string">
 				<xs:annotation><xs:documentation>Identifier for the WebSite.  Used within the MSI package only.</xs:documentation></xs:annotation>
 			</xs:attribute>
@@ -6264,6 +6300,7 @@
 			<xs:sequence>
 				<xs:element ref="Binary" minOccurs="0"/>
 			</xs:sequence>
+
 			<xs:attribute name="Id" use="required" type="xs:string"/>
 			<xs:attribute name="SqlDb" type="xs:string">
 				<xs:annotation><xs:documentation>required when not child of SqlDatabase</xs:documentation></xs:annotation>
