@@ -43,7 +43,7 @@ namespace Ankh.Commands
                 context.SolutionExplorer.VisitSelectedItems( v, true );
                 
                 v.Revert( context );
-                context.SolutionExplorer.RefreshSelection();
+                context.SolutionExplorer.RefreshSelectionParents();
                
             }
         #endregion
@@ -82,8 +82,17 @@ namespace Ankh.Commands
                         context.OutputPane.StartActionText("Reverting");
                         // do the actual revert
                         foreach( WorkingCopyResource r in this.revertables )
-                            r.Revert( true );
-                         context.OutputPane.EndActionText();
+                        {
+                            try
+                            {
+                                r.Revert( true );
+                            }
+                            catch( NotVersionControlledException )
+                            {
+                                // empty
+                            }
+                        }
+                        context.OutputPane.EndActionText();
                     }
                 }
 

@@ -13,8 +13,23 @@ namespace Ankh.Solution
             TreeNode parent ) : 
             base( item, hItem, explorer, parent )
         {
-            Project project = (Project)item.Object;
+            this.project = (Project)item.Object;
 
+            this.FindProjectResources(explorer);
+
+            this.projectFile.Context = explorer.Context;
+            this.projectFolder.Context = explorer.Context;
+        }
+
+        public override void Refresh()
+        {
+            this.FindProjectResources( this.Explorer );
+            base.Refresh();
+        }
+
+
+        private void FindProjectResources(Explorer explorer)
+        {
             // find the directory containing the project
             string fullname = project.FullName;
             // the Solution Items project has no path
@@ -24,16 +39,13 @@ namespace Ankh.Solution
                 this.projectFolder = SvnResource.FromLocalPath( parentPath );
                 this.projectFile = SvnResource.FromLocalPath( fullname );
 
-                explorer.AddResource( project, this );                    
+                this.Explorer.AddResource( project, this );                    
             }
             else
             {
                 this.projectFile = SvnResource.Unversionable;
                 this.projectFolder = SvnResource.Unversionable;
             }
-
-            this.projectFile.Context = explorer.Context;
-            this.projectFolder.Context = explorer.Context;
         }
 
         /// <summary>
@@ -93,6 +105,7 @@ namespace Ankh.Solution
 
         private ILocalResource projectFolder;
         private ILocalResource projectFile;
+        private Project project;
     }  
 
 }
