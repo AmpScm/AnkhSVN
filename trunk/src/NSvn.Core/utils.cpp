@@ -1,6 +1,7 @@
 #include "utils.h"
 #include "SvnClientException.h"
 #include <svn_path.h>
+#include <svn_time.h>
 #include <svn_utf.h>
 #include "StringHelper.h"
 
@@ -22,15 +23,47 @@ apr_time_t NSvn::Core::DateTimeToAprTime( DateTime& dateTime )
     return static_cast<apr_time_t>(t.TotalMilliseconds * 1000);
 }
 
+// convert an svn_time_to_cstring time string
+DateTime NSvn::Core::ParseDate( const char* date, apr_pool_t* pool )
+{
+    if ( date != 0 && date[0] != '\0' )
+    {
+        apr_time_t aprDate;
+        HandleError( svn_time_from_cstring(&aprDate, date, pool) );
+        return AprTimeToDateTime( aprDate );
+    }
+    else
+        return DateTime(0);
+}
+
 // Converts array of .NET strings to apr array of const char
-apr_array_header_t* NSvn::Core::StringArrayToAprArray( String* strings[], Pool& pool )
+apr_array_header_t* NSvn::Core::StringArrayToAprArray( String* strings[], bool isPath, Pool& pool )
 {
     apr_array_header_t* array = apr_array_make( pool, strings->Length, sizeof( char* ) );
     
     // put the strings in the apr array
     for( int i = 0; i < strings->Length; ++i )
     {
-        *((char**)apr_array_push(array)) = StringHelper( strings[i] ).CopyToPool( pool );
+        const char* newString;
+        //should the string be treated as a path?
+        if ( isPath )
+            newString = CanonicalizePath( strings[i], pool );
+        else
+            newString = StringHelper( strings[i] ).CopyToPool( pool );
+
+        *((const char**)apr_array_push(array)) = newString;
+    }
+
+    return array;
+}
+
+// converts apr_array of paths into a .NET array of Strings
+String* NSvn::Core::AprArrayToStringArray( apr_array_header_t* aprArray ) []
+{
+    String* array[] = new String*[ aprArray->nelts ];
+    for( int i = 0; i < aprArray->nelts; i++ )
+    {
+        array[i] = StringHelper( ((const char**)aprArray->elts)[i] );
     }
 
     return array;

@@ -46,7 +46,7 @@ namespace NSvn
 
                 private:
                     void NotifyCallback( Notification* notification );
-                    String* LogMsgCallback( CommitItem* items[] );
+                    System::String* LogMsgCallback( CommitItem* items[] );
                     bool flag;
                     Notification* notification;
 

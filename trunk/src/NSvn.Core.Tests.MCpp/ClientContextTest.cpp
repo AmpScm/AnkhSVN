@@ -3,6 +3,7 @@
 #include "ClientContextTest.h"
 #include "SvnClientException.h"
 #include "SimpleCredential.h"
+#include "delegates.h"
 
 // necessary since a .NET assembly does not export methods with native signatures
 #include "ClientContext.cpp"

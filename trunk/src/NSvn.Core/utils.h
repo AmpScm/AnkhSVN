@@ -9,17 +9,27 @@ namespace NSvn
 {
     namespace Core
     {
+
+        //TODO: doc comments here
         using namespace System;
 
         System::DateTime AprTimeToDateTime( apr_time_t aprTime );
+
         apr_time_t DateTimeToAprTime( System::DateTime& dateTime );
+
+        System::DateTime ParseDate( const char* date, apr_pool_t* pool );
+        
+
         void ByteArrayToSvnString( svn_string_t* string, Byte array[], 
             const Pool& pool );
+
         const char* CanonicalizePath( String* path, Pool& pool );
 
         String* ToNativePath( const char* path, Pool& pool );
 
         apr_array_header_t* StringArrayToAprArray( String* strings[], 
-            Pool& pool );
+            bool isPath, Pool& pool );
+
+        String* AprArrayToStringArray( apr_array_header_t* aprArray ) [];
     }
 }

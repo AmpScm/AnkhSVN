@@ -163,7 +163,7 @@ namespace NSvn
                 [System::Runtime::InteropServices::Out]System::Int32* youngest, 
                 String* path, bool descend, bool getAll, bool upDate,  
                 bool noIgnore, ClientContext* context);
- /*          
+         
             ///<summary>Obtain log information from the repository.</summary>
             ///<param name="targets">Targets contains all the working copy paths for 
             ///                      desired log messages.</param>
@@ -181,7 +181,7 @@ namespace NSvn
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
 	        static void Log(String* targets[], Revision* start, Revision* end, bool discoverChangePath, 
                 bool strictNodeHistory, LogMessageReceiver* receiver, ClientContext* context);
- */           
+            
             ///<summary>Produce diff output which describes the delta between path1/revision1 
             ///         and path2/revision2.</summary>
             ///<param name="path1">Path to first file/directory in working copy or repository.</param> 
@@ -414,7 +414,15 @@ namespace NSvn
 
             static NSvn::Common::PropListItem* ConvertPropListArray( 
                 apr_array_header_t* propListItems, Pool& pool ) [];
+
+            
             
         };
+        
+        /// callback function for Client::Log
+        svn_error_t* svn_log_message_receiver(void *baton, 
+                apr_hash_t *changed_paths, svn_revnum_t revision, 
+                const char *author, const char *date, const char *message, 
+                apr_pool_t *pool); 
     }
 }

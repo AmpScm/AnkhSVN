@@ -143,6 +143,12 @@
 				RelativePath="AprFileAdapter.h">
 			</File>
 			<File
+				RelativePath="ChangedPath.h">
+			</File>
+			<File
+				RelativePath="ChangedPathDictionary.h">
+			</File>
+			<File
 				RelativePath="Client.h">
 			</File>
 			<File
@@ -162,6 +168,9 @@
 			</File>
 			<File
 				RelativePath="Entry.h">
+			</File>
+			<File
+				RelativePath="LogMessage.h">
 			</File>
 			<File
 				RelativePath="ManagedPointer.h">
