@@ -182,7 +182,7 @@
          </copy>
     </target>
     
-    <target name="build-NSvn.Core.Tests" depends="build-NSvn.Common, build-NSvn.Core">
+    <target name="build-NSvn.Core.Tests" depends="build-NSvn.Common, build-NSvn.Core, build-Utils">
         <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="NSvn.Core.Tests/${build.dir}">
@@ -192,7 +192,7 @@
          </copy>
     </target>
     
-    <target name="build-NSvn.Core.Tests.MCpp" depends="build-NSvn.Common, build-NSvn.Core">
+    <target name="build-NSvn.Core.Tests.MCpp" depends="build-NSvn.Common, build-NSvn.Core, build-Utils">
         <nant buildfile="NSvn.Core.Tests.MCpp/NSvn.Core.Tests.MCpp.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="NSvn.Core.Tests.MCpp/${build.dir}">
