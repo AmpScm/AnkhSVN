@@ -49,7 +49,7 @@
             output="${build.dir}/AnkhUserControlHostLib.dll" />
         
         <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" 
-            define="${define}" debug="true">
+            define="${define}" debug="${debug}">
             <references>
                 <includes name="${lib.dir}\EnvDTE.dll"/>
                 <includes name="${lib.dir}\extensibility.dll"/>
@@ -65,7 +65,9 @@
                 <includes name="${lib.dir}\Interop.esproj.dll" />
             </references>
             
+            
             <arg value="/resource:status_icons.bmp,Ankh.status_icons.bmp"/>
+            <arg value="/debug:pdbonly" unless="${debug}"/>
             
             <sources basedir="${src.dir}">
                 <includes name="**/*.cs"/>
