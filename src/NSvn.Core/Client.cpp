@@ -150,6 +150,27 @@ void NSvn::Core::Client::Export(String* from, String* to, Revision* revision, Cl
     HandleError( svn_client_export ( trueSrcPath, trueDstPath, 
         revision->ToSvnOptRevision( pool ), context->ToSvnContext( pool ), pool ) );
 }
+//TODO: Implement the variable optionalAdmAccess
+// implementation of Client::Copy
+NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcRevision, String* dstPath,
+                ClientContext* context)
+{
+    Pool pool;
+    const char* trueSrcPath = CanonicalizePath( srcPath, pool );
+    const char* trueDstPath = CanonicalizePath( dstPath, pool );
+
+    svn_client_commit_info_t* commitInfoPtr = 0;
+
+    HandleError( svn_client_copy ( &commitInfoPtr, trueSrcPath , 
+        srcRevision->ToSvnOptRevision( pool ), trueDstPath, 0,  
+        context->ToSvnContext( pool ), pool ) );
+
+     if ( commitInfoPtr != 0 )
+        return new CommitInfo( commitInfoPtr );
+    else
+        return CommitInfo::Invalid;
+}
+
 
 // Converts array of .NET strings to apr array of const char
 apr_array_header_t* NSvn::Core::Client::StringArrayToAprArray( String* strings[], Pool& pool )
