@@ -211,6 +211,13 @@ namespace Utils.Win32
             IntPtr hMod, int threadId );
     
         /// <summary>
+        /// Locks or unlocks a window for updates.
+        /// </summary>
+        /// <param name="window">The window to lock or null to unlock.</param>
+        [DllImport("User32.dll")]
+        public static extern int LockWindowUpdate( IntPtr window );
+
+        /// <summary>
         /// Calls the next hook in the hook chain.
         /// </summary>
         [DllImport("user32.dll")]
