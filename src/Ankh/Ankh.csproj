@@ -80,8 +80,8 @@
         <File RelPath="Commands\RelocateCommand.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="Commands\RenameFileCommand.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="Commands\ResolveConflictCommand.cs" SubType="Code" BuildAction="Compile" />
-        <File RelPath="Commands\ResolveConflictExternalCommand.cs" SubType="Code" BuildAction="Compile"/>
-        <File RelPath="Commands\DiffExternalLocalItemCommand.cs" SubType="Code" BuildAction="Compile"/>
+        <File RelPath="Commands\ResolveConflictExternalCommand.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="Commands\DiffExternalLocalItemCommand.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="Commands\ReverseMergeCommand.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="Commands\RevertItemCommand.cs" SubType="Code" BuildAction="Compile" />
         <File RelPath="Commands\RunSvnCommand.cs" SubType="Code" BuildAction="Compile" />
