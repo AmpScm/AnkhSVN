@@ -76,7 +76,7 @@ namespace NSvn
         }
 
         /// <summary>
-        /// Reverts resources to the state before they where modified
+        /// Reverts resources to the state before they where modified.
         /// </summary>
         /// <param name="recursive">Whether subitems should be recursively reverted</param>
         public void Revert( bool recursive )
@@ -85,7 +85,7 @@ namespace NSvn
         }
 
         /// <summary>
-        /// Reverts resources to the state before they where modified
+        /// Reverts resources to the state before they where modified.
         /// </summary>
         /// <param name="resources">The resource to revert</param>
         /// <param name="recursive">Whether subitems should be reverted recursively</param>
@@ -93,6 +93,26 @@ namespace NSvn
         {
             Client.Revert( resource.Path, recursive, resource.ClientContext);     
         }    
+
+        /// <summary>
+        /// Deletes resources from the working copy.
+        /// </summary>
+        /// <param name="force">Whether items should be deleted with force.</param>
+        public void Remove( bool force )
+        {
+            Client.Delete( this.Path, force, this.ClientContext );
+        }
+
+        /// <summary>
+        /// Deletes resources from the working copy.
+        /// </summary>
+        /// <param name="resource">Items to be deleted.</param>
+        /// <param name="force">Whether items should be deleted with force.</param>
+        public static void Remove( WorkingCopyResource resource, bool force)
+        {
+            Client.Delete( resource.Path, force, resource.ClientContext );
+        }
+                
 /*
         /// <summary>
         /// Copy resource to repository.
