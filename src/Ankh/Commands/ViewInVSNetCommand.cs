@@ -10,7 +10,7 @@ namespace Ankh.Commands
     [VSNetCommand("ViewInVsNet", Tooltip="View this file in VS.NET", 
          Text = "In VS.NET", Bitmap = ResourceBitmaps.ViewInVSNet ),
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
-	internal class ViewInVSNetCommand : ViewRepositoryFileCommand
+	public class ViewInVSNetCommand : ViewRepositoryFileCommand
 	{
         public override void Execute(AnkhContext context, string parameters)
         {

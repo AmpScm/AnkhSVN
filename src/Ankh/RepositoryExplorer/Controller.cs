@@ -15,7 +15,7 @@ namespace Ankh.RepositoryExplorer
     /// <summary>
     /// Responsible for controlling the repository explorer.
     /// </summary>
-    internal class Controller
+    public class Controller
     {
         public Controller( AnkhContext context, 
             RepositoryExplorerControl repositoryExplorer, Window window )

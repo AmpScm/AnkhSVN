@@ -16,7 +16,7 @@ namespace Ankh.Commands
     [VSNetCommand("RenameFile", Text = "Rename file...", Tooltip = "Rename this file...", 
          Bitmap = ResourceBitmaps.Refresh),
     VSNetControl( "Item.Ankh", Position = 1 )]
-    internal class RenameFileCommand : CommandBase
+    public class RenameFileCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {

@@ -19,7 +19,7 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "", Position = 2 ),
     VSNetFolderNodeControl( "", Position = 2),
     VSNetControl( "Solution", Position = 2)]
-    internal class CommitItem : CommandBase
+    public class CommitItem : CommandBase
     {	
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)

@@ -8,9 +8,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Event sink for the ProjectEvents events.
     /// </summary>
-    internal class ProjectsEventSink : EventSink
+    public class ProjectsEventSink : EventSink
     {
-        internal ProjectsEventSink( ProjectsEvents events, AnkhContext context ) :
+        public ProjectsEventSink( ProjectsEvents events, AnkhContext context ) :
             base( context )
         {
             this.events = events;
