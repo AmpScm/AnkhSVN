@@ -149,6 +149,23 @@ namespace NSvn.Core.Tests
 
         }
 
+        [Test]
+        public void TestStatusEquals()
+        {
+            string form = Path.Combine( this.WcPath, "Form.cs" );
+            Status status1 = this.Client.SingleStatus( form );
+            Status status2 = this.Client.SingleStatus( form );
+            Assertion.AssertEquals( "Should be equal", status1, status2 );
+            Assertion.AssertEquals( "Should be equal", status1.Entry, status2.Entry );
+
+            using( StreamWriter w = new StreamWriter( form, true ) )
+                w.WriteLine( "Moo" );
+
+            status2 = this.Client.SingleStatus( form );
+            Assertion.Assert( "Should be non-equal", !status1.Equals( status2 ) );
+            Assertion.AssertEquals( "Should be equal", status1.Entry, status2.Entry );
+        }
+
         private void StatusFunc( string path, Status status )
         {
             this.currentPath = path;
