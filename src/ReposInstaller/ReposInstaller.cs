@@ -13,6 +13,7 @@ using EnvDTE;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using System.Collections.Specialized;
+using System.Reflection;
 
 namespace ReposInstaller
 {
@@ -29,16 +30,42 @@ namespace ReposInstaller
         public override void Install(IDictionary stateSaver)
         {
 #if DEBUG
-            MessageBox.Show( "Uninstall" );
+            //MessageBox.Show( "Install" );
 #endif
             base.Install (stateSaver);
 
             // create the about box text
-            string text = "";			
+            string text = "";		
+	
+            string ankhVersion = "";
+            try
+            {
+                Assembly ankh = typeof( Ankh.Connect ).Assembly;
 
-            // get the assembly version
-            string ankhVersion = 
-                typeof(NSvn.Core.Client).Assembly.GetName().Version.ToString();
+                // if there are any VersionAttributes on the assembly, we'll use them
+                object[] attrs = ankh.GetCustomAttributes( typeof(Utils.VersionAttribute), false );
+                if ( attrs.Length > 0 )
+                {
+                    // we'll use the last one
+                    Utils.VersionAttribute version = (Utils.VersionAttribute)attrs[attrs.Length-1];
+                    if ( version.CustomText != null )
+                        ankhVersion = version.CustomText;
+                    else            
+                        // we don't want the name part
+                        ankhVersion = String.Format( "{0}.{1}.{2}{3}", 
+                            version.Major, version.Minor, version.PatchLevel, version.Tag );
+                }
+                else
+                {
+                    // nope, just resort to the regular assembly version
+                    ankhVersion = 
+                        ankh.GetName().Version.ToString();
+                }
+            }
+            catch( Exception ex )
+            {
+                this.Context.LogMessage( ex.Message );
+            }
 			
             text += String.Format( "AnkhSVN {0}{1}", 
                 ankhVersion, Environment.NewLine );
