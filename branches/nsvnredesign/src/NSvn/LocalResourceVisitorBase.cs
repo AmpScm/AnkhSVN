@@ -7,6 +7,7 @@ namespace NSvn
     /// Convenience base class for ILocalResourceVisitor implementations, stubbing out
     /// the operations.
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public class LocalResourceVisitorBase : ILocalResourceVisitor
     {	
         #region Implementation of ILocalResourceVisitor

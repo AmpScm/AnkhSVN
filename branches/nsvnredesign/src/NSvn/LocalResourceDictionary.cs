@@ -14,6 +14,7 @@ using System.Collections;
 
 namespace NSvn
 {
+    [Obsolete("Will be removed in a future version")]
     public
         class LocalResourceDictionary : IDictionary, ICollection, IEnumerable, ICloneable
     {

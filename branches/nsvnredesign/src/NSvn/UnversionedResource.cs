@@ -9,6 +9,7 @@ namespace NSvn
     /// <summary>
     /// Represents an unversioned item in a working copy.
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public abstract class UnversionedResource : SvnResource, ILocalResource
     {
         /// <summary>

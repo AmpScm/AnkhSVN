@@ -9,6 +9,7 @@ namespace NSvn
     /// <summary>
     /// Represents a versioned directory in an SVN working copy.
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public class WorkingCopyDirectory : WorkingCopyResource
     {
         /// <summary>

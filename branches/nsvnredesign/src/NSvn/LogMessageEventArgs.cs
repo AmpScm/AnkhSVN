@@ -7,6 +7,7 @@ namespace NSvn
     /// <summary>
     /// Represents the EventArgs passed to the LogMessage event.
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public class LogMessageEventArgs : EventArgs
     {
         public LogMessageEventArgs( CommitItem[] targets )

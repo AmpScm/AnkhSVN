@@ -7,6 +7,7 @@ namespace NSvn
     /// <summary>
     /// TODO: doc-comment here
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public interface ILocalResource
     {
         /// <summary>

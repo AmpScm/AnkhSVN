@@ -11,6 +11,7 @@ namespace NSvn
     /// <summary>
     /// Represents an resource(file or directory) in a working copy.
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public abstract class WorkingCopyResource : SvnResource, ILocalResource
     {
         /// <summary>

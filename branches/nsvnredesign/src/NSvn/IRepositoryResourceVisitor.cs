@@ -6,6 +6,7 @@ namespace NSvn
     /// <summary>
     /// Defines a visitor for visiting RepositoryResource subclasses.
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public interface IRepositoryResourceVisitor
     {
         /// <summary>

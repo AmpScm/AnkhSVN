@@ -9,6 +9,7 @@ namespace NSvn
     /// <summary>
     /// Represents an item in the repository.
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public abstract class RepositoryResource : SvnResource
     {
         /// <summary>

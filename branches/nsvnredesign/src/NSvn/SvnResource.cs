@@ -10,6 +10,7 @@ namespace NSvn
     /// <summary>
     /// Base class for all entity classes
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public class SvnResource
     {       
         protected SvnResource()

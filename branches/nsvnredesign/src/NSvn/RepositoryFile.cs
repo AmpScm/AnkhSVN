@@ -9,6 +9,7 @@ namespace NSvn
     /// <summary>
     /// Represents a file in the repository.
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public class RepositoryFile : RepositoryResource
     {
         /// <summary>

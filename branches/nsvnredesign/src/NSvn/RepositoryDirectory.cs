@@ -9,6 +9,7 @@ namespace NSvn
     /// <summary>
     /// Represents a directory in a repository.
     /// </summary>
+    [Obsolete("Will be removed in a future version")]
     public class RepositoryDirectory : RepositoryResource
     {
         /// <summary>
