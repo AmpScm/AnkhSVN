@@ -316,8 +316,8 @@ namespace Ankh
 
             // get the library versions
             object[] attributes = typeof(NSvn.Core.Client).Assembly.GetCustomAttributes(
-                typeof(NSvn.Common.LibraryAttribute), true );
-            foreach( NSvn.Common.LibraryAttribute version in attributes )
+                typeof(Utils.LibraryAttribute), true );
+            foreach( Utils.LibraryAttribute version in attributes )
                 text += version.ToString() + Environment.NewLine;
 
             // set the registry value

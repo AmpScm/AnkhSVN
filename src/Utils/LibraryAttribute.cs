@@ -1,10 +1,10 @@
 // $Id$
 using System;
 
-namespace NSvn.Common
+namespace Utils
 {
     /// <summary>
-    /// An attribute that describes a library linked into NSvn.Core.
+    /// An attribute that describes a library
     /// </summary>
     [AttributeUsage( AttributeTargets.Assembly, AllowMultiple=true )]
     public class LibraryAttribute : Attribute
