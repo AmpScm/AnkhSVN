@@ -24,10 +24,10 @@
         /DELAYLOAD:{bdb.dll} /INCREMENTAL:NO /LIBPATH:"${svndir}\debug 
         /PDB:"${build.dir}/NSvn.Core.pdb" comctl32.lib mswsock.lib ws2_32.lib 
         rpcrt4.lib shlwapi.lib ${bdb.lib} 
-        ${svndir}Debug\subversion\libsvn_repos\libsvn_repos-1.lib 
+        ${svndir}\Debug\subversion\libsvn_repos\libsvn_repos-1.lib 
         ${svndir}\Debug\subversion\libsvn_fs\libsvn_fs-1.lib 
         ${svndir}\Debug\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib 
-        ${svndir}\\subversion\libsvn_ra_local\libsvn_ra_local-1.lib 
+        ${svndir}\subversion\libsvn_ra_local\libsvn_ra_local-1.lib 
         ${svndir}\Debug\subversion\libsvn_ra\libsvn_ra-1.lib 
         ${svndir}\Debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib 
         ${svndir}\neon\libneonD.lib 
@@ -56,7 +56,7 @@
         ${svndir}\Release\subversion\libsvn_wc\libsvn_wc-1.lib 
         ${svndir}\Release\subversion\libsvn_subr\libsvn_subr-1.lib 
         ${svndir}\Release\subversion\libsvn_client\libsvn_client-1.lib 
-        ${svndir}Release\subversion\libsvn_delta\libsvn_delta-1.lib 
+        ${svndir}\Release\subversion\libsvn_delta\libsvn_delta-1.lib 
         ${svndir}\Release\subversion\libsvn_diff\libsvn_diff-1.lib 
         ${svndir}\apr\LibR\apr.lib ${svndir}\apr-util\LibR\aprutil.lib 
         ${svndir}\apr-iconv\LibD\apriconv.lib 
