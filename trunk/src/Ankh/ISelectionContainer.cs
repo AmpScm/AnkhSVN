@@ -7,11 +7,6 @@ namespace Ankh
     public interface ISelectionContainer
     {
         /// <summary>
-        /// Updates the status of selected items.
-        /// </summary>
-        void UpdateSelectionStatus();
-
-        /// <summary>
         /// Refreshes the parents of the selected items.
         /// </summary>
         void RefreshSelectionParents();
