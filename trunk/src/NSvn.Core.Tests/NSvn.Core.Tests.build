@@ -37,7 +37,6 @@
         
         <csc target="library" output="${build.dir}/NSvn.Core.Tests.dll" verbose="${verbose}" define="${define}">
             <references>
-                <includes name="moo.dll"/>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <includes name="${lib.dir}\nunit.framework.dll"/>

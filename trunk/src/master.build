@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <!-- this is a comment -->
 <project default="build">
     <property name="verbose" value="false"/>
@@ -13,6 +13,7 @@
         <nant buildfile="NSvn.Core/NSvn.Core.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core.Tests.MCpp/NSvn.Core.Tests.MCpp.build" target="clean" inheritall="true" />
+        <nant buildfile="NSvn.Tests/NSvn.Tests.build" target="clean" inheritall="true" />
     </target>
     
     <target name="build-NSvn.Common">
@@ -20,9 +21,14 @@
         <copy file="NSvn.Common/${build.dir}/NSvn.Common.dll" tofile="${build.dir}/NSvn.Common.dll"/>
     </target>
     
-    <target name="build-NSvn" depends="build-NSvn.Common">
+    <target name="build-NSvn" depends="build-NSvn.Common, build-NSvn.Core">
         <nant buildfile="NSvn/NSvn.build" inheritall="true" target="build"/>
         <copy file="NSvn/${build.dir}/NSvn.dll" tofile="${build.dir}/NSvn.dll"/>
+    </target>
+    
+    <target name="build-NSvn.Tests" depends="build-NSvn">
+        <nant buildfile="NSvn.Tests/NSvn.Tests.build" inheritall="true" target="build"/>
+        <copy file="NSvn.Tests/${build.dir}/NSvn.Tests.dll" tofile="${build.dir}/NSvn.Tests.dll"/>
     </target>
     
     <target name="build-NSvn.Core" depends="build-NSvn.Common">
@@ -45,7 +51,7 @@
         <call target="build"/>
     </target>
     
-    <target name="build" depends="build-NSvn.Common, build-NSvn, build-NSvn.Core, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"/>
+    <target name="build" depends="build-NSvn.Common, build-NSvn, build-NSvn.Tests, build-NSvn.Core, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"/>
     
     <target name="test" depends="build">
 	    <copy todir="${build.dir}">
@@ -58,6 +64,8 @@
 				commandline="/assembly:${build.dir}/NSvn.Core.Tests.dll"/>
 		<exec program="nunit-console.exe"
               commandline="/assembly:${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
+        <exec program="nunit-console.exe"
+              commandline="/assembly:${build.dir}/NSvn.Tests.dll"/>
     </target>
     
 </project>
