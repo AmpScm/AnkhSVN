@@ -65,7 +65,6 @@ namespace NSvn.Core.Tests
         {
             string form = Path.Combine( this.WcPath, "Form.cs" );
             string output = this.RunCommand( "svn", "info " + form );
-            Console.WriteLine( output );
             Info info = new Info(output);
                         
             int youngest;
