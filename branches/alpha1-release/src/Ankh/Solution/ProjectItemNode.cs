@@ -93,7 +93,12 @@ namespace Ankh.Solution
             {
                 Debug.WriteLine( "NullReferenceException thrown in ProjectItemNode" );
                 //swallow
-            }    
+            }   
+            catch( System.Runtime.InteropServices.SEHException )
+            {
+                Debug.WriteLine( "SEHException thrown: " + this.projectItem.Name );
+                System.Windows.Forms.MessageBox.Show( "SEHException: " + this.projectItem.Name );
+            }
         }
 
         private ProjectItem projectItem;
