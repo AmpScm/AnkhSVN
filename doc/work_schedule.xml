@@ -96,8 +96,8 @@
 	</item>
 	<item>
 		<text>Design/Development</text>
-		<start week="48" year="2002" />
-		<end week="5" />
+		<start week="1"/>
+		<end week="20" />
 		<item>
 			<text>Install software</text>
 			<start week="1" />
@@ -110,23 +110,23 @@
 		</item>
 		<item>
 			<text>Programming</text>
-			<start week="10" />
-			<end week="20" />
+			<start week="7" />
+			<end week="21" />
 		</item>
 	</item>
 	<item>
 		<text>Testing</text>
 		<start week="10" />
-		<end week="20" />
+		<end week="21" />
 		<item>
 			<text>Unit testing</text>
 			<start week="10" />
-			<end week="20" />
+			<end week="21" />
 		</item>
 		<item>
 			<text>Functional testing</text>
-			<start week="10" />
-			<end week="19" />
+			<start week="14" />
+			<end week="21" />
 		</item>
 		<item>
 			<text>(Public?)Alpha release</text>
@@ -141,26 +141,26 @@
 	</item>
 	<item>
 		<text>Documentation</text>
-		<start week="8" />
+		<start week="1" />
 		<end week="19" />
 		<item>
-			<text>Make documentation of functional testing</text>
-			<start week="10" />
+			<text>Document functional testing</text>
+			<start week="14" />
 			<end week="19" />
 		</item>
 		<item>
-			<text>Make user guide</text>
+			<text>Write user guide</text>
 			<start week="12" />
 			<end week="19" />
 		</item>
 		<item>
-			<text>Make product documentation</text>
+			<text>Write product documentation</text>
 			<start week="8" />
 			<end week="19" />
 		</item>
 		<item>
-			<text>Make process documentation</text>
-			<start week="8" />
+			<text>Write process documentation</text>
+			<start week="1"/>
 			<end week="19" />
 		</item>
 	</item>
