@@ -26,9 +26,6 @@ namespace UseCase
             
             SubscribeToEvents();
 
-            this.idTextBox.Leave += new EventHandler( 
-                    this.IdChanged );
-
             this.stepRadioButton.Tag = new StepElementOption();
             this.includeRadioButton.Tag = new IncludeElementOption();
 
@@ -61,7 +58,7 @@ namespace UseCase
             this.moveElementUpButton = new System.Windows.Forms.Button();
             this.moveElementDownButton = new System.Windows.Forms.Button();
             this.viewXmlButton = new System.Windows.Forms.Button();
-            this.fileNameTextBox = new System.Windows.Forms.TextBox();
+            this.xslTextBox = new System.Windows.Forms.TextBox();
             this.browseButton = new System.Windows.Forms.Button();
             this.actorList = new UseCase.ItemListUserControl();
             this.preConditionsList = new UseCase.ItemListUserControl();
@@ -72,11 +69,11 @@ namespace UseCase
             this.elementLabel = new System.Windows.Forms.Label();
             this.mainMenu = new System.Windows.Forms.MainMenu();
             this.fileItem = new System.Windows.Forms.MenuItem();
+            this.newItem = new System.Windows.Forms.MenuItem();
             this.openItem = new System.Windows.Forms.MenuItem();
             this.saveItem = new System.Windows.Forms.MenuItem();
-            this.exitItem = new System.Windows.Forms.MenuItem();
             this.saveAsItem = new System.Windows.Forms.MenuItem();
-            this.newItem = new System.Windows.Forms.MenuItem();
+            this.exitItem = new System.Windows.Forms.MenuItem();
             this.elementPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -201,14 +198,14 @@ namespace UseCase
             this.viewXmlButton.Text = "View XML";
             this.viewXmlButton.Click += new System.EventHandler(this.viewXmlClick);
             // 
-            // fileNameTextBox
+            // xslTextBox
             // 
-            this.fileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.fileNameTextBox.Location = new System.Drawing.Point(120, 600);
-            this.fileNameTextBox.Name = "fileNameTextBox";
-            this.fileNameTextBox.Size = new System.Drawing.Size(392, 20);
-            this.fileNameTextBox.TabIndex = 21;
-            this.fileNameTextBox.Text = "";
+            this.xslTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.xslTextBox.Location = new System.Drawing.Point(120, 600);
+            this.xslTextBox.Name = "xslTextBox";
+            this.xslTextBox.Size = new System.Drawing.Size(392, 20);
+            this.xslTextBox.TabIndex = 21;
+            this.xslTextBox.Text = "";
             // 
             // browseButton
             // 
@@ -218,7 +215,6 @@ namespace UseCase
             this.browseButton.Size = new System.Drawing.Size(75, 20);
             this.browseButton.TabIndex = 23;
             this.browseButton.Text = "Browse...";
-            this.browseButton.Click += new System.EventHandler(this.browseButtonClick);
             // 
             // actorList
             // 
@@ -305,6 +301,12 @@ namespace UseCase
             this.fileItem.Text = "&File";
             this.fileItem.Popup += new System.EventHandler(this.FilePopup);
             // 
+            // newItem
+            // 
+            this.newItem.Index = 0;
+            this.newItem.Text = "New";
+            this.newItem.Click += new System.EventHandler(this.NewItemClick);
+            // 
             // openItem
             // 
             this.openItem.Index = 1;
@@ -317,22 +319,16 @@ namespace UseCase
             this.saveItem.Text = "&Save...";
             this.saveItem.Click += new System.EventHandler(this.SaveItemClick);
             // 
-            // exitItem
-            // 
-            this.exitItem.Index = 4;
-            this.exitItem.Text = "&Exit";
-            // 
             // saveAsItem
             // 
             this.saveAsItem.Index = 3;
             this.saveAsItem.Text = "Save as...";
             this.saveAsItem.Click += new System.EventHandler(this.SaveAsItemClick);
             // 
-            // newItem
+            // exitItem
             // 
-            this.newItem.Index = 0;
-            this.newItem.Text = "New";
-            this.newItem.Click += new System.EventHandler(this.NewItemClick);
+            this.exitItem.Index = 4;
+            this.exitItem.Text = "&Exit";
             // 
             // UseCaseForm
             // 
@@ -346,7 +342,7 @@ namespace UseCase
                                                                           this.preConditionsList,
                                                                           this.actorList,
                                                                           this.browseButton,
-                                                                          this.fileNameTextBox,
+                                                                          this.xslTextBox,
                                                                           this.viewXmlButton,
                                                                           this.moveElementDownButton,
                                                                           this.moveElementUpButton,
@@ -479,17 +475,7 @@ namespace UseCase
         
         }
 
-        private void IdChanged( object sender, EventArgs e )
-        {
-            if ( idTextBox.Text.Trim() != string.Empty &&
-                fileNameTextBox.Text.Trim() != string.Empty )
-            {
-                string directory = Path.GetDirectoryName( fileNameTextBox.Text.Trim() );
-                fileNameTextBox.Text = Path.Combine( 
-                    directory, idTextBox.Text + ".xml" );
-                
-            }
-        }
+        
 
         private void DeleteItem(object sender, object item )
         {
@@ -579,18 +565,7 @@ namespace UseCase
         
         }
 
-        private void browseButtonClick(object sender, System.EventArgs e)
-        {
-            using( SaveFileDialog sfd = new SaveFileDialog() )
-            {
-                sfd.Filter = "XML Files (*.xml)|*.xml";
-                sfd.FilterIndex = 1;
-                sfd.RestoreDirectory = true;
-
-                if ( sfd.ShowDialog() == DialogResult.OK )
-                    fileNameTextBox.Text = sfd.FileName;
-            }      
-        }
+        
 
         private void elementTypeChosen(object sender, System.EventArgs e)
         {
@@ -631,7 +606,8 @@ namespace UseCase
                 return SaveAs();
             else
             {
-                this.useCaseModel.Save( this.filename, "" );
+                this.useCaseModel.Save( this.filename, this.xslTextBox.Text );
+                this.isDirty = false;
                 return true;
             }
         }
@@ -671,7 +647,7 @@ namespace UseCase
 
                 if( sfd.ShowDialog() == DialogResult.OK )
                 {
-                    this.useCaseModel.Save( sfd.FileName, "" );
+                    this.useCaseModel.Save( sfd.FileName, this.xslTextBox.Text );
                     this.filename = sfd.FileName;
 
                     this.Text += " " + this.filename;
@@ -757,7 +733,6 @@ namespace UseCase
         private System.Windows.Forms.Button viewXmlButton;
         private System.Windows.Forms.TextBox summaryTextBox;
         private System.Windows.Forms.TextBox nameTextBox;
-        private System.Windows.Forms.TextBox fileNameTextBox;
         private System.Windows.Forms.Button browseButton;
         private UseCase.ItemListUserControl actorList;
         private UseCase.ItemListUserControl preConditionsList;
@@ -773,6 +748,7 @@ namespace UseCase
         private System.Windows.Forms.MenuItem exitItem;
         private System.Windows.Forms.MenuItem saveAsItem;
         private System.Windows.Forms.MenuItem newItem;
+        private System.Windows.Forms.TextBox xslTextBox;
         /// <summary>
         /// Required designer variable.
         /// </summary>
