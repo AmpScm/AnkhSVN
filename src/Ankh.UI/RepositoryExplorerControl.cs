@@ -15,13 +15,12 @@ using Utils.Win32;
 
 namespace Ankh.UI
 {
+    
     /// <summary>
     /// Gives a tree view of the repository based on revision.
     /// </summary>
     public class RepositoryExplorerControl : System.Windows.Forms.UserControl
     {
-        
-
         public RepositoryExplorerControl()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -39,7 +38,7 @@ namespace Ankh.UI
             Win32.SHAutoComplete( this.urlTextBox.Handle, 
                 Shacf.UrlAll | Shacf.Filesystem );
 
-            this.ValidateRevision();
+            this.ValidateAdd();
         }
 
         /// <summary>
@@ -320,12 +319,13 @@ namespace Ankh.UI
 
         private void revisionPicker_Changed(object sender, System.EventArgs e)
         {
-            this.ValidateRevision();            
+            this.ValidateAdd();            
         }
 
-        private void ValidateRevision()
+        private void ValidateAdd()
         {
-            this.addButton.Enabled = this.revisionPicker.Valid;
+            this.addButton.Enabled = this.revisionPicker.Valid && 
+                VALIDURL.IsMatch( this.urlTextBox.Text );
         }
 
         private void TreeViewMouseUp( object sender, MouseEventArgs args )
@@ -373,11 +373,12 @@ namespace Ankh.UI
             this.urlTextBox.Name = "urlTextBox";
             this.urlTextBox.Size = new System.Drawing.Size(368, 20);
             this.urlTextBox.TabIndex = 1;
-            this.urlTextBox.Text = "http://www.ankhsvn.com:8088/svn/test";
+            this.urlTextBox.Text = "";
             this.urlTextBox.TextChanged += new System.EventHandler(this.urlTextBox_TextChanged);
             // 
             // addButton
             // 
+            this.addButton.Enabled = false;
             this.addButton.Location = new System.Drawing.Point(4, 99);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(64, 23);
@@ -453,6 +454,7 @@ namespace Ankh.UI
             this.revisionPicker.Name = "revisionPicker";
             this.revisionPicker.Size = new System.Drawing.Size(368, 20);
             this.revisionPicker.TabIndex = 10;
+            this.revisionPicker.Changed += new System.EventHandler(this.revisionPicker_Changed);
             // 
             // RepositoryExplorerControl
             // 
@@ -486,8 +488,10 @@ namespace Ankh.UI
 
         private void urlTextBox_TextChanged(object sender, System.EventArgs e)
         {
-        
+            this.ValidateAdd();
         }
+
+
         private System.Windows.Forms.TextBox urlTextBox;
         private System.Windows.Forms.Label revisionLabel;
         private System.Windows.Forms.Button browseButton;
@@ -505,6 +509,7 @@ namespace Ankh.UI
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
+        private static readonly Regex VALIDURL = new Regex(@"\S*?://\S+");
 
         
     }
