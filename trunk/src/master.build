@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <!-- comment -->
-<project default="build">
+<project default="build" xmlns="http://nant.sf.net/release/0.85-rc1/nant.xsd">
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
@@ -13,6 +13,7 @@
     <property name="installsource.dir" value="installsource"/>
     <property name="deploy.dir" value="Deploy"/>
     <property name="alt.admin.dir" value="true"/>
+    <property name="wix-binary.dir" value="${path::get-full-path('../tools/WiX')}"/>
 
     <ifnot test="${property::exists('svndir')}">
         <sysinfo />
@@ -40,7 +41,7 @@
     </target>
     
     <target name="build-apr-iconv.wxs">
-        <exec workingdir="." program="candle.exe"
+        <exec workingdir="." program="${wix-binary.dir}\candle.exe"
             commandline="-nologo -w0 -dsvndir=${svndir} WiX\apr-iconv.wxs -out ${installsource.dir}\apr-iconv.wixobj" />
     </target>
     
@@ -49,14 +50,14 @@
         <property name="src.fullpath" value="${path::get-full-path(src.dir)}" />
         <property name="setupfiles.fullpath" value="${path::combine(path::combine(src.fullpath,'WiX'),'SetupFiles')}" />
         
-        <exec workingdir="${installsource.dir}" program="candle.exe"
+        <exec workingdir="${installsource.dir}" program="${wix-binary.dir}\candle.exe"
             commandline="-nologo -w0 -dsetupfiles=${setupfiles.fullpath} -dinstalldir=${installsource.fullpath} ..\WiX\Ankh.msi.wxs -out Ankh.msi.wixobj" />
         <echo message="building UI" />
-        <exec workingdir="${installsource.dir}" program="candle.exe"
+        <exec workingdir="${installsource.dir}" program="${wix-binary.dir}\candle.exe"
             commandline="-nologo -w0 -dsetupfiles=${setupfiles.fullpath} ..\WiX\Ankh-UI.wxs -out Ankh-UI.wixobj" />
             
         <!-- Build the Ankh msi -->
-        <exec workingdir="${installsource.dir}" program="light.exe"
+        <exec workingdir="${installsource.dir}" program="${wix-binary.dir}\light.exe"
             commandline="-nologo -w0 Ankh-UI.wixobj Ankh.msi.wixobj apr-iconv.wixobj Ankh.wixobj Ankh.UI.wixobj ReposInstaller.wixobj Utils.wixobj lib.wixobj -out Ankh.msi" />
     </target>
     

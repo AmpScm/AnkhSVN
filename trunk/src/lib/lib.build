@@ -11,7 +11,7 @@
     </target>
 
     <target name="build-WiX">
-        <exec workingdir="${src.dir}" program="candle.exe"
+        <exec workingdir="${src.dir}" program="${wix-binary.dir}\candle.exe"
             commandline="-nologo -dbuilddir=\lib -w0 lib.wxs -out ${installsource.dir}\lib.wixobj" />
     </target>
     
