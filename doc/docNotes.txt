@@ -1,0 +1,10 @@
+Total Pages i Colour:
+
+testDocumentation.doc: 	5
+processDocumentation.doc: 	
+productDocumentation.doc: 	
+Total			
+
+testDocumentation.doc
+Pages:	1,34,35,36,38
+total:	5 
