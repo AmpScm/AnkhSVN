@@ -3,6 +3,7 @@
     <property name="verbose" value="false"/>
     <property name="src.dir" value="."/>
     <property name="warninglevel" value="/warn:3"/>
+    <property name="installsource.dir" value="..\${installsource.dir}"/>
     
     
     <target name="rebuild">
@@ -41,6 +42,11 @@
         </csc>
         
                 
+    </target>
+    
+    <target name="build-WiX">
+        <exec workingdir="${src.dir}" program="candle.exe"
+            commandline="-nologo -w0 NSvn.Common.wxs -out ${installsource.dir}\NSvn.Common.wixobj" />
     </target>
     
 </project>

@@ -3,6 +3,7 @@
 <project default="build">
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
+    <property name="src.dir" value="."/>
 
     <property name="build.dir" value="build-Debug" if="${debug}"/>
     <property name="build.dir" value="build-Release" unless="${debug}"/>
@@ -24,8 +25,22 @@
     <property name="bdb.dll" value="libdb42d.dll"/>
     <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
     <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>-->
+
+
+    <!-- Creates the NSvn.msm merge module -->
+    <target name="build-NSvn.msm" depends="build">
+        <delete dir="${installsource.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
+        <mkdir dir="${installsource.dir}" />
+        
+        <!-- Build project specific parts -->
+        <nant buildfile="Nsvn.Common/NSvn.Common.build" target="build-WiX" inheritall="true" />
+        <nant buildfile="Nsvn.Core/NSvn.Core.build" target="build-WiX" inheritall="true" />
+        
+        <!-- Build NSvn Merge Module -->
+        <nant buildfile="WiX\NSvn.msm.build" target="build-WiX" inheritall="true" />
+    </target>
     
-    
+    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm" />
     
     <target name="clean" description="Cleans all output directories">
         <nant buildfile="NSvn.Common/NSvn.Common.build" target="clean" inheritall="true" />
