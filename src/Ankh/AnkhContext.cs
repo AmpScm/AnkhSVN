@@ -163,10 +163,18 @@ namespace Ankh
         {
             try
             {
+                System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
+
+                Utils.Timer timer = new Utils.Timer();
+                timer.Start();
+
                 this.StartOperation( "Synchronizing with solution explorer...");
 
                 this.solutionExplorer = new Explorer( this.DTE, this.Context );
                 this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
+
+                timer.End();
+                System.Diagnostics.Trace.WriteLine( "Solution opened: " + timer.Interval, "Ankh" );
             }
             catch( Exception ex )
             {
