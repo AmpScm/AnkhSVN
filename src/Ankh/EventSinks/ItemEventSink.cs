@@ -55,7 +55,19 @@ namespace Ankh.EventSinks
 
         protected void ItemRenamed( ProjectItem item, string oldName )
         {
-            string s = item.Kind;
+            try 
+            {
+                this.Context.OutputPane.StartActionText( "Renaming" );
+                this.Context.SolutionExplorer.VisitResources(
+                    item, new RenameProjectVisitor( item.get_FileNames(0) ), true );
+                this.Context.SolutionExplorer.Refresh( item.ContainingProject );
+                this.Context.OutputPane.EndActionText();
+            }
+            catch ( Exception ex)
+            {
+                Connect.HandleError( ex );
+                throw;
+            }
         }
 
         /// <summary>
@@ -70,9 +82,29 @@ namespace Ankh.EventSinks
                 {
                     resource.Remove( true );
                 }
-               
                 
             }
         }
+
+        /// <summary>
+        /// A visitor that renames visited items.
+        /// </summary>
+        private class RenameProjectVisitor : LocalResourceVisitorBase
+        {
+            private string newPath;
+            //Initialises the Visitor with the new name of the item to move.
+            public RenameProjectVisitor( string newName )
+            {
+                this.newPath = newName;
+            }
+
+            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
+            {
+                File.Move( this.newPath, resource.Path );
+                resource.Move( this.newPath, true );
+            }
+        }
+       
+        
 	}
 }

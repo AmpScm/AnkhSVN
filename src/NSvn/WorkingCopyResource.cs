@@ -114,6 +114,28 @@ namespace NSvn
         {
             Client.Delete( resource.Path, force, resource.ClientContext );
         }
+
+        /// <summary>
+        /// Move or rename a resource in working copy.
+        /// </summary>
+        /// <param name="force">Whether items should be moved with force.</param>
+        /// <param name="dstPath">Destination for move.</param>
+        public void Move( string dstPath, bool force )
+        {
+            Client.Move( this.Path, Revision.Unspecified, dstPath, force, this.ClientContext );
+        }
+
+        /// <summary>
+        /// Move or rename a resource in a working copy.
+        /// </summary>
+        /// <param name="resource">Resource to be moved or renamed.</param>
+        /// <param name="dstPath">Destination path.</param>
+        /// <param name="force">Wheter resource should be moved or renamed with force.</param>
+        public static void Move( WorkingCopyResource resource, string dstPath, bool force )
+        {
+            Client.Move( resource.Path, Revision.Unspecified, dstPath, force, 
+                resource.ClientContext );
+        }
                 
 /*
         /// <summary>
