@@ -9,7 +9,7 @@ using EnvDTE;
 namespace Ankh.Commands
 {
 	/// <summary>
-	/// Commits an item.
+	/// Commits an item. 
 	/// </summary>
 	[VSNetCommand("CommitItem", Text = "Commit", Tooltip = "Commits an item",
          Bitmap = ResourceBitmaps.Commit),
