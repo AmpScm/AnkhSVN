@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using NSvn.Common;
+using NSvn.Core;
 
 namespace NSvn
 {
@@ -62,31 +63,7 @@ namespace NSvn
         /// <returns>True if the path is/is in a working copy.</returns>
         public static bool IsWorkingCopyPath( string path )
         {
-            //TODO: Re
-            string baseDir;
-            // is the path a directory or a file?
-            if( Directory.Exists( path ) )
-            {
-                // is there a .svn dir under this directory?
-                if ( Directory.Exists( Path.Combine( path, WC_ADMIN_AREA ) ) )
-                    return true;
-                else
-                {
-                    // is there a .svn dir under the directory above?
-                    baseDir = GetParentDir( path );
-                    if ( baseDir == null )
-                        baseDir = path;
-                    return Directory.Exists( Path.Combine( baseDir, WC_ADMIN_AREA ) );
-                }
-            }
-            else if ( File.Exists( path ) )
-            {
-                // is there a .svn directory in the dir containing this file?
-                baseDir = Path.GetDirectoryName( path );
-                return Directory.Exists( Path.Combine( baseDir, WC_ADMIN_AREA ) );
-            }
-            else
-                return false;
+            return Client.SingleStatus( path ) != Status.None;
         }
 
         public const string WC_ADMIN_AREA = ".svn";
