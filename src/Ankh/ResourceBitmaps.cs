@@ -35,6 +35,10 @@ namespace Ankh
         public const int EditConfigFile = 119;
         public const int SaveToFile = 120;
         public const int Export = 121;
+        public const int AddSolutionToRepository = 122;
+        public const int CreatePatch = 123;
+        public const int Relocate = 124;
+        public const int ResolveConflict = 125;
 
     }
 }
