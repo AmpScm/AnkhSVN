@@ -39,6 +39,8 @@ namespace Ankh
                 AuthenticationProvider.GetSslClientCertPromptProvider( 
                     new SslClientCertPromptDelegate( this.ClientCertificatePrompt ) ) );
 
+            this.ClientContext.CancelCallback = new CancelCallback( this.CancelCallback );
+
 
 
         }
@@ -256,7 +258,16 @@ namespace Ankh
                 else
                     return null;
             }
-        }        
+        }     
+   
+
+        private CancelOperation CancelCallback()
+        {
+            System.Diagnostics.Debug.WriteLine( "Cancel called" );
+            Application.DoEvents();
+
+            return CancelOperation.DontCancel;
+        }
 
         /// <summary>
         /// Pupulates actionStatus Hashtable.
