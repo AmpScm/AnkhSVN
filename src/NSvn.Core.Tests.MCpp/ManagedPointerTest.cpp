@@ -1,3 +1,4 @@
+// $Id$
 #include "StdAfx.h"
 #include "../NSvn.Core/ManagedPointer.h"
 #include "managedpointertest.h"

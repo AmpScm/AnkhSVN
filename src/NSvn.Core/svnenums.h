@@ -1,3 +1,4 @@
+// $Id$
 #pragma once
 #using <mscorlib.dll>
 #include <svn_types.h>

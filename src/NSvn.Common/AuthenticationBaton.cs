@@ -1,3 +1,4 @@
+// $Id$
 using System;
 using System.Collections.Specialized;
 
@@ -37,3 +38,4 @@ namespace NSvn.Common
         private StringDictionary parameters;
 	}
 }
+

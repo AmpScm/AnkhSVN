@@ -1,3 +1,4 @@
+// $Id$
 #include "stdafx.h"
 
 using namespace System::Reflection;
@@ -55,4 +56,5 @@ using namespace System::Runtime::CompilerServices;
 [assembly:AssemblyDelaySignAttribute(false)];
 [assembly:AssemblyKeyFileAttribute("")];
 [assembly:AssemblyKeyNameAttribute("")];
+
 

@@ -1,3 +1,4 @@
+// $Id$
 #pragma once
 
 #include "StringHelper.h"
@@ -64,3 +65,4 @@ namespace NSvn
 
     }
 }
+

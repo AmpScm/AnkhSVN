@@ -1,3 +1,4 @@
+// $Id$
 // NSvnCore.h
 
 #pragma once
@@ -11,3 +12,4 @@ namespace NSvnCore
 		// TODO: Add your methods for this class here.
 	};
 }
+
