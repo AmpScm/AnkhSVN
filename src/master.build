@@ -50,8 +50,24 @@
                 <includes name="*.pdb"/>
             </fileset>
          </copy>
+
+         <!-- unfortunately necessary to get regasm to work -->
+         <copy todir="${build.dir}">
+            <fileset basedir="${lib.dir}">
+                <includes name="envdte.dll"/>
+                <includes name="extensibility.dll"/>
+            </fileset>
+        </copy>        
          
-         <regasm assembly="${build.dir}\Ankh.dll" typelibrary="${build.dir}\Ankh.tlb" codebase="true" exporttypelib="true" verbose="${verbose}"/>
+        <regasm assembly="${build.dir}\Ankh.dll" typelibrary="${build.dir}\Ankh.tlb" codebase="true" exporttypelib="true" verbose="${verbose}"/>
+
+        <!-- and now to get rid of them again -->
+        <delete>
+            <fileset basedir="${build.dir}">
+                <includes name="envdte.dll"/>
+                <includes name="extensibility.dll"/>
+            </fileset>
+        </delete>
     </target>
     
     <target name="build-Ankh.UI" depends="build-NSvn, build-Utils">
