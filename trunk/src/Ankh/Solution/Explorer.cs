@@ -313,8 +313,7 @@ namespace Ankh.Solution
 
         private void GenerateStatusCache( string solutionPath )
         {
-            Timer t = new Timer();
-            t.Start();
+            DebugTimer t = DebugTimer.Start();
             string solutionDir = Path.GetDirectoryName( solutionPath );
 
             int youngest;
@@ -332,8 +331,7 @@ namespace Ankh.Solution
                 // swallow
             }
 
-            t.End();
-            Debug.WriteLine( "Got status cache: " + t.Interval, "Ankh" );
+            t.End( "Got status cache", "Ankh" );
         }
 
         private TreeNode GetNode(UIHierarchyItem item)

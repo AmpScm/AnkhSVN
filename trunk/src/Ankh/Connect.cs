@@ -158,7 +158,7 @@ namespace Ankh
         /// <seealso class='Exec' />
         public void QueryStatus(string commandName, EnvDTE.vsCommandStatusTextWanted neededText, ref EnvDTE.vsCommandStatus status, ref object commandText)
         {
-            this.timer.Start();
+            Utils.DebugTimer t = Utils.DebugTimer.Start();
             try
             {
                 if( this.commands != null && 
@@ -181,9 +181,7 @@ namespace Ankh
                 Error.Handle( ex );
                 throw;
             }
-            this.timer.End();
-
-            Debug.WriteLine( String.Format( "Query status for {0}: {1}", commandName, this.timer.Interval), "Ankh" );
+            t.End( "Query status for " + commandName, "Ankh" );
         }
 
         /// <summary>
@@ -234,7 +232,6 @@ namespace Ankh
             }
         }
         
-        private Utils.Timer timer = new Utils.Timer();
         private AnkhContext context;
         Ankh.CommandMap commands;
 		
