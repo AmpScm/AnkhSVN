@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="NSvn.Core"
 	ProjectGUID="{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
 	Keyword="ManagedCProj">
@@ -53,7 +53,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -95,9 +101,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -130,10 +144,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SvnClientException.cpp">
+				RelativePath="stream.cpp">
 			</File>
 			<File
-				RelativePath="stream.cpp">
+				RelativePath="SvnClientException.cpp">
 			</File>
 			<File
 				RelativePath="utils.cpp">
@@ -168,6 +182,9 @@
 			</File>
 			<File
 				RelativePath="CommitItem.h">
+			</File>
+			<File
+				RelativePath="delegates.h">
 			</File>
 			<File
 				RelativePath="DirectoryEntry.h">
@@ -206,22 +223,19 @@
 				RelativePath="Stdafx.h">
 			</File>
 			<File
+				RelativePath="stream.h">
+			</File>
+			<File
 				RelativePath="StringHelper.h">
 			</File>
 			<File
 				RelativePath="SvnClientException.h">
 			</File>
 			<File
-				RelativePath="UsernameCredential.h">
-			</File>
-			<File
-				RelativePath="delegates.h">
-			</File>
-			<File
-				RelativePath="stream.h">
-			</File>
-			<File
 				RelativePath="svnenums.h">
+			</File>
+			<File
+				RelativePath="UsernameCredential.h">
 			</File>
 			<File
 				RelativePath="utils.h">
