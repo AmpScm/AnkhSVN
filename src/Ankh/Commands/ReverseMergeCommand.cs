@@ -55,9 +55,12 @@ namespace Ankh.Commands
                     runner.Start( "Merging" );
 
                     // we need to refresh every item, not just those selected since 
-                    // the operation might be recursove
-                    foreach( SvnItem item in resources )
-                        item.Refresh( context.Client);
+                    // the operation might be recursive
+                    if ( !context.ReloadSolutionIfNecessary() )
+                    {
+                        foreach( SvnItem item in resources )
+                            item.Refresh( context.Client);
+                    }
                 }
             }
             finally

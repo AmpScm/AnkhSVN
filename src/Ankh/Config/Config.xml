@@ -23,6 +23,10 @@
     <!-- Whether new files should be automatically added to Subversion -->
     <AutoAddNewFiles>true</AutoAddNewFiles>
     
+    <!-- Whether AnkhSVN should offer to automatically reload a solution if a project file
+    is modified -->
+    <DisableSolutionReload>false</DisableSolutionReload>
+    
     <Subversion>
         <!-- The path to the directory to use for the Subversion configuration data.
         If not specified, it will use the same config area as other Subversion tools, 

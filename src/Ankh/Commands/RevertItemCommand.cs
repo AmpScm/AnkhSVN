@@ -86,8 +86,13 @@ namespace Ankh.Commands
             {
                 // empty
             }
-            foreach( SvnItem item in resources )
-                item.Refresh( context.Client );
+
+            if ( !context.ReloadSolutionIfNecessary() )
+            {
+                foreach( SvnItem item in resources )
+                    item.Refresh( context.Client );
+            }
+
             context.OutputPane.EndActionText();
         }               
         #endregion       
