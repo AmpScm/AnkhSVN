@@ -192,7 +192,7 @@ namespace NSvn
                     this.CheckForModifications();
                     if ( this.status == null )
                     {
-                        Trace.WriteLine( "Refreshing status for " + this.path, "NSvn" );
+                        Debug.WriteLine( "Refreshing status for " + this.path, "NSvn" );
                         this.status = Client.SingleStatus( this.Path );
                     }
                     return this.status;

@@ -9,6 +9,7 @@ namespace Ankh
     using System.Diagnostics;
     using System.Text.RegularExpressions;
     using NSvn;
+    using System.IO;
 
     using Ankh.Commands;
 
@@ -35,6 +36,9 @@ namespace Ankh
         /// </summary>
         public Connect()
         {
+//            File.Delete( "N:\\ankhlog.txt" );
+//            Debug.Listeners.Add( new TextWriterTraceListener( "N:\\ankhlog.txt" ) );
+//            Debug.AutoFlush = true;
         }
 
         /// <summary>
@@ -179,7 +183,7 @@ namespace Ankh
             }
             this.timer.End();
 
-            Trace.WriteLine( commandName + ": " + this.timer.Interval, "Ankh" );
+            Debug.WriteLine( String.Format( "Query status for {0}: {1}", commandName, this.timer.Interval), "Ankh" );
         }
 
         /// <summary>
