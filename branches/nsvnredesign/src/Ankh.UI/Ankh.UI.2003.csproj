@@ -20,7 +20,7 @@
                 PostBuildEvent = ""
                 RootNamespace = "Ankh.UI"
                 RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = "Ankh.UI.ClientCertDialog"
+                StartupObject = "Ankh.UI.DiffTab"
             >
                 <Config
                     Name = "Debug"
@@ -193,6 +193,11 @@
                 <File
                     RelPath = "DiffHtmlModel.cs"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DiffTab.cs"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File

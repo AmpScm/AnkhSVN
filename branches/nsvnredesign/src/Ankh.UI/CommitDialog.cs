@@ -15,11 +15,16 @@ namespace Ankh.UI
 
 
     /// <summary>
-    /// Summary description for CommitDialog.
+    /// Dialog that lets a user enter a log message for a commit.
     /// </summary>
     public class CommitDialog : System.Windows.Forms.Form
     {
-        public event EventHandler DiffWanted;		
+        public event DiffWantedDelegate DiffWanted
+        {
+            add{ this.diffTab.DiffWanted += value; }
+            remove{ this.diffTab.DiffWanted -= value; }
+        }
+
 
         public CommitDialog()
         {
@@ -32,7 +37,7 @@ namespace Ankh.UI
 
             this.commitItems = new ArrayList();
             
-            this.diffView.Visible = false;
+            this.diffTab.Visible = false;
             
             this.pathColumnHeader.Width = this.commitItemsView.Width - this.actionColumnHeader.Width - 5;
         }
@@ -61,19 +66,6 @@ namespace Ankh.UI
             set{ this.logMessageTemplate = value; }
         }
 
-        /// <summary>
-        /// The diff to be displayed.
-        /// </summary>
-        public string Diff
-        {
-            get{ return this.diffView.Diff; }
-            set
-            { 
-                this.diff = value; 
-                this.diffView.Diff = this.diff;
-            }
-        }
-
         public void AddCommitItem( CommitAction action, string path, 
             object tag )
         {
@@ -82,6 +74,9 @@ namespace Ankh.UI
             item.Tag = tag;
 
             this.commitItemsView.Items.Add( item );
+
+            // we wanna see a diff too
+            this.diffTab.AddPage( path );
         }
 
         public Array GetSelectedTags( Type type )
@@ -135,9 +130,9 @@ namespace Ankh.UI
 
         private void showDiffButton_Click(object sender, System.EventArgs e)
         {
-            if ( this.diffView.Visible )
+            if ( this.diffTab.Visible )
             {                
-                this.diffView.Visible = false;
+                this.diffTab.Visible = false;
                 this.Height = this.okButton.Top + this.okButton.Height + 40;
                 this.showDiffButton.Text = "Show diff";
   
@@ -152,19 +147,19 @@ namespace Ankh.UI
             }
             else
             {
-                if ( this.diff == null && this.DiffWanted != null )
-                    this.DiffWanted( this, EventArgs.Empty );
-
                 // these items can no longer anchor to the bottom
                 this.logMessageBox.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
                 this.showDiffButton.Anchor = AnchorStyles.Left | AnchorStyles.Top;
                 this.okButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
                 this.cancelButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-                this.diffView.Top = this.okButton.Top + this.okButton.Height + 10;
+                this.diffTab.Top = this.okButton.Top + this.okButton.Height + 10;
                 this.Height += 400;
-                this.diffView.Visible = true;
+                this.diffTab.Visible = true;
                 this.showDiffButton.Text = "Hide diff";
             }
+
+            // Center the dialog vertically
+            this.Top = (Screen.FromControl(this).Bounds.Height / 2) - (this.Height/2);
 
         }
 
@@ -204,7 +199,7 @@ namespace Ankh.UI
         
 
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -215,7 +210,7 @@ namespace Ankh.UI
             this.okButton = new System.Windows.Forms.Button();
             this.logLabel = new System.Windows.Forms.Label();
             this.showDiffButton = new System.Windows.Forms.Button();
-            this.diffView = new Ankh.UI.DiffView();
+            this.diffTab = new Ankh.UI.DiffTab();
             this.logMessageBox = new System.Windows.Forms.RichTextBox();
             this.commitItemsView = new System.Windows.Forms.ListView();
             this.pathColumnHeader = new System.Windows.Forms.ColumnHeader();
@@ -259,15 +254,13 @@ namespace Ankh.UI
             // 
             // diffView
             // 
-            this.diffView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.diffTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
                 | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.diffView.Diff = "";
-            this.diffView.Font = new System.Drawing.Font("Courier New", 10F);
-            this.diffView.Location = new System.Drawing.Point(0, 312);
-            this.diffView.Name = "diffView";
-            this.diffView.Size = new System.Drawing.Size(814, 0);
-            this.diffView.TabIndex = 7;
+            this.diffTab.Font = new System.Drawing.Font("Courier New", 10F);
+            this.diffTab.Location = new System.Drawing.Point(0, 312);
+            this.diffTab.Name = "diffView";
+            this.diffTab.Size = new System.Drawing.Size(814, 0);
             // 
             // logMessageBox
             // 
@@ -316,7 +309,7 @@ namespace Ankh.UI
             this.ControlBox = false;
             this.Controls.Add(this.commitItemsView);
             this.Controls.Add(this.logMessageBox);
-            this.Controls.Add(this.diffView);
+            this.Controls.Add(this.diffTab);
             this.Controls.Add(this.showDiffButton);
             this.Controls.Add(this.logLabel);
             this.Controls.Add(this.okButton);
@@ -332,14 +325,14 @@ namespace Ankh.UI
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label logLabel;
         private System.Windows.Forms.Button showDiffButton;
         private string diff;
-        private Ankh.UI.DiffView diffView;
+        private Ankh.UI.DiffTab diffTab;
         private System.Windows.Forms.RichTextBox logMessageBox;
         private LogMessageTemplate logMessageTemplate;
        

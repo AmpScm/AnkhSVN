@@ -76,8 +76,8 @@ namespace Ankh
                         dialog.LogMessage = this.logMessage;
                 }
 
-
-                dialog.DiffWanted += new EventHandler( this.DiffWanted );
+                // we must give it diffs if it wants em
+                dialog.DiffWanted += new DiffWantedDelegate( this.DiffWanted );
                 if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
                 {
                     this.logMessage = dialog.LogMessage;
@@ -148,14 +148,25 @@ namespace Ankh
                 this.ankhContext.Config.LogMessageTemplate : "";
         }
 
-        private void DiffWanted( object sender, EventArgs args )
+        /// <summary>
+        /// The commit dialog wants a diff. Give it one.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void DiffWanted( object sender, DiffWantedEventArgs args )
         {  
-            //            DiffVisitor visitor = new DiffVisitor();
+            // run the diff itself
+            using ( MemoryStream diff = new MemoryStream() )
+            {
+                this.ankhContext.Client.Diff( new string[]{}, args.Path, Revision.Base, 
+                    args.Path, Revision.Working, false, true, false, diff, Stream.Null );
+                args.Diff = Encoding.Default.GetString( diff.ToArray() );                
+            }
 
-            //this.ankhContext.SolutionExplorer.VisitSelectedItems( visitor, true );
+            // and provide the source file a verbo as well
+            using( StreamReader reader = new StreamReader( args.Path, Encoding.Default ) )
+                args.Source = reader.ReadToEnd();
 
-            CommitDialog dialog = (CommitDialog)sender;
-            dialog.Diff = "";// visitor.Diff;    
         }
 
         /// <summary>
