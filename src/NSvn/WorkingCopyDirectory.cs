@@ -19,14 +19,7 @@ namespace NSvn
         {
         }
 
-        /// <summary>
-        /// Is this a directory?
-        /// </summary>
-        public override bool IsDirectory
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return true; }
-        }
+        
 
         /// <summary>
         /// Accepts an ILocalResourceVisitor.
@@ -34,6 +27,24 @@ namespace NSvn
         public override void Accept( ILocalResourceVisitor visitor )
         {
             visitor.VisitWorkingCopyDirectory( this );
+        }
+
+        /// <summary>
+        /// Recursively cleans up the working copy, removing any locks and completes any
+        /// unfinished transactions.
+        /// </summary>
+        public void Cleanup( )
+        {
+            Client.Cleanup( this.Path, this.ClientContext );
+        }
+
+        /// <summary>
+        /// Is this a directory?
+        /// </summary>
+        public override bool IsDirectory
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return true; }
         }
 
         /// <summary>
@@ -49,14 +60,13 @@ namespace NSvn
                 return this.children;
             }
         }
-        
+
         /// <summary>
-        /// Recursively cleans up the working copy, removing any locks and completes any
-        /// unfinished transactions.
+        /// Invalidates instance data of this resource object.
         /// </summary>
-        public void Cleanup( )
+        protected override void DoInvalidate()
         {
-            Client.Cleanup( this.Path, this.ClientContext );
+            this.children = null; 
         }
 
         /// <summary>
@@ -81,15 +91,7 @@ namespace NSvn
                 return Directory.GetLastWriteTime( System.IO.Path.Combine(
                     this.Path, ADMIN_AREA ) );
             }
-        }
-
-        /// <summary>
-        /// Invalidates instance data of this resource object.
-        /// </summary>
-        protected override void DoInvalidate()
-        {
-            this.children = null; 
-        }
+        }       
 
 
         /// <summary>

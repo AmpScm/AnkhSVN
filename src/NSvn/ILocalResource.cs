@@ -10,6 +10,12 @@ namespace NSvn
     public interface ILocalResource
     {
         /// <summary>
+        /// Accepts an ILocalResourceVisitor.
+        /// </summary>
+        /// <param name="visitor"></param>
+        void Accept( ILocalResourceVisitor visitor );
+
+        /// <summary>
         /// The file system path to the item.
         /// </summary>
         string Path
@@ -41,12 +47,7 @@ namespace NSvn
             get;
         }
 
-        /// <summary>
-        /// Accepts an ILocalResourceVisitor.
-        /// </summary>
-        /// <param name="visitor"></param>
-        void Accept( ILocalResourceVisitor visitor );
-
+        
         /// <summary>
         /// The context object used in version control operations.
         /// </summary>

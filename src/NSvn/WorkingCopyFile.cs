@@ -19,15 +19,7 @@ namespace NSvn
             // empty
         }
 
-        /// <summary>
-        /// Is this a folder?
-        /// </summary>
-        public override bool IsDirectory
-        {
-            get{ return false; }
-        }   
-
-        /// <summary>
+         /// <summary>
         /// Accepts an ILocalResourceVisitor.
         /// </summary>
         public override void Accept( ILocalResourceVisitor visitor )
@@ -39,6 +31,14 @@ namespace NSvn
         {
             Client.Resolve( this.Path, false, this.ClientContext );
         }
+
+        /// <summary>
+        /// Is this a folder?
+        /// </summary>
+        public override bool IsDirectory
+        {
+            get{ return false; }
+        }   
 
         /// <summary>
         /// Whether this resource has been modified

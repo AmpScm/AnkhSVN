@@ -31,26 +31,12 @@ namespace NSvn
         {
             return FromPath( path, null );
         }
-
+        
         /// <summary>
-        /// Creates a WorkingCopyResource object from a given path..
+        /// Accepts an ILocalResourceVisitor.
         /// </summary>
-        /// <param name="path">Path to the resource.</param>
-        /// <param name="status">A status object with which to initialize the object.</param>
-        /// <returns>An WorkingCopyresource object representing the resource.</returns>
-        internal static WorkingCopyResource FromPath( string path, Status status )
-        {
-            WorkingCopyResource resource;
-            if ( System.IO.File.Exists( path ) )
-                resource = new WorkingCopyFile( path );
-            else if ( System.IO.Directory.Exists( path ) )
-                resource = new WorkingCopyDirectory( path );
-            else
-                throw new ArgumentException( "Path must be a file or a directory: " + path, "path" );  
-
-            resource.status = status;
-            return resource;
-        }
+        /// <param name="visitor"></param>
+        public abstract void Accept( ILocalResourceVisitor visitor );
 
         /// <summary>
         /// Commit local changes to the repository.
@@ -58,7 +44,6 @@ namespace NSvn
         /// <param name="recursive">Whether subresources should be recursively committed.</param>
         public void Commit( bool recursive )
         {
-            
             Client.Commit( new string[]{ this.Path }, !recursive, this.ClientContext );
         }
 
@@ -227,11 +212,27 @@ namespace NSvn
             get;
         }
 
+
+
         /// <summary>
-        /// Accepts an ILocalResourceVisitor.
+        /// Creates a WorkingCopyResource object from a given path..
         /// </summary>
-        /// <param name="visitor"></param>
-        public abstract void Accept( ILocalResourceVisitor visitor );
+        /// <param name="path">Path to the resource.</param>
+        /// <param name="status">A status object with which to initialize the object.</param>
+        /// <returns>An WorkingCopyresource object representing the resource.</returns>
+        internal static WorkingCopyResource FromPath( string path, Status status )
+        {
+            WorkingCopyResource resource;
+            if ( System.IO.File.Exists( path ) )
+                resource = new WorkingCopyFile( path );
+            else if ( System.IO.Directory.Exists( path ) )
+                resource = new WorkingCopyDirectory( path );
+            else
+                throw new ArgumentException( "Path must be a file or a directory: " + path, "path" );  
+
+            resource.status = status;
+            return resource;
+        }
 
         /// <summary>
         /// Checks if the resource has been modified since information was

@@ -42,14 +42,7 @@ namespace NSvn
             this.clientContext.AuthBaton.Providers.Remove( provider );
         }
 
-        /// <summary>
-        /// The ClientContext object used by this NSvnContext.
-        /// </summary>
-        protected internal ClientContext ClientContext
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.clientContext; }
-        }
+        
 
         /// <summary>
         /// Notification callback. Override in derived classes to process the notification.
@@ -70,6 +63,15 @@ namespace NSvn
         protected virtual string LogMessageCallback( CommitItem[] commitItems )
         {
             return "";
+        }
+
+        /// <summary>
+        /// The ClientContext object used by this NSvnContext.
+        /// </summary>
+        protected internal ClientContext ClientContext
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.clientContext; }
         }
 
         private ClientContext clientContext;

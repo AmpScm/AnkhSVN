@@ -30,18 +30,7 @@ namespace NSvn
         {
             // empty
         }
-
-        /// <summary>
-        /// The name of the directory
-        /// </summary>
-        public override string Name
-        {
-            get
-            {
-                return NAME.Match( this.Url ).Groups[3].Value;
-            }
-        }
-
+        
         /// <summary>
         /// Retrieve the child resources of this directory.
         /// </summary>
@@ -104,6 +93,18 @@ namespace NSvn
         {
             visitor.VisitDirectory( this );
         }
+
+        /// <summary>
+        /// The name of the directory
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                return NAME.Match( this.Url ).Groups[3].Value;
+            }
+        }
+
 
         
 
