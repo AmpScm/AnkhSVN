@@ -35,32 +35,7 @@ namespace Ankh
 
             this.configLoader = new Ankh.Config.ConfigLoader();
 
-            // try to load the configuration file
-            try
-            {
-                this.config = this.configLoader.LoadConfig( );
-            }
-            catch( Ankh.Config.ConfigException ex )
-            {
-                MessageBox.Show( this.HostWindow, 
-                    "There is an error in your configuration file:" + 
-                    Environment.NewLine + Environment.NewLine + 
-                    ex.Message + Environment.NewLine + Environment.NewLine + 
-                    "Please edit the " + this.configLoader.ConfigPath + 
-                    " file and correct the error." + Environment.NewLine + 
-                    "Ankh will now load a default configuration.", "Configuration error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error );
-
-                // fall back on the default configuration
-                this.config = this.configLoader.LoadDefaultConfig();
-            }
-
-            // should we use a custom configuration directory?
-            if ( this.config.Subversion.ConfigDir != null )
-                this.client = new SvnClient( this, 
-                    Environment.ExpandEnvironmentVariables(this.config.Subversion.ConfigDir) );
-            else
-                this.client = new SvnClient( this );
+            this.LoadConfig();
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
             this.solutionExplorer = new Solution.Explorer( this.dte, this );
@@ -75,6 +50,8 @@ namespace Ankh
 
            
         }
+
+        
 
         
 
@@ -294,6 +271,44 @@ namespace Ankh
         }
         #endregion        
 
+        /// <summary>
+        /// try to load the configuration file
+        /// </summary>
+        private void LoadConfig()
+        {
+            try
+            {
+                this.config = this.configLoader.LoadConfig( );
+            }
+            catch( Ankh.Config.ConfigException ex )
+            {
+                MessageBox.Show( this.HostWindow, 
+                    "There is an error in your configuration file:" + 
+                    Environment.NewLine + Environment.NewLine + 
+                    ex.Message + Environment.NewLine + Environment.NewLine + 
+                    "Please edit the " + this.configLoader.ConfigPath + 
+                    " file and correct the error." + Environment.NewLine + 
+                    "Ankh will now load a default configuration.", "Configuration error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error );
+
+                // fall back on the default configuration
+                this.config = this.configLoader.LoadDefaultConfig();
+            }
+
+            // should we use a custom configuration directory?
+            if ( this.config.Subversion.ConfigDir != null )
+                this.client = new SvnClient( this, 
+                    Environment.ExpandEnvironmentVariables(this.config.Subversion.ConfigDir) );
+            else
+                this.client = new SvnClient( this );
+
+#if ALT_ADMIN_DIR
+            // should we use a custom admin directory for our working copies?
+            if ( this.config.Subversion.AdminDirectoryName != null )
+                NSvn.Core.Client.AdminDirectoryName = 
+                    this.config.Subversion.AdminDirectoryName;
+#endif
+        }
         
         private bool CheckWhetherAnkhShouldLoad()
         {
