@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace Ankh.UI
 {
@@ -82,7 +83,7 @@ namespace Ankh.UI
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(0, 9);
+            this.label1.Location = new System.Drawing.Point(88, -16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(96, 23);
             this.label1.TabIndex = 2;
@@ -94,6 +95,7 @@ namespace Ankh.UI
             this.fromRevisionComboBox.Name = "fromRevisionComboBox";
             this.fromRevisionComboBox.Size = new System.Drawing.Size(121, 21);
             this.fromRevisionComboBox.TabIndex = 1;
+            this.fromRevisionComboBox.TextChanged += new System.EventHandler(this.fromRevisionComboBox_TextChanged);
             this.fromRevisionComboBox.SelectedIndexChanged += new System.EventHandler(this.fromRevisionComboBox_SelectedIndexChanged);
             // 
             // toRevisionComboBox
@@ -168,7 +170,6 @@ namespace Ankh.UI
             this.getLogButton.Size = new System.Drawing.Size(99, 23);
             this.getLogButton.TabIndex = 9;
             this.getLogButton.Text = "Get log";
-            this.getLogButton.Click += new System.EventHandler(this.getLogButton_Click);
             // 
             // showDateCheckBox
             // 
@@ -275,62 +276,115 @@ namespace Ankh.UI
         private System.Windows.Forms.CheckBox showModifiedFilesCheckBox;
         private System.Windows.Forms.CheckBox singleRevisionCheckBox;
         private System.ComponentModel.IContainer components;
-       
+//        private static readonly Regex validateRevisionNumber = 
+//            new Regex(@"\s{1})", RegexOptions.Compiled);
+//       
         [STAThread] 
         public static void Main()
         {
             ViewLogDialog the = new ViewLogDialog();
             the.ShowDialog();
-            }
+         }
 
-        private void getLogButton_Click(object sender, System.EventArgs e)
-        {
-           
-        }
-
+        
         private void singleRevisionCheckBoxChecked(object sender, System.EventArgs e)
         {
-            this.toRevisionComboBox.Items.Clear();
-            this.toRevisionComboBox.Enabled = !this.singleRevisionCheckBox.Checked;
-            this.toDateTimePicker.Enabled = !this.singleRevisionCheckBox.Checked;
-            
-            if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
-                == RevisionChoice.Date)
+            if (this.singleRevisionCheckBox.Checked)
             {
-                this.toRevisionComboBox.Items.Add( RevisionChoice.Date);
+                this.toRevisionComboBox.Items.Clear();
+                this.toRevisionComboBox.Enabled = false;
             }
-            
-//            if ((RevisionChoice)this.toRevisionComboBox.SelectedItem
-//                == RevisionChoice.Head)
-//            {
-//                this.singleRevisionCheckBox.Checked = true;
-//                this.toRevisionComboBox.Enabled = false;
-//            }
+            else
+            {
+                this.toRevisionComboBox.Items.Clear();
+                EnableDisable();
+            }
 
         }
 
         private void fromRevisionComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             this.toRevisionComboBox.Items.Clear(); 
-            
-            if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem == RevisionChoice.Date)
+               
+            EnableDisable();
+        }
+
+        public void EnableDisable()
+        {
+            if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
+                == RevisionChoice.Date)
             {
                 this.fromDateTimePicker.Enabled = true;
+
+                if (!this.singleRevisionCheckBox.Checked)
+                {
+                    this.toDateTimePicker.Enabled = true;
+                    this.toRevisionComboBox.Enabled = true;
+                    this.toRevisionComboBox.Items.Clear();
+                    this.toRevisionComboBox.Items.Add(RevisionChoice.Date);
+                }
             }
+            else
+            {
+                this.fromDateTimePicker.Enabled = false;
+                this.toDateTimePicker.Enabled = false;
 
+                if (!this.singleRevisionCheckBox.Checked)
+                {
+                    this.toRevisionComboBox.Items.Clear();
+                    this.toRevisionComboBox.Items.Add( RevisionChoice.Head );
+                    this.toRevisionComboBox.Items.Add( RevisionChoice.Prev );
+                    this.toRevisionComboBox.Items.Add( RevisionChoice.Base );
+                    this.toRevisionComboBox.Items.Add( RevisionChoice.Commited);
 
-            
+                    this.toRevisionComboBox.Enabled = true;
+
+                    if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
+                        == RevisionChoice.Head)
+                    {
+                        this.toRevisionComboBox.Enabled = false;
+                    }
+                }
+            }
+    
         }
 
         private void toRevisionComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            this.toDateTimePicker.Enabled = 
-                ((RevisionChoice)this.toRevisionComboBox.SelectedItem )==
-                RevisionChoice.Date;
+            if ((RevisionChoice)this.fromRevisionComboBox.SelectedItem 
+                == RevisionChoice.Date)
+            {
+                this.toDateTimePicker.Enabled = true;       
+                
+            }
+            else
+            {
+                this.toDateTimePicker.Enabled = 
+                    ((RevisionChoice)this.toRevisionComboBox.SelectedItem )==
+                    RevisionChoice.Date;   
+            }
         
         }
+
+        /// <summary>
+        /// Tried to evaluate wheteher the entered revision number is
+        /// valid (regular expression) 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void fromRevisionComboBox_TextChanged(object sender, System.EventArgs e)
+        {
+//            if (this.fromRevisionComboBox.Items.ToString() != "")
+//            {
+//                Validate();
+//            }
+        }
         
-                                               
+//        public bool Validate()
+//        {
+//                    return this.validateRevisionNumber.IsMatch(
+//                        this.fromRevisionComboBox.Items.ToString());
+//        }                                     
  
 	}
 
