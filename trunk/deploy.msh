@@ -1,12 +1,12 @@
 
 # The URL to build from
-$ANKHSVN = "http://10.0.0.3/svn/finalproject/branches/0.5-release/src"
+$ANKHSVN = "http://10.0.0.3/svn/finalproject/trunk/src"
 
 # version numbers to put in the filename
 $MAJOR, $MINOR, $PATCH, $LABEL = 0, 5, 6, "test"
 
 # The URL of the Subversion version
-$SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.0.8/"
+$SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.1.0/"
 $subversion_dir=""
 
 # The URL of neon
@@ -18,6 +18,11 @@ $BDB_DIR = "db-4.2.52"
 
 # OpenSSL
 $OPENSSL = "http://www.openssl.org/source/openssl-0.9.7d.tar.gz"
+$openssl_target_dir = ""
+
+# ZLIB
+$ZLIB = "http://www.gzip.org/zlib/contrib/zlib113-win32.zip"
+$zlib_target_dir = ""
 
 # Whether to build openssl as a static library
 # Must be an environment variable so that neon.mak picks up on it
@@ -41,6 +46,9 @@ $APR_UTIL_MODULE = "apr-util"
 $APR_ICONV_BRANCH = "API_0_9_BRANCH"
 $APR_ICONV_MODULE = "apr-iconv"
 
+# Whether to use nant to build Ankh
+$USE_NANT = 1
+
 
 $TMP = "T:"
 
@@ -51,6 +59,26 @@ $ErrorContinue = 0
 filter qq
 {
 	'"' + $_.ToString() + '"' 
+}
+
+function showpath
+{
+	push-location
+	$env:path.split(";") | foreach {
+		if ( test-path $_ )
+		{
+			set-location $_
+			ls *.exe
+		}
+	}
+
+	pop-location
+
+}
+
+function showvars
+{
+	
 }
 
 function checkout 
@@ -96,27 +124,29 @@ function get_env_from_bat( $batfile )
 	remove-item $run_bat
 }
 
-function parse_args
+function parse_args( $cmdline )
 {
-	# go through any var=val args on the command line
-	$a = [String[]] $args
-	$a | where { $_ -match "=" } | foreach	{ 
-		$var, $value = $_.Split("=")
-		"Setting $var to $value"
-		set-variable $var $value
-	}
-
 	$do_vsvars = 1
 	
-	# get any other args
-	$a | foreach {
+	# get "regular" args
+	$cmdline | foreach {
 		switch( $_ )
 		{
-			{ $_ -ieq "/novsvars" }
+			{ $_ -match "[-/]novsvars" }
 			{
 				$do_vsvars = 0
 			}
 		}
+	}
+
+	# go through any var=val args on the command line
+	
+	$cmdline | where { $_ -match "=" } | foreach	{ 
+		$var, $value = $_.Split("=")
+		#$_.GetType()
+		 
+		"Setting $var to $value"
+		set-variable $var $value
 	}
 
 	if ( $do_vsvars )
@@ -128,7 +158,7 @@ function parse_args
 	{
 		"Not doing vsvars"
 	}
-			
+
 }
 
 
@@ -168,9 +198,9 @@ function download_and_extract($url, $dir, $targetname)
         }
         
         { $_ -like "*.zip" } 
-        {
-            "Extracting {0} using gunzip" -f $basename
-            gunzip $basename
+        {			
+            "Extracting {0} using unzip" -f $basename
+            unzip $basename
         }
 
         default 
@@ -206,8 +236,30 @@ function do_neon
     
 }
 
+function do_zlib
+{
+	if ( $script:zlib_target_dir )
+	{
+		"Already have zlib. Not doing it"
+		return
+	}
+
+	push-location
+	new-directory "zlib"
+	set-location "zlib"
+	download_and_extract $ZLIB "." ""
+	pop-location
+	$script:zlib_target_dir = resolve-path "zlib"
+}
+
 function do_openssl
 {
+	if ( $script:openssl_target_dir )
+	{
+		"Already have OpenSSL. Not doing it"
+		return
+	}
+
     push-location    
     download_and_extract $OPENSSL "." "openssl"
 
@@ -232,6 +284,8 @@ function do_openssl
 		"Building dynamic OpenSSL libraries"
         nmake -f ms\ntdll.mak 
     }
+
+	if ( ! $? ){ exit }
 
     pop-location
     
@@ -270,13 +324,18 @@ function do_berkeley
 	$slnfile = combine-path ( combine-path $bdb_build_dir "build_win32" ) "Berkeley_DB.sln"
 	
 	"Building $slnfile"
-	devenv $slnfile /Build $CONFIG
+	devenv $slnfile /Build $CONFIG /project "build_all"
+
+	if ( ! $? )
+	{
+		exit
+	}
 
 	$script:bdb_target_dir = convert-path "db4-win32"
 	"Creating $bdb_target_dir"
 	new-directory $bdb_target_dir
 	
-	$dirs = "$bdb_target_dir\include", "$bdb_target_dir\lib" 
+	$dirs = "$bdb_target_dir\include", "$bdb_target_dir\lib", "$bdb_target_dir\bin"
 	$dirs | foreach { "Creating $_"; new-directory $_ }
 
 	"Copying header files to $bdb_target_dir\include"
@@ -284,6 +343,9 @@ function do_berkeley
 
 	"Copying lib files to $bdb_target_dir\lib"
 	copy-item "$bdb_build_dir\build_win32\$CONFIG\*.lib" "$bdb_target_dir\lib"
+
+	"Copying DLL files to $bdb_target_dir\bin"
+	copy-item "$bdb_build_dir\build_win32\$CONFIG\*.dll" "$bdb_target_dir\bin"
 
 	pop-location
     
@@ -310,12 +372,23 @@ function do_subversion
 {
 	
 	do_openssl
+	do_zlib
 
 	push-location	
-	
-    checkout $SUBVERSION subversion 
 
-	set-location subversion
+	if ( $script:subversion_dir )
+	{
+		"Already have a subversion directory. Not doing it."
+		return
+	}
+	else
+	{
+		"No subversion dir. Doing it"
+	}
+	
+    checkout $SUBVERSION "subversion" 
+
+	set-location "subversion"
 
 	do_apr
 	do_berkeley
@@ -330,21 +403,28 @@ function do_subversion
 	$gen_make = convert-path "gen-make.py"
 	
 	$opts="-t vcproj "
-	$opts+=	"--with-berkeley-db=$bdb_target_dir --with-openssl=$openssl_target_dir"
+	$opts+=	"--with-berkeley-db=$bdb_target_dir --with-openssl=$openssl_target_dir --with-zlib=$zlib_target_dir"
 	
 	# quote appropriately
 	$opts = $opts.Split() | qq 
-	
+	showpath
 	"Generating VC++ solution files"
 	echo "python gen-make.py $opts"
     python "gen-make.py" $opts
+
+	if ( ! $? ){ exit }
 
 	# make sure our built subversion lets us set the admin dir
 	"Patching the Subversion source to allow us to set the admin dir"
 	patch -p0 --input "..\src\NSvn.Core\admindir.patch"
 
+	if ( ! $? ){ exit }
+
+	
 	"Building Subversion"
 	devenv "subversion_vcnet.sln" /Build $CONFIG /project "__ALL__"
+
+	#if ( ! $? ){ exit }
 
 	pop-location
 
@@ -353,39 +433,49 @@ function do_subversion
 	 
 }
 
+
+
 function do_ankh
 {
 	# do_subversion
 	#
 	checkout $ANKHSVN
 
-	if ( ! $subversion_dir )
-	{
-		"Doing subversion"
-		do_subversion 
-	}
-	else
-	{
-		"Not doing subversion"
-	}
-	
-	$env:svnsrc=$subversion_dir
-
-
-	"svnsrc: $env:svnsrc"
-	set-location "src"
-	devenv src.sln /build $CONFIG /project "AnkhSetup"
+	do_subversion
 
 	$toname = "..\AnkhSetup-{0}.{1}.{2}{3}.msi" -f $MAJOR, $MINOR, $PATCH, $LABEL
 
-	copy-item "Ankh\AnkhSetup\$CONFIG\AnkhSetup.msi" $toname
+	
+	set-location "src"
+
+	if ( $USE_NANT )
+	{
+		nant /t:"net-1.0" /v wix "-D:svndir=$subversion_dir"
+
+		if ( ! $? ){ exit }
+
+		copy-item "installsource\Ankh.msi" $toname
+		
+	}
+	else
+	{	
+		$env:svnsrc=$subversion_dir
+
+
+		"svnsrc: $env:svnsrc"
+		devenv src.sln /build $CONFIG /project "AnkhSetup"
+
+		if ( ! $? ){ exit }
+
+		copy-item "Ankh\AnkhSetup\$CONFIG\AnkhSetup.msi" $toname
+	}
 }
 
 $starttime = [DateTime].Now
 
 # parse any arguments given on the command line
 parse_args( $args )
-die
+
 push-location
 
 # create the build directory
@@ -395,10 +485,6 @@ set-location $dir
 
 "Created build directory {0}" -f $dir
 
-#do_subversion
-#do_openssl
-#do_berkeley
-# do_apr
 do_ankh
 pop-location
 
