@@ -6,20 +6,20 @@ Currently, to get a copy of the Ankh source code, you need to check it out using
 
 Note: The current source tree only builds against the 0.23 release of SVN.
 
-Start by getting the 0.23 source tarball. You will also need the VS.NET version of the Berkeley DB binaries, which can be found here . We are currently using the 4.0.14 version. Make sure you don't get the VC6.0 versions, since they will cause spurious access violations at runtime.
+Start by getting the 0.23 source tarball ( http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=260 ). You will also need the VS.NET version of the Berkeley DB binaries, which can be found at http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=688 . We are currently using the 4.0.14 version. Make sure you don't get the VC6.0 versions, since they will cause spurious access violations at runtime.
 
 Extract the subversion tarball(using Winzip or similar). Then, extract the Berkeley zip into a directory called db4-win32 at the root of the tree(alongside the doc and build directories).
 
 
 * APR *
 
-Subversion relies on the Apache Portable Runtime(APR) library. Most of APR is included in the tarball, but to get Subversion to build on Win32 you will also need the apr-iconv module. You can check this out from the Apache CVS repository using a CVS client:
+Subversion relies on the Apache Portable Runtime(APR) library. Most of APR is included in the tarball, but to get Subversion to build on Win32 you will also need the apr-iconv module. You can check this out from the Apache CVS repository using a CVS client ( http://www.cvshome.org/ ):
 
 cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic login 
     (password: 'anoncvs')
 cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic co apr-iconv
     
-You may run into a problem with the supplied .dsp files in the tarball. If the person packaging it was using a UNIX machine, the line endings will probably be wrong and VS.NET will refuse to convert them. You can use an utility like unix2dos to fix this, or you can check out those modules from CVS using the approach described above(just substitute apr and apr-util for apr-iconv). All the modules need to be in the top-level directory of the Subversion source tree. 
+You may run into a problem with the supplied .dsp files in the tarball. If the person packaging it was using a UNIX machine, the line endings will probably be wrong and VS.NET will refuse to convert them. You can use an utility like unix2dos ( http://home.clear.net.nz/pages/niche/unix2dos.html ) to fix this, or you can check out those modules from CVS using the approach described above(just substitute apr and apr-util for apr-iconv). All the modules need to be in the top-level directory of the Subversion source tree. 
 
 
 * Building Neon *
