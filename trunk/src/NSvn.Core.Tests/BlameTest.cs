@@ -40,6 +40,23 @@ namespace NSvn.Core.Tests
             }
         }
 
+        [Test]
+        public void TestWithEmptyEntries()
+        {
+            string path = Path.Combine( this.WcPath, "Form.cs" );
+
+            // this won't give any results - verify that there are no exceptions
+            this.Client.Blame( path, Revision.Head, Revision.Head,
+                new BlameReceiver( this.Receiver ) );
+
+            Blame[] b = (Blame[])this.blames.ToArray( typeof(Blame) );
+
+            Assert.AreEqual( -1, b[0].Revision );
+            Assert.AreEqual( "", b[0].Author );
+            Assert.AreEqual( DateTime.MinValue, b[0].Date );
+
+        }
+
         private void Receiver( long lineNumber, int revision, string author, 
             DateTime date, string line )
         {
@@ -66,11 +83,11 @@ namespace NSvn.Core.Tests
 
         private class Blame
         {
-            long LineNumber;
-            int Revision;
-            string Author;
-            DateTime Date;
-            string Line;
+            public long LineNumber;
+            public int Revision;
+            public string Author;
+            public DateTime Date;
+            public string Line;
 
             public Blame( long lineNumber, int revision, string author, 
                 DateTime date, string line )
