@@ -45,7 +45,7 @@
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
-                <includes name="${build.dir}/Ankh.ToolWindowLib.dll"/>
+                <includes name="${build.dir}/AnkhToolWindowLib.dll"/>
                 <includes name="${lib.dir}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
                 <includes name="${lib.dir}\Interop.SHDocVw.dll"/>
             </references>
