@@ -22,7 +22,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents the Solution Explorer window in the VS.NET IDE
     /// </summary>
-    public class Explorer 
+    public class Explorer : ISelectionContainer
     {
         public Explorer( _DTE dte, IContext context )
         {
