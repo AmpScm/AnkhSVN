@@ -515,6 +515,20 @@ String* NSvn::Core::Client::UrlFromPath( String* path )
         return 0;
 }
 
+// implementation of Client::UuidFromUrl
+String* NSvn::Core::Client::UuidFromUrl( String* url, ClientContext* context )
+{
+    Pool pool;
+
+    const char* realUrl = CanonicalizePath( url, pool );
+    const char* uuid;
+
+    HandleError( svn_client_uuid_from_url( &uuid, realUrl, context->ToSvnContext( pool ),
+        pool ) );
+
+    return (String*)StringHelper( uuid );
+}
+
 
 struct apr_hash_index_t
 {};

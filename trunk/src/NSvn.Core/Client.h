@@ -430,6 +430,14 @@ namespace NSvn
             /// <summary>Retrieves an URL from a working copy path</summary>
             /// <param name="path">The working copy path.</param>
             static String* UrlFromPath( String* path );
+
+            /// <summary>Retrieves the UUID for a specified repository.</summary>
+            /// <param name="url">The URL to the repository.</param>
+            ///<param name="context">A client context object, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
+            ///                      for more information.</param> 
+            static String* UuidFromUrl( String* url, ClientContext* context );
         private:
             // ctor made private to avoid instantiation of this class
             Client(){;}
