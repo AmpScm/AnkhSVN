@@ -32,10 +32,13 @@ namespace NSvn
             __property System::String* get_SvnError()
             { return this->svnError; }
 
-            // <summary>Override the Message property to include the SVN error message</summary>
-            __property System::String* get_Message()
-            { return System::String::Concat( SvnException::get_Message(), System::Environment::NewLine, this->SvnError ); }
+            /// <summary>The line number reported by Subversion.</summary>
+            __property int get_Line()
+            { return this->line; }
 
+            /// <summary>The filename reported by Subversion.</summary>
+            __property System::String* get_File()
+            { return this->file; }
 
         protected:
 
@@ -43,6 +46,8 @@ namespace NSvn
             static SvnClientException* CreateExceptionsRecursively( svn_error_t* err );
             int errorCode;
             System::String* svnError;
+            int line;
+            System::String* file;
 
         };
 

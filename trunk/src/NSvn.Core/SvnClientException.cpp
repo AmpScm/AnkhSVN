@@ -10,13 +10,6 @@ using namespace NSvn::Core;
 
 namespace
 {
-    String* FormatMessage( svn_error_t* err )
-    {
-        return String::Format( "svn client error: {0}\r\nat {1} : line {2}", 
-            StringHelper( err->message ),
-            StringHelper( err->file ), __box( err->line ) );
-    }
-
     SvnClientException* CreateException( svn_error_t* err, SvnClientException* child = 0 )
     {
         switch( err->apr_err )
@@ -41,7 +34,7 @@ namespace
             return new OperationCancelledException( child );
             break;
         default:
-            return new SvnClientException( FormatMessage( err ), child );
+            return new SvnClientException( StringHelper(err->message), child );
             break;
         }
     }
@@ -69,6 +62,8 @@ SvnClientException* NSvn::Core::SvnClientException::CreateExceptionsRecursively(
         exception = CreateException( err );;
 
     exception->errorCode = err->apr_err;
-    exception->svnError = StringHelper( err->message );
+    exception->svnError = StringHelper(err->message);
+    exception->file = StringHelper(err->file);
+    exception->line = err->line;
     return exception;
 }
