@@ -17,8 +17,6 @@ namespace NSvn
 		protected UnversionedResource( string path )
 		{
 			this.path = System.IO.Path.GetFullPath(path);
-            this.ClientContext.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
-	
 		}
 
         /// <summary>
@@ -80,15 +78,7 @@ namespace NSvn
             Client.Import( new string[]{ this.Path }, url.ToString(), newEntry, nonRecursive, this.ClientContext );
         }
 */
-        /// <summary>
-        /// Callback function for log messages
-        /// </summary>
-        /// <param name="targets"></param>
-        /// <returns></returns>
-        private string LogMessageCallback( CommitItem[] targets )
-        {
-            return this.logMessageProvider.GetLogMessage( targets );
-        }
+        
 
         /// <summary>
         /// The path to the item.
@@ -123,8 +113,6 @@ namespace NSvn
         }
 
 
-        private string path;
-        private ILogMessageProvider logMessageProvider;
-      
+        private string path;      
 	}
 }
