@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using Utils;
+using System.Threading;
 
 namespace Ankh.Commands
 {
@@ -28,17 +29,13 @@ namespace Ankh.Commands
        
         public override void Execute(IContext context, string parameters)
         {
-            CommandWindow window = (CommandWindow)((Window)context.DTE.Windows.Item( 
+            this.context = context;
+            this.window = (CommandWindow)((Window)context.DTE.Windows.Item( 
                 EnvDTE.Constants.vsWindowKindCommandWindow )).Object;
 
-            this.context = context;
-
             // is it one of the intrinsic commands?
-            string output = ParseIntrinsicCommand( parameters );
-            if ( output == null )
-                output = RunCommand( this.SvnExePath, parameters );
-
-            window.OutputString( output );
+            if ( !ParseIntrinsicCommand( parameters ) )
+                this.RunCommand( this.SvnExePath, parameters );
         }
 
         private string SvnExePath
@@ -52,34 +49,34 @@ namespace Ankh.Commands
             }
         }
 
-        private string ParseIntrinsicCommand( string parameters )
+        private bool ParseIntrinsicCommand( string parameters )
         {
             string[] args = this.ParseArguments( parameters );
 
             if ( args.Length < 1 )
-                return null;
+                return false;
 
-            string output;
+            bool retval = true;
             switch( args[0] )
             {
                 case "/?":
-                    output = Usage();
+                    this.Usage();
                     break;
                 case "pwd":
-                    output = WorkingDirectory();
+                    this.WorkingDirectory();
                     break;
                 case "cd":
-                    output = ChangeWorkingDirectory( args );
+                    this.ChangeWorkingDirectory( args );
                     break;
                 case "dir":
-                    output = DirectoryListing();
+                    this.DirectoryListing();
                     break;
                 default:
-                    output = null;
+                    retval = false;
                     break;
             }
 
-            return output;         
+            return retval;         
         }
 
         /// <summary>
@@ -88,7 +85,7 @@ namespace Ankh.Commands
         /// <param name="command">The command to run.</param>
         /// <param name="parameters">The parameters to use.</param>
         /// <returns>The output from the command.</returns>
-        private string RunCommand(string command, string parameters)
+        private void RunCommand(string command, string parameters)
         {
             ProcessStartInfo info = new ProcessStartInfo( command, parameters );
             info.CreateNoWindow = true;
@@ -105,9 +102,10 @@ namespace Ankh.Commands
             }
             catch( System.ComponentModel.Win32Exception )
             {
-                return String.Format( 
+                this.window.OutputString( String.Format( 
                     "Unable to launch {0}.{1}{1}",
-                    command, Environment.NewLine );
+                    command, Environment.NewLine ) );
+                return;
             }
             ProcessReader stdout = new ProcessReader( process.StandardOutput );
             ProcessReader stderr = new ProcessReader( process.StandardError );
@@ -115,34 +113,44 @@ namespace Ankh.Commands
             stdout.Start();
             stderr.Start();
 
-            process.WaitForExit();
-
-            stdout.Wait();
-            stderr.Wait();
-
-            return stdout.Output + stderr.Output;
+            while( !(process.HasExited && stdout.HasExited && stderr.HasExited && stdout.Empty &&
+                stderr.Empty ) )
+            {
+                int idx = WaitHandle.WaitAny( new WaitHandle[]{ 
+                                                                  stdout.WaitHandle,
+                                                                  stderr.WaitHandle 
+                                                              }, 20, false );
+                if ( idx == 0 )
+                {
+                   window.OutputString( stdout.ReadLine() + "\r\n" );
+                } 
+                else if ( idx == 1 )                
+                {
+                    window.OutputString( stderr.ReadLine() + "\r\n" );
+                }
+                
+            }
         }
 
         /// <summary>
         /// Returns a usage string.
         /// </summary>
         /// <returns></returns>
-        private string Usage()
+        private void Usage()
         {
-            string usage = RunCommand( this.SvnExePath, "help" );
-            usage += 
+            this.RunCommand( this.SvnExePath, "help" );
+            this.window.OutputString( 
 @"In addition to the above, the following metacommands are available:
 /?      This message
 pwd     Print working directory
 cd DIR  Change working directory
 dir     List the contents of the working directory
-";
-            return usage;
+" );
         }
             
-        private string WorkingDirectory()
+        private void WorkingDirectory()
         {
-            return this.workingDirectory;
+            this.window.OutputString( this.workingDirectory + "\r\n" );
         }
 
 
@@ -151,10 +159,10 @@ dir     List the contents of the working directory
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>The new path.</returns>
-        private string ChangeWorkingDirectory( string[] parameters )
+        private void ChangeWorkingDirectory( string[] parameters )
         {
             if ( parameters.Length <= 1 )
-                return "Invalid path";
+                this.window.OutputString( "Invalid path\r\n" );
 
             string path = string.Join( " ", parameters, 1, parameters.Length-1 );
 
@@ -165,19 +173,19 @@ dir     List the contents of the working directory
             if ( Directory.Exists( path ) )
             {
                 this.workingDirectory = path;            
-                return this.workingDirectory;
+                this.window.OutputString( this.workingDirectory + "\r\n" );
             }
             else
-                return "Invalid path.";
+                this.window.OutputString( "Invalid path.\r\n" );
         }
 
         /// <summary>
         /// List the current directory.
         /// </summary>
         /// <returns>A list of the directory.</returns>
-        private string DirectoryListing()
+        private void DirectoryListing()
         {
-            return this.RunCommand( "cmd.exe", "/k dir \"" + 
+            this.RunCommand( "cmd.exe", "/k dir \"" + 
                 this.workingDirectory + "\"" );
         }
 
@@ -185,9 +193,9 @@ dir     List the contents of the working directory
         /// Usage string for svn cd.
         /// </summary>
         /// <returns></returns>
-        private string CDUsage()
+        private void CDUsage()
         {
-            return "svn cd DIR";
+            this.window.OutputString( "svn cd DIR\r\n" );
         }
 
         /// <summary>
@@ -243,6 +251,7 @@ dir     List the contents of the working directory
             return (string[])arglist.ToArray( typeof(String) );
         }
 
+        private CommandWindow window;
         private IContext context;
         private string workingDirectory;
         private readonly Regex INTRINSIC =  new Regex( @"\/\?|pwd|cd|dir" );
