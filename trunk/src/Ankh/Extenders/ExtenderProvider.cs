@@ -16,6 +16,7 @@ namespace Ankh.Extenders
         private ExtenderProvider( AnkhContext context )
         {
             this.context = context;
+            this.extenders = new Hashtable();
         }
 
         #region IExtenderProvider Members
@@ -32,8 +33,15 @@ namespace Ankh.Extenders
                 // have the extender know about the selected item.
                 if ( v.WorkingCopyResources.Count > 0 )
                 {
-                    ResourceExtender extender = new ResourceExtender(
-                        ((WorkingCopyResource)v.WorkingCopyResources[0]).Status );
+                    WorkingCopyResource resource = (WorkingCopyResource)v.WorkingCopyResources[0];
+                    ResourceExtender extender = (ResourceExtender)this.extenders[ resource.Path ];
+                    if ( extender == null )
+                    {
+                        extender = new ResourceExtender();
+                        this.extenders[resource.Path] = extender;
+                    }
+                    extender.Status = resource.Status;
+ 
                     return extender;
                 }
                 else
@@ -99,6 +107,7 @@ namespace Ankh.Extenders
 
         private static ExtenderProvider provider;
         private static ArrayList cookies = new ArrayList();
+        private Hashtable extenders;
 
         private AnkhContext context;
 

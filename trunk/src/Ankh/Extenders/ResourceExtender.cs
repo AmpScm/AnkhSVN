@@ -60,10 +60,28 @@ namespace Ankh.Extenders
     [ClassInterface(ClassInterfaceType.None)]
     public class ResourceExtender : IResourceExtender
     {
-        internal ResourceExtender( Status status )
+        internal ResourceExtender( )
         {
-            this.status = status;
+            // empty
         }
+
+        public override bool Equals( object o )
+        {
+            if ( o == (object)this )
+                return true;
+
+            ResourceExtender other = o as ResourceExtender;
+            if ( other == null )
+                return false;
+
+            return other.Status.Entry.Url == this.Status.Entry.Url;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Status.Entry.Url.GetHashCode();
+        }
+
 
         [Category( "Subversion" )]
         public string Url
@@ -115,6 +133,7 @@ namespace Ankh.Extenders
 
         internal Status Status
         {
+            get{ return this.status; }
             set
             {
                 this.status = value;                
