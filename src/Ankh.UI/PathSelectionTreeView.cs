@@ -3,6 +3,7 @@ using System;
 using System.Windows.Forms;
 using System.Collections;
 using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace Ankh.UI
 {
@@ -263,7 +264,13 @@ namespace Ankh.UI
             if ( nodeName[nodeName.Length-1] == this.PathSeparator[0] )
                 nodeName = nodeName.Substring(0, nodeName.Length-1);
 
-            string[] components = nodeName.Split( this.PathSeparator[0]);
+            string[] components;
+            
+            // special treatment for URLs - we want the hostname in one go.
+            if ( this.UrlPaths )
+                components = this.UrlSplit( nodeName );
+            else
+                components = nodeName.Split( this.PathSeparator[0]);
 
             TreeNode node = null;
             foreach( string component in components )
@@ -296,6 +303,28 @@ namespace Ankh.UI
             return newNode;
         }
 
+        /// <summary>
+        /// Splits an URL. The first component in the returned array will be the
+        /// hostname, the remaining ones will be the path components split by '/'
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private string[] UrlSplit( string url )
+        {
+            Match match = URLPARSE.Match(url);
+            if ( !match.Success )
+                throw new ApplicationException( "Not an URL: " + url );
+            
+            string host = match.Groups["host"].ToString();
+            string rest = match.Groups["rest"].ToString();
+
+            string[] restComponents = rest.Split( this.PathSeparator[0] );
+            string[] components = new string[restComponents.Length+1];
+            components[0] = host;
+            restComponents.CopyTo( components, 1 );
+            return components;
+        }
+
         private IList items;
         private TreeNode checkedNode;
         private bool singleCheck;
@@ -303,6 +332,9 @@ namespace Ankh.UI
 
         private static readonly Color EnabledColor = Color.Black;
         private static readonly Color DisabledColor = Color.Gray;
+        private static readonly Regex URLPARSE = 
+            new Regex(@"(?'host'[^:]+://[^/]*)/(?'rest'.*)", 
+            RegexOptions.IgnoreCase);
 
        
         public static void Main()
