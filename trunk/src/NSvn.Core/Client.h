@@ -296,7 +296,7 @@ namespace NSvn
             ///<param name="recurse">If recurse is true, then propname will be set recursively 
             ///                      on target and all children.</param>  
 	        static void PropSet(Property* property, String* target, bool recurse);
-/*
+
             ///<summary>Set a property to a revision in the repository.</summary>
             ///<param name="propName">Name of property.</param>
             ///<param name="propval">Value of property.</param>
@@ -308,9 +308,9 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-              static void RevPropSet(String* propName, Byte propval[], String* url, Revision* revision, 
-                RevisionNumber* setRev, ClientContext* context);
-            */
+              static void RevPropSet(Property* property, String* url, Revision* revision, 
+			[System::Runtime::InteropServices::Out]System::Int32* setRev, ClientContext* context);
+            
             ///<summary>Get properties from an entry in a working copy or repository.</summary>
             ///<param name="propName">Name of property.</param>
             ///<param name="target">Target of property. Which file/directory to get the property.</param>         

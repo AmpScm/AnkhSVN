@@ -98,6 +98,26 @@ void NSvn::Core::Client::PropSet(Property* property, String* target, bool recurs
     HandleError( svn_client_propset( StringHelper(property->Name), &propv, truePath, recurse, pool) );
 }
 
+
+// implementation of Client::RevPropSet
+void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* revision, 
+    [System::Runtime::InteropServices::Out]System::Int32*
+    revisionNumber, ClientContext* context)
+{
+	Pool pool;
+    
+    const char* truePath = CanonicalizePath( url, pool );
+    svn_string_t propv;
+    ByteArrayToSvnString( &propv, property->Data, pool );
+	svn_revnum_t setRev; 
+
+    HandleError( svn_client_revprop_set(  StringHelper(property->Name), &propv, 
+		truePath, revision->ToSvnOptRevision( pool ), &setRev, 
+		context->ToSvnContext (pool), pool));
+
+    *revisionNumber = setRev;
+}
+
 // implementation of Client::Checkout
 void NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision, 
                                   bool recurse, ClientContext* context )
