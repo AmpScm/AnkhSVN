@@ -9,7 +9,6 @@ namespace Ankh.Commands
 	/// </summary>
     [VSNetCommand("ShowRepositoryExplorer", Text = "Repository Explorer", Tooltip = "Show the repository explorer window",
          Bitmap = ResourceBitmaps.ReposExplorer),
-    VSNetControl( "MenuBar.View", Position = 1 ),
     VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 )]
 	public class ShowRepositoryExplorerCommand : CommandBase
 	{
