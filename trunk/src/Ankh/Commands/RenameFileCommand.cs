@@ -23,7 +23,7 @@ namespace Ankh.Commands
             return v.Renamable ? 
                 (   vsCommandStatus.vsCommandStatusEnabled | 
                     vsCommandStatus.vsCommandStatusSupported ) 
-                : vsCommandStatus.vsCommandStatusUnsupported;
+                : vsCommandStatus.vsCommandStatusSupported;
         }
 
         public override void Execute(AnkhContext context)
