@@ -90,9 +90,7 @@ namespace Ankh.Solution
                 
                 this.Explorer.AddResource( this.projectItem, this );      
               
-                Debug.Unindent();
-                Debug.WriteLine( "Finished adding resources from node "+ 
-                    this.projectItem.Name, "Ankh" );
+               
             }
             catch( NullReferenceException )
             {
@@ -103,6 +101,11 @@ namespace Ankh.Solution
             {
                 Debug.WriteLine( "SEHException thrown: " + this.projectItem.Name );
                 System.Windows.Forms.MessageBox.Show( "SEHException: " + this.projectItem.Name + sex.Message );
+            }
+            finally
+            {
+                Debug.Unindent();
+                Debug.WriteLine( "Finished adding resources from node", "Ankh" );
             }
         }
 
@@ -124,12 +127,17 @@ namespace Ankh.Solution
                     }
                 }
 
-                Debug.Unindent();
-                Debug.WriteLine( "Finished adding subitems for " + item.Name, "Ankh" );
+               
             }
             catch( InvalidCastException )
             {
                 // empty
+            }
+            finally
+            {
+                Debug.Unindent();
+                Debug.WriteLine( "Finished adding subitems for " + item.Name, 
+                    "Ankh" );
             }
         }
 
