@@ -116,8 +116,6 @@ namespace Ankh.Solution
         /// </summary>
         protected void UpdateStatus( bool recursive, bool propagate )
         {      
-
-            Trace.WriteLine( "Updating status on " + this.uiItem.Name, "Ankh" );
             // update status on the children first
             if ( recursive )
             {
