@@ -1,5 +1,6 @@
 using System;
 using EnvDTE;
+using NSvn;
 
 namespace Ankh
 {
@@ -13,6 +14,7 @@ namespace Ankh
 		{
 			this.dte = dte;
             this.addin = addin;
+            this.callbackTargets = new CallbackTargets();
             SetUpEvents();
         }
 
@@ -40,6 +42,11 @@ namespace Ankh
         public SolutionExplorer SolutionExplorer
         {
             get{ return this.solutionExplorer; }
+        }
+
+        public Notifications Notifications
+        {
+            get{ return this.callbackTargets.Notifications; }
         }
 
         #region SetUpEvents
@@ -143,5 +150,6 @@ namespace Ankh
         private ProjectItemsEvents vcProjectItemsEvents;
         private ProjectItemsEvents vjProjectItemsEvents;
         private SolutionExplorer solutionExplorer = null;
+        private CallbackTargets callbackTargets;
 	}
 }

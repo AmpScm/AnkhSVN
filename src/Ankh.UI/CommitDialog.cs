@@ -22,6 +22,14 @@ namespace Ankh.UI
             CreateMyToolTip();
 		}
 
+        /// <summary>
+        /// The log message to be used for this commit.
+        /// </summary>
+        public string LogMessage
+        {
+            get{ return this.logMessageControl.LogMessage; }
+        }
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -43,7 +51,7 @@ namespace Ankh.UI
         private void CreateMyToolTip()
         {
             // Create the ToolTip and associate with the Form container.
-            ToolTip commitToolTip = new ToolTip(this.components);
+            ToolTip commitToolTip = new ToolTip();
 
             // Set up the delays in milliseconds for the ToolTip.
             commitToolTip.AutoPopDelay = 5000;
@@ -72,7 +80,6 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.components = new System.ComponentModel.Container();
             this.fileTreeView = new System.Windows.Forms.TreeView();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
@@ -115,7 +122,7 @@ namespace Ankh.UI
             this.logMessageControl.Location = new System.Drawing.Point(0, 184);
             this.logMessageControl.Name = "logMessageControl";
             this.logMessageControl.Size = new System.Drawing.Size(508, 128);
-            this.logMessageControl.TabIndex = 3;
+            this.logMessageControl.TabIndex = 1;
             // 
             // logLabel
             // 
@@ -127,7 +134,9 @@ namespace Ankh.UI
             // 
             // CommitDialog
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(512, 341);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
                                                                           this.logLabel,
@@ -135,8 +144,10 @@ namespace Ankh.UI
                                                                           this.okButton,
                                                                           this.cancelButton,
                                                                           this.fileTreeView});
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(390, 350);
             this.Name = "CommitDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Commit";
             this.ResumeLayout(false);
 

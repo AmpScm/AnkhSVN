@@ -160,7 +160,7 @@ namespace Ankh
                     try
                     {
                         this.resource = SvnResource.FromLocalPath(
-                            pitem.get_FileNames(0) );
+                            pitem.get_FileNames(1) );
                         if ( this.resource != null )
                         {
                             this.outer.AddResource( pitem, this );
