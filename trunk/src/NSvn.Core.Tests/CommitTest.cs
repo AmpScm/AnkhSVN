@@ -114,8 +114,8 @@ namespace NSvn.Core.Tests
             this.Client.LogMessage += new LogMessageDelegate( this.CancelLogMessage );
             CommitInfo info = this.Client.Commit( new string[]{ path }, true );
 
-            Assertion.AssertNull( "info should be null for a cancelled commit", 
-                info );
+            Assert.AreEqual( CommitInfo.Invalid, info,
+                "info should be Invalid for a cancelled commit" );
 
             string output = this.RunCommand( "svn", "st " + this.WcPath ).Trim();
             Assertion.AssertEquals( "File committed even for a cancelled log message", 'M', 
