@@ -164,6 +164,14 @@ namespace NSvn.Core.Tests
             status2 = this.Client.SingleStatus( form );
             Assertion.Assert( "Should be non-equal", !status1.Equals( status2 ) );
             Assertion.AssertEquals( "Should be equal", status1.Entry, status2.Entry );
+
+            // unversioned items have no .Entry
+            string unversioned = Path.Combine( this.WcPath, "Unversioned.txt" );
+            using( StreamWriter w = new StreamWriter( unversioned, false ) )
+                w.WriteLine( "Moo" );
+            status2 = this.Client.SingleStatus( unversioned );
+            Assertion.AssertNull( ".Entry should be null", status2.Entry );
+            Assertion.Assert( "Should not be similar", !status2.Equals( status1 ) );
         }
 
         private void StatusFunc( string path, Status status )

@@ -5,6 +5,8 @@
 #include "Entry.h"
 #include <svn_wc.h>
 
+
+
 namespace NSvn
 {
     namespace Core
@@ -123,7 +125,7 @@ namespace NSvn
                     this->locked == other->locked &&
                     this->copied == other->copied &&
                     this->switched == other->switched &&
-                    this->entry->Equals( other->entry );
+                    OBJEQUALS(this->entry, other->entry);
             }
 
         private:
