@@ -98,8 +98,7 @@ namespace NSvn.Core.Tests
         }
 
         private readonly Regex BlameRegex = new Regex( 
-            @"\s+(?<rev>\d+)\s+(?<author>\w+)\s+(?<date>\d\d\d\d-\d\d-\d\d " + 
-            @"\d\d:\d\d:\d\d [-+]\d\d\d\d) \(\w\w\w, \d\d \w\w\w \d\d\d\d\) (?<line>.*)" );
+            @"\s+(?<rev>\d+)\s+(?<author>\w+)\s+(?<date>\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d\d\d\d) (\(\w{1,4}, \d\d \w{1,4} \d{4}\) )?(?<line>.*)" );
 
         private ArrayList blames;
     }
