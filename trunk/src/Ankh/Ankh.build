@@ -54,10 +54,8 @@
                 <includes name="..\Ankh.UI\${build.dir}\Ankh.UI.dll"/>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
-                <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
                 <includes name="${build.dir}/AnkhUserControlHostLib.dll"/>
-                <includes name="${lib.dir}\${vsnet.ver}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
                 <includes name="${lib.dir}\Interop.SHDocVw.dll"/>
                 <includes name="${lib.dir}\Interop.esproj.dll" />
             </references>
