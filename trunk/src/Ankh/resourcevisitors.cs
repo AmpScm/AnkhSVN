@@ -114,7 +114,7 @@ namespace Ankh
 
         public string Diff
         {
-            get{ return Encoding.UTF8.GetString( this.stream.ToArray() ); }
+            get{ return Encoding.Default.GetString( this.stream.ToArray() ); }
         }
 
 

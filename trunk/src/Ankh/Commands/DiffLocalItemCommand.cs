@@ -44,7 +44,7 @@ namespace Ankh.Commands
                 DiffHtmlModel model = new DiffHtmlModel( v.Diff );
                 string html = model.GetHtml();
                 string htmlFile = Path.GetTempFileName();
-                using( StreamWriter w = new StreamWriter( htmlFile ) )
+                using( StreamWriter w = new StreamWriter( htmlFile, false, System.Text.Encoding.Default ) )
                     w.Write( html );
 
                 // the Start Page window is a web browser
