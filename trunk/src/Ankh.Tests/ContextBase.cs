@@ -432,6 +432,12 @@ namespace Ankh.Tests
                 // TODO: add implementation
             }
 
+            public virtual bool RunWithProgressDialog( IProgressWorker worker, string caption )
+            {
+                worker.Work( this.Context );
+                return true;
+            }
+
             public virtual DialogResult QueryWhetherAnkhShouldLoad()
             {
                 // TODO:  Add UIShellImpl.QueryWhetherAnkhShouldLoad implementation
