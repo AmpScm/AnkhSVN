@@ -14,6 +14,7 @@ namespace SvnTasks
 	public class SvnCommitTask : SvnBaseTask
 	{
 		protected bool m_recursive  = false;
+		protected string m_logMessage = String.Empty;
 
 		[TaskAttribute("recursive", Required=false)]
 		public bool Recursive
@@ -25,6 +26,18 @@ namespace SvnTasks
 			set
 			{
 				m_recursive = value;
+			}
+		}
+		[TaskAttribute("logmessage", Required=false)]
+		public string LogMessage
+		{
+			get
+			{
+				return m_logMessage;
+			}
+			set
+			{
+				m_logMessage = value;
 			}
 		}
 
@@ -43,6 +56,7 @@ namespace SvnTasks
 
 				string[] targets = new string[1];
 				targets[0] = this.LocalDir;
+				this.client.LogMessage += new LogMessageDelegate(client_LogMessage);
 				this.client.Commit(targets, !this.Recursive);
 			}
 			catch( AuthorizationFailedException )
@@ -57,6 +71,11 @@ namespace SvnTasks
 			{
 				throw new BuildException( "Unexpected error: " + ex.Message );
 			}
-		}      
+		}
+
+		private void client_LogMessage(object sender, LogMessageEventArgs args)
+		{
+			args.Message = m_logMessage;
+		}
 	}
 }

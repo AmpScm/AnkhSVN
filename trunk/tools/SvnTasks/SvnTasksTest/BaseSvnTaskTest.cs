@@ -13,10 +13,9 @@ namespace Tests.SvnTasks
 	{
 		protected readonly string m_localTestDir = @"C:\testSvnTasks\";
 		protected readonly string m_localExportDir = @"C:\testExportSvnTasks\";
-		protected readonly string m_testUrl= "http://ankhsvn.com:8088/svn/test";
 		
+		protected readonly string m_testUrl= "http://ankhsvn.com:8088/svn/test";
 		protected readonly string m_checkFile = "SvnTasksTest.txt";
-
 		
 		protected readonly string m_checkoutXml = @"<?xml version='1.0'?>
             <project>
