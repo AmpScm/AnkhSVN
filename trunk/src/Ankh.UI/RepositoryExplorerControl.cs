@@ -11,76 +11,89 @@ using System.Text.RegularExpressions;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Gives a tree view of the repository based on revision.
-	/// </summary>
-	public class RepositoryExplorerControl : System.Windows.Forms.UserControl
-	{		
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+    /// <summary>
+    /// Gives a tree view of the repository based on revision.
+    /// </summary>
+    public class RepositoryExplorerControl : System.Windows.Forms.UserControl
+    {		
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
-		public RepositoryExplorerControl()
-		{
-			//This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public RepositoryExplorerControl( )
+        {
+            //This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
-			//Set revision choices in combobox
+            //Set revision choices in combobox
             this.revisionPicker.WorkingEnabled = false;
             this.revisionPicker.BaseEnabled = false;
             this.revisionPicker.CommittedEnabled = false;
             this.revisionPicker.PreviousEnabled = false;
-
 			
             this.components = new System.ComponentModel.Container();
-			this.SetToolTips();
-		}
+            this.SetToolTips();
+        }
+
+        /// <summary>
+        /// The NSvnContext to use for authentication, notifications etc.
+        /// </summary>
+        public NSvnContext Context
+        {
+            get{ return this.context; }
+            set{ this.context = value; }
+        }
         
         public void AddMenuItem( MenuItem item, int position )
         {
             this.treeView.ContextMenu.MenuItems.Add( position, item );
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}	
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }	
 
-		private void SetToolTips()
-		{
-			// Create the ToolTip and associate with the Form container.
-			ToolTip ToolTip = new ToolTip(this.components);
+        private void SetToolTips()
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip ToolTip = new ToolTip(this.components);
 
-			// Set up the delays in milliseconds for the ToolTip.
-			ToolTip.AutoPopDelay = 5000;
-			ToolTip.InitialDelay = 1000;
-			ToolTip.ReshowDelay = 500;
-			// Force the ToolTip text to be displayed whether or not the form is active.
-			ToolTip.ShowAlways = true;
+            // Set up the delays in milliseconds for the ToolTip.
+            ToolTip.AutoPopDelay = 5000;
+            ToolTip.InitialDelay = 1000;
+            ToolTip.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            ToolTip.ShowAlways = true;
          
-			// Set up the ToolTip text for the Button and Checkbox.
-			ToolTip.SetToolTip( this.urlTextBox, 
-				"Write the url to your repository" );
-			ToolTip.SetToolTip( this.treeView, 
-				"Select a date from the calendar" );
-		}
+            // Set up the ToolTip text for the Button and Checkbox.
+            ToolTip.SetToolTip( this.urlTextBox, 
+                "Write the url to your repository" );
+            ToolTip.SetToolTip( this.treeView, 
+                "Select a date from the calendar" );
+        }
 
         //Gives a tree view of repository if valid revision is selected
         private void goButton_Click(object sender, System.EventArgs e)
         {
-            this.treeView.RepositoryRoot = new RepositoryDirectory(
+            RepositoryDirectory dir = new RepositoryDirectory(
                 this.urlTextBox.Text, this.revisionPicker.Revision );
+
+            if ( this.context != null )
+                dir.Context = this.context;
+
+            this.treeView.RepositoryRoot = dir;
             this.treeView.Enabled = true;
         }
 
@@ -90,12 +103,12 @@ namespace Ankh.UI
         }
 
 		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.urlLabel = new System.Windows.Forms.Label();
             this.urlTextBox = new System.Windows.Forms.TextBox();
             this.revisionLabel = new System.Windows.Forms.Label();
@@ -174,15 +187,16 @@ namespace Ankh.UI
         }
 		#endregion
 
-		private System.Windows.Forms.Label urlLabel;
-		private System.Windows.Forms.TextBox urlTextBox;
-		private System.Windows.Forms.Label revisionLabel;
-		private Ankh.UI.RepositoryTreeView treeView;
+        private System.Windows.Forms.Label urlLabel;
+        private System.Windows.Forms.TextBox urlTextBox;
+        private System.Windows.Forms.Label revisionLabel;
+        private Ankh.UI.RepositoryTreeView treeView;
         private System.Windows.Forms.Button goButton;
         private Ankh.UI.RevisionPicker revisionPicker;
+        private NSvnContext context;
 		
 						
-	}
+    }
 }
 
 
