@@ -66,19 +66,22 @@ namespace Ankh.Commands
         {
 
             string mergeExe = context.Config.MergeExePath;
-            if (mergeExe == null)
+            Entry entry = item.Status.Entry;
+            bool binary = context.Client.HasBinaryProp(item.Path);
+            if ( binary || mergeExe == null )
             {
                 string selection;
 
                 using( ConflictDialog dialog = new ConflictDialog(  ) )
                 {
-                    Entry entry = item.Status.Entry;
+                    entry = item.Status.Entry;
                     dialog.Filenames = new string[]{
                                                        entry.ConflictWorking,
                                                        entry.ConflictNew,
                                                        entry.ConflictOld,
                                                        item.Path
                                                    };
+                    dialog.Binary = binary;
 
                     if ( dialog.ShowDialog( context.HostWindow ) != DialogResult.OK )
                         return;

@@ -473,6 +473,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "EventSinks\ProjectFilesEventSink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "EventSinks\ProjectItemsEventSink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

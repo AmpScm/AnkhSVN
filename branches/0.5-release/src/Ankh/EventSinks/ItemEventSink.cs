@@ -34,8 +34,7 @@ namespace Ankh.EventSinks
                             this.Context.Client.Add( file, false );
                     }
                 }
-
-                this.DelayedRefresh( item.ContainingProject );
+                this.Context.SolutionExplorer.Refresh( item.ContainingProject );
             }
             catch( Exception ex )
             {
@@ -68,7 +67,7 @@ namespace Ankh.EventSinks
                 }
 
                 // we need a refresh of the containing project no matter what
-                this.DelayedRefresh( item.ContainingProject );
+                this.Context.SolutionExplorer.Refresh( item.ContainingProject );
             }
             catch ( Exception ex )
             {
@@ -85,7 +84,8 @@ namespace Ankh.EventSinks
         {
             // we don't want to svn delete files that actually exist on disk -
             // they'll most likely just be "Exclude(d) from project"
-            return item.IsVersioned && !File.Exists( item.Path );
+            return item.IsVersioned && 
+                (!File.Exists( item.Path ) || !Directory.Exists(item.Path));
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Ankh.EventSinks
                 SvnItem oldItem = this.Context.StatusCache[oldPath];
 
                 // is the item versioned?
-                if ( oldItem.Status.TextStatus != StatusKind.None )
+                if ( oldItem.IsVersioned )
                 {
                     MessageBox.Show( this.Context.HostWindow, 
                         "You have attempted to rename a file that is under version control.\r\n" + 
@@ -126,7 +126,7 @@ namespace Ankh.EventSinks
                 {
                     // we must still ensure that the project is rescanned, since 
                     // it will lose it's status icon otherwise
-                    this.DelayedRefresh( item.ContainingProject );
+                    this.Context.SolutionExplorer.Refresh( item.ContainingProject );
                 }
             }
             catch( Exception ex )
