@@ -179,34 +179,18 @@ namespace Ankh.Tests
         }
 
         #region UIShell class
-        private class UIShell : IUIShell
+        private class UIShell : ContextBase.UIShellImpl
         {
-            public RepositoryExplorerControl RepositoryExplorer
+            public override RepositoryExplorerControl RepositoryExplorer
             {
                 get{ return new RepositoryExplorerControl(); }
-            }
+            }           
 
-            public IContext Context
-            {
-                get{ return null; }
-                set{ ; }
-            }
-
-            public DialogResult QueryWhetherAnkhShouldLoad()
+            public override DialogResult QueryWhetherAnkhShouldLoad()
             {
                 return AllowLoad;
             }
-
-            public void SetRepositoryExplorerSelection(object[] selection)
-            {
-                // TODO:  Add UIShell.SetRepositoryExplorerSelection implementation
-            }
-
-            public void ShowRepositoryExplorer(bool show)
-            {
-                // TODO:  Add UIShell.ShowRepositoryExplorer implementation
-            }
-
+            
             public DialogResult AllowLoad = DialogResult.Yes;
         }
         #endregion
