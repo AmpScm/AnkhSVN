@@ -71,7 +71,11 @@ namespace Ankh.UI
                 this.commitItemsTree.Items = value;
                 this.commitItemsTree.CheckedItems = value;
                 foreach( object item in value )
-                    this.diffView.AddPage( item.ToString() );
+                {
+                    // is this a file?
+                    if ( File.Exists( item.ToString() ))
+                        this.diffView.AddPage( item.ToString() );
+                }
             }
         }
 
