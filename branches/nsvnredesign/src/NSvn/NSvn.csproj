@@ -194,11 +194,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SvnUtils.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "UnversionedDirectory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

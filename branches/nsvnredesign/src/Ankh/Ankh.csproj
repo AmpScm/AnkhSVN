@@ -206,6 +206,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SvnItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "VSNetCommandAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -475,6 +480,11 @@
                 />
                 <File
                     RelPath = "Solution\SolutionNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\StatusCache.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
