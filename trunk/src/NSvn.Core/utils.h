@@ -23,6 +23,8 @@ namespace NSvn
         void ByteArrayToSvnString( svn_string_t* string, Byte array[], 
             const Pool& pool );
 
+        Byte SvnStringToByteArray( svn_string_t* string )[];
+
         const char* CanonicalizePath( String* path, Pool& pool );
 
         String* ToNativePath( const char* path, Pool& pool );

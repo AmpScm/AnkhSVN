@@ -157,9 +157,9 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-            ///<returns></returns>
-            //TODO:  StringDictionary to be reconsidered
-	        static StatusDictionary* Status(
+            ///<returns>StatusDictionary object containing status information. 
+            ///        <see cref="NSvn.Core.StatusDictionary"></returns>
+            static StatusDictionary* Status(
                 [System::Runtime::InteropServices::Out]System::Int32* youngest, 
                 String* path, bool descend, bool getAll, bool upDate,  
                 bool noIgnore, ClientContext* context);
@@ -200,11 +200,9 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>   
-            ///<returns></returns>
 	        static void Diff(String* diffOptions[], String* path1, Revision* revision1, 
                 String* path2, Revision* revision2, bool recurse, bool noDiffDeleted, 
                 Stream* outfile, Stream* errFile, ClientContext* context);
-
 
             ///<summary>Apply file differences into a working copy. Merge changes 
             ///         from url1/revision1 to url2/revision2 into a working-copy. 
@@ -233,7 +231,7 @@ namespace NSvn
             ///<summary>Cleanup a working copy directory, finishing any incomplete operations, 
             ///         removing lockfiles, etc.</summary>
             ///<param name="dir">Path to the directory.</param>
-            static void Cleanup(String* dir);
+            static void Cleanup( String* dir, ClientContext* context );
 
             ///<summary>Restore the pristine version of a working copy path.</summary>
             ///<param name="path">Path to the file/directory</param>
@@ -253,8 +251,7 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-	        static void Resolve(String* path, bool recursive, ClientContext* context);
-        
+	        static void Resolve(String* path, bool recursive, ClientContext* context);       
 
             ///<summary>Copy a file/directory.</summary>
             ///<param name="srcPath">Path to the file/directory to be copied.</param>
@@ -271,7 +268,6 @@ namespace NSvn
             //TODO: Implement the variable optionalAdmAccess
 	        static CommitInfo* Copy(String* srcPath, Revision* srcRevision, String* dstPath,
                 ClientContext* context); 
-
 
             ///<summary>Move a file/directory.</summary>
             ///<param name="srcPath">Path to the file/directory to be moved.</param>
@@ -290,17 +286,17 @@ namespace NSvn
                 bool force, ClientContext* context);
 
             ///<summary>Set a property to a file/directory</summary>
-            ///<param name="propName">Name of property</param>
-            ///<param name="propval">Value of property</param>
+            ///<param name="property">Object that contain a value and a name.
+            ///         <see cref="NSvn.Common.Property"/></param>
             ///<param name="target">Target of property. Which file/directory to set the property.</param>
             ///<param name="recurse">If recurse is true, then propname will be set recursively 
             ///                      on target and all children.</param>  
 	        static void PropSet(Property* property, String* target, bool recurse);
 
             ///<summary>Set a property to a revision in the repository.</summary>
-            ///<param name="propName">Name of property.</param>
-            ///<param name="propval">Value of property.</param>
-            ///<param name="url">Path to the "revision" in the repository.</param>
+            ///<param name="property">Object that contain a value and a name.
+            ///         <see cref="NSvn.Common.Property"/></param>
+	        ///<param name="url">Path to the "revision" in the repository.</param>
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
             ///                         for more information.</param>
             ///<param name="setRev">A revision number.</param>
@@ -308,7 +304,7 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-              static void RevPropSet(Property* property, String* url, Revision* revision, 
+            static void RevPropSet(Property* property, String* url, Revision* revision, 
 			[System::Runtime::InteropServices::Out]System::Int32* setRev, ClientContext* context);
             
             ///<summary>Get properties from an entry in a working copy or repository.</summary>
@@ -322,10 +318,12 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
+            ///<returns>PropertyDictionary object that contain a list of names and values of properties.
+            ///         <see cref="NSvn.Common.PropertyDictionary"/></returns>
 	        static PropertyDictionary* PropGet(String* propName, String* target, Revision* revision, 
                 bool recurse, ClientContext* context);
 
-            /*
+            
    
             ///<summary>Get a revision property from a repository.</summary>
             ///<param name="propName">Name of property.</param>
@@ -337,10 +335,12 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>  
-            ///<returns></returns>
-	        static Byte RevPropGet(String* propName, String* url, Revision* revision, 
-                RevisionNumber* setRev, ClientContext* context) [];
-*/
+            ///<returns>Property object that contain a value and a name.
+            ///         <see cref="NSvn.Common.Property"/></returns>
+	        static Property* RevPropGet(String* propName, String* url, 
+				Revision* revision, [System::Runtime::InteropServices::Out]System::Int32* setRev, 
+				ClientContext* context);
+
             ///<summary>List the properties on an entry in a working copy or repository.</summary>          
             ///<param name="target">An url or working copy path.</param>         
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
@@ -351,7 +351,8 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>  
-            ///<returns></returns>
+            ///<returns>PropListItem object that contain a list of names and values of properties.
+            ///         <see cref="NSvn.Common.PropListItem"/> </returns>
 	        static PropListItem* PropList(String* target, Revision* revision, bool recurse, ClientContext* context)[];
 
             ///<summary>List the revision properties on an entry in a repository.</summary>
@@ -363,7 +364,8 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>  
-            ///<returns></returns>
+            ///<returns>PropertyDictionary object that contain a list of names and values of properties.
+            ///         <see cref="NSvn.Common.PropertyDictionary"/></returns>
             static PropertyDictionary* RevPropList(String* url, Revision* revision, 
                 [System::Runtime::InteropServices::Out]System::Int32* setRev, 
                 ClientContext* context);

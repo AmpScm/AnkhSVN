@@ -46,11 +46,11 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::MakeDir( String* path, ClientContext
         return CommitInfo::Invalid;
 }
 // implemenentation of Client::Cleanup
-void NSvn::Core::Client::Cleanup( String* directory )
+void NSvn::Core::Client::Cleanup( String* directory, ClientContext* context )
 {
     Pool pool;
     const char* truePath = CanonicalizePath( directory, pool );
-    HandleError( svn_client_cleanup( truePath, pool ) );
+    HandleError( svn_client_cleanup( truePath, context->ToSvnContext( pool ), pool ) );
 }
 
 // implementation of Client::Revert
@@ -220,7 +220,7 @@ void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, 
         trueDstPath, recurse, force, dryRun,
         context->ToSvnContext( pool ), pool ) );
 }
-
+// implementation of Client::PropGet
 NSvn::Common::PropertyDictionary* NSvn::Core::Client::PropGet(String* propName, 
                                                          String* target, Revision* revision, 
                                                         bool recurse, ClientContext* context)
@@ -237,6 +237,27 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::PropGet(String* propName,
     return ConvertToPropertyDictionary( propertyHash, propName, pool );
 
 }
+// implementation of Client::RevPropGet
+NSvn::Common::Property*  NSvn::Core::Client::RevPropGet(String* propName, String* url, Revision* revision,
+                System::Int32* revisionNumber, ClientContext* context)
+{
+	Pool pool;
+    
+    const char* truePath = CanonicalizePath( url, pool );
+    svn_string_t* propv;
+  	svn_revnum_t setRev; 
+
+    HandleError( svn_client_revprop_get(  StringHelper( propName ), &propv, 
+		truePath, revision->ToSvnOptRevision( pool ), &setRev, 
+		context->ToSvnContext (pool), pool));
+
+    *revisionNumber = setRev;
+    Byte array[] = SvnStringToByteArray( propv );
+
+    return new Property( propName, array );
+
+}	
+
 //TODO: Implement the variable admAccessBaton
 // implementation of Client::Delete
 NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* path, bool force, 
@@ -255,7 +276,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* path, bool force,
     else
         return CommitInfo::Invalid;
 }
-
+// implementation of Client::Import
 NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, String* newEntry, bool nonRecursive, 
                 ClientContext* context)
 {
