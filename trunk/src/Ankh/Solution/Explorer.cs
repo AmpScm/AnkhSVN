@@ -56,6 +56,8 @@ namespace Ankh.Solution
         {
             this.projectItems.Clear();
             this.projects.Clear();
+            if ( this.treeview != null )
+                this.treeview.ClearStatusImages();
             this.solutionNode = null;
         }
 
@@ -140,18 +142,19 @@ namespace Ankh.Solution
 
             this.projectItems.Clear();
             this.projects.Clear();
-            // find the root in the treeview
-            IntPtr root = (IntPtr)Win32.SendMessage( this.treeview, Msg.TVM_GETNEXTITEM,
-                C.TVGN_ROOT, IntPtr.Zero );
             
             // generate a status cache
             this.GenerateStatusCache( this.dte.Solution.FullName );
             
             this.solutionItem = this.uiHierarchy.UIHierarchyItems.Item(1);
+            
+            // and assign the status image list to the tree
+            this.treeview.StatusImageList = statusImageList;
+
 
             // we assume there is a single root node
             this.root = TreeNode.CreateSolutionNode( 
-                this.solutionItem, root, this );
+                this.solutionItem, this );
         }
 
         /// <summary>
@@ -234,7 +237,7 @@ namespace Ankh.Solution
             return (ProjectItem)uiItem.Object;
         }
 
-        internal IntPtr TreeView
+        internal TreeView TreeView
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.treeview; }
@@ -320,12 +323,13 @@ namespace Ankh.Solution
 
             IntPtr uiHierarchy = Win32.FindWindowEx( slnExplorer, IntPtr.Zero, 
                 UIHIERARCHY, null );
-            this.treeview = Win32.FindWindowEx( uiHierarchy, IntPtr.Zero, TREEVIEW, 
+            IntPtr treeHwnd = Win32.FindWindowEx( uiHierarchy, IntPtr.Zero, TREEVIEW, 
                 null );         
  
-            if ( this.treeview == IntPtr.Zero )
+            if ( treeHwnd == IntPtr.Zero )
                 throw new ApplicationException( 
                     "Could not attach to solution explorer treeview" );
+            this.treeview = new TreeView( treeHwnd );
 
             // reset back to the original hiding-state and dockable state            
             solutionExplorerWindow.Linkable = linkable;
@@ -343,9 +347,6 @@ namespace Ankh.Solution
             this.statusImageList.ImageSize = new Size(7, 16);
             this.statusImageList.Images.AddStrip( statusImages );    
         
-            // and assign it to the tree
-            Win32.SendMessage( this.treeview, Msg.TVM_SETIMAGELIST, C.TVSIL_STATE,
-                this.statusImageList.Handle );
         }
 
         
@@ -539,7 +540,6 @@ namespace Ankh.Solution
 
 
         private _DTE dte;
-        private IntPtr treeview;
         private UIHierarchyItem solutionItem;
         private TreeNode root;
         private UIHierarchy uiHierarchy;
@@ -554,6 +554,7 @@ namespace Ankh.Solution
         private ImageList statusImageList;
         private AnkhContext context;
         private StatusCache statusCache;
+        private TreeView treeview;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
     }
