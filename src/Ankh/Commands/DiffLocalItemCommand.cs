@@ -32,28 +32,38 @@ namespace Ankh.Commands
 
         public override void Execute(Ankh.AnkhContext context)
         {
-            // get the diff itself
-            DiffVisitor v = new DiffVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v, true );
+            try
+            {
+                context.StartOperation();
 
-            // convert it to HTML and store in a temp file
-            DiffHtmlModel model = new DiffHtmlModel( v.Diff );
-            string html = model.GetHtml();
-            string htmlFile = Path.GetTempFileName();
-            using( StreamWriter w = new StreamWriter( htmlFile ) )
-                w.Write( html );
+                // get the diff itself
+                DiffVisitor v = new DiffVisitor();
+                context.SolutionExplorer.VisitSelectedItems( v, true );
 
-            // the Start Page window is a web browser
-            Window browserWindow = context.DTE.Windows.Item( 
-                Constants.vsWindowKindWebBrowser );
-            WebBrowser browser = (WebBrowser)browserWindow.Object;
+                // convert it to HTML and store in a temp file
+                DiffHtmlModel model = new DiffHtmlModel( v.Diff );
+                string html = model.GetHtml();
+                string htmlFile = Path.GetTempFileName();
+                using( StreamWriter w = new StreamWriter( htmlFile ) )
+                    w.Write( html );
 
-            // have it show the html
-            object url = "file://" + htmlFile;
-            object nullObject = null;
-            browser.Navigate2( ref url, ref nullObject, ref nullObject,
-                ref nullObject, ref nullObject );
-            browserWindow.Activate();            
+                // the Start Page window is a web browser
+                Window browserWindow = context.DTE.Windows.Item( 
+                    Constants.vsWindowKindWebBrowser );
+                WebBrowser browser = (WebBrowser)browserWindow.Object;
+
+                // have it show the html
+                object url = "file://" + htmlFile;
+                object nullObject = null;
+                browser.Navigate2( ref url, ref nullObject, ref nullObject,
+                    ref nullObject, ref nullObject );
+                browserWindow.Activate();            
+            }
+            finally
+            {
+                context.EndOperation();
+            }
+
         } 
     }
 }

@@ -117,6 +117,23 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Should be called before starting any lengthy operation
+        /// </summary>
+        public void StartOperation()
+        {
+            //TODO: maybe refactor this?
+            this.DTE.StatusBar.Animate( true, vsStatusAnimation.vsStatusAnimationSync );
+        }
+
+        /// <summary>
+        ///  called at the end of any lengthy operation
+        /// </summary>
+        public void EndOperation()
+        {
+            this.DTE.StatusBar.Animate( false, vsStatusAnimation.vsStatusAnimationSync );
+        }
+
         #region SetUpEvents
         /// <summary>
         /// Sets up event handlers.
@@ -140,12 +157,18 @@ namespace Ankh
         {
             try
             {
+                this.StartOperation();
+
                 this.solutionExplorer = new Explorer( this.DTE, this.Context );
                 this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
             }
             catch( Exception ex )
             {
                 Error.Handle( ex );
+            }
+            finally
+            {
+                this.EndOperation();   
             }
         }
         
