@@ -29,6 +29,22 @@ namespace Ankh.UI
 			//
 		}
 
+        /// <summary>
+        /// The password entered in this dialog.
+        /// </summary>
+        public string Password
+        {
+            get{ return this.passwordTextBox.Text; }
+        }
+
+        /// <summary>
+        /// The username entered in this dialog.
+        /// </summary>
+        public string Username
+        {
+            get{ return this.usernameTextBox.Text; }
+        }
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -65,14 +81,14 @@ namespace Ankh.UI
             this.usernameLabel.Location = new System.Drawing.Point(50, 37);
             this.usernameLabel.Name = "usernameLabel";
             this.usernameLabel.TabIndex = 0;
-            this.usernameLabel.Text = "username:";
+            this.usernameLabel.Text = "Username:";
             // 
             // passwordLabel
             // 
             this.passwordLabel.Location = new System.Drawing.Point(50, 69);
             this.passwordLabel.Name = "passwordLabel";
             this.passwordLabel.TabIndex = 1;
-            this.passwordLabel.Text = "password:";
+            this.passwordLabel.Text = "Password:";
             // 
             // usernameTextBox
             // 
@@ -86,6 +102,7 @@ namespace Ankh.UI
             // 
             this.passwordTextBox.Location = new System.Drawing.Point(140, 69);
             this.passwordTextBox.Name = "passwordTextBox";
+            this.passwordTextBox.PasswordChar = '*';
             this.passwordTextBox.Size = new System.Drawing.Size(128, 20);
             this.passwordTextBox.TabIndex = 3;
             this.passwordTextBox.Text = "";
@@ -102,16 +119,17 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Location = new System.Drawing.Point(131, 128);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 5;
             this.okButton.Text = "Ok";
-
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(214, 128);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 6;
@@ -119,7 +137,9 @@ namespace Ankh.UI
             // 
             // LoginDialog
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(292, 157);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
                                                                           this.cancelButton,
@@ -130,6 +150,7 @@ namespace Ankh.UI
                                                                           this.passwordLabel,
                                                                           this.usernameLabel});
             this.Name = "LoginDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
             this.ResumeLayout(false);
 

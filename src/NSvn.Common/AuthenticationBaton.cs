@@ -17,16 +17,16 @@ namespace NSvn.Common
 
         /// <summary>
         /// The authentication providers associated with this authentication 
-        /// baton
+        /// baton.
         /// </summary>
         public AuthenticationProviderCollection Providers
         {
             get{ return this.providers; }
-            set{ this.providers = providers; }
+            set{ this.providers = value; }
         }
 
         /// <summary>
-        /// A set of parameters accessible by all providers
+        /// A set of parameters accessible by all providers.
         /// </summary>
         public StringDictionary Parameters
         {

@@ -173,6 +173,12 @@ namespace NSvn
         }
 
         /// <summary>
+        /// Accepts an ILocalResourceVisitor.
+        /// </summary>
+        /// <param name="visitor"></param>
+        public abstract void Accept( ILocalResourceVisitor visitor );
+
+        /// <summary>
         /// Checks if the resource has been modified since information was
         /// retrieved from it. Invalidates such information if so.
         /// </summary>
