@@ -196,6 +196,9 @@
 				RelativePath="Entry.h">
 			</File>
 			<File
+				RelativePath=".\GCPool.h">
+			</File>
+			<File
 				RelativePath="LogMessage.h">
 			</File>
 			<File
