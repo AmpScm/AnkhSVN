@@ -234,6 +234,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "LogMessageTemplate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MimeTypePropertyEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"

@@ -6,6 +6,9 @@ using Ankh.UI;
 using System.Windows.Forms;
 using System.Collections;
 using EnvDTE;
+using System.Text.RegularExpressions;
+using System.IO;
+using System.Text;
 
 namespace Ankh
 {
@@ -31,10 +34,17 @@ namespace Ankh
         /// <returns></returns>
         protected override string LogMessageCallback(NSvn.Core.CommitItem[] commitItems)
         {
+            string templateText = this.GetTemplate();
+            LogMessageTemplate template = new LogMessageTemplate( templateText );
+
             CommitDialog dialog = new CommitDialog( commitItems );
+            dialog.LogMessageTemplate = template;
+
             dialog.DiffWanted += new EventHandler( this.DiffWanted );
             if ( dialog.ShowDialog() == DialogResult.OK )
+            {
                 return dialog.LogMessage;
+            }
             else
                 return null;
         }
@@ -48,6 +58,12 @@ namespace Ankh
        
         }
         
+        private string GetTemplate()
+        {
+             return @"# All lines starting with a # will be ignored
+***# %path%";
+        }
+
 
         private void DiffWanted( object sender, EventArgs args )
         {  
@@ -106,6 +122,7 @@ namespace Ankh
         }
         #endregion
 
+       
         private AnkhContext ankhContext;
         private OutputWindowPane outputPane;
         private static IDictionary map = new Hashtable();
