@@ -19,10 +19,17 @@ using namespace std;
 
 BEGIN_DHTML_EVENT_MAP(CAutorunDlg)
 	DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
+    
+    DHTML_EVENT_ONCLICK(_T("processDocumentation"), Launch )
+    DHTML_EVENT_ONCLICK(_T("productDocumentation"), Launch )
+    DHTML_EVENT_ONCLICK(_T("testDocumentation"), Launch )
+    
+    DHTML_EVENT_ONCLICK(_T("helpdoc"), LaunchIE )
+    DHTML_EVENT_ONCLICK(_T("src"), LaunchIE )
+    DHTML_EVENT_ONCLICK(_T("Log"), LaunchIE )
 
-    DHTML_EVENT_ONCLICK(_T("processdoc"), Launch )
-    DHTML_EVENT_ONCLICK(_T("log"), LaunchIE )
-    DHTML_EVENT_ONCLICK(_T("ankhsetup"), LaunchExplorer )
+    DHTML_EVENT_ONCLICK(_T("BrowseCD"), LaunchExplorer )
+    DHTML_EVENT_ONCLICK(_T("AnkhSetup"), Launch )
 END_DHTML_EVENT_MAP()
 
 
