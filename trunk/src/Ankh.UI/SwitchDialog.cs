@@ -234,6 +234,8 @@ namespace Ankh.UI
             // recursiveCheckBox
             // 
             this.recursiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.recursiveCheckBox.Checked = true;
+            this.recursiveCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.recursiveCheckBox.Location = new System.Drawing.Point(368, 240);
             this.recursiveCheckBox.Name = "recursiveCheckBox";
             this.recursiveCheckBox.TabIndex = 6;
