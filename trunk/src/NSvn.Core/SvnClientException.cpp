@@ -34,7 +34,10 @@ namespace
             return new OperationCancelledException( child );
             break;
         default:
-            return new SvnClientException( StringHelper(err->message), child );
+            if ( err->message )
+                return new SvnClientException( StringHelper(err->message), child );
+            else
+                return new SvnClientException( S"", child );
             break;
         }
     }
@@ -48,6 +51,9 @@ SvnClientException* NSvn::Core::SvnClientException::FromSvnError( svn_error_t* e
 
 SvnClientException* NSvn::Core::SvnClientException::CreateExceptionsRecursively( svn_error_t* err )
 {
+    if ( ! err )
+        return new SvnClientException( S"Subversion error" );
+
     // is there a child error?
     SvnClientException* exception = 0;
 
@@ -62,8 +68,16 @@ SvnClientException* NSvn::Core::SvnClientException::CreateExceptionsRecursively(
         exception = CreateException( err );;
 
     exception->errorCode = err->apr_err;
-    exception->svnError = StringHelper(err->message);
-    exception->file = StringHelper(err->file);
+    if ( err->message )
+        exception->svnError = StringHelper(err->message);
+    else
+        exception->svnError = S"";
+    
+    if ( exception->file )
+        exception->file = StringHelper(err->file);
+    else
+        exception->file = S"";
+
     exception->line = err->line;
     return exception;
 }
