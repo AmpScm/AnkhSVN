@@ -60,7 +60,7 @@ namespace Ankh
             {
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
 
-#if REGISTER
+#if ALWAYSREGISTER
                 bool register = true;
 #else
                 bool register = connectMode == ext_ConnectMode.ext_cm_UISetup;
