@@ -32,8 +32,10 @@
         <nant buildfile="NSvn.Core/NSvn.Core.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core.Tests.MCpp/NSvn.Core.Tests.MCpp.build" target="clean" inheritall="true" />
+        <nant buildfile="ReposInstaller/ReposInstaller.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh.UI/Ankh.UI.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh/Ankh.build" target="clean" inheritall="true" />
+        <nant buildfile="Ankh.Tests/Ankh.Tests.build" target="clean" inheritall="true" />
         
         <delete dir="${installsource.dir}" failonerror="false"/>
         
