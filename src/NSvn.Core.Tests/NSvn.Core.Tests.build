@@ -51,6 +51,7 @@
             
             <arg value="/resource:repos.zip,NSvn.Core.Tests.repos.zip"/>
             <arg value="/resource:wc.zip,NSvn.Core.Tests.wc.zip"/>
+            <arg value="/resource:conflictwc.zip,NSvn.Core.Tests.conflictwc.zip"/>
             
             
             
