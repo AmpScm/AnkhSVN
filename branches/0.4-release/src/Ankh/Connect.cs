@@ -112,7 +112,8 @@ namespace Ankh
             try
             {
                 Extenders.ExtenderProvider.Unregister( this.context.DTE );
-                this.context.Shutdown();
+				if( this.context != null )
+					this.context.Shutdown();
             }
             catch( Exception ex )
             {
