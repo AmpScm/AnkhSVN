@@ -25,7 +25,7 @@
         /I "${svndir}\apr-iconv\include" /I "${svndir}\apr-util\include" 
         /I "${svndir}\subversion\include" /AI "..\NSvn.Common\bin\Release" 
         /AI "..\Utils\${build.dir}"
-        /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /FD /EHsc /MD /GS  /W3 
+        /D "WIN32" /D "_MBCS" /D "_WINDLL" /FD /EHsc /MD /GS  /W3 
         /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\'
         unless="${debug}"/>
 
