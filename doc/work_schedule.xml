@@ -24,9 +24,9 @@
         </item>
         
         <item>
-            <text>Make website for project </text>
-            <start week="49" year="2002"/>
-            <end week="5"/>
+            <text>Maintain website for project </text>
+            <start week="1" year="2002"/>
+            <end week="22"/>
         </item>
         
         <item>
@@ -73,7 +73,7 @@
         </item>
         
          <item>
-            <text>Get familiar with  Nunit V2.0</text>
+            <text>Get familiar with  NUnit V2.0</text>
             <start week="1"/>
             <end week="8"/>  
         </item>
@@ -85,7 +85,7 @@
         </item>
          
         <item>
-            <text>Get familiar with  Nant</text>
+            <text>Get familiar with  NAnt</text>
             <start week="1" year="2002"/>
             <end week="8" year="2002"/>  
         </item>
@@ -124,16 +124,29 @@
        <end week="5"/> 
        
        <item>
+           <text>Install software</text>
+           <start week="1"/>
+           <end week="4"/>  
+      </item>
+       
+       <item>
             <text>Develop use cases/domain analysis</text>
             <start week="3"/>
             <end week="8"/>  
        </item>
+       
+       <item>
+            <text>Programming</text>
+            <start week="10"/>
+            <end week="20"/>  
+      </item>
+       
     </item> 
     
      <item>
         <text>Testing</text>
         <start week="10" />
-        <end week="19"/> 
+        <end week="20"/> 
            
            <item>
                 <text>Unit testing</text>

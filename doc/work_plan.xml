@@ -5,8 +5,7 @@
         <list>
             <item>Write progress report - 2002-10-25</item>
             <item>Write project proposal - 2002-11-29</item>
-            <item>Make website for project</item>
-            <item>Make website for project</item>
+            <item>Maintain website for project</item>
             <item>Create project diary</item>
             <item>Write pilot project report                  2003-01-31</item>
             <item>Make work plan </item>
@@ -35,7 +34,9 @@
  
     <section header="Design/Development">
         <list>
+            <item>Install software</item>
             <item>Develop use cases/domain analysis</item>
+            <item>Programming</item>
         </list>
     </section>
 
