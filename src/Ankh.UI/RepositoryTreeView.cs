@@ -95,8 +95,6 @@ namespace Ankh.UI
             dummy.Tag = DUMMY_NODE;
 
             root.Nodes.Add( dummy );
-
-            root.Expand();
         }
         
         /// <summary>
