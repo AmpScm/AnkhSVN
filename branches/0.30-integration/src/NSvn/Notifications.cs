@@ -146,10 +146,6 @@ namespace NSvn
                     if ( this.SkipReceived!= null )
                         this.SkipReceived( this, args );
                     break;
-                case NotifyAction.Status:
-                    if ( this.StatusReceived!= null )
-                        this.StatusReceived( this, args );
-                    break;
                 case NotifyAction.UpdateAdd:
                     if ( this.UpdateAddReceived!= null )
                         this.UpdateAddReceived( this, args );

@@ -106,26 +106,35 @@ namespace NSvn
             // get the status of all subitems - this will effectively give us a list of them
             // and and we get their statuses as an added bonus
             // TODO: should this be recursive?
-            StatusDictionary statusDict = Client.Status( out youngest, this.Path, false, true, false, 
-                false, this.ClientContext );
+            StatusBuilder builder = new StatusBuilder();
+            Client.Status( out youngest, this.Path, Revision.Unspecified, 
+                new StatusCallback( builder.StatusFunc ), false, true, false, 
+                false, this.ClientContext );            
 
-            // delete the root directory - we dont want it in the returned dict
-            statusDict.Remove( this.Path );
+            builder.ResDict.Remove( System.IO.Path.GetFileName( this.Path ) );
+            return builder.ResDict;
+        }
 
-            // go through all the returned resources
-            foreach( string path in statusDict.Keys )
+        /// <summary>
+        /// Used to build up a list of statuses.
+        /// </summary>
+        private class StatusBuilder
+        {
+            public LocalResourceDictionary ResDict = new LocalResourceDictionary();
+
+            public void StatusFunc( string path, Status status )
             {
                 string basePath = System.IO.Path.GetFileName( path );
 
                 // is this a versioned or an unversioned resource?
-                if ( statusDict.Get(path).TextStatus == StatusKind.Unversioned )
-                    resDict[ basePath ] = UnversionedResource.FromPath( path );
+                if ( status.TextStatus == StatusKind.Unversioned )
+                    ResDict[ basePath ] = UnversionedResource.FromPath( path );
                 else
-                    resDict[ basePath ] = WorkingCopyResource.FromPath( path, statusDict.Get(path) );
+                    ResDict[ basePath ] = WorkingCopyResource.FromPath( path, status );
             }
-
-            return resDict;
         }
+
+        
 
         private LocalResourceDictionary children;    
     }
