@@ -31,7 +31,7 @@ namespace Ankh.UI
             this.CreateToolTips();
 
             this.commitItems = new ArrayList();
-
+            
             this.diffView.Visible = false;
             
             this.pathColumnHeader.Width = this.commitItemsView.Width - this.actionColumnHeader.Width - 5;
@@ -136,15 +136,31 @@ namespace Ankh.UI
         private void showDiffButton_Click(object sender, System.EventArgs e)
         {
             if ( this.diffView.Visible )
-            {
+            {                
                 this.diffView.Visible = false;
-                this.Height -= this.diffView.Height;
-                this.showDiffButton.Text = "Show diff";  
+                this.Height = this.okButton.Top + this.okButton.Height + 40;
+                this.showDiffButton.Text = "Show diff";
+  
+                // reanchor these things to the bottom
+                this.showDiffButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+                this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+                this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+                this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+                    | System.Windows.Forms.AnchorStyles.Left) 
+                    | System.Windows.Forms.AnchorStyles.Right)));
+
             }
             else
             {
                 if ( this.diff == null && this.DiffWanted != null )
                     this.DiffWanted( this, EventArgs.Empty );
+
+                // these items can no longer anchor to the bottom
+                this.logMessageBox.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+                this.showDiffButton.Anchor = AnchorStyles.Left | AnchorStyles.Top;
+                this.okButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
+                this.cancelButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
+                this.diffView.Top = this.okButton.Top + this.okButton.Height + 10;
                 this.Height += 400;
                 this.diffView.Visible = true;
                 this.showDiffButton.Text = "Hide diff";
@@ -208,7 +224,7 @@ namespace Ankh.UI
             // 
             // cancelButton
             // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(710, 280);
             this.cancelButton.Name = "cancelButton";
@@ -217,7 +233,7 @@ namespace Ankh.UI
             // 
             // okButton
             // 
-            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Location = new System.Drawing.Point(622, 280);
             this.okButton.Name = "okButton";
@@ -234,6 +250,7 @@ namespace Ankh.UI
             // 
             // showDiffButton
             // 
+            this.showDiffButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.showDiffButton.Location = new System.Drawing.Point(8, 280);
             this.showDiffButton.Name = "showDiffButton";
             this.showDiffButton.TabIndex = 6;
@@ -255,7 +272,8 @@ namespace Ankh.UI
             // logMessageBox
             // 
             this.logMessageBox.AcceptsTab = true;
-            this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+                | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.logMessageBox.DetectUrls = false;
             this.logMessageBox.Location = new System.Drawing.Point(0, 136);
@@ -303,7 +321,6 @@ namespace Ankh.UI
             this.Controls.Add(this.logLabel);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(390, 320);
