@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet type="text/xsl" href="doc.xsl"?>
+
+<doc title="Code guidelines">
+    <section header="Naming guidelines">
+        <p>We shall mostly follow the Microsoft .NET class library naming guidelines at 
+        <link url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpconnamingguidelines.asp">
+        http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpconnamingguidelines.asp</link>. Summarized:</p>
+        
+        <section header="General">
+            <list>
+                <item>Hungarian notation, eg <inlinecode>lpszFooBar</inlinecode> is not permitted</item>
+                <item>Underscores shall not be used</item>
+            </list>
+        </section>
+        
+        <section header="Classes">
+            <list>
+                <item>Class names shall use Pascal case, like this: 
+                    <code>public class FooBar{...}</code>
+                </item>
+                <item>The underscore character shall not be used</item>
+                <item>The letter C as a prefix to denote a class shall not be used</item>
+            </list>
+        </section>
+        
+        <section header="Interfaces">
+            <list>
+                <item>Interface names shall use Pascal Case</item>
+                <item>The name of an interface starts with the letter I</item>
+                <item>The underscore character shall not be used</item>
+            </list>
+        </section> 
+        <section header="Methods">
+            <list>
+                <item>Methods shall be named using Pascal Case</item>
+            </list>
+        </section> 
+        
+        <section header="Properties">
+            <list>
+                <item>Properties shall be named using Pascal Case</item>
+                
+                <item>It is permitted, and in some cases recommended, to name a property the same
+                as the underlying type:
+                    <code>public Color Color
+{
+get{ return this.color; }
+}
+                    </code>
+                </item>
+            </list>
+        </section>          
+        
+        <section header="Attributes">
+            <list>
+                <item>Attributes we write shall be named with <inlinecode>Attribute</inlinecode> 
+                    suffix added, as in <inlinecode>FooBarAttribute</inlinecode>.
+                </item>
+                <item>We shall <i>not</i> use the <inlinecode>Attribute</inlinecode> suffix when 
+                <b>applying</b> an attribute(in C# this suffix ix optional):
+<code>
+//yes
+[FooBar]
+public void Foo()
+{...}
+
+//no
+[FooBarAttribute]
+public void Foo()
+{...}
+</code>
+                </item>
+            </list>
+        </section>
+        
+        <section header="Method parameters">
+            <list>
+                <item>Parameters shall be named in camelCase</item>
+            </list>
+        </section>
+        
+        <section header="Fields">
+            <list>
+                <item>Private fields shall be named using camel case</item>                    
+            </list>                  
+        </section>            
+        
+    </section> <!-- naming guidelines -->
+    
+    <section header="Formatting">
+        <list>
+            <item>Tab characters shall not be used for indentation.</item>
+            <item>Each nested block shall be indented 4 spaces relative to the enclosing block</item>
+            <item>The 'normal' indentation style shall be used:
+<code>
+//yes
+public void FooBar()
+{
+//...
+}
+
+//no
+public void FooBar(){
+//...
+}
+
+//no
+public void FooBar()
+{
+//...
+]
+
+//no
+public void FooBar()
+{
+    //...
+]      
+
+</code>
+            </item>
+            <item>All use of member fields shall be prefixed with <inlinecode>this.</inlinecode>:
+<code>
+public class Foo
+{
+//...
+    
+public void Bar()
+{
+    this.baz = 42; //yes
+    baz = 13; //no
+}
+
+private int baz;
+}
+</code>         </item>
+            <item>Members of a class shall be ordered according to their protection level, 
+            in the following order from the top:
+                <list>
+                    <item>public member methods</item>
+                    <item>public properties</item>
+                    <item>public fields(should be avoided as a general rule)</item>
+                    <item>protected member methods</item>
+                    <item>protected properties</item>
+                    <item>protected fields(should be avoided)</item>
+                    <item>private member methods</item>
+                    <item>private properties</item>
+                    <item>private fields</item>
+                </list>
+            </item>
+        </list>
+    </section> <!-- formatting -->
+        
+</doc>
