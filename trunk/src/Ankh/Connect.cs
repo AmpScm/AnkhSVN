@@ -102,8 +102,6 @@ namespace Ankh
                 // register the new ones
                 this.commands= 
                     Ankh.CommandMap.LoadCommands( this.context, register );  
-
-                this.CreateAboutBoxText( ((_DTE)application).RegistryRoot );
                
                 // is there already a solution open? 
                 // can happen if we are loaded after startup
@@ -297,51 +295,6 @@ namespace Ankh
             {   
                 this.context.ErrorHandler.Handle( ex );
             }
-        }
-
-        /// <summary>
-        /// Create the text that goes in the VS.NET about box, with the 
-        /// version numbers of Ankh and the linked libraries.
-        /// </summary>
-        private void CreateAboutBoxText( string registryRoot )
-        {
-            // figure out which registry key we're under
-            RegistryKey key = null;
-            try
-            {
-                key = Registry.LocalMachine.OpenSubKey( registryRoot, true );
-            }
-            catch( System.Security.SecurityException )
-            {
-                // swallow
-            }
-
-            // either the HKLM key doesn't exist, or we can't access it
-            if ( key == null )
-                key = Registry.CurrentUser.OpenSubKey( registryRoot, true );
-
-            // if it's still null, it's really under HKLM, but we can't access it
-            // bail out
-            if ( key == null ) 
-                return;
-
-            string text = "";			
-
-            // get the assembly version
-            string ankhVersion = 
-                typeof(NSvn.Core.Client).Assembly.GetName().Version.ToString();
-			
-            text += String.Format( "AnkhSVN {0}{1}", 
-                ankhVersion, Environment.NewLine );
-
-            // get the library versions
-            object[] attributes = typeof(NSvn.Core.Client).Assembly.GetCustomAttributes(
-                typeof(Utils.VersionAttribute), true );
-            foreach( Utils.VersionAttribute version in attributes )
-                text += version.ToString() + Environment.NewLine;
-
-            // set the registry value
-            key.SetValue( "AboutBoxDetails", text );
         }
         
         private IContext context;
