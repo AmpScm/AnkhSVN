@@ -24,20 +24,28 @@ namespace Ankh.Commands
     
         public override void Execute(AnkhContext context)
         {
-            context.OutputPane.StartActionText( "Running cleanup" );
+            context.StartOperation( "Running cleanup" );
 
-            CleanupVisitor v = new CleanupVisitor();
+            CleanupVisitor v = new CleanupVisitor( context );
             context.SolutionExplorer.VisitSelectedItems( v, false );
 
-            context.OutputPane.EndActionText();
+            context.EndOperation();
         }
 
         private class CleanupVisitor : LocalResourceVisitorBase
-        {            
+        {   
+            public CleanupVisitor( AnkhContext ctx )
+            {
+                this.context = ctx;
+            }
+
             public override void VisitWorkingCopyDirectory(WorkingCopyDirectory dir)
             {
+                this.context.OutputPane.WriteLine( "Cleaning up {0}", dir.Path );
                 dir.Cleanup();
             }
+
+            private AnkhContext context;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Ankh.Commands
             if ( browser.ShowDialog() != DialogResult.OK) 
                 return;
 
-            context.StartOperation( "Checking out..." );
+            context.StartOperation( "Checking out" );
 
             try
             {

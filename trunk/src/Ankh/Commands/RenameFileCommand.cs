@@ -28,8 +28,16 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context)
         {
-            RenameVisitor v = new RenameVisitor( context );
-            context.SolutionExplorer.VisitSelectedNodes( v );
+            context.StartOperation( "Renaming" );
+            try
+            {
+                RenameVisitor v = new RenameVisitor( context );
+                context.SolutionExplorer.VisitSelectedNodes( v );
+            }
+            finally
+            {
+                context.EndOperation();
+            }
         }
 
         private class RenameVisitor : INodeVisitor
@@ -54,6 +62,7 @@ namespace Ankh.Commands
                     if ( dialog.ShowDialog() == DialogResult.OK )
                     {
                         string newPath = Path.Combine( dirname, dialog.NewName );
+                        context.OutputPane.WriteLine( "Renaming {0} to {1}", file.Path, newPath );
                         file.Move( newPath, true );
 
                         // remove the old file and add the new to the project

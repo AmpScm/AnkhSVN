@@ -38,15 +38,12 @@ namespace Ankh.Commands
         {
             try
             {
-                context.StartOperation( "Updating..." );
-
-                context.OutputPane.StartActionText("Updating");
+                context.StartOperation( "Updating" );
                 // we assume by now that all items are working copy resources.
                 UpdateVisitor v = new UpdateVisitor();
                 context.SolutionExplorer.VisitSelectedNodes( v );
                 v.Update();
                 context.SolutionExplorer.UpdateSelectionStatus();
-                context.OutputPane.EndActionText();
             }
             finally
             {

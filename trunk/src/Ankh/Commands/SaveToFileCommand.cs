@@ -14,13 +14,24 @@ namespace Ankh.Commands
     {
         public override void Execute(AnkhContext context)
         {
-            SaveCatVisitor v = new SaveCatVisitor( );     
-            context.RepositoryController.VisitSelectedNodes( v );
+            context.StartOperation( "Saving" );
+            try
+            {
+                SaveCatVisitor v = new SaveCatVisitor( context );     
+                context.RepositoryController.VisitSelectedNodes( v );
+            }
+            finally
+            {
+                context.EndOperation();
+            }
         }        
 
         // override the CatVisitor class so we can pop up a save file dialog.
         protected class SaveCatVisitor : CatVisitor
         {
+            public SaveCatVisitor( AnkhContext context ) : base( context )
+            {}
+
             protected override string GetPath(string filename)
             {
                 using( SaveFileDialog sfd = new SaveFileDialog() )

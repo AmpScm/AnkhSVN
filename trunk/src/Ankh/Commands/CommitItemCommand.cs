@@ -62,7 +62,6 @@ namespace Ankh.Commands
             {
                 if (commitInfo != null)
                     this.context.OutputPane.WriteLine("\nCommitted revision {0}.", commitInfo.Revision);
-                this.context.OutputPane.EndActionText();
 
                 context.EndOperation();
             }

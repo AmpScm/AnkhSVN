@@ -84,13 +84,24 @@ namespace Ankh
         {
             if ( actionStatus[notification.Action] != null)
             {
-                this.ankhContext.OutputPane.Write("{0} - {2}: {1}{3}"
-                    ,actionStatus[notification.Action].ToString() 
-                    ,notification.Path, notification.NodeKind.ToString()
-                    ,Environment.NewLine );
+                string nodeKind = "";
+                if ( notification.NodeKind == NodeKind.File )
+                    nodeKind = " file";
+                else if ( notification.NodeKind == NodeKind.Directory )
+                    nodeKind = " directory";
+
+                this.ankhContext.OutputPane.WriteLine( "{0}{1}: {2}",
+                    actionStatus[notification.Action],
+                    nodeKind, 
+                    notification.Path );
             }
             if (notification.Action == NotifyAction.UpdateCompleted)
-                this.ankhContext.OutputPane.WriteLine("\nUpdated to revision {0}.", notification.RevisionNumber);
+                this.ankhContext.OutputPane.WriteLine( "{0}Updated {1} to revision {2}.", 
+                    Environment.NewLine, 
+                    notification.Path, 
+                    notification.RevisionNumber);
+
+            // ensure the output pane gets updated 
             Application.DoEvents();
         }
         
