@@ -58,6 +58,6 @@ using namespace System::Runtime::CompilerServices;
 [assembly:AssemblyKeyNameAttribute("")];
 
 
-[assembly:NSvn::Common::SubversionVersionAttribute( Major=0, Minor=28, PatchLevel=0 )];
+[assembly:NSvn::Common::SubversionVersionAttribute( Major=0, Minor=28, PatchLevel=2 )];
 
 
