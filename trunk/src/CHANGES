@@ -1,4 +1,27 @@
+Version 0.4.0
+This release was built against Subversion 0.37.0, Neon 0.24.4, 
+openssl 0.9.7 and Berkeley DB 4.2.52
 
+Changes:
+* Fixed a bug in which an InvalidCastException would be thrown if you
+attempted to use a CF C# project.
+* Ankh remembers the commit message if a commit fails for any reason, 
+and offers to reuse it upon the next commit.
+* Revamped authentication system - we now support https:// connections
+* New configuration system. Also, Ankh will now optionally use the 
+Subversion config file.
+* Fixed a bug in which Ankh would fail to load if the VS.NET solution 
+explorer was not docked.
+* Ankh now saves all open files before committing or updating
+* Commit dialog is now resizable
+* Fixed a bug which caused directory names with a . in them to be cut short
+in the Repository Explorer
+* The Repository Explorer now sorts the files and directories
+* Ankh now supports a customizable log message template
+* Version numbers of linked libraries are shown in the VS.NET About box
+* Support for using svn.exe directly from the VS.NET command window
+
+------------------------------------------------------------------------
 Version 0.3.5 (released 24 Nov 2003 21:17:06 +0100, revision 984)
 This release was built against Subversion 0.33.1, Neon 0.24.4 and 
 Berkeley DB 4.0.14. 
