@@ -12,9 +12,10 @@ namespace Ankh
     {
         public OutputPaneWriter( _DTE dte, string caption )
         {
-            OutputWindow window = (OutputWindow)dte.Windows.Item( 
-                EnvDTE.Constants.vsWindowKindOutput).Object;
-            this.outputPane = window.OutputWindowPanes.Add( caption );			
+            this.outputWindow = dte.Windows.Item( EnvDTE.Constants.vsWindowKindOutput );
+
+            OutputWindow window = (OutputWindow)this.outputWindow.Object;
+            this.outputPane = window.OutputWindowPanes.Add( caption );		
         }
 
         public override Encoding Encoding
@@ -28,6 +29,7 @@ namespace Ankh
         /// </summary>
         public void Activate()
         {
+            this.outputWindow.Activate();
             this.outputPane.Activate();
         }
 
@@ -85,5 +87,6 @@ namespace Ankh
         private const int LINELENGTH = 70;
         private const char LINECHAR = '-';
         private OutputWindowPane outputPane;
+        private Window outputWindow;
     }
 }
