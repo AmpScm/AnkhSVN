@@ -102,11 +102,6 @@
                     Project = "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
                     Package = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
                 />
-                <Reference
-                    Name = "NSvn.Common"
-                    Project = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
             </References>
         </Build>
         <Files>

@@ -25,35 +25,6 @@ namespace ReposInstaller
         {			
         }
 
-        public override void Install(IDictionary stateSaver)
-        {
-#if DEBUG
-            MessageBox.Show( "Uninstall" );
-#endif
-            base.Install (stateSaver);
-
-            // create the about box text
-            string text = "";			
-
-            // get the assembly version
-            string ankhVersion = 
-                typeof(NSvn.Core.Client).Assembly.GetName().Version.ToString();
-			
-            text += String.Format( "AnkhSVN {0}{1}", 
-                ankhVersion, Environment.NewLine );
-
-            // get the library versions
-            object[] attributes = typeof(NSvn.Core.Client).Assembly.GetCustomAttributes(
-                typeof(NSvn.Common.LibraryAttribute), true );
-            foreach( NSvn.Common.LibraryAttribute version in attributes )
-                text += version.ToString() + Environment.NewLine;           
-
-            // set the registry value, either for the current user or for the machine
-            this.AddAboutBoxDetails( text, VS7REGPATH );
-            this.AddAboutBoxDetails( text, VS71REGPATH );
-        }
-
-        
         public override void Uninstall(IDictionary savedState)
         {
 #if DEBUG
@@ -167,28 +138,6 @@ namespace ReposInstaller
 
             File.SetAttributes( path, FileAttributes.Normal );
             Directory.Delete( path, true );
-        }
-        
-        private void AddAboutBoxDetails(string text, string registryRoot )
-        {
-            // user first
-            RegistryKey key = Registry.CurrentUser.OpenSubKey( registryRoot, 
-                true );
-            if ( key != null )
-                key.SetValue( "AboutBoxDetails", text );
-
-            try
-            {
-                // machine?
-                key = Registry.LocalMachine.OpenSubKey( registryRoot, true );
-                if ( key != null )
-                    key.SetValue( "AboutBoxDetails", text );
-            }
-            catch( System.Security.SecurityException )
-            {
-                // user doesn't have access to the key(shouldn't happen)
-                // swallow
-            }
         }
 
         private string PROGID="Ankh";
