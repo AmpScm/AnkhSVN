@@ -21,11 +21,18 @@ namespace Ankh.UI
 			//
 			InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
+            SetNewEditor(new PlainPropertyEditor());
+			
             this.propItems = new ArrayList();
+
+            this.nameCombo.Items.Add(new ExecutablePropertyEditor());
+            this.nameCombo.Items.Add(new MimeTypePropertyEditor());
+            this.nameCombo.Items.Add(new IgnorePropertyEditor());
+            this.nameCombo.Items.Add(new KeywordsPropertyEditor());
+            this.nameCombo.Items.Add(new EolStylePropertyEditor());
+            this.nameCombo.Items.Add(new ExternalsPropertyEditor());          
 		}
+
 
         public PropertyItem[] PropertyItems
         {
@@ -41,8 +48,6 @@ namespace Ankh.UI
                 this.PopulateListView();
             }
         }
-
-
 
 
 		/// <summary>
@@ -77,8 +82,7 @@ namespace Ankh.UI
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
-            this.propertyEditor = new Ankh.UI.PlainPropertyEditor();
-            this.valueLabel = new System.Windows.Forms.Label();
+            this.editorPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -96,6 +100,7 @@ namespace Ankh.UI
             this.nameCombo.Size = new System.Drawing.Size(121, 21);
             this.nameCombo.TabIndex = 1;
             this.nameCombo.TextChanged += new System.EventHandler(this.nameCombo_TextChanged);
+            this.nameCombo.SelectedValueChanged += new System.EventHandler(this.nameCombo_SelectedValueChanged);
             // 
             // propListView
             // 
@@ -105,9 +110,9 @@ namespace Ankh.UI
             this.propListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
                                                                                            this.nameColumn,
                                                                                            this.valueColumn});
-            this.propListView.Location = new System.Drawing.Point(0, 224);
+            this.propListView.Location = new System.Drawing.Point(0, 296);
             this.propListView.Name = "propListView";
-            this.propListView.Size = new System.Drawing.Size(480, 97);
+            this.propListView.Size = new System.Drawing.Size(544, 97);
             this.propListView.TabIndex = 6;
             this.propListView.View = System.Windows.Forms.View.Details;
             this.propListView.SelectedIndexChanged += new System.EventHandler(this.propListView_SelectedIndexChanged);
@@ -125,7 +130,7 @@ namespace Ankh.UI
             // newButton
             // 
             this.newButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
-            this.newButton.Location = new System.Drawing.Point(224, 192);
+            this.newButton.Location = new System.Drawing.Point(288, 264);
             this.newButton.Name = "newButton";
             this.newButton.TabIndex = 3;
             this.newButton.Text = "&New";
@@ -135,7 +140,7 @@ namespace Ankh.UI
             // 
             this.deleteButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
             this.deleteButton.Enabled = false;
-            this.deleteButton.Location = new System.Drawing.Point(392, 192);
+            this.deleteButton.Location = new System.Drawing.Point(456, 264);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.TabIndex = 5;
             this.deleteButton.Text = "&Delete";
@@ -145,7 +150,7 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(304, 344);
+            this.okButton.Location = new System.Drawing.Point(368, 416);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 7;
             this.okButton.Text = "&Ok";
@@ -154,7 +159,7 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(392, 344);
+            this.cancelButton.Location = new System.Drawing.Point(456, 416);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 8;
             this.cancelButton.Text = "&Cancel";
@@ -163,37 +168,31 @@ namespace Ankh.UI
             // 
             this.saveButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
             this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(308, 192);
+            this.saveButton.Location = new System.Drawing.Point(372, 264);
             this.saveButton.Name = "saveButton";
             this.saveButton.TabIndex = 4;
             this.saveButton.Text = "&Save";
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // propertyEditor
+            // editorPanel
             // 
-            this.propertyEditor.Location = new System.Drawing.Point(68, 48);
-            this.propertyEditor.Name = "propertyEditor";
-            this.propertyEditor.Size = new System.Drawing.Size(240, 128);
-            this.propertyEditor.TabIndex = 9;
-            this.propertyEditor.Changed += new System.EventHandler(this.propertyEditor_Changed);
-            // 
-            // valueLabel
-            // 
-            this.valueLabel.Location = new System.Drawing.Point(24, 56);
-            this.valueLabel.Name = "valueLabel";
-            this.valueLabel.Size = new System.Drawing.Size(40, 16);
-            this.valueLabel.TabIndex = 10;
-            this.valueLabel.Text = "Value:";
+            this.editorPanel.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+                | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right);
+            this.editorPanel.Location = new System.Drawing.Point(64, 56);
+            this.editorPanel.Name = "editorPanel";
+            this.editorPanel.Size = new System.Drawing.Size(456, 192);
+            this.editorPanel.TabIndex = 2;
+            this.editorPanel.TabStop = true;
             // 
             // PropertyEditorDialog
             // 
             this.AcceptButton = this.saveButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(474, 375);
+            this.ClientSize = new System.Drawing.Size(538, 447);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.valueLabel,
-                                                                          this.propertyEditor,
+                                                                          this.editorPanel,
                                                                           this.saveButton,
                                                                           this.cancelButton,
                                                                           this.okButton,
@@ -261,7 +260,7 @@ namespace Ankh.UI
 
         private void newButton_Click(object sender, System.EventArgs e)
         {
-            this.propertyEditor.Clear();
+            this.currentEditor.Clear();
             nameCombo.Text = "";
             this.propListView.SelectedItems.Clear();
         }
@@ -269,7 +268,6 @@ namespace Ankh.UI
         {
             object item = this.propListView.SelectedItems[0].Tag;
             this.propItems.Remove(item);
-
             this.PopulateListView();
 
             this.ValidateForm();
@@ -279,7 +277,7 @@ namespace Ankh.UI
         private void saveButton_Click(object sender, System.EventArgs e)
         {
             
-            PropertyItem item= this.propertyEditor.PropertyItem;
+            PropertyItem item= this.currentEditor.PropertyItem;
             item.Name = nameCombo.Text;
             
             if (this.propListView.SelectedItems.Count > 0)
@@ -294,7 +292,7 @@ namespace Ankh.UI
             }
 
             this.PopulateListView();
-            this.propertyEditor.Clear();
+            this.currentEditor.Clear();
             nameCombo.Text = "";
 
         }
@@ -305,19 +303,55 @@ namespace Ankh.UI
             {
                 TextPropertyItem item = (TextPropertyItem)this.propListView.SelectedItems[0].Tag;
                 this.nameCombo.Text = item.Name;
+
+                //HACK: find better way
+                foreach( object o in this.nameCombo.Items )
+                { 
+                    if ( o.ToString() == item.Text )
+                        this.SetNewEditor( (IPropertyEditor)o );
+                }
  
-                this.propertyEditor.PropertyItem = item;
+                this.currentEditor.PropertyItem = item;
             }
+
+
             this.ValidateForm();
         }   
 
-        private void propertyEditor_Changed(object sender, System.EventArgs e)
+        private void currentEditor_Changed(object sender, System.EventArgs e)
         {
             this.ValidateForm();
         }
 
+
         private void nameCombo_TextChanged(object sender, System.EventArgs e)
-        {
+        { 
+            if ( this.nameCombo.SelectedItem != null)
+            {
+                SetNewEditor(new PlainPropertyEditor());   
+            }
+            this.ValidateForm();
+        }
+
+        /// <summary>
+        /// Sets a new property editor.
+        /// </summary>
+        /// <param name="editor"></param>
+        private void SetNewEditor(IPropertyEditor editor)
+        { 
+            if (this.currentEditor != null)
+            {
+                this.currentEditor.Changed -= new EventHandler( 
+                    this.currentEditor_Changed);
+            }
+
+            this.editorPanel.Controls.Clear();
+            this.editorPanel.Controls.Add((Control)editor);
+           
+            this.currentEditor = editor;
+            this.currentEditor.Changed += new EventHandler( 
+                this.currentEditor_Changed);
+
             this.ValidateForm();
         }
 
@@ -325,10 +359,8 @@ namespace Ankh.UI
         {
             this.deleteButton.Enabled = this.propListView.SelectedItems.Count > 0;
             this.saveButton.Enabled = this.nameCombo.Text.Trim() != "" && 
-              this.propertyEditor.Valid;
-
+                this.currentEditor.Valid;
         }  
-
 
         private ArrayList propItems;
 
@@ -342,12 +374,26 @@ namespace Ankh.UI
         private System.Windows.Forms.ListView propListView;
         private System.Windows.Forms.Button newButton;
         private System.Windows.Forms.Button saveButton;
-        private System.Windows.Forms.Label valueLabel;
-        private Ankh.UI.PlainPropertyEditor propertyEditor;
+
+        private IPropertyEditor currentEditor;
+        private System.Windows.Forms.Panel editorPanel;
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
+
+        private void nameCombo_SelectedValueChanged(object sender, System.EventArgs e)
+        {
+            IPropertyEditor selectedItem = (IPropertyEditor)this.nameCombo.SelectedItem; 
+
+            if ( selectedItem != null)
+            {
+              SetNewEditor(selectedItem);
+
+            }
+            
+        }
 
        
   	}
@@ -377,11 +423,8 @@ namespace Ankh.UI
             get{ return this.name;}
             set { this.name = value;}
         }
-        
-        
+         
         private string name;
-       
-
     }
     /// <summary>
     /// Represents a text property.
