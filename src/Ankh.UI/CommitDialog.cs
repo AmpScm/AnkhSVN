@@ -42,9 +42,21 @@ namespace Ankh.UI
         /// </summary>
         public string LogMessage
         {
-            get{ return this.logMessageBox.Text; }
+            get
+            { 
+                return this.LogMessageTemplate.PostProcess( this.logMessageBox.Text );
+            }
         }
 
+        public LogMessageTemplate LogMessageTemplate
+        {
+            get{ return this.logMessageTemplate; }
+            set{ this.logMessageTemplate = value; }
+        }
+
+        /// <summary>
+        /// The diff to be displayed.
+        /// </summary>
         public string Diff
         {
             get{ return this.diffTextBox.Diff; }
@@ -55,17 +67,7 @@ namespace Ankh.UI
             }
         }
 
-        /// <summary>
-        /// The template to be used for log messages.
-        /// </summary>
-        public string Template
-        {
-            get{ return this.template; }
-            set
-            { 
-                this.template = value; 
-            }
-        }
+        
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -130,33 +132,10 @@ namespace Ankh.UI
         private void CommitDialog_VisibleChanged(object sender, System.EventArgs e)
         {
             if ( this.Visible && this.logMessageBox.Text == string.Empty )
-                this.ApplyTemplate();
+                this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( this.commitItems );
         }
 
-        private void ApplyTemplate()
-        {
-            string text = template;
-            if ( LINETEMPLATE.IsMatch( this.template ) )
-            {
-                string linePattern = LINETEMPLATE.Match( this.template ).Groups[ "linepattern" ].Value.Trim();
-                text = LINETEMPLATE.Replace( this.template, this.SubstituteLinePattern( linePattern ) );
-            }
-            this.logMessageBox.Text = text;
-        }
-
-        private string SubstituteLinePattern( string linePattern )
-        {
-            StringBuilder builder = new StringBuilder();
-            foreach( CommitItem item in this.commitItems )
-            {
-                string line = linePattern.Replace( "%path%", item.Path );
-                line = line.Replace( "%basepath%", Path.GetFileName( item.Path ) );
-
-                builder.Append( line + Environment.NewLine );
-            }
-
-            return builder.ToString();
-        }
+        
 
 
 		#region Windows Form Designer generated code
@@ -273,13 +252,10 @@ namespace Ankh.UI
         private string diff;
         private Ankh.UI.DiffTextBox diffTextBox;
         private System.Windows.Forms.RichTextBox logMessageBox;
-        private string template = @"This is a template
-***%path%
-
-This is the end of the template";
+        private LogMessageTemplate logMessageTemplate;
+       
         private CommitItem[] commitItems;
-        private static readonly Regex LINETEMPLATE = new Regex(@"^\*\*\*(?'linepattern'.+)$", 
-            RegexOptions.Multiline | RegexOptions.ExplicitCapture);
+       
         /// <summary>
         /// Required designer variable.
         /// </summary>

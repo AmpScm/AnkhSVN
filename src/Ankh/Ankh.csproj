@@ -98,32 +98,22 @@
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Drawing.dll"
                 />
                 <Reference
-                    Name = "VSUserControlHostLib"
-                    Guid = "{280D96EA-474C-486E-88BE-5EB39FC4ACCB}"
-                    VersionMajor = "1"
-                    VersionMinor = "0"
-                    Lcid = "0"
-                    WrapperTool = "tlbimp"
-                />
-                <Reference
                     Name = "NSvn"
                     Project = "{1C779D04-4D97-414E-93DF-F63E52660B2C}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Private = "True"
                 />
                 <Reference
                     Name = "NSvn.Common"
                     Project = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Private = "True"
                 />
                 <Reference
                     Name = "NSvn.Core"
                     Project = "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
                     Package = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
-                />
-                <Reference
-                    Name = "Ankh.UI"
-                    Project = "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Private = "True"
                 />
                 <Reference
                     Name = "Microsoft.VisualStudio.VCProjectEngine"
@@ -131,12 +121,19 @@
                     HintPath = "I:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.VCProjectEngine.dll"
                 />
                 <Reference
-                    Name = "SHDocVw"
-                    Guid = "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}"
-                    VersionMajor = "1"
-                    VersionMinor = "1"
-                    Lcid = "0"
-                    WrapperTool = "tlbimp"
+                    Name = "Ankh.UI"
+                    Project = "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Interop.SHDocVw"
+                    AssemblyName = "Interop.SHDocVw"
+                    HintPath = "..\lib\Interop.SHDocVw.dll"
+                />
+                <Reference
+                    Name = "VSUserControlHostLib"
+                    AssemblyName = "VSUserControlHostLib"
+                    HintPath = "..\lib\VSUserControlHostLib.dll"
                 />
             </References>
         </Build>
