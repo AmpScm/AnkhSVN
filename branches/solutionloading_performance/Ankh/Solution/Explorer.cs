@@ -37,7 +37,10 @@ namespace Ankh.Solution
             // get the uihierarchy root
             this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
                 DteConstants.vsWindowKindSolutionExplorer ).Object; 
-            this.solutionNode = null;    
+            this.solutionNode = null;
+            this.backgroundThreadRunning = false;
+            this.backgroundThreadQueued = false;
+
         }
 
         /// <summary>
@@ -49,14 +52,32 @@ namespace Ankh.Solution
             this.context.ProjectFileWatcher.AddFile( this.DTE.Solution.FullName );
             this.SetUpTreeview();
 
-            this.treeview.LockWindowUpdate( true );
-            this.SyncAll();
-            this.treeview.LockWindowUpdate( false );
+            StartBackgroundInitialization();
+        }
 
-            ThreadStart startDelegate = new ThreadStart( this.BackgroundInitialize );
-            backgroundThread = new System.Threading.Thread( startDelegate );
-            backgroundThread.Priority = ThreadPriority.Lowest;
-            backgroundThread.Start();
+        public void StartBackgroundInitialization()
+        {
+            lock (this) 
+            {
+                if (backgroundThreadRunning) 
+                {
+                    // If we are running and need a reinitialization,
+                    // we'll remember that and check again when the 
+                    // running thread finishes
+                    backgroundThreadQueued = true;
+                }
+                else
+                {
+                    // If we are not running, we start now
+                    this.SyncAll();
+                    
+                    backgroundThreadRunning = true;
+                    ThreadStart startDelegate = new ThreadStart( this.BackgroundInitialize );
+                    backgroundThread = new System.Threading.Thread( startDelegate );
+                    backgroundThread.Priority = ThreadPriority.Lowest;
+                    backgroundThread.Start();
+                }
+            }
         }
 
         public void BackgroundInitialize()
@@ -82,6 +103,14 @@ namespace Ankh.Solution
 
             Trace.WriteLine( String.Format( "Cache hit rate: {0}%", 
                 this.context.StatusCache.CacheHitSuccess ), "Ankh" );
+
+            backgroundThreadRunning = false;
+
+            if (backgroundThreadQueued) 
+            {
+                backgroundThreadQueued = false;
+                StartBackgroundInitialization();
+            }
         }
 
         /// <summary>
@@ -142,12 +171,27 @@ namespace Ankh.Solution
                 TreeNode node = this.GetNode( item );
                 // special care for the solution
                 if ( node == solutionNode )
-                    this.SyncAll();
+                    this.StartBackgroundInitialization();
                 else if ( node != null )
                     node.Refresh();
             }
         }
 
+        /// <summary>
+        /// Updates the current selection. Does not remove nodes.
+        /// </summary>
+        public void UpdateSelection()
+        {
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
+            {
+                TreeNode node = this.GetNode( item );
+                // special care for the solution
+                if ( node == solutionNode )
+                    this.StartBackgroundInitialization();
+                else if ( node != null )
+                    node.Update();
+            }
+        }
 
         /// <summary>
         /// Updates the status of the given item.
@@ -162,6 +206,8 @@ namespace Ankh.Solution
 
         public void SyncAll()
         {
+            this.treeview.LockWindowUpdate( true );
+
             // build the whole tree anew
             Debug.WriteLine( "Synchronizing with treeview", "Ankh" );
 
@@ -181,6 +227,8 @@ namespace Ankh.Solution
             this.solutionNode = TreeNode.CreateSolutionNode( 
                 this.uiHierarchy.UIHierarchyItems.Item(1), this );
  
+            this.treeview.LockWindowUpdate( false );
+
             Debug.WriteLine( "Created solution node", "Ankh" );
         }
 
@@ -547,6 +595,8 @@ namespace Ankh.Solution
         private TreeView treeview;
         private IntPtr originalImageList = IntPtr.Zero;
         private System.Threading.Thread backgroundThread;
+        private bool backgroundThreadRunning;
+        private bool backgroundThreadQueued;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
     }

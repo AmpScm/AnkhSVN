@@ -43,5 +43,11 @@ namespace Ankh
         /// Notify the Solution Explorer to unload.
         /// </summary>
         void Unload();
+
+        /// <summary>
+        /// Updates the current selection. No deletion.
+        /// </summary>
+        void UpdateSelection();
+
     }
 }

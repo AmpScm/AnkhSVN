@@ -31,7 +31,6 @@ namespace Ankh
                 // ignore if directory is indexed already
                 string normPath = PathUtils.NormalizePath(dir, dir);
 
-                /*
                 if ( !force && dirs[normPath] != null ) 
                 {
                     Debug.WriteLine( "Directory " + normPath + " indexed already", "Ankh" );
@@ -54,7 +53,6 @@ namespace Ankh
                         }
                     }
                 }
-                */
 
                 dirs[ normPath ] = normPath;
 

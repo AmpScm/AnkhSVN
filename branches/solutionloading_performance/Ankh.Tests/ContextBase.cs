@@ -320,6 +320,11 @@ namespace Ankh.Tests
                 // TODO:  Add Explorer.Ankh.ISolutionExplorer.Refresh implementation
             }
 
+            void Ankh.ISolutionExplorer.UpdateSelection()
+            {
+                // TODO:  Add Explorer.Ankh.ISolutionExplorer.UpdateSelection implementation
+            }
+
             #endregion
 
             #region ISelectionContainer Members
@@ -329,9 +334,9 @@ namespace Ankh.Tests
                 // TODO:  Add Explorer.RefreshSelectionParents implementation
             }
 
-            public virtual void SyncAll()
+            public virtual void StartBackgroundInitialization()
             {
-                // TODO:  Add Explorer.SyncAll implementation
+                // TODO:  Add Explorer.StartBackgroundInitialization implementation
             }
 
             public virtual System.Collections.IList GetSelectionResources(bool getChildItems, Ankh.ResourceFilterCallback filter)

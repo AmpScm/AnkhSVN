@@ -232,7 +232,7 @@ namespace Ankh
                 //            {
                 //                // couldn't get status for an item on disk - maybe its been renamed etc from
                 //                // outside VS
-                //                this.context.SolutionExplorer.RefreshSelection();
+                //                this.context.SolutionExplorer.UpdateSelection();
                 //                status = vsCommandStatus.vsCommandStatusSupported;
                 //            }
             catch( Exception ex )
@@ -288,7 +288,7 @@ namespace Ankh
                 //            {
                 //                // couldn't get status for an item on disk - maybe its been renamed etc from
                 //                // outside VS
-                //                this.context.SolutionExplorer.RefreshSelection();
+                //                this.context.SolutionExplorer.UpdateSelection();
                 //            }
             catch( Exception ex )
             {   

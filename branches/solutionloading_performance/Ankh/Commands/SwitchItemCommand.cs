@@ -64,7 +64,7 @@ namespace Ankh.Commands
                 runner.Start( "Switching" );
                 if ( !context.ReloadSolutionIfNecessary() )
                 {
-                    context.SolutionExplorer.RefreshSelection();
+                    context.SolutionExplorer.UpdateSelection();
                 }
             }
             finally

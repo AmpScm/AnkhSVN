@@ -57,7 +57,7 @@ namespace Ankh.Commands
                 if ( !visitor.Cancelled )
                 {
                     if ( !context.ReloadSolutionIfNecessary() )
-                        context.SolutionExplorer.RefreshSelection();
+                        context.SolutionExplorer.UpdateSelection();
                 }
             }
             finally

@@ -82,6 +82,12 @@ namespace Ankh.Solution
             this.Refresh( true );
         }
 
+        public virtual void Update()
+        {
+            this.explorer.Context.StatusCache.Status( this.Directory, true );                    
+            this.UpdateChildren( );
+        }
+
         public virtual void Refresh( bool rescan )
         {
             try
@@ -90,6 +96,7 @@ namespace Ankh.Solution
                 {
                     this.explorer.Context.StatusCache.Status( this.Directory, true );                    
                     this.FindChildren( );
+                    this.RecursiveInitializeStatus();
                     this.RescanHook();
                 }
                 this.currentStatus = this.MergeStatuses( this.ThisNodeStatus(), 
@@ -292,6 +299,76 @@ namespace Ankh.Solution
             }
 
             return statusMerger.CurrentStatus;
+        }
+
+        protected object FindChildByName( string name )
+        {
+            // Pretty slow way to find a child by name
+            // But maybe put back because mostly there are only a few items
+            if ( children == null ) return null;
+
+            foreach ( TreeNode child in children )
+            {
+                if ( child.uiItem.Name == name )
+                    return child;
+            }
+
+            return null;
+        }
+
+        protected void UpdateChildren()
+        {
+            try
+            {                
+                // retain the original expansion state
+                bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
+
+                // get the treeview child
+                IntPtr childItem = this.explorer.TreeView.GetChild( this.hItem );
+
+                // a node needs to be expanded at least once in order to have child nodes
+                if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
+                {
+                    this.uiItem.UIHierarchyItems.Expanded = true;
+                    childItem = this.explorer.TreeView.GetChild( this.hItem );
+                }
+                
+                // iterate over the ui items and the treeview items in parallell
+                foreach( UIHierarchyItem child in this.uiItem.UIHierarchyItems )
+                {
+                    Debug.Assert( childItem != IntPtr.Zero, 
+                        "Could not get treeview item" );
+
+                    if ( FindChildByName( child.Name ) == null && child.Name != Client.AdminDirectoryName )
+                    {                    
+                        TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
+                            this );
+                        if (childNode != null )
+                        {
+                            childNode.Changed += new StatusChanged(this.ChildOrResourceChanged);
+                            this.children.Add( childNode );
+                            childNode.RecursiveInitializeStatus();
+                            childNode.Refresh( false );
+                        }
+                    }
+
+                    // and the next child
+                    childItem = this.explorer.TreeView.GetNextSibling( childItem );               
+                }
+                
+                this.uiItem.UIHierarchyItems.Expanded = isExpanded;
+            }
+            catch( ArgumentException )
+            {
+                // thrown some times if the uiitem is invalid for some reason
+                this.explorer.Context.OutputPane.StartActionText( "ERROR" );
+                this.explorer.Context.OutputPane.WriteLine( 
+                    "ERROR: ArgumentException thrown by automation object. " + 
+                    "This project will not load." );
+                this.explorer.Context.OutputPane.WriteLine(
+                    "(Is this a third party project type?)" );
+                this.explorer.Context.OutputPane.EndActionText();
+            }
         }
 
         /// <summary>

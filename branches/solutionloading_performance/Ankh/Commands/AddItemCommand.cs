@@ -65,7 +65,7 @@ namespace Ankh.Commands
                 {
                     context.Client.Add( item.Path, recursive );
                 }
-                context.SolutionExplorer.RefreshSelection();
+                context.SolutionExplorer.UpdateSelection();
             }
             finally
             {

@@ -45,7 +45,7 @@ namespace Ankh.EventSinks
         {   
             try
             {
-                this.Context.SolutionExplorer.SyncAll();
+                this.Context.SolutionExplorer.StartBackgroundInitialization();
             }
             catch( Exception ex )
             {

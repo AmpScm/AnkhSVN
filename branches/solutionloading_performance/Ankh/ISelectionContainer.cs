@@ -16,7 +16,7 @@ namespace Ankh
         /// </summary>
         void RefreshSelection();
 
-        void SyncAll();
+        void StartBackgroundInitialization();
 
         /// <summary>
         /// Returns the SvnItem resources associated with the selected items
