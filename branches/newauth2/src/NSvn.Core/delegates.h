@@ -2,6 +2,8 @@
 #pragma once
 #using <mscorlib.dll>
 
+#include "credentials.h"
+
 
 namespace NSvn
 {
@@ -16,6 +18,9 @@ namespace NSvn
         public __delegate System::String* LogMessageCallback( CommitItem* items[] );
         public __delegate void LogMessageReceiver( LogMessage* logMessage );
         public __delegate void PromptCallback();
+
+        public __delegate SimpleCredential* SimplePromptDelegate( 
+            System::String* realm, String* username );
 
         public __delegate void StatusCallback( System::String* path, Status* status );
     }

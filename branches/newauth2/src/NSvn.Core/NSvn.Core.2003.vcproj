@@ -123,6 +123,9 @@
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
+				RelativePath=".\Authentication.cpp">
+			</File>
+			<File
 				RelativePath="Client.cpp">
 			</File>
 			<File
@@ -166,6 +169,12 @@
 				RelativePath="AprFileAdapter.h">
 			</File>
 			<File
+				RelativePath=".\Authentication.h">
+			</File>
+			<File
+				RelativePath=".\AuthenticationProviderObject.h">
+			</File>
+			<File
 				RelativePath="ChangedPath.h">
 			</File>
 			<File
@@ -185,6 +194,9 @@
 			</File>
 			<File
 				RelativePath="CommitItem.h">
+			</File>
+			<File
+				RelativePath=".\credentials.h">
 			</File>
 			<File
 				RelativePath="delegates.h">
@@ -215,9 +227,6 @@
 			</File>
 			<File
 				RelativePath="Revision.h">
-			</File>
-			<File
-				RelativePath="SimpleCredential.h">
 			</File>
 			<File
 				RelativePath="Status.h">

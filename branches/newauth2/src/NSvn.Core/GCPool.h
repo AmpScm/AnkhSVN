@@ -24,6 +24,11 @@ namespace NSvn
             {
                 return static_cast<apr_pool_t*>(*this->pool);
             }
+
+            Pool* GetPool()
+            {
+                return this->pool; 
+            }
        public:
             void Dispose()
             {
