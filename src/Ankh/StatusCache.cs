@@ -127,6 +127,9 @@ namespace Ankh.Solution
             if ( !Path.IsPathRooted( normPath ) )
                 normPath = Path.Combine( this.currentPath, normPath );
 
+            if ( normPath[normPath.Length-1] == '\\' )
+                normPath = normPath.Substring(0, normPath.Length-1);
+
             return normPath.ToLower();
         }
 
