@@ -30,7 +30,7 @@
                     ConfigurationOverrideFile = ""
                     DefineConstants = "DEBUG;TRACE"
                     DocumentationFile = ""
-                    DebugSymbols = "false"
+                    DebugSymbols = "true"
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
                     NoStdLib = "false"
@@ -137,6 +137,11 @@
                     VersionMinor = "1"
                     Lcid = "0"
                     WrapperTool = "aximp"
+                />
+                <Reference
+                    Name = "office"
+                    AssemblyName = "office"
+                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.1.4322\office.dll"
                 />
             </References>
         </Build>

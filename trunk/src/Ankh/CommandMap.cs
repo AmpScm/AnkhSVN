@@ -36,6 +36,8 @@ namespace Ankh
         /// <param name="dte">TODO: what to do, what to do?</param>
         public static CommandMap RegisterCommands( AnkhContext context )
         {
+            CreateReposExplorerPopup( context );
+
             CommandMap commands = new CommandMap();
 
             // find all the ICommand subclasses in all modules
@@ -45,25 +47,12 @@ namespace Ankh
                 foreach( Type type in module.FindTypes( 
                     new TypeFilter( CommandMap.CommandTypeFilter ), null ) )
                 {
-                    try
-                    {
-                        // is this a VS.NET command?
-                        VSNetCommandAttribute[] vsattrs = (VSNetCommandAttribute[])(
-                            type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) );
-                        if ( vsattrs.Length > 0 )
-                            RegisterVSNetCommand( vsattrs[0], type, commands, context );
-                    }
-                    catch( Exception ex )
-                    {
-                        Error.Handle( ex );
-                    }
-
-                    // solution explorer?
-                    RepositoryExplorerMenuAttribute [] reattrs = 
-                        (RepositoryExplorerMenuAttribute[])(type.GetCustomAttributes(
-                        typeof(RepositoryExplorerMenuAttribute), false ) );
-                    if ( reattrs.Length > 0 )
-                        RegisterRepositoryExplorerCommand( reattrs[0], type, context );
+                   
+                    // is this a VS.NET command?
+                    VSNetCommandAttribute[] vsattrs = (VSNetCommandAttribute[])(
+                        type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) );
+                    if ( vsattrs.Length > 0 )
+                        RegisterVSNetCommand( vsattrs[0], type, commands, context );
                 }
             }
 
@@ -151,26 +140,6 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Registers a right click menu item for the repository explorer control.
-        /// </summary>
-        /// <param name="attr"></param>
-        /// <param name="type"></param>
-        /// <param name="context"></param>
-        private static void RegisterRepositoryExplorerCommand( 
-            RepositoryExplorerMenuAttribute attr, Type type, AnkhContext context )
-        {
-            ICommand cmd = (ICommand)Activator.CreateInstance( type );
-            RepositoryExplorerMenuItem item = new RepositoryExplorerMenuItem( context,
-                cmd );
-
-            item.Text = attr.Text;
-
-            context.RepositoryExplorer.AddMenuItem( item, attr.Position );
-
-            item.RegisterWithParent();           
-        }
-
-        /// <summary>
         /// Retrieve the command bar associated with a given path, creating them if missing.
         /// </summary>
         /// <param name="name">The path to the command bar, components separated by .</param>
@@ -179,7 +148,13 @@ namespace Ankh
         private static CommandBar GetCommandBar( string name, AnkhContext context )
         {
             string[] path = name.Split( '.' );
-            CommandBar bar = (CommandBar)context.DTE.CommandBars[ path[0] ];;
+            CommandBar bar;
+
+            //TODO: is this really necessary?
+            if ( path[0] == context.RepositoryExplorer.CommandBar.Name )
+                bar = context.RepositoryExplorer.CommandBar;
+            else
+                bar = (CommandBar)context.DTE.CommandBars[ path[0] ];;
             for( int i = 1; i < path.Length; i++ )
             {
                 try
@@ -197,6 +172,13 @@ namespace Ankh
             }
 
             return bar;
+        }
+
+        private static void CreateReposExplorerPopup( AnkhContext context )
+        {
+            context.RepositoryExplorer.CommandBar = (CommandBar)
+                context.DTE.Commands.AddCommandBar( "ReposExplorer", vsCommandBarType.vsCommandBarTypePopup,
+                    null, 1 );
         }
 
     }

@@ -31,11 +31,7 @@ namespace Ankh.UI
             //
         }
 
-        public void AddMenuItem( MenuItem item, int position )
-        {
-            this.repositoryExplorerControl1.AddMenuItem( item, position );
-        }
-
+        
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>

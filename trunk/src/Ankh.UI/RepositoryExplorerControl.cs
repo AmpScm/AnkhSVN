@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using NSvn;
 using NSvn.Core;
 using System.Text.RegularExpressions;
+using Microsoft.Office.Core;
+using System.Diagnostics;
 
 namespace Ankh.UI
 {
@@ -31,6 +33,8 @@ namespace Ankh.UI
             this.revisionPicker.BaseEnabled = false;
             this.revisionPicker.CommittedEnabled = false;
             this.revisionPicker.PreviousEnabled = false;
+
+            this.treeView.MouseUp += new MouseEventHandler( this.TreeViewMouseUp );
 			
             this.components = new System.ComponentModel.Container();
             this.SetToolTips();
@@ -46,12 +50,16 @@ namespace Ankh.UI
             get{ return this.context; }
             set{ this.context = value; }
         }
-        
-        public void AddMenuItem( MenuItem item, int position )
-        {
-            this.treeView.ContextMenu.MenuItems.Add( position, item );
-        }
 
+        /// <summary>
+        /// The command bar to be used for a context menu.
+        /// </summary>
+        public CommandBar CommandBar
+        {
+            get{ return this.commandBar; }
+            set{ this.commandBar = value; }
+        }        
+        
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
@@ -128,6 +136,18 @@ namespace Ankh.UI
         {
             this.goButton.Enabled = this.revisionPicker.Valid;
         }
+
+        private void TreeViewMouseUp( object sender, MouseEventArgs args )
+        {
+            Debug.Assert( this.commandBar != null, "commandBar is null" );
+
+            if ( args.Button != MouseButtons.Right )
+                return;
+            Point screen = this.treeView.PointToScreen( new Point(args.X, args.Y) );
+
+            this.commandBar.ShowPopup( screen.X, screen.Y );
+        }
+
 
 		#region Component Designer generated code
         /// <summary> 
@@ -222,6 +242,7 @@ namespace Ankh.UI
         private System.Windows.Forms.Button goButton;
         private Ankh.UI.RevisionPicker revisionPicker;
         private NSvnContext context;
+        private CommandBar commandBar;
 		
 						
     }
