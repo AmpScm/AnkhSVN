@@ -315,7 +315,7 @@ namespace Ankh
         /// <summary>
         /// Sets up event handlers.
         /// </summary>
-        public void SetUpEvents()
+        private void SetUpEvents()
         {
             // apparently necessary to avoid the SolutionEvents object being
             // gc'd :-/
@@ -330,7 +330,7 @@ namespace Ankh
         /// <summary>
         /// try to load the configuration file
         /// </summary>
-        public void LoadConfig()
+        private void LoadConfig()
         {
             try
             {
@@ -366,7 +366,7 @@ namespace Ankh
 #endif
         }
         
-        public bool CheckWhetherAnkhShouldLoad()
+        private bool CheckWhetherAnkhShouldLoad()
         {
             // no point in doing anything if the solution dir doesn't exist
             string solutionPath = this.dte.Solution.FullName;
@@ -400,7 +400,7 @@ namespace Ankh
             }
         }
 
-        public bool QueryWhetherAnkhShouldLoad( string solutionDir )
+        private bool QueryWhetherAnkhShouldLoad( string solutionDir )
         {
             string nl = Environment.NewLine;
             string msg = "Ankh has detected that the solution file for this solution " + 
@@ -429,7 +429,7 @@ namespace Ankh
         }
         
 
-        public void CreateRepositoryExplorer()
+        private void CreateRepositoryExplorer()
         {   
             Debug.WriteLine( "Creating repository explorer", "Ankh" );
             object control = null;

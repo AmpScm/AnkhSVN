@@ -32,24 +32,19 @@ namespace Ankh
         /// </summary>
         OutputPaneWriter OutputPane { get; }
 
-        //        public RepositoryExplorer.Controller RepositoryController
-        //        {
-        //            [System.Diagnostics.DebuggerStepThrough]
-        //            get{ return this.repositoryController; }
-        //        }
-
-
-
         /// <summary>
         /// The SvnContext object used by the NSvn objects.
         /// </summary>
         SvnClient Client { get; }
 
         /// <summary>
-        /// The repository explorer control.
+        /// The repository explorer controller.
         /// </summary>
         RepositoryExplorer.Controller RepositoryExplorer { get; }
 
+        /// <summary>
+        /// The EnvDTE.Window hosting the Repository Explorer. 
+        /// </summary>
         EnvDTE.Window RepositoryExplorerWindow { get; }
 
         /// <summary>
@@ -57,6 +52,9 @@ namespace Ankh
         /// </summary>
         bool SolutionIsOpen { get; }
 
+        /// <summary>
+        /// Whether Ankh is loaded for the current solution.
+        /// </summary>
         bool AnkhLoadedForSolution { get; }
 
         /// <summary>
@@ -79,6 +77,9 @@ namespace Ankh
         /// </summary>
         StatusCache StatusCache { get; }
 
+        /// <summary>
+        /// Whether an operation is currently running.
+        /// </summary>
         bool OperationRunning { get; }
 
         /// <summary>
@@ -116,19 +117,5 @@ namespace Ankh
         /// Miscellaneous cleanup stuff goes here.
         /// </summary>
         void Shutdown();
-
-        /// <summary>
-        /// Sets up event handlers.
-        /// </summary>
-        void SetUpEvents();
-
-        /// <summary>
-        /// try to load the configuration file
-        /// </summary>
-        void LoadConfig();
-
-        bool CheckWhetherAnkhShouldLoad();
-        bool QueryWhetherAnkhShouldLoad( string solutionDir );
-        void CreateRepositoryExplorer();
     }
 }
