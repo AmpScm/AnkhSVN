@@ -209,7 +209,7 @@ namespace Ankh.UI
             this.showDiffButton = new System.Windows.Forms.Button();
             this.diffView = new Ankh.UI.DiffTab();
             this.logMessageBox = new System.Windows.Forms.RichTextBox();
-            this.commitItemsTree = new PathSelectionTreeView();
+            this.commitItemsTree = new Ankh.UI.PathSelectionTreeView();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -255,8 +255,9 @@ namespace Ankh.UI
             this.diffView.Font = new System.Drawing.Font("Courier New", 10F);
             this.diffView.Location = new System.Drawing.Point(0, 312);
             this.diffView.Name = "diffView";
+            this.diffView.SelectedIndex = 0;
+            this.diffView.Size = new System.Drawing.Size(814, 0);
             this.diffView.TabIndex = 10;
-            this.diffView.Size = new System.Drawing.Size(814,0);
             // 
             // logMessageBox
             // 
@@ -273,10 +274,19 @@ namespace Ankh.UI
             // 
             // commitItemsTree
             // 
+            this.commitItemsTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this.commitItemsTree.CheckBoxes = true;
+            this.commitItemsTree.ImageIndex = -1;
+            this.commitItemsTree.Items = new object[0];
             this.commitItemsTree.Location = new System.Drawing.Point(0, 0);
             this.commitItemsTree.Name = "commitItemsTree";
+            this.commitItemsTree.Recursive = false;
+            this.commitItemsTree.SelectedImageIndex = -1;
+            this.commitItemsTree.SingleCheck = false;
             this.commitItemsTree.Size = new System.Drawing.Size(816, 112);
             this.commitItemsTree.TabIndex = 9;
+            this.commitItemsTree.UrlPaths = false;
             // 
             // CommitDialog
             // 
