@@ -12,7 +12,13 @@ namespace NSvn
         public __gc class Revision
         {
         public:
-            //TODO: doc comments
+			///<param name="Unspecified">No revision information given.</param>         
+            ///<param name="Committed">Revision of item's last commit in working copy.</param>         
+            ///<param name="Previous">Revision before item's last commit in working copy. 
+			///						  (current committed revision in wc) - 1</param>         
+            ///<param name="Base">Base revision of item's working copy.</param>         
+            ///<param name="Working">Current committed revision, plus local changes in working copy.</param>         
+            ///<param name="Head">Latest revision in repository.</param>
             static Revision* const Unspecified = new Revision( svn_opt_revision_unspecified );
             static Revision* const Committed = new Revision( svn_opt_revision_committed );
             static Revision* const Previous = new Revision( svn_opt_revision_previous );
