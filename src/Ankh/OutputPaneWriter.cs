@@ -29,8 +29,11 @@ namespace Ankh
         /// </summary>
         public void Activate()
         {
-            this.outputWindow.Activate();
-            this.outputPane.Activate();
+            if ( !this.outputWindow.AutoHides )
+            {
+                this.outputWindow.Activate();
+                this.outputPane.Activate();
+            }
         }
 
         /// <summary>
