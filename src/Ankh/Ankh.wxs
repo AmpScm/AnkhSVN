@@ -1,6 +1,6 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
   <Fragment Id="FR_Ankh">
-    <DirectoryRef Id="appDir">
+    <DirectoryRef Id="TARGETDIR">
       <!-- RegAsm reg settings -->
       <Component Id="Ankh_component8" DiskId="1" Guid="FE524A94-5C69-4792-8B13-ABE0A8171FCF">
         <Registry Id="Ankh_registry8" Root="HKCR" Type="string" KeyPath="yes"
