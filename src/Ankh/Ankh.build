@@ -6,7 +6,7 @@
     <property name="warninglevel" value="/warn:3"/>
     <property name="installsource.dir" value="..\${installsource.dir}"/>
     
-    <target name="version" depends="build">    
+    <target name="version">    
         <script language="C#">
             <imports>
                <import name="System.Reflection" />
