@@ -26,7 +26,7 @@
         <copy file="NSvn/${build.dir}/NSvn.dll" tofile="${build.dir}/NSvn.dll"/>
     </target>
     
-    <target name="build-NSvn.Tests" depends="build-NSvn">
+    <target name="build-NSvn.Tests" depends="build-NSvn, build-NSvn.Common, build-NSvn.Core, build-NSvn.Core.Tests">
         <nant buildfile="NSvn.Tests/NSvn.Tests.build" inheritall="true" target="build"/>
         <copy file="NSvn.Tests/${build.dir}/NSvn.Tests.dll" tofile="${build.dir}/NSvn.Tests.dll"/>
     </target>
