@@ -6,6 +6,13 @@
         <Package Description="NSvn" Comments="NSvn Merge Module" Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud"
             InstallerVersion="200" Platforms="Intel" Languages="1033" Compressed="yes" SummaryCodepage="1252"
             Id="????????-????-????-????-????????????" />
+        
+        <Upgrade Id="D35F7A64-E1AA-46eb-8835-36401261EB2A">
+            <UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" Minimum="0.6.0" 
+                Maximum="$(var.ankhversion)" MigrateFeatures="yes" />
+            <UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhversion)" />
+        </Upgrade>
+            
         <Property Id="ShortProductName">AnkhSvn</Property>
         <Property Id="ARPCONTACT">Arild Fines, Per Krämer &amp; Kristin Borud</Property>
         <Property Id="ARPURLINFOABOUT">http://ankhsvn.tigris.org/</Property>
