@@ -8,6 +8,8 @@
 #include "CommitInfo.h"
 #include "ClientContext.h"
 #include "DirectoryEntry.h"
+#include "Status.h"
+#include "StatusDictionary.h"
 
 
 
@@ -157,8 +159,10 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns></returns>
             //TODO:  StringDictionary to be reconsidered
-	        static StringDictionary* Status(long* youngest, String* path, bool descend, 
-                bool getAll, bool upDate,  bool noIgnore, ClientContext* context);
+	        static StatusDictionary* Status(
+                [System::Runtime::InteropServices::Out]System::Int32* youngest, 
+                String* path, bool descend, bool getAll, bool upDate,  
+                bool noIgnore, ClientContext* context);
  /*          
             ///<summary>Obtain log information from the repository.</summary>
             ///<param name="targets">Targets contains all the working copy paths for 

@@ -10,7 +10,7 @@ namespace NSvn
     namespace Core
     {
             
-           public __value enum NodeKind
+        public __value enum NodeKind
         { 
             /// <summary>Node doesn't exist.</summary>     
             None = svn_node_none, 
@@ -83,6 +83,59 @@ namespace NSvn
             Merged = svn_wc_notify_state_merged, 
             ///<summary>Modified state got conflicting mods.</summary>                
             Conflicted = svn_wc_notify_state_conflicted 
+        };
+
+        public __value enum StatusKind
+        {
+            /// <summary>Does not exist.</summary>
+            None = svn_wc_status_none,
+
+            /// <summary>Is not versioned.</summary>
+            Unversioned = svn_wc_status_unversioned,
+
+            /// <summary>Nothing interesting.</summary>
+            Normal = svn_wc_status_normal,
+
+            /// <summary>The item is scheduled for addition.</summary>
+            Added = svn_wc_status_added,
+
+            /// <summary>The item is under version control, but is missing.</summary>
+            Absent = svn_wc_status_absent,
+
+            /// <summary>The item is scheduled for deletion.</summary>
+            Deleted = svn_wc_status_deleted,
+
+            /// <summary>The item was deleted then readded.</summary>
+            Replaced = svn_wc_status_replaced,
+
+            /// <summary>The item has been modified.</summary>
+            Modified = svn_wc_status_modified,
+
+            /// <summary>The item has been merged with changes from the repository.</summary>
+            Merged = svn_wc_status_merged,
+
+            /// <summary>The item is in a conflicted state.</summary>
+            Conflicted = svn_wc_status_conflicted,
+
+            /// <summary>An unversioned local resource is in the way of the versioned resource</summary>
+            Obstructed = svn_wc_status_obstructed
+
+        };
+
+        /// <summary>The schedule states an item can be in</summary>
+        public __value enum Schedule
+        {
+            /// <summary>Nothing special</summary>
+            Normal,
+
+            /// <summary>Scheduled for addition</summary>
+            Add,
+
+            /// <summary>Scheduled for deletion</summary>
+            Delete,
+
+            /// <summary>Scheduled for replacement(delete+add)</summary>
+            Replace
         };
     }
 }

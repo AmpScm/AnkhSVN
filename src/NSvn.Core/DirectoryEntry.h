@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "svnenums.h"
+#include "utils.h"
 
 namespace NSvn
 {
@@ -18,11 +19,7 @@ namespace NSvn
               createdRev( dirent->created_rev ),
               lastAuthor( StringHelper(dirent->last_author) )
             {
-                // TODO: refactor this out?
-                ;
-                TimeSpan t( dirent->time * 10 );
-                //apr_time_t is the number of microseconds since the epoch
-                this->time = DateTime( 1970, 1, 1 ).Add( t );
+                this->time = AprTimeToDateTime( dirent->time );
             }
 
             ///<summary>The path to this entry</summary>
