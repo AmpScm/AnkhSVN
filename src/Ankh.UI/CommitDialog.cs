@@ -150,16 +150,23 @@ namespace Ankh.UI
 
         private void CommitDialog_VisibleChanged(object sender, System.EventArgs e)
         {
-            ArrayList arr = new ArrayList();
-            foreach( ListViewItem item in this.commitItemsView.Items )
-                arr.Add( item.SubItems[0].Text );
-
             if ( this.Visible && this.logMessageBox.Text == string.Empty )
+            {
+                ArrayList arr = new ArrayList();
+                foreach( ListViewItem item in this.commitItemsView.Items )
+                    arr.Add( item.SubItems[0].Text );
+            
                 this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( arr );
+                this.preprocessed = true;
+            }
         }
 
         private void ItemChecked(object sender, System.Windows.Forms.ItemCheckEventArgs e)
         {
+            // don't bother if the 
+            if ( ! this.preprocessed )
+                return;
+
             ListViewItem item = this.commitItemsView.Items[e.Index];
             if ( e.CurrentValue == CheckState.Checked )
             {                
@@ -319,6 +326,8 @@ namespace Ankh.UI
         private System.Windows.Forms.ListView commitItemsView;
         private System.Windows.Forms.ColumnHeader pathColumnHeader;
         private System.Windows.Forms.ColumnHeader actionColumnHeader;
+
+        private bool preprocessed = false;
        
         /// <summary>
         /// Required designer variable.
