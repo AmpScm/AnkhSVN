@@ -50,10 +50,14 @@ namespace Ankh.Solution
         public static TreeNode CreateSolutionNode( UIHierarchyItem item, IntPtr hItem,
             Explorer explorer )
         {
-            TreeNode node = new SolutionNode( item, hItem, explorer );
-            node.UpdateStatus();
-            
-            return node;
+            if ( explorer.DTE.Solution.FullName != string.Empty )
+            {
+                TreeNode node = new SolutionNode( item, hItem, explorer );
+                node.UpdateStatus();
+                return node;
+            }
+            else
+                return null;
         }
 
         public virtual void Refresh()
