@@ -132,41 +132,48 @@ namespace NSvn.Tests
         public void TestUpdate()
         {
             // create a second wc and change a file
+           
             string wc2 = this.FindDirName( @"\tmp\wc2" );
-            Zip.ExtractZipResource( wc2, this.GetType(), this.WC_FILE );
-            WorkingCopyResource wc2item = new WorkingCopyFile( Path.Combine( wc2, "Form.cs" ) );
-            using( StreamWriter w = new StreamWriter( wc2item.Path, false ) )
-                w.Write( "MOO" );
-            wc2item.Commit( false );
-
-            // try to update the primary wc
-            WorkingCopyResource item = new WorkingCopyFile( Path.Combine( this.WcPath, "Form.cs" ) );
-            using( StreamWriter w2 = new StreamWriter( item.Path ) )
-                w2.Write( "BLAH" );
-            item.Update();
-
-            Assertion.AssertEquals( "Item should be conflicted", StatusKind.Conflicted, 
-                item.Status.TextStatus );
-
-            // make sure you cannot commit a conflicted wc
             try
             {
-                item.Commit( false );
-                Assertion.Fail( "Should not be able to commit a conflicted file" );
-            }
-            catch( SvnClientException )
-            { /*empty*/ }
+                Zip.ExtractZipResource( wc2, this.GetType(), this.WC_FILE );
+                WorkingCopyResource wc2item = new WorkingCopyFile( Path.Combine( wc2, "Form.cs" ) );
+                using( StreamWriter w = new StreamWriter( wc2item.Path, false ) )
+                    w.Write( "MOO" );
+                wc2item.Commit( false );
 
-            WorkingCopyResource folderItem = new WorkingCopyDirectory( this.WcPath );
-            try
+                // try to update the primary wc
+                WorkingCopyResource item = new WorkingCopyFile( Path.Combine( this.WcPath, "Form.cs" ) );
+                using( StreamWriter w2 = new StreamWriter( item.Path ) )
+                    w2.Write( "BLAH" );
+                item.Update();
+
+                Assertion.AssertEquals( "Item should be conflicted", StatusKind.Conflicted, 
+                    item.Status.TextStatus );
+
+                // make sure you cannot commit a conflicted wc
+                try
+                {
+                    item.Commit( false );
+                    Assertion.Fail( "Should not be able to commit a conflicted file" );
+                }
+                catch( SvnClientException )
+                { /*empty*/ }
+
+                WorkingCopyResource folderItem = new WorkingCopyDirectory( this.WcPath );
+                try
+                {
+                    folderItem.Commit(  true );
+                    Assertion.Fail( "Should not be able to commit a conflicted directory" );
+                }
+                catch( SvnClientException )
+                { /* empty */ }
+            }
+            finally
             {
-                folderItem.Commit(  true );
-                Assertion.Fail( "Should not be able to commit a conflicted directory" );
-            }
-            catch( SvnClientException )
-            { /* empty */ }
-
-            
+                if ( Directory.Exists( wc2 ) )
+                    this.RecursiveDelete( wc2 );
+            }           
         }
         #endregion
 
