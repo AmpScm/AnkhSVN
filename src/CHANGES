@@ -1,4 +1,17 @@
-Version 0.4.0
+Version 0.4.1(released 29.01.2004)
+This release was built against Subversion 0.37.0, Neon 0.24.4, 
+openssl 0.9.7 and Berkeley DB 4.2.52
+
+Changes:
+* Made the installer not include mswsock.dll and rpcrt4.dll. Deploying
+these in the application folder caused Ankh to fail to load on 
+Win2K and XP
+* Fixed a bug in the solution explorer code which caused Ankh to 
+fail if the solution explorer was floating or on autohide
+* Ensured that the checkout code in the installer for creating a test wc
+was provided with correct credentials, allowing it to succeed.
+------------------------------------------------------------------------
+Version 0.4.0(released 26.01.2004)
 This release was built against Subversion 0.37.0, Neon 0.24.4, 
 openssl 0.9.7 and Berkeley DB 4.2.52
 

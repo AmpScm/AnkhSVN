@@ -101,8 +101,15 @@ namespace Ankh.Extenders
         internal static void Unregister( _DTE dte )
         {
             // use the stored cookies to unregister the registered providers.
-            foreach( int cookie in cookies )
-                dte.ObjectExtenders.UnregisterExtenderProvider( cookie );
+			try
+			{
+				foreach( int cookie in cookies )
+					dte.ObjectExtenders.UnregisterExtenderProvider( cookie );
+			}
+			catch( Exception )
+			{
+				// HACK: swallow
+			}
         }
 
         private static ExtenderProvider provider;
