@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using NUnit.Framework;
+using Utils;
 
 namespace NSvn.Core.Tests
 {
@@ -23,7 +24,7 @@ namespace NSvn.Core.Tests
         public override void TearDown()
         {
             base.TearDown();
-            this.RecursiveDelete( this.newWc );
+            PathUtils.RecursiveDelete( this.newWc );
         }
 
         /// <summary>
