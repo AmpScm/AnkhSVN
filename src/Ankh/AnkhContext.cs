@@ -124,9 +124,10 @@ namespace Ankh
         /// <summary>
         /// Should be called before starting any lengthy operation
         /// </summary>
-        public void StartOperation()
+        public void StartOperation( string description )
         {
             //TODO: maybe refactor this?
+            this.DTE.StatusBar.Text = description;
             this.DTE.StatusBar.Animate( true, vsStatusAnimation.vsStatusAnimationSync );
         }
 
@@ -135,6 +136,7 @@ namespace Ankh
         /// </summary>
         public void EndOperation()
         {
+            this.DTE.StatusBar.Text = "Ready";
             this.DTE.StatusBar.Animate( false, vsStatusAnimation.vsStatusAnimationSync );
         }
 
@@ -161,7 +163,7 @@ namespace Ankh
         {
             try
             {
-                this.StartOperation();
+                this.StartOperation( "Synchronizing with solution explorer...");
 
                 this.solutionExplorer = new Explorer( this.DTE, this.Context );
                 this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
