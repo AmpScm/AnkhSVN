@@ -7,6 +7,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for MergeItem.
     /// </summary>
+    [VSNetCommand("MergeItem", Text = "Update", Tooltip = "Merges the local item",
+         Bitmap = ResourceBitmaps.Add),
+     VSNetControl( "ReposExplorer", Position = 1 ) ]
     internal class MergeItem : CommandBase
     {
 		
