@@ -66,6 +66,14 @@ namespace Ankh.Tests
             SvnItem item1 = this.GetItem();
             Assert.IsTrue( item1.IsVersioned );
 
+            // missing
+            File.Delete( item1.Path );
+            item1.Refresh( this.Client );
+            Assert.IsTrue( item1.IsVersioned );
+
+            // revert it so we can play some more with it
+            this.Client.Revert( new string[]{ item1.Path }, false );
+
             // modified
             using( StreamWriter writer = new StreamWriter(item1.Path) )
                 writer.WriteLine( "Foo" );
@@ -246,6 +254,14 @@ namespace Ankh.Tests
             // normal
             SvnItem item1 = this.GetItem();
             Assert.IsTrue( item1.IsVersionable );
+
+            // missing
+            File.Delete( item1.Path );
+            item1.Refresh( this.Client );
+            Assert.IsTrue( item1.IsVersionable );
+
+            // revert it so we can play some more with it
+            this.Client.Revert( new string[]{ item1.Path }, false );
 
             // modified
             using( StreamWriter writer = new StreamWriter(item1.Path) )
