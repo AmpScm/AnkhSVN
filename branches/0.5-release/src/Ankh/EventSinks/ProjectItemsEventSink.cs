@@ -9,9 +9,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Event sink for the ProjectItemsEvent
     /// </summary>
-    internal class ProjectItemsEventSink : ItemEventSink
+    public class ProjectItemsEventSink : ItemEventSink
     {
-        internal ProjectItemsEventSink( ProjectItemsEvents events, 
+        public ProjectItemsEventSink( ProjectItemsEvents events, 
             AnkhContext context )
             : base( context  )
         {

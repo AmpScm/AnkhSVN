@@ -13,7 +13,7 @@ namespace Ankh.Config
     /// <summary>
     /// Represents an error in the configuration file.
     /// </summary>
-    internal class ConfigException : ApplicationException
+    public class ConfigException : ApplicationException
     {
         public ConfigException( string msg ) : base(msg)
         {}
@@ -26,7 +26,7 @@ namespace Ankh.Config
     /// <summary>
     /// Contains functions used to load and save configuration data.
     /// </summary>
-    internal sealed class ConfigLoader
+    public sealed class ConfigLoader
     {
         public ConfigLoader( string configDir )
         {

@@ -7,7 +7,7 @@ namespace Ankh
     /// <summary>
     /// Represents an Ankh command.
     /// </summary>
-    internal interface ICommand
+    public interface ICommand
     {
         /// <summary>
         /// Get the status of the command

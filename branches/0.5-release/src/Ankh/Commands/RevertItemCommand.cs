@@ -21,7 +21,7 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetFolderNodeControl( "Ankh", Position = 1),
     VSNetControl( "Solution.Ankh", Position = 1)]
-    internal class RevertItemCommand : CommandBase
+    public class RevertItemCommand : CommandBase
     {
         #region Implementation of ICommand
 

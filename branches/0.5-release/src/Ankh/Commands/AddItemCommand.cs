@@ -16,7 +16,7 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetFolderNodeControl( "Ankh", Position = 1),
     VSNetControl( "Solution.Ankh", Position = 1)]    
-    internal class AddItemCommand : CommandBase
+    public class AddItemCommand : CommandBase
     {
         #region Implementation of ICommand
 

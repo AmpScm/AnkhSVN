@@ -7,7 +7,7 @@ namespace Ankh
     /// An attribute that lets you add controls to *all* of the VS Project bars.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    internal class VSNetProjectNodeControlAttribute : VSNetControlAttribute
+    public class VSNetProjectNodeControlAttribute : VSNetControlAttribute
     {
         public VSNetProjectNodeControlAttribute( string commandBar ) : 
             base( commandBar )

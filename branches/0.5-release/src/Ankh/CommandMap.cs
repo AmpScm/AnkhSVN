@@ -12,7 +12,7 @@ namespace Ankh
     /// <summary>
     /// Responsible for registering the ICommand implementations in this assembly.
     /// </summary>
-    internal class CommandMap : DictionaryBase
+    public class CommandMap : DictionaryBase
     {
         /// <summary>
         /// Private constructor to avoid instantiation.

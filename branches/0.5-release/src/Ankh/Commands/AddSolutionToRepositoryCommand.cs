@@ -21,7 +21,7 @@ namespace Ankh.Commands
          Bitmap=ResourceBitmaps.Default ),
     VSNetControl( "Solution.Ankh", Position=1 ),
     VSNetControl( "File", Position=14 )]
-    internal class AddSolutionToRepositoryCommand : CommandBase
+    public class AddSolutionToRepositoryCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {

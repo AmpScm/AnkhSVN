@@ -10,7 +10,7 @@ namespace Ankh.Commands
     [VSNetCommand("EditConfigFile", Tooltip="Edit the AnkhSVN config file", 
          Text = "Edit the AnkhSVN config file", Bitmap = ResourceBitmaps.EditConfigFile ),
     VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 ) ]
-	internal class EditConfigFileCommand : CommandBase
+	public class EditConfigFileCommand : CommandBase
 	{
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {

@@ -5,13 +5,13 @@ using NSvn.Core;
 
 namespace Ankh
 {
-    internal delegate void ProgressRunnerCallback( AnkhContext context );
+    public delegate void ProgressRunnerCallback( AnkhContext context );
 
     /// <summary>
     /// Used to run lengthy operations in a separate thread while 
     /// displaying a modal progress dialog in the main thread.
     /// </summary>
-    internal class ProgressRunner
+    public class ProgressRunner
     {
         /// <summary>
         /// 
