@@ -4,9 +4,9 @@
 
 Currently, to get a copy of the Ankh source code, you need to check it out using another SVN client. Further, in order to actually build it, you will also need to build Subversion itself. It then makes sense to start the process by building your own copy of the Subversion commandline client.
 
-Note: The current source tree only builds against the 0.22 release of SVN.
+Note: The current source tree only builds against the 0.23 release of SVN.
 
-Start by getting the 0.22 source tarball. You will also need the VS.NET version of the Berkeley DB binaries, which can be found here . We are currently using the 4.0.14 version. Make sure you don't get the VC6.0 versions, since they will cause spurious access violations at runtime.
+Start by getting the 0.23 source tarball. You will also need the VS.NET version of the Berkeley DB binaries, which can be found here . We are currently using the 4.0.14 version. Make sure you don't get the VC6.0 versions, since they will cause spurious access violations at runtime.
 
 Extract the subversion tarball(using Winzip or similar). Then, extract the Berkeley zip into a directory called db4-win32 at the root of the tree(alongside the doc and build directories).
 
