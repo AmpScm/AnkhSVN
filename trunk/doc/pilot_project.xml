@@ -3,7 +3,7 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
 
     <p><b>Title:</b> Subversion plugin for Visual Studio .NET</p> <p>
     <b>Employer:</b>  CollabNet - http://www.collab.net</p> 
-    <p><b>Supervisor at ColabNet:</b>  Karl Fogel, Software Collaboration Specialist - kfogel@collab.net</p> 
+    <p><b>Supervisor at CollabNet:</b>  Karl Fogel, Software Collaboration Specialist - kfogel@collab.net</p> 
     <p><b>Supervisor at HIO:</b>Eva Hadler Vihovde - EvaHadler.Vihovde@iu.hio.no </p>
     <p><b>Developers:  </b></p> 
     <list> 
@@ -25,52 +25,54 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
      </section>
 
      <section header="Background"> 
+        <p>
+            Subversion is a free open source tool which makes it easier
+            for several people to work within the same set of files. The
+            files are placed into a central repository. The repository
+            is much like an ordinary file server, except that it
+            remembers every change ever made to your files. Each
+            individual programmer checks out a working copy. During the
+            project period these working copies can be updated and
+            synchronised with the repository. </p>
         <p>The background for this specific
         project is that we wanted to do a project in the Microsoft's
         .NET environment. One of the group member had used the revision control system
-        Subversion in several projects at school for the last year.
-        Subversion is a free open source tool which makes it easier
-        for several people to work within the same set of files. The
-        files are placed into a central repository. The repository
-        is much like an ordinary file server, except that it
-        remembers every change ever made to your files. Each
-        individual programmer checks out a working copy. During the
-        project period these working copies could be updated and
-        synchronised with the repository. We decided to do a project
+        Subversion for several school and private projects in the last year.</p>
+        <p>We decided to do a project
         where both technologies were represented. After having
-        defined the project we contacted CollabNet. CollabNet pays the salary for several
-        people that works on the Subversion project fulltime. CollabNet agreed to
-        be the employer and provides the external supervisor, Karl Fogel to our
-        project.</p> 
+        defined the project we contacted CollabNet. CollabNet pays several
+        developers that works on the Subversion project fulltime. CollabNet 
+        agreed to be the employer and provides the external supervisor, 
+        Karl Fogel to our project.</p> 
     </section>
 
     <section header="Aim"> 
-        <p>The aim of this project is to provid an
+        <p>The aim of this project is to provide an
         integration for Subversion into the existing
         environment Visual Studio .NET. By making a plugin for
-        Visual Studio .NET the revision control system could be
+        Visual Studio .NET the revision control system can be
         made available for a huge amount of new programmers. We
         also hope to make the .NET wrapper layer available as a
-        standalone component so that it easily could be used in
+        standalone component so that it easily can be used in
         other applications.</p> 
    </section>
 
     <section header="External conditions"> 
         <p>The group will have
         weekly meetings with the HIO/IU supervisor, Eva H.Vihovde
-        Fridays at 2am.</p>
+        Fridays at 2 PM.</p>
 
-        <p>Every Monday from 8:30 am and Fridays from 1:30 am the
-        group will work at the dedicated school PC. The group will
+        <p>Every Monday from 8:30 AM and Fridays from 1:30 PM the
+        group will work at the dedicated school PC. The group intends to
         work together until all the group members are familiar with
         the software to be used. At a later stage in the project it
-        would be possible to work separately at individual home
-        computers as the communication easily could happen via
+        will be possible to work separately at individual home
+        computers as the communication easily can happen via
         instant messaging systems. The purpose with these meetings
-        are to assess the quality of the work completed and plan
+        is to assess the quality of the work completed and plan
         the next steps.</p>
 
-        <p>Through the project periode we will continousely give
+        <p>Through the project periode we will continuously give
         information of project news and progress in an online
         diary.</p>
 
@@ -84,16 +86,15 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         not definite and could be adjusted through the project
         process.</p>
 
-        <p>To enforce an overall consistent look of the code common
-        guidelines for source code is composed.</p>
+        <p>To enforce an overall consistent look of the code we will
+        compose a set of common programming guidelines.</p>
 
         <p>Subversion will be used for revision control both for
         the source code and documentation. Guidelines will be
         composed for how comments etc. are to be written.</p>
 
-        <p>To verify the sanity of the system at any given moment,
-        and to catch regression bugs (things that used to work, but
-        breaks due to later changes) we will conduct continuous
+        <p>To ensure the sanity and quality of the system at any given moment,
+        and to catch regression bugs we intend to conduct continuous
         unit tests using the <link
         url="http://nunit.sourceforge.net/">NUnit</link> testing
         framework.</p>
@@ -105,13 +106,12 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         without requiring the user to have Visual Studio.NET
         installed. </p>
 
-        <p>Code reviews will be performed. (Guidelines for code
-        review to be discussed)</p>
+        <p>We intend to perform code reviews on a regular basis.</p>
 
         <p>Guidelines for how the documentation to be written in
         XML will be composed. The intention is to transform these
         XML documents into both HTML and into a format suitable for
-        printing(XSL Formatting Objects) using XSL.</p>
+        printing using XSL.</p>
 
         <p>There are some open source code for addins of common
         revision control systems and available code of addins in
@@ -123,9 +123,9 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         write most of the system in the C# programming language.
         However, it might be beneficial to consider alternative
         approaches in certain areas of the project. For example, it
-        might be a better alternative to write the .NET wrapper layer
+        might be a better choice to write the .NET wrapper layer
         in Managed C++(C++ extensions for the .NET environment) since
-        this offers better integration with the C-based API of
+        this offers better integration with a C-based API such as that of
         Subversion. Another alternative might be to use a tool called
         <link url="http://www.swig.org">SWIG</link>(Simplified Wrapper
         and Interface Generator) - a tool that generates wrappers for C
@@ -135,9 +135,9 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
     </section>
 
     <section header="Conclusion"> 
-        <p>The addin of Subversion into
-        Visual Studio .NET would make the revision control system
-        available for a huge amount of new users.</p> 
+        <p>Subversion integration with
+        Visual Studio .NET can potentially make the revision control system
+        available to a huge amount of new users.</p> 
     </section> 
     
  </doc>
