@@ -89,10 +89,6 @@ namespace Ankh.Solution
             this.resources = new ArrayList();
             try
             {
-                Debug.WriteLine( "Adding resources from node " + 
-                    this.projectItem.Name, "Ankh" );
-                Debug.Indent();
-
                 StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
                 this.AddResourcesFromProjectItem( this.projectItem, del );
 
@@ -113,8 +109,6 @@ namespace Ankh.Solution
             }
             finally
             {
-                Debug.Unindent();
-                Debug.WriteLine( "Finished adding resources from node", "Ankh" );
             }
         }
 
@@ -124,9 +118,6 @@ namespace Ankh.Solution
             // some object models might throw when accessing the .ProjectItems property
             try
             {
-                Debug.WriteLine( "Adding subitems for " + item.Name, "Ankh" );
-                Debug.Indent();
-
                 foreach( ProjectItem subItem in item.ProjectItems )
                 {
                     if ( subItem.Name != Client.AdminDirectoryName )
@@ -144,9 +135,6 @@ namespace Ankh.Solution
             }
             finally
             {
-                Debug.Unindent();
-                Debug.WriteLine( "Finished adding subitems for " + item.Name, 
-                    "Ankh" );
             }
         }
 
@@ -155,7 +143,6 @@ namespace Ankh.Solution
             for( short i = 1; i <= item.FileCount; i++ ) 
             {
                 string path = item.get_FileNames(i);
-                Debug.WriteLine( "Adding path from ProjectItem: " + path, "Ankh" );
                 if ( File.Exists( path ) || System.IO.Directory.Exists( path ) )
                 {
                     SvnItem svnItem = this.Explorer.Context.StatusCache[path];

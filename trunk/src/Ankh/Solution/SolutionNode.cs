@@ -23,8 +23,6 @@ namespace Ankh.Solution
             this.solutionFolder = this.Explorer.Context.StatusCache[
                 Path.GetDirectoryName( solution.FullName )];
 
-            Debug.WriteLine( "Creating solution node for " + this.solutionFile.Path, "Ankh" );
-
             StatusChanged del  = new StatusChanged( this.ChildOrResourceChanged );
             this.solutionFile.Changed += del;
             this.solutionFolder.Changed += del;
