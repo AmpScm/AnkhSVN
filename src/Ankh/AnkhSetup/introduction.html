@@ -1,42 +1,109 @@
-IV.   START GUIDE
-  A.  EXAMPLE WALKTHROUGH
+<HTML>
+<HEAD>
 
-Here are some simple examples of how one might use the Ankh client. In general, things are designed to be similar to Subversion, but many things are different as we introduce a GUI.  
+<TITLE>Ankh introduction</TITLE>
+
+</HEAD>
+<BODY>
+	<b><h1> Ankh Start Guide </h1></b><br>
+ <a href="#walkthrough"> Walkthrough example </a> <br>
+ <a href="#subversion"> For those who have knowledge of Subversion</a> <br>
+
+
+<br><br>
+
+ 	<a name="#walkthrough">  <h2> Walkthrough example </h2> </a> 
+	<br>
+		Bellow are some simple examples of how one might use the Ankh client. In general, 
+		things are designed to be similar to the version control system Subversion, but 
+		many things are different as we introduce a GUI.  
+	<br><br>
 	
-A)	Open a project that is under revision control in Visual Studio .NET. 
-·	File -> Open -> Project 
-·	Select a project under revision control (working copy)
-·	Click at the Open-button. Solution Explorer file tree view of working copy is visible to the right of the screen. Status icons are displayed in front of each item indicating that the item is under revision control.
+		<br><b>	Open a project that is under revision control in Visual Studio .NET. 		</b>
+		<ul>
+            	<li> File -> Open -> Project 	</li>
+            	<li> Select a project under revision control (working copy)</li>
+			<li> Click at the Open-button. Solution Explorer file tree view of working copy is visible to the 
+				right of the screen. Status icons are displayed in front of each item indicating 
+				that the item is under revision control. </li>
+		</ul>
+		<table border=0 cellpadding=0 cellspacing=0>
+			<tr>
+ 				<td width=348> <img src="img/VS_NET_wc_explorer_right.png"> </td>
+			</tr>
+		</table>
+			
+	<br><br>
 
-B)	Add an unversioned file to working copy (Watch the status icon change)
-·	Select an unversioned file in the project. 
-·	Right click on the file and a menu will pop up.
-·	Select "Add" from the menu. Note that the status that has changed on the file from a blue ? icon to a yellow + icon in front of the filename in Solution Explorer.
+		<br><b>	Add an unversioned file to working copy (Watch the status icon change) </b>
+		<ul>
+            	<li> 	Select an unversioned file in the project (marked with a blue ? icon). </li>
+			<li> 	Right click on the file and a menu will pop up. </li>
+			<li> 	Select "Add" from the menu. </li> <br> 
+		</ul>
+				<img src="img/add.png">
+			<br> <br> Note that the status has changed on the file from a blue ? 
+				icon to a yellow + icon in front of the filename in Solution Explorer.<br> <br> 
+				<img src="img/add_icon_display.png"> 	<br>
 
-C)	Update your working copy
-·	Select an item.
-·	Right click on the item and a menu will pop up.
-·	Select "Update" from the menu.
+	<br><br>
 
-D)	Commit item in working copy 
-·	Select an item under revision control that either has been modified or added. (Has status icons A or M in front of the filename in Solution Explorer)
-·	Right click on the item and a menu will pop up.
-·	Select "Commit" from the menu. Write a log message in the dialogbox that pops up. Click the Ok-button. Take notice of the status that has changed on the file from a red M or yellow + icon to a green v icon in front of the filename in Solution Explorer.
+		<br><b>	Update your working copy </b>
+		<ul>
+            	<li> Select an item. </li>
+			<li> 	Right click on the item and a menu will pop up. </li>
+			<li> 	Select "Update" from the menu. </li>
+		</ul>
+		<img src="img/update.png">
+	<br><br>
 
-E)	See the committed item in the repository tool window
-·	If Repository Explorer is not visible already select Tools -> Repos Explorer. The committed item could now be seen in the Repository Explorer if head revision is selected.
+		<br><b>	Commit item in working copy </b>
+		<ul>
+            	<li> 	Select an item under revision control that either has been modified or added. 
+				(Has status icons + or M in front of the filename in Solution Explorer) </li>
+			<li> 	Right click on the item and a menu will pop up. </li>
+			<li> 	Select "Commit" from the menu. </li>		
+		</ul>
 
-B.  FOR THOSE WHO HAVE KNOWLEDGE OF SUBVERSION 
+		<img src="img/commit.png"> <br>
 
-In Ankh  the Subversion commands update, add, commit, status and list are implemented in Visual Studio .NET.
+		<ul>
+			<li> Write a log message in the dialogbox that pops up. Click the Ok-button. </li>
+		</ul>
 
-"Svn add" is visible in VS .NET as a menu-options if an unversioned item is selected in the Solution Explorer and right clicked. 
+		<img src="img/commit_dialog.png"> <br>
+		<ul>
+			<li> Take notice of the status that has changed on the file from a yellow + icon 
+				to a green v icon in front of the filename in Solution Explorer. </li>
+		</ul>
+		
+		<img src="img/commited.png"> <br>
 
-"Svn update" and "svn commit" is visible in VS .NET as menu-options if an item under revision control is selected in the Solution Explorer and right clicked.
+			<br><br>
 
-The "svn status" and "svn list" command of the working copy is displayed as a file tree view in Solution Explorer in VS.NET with status-icons shown on each item included in the project.
+		<br><b>	See the committed item in the repository tool window </b>
+		<ul>
+            	<li> 	If Repository Explorer is not visible already select Tools -> Repos Explorer. The 	
+				committed item could now be seen in the Repository Explorer if head revision is selected.</li>
+		</ul>
+		<br> <img src="img/repos.png"> <br>
 
-The "svn list" command of the repository is displayed as a file tree view in an optional Repository Explorer in VS .NET.
+
+
+	<br><br><br><br>
+
+		<a name="#subversion"> <br> <h2>  For those who have knowledge of Subversion</h2> </a>
+
+		In Ankh  the Subversion commands update, add, commit, status and list are implemented in 
+		Visual Studio .NET.
+		"Svn add" is visible in VS .NET as a menu-options if an unversioned item is selected in the 
+		Solution Explorer and right clicked. 
+		"Svn update" and "svn commit" is visible in VS .NET as menu-options if an item under 
+		revision control is selected in the Solution Explorer and right clicked.
+		The "svn status" and "svn list" command of the working copy is displayed as a file tree 
+		view in Solution Explorer in VS.NET with status-icons shown on each item included in the project.
+		The "svn list" command of the repository is displayed as a file tree view in an optional 
+		Repository Explorer in VS .NET.
 
 
 
