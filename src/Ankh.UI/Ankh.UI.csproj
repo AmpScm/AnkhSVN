@@ -414,6 +414,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "SwitchDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SwitchDialog.resx"
+                    DependentUpon = "SwitchDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "TestRepositoryExplorer.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
