@@ -24,6 +24,9 @@ namespace Ankh.Config {
         public ConfigRepositoryExplorer RepositoryExplorer;
         
         /// <remarks/>
+        public string LogMessageTemplate;
+        
+        /// <remarks/>
         public ConfigSubversion Subversion;
     }
     

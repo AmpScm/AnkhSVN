@@ -6,6 +6,10 @@
             <Url>http://svn.collab.net/repos/svn</Url>
         </MruUrls>
     </RepositoryExplorer>
+    <LogMessageTemplate><![CDATA[# All lines starting with a # will be ignored
+# This template can be modified by editing the Ankh config file, located in %APPDATA%\AnkhSVN
+*** # %path%]]>
+    </LogMessageTemplate>
     <Subversion>
         <!-- The path to the directory to use for the Subversion configuration data.
         If not specified, it will use the same config area as other Subversion tools, 
