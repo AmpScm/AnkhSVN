@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <project name="NSvn.Common" default="rebuild">
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
-    <property name="build.dir" value="build/Release" unless="${debug}"/>
-    <property name="build.dir" value="build/Debug" if="${debug}"/>
+    <property name="build.dir" value="build-Release" unless="${debug}"/>
+    <property name="build.dir" value="build-Debug" if="${debug}"/>
     <property name="warninglevel" value="/warn:3"/>
     
     
@@ -29,7 +29,7 @@
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
         
-        <csc target="library" output="${build.dir}/NSvn.Common.dll" verbose="${verbose}" define="${define}">
+        <csc target="library" output="${build.dir}/NSvn.Common.dll" verbose="${verbose}" define="${define}"  debug="${debug}">
             <references>
             </references>
             
