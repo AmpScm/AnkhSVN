@@ -34,7 +34,6 @@
       <Tool Name="VCManagedWrapperGeneratorTool" />
       <Tool Name="VCAuxiliaryManagedWrapperGeneratorTool" />
     </Configuration>
-<<<<<<< .working
     <Configuration Name="debug run vsexpress|Win32" OutputDirectory="$(ConfigurationName)" IntermediateDirectory="$(ConfigurationName)" ConfigurationType="2" CharacterSet="2" ManagedExtensions="TRUE">
       <Tool Name="VCCLCompilerTool" Optimization="0" AdditionalIncludeDirectories="&quot;$(SVNSRC)\apr\include&quot;;&quot;$(SVNSRC)\subversion\apr-iconv\include&quot;;&quot;$(SVNSRC)\apr-util\include&quot;;&quot;$(SVNSRC)\subversion\include&quot;" AdditionalUsingDirectories="..\NSvn.Common\bin\Debug" PreprocessorDefinitions="WIN32;_DEBUG;ALT_ADMIN_DIR" MinimalRebuild="FALSE" BasicRuntimeChecks="0" RuntimeLibrary="3" UsePrecompiledHeader="0" ExpandAttributedSource="TRUE" WarningLevel="3" DebugInformationFormat="3" />
       <Tool Name="VCCustomBuildTool" />
@@ -50,7 +49,6 @@
       <Tool Name="VCManagedWrapperGeneratorTool" />
       <Tool Name="VCAuxiliaryManagedWrapperGeneratorTool" />
     </Configuration>
-=======
     <Configuration Name="(svnlib) Debug|Win32" OutputDirectory="$(ConfigurationName)" IntermediateDirectory="$(ConfigurationName)" ConfigurationType="2" CharacterSet="2" ManagedExtensions="TRUE">
       <Tool Name="VCCLCompilerTool" Optimization="0" AdditionalIncludeDirectories="&quot;$(SVNDEV)\include&quot;;&quot;$(SVNDEV)\include\apr&quot;;&quot;$(SVNDEV)\include\apr-iconv&quot;;&quot;$(SVNDEV)\include\apr-util&quot;;" AdditionalUsingDirectories="..\NSvn.Common\bin\Debug" PreprocessorDefinitions="WIN32;_DEBUG" MinimalRebuild="FALSE" BasicRuntimeChecks="0" RuntimeLibrary="3" UsePrecompiledHeader="0" ExpandAttributedSource="TRUE" WarningLevel="3" DebugInformationFormat="3" />
       <Tool Name="VCCustomBuildTool" />
@@ -81,7 +79,6 @@
       <Tool Name="VCManagedWrapperGeneratorTool" />
       <Tool Name="VCAuxiliaryManagedWrapperGeneratorTool" />
     </Configuration>
->>>>>>> .merge-right.r1686
   </Configurations>
   <Files>
     <Filter Name="Source Files" Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
@@ -104,18 +101,15 @@
         <FileConfiguration Name="Release|Win32">
           <Tool Name="VCCLCompilerTool" UsePrecompiledHeader="1" />
         </FileConfiguration>
-<<<<<<< .working
         <FileConfiguration Name="debug run vsexpress|Win32">
           <Tool Name="VCCLCompilerTool" UsePrecompiledHeader="1" />
         </FileConfiguration>
-=======
         <FileConfiguration Name="(svnlib) Debug|Win32">
           <Tool Name="VCCLCompilerTool" UsePrecompiledHeader="1" />
         </FileConfiguration>
         <FileConfiguration Name="(svnlib) Release|Win32">
           <Tool Name="VCCLCompilerTool" UsePrecompiledHeader="1" />
         </FileConfiguration>
->>>>>>> .merge-right.r1686
       </File>
       <File RelativePath="stream.cpp">
       </File>

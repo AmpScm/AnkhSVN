@@ -26,7 +26,7 @@
         <Reference Name="Interop.esproj" AssemblyName="Interop.esproj" HintPath="..\lib\Interop.esproj.dll" />
         <Reference Name="Microsoft.VisualStudio.CommandBars" AssemblyName="Microsoft.VisualStudio.CommandBars" HintPath="..\lib\envdte8\Microsoft.VisualStudio.CommandBars.dll" />
         <Reference Name="envdte" AssemblyName="EnvDTE" HintPath="..\lib\envdte8\envdte.dll" />
-        </References>
+      </References>
     </Build>
     <Files>
       <Include>
