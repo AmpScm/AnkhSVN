@@ -1,3 +1,9 @@
+Version 0.5.3(released 17.08.2004)
+This release was built against Subversion 1.0.6, Neon 0.24.7, 
+openssl 0.9.7 and Berkeley DB 4.2.52
+
+* Fix an installer bug.
+------------------------------------------------------------------------
 Version 0.5.4(released 17.08.2004)
 This release was built against Subversion 1.0.6, Neon 0.24.7, 
 openssl 0.9.7 and Berkeley DB 4.2.52
