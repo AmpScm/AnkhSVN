@@ -26,11 +26,11 @@
             <b>How to commit files:</b>
              <list>
                 <item>
-                    <b>1.</b>Select and right click on the versioned item(s) 
-					you want to commit in the Solution Explorer. 
+                    <b>1.</b>Select and right click on the versioned file(s) 
+					you want to commit in the Solution Explorer. A menu pops up.
 				</item>
                 <item>
-                    <b>2.</b> Select <b>commit</b> from the item menu.
+                    <b>2.</b> Select <b>Commit</b> from the menu.
                     <br/><br/>
 			        <img src="../../img/menu-items/commit.png" align="left"/>   
 			        <br clear="all"/>

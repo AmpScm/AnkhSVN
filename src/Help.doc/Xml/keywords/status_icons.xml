@@ -7,7 +7,7 @@
             Ankh identifies if a file is under revision control and shows the 
             appropriate status in front it in Visual Studio .NET solution explorer.
             All files under revision control will be shown with the '<img src="../../img/ok.png"/>'
-            icon. Ankh updates the status icons AFTER a file has been saved.
+            icon. 
         </p>
         <p>     
         <b>Supported status icons:</b>
