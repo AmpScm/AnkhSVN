@@ -16,6 +16,21 @@
           Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
           src="..\$(var.builddir)\vc70.pdb" />
       </Component>
+      <Component Id="LibApr.component3" DiskId="1" Guid="F8A86574-96D2-4505-B524-9A1758B50CA7">
+        <File Id="LibApr.file3" Name="LIBAPR.DLL" LongName="LibApr.Dll"
+            Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
+            src="$(var.svndir)\apr\Release\libapr.dll" />
+      </Component>
+      <Component Id="LibAprUtil.component4" DiskId="1" Guid="F8A86574-96D2-4505-B524-9A1758B50CA7">
+        <File Id="LibAprUtil.file4" Name="LIBAPR~1.DLL" LongName="LibAprUtil.Dll"
+            Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
+            src="$(var.svndir)\apr-util\Release\libaprUtil.dll" />
+      </Component>
+      <Component Id="LibAprIconv.component5" DiskId="1" Guid="F8A86574-96D2-4505-B524-9A1758B50CA7">
+        <File Id="LibAprIconv.file5" Name="LIBAPR~2.DLL" LongName="LibAprIconv.Dll"
+            Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
+            src="$(var.svndir)\apr-iconv\Release\libapriconv.dll" />
+      </Component>
     </DirectoryRef>
   </Fragment>
 </Wix>
