@@ -17,6 +17,7 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.Commit),
     VSNetControl( "Item", Position = 2 ),
     VSNetControl( "Project Node", Position = 2 ),
+    VSNetControl( "Cab Project Node", Position = 2 ),
     VSNetControl( "Project", Position = 2 ),
     VSNetControl( "Folder", Position = 2 ),
     VSNetControl( "Solution", Position = 2)]

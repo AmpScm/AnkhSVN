@@ -17,6 +17,7 @@ namespace Ankh.Commands
     VSNetControl( "Item.Ankh", Position=2 ),
     VSNetControl( "Project Node.Ankh", Position = 2 ),
     VSNetControl( "Project.Ankh", Position = 2 ),
+    VSNetControl( "Cab Project Node.Ankh", Position = 2 ),
     VSNetControl( "Solution.Ankh", Position = 2 ),
     VSNetControl( "Folder.Ankh", Position = 2 )]
     internal class ReverseMergeCommand : CommandBase
