@@ -132,7 +132,7 @@ namespace Ankh
         private ArrayList GetConflictLines(string path) 
         {
             ArrayList conflictLines = new ArrayList();
-            int lineNumber = 1; 
+            int lineNumber = 0; 
             int index = NotFound; 
             bool nothingFound = true;
             string line;
