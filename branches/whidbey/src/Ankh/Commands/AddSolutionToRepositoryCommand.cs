@@ -156,7 +156,7 @@ namespace Ankh.Commands
                 }
                         
                 // we want ankh to get enabled right away
-                context.DTE.ExecuteCommand( "Ankh.ToggleAnkh", "" );
+                context.DTE.ExecuteCommand( context.AddIn.ProgID +".ToggleAnkh", "" );
 
                 // Make sure the URL typed gets remembered.
                 RegistryUtils.CreateNewTypedUrl( url );

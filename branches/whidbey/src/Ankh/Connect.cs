@@ -28,7 +28,7 @@ namespace Ankh
     ///   The object for implementing an Add-in.
     /// </summary>
     /// <seealso class='IDTExtensibility2' />
-    [GuidAttribute("DA979B20-78DF-45BC-A7D7-F5EF9DC77D30"), ProgId("Ankh")]
+    [GuidAttribute("8DCA5E4E-A947-46b3-B82E-BB9076819B09"), ProgId("Ankh.2005")]
     [ComVisible(true)]
     public class Connect : Object, Extensibility.IDTExtensibility2, IDTCommandTarget
     {
@@ -165,10 +165,12 @@ namespace Ankh
         /// <seealso class='IDTExtensibility2' />
         public void OnStartupComplete(ref System.Array custom)
         {
-            this.context.DTE.ExecuteCommand( "Tools.Alias", "svn Ankh.RunSvn" );
-            this.context.DTE.ExecuteCommand( "Tools.Alias", "cd Ankh.RunSvn cd" );
-            this.context.DTE.ExecuteCommand( "Tools.Alias", "pwd Ankh.RunSvn pwd" );
-            this.context.DTE.ExecuteCommand( "Tools.Alias", "dir Ankh.RunSvn dir" );
+            string pi = this.context.AddIn.ProgID;
+
+            this.context.DTE.ExecuteCommand( "Tools.Alias", "svn " + pi + ".RunSvn" );
+            this.context.DTE.ExecuteCommand( "Tools.Alias", "cd " + pi + ".RunSvn cd" );
+            this.context.DTE.ExecuteCommand( "Tools.Alias", "pwd " + pi + ".RunSvn pwd" );
+            this.context.DTE.ExecuteCommand( "Tools.Alias", "dir " + pi + ".RunSvn dir" );
         }
 
         /// <summary>

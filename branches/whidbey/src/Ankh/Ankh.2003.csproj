@@ -68,7 +68,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE;REPORTERROR;ALWAYSREGISTER;VS2003;ALT_ADMIN_DIR;WHIDBEY"
+                    DefineConstants = "DEBUG;TRACE;REPORTERROR;VS2003;ALT_ADMIN_DIR;WHIDBEY"
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -169,7 +169,7 @@
                 />
                 <Reference
                     Name = "envdte"
-                    AssemblyName = "envdte"
+                    AssemblyName = "EnvDTE"
                     HintPath = "..\lib\envdte8\envdte.dll"
                 />
             </References>
