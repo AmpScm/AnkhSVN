@@ -288,6 +288,9 @@
 			RelativePath="NSvn.Core.build">
 		</File>
 		<File
+			RelativePath=".\NSvn.Core.wxs">
+		</File>
+		<File
 			RelativePath="ReadMe.txt">
 		</File>
 	</Files>
