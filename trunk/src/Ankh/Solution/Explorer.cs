@@ -319,7 +319,16 @@ namespace Ankh.Solution
 
             int youngest;
             Debug.WriteLine( "Getting status cache", "Ankh" );
-            this.statusCache = Client.Status( out youngest, solutionDir, true, true, false, true, new ClientContext() );
+            try
+            {
+                this.statusCache = Client.Status( out youngest, solutionDir, true, true, false, true, new ClientContext() );
+            }
+            catch( NotVersionControlledException )
+            {
+                Debug.WriteLine( "Solution directory not version controlled", "Ankh" );
+                // swallow
+            }
+
             t.End();
             Debug.WriteLine( "Got status cache: " + t.Interval, "Ankh" );
         }
