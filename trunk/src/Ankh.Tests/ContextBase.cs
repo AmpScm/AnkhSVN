@@ -4,6 +4,7 @@ using EnvDTE;
 using NSvn.Core;
 using System.Collections;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Ankh.Tests
 {
@@ -235,6 +236,11 @@ namespace Ankh.Tests
             }
 
             public virtual void SendReport()
+            {
+                // empty
+            }
+
+            public void Write( string message, Exception ex, TextWriter writer )
             {
                 // empty
             }

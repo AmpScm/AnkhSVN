@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using EnvDTE;
 using Ankh.Commands;
+using System.IO;
 
 namespace Ankh.Tests.Commands
 {
@@ -80,6 +81,11 @@ namespace Ankh.Tests.Commands
             public void SendReport()
             {
                 this.Sent = true;
+            }
+
+            public void Write( string message, Exception ex, TextWriter writer )
+            {
+                // empty
             }
 
             #endregion

@@ -5,6 +5,7 @@ using Utils;
 using System.Reflection;
 using System.Diagnostics;
 using Ankh.UI;
+using System.IO;
 
 
 
@@ -40,6 +41,13 @@ namespace Ankh
         public void SendReport()
         {
             Utils.ErrorMessage.SendByWeb( ErrorReportUrl, null, typeof(Connect).Assembly );
+        }
+
+        public void Write( string message, Exception ex, TextWriter writer )
+        {
+            writer.WriteLine( message );
+            string exceptionMessage = GetNestedMessages( ex );
+            writer.WriteLine( exceptionMessage );
         }
 
         private void DoHandle( ProgressRunner.ProgressRunnerException ex )
