@@ -316,6 +316,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "PathTreeView.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PathTreeView.resx"
+                    DependentUpon = "PathTreeView.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "PlainPropertyEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
