@@ -87,6 +87,10 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "Ankh.png"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
