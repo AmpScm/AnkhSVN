@@ -141,6 +141,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DeleteTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ExportTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
