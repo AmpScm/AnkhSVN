@@ -67,11 +67,11 @@ namespace Ankh.Solution
 
         public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
         {
-            foreach( ILocalResource resource in this.resources )
-                resource.Accept( visitor );
-
             if ( recursive )
                 this.VisitChildResources( visitor );
+
+            foreach( ILocalResource resource in this.resources )
+                resource.Accept( visitor );
         }
 
         protected void FindResources()

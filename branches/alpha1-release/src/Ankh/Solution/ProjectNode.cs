@@ -64,11 +64,12 @@ namespace Ankh.Solution
         
 
         public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
-        {
-            this.projectFolder.Accept( visitor );
-            this.projectFile.Accept( visitor );
+        {            
             if ( recursive )
                 this.VisitChildResources( visitor );
+
+            this.projectFolder.Accept( visitor );
+            this.projectFile.Accept( visitor );
         } 
             
         protected override StatusKind GetStatus()
