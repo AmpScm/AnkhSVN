@@ -9,9 +9,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Sink for VCProjectEngineEvents events.
     /// </summary>
-    public class VCProjectEventSink : EventSink
+    internal class VCProjectEventSink : EventSink
     {
-        public VCProjectEventSink( object events, IContext context )
+        internal VCProjectEventSink( object events, AnkhContext context )
             : base( context )
         {
             this.events = events;
@@ -50,7 +50,7 @@ namespace Ankh.EventSinks
 
         }
 
-        //
+//
         public override void Unhook()
         {
             this.vcProjectEventsType.GetEvent( "ItemAdded" ).RemoveEventHandler( 
@@ -97,7 +97,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
 

@@ -12,9 +12,9 @@ namespace Ankh.Commands
     [VSNetCommand("SaveToFile", Tooltip="Save the file to disk.", 
          Text = "Save to file", Bitmap = ResourceBitmaps.SaveToFile ),
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
-    public class SaveToFileCommand : ViewRepositoryFileCommand
+    internal class SaveToFileCommand : ViewRepositoryFileCommand
     {
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             context.StartOperation( "Saving" );
             try

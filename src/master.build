@@ -3,44 +3,36 @@
 <project default="build">
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
-
     <property name="build.dir" value="build-Debug" if="${debug}"/>
     <property name="build.dir" value="build-Release" unless="${debug}"/>
     <property name="deploy.dir" value="${build.dir}"/>
     <property name="lib.dir" value="lib"/>
+    <property name="vs.2003" value="false"/>
+    <property name="vs.ver" value="7.0" unless="${vs.2003}"/>
+    <property name="vs.ver" value="7.1" if="${vs.2003}"/>
+    <property name="vsnet.ver" value="2002" unless="${vs.2003}"/>
+    <property name="vsnet.ver" value="2003" if="${vs.2003}"/>
     <property name="nant.default.framework" value="net-1.0"/>
     <property name="installsource.dir" value="installsource"/>
     <property name="deploy.dir" value="Deploy"/>
-    <property name="alt.admin.dir" value="true"/>
-    <ifnot propertyexists="svndir">
-        <sysinfo />
-        <ifnot propertyexists="sys.env.SVNSRC">
-            <fail message="Either provide the svndir property, or set the SVNSRC env var to point to the Subversion source tree" />
-        </ifnot>
-        <property name="svndir" value="${sys.env.SVNSRC}" />
-    </ifnot>
-
-    <property name="bdb.lib" value="${svndir}\db4-win32\lib\libdb42d.lib"/>
-    <property name="bdb.dll" value="libdb42d.dll"/>
     <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
     <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>-->
     
     
     
     <target name="clean" description="Cleans all output directories">
+        <nant buildfile="NSvn/NSvn.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Common/NSvn.Common.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core/NSvn.Core.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core.Tests.MCpp/NSvn.Core.Tests.MCpp.build" target="clean" inheritall="true" />
+        <nant buildfile="NSvn.Tests/NSvn.Tests.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh.UI/Ankh.UI.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh/Ankh.build" target="clean" inheritall="true" />
         
         <delete dir="${installsource.dir}" failonerror="false"/>
         
         <regasm assembly="${build.dir}\Ankh.dll" verbose="${verbose}" codebase="true" unregister="true" failonerror="false"/>
-    
-    <delete dir="build-Release" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
-    <delete dir="build-Debug" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
     </target>
     
     
@@ -54,7 +46,7 @@
          </copy>
     </target>
     
-    <target name="build-Ankh" depends="build-Ankh.UI, build-NSvn.Core, build-NSvn.Common, build-Utils">
+    <target name="build-Ankh" depends="build-Ankh.UI, build-NSvn, build-NSvn.Core, build-NSvn.Common, build-Utils">
         <nant buildfile="Ankh/Ankh.build" inheritall="true" target="build" />
         <copy todir="${build.dir}"> 
             <fileset basedir="Ankh/${build.dir}">
@@ -82,7 +74,7 @@
         </delete>
     </target>
     
-    <target name="build-Ankh.UI" depends="build-NSvn.Core, build-Utils">
+    <target name="build-Ankh.UI" depends="build-NSvn, build-Utils">
         <nant buildfile="Ankh.UI/Ankh.UI.build" inheritall="true" target="build" />
         <copy todir="${build.dir}"> 
             <fileset basedir="Ankh.UI/${build.dir}">
@@ -102,20 +94,30 @@
          </copy>
     </target>
     
-    <target name="build-NSvn.Core" depends="build-NSvn.Common">
-        <nant buildfile="NSvn.Core/NSvn.Core.build" inheritall="true" target="build"/>
-        <copy todir="${build.dir}"> 
-            <fileset basedir="NSvn.Core/${build.dir}">
+    <target name="build-NSvn" depends="build-NSvn.Common, build-NSvn.Core">
+        <nant buildfile="NSvn/NSvn.build" inheritall="true" target="build"/>
+       <copy todir="${build.dir}"> 
+            <fileset basedir="NSvn/${build.dir}">
                 <includes name="*.dll"/>
                 <includes name="*.pdb"/>
             </fileset>
          </copy>
     </target>
-
-    <target name="build-Ankh.Tests" depends="build-Ankh, build-NSvn.Core.Tests, build-NSvn.Common, build-NSvn.Core">
-        <nant buildfile="Ankh.Tests/Ankh.Tests.build" inheritall="true" target="build"/>
+    
+    <target name="build-NSvn.Tests" depends="build-NSvn, build-NSvn.Common, build-NSvn.Core, build-NSvn.Core.Tests">
+        <nant buildfile="NSvn.Tests/NSvn.Tests.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
-            <fileset basedir="Ankh.Tests/${build.dir}">
+            <fileset basedir="NSvn.Tests/${build.dir}">
+                <includes name="*.dll"/>
+                <includes name="*.pdb"/>
+            </fileset>
+         </copy>
+    </target>
+    
+    <target name="build-NSvn.Core" depends="build-NSvn.Common">
+        <nant buildfile="NSvn.Core/NSvn.Core.build" inheritall="true" target="build"/>
+        <copy todir="${build.dir}"> 
+            <fileset basedir="NSvn.Core/${build.dir}">
                 <includes name="*.dll"/>
                 <includes name="*.pdb"/>
             </fileset>
@@ -142,47 +144,31 @@
          </copy>
     </target>
     
-    <target name="build-ReposInstaller" depends="build-Ankh.UI, build-NSvn.Common, build-NSvn.Core, build-Utils">
-        <nant buildfile="ReposInstaller/ReposInstaller.build" inheritall="true" target="build"/>
-        <copy todir="${build.dir}"> 
-            <fileset basedir="ReposInstaller/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
-    </target>
-    
-    
     <target name="rebuild" description="Clean all output directories before rebuilding">
         <call target="clean"/>
         <call target="build"/>
     </target>
     
-    <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn.Core, build-ReposInstaller"
+    <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn, build-NSvn.Core"
         description="Build all necessary assemblies"/>
     
-<target name="build-tests" depends="build, build-Ankh.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"
+    <target name="build-tests" depends="build, build-NSvn.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"
         description="Build all test assemblies"/>
     
     
     <target name="test" depends="build-tests" description="Run all tests">
-        <copy todir="${build.dir}">
-            <fileset basedir="${lib.dir}">
-                <includes name="*.dll"/>
-            </fileset>
-        </copy>
-    <nunit2 failonerror="false" haltonerror="false">
-        <formatter type="Plain" />
-        <test assemblyname="${build.dir}/NSvn.Core.Tests.dll" failonerror="false" haltonerror="false"/>
-    </nunit2>
-    <nunit2 failonerror="false" haltonerror="false">
-        <formatter type="Plain" />
-        <test assemblyname="${build.dir}/NSvn.Core.Tests.MCpp.dll" failonerror="false" haltonerror="false"/>
-    </nunit2>
-    <nunit2 failonerror="false" haltonerror="false">
-        <formatter type="Plain" />
-        <test assemblyname="${build.dir}/Ankh.Tests.dll" failonerror="false" haltonerror="false"/>
-    </nunit2>
+	    <copy todir="${build.dir}">
+			<fileset basedir="${lib.dir}">
+				<includes name="*.dll"/>
+			</fileset>
+		</copy>
+		
+        <exec program="nunit-console.exe"
+				commandline="${build.dir}/NSvn.Core.Tests.dll"/>
+		<exec program="nunit-console.exe"
+              commandline="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
+        <exec program="nunit-console.exe"
+              commandline="${build.dir}/NSvn.Tests.dll"/>
     </target>
     
     <target name="deploy" depends = "rebuild, test" description="Run all tests, then create the MSI installer if the tests pass">

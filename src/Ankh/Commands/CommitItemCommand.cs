@@ -19,10 +19,10 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "", Position = 2 ),
     VSNetFolderNodeControl( "", Position = 2),
     VSNetControl( "Solution", Position = 2)]
-    public class CommitItem : CommandBase
+    internal class CommitItem : CommandBase
     {	
         #region Implementation of ICommand
-        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
             if ( context.SolutionExplorer.GetSelectionResources( true, 
                 new ResourceFilterCallback( CommandBase.ModifiedFilter) ).Count > 0 )
@@ -30,7 +30,7 @@ namespace Ankh.Commands
             else
                 return Disabled;
         }
-        public override void Execute(Ankh.IContext context, string parameters)
+        public override void Execute(Ankh.AnkhContext context, string parameters)
         {
             // make sure all files are saved
             this.SaveAllDirtyDocuments( context );
@@ -77,7 +77,7 @@ namespace Ankh.Commands
         }        
         #endregion
 
-        private void DoCommit( IContext context )
+        private void DoCommit( AnkhContext context )
         {
             this.commitInfo = context.Client.Commit( this.paths, true );
         }

@@ -14,8 +14,7 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
     </target>
     
     <target name="init">
@@ -30,8 +29,7 @@
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
         
-        <csc target="library" output="${build.dir}/NSvn.Common.dll" verbose="${verbose}" 
-            define="${define}" debug="${debug}">
+        <csc target="library" output="${build.dir}/NSvn.Common.dll" verbose="${verbose}" define="${define}"  debug="${debug}">
             <references>
             </references>
             
@@ -39,7 +37,6 @@
                 <includes name="**/*.cs"/>
             </sources>
             
-            <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="${warninglevel}"/>
         </csc>
         

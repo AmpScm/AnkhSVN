@@ -15,10 +15,7 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" 
-            includeEmptyDirs="true"/>
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" 
-            includeEmptyDirs="true"/>
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
     </target>
     
     <target name="init">
@@ -36,8 +33,7 @@
            
         
         
-        <csc target="library" output="${build.dir}/Ankh.UI.dll" 
-            verbose="${verbose}" define="${define}" debug="${debug}">
+        <csc target="library" output="${build.dir}/Ankh.UI.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
                 <includes name="${lib.dir}\Office.dll"/>
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
@@ -56,7 +52,6 @@
                 <includes name="*.resx"/>
             </resources>
             
-            <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="${warninglevel}"/>
         </csc>
         

@@ -15,10 +15,7 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" 
-        includeEmptyDirs="true" />
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" 
-        includeEmptyDirs="true" />
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true" />
     </target>
     
     <target name="init">
@@ -34,9 +31,8 @@
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
         
         <echo message="Utils.debug: ${debug}"/>
-
-        <csc target="library" output="${build.dir}/Utils.dll" verbose="${verbose}" 
-            define="${define}" debug="${debug}">
+        
+        <csc target="library" output="${build.dir}/Utils.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
                 <includes name="${lib.dir}\Sharpziplib.dll"/>
             </references>
@@ -45,7 +41,6 @@
                 <includes name="**/*.cs"/>
             </sources>
             
-            <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="${warninglevel}"/>
         </csc>
         

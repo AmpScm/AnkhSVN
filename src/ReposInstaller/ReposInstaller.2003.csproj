@@ -109,11 +109,6 @@
                     AssemblyName = "NSvn.Core"
                     HintPath = "..\NSvn.Core\Debug\NSvn.Core.dll"
                 />
-                <Reference
-                    Name = "NSvn.Common.2003"
-                    Project = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
             </References>
         </Build>
         <Files>
@@ -122,10 +117,6 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ReposInstaller.build"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "ReposInstaller.cs"

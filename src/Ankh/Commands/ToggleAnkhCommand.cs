@@ -13,9 +13,9 @@ namespace Ankh.Commands
          Tooltip= "Enable Ankh for this solution", 
          Bitmap=ResourceBitmaps.ToggleAnkh ),
     VSNetControl( "Solution.Ankh", Position=1 )]
-    public class ToggleAnkhCommand : CommandBase
+    internal class ToggleAnkhCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             // QueryStatus gets called when we set the Caption
             // we must prevent infinite recursion
@@ -74,7 +74,7 @@ namespace Ankh.Commands
             }
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             string solutionDir = Path.GetDirectoryName(context.DTE.Solution.FullName);
             string noLoad = Path.Combine(solutionDir, "Ankh.NoLoad");

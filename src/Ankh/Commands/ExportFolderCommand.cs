@@ -13,11 +13,11 @@ namespace Ankh.Commands
     [VSNetCommand("ExportFolder", Tooltip="Export this folder", 
          Text = "Export Folder...", Bitmap = ResourceBitmaps.Export ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
-    public class ExportFolderCommand : 
+    internal class ExportFolderCommand : 
         CommandBase
     {
         #region ICommand Members
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             if ( context.RepositoryExplorer.SelectedNode != null &&
                 context.RepositoryExplorer.SelectedNode.IsDirectory )
@@ -29,7 +29,7 @@ namespace Ankh.Commands
         }
         #endregion
 
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             /// first get the parent folder
             FolderBrowser browser = new FolderBrowser();

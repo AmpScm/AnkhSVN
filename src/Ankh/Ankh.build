@@ -15,12 +15,8 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" 
-            includeEmptyDirs="true"/>
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" 
-            includeEmptyDirs="true"/>
-        <comregister file="${lib.dir}\Ankh.ToolWindow.dll" unregister="true" 
-            failonerror="false"/>
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
+        <comregister file="${lib.dir}\Ankh.ToolWindow.dll" unregister="true" failonerror="false"/>
     </target>
     
     <target name="init">
@@ -33,20 +29,17 @@
     
     <target name="compile" depends="init">
         <property name="define" value="REPORTERROR;TRACE"/>
-        <property name="define" value="ALWAYSREGISTER;DEBUG;${define}" 
-            if="${debug}"/>
+        <property name="define" value="ALWAYSREGISTER;DEBUG;${define}" if="${debug}"/>
         
-        <property name="define" value="ALT_ADMIN_DIR;${define}" 
-            if="${alt.admin.dir}"/>
+        <property name="define" value="VS2002;${define}" unless="${vs.2003}"/>
+        <property name="define" value="VS2003;${define}" if="${vs.2003}"/>
         
         
         <comregister file="${lib.dir}\AnkhUserControlHost.dll"/>
-
-        <tlbimp typelib="${lib.dir}\AnkhUserControlHost.dll" 
-            output="${build.dir}\AnkhUserControlHostLib.dll" />
         
-        <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" 
-            define="${define}" debug="${debug}">
+        <tlbimp output="${build.dir}/AnkhUserControlHostLib.dll" typelib="${lib.dir}\AnkhUserControlHost.dll"/>
+        
+        <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
                 <includes name="${lib.dir}\EnvDTE.dll"/>
                 <includes name="${lib.dir}\extensibility.dll"/>
@@ -54,16 +47,14 @@
                 <includes name="..\Ankh.UI\${build.dir}\Ankh.UI.dll"/>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
                 <includes name="${build.dir}/AnkhUserControlHostLib.dll"/>
+                <includes name="${lib.dir}\${vsnet.ver}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
                 <includes name="${lib.dir}\Interop.SHDocVw.dll"/>
-                <includes name="${lib.dir}\Interop.esproj.dll" />
             </references>
             
-            
             <arg value="/resource:status_icons.bmp,Ankh.status_icons.bmp"/>
-            <arg value="/resource:Config/Config.xsd,Ankh.Config.Config.xsd"/>
-            <arg value="/debug:pdbonly" unless="${debug}"/>
             
             <sources basedir="${src.dir}">
                 <includes name="**/*.cs"/>
@@ -72,6 +63,9 @@
             <arg value="${warninglevel}"/>
         </csc>
         
+        
+        
+                
     </target>
     
 </project>

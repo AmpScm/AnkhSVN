@@ -15,10 +15,7 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" 
-        includeEmptyDirs="true"/>
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" 
-        includeEmptyDirs="true"/>
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
     </target>
     
     <target name="init">
@@ -35,12 +32,10 @@
     <target name="compile" depends="init">
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
-        <property name="define" value="ALT_ADMIN_DIR;${define}" if="${alt.admin.dir}"/>
-
+        
         <echo message="${lib.dir}/nunit.framework.dll"/>
         
-        <csc target="library" output="${build.dir}/NSvn.Core.Tests.dll" 
-        verbose="${verbose}" define="${define}" debug="${debug}">
+        <csc target="library" output="${build.dir}/NSvn.Core.Tests.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
@@ -54,7 +49,6 @@
                 <includes name="**/*.cs"/>
             </sources>
             
-            <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="/resource:repos.zip,NSvn.Core.Tests.repos.zip"/>
             <arg value="/resource:wc.zip,NSvn.Core.Tests.wc.zip"/>
             <arg value="/resource:conflictwc.zip,NSvn.Core.Tests.conflictwc.zip"/>

@@ -21,11 +21,11 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetFolderNodeControl( "Ankh", Position = 1),
     VSNetControl( "Solution.Ankh", Position = 1)]
-    public class RevertItemCommand : CommandBase
+    internal class RevertItemCommand : CommandBase
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {   
             if ( context.SolutionExplorer.GetSelectionResources( true, 
                 new ResourceFilterCallback( CommandBase.ModifiedFilter ) ).Count > 0 )
@@ -36,7 +36,7 @@ namespace Ankh.Commands
                 return Disabled;
         }
 
-        public override void Execute(Ankh.IContext context, string parameters)
+        public override void Execute(Ankh.AnkhContext context, string parameters)
         {
             this.SaveAllDirtyDocuments( context );
 

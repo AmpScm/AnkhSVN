@@ -15,9 +15,9 @@ namespace Ankh.Commands
          Tooltip="Create new directory here", Text = "New directory...",
          Bitmap = ResourceBitmaps.MakeDirectory ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
-    public class MakeDirectoryCommand : CommandBase
+    internal class MakeDirectoryCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             // we only want directories
             if ( context.RepositoryExplorer.SelectedNode != null &&
@@ -29,7 +29,7 @@ namespace Ankh.Commands
                 return Disabled;
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             context.RepositoryExplorer.MakeDir( new NewDirHandler(context) );           
         }
@@ -39,7 +39,7 @@ namespace Ankh.Commands
         /// </summary>
         private class NewDirHandler : ProgressRunner, INewDirectoryHandler
         {
-            public NewDirHandler( IContext context ) : base(context)
+            public NewDirHandler( AnkhContext context ) : base(context)
             {}
 
             public bool MakeDir(IRepositoryTreeNode parent, string dirname)
@@ -60,7 +60,7 @@ namespace Ankh.Commands
                 }
                 catch( Exception ex )
                 {
-                    this.Context.ErrorHandler.Handle( ex );
+                    Error.Handle( ex );
                     return false;
                 }
                 finally

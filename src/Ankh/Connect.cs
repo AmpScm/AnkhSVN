@@ -29,7 +29,6 @@ namespace Ankh
     /// </summary>
     /// <seealso class='IDTExtensibility2' />
     [GuidAttribute("DA979B20-78DF-45BC-A7D7-F5EF9DC77D30"), ProgId("Ankh")]
-    [ComVisible(true)]
     public class Connect : Object, Extensibility.IDTExtensibility2, IDTCommandTarget
     {
         /// <summary>
@@ -110,7 +109,7 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                this.context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
                 throw;
             }
         }
@@ -138,7 +137,7 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                this.context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
 
@@ -227,16 +226,16 @@ namespace Ankh
                     this.cachedStatus = status;
                 }
             }
-                //            catch( StatusException )
-                //            {
-                //                // couldn't get status for an item on disk - maybe its been renamed etc from
-                //                // outside VS
-                //                this.context.SolutionExplorer.RefreshSelection();
-                //                status = vsCommandStatus.vsCommandStatusSupported;
-                //            }
+//            catch( StatusException )
+//            {
+//                // couldn't get status for an item on disk - maybe its been renamed etc from
+//                // outside VS
+//                this.context.SolutionExplorer.RefreshSelection();
+//                status = vsCommandStatus.vsCommandStatusSupported;
+//            }
             catch( Exception ex )
             {   
-                this.context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
             t.End( "Query status for " + commandName + ": " + status, "Ankh" );
         }
@@ -278,24 +277,24 @@ namespace Ankh
                     ICommand cmd;
                     if ( (cmd = (ICommand)this.commands[commandName]) != null )
                     { 
-                        cmd.Execute(this.context, args);
+                        cmd.Execute( this.context, args );
                         handled = true;
                     }
                 }
             }
-                //            catch( StatusException )
-                //            {
-                //                // couldn't get status for an item on disk - maybe its been renamed etc from
-                //                // outside VS
-                //                this.context.SolutionExplorer.RefreshSelection();
-                //            }
+//            catch( StatusException )
+//            {
+//                // couldn't get status for an item on disk - maybe its been renamed etc from
+//                // outside VS
+//                this.context.SolutionExplorer.RefreshSelection();
+//            }
             catch( Exception ex )
             {   
-                this.context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }        
         
-        private IContext context;
+        private AnkhContext context;
         Ankh.CommandMap commands;
 
 

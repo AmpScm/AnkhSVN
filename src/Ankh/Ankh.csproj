@@ -171,22 +171,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ErrorHandler.cs"
+                    RelPath = "Error.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ICommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IContext.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IErrorHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

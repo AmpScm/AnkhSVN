@@ -16,11 +16,11 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetFolderNodeControl( "Ankh", Position = 1),
     VSNetControl( "Solution.Ankh", Position = 1)]    
-    public class AddItemCommand : CommandBase
+    internal class AddItemCommand : CommandBase
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
             AddFilter filter = new AddFilter();
             if ( context.SolutionExplorer.GetSelectionResources( false, 
@@ -32,7 +32,7 @@ namespace Ankh.Commands
                 return Disabled;
         }
 
-        public override void Execute(IContext context, string parameters )
+        public override void Execute(Ankh.AnkhContext context, string parameters )
         {
             AddFilter filter = new AddFilter();
             IList resources = context.SolutionExplorer.GetSelectionResources( false,

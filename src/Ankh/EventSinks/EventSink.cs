@@ -13,9 +13,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Base class for event sink classes.
     /// </summary>
-    public abstract class EventSink
+    internal abstract class EventSink
     {
-        protected EventSink( IContext context )
+        protected EventSink( AnkhContext context )
         {
             this.context = context;
         }
@@ -25,7 +25,7 @@ namespace Ankh.EventSinks
         /// </summary>
         public abstract void Unhook();
 
-        public static IList CreateEventSinks( IContext context)
+        public static IList CreateEventSinks( AnkhContext context)
         {
             // create event sinks only for projects actually loaded
             
@@ -69,7 +69,7 @@ namespace Ankh.EventSinks
         }
 
 
-        protected IContext Context
+        protected AnkhContext Context
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.context; }
@@ -103,7 +103,7 @@ namespace Ankh.EventSinks
         /// <param name="kind"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private static ProjectsEventSink GetProjectsEvents( string kind, IContext context )
+        private static ProjectsEventSink GetProjectsEvents( string kind, AnkhContext context )
         {
             string objectName = GetName( kind, "ProjectsEvents", context.DTE );    
             if ( objectName != null )
@@ -156,7 +156,7 @@ Please report this error.", kind, objectName, projectsEvents.GetType(),
         /// <param name="kind"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private static ProjectItemsEventSink GetProjectItemsEvents( string kind, IContext context )
+        private static ProjectItemsEventSink GetProjectItemsEvents( string kind, AnkhContext context )
         {
             string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );   
             
@@ -263,7 +263,7 @@ Please report this error.", kind, objectName, events.GetType(),
 
         protected const int REFRESHDELAY = 200;
         private static bool addingProject = false;
-        private IContext context;
+        private AnkhContext context;
         private const string PROJECTPATH = @"\Projects\";
         private const string PACKAGEPATH = 
             @"\Packages\";

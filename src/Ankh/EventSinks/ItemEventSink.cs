@@ -12,9 +12,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Base class serving as event sink for all item related events.
     /// </summary>
-    public abstract class ItemEventSink : EventSink
+    internal abstract class ItemEventSink : EventSink
     {
-        protected ItemEventSink( IContext context ) : base( context )
+        protected ItemEventSink( AnkhContext context ) : base( context )
         {
             // empty
         }
@@ -39,7 +39,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
 
@@ -72,7 +72,7 @@ namespace Ankh.EventSinks
             }
             catch ( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
             finally
             {
@@ -131,7 +131,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }            
         }
             

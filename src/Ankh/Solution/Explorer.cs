@@ -22,9 +22,9 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents the Solution Explorer window in the VS.NET IDE
     /// </summary>
-    public class Explorer
+    internal class Explorer
     {
-        public Explorer( _DTE dte, IContext context )
+        public Explorer( _DTE dte, AnkhContext context )
         {
             this.dte = dte;
             this.context = context;
@@ -253,7 +253,7 @@ namespace Ankh.Solution
             get{ return this.treeview; }
         }
 
-        internal IContext Context
+        internal AnkhContext Context
         {
             get{ return this.context; }
         }
@@ -537,7 +537,7 @@ namespace Ankh.Solution
         private IDictionary projects;
         private TreeNode solutionNode;
         private ImageList statusImageList;
-        private IContext context;
+        private AnkhContext context;
         private TreeView treeview;
         private IntPtr originalImageList = IntPtr.Zero;
 

@@ -17,9 +17,9 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetFolderNodeControl( "Ankh", Position = 1),
     VSNetControl( "Item.Ankh", Position=1 )]
-    public class SwitchItemCommand : CommandBase
+    internal class SwitchItemCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             IList resources = context.SolutionExplorer.GetSelectionResources(
                 false, new ResourceFilterCallback( CommandBase.VersionedFilter ) );
@@ -29,7 +29,7 @@ namespace Ankh.Commands
                 return Disabled;
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             this.SaveAllDirtyDocuments( context );
 
@@ -75,7 +75,7 @@ namespace Ankh.Commands
         private class SwitchRunner : ProgressRunner
         {
             public SwitchRunner( string path, string url, Revision revision,
-                bool recursive, IContext context ) :
+                bool recursive, AnkhContext context ) :
                 base(context)
             {
                 this.path = path;
