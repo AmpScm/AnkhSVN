@@ -6,6 +6,7 @@ using NSvn.Core;
 using System.Collections;
 using Utils.Win32;
 using System.Diagnostics;
+using System.IO;
 
 using C = Utils.Win32.Constants;
 
@@ -197,19 +198,31 @@ namespace Ankh
             {
                 if ( item.Object is Project )
                 {
-                    this.resource = SvnResource.FromLocalPath(((Project)item.Object).FullName);
-                    explorer.AddResource( (Project)item.Object, this );                    
+                    // find the directory containing the project
+                    string fullname = ((Project)item.Object).FullName;
+                    // the Solution Items project has no path
+                    if ( fullname != string.Empty )
+                    {
+                        string parentPath = Path.GetDirectoryName( fullname );
+                        this.resource = SvnResource.FromLocalPath( parentPath );
+                        explorer.AddResource( (Project)item.Object, this );                    
+                    }
                 }
                 else
                 {
+                    // a solution
                     this.resource = SvnResource.FromLocalPath(explorer.DTE.Solution.FullName);
                     explorer.AddResource( explorer.DTE.Solution, this );                    
                 }
-                this.resource.Context = explorer.Context;
+                if ( this.resource != null )
+                    this.resource.Context = explorer.Context;
             }
             
             protected override StatusKind GetStatus()
             {
+                if ( this.resource == null )
+                    return StatusKind.None;
+
                 if ( this.resource.Status.TextStatus != StatusKind.Normal ) 
                     return this.resource.Status.TextStatus;
                 else if ( this.resource.Status.PropertyStatus != StatusKind.Normal &&
@@ -227,6 +240,9 @@ namespace Ankh
             private ILocalResource resource;
         }        
 
+        /// <summary>
+        /// Represents a node containing a project item.
+        /// </summary>
         private class ProjectItemNode : TreeNode
         {
             public ProjectItemNode( UIHierarchyItem item, IntPtr hItem, SolutionExplorer explorer ) :
@@ -234,18 +250,27 @@ namespace Ankh
             {
                 ProjectItem pitem = (ProjectItem)item.Object;
                 this.resources = new ArrayList();
-                for( short i = 1; i <= pitem.FileCount; i++ ) 
+                try
                 {
-                    ILocalResource res = SvnResource.FromLocalPath( pitem.get_FileNames(i) );
-                    // does this resource exist?
-                    if ( res != null )
+                    for( short i = 1; i <= pitem.FileCount; i++ ) 
                     {
-                        res.Context = explorer.Context;
-                        this.resources.Add( res );
+                    
+                        ILocalResource res = SvnResource.FromLocalPath( pitem.get_FileNames(i) );
+                        // does this resource exist?
+                        if ( res != null )
+                        {
+                            res.Context = explorer.Context;
+                            this.resources.Add( res );
+                        }
                     }
+                    explorer.AddResource( pitem, this );                    
+                }
+                catch( NullReferenceException )
+                {
+                    //swallow
                 }
 
-                explorer.AddResource( pitem, this );
+                
             }
 
             protected override StatusKind GetStatus()

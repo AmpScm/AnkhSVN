@@ -89,6 +89,8 @@ namespace Ankh
             this.solutionEvents.AfterClosing += new 
                 _dispSolutionEvents_AfterClosingEventHandler( this.SolutionClosed );
 
+            
+
             this.documentEvents = this.DTE.Events.get_DocumentEvents( null );
             this.documentEvents.DocumentSaved += new 
                 _dispDocumentEvents_DocumentSavedEventHandler( this.DocumentSaved );
@@ -98,6 +100,8 @@ namespace Ankh
 
             this.csProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
                 this.ItemAdded );
+
+
 
 //            this.vcProjectItemsEvents = (ProjectItemsEvents)
 //                this.DTE.Events.GetObject( "VCProjectItemsEvents" );
