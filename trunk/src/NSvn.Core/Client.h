@@ -64,8 +64,8 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-	        /*static void Switch(String* path, String* url, Revision* revision, bool recurse, 
-                ClientContext* context);*/
+	        static void Switch(String* path, String* url, Revision* revision, bool recurse, 
+                ClientContext* context);
 
             ///<summary>Add a file/directory, not already under revision control to a working copy.</summary>
             ///<param name="path">Path to the file/directory.</param>
