@@ -7,6 +7,10 @@
         </MruUrls>
     </RepositoryExplorer>
     <Subversion>
-        <ConfigDir>%AppData%\Subversion</ConfigDir>
+        <!-- The path to the directory to use for the Subversion configuration data.
+        If not specified, it will use the same config area as other Subversion tools, 
+        usually %APPDATA%\Subversion. You can use environment variables in the path, quoted
+        with %. -->
+        <!--<ConfigDir>%AppData%\Subversion</ConfigDir>-->
     </Subversion>
 </Config>

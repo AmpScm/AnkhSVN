@@ -23,7 +23,16 @@ namespace Ankh
         {
             this.dte = dte;
             this.addin = addin;
-            this.context = new SvnContext( this );
+
+            this.config = Ankh.Config.ConfigLoader.LoadConfig( "AnkhSVN", "ankh.config" );
+
+            // should we use a custom configuration directory?
+            if ( this.config.Subversion.ConfigDir != null )
+                this.context = new SvnContext( this, 
+                    Environment.ExpandEnvironmentVariables(this.config.Subversion.ConfigDir) );
+            else
+                this.context = new SvnContext( this );
+
             this.hostWindow = new Win32Window( new IntPtr(dte.MainWindow.HWnd) );
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
@@ -32,9 +41,7 @@ namespace Ankh
 
             this.solutionExplorer = new Solution.Explorer( this.dte, this.context );
 
-            this.progressDialog = new ProgressDialog();
-
-            this.config = Ankh.Config.ConfigLoader.LoadConfig( @"T:\ankhconfig.xml" );
+            this.progressDialog = new ProgressDialog();            
 
             this.CreateRepositoryExplorer();
 

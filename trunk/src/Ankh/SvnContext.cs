@@ -18,32 +18,17 @@ namespace Ankh
     /// </summary>
     internal class SvnContext : NSvnContext
     {
-        public SvnContext( AnkhContext ankhContext ) // : base( @"T:\foo123config" )
+        public SvnContext( AnkhContext ankhContext, string configDir ) :  base( configDir )
         {
-            this.ankhContext = ankhContext;
-            this.AddAuthenticationProvider( AuthenticationProvider.GetSimpleProvider() );           
-            this.AddAuthenticationProvider( AuthenticationProvider.GetSimplePromptProvider(
-                new SimplePromptDelegate( this.PasswordPrompt ), 3 ) );
-            this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustFileProvider() );
-            this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustPromptProvider(
-                new SslServerTrustPromptDelegate( this.SslServerTrustPrompt ) ) );
-            this.AddAuthenticationProvider( 
-                AuthenticationProvider.GetSslClientCertPasswordFileProvider() );
-            this.AddAuthenticationProvider( 
-                AuthenticationProvider.GetSslClientCertPasswordPromptProvider(
-                    new SslClientCertPasswordPromptDelegate( 
-                        this.ClientCertificatePasswordPrompt ), 3 ) );
-            this.AddAuthenticationProvider( 
-                AuthenticationProvider.GetSslClientCertFileProvider() );
-            this.AddAuthenticationProvider( 
-                AuthenticationProvider.GetSslClientCertPromptProvider( 
-                    new SslClientCertPromptDelegate( this.ClientCertificatePrompt ), 3 ) );
-
-            this.ClientContext.CancelCallback = new CancelCallback( this.CancelCallback );
-
-
-
+            this.Init( ankhContext );
         }
+
+        public SvnContext( AnkhContext ankhContext ) 
+        {
+            this.Init( ankhContext );
+        }
+
+        
         /// <summary>
         /// Invokes the LogMessage dialog.
         /// </summary>
@@ -277,6 +262,30 @@ namespace Ankh
             Application.DoEvents();
 
             return CancelOperation.DontCancel;
+        }
+
+        private void Init(AnkhContext ankhContext)
+        {
+            this.ankhContext = ankhContext;
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSimpleProvider() );           
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSimplePromptProvider(
+                new SimplePromptDelegate( this.PasswordPrompt ), 3 ) );
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustFileProvider() );
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustPromptProvider(
+                new SslServerTrustPromptDelegate( this.SslServerTrustPrompt ) ) );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertPasswordFileProvider() );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertPasswordPromptProvider(
+                new SslClientCertPasswordPromptDelegate( 
+                this.ClientCertificatePasswordPrompt ), 3 ) );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertFileProvider() );
+            this.AddAuthenticationProvider( 
+                AuthenticationProvider.GetSslClientCertPromptProvider( 
+                new SslClientCertPromptDelegate( this.ClientCertificatePrompt ), 3 ) );
+
+            this.ClientContext.CancelCallback = new CancelCallback( this.CancelCallback );
         }
 
         /// <summary>
