@@ -32,6 +32,9 @@ namespace NSvn
 
         public __delegate SslClientCertificateCredential* SslClientCertPromptDelegate();
 
+        public __delegate SslClientCertificatePasswordCredential* 
+            SslClientCertPasswordPromptDelegate();
+
         public __delegate void StatusCallback( System::String* path, Status* status );
     }
 }

@@ -26,6 +26,9 @@ svn_error_t* svn_auth_ssl_server_trust_prompt_func(
 svn_error_t* svn_auth_ssl_client_cert_prompt_func( svn_auth_cred_ssl_client_cert_t **cred, 
                                                   void *baton, apr_pool_t *pool );
 
+svn_error_t* svn_auth_ssl_client_cert_pw_prompt_func( svn_auth_cred_ssl_client_cert_pw_t **cred, 
+                                                  void *baton, apr_pool_t *pool );
+
 
 
 // implementation of GetSimplePromptProvider
@@ -140,6 +143,23 @@ AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertProm
     return new AuthenticationProvider( provider, pool );
 }
 
+// implementation of GetSslServerTrustFileProvider
+AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertPasswordPromptProvider(
+    SslClientCertPasswordPromptDelegate* promptDelegate )
+{
+    GCPool* pool = new GCPool();
+    svn_auth_provider_object_t* provider;
+
+    void* baton = pool->GetPool()->AllocateObject( 
+        ManagedPointer<SslClientCertPasswordPromptDelegate*>(promptDelegate));
+
+    svn_client_get_ssl_client_cert_pw_prompt_provider( &provider, 
+        svn_auth_ssl_client_cert_pw_prompt_func, baton, 
+        pool->ToAprPool() );
+
+    return new AuthenticationProvider( provider, pool );
+}
+
 // callback function for a simple prompt provider
 svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton,
                                 const char* realm, const char* username, apr_pool_t* pool )
@@ -194,6 +214,24 @@ svn_error_t* svn_auth_ssl_client_cert_prompt_func( svn_auth_cred_ssl_client_cert
 
     // invoke the managed callback
     SslClientCertificateCredential* cred = delegate->Invoke();
+
+    // null?
+    if ( cred != 0 )
+        *cred_p = cred->GetCredential( pool );
+    else
+        *cred_p = 0;
+
+    return SVN_NO_ERROR;
+}
+
+svn_error_t* svn_auth_ssl_client_cert_pw_prompt_func( svn_auth_cred_ssl_client_cert_pw_t **cred_p, 
+                                                  void *baton, apr_pool_t *pool )
+{
+    SslClientCertPasswordPromptDelegate* delegate = *(static_cast<ManagedPointer<
+        SslClientCertPasswordPromptDelegate*>*>(baton));
+
+    // invoke the managed callback
+    SslClientCertificatePasswordCredential* cred = delegate->Invoke();
 
     // null?
     if ( cred != 0 )

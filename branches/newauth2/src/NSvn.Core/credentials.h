@@ -90,5 +90,23 @@ namespace NSvn
             }
 
         };
+
+        /// <summary>Represents a password phrase for aclient certificate.</summary>
+        public __gc class SslClientCertificatePasswordCredential
+        {
+        public:
+            String* Password;
+        public private:
+            svn_auth_cred_ssl_client_cert_pw_t* GetCredential( apr_pool_t* pool )
+            {
+                svn_auth_cred_ssl_client_cert_pw_t* cred = 
+                    static_cast<svn_auth_cred_ssl_client_cert_pw_t*>(
+                        apr_pcalloc(pool, sizeof(*cred) ) );
+                cred->password = StringHelper( this->Password ).CopyToPool( pool );
+
+                return cred;
+            }
+
+        };
     }
 }

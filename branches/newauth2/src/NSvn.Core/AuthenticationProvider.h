@@ -55,6 +55,11 @@ namespace NSvn
             static AuthenticationProvider* GetSslClientCertPromptProvider( 
                 SslClientCertPromptDelegate* promptDelegate );
 
+            /// <summary>Create and return an authentication provider that prompts
+            /// the user for a passphrase for a client certificate.</summary>
+            static AuthenticationProvider* GetSslClientCertPasswordPromptProvider( 
+                SslClientCertPasswordPromptDelegate* promptDelegate );
+
         private public:
             /// <summary>Note that provider *must* be allocated on pool</summary>
             AuthenticationProvider( svn_auth_provider_object_t* provider, GCPool* pool ) :
