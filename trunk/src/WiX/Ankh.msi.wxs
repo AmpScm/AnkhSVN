@@ -16,6 +16,7 @@
         <Media Id="2" Cabinet="NSvn.cab" EmbedCab="yes" CompressionLevel="high" />
         <CustomAction Id="DIRCA_TARGETDIR" Property="TARGETDIR" Value="[ProgramFilesFolder]\AnkhSVN\"
             Execute="firstSequence" />
+        <CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]"/>
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Merge Id="MSM_NSvn_msm" src="$(var.installdir)\NSvn.msm" Language="1033" DiskId="2" />
         </Directory>
@@ -32,11 +33,17 @@
             <ComponentRef Id="AUCH_RegAsm" />
             <ComponentRef Id="apr_iconv" />
         </Feature>
-        <CustomAction Id="ReposInstaller_Install" BinaryKey="InstallUtil" DllEntry="ManagedInstall" Execute="deferred" />
-        <CustomAction Id="ReposInstaller_Install.SetProperty" Property="ReposInstaller_Install" Value="/action=install /LogFile= &quot;[#CF_ReposInstaller.dll]&quot;" />
-        <CustomAction Id="ReposInstaller_Uninstall" BinaryKey="InstallUtil" DllEntry="ManagedInstall"
-            Execute="deferred" />
-        <CustomAction Id="ReposInstaller_Uninstall.SetProperty" Property="ReposInstaller_Uninstall" Value="/action=uninstall /LogFile= &quot;[#CF_ReposInstaller.dll]&quot;" />
+        <CustomAction Id="ReposInstaller_Install" BinaryKey="InstallUtil" 
+            DllEntry="ManagedInstall" Execute="deferred" />
+        <CustomAction Id="ReposInstaller_Install.SetProperty" 
+            Property="ReposInstaller_Install" 
+            Value="/installtype=notransaction /action=install /LogFile= &quot;[#CF_ReposInstaller.dll]&quot;" />
+        
+        <CustomAction Id="ReposInstaller_Uninstall" BinaryKey="InstallUtil" 
+            DllEntry="ManagedInstall" Execute="deferred" />
+        <CustomAction Id="ReposInstaller_Uninstall.SetProperty" 
+            Property="ReposInstaller_Uninstall" 
+            Value="/installtype=notransaction /action=uninstall /LogFile= &quot;[#CF_ReposInstaller.dll]&quot;" />
         <UI>
             <InstallUISequence>
                 <!-- Error, Exit and Finished forms -->
@@ -58,15 +65,88 @@
                 <MigrateFeatureStates Sequence="1200" />
                 <Show Dialog="WelcomeForm" Sequence="1230">NOT RESUME AND ((NOT Installed) OR (Installed AND NOT Preselected))</Show>
                 <Show Dialog="ResumeForm" Sequence="1240">Installed AND (RESUME OR Preselected)</Show>
+                <Show Dialog="MaintenanceForm" Sequence="1250">Installed AND NOT(RESUME OR Preselected)</Show>
                 <Show Dialog="ProgressForm" Sequence="1280" />
                 <ExecuteAction Sequence="1300" />
             </InstallUISequence>
         </UI>
         <InstallExecuteSequence>
-        <Custom Action="ReposInstaller_Uninstall.SetProperty" After="MsiUnpublishAssemblies"><![CDATA[$C_ReposInstaller.dll=2]]></Custom>
-        <Custom Action="ReposInstaller_Uninstall" After="ReposInstaller_Uninstall.SetProperty"><![CDATA[$C_ReposInstaller.dll=2]]></Custom>
-        <Custom Action="ReposInstaller_Install.SetProperty" After="StartServices"><![CDATA[$C_ReposInstaller.dll>2]]></Custom>
-        <Custom Action="ReposInstaller_Install" After="ReposInstaller_Install.SetProperty"><![CDATA[$C_ReposInstaller.dll>2]]></Custom>
+            <LaunchConditions Sequence="100"/>
+            <FindRelatedProducts Sequence="200"/>
+            <AppSearch Sequence="300"/>
+            <CCPSearch Sequence="500">NOT Installed</CCPSearch>
+            <RMCCPSearch Sequence="600">NOT Installed</RMCCPSearch>
+            <Custom Action="ERRCA_CANCELNEWERVERSION" Sequence="675">NEWERVERSIONINSTALLED AND NOT Installed</Custom>
+            <ValidateProductID Sequence="700"/>
+            <Custom Action="DIRCA_TARGETDIR" Before="CostInitialize">TARGETDIR=""</Custom>
+            <CostInitialize Sequence="800"/>
+            <FileCost Sequence="900"/>
+            <IsolateComponents Sequence="950">RedirectedDllSupport</IsolateComponents>
+            <CostFinalize Sequence="1000"/>
+            <SetODBCFolders Sequence="1100">NOT Installed</SetODBCFolders>
+            <MigrateFeatureStates Sequence="1200"/>
+            <InstallValidate Sequence="1400"/>
+            <InstallInitialize Sequence="1500"/>            
+            <RemoveExistingProducts Sequence="1525">PREVIOUSVERSIONSINSTALLED AND NOT NEWERVERSIONINSTALLED</RemoveExistingProducts>
+            <AllocateRegistrySpace Sequence="1550">NOT Installed</AllocateRegistrySpace>
+            <ProcessComponents Sequence="1600"/>
+            <UnpublishComponents Sequence="1700"/>
+            <MsiUnpublishAssemblies Sequence="1750"/>
+
+            <Custom Action="ReposInstaller_Uninstall.SetProperty" Sequence="1760">Installed</Custom>
+            <Custom Action="ReposInstaller_Uninstall" Sequence="1765">Installed</Custom>
+
+            <UnpublishFeatures Sequence="1800"/>
+            <StopServices Sequence="1900">VersionNT</StopServices>
+            <DeleteServices Sequence="2000">VersionNT</DeleteServices>
+            <UnregisterComPlus Sequence="2100"/>
+            <SelfUnregModules Sequence="2200"/>
+            <UnregisterTypeLibraries Sequence="2300"/>
+            <RemoveODBC Sequence="2400"/>
+            <UnregisterFonts Sequence="2500"/>
+            <RemoveRegistryValues Sequence="2600"/>
+            <UnregisterClassInfo Sequence="2700"/>
+            <UnregisterExtensionInfo Sequence="2800"/>
+            <UnregisterProgIdInfo Sequence="2900"/>
+            <UnregisterMIMEInfo Sequence="3000"/>
+            <RemoveIniValues Sequence="3100"/>
+            <RemoveShortcuts Sequence="3200"/>
+            <RemoveEnvironmentStrings Sequence="3300"/>
+            <RemoveDuplicateFiles Sequence="3400"/>
+            <RemoveFiles Sequence="3500"/>
+            <RemoveFolders Sequence="3600"/>
+            <CreateFolders Sequence="3700"/>
+            <MoveFiles Sequence="3800"/>
+            <InstallFiles Sequence="4000"/>
+            <PatchFiles Sequence="4090"/>
+            <DuplicateFiles Sequence="4210"/>
+            <BindImage Sequence="4300"/>
+            <CreateShortcuts Sequence="4500"/>
+            <RegisterClassInfo Sequence="4600"/>
+            <RegisterExtensionInfo Sequence="4700"/>
+            <RegisterProgIdInfo Sequence="4800"/>
+            <RegisterMIMEInfo Sequence="4900"/>
+            <WriteRegistryValues Sequence="5000"/>
+            <WriteIniValues Sequence="5100"/>
+            <WriteEnvironmentStrings Sequence="5200"/>
+            <RegisterFonts Sequence="5300"/>
+            <InstallODBC Sequence="5400"/>
+            <RegisterTypeLibraries Sequence="5500"/>
+            <SelfRegModules Sequence="5600"/>
+            <RegisterComPlus Sequence="5700"/>
+            <InstallServices Sequence="5800">VersionNT</InstallServices>
+            <StartServices Sequence="5900">VersionNT</StartServices>
+
+            <Custom Action="ReposInstaller_Install.SetProperty" Sequence="5960"><![CDATA[$C_ReposInstaller.dll>2]]></Custom>
+            <Custom Action="ReposInstaller_Install" Sequence="5965"><![CDATA[$C_ReposInstaller.dll>2]]></Custom>
+
+            <RegisterUser Sequence="6000"/>
+            <RegisterProduct Sequence="6100"/>
+            <PublishComponents Sequence="6200"/>
+            <MsiPublishAssemblies Sequence="6250"/>
+            <PublishFeatures Sequence="6300"/>
+            <PublishProduct Sequence="6400"/>
+            <InstallFinalize Sequence="6600"/>
         </InstallExecuteSequence>
         <Binary Id="InstallUtil" src="$(var.setupfiles)\InstallUtil.exe" />
         <UI>
