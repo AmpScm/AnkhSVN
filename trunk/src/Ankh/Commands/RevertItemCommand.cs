@@ -49,7 +49,7 @@ namespace Ankh.Commands
             bool recursive = false;
             bool confirmed = false;
             // is Shift down?
-            if ( !this.Shift )
+            if ( CommandBase.Shift )
             {
                 using(PathSelector p = this.GetPathSelector( "Select items to revert" ))
                 {

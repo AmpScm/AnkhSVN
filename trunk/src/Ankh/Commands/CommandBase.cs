@@ -42,7 +42,7 @@ namespace Ankh.Commands
         /// <summary>
         /// Whether the Shift key is down.
         /// </summary>
-        protected bool Shift
+        protected static bool Shift
         {
             get
             { 
