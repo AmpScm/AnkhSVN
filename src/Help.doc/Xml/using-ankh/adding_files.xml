@@ -13,15 +13,15 @@
              <list>
                 <item>
                     <b>1.</b> Select an unversioned file(s) in Solution Explorer. 
-                              An unversioned file has a 
-                              <img src="../../img/unrevisioned.png" />
+                              An unversioned file has a ( 
+                              <img src="../../img/unrevisioned.png" /> )
                               status icon in front of the file. 
                 </item>
                 <item>
-                    <b>2.</b> Right click the selected unversioned file(s). A menu will pop up.
+                    <b>2.</b> Right click the selected unversioned file(s).
                 </item>
                 <item>
-                    <b>3.</b>Select <b>Add</b> from the menu.
+                    <b>3.</b> Select <b>Add</b> from the menu.
 					 <br/><br/>
                     <img src="../../img/menu-items/add.png" align="left" />
                     <br clear="all" /> 
@@ -49,7 +49,7 @@
     <section>
         <p>
             <hr></hr>
-            <link url="make_changes.xml">back </link>
+            <link url="make_changes.xml">back</link> - 
             <link url="removing_files.xml">next</link>
         </p>
     </section>

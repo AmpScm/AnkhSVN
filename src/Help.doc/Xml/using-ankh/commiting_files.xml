@@ -24,21 +24,22 @@
             <br/><br/>
             <br/>
             <b>How to commit files:</b>
+            <br/><br/>
+             <img src="../../img/menu-items/commit.png" align="left"/>
              <list>
                 <item>
-                    <b>1.</b>Select and right click on the versioned file(s) 
-					you want to commit in the Solution Explorer. A menu pops up.
+                    <b>1.</b> Select and right click on the versioned file(s) 
+					you want to commit in the Solution Explorer.
 				</item>
                 <item>
                     <b>2.</b> Select <b>Commit</b> from the menu.
                     <br/><br/>
-			        <img src="../../img/menu-items/commit.png" align="left"/>   
-			        <br clear="all"/>
 			        <br/><br/>                    
 				</item>
 			</list>
+			<br clear="all"/>
 			<br/><br/>
-			<b>1.The Commit dialog:</b>
+			<b>The Commit dialog:</b>
 			<br/><br/>
 			 <img src="../../img/commit_dialog.png" align="left"/>   
 			 <br/>                    
@@ -47,29 +48,38 @@
                     <b>1.</b> Shows a list of all the files being committed. 
                 </item>
                 <item>
-                    <b>2.</b>Type in your log message. All Lines starting with ‘#’ will be ignored.
+                    <b>2.</b> Type in your log message. All Lines starting with ‘#’ will be ignored.
                 </item>
                 <item>
-                    <b>3.</b>Shows the <link url="examine_changes.xml">differences</link> between the 
+                    <b>3.</b> Shows/Hides the <link url="examine_changes.xml">differences</link> between the 
                     modified (green), removed (red) and unchanged (blue) text.
                 </item>
 			</list>
 			<br clear="ALL"/>
 			<br/><br/>
-			<b>2. The login dialog:</b>
+			<b>The login dialog:</b>
+			<br/><br/>
 			<img src="../../img/login.png" align="left"/>   
 			<list>
-			    <item><b>1.</b>Enter your username and password.</item>
+			    <item><b>1.</b> Enter your username and password.</item>
 			</list>
 			<br clear="all"/>
 			<br/><br/>
 			Notice how the status symbol has changed in front of the 
-            item(s) committed in Solution Explorer to<img src="../../img/ok_file.png"/>
+            item(s) committed in Solution Explorer to <img src="../../img/ok_file.png"/>
             <br/>
-             Ankhs <link url="../keywords/output_window.xml">output window </link>
+             Ankhs <link url="../keywords/output_window.xml">output window</link> 
              will show all the files that have been committed. 
             <br/>
         </p>
-    </section>   
+        <b>NOTE:</b> A Commit can not be reverted. 
+    </section>  
+     <section>
+        <p>
+            <hr></hr>
+            <link url="reverting_files.xml">back</link> - 
+            <link url="basic_work_cycle.xml">home</link>
+        </p>
+    </section> 
 </doc>
 

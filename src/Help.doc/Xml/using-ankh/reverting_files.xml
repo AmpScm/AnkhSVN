@@ -5,7 +5,7 @@
         <p>
             It is possible to revert changes done to a file. 
             The file will then be reverted to the exact state it was in before you started working on it.  
-            This is done with the ‘Revert’ command. 
+            This is done with the <b>Revert</b> command. 
         </p>
         <b>How to revert files:</b>
         <list>
@@ -26,11 +26,13 @@
         <br clear="all"/>        
          Ankhs <link url="../keywords/output_window.xml">output window </link>
         will show all the files that have been reverted. 
+        <br/><br/>
+        <b>NOTE:</b> It is not possible to revert a revert command. When you revert an item, all changes you have done to this file will be deleted permanetly.
     </section>   
     <section>
         <p>
             <hr></hr>
-            <link url="examine_changes.xml">back </link>
+            <link url="examine_changes.xml">back</link> - 
             <link url="commiting_files.xml">next</link>
         </p>
     </section>   
