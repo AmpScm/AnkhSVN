@@ -97,6 +97,7 @@ namespace NSvn.Core.Tests
             try
             {                
                 Zip.ExtractZipResource( wc2, this.GetType(), WC_FILE );
+                this.RenameAdminDirs( wc2 );
                 using( StreamWriter w = new StreamWriter( 
                            Path.Combine(wc2, "Form.cs"), true ) )
                     w.Write( "Hell worl" );

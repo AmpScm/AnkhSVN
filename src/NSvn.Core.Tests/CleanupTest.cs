@@ -26,7 +26,7 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestRemoveLockFile()
         {
-            string lockPath = Path.Combine( this.WcPath, ".svn" );
+            string lockPath = Path.Combine( this.WcPath, Client.AdminDirectoryName );
             lockPath = Path.Combine( lockPath, "lock" );
 
             File.CreateText( lockPath ).Close();

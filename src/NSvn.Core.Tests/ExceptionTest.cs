@@ -37,7 +37,8 @@ namespace NSvn.Core.Tests
         [ExpectedException(typeof(WorkingCopyLockedException))]
         public void TestCommitLockedWc()
         {
-            string lockPath = Path.Combine( Path.Combine( this.WcPath, ".svn" ), "lock" );
+            string lockPath = Path.Combine(
+                Path.Combine( this.WcPath, Client.AdminDirectoryName ), "lock" );
             File.Create( lockPath ).Close();
 
             this.Client.Update( this.WcPath, Revision.Head, true );
@@ -56,6 +57,7 @@ namespace NSvn.Core.Tests
             {
                 wc2 = this.FindDirName( Path.Combine( TestBase.BASEPATH, TestBase.WC_NAME ) );
                 Zip.ExtractZipResource( wc2, this.GetType(), this.WC_FILE );
+                this.RenameAdminDirs( wc2 );
 
                 using (StreamWriter w = new StreamWriter( Path.Combine( this.WcPath, "Form.cs" ), true ) )
                     w.Write( "Moo" );

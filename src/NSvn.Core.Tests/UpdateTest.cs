@@ -20,6 +20,7 @@ namespace NSvn.Core.Tests
             this.ExtractWorkingCopy();
             this.wc2 = this.FindDirName( Path.Combine( TestBase.BASEPATH, TestBase.WC_NAME ) );
             Zip.ExtractZipResource( this.wc2, this.GetType(), this.WC_FILE );
+            this.RenameAdminDirs( this.wc2 );
         }
 
         public override void TearDown()

@@ -29,7 +29,7 @@ namespace NSvn.Core.Tests
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
 
-            this.Client.Commit( new string[]{ this.WcPath }, false );
+            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
            
             char status = this.GetSvnStatus( filepath );
             Assertion.AssertEquals( "File not committed", '-', 
@@ -117,7 +117,8 @@ namespace NSvn.Core.Tests
         [ExpectedException( typeof(WorkingCopyLockedException) )]
         public void TestLockedWc()
         {
-            string lockPath = Path.Combine( this.WcPath, @".svn\lock" );
+            string lockPath = Path.Combine(
+                Path.Combine( this.WcPath, Client.AdminDirectoryName ), "lock" );
             using( File.CreateText( lockPath ) )
             {
                 this.Client.Commit( new string[]{ this.WcPath }, true );            

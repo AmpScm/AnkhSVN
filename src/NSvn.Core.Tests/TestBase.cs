@@ -34,6 +34,7 @@ namespace NSvn.Core.Tests
             this.notifications = new ArrayList();
             this.client = new Client( this.GetTempFile() );
             this.client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
+            this.client.LogMessage += new LogMessageDelegate(LogMessage);
         }
 
         [TearDown]
@@ -79,7 +80,9 @@ namespace NSvn.Core.Tests
         public void ExtractWorkingCopy( )
         {
             this.wcPath = this.FindDirName( Path.Combine( BASEPATH, WC_NAME ) );
-            Zip.ExtractZipResource( this.wcPath, this.GetType(), WC_FILE );        
+            Zip.ExtractZipResource( this.wcPath, this.GetType(), WC_FILE );  
+      
+            this.RenameAdminDirs( wcPath );
 
         }
 
@@ -119,6 +122,8 @@ namespace NSvn.Core.Tests
             proc.StartInfo.UseShellExecute = false;
 
             proc.Start();
+
+            //Console.WriteLine( proc.MainModule.FileName );
 
             ProcessReader outreader = new ProcessReader( proc.StandardOutput );
             ProcessReader errreader = new ProcessReader( proc.StandardError );
@@ -260,7 +265,31 @@ namespace NSvn.Core.Tests
             File.Delete( tmpPath );
 
             return tmpPath;
-        }       
+        }    
+   
+        /// <summary>
+        /// Rename the administrative subdirectories if necessary.
+        /// </summary>
+        /// <param name="path"></param>
+        [Conditional("ALT_ADMIN_DIR")]
+        protected void RenameAdminDirs( string path )
+        {
+            string adminDir = Path.Combine( path, TRAD_WC_ADMIN_DIR );
+            string newDir = Path.Combine( path, Client.AdminDirectoryName );
+            if ( Directory.Exists( adminDir ) && 
+                TRAD_WC_ADMIN_DIR != Client.AdminDirectoryName )
+            {
+                Directory.Move( adminDir, newDir );
+            }
+
+            foreach( string dir in Directory.GetDirectories( path ) )
+                this.RenameAdminDirs( dir );
+        }
+
+        protected virtual void LogMessage( object sender, LogMessageEventArgs e )
+        {
+            e.Message = "";
+        }
         
        
 
@@ -290,6 +319,7 @@ namespace NSvn.Core.Tests
         protected const string BASEPATH = @"\tmp";
         protected readonly string WC_FILE;
         protected const string WC_NAME = "wc";
+        protected const string TRAD_WC_ADMIN_DIR = ".svn";
         private string reposUrl;
         private string wcPath;
         private string reposPath;   

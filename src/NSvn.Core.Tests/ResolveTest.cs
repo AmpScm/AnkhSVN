@@ -18,6 +18,7 @@ namespace NSvn.Core.Tests
             base.SetUp();
             this.path = this.GetTempFile();
             Zip.ExtractZipResource( this.path, this.GetType(), "NSvn.Core.Tests.conflictwc.zip" );
+            this.RenameAdminDirs( this.path );
         }
 
         [TearDown]
