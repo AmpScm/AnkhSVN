@@ -27,8 +27,7 @@ namespace NSvn
                 this->pool = new GCPool();
             }
 
-            AuthenticationBaton( ICollection* providerObjects ) : dirty( true ), authBaton(0), 
-                paramSet(false)
+            AuthenticationBaton( ICollection* providerObjects ) : dirty( true ), authBaton(0)
             {
                 this->providerObjects = new ArrayList( providerObjects );
                 this->parameters = new Hashtable();
@@ -132,7 +131,6 @@ namespace NSvn
             Hashtable* parameters;
             ArrayList* providerObjects;
             bool dirty;
-            bool paramSet;
             svn_auth_baton_t* authBaton;
             GCPool* pool;
 
