@@ -1,6 +1,5 @@
 #pragma once
 #using <mscorlib.dll>
-#using <NSvn.Common.dll>
 
 #include "delegates.h"
 #include "AdminAccessBaton.h"
@@ -133,11 +132,11 @@ namespace NSvn
                     ManagedPointer<NSvn::Core::NotifyCallback*>( this->NotifyCallback ) );
             }
 
-            //// is there an auth baton? (should be)
-            //if ( this->AuthBaton != 0 )
-            //{
-            //    ctx->auth_baton = this->CreateAuthBaton( pool, this->AuthBaton );
-            //}
+            // is there an auth baton? (should be)
+            if ( this->AuthBaton != 0 )
+            {
+                ctx->auth_baton = this->CreateAuthBaton( pool, this->AuthBaton );
+            }
 
             return ctx; 
 
@@ -154,15 +153,19 @@ namespace NSvn
             // put our providers in the array
             for( int i = 0; i < baton->Providers->Count; i++ )
             {
-                IAuthenticationProvider* pr = baton->Providers->Item[i];
-                svn_auth_provider_object_t* providerObject = 0;/*
-                    this->CreateProvider( pool, baton->Providers->Item(i) );*/
+                svn_auth_provider_object_t* providerObject = 
+                    this->CreateProvider( pool, baton->Providers->Item[i] );
 
                 *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
                     providerObject;
             }
 
-            return 0;
+            // create the actual baton
+            svn_auth_baton_t* ab;
+            svn_auth_open( &ab, providers, pool );
+
+
+            return ab;
         }
 
         inline svn_auth_provider_object_t* ClientContext::CreateProvider( 
@@ -187,7 +190,7 @@ namespace NSvn
             providerObject->provider_baton = pool.AllocateObject( 
                 ManagedPointer<IAuthenticationProvider*>( authProvider ) );
 
-            return 0;
+            return providerObject;
 
         }
     }
@@ -195,6 +198,9 @@ namespace NSvn
 
 // necessary to get the managed compiler to generate metadata for the type
 struct apr_pool_t
+{};
+
+struct svn_auth_baton_t
 {};
 
 namespace
@@ -214,6 +220,25 @@ namespace
 
     }
 
+    svn_auth_cred_simple_t* GetCredentials( Credential* credential, apr_pool_t* pool  )
+    {
+        // did we get a valid credential?
+        if ( credential != Credential::Invalid )
+        {
+            // a simple credential will do for now
+            svn_auth_cred_simple_t* creds = static_cast<svn_auth_cred_simple_t*>(
+                apr_pcalloc( pool, sizeof(*creds)) );
+
+            creds->username = StringHelper( credential->Username ).CopyToPool( pool );
+            creds->password = StringHelper( credential->Password ).CopyToPool( pool );
+
+            return creds;
+        }
+        else 
+            return 0;
+    }
+
+
 
     svn_error_t * first_credentials  (void **credentials,
                                       void **iter_baton,
@@ -225,14 +250,16 @@ namespace
         IAuthenticationProvider* provider = 
             *( static_cast<ManagedPointer<IAuthenticationProvider*>* >(provider_baton) );
 
-        Credential* credential = provider->FirstCredentials();
-        /*if ( credential != Credential.InvalidCredentials )
-        {
-            svn_auth_cred_simple_t *creds = apr_pcalloc (pool, sizeof(*creds));
-            creds->*/
-        return 0;
+        *credentials = GetCredentials( provider->FirstCredentials(), pool );
+       
+        // next_creds doesnt have a provider_baton param, so we store it in
+        // the iter baton. We don't need it for anything else, since 
+        // the IAuth... object can maintain it's own context
+        *iter_baton = provider_baton;
 
 
+        // everything is aok
+        return SVN_NO_ERROR;
     }
 
     svn_error_t * next_credentials (void **credentials,
@@ -240,7 +267,13 @@ namespace
                                      apr_hash_t *parameters,
                                      apr_pool_t *pool)
     {
-        return 0;
+        IAuthenticationProvider* provider = 
+            *(static_cast<ManagedPointer<IAuthenticationProvider*>*>(iter_baton) );
+
+        *credentials = GetCredentials( provider->NextCredentials(), pool );
+
+        // nothing can ever go wrong here
+        return SVN_NO_ERROR;
     }
 
 
@@ -250,7 +283,9 @@ namespace
                                      apr_hash_t *parameters,
                                      apr_pool_t *pool)
     {
-        return 0;
+        // TODO: implement this
+        *saved = false;
+        return SVN_NO_ERROR;
     }
 
 
