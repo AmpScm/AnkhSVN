@@ -57,6 +57,23 @@ FOR /R %%f IN (_svn) DO IF EXIST "%%f" (
                   expected, with the manual step of changing the debug application to "URL" and pointing it at your local share.  Note that these debug settings are stored 
                   locally in the .suo file.</p>
         </section>
+        <section header="I installed Ankh, Ankh menu entries are there but right clicking on a versioned file gives me a null pointer exception.">
+            <p>Make sure the .sln file is under version control. See the readme file for more information.
+            </p>
+        </section>
+        <section header="Why do I have to use Ankh rename and not the VS.NET rename to rename a versioned file?">
+            <p>We were unable to get the VS.NET rename to work with Ankh for various reasons. Unfortunately, 
+                the ItemRenamed event only occurs (as indicated by the name) AFTER the IDE has renamed the file.
+                It was attempted to work around that by first renaming the file in question back to it's original 
+                name and then invoking Subversion's rename functionality on it. Kludgy, but it works. However, 
+                Subversion doesn't permit you to rename an item more than once, nor does it allow you to rename 
+                items that have local modifications. Attempting to do so will cause an exception to be thrown. 
+                It was attempted to work around that by catching that exception, and renaming the project 
+                item back to the original name by calling SaveAs on the ProjectItem object. But this DOES NOT WORK for 
+                folders - you cannot call SaveAs on a ProjectItem if it represents a folder.
+                In light of this, we found that the current approach was a better idea
+            </p>
+        </section>
         <section header="There is nothing about my problem here!">
             <p>Don't despair. Either send a mail to our developers mailing list(dev AT ankhsvn.tigris.org) describing the 
             problem (in as much detail as possible) or visit us in our IRC channel #ankhsvn on the irc.freenode.net server.</p>
