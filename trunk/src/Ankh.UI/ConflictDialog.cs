@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace Ankh.UI
 {
     /// <summary>
-    /// Summary description for ConflictDialog.
+    /// A dialog that allows the user to resolve a conflicted file.
     /// </summary>
     public class ConflictDialog : System.Windows.Forms.Form
     {
@@ -35,14 +35,20 @@ namespace Ankh.UI
             this.oldRevRadioButton.Tag = Choice.OldRev;
             this.newRevRadioButton.Tag = Choice.NewRev;
             this.fileRadioButton.Tag = Choice.ConflictMarkers;
-            CreateMyToolTip();
+            CreateToolTips();
         }
 
+        /// <summary>
+        /// The selection made by the user.
+        /// </summary>
         public Choice Selection
         {
             get { return this.selectedChoice; }
         }
 
+        /// <summary>
+        /// The filename to resolve.
+        /// </summary>
         public string Filename
         {
             get{ return this.filename; }
@@ -52,12 +58,18 @@ namespace Ankh.UI
             }
         }
 
+        /// <summary>
+        /// The old revision number.
+        /// </summary>
         public int OldRev
         {
             get { return this.oldRev; }
             set { this.oldRev = value; }
         }
 
+        /// <summary>
+        /// The new revision number.
+        /// </summary>
         public int NewRev
         {
             get { return this.newRev; }
@@ -109,18 +121,11 @@ namespace Ankh.UI
                 this.EditClicked (this, EventArgs.Empty); 
         }
 
-        private void CreateMyToolTip()
+        private void CreateToolTips()
         {
             // Create the ToolTip and associate with the Form container.
             ToolTip conflictToolTip = new ToolTip(this.components);
 
-            // Set up the delays in milliseconds for the ToolTip.
-            conflictToolTip.AutoPopDelay = 5000;
-            conflictToolTip.InitialDelay = 1000;
-            conflictToolTip.ReshowDelay = 500;
-            // Force the ToolTip text to be displayed whether or not the form is active.
-            conflictToolTip.ShowAlways = true;
-         
             // Set up the ToolTip text for the Button and Checkbox.
             conflictToolTip.SetToolTip( this.mineFileRadioButton, "Latest local file" ); 
             conflictToolTip.SetToolTip( this.oldRevRadioButton, "Latest updated revision" );
@@ -269,26 +274,7 @@ namespace Ankh.UI
         private System.Windows.Forms.Label conflictLabel;
         private System.ComponentModel.IContainer components;
         
-
-        [STAThread] 
-        public static void Main()
-        {
-            ConflictDialog the = new ConflictDialog();
-            the.Filename = "Moo.cs";
-            the.OldRev = 42;
-            the.NewRev = 100;
-            the.EditClicked += new EventHandler( test ); 
-            the.ShowDialog();
-            MessageBox.Show("You selected: " + the.Selection.ToString());
-        }
-        public static void test (object sender, EventArgs e)
-        {
-            ConflictDialog testD = (ConflictDialog) sender;
-            MessageBox.Show ("You want to Edit: " +testD.Selection.ToString());
-
-        }
-
-  
+        
         
     }
 

@@ -122,4 +122,24 @@ namespace Ankh
 
         private MemoryStream stream;
     }
+
+    internal class ConflictedVisitor : LocalResourceVisitorBase
+    {    
+        public override void VisitWorkingCopyFile(WorkingCopyFile file)
+        {
+            if ( file.Status.TextStatus == StatusKind.Conflicted )
+                conflicted++;
+            else
+                nonConflicted++;
+        }
+
+        public bool Conflicted
+        {
+            get{ return conflicted > 0 && nonConflicted == 0; }
+        }
+
+        private int conflicted = 0;
+        private int nonConflicted = 0;
+    }
+
 }
