@@ -518,6 +518,20 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
     errAdapter->WaitForExit();
 }
 
+String* NSvn::Core::Client::GetPristinePath(String* path)
+{
+    Pool pool;
+
+    const char* realPath = CanonicalizePath( path, pool );
+    const char* pristinePath = NULL;
+    HandleError(svn_wc_get_pristine_copy_path(realPath, &pristinePath, pool));
+
+    if ( pristinePath ) 
+        return (String*)StringHelper( pristinePath );
+    else
+        return 0;
+}
+
 // Implementation of Client::Log
 void NSvn::Core::Client::Log( String* targets[], Revision* start, Revision* end, bool discoverChangePath, 
                              bool strictNodeHistory, LogMessageReceiver* receiver )

@@ -245,6 +245,20 @@ namespace Utils.Win32
         public static extern int SHAutoComplete( IntPtr window,
             Shacf flags );
 
+        [DllImport("Kernel32.dll")]
+        public static extern int WaitForSingleObject( IntPtr handle,
+            UInt32 milliseconds );
+
+        [DllImport("Kernel32.dll")]
+        public static extern int CreateProcess( string appName,
+            string commandLine, IntPtr processAttributes,
+            IntPtr threadAttributes, bool inheritHandles, int creationFlags,
+            IntPtr environment, string currentDir, ref STARTUP_INFO si,
+            out PROCESS_INFORMATION pi );
+
+        [DllImport("Kernel32.dll")]
+        public static extern bool CloseHandle( IntPtr handle );
+
 
     }
 }

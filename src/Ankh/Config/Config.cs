@@ -24,6 +24,12 @@ namespace Ankh.Config {
         public ConfigRepositoryExplorer RepositoryExplorer;
         
         /// <remarks/>
+        public string MergeExePath;
+        
+        /// <remarks/>
+        public string DiffExePath;
+        
+        /// <remarks/>
         public string LogMessageTemplate;
         
         /// <remarks/>

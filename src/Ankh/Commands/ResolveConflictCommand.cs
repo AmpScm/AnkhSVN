@@ -64,39 +64,68 @@ namespace Ankh.Commands
             int oldRev, newRev;
             this.GetRevisions( item, out oldRev, out newRev );
 
-            ConflictDialog.Choice selection;
-
-            using( ConflictDialog dialog = new ConflictDialog(  ) )
+            string mergeExe = context.Config.MergeExePath;
+            if (mergeExe == null)
             {
-                dialog.OldRev = oldRev;
-                dialog.NewRev = newRev;
-                dialog.Filename = item.Path;
+                ConflictDialog.Choice selection;
 
-                if ( dialog.ShowDialog( context.HostWindow ) != DialogResult.OK )
-                    return;
-                    
-                selection = dialog.Selection;
-            }       
+                using( ConflictDialog dialog = new ConflictDialog(  ) )
+                {
+                    dialog.OldRev = oldRev;
+                    dialog.NewRev = newRev;
+                    dialog.Filename = item.Path;
 
-            // should we copy one of the files over the original?
-            switch( selection )
-            {
-                case ConflictDialog.Choice.OldRev:
-                    this.Copy( item.Path, item.Status.Entry.ConflictOld );
-                    break;
-                case ConflictDialog.Choice.NewRev:
-                    this.Copy( item.Path, item.Status.Entry.ConflictNew  );
-                    break;
-                case ConflictDialog.Choice.Mine:
-                    this.Copy( item.Path, item.Status.Entry.ConflictWorking );
-                    break;
-                default:
-                    break;
+                    if ( dialog.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                        return;
+                        
+                    selection = dialog.Selection;
+                }       
+
+                // should we copy one of the files over the original?
+                switch( selection )
+                {
+                    case ConflictDialog.Choice.OldRev:
+                        this.Copy( item.Path, item.Status.Entry.ConflictOld );
+                        break;
+                    case ConflictDialog.Choice.NewRev:
+                        this.Copy( item.Path, item.Status.Entry.ConflictNew  );
+                        break;
+                    case ConflictDialog.Choice.Mine:
+                        this.Copy( item.Path, item.Status.Entry.ConflictWorking );
+                        break;
+                    default:
+                        break;
+                }
+
+                context.Client.Resolved( item.Path, false );
+                context.OutputPane.WriteLine( 
+                    "Resolved conflicted state of {0}", item.Path );
             }
+            else
+            {
+                string itemPath = Path.GetDirectoryName( item.Path );
+                string oldPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictOld ));
+                string newPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictNew ));
+                string workingPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictWorking ));
 
-            context.Client.Resolved( item.Path, false );
-            context.OutputPane.WriteLine( 
-                "Resolved conflicted state of {0}", item.Path );
+                string mergeString = mergeExe;
+                mergeString = mergeString.Replace( "%merged", item.Path );
+                mergeString = mergeString.Replace( "%base", oldPath );
+                mergeString = mergeString.Replace( "%theirs", newPath );
+                mergeString = mergeString.Replace( "%mine", workingPath );
+
+                // We can't use System.Diagnostics.Process here because we want to keep the
+                // program path and arguments together, which it doesn't allow.
+                Utils.Exec exec = new Utils.Exec();
+                exec.ExecPath( mergeString );
+                exec.WaitForExit();
+
+                if ( MessageBox.Show( "Have all conflicts been resolved?",
+                    "Resolve", MessageBoxButtons.YesNo, MessageBoxIcon.Question ) == DialogResult.Yes )
+                {
+                    context.Client.Resolved( item.Path, false );
+                }
+            }
         }
 
         /// <summary>
