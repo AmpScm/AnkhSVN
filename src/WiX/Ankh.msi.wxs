@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
-    <Product UpgradeCode="D35F7A64-E1AA-46eb-8835-36401261EB2A" Name="AnkhSvn"
-        Id="734AB425-8C5E-4ce9-8346-0C592518ACD5" 
-        Version="0.5.2" Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud"
-        Language="1033" Codepage="1252">
-
-
-        <Package Description="NSvn" Comments="NSvn Merge Module" 
-            Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud" 
-            InstallerVersion="200" Platforms="Intel"
-            Languages="1033" Compressed="yes" SummaryCodepage="1252"
-            Id="????????-????-????-????-????????????"/>
-        
+    <Product UpgradeCode="D35F7A64-E1AA-46eb-8835-36401261EB2A" Name="AnkhSvn" Id="734AB425-8C5E-4ce9-8346-0C592518ACD5"
+        Version="0.5.3" Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud" Language="1033"
+        Codepage="1252">
+        <Package Description="NSvn" Comments="NSvn Merge Module" Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud"
+            InstallerVersion="200" Platforms="Intel" Languages="1033" Compressed="yes" SummaryCodepage="1252"
+            Id="????????-????-????-????-????????????" />
         <Property Id="ShortProductName">AnkhSvn</Property>
         <Property Id="ARPCONTACT">Arild Fines, Per Krämer &amp; Kristin Borud</Property>
         <Property Id="ARPURLINFOABOUT">http://ankhsvn.tigris.org/</Property>
         <Property Id="ARPHELPLINK">http://ankhsvn.tigris.org/</Property>
         <Property Id="ARPURLUPDATEINFO">http://ankhsvn.tigris.org/</Property>
-        
         <!-- Try to divide cab size, because win 2000 and below don't like large cab's -->
         <Media Id="1" Cabinet="Ankh.cab" EmbedCab="yes" CompressionLevel="high" />
         <Media Id="2" Cabinet="NSvn.cab" EmbedCab="yes" CompressionLevel="high" />
-        
         <Directory Id="TARGETDIR" Name="SourceDir">
-            <Merge Id="MSM_Ankh_msm" src="$(var.installdir)\Ankh.msm" Language="1033"
-                DiskId="1" />
-            <Merge Id="MSM_NSvn_msm" src="$(var.installdir)\NSvn.msm" Language="1033"
-                DiskId="2" />
+            <Merge Id="MSM_NSvn_msm" src="$(var.installdir)\NSvn.msm" Language="1033" DiskId="2" />
         </Directory>
-        
         <Feature Id="DefaultFeature" Title="AnkhSVN" Level="1">
-            <MergeRef Id="MSM_Ankh_msm" />
             <MergeRef Id="MSM_NSvn_msm" />
+            <ComponentRef Id="C_Ankh.dll" />
+            <ComponentRef Id="C_Ankh_RegAsm" />
+            <ComponentRef Id="C_Ankh_RegVS" />
+            <ComponentRef Id="C_Bitmap.dll" />
+            <ComponentRef Id="C_Ankh.UI.dll" />
+            <ComponentRef Id="C_ReposInstaller.dll" />
+            <ComponentRef Id="C_Utils.dll" />
+            <ComponentRef Id="Libs" />
+            <ComponentRef Id="AUCH_RegAsm" />
+            <ComponentRef Id="apr-iconv" />
         </Feature>
+        <CustomAction Id="ReposInstaller_Install" BinaryKey="InstallUtil" DllEntry="ManagedInstall" Execute="deferred" />
+        <CustomAction Id="ReposInstaller_Install.SetProperty" Property="ReposInstaller_Install" Value="/action=install /LogFile= &quot;[#CF_ReposInstaller.dll]&quot;" />
+        <CustomAction Id="ReposInstaller_Uninstall" BinaryKey="InstallUtil" DllEntry="ManagedInstall"
+            Execute="deferred" />
+        <CustomAction Id="ReposInstaller_Uninstall.SetProperty" Property="ReposInstaller_Uninstall" Value="/action=uninstall /LogFile= &quot;[#CF_ReposInstaller.dll]&quot;" />
         <UI>
             <InstallUISequence>
                 <!-- Error, Exit and Finished forms -->
@@ -54,13 +56,8 @@
                 <Show Dialog="WelcomeForm" Sequence="1230">NOT RESUME AND ((NOT Installed) OR (Installed AND NOT Preselected))</Show>
                 <Show Dialog="ResumeForm" Sequence="1240">Installed AND (RESUME OR Preselected)</Show>
                 <Show Dialog="ProgressForm" Sequence="1280" />
-                
                 <ExecuteAction Sequence="1300" />
             </InstallUISequence>
         </UI>
-        
-        
-
     </Product>
 </Wix>
-
