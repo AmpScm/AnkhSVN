@@ -54,6 +54,11 @@
                     <xsl:with-param name="date" select="date" />
                 </xsl:call-template>
             </td>
+            <tr />
+            <th>Affected paths:</th>
+            <td>
+                <xsl:apply-templates select="paths/path"/>
+            </td>            
         </table>
         <br/>
         <span class="details">
@@ -68,6 +73,12 @@
             </span>
         <hr />
     </xsl:template>
+        
+    <xsl:template match="path">        
+        <xsl:value-of select="@action"/> - 
+        <xsl:value-of select="."/> <br/>
+    </xsl:template>
+    
     <xsl:template name="string-replace">
         <xsl:param name="string" />
         <xsl:param name="from" />
