@@ -34,8 +34,7 @@ namespace Ankh.EventSinks
                             this.Context.Client.Add( file, false );
                     }
                 }
-
-                this.DelayedRefresh( item.ContainingProject );
+                this.Context.SolutionExplorer.Refresh( item.ContainingProject );
             }
             catch( Exception ex )
             {
@@ -68,7 +67,7 @@ namespace Ankh.EventSinks
                 }
 
                 // we need a refresh of the containing project no matter what
-                this.DelayedRefresh( item.ContainingProject );
+                this.Context.SolutionExplorer.Refresh( item.ContainingProject );
             }
             catch ( Exception ex )
             {
@@ -127,7 +126,7 @@ namespace Ankh.EventSinks
                 {
                     // we must still ensure that the project is rescanned, since 
                     // it will lose it's status icon otherwise
-                    this.DelayedRefresh( item.ContainingProject );
+                    this.Context.SolutionExplorer.Refresh( item.ContainingProject );
                 }
             }
             catch( Exception ex )

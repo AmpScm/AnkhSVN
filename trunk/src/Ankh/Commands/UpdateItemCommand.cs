@@ -50,6 +50,7 @@ namespace Ankh.Commands
                     return;
 
                 // run the actual update on another thread
+                context.ProjectFileWatcher.StartWatchingForChanges();
                 visitor.Start( "Updating" );
 
                 // this *must* happen on the primary thread.

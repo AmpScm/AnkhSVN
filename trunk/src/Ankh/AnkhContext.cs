@@ -43,10 +43,10 @@ namespace Ankh
 
             this.LoadConfig();
 
-            this.fileWatcher = new FileWatcher(this.client);
+            this.projectFileWatcher = new FileWatcher(this.client);
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
-            this.solutionExplorer = new Solution.Explorer( this.dte, this, this.fileWatcher );
+            this.solutionExplorer = new Solution.Explorer( this.dte, this);
             this.progressDialog = new ProgressDialog();             
 
             string iconvdir = Path.Combine( 
@@ -222,6 +222,15 @@ namespace Ankh
             get {  return this.conflictManager;  }
         }
 
+        /// <summary>
+        /// Watches the project and solution files.
+        /// </summary>
+        public FileWatcher ProjectFileWatcher
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.projectFileWatcher; }
+        }
+
 
         /// <summary>
         /// Event handler for the SolutionOpened event. Can also be called at
@@ -287,10 +296,11 @@ namespace Ankh
         /// <returns>True if the solution has been reloaded.</returns>
         public bool ReloadSolutionIfNecessary()
         {
-            if ( this.fileWatcher.HasDirtyProjects && !this.Config.DisableSolutionReload )
+            if ( this.projectFileWatcher.HasDirtyFiles && !this.Config.DisableSolutionReload )
             {
                 if ( MessageBox.Show( this.HostWindow, 
-                    "One or more of your project files have changed." + Environment.NewLine +
+                    "One or more of your project files have changed as a result of a " + 
+                    "Subversion operation." + Environment.NewLine +
                     "It is recommended that you reload the solution now. " + Environment.NewLine +
                     "Do you want to reload the solution?", "Project files changed", 
                     MessageBoxButtons.YesNo ) == DialogResult.Yes )
@@ -298,7 +308,6 @@ namespace Ankh
                     string filename = this.dte.Solution.FullName;
                     this.dte.Solution.Close( true );
                     this.dte.Solution.Open( filename );
-                    this.fileWatcher.Reset();
                     return true;
                 }
             }
@@ -502,7 +511,7 @@ namespace Ankh
         private ConflictManager conflictManager; 
         private IErrorHandler errorHandler;
 
-        private FileWatcher fileWatcher;
+        private FileWatcher projectFileWatcher;
 
         private ProgressDialog progressDialog;
         private SvnClient client;

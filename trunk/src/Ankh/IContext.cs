@@ -100,6 +100,11 @@ namespace Ankh
         ConflictManager ConflictManager { get; }
 
         /// <summary>
+        /// Watches the project files.
+        /// </summary>
+        FileWatcher ProjectFileWatcher{ get; }
+
+        /// <summary>
         /// Event handler for the SolutionOpened event. Can also be called at
         /// addin load time, or if Ankh is enabled for a solution.
         /// </summary>

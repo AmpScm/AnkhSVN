@@ -48,6 +48,8 @@ namespace Ankh.Commands
 
                     if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
                         return;
+
+                    context.ProjectFileWatcher.StartWatchingForChanges();
                
                     ReverseMergeRunner runner = new ReverseMergeRunner(
                         context, dlg.CheckedItems, dlg.Revision, dlg.Recursive,
