@@ -22,13 +22,14 @@
         <Property Id="ARPHELPLINK">http://ankhsvn.tigris.org/</Property>
         <Property Id="ARPURLUPDATEINFO">http://ankhsvn.tigris.org/</Property>
         
+        <!-- Error messages -->
+        <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
+        <Property Id="VSDUIANDADVERTISED">This advertised application will not be installed because it might be unsafe. Contact your administrator to change the installation user interface option of the package to basic.</Property>
         <!-- Try to divide cab size, because win 2000 and below don't like large cab's -->
         <Media Id="1" Cabinet="Ankh.cab" EmbedCab="yes" CompressionLevel="high" />
         <Media Id="2" Cabinet="NSvn.cab" EmbedCab="yes" CompressionLevel="high" />
-        
         <CustomAction Id="DIRCA_TARGETDIR" Property="TARGETDIR" Value="[ProgramFilesFolder]\AnkhSVN\"
             Execute="firstSequence" />
-        
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Merge Id="MSM_NSvn_msm" src="$(var.installdir)\NSvn.msm" Language="1033" DiskId="2" />
         </Directory>
@@ -59,7 +60,6 @@
         <!-- Errormessages -->
         <CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]" />
         <CustomAction Id="ERRCA_UIANDADVERTISED" Error="[VSDUIANDADVERTISED]" />
-
         <UI>
             <InstallUISequence>
                 <!-- Error, Exit and Finished forms -->
