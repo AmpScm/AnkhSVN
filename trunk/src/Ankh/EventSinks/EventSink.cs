@@ -96,7 +96,20 @@ namespace Ankh.EventSinks
             string objectName = GetName( kind, "ProjectsEvents", context.DTE );    
             if ( objectName != null )
             {
-                object projectsEvents = context.DTE.Events.GetObject( objectName );
+                object projectsEvents;
+                try
+                {
+                    projectsEvents = context.DTE.Events.GetObject( objectName );
+                }
+                catch( System.Runtime.InteropServices.COMException )
+                {
+                    // all eVB projects just throw "Catastrophic failure" when trying 
+                    // to retrieve the event objects
+                    context.OutputPane.WriteLine( "Unable to retrieve project events object for " + 
+                        "project of type {0}", objectName );
+                    return null;
+                }
+
                 if ( projectsEvents is ProjectsEvents )
                 {
                     return new ProjectsEventSink( (ProjectsEvents)
@@ -137,7 +150,20 @@ Please report this error.", kind, objectName, projectsEvents.GetType(),
             
             if ( objectName != null )
             {
-				object events = context.DTE.Events.GetObject( objectName );
+                object events;
+                try
+                {
+                    events = context.DTE.Events.GetObject( objectName );
+                }
+                catch( System.Runtime.InteropServices.COMException )
+                {
+                    // all eVB projects just throw "Catastrophic failure" when trying 
+                    // to retrieve the event objects
+                    context.OutputPane.WriteLine( "Unable to retrieve project item events object for " + 
+                        "project of type {0}", objectName );
+                    return null;
+                }
+
                 if ( events is ProjectItemsEvents )
                 {
                     return new ProjectItemsEventSink( (ProjectItemsEvents)
@@ -151,7 +177,16 @@ Please report this error.", kind, objectName, projectsEvents.GetType(),
                         context );
                 }
                 else
-                    throw new ApplicationException( "Stuff" );
+                {
+                    throw new ApplicationException( String.Format(
+                        @"Could not retrieve ProjectItemsEvents.
+kind: {0} 
+objectName: {1}
+type: {2}
+ToString(): {3}
+Please report this error.", kind, objectName, events.GetType(), 
+                        events.ToString() ) );
+                }
             }
             else
                 return null;
