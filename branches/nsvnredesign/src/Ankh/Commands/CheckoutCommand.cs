@@ -13,17 +13,6 @@ namespace Ankh.Commands
     /// </summary>
     internal abstract class CheckoutCommand : CommandBase
     {
-        #region ICommand Members
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
-        {
-            return context.RepositoryExplorer.SelectedNode.IsDirectory ? 
-                vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled :
-                vsCommandStatus.vsCommandStatusSupported;
-
-        }
-        #endregion
-
-
         #region CheckoutRunner class
         /// <summary>
         /// For running checkouts on a separate thread.
