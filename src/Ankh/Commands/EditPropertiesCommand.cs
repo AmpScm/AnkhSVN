@@ -6,9 +6,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for EditProperties.
     /// </summary>
-    public class EditProperties
+    internal class EditPropertiesCommand
     {
-        public EditProperties()
+        public EditPropertiesCommand()
         {
             //
             // TODO: Add constructor logic here

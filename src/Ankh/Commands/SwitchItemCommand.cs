@@ -6,9 +6,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for SwitchItem.
     /// </summary>
-    public class SwitchItem
+    internal class SwitchItemCommand
     {
-        public SwitchItem()
+        public SwitchItemCommand()
         {
             //
             // TODO: Add constructor logic here

@@ -6,9 +6,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for DiffRepositoryItem.
     /// </summary>
-    public class DiffRepositoryItem
+    internal class DiffRepositoryItemCommand
     {
-        public DiffRepositoryItem()
+        public DiffRepositoryItemCommand()
         {
             //
             // TODO: Add constructor logic here

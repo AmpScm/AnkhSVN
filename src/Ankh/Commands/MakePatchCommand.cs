@@ -6,9 +6,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for MakePatch.
     /// </summary>
-    public class MakePatch
+    internal class MakePatchCommand
     {
-        public MakePatch()
+        internal MakePatchCommand()
         {
             //
             // TODO: Add constructor logic here

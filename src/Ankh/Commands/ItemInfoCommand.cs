@@ -6,9 +6,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for ItemInfo.
     /// </summary>
-    public class ItemInfo
+    internal class ItemInfoCommand
     {
-        public ItemInfo()
+        public ItemInfoCommand()
         {
             //
             // TODO: Add constructor logic here

@@ -6,9 +6,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for ExportItem.
     /// </summary>
-    public class ExportItem
+    internal class ExportItemCommand
     {
-        public ExportItem()
+        public ExportItemCommand()
         {
             //
             // TODO: Add constructor logic here
