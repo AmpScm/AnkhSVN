@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<project default="msi" xmlns="http://nant.sourceforge.net/schema/">
+    <property name="verbose" value="false"/>
+    <property name="debug" value="false"/>
+    <property name="deploy.dir" value="deploy"/>
+    <property name="checkout.dir" value="Ankh-Release" />
+    <property name="zip.file" value="Ankh.zip" />
+    <property name="url" 
+        value="http://10.0.0.3:8088/svn/finalproject/branches/alpha1-release/src"/>
+        
+   
+    
+    
+    <target name="checkout">
+        <svncheckout localDir="${checkout.dir}" url="${url}" verbose="${verbose}" />
+    </target>
+    
+    <target name="source">
+        <available type="Directory" resource="${checkout.dir}" 
+            property="checkout.dir.present"/>
+        <ifnot propertytrue="checkout.dir.present">
+            <call target="checkout" />
+        </ifnot>
+    </target>
+    
+    <target name="clean">
+        <delete dir="${checkout.dir}" />       
+    </target>
+    
+    
+    <target name="svndir">
+        <ifnot propertyexists="svn.dir">
+            <sysinfo/>
+            <ifnot propertyexists="sys.env.SVNSRC">
+                <fail message="Either provide the svn.dir property, or set the SVNSRC env var to point to the Subversion source tree" />
+            </ifnot>
+            <property name="svn.dir" value="${sys.env.SVNSRC}" />
+        </ifnot>
+        
+    </target>
+    
+    
+    <target name="msi" depends="svndir, source"> 
+        <property name="config" value="Debug" if="${debug}"/>
+        <property name="config" value="Release" unless="${debug}" />
+        
+        <exec program="devenv.com" 
+            commandline="${checkout.dir}\src.sln /build ${config} /project AnkhSetup"
+            verbose="${verbose}">
+            <environment>
+                <option name="SVNSRC" value="${svn.dir}"/>                   
+            </environment>
+        </exec>
+        <copy todir="${deploy.dir}">
+            <fileset basedir="${checkout.dir}\Ankh\AnkhSetup\${config}\">
+                <includes name="*.msi"/>
+            </fileset>
+        </copy>
+        
+    </target>
+    
+    <target name="test" depends="svndir">
+        <exec program="cmd.exe" commandline="/c test.bat">
+            <environment>
+                <option name="SVNSRC" value="${svn.dir}"/>                   
+            </environment>
+        </exec>
+    </target>
+    
+    <target name="schema">
+        <nantschema 
+            output="nant-current.xsd" 
+            target-ns="http://nant.sourceforge.net/schema/"/> 
+    </target>
+    
+    <target name="zip" depends="source">
+        <zip zipfile="${zip.file}" verbose="${verbose}">
+            <fileset basedir="${checkout.dir}">
+                <includes name="**/*"/>
+                <excludes name="**/.svn/**" />
+            </fileset>
+        </zip>
+    </target>
+    
+</project>
