@@ -88,10 +88,6 @@ namespace NSvn
             {;}
     };
 
-    inline void HandleError( svn_error_t* err )
-    {
-        if ( err != 0 )
-            throw NSvn::Core::SvnClientException::FromSvnError( err );
-    }
+    #define HandleError( err ) if ( (err) != 0 ) throw NSvn::Core::SvnClientException::FromSvnError( (err) )
     }
 }
