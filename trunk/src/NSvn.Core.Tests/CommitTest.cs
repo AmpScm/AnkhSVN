@@ -32,9 +32,9 @@ namespace NSvn.Core.Tests
             ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
             Client.Commit( new string[]{ this.WcPath }, false, ctx );
            
-            string output = this.RunCommand( "svn", "st " + filepath );
-            Assertion.AssertEquals( "File not committed", ' ', 
-                output[0] );
+            char status = this.GetSvnStatus( filepath );
+            Assertion.AssertEquals( "File not committed", '-', 
+                status );
         }
 
         /// <summary>
@@ -50,9 +50,9 @@ namespace NSvn.Core.Tests
             ClientContext ctx = new ClientContext();
             CommitInfo info = Client.Commit( new string[]{ filepath }, true, ctx );
 
-            string output = this.RunCommand( "svn", "st " + filepath );
-            Assertion.AssertEquals( "File not committed", ' ', 
-                output[0] );
+            char status = this.GetSvnStatus( filepath );
+            Assertion.AssertEquals( "File not committed", '-', 
+                status );
 
         }
 

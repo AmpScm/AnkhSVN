@@ -10,6 +10,8 @@ using NUnit.Framework;
 using System.Collections;
 using System.Threading;
 using Utils;
+using Utils.Win32;
+using System.Text;
 
 namespace NSvn.Core.Tests
 {
@@ -85,11 +87,16 @@ namespace NSvn.Core.Tests
         /// <param name="path">The path to check</param>
         /// <returns>Same character codes as used by svn st</returns>
         public char GetSvnStatus( string path )
-        {            
-            string output = this.RunCommand( "svn", "st " + path );
+        {   
 
-            // status code is the first character
-            return output[ 0 ];
+            string output = this.RunCommand( "svn", "st \"" + path + "\"" );
+
+            string regexString = String.Format( @"(\w).*\s{0}\s*", Regex.Escape(path) );
+            Match match = Regex.Match( output, regexString );
+            if ( match != Match.Empty )
+                return match.Groups[1].ToString()[0];
+            else 
+                return '-';
 
         }
 
@@ -128,7 +135,10 @@ namespace NSvn.Core.Tests
                     "Command was " + 
                     proc.StartInfo.FileName + " " + proc.StartInfo.Arguments );
 
-            return outreader.Output;
+
+            // normalize newlines
+            string[] lines = Regex.Split( outreader.Output, @"\r?\n" );  
+            return String.Join( Environment.NewLine, lines );
         }
 
         
@@ -226,6 +236,18 @@ namespace NSvn.Core.Tests
 
             return Path.GetFullPath( dir );
         }
+
+        protected string GetTempFile()
+        {
+            // ensure we get a long path
+            StringBuilder builder = new StringBuilder( 260 );
+            Win32.GetLongPathName( Path.GetTempFileName(), builder, 260 );
+            string tmpPath = builder.ToString();
+            File.Delete( tmpPath );
+
+            return tmpPath;
+        }
+
 
         private class ProcessReader
         {
