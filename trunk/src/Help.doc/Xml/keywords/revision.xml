@@ -2,6 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Revisions: Numbers, Keywords, and Dates">
     <section>
+    <hr></hr>
         <p>
             Revisions: Numbers, Keywords, and Dates.
             Before we go on, you should know a bit about how to identify a particular revision in your repository. 

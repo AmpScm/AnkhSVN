@@ -2,12 +2,29 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Reverting files">
     <section>
+    <hr></hr>
+        <p>
+            It is possible to revert changes done to a file. 
+            The file will then be reverted to the exact state it was in before you started working on it.  
+            This is done with the ‘Revert’ command. 
+        </p>
+        <b>How to revert files:</b>
+        <img src="../../img/revert_menu.png" align="left"/>
+        <list>
+            <item><b>1.</b></item>
+            <item><b>2.</b></item>
+            <item><b>3.</b></item>
+            <item><b>4.</b></item>
+            <item><b>5.</b></item>
+            <item><b>6.</b></item>
+        </list>
+    <br clear="all" />    
     </section>   
     <section>
         <p>
             <hr></hr>
             <link url="examine_changes.xml">back </link>
-            <link url="merging_files.xml">next</link>
+            <link url="commiting_files.xml">next</link>
         </p>
     </section>   
 </doc>

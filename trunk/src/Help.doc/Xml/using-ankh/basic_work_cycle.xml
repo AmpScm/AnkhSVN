@@ -2,6 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Basic Work Cycle">
     <section>
+    <hr></hr>
         <p>
             Ankh and Subverison has numerous features, options, but on a day-to-day basis, 
             odds are that you will only use a few of them. 
@@ -10,17 +11,13 @@
             <br/><br/>
             <b>The typical work cycle looks like this:</b><br/>
             <list>
-                <item>Update your working copy</item>
-                <item>Make changes</item>
-                <item>Adding files to the repository</item>
-                <item>Removing/deleting files from the repository</item>
-                <item>Moving files in the repository</item>
-                <item>Copying files</item>
-                <item>Examine your changes</item>
-                <item>Reverting changes</item>
-                <item>Merge others' changes</item>
-                <item>Resolving files</item>
-                <item>Commit your changes to the repository</item>
+                <item><link url="update_wc.xml">Update your working copy</link></item>
+                <item><link url="make_changes.xml">Make changes</link></item>
+                <item><link url="adding_files.xml">Adding files to the repository</link></item>
+                <item><link url="removing_files.xml">Removing/deleting files from the repository</link></item>
+                <item><link url="examine_changes.xml">Examine your changes</link></item>
+                <item><link url="reverting_files.xml">Reverting changes</link></item>
+                <item><link url="commiting_files.xml">Commit your changes to the repository</link></item>
             </list>
         </p>
     </section>   

@@ -2,6 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Examining changes">
     <section>
+    <hr></hr>
         <p>
             Besides the status icons in front of files in the Solution Explorer, 
             Ankh gives you a more detailed view of the changes made to files. 
@@ -25,7 +26,7 @@
     <section>
         <p>
             <hr></hr>
-            <link url="copying_files.xml">back </link>
+            <link url="removing_files.xml">back </link>
             <link url="reverting_files.xml">next</link>
         </p>
     </section>   

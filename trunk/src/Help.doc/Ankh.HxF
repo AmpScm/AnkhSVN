@@ -42,19 +42,13 @@
     <File Url="xml\basic-operations\propedit.xml"/>
     <File Url="xml\basic-operations\proplist.xml"/>
     <File Url="xml\keywords\revision.xml"/>
-    <File Url="xml\using-ankh\copying_files.xml"/>
     <File Url="xml\using-ankh\make_changes.xml"/>
-    <File Url="xml\using-ankh\merging_files.xml"/>
-    <File Url="xml\using-ankh\moving_files.xml"/>
     <File Url="xml\using-ankh\removing_files.xml"/>
-    <File Url="xml\using-ankh\resolving_conflicts.xml"/>
     <File Url="xml\using-ankh\reverting_files.xml"/>
     <File Url="xml\keywords\keywords.xml"/>
     <File Url="xml\using-ankh\examine_changes.xml"/>
     <File Url="xml\using-ankh\update_wc.xml"/>
     <File Url="xml\using-ankh\commiting_files.xml"/>
-    <File Url="xml\using-ankh\setting_properties.xml"/>
-    <File Url="xml\using-ankh\creating_repositories.xml"/>
     <File Url="img\propeditor_3.png"/>
     <File Url="img\propeditor_1.png"/>
     <File Url="img\propeditor_2.png"/>
@@ -80,4 +74,7 @@
     <File Url="img\add_remove_programs.png"/>
     <File Url="img\ws_right_click_menu.png"/>
     <File Url="img\diff_file.png"/>
+    <File Url="img\revert_menu.png"/>
+    <File Url="Xml\configuration\configuration.xml"/>
+    <File Url="Xml\using-ankh\creating_repositories.xml"/>
     </HelpFileList>
