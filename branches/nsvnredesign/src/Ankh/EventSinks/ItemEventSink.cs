@@ -5,6 +5,7 @@ using EnvDTE;
 using System.IO;
 using NSvn.Core;
 using System.Windows.Forms;
+using System.Collections;
 
 namespace Ankh.EventSinks
 {
@@ -39,24 +40,33 @@ namespace Ankh.EventSinks
         /// <param name="item">Projectitem to be scheduled for removal.</param>
         protected void ItemRemoved( ProjectItem item )
         {
-//            try
-//            {
-//                // is a rename back operation going on?
-//                if ( this.renaming )
-//                    return;
-//
-//                this.Context.StartOperation( "Deleting" );
-//                this.Context.SolutionExplorer.VisitResources( 
-//                    item, new RemoveProjectVisitor(), false );
-//                this.Context.SolutionExplorer.Refresh ( item.ContainingProject );
-//                this.Context.EndOperation();
-//
-//            }
-//            catch ( Exception ex )
-//            {
-//                Error.Handle( ex );
-//                throw;
-//            }
+            // is a rename back operation going on?
+            if ( this.renaming )
+                return;
+
+            try
+            {
+                
+                this.Context.StartOperation( "Deleting" );
+
+                IList items = 
+                    this.Context.SolutionExplorer.GetSelectionResources(true);
+                string[] paths = SvnItem.GetPaths( items );
+                this.Context.Client.Delete( paths, true );
+                
+                foreach( SvnItem svnItem in items )
+                    svnItem.Refresh( this.Context.Client );
+
+            }
+            catch ( Exception ex )
+            {
+                Error.Handle( ex );
+                throw;
+            }
+            finally
+            {
+                this.Context.EndOperation();
+            }
         }
 
         /// <summary>

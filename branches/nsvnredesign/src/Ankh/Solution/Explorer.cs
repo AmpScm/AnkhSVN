@@ -182,6 +182,8 @@ namespace Ankh.Solution
             }	 	
         }
 
+        
+
 
         /// <summary>
         /// Returns the SvnItem resources associated with the selected items
@@ -204,6 +206,23 @@ namespace Ankh.Solution
                 if ( node != null )	 	
                     node.GetResources( list, getChildItems, filter );	 	
             }
+
+            return list;
+        }
+
+        /// <summary>
+        /// Retrieves the resources associated with a project item.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="recursive"></param>
+        /// <returns></returns>
+        public IList GetItemResources( ProjectItem item, bool recursive )
+        {
+            ArrayList list = new ArrayList();
+
+            TreeNode node = this.GetNode(item);
+            if ( node != null )
+                node.GetResources( list, recursive, null );
 
             return list;
         }
