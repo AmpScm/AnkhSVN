@@ -4,6 +4,7 @@ using NSvn.Core;
 using System.Collections;
 using System.IO;
 using System.Diagnostics;
+using Utils;
 
 namespace Ankh
 {
@@ -38,7 +39,7 @@ namespace Ankh
         {
             get
             {
-                string normPath = this.NormalizePath(path);
+                string normPath = PathUtils.NormalizePath(path, this.currentPath);
                 SvnItem item = (SvnItem)this.table[normPath];
 
                 if ( item == null )
@@ -64,7 +65,7 @@ namespace Ankh
         /// <returns></returns>
         public IList GetDeletions( string dir )
         {
-            string normdir = this.NormalizePath(dir);
+            string normdir = PathUtils.NormalizePath(dir, this.currentPath);
             if ( this.deletions.ContainsKey( normdir ) )
             {
                 // we need to make sure at this point that they are still valid
@@ -102,7 +103,7 @@ namespace Ankh
             Debug.WriteLine( "Received status for " + path + ": " + status.TextStatus, 
                 "Ankh" );
             // we need all paths to be on ONE form
-            string normPath = this.NormalizePath( path );
+            string normPath = PathUtils.NormalizePath( path, this.currentPath );
 
             
             if ( status.TextStatus != StatusKind.Deleted )
@@ -128,7 +129,7 @@ namespace Ankh
                     containingDir = Path.GetDirectoryName( path );
                 }
 
-                containingDir = this.NormalizePath( containingDir );
+                containingDir = PathUtils.NormalizePath( containingDir, this.currentPath );
 
                 // store the deletions keyed on the parent directory
                 IList list = (IList)this.deletions[ containingDir ];
@@ -140,22 +141,7 @@ namespace Ankh
             }
         }
 
-        /// <summary>
-        /// Make sure all paths are on the same form, lower case and rooted.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private string NormalizePath( string path )
-        {
-            string normPath = path.Replace( "/", "\\" );
-            if ( !Path.IsPathRooted( normPath ) )
-                normPath = Path.Combine( this.currentPath, normPath );
-
-            if ( normPath[normPath.Length-1] == '\\' )
-                normPath = normPath.Substring(0, normPath.Length-1);
-
-            return normPath.ToLower();
-        }
+        
 
         private Hashtable deletions;
         private Hashtable table;
