@@ -101,7 +101,7 @@ namespace Ankh
         /// <summary>
         /// The SolutionExplorer object.
         /// </summary>
-        public Explorer SolutionExplorer
+        public ISolutionExplorer SolutionExplorer
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.solutionExplorer; }

@@ -38,5 +38,10 @@ namespace Ankh
         /// </summary>
         /// <returns></returns>
         ProjectItem GetSelectedProjectItem();
+
+        /// <summary>
+        /// Notify the Solution Explorer to unload.
+        /// </summary>
+        void Unload();
     }
 }
