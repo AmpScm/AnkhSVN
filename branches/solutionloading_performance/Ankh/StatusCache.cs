@@ -18,22 +18,59 @@ namespace Ankh
             this.client = client;
             this.table = new Hashtable();
             this.deletions = new Hashtable();
+            this.dirs = new Hashtable();
         }
 
         public void Status( string dir )
         {
-            lock(this)
+            lock (this) 
             {
                 if ( !SvnUtils.IsWorkingCopyPath(dir) )
                     return;
 
-                Debug.WriteLine( "Generating status cache for " + dir, "Ankh" );
-                this.currentPath = dir;
+                // ignore if directory is indexed already
+                string normPath = PathUtils.NormalizePath(dir, dir);
+
+                if ( dirs[normPath] != null ) 
+                {
+                    Debug.WriteLine( "Directory " + normPath + " indexed already", "Ankh" );
+                    return;
+                }
+
+                // ignore if directory is indexed implicitly by another directory index
+                if ( dirs[normPath] == null ) 
+                {
+                    if ( dirs.Count > 0 ) 
+                    {
+                        IDictionaryEnumerator de = dirs.GetEnumerator();
+                        while (de.MoveNext())
+                        {
+                            if ( dir.StartsWith( (string)de.Value ) ) 
+                            {
+                                Debug.WriteLine( "Directory " + normPath + " indexed already", "Ankh" );
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                dirs[ normPath ] = normPath;
+
+                Debug.WriteLine( "Generating status cache for " + normPath, "Ankh" );
+                this.currentPath = normPath;
+                
                 int youngest;
-                this.client.Status( out youngest, dir, Revision.Unspecified, 
+                this.client.Status( out youngest, normPath, Revision.Unspecified, 
                     new StatusCallback( this.Callback ), true, true, false, true );
             }
         }
+
+        /// <summary>
+        /// Initializes the status of the given item using 
+        /// the current client
+        /// </summary>
+        /// <param name="item">The item to refresh</param>
+        /// <returns></returns>
 
         public SvnItem this[string path]
         {
@@ -168,6 +205,7 @@ namespace Ankh
         private int cacheMisses = 0;
         
 
+        private Hashtable dirs;
         private Hashtable deletions;
         private Hashtable table;
         private Client client;

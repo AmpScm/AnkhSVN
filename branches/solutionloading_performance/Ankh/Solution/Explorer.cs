@@ -10,6 +10,7 @@ using System.Collections;
 using System.Drawing;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 using C = Utils.Win32.Constants;
 using DteConstants = EnvDTE.Constants;
@@ -36,18 +37,48 @@ namespace Ankh.Solution
             // get the uihierarchy root
             this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
                 DteConstants.vsWindowKindSolutionExplorer ).Object; 
-            this.solutionNode = null;            
+            this.solutionNode = null;    
         }
 
         /// <summary>
         ///  To be called when a solution is loaded.
         /// </summary>
         public void Load()
-        {           
+        {
             this.Unload();
             this.context.ProjectFileWatcher.AddFile( this.DTE.Solution.FullName );
             this.SetUpTreeview();
+
+            this.treeview.LockWindowUpdate( true );
             this.SyncAll();
+            this.treeview.LockWindowUpdate( false );
+
+            ThreadStart startDelegate = new ThreadStart( this.BackgroundInitialize );
+            backgroundThread = new System.Threading.Thread( startDelegate );
+            backgroundThread.Priority = ThreadPriority.Lowest;
+            backgroundThread.Start();
+        }
+
+        public void BackgroundInitialize()
+        {
+            System.Diagnostics.Trace.WriteLine( "Solution initializing (this is a silent operation and takes a while)", "Ankh" );
+            Utils.DebugTimer timer = DebugTimer.Start();
+            DateTime startTime = DateTime.Now;
+
+            try
+            {
+                this.solutionNode.RecursiveInitializeStatus();
+                this.context.ConflictManager.CreateTaskItems();
+            }
+            catch( Exception ex )
+            {
+                this.context.ErrorHandler.Handle( ex );
+            }
+            finally
+            {}
+
+            timer.End( "Solution initialized and conflict tasks created", "Ankh" );
+            this.context.OutputPane.WriteLine( "Time: {0}", DateTime.Now - startTime );
 
             Trace.WriteLine( String.Format( "Cache hit rate: {0}%", 
                 this.context.StatusCache.CacheHitSuccess ), "Ankh" );
@@ -138,7 +169,7 @@ namespace Ankh.Solution
             this.projects.Clear();
             
             // generate a status cache
-            this.GenerateStatusCache( this.dte.Solution.FullName );
+            // this.GenerateStatusCache( this.dte.Solution.FullName );
             
             // store the original image list
             this.originalImageList = this.treeview.StatusImageList;
@@ -251,6 +282,10 @@ namespace Ankh.Solution
         }
 
        
+        public System.Threading.Thread BackgroundThread
+        {
+            get { return this.backgroundThread; }
+        }
 
         internal TreeView TreeView
         {
@@ -385,22 +420,6 @@ namespace Ankh.Solution
             this.solutionNode = node;
         }
 
-        private void GenerateStatusCache( string solutionPath )
-        {
-            DebugTimer t = DebugTimer.Start();
-            string solutionDir = Path.GetDirectoryName( solutionPath );
-           
-            Debug.WriteLine( "Getting status cache", "Ankh" );
-            
-            this.context.StatusCache.Status( solutionDir );
-
-            t.End( "Got status cache", "Ankh" );
-        }
-
-        
-
-        
-
         private TreeNode GetNode(UIHierarchyItem item)
         {
             if ( item.Object == null )
@@ -527,6 +546,7 @@ namespace Ankh.Solution
         private IContext context;
         private TreeView treeview;
         private IntPtr originalImageList = IntPtr.Zero;
+        private System.Threading.Thread backgroundThread;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
     }

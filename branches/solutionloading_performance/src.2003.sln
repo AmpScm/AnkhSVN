@@ -115,7 +115,6 @@ Global
 		{1882FE23-6EE3-46AF-82B2-929E371E6218}.(svnlib) NSvn.Tests.ActiveCfg = (svnlib) Debug|.NET
 		{1882FE23-6EE3-46AF-82B2-929E371E6218}.(svnlib) NSvn.Tests.Build.0 = (svnlib) Debug|.NET
 		{1882FE23-6EE3-46AF-82B2-929E371E6218}.(svnlib) Release.ActiveCfg = (svnlib) Release|.NET
-		{1882FE23-6EE3-46AF-82B2-929E371E6218}.(svnlib) Release.Build.0 = (svnlib) Release|.NET
 		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Debug.ActiveCfg = Debug|.NET
 		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Debug.Build.0 = Debug|.NET
 		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Debug run.ActiveCfg = Debug|.NET
@@ -166,7 +165,6 @@ Global
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Release.ActiveCfg = Release|.NET
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Release.Build.0 = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.(svnlib) Debug.ActiveCfg = Debug|.NET
-		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.(svnlib) Debug.Build.0 = Debug|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.(svnlib) Debug run.ActiveCfg = Debug|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.(svnlib) NSvn.Tests.ActiveCfg = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.(svnlib) NSvn.Tests.Build.0 = Release|.NET
@@ -178,13 +176,10 @@ Global
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.NSvn.Tests.Build.0 = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.Release.ActiveCfg = Release|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug.ActiveCfg = Debug|.NET
-		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug.Build.0 = Debug|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug run.ActiveCfg = Debug|.NET
-		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug run.Build.0 = Debug|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) NSvn.Tests.ActiveCfg = Release|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) NSvn.Tests.Build.0 = Release|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Release.ActiveCfg = Release|.NET
-		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Release.Build.0 = Release|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Debug.ActiveCfg = Debug|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Debug.Build.0 = Debug|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Debug run.ActiveCfg = Debug|.NET
@@ -196,11 +191,9 @@ Global
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug.ActiveCfg = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug.Build.0 = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug run.ActiveCfg = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug run.Build.0 = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) NSvn.Tests.ActiveCfg = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) NSvn.Tests.Build.0 = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Release.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Release.Build.0 = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.ActiveCfg = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.Build.0 = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug run.ActiveCfg = Debug|.NET
@@ -231,8 +224,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection

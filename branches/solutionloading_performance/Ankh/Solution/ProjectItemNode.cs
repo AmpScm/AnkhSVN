@@ -20,17 +20,28 @@ namespace Ankh.Solution
             base( item, hItem, explorer, parent )
         {
             this.projectItem = (ProjectItem)item.Object;
+            this.Explorer.AddResource( this.projectItem, this ); 
             
-            this.FindResources();                      
         }
 
         public override void GetResources(IList list, bool getChildItems, 
             ResourceFilterCallback filter )
         {
+            if ( this.resources == null )
+                FindResources();
+
             foreach( SvnItem item in this.resources )
             {
-                if ( filter == null || filter(item) )
+
+                if ( filter == null ) 
+                {
                     list.Add(item);
+                }
+                else 
+                {
+                    if ( filter(item) )
+                    list.Add(item);
+            }
             }
             this.GetChildResources( list, getChildItems, filter );
         }
@@ -40,6 +51,10 @@ namespace Ankh.Solution
             visitor.VisitProjectItem(this);
         }
 
+        public override void InitializeStatus()
+        {
+            this.FindResources();                      
+        }
 
 
         /// <summary>
@@ -59,6 +74,9 @@ namespace Ankh.Solution
         {
             get
             {
+                if ( this.resources == null )
+                    FindResources();
+
                 // is one of the resources a directory?
                 foreach( SvnItem item in this.resources )
                 {
@@ -84,8 +102,6 @@ namespace Ankh.Solution
 
         protected void FindResources()
         {
-            this.Explorer.AddResource( this.projectItem, this ); 
-
             this.resources = new ArrayList();
             try
             {
@@ -110,6 +126,8 @@ namespace Ankh.Solution
             finally
             {
             }
+
+            Refresh( false );
         }
 
         // recursively adds subitems of this projectitem.

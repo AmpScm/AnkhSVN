@@ -126,6 +126,7 @@ namespace Ankh.Solution
             statusMap[ NodeStatus.Conflicted ]  = 6;
             statusMap[ NodeStatus.Unversioned ] = 8;
             statusMap[ NodeStatus.Modified ]    = 9;
+            statusMap[ NodeStatus.StatusPending ] = 10;
             
         }
         
@@ -146,6 +147,23 @@ namespace Ankh.Solution
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.parent; }
+        }
+
+        public virtual void InitializeStatus()
+        {
+        }
+
+        public void RecursiveInitializeStatus()  
+        {
+            if ( CurrentStatus == NodeStatus.StatusPending ) 
+            {
+                InitializeStatus();
+            }
+
+            foreach( TreeNode child in children ) 
+                child.RecursiveInitializeStatus();
+
+            Refresh( false );
         }
 
         protected NodeStatus CurrentStatus
@@ -210,7 +228,8 @@ namespace Ankh.Solution
             if ( statusMap.Contains(status) )
                 statusImage = (int)statusMap[status];
 
-            this.explorer.TreeView.SetStatusImage( this.hItem, statusImage );                
+            if ( this.explorer.DTE.MainWindow.Visible == true ) 
+                this.explorer.TreeView.SetStatusImage( this.hItem, statusImage );                
         }
 
         /// <summary>
@@ -261,9 +280,16 @@ namespace Ankh.Solution
         /// <returns></returns>
         protected NodeStatus MergeStatuses( IList items )
         {   
+            if ( items == null ) return NodeStatus.StatusPending;
+
             StatusMerger statusMerger = new StatusMerger();
             foreach( SvnItem item in items )
-                statusMerger.NewStatus( this.GenerateStatus(item.Status) );
+            {
+                if ( item == null )
+                    statusMerger.NewStatus( NodeStatus.StatusPending );
+                else
+                    statusMerger.NewStatus( this.GenerateStatus(item.Status) );
+            }
 
             return statusMerger.CurrentStatus;
         }
@@ -427,7 +453,8 @@ namespace Ankh.Solution
             Unversioned = StatusKind.Unversioned,
             Modified = StatusKind.Modified,
             Ignored = StatusKind.Ignored,
-            IndividualStatusesConflicting
+            IndividualStatusesConflicting,
+            StatusPending
         }
 
         private UIHierarchyItem uiItem;

@@ -257,10 +257,6 @@ namespace Ankh
                 timer.End( "Solution opened", "Ankh" );
                 this.OutputPane.WriteLine( "Time: {0}", DateTime.Now - startTime );
                 this.ankhLoadedForSolution = true;
-                //MessageBox.Show( timer.ToString() );
-
-                // Add Conflict tasks for all conflicts in solution
-                this.conflictManager.CreateTaskItems(); 
             }
             catch( Exception ex )
             {
@@ -277,6 +273,7 @@ namespace Ankh
         /// </summary>
         public void SolutionClosing()
         {
+            this.solutionExplorer.BackgroundThread.Suspend();
             this.conflictManager.RemoveAllTaskItems();
             this.SolutionExplorer.Unload();
 

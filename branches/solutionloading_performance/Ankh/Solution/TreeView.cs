@@ -29,6 +29,22 @@ namespace Ankh.Solution
         }
 
         /// <summary>
+        /// Toggles updates of this treeview window.
+        /// </summary>
+        /// <returns></returns>
+        public void LockWindowUpdate( bool enable )
+        {
+            if (enable) 
+            {
+                Win32.LockWindowUpdate( this.hwnd );
+            } 
+            else 
+            {
+                Win32.LockWindowUpdate( (IntPtr)null );
+            }
+        }
+
+        /// <summary>
         /// Gets the first child of the specified item.
         /// </summary>
         /// <param name="item"></param>
