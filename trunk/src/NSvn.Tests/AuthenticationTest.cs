@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using NSvn.Common;
 using NSvn.Core;
+using System.Collections;
 
 namespace NSvn.Tests
 {
@@ -39,7 +40,7 @@ namespace NSvn.Tests
 
         
             #region Implementation of IAuthenticationProvider
-            public NSvn.Common.ICredential NextCredentials()
+            public NSvn.Common.ICredential NextCredentials( ICollection parameters )
             {
                 if ( this.time++ > 3 )
                     return new SimpleCredential( USER, PASS );
@@ -47,11 +48,17 @@ namespace NSvn.Tests
                     return new SimpleCredential( "", "" );
             }
 
-            public NSvn.Common.ICredential FirstCredentials()
+            public NSvn.Common.ICredential FirstCredentials( ICollection parameters )
             {
                 // this is wrong
                 return new SimpleCredential( "kung", "foo" );
             }
+
+            public bool SaveCredentials( ICollection parameters )
+            {
+                return false;
+            }
+
 
             public string Kind
             {
