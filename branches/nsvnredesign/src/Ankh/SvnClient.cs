@@ -34,7 +34,7 @@ namespace Ankh
         /// </summary>
         /// <param name="commitItems"></param>
         /// <returns></returns>
-        internal SvnItem[] ShowLogMessageDialog(SvnItem[] items)
+        internal IList ShowLogMessageDialog(IList items)
         {
             string templateText = this.GetTemplate();
             LogMessageTemplate template = new LogMessageTemplate( templateText );
@@ -102,11 +102,15 @@ namespace Ankh
         
         protected override void OnLogMessage(LogMessageEventArgs args)
         {
-            args.Message = this.logMessage;
+            base.OnLogMessage( args );
+            if ( args.Message == null )
+                args.Message = this.logMessage;
         }
 
         protected override void OnNotification(NotificationEventArgs notification)
-        {            
+        {  
+            base.OnNotification( notification );
+
             if ( actionStatus[notification.Action] != null)
             {
                 string nodeKind = "";
@@ -129,17 +133,12 @@ namespace Ankh
                     Environment.NewLine, 
                     notification.Path, 
                     notification.RevisionNumber);
-
-            // ensure the output pane gets updated 
-            Application.DoEvents();
         }
 
         protected override void OnCancel(CancelEventArgs args)
         {
+            base.OnCancel( args );
             System.Diagnostics.Debug.WriteLine( "Cancel called" );
-            Application.DoEvents();
-
-            args.Cancel = false;
         }
 
         

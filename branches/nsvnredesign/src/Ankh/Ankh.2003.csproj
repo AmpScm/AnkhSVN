@@ -191,6 +191,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ProgressRunner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ResourceBitmaps.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

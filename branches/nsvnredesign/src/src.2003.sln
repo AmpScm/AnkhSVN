@@ -117,7 +117,6 @@ Global
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.NSvn.Tests.ActiveCfg = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.NSvn.Tests.Build.0 = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.Release.ActiveCfg = Release|.NET
-		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
@@ -129,8 +128,8 @@ Global
 		..\doc\src.2003.vsd = ..\doc\src.2003.vsd
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
