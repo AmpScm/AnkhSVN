@@ -38,6 +38,20 @@ namespace Ankh.Solution
             }                
         }
 
+        public IList Resources
+        {
+            get{ return this.resources; }
+        }
+
+        /// <summary>
+        /// Accept an INodeVisitor.
+        /// </summary>
+        /// <param name="visitor"></param>
+        public override void Accept( INodeVisitor visitor )
+        {
+            visitor.VisitProjectItem( this );
+        }
+
         protected override StatusKind GetStatus()
         {
             // go through the resources belonging to this node
@@ -51,12 +65,13 @@ namespace Ankh.Solution
             return StatusKind.Normal;            
         }
 
-        public override void VisitResources( ILocalResourceVisitor visitor )
+        public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
         {
             foreach( ILocalResource resource in this.resources )
                 resource.Accept( visitor );
 
-            this.VisitChildren( visitor );
+            if ( recursive )
+                this.VisitChildResources( visitor );
         }
 
         private IList resources;

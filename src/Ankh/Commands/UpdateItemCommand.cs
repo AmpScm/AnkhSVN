@@ -22,7 +22,7 @@ namespace Ankh.Commands
         {
             // all items must be versioned if we are going to run update.
             VersionedVisitor v = new VersionedVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v );
+            context.SolutionExplorer.VisitSelectedItems( v, true );
             
             if ( v.IsVersioned )
                 return vsCommandStatus.vsCommandStatusEnabled |
@@ -35,7 +35,7 @@ namespace Ankh.Commands
         {
             // we assume by now that all items are working copy resources.
             UpdateVisitor v = new UpdateVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v );
+            context.SolutionExplorer.VisitSelectedItems( v, true );
             v.Update();
             context.SolutionExplorer.UpdateSelectionStatus();
         }    

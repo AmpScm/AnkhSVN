@@ -22,7 +22,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
             CommitCandidateVisitor v = new CommitCandidateVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v );
+            context.SolutionExplorer.VisitSelectedItems( v, true );
             if ( v.Commitable )
                 return vsCommandStatus.vsCommandStatusEnabled |
                     vsCommandStatus.vsCommandStatusSupported;
@@ -32,16 +32,21 @@ namespace Ankh.Commands
         public override void Execute(Ankh.AnkhContext context)
         {
             ResourceGathererVisitor v = new ResourceGathererVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v );
+            context.SolutionExplorer.VisitSelectedItems( v, true );
 
-            WorkingCopyResource.Commit( (WorkingCopyResource[])
-                v.WorkingCopyResources.ToArray( typeof(WorkingCopyResource) ), 
-                true );
+            this.context = context;
+            WorkingCopyResource[] resources = (WorkingCopyResource[])
+                v.WorkingCopyResources.ToArray( typeof(WorkingCopyResource) );
+
+            WorkingCopyResource.Commit( resources, true );
+       
 
             context.SolutionExplorer.UpdateSelectionStatus();
         }
         
         #endregion
+
+        
 
         private class CommitCandidateVisitor : LocalResourceVisitorBase
         {
@@ -57,6 +62,8 @@ namespace Ankh.Commands
             private const StatusKind commitCandidates = StatusKind.Added | 
                 StatusKind.Modified;
         }
+        private AnkhContext context;
+
     }
 }
 

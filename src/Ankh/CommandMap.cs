@@ -43,11 +43,18 @@ namespace Ankh
                 foreach( Type type in module.FindTypes( 
                     new TypeFilter( CommandMap.CommandTypeFilter ), null ) )
                 {
-                    // is this a VS.NET command?
-                    VSNetCommandAttribute[] vsattrs = (VSNetCommandAttribute[])(
-                        type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) );
-                    if ( vsattrs.Length > 0 )
-                        RegisterVSNetCommand( vsattrs[0], type, commands, context );
+                    try
+                    {
+                        // is this a VS.NET command?
+                        VSNetCommandAttribute[] vsattrs = (VSNetCommandAttribute[])(
+                            type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) );
+                        if ( vsattrs.Length > 0 )
+                            RegisterVSNetCommand( vsattrs[0], type, commands, context );
+                    }
+                    catch( Exception ex )
+                    {
+                        Connect.HandleError( ex );
+                    }
 
                     // solution explorer?
                     RepositoryExplorerMenuAttribute [] reattrs = 

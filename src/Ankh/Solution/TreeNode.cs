@@ -28,7 +28,7 @@ namespace Ankh.Solution
             this.FindChildren();  
         }
 
-        public abstract void VisitResources( ILocalResourceVisitor visitor );        
+        public abstract void VisitResources( ILocalResourceVisitor visitor, bool recursive );        
         
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
             Explorer explorer, TreeNode parent )
@@ -60,6 +60,8 @@ namespace Ankh.Solution
         {
             this.FindChildren( );
         }
+
+        abstract public void Accept( INodeVisitor visitor );
 
 
 
@@ -100,10 +102,10 @@ namespace Ankh.Solution
         /// Visits the children of this node.
         /// </summary>
         /// <param name="visitor"></param>
-        public void VisitChildren( ILocalResourceVisitor visitor )
+        public void VisitChildResources( ILocalResourceVisitor visitor )
         {
             foreach( TreeNode node in this.Children )
-                node.VisitResources( visitor );
+                node.VisitResources( visitor, true );
         }
 
         /// <summary>

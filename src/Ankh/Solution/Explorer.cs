@@ -40,7 +40,7 @@ namespace Ankh.Solution
         /// Visits all the selected items.
         /// </summary>
         /// <param name="visitor"></param>
-        public void VisitSelectedItems( ILocalResourceVisitor visitor )
+        public void VisitSelectedItems( ILocalResourceVisitor visitor, bool recursive )
         {
             //foreach( SelectedItem item in items )
             object o = this.uiHierarchy.SelectedItems;
@@ -48,22 +48,24 @@ namespace Ankh.Solution
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
-                    node.VisitResources( visitor );
+                    node.VisitResources( visitor, recursive );
             }
         }
 
-        public void VisitResources( ProjectItem item, ILocalResourceVisitor visitor )
+        public void VisitResources( ProjectItem item, ILocalResourceVisitor visitor,
+            bool recursive )
         {
             TreeNode node = this.GetNode( item );
             if ( node != null )
-                node.VisitResources( visitor );
+                node.VisitResources( visitor, recursive );
         }
 
-        public void VisitResources( Project project, ILocalResourceVisitor visitor )
+        public void VisitResources( Project project, ILocalResourceVisitor visitor, 
+            bool recursive )
         {
             TreeNode node = this.GetNode( project );
             if ( node != null )
-                node.VisitResources( visitor );
+                node.VisitResources( visitor, recursive );
         }
 
         /// <summary>

@@ -14,17 +14,35 @@ namespace Ankh.Solution
             : base( item, hItem, explorer, null )
         {
             EnvDTE.Solution solution = explorer.DTE.Solution;
-            this.solutionFile = SvnResource.FromLocalPath( solution.FullName );
+            this.solutionFile = (WorkingCopyFile)SvnResource.FromLocalPath( solution.FullName );
             this.solutionFile.Context = explorer.Context;
 
             explorer.SetSolution( this );
         }
 
-        public override void VisitResources( ILocalResourceVisitor visitor )
+        
+        public WorkingCopyFile SolutionFile
+        {
+            get{ return this.solutionFile; }
+        }
+
+
+        public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
         {
             this.solutionFile.Accept( visitor );
-            this.VisitChildren( visitor );
+            if ( recursive )
+                this.VisitChildResources( visitor);
         } 
+
+
+        /// <summary>
+        /// Accept an INodeVisitor.
+        /// </summary>
+        /// <param name="visitor"></param>
+        public override void Accept( INodeVisitor visitor )
+        {
+            visitor.VisitSolutionNode( this );
+        }
 
         protected override StatusKind GetStatus()
         {
@@ -37,7 +55,7 @@ namespace Ankh.Solution
                 {
                     // check the status on the projects
                     ModifiedVisitor v = new ModifiedVisitor();
-                    this.VisitChildren( v );
+                    this.VisitChildResources( v );
                     if ( v.Modified )
                         status = StatusKind.Modified;
                 }
@@ -46,6 +64,6 @@ namespace Ankh.Solution
             }
         }
 
-        private ILocalResource solutionFile;
+        private WorkingCopyFile solutionFile;
     }
 }
