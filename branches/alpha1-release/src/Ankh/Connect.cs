@@ -53,6 +53,16 @@ namespace Ankh
 		{
             try
             {
+                // this will throw if we are invoked from the command line
+                object m = ((_DTE)application).MainWindow;
+            }
+            catch( Exception )
+            {
+                return;
+            }
+
+            try
+            {
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
 
                 // get rid of the old ones
