@@ -16,8 +16,6 @@
             includeEmptyDirs="true"/>
         <delete dir="build-Debug" verbose="${verbose}" failonerror="false" 
             includeEmptyDirs="true"/>
-        <comregister file="${lib.dir}\Ankh.ToolWindow.dll" unregister="true" 
-            failonerror="false"/>
     </target>
     
     <target name="init">
@@ -37,7 +35,7 @@
             if="${alt.admin.dir}"/>
        
         
-        <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" 
+        <csc target="library" output="${build.dir}/ReposInstaller.dll" verbose="${verbose}" 
             define="${define}" debug="${debug}">
             <references>
                 <includes name="${lib.dir}\EnvDTE.dll"/>
