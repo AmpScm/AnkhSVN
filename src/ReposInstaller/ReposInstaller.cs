@@ -9,6 +9,8 @@ using System.IO;
 using System.Windows.Forms;
 using System.Web;
 using EnvDTE;
+using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace ReposInstaller
 {
@@ -24,6 +26,9 @@ namespace ReposInstaller
 
 		public override void Install( IDictionary state )
 		{
+#if DEBUG
+			MessageBox.Show( "Install" );
+#endif
 
 			if ( MessageBox.Show( "Do you want to extract a test repository?", "Test repository",
 				MessageBoxButtons.YesNo ) == DialogResult.No )
@@ -66,7 +71,10 @@ namespace ReposInstaller
 
 		public override void Rollback(System.Collections.IDictionary savedState)
 		{
-			base.Rollback( savedState );
+#if DEBUG
+			MessageBox.Show( "Rollback" );
+#endif
+			//base.Rollback( savedState );
 
 			string reposPath = (string)savedState[ "repospath" ];
 			string wcPath = (string)savedState[ "wcpath" ];
@@ -79,6 +87,10 @@ namespace ReposInstaller
 
 		public override void Uninstall(IDictionary savedState)
 		{
+#if DEBUG
+			MessageBox.Show( "Uninstall" );
+#endif
+
 			try
 			{
 			
@@ -91,9 +103,21 @@ namespace ReposInstaller
 						"Please close these before continuing", "VS.NET is running", MessageBoxButtons.OK,
 						MessageBoxIcon.Warning );
 				} 
-          
-				MessageBox.Show( "Hello 2" );
 
+				// we MUST make sure Ankh doesn't load when trying to delete commands
+				if ( Registry.CurrentUser.OpenSubKey( VS7REGPATH ) != null )
+					Registry.CurrentUser.DeleteSubKeyTree( VS7REGPATH );
+
+				if ( Registry.CurrentUser.OpenSubKey( VS71REGPATH ) != null )
+					Registry.CurrentUser.DeleteSubKeyTree( VS71REGPATH );
+
+				if ( Registry.LocalMachine.OpenSubKey( VS7REGPATH ) != null )
+					Registry.LocalMachine.DeleteSubKeyTree( VS7REGPATH );
+
+				if ( Registry.LocalMachine.OpenSubKey( VS71REGPATH ) != null )
+					Registry.LocalMachine.DeleteSubKeyTree( VS71REGPATH );
+
+          
 				// delete the commands
 				this.DeleteAnkhCommands( "VisualStudio.DTE.7" );
 				this.DeleteAnkhCommands( "VisualStudio.DTE.7.1" );
@@ -136,6 +160,8 @@ namespace ReposInstaller
 					// HACK: swallow
 				}
 			}
+
+			Marshal.ReleaseComObject( dte );
 		}
 
 		private bool VSIsRunningRunning()
@@ -175,5 +201,7 @@ namespace ReposInstaller
 		}
 
 		private string PROGID="Ankh";
+		private string VS7REGPATH = @"Software\Microsoft\VisualStudio\7.0\AddIns\Ankh";
+		private string VS71REGPATH = @"Software\Microsoft\VisualStudio\7.1\AddIns\Ankh";
 	}
 }
