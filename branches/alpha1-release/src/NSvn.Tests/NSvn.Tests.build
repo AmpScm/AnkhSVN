@@ -35,6 +35,7 @@
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
+                <includes name="..\Utils\${build.dir}\Utils.dll"/>
                 <includes name="..\NSvn.Core.Tests\${build.dir}\NSvn.Core.Tests.dll"/>
                 <includes name="${lib.dir}\nunit.framework.dll"/>
             </references>
