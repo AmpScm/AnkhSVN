@@ -344,14 +344,19 @@ namespace Ankh.Solution
             public void NewStatus( NodeStatus status )
             {
                 if ( this.CurrentStatus == NodeStatus.None )
+                {
                     this.CurrentStatus = status;
+                }
                 else if ( status != NodeStatus.None )
                 {
-                    if ( this.CurrentStatus == NodeStatus.Normal )
+                    
+                    if ( this.CurrentStatus == NodeStatus.Normal || 
+                        this.CurrentStatus == NodeStatus.Unversioned )
                     {
                         this.CurrentStatus = status;
                     }
                     else if ( status != NodeStatus.Normal &&
+                        status != NodeStatus.Unversioned &&
                         this.CurrentStatus != status )
                     {
                         this.CurrentStatus = NodeStatus.IndividualStatusesConflicting;
