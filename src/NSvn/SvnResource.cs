@@ -13,13 +13,6 @@ namespace NSvn
 	{       
         protected SvnResource()
         {
-            this.clientContext = new ClientContext();
-            this.clientContext.LogMessageCallback = 
-                new LogMessageCallback( this.LogMessageCallback );
-            this.clientContext.NotifyCallback = 
-                new NotifyCallback( this.NotifyCallback );
-            this.clientContext.AuthBaton = new AuthenticationBaton();
-            this.dispatchMapping = new Hashtable();
         }
 
         /// <summary>
@@ -46,71 +39,35 @@ namespace NSvn
         }
 
         /// <summary>
-        /// An object dispatching notification events.
+        /// The context object used in version control operations.
         /// </summary>
-        public Notifications Notifications
+        public NSvnContext Context
         {
             get
             {
-                // lazy initialization - we might not need it
-                if ( this.notifications == null )
-                {
-                    this.notifications = new Notifications();
-                }
-                return this.notifications;
+                if ( this.context == null )
+                    this.context = new NSvnContext();
+                return this.context;
             }
 
             set
             {
-                this.notifications = value;
+                this.context = value; 
             }
-        }
-
-
-
-        /// <summary>
-        /// Gets or sets the collection of authentication providers
-        /// used with this resource.
-        /// </summary>
-        public AuthenticationProviderCollection AuthenticationProviders
-        {
-            get{ return this.clientContext.AuthBaton.Providers; }
-            set{ this.clientContext.AuthBaton.Providers = value; }
         }
 
         
 
         /// <summary>
-        /// The ClientContext to be used in version control operations
+        /// The ClientContext to be used in version control operations.
         /// </summary>
         protected ClientContext ClientContext
         {
-            get{ return this.clientContext; }
-        }
-
-        /// <summary>
-        /// Callback receiver for notifications.
-        /// </summary>
-        /// <param name="notification">The notification.</param>
-        private void NotifyCallback( Notification notification )
-        {
-            if ( this.notifications != null )
-                this.notifications.Notify( this, notification );
-        }
-     
-        /// <summary>
-        /// Callback receiver for log message requests.
-        /// </summary>
-        /// <param name="items">The items that will be committed.</param>
-        /// <returns>A string containing the log message, or null if the 
-        /// commit is canceled.</returns>
-        private string LogMessageCallback( CommitItem[] items )
-        {
-            // no event listeners - no log message
-            if ( this.notifications == null )
-                return "";
-            return this.notifications.LogMessageCallback( this, items );    
-        }
+            get
+            { 
+               return this.Context.ClientContext;
+            }
+        }        
 
         /// <summary>
         /// Checks whether a given path is versioned.
@@ -129,10 +86,7 @@ namespace NSvn
         
             
 
-        private ClientContext clientContext;
-        private IDictionary dispatchMapping;
-        private Notifications notifications;
+        private NSvnContext context;
         private const string WCAREA=".svn";
-
 	}
 }

@@ -150,6 +150,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "NSvnContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RepositoryDirectory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

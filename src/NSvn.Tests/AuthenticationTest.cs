@@ -18,7 +18,7 @@ namespace NSvn.Tests
             IAuthenticationProvider provider = new SimpleProvider( cred );
 
             RepositoryDirectory dir = new RepositoryDirectory( AUTHREPOS );
-            dir.AuthenticationProviders.Add( provider );
+            dir.Context.AddAuthenticationProvider( provider );
 
             RepositoryResourceDictionary dict = dir.GetChildren();
             Assertion.Assert( "Expected some more results", dict.Count > 0 );            
@@ -28,7 +28,7 @@ namespace NSvn.Tests
         public void TestCustomProvider()
         {
             RepositoryDirectory dir = new RepositoryDirectory( AUTHREPOS );
-            dir.AuthenticationProviders.Add( new AuthProvider() );
+            dir.Context.AddAuthenticationProvider( new AuthProvider() );
 
             RepositoryResourceDictionary dict = dir.GetChildren();
             Assertion.Assert( "Expected more results", dict.Count > 0 );

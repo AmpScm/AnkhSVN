@@ -21,9 +21,10 @@ namespace Ankh
 	/// </summary>
 	internal class SolutionExplorer
 	{
-		public SolutionExplorer( _DTE dte )
+		public SolutionExplorer( _DTE dte, SvnContext context )
 		{
 			this.dte = dte;
+            this.context = context;
             this.resources = new Hashtable( new ItemHashCodeProvider(),
                 new ItemComparer() );
             this.SetUpTreeview();
@@ -174,6 +175,7 @@ namespace Ankh
                             pitem.get_FileNames(1) );
                         if ( this.resource != null )
                         {
+                            this.resource.Context = this.outer.context;
                             this.outer.AddResource( pitem, this );
                             
                             this.UpdateStatus();
@@ -342,6 +344,7 @@ namespace Ankh
         private const string TREEVIEW = "SysTreeView32";
         private IDictionary resources;
         private Swf.ImageList statusImageList;
+        private SvnContext context;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
 	}

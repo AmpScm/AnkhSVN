@@ -31,7 +31,8 @@ namespace NSvn.Tests
 
             UnversionedResource item = new UnversionedFile( this.newFile );
             
-            this.SetupEventHandlers( item.Notifications );
+            //TODO: fix this
+            // this.SetupEventHandlers( item.Notifications );
 
             //TODO: fix this
 //            Assertion.AssertEquals( "Expected only one notification", 1,
