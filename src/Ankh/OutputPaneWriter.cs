@@ -55,7 +55,7 @@ namespace Ankh
         public void StartActionText( string action )
         {
             this.outputPane.OutputString( Environment.NewLine + 
-                this.line + action + " " + this.line + Environment.NewLine 
+                line + action + " " + line + Environment.NewLine 
                 + Environment.NewLine);
         }
 
@@ -64,11 +64,11 @@ namespace Ankh
         /// </summary>
         public void EndActionText()
         {
-            this.outputPane.OutputString( Environment.NewLine + this.line + "Done " + 
-                this.line + Environment.NewLine);
+            this.outputPane.OutputString( Environment.NewLine + line + "Done " + 
+                line + Environment.NewLine);
         }
 
-        private string line = "---------------------- ";
+        private const string line = "---------------------- ";
         private OutputWindowPane outputPane;
 	}
 }

@@ -35,7 +35,7 @@ namespace Ankh.Commands
 
         public override void Execute(Ankh.AnkhContext context)
         {
-            context.OutputPane.StartActionText( "Add" );
+            context.OutputPane.StartActionText( "Adding" );
             context.SolutionExplorer.VisitSelectedItems( new AddVisitor(), true );
             context.OutputPane.EndActionText();
             context.SolutionExplorer.RefreshSelectionParents();

@@ -25,7 +25,7 @@ namespace Ankh
             this.addin = addin;
             this.context = new SvnContext( this );
 
-            this.outputPane = new OutputPaneWriter( dte, "Subversion" );
+            this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
 
             this.CreateRepositoryExplorer();
 
