@@ -95,6 +95,10 @@ namespace Ankh
                     nodeKind, 
                     notification.Path );
             }
+
+            if (notification.Action == NotifyAction.CommitPostfixTxDelta)
+                this.ankhContext.OutputPane.Write( '.' );
+
             if (notification.Action == NotifyAction.UpdateCompleted)
                 this.ankhContext.OutputPane.WriteLine( "{0}Updated {1} to revision {2}.", 
                     Environment.NewLine, 
