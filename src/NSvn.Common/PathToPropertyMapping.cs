@@ -14,60 +14,60 @@ using System.Collections;
 namespace NSvn.Common
 {
 	public
-	class PropertyMapping : IDictionary, ICollection, IEnumerable, ICloneable
+	class PathToPropertyMapping : IDictionary, ICollection, IEnumerable, ICloneable
 	{
 		protected Hashtable innerHash;
 		
 		#region "Constructors"
-		public  PropertyMapping()
+		public  PathToPropertyMapping()
 		{
 			innerHash = new Hashtable();
 		}
-		public PropertyMapping(PropertyMapping original)
+		public PathToPropertyMapping(PathToPropertyMapping original)
 		{
 			innerHash = new Hashtable (original.innerHash);
 		}
-		public PropertyMapping(IDictionary dictionary)
+		public PathToPropertyMapping(IDictionary dictionary)
 		{
 			innerHash = new Hashtable (dictionary);
 		}
 
-		public PropertyMapping(int capacity)
+		public PathToPropertyMapping(int capacity)
 		{
 			innerHash = new Hashtable(capacity);
 		}
 
-		public PropertyMapping(IDictionary dictionary, float loadFactor)
+		public PathToPropertyMapping(IDictionary dictionary, float loadFactor)
 		{
 			innerHash = new Hashtable(dictionary, loadFactor);
 		}
 
-		public PropertyMapping(IHashCodeProvider codeProvider, IComparer comparer)
+		public PathToPropertyMapping(IHashCodeProvider codeProvider, IComparer comparer)
 		{
 			innerHash = new Hashtable (codeProvider, comparer);
 		}
 
-		public PropertyMapping(int capacity, int loadFactor)
+		public PathToPropertyMapping(int capacity, int loadFactor)
 		{
 			innerHash = new Hashtable(capacity, loadFactor);
 		}
 
-		public PropertyMapping(IDictionary dictionary, IHashCodeProvider codeProvider, IComparer comparer)
+		public PathToPropertyMapping(IDictionary dictionary, IHashCodeProvider codeProvider, IComparer comparer)
 		{
 			innerHash = new Hashtable (dictionary, codeProvider, comparer);
 		}
 		
-		public PropertyMapping(int capacity, IHashCodeProvider codeProvider, IComparer comparer)
+		public PathToPropertyMapping(int capacity, IHashCodeProvider codeProvider, IComparer comparer)
 		{
 			innerHash = new Hashtable (capacity, codeProvider, comparer);
 		}
 
-		public PropertyMapping(IDictionary dictionary, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
+		public PathToPropertyMapping(IDictionary dictionary, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
 		{
 			innerHash = new Hashtable (dictionary, loadFactor, codeProvider, comparer);
 		}
 
-		public PropertyMapping(int capacity, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
+		public PathToPropertyMapping(int capacity, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
 		{
 			innerHash = new Hashtable (capacity, loadFactor, codeProvider, comparer);
 		}
@@ -76,14 +76,14 @@ namespace NSvn.Common
 #endregion
 
 		#region Implementation of IDictionary
-        public PropertyMappingEnumerator GetEnumerator()
+        public PathToPropertyMappingEnumerator GetEnumerator()
         {
-	        return new PropertyMappingEnumerator(this);
+	        return new PathToPropertyMappingEnumerator(this);
         }
         
 		System.Collections.IDictionaryEnumerator IDictionary.GetEnumerator()
 		{
-			return new PropertyMappingEnumerator(this);
+			return new PathToPropertyMappingEnumerator(this);
 		}
 		
 		IEnumerator IEnumerable.GetEnumerator()
@@ -211,9 +211,9 @@ namespace NSvn.Common
 		#endregion
 
 		#region Implementation of ICloneable
-		public PropertyMapping Clone()
+		public PathToPropertyMapping Clone()
 		{
-			PropertyMapping clone = new PropertyMapping();
+			PathToPropertyMapping clone = new PathToPropertyMapping();
 			clone.innerHash = (Hashtable) innerHash.Clone();
 			
 			return clone;
@@ -233,9 +233,9 @@ namespace NSvn.Common
 		{
 			return innerHash.ContainsValue(value);
 		}
-		public static PropertyMapping Synchronized(PropertyMapping nonSync)
+		public static PathToPropertyMapping Synchronized(PathToPropertyMapping nonSync)
 		{
-			PropertyMapping sync = new PropertyMapping();
+			PathToPropertyMapping sync = new PathToPropertyMapping();
 			sync.innerHash = Hashtable.Synchronized(nonSync.innerHash);
 
 			return sync;
@@ -251,11 +251,11 @@ namespace NSvn.Common
 		}
 	}
 	
-	public class PropertyMappingEnumerator : IDictionaryEnumerator
+	public class PathToPropertyMappingEnumerator : IDictionaryEnumerator
 	{
 		private IDictionaryEnumerator innerEnumerator;
 			
-		internal PropertyMappingEnumerator (PropertyMapping enumerable)
+		internal PathToPropertyMappingEnumerator (PathToPropertyMapping enumerable)
 		{
 			innerEnumerator = enumerable.InnerHash.GetEnumerator();
 		}

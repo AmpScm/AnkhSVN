@@ -1,11 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+﻿<?xml version="1.0"?>
 <typeSafeCollections>
    <typeSafeCollection>
         <templateKind>HashTable</templateKind>
         <accessibility>public</accessibility>
         <keyType>string</keyType>
         <itemType>Property</itemType>
-        <collectionName>PropertyMapping</collectionName>
+        <collectionName>PathToPropertyMapping</collectionName>
         <collectionNamespace>NSvn.Common</collectionNamespace>
     </typeSafeCollection>
 </typeSafeCollections>

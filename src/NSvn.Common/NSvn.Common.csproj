@@ -120,18 +120,18 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "PathToPropertyMapping.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PathToPropertyMapping.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Property.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "PropertyMapping.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "PropertyMapping.xml"
-                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "SimpleProvider.cs"
