@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
+using System.Text;
 
 namespace UseCase
 {
@@ -35,12 +36,15 @@ namespace UseCase
                 ModelChangedEventHandler( this.PreConditionsChanged );
             this.useCaseModel.PostConditionsChanged += 
                 new ModelChangedEventHandler( this.PostConditionsChanged );
+            this.useCaseModel.AtomsChanged +=
+                new ModelChangedEventHandler( this.AtomsChanged );
 //            this.useCaseModel.ElementsChanged += 
 //                new ModelChangedEventHandler( this.ElementsChanged );
 
             this.ActorsChanged( null, EventArgs.Empty );
             this.PreConditionsChanged( null, EventArgs.Empty );
             this.PostConditionsChanged( null, EventArgs.Empty );
+            this.AtomsChanged( null, EventArgs.Empty );
             this.RefreshView();
         }
 
@@ -106,11 +110,9 @@ namespace UseCase
             actorsNode.RemoveAll();
             foreach( string actor in this.useCaseModel.Actors.Items )
             {
-                actorsNode.AppendChild( doc.CreateSignificantWhitespace("\r\n\t" ) );
                 XmlNode node = actorsNode.AppendChild( 
                     doc.CreateElement( "ActorID" ) );
                 node.InnerText = actor;
-                actorsNode.AppendChild( doc.CreateSignificantWhitespace( "\r\n\t" ) );
             }
 
             this.RefreshView();
@@ -147,20 +149,52 @@ namespace UseCase
             this.RefreshView();
         }
 
+        private void AtomsChanged( object sender, EventArgs e )
+        {
+            XmlNode node = this.xmlDocument.DocumentElement["Preface"];
+            node["Name"].InnerText = this.useCaseModel.Name;
+            node["ID"].InnerText = this.useCaseModel.Id;
+            node["Summary"].InnerText = this.useCaseModel.Summary;
+        }
+
         private void RefreshView()
         {
             this.textBox.Clear();
-            this.textBox.Text = this.xmlDocument.InnerXml;
+
+            StringBuilder text = new StringBuilder();
+            this.FormatXml( this.xmlDocument.DocumentElement, text, 0 );
+            this.textBox.Text = text.ToString();
         }
 
+        private void FormatXml( XmlNode node, StringBuilder text, int level )
+        {
+            if ( node is XmlWhitespace )
+                return;
 
+            const int INDENT = 4;
+            text.AppendFormat( "{0}<{1}>", new String( ' ', INDENT*level), node.Name );
 
+            if ( (node.ChildNodes.Count == 1 && node.ChildNodes[0] is XmlText) ||
+                node.ChildNodes.Count == 0 )
+            {
+                text.AppendFormat( "{0}</{1}>{2}", node.InnerText, node.Name, 
+                    Environment.NewLine );
+            }
+            else
+            {
+                text.Append( System.Environment.NewLine );
+                foreach( XmlNode child in node.ChildNodes )
+                    FormatXml( child, text, level + 1 );
+                text.AppendFormat( "{0}</{1}>{2}", 
+                    new String( ' ', INDENT*level), node.Name, Environment.NewLine );
+            }           
+
+        }
 
         private void PopulateDocument()
         {
             string[] names = typeof(XmlViewForm).Assembly.GetManifestResourceNames();
             
-            this.xmlDocument.PreserveWhitespace = true;
             this.xmlDocument.Load( 
                 typeof( XmlViewForm ).Assembly.GetManifestResourceStream(
                        "UseCase.XmlSkeleton.txt" ) );

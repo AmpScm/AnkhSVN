@@ -56,11 +56,11 @@ namespace UseCase
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.titleTextBox = new System.Windows.Forms.TextBox();
+            this.nameTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.idTextBox = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.summaryTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.elementsView = new System.Windows.Forms.TreeView();
             this.actorList = new UseCase.ItemListUserControl();
@@ -74,13 +74,14 @@ namespace UseCase
             this.viewXmlButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // titleTextBox
+            // nameTextBox
             // 
-            this.titleTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.titleTextBox.Location = new System.Drawing.Point(120, 8);
-            this.titleTextBox.Name = "titleTextBox";
-            this.titleTextBox.TabIndex = 0;
-            this.titleTextBox.Text = "";
+            this.nameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.nameTextBox.Location = new System.Drawing.Point(120, 8);
+            this.nameTextBox.Name = "nameTextBox";
+            this.nameTextBox.TabIndex = 0;
+            this.nameTextBox.Text = "";
+            this.nameTextBox.Leave += new System.EventHandler(this.TitleEntered);
             // 
             // label1
             // 
@@ -88,7 +89,7 @@ namespace UseCase
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 23);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Title";
+            this.label1.Text = "Name";
             // 
             // label2
             // 
@@ -105,16 +106,18 @@ namespace UseCase
             this.idTextBox.Name = "idTextBox";
             this.idTextBox.TabIndex = 1;
             this.idTextBox.Text = "";
+            this.idTextBox.Leave += new System.EventHandler(this.IdEntered);
             // 
-            // textBox2
+            // summaryTextBox
             // 
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox2.Location = new System.Drawing.Point(120, 168);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(144, 48);
-            this.textBox2.TabIndex = 4;
-            this.textBox2.Text = "";
+            this.summaryTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.summaryTextBox.Location = new System.Drawing.Point(120, 168);
+            this.summaryTextBox.Multiline = true;
+            this.summaryTextBox.Name = "summaryTextBox";
+            this.summaryTextBox.Size = new System.Drawing.Size(144, 48);
+            this.summaryTextBox.TabIndex = 4;
+            this.summaryTextBox.Text = "";
+            this.summaryTextBox.Leave += new System.EventHandler(this.SummaryEntered);
             // 
             // label3
             // 
@@ -235,11 +238,11 @@ namespace UseCase
                                                                           this.actorList,
                                                                           this.elementsView,
                                                                           this.label3,
-                                                                          this.textBox2,
+                                                                          this.summaryTextBox,
                                                                           this.idTextBox,
                                                                           this.label2,
                                                                           this.label1,
-                                                                          this.titleTextBox});
+                                                                          this.nameTextBox});
             this.Name = "UseCaseForm";
             this.Text = "UseCaseForm";
             this.ResumeLayout(false);
@@ -334,11 +337,8 @@ namespace UseCase
         private UseCaseModel useCaseModel;
 
         private XmlViewForm xmlViewForm;
-
-        private System.Windows.Forms.TextBox titleTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox idTextBox;
         private UseCase.ItemListUserControl actorList;
@@ -351,12 +351,32 @@ namespace UseCase
         private System.Windows.Forms.TreeView elementsView;
         private System.Windows.Forms.Button addElementButton;
         private System.Windows.Forms.Button viewXmlButton;
+        private System.Windows.Forms.TextBox summaryTextBox;
+        private System.Windows.Forms.TextBox nameTextBox;
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        
+        private void titleEntered(object sender, System.EventArgs e)
+        {
+            
+        }
+
+        private void IdEntered(object sender, System.EventArgs e)
+        {
+            this.useCaseModel.Id = this.idTextBox.Text;
+        }
+
+        private void TitleEntered(object sender, System.EventArgs e)
+        {
+            this.useCaseModel.Name = this.nameTextBox.Text;        
+        }
+
+        private void SummaryEntered(object sender, System.EventArgs e)
+        {
+            this.useCaseModel.Summary = this.summaryTextBox.Text;
+        }
 
         
         
