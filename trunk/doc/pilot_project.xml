@@ -38,8 +38,9 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         project period these working copies could be updated and
         synchronised with the repository. We decided to do a project
         where both technologies were represented. After having
-        defined the project we contacted CollabNet. They agreed to
-        be the employer and provide the external supervisor to our
+        defined the project we contacted CollabNet. CollabNet pays the salary for several
+        people that works on the Subversion project fulltime. CollabNet agreed to
+        be the employer and provides the external supervisor, Karl Fogel to our
         project.</p> 
     </section>
 
@@ -134,7 +135,9 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
     </section>
 
     <section header="Conclusion"> 
-        <p> </p> 
+        <p>The addin of Subversion into
+        Visual Studio .NET would make the revision control system
+        available for a huge amount of new users.</p> 
     </section> 
     
  </doc>
