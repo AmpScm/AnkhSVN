@@ -1,5 +1,32 @@
+Version 0.5.3(released 16.08.2004)
+This release was built against Subversion 1.0.6, Neon 0.24.7, 
+openssl 0.9.7 and Berkeley DB 4.2.52
+
+* Ankh now watches project files for changes itself, removing the 
+  dependency on this buggy feature in VS
+* Fixed bug which prevented you from doing a rename on an unversioned 
+  file
+* Fixed bug which prevented you from excluding a directory
+* Fixed bug which would cause an exception if you had a Filter in a VC++
+  project with the same name as a physical folder(you also had to 
+  load the project in a specific way) when doing Add Solution To 
+  Repository
+* Fixed bug which caused an exception if you had solution items or 
+  miscellaneous items in a solution when doing Add Solution To 
+  Repository
+* Do better recovery if the user cancels out of Add Solution To 
+  Repository
+* Use the built in File.SaveAll command to save dirty files before 
+  a Subversion operation, avoiding some problems with documents with
+  incomplete automation models
+* Working copies marked by Subversion as "Incomplete" are now recognized
+  as versioned
+* No longer attempt to start external diff for binary file
+* Link statically against OpenSSL, avoiding a problem that would arise
+  if the OpenSSL DLLs were built against an older version of the CRT
+------------------------------------------------------------------------
 Version 0.5.2(released 07.07.2004)
-This release was built against Subversion 1.0.6, Neon 0.24.6, 
+This release was built against Subversion 1.0.5, Neon 0.24.6, 
 openssl 0.9.7 and Berkeley DB 4.2.52
 
 * New command bitmaps
@@ -15,14 +42,14 @@ openssl 0.9.7 and Berkeley DB 4.2.52
   as when you accept the defaults in the dialog box.
 ------------------------------------------------------------------------
 Version 0.5.1(released 01.07.2004)
-This release was built against Subversion 1.0.6, Neon 0.24.6, 
+This release was built against Subversion 1.0.5, Neon 0.24.6, 
 openssl 0.9.7 and Berkeley DB 4.2.52
 
 * Fix a bug in the installer which caused it to not register Ankh.dll
   for COM interop
 ------------------------------------------------------------------------
 Version 0.5.0(released 30.06.2004)
-This release was built against Subversion 1.0.6, Neon 0.24.6, 
+This release was built against Subversion 1.0.5, Neon 0.24.6, 
 openssl 0.9.7 and Berkeley DB 4.2.52
 
 * Support for customizing the name of the SVN admin directory, allowing 
