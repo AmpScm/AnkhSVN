@@ -3,8 +3,11 @@
     <Product UpgradeCode="D35F7A64-E1AA-46eb-8835-36401261EB2A" Name="AnkhSvn"
         Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud" Language="1033"
         Version="$(var.ankhversion)" Id="????????-????-????-????-????????????">
-        <Package Description="NSvn" Comments="NSvn Merge Module" Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud"
-            InstallerVersion="200" Platforms="Intel" Languages="1033" Compressed="yes" SummaryCodepage="1252"
+
+        <Package Description="AnkhSVN" Comments="AnkhSVN Visual Studio plugin" 
+            Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud"
+            InstallerVersion="200" Platforms="Intel" Languages="1033" 
+            Compressed="yes" SummaryCodepage="1252"
             Id="????????-????-????-????-????????????" />
         
         <Upgrade Id="D35F7A64-E1AA-46eb-8835-36401261EB2A">
