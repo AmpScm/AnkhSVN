@@ -3,6 +3,7 @@ using System;
 using NSvn.Core;
 using NSvn.Common;
 using System.IO;
+using System.Collections;
 
 namespace Ankh
 {
@@ -174,6 +175,25 @@ namespace Ankh
                 paths[i++] = item.Path;
 
             return paths;
+        }
+
+        /// <summary>
+        /// Filters a list of SvnItem instances using the provided callback.
+        /// </summary>
+        /// <param name="items">An IList containing SvnItem instances.</param>
+        /// <param name="callback">A callback to be used to determine whether 
+        /// an item should be included in the returned list.</param>
+        /// <returns>A new IList of SvnItem instances.</returns>
+        public static IList Filter( IList items, ResourceFilterCallback callback )
+        {
+            ArrayList list = new ArrayList( items.Count );
+            foreach( SvnItem item in items )
+            {
+                if ( callback( item ) )
+                    list.Add( item );
+            }
+
+            return list;
         }
 
 

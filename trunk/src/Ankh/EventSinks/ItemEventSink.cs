@@ -60,6 +60,9 @@ namespace Ankh.EventSinks
 
                 IList items = 
                     this.Context.SolutionExplorer.GetItemResources(item, true);
+
+                items = SvnItem.Filter( items, new ResourceFilterCallback( 
+                    this.DeletableFilter ) );
                 string[] paths = SvnItem.GetPaths( items );
                 this.Context.Client.Delete( paths, true );
                 
@@ -73,6 +76,11 @@ namespace Ankh.EventSinks
             {
                 this.Context.EndOperation();
             }
+        }
+
+        private bool DeletableFilter( SvnItem item )
+        {
+            return item.IsVersioned;
         }
 
         /// <summary>
