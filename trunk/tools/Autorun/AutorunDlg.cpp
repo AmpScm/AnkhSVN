@@ -15,7 +15,7 @@
 BEGIN_DHTML_EVENT_MAP(CAutorunDlg)
 	DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
 
-    DHTML_EVENT_ONCLICK(_T("processDocumentation.doc"), ShowWordDoc )
+    DHTML_EVENT_ONCLICK(_T("pdoc"), Launch )
 END_DHTML_EVENT_MAP()
 
 
@@ -98,12 +98,13 @@ HRESULT CAutorunDlg::OnButtonCancel(IHTMLElement* /*pElement*/)
 	return S_OK;
 }
 
-HRESULT CAutorunDlg::ShowWordDoc( IHTMLElement* pElement )
+HRESULT CAutorunDlg::Launch( IHTMLElement* pElement )
 {
-    BSTR bstr;
-    pElement->get_id( &bstr );
+    COleVariant path;
+    pElement->getAttribute( CComBSTR( "path" ), 0, &path );
+   
+    HINSTANCE ret = ShellExecute( NULL, "open", COLE2T(path.bstrVal), NULL, "", SW_SHOW );
 
-    HINSTANCE ret = ShellExecute( NULL, "open", COLE2T(bstr), NULL, _T("c:\\finalproject\\ankh\\doc\\"), SW_SHOW );
+    return S_OK;
 
-    SysFreeString( bstr );
 }

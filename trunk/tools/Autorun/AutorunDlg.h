@@ -20,7 +20,7 @@ public:
 	HRESULT OnButtonOK(IHTMLElement *pElement);
 	HRESULT OnButtonCancel(IHTMLElement *pElement);
 
-    HRESULT ShowWordDoc( IHTMLElement* pElement );
+    HRESULT Launch( IHTMLElement* pElement );
 
 // Implementation
 protected:
