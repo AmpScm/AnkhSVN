@@ -12,14 +12,14 @@ namespace NSvn.Common
 		public AuthenticationBaton()
 		{
             this.parameters = new StringDictionary();
-            this.providers = new IAuthenticationProviderCollection();
+            this.providers = new AuthenticationProviderCollection();
 		}
 
         /// <summary>
         /// The authentication providers associated with this authentication 
         /// baton
         /// </summary>
-        public IAuthenticationProviderCollection Providers
+        public AuthenticationProviderCollection Providers
         {
             get{ return this.providers; }
         }
@@ -34,7 +34,7 @@ namespace NSvn.Common
 
 
 
-        private IAuthenticationProviderCollection providers;
+        private AuthenticationProviderCollection providers;
         private StringDictionary parameters;
 	}
 }

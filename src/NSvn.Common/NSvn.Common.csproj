@@ -97,18 +97,18 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AuthenticationProviderCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AuthenticationProviderCollection.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "IAuthenticationProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IAuthenticationProviderCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IAuthenticationProviderCollection.xml"
-                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "ICredential.cs"
