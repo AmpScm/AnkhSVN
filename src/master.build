@@ -80,6 +80,8 @@
         <nant buildfile="Ankh.UI/Ankh.UI.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh/Ankh.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh.Tests/Ankh.Tests.build" target="clean" inheritall="true" />
+        <nant buildfile="Utils/Utils.build" target="clean" inheritall="true" />
+        <nant buildfile="Utils.Tests/Utils.Tests.build" target="clean" inheritall="true" />
         
         <delete dir="${installsource.dir}" failonerror="false"/>
         
@@ -98,6 +100,16 @@
                 <include name="*.pdb"/>
             </fileset>
          </copy>
+    </target>
+    
+    <target name="build-Utils.Tests">
+        <nant buildfile="Utils.Tests/Utils.Tests.build" inheritall="true" target="build"/>
+        <copy todir="${build.dir}">
+            <fileset basedir="Utils.Tests/${build.dir}">
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
+            </fileset>
+        </copy>
     </target>
     
     <target name="build-Ankh" depends="build-Ankh.UI, build-NSvn.Core, build-NSvn.Common, build-Utils">
@@ -220,7 +232,7 @@
     <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn.Core, build-ReposInstaller"
         description="Build all necessary assemblies"/>
     
-    <target name="build-tests" depends="build, build-Ankh.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"
+    <target name="build-tests" depends="build, build-Ankh.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp, build-Utils.Tests"
         description="Build all test assemblies"/>
     
     
@@ -241,6 +253,10 @@
         <nunit2 failonerror="false" haltonerror="false">
             <formatter type="Plain" />
             <test assemblyname="${build.dir}/Ankh.Tests.dll"/>
+        </nunit2>
+        <nunit2 failonerror="false" haltonfailure="false">
+            <formatter type="Plain" />
+            <test assemblyname="${build.dir}/Utils.Tests.dll"/>
         </nunit2>
     </target>
     
