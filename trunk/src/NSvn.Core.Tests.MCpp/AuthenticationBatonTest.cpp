@@ -64,5 +64,5 @@ NSvn::Core::SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationBatonTest::
     Assertion::AssertEquals( "Realm string is wrong", S"Realm", realm );
     Assertion::AssertEquals( "Username is wrong", Environment::UserName, username );
 
-    return new SimpleCredential( S"Arild", S"Fines" );
+    return new SimpleCredential( S"Arild", S"Fines", false );
 }
