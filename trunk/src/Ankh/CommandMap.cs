@@ -193,11 +193,8 @@ namespace Ankh
         /// <param name="context"></param>
         private static void CreateAnkhSubMenu( AnkhContext context )
         {
-            CommandBar menuBar = (CommandBar)
-                context.DTE.CommandBars[ "MenuBar" ];
-            
-            CommandBar toolMenu = 
-                ((CommandBarPopup)menuBar.Controls[ "Tools" ]).CommandBar;
+            CommandBar toolMenu = (CommandBar)
+                context.DTE.CommandBars[ "Tools" ];
 
             context.DTE.Commands.AddCommandBar( "AnkhSVN", 
                 vsCommandBarType.vsCommandBarTypeMenu,
