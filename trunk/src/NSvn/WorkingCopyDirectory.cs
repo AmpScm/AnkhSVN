@@ -48,6 +48,15 @@ namespace NSvn
                 return this.children;
             }
         }
+        
+        /// <summary>
+        /// Recursively cleans up the working copy, removing any locks and completes any
+        /// unfinished transactions.
+        /// </summary>
+        public void Cleanup( )
+        {
+            Client.Cleanup( this.Path, this.ClientContext );
+        }
 
         /// <summary>
         /// Whether the resource has been modified.
