@@ -62,4 +62,13 @@ namespace Utils.Win32
         public int unused2;
         public RECT rect;
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public class CWPSTRUCT
+    {
+        IntPtr lParam;
+        IntPtr wParam;
+        int message;
+        IntPtr hWnd;
+    }
 }

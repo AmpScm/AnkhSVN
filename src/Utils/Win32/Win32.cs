@@ -187,6 +187,33 @@ namespace Utils.Win32
         /// is NULL, all window names match. </param>
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow( string className, string windowName );
+
+
+        /// <summary>
+        /// Retrieves the thread ID of the currently running thread.
+        /// </summary>
+        [DllImport("kernel32.dll")]
+        public static extern int GetCurrentThreadId();
+
+        /// <summary>
+        /// Sets a windows hook.
+        /// </summary>
+        /// <param name="filterType">The type of filter.</param>
+        /// <param name="hkprc">The hook procedure.</param>
+        /// <param name="hMod">The module in which the proc recides, or
+        /// null if in the current process.</param>
+        /// <param name="threadId">The thread id of the hook, or zero
+        /// if it is to be associated with all threads. In that case, the
+        /// hook proc must be in a dll.</param>
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetWindowsHookEx( int filterType, HOOKPROC hkprc, 
+            IntPtr hMod, int threadId );
     
+        /// <summary>
+        /// Calls the next hook in the hook chain.
+        /// </summary>
+        [DllImport("user32.dll")]
+        public static extern int CallNextHookEx( IntPtr hook, int code, 
+            IntPtr wParam, CWPSTRUCT lParam );
     }
 }

@@ -209,5 +209,16 @@ namespace Utils.Win32
         /// </summary>
         public const int TVIS_STATEIMAGEMASK = 61440;
 
+
+        /// <summary>
+        /// Flag passed to SetWindowsHookEx to indicate that 
+        /// </summary>
+        public const int WH_CALLWNDPROC = 4;
+
+        /// <summary>
+        /// Indicates that a hook procedure must process the message.
+        /// </summary>
+        public const int HC_ACTION = 0;
+
 	}
 }
