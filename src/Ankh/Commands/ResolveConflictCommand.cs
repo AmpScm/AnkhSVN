@@ -34,14 +34,17 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context)
         {
-            ResolveVisitor v = new ResolveVisitor();
+            ResolveVisitor v = new ResolveVisitor( context );
             context.SolutionExplorer.VisitSelectedItems( v, false );
             context.SolutionExplorer.RefreshSelection();
         }
 
         private class ResolveVisitor : LocalResourceVisitorBase
         {
-
+            public ResolveVisitor( AnkhContext context )
+            {
+                this.context = context;
+            }
         
             public override void VisitWorkingCopyFile(WorkingCopyFile file)
             {
@@ -52,13 +55,13 @@ namespace Ankh.Commands
 
                     ConflictDialog.Choice selection;
 
-                    using( ConflictDialog dialog = new ConflictDialog() )
+                    using( ConflictDialog dialog = new ConflictDialog(  ) )
                     {
                         dialog.OldRev = oldRev;
                         dialog.NewRev = newRev;
                         dialog.Filename = file.Path;
 
-                        if ( dialog.ShowDialog() != DialogResult.OK )
+                        if ( dialog.ShowDialog( this.context.HostWindow ) != DialogResult.OK )
                             return;
                     
                         selection = dialog.Selection;
@@ -102,6 +105,7 @@ namespace Ankh.Commands
             }
        
             private readonly Regex NUMBER = new Regex( @".*\.r(\d+)" );
+            private AnkhContext context;
 
         }
     }

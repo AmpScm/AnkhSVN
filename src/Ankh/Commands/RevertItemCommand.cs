@@ -82,7 +82,7 @@ namespace Ankh.Commands
                 string msg = "Do you really want to revert the following item(s)?" + 
                     Environment.NewLine + Environment.NewLine + builder.ToString();
 
-                if( MessageBox.Show( msg, "Revert", MessageBoxButtons.YesNo,
+                if( MessageBox.Show( context.HostWindow, msg, "Revert", MessageBoxButtons.YesNo,
                     MessageBoxIcon.Information ) == 
                     DialogResult.Yes )
                 {

@@ -159,7 +159,7 @@ namespace Ankh.UI
             // 
             // cancelButton
             // 
-            this.cancelButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(710, 280);
             this.cancelButton.Name = "cancelButton";
@@ -168,7 +168,7 @@ namespace Ankh.UI
             // 
             // okButton
             // 
-            this.okButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Location = new System.Drawing.Point(622, 280);
             this.okButton.Name = "okButton";
@@ -186,6 +186,7 @@ namespace Ankh.UI
             // commitItemsList
             // 
             this.commitItemsList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.commitItemsList.Location = new System.Drawing.Point(0, 0);
             this.commitItemsList.Name = "commitItemsList";
             this.commitItemsList.Size = new System.Drawing.Size(816, 108);
             this.commitItemsList.TabIndex = 5;
@@ -200,9 +201,9 @@ namespace Ankh.UI
             // 
             // diffView
             // 
-            this.diffView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.diffView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
                 | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right);
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.diffView.Diff = "";
             this.diffView.Font = new System.Drawing.Font("Courier New", 10F);
             this.diffView.Location = new System.Drawing.Point(0, 312);
@@ -213,8 +214,8 @@ namespace Ankh.UI
             // logMessageBox
             // 
             this.logMessageBox.AcceptsTab = true;
-            this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right);
+            this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.logMessageBox.Location = new System.Drawing.Point(0, 136);
             this.logMessageBox.Name = "logMessageBox";
             this.logMessageBox.Size = new System.Drawing.Size(816, 128);
@@ -227,16 +228,17 @@ namespace Ankh.UI
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(816, 315);
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.logMessageBox,
-                                                                          this.diffView,
-                                                                          this.showDiffButton,
-                                                                          this.commitItemsList,
-                                                                          this.logLabel,
-                                                                          this.okButton,
-                                                                          this.cancelButton});
+            this.Controls.Add(this.logMessageBox);
+            this.Controls.Add(this.diffView);
+            this.Controls.Add(this.showDiffButton);
+            this.Controls.Add(this.commitItemsList);
+            this.Controls.Add(this.logLabel);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.cancelButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(390, 320);
             this.Name = "CommitDialog";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Commit";
             this.VisibleChanged += new System.EventHandler(this.CommitDialog_VisibleChanged);

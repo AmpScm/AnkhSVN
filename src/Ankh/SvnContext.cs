@@ -23,7 +23,7 @@ namespace Ankh
 
             //Clears the pane when opening new solutions.
             this.ankhContext = ankhContext;
-            this.AddAuthenticationProvider( new DialogProvider() );           
+            this.AddAuthenticationProvider( new DialogProvider( ankhContext.HostWindow ) );           
         }
         /// <summary>
         /// Invokes the LogMessage dialog.
@@ -41,7 +41,7 @@ namespace Ankh
                 dialog.LogMessageTemplate = template;
 
                 dialog.DiffWanted += new EventHandler( this.DiffWanted );
-                if ( dialog.ShowDialog() == DialogResult.OK )
+                if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
                 {
                     ankhContext.OutputPane.StartActionText("Committing");
                     return dialog.LogMessage;
@@ -83,13 +83,17 @@ namespace Ankh
         #region DialogProvider
         private class DialogProvider : IAuthenticationProvider
         {
+            public DialogProvider( IWin32Window hostWindow )
+            {
+                this.hostWindow = hostWindow;
+            }
             
 
             #region Implementation of IAuthenticationProvider
             public NSvn.Common.ICredential NextCredentials( ICollection parameters )
             {              
 
-                if ( loginDialog.ShowDialog() == DialogResult.OK )
+                if ( loginDialog.ShowDialog( this.hostWindow ) == DialogResult.OK )
                     return this.lastCredential = new SimpleCredential( loginDialog.Username, 
                         loginDialog.Password );
                 else
@@ -102,7 +106,7 @@ namespace Ankh
 
                 loginDialog.Realm = realm;
 
-                if ( loginDialog.ShowDialog() == DialogResult.OK )
+                if ( loginDialog.ShowDialog( this.hostWindow ) == DialogResult.OK )
                     return this.lastCredential = new SimpleCredential( loginDialog.Username, 
                         loginDialog.Password );
                 else
@@ -126,6 +130,7 @@ namespace Ankh
             private LoginDialog loginDialog = new LoginDialog();
             private ICredential lastCredential;
             private ICredential savedCredential;
+            private IWin32Window hostWindow;
         }
         #endregion
 

@@ -134,16 +134,16 @@ namespace Ankh.UI
         private void CreateToolTips()
         {
             // Create the ToolTip and associate with the Form container.
-            ToolTip conflictToolTip = new ToolTip(this.components);
+            ToolTip conflictToolTip = new ToolTip();
 
             // Set up the ToolTip text for the Button and Checkbox.
             conflictToolTip.SetToolTip( this.mineFileRadioButton, "Latest local file" ); 
             conflictToolTip.SetToolTip( this.oldRevRadioButton, "Latest updated revision" );
             conflictToolTip.SetToolTip( this.newRevRadioButton, "Latest version in repository" );
             conflictToolTip.SetToolTip( this.fileRadioButton, "File with conflict markers" );
-            conflictToolTip.SetToolTip( this.editButton, "Selected file is edited" );
-            conflictToolTip.SetToolTip( this.okButton, "Conflict is resolved and the three files that are not selected will be deleted" ); 
-            conflictToolTip.SetToolTip( this.cancelButton, "Latest local file" );  
+            conflictToolTip.SetToolTip( this.editButton, "Edit selected file" );
+            conflictToolTip.SetToolTip( this.okButton, "Resolve conflict and delete the three files that are not selected." ); 
+            conflictToolTip.SetToolTip( this.cancelButton, "Cancel this dialog." );  
         }
 
 
@@ -154,7 +154,6 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.mineFileRadioButton = new System.Windows.Forms.RadioButton();
             this.oldRevRadioButton = new System.Windows.Forms.RadioButton();
             this.newRevRadioButton = new System.Windows.Forms.RadioButton();
@@ -167,8 +166,8 @@ namespace Ankh.UI
             // 
             // mineFileRadioButton
             // 
-            this.mineFileRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right);
+            this.mineFileRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.mineFileRadioButton.Location = new System.Drawing.Point(16, 24);
             this.mineFileRadioButton.Name = "mineFileRadioButton";
             this.mineFileRadioButton.Size = new System.Drawing.Size(348, 24);
@@ -179,8 +178,8 @@ namespace Ankh.UI
             // 
             // oldRevRadioButton
             // 
-            this.oldRevRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right);
+            this.oldRevRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.oldRevRadioButton.Location = new System.Drawing.Point(16, 48);
             this.oldRevRadioButton.Name = "oldRevRadioButton";
             this.oldRevRadioButton.Size = new System.Drawing.Size(348, 24);
@@ -191,8 +190,8 @@ namespace Ankh.UI
             // 
             // newRevRadioButton
             // 
-            this.newRevRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right);
+            this.newRevRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.newRevRadioButton.Location = new System.Drawing.Point(16, 72);
             this.newRevRadioButton.Name = "newRevRadioButton";
             this.newRevRadioButton.Size = new System.Drawing.Size(348, 24);
@@ -203,8 +202,8 @@ namespace Ankh.UI
             // 
             // fileRadioButton
             // 
-            this.fileRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right);
+            this.fileRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.fileRadioButton.Location = new System.Drawing.Point(16, 96);
             this.fileRadioButton.Name = "fileRadioButton";
             this.fileRadioButton.Size = new System.Drawing.Size(348, 24);
@@ -215,7 +214,7 @@ namespace Ankh.UI
             // 
             // cancelButton
             // 
-            this.cancelButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(292, 129);
             this.cancelButton.Name = "cancelButton";
@@ -224,7 +223,7 @@ namespace Ankh.UI
             // 
             // editButton
             // 
-            this.editButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
+            this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.editButton.Location = new System.Drawing.Point(132, 129);
             this.editButton.Name = "editButton";
             this.editButton.TabIndex = 4;
@@ -233,7 +232,7 @@ namespace Ankh.UI
             // 
             // okButton
             // 
-            this.okButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
+            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Location = new System.Drawing.Point(212, 129);
             this.okButton.Name = "okButton";
@@ -252,17 +251,18 @@ namespace Ankh.UI
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(376, 160);
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.conflictLabel,
-                                                                          this.okButton,
-                                                                          this.editButton,
-                                                                          this.cancelButton,
-                                                                          this.fileRadioButton,
-                                                                          this.newRevRadioButton,
-                                                                          this.oldRevRadioButton,
-                                                                          this.mineFileRadioButton});
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.Controls.Add(this.conflictLabel);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.editButton);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.fileRadioButton);
+            this.Controls.Add(this.newRevRadioButton);
+            this.Controls.Add(this.oldRevRadioButton);
+            this.Controls.Add(this.mineFileRadioButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "ConflictDialog";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Conflict";
             this.ResumeLayout(false);
 

@@ -17,13 +17,14 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
-    internal class AnkhContext : IWin32Window
+    internal class AnkhContext
     {
         public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin )
         {
             this.dte = dte;
             this.addin = addin;
             this.context = new SvnContext( this );
+            this.hostWindow = new Win32Window( new IntPtr(dte.MainWindow.HWnd) );
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
 
@@ -108,12 +109,15 @@ namespace Ankh
             get{ return this.reposExplorerWindow; }
         }   
      
-        public IntPtr Handle
+        /// <summary>
+        /// An IWin32Window to be used for parenting dialogs.
+        /// </summary>
+        public IWin32Window HostWindow
         {
             [System.Diagnostics.DebuggerStepThrough]
             get
             {
-                return new IntPtr(this.DTE.MainWindow.HWnd);
+                return this.hostWindow;
             }
         }
 
@@ -206,8 +210,34 @@ namespace Ankh
                 "Could not create tool window" );
         }
 
+        #region Win32Window class
+        private class Win32Window : IWin32Window
+        {
+            public Win32Window( IntPtr handle )
+            {
+                this.handle = handle;
+            }
+            #region IWin32Window Members
+
+            public System.IntPtr Handle
+            {
+                get
+                {
+                    return this.handle;
+                }
+            }
+
+            #endregion
+            private IntPtr handle;
+
+        }
+        #endregion
+
+        
+
         private EnvDTE._DTE dte;
         private EnvDTE.AddIn addin;
+        private IWin32Window hostWindow;
 
         private IList eventSinks;
 
