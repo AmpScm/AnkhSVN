@@ -95,7 +95,8 @@ namespace Ankh.Commands
                 {
                     if ( item.IsVersionable )
                     {
-                        this.paths.Add( item.Path, null );
+                        // this could be the parent item of some item to come later on
+                        this.paths.Add( NormalizePath(item.Path), null );
                         return true;
                     }
                     else
@@ -108,6 +109,7 @@ namespace Ankh.Commands
                         return true;
                     else
                     {
+                        // have we already visited the parent?
                         string dir = NormalizePath(Path.GetDirectoryName( item.Path ));
                         return this.paths.ContainsKey( dir );
                     }
