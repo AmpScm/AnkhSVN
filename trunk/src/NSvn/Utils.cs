@@ -6,6 +6,7 @@ namespace NSvn
 {
     /// <summary>
     /// Contains utility methods for SVN
+    /// TODO: rename to SvnUtils
     /// </summary>
     public class Utils
     {
