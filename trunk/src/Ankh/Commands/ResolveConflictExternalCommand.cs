@@ -23,6 +23,15 @@ namespace Ankh.Commands
      VSNetControl( "Solution.Ankh", Position = 1)]
     public class ResolveConflictExternalCommand : ResolveConflictCommand
     {    
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        {
+            // Allow external merge if enabled in config file
+            if ( context.Config.ChooseDiffMergeManual && context.Config.MergeExePath != null )
+                return Enabled;
+            else 
+                return vsCommandStatus.vsCommandStatusInvisible;
+        }
+
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.
         /// </summary>
