@@ -38,16 +38,16 @@
             <description>The Product documentation in PDF format</description>
         </directory>
 
-        <file path="prosessDocumentation.doc">
-            <name>Prosess documentation</name>
-            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/prosessDocumentation.doc</realpath>
-            <description>The Prosess documentation in Word format.</description>
+        <file path="processDocumentation.doc">
+            <name>Process documentation</name>
+            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/processDocumentation.doc</realpath>
+            <description>The Process documentation in Word format.</description>
         </file>
 
-        <file path="prosessDocumentation.pdf">
-            <name>Prosess documentation</name>
-            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/pdf/prosessDocumentation.pdf</realpath>
-            <description>The Prosess documentation in PDF format.</description>
+        <file path="processDocumentation.pdf">
+            <name>Process documentation</name>
+            <realpath>/hovedprosjekter/2003/data/10/pdiary/doc/pdf/processDocumentation.pdf</realpath>
+            <description>The Process documentation in PDF format.</description>
         </file>
 
         <file path="testDocumentation.doc">
