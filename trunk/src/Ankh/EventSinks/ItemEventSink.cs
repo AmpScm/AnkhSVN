@@ -65,9 +65,10 @@ namespace Ankh.EventSinks
                 {
                     this.Context.StartOperation( "Deleting" );
                     this.Context.Client.Delete( paths, true );
-
-                    this.DelayedRefresh( item.ContainingProject );
                 }
+
+                // we need a refresh of the containing project no matter what
+                this.DelayedRefresh( item.ContainingProject );
             }
             catch ( Exception ex )
             {
