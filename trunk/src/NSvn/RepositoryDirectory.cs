@@ -30,6 +30,32 @@ namespace NSvn
         }
 
         /// <summary>
+        /// Retrieve the child resources of this directory.
+        /// </summary>
+        /// <returns>A RepositoryResourceDictionary containing the child resources of this
+        /// directory.</returns>
+        public RepositoryResourceDictionary GetChildren()
+        {
+            RepositoryResourceDictionary dict = new RepositoryResourceDictionary();
+
+            DirectoryEntry[] entries = Client.List( this.Url, this.Revision, false, 
+                this.ClientContext );
+            foreach( DirectoryEntry entry in entries )
+            {
+                string url = System.IO.Path.Combine( this.Url, entry.Path );
+                // dir or file?
+                if ( entry.NodeKind == NodeKind.Directory )
+                    dict[entry.Path] = new RepositoryDirectory( url, this.Revision );
+                else if ( entry.NodeKind == NodeKind.File )
+                    dict[entry.Path] = new RepositoryFile( url, this.Revision );
+                else
+                    throw new InvalidOperationException( "Expected a file or a directory" );
+            }
+
+            return dict;
+        }
+
+        /// <summary>
         /// Checks out the directory to a local directory.
         /// </summary>
         /// <param name="localPath">The local path to check out to.</param>
@@ -37,8 +63,8 @@ namespace NSvn
         /// be checked out.</param>
         public WorkingCopyDirectory Checkout( string localPath, bool recurse )
         {
-            Client.Checkout( url, localPath, revision, recurse,
-                new ClientContext() );
+            Client.Checkout( this.Url, localPath, this.Revision, recurse,
+                this.ClientContext );
 
             return new WorkingCopyDirectory( localPath );
         }
@@ -49,11 +75,8 @@ namespace NSvn
         public static WorkingCopyDirectory Checkout( string url, 
             string localPath, Revision revision, bool recurse )
         {
-            // TODO: what to do with ClientContext here?
             return new RepositoryDirectory( url, revision ).Checkout( 
                 localPath, recurse );
-
-            
         }
 	}
 }

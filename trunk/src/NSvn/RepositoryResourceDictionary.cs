@@ -14,60 +14,60 @@ using System.Collections;
 namespace NSvn
 {
 	public
-	class RespositoryResourceDictionary : IDictionary, ICollection, IEnumerable, ICloneable
+	class RepositoryResourceDictionary : IDictionary, ICollection, IEnumerable, ICloneable
 	{
 		protected Hashtable innerHash;
 		
 		#region "Constructors"
-		public  RespositoryResourceDictionary()
+		public  RepositoryResourceDictionary()
 		{
 			innerHash = new Hashtable();
 		}
-		public RespositoryResourceDictionary(RespositoryResourceDictionary original)
+		public RepositoryResourceDictionary(RepositoryResourceDictionary original)
 		{
 			innerHash = new Hashtable (original.innerHash);
 		}
-		public RespositoryResourceDictionary(IDictionary dictionary)
+		public RepositoryResourceDictionary(IDictionary dictionary)
 		{
 			innerHash = new Hashtable (dictionary);
 		}
 
-		public RespositoryResourceDictionary(int capacity)
+		public RepositoryResourceDictionary(int capacity)
 		{
 			innerHash = new Hashtable(capacity);
 		}
 
-		public RespositoryResourceDictionary(IDictionary dictionary, float loadFactor)
+		public RepositoryResourceDictionary(IDictionary dictionary, float loadFactor)
 		{
 			innerHash = new Hashtable(dictionary, loadFactor);
 		}
 
-		public RespositoryResourceDictionary(IHashCodeProvider codeProvider, IComparer comparer)
+		public RepositoryResourceDictionary(IHashCodeProvider codeProvider, IComparer comparer)
 		{
 			innerHash = new Hashtable (codeProvider, comparer);
 		}
 
-		public RespositoryResourceDictionary(int capacity, int loadFactor)
+		public RepositoryResourceDictionary(int capacity, int loadFactor)
 		{
 			innerHash = new Hashtable(capacity, loadFactor);
 		}
 
-		public RespositoryResourceDictionary(IDictionary dictionary, IHashCodeProvider codeProvider, IComparer comparer)
+		public RepositoryResourceDictionary(IDictionary dictionary, IHashCodeProvider codeProvider, IComparer comparer)
 		{
 			innerHash = new Hashtable (dictionary, codeProvider, comparer);
 		}
 		
-		public RespositoryResourceDictionary(int capacity, IHashCodeProvider codeProvider, IComparer comparer)
+		public RepositoryResourceDictionary(int capacity, IHashCodeProvider codeProvider, IComparer comparer)
 		{
 			innerHash = new Hashtable (capacity, codeProvider, comparer);
 		}
 
-		public RespositoryResourceDictionary(IDictionary dictionary, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
+		public RepositoryResourceDictionary(IDictionary dictionary, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
 		{
 			innerHash = new Hashtable (dictionary, loadFactor, codeProvider, comparer);
 		}
 
-		public RespositoryResourceDictionary(int capacity, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
+		public RepositoryResourceDictionary(int capacity, float loadFactor, IHashCodeProvider codeProvider, IComparer comparer)
 		{
 			innerHash = new Hashtable (capacity, loadFactor, codeProvider, comparer);
 		}
@@ -76,14 +76,14 @@ namespace NSvn
 #endregion
 
 		#region Implementation of IDictionary
-        public RespositoryResourceDictionaryEnumerator GetEnumerator()
+        public RepositoryResourceDictionaryEnumerator GetEnumerator()
         {
-	        return new RespositoryResourceDictionaryEnumerator(this);
+	        return new RepositoryResourceDictionaryEnumerator(this);
         }
         
 		System.Collections.IDictionaryEnumerator IDictionary.GetEnumerator()
 		{
-			return new RespositoryResourceDictionaryEnumerator(this);
+			return new RepositoryResourceDictionaryEnumerator(this);
 		}
 		
 		IEnumerator IEnumerable.GetEnumerator()
@@ -211,9 +211,9 @@ namespace NSvn
 		#endregion
 
 		#region Implementation of ICloneable
-		public RespositoryResourceDictionary Clone()
+		public RepositoryResourceDictionary Clone()
 		{
-			RespositoryResourceDictionary clone = new RespositoryResourceDictionary();
+			RepositoryResourceDictionary clone = new RepositoryResourceDictionary();
 			clone.innerHash = (Hashtable) innerHash.Clone();
 			
 			return clone;
@@ -233,9 +233,9 @@ namespace NSvn
 		{
 			return innerHash.ContainsValue(value);
 		}
-		public static RespositoryResourceDictionary Synchronized(RespositoryResourceDictionary nonSync)
+		public static RepositoryResourceDictionary Synchronized(RepositoryResourceDictionary nonSync)
 		{
-			RespositoryResourceDictionary sync = new RespositoryResourceDictionary();
+			RepositoryResourceDictionary sync = new RepositoryResourceDictionary();
 			sync.innerHash = Hashtable.Synchronized(nonSync.innerHash);
 
 			return sync;
@@ -251,11 +251,11 @@ namespace NSvn
 		}
 	}
 	
-	public class RespositoryResourceDictionaryEnumerator : IDictionaryEnumerator
+	public class RepositoryResourceDictionaryEnumerator : IDictionaryEnumerator
 	{
 		private IDictionaryEnumerator innerEnumerator;
 			
-		internal RespositoryResourceDictionaryEnumerator (RespositoryResourceDictionary enumerable)
+		internal RepositoryResourceDictionaryEnumerator (RepositoryResourceDictionary enumerable)
 		{
 			innerEnumerator = enumerable.InnerHash.GetEnumerator();
 		}

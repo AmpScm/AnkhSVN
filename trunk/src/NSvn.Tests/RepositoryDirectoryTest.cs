@@ -52,6 +52,32 @@ namespace NSvn.Tests
                 2, wcDir.Status.Entry.Revision );
         }
 
+        [Test]
+        public void TestGetChildren()
+        {
+            this.ExtractWorkingCopy();
+            WorkingCopyDirectory wc = new WorkingCopyDirectory( this.WcPath );
+
+            RepositoryDirectory repos = new RepositoryDirectory( this.ReposUrl );
+
+            RepositoryResourceDictionary children = repos.GetChildren();
+
+            Assertion.AssertEquals( "Wrong number of children", wc.Children.Count,
+                children.Count );
+
+            // assert that all the nodes in the wc are found in the repos
+            foreach( string path in wc.Children.Keys )
+            {
+                Assertion.Assert( path + " not found", children.ContainsKey( path ) );
+                if( wc.Children[path].IsDirectory )
+                    Assertion.AssertEquals( "Wrong type of node for " + path,
+                        typeof(RepositoryDirectory), children[path].GetType() );
+                else if ( !wc.Children[path].IsDirectory)
+                    Assertion.AssertEquals( "Wrong type of node for " + path,
+                        typeof(RepositoryFile), children[path].GetType() );
+            }
+        }
+
         private string localDir;
 	}
 }
