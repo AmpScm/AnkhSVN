@@ -58,7 +58,7 @@ namespace Ankh.Solution
             if ( explorer.DTE.Solution.FullName != string.Empty )
             {
                 TreeNode node = new SolutionNode( item, hItem, explorer );
-                node.UpdateStatus( true, false );
+                //node.UpdateStatus( true, false );
                 return node;
             }
             else
@@ -296,7 +296,7 @@ namespace Ankh.Solution
         private IList children;
         private Explorer explorer;
         private StatusKind currentStatus;
-        private StatusKind propagatedStatus;
+        private StatusKind propagatedStatus = StatusKind.None;
         private static IDictionary statusMap = new Hashtable();
     }
 }

@@ -24,6 +24,8 @@ namespace Ankh.Solution
             this.solutionFolder.Context = explorer.Context;
 
             explorer.SetSolution( this );
+
+            this.UpdateStatus( false, false );
         }
 
         

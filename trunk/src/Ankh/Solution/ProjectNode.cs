@@ -19,6 +19,8 @@ namespace Ankh.Solution
 
             this.projectFile.Context = explorer.Context;
             this.projectFolder.Context = explorer.Context;
+
+            this.UpdateStatus( false, false );
         }
 
         public override void Refresh()

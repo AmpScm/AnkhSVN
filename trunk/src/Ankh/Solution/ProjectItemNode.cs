@@ -20,6 +20,8 @@ namespace Ankh.Solution
         {
             this.projectItem = (ProjectItem)item.Object;
             this.FindResources();
+
+            this.UpdateStatus( false, false );
                         
         }
 
