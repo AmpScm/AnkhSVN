@@ -2,8 +2,22 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Revert">
     <section>
+            Undo all local edits
+            <br/><br/>
             <p>
-            
+                <b>Description</b>
+                <br/>
+                Reverts any local changes to a file or directory and resolves any conflicted states. 
+                svn revert will not only revert the contents of an item in your working copy, 
+                but also any property changes. 
+                Finally, you can use it to undo any scheduling operations that you may have done 
+                (e.g. files scheduled for addition or deletion can be unscheduled).
+                <br/><br/>
+                <b>Changes</b>
+                <br/>
+                Working copy
+                
+
             </p>
     
         </section>

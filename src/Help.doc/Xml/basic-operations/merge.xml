@@ -3,7 +3,25 @@
 <doc title="Merge">
     <section>
             <p>
-            
+                Apply the differences between two URLs to a working copy path.
+                <br/><br/>
+                <b>Description</b>
+                <br/>
+                    In the first form, URL1 and URL2 are URLs specified at revisions N and M. 
+                    These are the two sources to be compared. The revisions default to HEAD if omitted.
+                    <br/><br/>
+                    In the second form TARGET can be a URL, or it can be a working copy path, 
+                    in which case the corresponding URL is used. This URL, at revisions N and M, 
+                    defines the two sources to be compared.
+                    <br/><br/>
+                    PATH is the working copy path that will receive the changes. 
+                    If omitted, a default value of '.' is assumed.
+                <br/><br/>
+                <b>Changes</b>
+                <br/>
+                Working copy
+
+
             </p>
     
         </section>

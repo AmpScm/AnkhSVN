@@ -2,8 +2,20 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Import">
     <section>
+            Recursively commit a copy of PATH to URL.
+            <br/><br/>
             <p>
-            
+                <b>Description</b>
+                <br/>
+                Recursively commit a copy of PATH to URL. If there is no third argument, 
+                copy the top-level contents of PATH into URL directly. 
+                Otherwise, create NEW_ENTRY underneath URL and begin copy there.
+                <br/><br/>
+                <b>Changes</b>
+                <br/>
+                Repository
+
+
             </p>
     
         </section>

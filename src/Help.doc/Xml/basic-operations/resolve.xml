@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
-<doc title="List">
+<doc title="Resolve">
     <section>
-            List directory entries of a URL.
+            Remove conflicted state on working copy files or directories.
             <br/><br/>
             <p>
                 <b>Description</b>
-                <br/>
-                List directory entries of a URL. 
-                If URL is a file, just file entry will be displayed. svn list does not work on paths 
-                in your working copy.
-                <br/><br/>
-                
+                    Remove conflicted state on working copy files or directories. 
+                    This routine does not semantically resolve conflict markers; 
+                    it merely removes conflict-related artifact files and allows PATH 
+                    to be committed again. 
                 <b>Changes</b>
                 <br/>
-                Nothing
-                
-
+                Working copy
             </p>
     
         </section>
