@@ -240,10 +240,10 @@ namespace Ankh.UI
             this.treeView.Controller = null;
             this.treeView.Enabled = false;
             this.treeView.ImageIndex = -1;
-            this.treeView.Location = new System.Drawing.Point(0, 88);
+            this.treeView.Location = new System.Drawing.Point(0, 110);
             this.treeView.Name = "treeView";
             this.treeView.SelectedImageIndex = -1;
-            this.treeView.Size = new System.Drawing.Size(400, 296);
+            this.treeView.Size = new System.Drawing.Size(407, 296);
             this.treeView.TabIndex = 6;
             // 
             // revisionPicker
