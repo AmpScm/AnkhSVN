@@ -396,6 +396,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "ReverseMergeDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReverseMergeDialog.resx"
+                    DependentUpon = "ReverseMergeDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "RevisionPicker.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
