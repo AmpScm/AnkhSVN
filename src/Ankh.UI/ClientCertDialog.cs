@@ -7,22 +7,24 @@ using System.IO;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// A dialog that prompts the user for a client certificate.
-	/// </summary>
-	public class ClientCertDialog : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// A dialog that prompts the user for a client certificate.
+    /// </summary>
+    public class ClientCertDialog : System.Windows.Forms.Form
+    {
         public ClientCertDialog()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
-		}
+            //
+            // TODO: Add any constructor code after InitializeComponent call
+            //
+
+            this.clientCertTextBox_TextChanged( this, EventArgs.Empty );
+        }
 
         /// <summary>
         /// The path to the certificate file.
@@ -59,28 +61,28 @@ namespace Ankh.UI
             set{ this.realmLabel.Text = value; }
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -95,7 +97,7 @@ namespace Ankh.UI
             // okButton
             // 
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(192, 144);
+            this.okButton.Location = new System.Drawing.Point(192, 128);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 0;
             this.okButton.Text = "OK";
@@ -103,7 +105,7 @@ namespace Ankh.UI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(280, 144);
+            this.cancelButton.Location = new System.Drawing.Point(280, 128);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 1;
             this.cancelButton.Text = "Cancel";
@@ -119,7 +121,7 @@ namespace Ankh.UI
             // browseButton
             // 
             this.browseButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-            this.browseButton.Location = new System.Drawing.Point(336, 64);
+            this.browseButton.Location = new System.Drawing.Point(336, 72);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(22, 23);
             this.browseButton.TabIndex = 3;
@@ -128,7 +130,7 @@ namespace Ankh.UI
             // 
             // clientCertTextBox
             // 
-            this.clientCertTextBox.Location = new System.Drawing.Point(8, 88);
+            this.clientCertTextBox.Location = new System.Drawing.Point(8, 72);
             this.clientCertTextBox.Name = "clientCertTextBox";
             this.clientCertTextBox.Size = new System.Drawing.Size(320, 20);
             this.clientCertTextBox.TabIndex = 4;
@@ -138,14 +140,15 @@ namespace Ankh.UI
             // pathWarningLabel
             // 
             this.pathWarningLabel.ForeColor = System.Drawing.Color.Red;
-            this.pathWarningLabel.Location = new System.Drawing.Point(16, 144);
+            this.pathWarningLabel.Location = new System.Drawing.Point(8, 128);
             this.pathWarningLabel.Name = "pathWarningLabel";
+            this.pathWarningLabel.Size = new System.Drawing.Size(104, 23);
             this.pathWarningLabel.TabIndex = 5;
             this.pathWarningLabel.Text = "Invalid path";
             // 
             // saveCredentialsCheckBox
             // 
-            this.saveCredentialsCheckBox.Location = new System.Drawing.Point(8, 112);
+            this.saveCredentialsCheckBox.Location = new System.Drawing.Point(8, 96);
             this.saveCredentialsCheckBox.Name = "saveCredentialsCheckBox";
             this.saveCredentialsCheckBox.Size = new System.Drawing.Size(136, 24);
             this.saveCredentialsCheckBox.TabIndex = 6;
@@ -157,21 +160,23 @@ namespace Ankh.UI
             this.realmLabel.Name = "realmLabel";
             this.realmLabel.Size = new System.Drawing.Size(256, 32);
             this.realmLabel.TabIndex = 11;
+            this.realmLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
             this.label2.Location = new System.Drawing.Point(10, 32);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 23);
+            this.label2.Size = new System.Drawing.Size(54, 32);
             this.label2.TabIndex = 10;
             this.label2.Text = "Realm:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ClientCertDialog
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(370, 175);
+            this.ClientSize = new System.Drawing.Size(370, 159);
             this.Controls.Add(this.realmLabel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.saveCredentialsCheckBox);
@@ -191,7 +196,7 @@ namespace Ankh.UI
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         private void clientCertTextBox_TextChanged(object sender, System.EventArgs e)
         {
@@ -231,5 +236,5 @@ namespace Ankh.UI
         }
 
         
-	}
+    }
 }

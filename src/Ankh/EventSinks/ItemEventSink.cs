@@ -29,6 +29,14 @@ namespace Ankh.EventSinks
                     for( short i = 1; i <= item.FileCount; i++ )
                     {
                         string file = item.get_FileNames(i);
+
+                        // is this an URI?
+                        if ( file.ToLower().StartsWith( "file://" ) )
+                        {
+                            Uri uri = new Uri( file );
+                            file = uri.LocalPath;
+                        }
+
                         SvnItem svnItem = this.Context.StatusCache[ file ];
                         if ( !svnItem.IsVersioned && svnItem.IsVersionable )
                             this.Context.Client.Add( file, false );
@@ -85,7 +93,7 @@ namespace Ankh.EventSinks
             // we don't want to svn delete files that actually exist on disk -
             // they'll most likely just be "Exclude(d) from project"
             return item.IsVersioned && 
-                (!File.Exists( item.Path ) || !Directory.Exists(item.Path));
+                (!File.Exists( item.Path ) && !Directory.Exists(item.Path));
         }
 
         /// <summary>
