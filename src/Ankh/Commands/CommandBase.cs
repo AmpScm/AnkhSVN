@@ -117,6 +117,11 @@ namespace Ankh.Commands
             return item.IsVersioned && !item.IsModified && item.IsFile;
         }
 
+        protected static bool UnmodifiedItemFilter( SvnItem item )
+        {
+            return item.IsVersioned && !item.IsModified;
+        }
+
         protected static void GetPathInfo(object sender, GetPathInfoEventArgs args)
         {
             SvnItem item = (SvnItem)args.Item;

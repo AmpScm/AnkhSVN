@@ -2,6 +2,7 @@ using System;
 using EnvDTE;
 using Ankh.UI;
 using NSvn.Core;
+using Utils;
 
 using System.IO;
 using System.Windows.Forms;
@@ -13,16 +14,17 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for RenameCommand.
     /// </summary>
-    [VSNetCommand("RenameFile", Text = "Rename file...", Tooltip = "Rename this file...", 
+    [VSNetCommand("RenameFile", Text = "Rename item...", Tooltip = "Rename this item...", 
          Bitmap = ResourceBitmaps.Refresh),
-    VSNetControl( "Item.Ankh", Position = 1 )]
+    VSNetControl( "Item.Ankh", Position = 1 ),
+    VSNetControl( "Folder.Ankh", Position = 1 )]
     public class RenameFileCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            // we can only rename a single unmodified file
+            // we can only rename unmodified files or folders
             if ( context.SolutionExplorer.GetSelectionResources( false, 
-                new ResourceFilterCallback(RenameFileCommand.UnmodifiedSingleFileFilter) ).Count == 1 )
+                new ResourceFilterCallback(RenameFileCommand.UnmodifiedItemFilter) ).Count == 1 )
             {
                 return Enabled;
             }
@@ -37,39 +39,52 @@ namespace Ankh.Commands
             this.SaveAllDirtyDocuments( context );
 
             IList items = context.SolutionExplorer.GetSelectionResources( false,
-                new ResourceFilterCallback(CommandBase.UnmodifiedSingleFileFilter) );
+                new ResourceFilterCallback(CommandBase.UnmodifiedItemFilter) );
             
-            // should only ever be 1
-            System.Diagnostics.Debug.Assert( items.Count == 1, "Should only be 1" );
-            SvnItem item = (SvnItem)items[0];
+            // should only ever be 1 
+            System.Diagnostics.Debug.Assert( items.Count == 1, "Should be 1" );
 
             context.StartOperation( "Renaming" );
             try
             {
-                string filename = Path.GetFileName( item.Path );
-                string dirname = Path.GetDirectoryName( item.Path );
-                using( RenameDialog dialog = new RenameDialog( filename ) )
+                foreach( SvnItem item in items )
                 {
-                    if ( dialog.ShowDialog() == DialogResult.OK )
-                    {
-                        string newPath = Path.Combine( dirname, dialog.NewName );
-                        context.OutputPane.WriteLine( "Renaming {0} to {1}", item.Path, newPath );
-                        context.Client.Move( item.Path, Revision.Unspecified, newPath, true );
-
-                        // remove the old file and add the new to the project
-                        ProjectItem prjItem = context.SolutionExplorer.GetSelectedProjectItem();
-
-                        Project project = prjItem.ContainingProject;
-                        prjItem.Remove();
-                        project.ProjectItems.AddFromFile( newPath );
-                    }
+                    this.RenameItem( item, context );
                 }
-                                
             }
             finally
             {
                 context.EndOperation();
             }
+            
         }
+
+        private void RenameItem( SvnItem item, IContext context )
+        {
+            string parent = PathUtils.GetParent( item.Path );
+            string name = PathUtils.GetName( item.Path );
+
+            using( RenameDialog dialog = new RenameDialog( name ) )
+            {
+                if ( dialog.ShowDialog() == DialogResult.OK )
+                {
+                    string newPath = Path.Combine( parent, dialog.NewName );
+                    context.OutputPane.WriteLine( "Renaming {0} to {1}", item.Path, newPath );
+                    context.Client.Move( item.Path, Revision.Unspecified, newPath, true );
+
+                    // remove the old file and add the new to the project
+                    ProjectItem prjItem = context.SolutionExplorer.GetSelectedProjectItem();
+
+                    Project project = prjItem.ContainingProject;
+                    prjItem.Remove();
+
+                    if ( item.IsDirectory )
+                        project.ProjectItems.AddFromDirectory( newPath );
+                    else                            
+                        project.ProjectItems.AddFromFile( newPath );
+                }
+            }
+        }
+
     }
 }
