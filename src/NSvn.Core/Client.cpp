@@ -185,16 +185,22 @@ NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
     else
         HandleError( err );
 
-    //retrieve the status
-    svn_wc_status_t* status;    
-    const char* truePath = CanonicalizePath( path, pool );
+    try
+    {
+        //retrieve the status
+        svn_wc_status_t* status;    
+        const char* truePath = CanonicalizePath( path, pool );
 
-    HandleError( svn_wc_status( &status, truePath, admAccess, pool ) );
+        HandleError( svn_wc_status( &status, truePath, admAccess, pool ) );
 
-    // and unlock again
-    HandleError( svn_wc_adm_close( admAccess ) );
+        return new NSvn::Core::Status( status );
+    }
+    __finally
+    {
 
-    return new NSvn::Core::Status( status );
+        // and unlock again
+        HandleError( svn_wc_adm_close( admAccess ) );
+    }    
 }
 
 
