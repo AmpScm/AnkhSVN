@@ -39,7 +39,9 @@ namespace NSvn.Tests
             Assertion.AssertEquals( "Wrong status. Should be modified", StatusKind.Modified,
                 item.Status.TextStatus );
 
-            item.Commit( false );
+            CommitInfo info = item.Commit( false );
+
+            Assertion.AssertNotNull( "Wrong CommitInfo. Shouldn't be null", info );
 
             Assertion.AssertEquals( "Wrong status. Should be normal", StatusKind.Normal,
                 item.Status.TextStatus );

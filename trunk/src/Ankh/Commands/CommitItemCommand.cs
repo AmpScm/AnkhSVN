@@ -39,9 +39,11 @@ namespace Ankh.Commands
             WorkingCopyResource[] resources = (WorkingCopyResource[])
                 v.WorkingCopyResources.ToArray( typeof(WorkingCopyResource) );
 
+            CommitInfo commitInfo = null;
+
             try
             {
-                WorkingCopyResource.Commit( resources, true );
+                commitInfo = WorkingCopyResource.Commit( resources, true );
             }
             catch( NSvn.Common.SvnException )
             {
@@ -50,6 +52,8 @@ namespace Ankh.Commands
             }
             finally
             {
+                if (commitInfo != null)
+                    this.context.OutputPane.WriteLine("\nCommitted revision {0}.", commitInfo.Revision);
                 this.context.OutputPane.EndActionText();
             }
 
