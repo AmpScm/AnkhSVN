@@ -8,7 +8,7 @@
                 <xs:element name="RepositoryExplorer">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="MruUrls" minOccurs="1" maxOccurs="1">
+                            <xs:element name="MruUrls" minOccurs="0" maxOccurs="1">
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element name="Url" nillable="true" minOccurs="0" maxOccurs="unbounded">
@@ -27,10 +27,10 @@
                 <xs:element name="MergeExePath" type="xs:string" minOccurs="0" maxOccurs="1" />
                 <xs:element name="DiffExePath" type="xs:string" minOccurs="0" maxOccurs="1" />
                 <xs:element name="LogMessageTemplate" type="xs:string" minOccurs="0" maxOccurs="1" />
-                <xs:element name="AutoAddNewFiles" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
-                <xs:element name="AutoReuseComment" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
-                <xs:element name="ChooseDiffMergeManual" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
-                <xs:element name="DisableSolutionReload" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="AutoAddNewFiles" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+                <xs:element name="AutoReuseComment" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+                <xs:element name="ChooseDiffMergeManual" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+                <xs:element name="DisableSolutionReload" type="xs:boolean" minOccurs="0" maxOccurs="1" />
                 <xs:element name="Subversion">
                     <xs:complexType>
                         <xs:sequence>
