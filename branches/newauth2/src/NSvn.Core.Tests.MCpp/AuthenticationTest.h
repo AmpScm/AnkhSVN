@@ -20,6 +20,9 @@ namespace NSvn
                 public:
                     [Test]
                     void TestGetSimplePromptProvider();
+
+                    [Test]
+                    void TestGetUsernameProvider();
                 private:
                     NSvn::Core::SimpleCredential* SimplePrompt( System::String* realm, 
                         System::String* username );

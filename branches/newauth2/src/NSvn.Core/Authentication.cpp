@@ -16,6 +16,8 @@ using namespace NSvn::Core;
 svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton, 
                                 const char* realm, const char* username, apr_pool_t* pool );
 
+
+// implementation of GetSimplePromptProvider
 AuthenticationProviderObject* NSvn::Core::Authentication::GetSimplePromptProvider(
     SimplePromptDelegate* promptDelegate, int retryLimit )
 {
@@ -33,6 +35,19 @@ AuthenticationProviderObject* NSvn::Core::Authentication::GetSimplePromptProvide
 
     return new AuthenticationProviderObject( provider, pool );
 }
+
+
+// implementation of GetUsernameProvider
+AuthenticationProviderObject* NSvn::Core::Authentication::GetUsernameProvider()
+{
+    GCPool* pool = new GCPool();
+    svn_auth_provider_object_t* provider;
+
+    svn_client_get_username_provider( &provider, pool->ToAprPool() );
+
+    return new AuthenticationProviderObject( provider, pool );
+}
+
 
 // callback function for a simple prompt provider
 svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton,

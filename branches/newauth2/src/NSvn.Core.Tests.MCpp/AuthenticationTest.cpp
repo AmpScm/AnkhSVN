@@ -52,9 +52,42 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
 
     Assertion::AssertEquals( "Username not correct", S"Arild", StringHelper( creds->username ) );
     Assertion::AssertEquals( "Password not correct", S"Fines", StringHelper( creds->password ) );
-
 }
 
+void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetUsernameProvider()
+{
+    // first get the username through the managed interface
+    AuthenticationProviderObject* obj = Authentication::GetUsernameProvider();
+
+    Pool pool;
+
+    svn_auth_cred_username_t* credsManaged;
+    svn_auth_iterstate_t* iterstate;
+    apr_hash_t* params = apr_hash_make( pool );
+
+    svn_auth_baton_t* authBaton = GetBaton( obj->GetProvider(), pool );
+
+    HandleError( svn_auth_first_credentials( ((void**)&credsManaged), &iterstate, SVN_AUTH_CRED_USERNAME, 
+        "Realm", authBaton, pool ) );
+
+       
+    // now get it directly
+    svn_auth_provider_object_t* authProvider;
+    svn_auth_cred_username_t* credsUnmanaged;
+    svn_client_get_username_provider( &authProvider, pool );
+
+    authBaton = GetBaton( authProvider, pool );
+
+    HandleError( svn_auth_first_credentials( ((void**)&credsUnmanaged), &iterstate, SVN_AUTH_CRED_USERNAME, 
+        "Realm", authBaton, pool ) );
+
+    if ( credsUnmanaged && credsUnmanaged )
+        Assertion::AssertEquals( "Usernames different", StringHelper(credsUnmanaged->username), 
+            StringHelper(credsManaged->username) );  
+    else if ( (credsManaged != 0) ^ (credsUnmanaged != 0) )
+        Assertion::Fail( "Credentials are different" );
+
+}
 SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::SimplePrompt( 
     String* realm, String* username )
 {

@@ -17,6 +17,11 @@ namespace NSvn
             static AuthenticationProviderObject* GetSimplePromptProvider( 
                 SimplePromptDelegate* promptDelegate,
                 int retryLimit );
+
+            /// <summary>Create and return an authentication provider that gets username 
+            /// information from the user's ~/.subversion configuration directory </summary>
+            static AuthenticationProviderObject* GetUsernameProvider();
+
         };
     }
 }
