@@ -374,7 +374,7 @@ namespace NSvn
             Client(){;}
             static void ByteArrayToSvnString( svn_string_t* string, Byte array[], 
                 const Pool& pool );
-            static String* CanonicalizePath( String* path );
+            static const char* CanonicalizePath( String* path, Pool& pool );
 
             static apr_array_header_t* StringArrayToAprArray( String* strings[], Pool& pool );
         };
