@@ -43,11 +43,6 @@ namespace Ankh
         RepositoryExplorer.Controller RepositoryExplorer { get; }
 
         /// <summary>
-        /// The EnvDTE.Window hosting the Repository Explorer. 
-        /// </summary>
-        EnvDTE.Window RepositoryExplorerWindow { get; }
-
-        /// <summary>
         /// Whether a solution is open.
         /// </summary>
         bool SolutionIsOpen { get; }

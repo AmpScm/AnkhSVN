@@ -42,10 +42,7 @@ namespace Ankh
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
             this.solutionExplorer = new Solution.Explorer( this.dte, this );
-            this.progressDialog = new ProgressDialog();            
-            this.CreateRepositoryExplorer();
-            this.repositoryController = new RepositoryExplorer.Controller( this, 
-                this.repositoryExplorer, this.reposExplorerWindow );
+            this.progressDialog = new ProgressDialog();             
 
             string iconvdir = Path.Combine( 
                 Path.GetDirectoryName(this.GetType().Assembly.Location), 
@@ -57,6 +54,9 @@ namespace Ankh
             this.SetUpEvents();    
             
             this.conflictManager = new ConflictManager(this);
+
+            this.repositoryController = 
+                new RepositoryExplorer.Controller( this );
 
         }
 
@@ -125,12 +125,6 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.repositoryController; }
         }
-
-        public EnvDTE.Window RepositoryExplorerWindow
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.reposExplorerWindow; }
-        }  
  
         /// <summary>
         /// Whether a solution is open.
@@ -427,27 +421,6 @@ namespace Ankh
 
             return false;
         }
-        
-
-        private void CreateRepositoryExplorer()
-        {   
-            Debug.WriteLine( "Creating repository explorer", "Ankh" );
-            object control = null;
-            this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
-                this.addin, "AnkhUserControlHost.AnkhUserControlHostCtl", 
-                "Repository Explorer", REPOSEXPLORERGUID, ref control );
-            
-            this.reposExplorerWindow.Visible = true;
-            this.reposExplorerWindow.Caption = "Repository Explorer";
-            
-            this.objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
-            
-            this.repositoryExplorer = new RepositoryExplorerControl();
-            this.objControl.HostUserControl( this.repositoryExplorer );
-            
-            System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
-                "Could not create tool window" );
-        }
 
         #region Win32Window class
         private class Win32Window : IWin32Window
@@ -500,11 +473,7 @@ namespace Ankh
 
         private ProgressDialog progressDialog;
         private SvnClient client;
-        private RepositoryExplorerControl repositoryExplorer;
-        private EnvDTE.Window reposExplorerWindow;
-        private AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl objControl;
+        
         private Ankh.Config.ConfigLoader configLoader;
-        public static readonly string REPOSEXPLORERGUID = 
-            "{1C5A739C-448C-4401-9076-5990300B0E1B}";
     }
 }
