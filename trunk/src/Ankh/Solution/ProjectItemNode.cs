@@ -122,7 +122,7 @@ namespace Ankh.Solution
             {
                 for( int i = 1; i <= item.ProjectItems.Count; i++ )
                 {
-                    ProjectItem subItem = item.ProjectItems.Item(1);
+                    ProjectItem subItem = item.ProjectItems.Item(i);
                     if ( subItem.Name != Client.AdminDirectoryName )
                     {
                         this.AddResourcesFromProjectItem( subItem, del );
