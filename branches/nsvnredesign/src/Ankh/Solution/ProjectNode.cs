@@ -31,6 +31,12 @@ namespace Ankh.Solution
             this.GetChildResources( list, getChildItems, filter );
         }
 
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.VisitProject(this);
+        }
+
+
 
         private void FindProjectResources(Explorer explorer)
         {
@@ -62,7 +68,7 @@ namespace Ankh.Solution
         /// <summary>
         /// The directory this project resides in.
         /// </summary>
-        protected override string Directory
+        public override string Directory
         {
             [System.Diagnostics.DebuggerStepThrough()]
             get { return this.projectFolder.Path; }

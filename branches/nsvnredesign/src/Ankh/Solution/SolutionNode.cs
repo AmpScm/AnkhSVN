@@ -30,6 +30,12 @@ namespace Ankh.Solution
 
             this.FindChildren();
         }   
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.VisitSolutionNode(this);
+        }
+
     
         public override void GetResources( IList list, 
             bool getChildItems, ResourceFilterCallback filter )
@@ -49,7 +55,7 @@ namespace Ankh.Solution
         /// <summary>
         /// The path to the solution folder.
         /// </summary>
-        protected override string Directory
+        public override string Directory
         {
             [System.Diagnostics.DebuggerStepThrough()]
             get{ return this.solutionFolder.Path; }

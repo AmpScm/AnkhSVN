@@ -57,6 +57,11 @@ namespace Ankh.Commands
             return item.IsVersioned && item.IsDirectory;
         }
 
+        protected static bool VersionedFilter( SvnItem item )
+        {
+            return item.IsVersioned;
+        }
+
         protected static bool UnversionedFilter( SvnItem item )
         {
             return !item.IsVersioned;

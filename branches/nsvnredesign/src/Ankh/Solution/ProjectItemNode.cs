@@ -35,6 +35,12 @@ namespace Ankh.Solution
             this.GetChildResources( list, getChildItems, filter );
         }
 
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.VisitProjectItem(this);
+        }
+
+
 
         /// <summary>
         /// The status of this node, not including children.
@@ -49,7 +55,7 @@ namespace Ankh.Solution
         /// The folder path if this is a folder item, or the directory
         /// in which the file resides if it is a file.
         /// </summary>
-        protected override string Directory
+        public override string Directory
         {
             get
             {

@@ -67,6 +67,8 @@ namespace Ankh.Solution
                 return null;
         }
 
+        public abstract void Accept( INodeVisitor visitor );
+
         public void Refresh()
         {
             this.Refresh( true );
@@ -99,7 +101,7 @@ namespace Ankh.Solution
 
         
 
-        abstract protected string Directory
+        abstract public string Directory
         {
             get;
         }
