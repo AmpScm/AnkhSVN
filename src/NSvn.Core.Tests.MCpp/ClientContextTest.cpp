@@ -112,7 +112,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
 String* NSvn::Core::Tests::MCpp::ClientContextTest::LogMsgCallback( CommitItem* items[] )
 {
     Assertion::AssertEquals( "Wrong number of items", 2, items->Length );
-    Assertion::AssertEquals( "Wrong path", S"/foo/bar", items[0]->Path );
+    Assertion::AssertEquals( "Wrong path", S"\foo\bar", items[0]->Path );
     Assertion::AssertEquals( "Wrong node kind", NodeKind::Directory, items[1]->Kind );
     Assertion::AssertEquals( "Wrong revision", 42, items[0]->Revision );
     Assertion::AssertEquals( "Wrong copy from url", S"http://copy.from.url", 
