@@ -1,4 +1,7 @@
 // $Id$
+using EnvDTE;
+using Ankh.Solution;
+using System.Collections;
 
 namespace Ankh
 {
@@ -16,12 +19,6 @@ namespace Ankh
         /// <param name="item"></param>
         void UpdateStatus( ProjectItem item );
 
-        /// <summary>	 	
-        /// Visits all the selected nodes.	 	
-        /// </summary>	 	
-        /// <param name="visitor"></param>	 	
-        void VisitSelectedNodes( INodeVisitor visitor );
-
         /// <summary>
         /// Retrieves the resources associated with a project item.
         /// </summary>
@@ -34,7 +31,7 @@ namespace Ankh
         /// Visits all the selected nodes.	 	
         /// </summary>	 	
         /// <param name="visitor"></param>	 	
-        public void VisitSelectedNodes( INodeVisitor visitor );
+        void VisitSelectedNodes( INodeVisitor visitor );
 
         /// <summary>
         /// Returns the selected ProjectItem
