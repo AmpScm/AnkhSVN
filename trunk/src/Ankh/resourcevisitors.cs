@@ -59,8 +59,16 @@ namespace Ankh
         {
             this.WorkingCopyResources.Add( resource );            
         }
-
     }
-	
 
+    /// <summary>
+    /// A visitor that adds visited item to the Working copy.
+    /// </summary>
+    internal class AddVisitor : LocalResourceVisitorBase
+    {
+        public override void VisitUnversionedResource(NSvn.UnversionedResource resource)
+        {
+            resource.Add( true );
+        }
+    }
 }
