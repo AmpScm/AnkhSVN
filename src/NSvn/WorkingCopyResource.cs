@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections;
 using NSvn.Core;
 
+
 namespace NSvn
 {
 	/// <summary>
@@ -49,15 +50,13 @@ namespace NSvn
             return resource;
         }
 
-
-        
-
         /// <summary>
         /// Commit local changes to the repository.
         /// </summary>
         /// <param name="recursive">Whether subresources should be recursively committed.</param>
         public void Commit( bool recursive )
         {
+            
             Client.Commit( new string[]{ this.Path }, recursive, this.ClientContext );
         }
 
@@ -77,23 +76,22 @@ namespace NSvn
         }
 
         /// <summary>
-        /// Reverts items to the state before they where modified
+        /// Reverts resources to the state before they where modified
         /// </summary>
         /// <param name="recursive">Whether subitems should be recursively reverted</param>
-        public WorkingCopyResource Revert( bool recursive )
+        public void Revert( bool recursive )
         {
-            Client.Revert( this.Path, recursive, this.ClientContext );
-            return WorkingCopyResource.FromPath( this.Path );            
+            Client.Revert( this.Path, recursive, this.ClientContext );          
         }
 
         /// <summary>
         /// Reverts resources to the state before they where modified
         /// </summary>
-        /// <param name="resources"></param>
-        /// <param name="recursive"></param>
-        public static WorkingCopyResource Revert( string path, bool recursive )
+        /// <param name="resources">The resource to revert</param>
+        /// <param name="recursive">Whether subitems should be reverted recursively</param>
+        public static void Revert( WorkingCopyResource resource, bool recursive )
         {
-            return FromPath( path ).Revert( recursive );     
+            Client.Revert( resource.Path, recursive, resource.ClientContext);     
         }    
 /*
         /// <summary>
