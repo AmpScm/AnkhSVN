@@ -35,17 +35,10 @@ namespace Ankh
                 this.client = new SvnClient( this );
 
             this.hostWindow = new Win32Window( new IntPtr(dte.MainWindow.HWnd) );
-
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
-
-            
-
             this.solutionExplorer = new Solution.Explorer( this.dte, this );
-
             this.progressDialog = new ProgressDialog();            
-
             this.CreateRepositoryExplorer();
-
             this.repositoryController = new RepositoryExplorer.Controller( this, 
                 this.repositoryExplorer, this.reposExplorerWindow );
 
