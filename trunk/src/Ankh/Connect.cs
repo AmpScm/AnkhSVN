@@ -3,6 +3,7 @@ namespace Ankh
 {
     using System;
     using Microsoft.Office.Core;
+    using Microsoft.Win32;
     using Extensibility;
     using System.Runtime.InteropServices;
     using EnvDTE;
@@ -63,7 +64,9 @@ namespace Ankh
 
             try
             {
+                
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
+                
 
                 Extenders.ExtenderProvider.Register( this.context );
 
@@ -78,7 +81,11 @@ namespace Ankh
 
                 // register the new ones
                 this.commands= 
-                    Ankh.CommandMap.LoadCommands( this.context, register );    
+                    Ankh.CommandMap.LoadCommands( this.context, register );  
+
+                this.CreateAboutBoxText( ((_DTE)application).RegistryRoot );
+  
+                
             }
             catch( Exception ex )
             {
@@ -254,9 +261,36 @@ namespace Ankh
                 throw;
             }
         }
+
+        /// <summary>
+        /// Create the text that goes in the VS.NET about box, with the 
+        /// version numbers of Ankh and the linked libraries.
+        /// </summary>
+        private void CreateAboutBoxText( string registryRoot )
+        {
+            string text = "";			
+
+            // get the assembly version
+            string ankhVersion = 
+                typeof(NSvn.WorkingCopyDirectory).Assembly.GetName().Version.ToString();
+			
+            text += String.Format( "AnkhSVN {0}{1}", 
+                ankhVersion, Environment.NewLine );
+
+            // get the library versions
+            object[] attributes = typeof(NSvn.Core.Client).Assembly.GetCustomAttributes(
+                typeof(NSvn.Common.LibraryAttribute), true );
+            foreach( NSvn.Common.LibraryAttribute version in attributes )
+                text += version.ToString() + Environment.NewLine;
+
+            // set the registry value
+            RegistryKey key = Registry.CurrentUser.CreateSubKey( registryRoot + @"\AddIns\Ankh" );
+            key.SetValue( "AboutBoxDetails", text );
+        }
         
         private AnkhContext context;
         Ankh.CommandMap commands;
+
 
         private EnvDTE.vsCommandStatus cachedStatus;
         private string lastQueriedCommand = "";
