@@ -59,8 +59,14 @@ namespace Ankh.Solution
             this.projects.Clear();
             if ( this.treeview != null )
                 this.treeview.ClearStatusImages();
+            if ( this.originalImageList != IntPtr.Zero )
+            {
+                this.treeview.StatusImageList = originalImageList;
+                originalImageList = IntPtr.Zero;
+            }
             this.solutionNode = null;
         }
+
 
         
 
@@ -147,15 +153,19 @@ namespace Ankh.Solution
             this.GenerateStatusCache( this.dte.Solution.FullName );
             
             this.solutionItem = this.uiHierarchy.UIHierarchyItems.Item(1);
+
+            // store the original image list
+            this.originalImageList = this.treeview.StatusImageList;
             
             // and assign the status image list to the tree
-            this.treeview.StatusImageList = statusImageList;
+            this.treeview.StatusImageList = statusImageList.Handle;
+            
 
 
             // we assume there is a single root node
             this.root = TreeNode.CreateSolutionNode( 
                 this.solutionItem, this );
-
+ 
             Debug.WriteLine( "Created solution node", "Ankh" );
         }
 
@@ -512,6 +522,7 @@ namespace Ankh.Solution
         private ImageList statusImageList;
         private AnkhContext context;
         private TreeView treeview;
+        private IntPtr originalImageList = IntPtr.Zero;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
     }
