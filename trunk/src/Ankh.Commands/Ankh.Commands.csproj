@@ -69,15 +69,35 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
+                />
+                <Reference
+                    Name = "envdte"
+                    AssemblyName = "envdte"
+                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\envdte.dll"
+                />
+                <Reference
+                    Name = "extensibility"
+                    AssemblyName = "extensibility"
+                    HintPath = "I:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\PublicAssemblies\extensibility.dll"
+                />
+                <Reference
+                    Name = "office"
+                    AssemblyName = "office"
+                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\office.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "AddItem.cs"
+                    RelPath = "AddItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -87,112 +107,127 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Cleanup.cs"
+                    RelPath = "CleanupCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CommitItem.cs"
+                    RelPath = "Commands.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CopyItem.cs"
+                    RelPath = "CommitItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DiffLocalItem.cs"
+                    RelPath = "CopyItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DiffRepositoryItem.cs"
+                    RelPath = "DiffLocalItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "EditProperties.cs"
+                    RelPath = "DiffRepositoryItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ExportItem.cs"
+                    RelPath = "EditPropertiesCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ImportSolution.cs"
+                    RelPath = "ExportItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ItemInfo.cs"
+                    RelPath = "ICommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MakeDirectory.cs"
+                    RelPath = "ImportSolutionCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MakePatch.cs"
+                    RelPath = "ItemInfoCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MergeItem.cs"
+                    RelPath = "MakeDirectoryCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MoveItem.cs"
+                    RelPath = "MakePatchCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RemoveItem.cs"
+                    RelPath = "MergeItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RenameItem.cs"
+                    RelPath = "MoveItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ResolveConflict.cs"
+                    RelPath = "RemoveItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RevertItem.cs"
+                    RelPath = "RenameItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ShowLocalChanges.cs"
+                    RelPath = "ResolveConflictCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SwitchItem.cs"
+                    RelPath = "RevertItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "UpdateItem.cs"
+                    RelPath = "ShowLocalChangesCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ViewLog.cs"
+                    RelPath = "SwitchItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ViewRepositoryFile.cs"
+                    RelPath = "UpdateItemCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ViewLogCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ViewRepositoryFileCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "VSNetCommandAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

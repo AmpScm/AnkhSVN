@@ -6,14 +6,10 @@ namespace Ankh.Commands
 	/// <summary>
 	/// Summary description for UpdateItem.
 	/// </summary>
-	public class UpdateItem
+	[VSNetCommand("UpdateItem", Text = "Update", Tooltip = "Updates the local item")]
+	internal class UpdateItem : ICommand
 	{
-		public UpdateItem()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
+		
 	}
 }
 

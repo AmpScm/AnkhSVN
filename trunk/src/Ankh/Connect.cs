@@ -7,6 +7,8 @@ namespace Ankh
 	using System.Runtime.InteropServices;
 	using EnvDTE;
 
+    using Ankh.Commands;
+
 	#region Read me for Add-in installation and setup information.
 	// When run, the Add-in wizard prepared the registry for the Add-in.
 	// At a later time, if the Add-in becomes unavailable for reasons such as:
@@ -21,7 +23,7 @@ namespace Ankh
 	///   The object for implementing an Add-in.
 	/// </summary>
 	/// <seealso class='IDTExtensibility2' />
-	[GuidAttribute("DA979B20-78DF-45BC-A7D7-F5EF9DC77D30"), ProgId("Ankh.Connect")]
+	[GuidAttribute("DA979B20-78DF-45BC-A7D7-F5EF9DC77D30"), ProgId("Ankh")]
 	public class Connect : Object, Extensibility.IDTExtensibility2, IDTCommandTarget
 	{
 		/// <summary>
@@ -50,30 +52,40 @@ namespace Ankh
 		{
 			applicationObject = (_DTE)application;
 			addInInstance = (AddIn)addInInst;
+
+            this.commands= 
+                Ankh.Commands.Commands.RegisterCommands( applicationObject, addInInstance );           
+            
+
 			if(connectMode == Extensibility.ext_ConnectMode.ext_cm_UISetup)
 			{
-				object []contextGUIDS = new object[] { };
-				Commands commands = applicationObject.Commands;
-				_CommandBars commandBars = applicationObject.CommandBars;
+                
 
-				// When run, the Add-in wizard prepared the registry for the Add-in.
-				// At a later time, the Add-in or its commands may become unavailable for reasons such as:
-				//   1) You moved this project to a computer other than which is was originally created on.
-				//   2) You chose 'Yes' when presented with a message asking if you wish to remove the Add-in.
-				//   3) You add new commands or modify commands already defined.
-				// You will need to re-register the Add-in by building the AnkhSetup project,
-				// right-clicking the project in the Solution Explorer, and then choosing install.
-				// Alternatively, you could execute the ReCreateCommands.reg file the Add-in Wizard generated in
-				// the project directory, or run 'devenv /setup' from a command prompt.
-				try
-				{
-					Command command = commands.AddNamedCommand(addInInstance, "Ankh", "Ankh", "Executes the command for Ankh", true, 59, ref contextGUIDS, (int)vsCommandStatus.vsCommandStatusSupported+(int)vsCommandStatus.vsCommandStatusEnabled);
-					CommandBar commandBar = (CommandBar)commandBars["Tools"];
-					CommandBarControl commandBarControl = command.AddControl(commandBar, 1);
-				}
-				catch(System.Exception /*e*/)
-				{
-				}
+                 
+                
+//				object []contextGUIDS = new object[] { };
+//				Commands commands = applicationObject.Commands;
+//				_CommandBars commandBars = applicationObject.CommandBars;
+
+
+//				// When run, the Add-in wizard prepared the registry for the Add-in.
+//				// At a later time, the Add-in or its commands may become unavailable for reasons such as:
+//				//   1) You moved this project to a computer other than which is was originally created on.
+//				//   2) You chose 'Yes' when presented with a message asking if you wish to remove the Add-in.
+//				//   3) You add new commands or modify commands already defined.
+//				// You will need to re-register the Add-in by building the AnkhSetup project,
+//				// right-clicking the project in the Solution Explorer, and then choosing install.
+//				// Alternatively, you could execute the ReCreateCommands.reg file the Add-in Wizard generated in
+//				// the project directory, or run 'devenv /setup' from a command prompt.
+//				try
+//				{
+//					Command command = commands.AddNamedCommand(addInInstance, "Ankh", "Ankh", "Executes the command for Ankh", true, 59, ref contextGUIDS, (int)vsCommandStatus.vsCommandStatusSupported+(int)vsCommandStatus.vsCommandStatusEnabled);
+//					CommandBar commandBar = (CommandBar)commandBars["Tools"];
+//					CommandBarControl commandBarControl = command.AddControl(commandBar, 1);
+//				}
+//				catch(System.Exception /*e*/)
+//				{
+//				}
 			}
 			
 		}
@@ -150,10 +162,12 @@ namespace Ankh
 		{
 			if(neededText == EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedNone)
 			{
-				if(commandName == "Ankh.Connect.Ankh")
-				{
-					status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
-				}
+                if ( this.commands[commandName] != null )
+                    status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
+//				if(commandName == "Ankh.Connect.Ankh")
+//				{
+//					status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
+//				}
 			}
 		}
 
@@ -191,6 +205,7 @@ namespace Ankh
 		}
 		private _DTE applicationObject;
 		private AddIn addInInstance;
+        Ankh.Commands.Commands commands;
 		
 	}
 }

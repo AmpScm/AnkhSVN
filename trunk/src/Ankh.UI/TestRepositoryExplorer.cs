@@ -114,7 +114,8 @@ namespace Ankh.UI
 
         public static void Main()
         {
-            Application.Run( new TestRepositoryExplorer() );
+            //Application.Run( new TestRepositoryExplorer() );
+           // Ankh.Commands.Commands.RegisterCommands( null );
         }
 	}
 }

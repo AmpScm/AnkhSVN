@@ -40,12 +40,10 @@
     <File Url="img\repository.png"/>
     <File Url="Xml\basic-operations\propset.xml"/>
     <File Url="Xml\using-ankh\special_properties.xml"/>
-    <File Url="basic_work_cycle.xml"/>
     <File Url="Xml\using-ankh\basic_work_cycle.xml"/>
     <File Url="Xml\basic-operations\propget.xml"/>
     <File Url="Xml\basic-operations\propdel.xml"/>
     <File Url="Xml\basic-operations\propedit.xml"/>
     <File Url="Xml\basic-operations\proplist.xml"/>
     <File Url="Xml\using-ankh\revision.xml"/>
-    <File Url="keywords.xml"/>
     </HelpFileList>
