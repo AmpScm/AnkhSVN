@@ -317,7 +317,7 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-	        static PathToPropertyMapping* PropGet(String* propName, String* target, Revision* revision, 
+	        static PropertyDictionary* PropGet(String* propName, String* target, Revision* revision, 
                 bool recurse, ClientContext* context);
 
             /*
@@ -405,7 +405,7 @@ namespace NSvn
                 const Pool& pool );
             static const char* CanonicalizePath( String* path, Pool& pool );
 
-            static PathToPropertyMapping* ConvertPropertyHash( 
+            static PropertyDictionary* ConvertPathToPropertyMapping( 
                 apr_hash_t* propertyHash, String* propertyName, Pool& pool );
 
             static String* ToNativePath( const char* path, Pool& pool );

@@ -134,6 +134,15 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "PropertyDictionary.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PropertyDictionary.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "SimpleProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
