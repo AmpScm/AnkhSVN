@@ -102,9 +102,59 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "EolStylePropertyEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "EolStylePropertyEditor.resx"
+                    DependentUpon = "EolStylePropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ExecutablePropertyEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ExecutablePropertyEditor.resx"
+                    DependentUpon = "ExecutablePropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ExternalsPropertyEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ExternalsPropertyEditor.resx"
+                    DependentUpon = "ExternalsPropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "IgnorePropertyEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IgnorePropertyEditor.resx"
+                    DependentUpon = "IgnorePropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "IPropertyEditor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "KeywordsPropertyEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "KeywordsPropertyEditor.resx"
+                    DependentUpon = "KeywordsPropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "LogMessageControl.cs"
@@ -114,6 +164,16 @@
                 <File
                     RelPath = "LogMessageControl.resx"
                     DependentUpon = "LogMessageControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "MimeTypePropertyEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MimeTypePropertyEditor.resx"
+                    DependentUpon = "MimeTypePropertyEditor.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
