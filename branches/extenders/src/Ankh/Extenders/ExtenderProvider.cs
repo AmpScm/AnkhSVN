@@ -17,26 +17,45 @@ namespace Ankh.Extenders
         private ExtenderProvider( AnkhContext context )
         {
             this.context = context;
+            this.extender = new ResourceExtender();
         }
 
         #region IExtenderProvider Members
 
         public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, IExtenderSite ExtenderSite, int Cookie)
         {
-            ResourceGathererVisitor v = new ResourceGathererVisitor();
-            this.context.SolutionExplorer.VisitSelectedItems( v, false );
+            try
+            {
+                // get the selected items
+                ResourceGathererVisitor v = new ResourceGathererVisitor();
+                this.context.SolutionExplorer.VisitSelectedItems( v, false );
             
-            TestExtender extender = new TestExtender();
-            extender.Resource = (WorkingCopyResource)v.WorkingCopyResources[0];
+                // have the extender know about the selected item.
+                this.extender.Resource = (WorkingCopyResource)v.WorkingCopyResources[0];
 
-            return extender;
+                return this.extender;
+            }
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+                throw;
+            }
         }
 
         public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
         {
-            VersionedVisitor v = new VersionedVisitor();
-            this.context.SolutionExplorer.VisitSelectedItems( v, false );
-            return v.IsVersioned;
+            try
+            {
+                // ensure all selected items are versioned
+                VersionedVisitor v = new VersionedVisitor();
+                this.context.SolutionExplorer.VisitSelectedItems( v, false );
+                return v.IsVersioned;
+            }
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+                throw;
+            }
         }
 
         #endregion
@@ -50,8 +69,12 @@ namespace Ankh.Extenders
             ExtenderProvider.provider = new ExtenderProvider( context );
 
             _DTE dte = context.DTE;
-            cookies.Add ( dte.ObjectExtenders.RegisterExtenderProvider( 
-                PrjBrowseObjectCATID.prjCATIDCSharpFileBrowseObject, "Ankh", provider, string.Empty ) );
+            foreach( string catid in CATIDS )
+            {
+                // cookies need to be stored so we can unregister the extender provider later
+                cookies.Add ( dte.ObjectExtenders.RegisterExtenderProvider( 
+                    catid, "Ankh", provider, string.Empty ) );
+            }
         }
 
         
@@ -61,6 +84,7 @@ namespace Ankh.Extenders
         /// <param name="dte"></param>
         internal static void Unregister( _DTE dte )
         {
+            // use the stored cookies to unregister the registered providers.
             foreach( int cookie in cookies )
                 dte.ObjectExtenders.UnregisterExtenderProvider( cookie );
         }
@@ -70,5 +94,23 @@ namespace Ankh.Extenders
 
         private AnkhContext context;
 
-    }
+        private ResourceExtender extender;
+
+        private readonly static string[] CATIDS = new string[]{
+                                                                  "{8D58E6AF-ED4E-48B0-8C7B-C74EF0735451}", // C# File Browse
+                                                                  "{914FE278-054A-45DB-BF9E-5F22484CC84C}", // C# folder browse
+                                                                  "{4EF9F003-DE95-4d60-96B0-212979F2A857}", // C# Project browse
+                                                                  "{EA5BD05D-3C72-40A5-95A0-28A2773311CA}", // VB file browse
+                                                                  "{932DC619-2EAA-4192-B7E6-3D15AD31DF49}", // VB folder browse
+                                                                  "{E0FDC879-C32A-4751-A3D3-0B3824BD575F}", // VB project browse
+                                                                  "{E6FDF869-F3D1-11D4-8576-0002A516ECE8}", // VJ# file browse
+                                                                  "{E6FDF86A-F3D1-11D4-8576-0002A516ECE8}", // VJ# folder browse
+                                                                  "{E6FDF86C-F3D1-11D4-8576-0002A516ECE8}", // VJ# project browse
+                                                                  "{A2392464-7C22-11d3-BDCA-00C04F688E50}", // solution browse object
+                                                                  "{610d4611-d0d5-11d2-8599-006097c68e81}" // generic project
+                                                              };
+
+
+
+        }
 }

@@ -416,11 +416,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Extenders\Extenders.reg"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Extenders\TestExtender.cs"
+                    RelPath = "Extenders\ResourceExtender.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
