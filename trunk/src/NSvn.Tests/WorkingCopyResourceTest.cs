@@ -112,6 +112,12 @@ namespace NSvn.Tests
         {
             // text status has been tested in other tests
             WorkingCopyResource file = new WorkingCopyFile(Path.Combine(this.WcPath, "Form.cs") );
+
+            //retrieve the status first to force it to be cached
+            Assertion.AssertEquals( "Property status should be none",
+                StatusKind.None, file.Status.PropertyStatus );
+
+            // then set a property and check if it correctly detects the change in status
             this.RunCommand( "svn",  "ps foo moo " + file.Path );
             Assertion.AssertEquals( "property status should have been modified", 
                 StatusKind.Modified, file.Status.PropertyStatus );
