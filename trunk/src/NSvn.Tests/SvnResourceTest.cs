@@ -43,8 +43,8 @@ namespace NSvn.Tests
 
             ILocalResource totallyUnversionedFile = SvnResource.FromLocalPath(
                 Path.GetTempFileName() );
-            Assertion.AssertNull( "Expected a null resource from an unversioned path", 
-                totallyUnversionedFile );
+            Assertion.AssertEquals( "Expected SvnResource.Unversionable", 
+                SvnResource.Unversionable, totallyUnversionedFile );
         }
 	}
 }
