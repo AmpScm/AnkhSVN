@@ -30,9 +30,31 @@ namespace Ankh.Solution
                 new ItemComparer() );
             this.projects = new Hashtable( new ProjectHashCodeProvider(), 
                 new ProjectComparer() );
-            this.solutionNode = null;
+            
+            // get the uihierarchy root
+            this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
+                DteConstants.vsWindowKindSolutionExplorer ).Object; 
+            this.solutionNode = null;            
+        }
+
+        /// <summary>
+        ///  To be called when a solution is loaded.
+        /// </summary>
+        public void Load()
+        {
+            this.Unload();
             this.SetUpTreeview();
             this.SyncWithTreeView();
+        }
+
+        /// <summary>
+        ///  Resets the state of the object. To be called when a solution is unloaded.
+        /// </summary>
+        public void Unload()
+        {
+            this.projectItems.Clear();
+            this.projects.Clear();
+            this.solutionNode = null;
         }
 
         
@@ -167,16 +189,9 @@ namespace Ankh.Solution
             IntPtr root = (IntPtr)Win32.SendMessage( this.treeview, Msg.TVM_GETNEXTITEM,
                 C.TVGN_ROOT, IntPtr.Zero );
             
-
-            // and the uihierarchy root
-            this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
-                DteConstants.vsWindowKindSolutionExplorer ).Object;           
+          
 
             this.solutionItem = this.uiHierarchy.UIHierarchyItems.Item(1);
-            if ( this.solutionItem.Object is EnvDTE.Solution )
-                System.Windows.Forms.MessageBox.Show( "Moo" );
-            else if ( this.solutionItem.Object == this.dte.Solution )
-                System.Windows.Forms.MessageBox.Show( "Baaaaahh!" );
 
             // we assume there is a single root node
             this.root = TreeNode.CreateSolutionNode( 

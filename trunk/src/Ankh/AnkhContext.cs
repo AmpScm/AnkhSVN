@@ -30,6 +30,8 @@ namespace Ankh
 
             this.repositoryController = new RepositoryExplorer.Controller( this );
 
+            this.solutionExplorer = new Solution.Explorer( this.dte, this.context );
+
             this.CreateRepositoryExplorer();
 
             // is there a solution opened?
@@ -170,7 +172,8 @@ namespace Ankh
 
                 this.StartOperation( "Synchronizing with solution explorer...");
 
-                this.solutionExplorer = new Explorer( this.DTE, this.Context );
+                this.solutionExplorer.Load();
+
                 this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
 
                 timer.End();
@@ -191,7 +194,7 @@ namespace Ankh
         /// </summary>
         private void SolutionClosing()
         {
-            this.solutionExplorer = null;
+            this.SolutionExplorer.Unload();
 
             // unhook events.
             foreach( EventSinks.EventSink sink in this.eventSinks )
