@@ -31,24 +31,53 @@ namespace Ankh
         /// <param name="commitItems"></param>
         /// <returns></returns>
         
-        protected override string LogMessageCallback(NSvn.Core.CommitItem[] commitItems)
+        public WorkingCopyResource[] ShowLogMessageDialog( WorkingCopyResource[] commitItems )
         {
             string templateText = this.GetTemplate();
             LogMessageTemplate template = new LogMessageTemplate( templateText );
 
-            using( CommitDialog dialog = new CommitDialog( commitItems ) )
+            using( CommitDialog dialog = new CommitDialog() )
             {
+                foreach( WorkingCopyResource item in commitItems )
+                {
+                    CommitAction action = CommitAction.None;
+                    switch( item.Status.TextStatus )
+                    {
+                        case StatusKind.Added:
+                            action = CommitAction.Added;
+                            break;
+                        case StatusKind.Deleted:
+                            action = CommitAction.Deleted;
+                            break;
+                        case StatusKind.Modified:
+                            action = CommitAction.Modified;
+                            break;
+                    }
+                    if ( action != CommitAction.None )
+                        dialog.AddCommitItem( action, item.Path, item );
+                } // foreach
+
                 dialog.LogMessageTemplate = template;
 
                 dialog.DiffWanted += new EventHandler( this.DiffWanted );
                 if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
                 {
-                    ankhContext.OutputPane.StartActionText("Committing");
-                    return dialog.LogMessage;
+                    this.logMessage = dialog.LogMessage;
+                    return (WorkingCopyResource[])dialog.GetSelectedTags( 
+                        typeof(WorkingCopyResource) );
                 }
                 else
+                {
+                    this.logMessage = null;
                     return null;
+                }
             }
+
+        }
+        
+        protected override string LogMessageCallback(NSvn.Core.CommitItem[] commitItems)
+        {
+            return this.logMessage;
         }
 
         protected override void NotifyCallback(NSvn.Core.Notification notification)
@@ -163,5 +192,6 @@ namespace Ankh
         static readonly Hashtable actionStatus = new Hashtable();
         private AnkhContext ankhContext;
         private static IDictionary map = new Hashtable();
+        private string logMessage = null;
     }
 }
