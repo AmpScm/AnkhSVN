@@ -1,3 +1,4 @@
+// $Id$
 #include "StdAfx.h"
 #include "MiscTests.h"
 #include "SimpleCredential.h"

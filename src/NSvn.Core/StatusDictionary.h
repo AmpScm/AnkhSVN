@@ -1,3 +1,4 @@
+// $Id$
 #pragma once
 #include "stdafx.h"
 #include <svn_path.h>

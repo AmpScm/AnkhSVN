@@ -1,3 +1,4 @@
+// $Id$
 #include "StdAfx.h"
 #include "svnclientexception.h"
 #include "StringHelper.h"

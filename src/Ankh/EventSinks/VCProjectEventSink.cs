@@ -1,3 +1,4 @@
+// $Id$
 using System;
 using Microsoft.VisualStudio.VCProjectEngine;
 using EnvDTE;

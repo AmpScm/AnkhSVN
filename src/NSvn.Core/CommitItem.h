@@ -1,3 +1,4 @@
+// $Id$
 #include "StdAfx.h"
 #include <svn_client.h>
 #include <svn_path.h>
