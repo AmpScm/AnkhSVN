@@ -15,7 +15,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Allows the user retrieve a file list of the selected item(s).
     /// </summary>
-    [VSNetCommand( "FileListCommand", Text="Create a list of files...",  
+    [VSNetCommand( "FileListCommand", Text="Create a file list...",  
          Bitmap = ResourceBitmaps.ResolveConflict, 
          Tooltip = "Resolve conflicted file"),
      VSNetControl( "Item.Ankh.Tools", Position = 1 ),
@@ -31,8 +31,8 @@ namespace Ankh.Commands
         public override void Execute(IContext context, string parameters)
         {
             SaveFileDialog fd = new SaveFileDialog();
-            fd.Title = "Dateiliste speichern unter ...";
-            fd.Filter = "Text-Datei (*.txt)|*.txt";
+            fd.Title = "Save file list as ...";
+            fd.Filter = "Text file (*.txt)|*.txt";
             fd.FilterIndex = 1;
             if (fd.ShowDialog() == DialogResult.OK) 
             {
