@@ -129,6 +129,33 @@ namespace NSvn
 
         };
 
+        public __value enum RevisionType
+        {
+            /// <summary>The revision type is unspecified.</summary>
+            Unspecified = svn_opt_revision_unspecified,
+
+            /// <summary>The revision is the last committed revision.</summary>
+            Commmitted = svn_opt_revision_committed,
+
+            /// <summary>The revision type is the revision prior to the last committed one.</summary>
+            Previous = svn_opt_revision_previous,
+
+            /// <summary>The revision is that of the working base.</summary>
+            Base = svn_opt_revision_base,
+
+            /// <summary>The revision is that of the working copy.</summary>
+            Working = svn_opt_revision_working,
+
+            /// <summary>The revision is that of the working copy.</summary>
+            Head = svn_opt_revision_head,
+
+            /// <summary>The revision is a date.</summary>
+            Date = svn_opt_revision_date,
+
+            /// <summary>The revision is a number.</summary>
+            Number = svn_opt_revision_number
+        };
+
         /// <summary>The schedule states an item can be in</summary>
         public __value enum Schedule
         {

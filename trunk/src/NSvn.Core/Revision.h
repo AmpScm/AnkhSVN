@@ -43,6 +43,28 @@ namespace NSvn
 
             String* ToString();
 
+            /// <summary>The revision as a number. Can only be used if .Type is Number.</summary>
+            __property int get_Number()
+            {
+                if ( this->Type != RevisionType::Number )
+                    throw new InvalidOperationException( S"Revision type is not Number" );
+                return this->revision;
+            }
+
+            /// <summary>The revision as a date. Can only be used if .Type is Date.</summary>
+            __property DateTime get_Date()
+            {
+                if ( this->Type != RevisionType::Date )
+                    throw new InvalidOperationException( S"Revision type is not Date" );
+                return this->date;
+            }
+
+            /// <summary>The type of the revision.</summary>
+            __property RevisionType get_Type()
+            {
+                return static_cast<RevisionType>(kind);
+            }
+
         private:
             Revision( svn_opt_revision_kind kind ) : kind( kind )
             {;}
