@@ -26,7 +26,6 @@ namespace Ankh
             // add an event for this task list item to the taskEventList.
             this.taskListEvents.TaskNavigated +=new 
                 _dispTaskListEvents_TaskNavigatedEventHandler(TaskNavigated);
-
         }
 
         /// <summary>
@@ -37,21 +36,20 @@ namespace Ankh
         {
             // Get the line number for adding to the task so that when the user clicks on 
             // the task it opens the file and goes to the line the conflict text starts on
-            int lineNumber = this.GetConflictLine(path);
+            ArrayList conflictLines = this.GetConflictLines(path);
+            
 
-            // At the task item 
             Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
             TaskList taskList = (TaskList) win.Object;
-            TaskItem taskListItem;
-            taskListItem = taskList.TaskItems.Add(ConflictTaskItemCategory, " ", 
-                "AnkhSVN: file has a conflict. ", 
-                vsTaskPriority.vsTaskPriorityHigh, 
-                vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
 
-            // add an event for this task list item to the taskEventList.
-            this.taskListEvents.TaskNavigated +=new 
-                _dispTaskListEvents_TaskNavigatedEventHandler(TaskNavigated);
-
+            // add a task item for everu conflict in the file
+            foreach(int lineNumber in conflictLines)
+            {
+                taskList.TaskItems.Add(ConflictTaskItemCategory, " ", 
+                    "AnkhSVN: file has a conflict. ", 
+                    vsTaskPriority.vsTaskPriorityHigh, 
+                    vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
+            }
         }
 
 
@@ -120,7 +118,6 @@ namespace Ankh
         ///       
         private void  TaskNavigated(TaskItem taskItem, ref bool navigateHandled)
         {
-            // Debug.WriteLine("A task named '" + taskItem.Description  + "' was navigated to in the Task List.");
             Window win = taskItem.DTE.ItemOperations.OpenFile( taskItem.FileName, Constants.vsViewKindTextView);
             TextSelection sel = (TextSelection) win.DTE.ActiveDocument.Selection; 
             sel.GotoLine(taskItem.Line, true);
@@ -133,32 +130,36 @@ namespace Ankh
         /// </summary>
         /// <param name="path">string: Path to file with a conflict</param>
         /// <returns>int: Line number conflict </returns>
-        private int GetConflictLine(string path) 
+        private ArrayList GetConflictLines(string path) 
         {
+            ArrayList conflictLines = new ArrayList();
             int lineNumber = 1; 
-            StreamReader sr = null;
             int index = NotFound; 
-            try 
+            bool nothingFound = true;
+            string line;
+            // Create an instance of StreamReader to read from a file.
+            // The using statement also closes the StreamReader.
+            using (StreamReader sr  = new StreamReader(path))
             {
-                // Create an instance of StreamReader to read from a file.
-                // The using statement also closes the StreamReader.
-                sr = new StreamReader(path);
 
-                string line;
+
                 // Read and display lines from the file until the end of 
                 // the file is reached and not match
-                while ((line = sr.ReadLine()) != null && 
-                    (index = line.IndexOf(SvnConflictString)) == NotFound)
+                while ((line = sr.ReadLine()) != null)
+                {
                     lineNumber++;
-                if(index == NotFound) 
-                    lineNumber = 0;
+                    index = line.IndexOf(SvnConflictString); 
+                    if(index != NotFound) 
+                    {
+                        nothingFound = false;
+                        conflictLines.Add(lineNumber);
+                    }
+                }
             }
-            catch (Exception ) 
-            {
-                lineNumber = 0; 
-            }
-            sr.Close();
-            return lineNumber;            
+            if(nothingFound) 
+                conflictLines.Add(0);
+
+            return conflictLines;
         }
 
         private AnkhContext context; 
