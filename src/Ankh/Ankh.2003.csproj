@@ -489,6 +489,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\ShowCommitDialogCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\ShowRepositoryExplorerCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

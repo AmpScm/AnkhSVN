@@ -67,7 +67,7 @@ namespace Ankh
             // we must give it diffs if it wants em
             ctx.DiffWanted += new DiffWantedDelegate( this.DiffWanted );
 
-            ctx = this.ankhContext.UIShell.ShowCommitDialog( ctx );
+            ctx = this.ankhContext.UIShell.ShowCommitDialogModal( ctx );
             if ( ctx.Cancelled )
             {
                 this.logMessage = ctx.RawLogMessage;
@@ -86,6 +86,7 @@ namespace Ankh
         public void CommitCompleted()
         {
             this.logMessage = null;
+            this.ankhContext.UIShell.ResetCommitDialog();
         }
         
         protected override void OnLogMessage(LogMessageEventArgs args)

@@ -111,6 +111,18 @@ namespace Ankh.UI
         }
 
         /// <summary>
+        /// Whether the Commit/Cancel buttons should be enabled.
+        /// </summary>
+        public bool ButtonsEnabled
+        {
+            get{ return this.commitButton.Enabled || this.cancelButton.Enabled; }
+            set
+            {
+                this.commitButton.Enabled = this.cancelButton.Enabled = value;
+            }
+        }
+
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose( bool disposing )
@@ -156,15 +168,28 @@ namespace Ankh.UI
         /// Initialize the log message in the text box.
         /// </summary>
         public void Initialize()
-        {            
-            ArrayList arr = new ArrayList();
-            foreach( object item in this.commitItemsTree.CheckedItems )
-                arr.Add( item.ToString() );
-            this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( arr );
+        {   
+            if ( this.logMessageBox.Text.Trim() == String.Empty )
+            {
+                ArrayList arr = new ArrayList();
+                foreach( object item in this.commitItemsTree.CheckedItems )
+                    arr.Add( item.ToString() );
+                this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( arr );
         
-            this.LogMessageTemplate.UrlPaths = this.commitItemsTree.UrlPaths;         
+                this.LogMessageTemplate.UrlPaths = this.commitItemsTree.UrlPaths; 
+            }
 
             this.loaded = true;
+        }
+
+        /// <summary>
+        /// Reset the log message
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Reset()
+        {
+            this.logMessageBox.Text = "";
         }
 
         private void ItemChecked(object sender, TreeViewEventArgs e )

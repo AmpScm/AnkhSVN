@@ -65,7 +65,12 @@ namespace Ankh
             this.repositoryExplorerWindow.SetSelectionContainer( ref selection );
         }
 
-        public CommitContext ShowCommitDialog( CommitContext ctx )
+        /// <summary>
+        /// Shows the commit dialog, blocking until the user hits cancel or commit.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
+        public CommitContext ShowCommitDialogModal( CommitContext ctx )
         {
             if ( this.commitDialogWindow == null ) 
                 this.CreateCommitDialog();
@@ -77,11 +82,17 @@ namespace Ankh
             if ( ctx.LogMessage != null )
                 this.commitDialog.LogMessage = ctx.LogMessage;
 
+            // we want to preserve the original state.
+            bool originalVisibility = this.commitDialog.Visible;
+
             this.commitDialogWindow.Visible = true;
             this.commitDialogModal = true;
 
+            // Fired when user clicks Commit or Cancel.
             this.commitDialog.Proceed += new EventHandler( this.ProceedCommit );
 
+            // we need the buttons enabled now, since it's pseudo-modal.
+            this.commitDialog.ButtonsEnabled = true;
             this.commitDialog.Initialize();
 
             while ( this.commitDialogModal ) 
@@ -100,7 +111,29 @@ namespace Ankh
                 ctx.Cancelled = false;
             }
 
+            // restore the pre-modal state.
+            this.commitDialog.ButtonsEnabled = false;
+            this.commitDialogWindow.Visible = originalVisibility;
+
             return ctx;
+        }
+
+        public void ToggleCommitDialog( bool show )
+        {
+            if ( this.commitDialogWindow == null )
+                this.CreateCommitDialog();
+
+            Debug.Assert( this.commitDialogWindow != null );
+
+            this.commitDialogWindow.Visible = show;
+            this.commitDialog.ButtonsEnabled = this.commitDialogModal;
+        }
+
+
+
+        public void ResetCommitDialog()
+        {
+            this.commitDialog.Reset();
         }
 
         /// <summary>
