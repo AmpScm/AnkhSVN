@@ -1,12 +1,14 @@
+#pragma once
 #using <mscorlib.dll>
+#include "Notification.h"
 
 namespace NSvn
 {
     namespace Core
     {
-        __delegate void NotifyCallback();
-        __delegate void LogMessageCallback();
-        __delegate void LogMessageReceiver();
-        __delegate void PromptCallback();
+        public __delegate void NotifyCallback( Notification* notification );
+        public __delegate void LogMessageCallback();
+        public __delegate void LogMessageReceiver();
+        public __delegate void PromptCallback();
     }
 }

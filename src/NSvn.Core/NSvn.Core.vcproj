@@ -25,7 +25,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"/>
@@ -36,7 +36,8 @@
 				AdditionalDependencies="comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib ..\..\Subversion\db4-win32\lib\libdb41d.lib ..\..\Subversion\subversion\libsvn_repos\Debug\libsvn_repos.lib ..\..\Subversion\subversion\libsvn_fs\Debug\libsvn_fs.lib ..\..\Subversion\subversion\libsvn_ra_dav\Debug\libsvn_ra_dav.lib ..\..\Subversion\subversion\libsvn_ra_local\Debug\libsvn_ra_local.lib ..\..\Subversion\subversion\libsvn_ra\Debug\libsvn_ra.lib ..\..\Subversion\subversion\libsvn_ra_svn\Debug\libsvn_ra_svn.lib ..\..\Subversion\neon\libneonD.lib ..\..\Subversion\subversion\libsvn_wc\Debug\libsvn_wc.lib ..\..\Subversion\subversion\libsvn_subr\Debug\libsvn_subr.lib ..\..\Subversion\subversion\libsvn_client\Debug\libsvn_client.lib ..\..\Subversion\subversion\libsvn_delta\Debug\libsvn_delta.lib ..\..\Subversion\apr\LibD\apr.lib ..\..\Subversion\apr-util\LibD\aprutil.lib ..\..\Subversion\apr-iconv\LibD\apriconv.lib ..\..\Subversion\apr-util\xml\expat\lib\LibD\xml.lib"
 				OutputFile="$(OutDir)/NSvn.Core.dll"
 				LinkIncremental="2"
-				GenerateDebugInformation="TRUE"/>
+				GenerateDebugInformation="TRUE"
+				ImportLibrary="$(TargetDir)\$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -139,6 +140,12 @@
 				RelativePath="CommitInfo.h">
 			</File>
 			<File
+				RelativePath="ManagedPointer.h">
+			</File>
+			<File
+				RelativePath="Notification.h">
+			</File>
+			<File
 				RelativePath="Pool.h">
 			</File>
 			<File
@@ -155,6 +162,9 @@
 			</File>
 			<File
 				RelativePath="delegates.h">
+			</File>
+			<File
+				RelativePath="svnenums.h">
 			</File>
 		</Filter>
 		<Filter
