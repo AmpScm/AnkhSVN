@@ -16,7 +16,6 @@ namespace NSvn
         /// <param name="path">The path to the directory.</param>
 		public WorkingCopyDirectory( string path ) : base( path )
 		{
-            this.lastModTime = Directory.GetLastWriteTime( this.Path );			
 		}
 
         /// <summary>
@@ -44,11 +43,24 @@ namespace NSvn
         /// <summary>
         /// Whether the resource has been modified.
         /// </summary>
-        protected override bool IsModified
+        protected override DateTime LastWriteTime
         {
             get
             {
-                return Directory.GetLastWriteTime(this.Path) > this.lastModTime;
+                return Directory.GetLastWriteTime( this.Path );
+            }
+        }
+
+        /// <summary>
+        /// Returns the timestamp on the administrative directory of this
+        /// resource.
+        /// </summary>
+        protected override DateTime AdminAreaWriteTime
+        {
+            get
+            {                
+                return Directory.GetLastWriteTime( System.IO.Path.Combine(
+                    this.Path, ADMIN_AREA ) );
             }
         }
 
@@ -58,7 +70,6 @@ namespace NSvn
         protected override void DoInvalidate()
         {
             this.children = null; 
-            this.lastModTime = Directory.GetLastWriteTime( this.Path );
         }
 
 
@@ -95,7 +106,6 @@ namespace NSvn
             return resDict;
         }
 
-        private DateTime lastModTime;
         private LocalResourceDictionary children;    
 	}
 }

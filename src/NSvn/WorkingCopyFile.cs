@@ -13,8 +13,8 @@ namespace NSvn
         /// </summary>
         /// <param name="path">The path to the file.</param>
 		public WorkingCopyFile( string path ) : base( path )
-		{
-			this.lastModTime = File.GetLastWriteTime( this.Path );
+		{ 
+            // empty
 		}
 
         /// <summary>
@@ -28,22 +28,27 @@ namespace NSvn
         /// <summary>
         /// Whether this resource has been modified
         /// </summary>
-        protected override bool IsModified
+        protected override DateTime LastWriteTime
         {
             get
             { 
-                return File.GetLastWriteTime( this.Path ) > this.lastModTime; 
+                return File.GetLastWriteTime( this.Path );
             }
         }
 
         /// <summary>
-        /// Invalidates instance data associated with this file.
+        /// Returns the timestamp on the administrative directory of this
+        /// resource.
         /// </summary>
-        protected override void DoInvalidate()
+        protected override DateTime AdminAreaWriteTime
         {
-            this.lastModTime = File.GetLastWriteTime( this.Path );
+            get
+            {
+                string basePath = System.IO.Path.GetDirectoryName( this.Path );
+                return Directory.GetLastWriteTime( System.IO.Path.Combine(
+                    basePath, ADMIN_AREA ) );
+            }
         }
      
-        private DateTime lastModTime;
 	}
 }

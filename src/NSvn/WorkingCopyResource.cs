@@ -105,7 +105,7 @@ namespace NSvn
                     int youngest;
                     StatusDictionary dict = Client.Status( out youngest, this.Path, 
                         false, true, false, true, this.ClientContext );
-                    return dict.Get( this.Path );
+                    this.status = dict.Get( this.Path );
                 }
                 return this.status;
             }
@@ -141,8 +141,13 @@ namespace NSvn
         /// </summary>
         protected void CheckForModifications()
         {
-            if ( this.IsModified )
+            DateTime fileTime = this.LastWriteTime;
+            DateTime adminTime = this.AdminAreaWriteTime;
+            if ( fileTime > this.lastModTime || adminTime > this.lastModTime )
             {
+                //reset the lastModTime
+                this.lastModTime = adminTime > fileTime ? adminTime : fileTime;
+
                 // we'll have to get a new status...
                 this.status = null;
 
@@ -159,13 +164,26 @@ namespace NSvn
             // empty here
         }
 
+
+
         /// <summary>
         /// Whether the resource has been modified.
         /// </summary>
-        protected abstract bool IsModified
+        protected abstract DateTime LastWriteTime
         {
             get;
         }
+
+        /// <summary>
+        /// Returns the timestamp on the administrative directory of this
+        /// resource.
+        /// </summary>
+        protected abstract DateTime AdminAreaWriteTime
+        {
+            get;
+        }
+
+
 
         /// <summary>
         /// Callback function for log messages
@@ -177,9 +195,11 @@ namespace NSvn
             return this.logMessageProvider.GetLogMessage( targets );
         }
 
-
+        protected const string ADMIN_AREA = ".svn";
+        protected const int MODIFICATION_DELTA = 5;
         private string path;
         private Status status;
         private ILogMessageProvider logMessageProvider;
+        private DateTime lastModTime;
 	}
 }
