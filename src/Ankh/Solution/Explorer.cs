@@ -19,9 +19,9 @@ namespace Ankh
 	/// <summary>
 	/// Represents the Solution Explorer window in the VS.NET IDE
 	/// </summary>
-	internal class SolutionExplorer
+	internal class Explorer
 	{
-		public SolutionExplorer( _DTE dte, SvnContext context )
+		public Explorer( _DTE dte, SvnContext context )
 		{
 			this.dte = dte;
             this.context = context;

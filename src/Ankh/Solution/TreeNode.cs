@@ -18,7 +18,7 @@ namespace Ankh
     internal abstract class TreeNode
     {
         private TreeNode( UIHierarchyItem item, IntPtr hItem, 
-            SolutionExplorer explorer )
+            Explorer explorer )
         {                
             this.hItem = hItem;
             this.explorer = explorer;
@@ -29,7 +29,7 @@ namespace Ankh
         public abstract void VisitResources( ILocalResourceVisitor visitor );        
         
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
-            SolutionExplorer explorer )
+            Explorer explorer )
         {
             TreeNode node = null;
             // what kind of node is this?
@@ -46,7 +46,7 @@ namespace Ankh
         }
 
         public static TreeNode CreateSolutionNode( UIHierarchyItem item, IntPtr hItem,
-            SolutionExplorer explorer )
+            Explorer explorer )
         {
             TreeNode node = new SolutionNode( item, hItem, explorer );
             node.UpdateStatus();
@@ -193,7 +193,7 @@ namespace Ankh
         /// </summary>
         private class ProjectNode : TreeNode
         {
-            public ProjectNode( UIHierarchyItem item, IntPtr hItem, SolutionExplorer explorer ) : 
+            public ProjectNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer ) : 
                 base( item, hItem, explorer )
             {
                 Project project = (Project)item.Object;
@@ -233,7 +233,7 @@ namespace Ankh
         /// </summary>
         private class SolutionNode : TreeNode
         {
-            public SolutionNode( UIHierarchyItem item, IntPtr hItem, SolutionExplorer explorer )
+            public SolutionNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer )
                 : base( item, hItem, explorer )
             {
                 Solution solution = explorer.DTE.Solution;
@@ -276,7 +276,7 @@ namespace Ankh
         /// </summary>
         private class ProjectItemNode : TreeNode
         {
-            public ProjectItemNode( UIHierarchyItem item, IntPtr hItem, SolutionExplorer explorer ) :
+            public ProjectItemNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer ) :
                 base( item, hItem, explorer )
             {
                 ProjectItem pitem = (ProjectItem)item.Object;
@@ -328,7 +328,7 @@ namespace Ankh
 
         private IntPtr hItem;
         private IList children;
-        private SolutionExplorer explorer;
+        private Explorer explorer;
         private static IDictionary statusMap = new Hashtable();
     }
 }
