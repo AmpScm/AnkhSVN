@@ -6,30 +6,30 @@ using System.Drawing;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Represents a TreeView that can be used to choose from a set of paths.
-	/// </summary>
-	public class PathSelectionTreeView : PathTreeView
-	{
+    /// <summary>
+    /// Represents a TreeView that can be used to choose from a set of paths.
+    /// </summary>
+    public class PathSelectionTreeView : PathTreeView
+    {
         /// <summary>
         /// Fired when the treeview needs information about a path.
         /// </summary>
         public event GetPathInfoDelegate GetPathInfo;
 
-		public PathSelectionTreeView()
-		{
-			this.CheckBoxes = true;
+        public PathSelectionTreeView()
+        {
+            this.CheckBoxes = true;
             this.SingleCheck = false;
             this.Recursive = false;
-            this.paths = new object[]{};
-		}
+            this.items = new object[]{};
+        }
 
-        public IList Paths
+        public IList Items
         {
-            get{ return this.paths; }
+            get{ return this.items; }
             set
             {
-                this.paths = value;
+                this.items = value;
                 this.BuildTree();
             }
         }
@@ -39,7 +39,8 @@ namespace Ankh.UI
         /// </summary>
         public bool UrlPaths
         {
-            get{ 
+            get
+            { 
                 return this.PathSeparator == "/"; }
             set{ this.PathSeparator = value ? "/" : "\\"; }
         }
@@ -234,10 +235,10 @@ namespace Ankh.UI
                 this.BeginUpdate();
                 this.Nodes.Clear();
 
-                if ( this.paths.Count == 0 )
+                if ( this.items.Count == 0 )
                     return;            
 
-                foreach( object item in this.paths )
+                foreach( object item in this.items )
                     this.AddNode( item );
 
                 this.ExpandAll();
@@ -295,7 +296,7 @@ namespace Ankh.UI
             return newNode;
         }
 
-        private IList paths;
+        private IList items;
         private TreeNode checkedNode;
         private bool singleCheck;
         private bool recursive;
@@ -312,7 +313,7 @@ namespace Ankh.UI
             tree.Dock = DockStyle.Fill;
             tree.UrlPaths = true;
 
-            tree.Paths = new string[]{ 
+            tree.Items = new string[]{ 
                                          "trunk/src/Ankh/Commands/AddItemCommand.cs",
                                          "trunk/src/Ankh/Commands/CheckoutFolderCommand.cs",
                                          "trunk/src/Ankh/Commands/CheckoutSolutionCommand.cs",
@@ -334,7 +335,7 @@ namespace Ankh.UI
             Application.Run( form );
 
         }
-	}
+    }
 
     public class GetPathInfoEventArgs
     {
@@ -365,7 +366,7 @@ namespace Ankh.UI
     }
 
     public delegate void GetPathInfoDelegate( 
-        object sender, GetPathInfoEventArgs args );
+    object sender, GetPathInfoEventArgs args );
 
    
 }

@@ -71,7 +71,7 @@ namespace Ankh.UI
             get{ return this.commitItemsTree.CheckedItems; }
             set
             { 
-                this.commitItemsTree.Paths = value;
+                this.commitItemsTree.Items = value;
                 this.commitItemsTree.CheckedItems = value;
                 foreach( object item in value )
                     this.diffView.AddPage( item.ToString() );
