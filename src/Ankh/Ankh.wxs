@@ -3,46 +3,46 @@
     <DirectoryRef Id="appDir">
       <!-- RegAsm reg settings -->
       <Component Id="Ankh_component8" DiskId="1">
-        <Registry Id="Ankh_registry8" Root="HKCR" 
+        <Registry Id="Ankh_registry8" Root="HKCR" Type="string" KeyPath="yes"
           Key="Ankh" 
-          Name="" Value="Ankh.Connect" />
+          Value="Ankh.Connect" />
       </Component>
       <Component Id="Ankh_component9" DiskId="1">
-        <Registry Id="Ankh_registry9" Root="HKCR" 
+        <Registry Id="Ankh_registry9" Root="HKCR" Type="string" KeyPath="yes"
           Key="Ankh\CLSID" 
-          Name="" Value="{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}" />
+          Value="{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}" />
       </Component>
       <Component Id="Ankh_component10" DiskId="1">
-        <Registry Id="Ankh_registry10" Root="HKCR" 
+        <Registry Id="Ankh_registry10" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}" 
-          Name="" Value="Ankh.Connect" />
+          Value="Ankh.Connect" />
       </Component>
       <Component Id="Ankh_component11" DiskId="1">
-        <Registry Id="Ankh_registry11" Root="HKCR" 
+        <Registry Id="Ankh_registry11" Root="HKCR" KeyPath="yes" 
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" />
       </Component>
       <Component Id="Ankh_component12" DiskId="1">
-        <Registry Id="Ankh_registry12" Root="HKCR" 
+        <Registry Id="Ankh_registry12" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
-          Name="" Value="mscoree.dll" />
+          Value="mscoree.dll" />
       </Component>
       <Component Id="Ankh_component13" DiskId="1">
-        <Registry Id="Ankh_registry13" Root="HKCR" 
+        <Registry Id="Ankh_registry13" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
           Name="ThreadingModel" Value="Both" />
       </Component>
       <Component Id="Ankh_component14" DiskId="1">
-        <Registry Id="Ankh_registry14" Root="HKCR" 
+        <Registry Id="Ankh_registry14" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
           Name="Class" Value="Ankh.Connect" />
       </Component>
       <Component Id="Ankh_component15" DiskId="1">
-        <Registry Id="Ankh_registry15" Root="HKCR" 
+        <Registry Id="Ankh_registry15" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
           Name="Assembly" Value="Ankh, Version=$(var.ankhversion), Culture=neutral, PublicKeyToken=null" />
       </Component>
       <Component Id="Ankh_component16" DiskId="1">
-        <Registry Id="Ankh_registry16" Root="HKCR" 
+        <Registry Id="Ankh_registry16" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
           Name="RuntimeVersion" Value="v1.0.3705" />
       </Component>
@@ -54,17 +54,17 @@
           Name="CodeBase" Value="file:///C:/projects/Ankh/src/build-Release/Ankh.dll" />
       </Component>-->
       <Component Id="Ankh_component18" DiskId="1">
-        <Registry Id="Ankh_registry18" Root="HKCR" 
+        <Registry Id="Ankh_registry18" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
           Name="Class" Value="Ankh.Connect" />
       </Component>
       <Component Id="Ankh_component19" DiskId="1">
-        <Registry Id="Ankh_registry19" Root="HKCR" 
+        <Registry Id="Ankh_registry19" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
           Name="Assembly" Value="Ankh, Version=$(var.ankhversion), Culture=neutral, PublicKeyToken=null" />
       </Component>
       <Component Id="Ankh_component20" DiskId="1">
-        <Registry Id="Ankh_registry20" Root="HKCR" 
+        <Registry Id="Ankh_registry20" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
           Name="RuntimeVersion" Value="v1.0.3705" />
       </Component>
@@ -75,12 +75,12 @@
           Name="CodeBase" Value="file:///C:/projects/Ankh/src/build-Release/Ankh.dll" />
       </Component>-->
       <Component Id="Ankh_component22" DiskId="1">
-        <Registry Id="Ankh_registry22" Root="HKCR" 
+        <Registry Id="Ankh_registry22" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\ProgId" 
-          Name="" Value="Ankh" />
+          Value="Ankh" />
       </Component>
       <Component Id="Ankh_component23" DiskId="1">
-        <Registry Id="Ankh_registry23" Root="HKCR" 
+        <Registry Id="Ankh_registry23" Root="HKCR" Type="string" KeyPath="yes"
           Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" 
           Name="0" Value=".NET Category" />
       </Component>
