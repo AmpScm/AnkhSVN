@@ -67,7 +67,37 @@ namespace NSvn.Core.Tests
             }
             catch( FormatException )
             {}
+        }
 
+        [Test]
+        public void TestRevisionTypes()
+        {
+            Revision r = Revision.FromDate( DateTime.Now );
+            Assert.AreEqual( RevisionType.Date, r.Type );
+
+            r = Revision.FromNumber( 42 );
+            Assert.AreEqual( RevisionType.Number, r.Type );
+
+            Assert.AreEqual( RevisionType.Base, Revision.Base.Type );
+            Assert.AreEqual( RevisionType.Commmitted, Revision.Committed.Type );
+            Assert.AreEqual( RevisionType.Head, Revision.Head.Type );
+            Assert.AreEqual( RevisionType.Previous, Revision.Previous.Type );
+            Assert.AreEqual( RevisionType.Unspecified, Revision.Unspecified.Type );
+            Assert.AreEqual( RevisionType.Working, Revision.Working.Type );
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestGetDateFromOtherTypeOfRevision()
+        {
+            DateTime dt = Revision.Head.Date;
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestGetNumberFromOtherTypeOfRevision()
+        {
+            int number = Revision.Head.Number;
         }
 
         private void DoTestParse( string s, Revision rev )
