@@ -7,7 +7,7 @@ namespace Ankh
     /// A control attribute that lets you put controls on *all* folder bars.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class VSNetFolderNodeControlAttribute : VSNetControlAttribute
+    internal class VSNetFolderNodeControlAttribute : VSNetControlAttribute
     {
         public VSNetFolderNodeControlAttribute( string bar ) : base(bar)
         {

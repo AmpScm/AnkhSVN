@@ -14,7 +14,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Base class for the DiffLocalItem and CreatePatch commands
     /// </summary>
-    public abstract class LocalDiffCommandBase : CommandBase
+    internal abstract class LocalDiffCommandBase : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {

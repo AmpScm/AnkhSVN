@@ -29,7 +29,6 @@ namespace Ankh
     /// </summary>
     /// <seealso class='IDTExtensibility2' />
     [GuidAttribute("DA979B20-78DF-45BC-A7D7-F5EF9DC77D30"), ProgId("Ankh")]
-    [ComVisible(true)]
     public class Connect : Object, Extensibility.IDTExtensibility2, IDTCommandTarget
     {
         /// <summary>

@@ -8,7 +8,7 @@ namespace Ankh
     /// <summary>
     /// A TextWriter backed by the VS.NET output window.
     /// </summary>
-    public class OutputPaneWriter : TextWriter
+    internal class OutputPaneWriter : TextWriter
     {
         public OutputPaneWriter( _DTE dte, string caption )
         {

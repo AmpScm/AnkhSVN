@@ -15,7 +15,7 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1 ),
     VSNetFolderNodeControl( "Ankh", Position = 1)]
-    public class CreatePatchCommand : LocalDiffCommandBase
+    internal class CreatePatchCommand : LocalDiffCommandBase
     {    
     
         public override void Execute(AnkhContext context, string parameters)

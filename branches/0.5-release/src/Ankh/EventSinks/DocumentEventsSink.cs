@@ -8,7 +8,7 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Event sink for the DocumentEvents events.
     /// </summary>
-    public class DocumentEventsSink : EventSink
+    internal class DocumentEventsSink : EventSink
     {
         public DocumentEventsSink( AnkhContext context ) : base( context )
         {

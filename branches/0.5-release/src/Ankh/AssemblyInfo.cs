@@ -16,10 +16,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
-
-// We only want the Connect class to be visible
-[assembly: System.Runtime.InteropServices.ComVisible(false)]
-
 //
 // Version information for an assembly consists of the following four values:
 //

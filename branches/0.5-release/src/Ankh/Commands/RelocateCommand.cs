@@ -12,7 +12,7 @@ namespace Ankh.Commands
     VSNetFolderNodeControl( "Ankh", Position = 1),
     VSNetControl( "Solution.Ankh", Position = 1 ),
     VSNetProjectNodeControl( "Ankh", Position = 1 )]
-    public class RelocateCommand : CommandBase
+    internal class RelocateCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
