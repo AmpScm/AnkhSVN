@@ -448,7 +448,8 @@ namespace Ankh.Solution
             {
                 try
                 {
-                    return ((ProjectItem)obj).get_FileNames(1).GetHashCode();
+                    string str = ((ProjectItem)obj).ContainingProject.FullName + "|" + ((ProjectItem)obj).get_FileNames(1);
+                    return str.GetHashCode();
                 }
                 catch( Exception )
                 {
@@ -465,8 +466,9 @@ namespace Ankh.Solution
             {
                 try
                 {
-                    return ((ProjectItem)x).get_FileNames(1).CompareTo(
-                        ((ProjectItem)y).get_FileNames(1) );
+                    string str_a = ((ProjectItem)x).ContainingProject.FullName + "|" + ((ProjectItem)x).get_FileNames(1);
+                    string str_b = ((ProjectItem)y).ContainingProject.FullName + "|" + ((ProjectItem)y).get_FileNames(1);
+                    return str_a.CompareTo(str_b);
                 }
                 catch( Exception )
                 {
