@@ -165,14 +165,6 @@
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.1.4322\office.dll"
                 />
                 <Reference
-                    Name = "stdole"
-                    Guid = "{00020430-0000-0000-C000-000000000046}"
-                    VersionMajor = "2"
-                    VersionMinor = "0"
-                    Lcid = "0"
-                    WrapperTool = "primary"
-                />
-                <Reference
                     Name = "AnkhUserControlHostLib"
                     AssemblyName = "AnkhUserControlHostLib"
                     HintPath = "..\lib\AnkhUserControlHostLib.dll"
@@ -186,6 +178,11 @@
                     Name = "envdte"
                     AssemblyName = "EnvDTE"
                     HintPath = "..\lib\envdte.dll"
+                />
+                <Reference
+                    Name = "stdole"
+                    AssemblyName = "stdole"
+                    HintPath = "..\lib\stdole.dll"
                 />
             </References>
         </Build>
