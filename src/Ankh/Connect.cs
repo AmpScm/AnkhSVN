@@ -176,10 +176,8 @@ namespace Ankh
                 }
             }
             catch( Exception ex )
-            {                                  
-                System.Windows.Forms.MessageBox.Show( 
-                    this.GenerateNestedExceptionMessage( ex )+ 
-                    Environment.NewLine + ex.StackTrace );
+            {   
+                HandleError( ex );
             }
 		}
 
@@ -219,12 +217,15 @@ namespace Ankh
                 }
             }
             catch( Exception ex )
-            {                                  
-                System.Windows.Forms.MessageBox.Show( 
-                    this.GenerateNestedExceptionMessage( ex )+ 
-                    Environment.NewLine + ex.StackTrace );
+            {   
+                HandleError( ex );
             }
 		}
+
+        public static void HandleError( Exception ex )
+        {
+            Utils.ErrorMessage.QuerySendByWeb( "http://localhost/error/report.aspx", ex );
+        }
 
         
         private void AddCommandBars()

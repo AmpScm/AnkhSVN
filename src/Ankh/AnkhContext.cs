@@ -4,6 +4,7 @@ using NSvn;
 using NSvn.Common;
 using NSvn.Core;
 using Ankh.UI;
+using Utils;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
@@ -137,10 +138,7 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                System.Windows.Forms.MessageBox.Show( ex.Message + 
-                    Environment.NewLine + 
-                    ex.StackTrace );
-                throw;
+                Connect.HandleError( ex );
             }
         }
         
