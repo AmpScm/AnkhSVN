@@ -35,6 +35,13 @@
     <File Url="Xml\helpstyle.css"/>
     <File Url="Xml\top\About_the_Ankh_help_file.xml"/>
     <File Url="Xml\top\credits.xml"/>
+    <File Url="Xml\configuration\setting_up_anhk.xml"/>
+    <File Url="Xml\using-ankh\adding_files.xml"/>
+    <File Url="Xml\introduction\about_subversion.xml"/>
+    <File Url="Xml\introduction\ankh.xml"/>
+    <File Url="Xml\introduction\revision_controll.xml"/>
+    <File Url="Xml\introduction\why_ankh.xml"/>
+    <File Url="Xml\introduction\why_revision_controll.xml"/>
     </Files>
 	<Dirs>
 		<Dir Url="html"/>
