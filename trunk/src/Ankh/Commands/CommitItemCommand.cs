@@ -43,7 +43,7 @@ namespace Ankh.Commands
 
             try
             {
-                context.StartOperation();
+                context.StartOperation( "Committing..." );
 
                 commitInfo = WorkingCopyResource.Commit( resources, true );
             }

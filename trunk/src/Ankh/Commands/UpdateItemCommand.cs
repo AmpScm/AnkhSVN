@@ -38,7 +38,7 @@ namespace Ankh.Commands
         {
             try
             {
-                context.StartOperation();
+                context.StartOperation( "Updating..." );
 
                 context.OutputPane.StartActionText("Updating");
                 // we assume by now that all items are working copy resources.

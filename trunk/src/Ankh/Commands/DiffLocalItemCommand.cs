@@ -34,7 +34,7 @@ namespace Ankh.Commands
         {
             try
             {
-                context.StartOperation();
+                context.StartOperation( "Diffing..." );
 
                 // get the diff itself
                 DiffVisitor v = new DiffVisitor();
