@@ -1,9 +1,17 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.UI.2003", "Ankh.UI\Ankh.UI.2003.csproj", "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A3248E1E-8272-4227-AF02-BB86040FBED9}
+		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.2003", "Ankh\Ankh.2003.csproj", "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A3248E1E-8272-4227-AF02-BB86040FBED9}
 		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
 		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE} = {AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSvn.Core", "NSvn.Core\NSvn.Core.2003.vcproj", "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
@@ -53,6 +61,13 @@ Global
 		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Debug.ActiveCfg = Debug|.NET
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Debug.Build.0 = Debug|.NET
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Debug run.ActiveCfg = Debug|.NET
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Debug run.Build.0 = Debug|.NET
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.NSvn.Tests.ActiveCfg = Debug|.NET
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Release.ActiveCfg = Release|.NET
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Release.Build.0 = Release|.NET
 		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Debug.ActiveCfg = Debug|.NET
 		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Debug.Build.0 = Debug|.NET
 		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Debug run.ActiveCfg = Debug|.NET
@@ -119,7 +134,6 @@ Global
 		ankh.reg = ankh.reg
 		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
 		CHANGES = CHANGES
-		CONTRIBUTERS = CONTRIBUTERS
 		..\deploy.build = ..\deploy.build
 		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
 		master.build = master.build
@@ -129,8 +143,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
