@@ -36,7 +36,7 @@ namespace NSvn.Core.Tests
             MemoryStream outstream = new MemoryStream();
             MemoryStream errstream = new MemoryStream();
             Client.Diff( new string[]{}, "Form.cs", Revision.Base, "Form.cs", 
-                Revision.Working, false, false, outstream, errstream, 
+                Revision.Working, false, true, false, outstream, errstream, 
                 new ClientContext() );
 
 
@@ -56,7 +56,7 @@ namespace NSvn.Core.Tests
             MemoryStream errstream = new MemoryStream();
 
             Client.Diff( new string[]{}, this.ReposUrl, Revision.FromNumber(1), 
-                this.ReposUrl, Revision.FromNumber(5), true, false, outstream,
+                this.ReposUrl, Revision.FromNumber(5), true, true, false, outstream,
                 errstream, new ClientContext() );
 
             string err = Encoding.Default.GetString( errstream.ToArray() );

@@ -41,11 +41,35 @@ namespace Ankh
     /// </summary>
     internal class UnversionedVisitor : LocalResourceVisitorBase
     {
-        public bool IsVersioned = false;
+        public bool IsUnversioned
+        {
+            get
+            { 
+                return !this.workingCopyResourceFound && 
+                     this.unversionedResourceFound; 
+            }
+        }   
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="r"></param>
         public override void VisitWorkingCopyResource( WorkingCopyResource r )
         {
-            this.IsVersioned = true;
+            this.workingCopyResourceFound = true;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="r"></param>
+        public override void VisitUnversionedResource( UnversionedResource r )
+        {
+            this.unversionedResourceFound = true;
+        }
+
+
+        private bool workingCopyResourceFound = false;
+        private bool unversionedResourceFound = false;
     }
 
     internal class ResourceGathererVisitor : LocalResourceVisitorBase

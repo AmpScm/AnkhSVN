@@ -43,7 +43,7 @@ namespace Ankh.Commands
                 context.SolutionExplorer.VisitSelectedItems( v, true );
                 
                 v.Revert( context );
-                context.SolutionExplorer.UpdateSelectionStatus();
+                context.SolutionExplorer.RefreshSelectionParents();
                
             }
         #endregion
@@ -63,6 +63,10 @@ namespace Ankh.Commands
 
                 public void Revert(Ankh.AnkhContext context)
                 {
+                    // no revertables?
+                    if ( this.revertables.Count < 1 )
+                        return;
+
                     // make the user confirm that he really wants to revert.
                     StringBuilder builder = new StringBuilder();
                     foreach( WorkingCopyResource r in this.revertables )
@@ -71,14 +75,24 @@ namespace Ankh.Commands
                     string msg = "Do you really want to revert the following item(s)?" + 
                         Environment.NewLine + Environment.NewLine + builder.ToString();
 
-                    if( MessageBox.Show( msg, "Revert", MessageBoxButtons.YesNo ) == 
+                    if( MessageBox.Show( msg, "Revert", MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Information ) == 
                         DialogResult.Yes )
                     {
                         context.OutputPane.StartActionText("Reverting");
                         // do the actual revert
                         foreach( WorkingCopyResource r in this.revertables )
-                            r.Revert( true );
-                         context.OutputPane.EndActionText();
+                        {
+                            try
+                            {
+                                r.Revert( true );
+                            }
+                            catch( NotVersionControlledException )
+                            {
+                                // empty
+                            }
+                        }
+                        context.OutputPane.EndActionText();
                     }
                 }
 

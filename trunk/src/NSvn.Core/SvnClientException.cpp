@@ -27,6 +27,10 @@ namespace
         case SVN_ERR_WC_LOCKED:
             return new WorkingCopyLockedException( child );
             break;
+        case SVN_ERR_WC_NOT_DIRECTORY:
+        case SVN_ERR_WC_NOT_FILE:
+            return new NotVersionControlledException( child );
+            break;
         default:
             return new SvnClientException( FormatMessage( err ), child );
             break;

@@ -5,12 +5,13 @@ using System.Reflection;
 using EnvDTE;
 using System.Diagnostics;
 using Microsoft.Office.Core;
+using System.Runtime.InteropServices;
 
 namespace Ankh
 {
-	/// <summary>
-	/// Responsible for registering the ICommand implementations in this assembly.
-	/// </summary>
+    /// <summary>
+    /// Responsible for registering the ICommand implementations in this assembly.
+    /// </summary>
     internal class CommandMap : DictionaryBase
     {
         /// <summary>
@@ -54,7 +55,7 @@ namespace Ankh
                     }
                     catch( Exception ex )
                     {
-                        Connect.HandleError( ex );
+                        Error.Handle( ex );
                     }
 
                     // solution explorer?
@@ -74,16 +75,25 @@ namespace Ankh
         /// </summary>
         public static void DeleteCommands( AnkhContext context )
         {
+           
             if ( context.DTE.Commands != null )
             {
                 // we only want to delete our own commands
                 foreach( Command cmd in context.DTE.Commands )
                 {
-                    if ( cmd.Name != null && cmd.Name.StartsWith( context.AddIn.ProgID ) )
-                        cmd.Delete();
+                    try
+                    {
+                        if ( cmd.Name != null && cmd.Name.StartsWith( context.AddIn.ProgID ) )
+                            cmd.Delete();
+                    }
+                    catch( COMException )
+                    {
+                        // swallow
+                    }
                 }
             }
         }
+            
 
         /// <summary>
         /// Callback used to filter the type list.
@@ -183,5 +193,5 @@ namespace Ankh
             return bar;
         }
 
-	}
+    }
 }

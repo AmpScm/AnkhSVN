@@ -4,6 +4,7 @@ using System.Collections;
 using NSvn;
 using NSvn.Core;
 using EnvDTE;
+using System.Diagnostics;
 
 namespace Ankh.Solution
 {
@@ -16,24 +17,9 @@ namespace Ankh.Solution
             TreeNode parent ) :
             base( item, hItem, explorer, parent )
         {
-            ProjectItem pitem = (ProjectItem)item.Object;
-            this.resources = new ArrayList();
-            try
-            {
-                for( short i = 1; i <= pitem.FileCount; i++ ) 
-                {
-                    
-                    ILocalResource res = SvnResource.FromLocalPath( pitem.get_FileNames(i) );
-                    // does this resource exist?
-                    res.Context = explorer.Context;
-                    this.resources.Add( res );
-                }
-                explorer.AddResource( pitem, this );                    
-            }
-            catch( NullReferenceException )
-            {
-                //swallow
-            }                
+            this.projectItem = (ProjectItem)item.Object;
+            this.FindResources();
+                        
         }
 
         public IList Resources
@@ -49,6 +35,13 @@ namespace Ankh.Solution
         {
             visitor.VisitProjectItem( this );
         }
+
+        public override void Refresh()
+        {
+            this.FindResources();
+            base.Refresh();
+        }
+ 
 
         protected override StatusKind GetStatus()
         {
@@ -75,13 +68,40 @@ namespace Ankh.Solution
 
         public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
         {
-            foreach( ILocalResource resource in this.resources )
-                resource.Accept( visitor );
-
             if ( recursive )
                 this.VisitChildResources( visitor );
+
+            foreach( ILocalResource resource in this.resources )
+                resource.Accept( visitor );
         }
 
+        protected void FindResources()
+        {
+            this.resources = new ArrayList();
+            try
+            {
+                for( short i = 1; i <= this.projectItem.FileCount; i++ ) 
+                {
+                    ILocalResource res = SvnResource.FromLocalPath( this.projectItem.get_FileNames(i) );
+                    // does this resource exist?
+                    res.Context = this.Explorer.Context;
+                    this.resources.Add( res );
+                }
+                this.Explorer.AddResource( this.projectItem, this );                    
+            }
+            catch( NullReferenceException )
+            {
+                Debug.WriteLine( "NullReferenceException thrown in ProjectItemNode" );
+                //swallow
+            }   
+            catch( System.Runtime.InteropServices.SEHException )
+            {
+                Debug.WriteLine( "SEHException thrown: " + this.projectItem.Name );
+                System.Windows.Forms.MessageBox.Show( "SEHException: " + this.projectItem.Name );
+            }
+        }
+
+        private ProjectItem projectItem;
         private IList resources;
     }    
 

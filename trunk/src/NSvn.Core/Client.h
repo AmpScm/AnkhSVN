@@ -198,6 +198,13 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<param name="recurse">If recursive is set, assuming path is a directory 
             ///                        all of its contents will be scheduled for addition as well.</param> 
+            ///<param name="ignoreAncestry">Use ignore_ancestry to control whether or not items 
+            /// being diffed will be checked for relatedness first. Unrelated items are 
+            /// typically transmitted to the editor as a deletion of one thing and the 
+            /// addition of another, but if this flag is TRUE, unrelated items will be 
+            /// diffed as if they were related. </param>
+
+
             ///<param name="noDiffDeleted">If noDiffDeleted is true, then no diff output will 
             ///                             be generated on deleted files</param> 
             ///<param name="outfile">File that contains output of the diff.</param> 
@@ -207,7 +214,8 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>   
 	        static void Diff(String* diffOptions[], String* path1, Revision* revision1, 
-                String* path2, Revision* revision2, bool recurse, bool noDiffDeleted, 
+                String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, 
+                bool noDiffDeleted, 
                 Stream* outfile, Stream* errFile, ClientContext* context);
 
             ///<summary>Apply file differences into a working copy. Merge changes 
@@ -220,6 +228,11 @@ namespace NSvn
             ///<param name="revision2">Second revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
             ///                      for more information.</param> 
             ///<param name="targetWCPath">Working copy paths for desired merge.</param>
+            ///<param name="ignoreAncestry">Use ignore_ancestry to control whether or not items 
+            /// being diffed will be checked for relatedness first. Unrelated items are 
+            /// typically transmitted to the editor as a deletion of one thing and the 
+            /// addition of another, but if this flag is TRUE, unrelated items will be 
+            /// diffed as if they were related. </param>
             ///<param name="recurse">If recursive is set, assuming path is a directory 
             ///                      all of its contents will be included in the merge.</param> 
             ///<param name="force">If force is set locally modified or 
@@ -232,7 +245,7 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
 	        static void Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
-                String* targetWcPath, bool recurse, bool force, bool dryRun, ClientContext* context);
+                String* targetWcPath, bool recurse, bool ignoreAncestry, bool force, bool dryRun, ClientContext* context);
 
             ///<summary>Cleanup a working copy directory, finishing any incomplete operations, 
             ///         removing lockfiles, etc.</summary>

@@ -41,10 +41,11 @@ namespace Ankh.Solution
 
         public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
         {
-            this.SolutionFolder.Accept( visitor );
-            this.SolutionFile.Accept( visitor );
             if ( recursive )
                 this.VisitChildResources( visitor);
+
+            this.SolutionFolder.Accept( visitor );
+            this.SolutionFile.Accept( visitor );
         } 
 
 

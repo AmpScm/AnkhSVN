@@ -167,6 +167,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Error.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ICommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -297,16 +302,6 @@
                 />
                 <File
                     RelPath = "Commands\RefreshCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Commands\RemoveItemCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Commands\RenameItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

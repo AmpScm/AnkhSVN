@@ -25,7 +25,7 @@ namespace Ankh.Commands
         {
             // all items must be versioned if we are going to run update.
             VersionedVisitor v = new VersionedVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v, true );
+            context.SolutionExplorer.VisitSelectedItems( v, false );
             
             if ( v.IsVersioned )
                 return vsCommandStatus.vsCommandStatusEnabled |

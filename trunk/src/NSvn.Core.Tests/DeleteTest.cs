@@ -51,13 +51,13 @@ namespace NSvn.Core.Tests
 		[Test]
 		public void TestDeleteReposDir()
 		{
-			string path = Path.Combine( this.ReposUrl, @"obj" );
+			string path = Path.Combine( this.ReposUrl, @"doc" );
 			ClientContext ctx = new ClientContext( );
 
 			CommitInfo info = Client.Delete( path, false, ctx );
 
 			String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-			Assertion.Assert( "Directory wasn't deleted ", cmd.IndexOf( "obj" ) == -1 );
+			Assertion.Assert( "Directory wasn't deleted ", cmd.IndexOf( "doc" ) == -1 );
 		}
 
 	}

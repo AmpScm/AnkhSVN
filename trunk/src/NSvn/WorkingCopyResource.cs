@@ -46,7 +46,7 @@ namespace NSvn
             else if ( System.IO.Directory.Exists( path ) )
                 resource = new WorkingCopyDirectory( path );
             else
-                throw new ArgumentException( "Path must be a file or a directory", "path" );  
+                throw new ArgumentException( "Path must be a file or a directory: " + path, "path" );  
 
             resource.status = status;
             return resource;
@@ -59,7 +59,7 @@ namespace NSvn
         public void Commit( bool recursive )
         {
             
-            Client.Commit( new string[]{ this.Path }, recursive, this.ClientContext );
+            Client.Commit( new string[]{ this.Path }, !recursive, this.ClientContext );
         }
 
         /// <summary>
@@ -113,28 +113,6 @@ namespace NSvn
         public static void Remove( WorkingCopyResource resource, bool force)
         {
             Client.Delete( resource.Path, force, resource.ClientContext );
-        }
-
-        /// <summary>
-        /// Move or rename a resource in working copy.
-        /// </summary>
-        /// <param name="force">Whether items should be moved with force.</param>
-        /// <param name="dstPath">Destination for move.</param>
-        public void Move( string dstPath, bool force )
-        {
-            Client.Move( this.Path, Revision.Unspecified, dstPath, force, this.ClientContext );
-        }
-
-        /// <summary>
-        /// Move or rename a resource in a working copy.
-        /// </summary>
-        /// <param name="resource">Resource to be moved or renamed.</param>
-        /// <param name="dstPath">Destination path.</param>
-        /// <param name="force">Wheter resource should be moved or renamed with force.</param>
-        public static void Move( WorkingCopyResource resource, string dstPath, bool force )
-        {
-            Client.Move( resource.Path, Revision.Unspecified, dstPath, force, 
-                resource.ClientContext );
         }
                 
 /*
@@ -199,7 +177,7 @@ namespace NSvn
         public void Diff( Stream outStream, Stream errStream )
         {
             Client.Diff( new string[]{}, this.Path, Revision.Base, this.Path,
-                Revision.Working, false, false, outStream, errStream, 
+                Revision.Working, false, true, false, outStream, errStream, 
                 this.ClientContext );
         }
 

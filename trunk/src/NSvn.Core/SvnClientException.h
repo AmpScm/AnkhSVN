@@ -50,6 +50,14 @@ namespace NSvn
               {;}
         };
 
+        public __gc class NotVersionControlledException : public SvnClientException
+        {
+        public:
+            NotVersionControlledException( System::Exception* innerException ) :
+              SvnClientException( "Path is not version controlled", innerException )
+              {;}
+        };
+
         inline void HandleError( svn_error_t* err )
         {
             if ( err != 0 )

@@ -3,20 +3,20 @@
         ProjectType = "Local"
         ProductVersion = "7.0.9466"
         SchemaVersion = "1.0"
-        ProjectGuid = "{EC6D73BC-8445-4400-B910-784720330F05}"
+        ProjectGuid = "{6D2A5456-0DB3-4795-8005-7E591AB2A221}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "NSvn.Tests"
+                AssemblyName = "ReposInstaller"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                RootNamespace = "NSvn.Tests"
+                RootNamespace = "ReposInstaller"
                 StartupObject = ""
             >
                 <Config
@@ -73,34 +73,29 @@
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\lib\nunit.framework.dll"
-                />
-                <Reference
-                    Name = "NSvn.Core.Tests"
-                    Project = "{1882FE23-6EE3-46AF-82B2-929E371E6218}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "NSvn"
                     Project = "{1C779D04-4D97-414E-93DF-F63E52660B2C}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "NSvn.Common"
-                    Project = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "NSvn.Core"
-                    Project = "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
-                    Package = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
-                />
-                <Reference
                     Name = "Utils"
                     Project = "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "System.Configuration.Install"
+                    AssemblyName = "System.Configuration.Install"
+                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Configuration.Install.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Web.dll"
                 />
             </References>
         </Build>
@@ -112,63 +107,18 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AuthenticationTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NSvn.Tests.build"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "repos.zip"
-                    Link = "..\NSvn.Core.Tests\repos.zip"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "RepositoryDirectoryTest.cs"
-                    SubType = "Code"
+                    RelPath = "ReposInstaller.cs"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RepositoryResourceTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SvnResourceTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TestBase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "UnversionedResourceTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "UtilsTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "wc.zip"
-                    Link = "..\NSvn.Core.Tests\wc.zip"
+                    RelPath = "ReposInstaller.resx"
+                    DependentUpon = "ReposInstaller.cs"
                     BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "WorkingCopyDirectoryTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WorkingCopyResourceTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
             </Include>
         </Files>

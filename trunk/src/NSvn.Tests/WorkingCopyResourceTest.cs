@@ -4,6 +4,8 @@ using System.IO;
 using NUnit.Framework;
 using NSvn.Core;
 
+using Zip = Utils.Zip;
+
 namespace NSvn.Tests
 {
 	/// <summary>
@@ -129,7 +131,7 @@ namespace NSvn.Tests
         {
             // create a second wc and change a file
             string wc2 = this.FindDirName( @"\tmp\wc2" );
-            this.ExtractZipFile( wc2, this.WC_FILE );
+            Zip.ExtractZipResource( wc2, this.GetType(), this.WC_FILE );
             WorkingCopyResource wc2item = new WorkingCopyFile( Path.Combine( wc2, "Form.cs" ) );
             using( StreamWriter w = new StreamWriter( wc2item.Path, false ) )
                 w.Write( "MOO" );
@@ -148,7 +150,7 @@ namespace NSvn.Tests
             try
             {
                 item.Commit( false );
-                Assertion.Fail( "Should not be able to commit a conflicted wc" );
+                Assertion.Fail( "Should not be able to commit a conflicted file" );
             }
             catch( SvnClientException )
             { /*empty*/ }
@@ -157,7 +159,7 @@ namespace NSvn.Tests
             try
             {
                 folderItem.Commit(  true );
-                Assertion.Fail( "Should not be able to commit a conflicted wc" );
+                Assertion.Fail( "Should not be able to commit a conflicted directory" );
             }
             catch( SvnClientException )
             { /* empty */ }

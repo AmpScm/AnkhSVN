@@ -82,6 +82,11 @@
                     AssemblyName = "System.Windows.Forms"
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
                 />
+                <Reference
+                    Name = "SharpZipLib"
+                    AssemblyName = "SharpZipLib"
+                    HintPath = "..\lib\SharpZipLib.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -97,6 +102,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "FolderBrowser.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FolderBrowser.resx"
+                    DependentUpon = "FolderBrowser.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Timer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -106,12 +121,22 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Zip.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Win32\Constants.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Win32\delegates.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Win32\enums.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -130,7 +155,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "Win32\Structs\" />
             </Include>
         </Files>
     </CSHARP>

@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using NUnit.Framework;
+using Utils;
 
 namespace NSvn.Core.Tests
 {
@@ -18,7 +19,7 @@ namespace NSvn.Core.Tests
             this.ExtractRepos();
             this.ExtractWorkingCopy();
             this.wc2 = this.FindDirName( Path.Combine( TestBase.BASEPATH, TestBase.WC_NAME ) );
-            this.ExtractZipFile( this.wc2, this.WC_FILE );
+            Zip.ExtractZipResource( this.wc2, this.GetType(), this.WC_FILE );
         }
 
         public override void TearDown()

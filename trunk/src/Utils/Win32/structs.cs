@@ -71,4 +71,34 @@ namespace Utils.Win32
         int message;
         IntPtr hWnd;
     }
+
+    // C# representation of the IMalloc interface.
+    [InterfaceType ( ComInterfaceType.InterfaceIsIUnknown ),
+    Guid ( "00000002-0000-0000-C000-000000000046" )]
+    public interface IMalloc
+    {
+        [PreserveSig] IntPtr Alloc ( [In] int cb );
+        [PreserveSig] IntPtr Realloc ( [In] IntPtr pv, [In] int cb );
+        [PreserveSig] void   Free ( [In] IntPtr pv );
+        [PreserveSig] int    GetSize ( [In] IntPtr pv );
+        [PreserveSig] int    DidAlloc ( IntPtr pv );
+        [PreserveSig] void   HeapMinimize ( );
+    }
+
+    [StructLayout ( LayoutKind.Sequential, Pack=8 )]
+    public struct BROWSEINFO
+    {
+        public IntPtr       hwndOwner;
+        public IntPtr       pidlRoot;
+        public IntPtr       pszDisplayName;
+        [MarshalAs ( UnmanagedType.LPTStr )]
+        public string       lpszTitle;
+        public int          ulFlags;
+        [MarshalAs ( UnmanagedType.FunctionPtr )]
+        public BFFCALLBACK  lpfn;
+        public IntPtr       lParam;
+        public int          iImage;
+    }
+
+
 }

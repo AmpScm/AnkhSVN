@@ -22,6 +22,7 @@ namespace
                                       void **iter_baton,
                                       void *provider_baton,
                                       apr_hash_t *parameters,
+                                      const char* realmstring,
                                       apr_pool_t *pool);
     svn_error_t * next_credentials (void **credentials,
                                      void *iter_baton,

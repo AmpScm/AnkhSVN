@@ -12,24 +12,22 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for DiffLocalItem.
     /// </summary>
-    [VSNetCommand( "DiffLocalItem", Text="Diff", Tooltip="Diff de dah", 
+    [VSNetCommand( "DiffLocalItem", Text="Diff", 
+        Tooltip="Diff against local text base.", 
          Bitmap = ResourceBitmaps.Diff),
     VSNetControl( "Item", Position=2 ),
     VSNetControl( "Project", Position = 2 ),
-    VSNetControl( "Solution", Position = 2 ) ]
+    VSNetControl( "Solution", Position = 2 ),
+    VSNetControl( "Folder", Position = 2 )]
     internal class DiffLocalItem : CommandBase
     {
 		
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
-            // only allow diff if all selected items are modified
-            ModifiedVisitor v = new ModifiedVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v, true );
-            if ( v.Modified )
-                return vsCommandStatus.vsCommandStatusEnabled |
-                    vsCommandStatus.vsCommandStatusSupported;
-            else
-                return vsCommandStatus.vsCommandStatusUnsupported;
+            // always allow diff - worst case you get an empty diff            
+            return vsCommandStatus.vsCommandStatusEnabled |
+                vsCommandStatus.vsCommandStatusSupported;
+            
         }
 
         public override void Execute(Ankh.AnkhContext context)

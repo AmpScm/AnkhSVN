@@ -34,6 +34,8 @@ namespace Ankh.UI
 			
             this.components = new System.ComponentModel.Container();
             this.SetToolTips();
+
+            this.ValidateRevision();
         }
 
         /// <summary>
@@ -87,17 +89,42 @@ namespace Ankh.UI
         //Gives a tree view of repository if valid revision is selected
         private void goButton_Click(object sender, System.EventArgs e)
         {
-            RepositoryDirectory dir = new RepositoryDirectory(
-                this.urlTextBox.Text, this.revisionPicker.Revision );
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
 
-            if ( this.context != null )
-                dir.Context = this.context;
+                RepositoryDirectory dir = new RepositoryDirectory(
+                    this.urlTextBox.Text, this.revisionPicker.Revision );
 
-            this.treeView.RepositoryRoot = dir;
-            this.treeView.Enabled = true;
+                if ( this.context != null )
+                    dir.Context = this.context;
+
+                this.treeView.RepositoryRoot = dir;
+                this.treeView.Enabled = true;
+            }
+            catch( AuthorizationFailedException )
+            {
+                MessageBox.Show( "Could not authorize against repository " + 
+                    this.urlTextBox.Text, "Authorization failed", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning );
+            }
+            catch( SvnClientException ex )
+            {
+                MessageBox.Show( "An error occurred: " + ex.Message, "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error );
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private void revisionPicker_Changed(object sender, System.EventArgs e)
+        {
+            this.ValidateRevision();            
+        }
+
+        private void ValidateRevision()
         {
             this.goButton.Enabled = this.revisionPicker.Valid;
         }
@@ -131,14 +158,15 @@ namespace Ankh.UI
             this.urlTextBox.Name = "urlTextBox";
             this.urlTextBox.Size = new System.Drawing.Size(220, 20);
             this.urlTextBox.TabIndex = 1;
-            this.urlTextBox.Text = "http://arild.no-ip.com:8088/svn/test";
+            this.urlTextBox.Text = "http://www.ankhsvn.com:8088/svn/test";
             // 
             // revisionLabel
             // 
             this.revisionLabel.Location = new System.Drawing.Point(1, 29);
             this.revisionLabel.Name = "revisionLabel";
             this.revisionLabel.TabIndex = 2;
-            this.revisionLabel.Text = "Select Revision:";
+            this.revisionLabel.Text = "Select a revision or manually type the revision number:";
+            this.revisionLabel.Size = new System.Drawing.Size( 350, 20 );
             // 
             // goButton
             // 

@@ -177,6 +177,7 @@ namespace
                                       void **iter_baton,
                                       void *provider_baton,
                                       apr_hash_t *parameters,
+                                      const char* realmstring,
                                       apr_pool_t *pool)
     {
         // delegate to the IAuth.. object
@@ -184,7 +185,9 @@ namespace
             *( static_cast<ManagedPointer<IAuthenticationProvider*>* >(provider_baton) );
 
         ParameterDictionary* params = new ParameterDictionary( parameters, pool );
-        *credentials = GetCredentials( provider->FirstCredentials( params ), pool );
+        String* managedRealmString = StringHelper( realmstring );
+        *credentials = GetCredentials( 
+            provider->FirstCredentials( managedRealmString, params ), pool );
        
         // next_creds doesnt have a provider_baton param, so we store it in
         // the iter baton. We don't need it for anything else, since 

@@ -104,21 +104,12 @@ NSvn::Core::StatusDictionary* NSvn::Core::Client::Status(
 
 NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
 {
-    String* directory;
-
-    // find the directory containing this item
-    if ( Directory::Exists( path ) )
-        directory = path;
-    else
-        directory = Path::GetDirectoryName( path );
-
     svn_wc_adm_access_t* admAccess;
     Pool pool;
 
-    const char* trueDir = CanonicalizePath( directory, pool );
-
     // lock the directory
-    HandleError( svn_wc_adm_open( &admAccess, 0, trueDir, false, false, pool ) );
+    HandleError( svn_wc_adm_probe_open( &admAccess, 0, CanonicalizePath( path, pool ), 
+        false, false, pool ) );
 
     //retrieve the status
     svn_wc_status_t* status;    
@@ -251,7 +242,8 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcR
 
 // implementation of Client::Merge
 void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
-                String* targetWcPath, bool recurse, bool force, bool dryRun, ClientContext* context)
+                String* targetWcPath, bool recurse, bool ignoreAncestry,
+                bool force, bool dryRun, ClientContext* context)
 {
     Pool pool;
     const char* trueSrcPath1 = CanonicalizePath( url1, pool );
@@ -260,7 +252,7 @@ void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, 
 
     HandleError( svn_client_merge ( trueSrcPath1 , revision1->ToSvnOptRevision( pool ),
         trueSrcPath2, revision2->ToSvnOptRevision( pool ),
-        trueDstPath, recurse, force, dryRun,
+        trueDstPath, recurse, ignoreAncestry, force, dryRun,
         context->ToSvnContext( pool ), pool ) );
 }
 // implementation of Client::PropGet
@@ -311,7 +303,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* path, bool force,
     
     svn_client_commit_info_t* commitInfoPtr = 0;
 
-    HandleError( svn_client_delete( &commitInfoPtr, trueSrcPath,  0, false, 
+    HandleError( svn_client_delete( &commitInfoPtr, trueSrcPath, false, 
         context->ToSvnContext( pool ), pool ) );
 
      if ( commitInfoPtr != 0 )
@@ -436,7 +428,7 @@ NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* rev
 
 // implementation of Client::Diff
 void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* revision1,
-    String* path2, Revision* revision2, bool recurse, bool noDiffDeleted, 
+    String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, bool noDiffDeleted, 
     Stream* outfile, Stream* errfile, ClientContext* context )
 {
     Pool pool;
@@ -452,7 +444,7 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
 
     HandleError( svn_client_diff( diffOptArray, truePath1, 
         revision1->ToSvnOptRevision( pool ), truePath2, 
-        revision2->ToSvnOptRevision(pool), recurse, noDiffDeleted,
+        revision2->ToSvnOptRevision(pool), recurse, ignoreAncestry, noDiffDeleted,
         aprOut, aprErr, context->ToSvnContext(pool), pool ) );
 
     apr_file_close( aprOut );
