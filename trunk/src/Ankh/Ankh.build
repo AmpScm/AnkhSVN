@@ -35,9 +35,9 @@
         <property name="define" value="VS2003;${define}" if="${vs.2003}"/>
         
         
-        <comregister file="${lib.dir}\Ankh.ToolWindow.dll"/>
+        <comregister file="${lib.dir}\AnkhUserControlHost.dll"/>
         
-        <tlbimp output="${build.dir}/AnkhToolWindowLib.dll" typelib="${lib.dir}\Ankh.ToolWindow.dll"/>
+        <tlbimp output="${build.dir}/AnkhUserControlHostLib.dll" typelib="${lib.dir}\AnkhUserControlHost.dll"/>
         
         <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
