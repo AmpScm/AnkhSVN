@@ -96,7 +96,7 @@ namespace Ankh.EventSinks
                 string dir = Path.GetDirectoryName( newName );
 
                 string oldPath = Path.Combine( dir, oldName );
-                SvnItem oldItem = this.Context.StatusCache["oldPath"];
+                SvnItem oldItem = this.Context.StatusCache[oldPath];
 
                 // is the item versioned?
                 if ( oldItem.Status.TextStatus != StatusKind.None )
