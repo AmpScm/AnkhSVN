@@ -59,6 +59,18 @@ namespace NSvn
             return Client.Commit( targets, recursive, resources[0].ClientContext );
         }
 
+        /// <summary>
+        /// Moves or renames the resource.
+        /// </summary>
+        /// <param name="newPath">The new path of the resource</param>
+        /// <param name="force">Whether to force the operation.</param>
+        public void Move( string newPath, bool force )
+        {
+            Client.Move( this.Path, Revision.Unspecified, newPath, force, this.ClientContext );
+            this.path = newPath;
+            this.DoInvalidate();
+        }
+
 
         /// <summary>
         /// Reverts resources to the state before they where modified.

@@ -210,5 +210,20 @@ namespace NSvn.Tests
                 resFile.GetType() );
         }
 
+        [Test]
+        public void TestMoveFile()
+        {
+            string dstpath = Path.Combine( this.WcPath, "Moo.cs" );
+            string srcpath = Path.Combine( this.WcPath, "Form.cs" );
+            WorkingCopyResource file = new WorkingCopyFile( srcpath );
+            
+            file.Move( dstpath, false );
+            
+            Assertion.Assert( "Old file still exists", !File.Exists( srcpath ) );
+            Assertion.Assert( "New file doesn't exist", File.Exists( dstpath ) );
+            Assertion.AssertEquals( "Status should be added", StatusKind.Added, file.Status.TextStatus );       
+            
+        }
+
     }
 }
