@@ -118,7 +118,7 @@ NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
     const char* trueDir = CanonicalizePath( directory, pool );
 
     // lock the directory
-    HandleError( svn_wc_adm_open( &admAccess, 0, trueDir, false, false, pool ) );
+    HandleError( svn_wc_adm_probe_open( &admAccess, 0, trueDir, false, false, pool ) );
 
     //retrieve the status
     svn_wc_status_t* status;    
@@ -261,7 +261,7 @@ void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, 
 
     HandleError( svn_client_merge ( trueSrcPath1 , revision1->ToSvnOptRevision( pool ),
         trueSrcPath2, revision2->ToSvnOptRevision( pool ),
-        trueDstPath, recurse, ignoreAncestry, force, dryRun,
+        trueDstPath, recurse, force, dryRun,
         context->ToSvnContext( pool ), pool ) );
 }
 // implementation of Client::PropGet
@@ -453,7 +453,7 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
 
     HandleError( svn_client_diff( diffOptArray, truePath1, 
         revision1->ToSvnOptRevision( pool ), truePath2, 
-        revision2->ToSvnOptRevision(pool), recurse, ignoreAncestry, noDiffDeleted,
+        revision2->ToSvnOptRevision(pool), recurse, noDiffDeleted,
         aprOut, aprErr, context->ToSvnContext(pool), pool ) );
 
     apr_file_close( aprOut );
