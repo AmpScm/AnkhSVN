@@ -16,7 +16,7 @@ namespace Ankh
 	/// General context object for the Ankh addin. Contains pointers to objects
 	/// required by commands.
 	/// </summary>
-	internal class AnkhContext
+	internal class AnkhContext : IWin32Window
 	{
 		public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin )
 		{
@@ -74,7 +74,15 @@ namespace Ankh
         public EnvDTE.Window RepositoryExplorerWindow
         {
             get{ return this.reposExplorerWindow; }
-        }        
+        }   
+     
+        public IntPtr Handle
+        {
+            get
+            {
+                return new IntPtr(this.DTE.MainWindow.HWnd);
+            }
+        }
 
         #region SetUpEvents
         /// <summary>

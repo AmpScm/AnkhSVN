@@ -24,7 +24,7 @@ namespace Ankh.Commands
             public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
             {
                 ModifiedVisitor m = new ModifiedVisitor();
-                context.SolutionExplorer.VisitSelectedItems( m );
+                context.SolutionExplorer.VisitSelectedItems( m, true );
             
                 if ( m.Modified )
                     return vsCommandStatus.vsCommandStatusEnabled |
@@ -35,7 +35,7 @@ namespace Ankh.Commands
 
             public override void Execute(Ankh.AnkhContext context)
             {
-                context.SolutionExplorer.VisitSelectedItems( new RevertVisitor() );
+                context.SolutionExplorer.VisitSelectedItems( new RevertVisitor(), true );
                 context.SolutionExplorer.UpdateSelectionStatus();
             }
         #endregion

@@ -20,18 +20,35 @@ namespace Ankh.Solution
             if ( fullname != string.Empty )
             {
                 string parentPath = Path.GetDirectoryName( fullname );
-                this.projectFolder = SvnResource.FromLocalPath( parentPath );
+                this.projectFolder = (WorkingCopyDirectory)SvnResource.FromLocalPath( parentPath );
                 explorer.AddResource( project, this );                    
             }
             if ( this.projectFolder != null )
                 this.projectFolder.Context = explorer.Context;
         }
 
-        public override void VisitResources( ILocalResourceVisitor visitor )
+        public WorkingCopyDirectory ProjectFolder
+        {
+            get{ return this.projectFolder; }
+        }
+
+        /// <summary>
+        /// Accept an INodeVisitor.
+        /// </summary>
+        /// <param name="visitor"></param>
+        public override void Accept( INodeVisitor visitor )
+        {
+            visitor.VisitProject( this );
+        }
+
+        
+
+        public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
         {
             if ( this.projectFolder != null )
                 this.projectFolder.Accept( visitor );
-            this.VisitChildren( visitor );
+            if ( recursive )
+                this.VisitChildResources( visitor );
         } 
             
         protected override StatusKind GetStatus()
@@ -42,7 +59,7 @@ namespace Ankh.Solution
                 return StatusFromResource( this.projectFolder );
         }                    
 
-        private ILocalResource projectFolder;
+        private WorkingCopyDirectory projectFolder;
     }  
 
 }

@@ -28,7 +28,7 @@ namespace Ankh.EventSinks
         protected void ItemRemoved( ProjectItem item )
         {
             this.Context.SolutionExplorer.VisitResources( 
-                item, new RemoveProjectVisitor() );
+                item, new RemoveProjectVisitor(), false );
         }
 
         protected void ItemRenamed( ProjectItem item, string oldName )

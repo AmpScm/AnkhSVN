@@ -23,7 +23,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
             UnversionedVisitor a = new UnversionedVisitor();
-            context.SolutionExplorer.VisitSelectedItems( a );
+            context.SolutionExplorer.VisitSelectedItems( a, true );
             
             if ( !a.IsVersioned )
                 return vsCommandStatus.vsCommandStatusEnabled |
@@ -34,7 +34,7 @@ namespace Ankh.Commands
 
         public override void Execute(Ankh.AnkhContext context)
         {
-            context.SolutionExplorer.VisitSelectedItems( new AddVisitor() );
+            context.SolutionExplorer.VisitSelectedItems( new AddVisitor(), true );
             
             context.SolutionExplorer.RefreshSelectionParents();
         }
