@@ -1,3 +1,4 @@
+// $Id$
 #include "StdAfx.h"
 #include "../NSvn.Core/StringHelper.h"
 #include "stringhelpertest.h"
@@ -76,4 +77,5 @@ namespace MCpp
 }
 }
 }
+
 

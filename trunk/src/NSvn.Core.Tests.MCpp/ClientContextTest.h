@@ -1,3 +1,4 @@
+// $Id$
 #pragma once
 #include "stdafx.h"
 #include "ClientContext.h"
@@ -47,3 +48,4 @@ namespace NSvn
         }
     }
 }
+

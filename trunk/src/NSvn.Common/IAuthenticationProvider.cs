@@ -1,3 +1,4 @@
+// $Id$
 
 namespace NSvn.Common
 {

@@ -1,3 +1,4 @@
+// $Id$
 #include "Stdafx.h"
 #include "ClientContextTest.h"
 
@@ -106,6 +107,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
 
     Assertion::Assert( "cred not NULL", cred == 0 );
 }
+
 
 
 

@@ -1,3 +1,4 @@
+// $Id$
 #using <mscorlib.dll>
 
 namespace NSvn
@@ -13,3 +14,4 @@ namespace NSvn
         };
     }
 }
+
