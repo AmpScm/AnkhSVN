@@ -83,6 +83,7 @@ namespace NSvn.Core.Tests
         [System.Diagnostics.Conditional("ALT_ADMIN_DIR")]
         public void TestChangeAdminDirectoryName()
         {
+#if ALT_ADMIN_DIR
             Client.AdminDirectoryName = "__SVN__";
             try
             {
@@ -99,6 +100,7 @@ namespace NSvn.Core.Tests
             {
                 Client.AdminDirectoryName = ".svn";
             }
+#endif
         }
 
         [Test]

@@ -62,6 +62,46 @@
                     TreatWarningsAsErrors = "false"
                     WarningLevel = "4"
                 />
+                <Config
+                    Name = "(svnlib) Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE;REPORTERROR;ALWAYSREGISTER;VS2003"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "true"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\(svnlib) Release\"
+                    RegisterForComInterop = "true"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "(svnlib) Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE;REPORTERROR;ALWAYSREGISTER;VS2003"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "true"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\(svnlib) Debug\"
+                    RegisterForComInterop = "true"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
             </Settings>
             <References>
                 <Reference
@@ -114,11 +154,6 @@
                     HintPath = "..\lib\Interop.SHDocVw.dll"
                 />
                 <Reference
-                    Name = "envdte"
-                    AssemblyName = "EnvDTE"
-                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.1.4322\envdte.dll"
-                />
-                <Reference
                     Name = "extensibility"
                     AssemblyName = "Extensibility"
                     HintPath = "I:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\PublicAssemblies\extensibility.dll"
@@ -146,6 +181,11 @@
                     Name = "Interop.esproj"
                     AssemblyName = "Interop.esproj"
                     HintPath = "..\lib\Interop.esproj.dll"
+                />
+                <Reference
+                    Name = "envdte"
+                    AssemblyName = "envdte"
+                    HintPath = "..\lib\envdte.dll"
                 />
             </References>
         </Build>
