@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
     <Fragment Id="FR_Lib">
-	    <DirectoryRef Id="TARGETDIR">
+        <DirectoryRef Id="TARGETDIR">
             <!-- Register AnkhUserControlHost -->
-	    <Component Id="AUCH_RegAsm" DiskId="1" Guid="37DAC5C0-D247-4ffd-83F7-4E66840766EC">
+        <Component Id="AUCH_RegAsm" DiskId="1" Guid="37DAC5C0-D247-4ffd-83F7-4E66840766EC">
                 <Registry Id="AUCH_Reg_registry0" Root="HKCR" Type="string" KeyPath="yes"
                     Key="AnkhUserControlHost.AnkhUserControlHostCtl" 
                     Value="AnkhUserControlHostCtl Class" />
