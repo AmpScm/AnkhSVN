@@ -6,6 +6,7 @@ using System.Xml.Schema;
 using System.Reflection;
 using System.Collections;
 using Ankh.RepositoryExplorer;
+using System.Threading;
 
 namespace Ankh.Config
 {
@@ -139,9 +140,21 @@ namespace Ankh.Config
         /// <param name="roots"></param>
         public void SaveReposExplorerRoots( string[] roots  )
         {
-            string reposRootPath = Path.Combine( this.configDir, REPOSROOTS );
+            // Make sure only one process tries to write to this.
+            Mutex mutex = new Mutex( false, "Ankh.Config.ConfigLoader.reposroots.xml" );
+            bool ownsMutex = false;
+            for( int i = 0; i < 3 && !ownsMutex; i++ )
+            {
+                ownsMutex = mutex.WaitOne( 1000, false );
+            }
+            // If we didn't get it by now, give up
+            if ( !ownsMutex )
+                return;
+
+            string reposRootPath = null;
             try
             {
+                reposRootPath = Path.Combine( this.configDir, REPOSROOTS );
                 using( StreamWriter writer = new StreamWriter( reposRootPath ) )
                 {
                     XmlSerializer serializer = new XmlSerializer( typeof(string[]) );
@@ -150,7 +163,9 @@ namespace Ankh.Config
             }
             catch( Exception )
             {
-                File.Delete( reposRootPath );
+                mutex.ReleaseMutex();
+                if ( reposRootPath != null )
+                    File.Delete( reposRootPath );
                 throw;
             }
         }
