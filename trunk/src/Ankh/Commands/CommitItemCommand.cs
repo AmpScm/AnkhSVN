@@ -35,8 +35,6 @@ namespace Ankh.Commands
             WorkingCopyResource[] wcResources = new WorkingCopyResource[ resources.Length ];
             resources.CopyTo( wcResources, 0 );
 
-            wcResources[0].Notifications = context.Notifications;
-
             WorkingCopyResource.Commit( wcResources, false );
 
             context.SolutionExplorer.UpdateSelectionStatus();

@@ -32,7 +32,6 @@ namespace Ankh.Commands
             foreach( WorkingCopyResource resource in 
                 context.SolutionExplorer.GetSelectedItems() )
             {
-                resource.AuthenticationProviders = context.AuthenticationProviders;
                 resource.Update();
             }
         }

@@ -45,5 +45,14 @@ namespace NSvn
         /// </summary>
         /// <param name="visitor"></param>
         void Accept( ILocalResourceVisitor visitor );
+
+        /// <summary>
+        /// The context object used in version control operations.
+        /// </summary>
+        NSvnContext Context
+        {
+            get;
+            set;
+        }
 	}
 }
