@@ -6,18 +6,19 @@
             <br/><br/>
             <p>
                 <b>Description</b>
-                <br/>
-                Display the differences between two paths. Each TARGET can be either a working copy path or URL. 
-                If TARGET is a working copy path, then the means:
-                The client compares base and working copies of TARGET.
-                <br/><br/>
-                <b>Changes</b>
-                <br/>
-                Nothing
+                    <br/>
+                    Display the differences between two paths. Each TARGET can be either a working copy path or URL. 
+                    If TARGET is a working copy path, then the means:
+                    The client compares base and working copies of TARGET.
+                    <br/><br/>
+                    <b>Changes</b>
+                    <br/>
+                    Nothing.
             </p>
         </section>
         <section>
             <p>
+            <hr></hr>
                 <i>(from "Subversion:The Definitive Guide" - <link url="http://svnbook.red-bean.com/html-chunk/">
                 svnbook.red-bean.com/html-chunk/</link>)</i>
             </p>

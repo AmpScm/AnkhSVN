@@ -6,18 +6,19 @@
             <br/><br/>
             <p>
                 <b>Description</b>
-                <br/>
-                Outputs the contents of the specified files or URLs. 
-                For listing the contents of directories, see svn <link url="list.xml">list</link>
-                <br/><br/><br/>
-                <b>Changes</b>
-                <br/>
-                Nothing
+                    <br/>
+                    Outputs the contents of the specified files or URLs. 
+                    For listing the contents of directories, see svn <link url="list.xml">list</link>
+                    <br/><br/>
+                    <b>Changes</b>
+                    <br/>
+                    Nothing.
             </p>
     
         </section>
         <section>
             <p>
+            <hr></hr>
                 <i>(from "Subversion:The Definitive Guide" - <link url="http://svnbook.red-bean.com/html-chunk/">
                 svnbook.red-bean.com/html-chunk/</link>)</i>
             </p>
