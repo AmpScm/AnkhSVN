@@ -30,7 +30,7 @@
         unless="${debug}"/>
 
     <property name="link.options" value='/NOLOGO /DLL /DEBUG 
-        /DELAYLOAD:{bdb.dll} /INCREMENTAL:NO /LIBPATH:"${svndir}\debug 
+        /DELAYLOAD:${bdb.dll} /INCREMENTAL:NO /LIBPATH:"${svndir}\debug 
         /PDB:"${build.dir}/NSvn.Core.pdb" comctl32.lib mswsock.lib ws2_32.lib 
         rpcrt4.lib shlwapi.lib ${bdb.lib} 
         ${svndir}\Debug\subversion\libsvn_repos\libsvn_repos-1.lib 
