@@ -316,6 +316,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "PathSelector.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PathSelector.resx"
+                    DependentUpon = "PathSelector.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "PathTreeView.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
@@ -403,6 +413,16 @@
                 <File
                     RelPath = "SslServerTrustDialog.resx"
                     DependentUpon = "SslServerTrustDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SwitchDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SwitchDialog.resx"
+                    DependentUpon = "SwitchDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
