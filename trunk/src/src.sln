@@ -223,9 +223,8 @@ Global
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Release.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
+		WiX\Ankh-UI.wxs = WiX\Ankh-UI.wxs
 		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
-		WiX\Ankh.msm.build = WiX\Ankh.msm.build
-		WiX\Ankh.msm.wxs = WiX\Ankh.msm.wxs
 		ankh.reg = ankh.reg
 		WiX\apr-iconv.wxs = WiX\apr-iconv.wxs
 		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
@@ -244,8 +243,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
