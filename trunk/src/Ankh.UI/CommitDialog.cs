@@ -11,6 +11,9 @@ using System.IO;
 
 namespace Ankh.UI
 {
+    
+
+
     /// <summary>
     /// Summary description for CommitDialog.
     /// </summary>
@@ -18,7 +21,7 @@ namespace Ankh.UI
     {
         public event EventHandler DiffWanted;		
 
-        public CommitDialog( CommitItem[] items )
+        public CommitDialog()
         {
             //
             // Required for Windows Form Designer support
@@ -27,10 +30,7 @@ namespace Ankh.UI
 
             this.CreateToolTips();
 
-            this.commitItems = items;
-
-            foreach( CommitItem item in items )
-                this.commitItemsList.Items.Add( item.Path );
+            this.commitItems = new ArrayList();
 
             this.diffView.Visible = false;
 
@@ -70,7 +70,23 @@ namespace Ankh.UI
             }
         }
 
-        
+        public void AddCommitItem( CommitAction action, string path, 
+            object tag )
+        {
+            ListViewItem item = new ListViewItem( new string[]{ path, action.ToString() } );
+            item.Checked = true;
+            item.Tag = tag;
+
+            this.commitItemsView.Items.Add( item );
+        }
+
+        public Array GetSelectedTags( Type type )
+        {           
+            ArrayList arr = new ArrayList();
+            foreach( ListViewItem i in this.commitItemsView.CheckedItems )
+                arr.Add( i.Tag );
+            return arr.ToArray( type );
+        }        
 
         /// <summary>
         /// Clean up any resources being used.
@@ -134,9 +150,29 @@ namespace Ankh.UI
 
         private void CommitDialog_VisibleChanged(object sender, System.EventArgs e)
         {
+            ArrayList arr = new ArrayList();
+            foreach( ListViewItem item in this.commitItemsView.Items )
+                arr.Add( item.SubItems[0].Text );
+
             if ( this.Visible && this.logMessageBox.Text == string.Empty )
-                this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( this.commitItems );
+                this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( arr );
         }
+
+        private void ItemChecked(object sender, System.Windows.Forms.ItemCheckEventArgs e)
+        {
+            ListViewItem item = this.commitItemsView.Items[e.Index];
+            if ( e.CurrentValue == CheckState.Checked )
+            {                
+                this.logMessageBox.Text = this.logMessageTemplate.RemoveItem(
+                    this.logMessageBox.Text, item.SubItems[0].Text );
+            }
+            else if ( e.CurrentValue == CheckState.Unchecked )
+            {
+                this.logMessageBox.Text = this.LogMessageTemplate.AddItem(
+                    this.logMessageBox.Text, item.SubItems[0].Text );
+            }        
+        }
+
 
         
 
@@ -151,10 +187,12 @@ namespace Ankh.UI
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.logLabel = new System.Windows.Forms.Label();
-            this.commitItemsList = new System.Windows.Forms.ListBox();
             this.showDiffButton = new System.Windows.Forms.Button();
             this.diffView = new Ankh.UI.DiffView();
             this.logMessageBox = new System.Windows.Forms.RichTextBox();
+            this.commitItemsView = new System.Windows.Forms.ListView();
+            this.pathColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.actionColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -182,14 +220,6 @@ namespace Ankh.UI
             this.logLabel.Size = new System.Drawing.Size(296, 23);
             this.logLabel.TabIndex = 4;
             this.logLabel.Text = "Write log message:";
-            // 
-            // commitItemsList
-            // 
-            this.commitItemsList.Dock = System.Windows.Forms.DockStyle.Top;
-            this.commitItemsList.Location = new System.Drawing.Point(0, 0);
-            this.commitItemsList.Name = "commitItemsList";
-            this.commitItemsList.Size = new System.Drawing.Size(816, 108);
-            this.commitItemsList.TabIndex = 5;
             // 
             // showDiffButton
             // 
@@ -222,6 +252,31 @@ namespace Ankh.UI
             this.logMessageBox.TabIndex = 8;
             this.logMessageBox.Text = "";
             // 
+            // commitItemsView
+            // 
+            this.commitItemsView.CheckBoxes = true;
+            this.commitItemsView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+                                                                                              this.pathColumnHeader,
+                                                                                              this.actionColumnHeader});
+            this.commitItemsView.Dock = System.Windows.Forms.DockStyle.Top;
+            this.commitItemsView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.commitItemsView.Location = new System.Drawing.Point(0, 0);
+            this.commitItemsView.Name = "commitItemsView";
+            this.commitItemsView.Size = new System.Drawing.Size(816, 112);
+            this.commitItemsView.TabIndex = 9;
+            this.commitItemsView.View = System.Windows.Forms.View.Details;
+            this.commitItemsView.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ItemChecked);
+            // 
+            // pathColumnHeader
+            // 
+            this.pathColumnHeader.Text = "Path";
+            this.pathColumnHeader.Width = 398;
+            // 
+            // actionColumnHeader
+            // 
+            this.actionColumnHeader.Text = "Action";
+            this.actionColumnHeader.Width = 85;
+            // 
             // CommitDialog
             // 
             this.AcceptButton = this.okButton;
@@ -229,10 +284,10 @@ namespace Ankh.UI
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(816, 315);
             this.ControlBox = false;
+            this.Controls.Add(this.commitItemsView);
             this.Controls.Add(this.logMessageBox);
             this.Controls.Add(this.diffView);
             this.Controls.Add(this.showDiffButton);
-            this.Controls.Add(this.commitItemsList);
             this.Controls.Add(this.logLabel);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
@@ -253,20 +308,23 @@ namespace Ankh.UI
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label logLabel;
-        private System.Windows.Forms.ListBox commitItemsList;
         private System.Windows.Forms.Button showDiffButton;
         private string diff;
         private Ankh.UI.DiffView diffView;
         private System.Windows.Forms.RichTextBox logMessageBox;
         private LogMessageTemplate logMessageTemplate;
        
-        private CommitItem[] commitItems;
+        private ArrayList commitItems;
+        private System.Windows.Forms.ListView commitItemsView;
+        private System.Windows.Forms.ColumnHeader pathColumnHeader;
+        private System.Windows.Forms.ColumnHeader actionColumnHeader;
        
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
+        
 
         
 
@@ -279,6 +337,17 @@ namespace Ankh.UI
 
 
 
+    }
+
+    /// <summary>
+    /// The various types of actions.
+    /// </summary>
+    public enum CommitAction
+    {
+        Added,
+        Deleted,
+        Modified,
+        None
     }
 }
 

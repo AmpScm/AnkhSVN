@@ -37,7 +37,13 @@ namespace Ankh.Commands
 
             this.context = context;
             WorkingCopyResource[] resources = (WorkingCopyResource[])
-                v.WorkingCopyResources.ToArray( typeof(WorkingCopyResource) );
+                v.WorkingCopyResources.ToArray( typeof(WorkingCopyResource) );            
+
+            resources = context.Context.ShowLogMessageDialog( resources );
+
+            // did the user cancel?
+            if ( resources == null ) 
+                return;
 
             CommitInfo commitInfo = null;
 

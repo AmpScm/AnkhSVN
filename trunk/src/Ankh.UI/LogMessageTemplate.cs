@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
+using System.Collections;  
 
 namespace Ankh.UI
 {
@@ -38,14 +39,14 @@ namespace Ankh.UI
             
         }
 
-        public virtual string PreProcess( CommitItem[] items )        
+        public virtual string PreProcess( IList paths )        
         {
             string text = this.Template;
             // substitute all the patterns.
             if ( LINETEMPLATE.IsMatch( this.template ) )
             {
                 string linePattern = LINETEMPLATE.Match( this.template ).Groups[ "linepattern" ].Value.Trim();
-                text = LINETEMPLATE.Replace( this.template, this.SubstituteLinePattern( linePattern, items ) );
+                text = LINETEMPLATE.Replace( this.template, this.SubstituteLinePattern( linePattern, paths ) );
                 
             }
             return text;
@@ -66,17 +67,54 @@ namespace Ankh.UI
                 }
             }
         }
+
+        /// <summary>
+        /// Removes an item from the log message, if unchanged. 
+        /// </summary>
+        /// <param name="currentLog">The current log message.</param>
+        /// <param name="path">The path to be removed.</param>
+        /// <returns>The new log message</returns>
+        public virtual string RemoveItem( string currentLog, string path )
+        {            
+            string line = Regex.Escape( this.LineForPath( path ) );
+            string regex = "^" + line + @"\s*";
+  
+            return Regex.Replace( currentLog, regex, "", RegexOptions.Multiline );
+        }
+
+        /// <summary>
+        /// Adds an item to the log message, if its not already there.
+        /// </summary>
+        /// <param name="currentLog">The current log message.</param>
+        /// <param name="path">The new path.</param>
+        /// <returns>The altered log message</returns>
+        public virtual string AddItem( string currentLog, string path )
+        {
+            string line = this.LineForPath( path );
+
+            // dont replace if the line is already there
+            if ( currentLog.IndexOf( line ) >= 0 )
+                return currentLog;
+            else
+                return currentLog + line + Environment.NewLine;            
+        }
+
+        private string LineForPath( string path )
+        {
+            string rootedPath = NSvn.SvnUtils.GetWorkingCopyRootedPath(
+                path );
+            string linePattern = LINETEMPLATE.Match( this.template ).Groups[ 
+                "linepattern" ].Value.Trim();
+            return linePattern.Replace( "%path%", rootedPath );
+        }
  
 
-        private string SubstituteLinePattern( string linePattern, CommitItem[] items )
+        private string SubstituteLinePattern( string linePattern, IList paths )
         {
             StringBuilder builder = new StringBuilder();
-            foreach( CommitItem item in items )
+            foreach( string path in paths )
             { 
-                string line = linePattern.Replace( "%path%", NSvn.SvnUtils.GetWorkingCopyRootedPath(
-                    item.Path ) );
-                line = line.Replace( "%basepath%", Path.GetFileName( item.Path ) );
-
+                string line = LineForPath( path );
                 builder.Append( line + Environment.NewLine );
             }
 
