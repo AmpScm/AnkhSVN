@@ -21,7 +21,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\NSvn.Core;..\..\subversion\apr\include;&quot;..\..\subversion\apr-iconv\include&quot;;&quot;..\..\subversion\apr-util\include&quot;;..\..\subversion\subversion\include"
-				AdditionalUsingDirectories="..\NSvn.Common\bin\Debug;&quot;I:\Program Files\NUnit V2.0\bin&quot;"
+				AdditionalUsingDirectories="..\NSvn.Common\bin\Debug;..\lib"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
