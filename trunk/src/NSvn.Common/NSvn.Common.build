@@ -30,7 +30,8 @@
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
         
-        <csc target="library" output="${build.dir}/NSvn.Common.dll" verbose="${verbose}" define="${define}"  debug="true">
+        <csc target="library" output="${build.dir}/NSvn.Common.dll" verbose="${verbose}" 
+            define="${define}" debug="${debug}">
             <references>
             </references>
             
@@ -38,6 +39,7 @@
                 <includes name="**/*.cs"/>
             </sources>
             
+            <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="${warninglevel}"/>
         </csc>
         

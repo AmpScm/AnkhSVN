@@ -39,13 +39,13 @@
 
         <echo message="${lib.dir}/nunit.framework.dll"/>
         
-    <csc target="library" output="${build.dir}/Ankh.Tests.dll" 
-        verbose="${verbose}" define="${define}" debug="true">
+        <csc target="library" output="${build.dir}/Ankh.Tests.dll" 
+            verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
-        <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
-        <includes name="..\NSvn.Core.Tests\${build.dir}\NSvn.Core.Tests.dll"/>
-        <includes name="..\Ankh\${build.dir}\Ankh.dll"/>
+                <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <includes name="..\NSvn.Core.Tests\${build.dir}\NSvn.Core.Tests.dll"/>
+                <includes name="..\Ankh\${build.dir}\Ankh.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
                 <includes name="${lib.dir}\nunit.framework.dll"/>
                 <includes name="${lib.dir}\Sharpziplib.dll"/>
@@ -58,7 +58,7 @@
             
             
             
-            
+            <arg value="/debug:pdbonly"/ unless="${debug}">
             <arg value="${warninglevel}"/>
         </csc>
         
