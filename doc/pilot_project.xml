@@ -111,12 +111,12 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         <p>To ensure the sanity and quality of the system at any given moment,
         and to catch regression bugs we intend to conduct continuous
         unit tests using the <link
-        url="http://nunit.sourceforge.net/">Nunit</link> testing
+        url="http://nunit.sourceforge.net/">NUnit</link> testing
         framework.</p>
 
         <p>We hope to make the .NET wrapper layer available as a
         standalone unit for use in other applications. We also hope
-        to provide <link url="http://nant.sourceforge.net/">Nant
+        to provide <link url="http://nant.sourceforge.net/">NAnt
         </link> build scripts that will enable it to be built
         without requiring the user to have Visual Studio.NET
         installed. </p>
