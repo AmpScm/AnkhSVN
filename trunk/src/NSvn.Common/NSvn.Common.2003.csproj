@@ -156,6 +156,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SubversionVersionAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SvnException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -146,7 +146,7 @@ namespace Ankh
             actionStatus[NotifyAction.Restore] =                "Restored";
             actionStatus[NotifyAction.Revert] =                 "Reverted";
             actionStatus[NotifyAction.FailedRevert] =           "Revert failed";
-            actionStatus[NotifyAction.Resolve] =                "Resolved";
+            actionStatus[NotifyAction.Resolved] =                "Resolved";
             actionStatus[NotifyAction.Skip] =                   "Skipped";
             actionStatus[NotifyAction.UpdateDelete] =           "Update deleted";
             actionStatus[NotifyAction.UpdateAdd] =              "Update added";
