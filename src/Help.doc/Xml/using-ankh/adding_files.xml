@@ -3,7 +3,6 @@
 <doc title="Adding files to revision control">
     <section>
         <p>
-            <hr></hr>
                  Add will schedule files and directories to your working copy. 
                  They will be uploaded and added to the repository on your next
                  <link url="commiting_files.xml">commit.</link>
@@ -31,8 +30,10 @@
 				
 			Notice that the status symbol has changed in front of the 
             item(s) added in Solution Explorer from 
+            <br/>
             <img src="../../img/unrevisioned_file.png" />
-            to <img src="../../img/added_file.png" /><br/>
+            to <img src="../../img/added_file.png" />
+            <br/><br/>
             Ankhs <link url="../keywords/output_window.xml">output window </link>
             will show all the files that has been added to the working copy. 
             <br></br><br></br>

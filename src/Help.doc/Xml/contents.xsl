@@ -10,6 +10,7 @@
 
     <xsl:template match="/doc">
         <h1><xsl:value-of select="@title"/></h1>
+        <hr></hr>
        <!-- <xsl:call-template name="toc"/> -->
         <xsl:apply-templates select="section">
             <xsl:with-param name="level" select="1"/>

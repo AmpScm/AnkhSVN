@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8" ?> 
+﻿<?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Examining changes">
     <section>
-    <hr></hr>
         <p>
             Besides the <link url="../keywords/status_icons.xml">status icons</link>
             in front of files in the Solution Explorer, 
@@ -17,7 +16,7 @@
                     <b>1.</b> Select and the right click the file(s) you want to diff.
                 </item>
                 <item>
-                    <b>2.</b> Click the 'Diff' command. 
+                    <b>2.</b> Click the <b>'Diff'</b> command. 
                     <br/><br/>
                     <img src="../../img/menu-items/diff.png" />
                     <br clear="all"/><br/>
@@ -30,7 +29,7 @@
             <list>
                 <item><b>1.</b> Shows which files that has been diff'ed.</item>
                 <item><b>2.</b> Shows which revision the file is beeing diff'ed against.</item>
-                <item><b>3.</b> Shows linenumber and position of a section tha differs.</item>
+                <item><b>3.</b> Shows the line number and position of a section that differs.</item>
                 <item><b>4.</b> '+' indicates added text fragment. </item>
                 <item><b>5.</b> '-' indicates removed text fragment. </item>
             </list>
