@@ -42,13 +42,14 @@ namespace Ankh
             Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
             TaskList taskList = (TaskList) win.Object;
 
-            // add a task item for everu conflict in the file
+            // add a task item for every conflict in the file
             foreach(int lineNumber in conflictLines)
             {
-                taskList.TaskItems.Add(ConflictTaskItemCategory, " ", 
-                    "AnkhSVN: file has a conflict. ", 
-                    vsTaskPriority.vsTaskPriorityHigh, 
-                    vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
+                if(!TaskExists(path, lineNumber, taskList))
+                    taskList.TaskItems.Add(ConflictTaskItemCategory, " ", 
+                        "AnkhSVN: file has a conflict. ", 
+                        vsTaskPriority.vsTaskPriorityHigh, 
+                        vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
             }
         }
 
@@ -177,6 +178,28 @@ namespace Ankh
 
             return conflictLines;
         }
+        /// <summary>
+        ///  Look through the task items and return true is a conflict task item already exists for a file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private bool TaskExists(String path, int lineNumber, TaskList taskList)
+        {
+            bool exists = false; 
+            foreach(TaskItem item in taskList.TaskItems)
+            {
+                if(item.Category == ConflictTaskItemCategory &&
+                    item.FileName == path && 
+                    item.Line == lineNumber)
+                {
+                    exists = true; 
+                    break;
+                }
+            }
+            return exists;
+        }
+
+
 
         private AnkhContext context; 
         private const string ConflictTaskItemCategory = "Conflict"; 
