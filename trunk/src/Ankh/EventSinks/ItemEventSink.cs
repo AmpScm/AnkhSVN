@@ -1,10 +1,11 @@
 // $Id$
 using System;
-using NSvn;
+
 using EnvDTE;
 using System.IO;
 using NSvn.Core;
 using System.Windows.Forms;
+using System.Collections;
 
 namespace Ankh.EventSinks
 {
@@ -39,23 +40,32 @@ namespace Ankh.EventSinks
         /// <param name="item">Projectitem to be scheduled for removal.</param>
         protected void ItemRemoved( ProjectItem item )
         {
+            // is a rename back operation going on?
+            if ( this.renaming )
+                return;
+
             try
             {
-                // is a rename back operation going on?
-                if ( this.renaming )
-                    return;
-
+                
                 this.Context.StartOperation( "Deleting" );
-                this.Context.SolutionExplorer.VisitResources( 
-                    item, new RemoveProjectVisitor(), false );
-                this.Context.SolutionExplorer.Refresh ( item.ContainingProject );
-                this.Context.EndOperation();
+
+                IList items = 
+                    this.Context.SolutionExplorer.GetSelectionResources(true);
+                string[] paths = SvnItem.GetPaths( items );
+                this.Context.Client.Delete( paths, true );
+                
+                foreach( SvnItem svnItem in items )
+                    svnItem.Refresh( this.Context.Client );
 
             }
             catch ( Exception ex )
             {
                 Error.Handle( ex );
                 throw;
+            }
+            finally
+            {
+                this.Context.EndOperation();
             }
         }
 
@@ -72,8 +82,10 @@ namespace Ankh.EventSinks
                 string dir = Path.GetDirectoryName( newName );
 
                 string oldPath = Path.Combine( dir, oldName );
+                SvnItem oldItem = this.Context.SolutionExplorer.StatusCache["oldPath"];
+
                 // is the item versioned?
-                if ( Client.SingleStatus( oldPath ).TextStatus != StatusKind.None )
+                if ( oldItem.Status.TextStatus != StatusKind.None )
                 {
                     MessageBox.Show( this.Context.HostWindow, 
                         "You have attempted to rename a file that is under version control.\r\n" + 
@@ -104,22 +116,6 @@ namespace Ankh.EventSinks
             }            
         }
             
-
-        /// <summary>
-        /// A visitor that schedules a remove of visited item on commit
-        /// </summary>
-        private class RemoveProjectVisitor : LocalResourceVisitorBase
-        {
-            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
-            {
-                // Checks if file doesn't exist. This should not trigger if we are renaming.
-                if ( !File.Exists( resource.Path ) )
-                {
-                    resource.Remove( true );
-                }
-            }
-        }
-
         private bool renaming = false;
     }
 }

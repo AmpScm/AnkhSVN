@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
+using Ankh.RepositoryExplorer;
 
 namespace Ankh.Commands
 {
@@ -18,29 +19,30 @@ namespace Ankh.Commands
             {
                 context.StartOperation( "Opening" );
 
-                CatVisitor v = new CatVisitor( context );
-                context.RepositoryController.VisitSelectedNodes( v );
+                // make the catrunner get it on a separate thread.
+                INode node = (INode)context.RepositoryExplorer.SelectedNode;
+                CatRunner runner = new CatRunner( context, node.Name, 
+                    node.Revision, node.Url );
 
-                // shell execute each file.
-                foreach( string filename in v.FileNames )
+                runner.Start( "Retrieving" );
+                 
+                // now have windows try to start it.
+                Process process = new Process();
+                process.StartInfo.FileName = runner.Path;
+                process.StartInfo.UseShellExecute = true;
+
+                try
                 {
-                    Process process = new Process();
-                    process.StartInfo.FileName = filename;
-                    process.StartInfo.UseShellExecute = true;
-
-                    try
-                    {
-                        process.Start();
-                    }
-                    catch( Win32Exception ex )
-                    {
-                        // no application is associated with the file type
-                        if ( ex.NativeErrorCode == NOASSOCIATEDAPP )
-                            MessageBox.Show( "Windows could not find an application associated with the file type", 
-                                "No associated application", MessageBoxButtons.OK );
-                        else
-                            throw;
-                    }
+                    process.Start();
+                }
+                catch( Win32Exception ex )
+                {
+                    // no application is associated with the file type
+                    if ( ex.NativeErrorCode == NOASSOCIATEDAPP )
+                        MessageBox.Show( "Windows could not find an application associated with the file type", 
+                            "No associated application", MessageBoxButtons.OK );
+                    else
+                        throw;
                 }
             }
             finally

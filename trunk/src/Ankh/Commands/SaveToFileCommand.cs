@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
+using Ankh.RepositoryExplorer;
 
 namespace Ankh.Commands
 {
@@ -17,32 +18,26 @@ namespace Ankh.Commands
             context.StartOperation( "Saving" );
             try
             {
-                SaveCatVisitor v = new SaveCatVisitor( context );     
-                context.RepositoryController.VisitSelectedNodes( v );
+                INode node = (INode)context.RepositoryExplorer.SelectedNode;
+                string filename = null;
+                using( SaveFileDialog sfd = new SaveFileDialog() )
+                {
+                    sfd.FileName = node.Name;
+                    if ( sfd.ShowDialog() == DialogResult.OK )
+                        filename = sfd.FileName;
+                    else
+                        return;
+                }
+
+                
+                CatRunner runner = new CatRunner( context, node.Revision, node.Url, 
+                    filename );
+                runner.Start( "Retrieving file" );
             }
             finally
             {
                 context.EndOperation();
             }
-        }        
-
-        // override the CatVisitor class so we can pop up a save file dialog.
-        protected class SaveCatVisitor : CatVisitor
-        {
-            public SaveCatVisitor( AnkhContext context ) : base( context )
-            {}
-
-            protected override string GetPath(string filename)
-            {
-                using( SaveFileDialog sfd = new SaveFileDialog() )
-                {
-                    sfd.FileName = filename;
-                    if ( sfd.ShowDialog() == DialogResult.OK )
-                        return sfd.FileName;
-                    else
-                        return null;
-                }
-            }
-        }
+        } 
     }
 }

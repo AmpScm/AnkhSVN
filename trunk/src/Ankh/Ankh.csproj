@@ -98,12 +98,6 @@
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Drawing.dll"
                 />
                 <Reference
-                    Name = "NSvn"
-                    Project = "{1C779D04-4D97-414E-93DF-F63E52660B2C}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                    Private = "True"
-                />
-                <Reference
                     Name = "NSvn.Common"
                     Project = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -187,6 +181,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ProgressRunner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ResourceBitmaps.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -201,7 +200,12 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "SvnContext.cs"
+                    RelPath = "SvnClient.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SvnItem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -227,6 +231,11 @@
                 />
                 <File
                     RelPath = "Commands\CheckoutFolderCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\CheckoutSolutionCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -282,6 +291,11 @@
                 />
                 <File
                     RelPath = "Commands\ItemInfoCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\LocalDiffCommandBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -347,6 +361,11 @@
                 />
                 <File
                     RelPath = "Commands\SwitchItemCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\ToggleAnkhCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -475,6 +494,11 @@
                 />
                 <File
                     RelPath = "Solution\SolutionNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\StatusCache.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

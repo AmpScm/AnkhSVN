@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using EnvDTE;
 using System.Reflection;
 using System.Collections;
-using NSvn;
+
 
 namespace Ankh.Extenders
 {
@@ -25,31 +25,28 @@ namespace Ankh.Extenders
         {
             try
             {
-                // get the selected items
-                ResourceGathererVisitor v = new ResourceGathererVisitor();
-                this.context.SolutionExplorer.VisitSelectedItems( v, false );
-
-               
-                // have the extender know about the selected item.
-                if ( v.WorkingCopyResources.Count > 0 )
+                IList resources = this.context.SolutionExplorer.GetSelectionResources(false);
+                if ( resources.Count > 0 )
                 {
-                    WorkingCopyResource resource = (WorkingCopyResource)v.WorkingCopyResources[0];
-                    ResourceExtender extender = (ResourceExtender)this.extenders[ resource.Path ];
+                    SvnItem resource = (SvnItem)resources[0];
+
+                    // is this resource already cached?
+                    ResourceExtender extender = (ResourceExtender)this.extenders[ 
+                        resource.Path ];
                     if ( extender == null )
                     {
                         extender = new ResourceExtender();
                         this.extenders[resource.Path] = extender;
                     }
+
+                    // make sure it's up to date
+                    resource.Refresh( this.context.Client );
                     extender.Status = resource.Status;
  
                     return extender;
                 }
                 else
                     return null;
-            }
-            catch( StatusException )
-            {
-                return null;
             }
             catch( Exception ex )
             {
@@ -62,10 +59,15 @@ namespace Ankh.Extenders
         {
             try
             {
-                // ensure all selected items are versioned
-                VersionedVisitor v = new VersionedVisitor();
-                this.context.SolutionExplorer.VisitSelectedItems( v, false );
-                return v.IsVersioned;
+                IList resources = 
+                    this.context.SolutionExplorer.GetSelectionResources(false);
+                if ( resources.Count > 0 )
+                {
+                    SvnItem resource = (SvnItem)resources[0];
+                    return resource.IsVersioned;
+                }
+                else
+                    return false;
             }
             catch( Exception ex )
             {

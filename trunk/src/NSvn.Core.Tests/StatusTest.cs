@@ -16,6 +16,8 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
+            base.SetUp();
+
             this.ExtractWorkingCopy();
             this.ExtractRepos();
         }
@@ -34,30 +36,30 @@ namespace NSvn.Core.Tests
             string propChange = Path.Combine( this.WcPath, "App.ico" );
             this.RunCommand( "svn", "ps foo bar " + propChange );
 
-            Client.Status( out youngest, unversioned, Revision.Unspecified, 
+            this.Client.Status( out youngest, unversioned, Revision.Unspecified, 
                 new StatusCallback( this.StatusFunc ), false, false, false, 
-                false, new ClientContext() );
+                false );
             Assertion.AssertEquals( "Wrong text status on " + unversioned, 
                 this.currentStatus.TextStatus, StatusKind.Unversioned );
             Assertion.AssertEquals( unversioned, this.currentPath );
 
-            Client.Status( out youngest, added,  Revision.Unspecified, 
+            this.Client.Status( out youngest, added,  Revision.Unspecified, 
                 new StatusCallback( this.StatusFunc ), false, false, false, 
-                false, new ClientContext() );
+                false );
             Assertion.AssertEquals( "Wrong text status on " + added, 
                 this.currentStatus.TextStatus, StatusKind.Added );
             Assertion.AssertEquals( added, this.currentPath );
 
-            Client.Status( out youngest, changed, Revision.Unspecified,
+            this.Client.Status( out youngest, changed, Revision.Unspecified,
                 new StatusCallback( this.StatusFunc ), false, false, false, 
-                false, new ClientContext() );
+                false );
             Assertion.AssertEquals( "Wrong text status " + changed, 
                 this.currentStatus.TextStatus, StatusKind.Modified );
             Assertion.AssertEquals( changed, this.currentPath );
 
-            Client.Status( out youngest, propChange, Revision.Unspecified,
+            this.Client.Status( out youngest, propChange, Revision.Unspecified,
                 new StatusCallback( this.StatusFunc ), false, false, false, 
-                false, new ClientContext() );
+                false );
             Assertion.AssertEquals( "Wrong property status " + propChange, 
                 this.currentStatus.PropertyStatus, StatusKind.Modified );
             Assertion.AssertEquals( propChange, this.currentPath );
@@ -73,13 +75,12 @@ namespace NSvn.Core.Tests
             string output = this.RunCommand( "svn", "info " + form );
             Info info = new Info(output);
 
-            Status s = Client.SingleStatus( form );
+            Status s = this.Client.SingleStatus( form );
                         
             int youngest;
-            Client.Status( out youngest, form,
+            this.Client.Status( out youngest, form,
                 Revision.Unspecified, new StatusCallback( this.StatusFunc ),
-                false, true, false, false, 
-                new ClientContext() );
+                false, true, false, false );
 
             info.CheckEquals( this.currentStatus.Entry );
         }
@@ -104,9 +105,9 @@ namespace NSvn.Core.Tests
                 // find the status in our own wc
                 int youngest;
                 string form = Path.Combine( this.WcPath, "Form.cs" );
-                Client.Status( out youngest, 
+                this.Client.Status( out youngest, 
                     form, Revision.Head, new StatusCallback( this.StatusFunc ),
-                    false, false, true, true, new ClientContext() );
+                    false, false, true, true );
 
                 Assertion.AssertEquals( "Wrong status", 
                     this.currentStatus.RepositoryTextStatus, StatusKind.Modified );
@@ -130,22 +131,47 @@ namespace NSvn.Core.Tests
 
             this.RunCommand( "svn", "ps foo bar " + propChange );
 
-            Status status = Client.SingleStatus( unversioned );
+            Status status = this.Client.SingleStatus( unversioned );
             Assertion.AssertEquals( "Wrong text status on " + unversioned, 
                 status.TextStatus, StatusKind.Unversioned );
 
-            status = Client.SingleStatus( added );
+            status = this.Client.SingleStatus( added );
             Assertion.AssertEquals( "Wrong text status on " + added, 
                 status.TextStatus, StatusKind.Added );
 
-            status = Client.SingleStatus( changed );
+            status = this.Client.SingleStatus( changed );
             Assertion.AssertEquals( "Wrong text status " + changed, 
                 status.TextStatus, StatusKind.Modified );
 
-            status = Client.SingleStatus( propChange );
+            status = this.Client.SingleStatus( propChange );
             Assertion.AssertEquals( "Wrong property status " + propChange, 
                 status.PropertyStatus, StatusKind.Modified );
 
+        }
+
+        [Test]
+        public void TestStatusEquals()
+        {
+            string form = Path.Combine( this.WcPath, "Form.cs" );
+            Status status1 = this.Client.SingleStatus( form );
+            Status status2 = this.Client.SingleStatus( form );
+            Assertion.AssertEquals( "Should be equal", status1, status2 );
+            Assertion.AssertEquals( "Should be equal", status1.Entry, status2.Entry );
+
+            using( StreamWriter w = new StreamWriter( form, true ) )
+                w.WriteLine( "Moo" );
+
+            status2 = this.Client.SingleStatus( form );
+            Assertion.Assert( "Should be non-equal", !status1.Equals( status2 ) );
+            Assertion.AssertEquals( "Should be equal", status1.Entry, status2.Entry );
+
+            // unversioned items have no .Entry
+            string unversioned = Path.Combine( this.WcPath, "Unversioned.txt" );
+            using( StreamWriter w = new StreamWriter( unversioned, false ) )
+                w.WriteLine( "Moo" );
+            status2 = this.Client.SingleStatus( unversioned );
+            Assertion.AssertNull( ".Entry should be null", status2.Entry );
+            Assertion.Assert( "Should not be similar", !status2.Equals( status1 ) );
         }
 
         private void StatusFunc( string path, Status status )

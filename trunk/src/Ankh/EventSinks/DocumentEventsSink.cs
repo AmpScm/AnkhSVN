@@ -27,13 +27,21 @@ namespace Ankh.EventSinks
         {
             try
             {
-                // verify that the item has a ProjectItem - see issue #87
                 if ( document.ProjectItem != null )
-                    this.Context.SolutionExplorer.UpdateStatus( document.ProjectItem );
+                {
+                    for ( short i = 1; i <= document.ProjectItem.FileCount; i++ )
+                    {
+                        string filename = document.ProjectItem.get_FileNames(i);
+                        SvnItem item = this.Context.SolutionExplorer.StatusCache[ filename ];
+                        item.Refresh( this.Context.Client );
+                    }
+                }
             }
-            catch( COMException )
+            catch( COMException ex )
             {
-                // HACK: Swallow
+                System.Diagnostics.Debug.WriteLine( 
+                    "Exception thrown in DocumentSaved: " + ex, "Ankh" );
+                // swallow
             }
             catch( Exception ex )
             {

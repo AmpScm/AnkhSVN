@@ -1,7 +1,7 @@
+// $Id$
 using System;
-using EnvDTE;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
@@ -15,25 +15,17 @@ namespace Ankh.Commands
     VSNetControl( "Project.Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1 ),
     VSNetControl( "Folder.Ankh", Position = 1 )]
-    internal class CreatePatchCommand : CommandBase
-    {       
-    
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
-        {
-            // always allow - worst case, he gets an empty file
-            return vsCommandStatus.vsCommandStatusEnabled |
-                vsCommandStatus.vsCommandStatusSupported;
-        }
+    internal class CreatePatchCommand : LocalDiffCommandBase
+    {    
     
         public override void Execute(AnkhContext context, string parameters)
         {
             context.StartOperation( "Creating patch" );
             try
             {
-                DiffVisitor v = new DiffVisitor();
-                context.SolutionExplorer.VisitSelectedItems( v, true );
-
-                if ( v.Diff.Trim() == String.Empty )
+                string diff = this.GetDiff( context );
+                
+                if ( diff.Trim() == String.Empty )
                 {
                     MessageBox.Show( context.HostWindow, "Nothing to diff here. Move along." );
                     return;
@@ -48,7 +40,7 @@ namespace Ankh.Commands
                     if ( dlg.ShowDialog( context.HostWindow ) == DialogResult.OK )
                     {
                         using( StreamWriter w = File.CreateText(dlg.FileName) )
-                            w.Write( v.Diff );
+                            w.Write( diff );
                     }
                 }
             }

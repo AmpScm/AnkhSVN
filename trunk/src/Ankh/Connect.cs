@@ -9,7 +9,7 @@ namespace Ankh
     using EnvDTE;
     using System.Diagnostics;
     using System.Text.RegularExpressions;
-    using NSvn;
+    
     using System.IO;
 
     using Ankh.Commands;
@@ -208,13 +208,13 @@ namespace Ankh
                     this.cachedStatus = status;
                 }
             }
-            catch( StatusException )
-            {
-                // couldn't get status for an item on disk - maybe its been renamed etc from
-                // outside VS
-                this.context.SolutionExplorer.RefreshSelection();
-                status = vsCommandStatus.vsCommandStatusSupported;
-            }
+//            catch( StatusException )
+//            {
+//                // couldn't get status for an item on disk - maybe its been renamed etc from
+//                // outside VS
+//                this.context.SolutionExplorer.RefreshSelection();
+//                status = vsCommandStatus.vsCommandStatusSupported;
+//            }
             catch( Exception ex )
             {   
                 Error.Handle( ex );
@@ -265,12 +265,12 @@ namespace Ankh
                     }
                 }
             }
-            catch( StatusException )
-            {
-                // couldn't get status for an item on disk - maybe its been renamed etc from
-                // outside VS
-                this.context.SolutionExplorer.RefreshSelection();
-            }
+//            catch( StatusException )
+//            {
+//                // couldn't get status for an item on disk - maybe its been renamed etc from
+//                // outside VS
+//                this.context.SolutionExplorer.RefreshSelection();
+//            }
             catch( Exception ex )
             {   
                 Error.Handle( ex );
@@ -288,7 +288,7 @@ namespace Ankh
 
             // get the assembly version
             string ankhVersion = 
-                typeof(NSvn.WorkingCopyDirectory).Assembly.GetName().Version.ToString();
+                typeof(NSvn.Core.Client).Assembly.GetName().Version.ToString();
 			
             text += String.Format( "AnkhSVN {0}{1}", 
                 ankhVersion, Environment.NewLine );

@@ -1,11 +1,6 @@
 // $Id$
-using System;
-using NSvn;
-using NSvn.Core;
-using NSvn.Common;
 using EnvDTE;
-using Ankh.UI;
-using Ankh.Solution;
+using System.Collections;
 
 namespace Ankh.Commands
 {
@@ -17,60 +12,40 @@ namespace Ankh.Commands
     VSNetControl( "Item.Ankh", Position = 1 ),
     VSNetControl( "Project.Ankh", Position = 1 ),
     VSNetControl( "Folder.Ankh", Position = 1 ),
-    VSNetControl( "Solution.Ankh", Position = 1)]
-    
+    VSNetControl( "Solution.Ankh", Position = 1)]    
     internal class AddItemCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
-            UnversionedVisitor a = new UnversionedVisitor();
-            context.SolutionExplorer.VisitSelectedItems( a, true );
-            
-            if ( a.IsUnversioned )
+            if ( context.SolutionExplorer.GetSelectionResources( false, 
+                new ResourceFilterCallback(CommandBase.UnversionedFilter)).Count > 0 )
+            {
                 return vsCommandStatus.vsCommandStatusEnabled |
                     vsCommandStatus.vsCommandStatusSupported;
+            }
             else
                 return vsCommandStatus.vsCommandStatusSupported;
         }
 
         public override void Execute(Ankh.AnkhContext context, string parameters )
         {
+            IList resources = context.SolutionExplorer.GetSelectionResources( false,
+                new ResourceFilterCallback(CommandBase.UnversionedFilter) );
+
             context.StartOperation( "Adding" );
-            context.SolutionExplorer.VisitSelectedNodes( new AddVisitor() );
+
+            foreach( SvnItem item in resources )
+            {
+                context.Client.Add( item.Path, true );
+                item.Refresh( context.Client );
+            }
+
+
             context.EndOperation();
-            context.SolutionExplorer.RefreshSelectionParents();
         }
         #endregion
-        
-        /// <summary>
-        /// A visitor that adds visited item to the Working copy.
-        /// </summary>
-        private class AddVisitor : LocalResourceVisitorBase, INodeVisitor
-        {
-            public override void VisitUnversionedResource(NSvn.UnversionedResource resource)
-            {
-                resource.Add( false );
-            }
-       
-            public void VisitProject(  ProjectNode node )
-            {
-                node.VisitResources( this, false );
-                node.Refresh();
-                node.VisitResources( this, false );
-            }    
-    
-            public void VisitSolutionNode(  SolutionNode node )
-            {
-                // empty
-            }    
-
-            public void VisitProjectItem(Ankh.Solution.ProjectItemNode node)
-            {
-                node.VisitResources( this, true );
-            }
-        }
     }
 }
 

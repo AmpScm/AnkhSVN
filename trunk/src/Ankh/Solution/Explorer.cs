@@ -2,7 +2,7 @@
 using System;
 using EnvDTE;
 using Utils;
-using NSvn;
+
 using NSvn.Core;
 using NSvn.Common;
 using Utils.Win32;
@@ -13,17 +13,18 @@ using System.IO;
 
 using C = Utils.Win32.Constants;
 using DteConstants = EnvDTE.Constants;
-using Swf = System.Windows.Forms;
+using System.Windows.Forms;
 
 
 namespace Ankh.Solution
 {
+
     /// <summary>
     /// Represents the Solution Explorer window in the VS.NET IDE
     /// </summary>
     internal class Explorer
     {
-        public Explorer( _DTE dte, SvnContext context )
+        public Explorer( _DTE dte, AnkhContext context )
         {
             this.dte = dte;
             this.context = context;
@@ -61,54 +62,6 @@ namespace Ankh.Solution
         
 
         /// <summary>
-        /// Visits all the selected items.
-        /// </summary>
-        /// <param name="visitor"></param>
-        public void VisitSelectedItems( ILocalResourceVisitor visitor, bool recursive )
-        {
-            //foreach( SelectedItem item in items )
-            object o = this.uiHierarchy.SelectedItems;
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
-            {
-                TreeNode node = this.GetNode( item );
-                if ( node != null )
-                    node.VisitResources( visitor, recursive );
-            }
-        }
-
-        /// <summary>
-        /// Visits all the selected nodes.
-        /// </summary>
-        /// <param name="visitor"></param>
-        public void VisitSelectedNodes( INodeVisitor visitor )
-        {
-            //foreach( SelectedItem item in items )
-            object o = this.uiHierarchy.SelectedItems;
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
-            {
-                TreeNode node = this.GetNode( item );
-                if ( node != null )
-                    node.Accept( visitor );
-            }
-        }
-
-        public void VisitResources( ProjectItem item, ILocalResourceVisitor visitor,
-            bool recursive )
-        {
-            TreeNode node = this.GetNode( item );
-            if ( node != null )
-                node.VisitResources( visitor, recursive );
-        }
-
-        public void VisitResources( Project project, ILocalResourceVisitor visitor, 
-            bool recursive )
-        {
-            TreeNode node = this.GetNode( project );
-            if ( node != null )
-                node.VisitResources( visitor, recursive );
-        }
-
-        /// <summary>
         /// Updates the status of selected items.
         /// </summary>
         public void UpdateSelectionStatus()
@@ -117,7 +70,7 @@ namespace Ankh.Solution
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
-                    node.UpdateStatus();
+                    node.Refresh();
             }
         }
 
@@ -177,41 +130,12 @@ namespace Ankh.Solution
         {
             TreeNode node = (TreeNode)this.projectItems[item];
             if ( node != null )
-                node.UpdateStatus();
-        }
-
-        /// <summary>
-        /// Checks if the status of an item is cached.
-        /// </summary>
-        /// <param name="path">The path to check status for</param>
-        /// <returns>A status object, or null if its not cached</returns>
-        public Status GetCachedStatus( string path )
-        {
-            Debug.WriteLine( "Checking for cached status for " + path, "Ankh" );
-            if ( this.statusCache != null ) 
-            {
-                Status status; 
-
-                if ( (status = this.statusCache[ path ]) != null )
-                {
-                    Debug.WriteLine( "Found cached status for " + path, "Ankh" );
-                    return status;
-                }
-                else
-                    return null;
-            }
-            else
-                return null;
-        }
-
- 
+                node.Refresh();
+        }       
 
         public void SyncWithTreeView()
         {
-            // no point in doing anything if the solution dir isn't a wc
-            string solutionPath = this.dte.Solution.FullName;
-            if ( solutionPath == String.Empty || 
-                !SvnUtils.IsWorkingCopyPath( Path.GetDirectoryName( solutionPath ) ) )
+            if ( !this.CheckWhetherAnkhShouldLoad() )
                 return;
 
             this.projectItems.Clear();
@@ -228,11 +152,86 @@ namespace Ankh.Solution
             // we assume there is a single root node
             this.root = TreeNode.CreateSolutionNode( 
                 this.solutionItem, root, this );
+        }
 
-            // we don't want to maintain the cache after initial load.
-            this.statusCache = null;
+        /// <summary>
+        /// Returns the SvnItem resources associated with the selected items
+        /// in the solution explorer.
+        /// </summary>
+        /// <param name="getChildItems">Whether children of the items in 
+        /// question should be included.</param>        /// 
+        /// <returns>A list of SvnItem instances.</returns>
+        public IList GetSelectionResources( bool getChildItems )
+        {
+            return this.GetSelectionResources( getChildItems, null );
+        }
 
-            //this.Hook();
+        /// <summary>	 	
+        /// Visits all the selected nodes.	 	
+        /// </summary>	 	
+        /// <param name="visitor"></param>	 	
+        public void VisitSelectedNodes( INodeVisitor visitor )	 	
+        {	 	
+            //foreach( SelectedItem item in items )	 	
+            object o = this.uiHierarchy.SelectedItems;	 	
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )	 	
+            {	 	
+                TreeNode node = this.GetNode( item );	 	
+                if ( node != null )	 	
+                    node.Accept( visitor );	 	
+            }	 	
+        }
+
+        
+
+
+        /// <summary>
+        /// Returns the SvnItem resources associated with the selected items
+        /// in the solution explorer.
+        /// </summary>
+        /// <param name="getChildItems">Whether children of the items in 
+        /// question should be included.</param>
+        /// <param name="filter">A callback used to filter the items
+        /// that are added.</param>
+        /// <returns>A list of SvnItem instances.</returns>
+        public IList GetSelectionResources( bool getChildItems, 
+            ResourceFilterCallback filter )
+        {
+            ArrayList list = new ArrayList();
+
+            object o = this.uiHierarchy.SelectedItems;	 	
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )	 	
+            {	 	
+                TreeNode node = this.GetNode( item );	 	
+                if ( node != null )	 	
+                    node.GetResources( list, getChildItems, filter );	 	
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// Retrieves the resources associated with a project item.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="recursive"></param>
+        /// <returns></returns>
+        public IList GetItemResources( ProjectItem item, bool recursive )
+        {
+            ArrayList list = new ArrayList();
+
+            TreeNode node = this.GetNode(item);
+            if ( node != null )
+                node.GetResources( list, recursive, null );
+
+            return list;
+        }
+
+        public ProjectItem GetSelectedProjectItem()
+        {
+            Array array = (Array)this.uiHierarchy.SelectedItems;
+            UIHierarchyItem uiItem = (UIHierarchyItem)array.GetValue(0);
+            return (ProjectItem)uiItem.Object;
         }
 
         internal IntPtr TreeView
@@ -241,10 +240,16 @@ namespace Ankh.Solution
             get{ return this.treeview; }
         }
 
-        internal NSvnContext Context
+        internal Client Client
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.context; }
+            get{ return this.context.Client; }
+        }
+
+        internal StatusCache StatusCache
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.statusCache; }
         }
 
         internal _DTE DTE
@@ -334,7 +339,7 @@ namespace Ankh.Solution
 
             statusImages.MakeTransparent( statusImages.GetPixel(0,0) );
 
-            this.statusImageList = new Swf.ImageList();
+            this.statusImageList = new ImageList();
             this.statusImageList.ImageSize = new Size(7, 16);
             this.statusImageList.Images.AddStrip( statusImages );    
         
@@ -368,16 +373,59 @@ namespace Ankh.Solution
         {
             DebugTimer t = DebugTimer.Start();
             string solutionDir = Path.GetDirectoryName( solutionPath );
-
-            int youngest;
+           
             Debug.WriteLine( "Getting status cache", "Ankh" );
             
-            this.statusCache = new StatusCache();
-            Client.Status( out youngest, solutionDir, Revision.Unspecified, 
-                new StatusCallback(this.statusCache.StatusFunc), 
-                true, true, false, true, new ClientContext() );
+            this.statusCache = new StatusCache( this.Client );
+            this.statusCache.Status( solutionDir );
 
             t.End( "Got status cache", "Ankh" );
+        }
+
+        private bool CheckWhetherAnkhShouldLoad()
+        {
+            // no point in doing anything if the solution dir isn't a wc
+            string solutionPath = this.dte.Solution.FullName;
+            if ( solutionPath == String.Empty || 
+                !SvnUtils.IsWorkingCopyPath( Path.GetDirectoryName( solutionPath ) ) )
+                return false;
+
+            string adminDir = Path.Combine( Path.GetDirectoryName( solutionPath ),
+                SvnUtils.WC_ADMIN_AREA );
+
+            // maybe this solution has never been loaded before with Ankh?
+            if ( File.Exists( Path.Combine( adminDir, "Ankh.Load" ) ) )
+                return true;
+            else if ( File.Exists( Path.Combine(adminDir, "Ankh.NoLoad") ) )
+                return false;
+            else
+                return this.QueryWhetherAnkhShouldLoad( adminDir );
+        }
+
+        private bool QueryWhetherAnkhShouldLoad( string adminDir )
+        {
+            string nl = Environment.NewLine;
+            string msg = "Ankh has detected that the solution file for this solution " + 
+                "is in a Subversion working copy." + nl + 
+                "Do you want to enable Ankh for this solution?" + nl +
+                "(If you select Cancel, Ankh will not be enabled, " + nl +
+                "but you will " +
+                "be asked this question again the next time you open the solution)";
+
+            DialogResult res = MessageBox.Show( 
+                this.context.HostWindow, msg, "Ankh", 
+                MessageBoxButtons.YesNoCancel );
+            if ( res == DialogResult.Yes )
+            {
+                File.Create( Path.Combine(adminDir, "Ankh.Load") ).Close();
+                return true;
+            }
+            else if ( res == DialogResult.No )
+            {
+                File.Create( Path.Combine(adminDir, "Ankh.NoLoad") ).Close();
+            }
+
+            return false;
         }
 
         private TreeNode GetNode(UIHierarchyItem item)
@@ -489,28 +537,6 @@ namespace Ankh.Solution
         }
         #endregion
 
-        #region StatusCache
-        /// <summary>
-        ///  used to accumulate and persist state from status callbacks when
-        ///  generating status cache.
-        /// </summary>
-        private class StatusCache
-        {
-            public Status this[ string path ]
-            {
-                get{ return (Status)dict[path]; }
-            }
-
-            public void StatusFunc( string path, Status status )
-            {
-                dict[path] = status;
-
-            }
-
-            private IDictionary dict = new Hashtable();
-        }
-        #endregion
-
 
         private _DTE dte;
         private IntPtr treeview;
@@ -525,8 +551,8 @@ namespace Ankh.Solution
         private IDictionary projectItems;
         private IDictionary projects;
         private TreeNode solutionNode;
-        private Swf.ImageList statusImageList;
-        private SvnContext context;
+        private ImageList statusImageList;
+        private AnkhContext context;
         private StatusCache statusCache;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";

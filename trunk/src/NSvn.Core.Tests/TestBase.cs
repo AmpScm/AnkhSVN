@@ -32,6 +32,8 @@ namespace NSvn.Core.Tests
         public virtual void SetUp()
         {
             this.notifications = new ArrayList();
+            this.client = new Client( this.GetTempFile() );
+            this.client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
         }
 
         [TearDown]
@@ -170,16 +172,28 @@ namespace NSvn.Core.Tests
         /// <summary>
         /// The notifications generated during a call to Client::Add
         /// </summary>
-        public Notification[] Notifications
+        public NotificationEventArgs[] Notifications
         {
-            get{ return (Notification[])this.notifications.ToArray( typeof(Notification) ); }
+            get
+            {
+                return (NotificationEventArgs[])this.notifications.ToArray( 
+                    typeof(NotificationEventArgs) ); }
+        }
+
+        /// <summary>
+        /// The client object.
+        /// </summary>
+        public Client Client
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.client; }
         }
 
         /// <summary>
         /// Callback method to be used as ClientContext.NotifyCallback
         /// </summary>
         /// <param name="notification">An object containing information about the notification</param>
-        public virtual void NotifyCallback( Notification notification )
+        public virtual void NotifyCallback( object sender, NotificationEventArgs notification )
         {
             this.notifications.Add( notification );
         }
@@ -246,10 +260,7 @@ namespace NSvn.Core.Tests
             File.Delete( tmpPath );
 
             return tmpPath;
-        }
-
-
-        
+        }       
         
        
 
@@ -281,9 +292,12 @@ namespace NSvn.Core.Tests
         protected const string WC_NAME = "wc";
         private string reposUrl;
         private string wcPath;
-        private string reposPath;       
+        private string reposPath;   
+        private Client client;
     
         
         protected ArrayList notifications;
+
+        
     }
 }

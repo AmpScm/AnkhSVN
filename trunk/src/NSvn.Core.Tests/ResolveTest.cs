@@ -35,8 +35,7 @@ namespace NSvn.Core.Tests
         {  
             string filePath = Path.Combine( this.path, "Form.cs" );
 
-            ClientContext ctx = new ClientContext( new NotifyCallback ( this.NotifyCallback) );
-            Client.Resolved( filePath, false, ctx );
+            this.Client.Resolved( filePath, false );
  
             Assertion.AssertEquals(" Resolve didn't work!", 'M', this.GetSvnStatus( filePath ) );
 
@@ -48,8 +47,7 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestResolveDirectory()
         {  
-            ClientContext ctx = new ClientContext( new NotifyCallback ( this.NotifyCallback) );
-            Client.Resolved( this.path, true, ctx );
+            this.Client.Resolved( this.path, true );
  
             Assertion.AssertEquals(" Resolve didn't work! Directory still conflicted", 'M', 
                 this.GetSvnStatus( this.path ) );

@@ -2,7 +2,7 @@
 using System;
 using EnvDTE;
 using Extensibility;
-using NSvn;
+
 
 namespace Ankh.EventSinks
 {

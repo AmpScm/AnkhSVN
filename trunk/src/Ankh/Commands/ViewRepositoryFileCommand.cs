@@ -1,8 +1,10 @@
 // $Id$
 using EnvDTE;
-using NSvn;
+
 using System.IO;
 using System.Collections;
+using NSvn.Core;
+using Ankh.RepositoryExplorer;
 
 namespace Ankh.Commands
 {
@@ -10,56 +12,66 @@ namespace Ankh.Commands
     /// A command that lets you view a repository file.
     /// </summary>
     [VSNetCommand("ViewRepositoryFile", Tooltip="View this file", Text = "In VS.NET" ),
-     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
+    VSNetControl( "ReposExplorer.View", Position = 1 ) ]
     internal abstract class ViewRepositoryFileCommand : CommandBase
     {
-       
-    
         #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
-            IsRepositoryFileVisitor v = new IsRepositoryFileVisitor();
-            context.RepositoryController.VisitSelectedNodes( v );
-            return v.IsFile ? vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled :
-                vsCommandStatus.vsCommandStatusSupported;
+            // we enable it if it's a file.
+            return context.RepositoryExplorer.SelectedNode.IsDirectory ? 
+                vsCommandStatus.vsCommandStatusSupported : 
+                vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
+
         }
         #endregion
 
-        #region CatVisitor
-        protected class CatVisitor : RepositoryResourceVisitorBase
-        {    
-            public CatVisitor( AnkhContext context )
-            {
-                this.context = context;
+        #region CatRunner class
+        /// <summary>
+        /// For running cats on a separate thread.
+        /// </summary>
+        protected class CatRunner : ProgressRunner
+        {
+            public CatRunner( AnkhContext context, string name, Revision revision, string url ) : 
+                base( context )
+            { 
+                this.path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), 
+                    name );
+                this.url = url;
+                this.revision = revision;
             }
 
-            public virtual IEnumerable FileNames
+            public CatRunner( AnkhContext context,  Revision revision, string url,  
+                 string path ) : base(context)
             {
-                get{ return this.fileNames; }
+                this.path = path;
+                this.url = url;
+                this.revision = revision;
             }
 
-            public override void VisitFile(RepositoryFile file)
+            /// <summary>
+            /// The path the file was written to.
+            /// </summary>
+            public string Path
             {
-                string filename = this.GetPath( file.Name );
-                if ( filename != null )
+                get{ return this.path; }
+            }
+
+            protected override void DoRun()
+            {
+                using( FileStream fs = new FileStream( this.path, FileMode.Create, 
+                           FileAccess.Write ) )
                 {
-                    this.context.OutputPane.WriteLine( "Retrieving {0}", file.Url );
-                    using( FileStream fs = new FileStream( filename, FileMode.Create, FileAccess.Write ) )
-                        file.Cat( fs );  
-
-                    this.fileNames.Add( filename );
+                    this.Context.Client.Cat( fs, this.url, this.revision );
                 }
             }
 
-            protected virtual string GetPath( string filename )
-            {
-                return  Path.Combine( Path.GetTempPath(), filename );
-            }
+            private Revision revision;
+            private string url;
+            private string path;
 
-            private ArrayList fileNames = new ArrayList();
-            private AnkhContext context;
         }
-        #endregion
+        #endregion        
     }
 }
 

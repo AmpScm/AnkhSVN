@@ -88,6 +88,14 @@ namespace NSvn
             {;}
     };
 
+    public __gc class OperationCancelledException : public SvnClientException 
+    {
+    public:
+        OperationCancelledException( System::Exception* innerException ) :
+            SvnClientException( "The operation was cancelled.", innerException )
+            {;}
+    };
+
     #define HandleError( err ) if ( (err) != 0 ) throw NSvn::Core::SvnClientException::FromSvnError( (err) )
     }
 }

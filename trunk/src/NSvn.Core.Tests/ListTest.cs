@@ -15,6 +15,8 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
+            base.SetUp();
+
             this.ExtractRepos();
         }
 
@@ -40,8 +42,8 @@ namespace NSvn.Core.Tests
                 }
             }
 
-            DirectoryEntry[] dirents = Client.List( this.ReposUrl, Revision.Head, false, 
-                new ClientContext() );
+            DirectoryEntry[] dirents = this.Client.List( this.ReposUrl, Revision.Head, 
+                false);
 
             Assertion.AssertEquals( "Wrong number of entries returned", ht.Count, 
                 dirents.Length );
