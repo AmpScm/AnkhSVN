@@ -145,6 +145,15 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "RepositoryResourceDictionary.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RepositoryResourceDictionary.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "SvnResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
