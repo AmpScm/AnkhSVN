@@ -241,6 +241,10 @@ namespace Utils.Win32
         [DllImport("User32.dll")]
         public static extern short GetAsyncKeyState( int vkey );
 
+        [DllImport("Shlwapi.dll")]
+        public static extern int SHAutoComplete( IntPtr window,
+            Shacf flags );
+
 
     }
 }
