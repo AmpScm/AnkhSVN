@@ -192,7 +192,7 @@ namespace Ankh.Solution
             {
                 Status status; 
 
-                if ( (status = this.statusCache.Get( path )) != null )
+                if ( (status = this.statusCache[ path ]) != null )
                 {
                     Debug.WriteLine( "Found cached status for " + path, "Ankh" );
                     return status;
@@ -321,7 +321,10 @@ namespace Ankh.Solution
             Debug.WriteLine( "Getting status cache", "Ankh" );
             try
             {
-                this.statusCache = Client.Status( out youngest, solutionDir, true, true, false, true, new ClientContext() );
+                this.statusCache = new StatusCache();
+               Client.Status( out youngest, solutionDir, Revision.Unspecified, 
+                    new StatusCallback(this.statusCache.StatusFunc), 
+                    true, true, false, true, new ClientContext() );
             }
             catch( NotVersionControlledException )
             {
@@ -433,6 +436,28 @@ namespace Ankh.Solution
         }
         #endregion
 
+        #region StatusCache
+        /// <summary>
+        ///  used to accumulate and persist state from status callbacks when
+        ///  generating status cache.
+        /// </summary>
+        private class StatusCache
+        {
+            public Status this[ string path ]
+            {
+                get{ return (Status)dict[path]; }
+            }
+
+            public void StatusFunc( string path, Status status )
+            {
+                dict[path] = status;
+
+            }
+
+            private IDictionary dict = new Hashtable();
+        }
+        #endregion
+
 
         private _DTE dte;
         private IntPtr treeview;
@@ -448,7 +473,7 @@ namespace Ankh.Solution
         private TreeNode solutionNode;
         private Swf.ImageList statusImageList;
         private SvnContext context;
-        private StatusDictionary statusCache;
+        private StatusCache statusCache;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
     }

@@ -25,38 +25,42 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestLocalStatus()
         {
+            int youngest;      
+
             string unversioned = this.CreateTextFile( "unversioned.cs" );
             string added = this.CreateTextFile( "added.cs" );
             this.RunCommand( "svn", "add " + added );
-
             string changed = this.CreateTextFile( "Form.cs" );
-
             string propChange = Path.Combine( this.WcPath, "App.ico" );
-
             this.RunCommand( "svn", "ps foo bar " + propChange );
 
-            int youngest;
-            StatusDictionary dict = Client.Status( out youngest, unversioned, false, false, false, 
+            Client.Status( out youngest, unversioned, Revision.Unspecified, 
+                new StatusCallback( this.StatusFunc ), false, false, false, 
                 false, new ClientContext() );
             Assertion.AssertEquals( "Wrong text status on " + unversioned, 
-                dict.Get(unversioned).TextStatus, StatusKind.Unversioned );
+                this.currentStatus.TextStatus, StatusKind.Unversioned );
+            Assertion.AssertEquals( unversioned, this.currentPath );
 
-            dict = Client.Status( out youngest, added, false, false, false, 
+            Client.Status( out youngest, added,  Revision.Unspecified, 
+                new StatusCallback( this.StatusFunc ), false, false, false, 
                 false, new ClientContext() );
             Assertion.AssertEquals( "Wrong text status on " + added, 
-                dict.Get(added).TextStatus, StatusKind.Added );
+                this.currentStatus.TextStatus, StatusKind.Added );
+            Assertion.AssertEquals( added, this.currentPath );
 
-            dict = Client.Status( out youngest, changed, false, false, false, 
+            Client.Status( out youngest, changed, Revision.Unspecified,
+                new StatusCallback( this.StatusFunc ), false, false, false, 
                 false, new ClientContext() );
             Assertion.AssertEquals( "Wrong text status " + changed, 
-                dict.Get(changed).TextStatus, StatusKind.Modified );
+                this.currentStatus.TextStatus, StatusKind.Modified );
+            Assertion.AssertEquals( changed, this.currentPath );
 
-            dict = Client.Status( out youngest, propChange, 
-                false, false, false, 
+            Client.Status( out youngest, propChange, Revision.Unspecified,
+                new StatusCallback( this.StatusFunc ), false, false, false, 
                 false, new ClientContext() );
             Assertion.AssertEquals( "Wrong property status " + propChange, 
-                dict.Get(propChange).PropertyStatus, StatusKind.Modified );
-            
+                this.currentStatus.PropertyStatus, StatusKind.Modified );
+            Assertion.AssertEquals( propChange, this.currentPath );
         }
 
         /// <summary>
@@ -68,13 +72,16 @@ namespace NSvn.Core.Tests
             string form = Path.Combine( this.WcPath, "Form.cs" );
             string output = this.RunCommand( "svn", "info " + form );
             Info info = new Info(output);
+
+            Status s = Client.SingleStatus( form );
                         
             int youngest;
-            StatusDictionary dict = Client.Status( out youngest, form, 
-                false, false, false, false, 
+            Client.Status( out youngest, form,
+                Revision.Unspecified, new StatusCallback( this.StatusFunc ),
+                false, true, false, false, 
                 new ClientContext() );
 
-            info.CheckEquals( dict.Get(form).Entry );
+            info.CheckEquals( this.currentStatus.Entry );
         }
        
 
@@ -86,21 +93,28 @@ namespace NSvn.Core.Tests
         {
             // modify the file in another working copy and commit
             string wc2 = this.FindDirName( "wc2" );
-            Zip.ExtractZipResource( wc2, this.GetType(), WC_FILE );
-            using( StreamWriter w = new StreamWriter( 
-                       Path.Combine(wc2, "Form.cs"), true ) )
-                w.Write( "Hell worl" );
-            this.RunCommand( "svn", "ci -m \"\" " + wc2 );
+            try
+            {                
+                Zip.ExtractZipResource( wc2, this.GetType(), WC_FILE );
+                using( StreamWriter w = new StreamWriter( 
+                           Path.Combine(wc2, "Form.cs"), true ) )
+                    w.Write( "Hell worl" );
+                this.RunCommand( "svn", "ci -m \"\" " + wc2 );
 
-            // find the status in our own wc
-            int youngest;
-            string form = Path.Combine( this.WcPath, "Form.cs" );
-            StatusDictionary dict = Client.Status( out youngest, 
-                form, false, false, true, true, new ClientContext() );
+                // find the status in our own wc
+                int youngest;
+                string form = Path.Combine( this.WcPath, "Form.cs" );
+                Client.Status( out youngest, 
+                    form, Revision.Head, new StatusCallback( this.StatusFunc ),
+                    false, false, true, true, new ClientContext() );
 
-            Assertion.AssertEquals( "Wrong status", 
-                dict.Get(form).RepositoryTextStatus, StatusKind.Modified );
-            this.RecursiveDelete( wc2 );
+                Assertion.AssertEquals( "Wrong status", 
+                    this.currentStatus.RepositoryTextStatus, StatusKind.Modified );
+            }
+            finally
+            {
+                this.RecursiveDelete( wc2 );
+            }
         }
 
         [Test]
@@ -134,6 +148,12 @@ namespace NSvn.Core.Tests
 
         }
 
+        private void StatusFunc( string path, Status status )
+        {
+            this.currentPath = path;
+            this.currentStatus = status;
+        }
+
         private class Info
         {
             private static readonly Regex INFO = new Regex(@"Path:\s(?'path'\S+)\s+Name:\s(?'name'\S+)\s+Url:\s(?'url'\S+)\s+Repository UUID:\s(?'reposuuid'\S+)\s+Revision:\s(?'revision'\S+)\s+Node Kind:\s(?'nodekind'\S+)\s+Schedule:\s(?'schedule'\S+)\s+Last Changed Author:\s+(?'lastchangedauthor'\S+)", 
@@ -165,7 +185,10 @@ namespace NSvn.Core.Tests
                     match.Groups["lastchangedauthor"].Value, entry.CommitAuthor );
             }
 
-            private string output;
+            private string output;            
         }
+
+        private string currentPath;
+        private Status currentStatus;
     }
 }
