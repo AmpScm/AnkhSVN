@@ -43,8 +43,10 @@ namespace NSvn
 
 	        static CommitInfo* Commit(String __gc* targets[], bool nonRecursive, ClientContext* context);
 
-	        static StringDictionary* Status(Revision* youngest, String* path, bool descend, 
+            TO-DO:  Core::Revision to be implemented */
+	        static StringDictionary* Status(long* youngest, String* path, bool descend, 
                 bool getAll, bool upDate,  bool noIgnore, ClientContext* context);
+ /*           
 
 	        static void Log(String* targets[], Revision* start, Revision* end, bool discoverChangePath, 
                 bool strictNodeHistory, LogMessageReceiver* receiver, ClientContext* context);
@@ -68,9 +70,9 @@ namespace NSvn
 
 	        static CommitInfo* Move(String* srcPath, Revision* srcRevision, String* dstPath, 
                 bool force, ClientContext* context);
-
+*/
 	        static void PropSet(String* propName, Byte propval[], String* target, bool recurse);
-
+/*
 	        static void RevPropSet(String* propName, Byte propval[], String* url, Revision* revision, 
                 RevisionNumber* setRev, ClientContext* context);
 
@@ -94,7 +96,8 @@ namespace NSvn
         private:
             // ctor made private to avoid instantiation of this class
             Client(){;}
-
+            static void ByteArrayToSvnString( svn_string_t* string, Byte array[], 
+                const Pool& pool );
             static String* CanonicalizePath( String* path );
         };
     }

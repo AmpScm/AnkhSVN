@@ -74,7 +74,7 @@ namespace NSvn
             { return this->promptCallback; }
             __property void set_PromptCallback( NSvn::Core::PromptCallback* value )
             { this->promptCallback = value; }
-
+            
             // Callback delegate for notifications
             __property NotifyCallback* get_NotifyCallback()
             { return this->notifyCallback; }

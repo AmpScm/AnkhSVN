@@ -9,12 +9,19 @@
 
 namespace
 {
+    using namespace NSvn::Core;
+    using namespace System::Runtime::InteropServices;
+
     inline void HandleError( svn_error_t* err )
     {
         if ( err != 0 )
             throw NSvn::Core::SvnClientException::FromSvnError( err );
     }
+
+    
 }
+
+
 
 // implementation of Client::Add
 void NSvn::Core::Client::Add( String* path, bool recursive, ClientContext* ctx )
@@ -65,13 +72,53 @@ void NSvn::Core::Client::Resolve(String* path, bool recursive, ClientContext* ct
 
     HandleError( svn_client_resolve( StringHelper( truePath ), recursive, 
         ctx->ToSvnContext (pool), pool));
-}    
+}  
+
+
+// implementation of Client::Status
+//TO-DO:   Core::Revision to be implemented
+StringDictionary* NSvn::Core::Client::Status( long* youngest, String* path, bool descend,
+                                bool getAll, bool update, bool noIgnore, ClientContext* ctx )
+{
+    apr_hash_t* statushash = 0;
+    Pool pool;
+    String* truePath = CanonicalizePath( path );
+    
+
+    HandleError( svn_client_status( &statushash, youngest, StringHelper( truePath ), descend,
+        getAll, update, noIgnore, ctx->ToSvnContext( pool ), pool ) );
+
+    if ( statushash != 0 )
+        return new StringDictionary();
+    else
+        return 0;
+}
+
+void NSvn::Core::Client::PropSet(String* propName, Byte propval[], String* target, bool recurse)
+{
+    Pool pool;
+    svn_string_t propv;
+    ByteArrayToSvnString( &propv, propval, pool );    
+    String* truePath = CanonicalizePath( target );
+    HandleError( svn_client_propset( StringHelper(propName), &propv, StringHelper(truePath), recurse, pool) );
+}
+
 
 
 String* NSvn::Core::Client::CanonicalizePath( String* path )
 {
     return path->Replace( "\\", "/" );
 }
+
+void NSvn::Core::Client::ByteArrayToSvnString( svn_string_t* string, Byte array[], const Pool& pool  )
+{
+    string->len = array.Length;
+    string->data = static_cast<char*>(pool.Alloc( array.Length));
+    Marshal::Copy( array, 0, const_cast<char*>(string->data), array.Length );
+
+}
+
+
 
 
 
