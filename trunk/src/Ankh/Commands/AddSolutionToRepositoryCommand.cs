@@ -121,6 +121,7 @@ namespace Ankh.Commands
                 {
                     new ProgressRunner( context, 
                         new ProgressRunnerCallback(this.DoCommit) ).Start( "Committing" ); 
+                    context.Client.CommitCompleted();
                 }
                 finally
                 {
