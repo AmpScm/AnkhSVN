@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using EnvDTE;
-using NSvn;
+
 using NSvn.Common;
 using NSvn.Core;
 using System.Collections;
@@ -19,6 +19,9 @@ namespace Ankh.Solution
     /// </summary>
     internal abstract class TreeNode
     {
+
+        public event StatusChanged Changed;
+
         protected TreeNode( UIHierarchyItem item, IntPtr hItem, 
             Explorer explorer, TreeNode parent )
         {     
@@ -35,9 +38,7 @@ namespace Ankh.Solution
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.explorer; }
-        }
-
-        public abstract void VisitResources( ILocalResourceVisitor visitor, bool recursive );        
+        }     
         
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
             Explorer explorer, TreeNode parent )
@@ -58,6 +59,7 @@ namespace Ankh.Solution
             if ( explorer.DTE.Solution.FullName != string.Empty )
             {
                 TreeNode node = new SolutionNode( item, hItem, explorer );
+                node.Refresh( false );
                 //node.UpdateStatus( true, false );
                 return node;
             }
@@ -65,12 +67,27 @@ namespace Ankh.Solution
                 return null;
         }
 
-        public virtual void Refresh()
+        public abstract void Accept( INodeVisitor visitor );
+
+        public void Refresh()
+        {
+            this.Refresh( true );
+        }
+
+        public virtual void Refresh( bool rescan )
         {
             try
-            {
-                this.FindChildren( );
-                this.UpdateStatus();
+            {                
+                if ( rescan )
+                {
+                    this.explorer.StatusCache.Status( this.Directory );
+                    this.FindChildren( );
+                }
+                this.currentStatus = this.MergeStatuses( this.ThisNodeStatus(), 
+                    this.CheckChildStatuses() );
+
+                this.SetStatusImage( this.currentStatus );
+
             }
             catch( SvnException )
             {
@@ -82,18 +99,25 @@ namespace Ankh.Solution
             }
         }
 
-        abstract public void Accept( INodeVisitor visitor );
+        
+
+        abstract public string Directory
+        {
+            get;
+        }
 
 
 
         static TreeNode()
         {
-            statusMap[ StatusKind.Normal ]      = 1;
-            statusMap[ StatusKind.Added ]       = 2;
-            statusMap[ StatusKind.Deleted ]     = 3;
-            statusMap[ StatusKind.Conflicted ]  = 6;
-            statusMap[ StatusKind.Unversioned ] = 8;
-            statusMap[ StatusKind.Modified ]    = 9;
+            statusMap[ NodeStatus.Normal ]      = 1;
+            statusMap[ NodeStatus.Added ]       = 2;
+            statusMap[ NodeStatus.Deleted ]     = 3;
+            statusMap[ NodeStatus.IndividualStatusesConflicting ] = 7;
+            statusMap[ NodeStatus.Conflicted ]  = 6;
+            statusMap[ NodeStatus.Unversioned ] = 8;
+            statusMap[ NodeStatus.Modified ]    = 9;
+            
         }
         
 
@@ -106,61 +130,6 @@ namespace Ankh.Solution
             get { return this.children;  }
         }
 
-        public void UpdateStatus()
-        {
-            this.UpdateStatus( true, true );
-        }
-
-
-        /// <summary>
-        /// Updates the status icon of this node and parents.
-        /// </summary>
-        protected void UpdateStatus( bool recursive, bool propagate )
-        {      
-            // update status on the children first           
-            if ( recursive )
-            {
-                this.propagatedStatus = StatusKind.None;
-                foreach( TreeNode node in this.Children )
-                    node.UpdateStatus( true, false );
-            }
-
-            // text or property changes on the project file itself?
-            try
-            {
-                // should be set either by the recursion above or by an explicit propagation
-                if ( this.propagatedStatus != StatusKind.None )
-                    this.currentStatus = this.propagatedStatus;
-                else
-                    this.currentStatus = this.GetStatus();
-            }
-            catch( StatusException stex )
-            {
-                Debug.WriteLine( stex.Message );
-                this.currentStatus = StatusKind.Deleted;
-            }
-
-            this.SetStatusImage( this.currentStatus );
-
-            // propagate to the parent nodes.
-            if ( this.currentStatus != StatusKind.Normal && this.Parent != null )
-                this.Parent.PropagateStatus( this.currentStatus );
-            if ( propagate && this.parent != null )
-                this.parent.UpdateStatus( false, true );
-
-            this.propagatedStatus = StatusKind.None;
-        }
-
-        /// <summary>
-        /// Visits the children of this node.
-        /// </summary>
-        /// <param name="visitor"></param>
-        public void VisitChildResources( ILocalResourceVisitor visitor )
-        {
-            foreach( TreeNode node in this.Children )
-                node.VisitResources( visitor, true );
-        }
-
         /// <summary>
         /// The parent node of this node.
         /// </summary>
@@ -170,35 +139,63 @@ namespace Ankh.Solution
             get{ return this.parent; }
         }
 
+        protected NodeStatus CurrentStatus
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.currentStatus; }
+        }
+
         /// <summary>
+        /// Derived classes implement this method to append their resources
+        /// to the list.
+        /// </summary>
+        /// <param name="list"></param>
+        public abstract void GetResources( IList list, bool getChildItems, 
+            ResourceFilterCallback filter );
+        
+
+       /// <summary>
         /// Gets the status of the resources belonging to one specific node, 
         /// not including children.
         /// </summary>
         /// <returns></returns>
-        protected virtual StatusKind GetStatus()
+        protected virtual NodeStatus ThisNodeStatus()
         {
-            return StatusKind.None;
+            return NodeStatus.None;
         }
 
         /// <summary>
-        /// Intended to be called from child nodes if their status has changed.
+        /// Dispatches the Changed event.
         /// </summary>
-        /// <param name="status"></param>
-        protected virtual void PropagateStatus( StatusKind status )
+        protected virtual void OnChanged()
         {
-            if ( status == StatusKind.Added || status == StatusKind.Modified )
-                this.propagatedStatus = StatusKind.Modified;
-            else if ( status == StatusKind.None )
-                this.propagatedStatus = StatusKind.Normal;
-            else
-                this.propagatedStatus = status;
+            this.SetStatusImage( this.CurrentStatus );
+            if ( this.Changed != null )
+                this.Changed( this, EventArgs.Empty );
+        }
+
+        /// <summary>
+        /// Event handler for change events in child nodes or resources belonging
+        /// to this node.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        protected virtual void ChildOrResourceChanged( object sender, EventArgs args )
+        {
+            NodeStatus newStatus = this.MergeStatuses( this.ThisNodeStatus(), 
+                this.CheckChildStatuses() );
+            if ( newStatus != this.currentStatus )
+            {
+                this.currentStatus = newStatus;
+                this.OnChanged();
+            }
         }
 
         /// <summary>
         /// Sets the status image on this node.
         /// </summary>
         /// <param name="status">The status on this node.</param>
-        protected void SetStatusImage( StatusKind status )
+        protected void SetStatusImage( NodeStatus status )
         {
             int statusImage = 0;
             if ( statusMap.Contains(status) )
@@ -219,27 +216,58 @@ namespace Ankh.Solution
         }
 
         /// <summary>
-        /// Returns a status from a resource, taking into account both text status and 
+        /// Returns a NodeStatus from a Status, taking into account both text status and 
         /// property status.
         /// </summary>
         /// <param name="resource"></param>
         /// <returns></returns>
-        protected StatusKind StatusFromResource( ILocalResource resource )
-        {
-            
-            Status status;
-
-            // is it cached?
-            if ( (status = this.Explorer.GetCachedStatus( resource.Path ) ) == null )
-                status = resource.Status;
-
+        protected NodeStatus GenerateStatus(Status status)
+        {  
             if ( status.TextStatus != StatusKind.Normal )
-                return status.TextStatus;
+                return (NodeStatus)status.TextStatus;
             else if ( status.PropertyStatus != StatusKind.Normal &&
                 status.PropertyStatus != StatusKind.None )
-                return status.PropertyStatus;  
+                return (NodeStatus)status.PropertyStatus;  
             else
-                return StatusKind.Normal;
+                return NodeStatus.Normal;
+        }
+
+        /// <summary>
+        /// Merges the statuses of the passed items into a single NodeStatus.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        protected NodeStatus MergeStatuses( params SvnItem[] items )
+        {
+            return this.MergeStatuses( ((IList)items) );
+        }
+
+        /// <summary>
+        /// Merges the passed NodeStatuses into a single NodeStatus.
+        /// </summary>
+        /// <param name="statuses"></param>
+        /// <returns></returns>
+        protected NodeStatus MergeStatuses( params NodeStatus[] statuses )
+        {
+            StatusMerger merger = new StatusMerger();
+            foreach( NodeStatus status in statuses )
+                merger.NewStatus( status );
+            return merger.CurrentStatus;
+        }
+
+        /// <summary>
+        /// Merges the statuses of the passed SvnItems into
+        /// a single NodeStatus.
+        /// </summary>
+        /// <param name="items">An IList of SvnItem instances.</param>
+        /// <returns></returns>
+        protected NodeStatus MergeStatuses( IList items )
+        {   
+            StatusMerger statusMerger = new StatusMerger();
+            foreach( SvnItem item in items )
+                statusMerger.NewStatus( this.GenerateStatus(item.Status) );
+
+            return statusMerger.CurrentStatus;
         }
 
         /// <summary>
@@ -276,7 +304,11 @@ namespace Ankh.Solution
                         TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
                             this );
                         if (childNode != null )
+                        {
+                            childNode.Changed += new StatusChanged(this.ChildOrResourceChanged);
                             this.children.Add( childNode );
+                            childNode.Refresh( false );
+                        }
                     }
 
                     // and the next child
@@ -292,14 +324,90 @@ namespace Ankh.Solution
                 throw new SvnException( "Invalid UIHierarchyItem", ex );
             }
         }
-        
+
+        /// <summary>
+        /// Gets the merged NodeStatus from the child nodes.
+        /// </summary>
+        /// <returns></returns>
+        protected NodeStatus CheckChildStatuses()
+        {            
+            StatusMerger statusMerger = new StatusMerger();
+            foreach( TreeNode node in this.children )
+            {
+                statusMerger.NewStatus( node.CurrentStatus );                
+            }
+            return statusMerger.CurrentStatus;
+        }
+
+        protected void GetChildResources(System.Collections.IList list, bool getChildItems,
+            ResourceFilterCallback filter )
+        {
+            if ( getChildItems )
+            {
+                foreach( TreeNode node in this.Children )
+                    node.GetResources( list, getChildItems, filter );
+            }
+        }
+
+
+        /// <summary>
+        /// Used for merging several NodeStatuses into a single NodeStatus.
+        /// </summary>
+        protected struct StatusMerger
+        {
+            public void NewStatus( NodeStatus status )
+            {
+                if ( this.CurrentStatus == NodeStatus.None )
+                    this.CurrentStatus = status;
+                else if ( status != NodeStatus.None )
+                {
+                    if ( this.CurrentStatus == NodeStatus.Normal )
+                    {
+                        this.CurrentStatus = status;
+                    }
+                    else if ( status != NodeStatus.Normal &&
+                        this.CurrentStatus != status )
+                    {
+                        this.CurrentStatus = NodeStatus.IndividualStatusesConflicting;
+                    }
+                }
+                                                    
+            }
+
+            public NodeStatus CurrentStatus
+            {
+                get
+                {
+                    if ( this.currentStatus == (NodeStatus)0 )
+                        this.currentStatus = NodeStatus.None;
+                    return this.currentStatus;
+                }
+                set{ this.currentStatus = value; }
+            }
+            private NodeStatus currentStatus;
+        }
+
+        /// <summary>
+        /// Describes the status of a tree node.
+        /// </summary>
+        protected enum NodeStatus
+        {
+            None = StatusKind.None,
+            Normal = StatusKind.Normal,
+            Added = StatusKind.Added,
+            Deleted = StatusKind.Deleted,
+            Conflicted = StatusKind.Conflicted,
+            Unversioned = StatusKind.Unversioned,
+            Modified = StatusKind.Modified,
+            IndividualStatusesConflicting
+        }
+
         private UIHierarchyItem uiItem;
         private TreeNode parent;
         private IntPtr hItem;
         private IList children;
         private Explorer explorer;
-        private StatusKind currentStatus;
-        private StatusKind propagatedStatus = StatusKind.None;
-        private static IDictionary statusMap = new Hashtable();
+        private NodeStatus currentStatus;
+        private static readonly IDictionary statusMap = new Hashtable();
     }
 }

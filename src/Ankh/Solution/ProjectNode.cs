@@ -1,6 +1,6 @@
 // $Id$
 using System;
-using NSvn;
+
 using NSvn.Core;
 using EnvDTE;
 using System.IO;
@@ -17,17 +17,25 @@ namespace Ankh.Solution
 
             this.FindProjectResources(explorer);
 
-            this.projectFile.Context = explorer.Context;
-            this.projectFolder.Context = explorer.Context;
-
-            this.UpdateStatus( false, false );
+            this.FindChildren();
         }
 
-        public override void Refresh()
+        public override void GetResources( System.Collections.IList list, 
+            bool getChildItems, ResourceFilterCallback filter )
         {
-            this.FindProjectResources( this.Explorer );
-            base.Refresh();
+            if ( filter == null || filter( this.projectFolder ) )
+                list.Add (this.projectFolder );
+            if ( filter == null || filter( this.projectFile ) )
+                list.Add( this.projectFile );
+
+            this.GetChildResources( list, getChildItems, filter );
         }
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.VisitProject(this);
+        }
+
 
 
         private void FindProjectResources(Explorer explorer)
@@ -37,71 +45,48 @@ namespace Ankh.Solution
             // the Solution Items project has no path
             if ( fullname != string.Empty && File.Exists( fullname ) )
             {
-                string parentPath = Path.GetDirectoryName( fullname );
-                this.projectFolder = SvnResource.FromLocalPath( parentPath );
-                this.projectFile = SvnResource.FromLocalPath( fullname );
+                
 
-                this.Explorer.AddResource( project, this );                    
+                string parentPath = Path.GetDirectoryName( fullname );
+                this.projectFolder = this.Explorer.StatusCache[ parentPath ];                
+                this.projectFile = this.Explorer.StatusCache[ fullname ];
+
+                this.Explorer.AddResource( project, this ); 
+
+                // attach event handlers
+                StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
+                this.projectFolder.Changed += del;
+                this.projectFolder.Changed += del;                                   
             }
             else
             {
-                this.projectFile = SvnResource.Unversionable;
-                this.projectFolder = SvnResource.Unversionable;
+                this.projectFile = SvnItem.Unversionable;
+                this.projectFolder = SvnItem.Unversionable;
             }
         }
 
         /// <summary>
-        /// The folder this project is contained in.
+        /// The directory this project resides in.
         /// </summary>
-        public ILocalResource ProjectFolder
+        public override string Directory
         {
-            get{ return this.projectFolder; }
+            [System.Diagnostics.DebuggerStepThrough()]
+            get { return this.projectFolder.Path; }
         }
+
 
         /// <summary>
-        /// The project file itself.
+        /// The status of this node, not including children.
         /// </summary>
-        public ILocalResource ProjectFile
-        {
-            get{ return this.projectFile; }
-        }
-
-        /// <summary>
-        /// Accept an INodeVisitor.
-        /// </summary>
-        /// <param name="visitor"></param>
-        public override void Accept( INodeVisitor visitor )
-        {
-            visitor.VisitProject( this );
-        }
-
-        
-
-        public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
+        /// <returns></returns>
+        protected override NodeStatus ThisNodeStatus()
         {            
-            if ( recursive )
-                this.VisitChildResources( visitor );
-
-            this.projectFolder.Accept( visitor );
-            this.projectFile.Accept( visitor );
-        } 
-            
-        protected override StatusKind GetStatus()
-        {
-            
             // check status on the project folder
-            StatusKind folderStatus = StatusFromResource( this.projectFolder );
-            StatusKind fileStatus = StatusFromResource( this.projectFile );
-            if ( fileStatus != StatusKind.Normal )
-                return fileStatus;
-            else if (  folderStatus != StatusKind.Normal )
-                return folderStatus;
-            else
-                return StatusKind.Normal;
+            return this.MergeStatuses( this.projectFolder, this.projectFile );
         }                    
 
-        private ILocalResource projectFolder;
-        private ILocalResource projectFile;
+        private SvnItem projectFolder;
+        private SvnItem projectFile;
         private Project project;
     }  
 

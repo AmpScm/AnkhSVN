@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using Utils;
 using EnvDTE;
-using NSvn;
+using Ankh.RepositoryExplorer;
 
 namespace Ankh.Commands
 {
@@ -15,6 +15,16 @@ namespace Ankh.Commands
 	internal class CheckoutFolderCommand : 
         CheckoutCommand
 	{
+        #region ICommand Members
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        {
+            return context.RepositoryExplorer.SelectedNode.IsDirectory ? 
+                vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled :
+                vsCommandStatus.vsCommandStatusSupported;
+
+        }
+        #endregion
+
         public override void Execute(AnkhContext context, string parameters)
         {
             /// first get the parent folder
@@ -24,19 +34,15 @@ namespace Ankh.Commands
             if ( browser.ShowDialog() != DialogResult.OK) 
                 return;
 
-            context.StartOperation( "Checking out" );
-
             try
             {
-                CheckoutVisitor v = new CheckoutVisitor( );
-                context.RepositoryController.VisitSelectedNodes( v );
+                context.StartOperation( "Checking out" );
 
-                /// checkout all selected folders recurively
-                foreach( RepositoryDirectory directory in v.Directories )
-                {
-                    context.OutputPane.WriteLine( "Checking out {0}", directory.Url );
-                    directory.Checkout( browser.DirectoryPath, true );
-                }
+                INode node = (INode)context.RepositoryExplorer.SelectedNode;
+
+                CheckoutRunner runner = new CheckoutRunner(context, browser.DirectoryPath, node.Revision, node.Url);
+                runner.Start( "Checking out folder" );
+
             }
             finally
             {

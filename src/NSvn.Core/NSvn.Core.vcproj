@@ -158,6 +158,9 @@
 				RelativePath="AuthenticationProvider.h">
 			</File>
 			<File
+				RelativePath="CancelEventArgs.h">
+			</File>
+			<File
 				RelativePath="ChangedPath.h">
 			</File>
 			<File
@@ -188,10 +191,13 @@
 				RelativePath="LogMessage.h">
 			</File>
 			<File
+				RelativePath="LogMessageEventArgs.h">
+			</File>
+			<File
 				RelativePath="ManagedPointer.h">
 			</File>
 			<File
-				RelativePath="Notification.h">
+				RelativePath="NotificationEventArgs.h">
 			</File>
 			<File
 				RelativePath="ParameterDictionary.h">

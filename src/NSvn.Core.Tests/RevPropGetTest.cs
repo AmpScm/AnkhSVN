@@ -29,15 +29,14 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestRevPropGetDir()
         {  
-            ClientContext ctx = new ClientContext( );  
-            int rev;
 
             int headRev = int.Parse( this.RunCommand( "svnlook", "youngest " + this.ReposPath ) );
 
             this.RunCommand( "svn", "ps --revprop -r HEAD cow moo " + this.ReposUrl );
  
-            Property prop = Client.RevPropGet( "cow", this.ReposUrl, 
-                Revision.Head, out rev, ctx );
+            int rev;
+            Property prop = this.Client.RevPropGet( "cow", this.ReposUrl, 
+                Revision.Head, out rev );
 
             Assertion.AssertEquals( "Revision wrong", headRev, rev );
             Assertion.AssertEquals( "Wrong property value", "moo", prop.ToString());

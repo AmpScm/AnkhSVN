@@ -3,13 +3,16 @@
 #include "stdafx.h"
 
 #include "ClientContext.h"
+#include "Client.h"
 #include "CommitItem.h"
 #include "ParameterDictionary.h"
 
 #include <svn_subst.h>
 //#include <svn_client.h>
 //#include <apr_pools.h>
-#include "Notification.h"
+#include "NotificationEventArgs.h"
+#include "LogMessageEventArgs.h"
+#include "CancelEventArgs.h"
 //#include "ManagedPointer.h"
 
 namespace
@@ -40,35 +43,24 @@ namespace NSvn
             svn_client_ctx_t* ctx;
             HandleError( svn_client_create_context( &ctx, pool ) );
 
-            // is there a notify callback? (usually is)
-            if ( this->NotifyCallback != 0 )
-            {
-                ctx->notify_func = notify_func;
-                ctx->notify_baton = pool.AllocateObject( 
-                    ManagedPointer<NSvn::Core::NotifyCallback*>( this->NotifyCallback ) );
-            }
+            void* clientBaton = pool.AllocateObject(
+                ManagedPointer<NSvn::Core::Client*>(
+                this->client) );
+
+            ctx->notify_func = notify_func;
+            ctx->notify_baton = clientBaton;
 
             // is there an auth baton? (should be)
             if ( this->authBaton != 0 )
                 ctx->auth_baton = this->authBaton->GetAuthBaton();
 
-            // log message callback?
-            if ( this->LogMessageCallback != 0 )
-            {
-                ctx->log_msg_func = log_msg_func;
-                ctx->log_msg_baton = pool.AllocateObject( 
-                    ManagedPointer<NSvn::Core::LogMessageCallback*>( 
-                    this->LogMessageCallback ) );
-            }
+            
+            ctx->log_msg_func = log_msg_func;
+            ctx->log_msg_baton = clientBaton;
 
-            // cancellation callback?
-            if ( this->CancelCallback != 0 )
-            {
-                ctx->cancel_func = cancel_func;
-                ctx->cancel_baton = pool.AllocateObject(
-                    ManagedPointer<NSvn::Core::CancelCallback*>(
-                    this->CancelCallback) );
-            }
+
+            ctx->cancel_func = cancel_func;
+            ctx->cancel_baton = clientBaton;
 
             // client configuration
             if ( this->ClientConfig == 0 )
@@ -77,7 +69,6 @@ namespace NSvn
             ctx->config = this->clientConfig->GetHash();
            
             return ctx; 
-
 
         }
         
@@ -106,12 +97,11 @@ namespace
         const char *mime_type, svn_wc_notify_state_t content_state, 
         svn_wc_notify_state_t prop_state, svn_revnum_t revision )
     {
-        Notification* notification = new Notification( path, action, kind,
+        NotificationEventArgs* args = new NotificationEventArgs( path, action, kind,
             mime_type, content_state, prop_state, revision );
-        NotifyCallback* callback = 
-            *(static_cast<ManagedPointer<NotifyCallback*>* >(baton) );
-        callback->Invoke( notification );
-
+        Client* client = 
+            *(static_cast<ManagedPointer<Client*>* >(baton) );
+        client->OnNotification( args );
     }
 
     // delegate the log message callback back into managed space
@@ -133,14 +123,17 @@ namespace
         //TODO: should we support tmp_file?
         *tmp_file = 0;
 
-        LogMessageCallback* callback = *(static_cast<
-            ManagedPointer<LogMessageCallback*>* >( baton ) );
+        Client* client = *(static_cast<
+            ManagedPointer<Client*>* >( baton ) );
+
+        LogMessageEventArgs* args = new LogMessageEventArgs( items );
 
         // get the log message
-        StringHelper logMessage( callback->Invoke( items ) );
+        client->OnLogMessage( args );
+        const char* logMessage = StringHelper( args->Message ).CopyToPool(pool);
 
         // a null indicates a canceled commit
-        if ( static_cast<const char*>(logMessage) != 0 )
+        if ( logMessage != 0 )
         {
             svn_string_t *logMsgString = svn_string_create ("", pool);
 
@@ -163,11 +156,12 @@ namespace
     // Delegate the callback function into managed space
     svn_error_t* cancel_func( void* baton )
     {
-        CancelCallback* delegate = *(static_cast<ManagedPointer<CancelCallback*>*>(
+        Client* client = *(static_cast<ManagedPointer<Client*>*>(
             baton) );
-        CancelOperation status = delegate->Invoke();
+        CancelEventArgs* args = new CancelEventArgs();
+        client->OnCancel( args );
 
-        if ( status == CancelOperation::Cancel ) 
+        if ( args->Cancel ) 
             return svn_error_create( SVN_ERR_CANCELLED, NULL, "caught SIGINT" );
         else
             return SVN_NO_ERROR;

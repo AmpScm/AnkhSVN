@@ -5,6 +5,10 @@
 #include <svn_wc.h>
 #include "utils.h"
 
+
+#define OBJEQUALS( obj1, obj2 ) ((((obj1) == 0 && (obj2) == 0)) || \
+                                      (((obj2) != 0) && ((obj1)->Equals(obj2))))
+
 namespace NSvn
 {
     namespace Core
@@ -144,6 +148,39 @@ namespace NSvn
             [System::Diagnostics::DebuggerStepThrough]
             __property String* get_CommitAuthor()
             { return this->commitAuthor; }
+
+            /// <summary>Test whether to Entry instances are equal.</summary>
+            virtual bool Equals( Object* obj )
+            {
+                if ( !obj )
+                    return false;
+
+                if ( !this->GetType()->IsInstanceOfType( obj ) )
+                    return false;
+                Entry* other = static_cast<Entry*>(obj);
+
+                return OBJEQUALS(this->name, other->name) &&
+                    this->revision == other->revision &&
+                    OBJEQUALS(this->url, other->url) &&
+                    OBJEQUALS(this->repository, other->repository);// &&
+                    OBJEQUALS(this->uuid, other->uuid) &&
+                    this->kind == other->kind &&
+                    this->schedule == other->schedule &&
+                    this->copied == other->copied &&
+                    this->deleted == other->deleted &&
+                    OBJEQUALS(this->copyFromUrl, other->copyFromUrl) &&
+                    this->copyFromRevision == other->copyFromRevision &&
+                    OBJEQUALS(this->conflictNew, other->conflictNew) &&
+                    OBJEQUALS(this->conflictOld, other->conflictOld ) &&
+                    OBJEQUALS(this->conflictWorking, other->conflictWorking) &&
+                    OBJEQUALS(this->propertyRejectFile, other->propertyRejectFile) &&
+                    this->textTime.Equals( __box(other->textTime) ) &&
+                    this->propertyTime.Equals( __box(other->propertyTime) ) &&
+                    OBJEQUALS(this->checkSum, other->checkSum) &&
+                    this->commitRevision == other->commitRevision &&
+                    this->commitDate.Equals( __box(other->commitDate) ) &&
+                    OBJEQUALS(this->commitAuthor, other->commitAuthor );
+            }
 
         private:
             String* name;

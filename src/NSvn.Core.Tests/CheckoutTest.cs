@@ -32,8 +32,7 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestBasicCheckout()
         {
-            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
-            Client.Checkout( this.ReposUrl, this.newWc, Revision.Head, true, ctx );
+            this.Client.Checkout( this.ReposUrl, this.newWc, Revision.Head, true );
 
             Assertion.Assert( "Checked out file not there", 
                 File.Exists( Path.Combine( this.newWc, "Form.cs" ) ) );

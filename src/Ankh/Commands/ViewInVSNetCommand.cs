@@ -1,5 +1,6 @@
 using System;
 using EnvDTE;
+using Ankh.RepositoryExplorer;
 
 namespace Ankh.Commands
 {
@@ -16,11 +17,13 @@ namespace Ankh.Commands
             {
                 context.StartOperation( "Opening" );
 
-                CatVisitor v = new CatVisitor( context );
-                context.RepositoryController.VisitSelectedNodes( v );
+                INode node = (INode)context.RepositoryExplorer.SelectedNode;
 
-                foreach( string filename in v.FileNames )
-                    context.DTE.ItemOperations.OpenFile( filename, Constants.vsViewKindPrimary );
+                CatRunner runner = new CatRunner(context, node.Name, node.Revision, node.Url);
+                runner.Start( "Retrieving file" );
+
+                context.DTE.ItemOperations.OpenFile( runner.Path, 
+                    Constants.vsViewKindPrimary );
 
             }
             finally

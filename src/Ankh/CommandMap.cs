@@ -136,9 +136,11 @@ namespace Ankh
                 typeof(VSNetControlAttribute), false) ) 
             {
              
+                string name = ((VSNetCommandAttribute)cmd.GetType().GetCustomAttributes(
+                    typeof(VSNetCommandAttribute), false )[0]).Name;
                 CommandBar cmdBar = GetCommandBar( control.CommandBar, context );
-                cmd.Command.AddControl( cmdBar, control.Position );
-                
+                CommandBarControl cntrl = cmd.Command.AddControl( cmdBar, control.Position );
+                cntrl.Tag = control.CommandBar + "." + name;                
             }
         }
 
@@ -148,7 +150,7 @@ namespace Ankh
         /// <param name="name">The path to the command bar, components separated by .</param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private static CommandBar GetCommandBar( string name, AnkhContext context )
+        public static CommandBar GetCommandBar( string name, AnkhContext context )
         {
             string[] path = name.Split( '.' );
             CommandBar bar;

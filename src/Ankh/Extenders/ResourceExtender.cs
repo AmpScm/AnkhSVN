@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
-using NSvn;
+
 using NSvn.Core;
 
 

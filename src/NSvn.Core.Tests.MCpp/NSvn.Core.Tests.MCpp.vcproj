@@ -126,7 +126,7 @@
 				RelativePath="MiscTests.cpp">
 			</File>
 			<File
-				RelativePath="NotificationTest.cpp">
+				RelativePath="NotificationEventArgsTest.cpp">
 			</File>
 			<File
 				RelativePath="PoolTest.cpp">
@@ -178,7 +178,7 @@
 				RelativePath="MiscTests.h">
 			</File>
 			<File
-				RelativePath="NotificationTest.h">
+				RelativePath="NotificationEventArgsTest.h">
 			</File>
 			<File
 				RelativePath="PoolTest.h">

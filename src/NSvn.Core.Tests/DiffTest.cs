@@ -15,6 +15,8 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
+            base.SetUp();
+
             this.ExtractRepos();
             this.ExtractWorkingCopy();
         }
@@ -35,9 +37,8 @@ namespace NSvn.Core.Tests
 
             MemoryStream outstream = new MemoryStream();
             MemoryStream errstream = new MemoryStream();
-            Client.Diff( new string[]{}, "Form.cs", Revision.Base, "Form.cs", 
-                Revision.Working, false, true, false, outstream, errstream, 
-                new ClientContext() );
+            this.Client.Diff( new string[]{}, "Form.cs", Revision.Base, "Form.cs", 
+                Revision.Working, false, true, false, outstream, errstream );
 
 
             string err = Encoding.Default.GetString( errstream.ToArray() );
@@ -55,9 +56,9 @@ namespace NSvn.Core.Tests
             MemoryStream outstream = new MemoryStream();
             MemoryStream errstream = new MemoryStream();
 
-            Client.Diff( new string[]{}, this.ReposUrl, Revision.FromNumber(1), 
+            this.Client.Diff( new string[]{}, this.ReposUrl, Revision.FromNumber(1), 
                 this.ReposUrl, Revision.FromNumber(5), true, true, false, outstream,
-                errstream, new ClientContext() );
+                errstream );
 
             string err = Encoding.Default.GetString( errstream.ToArray() );
             Assertion.AssertEquals( "Error in diff: " + err, string.Empty, err );

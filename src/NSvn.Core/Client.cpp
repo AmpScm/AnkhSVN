@@ -5,10 +5,14 @@
 #include "Client.h"
 
 #include "StringHelper.h"
-#include "Notification.h"
 
 
-
+#include "Status.h"
+#include "Revision.h"
+#include "CommitInfo.h"
+#include "DirectoryEntry.h"
+#include "Status.h"
+#include "StatusDictionary.h"
 #include <svn_client.h>
 #include <svn_wc.h>
 #include <svn_path.h>
@@ -22,6 +26,11 @@
 #include "ManagedPointer.h"
 #include "stream.h"
 #include <svn_io.h>
+#include "LogMessageEventArgs.h"
+#include "CancelEventArgs.h"
+#include "NotificationEventArgs.h"
+#include "AuthenticationBaton.h"
+#include "ClientContext.h"
 
 #include "Status.h"
 
@@ -47,24 +56,44 @@ svn_error_t* svn_log_message_receiver(void *baton,
 /// callback function for Client::Status
 void svn_status_func( void* baton, const char* path, svn_wc_status_t* status );
 
+NSvn::Core::Client::Client()
+{
+    this->context = new ClientContext( this,
+        new AuthenticationBaton(), 
+        new ClientConfig() );
+} 
+
+NSvn::Core::Client::Client( String* configDir )
+{
+    this->context = new ClientContext( this,
+        new AuthenticationBaton(),
+        new ClientConfig( configDir ) );
+    
+    this->context->AuthBaton->SetParameter( AuthenticationBaton::ParamConfigDir, configDir );
+}
+
+NSvn::Core::AuthenticationBaton* NSvn::Core::Client::get_AuthBaton()
+{
+    return this->context->AuthBaton;
+}
 
 // implementation of Client::Add
-void NSvn::Core::Client::Add( String* path, bool recursive, ClientContext* context )
+void NSvn::Core::Client::Add( String* path, bool recursive )
 {
     Pool pool;
 
     const char* truePath = CanonicalizePath( path, pool );
-    HandleError( svn_client_add( truePath, recursive, context->ToSvnContext( pool ), pool ) );
+    HandleError( svn_client_add( truePath, recursive, this->context->ToSvnContext( pool ), pool ) );
 }
 // implementation of Client::MakeDir
-NSvn::Core::CommitInfo* NSvn::Core::Client::MakeDir( String* paths[], ClientContext* context )
+NSvn::Core::CommitInfo* NSvn::Core::Client::MakeDir( String* paths[] )
 {
     Pool pool;
 
     apr_array_header_t* aprPaths = StringArrayToAprArray( paths, true, pool );
 
     svn_client_commit_info_t* commitInfo = 0;
-    HandleError( svn_client_mkdir( &commitInfo, aprPaths, context->ToSvnContext( pool ), 
+    HandleError( svn_client_mkdir( &commitInfo, aprPaths, this->context->ToSvnContext( pool ), 
         pool ) );
 
     if ( commitInfo != 0 )
@@ -73,32 +102,32 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::MakeDir( String* paths[], ClientCont
         return CommitInfo::Invalid;
 }
 // implemenentation of Client::Cleanup
-void NSvn::Core::Client::Cleanup( String* directory, ClientContext* context )
+void NSvn::Core::Client::Cleanup( String* directory )
 {
     Pool pool;
     const char* truePath = CanonicalizePath( directory, pool );
-    HandleError( svn_client_cleanup( truePath, context->ToSvnContext( pool ), pool ) );
+    HandleError( svn_client_cleanup( truePath, this->context->ToSvnContext( pool ), pool ) );
 }
 
 // implementation of Client::Revert
-void NSvn::Core::Client::Revert(String* paths[], bool recursive, ClientContext* context )
+void NSvn::Core::Client::Revert(String* paths[], bool recursive )
 {
     Pool pool;
     
     const apr_array_header_t* aprArray = StringArrayToAprArray( paths, true, pool );
 
     HandleError( svn_client_revert( aprArray, recursive, 
-        context->ToSvnContext (pool), pool));
+        this->context->ToSvnContext (pool), pool));
 }    
 
 // implementation of Client::Resolve
-void NSvn::Core::Client::Resolved(String* path, bool recursive, ClientContext* context )
+void NSvn::Core::Client::Resolved(String* path, bool recursive )
 {
     Pool pool;
     const char* truePath = CanonicalizePath( path, pool );
 
     HandleError( svn_client_resolved( truePath, recursive, 
-        context->ToSvnContext (pool), pool));
+        this->context->ToSvnContext (pool), pool));
 }  
 
 
@@ -106,7 +135,7 @@ void NSvn::Core::Client::Resolved(String* path, bool recursive, ClientContext* c
 void NSvn::Core::Client::Status( 
     [System::Runtime::InteropServices::Out]System::Int32* youngest, 
     String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll, bool update,  
-    bool noIgnore, ClientContext* context )
+    bool noIgnore )
 {
     Pool pool;
     StatusBaton baton;
@@ -121,7 +150,7 @@ void NSvn::Core::Client::Status(
     svn_revnum_t revnum;
     HandleError( svn_client_status( &revnum, truePath, 
         revision->ToSvnOptRevision( pool ), svn_status_func, &baton, descend,
-        getAll, update, noIgnore, context->ToSvnContext( pool ), pool ) );
+        getAll, update, noIgnore, this->context->ToSvnContext( pool ), pool ) );
 
     *youngest = revnum;
 }
@@ -167,7 +196,7 @@ void NSvn::Core::Client::PropSet(Property* property, String* target, bool recurs
 // implementation of Client::RevPropSet
 void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* revision, 
                                     [System::Runtime::InteropServices::Out]System::Int32*
-                                    revisionNumber, bool force, ClientContext* context)
+                                    revisionNumber, bool force)
 {
     Pool pool;
 
@@ -178,46 +207,45 @@ void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* r
 
     HandleError( svn_client_revprop_set(  StringHelper(property->Name), &propv, 
         truePath, revision->ToSvnOptRevision( pool ), &setRev, 
-        force, context->ToSvnContext (pool), pool));
+        force, this->context->ToSvnContext (pool), pool));
 
     *revisionNumber = setRev;
 }
 
 // implementation of Client::Checkout
 int NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision, 
-                                  bool recurse, ClientContext* context )
+                                  bool recurse )
 {
     Pool pool;
     const char* truePath = CanonicalizePath( path, pool );
     svn_revnum_t rev;
     HandleError( svn_client_checkout( &rev, StringHelper( url ), truePath, 
-        revision->ToSvnOptRevision( pool ), recurse, context->ToSvnContext( pool ), pool ) );
+        revision->ToSvnOptRevision( pool ), recurse, this->context->ToSvnContext( pool ), pool ) );
 
     return rev;
 }
 
 // implementation of Client::Update
-int NSvn::Core::Client::Update( String* path, Revision* revision, bool recurse, 
-                                ClientContext* context )
+int NSvn::Core::Client::Update( String* path, Revision* revision, bool recurse )
 {
     Pool pool;
     const char* truePath = CanonicalizePath( path, pool );
     svn_revnum_t rev;
     HandleError( svn_client_update( &rev, truePath, revision->ToSvnOptRevision( pool ),
-        recurse, context->ToSvnContext( pool ), pool ) );
+        recurse, this->context->ToSvnContext( pool ), pool ) );
 
     return rev;
 }
 
 // implementation of Client::Commit
-NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonRecursive, ClientContext* context )
+NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonRecursive )
 {
     Pool pool;
     apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
     svn_client_commit_info_t* commitInfoPtr;
 
     HandleError( svn_client_commit( &commitInfoPtr, aprArrayTargets, nonRecursive, 
-        context->ToSvnContext( pool ), pool ) );
+        this->context->ToSvnContext( pool ), pool ) );
 
     if ( commitInfoPtr )
         return new CommitInfo( commitInfoPtr );
@@ -227,7 +255,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonR
 // implementation of Client::Move
 NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath, 
                                                  Revision* srcRevision, String* dstPath, 
-                                                 bool force, ClientContext* context )
+                                                 bool force )
 {
     Pool pool;
     const char* trueSrcPath = CanonicalizePath( srcPath, pool );
@@ -237,7 +265,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath,
 
     HandleError( svn_client_move ( &commitInfoPtr, trueSrcPath, 
         srcRevision->ToSvnOptRevision( pool ), trueDstPath, force, 
-        context->ToSvnContext( pool ), pool ) );
+        this->context->ToSvnContext( pool ), pool ) );
 
     if ( commitInfoPtr != 0 )
         return new CommitInfo( commitInfoPtr );
@@ -245,7 +273,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath,
         return CommitInfo::Invalid;
 }
 // implementation of Client::Export
-int NSvn::Core::Client::Export(String* from, String* to, Revision* revision, bool force, ClientContext* context)
+int NSvn::Core::Client::Export(String* from, String* to, Revision* revision, bool force)
 {
     Pool pool;
     const char* trueSrcPath = CanonicalizePath( from, pool );
@@ -253,14 +281,13 @@ int NSvn::Core::Client::Export(String* from, String* to, Revision* revision, boo
 
     svn_revnum_t rev;
     HandleError( svn_client_export ( &rev, trueSrcPath, trueDstPath, 
-        revision->ToSvnOptRevision( pool ), force, context->ToSvnContext( pool ), pool ) );
+        revision->ToSvnOptRevision( pool ), force, this->context->ToSvnContext( pool ), pool ) );
 
     return rev;
-}
+}   
 //TODO: Implement the variable optionalAdmAccess
 // implementation of Client::Copy
-NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcRevision, String* dstPath,
-                                                 ClientContext* context)
+NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcRevision, String* dstPath)
 {
     Pool pool;
     const char* trueSrcPath = CanonicalizePath( srcPath, pool );
@@ -270,7 +297,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcR
 
     HandleError( svn_client_copy ( &commitInfoPtr, trueSrcPath , 
         srcRevision->ToSvnOptRevision( pool ), trueDstPath, 
-        context->ToSvnContext( pool ), pool ) );
+        this->context->ToSvnContext( pool ), pool ) );
 
     if ( commitInfoPtr != 0 )
         return new CommitInfo( commitInfoPtr );
@@ -281,7 +308,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcR
 // implementation of Client::Merge
 void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
                                String* targetWcPath, bool recurse, bool ignoreAncestry,
-                               bool force, bool dryRun, ClientContext* context)
+                               bool force, bool dryRun)
 {
     Pool pool;
     const char* trueSrcPath1 = CanonicalizePath( url1, pool );
@@ -291,12 +318,12 @@ void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, 
     HandleError( svn_client_merge ( trueSrcPath1 , revision1->ToSvnOptRevision( pool ),
         trueSrcPath2, revision2->ToSvnOptRevision( pool ),
         trueDstPath, recurse, ignoreAncestry, force, dryRun,
-        context->ToSvnContext( pool ), pool ) );
+        this->context->ToSvnContext( pool ), pool ) );
 }
 // implementation of Client::PropGet
 NSvn::Common::PropertyDictionary* NSvn::Core::Client::PropGet(String* propName, 
                                                               String* target, Revision* revision, 
-                                                              bool recurse, ClientContext* context)
+                                                              bool recurse)
 {
     Pool pool;
     apr_hash_t* propertyHash;
@@ -304,7 +331,7 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::PropGet(String* propName,
     const char* trueTarget = CanonicalizePath( target, pool );
 
     svn_error_t* err = svn_client_propget( &propertyHash, StringHelper( propName ), trueTarget,
-        revision->ToSvnOptRevision( pool ), recurse, context->ToSvnContext( pool ), pool );
+        revision->ToSvnOptRevision( pool ), recurse, this->context->ToSvnContext( pool ), pool );
     HandleError( err );
 
     return ConvertToPropertyDictionary( propertyHash, propName, pool );
@@ -312,7 +339,7 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::PropGet(String* propName,
 }
 // implementation of Client::RevPropGet
 NSvn::Common::Property*  NSvn::Core::Client::RevPropGet(String* propName, String* url, Revision* revision,
-                                                        System::Int32* revisionNumber, ClientContext* context)
+                                                        System::Int32* revisionNumber)
 {
     Pool pool;
 
@@ -322,7 +349,7 @@ NSvn::Common::Property*  NSvn::Core::Client::RevPropGet(String* propName, String
 
     HandleError( svn_client_revprop_get(  StringHelper( propName ), &propv, 
         truePath, revision->ToSvnOptRevision( pool ), &setRev, 
-        context->ToSvnContext (pool), pool));
+        this->context->ToSvnContext (pool), pool));
 
     *revisionNumber = setRev;
     Byte array[] = SvnStringToByteArray( propv );
@@ -333,8 +360,7 @@ NSvn::Common::Property*  NSvn::Core::Client::RevPropGet(String* propName, String
 
 //TODO: Implement the variable admAccessBaton
 // implementation of Client::Delete
-NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* paths[], bool force, 
-                                                   ClientContext* context)
+NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* paths[], bool force)
 {
     Pool pool;
 
@@ -343,7 +369,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* paths[], bool force,
     apr_array_header_t* aprPaths = StringArrayToAprArray( paths, true, pool );
 
     HandleError( svn_client_delete( &commitInfoPtr, aprPaths, false, 
-        context->ToSvnContext( pool ), pool ) );
+        this->context->ToSvnContext( pool ), pool ) );
 
     if ( commitInfoPtr != 0 )
         return new CommitInfo( commitInfoPtr );
@@ -351,8 +377,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* paths[], bool force,
         return CommitInfo::Invalid;
 }
 // implementation of Client::Import
-NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, bool nonRecursive, 
-                                                   ClientContext* context)
+NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, bool nonRecursive)
 {
     Pool pool;
     const char* trueSrcPath = CanonicalizePath( path, pool );
@@ -361,7 +386,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, bo
     svn_client_commit_info_t* commitInfoPtr = 0;
 
     HandleError( svn_client_import( &commitInfoPtr, trueSrcPath, trueDstUrl, nonRecursive,
-        context->ToSvnContext( pool ), pool ) );
+        this->context->ToSvnContext( pool ), pool ) );
 
     if ( commitInfoPtr != 0 )
         return new CommitInfo( commitInfoPtr );
@@ -370,7 +395,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, bo
 }
 
 // implementation of Client::Cat
-void NSvn::Core::Client::Cat( Stream* out, String* path, Revision* revision, ClientContext* context )
+void NSvn::Core::Client::Cat( Stream* out, String* path, Revision* revision )
 {
     Pool pool; 
 
@@ -378,12 +403,11 @@ void NSvn::Core::Client::Cat( Stream* out, String* path, Revision* revision, Cli
     svn_stream_t* svnStream = CreateSvnStream( out, pool );
 
     HandleError( svn_client_cat( svnStream, truePath, revision->ToSvnOptRevision( pool ), 
-        context->ToSvnContext( pool ), pool ) );
+        this->context->ToSvnContext( pool ), pool ) );
 }
 
 // implementation of Client::Switch
-int NSvn::Core::Client::Switch( String* path, String* url, Revision* revision, bool recurse, 
-                                ClientContext* context)
+int NSvn::Core::Client::Switch( String* path, String* url, Revision* revision, bool recurse)
 {
     Pool pool;
 
@@ -392,15 +416,14 @@ int NSvn::Core::Client::Switch( String* path, String* url, Revision* revision, b
 
     svn_revnum_t rev;
     HandleError( svn_client_switch( &rev, truePath, trueUrl, revision->ToSvnOptRevision( pool ), recurse,
-        context->ToSvnContext( pool ), pool ) );
+        this->context->ToSvnContext( pool ), pool ) );
 
     return rev;
 
 }
 
 // implementation of Client::PropList
-NSvn::Common::PropListItem* NSvn::Core::Client::PropList( String* path, Revision* revision, bool recurse, 
-                                                         ClientContext* context ) []
+NSvn::Common::PropListItem* NSvn::Core::Client::PropList( String* path, Revision* revision, bool recurse ) []
 {
     Pool pool;
 
@@ -408,7 +431,7 @@ NSvn::Common::PropListItem* NSvn::Core::Client::PropList( String* path, Revision
     apr_array_header_t* propListItems;
 
     HandleError( svn_client_proplist( &propListItems, truePath, 
-        revision->ToSvnOptRevision( pool ), recurse, context->ToSvnContext( pool ),
+        revision->ToSvnOptRevision( pool ), recurse, this->context->ToSvnContext( pool ),
         pool ) );
 
     return ConvertPropListArray( propListItems, pool );
@@ -416,7 +439,7 @@ NSvn::Common::PropListItem* NSvn::Core::Client::PropList( String* path, Revision
 
 // Implementation of Client::RevPropList
 NSvn::Common::PropertyDictionary* NSvn::Core::Client::RevPropList( String* path,
-                                                                  Revision* revision, System::Int32* revisionNumber, ClientContext* context ) 
+                                                                  Revision* revision, System::Int32* revisionNumber ) 
 {
     Pool pool;
 
@@ -426,7 +449,7 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::RevPropList( String* path,
     svn_revnum_t revNo;
     HandleError( svn_client_revprop_list( &propListItems, truePath, 
         revision->ToSvnOptRevision( pool ), &revNo, 
-        context->ToSvnContext( pool ), pool ) );
+        this->context->ToSvnContext( pool ), pool ) );
 
     *revisionNumber = revNo;
 
@@ -435,7 +458,7 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::RevPropList( String* path,
 
 // Implementation of Client::List
 NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* revision, 
-                                                     bool recurse, ClientContext* context) []
+                                                     bool recurse) []
 {
     Pool pool;
 
@@ -444,7 +467,7 @@ NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* rev
 
     HandleError( svn_client_ls( &entriesHash, truePath, 
         revision->ToSvnOptRevision( pool ), recurse,
-        context->ToSvnContext( pool ), pool ) );
+        this->context->ToSvnContext( pool ), pool ) );
 
     ArrayList* entries = new ArrayList();
 
@@ -470,7 +493,7 @@ NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* rev
 // implementation of Client::Diff
 void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* revision1,
                               String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, bool noDiffDeleted, 
-                              Stream* outfile, Stream* errfile, ClientContext* context )
+                              Stream* outfile, Stream* errfile )
 {
     Pool pool;
 
@@ -486,7 +509,7 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
     HandleError( svn_client_diff( diffOptArray, truePath1, 
         revision1->ToSvnOptRevision( pool ), truePath2, 
         revision2->ToSvnOptRevision(pool), recurse, ignoreAncestry, noDiffDeleted,
-        aprOut, aprErr, context->ToSvnContext(pool), pool ) );
+        aprOut, aprErr, this->context->ToSvnContext(pool), pool ) );
 
     apr_file_close( aprOut );
     apr_file_close( aprErr );
@@ -497,7 +520,7 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
 
 // Implementation of Client::Log
 void NSvn::Core::Client::Log( String* targets[], Revision* start, Revision* end, bool discoverChangePath, 
-                             bool strictNodeHistory, LogMessageReceiver* receiver, ClientContext* context )
+                             bool strictNodeHistory, LogMessageReceiver* receiver )
 {
     Pool pool;
 
@@ -508,7 +531,7 @@ void NSvn::Core::Client::Log( String* targets[], Revision* start, Revision* end,
     HandleError( svn_client_log( aprTargets, start->ToSvnOptRevision(pool), 
         end->ToSvnOptRevision(pool), discoverChangePath, 
         strictNodeHistory, svn_log_message_receiver, &ptr,
-        context->ToSvnContext(pool), pool ) ); 
+        this->context->ToSvnContext(pool), pool ) ); 
 }
 
 // implementation of Client::UrlFromPath
@@ -529,18 +552,39 @@ String* NSvn::Core::Client::UrlFromPath( String* path )
 }
 
 // implementation of Client::UuidFromUrl
-String* NSvn::Core::Client::UuidFromUrl( String* url, ClientContext* context )
+String* NSvn::Core::Client::UuidFromUrl( String* url )
 {
     Pool pool;
 
     const char* realUrl = CanonicalizePath( url, pool );
     const char* uuid;
 
-    HandleError( svn_client_uuid_from_url( &uuid, realUrl, context->ToSvnContext( pool ),
+    HandleError( svn_client_uuid_from_url( &uuid, realUrl, this->context->ToSvnContext( pool ),
         pool ) );
 
     return (String*)StringHelper( uuid );
 }
+
+void NSvn::Core::Client::OnNotification( NotificationEventArgs* args )
+{
+    if ( this->Notification != 0 )
+        this->Notification->Invoke( this, args );
+}
+
+void NSvn::Core::Client::OnCancel( CancelEventArgs* args )
+{
+    if ( this->Cancel != 0 )
+        this->Cancel->Invoke( this, args );
+}
+
+void NSvn::Core::Client::OnLogMessage( LogMessageEventArgs* args )
+{
+    if ( this->LogMessage != 0 )
+        this->LogMessage->Invoke( this, args );
+}
+
+
+
 
 
 struct apr_hash_index_t

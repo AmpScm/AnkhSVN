@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using EnvDTE;
-using NSvn;
+
 
 namespace Ankh.EventSinks
 {

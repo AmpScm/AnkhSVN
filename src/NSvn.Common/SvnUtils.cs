@@ -1,9 +1,8 @@
 using System;
 using System.IO;
 using NSvn.Common;
-using NSvn.Core;
 
-namespace NSvn
+namespace NSvn.Common
 {
     /// <summary>
     /// Contains utility methods for SVN
@@ -63,7 +62,13 @@ namespace NSvn
         /// <returns>True if the path is/is in a working copy.</returns>
         public static bool IsWorkingCopyPath( string path )
         {
-            return Client.SingleStatus( path ) != Status.None;
+            string dir;
+            if ( !Directory.Exists( path ) )
+                dir = Path.GetDirectoryName( path );
+            else 
+                dir = path;
+            return Directory.Exists( Path.Combine( path, WC_ADMIN_AREA ) );
+                
         }
 
         public const string WC_ADMIN_AREA = ".svn";

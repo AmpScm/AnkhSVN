@@ -25,8 +25,8 @@ namespace NSvn.Core.Tests
             string path = Path.Combine( this.WcPath, "Form.cs" );
             this.RunCommand( "svn", "ps foo bar " + path );
  
-            PropertyDictionary mapping = Client.PropGet( "foo", path, Revision.Working, 
-                false, new ClientContext() );
+            PropertyDictionary mapping = this.Client.PropGet( "foo", path, Revision.Working, 
+                false );
             Assertion.AssertEquals( "No entries returned", 1, mapping.Count );
            
             foreach( string key in mapping.Keys )

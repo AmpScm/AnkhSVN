@@ -35,9 +35,8 @@ namespace NSvn.Core.Tests
         {
             string path1 = Path.Combine( this.WcPath, "Form.cs" );
             string path2 = Path.Combine( this.WcPath, "AssemblyInfo.cs" );
-            ClientContext ctx = new ClientContext( );
 
-            CommitInfo info = Client.Delete( new string[]{ path1, path2 }, false, ctx );
+            CommitInfo info = this.Client.Delete( new string[]{ path1, path2 }, false );
 
             Assertion.Assert( "File not deleted", !File.Exists( path1 ) );
             Assertion.Assert( "File not deleted", !File.Exists( path2 ) );
@@ -57,9 +56,8 @@ namespace NSvn.Core.Tests
         {
             string path1 = Path.Combine( this.ReposUrl, @"doc" );
             string path2 = Path.Combine( this.ReposUrl, "Form.cs" );
-            ClientContext ctx = new ClientContext( );
 
-            CommitInfo info = Client.Delete( new string[]{path1, path2}, false, ctx );
+            CommitInfo info = this.Client.Delete( new string[]{path1, path2}, false );
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
             Assertion.Assert( "Directory wasn't deleted ", cmd.IndexOf( "doc" ) == -1 );

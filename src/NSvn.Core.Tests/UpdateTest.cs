@@ -37,8 +37,7 @@ namespace NSvn.Core.Tests
         {
             string filePath = Path.Combine( this.WcPath, "Form.cs" ); 
             File.Delete( filePath );
-            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
-            Client.Update( this.WcPath, Revision.Head, true, ctx );
+            this.Client.Update( this.WcPath, Revision.Head, true );
 
             Assertion.Assert( "File not restored after update", File.Exists( filePath ) );
         }
@@ -54,8 +53,7 @@ namespace NSvn.Core.Tests
                 w.Write( "Moo" );
             this.RunCommand( "svn", "ci -m \"\" " + this.wc2 );
 
-            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
-            Client.Update( this.WcPath, Revision.Head, true, ctx );
+            this.Client.Update( this.WcPath, Revision.Head, true );
 
             string s;
             using( StreamReader r = new StreamReader( Path.Combine( this.WcPath, "Form.cs" ) ) )

@@ -1,11 +1,12 @@
 // $Id$
 using System;
 using EnvDTE;
-using NSvn;
+
 using Ankh.UI;
 using System.Collections;
 using System.Diagnostics;
 using Ankh.Solution;
+using NSvn.Core;
 
 namespace Ankh.Commands
 {
@@ -24,11 +25,10 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             // all items must be versioned if we are going to run update.
-            VersionedVisitor v = new VersionedVisitor();
-            context.SolutionExplorer.VisitSelectedItems( v, false );
-            
-            if ( v.IsVersioned )
-                return vsCommandStatus.vsCommandStatusEnabled |
+            IList resources = context.SolutionExplorer.GetSelectionResources( true,
+                new ResourceFilterCallback(CommandBase.VersionedFilter) );
+            if ( resources.Count > 0 )
+                return vsCommandStatus.vsCommandStatusEnabled | 
                     vsCommandStatus.vsCommandStatusSupported;
             else
                 return vsCommandStatus.vsCommandStatusSupported;
@@ -43,10 +43,11 @@ namespace Ankh.Commands
 
                 context.StartOperation( "Updating" );
                 // we assume by now that all items are working copy resources.
-                UpdateVisitor v = new UpdateVisitor();
-                context.SolutionExplorer.VisitSelectedNodes( v );
-                v.Update();
-                context.SolutionExplorer.UpdateSelectionStatus();
+
+                // run this on another thread
+                UpdateRunner visitor = new UpdateRunner( context);
+                context.SolutionExplorer.VisitSelectedNodes( visitor );
+                visitor.Start( "Updating" );
             }
             finally
             {
@@ -56,55 +57,63 @@ namespace Ankh.Commands
         #endregion
 
         #region UpdateVisitor
-        private class UpdateVisitor : LocalResourceVisitorBase, INodeVisitor
+        private class UpdateRunner : ProgressRunner, INodeVisitor
         {
-            public void Update()
-            {
-                foreach( WorkingCopyResource resource in this.resources )
-                {
-                    Debug.WriteLine( "Updating " + resource.Path, "Ankh" );
-                    resource.Update();
-                }
-            }
+            public UpdateRunner( AnkhContext context ) : base(context)
+            {}
 
-            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
+            protected override void DoRun()
             {
-                this.resources.Add( resource );
+                foreach( SvnItem item in this.resources )
+                {
+                    Debug.WriteLine( "Updating " + item.Path, "Ankh" );
+                    this.Context.Client.Update( item.Path, Revision.Head, true );                    
+                }
+
+                this.Context.SolutionExplorer.RefreshSelection();
             }
 
             public void VisitProject(Ankh.Solution.ProjectNode node)
             {
                 // some project types dont necessarily have a project folder
-                if ( node.ProjectFolder != SvnResource.Unversionable )
-                    this.resources.Add( node.ProjectFolder );
-                else
-                    node.VisitResources( this, true );
+                SvnItem folder = 
+                    this.Context.SolutionExplorer.StatusCache[node.Directory];
+                if ( folder != SvnItem.Unversionable )
+                    this.resources.Add( folder );
             }           
 
             public void VisitProjectItem(Ankh.Solution.ProjectItemNode node)
             {
-                node.VisitResources( this, false );
+                node.GetResources( this.resources, false, 
+                    new ResourceFilterCallback(CommandBase.VersionedFilter) );
             } 
 
             public void VisitSolutionNode(Ankh.Solution.SolutionNode node)
             {
                 string solutionPath = ";"; // illegal in a path
-                if ( node.SolutionFolder != SvnResource.Unversionable )
+                SvnItem folder = 
+                    this.Context.SolutionExplorer.StatusCache[node.Directory];
+                if ( folder != SvnItem.Unversionable )
                 {
-                    node.SolutionFolder.Accept( this );
-                    solutionPath = node.SolutionFolder.Path.ToLower();
+                    this.resources.Add( folder );
+                    solutionPath = folder.Path;
                 }
 
                 // update all projects whose folder is not under the solution root
                 foreach( TreeNode n in node.Children )
                 {
                     ProjectNode pNode = n as ProjectNode;
-                    if ( pNode != null && ( 
-                        pNode.ProjectFolder == SvnResource.Unversionable ||
-                        pNode.ProjectFolder.Path.ToLower().IndexOf( 
-                        solutionPath ) != 0 ) )
+
+                    if ( pNode != null )
                     {
-                        pNode.Accept( this );
+                        SvnItem folder2 = 
+                            this.Context.SolutionExplorer.StatusCache[pNode.Directory];
+                        if ( folder2 == SvnItem.Unversionable ||
+                            folder2.Path.IndexOf( 
+                            solutionPath ) != 0 )
+                        {
+                            pNode.Accept( this );
+                        }
                     }
                 }
             }
