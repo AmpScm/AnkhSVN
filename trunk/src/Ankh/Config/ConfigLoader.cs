@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using System.Xml.Schema;
 using System.Reflection;
 using System.Collections;
+using Ankh.RepositoryExplorer;
 
 namespace Ankh.Config
 {
@@ -95,7 +96,51 @@ namespace Ankh.Config
             }
         }
 
-        
+        /// <summary>
+        /// Load the repos explorer roots from a file in the config dir.
+        /// </summary>
+        /// <returns></returns>
+        public string[] LoadReposExplorerRoots()
+        {
+            string reposRootPath = Path.Combine( this.configDir, REPOSROOTS );
+
+            if ( !File.Exists(reposRootPath) )
+                return new string[]{};
+
+            XmlTextReader reader = new XmlTextReader( reposRootPath );
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer( typeof(string[]) );
+                return (string[])serializer.Deserialize( reader );
+            }
+            finally
+            {
+                reader.Close();
+            }
+
+        }
+
+        /// <summary>
+        /// Store the repository explorer roots in a file in the config dir.
+        /// </summary>
+        /// <param name="roots"></param>
+        public void SaveReposExplorerRoots( string[] roots  )
+        {
+            string reposRootPath = Path.Combine( this.configDir, REPOSROOTS );
+            try
+            {
+                using( StreamWriter writer = new StreamWriter( reposRootPath ) )
+                {
+                    XmlSerializer serializer = new XmlSerializer( typeof(string[]) );
+                    serializer.Serialize( writer, roots );
+                }
+            }
+            catch( Exception )
+            {
+                File.Delete( reposRootPath );
+                throw;
+            }
+        }
 
         /// <summary>
         /// Returns the errors from the last attempt to load a configuration file.
@@ -146,6 +191,7 @@ namespace Ankh.Config
 
         private string configDir;
 
+        private const string REPOSROOTS="reposroots.xml";
         private const string CONFIGFILENAME = "ankhsvn.xml";
         private const string CONFIGDIRNAME = "AnkhSVN";
         private System.Collections.ArrayList errors;
