@@ -51,7 +51,7 @@
         <property name="setupfiles.fullpath" value="${path::combine(path::combine(src.fullpath,'WiX'),'SetupFiles')}" />
         
         <exec workingdir="${installsource.dir}" program="${wix-binary.dir}\candle.exe"
-            commandline="-nologo -w0 -dsetupfiles=${setupfiles.fullpath} -dinstalldir=${installsource.fullpath} ..\WiX\Ankh.msi.wxs -out Ankh.msi.wixobj" />
+            commandline="-nologo -w0 -dankhversion=${ankh.version} -dsetupfiles=${setupfiles.fullpath} -dinstalldir=${installsource.fullpath} ..\WiX\Ankh.msi.wxs -out Ankh.msi.wixobj" />
         <echo message="building UI" />
         <exec workingdir="${installsource.dir}" program="${wix-binary.dir}\candle.exe"
             commandline="-nologo -w0 -dsetupfiles=${setupfiles.fullpath} ..\WiX\Ankh-UI.wxs -out Ankh-UI.wixobj" />
@@ -61,7 +61,7 @@
             commandline="-nologo -w0 Ankh-UI.wixobj Ankh.msi.wixobj apr-iconv.wixobj Ankh.wixobj Ankh.UI.wixobj ReposInstaller.wixobj Utils.wixobj lib.wixobj -out Ankh.msi" />
     </target>
     
-    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm, build-apr-iconv.wxs">
+    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm, build-apr-iconv.wxs, version">
         <nant buildfile="Ankh.UI\Ankh.UI.build" target="build-WiX" inheritall="true"/>
         <nant buildfile="Ankh\Ankh.build" target="build-WiX" inheritall="true" />
         <nant buildfile="lib\lib.build" target="build-WiX" inheritall="true" />
@@ -267,6 +267,28 @@
     <target name="deploy-daily" depends="deploy" description="Run all tests, create MSI and then deploy it to a given directory">
         <tstamp property="msi.tstamp" pattern="dd.MM.yyyy.HH.mm" verbose="${verbose}"/>
         <copy tofile="${deploy.dir}\AnkhSVN${vsnet.ver}.${msi.tstamp}.msi" file="${installsource.dir}\AnkhSVN${vsnet.ver}.msi"/>
+    </target>
+    
+    <target name="version" depends="build" description="Determine the current version of Ankh by getting the versionnumber of ankh.dll">    
+        <script language="C#">
+            <imports>
+               <import name="System.Reflection" />
+            </imports>
+            
+            <code><![CDATA[
+            public static void ScriptMain( Project project )
+            {
+               string buildDir = Path.GetFullPath(project.Properties[ "build.dir" ]);
+               string ankhPath = Path.Combine(buildDir, "Ankh.dll");
+
+               //retrieve the Ankh.dll version, for use in installer
+               string ankhversion = Assembly.LoadFile(ankhPath).GetName().Version.ToString();
+               
+               project.Log(Level.Info, "Detected Ankh.dll version: {0}", ankhversion);
+               project.Properties.Add("ankh.version", ankhversion);
+            }]]></code>   
+        </script>
+    
     </target>
     
     <target name="msi" depends="build" description="Build the MSI installer">
