@@ -58,4 +58,4 @@ using System;
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
 
-[assembly: CLSCompliant(true)]
+//[assembly: CLSCompliant(true)]
