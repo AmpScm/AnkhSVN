@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using System.Collections;
-using NSvn;
+
 using NSvn.Core;
 using EnvDTE;
 using System.Diagnostics;
@@ -21,64 +21,49 @@ namespace Ankh.Solution
             this.projectItem = (ProjectItem)item.Object;
             this.FindResources();
 
-            this.UpdateStatus( false, false );
-                        
-        }
-
-        public IList Resources
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.resources; }
+            this.FindChildren();                        
         }
 
         /// <summary>
-        /// Accept an INodeVisitor.
+        /// The status of this node, not including children.
         /// </summary>
-        /// <param name="visitor"></param>
-        public override void Accept( INodeVisitor visitor )
-        {
-            visitor.VisitProjectItem( this );
-        }
-
-        public override void Refresh()
-        {
-            this.FindResources();
-            base.Refresh();
-        }
-
-        /// <summary>
-        /// The project item associated with this node.
-        /// </summary>
-        public ProjectItem ProjectItem
-        {
-            get{ return this.projectItem; }
-        }
- 
-
-        protected override StatusKind GetStatus()
+        /// <returns></returns>
+        protected override StatusKind NodeStatus()
         {
             // any resources at all?
             if ( this.resources.Count == 0 )
                 return StatusKind.None;
 
             // go through the resources belonging to this node
-            foreach( ILocalResource resource in this.resources )
+            foreach( SvnItem item in this.resources )
             {
-                StatusKind status = StatusFromResource( resource );
+                StatusKind status = GenerateStatus(item.Status);
                 if ( status != StatusKind.Normal )
                     return status;
             }                   
             return StatusKind.Normal;            
         }
 
-        public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
+        /// <summary>
+        /// The folder path if this is a folder item, or the directory
+        /// in which the file resides if it is a file.
+        /// </summary>
+        protected override string Directory
         {
-            if ( recursive )
-                this.VisitChildResources( visitor );
+            get
+            {
+                // is one of the resources a directory?
+                foreach( SvnItem item in this.resources )
+                {
+                    if ( System.IO.Directory.Exists( item.Path ) )
+                        return item.Path;
+                }
 
-            foreach( ILocalResource resource in this.resources )
-                resource.Accept( visitor );
+                // just return the dir component of the first item
+                return Path.GetDirectoryName( ((SvnItem)this.resources[0]).Path );
+            }
         }
+
 
         protected void FindResources()
         {
@@ -87,13 +72,11 @@ namespace Ankh.Solution
             {
                 for( short i = 1; i <= this.projectItem.FileCount; i++ ) 
                 {
-                    string filename = this.projectItem.get_FileNames(i);
-                    if ( File.Exists( filename ) || Directory.Exists( filename ) )
+                    string path = this.projectItem.get_FileNames(i);
+                    if ( File.Exists( path ) || System.IO.Directory.Exists( path ) )
                     {
-                        ILocalResource res = SvnResource.FromLocalPath( filename);
-                        // does this resource exist?
-                        res.Context = this.Explorer.Context;
-                        this.resources.Add( res );
+                        SvnItem item = this.Explorer.StatusCache[path];
+                        this.resources.Add( item );
                     }                    
                 }
                 this.Explorer.AddResource( this.projectItem, this );                    

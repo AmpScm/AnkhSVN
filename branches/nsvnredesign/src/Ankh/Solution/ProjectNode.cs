@@ -1,6 +1,6 @@
 // $Id$
 using System;
-using NSvn;
+
 using NSvn.Core;
 using EnvDTE;
 using System.IO;
@@ -17,18 +17,8 @@ namespace Ankh.Solution
 
             this.FindProjectResources(explorer);
 
-            this.projectFile.Context = explorer.Context;
-            this.projectFolder.Context = explorer.Context;
-
-            this.UpdateStatus( false, false );
+            this.FindChildren();
         }
-
-        public override void Refresh()
-        {
-            this.FindProjectResources( this.Explorer );
-            base.Refresh();
-        }
-
 
         private void FindProjectResources(Explorer explorer)
         {
@@ -38,60 +28,37 @@ namespace Ankh.Solution
             if ( fullname != string.Empty && File.Exists( fullname ) )
             {
                 string parentPath = Path.GetDirectoryName( fullname );
-                this.projectFolder = SvnResource.FromLocalPath( parentPath );
-                this.projectFile = SvnResource.FromLocalPath( fullname );
+                this.projectFolder = this.Explorer.StatusCache[ parentPath ];
+                this.projectFile = this.Explorer.StatusCache[ fullname ];
 
                 this.Explorer.AddResource( project, this );                    
             }
             else
             {
-                this.projectFile = SvnResource.Unversionable;
-                this.projectFolder = SvnResource.Unversionable;
+                this.projectFile = SvnItem.Unversionable;
+                this.projectFolder = SvnItem.Unversionable;
             }
         }
 
         /// <summary>
-        /// The folder this project is contained in.
+        /// The directory this project resides in.
         /// </summary>
-        public ILocalResource ProjectFolder
+        protected override string Directory
         {
-            get{ return this.projectFolder; }
+            [System.Diagnostics.DebuggerStepThrough()]
+            get { return this.projectFolder.Path; }
         }
+
 
         /// <summary>
-        /// The project file itself.
+        /// The status of this node, not including children.
         /// </summary>
-        public ILocalResource ProjectFile
-        {
-            get{ return this.projectFile; }
-        }
-
-        /// <summary>
-        /// Accept an INodeVisitor.
-        /// </summary>
-        /// <param name="visitor"></param>
-        public override void Accept( INodeVisitor visitor )
-        {
-            visitor.VisitProject( this );
-        }
-
-        
-
-        public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
+        /// <returns></returns>
+        protected override StatusKind NodeStatus()
         {            
-            if ( recursive )
-                this.VisitChildResources( visitor );
-
-            this.projectFolder.Accept( visitor );
-            this.projectFile.Accept( visitor );
-        } 
-            
-        protected override StatusKind GetStatus()
-        {
-            
             // check status on the project folder
-            StatusKind folderStatus = StatusFromResource( this.projectFolder );
-            StatusKind fileStatus = StatusFromResource( this.projectFile );
+            StatusKind folderStatus = this.GenerateStatus(this.projectFolder.Status);
+            StatusKind fileStatus = this.GenerateStatus(this.projectFile.Status);
             if ( fileStatus != StatusKind.Normal )
                 return fileStatus;
             else if (  folderStatus != StatusKind.Normal )
@@ -100,8 +67,8 @@ namespace Ankh.Solution
                 return StatusKind.Normal;
         }                    
 
-        private ILocalResource projectFolder;
-        private ILocalResource projectFile;
+        private SvnItem projectFolder;
+        private SvnItem projectFile;
         private Project project;
     }  
 

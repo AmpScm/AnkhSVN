@@ -101,7 +101,7 @@ namespace Ankh.UI
 
         private string LineForPath( string path )
         {
-            string rootedPath = NSvn.SvnUtils.GetWorkingCopyRootedPath(
+            string rootedPath = NSvn.Common.SvnUtils.GetWorkingCopyRootedPath(
                 path );
             string linePattern = LINETEMPLATE.Match( this.template ).Groups[ 
                 "linepattern" ].Value.Trim();

@@ -1,6 +1,6 @@
 // $Id$
 using System;
-using NSvn;
+
 using NSvn.Common;
 using NSvn.Core;
 using Ankh.UI;
@@ -16,7 +16,7 @@ namespace Ankh
     /// <summary>
     /// Summary description for SvnContext.
     /// </summary>
-    internal class SvnContext : NSvnContext
+    internal class SvnContext : Client
     {
         public SvnContext( AnkhContext ankhContext, string configDir ) :  base( configDir )
         {
@@ -34,19 +34,19 @@ namespace Ankh
         /// </summary>
         /// <param name="commitItems"></param>
         /// <returns></returns>
-        
-        public WorkingCopyResource[] ShowLogMessageDialog( WorkingCopyResource[] commitItems )
+        internal SvnItem[] ShowLogMessageDialog(SvnItem[] items)
         {
-
             string templateText = this.GetTemplate();
             LogMessageTemplate template = new LogMessageTemplate( templateText );
 
             using( CommitDialog dialog = new CommitDialog() )
             {
-                foreach( WorkingCopyResource item in commitItems )
+                foreach( SvnItem item in items )
                 {
                     CommitAction action = CommitAction.None;
-                    switch( item.Status.TextStatus )
+                    Status status = 
+                        this.ankhContext.SolutionExplorer.StatusCache[item.Path].Status;
+                    switch( status.TextStatus )
                     {
                         case StatusKind.Added:
                             action = CommitAction.Added;
@@ -81,8 +81,8 @@ namespace Ankh
                 if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
                 {
                     this.logMessage = dialog.LogMessage;
-                    return (WorkingCopyResource[])dialog.GetSelectedTags( 
-                        typeof(WorkingCopyResource) );
+                    return (SvnItem[])dialog.GetSelectedTags( 
+                        typeof(SvnItem) );
                 }
                 else
                 {
@@ -100,13 +100,13 @@ namespace Ankh
             this.logMessage = null;
         }
         
-        protected override string LogMessageCallback(NSvn.Core.CommitItem[] commitItems)
+        protected override void OnLogMessage(LogMessageEventArgs args)
         {
-            return this.logMessage;
+            args.Message = this.logMessage;
         }
 
-        protected override void NotifyCallback(NSvn.Core.Notification notification)
-        {
+        protected override void OnNotification(NotificationEventArgs notification)
+        {            
             if ( actionStatus[notification.Action] != null)
             {
                 string nodeKind = "";
@@ -133,6 +133,15 @@ namespace Ankh
             // ensure the output pane gets updated 
             Application.DoEvents();
         }
+
+        protected override void OnCancel(CancelEventArgs args)
+        {
+            System.Diagnostics.Debug.WriteLine( "Cancel called" );
+            Application.DoEvents();
+
+            args.Cancel = false;
+        }
+
         
         private string GetTemplate()
         {
@@ -142,12 +151,12 @@ namespace Ankh
 
         private void DiffWanted( object sender, EventArgs args )
         {  
-            DiffVisitor visitor = new DiffVisitor();
+//            DiffVisitor visitor = new DiffVisitor();
 
-            this.ankhContext.SolutionExplorer.VisitSelectedItems( visitor, true );
+            //this.ankhContext.SolutionExplorer.VisitSelectedItems( visitor, true );
 
             CommitDialog dialog = (CommitDialog)sender;
-            dialog.Diff = visitor.Diff;    
+            dialog.Diff = "";// visitor.Diff;    
         }
 
         /// <summary>
@@ -255,39 +264,27 @@ namespace Ankh
             }
         }     
    
-
-        private CancelOperation CancelCallback()
-        {
-            System.Diagnostics.Debug.WriteLine( "Cancel called" );
-            Application.DoEvents();
-
-            return CancelOperation.DontCancel;
-        }
-
         private void Init(AnkhContext ankhContext)
         {
             this.ankhContext = ankhContext;
-            this.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
-            this.AddAuthenticationProvider( AuthenticationProvider.GetSimpleProvider() );           
-            this.AddAuthenticationProvider( AuthenticationProvider.GetSimplePromptProvider(
+            this.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
+            this.AuthBaton.Add( AuthenticationProvider.GetSimpleProvider() );           
+            this.AuthBaton.Add( AuthenticationProvider.GetSimplePromptProvider(
                 new SimplePromptDelegate( this.PasswordPrompt ), 3 ) );
-            this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustFileProvider() );
-            this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustPromptProvider(
+            this.AuthBaton.Add( AuthenticationProvider.GetSslServerTrustFileProvider() );
+            this.AuthBaton.Add( AuthenticationProvider.GetSslServerTrustPromptProvider(
                 new SslServerTrustPromptDelegate( this.SslServerTrustPrompt ) ) );
-            this.AddAuthenticationProvider( 
+            this.AuthBaton.Add( 
                 AuthenticationProvider.GetSslClientCertPasswordFileProvider() );
-            this.AddAuthenticationProvider( 
+            this.AuthBaton.Add( 
                 AuthenticationProvider.GetSslClientCertPasswordPromptProvider(
                 new SslClientCertPasswordPromptDelegate( 
                 this.ClientCertificatePasswordPrompt ), 3 ) );
-            this.AddAuthenticationProvider( 
+            this.AuthBaton.Add( 
                 AuthenticationProvider.GetSslClientCertFileProvider() );
-            this.AddAuthenticationProvider( 
+            this.AuthBaton.Add( 
                 AuthenticationProvider.GetSslClientCertPromptProvider( 
                 new SslClientCertPromptDelegate( this.ClientCertificatePrompt ), 3 ) );
-
-            this.ClientContext.CancelCallback = new CancelCallback( this.CancelCallback );
-
         }
 
         /// <summary>

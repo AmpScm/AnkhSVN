@@ -2,7 +2,7 @@
 using System;
 using EnvDTE;
 using Utils;
-using NSvn;
+
 using NSvn.Core;
 using NSvn.Common;
 using Utils.Win32;
@@ -23,10 +23,10 @@ namespace Ankh.Solution
     /// </summary>
     internal class Explorer
     {
-        public Explorer( _DTE dte, SvnContext context )
+        public Explorer( _DTE dte, Client client )
         {
             this.dte = dte;
-            this.context = context;
+            this.client = client;
             this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
                 new ItemComparer() );
             this.projects = new Hashtable( new ProjectHashCodeProvider(), 
@@ -61,54 +61,6 @@ namespace Ankh.Solution
         
 
         /// <summary>
-        /// Visits all the selected items.
-        /// </summary>
-        /// <param name="visitor"></param>
-        public void VisitSelectedItems( ILocalResourceVisitor visitor, bool recursive )
-        {
-            //foreach( SelectedItem item in items )
-            object o = this.uiHierarchy.SelectedItems;
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
-            {
-                TreeNode node = this.GetNode( item );
-                if ( node != null )
-                    node.VisitResources( visitor, recursive );
-            }
-        }
-
-        /// <summary>
-        /// Visits all the selected nodes.
-        /// </summary>
-        /// <param name="visitor"></param>
-        public void VisitSelectedNodes( INodeVisitor visitor )
-        {
-            //foreach( SelectedItem item in items )
-            object o = this.uiHierarchy.SelectedItems;
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
-            {
-                TreeNode node = this.GetNode( item );
-                if ( node != null )
-                    node.Accept( visitor );
-            }
-        }
-
-        public void VisitResources( ProjectItem item, ILocalResourceVisitor visitor,
-            bool recursive )
-        {
-            TreeNode node = this.GetNode( item );
-            if ( node != null )
-                node.VisitResources( visitor, recursive );
-        }
-
-        public void VisitResources( Project project, ILocalResourceVisitor visitor, 
-            bool recursive )
-        {
-            TreeNode node = this.GetNode( project );
-            if ( node != null )
-                node.VisitResources( visitor, recursive );
-        }
-
-        /// <summary>
         /// Updates the status of selected items.
         /// </summary>
         public void UpdateSelectionStatus()
@@ -117,7 +69,7 @@ namespace Ankh.Solution
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
-                    node.UpdateStatus();
+                    node.Refresh();
             }
         }
 
@@ -177,34 +129,8 @@ namespace Ankh.Solution
         {
             TreeNode node = (TreeNode)this.projectItems[item];
             if ( node != null )
-                node.UpdateStatus();
-        }
-
-        /// <summary>
-        /// Checks if the status of an item is cached.
-        /// </summary>
-        /// <param name="path">The path to check status for</param>
-        /// <returns>A status object, or null if its not cached</returns>
-        public Status GetCachedStatus( string path )
-        {
-            Debug.WriteLine( "Checking for cached status for " + path, "Ankh" );
-            if ( this.statusCache != null ) 
-            {
-                Status status; 
-
-                if ( (status = this.statusCache[ path ]) != null )
-                {
-                    Debug.WriteLine( "Found cached status for " + path, "Ankh" );
-                    return status;
-                }
-                else
-                    return null;
-            }
-            else
-                return null;
-        }
-
- 
+                node.Refresh();
+        }       
 
         public void SyncWithTreeView()
         {
@@ -228,11 +154,6 @@ namespace Ankh.Solution
             // we assume there is a single root node
             this.root = TreeNode.CreateSolutionNode( 
                 this.solutionItem, root, this );
-
-            // we don't want to maintain the cache after initial load.
-            this.statusCache = null;
-
-            //this.Hook();
         }
 
         internal IntPtr TreeView
@@ -241,10 +162,16 @@ namespace Ankh.Solution
             get{ return this.treeview; }
         }
 
-        internal NSvnContext Context
+        internal Client Client
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.context; }
+            get{ return this.client; }
+        }
+
+        internal StatusCache StatusCache
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.statusCache; }
         }
 
         internal _DTE DTE
@@ -368,14 +295,11 @@ namespace Ankh.Solution
         {
             DebugTimer t = DebugTimer.Start();
             string solutionDir = Path.GetDirectoryName( solutionPath );
-
-            int youngest;
+           
             Debug.WriteLine( "Getting status cache", "Ankh" );
             
-            this.statusCache = new StatusCache();
-            Client.Status( out youngest, solutionDir, Revision.Unspecified, 
-                new StatusCallback(this.statusCache.StatusFunc), 
-                true, true, false, true, new ClientContext() );
+            this.statusCache = new StatusCache( this.client );
+            this.statusCache.Status( solutionDir );
 
             t.End( "Got status cache", "Ankh" );
         }
@@ -489,28 +413,6 @@ namespace Ankh.Solution
         }
         #endregion
 
-        #region StatusCache
-        /// <summary>
-        ///  used to accumulate and persist state from status callbacks when
-        ///  generating status cache.
-        /// </summary>
-        private class StatusCache
-        {
-            public Status this[ string path ]
-            {
-                get{ return (Status)dict[path]; }
-            }
-
-            public void StatusFunc( string path, Status status )
-            {
-                dict[path] = status;
-
-            }
-
-            private IDictionary dict = new Hashtable();
-        }
-        #endregion
-
 
         private _DTE dte;
         private IntPtr treeview;
@@ -526,7 +428,7 @@ namespace Ankh.Solution
         private IDictionary projects;
         private TreeNode solutionNode;
         private Swf.ImageList statusImageList;
-        private SvnContext context;
+        private Client client;
         private StatusCache statusCache;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";

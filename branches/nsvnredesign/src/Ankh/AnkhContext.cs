@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using EnvDTE;
-using NSvn;
+
 using NSvn.Common;
 using NSvn.Core;
 using Ankh.UI;
@@ -38,7 +38,7 @@ namespace Ankh
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
 
-            this.repositoryController = new RepositoryExplorer.Controller( this );
+            //this.repositoryController = new RepositoryExplorer.Controller( this );
 
             this.solutionExplorer = new Solution.Explorer( this.dte, this.context );
 
@@ -91,11 +91,11 @@ namespace Ankh
             get{ return this.outputPane; }
         }
 
-        public RepositoryExplorer.Controller RepositoryController
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.repositoryController; }
-        }
+//        public RepositoryExplorer.Controller RepositoryController
+//        {
+//            [System.Diagnostics.DebuggerStepThrough]
+//            get{ return this.repositoryController; }
+//        }
 
 
 
@@ -242,23 +242,23 @@ namespace Ankh
 
         private void CreateRepositoryExplorer()
         {   
-            object control = null;
-            this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
-                this.addin, "AnkhUserControlHost.AnkhUserControlHostCtl", 
-                "Repository Explorer", REPOSEXPLORERGUID, ref control );
-
-            this.reposExplorerWindow.Visible = true;
-            this.reposExplorerWindow.Caption = "Repository Explorer";
-
-            this.objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
-
-            this.repositoryExplorer = new RepositoryExplorerControl();
-            this.objControl.HostUserControl( this.repositoryExplorer );
-
-            this.repositoryExplorer.Controller = this.RepositoryController;
-
-            System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
-                "Could not create tool window" );
+//            object control = null;
+//            this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
+//                this.addin, "AnkhUserControlHost.AnkhUserControlHostCtl", 
+//                "Repository Explorer", REPOSEXPLORERGUID, ref control );
+//
+//            this.reposExplorerWindow.Visible = true;
+//            this.reposExplorerWindow.Caption = "Repository Explorer";
+//
+//            this.objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
+//
+//            this.repositoryExplorer = new RepositoryExplorerControl();
+//            this.objControl.HostUserControl( this.repositoryExplorer );
+//
+//            this.repositoryExplorer.Controller = this.RepositoryController;
+//
+//            System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
+//                "Could not create tool window" );
         }
 
         #region Win32Window class
@@ -292,7 +292,7 @@ namespace Ankh
 
         private IList eventSinks;
 
-        private RepositoryExplorer.Controller repositoryController;
+        //private RepositoryExplorer.Controller repositoryController;
 
         private OutputPaneWriter outputPane;
 

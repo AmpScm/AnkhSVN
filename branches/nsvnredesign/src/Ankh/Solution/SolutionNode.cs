@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using System.IO;
-using NSvn;
+
 using EnvDTE;
 using NSvn.Core;
 
@@ -15,67 +15,47 @@ namespace Ankh.Solution
         public SolutionNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer )
             : base( item, hItem, explorer, null )
         {
-            EnvDTE.Solution solution = explorer.DTE.Solution;
-            this.solutionFile = SvnResource.FromLocalPath( solution.FullName );
-            this.solutionFile.Context = explorer.Context;
+            EnvDTE.Solution solution = this.Explorer.DTE.Solution;
+            this.solutionFile = this.Explorer.StatusCache[solution.FullName];
 
-            this.solutionFolder = SvnResource.FromLocalPath(
-                Path.GetDirectoryName( solution.FullName ) );
-            this.solutionFolder.Context = explorer.Context;
+            this.solutionFolder = this.Explorer.StatusCache[
+                Path.GetDirectoryName( solution.FullName )];
 
             explorer.SetSolution( this );
 
-            this.UpdateStatus( false, false );
-        }
-
+            this.FindChildren();
+        }       
         
-        public ILocalResource SolutionFile
+
+        /// <summary>
+        /// The path to the solution folder.
+        /// </summary>
+        protected override string Directory
         {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.solutionFile; }
+            [System.Diagnostics.DebuggerStepThrough()]
+            get{ return this.solutionFolder.Path; }
         }
 
-        public ILocalResource SolutionFolder
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.solutionFolder; }
-        }
-
-
-
-        public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
-        {
-            if ( recursive )
-                this.VisitChildResources( visitor);
-
-            this.SolutionFolder.Accept( visitor );
-            this.SolutionFile.Accept( visitor );
-        } 
 
 
         /// <summary>
-        /// Accept an INodeVisitor.
+        /// Get the status for this node, not including children.
         /// </summary>
-        /// <param name="visitor"></param>
-        public override void Accept( INodeVisitor visitor )
-        {
-            visitor.VisitSolutionNode( this );
-        }
-
-        protected override StatusKind GetStatus()
+        /// <returns></returns>
+        protected override StatusKind NodeStatus()
         {
             if ( this.solutionFile == null )
                 return StatusKind.None;               
             else
             {
-                StatusKind fileStatus = StatusFromResource( this.solutionFile );
-                StatusKind folderStatus = StatusFromResource( this.solutionFolder );
+                StatusKind fileStatus = this.GenerateStatus(this.solutionFile.Status);
+                StatusKind folderStatus = this.GenerateStatus(this.solutionFolder.Status);
                 
                 return fileStatus == StatusKind.Normal ? folderStatus : fileStatus;
             }
         }
 
-        private ILocalResource solutionFile;
-        private ILocalResource solutionFolder;
+        private SvnItem solutionFile;
+        private SvnItem solutionFolder;
     }
 }

@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using EnvDTE;
-using NSvn;
+
 using NSvn.Common;
 using NSvn.Core;
 using System.Collections;
@@ -19,6 +19,9 @@ namespace Ankh.Solution
     /// </summary>
     internal abstract class TreeNode
     {
+
+        public event StatusChanged Changed;
+
         protected TreeNode( UIHierarchyItem item, IntPtr hItem, 
             Explorer explorer, TreeNode parent )
         {     
@@ -35,9 +38,7 @@ namespace Ankh.Solution
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.explorer; }
-        }
-
-        public abstract void VisitResources( ILocalResourceVisitor visitor, bool recursive );        
+        }     
         
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
             Explorer explorer, TreeNode parent )
@@ -58,6 +59,7 @@ namespace Ankh.Solution
             if ( explorer.DTE.Solution.FullName != string.Empty )
             {
                 TreeNode node = new SolutionNode( item, hItem, explorer );
+                node.Refresh( false );
                 //node.UpdateStatus( true, false );
                 return node;
             }
@@ -65,12 +67,26 @@ namespace Ankh.Solution
                 return null;
         }
 
-        public virtual void Refresh()
+        public void Refresh()
+        {
+            this.Refresh( true );
+        }
+
+        public virtual void Refresh( bool rescan )
         {
             try
-            {
-                this.FindChildren( );
-                this.UpdateStatus();
+            {                
+                if ( rescan )
+                {
+                    this.explorer.StatusCache.Status( this.Directory );
+                    this.FindChildren( );
+                }
+
+                this.currentStatus = this.NodeStatus();
+                this.CheckChildStatuses();
+
+                this.SetStatusImage( this.currentStatus );
+
             }
             catch( SvnException )
             {
@@ -82,7 +98,12 @@ namespace Ankh.Solution
             }
         }
 
-        abstract public void Accept( INodeVisitor visitor );
+        
+
+        abstract protected string Directory
+        {
+            get;
+        }
 
 
 
@@ -106,61 +127,6 @@ namespace Ankh.Solution
             get { return this.children;  }
         }
 
-        public void UpdateStatus()
-        {
-            this.UpdateStatus( true, true );
-        }
-
-
-        /// <summary>
-        /// Updates the status icon of this node and parents.
-        /// </summary>
-        protected void UpdateStatus( bool recursive, bool propagate )
-        {      
-            // update status on the children first           
-            if ( recursive )
-            {
-                this.propagatedStatus = StatusKind.None;
-                foreach( TreeNode node in this.Children )
-                    node.UpdateStatus( true, false );
-            }
-
-            // text or property changes on the project file itself?
-            try
-            {
-                // should be set either by the recursion above or by an explicit propagation
-                if ( this.propagatedStatus != StatusKind.None )
-                    this.currentStatus = this.propagatedStatus;
-                else
-                    this.currentStatus = this.GetStatus();
-            }
-            catch( StatusException stex )
-            {
-                Debug.WriteLine( stex.Message );
-                this.currentStatus = StatusKind.Deleted;
-            }
-
-            this.SetStatusImage( this.currentStatus );
-
-            // propagate to the parent nodes.
-            if ( this.currentStatus != StatusKind.Normal && this.Parent != null )
-                this.Parent.PropagateStatus( this.currentStatus );
-            if ( propagate && this.parent != null )
-                this.parent.UpdateStatus( false, true );
-
-            this.propagatedStatus = StatusKind.None;
-        }
-
-        /// <summary>
-        /// Visits the children of this node.
-        /// </summary>
-        /// <param name="visitor"></param>
-        public void VisitChildResources( ILocalResourceVisitor visitor )
-        {
-            foreach( TreeNode node in this.Children )
-                node.VisitResources( visitor, true );
-        }
-
         /// <summary>
         /// The parent node of this node.
         /// </summary>
@@ -170,29 +136,33 @@ namespace Ankh.Solution
             get{ return this.parent; }
         }
 
+        public StatusKind CurrentStatus
+        {
+            get{ return this.currentStatus; }
+        }
+
+
         /// <summary>
         /// Gets the status of the resources belonging to one specific node, 
         /// not including children.
         /// </summary>
         /// <returns></returns>
-        protected virtual StatusKind GetStatus()
+        protected virtual StatusKind NodeStatus()
         {
             return StatusKind.None;
         }
 
-        /// <summary>
-        /// Intended to be called from child nodes if their status has changed.
-        /// </summary>
-        /// <param name="status"></param>
-        protected virtual void PropagateStatus( StatusKind status )
+        protected virtual void OnChanged()
         {
-            if ( status == StatusKind.Added || status == StatusKind.Modified )
-                this.propagatedStatus = StatusKind.Modified;
-            else if ( status == StatusKind.None )
-                this.propagatedStatus = StatusKind.Normal;
-            else
-                this.propagatedStatus = status;
+            if ( this.Changed != null )
+                this.Changed( this, EventArgs.Empty );
         }
+
+        protected virtual void ChildChanged( object sender, EventArgs args )
+        {
+            this.CheckChildStatuses();
+        }
+
 
         /// <summary>
         /// Sets the status image on this node.
@@ -224,15 +194,8 @@ namespace Ankh.Solution
         /// </summary>
         /// <param name="resource"></param>
         /// <returns></returns>
-        protected StatusKind StatusFromResource( ILocalResource resource )
-        {
-            
-            Status status;
-
-            // is it cached?
-            if ( (status = this.Explorer.GetCachedStatus( resource.Path ) ) == null )
-                status = resource.Status;
-
+        protected StatusKind GenerateStatus(Status status)
+        {  
             if ( status.TextStatus != StatusKind.Normal )
                 return status.TextStatus;
             else if ( status.PropertyStatus != StatusKind.Normal &&
@@ -276,7 +239,11 @@ namespace Ankh.Solution
                         TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
                             this );
                         if (childNode != null )
+                        {
+                            childNode.Changed += new StatusChanged(this.ChildChanged);                            
                             this.children.Add( childNode );
+                            childNode.Refresh( false );
+                        }
                     }
 
                     // and the next child
@@ -292,6 +259,21 @@ namespace Ankh.Solution
                 throw new SvnException( "Invalid UIHierarchyItem", ex );
             }
         }
+
+        private void CheckChildStatuses()
+        {
+            StatusKind newStatus = this.currentStatus;
+            foreach( TreeNode node in this.children )
+            {
+                newStatus = node.CurrentStatus;
+                if ( newStatus != this.CurrentStatus )
+                {
+                    this.currentStatus = newStatus;
+                    this.OnChanged();
+                    break;
+                }
+            }
+        }
         
         private UIHierarchyItem uiItem;
         private TreeNode parent;
@@ -299,7 +281,6 @@ namespace Ankh.Solution
         private IList children;
         private Explorer explorer;
         private StatusKind currentStatus;
-        private StatusKind propagatedStatus = StatusKind.None;
         private static IDictionary statusMap = new Hashtable();
     }
 }

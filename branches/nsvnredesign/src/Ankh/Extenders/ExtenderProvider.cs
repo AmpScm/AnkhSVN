@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using EnvDTE;
 using System.Reflection;
 using System.Collections;
-using NSvn;
+
 
 namespace Ankh.Extenders
 {
@@ -23,55 +23,57 @@ namespace Ankh.Extenders
 
         public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, IExtenderSite ExtenderSite, int Cookie)
         {
-            try
-            {
-                // get the selected items
-                ResourceGathererVisitor v = new ResourceGathererVisitor();
-                this.context.SolutionExplorer.VisitSelectedItems( v, false );
-
-               
-                // have the extender know about the selected item.
-                if ( v.WorkingCopyResources.Count > 0 )
-                {
-                    WorkingCopyResource resource = (WorkingCopyResource)v.WorkingCopyResources[0];
-                    ResourceExtender extender = (ResourceExtender)this.extenders[ resource.Path ];
-                    if ( extender == null )
-                    {
-                        extender = new ResourceExtender();
-                        this.extenders[resource.Path] = extender;
-                    }
-                    extender.Status = resource.Status;
- 
-                    return extender;
-                }
-                else
-                    return null;
-            }
-            catch( StatusException )
-            {
-                return null;
-            }
-            catch( Exception ex )
-            {
-                Error.Handle( ex );
-                throw;
-            }
+            return null;
+//            try
+//            {
+//                // get the selected items
+//                ResourceGathererVisitor v = new ResourceGathererVisitor();
+//                this.context.SolutionExplorer.VisitSelectedItems( v, false );
+//
+//               
+//                // have the extender know about the selected item.
+//                if ( v.WorkingCopyResources.Count > 0 )
+//                {
+//                    WorkingCopyResource resource = (WorkingCopyResource)v.WorkingCopyResources[0];
+//                    ResourceExtender extender = (ResourceExtender)this.extenders[ resource.Path ];
+//                    if ( extender == null )
+//                    {
+//                        extender = new ResourceExtender();
+//                        this.extenders[resource.Path] = extender;
+//                    }
+//                    extender.Status = resource.Status;
+// 
+//                    return extender;
+//                }
+//                else
+//                    return null;
+//            }
+//            catch( StatusException )
+//            {
+//                return null;
+//            }
+//            catch( Exception ex )
+//            {
+//                Error.Handle( ex );
+//                throw;
+//            }
         }
 
         public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
         {
-            try
-            {
-                // ensure all selected items are versioned
-                VersionedVisitor v = new VersionedVisitor();
-                this.context.SolutionExplorer.VisitSelectedItems( v, false );
-                return v.IsVersioned;
-            }
-            catch( Exception ex )
-            {
-                Error.Handle( ex );
-                throw;
-            }
+            return false;
+//            try
+//            {
+//                // ensure all selected items are versioned
+//                VersionedVisitor v = new VersionedVisitor();
+//                this.context.SolutionExplorer.VisitSelectedItems( v, false );
+//                return v.IsVersioned;
+//            }
+//            catch( Exception ex )
+//            {
+//                Error.Handle( ex );
+//                throw;
+//            }
         }
 
         #endregion
