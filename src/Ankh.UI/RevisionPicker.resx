@@ -97,9 +97,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="$this.Name">
-    <value>RepositoryExplorerControl</value>
-  </data>
-  <data name="$this.Name1">
-    <value>RepositoryExplorerControl</value>
+    <value>RevisionPicker</value>
   </data>
 </root>
