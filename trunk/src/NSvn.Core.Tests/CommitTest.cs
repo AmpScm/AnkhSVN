@@ -59,7 +59,7 @@ namespace NSvn.Core.Tests
             Assertion.Assert( "Wrong path", items[0].Path.IndexOf( 
                 this.filepath.Replace( "\\", "/" ) ) >= 0 );
             Assertion.AssertEquals( "Wrong kind", NodeKind.File, items[0].Kind );
-            Assertion.AssertEquals( "Wrong revision", 1, items[0].Revision );
+            Assertion.AssertEquals( "Wrong revision", 5, items[0].Revision );
 
             return "Moo is the log message";
         }
