@@ -22,7 +22,6 @@
     <File Url="xml\Basic-operations\move.xml"/>
     <File Url="xml\Basic-operations\remove.xml"/>
     <File Url="xml\Basic-operations\status.xml"/>
-    <File Url="xml\configuration\configuration.xml"/>
     <File Url="xml\basic-operations\basic_operations.xml"/>
     <File Url="xml\introduction\introduction.xml"/>
     <File Url="xml\using-ankh\using_ankh.xml"/>
@@ -80,4 +79,5 @@
     <File Url="img\disable_ankh.png"/>
     <File Url="img\add_remove_programs.png"/>
     <File Url="img\ws_right_click_menu.png"/>
+    <File Url="img\diff_file.png"/>
     </HelpFileList>

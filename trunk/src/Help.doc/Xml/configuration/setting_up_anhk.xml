@@ -15,14 +15,14 @@
           
             <b>How to install:</b>
             <list>
-                <item>1. Double click the installer to start the installation progress.</item>
-                <item>2. Press the 'Next' button.</item>
-                <item>3. You must read through and accept the license agreement. Select 'I agree' and then push the 'Next' button, or 'Cancel' if you do not agree to the license agreement.</item>
-                <item>4. Choose the destination folder where the Ankh addin will be installed.<br /></item>
-                <item>5. Select 'Next' to start the installation, or 'Cancel' to exit.</item>
-                <item>6. The installer includes a test repository and a working copy. Press 'Yes' if you want to install them.</item>
+                <item>1. Start the installer.</item>
+                <item>2. Click the 'Next' button.</item>
+                <item>3. Read through and accept the license agreement. Select 'I agree' and then click the 'Next' button, or 'Cancel' if you do not agree to the license agreement.</item>
+                <item>4. Choose the destination folder where you want the Ankh addin to be installed.<br /></item>
+                <item>5. Click 'Next' to start the installation, or 'Cancel' to exit.</item>
+                <item>6. Click 'Yes' if you want to install a test repository and a working copy.</item>
                 <item>7. Select the destination for the test repository and the working copy.</item>
-                <item>8. Please read through the 'README' file for known issues, installation problems</item>
+                <item>8. Please read through the 'README' file for known issues, installation problems and other issues conserning the Ankh addin.</item>
             </list>
           <br clear="ALL" />
           <b>How to disable the addin:</b>
@@ -42,7 +42,7 @@
             <br /><br />
             <b>Uninstallation with the Ankh installer:</b>
             <img src="../../img/uninstall_using_installer.png" align="left" />
-            <br clear="all"/><br/>
+            <br clear="all" /><br />
             <list>
                 <item>1. Start Ankh intaller.</item>
                 <item>2. Select the 'Remove AnkhSVN addin' button.</item>
@@ -50,9 +50,9 @@
             </list>
             <br clear="all" /><br />
             
-            <b>Uninstalling with Windows 'Add/remove program' wizard <img src="../../img/add_remove_programs.png"/>:</b>
+            <b>Uninstalling with Windows 'Add/remove program' wizard <img src="../../img/add_remove_programs.png" />:</b>
             <img src="../../img/uninstall_using_ms.png" align="left" />
-            <br clear="all"/><br/>
+            <br clear="all" /><br />
             <list>
                 <item>1. Start the 'Add/Remove programs' wizard (Found under Start -> Settings -> Control Panel </item>
                 <item>2. Locate 'AnkhSVN Addin'.</item>
