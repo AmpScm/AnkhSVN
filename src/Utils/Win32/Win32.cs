@@ -238,6 +238,9 @@ namespace Utils.Win32
         public static extern int GetLongPathName( string shortPath,
             StringBuilder longPath, int bufSize );
 
+        [DllImport("User32.dll")]
+        public static extern short GetAsyncKeyState( int vkey );
+
 
     }
 }
