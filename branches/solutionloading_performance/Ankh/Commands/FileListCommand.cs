@@ -36,7 +36,7 @@ namespace Ankh.Commands
             fd.FilterIndex = 1;
             if (fd.ShowDialog() == DialogResult.OK) 
             {
-                StreamWriter output = new StreamWriter(fd.FileName, false, System.Text.Encoding.UTF8);
+                StreamWriter output = new StreamWriter(fd.FileName, false, System.Text.Encoding.ASCII);
                 IList files = context.SolutionExplorer.GetSelectionFileNames();
 
                 foreach ( string path in files )
