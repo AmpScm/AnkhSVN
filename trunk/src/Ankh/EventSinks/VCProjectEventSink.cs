@@ -22,22 +22,20 @@ namespace Ankh.EventSinks
 
         public override void Unhook()
         {
-            this.events.ItemAdded += new _dispVCProjectEngineEvents_ItemAddedEventHandler(
+            this.events.ItemAdded -= new _dispVCProjectEngineEvents_ItemAddedEventHandler(
                 this.ItemAdded );
-            this.events.ItemRemoved += new _dispVCProjectEngineEvents_ItemRemovedEventHandler(
+            this.events.ItemRemoved -= new _dispVCProjectEngineEvents_ItemRemovedEventHandler(
                 this.ItemRemoved );
         }
 
         protected void ItemAdded( object item, object parent )
         {
-            VCFile file = item as VCFile;
-            string s = file.ToString();
-            //this.Context.SolutionExplorer.SyncWithTreeView();
+            this.Context.SolutionExplorer.RefreshSelectionParents();
         }
 
         protected void ItemRemoved( object item, object parent )
         {
-            
+            this.Context.SolutionExplorer.RefreshSelectionParents();
         }
 
         private VCProjectEngineEvents events;
