@@ -237,8 +237,12 @@ namespace Ankh
                 for( short i = 1; i <= pitem.FileCount; i++ ) 
                 {
                     ILocalResource res = SvnResource.FromLocalPath( pitem.get_FileNames(i) );
-                    res.Context = explorer.Context;
-                    this.resources.Add( res );
+                    // does this resource exist?
+                    if ( res != null )
+                    {
+                        res.Context = explorer.Context;
+                        this.resources.Add( res );
+                    }
                 }
 
                 explorer.AddResource( pitem, this );
