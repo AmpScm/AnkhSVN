@@ -50,7 +50,7 @@ namespace Ankh.Solution
             if ( explorer.DTE.Solution.FullName != string.Empty )
             {
                 TreeNode node = new SolutionNode( item, hItem, explorer );
-                node.UpdateStatus( true );
+                node.UpdateStatus( true, false );
                 return node;
             }
             else
@@ -85,17 +85,23 @@ namespace Ankh.Solution
             get { return this.children;  }
         }
 
+        public void UpdateStatus()
+        {
+            this.UpdateStatus( true, true );
+        }
+
         /// <summary>
         /// Updates the status icon of this node and parents.
         /// </summary>
-        public void UpdateStatus( bool recursive )
+        protected void UpdateStatus( bool recursive, bool propagate )
         {      
 
+            Trace.WriteLine( "Updating status on " + this.uiItem.Name, "Ankh" );
             // update status on the children first
             if ( recursive )
             {
                 foreach( TreeNode node in this.Children )
-                    node.UpdateStatus( true );
+                    node.UpdateStatus( true, false );
             }
 
             // text or property changes on the project file itself?
@@ -103,7 +109,7 @@ namespace Ankh.Solution
             this.SetStatusImage( this.currentStatus );
 
             // propagate to the parent nodes.
-            if ( this.Parent != null )
+            if ( propagate && this.Parent != null )
                 this.Parent.PropagateStatus( this.currentStatus );
         }
 
@@ -143,7 +149,7 @@ namespace Ankh.Solution
         {
             // only propagate if there is a new status
             if ( status != this.currentStatus )
-                this.UpdateStatus( false );
+                this.UpdateStatus( false, true );
         }
 
         /// <summary>

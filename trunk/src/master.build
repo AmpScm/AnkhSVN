@@ -89,7 +89,8 @@
     <target name="deploy">
         <if propertytrue="debug">
             <exec program="devenv.exe" 
-                commandline="src.sln /build Debug /project AnkhSetup"/>
+                commandline="src.sln /build Debug /project AnkhSetup"
+                verbose="${verbose}"/>
             <copy todir="${deploy.dir}">
                 <fileset basedir="Ankh\AnkhSetup\Debug\">
                     <includes name="*.msi"/>
@@ -98,7 +99,8 @@
         </if>
         <if propertytrue="debug" if="false">
             <exec program="devenv.exe" 
-                commandline="src.sln /build Release /project AnkhSetup"/>
+                commandline="src.sln /build Release /project AnkhSetup"
+                verbose="${verbose}"/>
             <copy todir="${deploy.dir}">
                 <fileset basedir="Ankh\AnkhSetup\Release\">
                     <includes name="*.msi"/>

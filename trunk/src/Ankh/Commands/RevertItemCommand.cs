@@ -48,7 +48,10 @@ namespace Ankh.Commands
             {
                 public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
                 {
-                    resource.Revert( true );
+                    if ( resource.Status.TextStatus != StatusKind.Normal ||
+                        (resource.Status.PropertyStatus != StatusKind.Normal && 
+                        resource.Status.PropertyStatus != StatusKind.None ) )
+                        resource.Revert( true );
                 }
             }
     }

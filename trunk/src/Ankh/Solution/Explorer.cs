@@ -90,12 +90,11 @@ namespace Ankh.Solution
         /// </summary>
         public void UpdateSelectionStatus()
         {
-            //TODO: this can be done slightly faster, with only a single lookup
             foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
-                    node.UpdateStatus( true );
+                    node.UpdateStatus();
             }
         }
 
@@ -132,7 +131,7 @@ namespace Ankh.Solution
         /// <param name="item"></param>
         public void UpdateStatus( ProjectItem item )
         {
-            ((TreeNode)this.projectItems[item]).UpdateStatus( true );
+            ((TreeNode)this.projectItems[item]).UpdateStatus();
         }
 
  
