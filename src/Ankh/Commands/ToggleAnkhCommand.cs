@@ -71,14 +71,14 @@ namespace Ankh.Commands
             {
                 File.Delete( load );
                 File.Create( noLoad ).Close();
-                context.SolutionExplorer.Unload();
+                context.SolutionClosing();
             }
             else
             {
                 // delete doesnt throw if the file doesn't exist
                 File.Delete( noLoad );
                 File.Create( load ).Close();
-                context.SolutionExplorer.Load();
+                context.SolutionOpened();
             }
         }
 
