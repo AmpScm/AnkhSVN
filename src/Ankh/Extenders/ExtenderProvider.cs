@@ -41,7 +41,7 @@ namespace Ankh.Extenders
 
                     // make sure it's up to date
                     resource.Refresh( this.context.Client );
-                    extender.Status = resource.Status;
+                    extender.SetStatus( resource.Status );
  
                     return extender;
                 }
