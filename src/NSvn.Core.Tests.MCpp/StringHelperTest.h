@@ -1,6 +1,5 @@
 #pragma once
-#using <mscorlib.dll>
-#using <NUnit.Framework.dll>
+#include "stdafx.h"
 using namespace NUnit::Framework;
 
 namespace NSvn{

@@ -1,6 +1,5 @@
 #pragma once
-#using <mscorlib.dll>
-#using <nunit.framework.dll>
+#include "stdafx.h"
 #include "ClientContext.h"
 
 using namespace NUnit::Framework;
