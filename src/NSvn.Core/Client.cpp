@@ -570,9 +570,9 @@ void NSvn::Core::Client::Relocate( String* dir, String* from, String* to,
 {
     Pool pool;
     HandleError( svn_client_relocate( 
-        StringHelper(dir),
-        StringHelper(from),
-        StringHelper(to),
+        CanonicalizePath( dir, pool ),
+        CanonicalizePath( from, pool ),
+        CanonicalizePath( to, pool ),
         recurse,
         this->context->ToSvnContext(pool), pool ) );
 }
