@@ -43,6 +43,12 @@ namespace Ankh.Config {
         public bool DisableSolutionReload;
         
         /// <remarks/>
+        public bool AutoReuseComment;
+
+        /// <remarks/>
+        public bool ChooseDiffMergeManual;
+        
+        /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DisableSolutionReloadSpecified;
         

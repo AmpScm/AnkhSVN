@@ -60,7 +60,8 @@ namespace Ankh
                 // is there a previous log message?
                 if ( this.logMessage != null )
                 {
-                    if ( MessageBox.Show( this.ankhContext.HostWindow, 
+                    if ( ankhContext.Config.AutoReuseComment ||
+                        MessageBox.Show( this.ankhContext.HostWindow, 
                         "The previous commit did not complete." + Environment.NewLine + 
                         "Do you want to reuse the log message?", 
                         "Previous log message", MessageBoxButtons.YesNo ) ==

@@ -23,6 +23,19 @@ namespace Ankh.Commands
      VSNetControl( "Solution.Ankh", Position = 1)]
     public class ResolveConflictCommand : CommandBase
     {    
+        /// <summary>
+        /// Gets path to the diff executable while taking care of config file settings.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns>The exe path.</returns>
+        private string GetExe( Ankh.IContext context )
+        {
+            if ( !context.Config.ChooseDiffMergeManual )
+                return context.Config.MergeExePath;
+            else
+                return null;
+        }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             int count = context.SolutionExplorer.GetSelectionResources(false, 
@@ -65,7 +78,7 @@ namespace Ankh.Commands
         private void Resolve(IContext context, SvnItem item)
         {
 
-            string mergeExe = context.Config.MergeExePath;
+            string mergeExe = GetExe( context );
             Entry entry = item.Status.Entry;
             bool binary = context.Client.HasBinaryProp(item.Path);
             if ( binary || mergeExe == null )
