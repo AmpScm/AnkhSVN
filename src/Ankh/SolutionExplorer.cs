@@ -176,9 +176,12 @@ namespace Ankh
 
             static TreeNode()
             {
-                statusMap[ StatusKind.Normal ] = 1;
-                statusMap[ StatusKind.Unversioned ] = 4;
-                statusMap[ StatusKind.Modified ] = 11;
+                statusMap[ StatusKind.Added ]       = 2;
+                statusMap[ StatusKind.Deleted ]     = 3;
+                statusMap[ StatusKind.Conflicted ]  = 6;
+                statusMap[ StatusKind.Unversioned ] = 8;
+                statusMap[ StatusKind.Modified ]    = 9;
+                statusMap[ StatusKind.Normal ]      = 10;
             }
         
 
