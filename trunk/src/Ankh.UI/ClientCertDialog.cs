@@ -81,7 +81,6 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ClientCertDialog));
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -183,7 +182,6 @@ namespace Ankh.UI
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ClientCertDialog";
