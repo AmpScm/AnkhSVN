@@ -23,7 +23,10 @@ namespace Ankh
 
             //Clears the pane when opening new solutions.
             this.ankhContext = ankhContext;
-            this.AddAuthenticationProvider( new DialogProvider( ankhContext.HostWindow ) );           
+            this.AddAuthenticationProvider( Authentication.GetSimpleProvider() );           
+            this.AddAuthenticationProvider( Authentication.GetSimplePromptProvider(
+                new SimplePromptDelegate( this.PasswordPrompt ), 3 ) );
+
         }
         /// <summary>
         /// Invokes the LogMessage dialog.
@@ -110,59 +113,23 @@ namespace Ankh
             dialog.Diff = visitor.Diff;    
         }
 
-        #region DialogProvider
-        private class DialogProvider : IAuthenticationProvider
+        private SimpleCredential PasswordPrompt( String realm, String username )
         {
-            public DialogProvider( IWin32Window hostWindow )
+            using( LoginDialog dialog = new LoginDialog() )
             {
-                this.hostWindow = hostWindow;
+                if ( realm != null )
+                    dialog.Realm = realm;
+
+                if ( username != null )
+                    dialog.Username = username;
+
+                if ( dialog.ShowDialog( this.ankhContext.HostWindow ) != DialogResult.OK )
+                    return null;
+
+                return new SimpleCredential( dialog.Username, dialog.Password );
             }
-            
-
-            #region Implementation of IAuthenticationProvider
-            public NSvn.Common.ICredential NextCredentials( ICollection parameters )
-            {              
-
-                if ( loginDialog.ShowDialog( this.hostWindow ) == DialogResult.OK )
-                    return this.lastCredential = new SimpleCredential( loginDialog.Username, 
-                        loginDialog.Password );
-                else
-                    return this.lastCredential = null;
-            }
-            public NSvn.Common.ICredential FirstCredentials(  string realm, ICollection parameters )
-            {
-                if ( this.savedCredential != null )
-                    return this.savedCredential;
-
-                loginDialog.Realm = realm;
-
-                if ( loginDialog.ShowDialog( this.hostWindow ) == DialogResult.OK )
-                    return this.lastCredential = new SimpleCredential( loginDialog.Username, 
-                        loginDialog.Password );
-                else
-                    return this.lastCredential = null;
-            }
-
-            public bool SaveCredentials( ICollection parameters )
-            {
-                this.savedCredential = this.lastCredential;
-                return true;
-            }
-            public string Kind
-            {
-                get
-                {
-                    return SimpleCredential.AuthKind;
-                }
-            }
-            #endregion
-
-            private LoginDialog loginDialog = new LoginDialog();
-            private ICredential lastCredential;
-            private ICredential savedCredential;
-            private IWin32Window hostWindow;
         }
-        #endregion
+        
 
         /// <summary>
         /// Pupulates actionStatus Hashtable.
