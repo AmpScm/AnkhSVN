@@ -201,9 +201,9 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>   
             ///<returns></returns>
-	        /*static void Diff(String* diffOptions[], String* path1, Revision* revision1, 
+	        static void Diff(String* diffOptions[], String* path1, Revision* revision1, 
                 String* path2, Revision* revision2, bool recurse, bool noDiffDeleted, 
-                Stream* outfile, Stream* errFile, ClientContext* context);*/
+                Stream* outfile, Stream* errFile, ClientContext* context);
 
 
             ///<summary>Apply file differences into a working copy. Merge changes 

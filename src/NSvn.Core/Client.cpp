@@ -10,6 +10,7 @@
 #include <apr_general.h>
 #include <apr_hash.h>
 #include "SvnClientException.h"
+#include "AprFileAdapter.h"
 #include "stream.h"
 #include <svn_io.h>
 
@@ -343,6 +344,35 @@ NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* rev
     return static_cast<DirectoryEntry*[]>( 
         entries->ToArray( __typeof(DirectoryEntry) ) );
 }
+
+// implementation of Client::Diff
+void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* revision1,
+    String* path2, Revision* revision2, bool recurse, bool noDiffDeleted, 
+    Stream* outfile, Stream* errfile, ClientContext* context )
+{
+    Pool pool;
+
+    apr_array_header_t* diffOptArray = StringArrayToAprArray( diffOptions, pool );
+    const char* truePath1 = CanonicalizePath( path1, pool );
+    const char* truePath2 = CanonicalizePath( path2, pool );
+
+    AprFileAdapter* outAdapter = new AprFileAdapter(outfile);
+    AprFileAdapter* errAdapter = new AprFileAdapter(errfile);
+    apr_file_t* aprOut = outAdapter->Start( pool );
+    apr_file_t* aprErr = errAdapter->Start( pool );    
+
+    HandleError( svn_client_diff( diffOptArray, truePath1, 
+        revision1->ToSvnOptRevision( pool ), truePath2, 
+        revision2->ToSvnOptRevision(pool), recurse, noDiffDeleted,
+        aprOut, aprErr, context->ToSvnContext(pool), pool ) );
+
+    apr_file_close( aprOut );
+    apr_file_close( aprErr );
+
+    outAdapter->WaitForExit();
+    errAdapter->WaitForExit();
+}
+
 
 
 struct apr_hash_index_t
