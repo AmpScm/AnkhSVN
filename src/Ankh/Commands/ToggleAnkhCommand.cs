@@ -32,8 +32,8 @@ namespace Ankh.Commands
                     "ToggleAnkh" );
 
                 string solutionPath = context.DTE.Solution.FullName;
-                if ( (solutionPath == null) || (!SvnUtils.IsWorkingCopyPath(
-                    Path.GetDirectoryName(solutionPath))) )
+                if ( ( !context.SolutionIsOpen || (!SvnUtils.IsWorkingCopyPath(
+                    Path.GetDirectoryName(solutionPath)))))
                 {
                     // we want it to show "Enable" if we're not in a wc
                     cntl.Caption = cntl.TooltipText = "Enable Ankh for this solution";
