@@ -68,54 +68,50 @@ namespace Rogue.SvnTasks
         /// </summary>
         protected override void ExecuteTask()
         {
-            Revision revision = NSvn.Core.Revision.Head;
-            if ( this.Revision != -1 )
-                revision = NSvn.Core.Revision.FromNumber( this.Revision );
+            try
+            {
+                Revision revision = NSvn.Core.Revision.Head;
+                if ( this.Revision != -1 )
+                    revision = NSvn.Core.Revision.FromNumber( this.Revision );
 
-            RepositoryDirectory dir = new RepositoryDirectory( this.Url, revision );
+                RepositoryDirectory dir = new RepositoryDirectory( this.Url, revision );
 
-            dir.Context.AddAuthenticationProvider( 
-                new AuthenticationProvider( this.Username, this.Password ) );
+                if( this.Verbose )
+                    dir.Context = new Context( this.LogPrefix );
 
-            dir.Checkout( this.LocalDir, true );
+                dir.Context.AddAuthenticationProvider( 
+                    new SimpleProvider( new SimpleCredential(this.Username, this.Password) ) );           
+
+                dir.Checkout( this.LocalDir, true );
+            }
+            catch( AuthorizationFailedException )
+            {
+                throw new BuildException( "Unable to authorize against the repository." );
+            }
+            catch( SvnException ex )
+            {
+                throw new BuildException( "Unable to check out: " + ex.Message );
+            }
+            catch( Exception ex )
+            {
+                throw new BuildException( "Unexpected error: " + ex.Message );
+            }
         }
 
-        #region class AuthenticationProvider	
-        private class AuthenticationProvider : IAuthenticationProvider
+        #region class Context	
+        private class Context : NSvnContext
         {
-            public AuthenticationProvider( string username, string password )
+            public Context( string logPrefix )
             {
-                this.username = username;
-                this.password = password;
+                this.logPrefix = logPrefix;
             }
 
-            private string username = null;
-            private string password = null;
-
-            #region Implementation of IAuthenticationProvider
-            public bool SaveCredentials(System.Collections.ICollection parameters)
+            protected override void NotifyCallback(NSvn.Core.Notification notification)
             {
-                return false;
+                Log.WriteLine( "{0}Checked out {1}", this.logPrefix, notification.Path );
             }
 
-            public NSvn.Common.ICredential NextCredentials(System.Collections.ICollection parameters)
-            {
-                return null;
-            }
-
-            public NSvn.Common.ICredential FirstCredentials(System.Collections.ICollection parameters)
-            {
-                return new SimpleCredential( this.username, this.password );;
-            }
-
-            public string Kind
-            {
-                get
-                {
-                    return SimpleCredential.AuthKind;
-                }
-            }
-            #endregion            
+            private string logPrefix;
         }
         #endregion
 
