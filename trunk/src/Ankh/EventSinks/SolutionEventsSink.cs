@@ -66,7 +66,6 @@ namespace Ankh.EventSinks
             catch( Exception ex )
             {
                 Error.Handle( ex );
-                throw;
             }
             finally
             {

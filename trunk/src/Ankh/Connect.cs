@@ -221,7 +221,6 @@ namespace Ankh
             catch( Exception ex )
             {   
                 Error.Handle( ex );
-                throw;
             }
             t.End( "Query status for " + commandName, "Ankh" );
         }
@@ -277,7 +276,6 @@ namespace Ankh
             catch( Exception ex )
             {   
                 Error.Handle( ex );
-                throw;
             }
         }
 
