@@ -265,6 +265,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\CopyReposExplorerUrl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\CreatePatchCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -514,6 +519,11 @@
                 />
                 <File
                     RelPath = "Solution\TreeNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\TreeView.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
