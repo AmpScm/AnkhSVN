@@ -258,6 +258,21 @@ void NSvn::Core::Client::Cat( Stream* out, String* path, Revision* revision, Cli
     HandleError( svn_client_cat( svnStream, truePath, revision->ToSvnOptRevision( pool ), 
         context->ToSvnContext( pool ), pool ) );
 }
+
+// implementation of Client::Switch
+void NSvn::Core::Client::Switch( String* path, String* url, Revision* revision, bool recurse, 
+                                ClientContext* context)
+{
+    Pool pool;
+
+    const char* truePath = CanonicalizePath( path, pool );
+    const char* trueUrl = CanonicalizePath( url, pool );
+
+    HandleError( svn_client_switch( truePath, trueUrl, revision->ToSvnOptRevision( pool ), recurse,
+        context->ToSvnContext( pool ), pool ) );
+
+}
+
 // implementation of Client::PropList
 NSvn::Common::PropListItem* NSvn::Core::Client::PropList( String* path, Revision* revision, bool recurse, 
                                   ClientContext* context ) []
