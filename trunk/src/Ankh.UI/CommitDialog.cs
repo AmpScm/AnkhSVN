@@ -246,6 +246,7 @@ namespace Ankh.UI
             this.logMessageBox.AcceptsTab = true;
             this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
+            this.logMessageBox.DetectUrls = false;
             this.logMessageBox.Location = new System.Drawing.Point(0, 136);
             this.logMessageBox.Name = "logMessageBox";
             this.logMessageBox.Size = new System.Drawing.Size(816, 128);
