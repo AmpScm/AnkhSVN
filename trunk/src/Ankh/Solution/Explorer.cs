@@ -26,10 +26,8 @@ namespace Ankh.Solution
 		{
 			this.dte = dte;
             this.context = context;
-            this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
-                new ItemComparer() );
-            this.projects = new Hashtable( new ProjectHashCodeProvider(), 
-                new ProjectComparer() );
+            this.projectItems = new Hashtable();
+            this.projects = new Hashtable();
             this.solutionNode = null;
             this.SetUpTreeview();
             this.SyncWithTreeView();
