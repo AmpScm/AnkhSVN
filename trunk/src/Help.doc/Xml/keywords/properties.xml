@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
-<doc title="Special Properties">
+<doc title="Properties">
     <section>
         <p>
             Subversion has no particular policy regarding properties—you can use them for any purpose. 
