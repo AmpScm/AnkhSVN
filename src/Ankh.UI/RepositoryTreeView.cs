@@ -98,6 +98,26 @@ namespace Ankh.UI
 
             root.Expand();
         }
+        
+        /// <summary>
+        /// Refresh the contents of this node.
+        /// </summary>
+        /// <param name="n"></param>
+        public void RefreshNode( IRepositoryTreeNode n )
+        {
+            // get rid of the subnodes
+            TreeNode node = (TreeNode)n.Tag;
+            node.Nodes.Clear();
+
+            // now add the dummy child.
+            TreeNode dummy = new TreeNode();
+            dummy.Tag = DUMMY_NODE;
+            node.Nodes.Add( dummy );
+
+            // make sure it gets refilled.
+            node.Collapse();
+            node.Expand();
+        }
 
         public void AddChildren( IRepositoryTreeNode parent, IList childNodes )
         {
