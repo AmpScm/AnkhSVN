@@ -81,7 +81,7 @@ namespace NSvn.Tests
         private void ResolveReceived( object sender, NotificationEventArgs args )
         {
             Assertion.AssertEquals( "Wrong type of notification", 
-                NotifyAction.Resolve, args.Notification.Action );
+                NotifyAction.Resolved, args.Notification.Action );
         }
 
         private void RevertReceived( object sender, NotificationEventArgs args )
