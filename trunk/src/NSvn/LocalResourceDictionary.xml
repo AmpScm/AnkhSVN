@@ -4,8 +4,8 @@
         <templateKind>HashTable</templateKind>
         <accessibility>public</accessibility>
         <keyType>string</keyType>
-        <itemType>ILocalItem</itemType>
-        <collectionName>LocalItemDictionary</collectionName>
-        <collectionNamespace>NSvn.Core</collectionNamespace>
+        <itemType>ILocalResource</itemType>
+        <collectionName>LocalResourceDictionary</collectionName>
+        <collectionNamespace>NSvn</collectionNamespace>
     </typeSafeCollection>
 </typeSafeCollections>

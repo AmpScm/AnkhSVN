@@ -11,7 +11,7 @@
 using System;
 using System.Collections;
 
-namespace NSvn.Core
+namespace NSvn
 {
 	public
 	class LocalResourceDictionary : IDictionary, ICollection, IEnumerable, ICloneable
@@ -76,14 +76,14 @@ namespace NSvn.Core
 #endregion
 
 		#region Implementation of IDictionary
-        public LocalItemDictionaryEnumerator GetEnumerator()
+        public LocalResourceDictionaryEnumerator GetEnumerator()
         {
-	        return new LocalItemDictionaryEnumerator(this);
+	        return new LocalResourceDictionaryEnumerator(this);
         }
         
 		System.Collections.IDictionaryEnumerator IDictionary.GetEnumerator()
 		{
-			return new LocalItemDictionaryEnumerator(this);
+			return new LocalResourceDictionaryEnumerator(this);
 		}
 		
 		IEnumerator IEnumerable.GetEnumerator()
@@ -251,11 +251,11 @@ namespace NSvn.Core
 		}
 	}
 	
-	public class LocalItemDictionaryEnumerator : IDictionaryEnumerator
+	public class LocalResourceDictionaryEnumerator : IDictionaryEnumerator
 	{
 		private IDictionaryEnumerator innerEnumerator;
 			
-		internal LocalItemDictionaryEnumerator (LocalResourceDictionary enumerable)
+		internal LocalResourceDictionaryEnumerator (LocalResourceDictionary enumerable)
 		{
 			innerEnumerator = enumerable.InnerHash.GetEnumerator();
 		}
