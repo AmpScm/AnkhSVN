@@ -4,13 +4,15 @@
     <property name="debug" value="false"/>
     <property name="deploy.dir" value="deploy"/>
     <property name="checkout.dir" value="Ankh-Release" />
-    <property name="zip.file" value="Ankh.zip" />
+    
     <property name="vs.2003" value="false"/>
     <property name="major.version" value="0" />
-    <property name="minor.version" value="2" />
-    <property name="patch.version" value="9" />
+    <property name="minor.version" value="3" />
+    <property name="patch.version" value="0" />
+    <property name="zip.file" value="Ankh-${major.version}.${minor.version}.${patch.version}.zip" />
+    <property name="msi.file" value="AnkhSetup-${major.version}.${minor.version}.${patch.version}.msi" />
     <property name="url" 
-        value="http://arild.no-ip.com:8088/svn/finalproject/trunk/src"/>
+        value="http://10.0.0.3:8088/svn/finalproject/branches/0.3-release/src"/>
         
    
     
@@ -100,7 +102,7 @@
     </target>
     
     <target name="clean">
-        <delete dir="${checkout.dir}" />       
+        <delete dir="${checkout.dir}" />   
     </target>
     
     
@@ -115,7 +117,11 @@
         
     </target>
     
-    <target name="msi" depends="source">
+    <target name="deploydir">
+        <mkdir dir="${deploy.dir}"/>
+    </target>
+    
+    <target name="msi" depends="source, deploydir">
         <!--<nant buildfile="${checkout.dir}\master.build" inheritall="true" target="rebuild,msi"/>
         
         <copy todir="${deploy.dir}">
@@ -137,11 +143,8 @@
                 <option name="SVNSRC" value="${svn.dir}"/>                    
             </environment>
         </exec>
-        <copy todir="${deploy.dir}">
-            <fileset basedir="${checkout.dir}\Ankh\AnkhSetup\${config}\">
-                <includes name="*.msi"/>
-            </fileset>
-        </copy>
+        <copy file="${checkout.dir}\Ankh\AnkhSetup\${config}\AnkhSetup.msi" 
+            tofile="${deploy.dir}\${msi.file}" />
         
     </target>
     
@@ -159,8 +162,8 @@
             target-ns="http://nant.sourceforge.net/schema/"/> 
     </target>
     
-    <target name="zip" depends="source">
-        <zip zipfile="${zip.file}" verbose="${verbose}">
+    <target name="zip" depends="source, deploydir">
+        <zip zipfile="${deploy.dir}\${zip.file}" verbose="${verbose}">
             <fileset basedir="${checkout.dir}">
                 <includes name="**/*"/>
                 <excludes name="**/.svn/**" />
