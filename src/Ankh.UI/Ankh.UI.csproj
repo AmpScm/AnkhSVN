@@ -219,6 +219,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "ErrorDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ErrorDialog.resx"
+                    DependentUpon = "ErrorDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "ExecutablePropertyEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
