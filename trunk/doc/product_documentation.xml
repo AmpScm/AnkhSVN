@@ -45,10 +45,10 @@
 		(svnadmin not implemented)</p> 
 	</section>	
 	
-	<section header="Program overview"> 
+	<section header="The Ankh project overview"> 
 	
 		<section header="System architecture"> 
-			<p>The system is divided into 2 main layers, an addin/GUI layer and a .NET
+			<p>The system is divided into 2 main layers, a GUI/addin layer and a .NET
 			wrapper layer. The addin/GUI layer
 			contain coding of the addin and graphical user interface in the C# language.
 			This layer is called Ankh. The wrapper is divided into a thin .NET 
@@ -102,7 +102,10 @@
 			</section>
 			
 			<section header="NSvn"> 
-				<p>NSvn is the name of our VS.NET wrapper.</p> 
+				<p>NSvn is the name of our VS.NET wrapper. The choise of the name selected was
+				based on the short name of Subversion, svn, combined with the letter N symbolising VS.NET.
+				NSvn includes all files related to the .NET wrapper.
+				The namespace NSvn has 2 children named Common and Core.</p> 
 			</section>
 			
 			<section header="NSvn.Common"> 
@@ -140,9 +143,51 @@
 		</section>
 	</section>	
 			
-			<section header="Conclusion">  
-			<p></p>  
-			
-			</section>
+	<section header="Conclusion">  
+		<p></p>  			
+	</section>
+	
+	<section header="Appendix"> 
+	
+		<section header="Dictionary">  
+		</section>
+		
+		<section header="Use case diagrams">  
+		 	<img src="uml/uc1.png" align="center" hspace="10" vspace="10"/>
+		 	<br></br>	
+		 	<img src="uml/uc2.png" align="center" hspace="10" vspace="10"/>	
+		 	<br></br>	
+		 	<img src="uml/uc3.png" align="center" hspace="10" vspace="10"/>	
+		 	<br></br>	
+		 	<img src="uml/uc4.png" align="center" hspace="10" vspace="10"/>
+		 	<br></br>	
+		 	<img src="uml/diff.png" align="center" hspace="10" vspace="10"/>
+		 	<br></br>	
+		</section> 	
+		<section header="Use case schemes">  		
+		</section> 	
+		<section header="Class diagrams"> 
+			 <p>Class diagram of Ankh</p>
+			 <img src="uml/Ankh.png" align="center" hspace="10" vspace="10"/>
+			 <p>Class diagram of Ankh.UI</p>	
+			 <img src="uml/Ankh.UI.png" align="center" hspace="10" vspace="10"/>			 
+			 <p>Class diagram of Ankh.Commands</p>
+			 <img src="uml/Commands.png" align="center" hspace="10" vspace="10"/>
+			 <p>Class diagram of NSvn</p>	
+			 <img src="uml/NSvn.ClassDiagram.png" align="center" hspace="10" vspace="10"/>
+			 <p>Class diagram of NSvn.Common</p>	
+			 <img src="uml/Common.png" align="center" hspace="10" vspace="10"/>
+			 <p>Class diagram of NSvn.Core</p>	
+			 <img src="uml/Core.png" align="center" hspace="10" vspace="10"/>
+			 <p>Class diagram of NSvn.Core.Client</p>			 
+			 <img src="uml/Client.png" align="center" hspace="10" vspace="10"/>	
+			 <p>Class diagram of NSvn.Core.Tests</p>	
+			 <!-- TODO  <img src="uml/Tests.png" align="center" hspace="10" vspace="10"/> !-->
+			 <p>Class diagram of NSvn.Core.Tests.MCpp</p>	
+			 <!-- TODO  <img src="uml/Tests.MCpp.png" align="center" hspace="10" vspace="10"/> !-->
+		</section> 
+	</section>
+		
+	
 </doc>
     
