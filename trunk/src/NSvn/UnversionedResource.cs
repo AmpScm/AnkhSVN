@@ -112,6 +112,11 @@ namespace NSvn
             get{ return NSvn.Core.Status.Unversioned; }
         }
 
+        /// <summary>
+        /// Accepts an ILocalResourceVisitor.
+        /// </summary>
+        public abstract void Accept( ILocalResourceVisitor visitor );
+
 
         private string path;      
 	}

@@ -72,13 +72,18 @@ namespace NSvn
                 baton = new AuthenticationBaton();
             }
 
-            // always put this one in, since it seems to be needed
-            // TODO: is there a better way?
-            baton->Providers->Add( new SimpleProvider( UsernameCredential::LoggedInUser ) );
-
             // create an array to put our providers in, leaving room for the LoggedInUser provider
             providers = apr_array_make( pool, baton->Providers->Count + 1, 
                 sizeof( svn_auth_provider_object_t* ) );
+
+            // always put this one in, since it seems to be needed
+            // TODO: is there a better way?
+            svn_auth_provider_object_t* providerObject =
+                this->CreateProvider( pool, new SimpleProvider( 
+                UsernameCredential::LoggedInUser ) );
+            *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
+                    providerObject;
+
 
             // put our providers in the array
             for( int i = 0; i < baton->Providers->Count; i++ )

@@ -27,6 +27,14 @@ namespace NSvn
         }
 
         /// <summary>
+        /// Accepts an ILocalResourceVisitor.
+        /// </summary>
+        public override void Accept( ILocalResourceVisitor visitor )
+        {
+            visitor.VisitWorkingCopyDirectory( this );
+        }
+
+        /// <summary>
         /// Returns all the child objects of this resource.
         /// </summary>
         public LocalResourceDictionary Children

@@ -39,5 +39,11 @@ namespace NSvn
         {
             get;
         }
+
+        /// <summary>
+        /// Accepts an ILocalResourceVisitor.
+        /// </summary>
+        /// <param name="visitor"></param>
+        void Accept( ILocalResourceVisitor visitor );
 	}
 }

@@ -23,5 +23,13 @@ namespace NSvn
         {
             get{ return true; }
         }
+
+        /// <summary>
+        /// Accepts an ILocalResourceVisitor.
+        /// </summary>
+        public override void Accept( ILocalResourceVisitor visitor )
+        {
+            visitor.VisitUnversionedDirectory( this );
+        }
 	}
 }

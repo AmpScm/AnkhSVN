@@ -26,6 +26,14 @@ namespace NSvn
         }   
 
         /// <summary>
+        /// Accepts an ILocalResourceVisitor.
+        /// </summary>
+        public override void Accept( ILocalResourceVisitor visitor )
+        {
+            visitor.VisitWorkingCopyFile( this );
+        }
+
+        /// <summary>
         /// Whether this resource has been modified
         /// </summary>
         protected override DateTime LastWriteTime

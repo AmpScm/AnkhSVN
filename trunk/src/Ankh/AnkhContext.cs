@@ -1,6 +1,10 @@
 using System;
 using EnvDTE;
 using NSvn;
+using NSvn.Common;
+using NSvn.Core;
+using Ankh.UI;
+using System.Windows.Forms;
 
 namespace Ankh
 {
@@ -15,6 +19,8 @@ namespace Ankh
 			this.dte = dte;
             this.addin = addin;
             this.callbackTargets = new CallbackTargets();
+            this.authProviders = new AuthenticationProviderCollection( 
+                new IAuthenticationProvider[]{ new DialogProvider() } );
             SetUpEvents();
         }
 
@@ -44,9 +50,20 @@ namespace Ankh
             get{ return this.solutionExplorer; }
         }
 
+        /// <summary>
+        /// The Notifications instance associated with Ankh.
+        /// </summary>
         public Notifications Notifications
         {
             get{ return this.callbackTargets.Notifications; }
+        }
+
+        /// <summary>
+        /// The authentication providers.
+        /// </summary>
+        public AuthenticationProviderCollection AuthenticationProviders
+        {
+            get{ return this.authProviders; }
         }
 
         #region SetUpEvents
@@ -92,6 +109,39 @@ namespace Ankh
 //                this.ItemAdded );
 
        }
+        #endregion
+
+        #region DialogProvider
+        private class DialogProvider : IAuthenticationProvider
+        {
+            private LoginDialog loginDialog = new LoginDialog();
+
+            #region Implementation of IAuthenticationProvider
+            public NSvn.Common.ICredential NextCredentials()
+            {
+                if ( loginDialog.ShowDialog() == DialogResult.OK )
+                    return new SimpleCredential( loginDialog.Username, 
+                        loginDialog.Password );
+                else
+                    return null;
+            }
+            public NSvn.Common.ICredential FirstCredentials()
+            {
+                if ( loginDialog.ShowDialog() == DialogResult.OK )
+                    return new SimpleCredential( loginDialog.Username, 
+                        loginDialog.Password );
+                else
+                    return null;
+            }
+            public string Kind
+            {
+                get
+                {
+                    return SimpleCredential.AuthKind;
+                }
+            }
+            #endregion
+        }
         #endregion
 
         /// <summary>
@@ -151,5 +201,7 @@ namespace Ankh
         private ProjectItemsEvents vjProjectItemsEvents;
         private SolutionExplorer solutionExplorer = null;
         private CallbackTargets callbackTargets;
+
+        private AuthenticationProviderCollection authProviders;
 	}
 }

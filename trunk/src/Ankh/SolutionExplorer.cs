@@ -44,6 +44,16 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Visits all the selected items.
+        /// </summary>
+        /// <param name="visitor"></param>
+        public void VisitSelectedItems( ILocalResourceVisitor visitor )
+        {
+            foreach( SelectedItem item in this.dte.SelectedItems )
+                ((TreeNode)this.resources[item.ProjectItem]).Resource.Accept( visitor );
+        }
+
+        /// <summary>
         /// Updates the status of selected items.
         /// </summary>
         public void UpdateSelectionStatus()
@@ -67,6 +77,7 @@ namespace Ankh
 
         public void UpdateItem( ILocalResource oldResource, ILocalResource newResource )
         {
+            // HACK: fix this
             ProjectItem item = null;
             foreach( DictionaryEntry entry in this.resources )
             {
@@ -172,10 +183,10 @@ namespace Ankh
                 
                     catch( NullReferenceException ex ) 
                     {
-                        Swf.MessageBox.Show( ex.GetType().ToString() + ": " + 
-                            ex.Message + Environment.NewLine + 
-                            ex.StackTrace + Environment.NewLine + 
-                            item.Name );
+//                        Swf.MessageBox.Show( ex.GetType().ToString() + ": " + 
+//                            ex.Message + Environment.NewLine + 
+//                            ex.StackTrace + Environment.NewLine + 
+//                            item.Name );
                     }
                 }
                 else
