@@ -90,7 +90,7 @@
             </fileset>
         </copy>        
          
-        <regasm assembly="${build.dir}\Ankh.dll" typelibrary="${build.dir}\Ankh.tlb" codebase="true" exporttypelib="true" verbose="${verbose}"/>
+        <regasm assembly="${build.dir}\Ankh.dll" typelib="${build.dir}\Ankh.tlb" codebase="true" exporttypelib="true" verbose="${verbose}"/>
 
         <!-- and now to get rid of them again -->
         <delete>
@@ -192,15 +192,15 @@
         </copy>
         <nunit2 failonerror="false" haltonerror="false">
             <formatter type="Plain" />
-            <test assemblyname="${build.dir}/NSvn.Core.Tests.dll" failonerror="false" haltonerror="false"/>
+            <test assemblyname="${build.dir}/NSvn.Core.Tests.dll"/>
         </nunit2>
         <nunit2 failonerror="false" haltonerror="false">
             <formatter type="Plain" />
-        <test assemblyname="${build.dir}/NSvn.Core.Tests.MCpp.dll" failonerror="false" haltonerror="false"/>
+        <test assemblyname="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
         </nunit2>
         <nunit2 failonerror="false" haltonerror="false">
             <formatter type="Plain" />
-            <test assemblyname="${build.dir}/Ankh.Tests.dll" failonerror="false" haltonerror="false"/>
+            <test assemblyname="${build.dir}/Ankh.Tests.dll"/>
         </nunit2>
     </target>
     

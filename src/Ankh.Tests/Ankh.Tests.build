@@ -43,10 +43,14 @@
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <includes name="..\NSvn.Core.Tests\${build.dir}\NSvn.Core.Tests.dll"/>
                 <includes name="..\Ankh\${build.dir}\Ankh.dll"/>
+                <includes name="..\Ankh.UI\${build.dir}\Ankh.UI.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
+                <includes name="${build.dir}/AnkhUserControlHostLib.dll"/>
                 <includes name="${lib.dir}\nunit.framework.dll"/>
                 <includes name="${lib.dir}\Sharpziplib.dll"/>
-                
+                <includes name="${lib.dir}\EnvDTE.dll"/>
+                <includes name="${lib.dir}\extensibility.dll"/>
+                <includes name="${lib.dir}\Office.dll"/>                
             </references>
             
             <sources basedir="${src.dir}">
