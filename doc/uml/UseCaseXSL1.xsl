@@ -160,6 +160,14 @@ Clear View Training web address: www.clearviewtraining.com
 			<xsl:apply-templates/>
 		</p>
 	</xsl:template>
+	
+	<xsl:template match="Include">
+		<a>
+			<xsl:attribute name="href"><xsl:value-of select="@useCaseID"/>.xml</xsl:attribute>
+			&lt;Include '<xsl:value-of select="@useCaseID"/>'&gt;
+		</a>
+	</xsl:template>
+	
 	<xsl:template match="Step">
 		<xsl:apply-templates/>
 	</xsl:template>
