@@ -11,10 +11,10 @@ namespace Ankh.Commands
 	/// Adds an unversioned item to a working copy
 	/// </summary>
     [VSNetCommand("AddItem", Text = "Add", Tooltip = "Adds selected item to a working copy"),
-    VSNetControl( "Item", Position = 3 ),
-    VSNetControl( "Project", Position = 3 ),
-    VSNetControl( "Folder", Position = 3 ),
-    VSNetControl( "Solution", Position = 3)]
+    VSNetControl( "Item.Ankh", Position = 1 ),
+    VSNetControl( "Project.Ankh", Position = 1 ),
+    VSNetControl( "Folder.Ankh", Position = 1 ),
+    VSNetControl( "Solution.Ankh", Position = 1)]
     
 	internal class AddItemCommand : CommandBase
 	{

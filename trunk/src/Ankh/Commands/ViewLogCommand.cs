@@ -9,8 +9,7 @@ namespace Ankh.Commands
 	/// Summary description for ViewLog.
 	/// </summary>
     [VSNetCommand("ViewLog", Text = "Repos Explorer", Tooltip = "Show the repository explorer"),
-    VSNetControl( "MenuBar.View", Position = 1 ),
-    VSNetControl( "Tools", Position = 5 )]
+    VSNetControl( "MenuBar.View", Position = 1 )]
 	internal class ViewLog : CommandBase
 	{
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
