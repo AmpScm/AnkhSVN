@@ -34,6 +34,14 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Send a non-specific report.
+        /// </summary>
+        public void SendReport()
+        {
+            Utils.ErrorMessage.SendByWeb( ErrorReportUrl, null, typeof(Connect).Assembly );
+        }
+
         private void DoHandle( ProgressRunner.ProgressRunnerException ex )
         {
             // we're only interested in the inner exception - we know where the 
