@@ -18,25 +18,27 @@ namespace Ankh.Solution
     internal abstract class TreeNode
     {
         private TreeNode( UIHierarchyItem item, IntPtr hItem, 
-            Explorer explorer )
-        {                
+            Explorer explorer, TreeNode parent )
+        {     
+            this.uiItem = item;
             this.hItem = hItem;
             this.explorer = explorer;
+            this.parent = parent;
                 
-            this.FindChildren( item );  
+            this.FindChildren();  
         }
 
         public abstract void VisitResources( ILocalResourceVisitor visitor );        
         
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
-            Explorer explorer )
+            Explorer explorer, TreeNode parent )
         {
             TreeNode node = null;
             // what kind of node is this?
             if ( item.Object is Project )
-                node = new ProjectNode( item, hItem, explorer );
+                node = new ProjectNode( item, hItem, explorer, parent );
             else if ( item.Object is ProjectItem )
-                node = new ProjectItemNode( item, hItem, explorer );
+                node = new ProjectItemNode( item, hItem, explorer, parent );
 
             // make sure it has the correct status
             if ( node != null )
@@ -52,6 +54,11 @@ namespace Ankh.Solution
             node.UpdateStatus();
             
             return node;
+        }
+
+        public virtual void Refresh()
+        {
+            this.FindChildren( );
         }
 
 
@@ -97,6 +104,14 @@ namespace Ankh.Solution
         {
             foreach( TreeNode node in this.Children )
                 node.VisitResources( visitor );
+        }
+
+        /// <summary>
+        /// The parent node of this node.
+        /// </summary>
+        public TreeNode Parent
+        {
+            get{ return this.parent; }
         }
 
         /// <summary>
@@ -153,30 +168,32 @@ namespace Ankh.Solution
         /// <summary>
         /// Finds the child nodes of this node.
         /// </summary>
-        protected void FindChildren( UIHierarchyItem item )
+        protected void FindChildren()
         {
             // retain the original expansion state
-            bool isExpanded = item.UIHierarchyItems.Expanded;
+            bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
 
             // get the treeview child
             IntPtr childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
                 C.TVGN_CHILD, this.hItem );
 
             // a node needs to be expanded at least once in order to have child nodes
-            if ( childItem == IntPtr.Zero && item.UIHierarchyItems.Count > 0 )
+            if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
             {
-                item.UIHierarchyItems.Expanded = true;
+                this.uiItem.UIHierarchyItems.Expanded = true;
                 childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
                     C.TVGN_CHILD, this.hItem );
             }
 
+            // iterate over the ui items and the treeview items in parallell
             this.children = new ArrayList();
-            foreach( UIHierarchyItem child in item.UIHierarchyItems )
+            foreach( UIHierarchyItem child in this.uiItem.UIHierarchyItems )
             {
                 Debug.Assert( childItem != IntPtr.Zero, 
                     "Could not get treeview item" );
                     
-                TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer );
+                TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
+                    this );
                 if (childNode != null )
                     this.children.Add( childNode );
 
@@ -185,16 +202,18 @@ namespace Ankh.Solution
                     C.TVGN_NEXT, childItem );                    
             }
 
-            item.UIHierarchyItems.Expanded = isExpanded;
+            this.uiItem.UIHierarchyItems.Expanded = isExpanded;
         }
 
+        #region ProjectNode
         /// <summary>
         /// Represents a node containing subnodes, such as a project or a solution.
         /// </summary>
         private class ProjectNode : TreeNode
         {
-            public ProjectNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer ) : 
-                base( item, hItem, explorer )
+            public ProjectNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
+                TreeNode parent ) : 
+                base( item, hItem, explorer, parent )
             {
                 Project project = (Project)item.Object;
 
@@ -227,15 +246,17 @@ namespace Ankh.Solution
             }                    
 
             private ILocalResource projectFolder;
-        }     
+        }  
+        #endregion
    
+        #region SolutionNode
         /// <summary>
         /// A node representing a solution.
         /// </summary>
         private class SolutionNode : TreeNode
         {
             public SolutionNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer )
-                : base( item, hItem, explorer )
+                : base( item, hItem, explorer, null )
             {
                 EnvDTE.Solution solution = explorer.DTE.Solution;
                 this.solutionFile = SvnResource.FromLocalPath( solution.FullName );
@@ -274,14 +295,17 @@ namespace Ankh.Solution
 
             private ILocalResource solutionFile;
         }
+        #endregion
 
+        #region ProjectItemNode
         /// <summary>
         /// Represents a node containing a project item.
         /// </summary>
         private class ProjectItemNode : TreeNode
         {
-            public ProjectItemNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer ) :
-                base( item, hItem, explorer )
+            public ProjectItemNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
+                TreeNode parent ) :
+                base( item, hItem, explorer, parent )
             {
                 ProjectItem pitem = (ProjectItem)item.Object;
                 this.resources = new ArrayList();
@@ -328,8 +352,11 @@ namespace Ankh.Solution
             }
 
             private IList resources;
-        }        
+        }    
+        #endregion
 
+        private UIHierarchyItem uiItem;
+        private TreeNode parent;
         private IntPtr hItem;
         private IList children;
         private Explorer explorer;
