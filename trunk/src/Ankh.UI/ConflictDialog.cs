@@ -57,20 +57,17 @@ namespace Ankh.UI
                 Debug.Assert( value.Length == 4, "There should be 4 filenames" );
                 this.mineFileRadioButton.Text = Path.GetFileName(value[0]);
                 this.mineFileRadioButton.Tag = value[0];
-                if ( !this.binary )
-                    this.mineFileRadioButton.Checked = true;
-                this.selectedChoice = value[0];
 
                 this.oldRevRadioButton.Text = Path.GetFileName(value[1]);
                 this.oldRevRadioButton.Tag = value[1];
 
                 this.newRevRadioButton.Text = Path.GetFileName(value[2]);
                 this.newRevRadioButton.Tag = value[2];
-                if ( this.binary )
-                    this.newRevRadioButton.Checked = true;
 
                 this.fileRadioButton.Text = Path.GetFileName(value[3]);
                 this.fileRadioButton.Tag = value[3];
+                this.selectedChoice = value[3];
+                this.fileRadioButton.Checked = true;
 
                 
             }
@@ -91,7 +88,10 @@ namespace Ankh.UI
 
                 // make sure there's at least one button checked.
                 if ( this.binary )
+                {
                     this.fileRadioButton.Checked = true;
+                    this.selectedChoice = (string)this.fileRadioButton.Tag;
+                }
             }
         }
 
