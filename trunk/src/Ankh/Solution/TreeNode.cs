@@ -7,6 +7,7 @@ using NSvn.Core;
 using System.Collections;
 using Utils.Win32;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.IO;
 
 using C = Utils.Win32.Constants;
@@ -66,8 +67,19 @@ namespace Ankh.Solution
 
         public virtual void Refresh()
         {
-            this.FindChildren( );
-            this.UpdateStatus();
+            try
+            {
+                this.FindChildren( );
+                this.UpdateStatus();
+            }
+            catch( SvnException )
+            {
+                // try refreshing the parent
+                if ( this.parent != null )
+                    parent.Refresh();
+                else
+                    throw;
+            }
         }
 
         abstract public void Accept( INodeVisitor visitor );
@@ -217,39 +229,47 @@ namespace Ankh.Solution
         /// </summary>
         protected void FindChildren()
         {
-            // retain the original expansion state
-            bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
-
-            // get the treeview child
-            IntPtr childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
-                C.TVGN_CHILD, this.hItem );
-
-            // a node needs to be expanded at least once in order to have child nodes
-            if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
+            try
             {
-                this.uiItem.UIHierarchyItems.Expanded = true;
-                childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
+                // retain the original expansion state
+                bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
+
+                // get the treeview child
+                IntPtr childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
                     C.TVGN_CHILD, this.hItem );
-            }
 
-            // iterate over the ui items and the treeview items in parallell
-            this.children = new ArrayList();
-            foreach( UIHierarchyItem child in this.uiItem.UIHierarchyItems )
-            {
-                Debug.Assert( childItem != IntPtr.Zero, 
-                    "Could not get treeview item" );
+                // a node needs to be expanded at least once in order to have child nodes
+                if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
+                {
+                    this.uiItem.UIHierarchyItems.Expanded = true;
+                    childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
+                        C.TVGN_CHILD, this.hItem );
+                }
+
+                // iterate over the ui items and the treeview items in parallell
+                this.children = new ArrayList();
+                foreach( UIHierarchyItem child in this.uiItem.UIHierarchyItems )
+                {
+                    Debug.Assert( childItem != IntPtr.Zero, 
+                        "Could not get treeview item" );
                     
-                TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
-                    this );
-                if (childNode != null )
-                    this.children.Add( childNode );
+                    TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
+                        this );
+                    if (childNode != null )
+                        this.children.Add( childNode );
 
-                // and the next child
-                childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
-                    C.TVGN_NEXT, childItem );                    
+                    // and the next child
+                    childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
+                        C.TVGN_NEXT, childItem );                    
+                }
+
+                this.uiItem.UIHierarchyItems.Expanded = isExpanded;
             }
-
-            this.uiItem.UIHierarchyItems.Expanded = isExpanded;
+            catch( ArgumentException )
+            {
+                // thrown some times if the uiitem is invalid for some reason
+                throw new SvnException( "Invalid UIHierarchyItem" );
+            }
         }
         
         private UIHierarchyItem uiItem;
