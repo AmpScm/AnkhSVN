@@ -53,7 +53,7 @@ namespace Ankh
 
         protected override void NotifyCallback(NSvn.Core.Notification notification)
         {
-            if (((string)actionStatus[notification.Action]) != null)
+            if ( actionStatus[notification.Action] != null)
             {
                 this.ankhContext.OutputPane.Write("{0} - {2}: {1}{3}"
                     ,actionStatus[notification.Action].ToString() 
@@ -78,7 +78,7 @@ namespace Ankh
             dialog.Diff = visitor.Diff;    
         }
 
-            #region DialogProvider
+        #region DialogProvider
         private class DialogProvider : IAuthenticationProvider
         {
             
