@@ -71,6 +71,14 @@ namespace NSvn
           {;}
     };
 
+    public __gc class IllegalTargetException : public SvnClientException 
+    {
+    public:
+        IllegalTargetException( System::Exception* innerException ) :
+            SvnClientException( "The item is not a valid target for this operation", innerException )
+            {;}
+    };
+
     inline void HandleError( svn_error_t* err )
     {
         if ( err != 0 )
