@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-using Utils;
 using EnvDTE;
 using NSvn;
 
@@ -17,14 +16,16 @@ namespace Ankh.Commands
         public override void Execute(AnkhContext context)
         {
             /// first get the parent folder
-            FolderBrowser browser = new FolderBrowser();
+            FolderBrowserDialog browser = new FolderBrowserDialog();
+            browser.Description = "Select the location where to checkout";
+            browser.ShowNewFolderButton = true;
 
             /// give a chance to the user to bail
             if ( browser.ShowDialog() != DialogResult.OK) 
                 return;
 
             /// save parent folder path
-            this.parentPath = browser.DirectoryPath;
+            this.parentPath = browser.SelectedPath;
 
             CheckoutVisitor v = new CheckoutVisitor( );
             context.RepositoryController.VisitSelectedNodes( v );
