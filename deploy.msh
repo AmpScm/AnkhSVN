@@ -1,6 +1,6 @@
 
 # The URL to build from
-$ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/trunk"
+$ANKHSVN_ROOT = "http://10.0.0.3/svn/finalproject/trunk"
 $ANKHSVN = "$ANKHSVN_ROOT/src"
 
 # version numbers to put in the filename
@@ -67,27 +67,27 @@ $ErrorContinue = 0
 
 filter qq
 {
-	'"' + $_.ToString() + '"' 
+    '"' + $_.ToString() + '"' 
 }
 
 function showpath
 {
-	push-location
-	$env:path.split(";") | foreach {
-		if ( test-path $_ )
-		{
-			set-location $_
-			ls *.exe
-		}
-	}
+    push-location
+    $env:path.split(";") | foreach {
+        if ( test-path $_ )
+        {
+            set-location $_
+            ls *.exe
+        }
+    }
 
-	pop-location
+    pop-location
 
 }
 
 function showvars
 {
-	
+    
 }
 
 function checkout 
@@ -118,55 +118,55 @@ function create_build_directory
 
 function get_env_from_bat( $batfile )
 {
-	$run_bat = combine-path $TMP "run_bat.cmd"
-	echo "call %1" > $run_bat
-	echo "set" >> $run_bat
-	
-	$newenv = cmd.exe "/c" $run_bat "$batfile"
-	
-	$newenv -match "=" | foreach{
-	   $var, $value = $_.Split("=")
-		"Setting environment variable $var to $value"
-		set-env $var $value
-	}
+    $run_bat = combine-path $TMP "run_bat.cmd"
+    echo "call %1" > $run_bat
+    echo "set" >> $run_bat
+    
+    $newenv = cmd.exe "/c" $run_bat "$batfile"
+    
+    $newenv -match "=" | foreach{
+       $var, $value = $_.Split("=")
+        "Setting environment variable $var to $value"
+        set-env $var $value
+    }
 
-	remove-item $run_bat
+    remove-item $run_bat
 }
 
 function parse_args( $cmdline )
 {
-	$do_vsvars = 1
-	
-	# get "regular" args
-	$cmdline | foreach {
-		switch( $_ )
-		{
-			{ $_ -match "[-/]novsvars" }
-			{
-				$do_vsvars = 0
-			}
-		}
-	}
+    $do_vsvars = 1
+    
+    # get "regular" args
+    $cmdline | foreach {
+        switch( $_ )
+        {
+            { $_ -match "[-/]novsvars" }
+            {
+                $do_vsvars = 0
+            }
+        }
+    }
 
-	# go through any var=val args on the command line
-	
-	$cmdline | where { $_ -match "=" } | foreach	{ 
-		$var, $value = $_.Split("=")
-		#$_.GetType()
-		 
-		"Setting $var to $value"
-		set-variable $var $value
-	}
+    # go through any var=val args on the command line
+    
+    $cmdline | where { $_ -match "=" } | foreach    { 
+        $var, $value = $_.Split("=")
+        #$_.GetType()
+         
+        "Setting $var to $value"
+        set-variable $var $value
+    }
 
-	if ( $do_vsvars )
-	{
-		"Doing vsvars"
-		get_env_from_bat( $VSVARS )
-	}
-	else
-	{
-		"Not doing vsvars"
-	}
+    if ( $do_vsvars )
+    {
+        "Doing vsvars"
+        get_env_from_bat( $VSVARS )
+    }
+    else
+    {
+        "Not doing vsvars"
+    }
 
 }
 
@@ -197,17 +197,17 @@ function download_and_extract($url, $dir, $targetname)
     {
         { $_ -like "*.tar.gz" } 
         {
-			"Unzipping {0} using gunzip"
-			gunzip $basename
+            "Unzipping {0} using gunzip"
+            gunzip $basename
 
-			$basename = $basename.Substring(0, ($basename.Length - 2));
+            $basename = $basename.Substring(0, ($basename.Length - 2));
             "Extracting {0} using tar" -f $basename
             tar -xf $basename
             $dirname = $basename.Substring(0, $basename.LastIndexOf( ".tar"))
         }
         
         { $_ -like "*.zip" } 
-        {			
+        {           
             "Extracting {0} using unzip" -f $basename
             unzip $basename
         }
@@ -221,11 +221,11 @@ function download_and_extract($url, $dir, $targetname)
     }
 
     # if provided, rename the directory
-	if ( $dirname -ne $targetname )
+    if ( $dirname -ne $targetname )
     {
         "Moving {0} to {1}" -f $dirname, $targetname
         move-item $dirname $targetname
-	}
+    }
 
     # we don't need the tarball(zipball) any more
     #remove-item $basename
@@ -234,67 +234,67 @@ function download_and_extract($url, $dir, $targetname)
 
 function checkout( $url, $dirname )
 {
-	"Checking out $url to $dirname"
-	svn co $url $dirname
+    "Checking out $url to $dirname"
+    svn co $url $dirname
 }
 
 function do_neon
 {
     download_and_extract $NEON "." neon
-	$script:neon_target_dir = "neon"
+    $script:neon_target_dir = "neon"
     
 }
 
 function do_zlib
 {
-	if ( $script:zlib_target_dir )
-	{
-		"Already have zlib. Not doing it"
-		return
-	}
+    if ( $script:zlib_target_dir )
+    {
+        "Already have zlib. Not doing it"
+        return
+    }
 
-	push-location
-	new-directory "zlib"
-	set-location "zlib"
-	download_and_extract $ZLIB "." ""
-	pop-location
-	$script:zlib_target_dir = resolve-path "zlib"
+    push-location
+    new-directory "zlib"
+    set-location "zlib"
+    download_and_extract $ZLIB "." ""
+    pop-location
+    $script:zlib_target_dir = resolve-path "zlib"
 }
 
 function do_openssl
 {
-	if ( $script:openssl_target_dir )
-	{
-		"Already have OpenSSL. Not doing it"
-		return
-	}
+    if ( $script:openssl_target_dir )
+    {
+        "Already have OpenSSL. Not doing it"
+        return
+    }
 
     push-location    
     download_and_extract $OPENSSL "." "openssl"
 
-	
-	""
+    
+    ""
     "** Building OpenSSL **"
     ""
 
     # now build it
-	$script:openssl_target_dir = convert-path "openssl"
+    $script:openssl_target_dir = convert-path "openssl"
 
     set-location $openssl_target_dir
     perl Configure VC-WIN32
     ms\do_masm
     if ( $env:OPENSSL_STATIC )
     {
-		"Building static OpenSSL libraries"
+        "Building static OpenSSL libraries"
         nmake -f ms\nt.mak
     }
     else
     {
-		"Building dynamic OpenSSL libraries"
+        "Building dynamic OpenSSL libraries"
         nmake -f ms\ntdll.mak 
     }
 
-	if ( ! $? ){ exit }
+    if ( ! $? ){ exit }
 
     pop-location
     
@@ -304,202 +304,202 @@ function do_berkeley
 {
     push-location
 
-	""
-	"** Berkeley DB **"
-	""
-	
-	$bdb_src = combine-path $TMP $BDB_DIR
-	"Looking for BDB sources in $bdb_src"
-	if ( -not (test-path $bdb_src) )
-	{
-		"Not found"
-		download_and_extract $BDB $TMP $BDB_DIR
-	}
-
-	$slnfile = combine-path ( combine-path $bdb_src "build_win32" ) "Berkeley_DB.sln"
-	"Looking for $slnfile"
-
-	if ( ! ( test-path $slnfile ))
-	{
-		"Not found. Now convert the Berkeley DB workspace to a VS.NET solution"
-		die
-	}
-
-	$bdb_build_dir = (combine-path "." $BDB_DIR)
-	"Copying $bdb_src to $bdb_build_dir"
-	copy-item -recurse $bdb_src $bdb_build_dir
-	
+    ""
+    "** Berkeley DB **"
+    ""
     
-	$slnfile = combine-path ( combine-path $bdb_build_dir "build_win32" ) "Berkeley_DB.sln"
-	
-	"Building $slnfile"
-	devenv $slnfile /Build $CONFIG /project "build_all"
+    $bdb_src = combine-path $TMP $BDB_DIR
+    "Looking for BDB sources in $bdb_src"
+    if ( -not (test-path $bdb_src) )
+    {
+        "Not found"
+        download_and_extract $BDB $TMP $BDB_DIR
+    }
 
-	if ( ! $? )
-	{
-		exit
-	}
+    $slnfile = combine-path ( combine-path $bdb_src "build_win32" ) "Berkeley_DB.sln"
+    "Looking for $slnfile"
 
-	$script:bdb_target_dir = convert-path "db4-win32"
-	"Creating $bdb_target_dir"
-	new-directory $bdb_target_dir
-	
-	$dirs = "$bdb_target_dir\include", "$bdb_target_dir\lib", "$bdb_target_dir\bin"
-	$dirs | foreach { "Creating $_"; new-directory $_ }
+    if ( ! ( test-path $slnfile ))
+    {
+        "Not found. Now convert the Berkeley DB workspace to a VS.NET solution"
+        die
+    }
 
-	"Copying header files to $bdb_target_dir\include"
-	copy-item "$bdb_build_dir\build_win32\*.h" "$bdb_target_dir\include"
+    $bdb_build_dir = (combine-path "." $BDB_DIR)
+    "Copying $bdb_src to $bdb_build_dir"
+    copy-item -recurse $bdb_src $bdb_build_dir
+    
+    
+    $slnfile = combine-path ( combine-path $bdb_build_dir "build_win32" ) "Berkeley_DB.sln"
+    
+    "Building $slnfile"
+    devenv $slnfile /Build $CONFIG /project "build_all"
 
-	"Copying lib files to $bdb_target_dir\lib"
-	copy-item "$bdb_build_dir\build_win32\$CONFIG\*.lib" "$bdb_target_dir\lib"
+    if ( ! $? )
+    {
+        exit
+    }
 
-	"Copying DLL files to $bdb_target_dir\bin"
-	copy-item "$bdb_build_dir\build_win32\$CONFIG\*.dll" "$bdb_target_dir\bin"
+    $script:bdb_target_dir = convert-path "db4-win32"
+    "Creating $bdb_target_dir"
+    new-directory $bdb_target_dir
+    
+    $dirs = "$bdb_target_dir\include", "$bdb_target_dir\lib", "$bdb_target_dir\bin"
+    $dirs | foreach { "Creating $_"; new-directory $_ }
 
-	pop-location
+    "Copying header files to $bdb_target_dir\include"
+    copy-item "$bdb_build_dir\build_win32\*.h" "$bdb_target_dir\include"
+
+    "Copying lib files to $bdb_target_dir\lib"
+    copy-item "$bdb_build_dir\build_win32\$CONFIG\*.lib" "$bdb_target_dir\lib"
+
+    "Copying DLL files to $bdb_target_dir\bin"
+    copy-item "$bdb_build_dir\build_win32\$CONFIG\*.dll" "$bdb_target_dir\bin"
+
+    pop-location
     
 }
 
 function do_apr
 {
-	""
-	"** APR **"
-	""
-	
-	"Checking out $APR_MODULE from $APACHE_CVS, the $APR_BRANCH branch"
-	cvs -d $APACHE_CVS co -r $APR_BRANCH $APR_MODULE 
+    ""
+    "** APR **"
+    ""
+    
+    "Checking out $APR_MODULE from $APACHE_CVS, the $APR_BRANCH branch"
+    cvs -d $APACHE_CVS co -r $APR_BRANCH $APR_MODULE 
 
-	"Checking out $APR_UTIL_MODULE from $APACHE_CVS, the $APR_UTIL_BRANCH branch"
-	cvs -d $APACHE_CVS co -r $APR_UTIL_BRANCH $APR_UTIL_MODULE
+    "Checking out $APR_UTIL_MODULE from $APACHE_CVS, the $APR_UTIL_BRANCH branch"
+    cvs -d $APACHE_CVS co -r $APR_UTIL_BRANCH $APR_UTIL_MODULE
 
-	"Checking out $APR_ICONV_MODULE from $APACHE_CVS, the $APR_ICONV_BRANCH branch"
-	cvs -d $APACHE_CVS co -r $APR_ICONV_BRANCH $APR_ICONV_MODULE
+    "Checking out $APR_ICONV_MODULE from $APACHE_CVS, the $APR_ICONV_BRANCH branch"
+    cvs -d $APACHE_CVS co -r $APR_ICONV_BRANCH $APR_ICONV_MODULE
 
 }
 
 function do_subversion
 {
-	
-	do_openssl
-	do_zlib
+    
+    do_openssl
+    do_zlib
 
-	push-location	
+    push-location   
 
-	if ( $script:subversion_dir )
-	{
-		"Already have a subversion directory. Not doing it."
-		return
-	}
-	else
-	{
-		"No subversion dir. Doing it"
-	}
-	
+    if ( $script:subversion_dir )
+    {
+        "Already have a subversion directory. Not doing it."
+        return
+    }
+    else
+    {
+        "No subversion dir. Doing it"
+    }
+    
     checkout $SUBVERSION "subversion" 
 
-	set-location "subversion"
+    set-location "subversion"
 
-	do_apr
-	do_berkeley
+    do_apr
+    do_berkeley
 
-	""
-	""
-	"*** And finally - Subversion! ***"
-	
+    ""
+    ""
+    "*** And finally - Subversion! ***"
+    
     do_neon
-	echo "$bdb_target_dir | $openssl_target_dir | $APR_MODULE | $APR_ICONV_MODULE |  $APR_UTIL_MODULE"  
-	
-	$gen_make = convert-path "gen-make.py"
-	
-	$opts="-t vcproj "
-	$opts+=	"--with-berkeley-db=$bdb_target_dir --with-openssl=$openssl_target_dir --with-zlib=$zlib_target_dir"
-	
-	# quote appropriately
-	$opts = $opts.Split() | qq 
-	showpath
-	"Generating VC++ solution files"
-	echo "python gen-make.py $opts"
+    echo "$bdb_target_dir | $openssl_target_dir | $APR_MODULE | $APR_ICONV_MODULE |  $APR_UTIL_MODULE"  
+    
+    $gen_make = convert-path "gen-make.py"
+    
+    $opts="-t vcproj "
+    $opts+= "--with-berkeley-db=$bdb_target_dir --with-openssl=$openssl_target_dir --with-zlib=$zlib_target_dir"
+    
+    # quote appropriately
+    $opts = $opts.Split() | qq 
+    showpath
+    "Generating VC++ solution files"
+    echo "python gen-make.py $opts"
     python "gen-make.py" $opts
 
-	if ( ! $? ){ exit }
+    if ( ! $? ){ exit }
 
-	# make sure our built subversion lets us set the admin dir
-	"Patching the Subversion source to allow us to set the admin dir"
-	patch -p0 --input "..\src\NSvn.Core\admindir.patch"
+    # make sure our built subversion lets us set the admin dir
+    "Patching the Subversion source to allow us to set the admin dir"
+    patch -p0 --input "..\src\NSvn.Core\admindir.patch"
 
-	if ( ! $? ){ exit }
+    if ( ! $? ){ exit }
 
-	
-	"Building Subversion"
-	devenv "subversion_vcnet.sln" /Build $CONFIG /project "__ALL__"
+    
+    "Building Subversion"
+    devenv "subversion_vcnet.sln" /Build $CONFIG /project "__ALL__"
 
-	#if ( ! $? ){ exit }
+    #if ( ! $? ){ exit }
 
-	pop-location
+    pop-location
 
-	# so that the Ankh  build will pick up on it.
-	$script:subversion_dir = convert-path "subversion"
-	 
+    # so that the Ankh  build will pick up on it.
+    $script:subversion_dir = convert-path "subversion"
+     
 }
 
 function get_revision($dir)
 {
-	return $(svnversion $dir)
+    return $(svnversion $dir)
 }
 
 function add_version( $name, $version )
 {
-	$ver, $tag = $version.Split("-")
-	$major, $minor, $patch, $rev = $ver.Split(".")
-	if ( $rev -eq "" )
-	{
-		$rev = 0
-	}
-	$params = "`"$name`", $major, $minor, $patch, Tag=`"$tag`""
-	#$params = "`"`", {1}, {2}, {3}, Tag=`"{4}`"" -f `
-	#	$name, $maj, $min, $r, $tag 
+    $ver, $tag = $version.Split("-")
+    $major, $minor, $patch, $rev = $ver.Split(".")
+    if ( $rev -eq "" )
+    {
+        $rev = 0
+    }
+    $params = "`"$name`", $major, $minor, $patch, Tag=`"$tag`""
+    #$params = "`"`", {1}, {2}, {3}, Tag=`"{4}`"" -f `
+    #   $name, $maj, $min, $r, $tag 
 
-	"[assembly:Utils.VersionAttribute( $params )]" >> AssemblyInfo.cs
-	"[assembly:Utils::VersionAttribute( $params )];" >> AssemblyInfo.cpp
+    "[assembly:Utils.VersionAttribute( $params )]" >> AssemblyInfo.cs
+    "[assembly:Utils::VersionAttribute( $params )];" >> AssemblyInfo.cpp
 }
 
 function create_assemblyinfo
 {
-	$rev = get_revision "src" 
-	$versiontuple = "{0}.{1}.{2}.{3}" -f $MAJOR, $MINOR, $PATCH, $rev
-	$ankhversion="$versiontuple-$LABEL"
-	
-	"Creating AssemblyInfo.cs"
-	
-	"using System.Reflection;`
+    $rev = get_revision "src" 
+    $versiontuple = "{0}.{1}.{2}.{3}" -f $MAJOR, $MINOR, $PATCH, $rev
+    $ankhversion="$versiontuple-$LABEL"
+    
+    "Creating AssemblyInfo.cs"
+    
+    "using System.Reflection;`
 using System.Runtime.CompilerServices;
 `
 [assembly:AssemblyVersion(`"{0}`")]" -f $versiontuple > AssemblyInfo.cs
 
 
-	"Creating AssemblyInfo.cpp"
-	
-	"#include `"stdafx.h`"`
+    "Creating AssemblyInfo.cpp"
+    
+    "#include `"stdafx.h`"`
 `
 using namespace System::Reflection;`
 using namespace System::Runtime::CompilerServices;`
 [assembly:AssemblyVersionAttribute(`"{0}`")];" -f $versiontuple > AssemblyInfo.cpp
 
-	add_version "Subversion" $SUBVERSION_VERSION 
-	add_version "Neon" $NEON_VERSION 
-	add_version "Berkeley DB" $BDB_VERSION 
-	add_version "OpenSSL" $OPENSSL_VERSION
-	add_version "ZLib" $ZLIB_VERSION 
-	add_version "apr" $APR_VERSION 
-	add_version "apr-util" $APR_UTIL_VERSION 
-	add_version "apr-iconv" $APR_ICONV_VERSION 
-	add_version "Ankh" $ankhversion
+    add_version "Subversion" $SUBVERSION_VERSION 
+    add_version "Neon" $NEON_VERSION 
+    add_version "Berkeley DB" $BDB_VERSION 
+    add_version "OpenSSL" $OPENSSL_VERSION
+    add_version "ZLib" $ZLIB_VERSION 
+    add_version "apr" $APR_VERSION 
+    add_version "apr-util" $APR_UTIL_VERSION 
+    add_version "apr-iconv" $APR_ICONV_VERSION 
+    add_version "Ankh" $ankhversion
 
-	copy-item -force AssemblyInfo.cs src\Ankh\AssemblyInfo.cs
-	copy-item -force AssemblyInfo.cs src\Ankh.UI\AssemblyInfo.cs
-	copy-item -force AssemblyInfo.cs src\Utils\AssemblyInfo.cs
-	copy-item -force AssemblyInfo.cpp src\NSvn.Core\AssemblyInfo.cpp
-	copy-item -force AssemblyInfo.cs src\ReposInstaller\AssemblyInfo.cs	
+    copy-item -force AssemblyInfo.cs src\Ankh\AssemblyInfo.cs
+    copy-item -force AssemblyInfo.cs src\Ankh.UI\AssemblyInfo.cs
+    copy-item -force AssemblyInfo.cs src\Utils\AssemblyInfo.cs
+    copy-item -force AssemblyInfo.cpp src\NSvn.Core\AssemblyInfo.cpp
+    copy-item -force AssemblyInfo.cs src\ReposInstaller\AssemblyInfo.cs 
 }
 
 
@@ -517,45 +517,45 @@ function checkout_tools
 
 function do_ankh
 {
-	# do_subversion
-	#
-	checkout $ANKHSVN
+    # do_subversion
+    #
+    checkout $ANKHSVN
     
     $REVISION = $(svnversion src)
 
-	do_subversion
+    do_subversion
 
-	$toname = "..\AnkhSetup-{0}.{1}.{2}.{3}-{4}.msi" -f $MAJOR, $MINOR, $PATCH, $REVISION, $LABEL
+    $toname = "..\AnkhSetup-{0}.{1}.{2}.{3}-{4}.msi" -f $MAJOR, $MINOR, $PATCH, $REVISION, $LABEL
 
-	checkout_tools
+    checkout_tools
 
     # get the version thing done
-	create_assemblyinfo 
+    create_assemblyinfo 
     
-	set-location "src"
+    set-location "src"
 
-	if ( $USE_NANT )
-	{      
+    if ( $USE_NANT )
+    {      
         
-		nant /t:"net-1.0" /v wix "-D:svndir=$subversion_dir" "-D:wix-binary.dir=$wix_binary_dir"
+        nant /t:"net-1.0" /v wix "-D:svndir=$subversion_dir" "-D:wix-binary.dir=$wix_binary_dir"
 
-		if ( ! $? ){ exit }
+        if ( ! $? ){ exit }
 
-		copy-item "installsource\Ankh.msi" $toname
-		
-	}
-	else
-	{	
-		$env:svnsrc=$subversion_dir
+        copy-item "installsource\Ankh.msi" $toname
+        
+    }
+    else
+    {   
+        $env:svnsrc=$subversion_dir
 
 
-		"svnsrc: $env:svnsrc"
-		devenv src.sln /build $CONFIG /project "AnkhSetup"
+        "svnsrc: $env:svnsrc"
+        devenv src.sln /build $CONFIG /project "AnkhSetup"
 
-		if ( ! $? ){ exit }
+        if ( ! $? ){ exit }
 
-		copy-item "Ankh\AnkhSetup\$CONFIG\AnkhSetup.msi" $toname
-	}
+        copy-item "Ankh\AnkhSetup\$CONFIG\AnkhSetup.msi" $toname
+    }
 }
 
 $starttime = [DateTime].Now
