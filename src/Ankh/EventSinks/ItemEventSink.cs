@@ -46,13 +46,27 @@ namespace Ankh.EventSinks
                             file = uri.LocalPath;
                         }
 
-                        SvnItem svnItem = this.Context.StatusCache[ file ];
+                        // does this file even exist?
+                        if ( !File.Exists( file ) )
+                            return;
+                        try
+                        {
+                            SvnItem svnItem = this.Context.StatusCache[ file ];
+                            
+                            // make sure we have up to date info on this item.
+                            svnItem.Refresh(this.Context.Client);
                         
-                        // make sure we have up to date info on this item.
-                        svnItem.Refresh(this.Context.Client);
-                        if ( !svnItem.IsVersioned && svnItem.IsVersionable &&
-                            !this.Context.Client.IsIgnored( svnItem.Path ) )
-                            this.Context.Client.Add( file, false );
+                            if ( !svnItem.IsVersioned && svnItem.IsVersionable &&
+                                !this.Context.Client.IsIgnored( svnItem.Path ) )
+                                this.Context.Client.Add( file, false );
+                        }
+                        catch( SvnClientException ex )
+                        {
+                            // don't propagate this exception
+                            // just tell the user and move on
+                            this.Context.ErrorHandler.Write( "Unable to add file: ", ex, 
+                                this.Context.OutputPane );
+                        }
                     }
                 }
                 this.Context.SolutionExplorer.Refresh( item.ContainingProject );

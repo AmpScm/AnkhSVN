@@ -210,6 +210,11 @@ namespace Ankh.Tests
                 Assert.Fail( "Should not be called, I guess" );
             }
 
+            public void Write( string message, Exception ex, TextWriter writer )
+            {
+                // empty
+            }
+
             #endregion
 
         }
