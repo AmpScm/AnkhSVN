@@ -310,6 +310,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\ExportFolderCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\ExportRunner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\ImportSolutionCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
