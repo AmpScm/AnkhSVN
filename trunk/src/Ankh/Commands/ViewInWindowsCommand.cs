@@ -20,7 +20,7 @@ namespace Ankh.Commands
                 context.StartOperation( "Opening" );
 
                 // make the catrunner get it on a separate thread.
-                INode node = (INode)context.RepositoryExplorer.SelectedNode;
+                INode node = context.RepositoryExplorer.SelectedNode;
                 CatRunner runner = new CatRunner( context, node.Name, 
                     node.Revision, node.Url );
 

@@ -18,7 +18,7 @@ namespace Ankh.Commands
             context.StartOperation( "Saving" );
             try
             {
-                INode node = (INode)context.RepositoryExplorer.SelectedNode;
+                INode node = context.RepositoryExplorer.SelectedNode;
                 string filename = null;
                 using( SaveFileDialog sfd = new SaveFileDialog() )
                 {

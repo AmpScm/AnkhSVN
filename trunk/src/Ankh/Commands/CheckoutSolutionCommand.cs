@@ -43,7 +43,7 @@ namespace Ankh.Commands
             {
                 context.StartOperation( "Checking out" );
 
-                INode node = (INode)context.RepositoryExplorer.SelectedNode;
+                INode node = context.RepositoryExplorer.SelectedNode;
                 INode parent = node.Parent;
 
                 CheckoutRunner runner = new CheckoutRunner(context, browser.DirectoryPath, parent.Revision, parent.Url);

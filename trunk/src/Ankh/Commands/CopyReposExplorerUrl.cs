@@ -30,7 +30,7 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context, string parameters)
         {
-            INode node = (INode)context.RepositoryExplorer.SelectedNode;
+            INode node = context.RepositoryExplorer.SelectedNode;
             Clipboard.SetDataObject( node.Url );
         }
 	}
