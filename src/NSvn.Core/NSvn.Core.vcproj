@@ -24,7 +24,7 @@
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
-				UsePrecompiledHeader="3"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"/>
 			<Tool
@@ -95,6 +95,9 @@
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
+				RelativePath="Client.cpp">
+			</File>
+			<File
 				RelativePath="Stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -114,10 +117,31 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
+				RelativePath="AdminAccessBaton.h">
+			</File>
+			<File
+				RelativePath="AuthenticationBaton.h">
+			</File>
+			<File
+				RelativePath="Client.h">
+			</File>
+			<File
+				RelativePath="CommitInfo.h">
+			</File>
+			<File
 				RelativePath="NSvn.Core.h">
 			</File>
 			<File
+				RelativePath="PropListItem.h">
+			</File>
+			<File
+				RelativePath="Revision.h">
+			</File>
+			<File
 				RelativePath="Stdafx.h">
+			</File>
+			<File
+				RelativePath="delegates.h">
 			</File>
 		</Filter>
 		<Filter
