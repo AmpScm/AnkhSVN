@@ -136,6 +136,18 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Executes the worker.Work method while displaying a progress dialog.
+        /// </summary>
+        /// <param name="worker"></param>
+        public bool RunWithProgressDialog( IProgressWorker worker, string caption )
+        {
+            ProgressRunner runner = new ProgressRunner( this.Context, worker );
+            runner.Start( caption );     
+       
+            return !runner.Cancelled;
+        }
+
+        /// <summary>
         /// Display a message box.
         /// </summary>
         /// <param name="caption"></param>

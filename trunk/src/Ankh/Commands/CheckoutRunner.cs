@@ -11,11 +11,10 @@ namespace Ankh.Commands
     /// <summary>
     /// A progress runner for checkouts.
     /// </summary>
-    public class CheckoutRunner : ProgressRunner
+    public class CheckoutRunner : IProgressWorker
     {
-        public CheckoutRunner( IContext context, string path, Revision revision, 
+        public CheckoutRunner( string path, Revision revision, 
             string url, bool recurse ) 
-            : base( context )
         { 
             this.path = path;
             this.url = url;
@@ -23,15 +22,15 @@ namespace Ankh.Commands
             this.recurse = recurse;
         }
 
-        public CheckoutRunner( IContext context, string path, Revision revision, 
-            string url ) : this( context, path, revision, url, true )
+        public CheckoutRunner( string path, Revision revision, 
+            string url ) : this( path, revision, url, true )
         {
             // empty
         }
 
-        protected override void DoRun()
+        public void Work( IContext context )
         {
-            this.Context.Client.Checkout( this.url, this.path, this.revision, this.recurse );
+            context.Client.Checkout( this.url, this.path, this.revision, this.recurse );
         }
 
         private Revision revision;

@@ -44,8 +44,8 @@ namespace Ankh.Commands
 
                 INode node = context.RepositoryExplorer.SelectedNode;
 
-                ExportRunner runner = new ExportRunner(context, browser.DirectoryPath, node.Revision, node.Url);
-                runner.Start( "Exporting folder" );
+                ExportRunner runner = new ExportRunner( browser.DirectoryPath, node.Revision, node.Url);
+                context.UIShell.RunWithProgressDialog( runner, "Exporting folder" );
 
             }
             finally

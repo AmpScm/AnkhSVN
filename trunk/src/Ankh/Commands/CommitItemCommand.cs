@@ -61,11 +61,11 @@ namespace Ankh.Commands
                 {
                     this.paths = SvnItem.GetPaths( items );
 
-                    ProgressRunner runner = new ProgressRunner( context, 
-                        new ProgressRunnerCallback( this.DoCommit ) );
-                    runner.Start( "Committing" );
+                    bool completed = context.UIShell.RunWithProgressDialog( 
+                        new SimpleProgressWorker( 
+                            new SimpleProgressWorkerCallback( this.DoCommit ) ), "Committing" );
 
-                    if(!runner.Cancelled)
+                    if(completed)
                     {
                         foreach( SvnItem item in resources )
                             item.Refresh( context.Client );                        

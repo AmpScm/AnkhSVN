@@ -29,10 +29,9 @@ namespace Ankh.Commands
         /// <summary>
         /// For running cats on a separate thread.
         /// </summary>
-        protected class CatRunner : ProgressRunner
+        protected class CatRunner : IProgressWorker
         {
-            public CatRunner( IContext context, string name, Revision revision, string url ) : 
-                base( context )
+            public CatRunner( string name, Revision revision, string url ) 
             { 
                 this.path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), 
                     name );
@@ -40,8 +39,8 @@ namespace Ankh.Commands
                 this.revision = revision;
             }
 
-            public CatRunner( IContext context,  Revision revision, string url,  
-                 string path ) : base(context)
+            public CatRunner( Revision revision, string url,  
+                 string path ) 
             {
                 this.path = path;
                 this.url = url;
@@ -56,12 +55,12 @@ namespace Ankh.Commands
                 get{ return this.path; }
             }
 
-            protected override void DoRun()
+            public void Work( IContext context )
             {
                 using( FileStream fs = new FileStream( this.path, FileMode.Create, 
                            FileAccess.Write ) )
                 {
-                    this.Context.Client.Cat( fs, this.url, this.revision );
+                    context.Client.Cat( fs, this.url, this.revision );
                 }
             }
 
