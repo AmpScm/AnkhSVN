@@ -81,21 +81,26 @@ namespace Ankh.Commands
                 this.recursive = false;
                 this.revision = Revision.Head;
 
-                // is Shift down?
-                if ( !CommandBase.Shift )
+                // We're using the update dialog no matter what to
+                // take advantage of it's path processing capabilities.
+                // This is the best way to ensure holding down Shift is
+                // equivalent to accepting the default in the dialog.
+                using(UpdateDialog d = new UpdateDialog())
                 {
-                    using(UpdateDialog d = new UpdateDialog())
+                    d.GetPathInfo += new GetPathInfoDelegate(CommandBase.GetPathInfo);
+                    d.Items = this.resources;
+                    d.CheckedItems = this.resources;
+                    d.Recursive = true;
+
+                    if ( !CommandBase.Shift )
                     {
-                        d.GetPathInfo += new GetPathInfoDelegate(CommandBase.GetPathInfo);
-                        d.Items = this.resources;
-                        d.CheckedItems = this.resources;
-                        d.Recursive = true;
                         if ( d.ShowDialog( this.Context.HostWindow ) != DialogResult.OK )
                             return false;
-                        recursive = d.Recursive;
-                        this.resources = d.CheckedItems;
-                        this.revision = d.Revision;
                     }
+
+                    recursive = d.Recursive;
+                    this.resources = d.CheckedItems;
+                    this.revision = d.Revision;
                 }
 
                 // the user hasn't cancelled the update
