@@ -26,8 +26,10 @@ namespace Ankh.Solution
         {
             this.dte = dte;
             this.context = context;
-            this.projectItems = new Hashtable( );
-            this.projects = new Hashtable( );
+            this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
+                new ItemComparer() );
+            this.projects = new Hashtable( new ProjectHashCodeProvider(), 
+                new ProjectComparer() );
             this.solutionNode = null;
             this.SetUpTreeview();
             this.SyncWithTreeView();
@@ -293,6 +295,79 @@ namespace Ankh.Solution
             else
                 return null;
         }
+
+        
+
+
+        #region class ItemHashCodeProvider
+        private class ItemHashCodeProvider : IHashCodeProvider
+        {        
+            public int GetHashCode(object obj)
+            {
+                try
+                {
+                    return ((ProjectItem)obj).get_FileNames(1).GetHashCode();
+                }
+                catch( Exception )
+                {
+                    return obj.GetHashCode();
+                }
+            }
+        }
+        #endregion
+
+        #region class ItemComparer
+        private class ItemComparer : IComparer
+        {        
+            public int Compare(object x, object y)
+            {
+                try
+                {
+                    return ((ProjectItem)x).get_FileNames(1).CompareTo(
+                        ((ProjectItem)y).get_FileNames(1) );
+                }
+                catch( Exception )
+                {
+                    return -1;
+                }
+            }
+        }
+        #endregion
+        #region class ProjectHashCodeProvider
+        private class ProjectHashCodeProvider : IHashCodeProvider
+        {        
+            public int GetHashCode(object obj)
+            {
+                try
+                {
+                    return ((Project)obj).FullName.GetHashCode();
+                }
+                catch( Exception )
+                {
+                    return obj.GetHashCode();
+                }
+            }
+        }
+        #endregion
+
+        #region class ProjectComparer
+        private class ProjectComparer : IComparer
+        {        
+            public int Compare(object x, object y)
+            {
+                try
+                {
+                    return ((Project)x).FullName.CompareTo(
+                        ((Project)y).FullName );
+                }
+                catch( Exception )
+                {
+                    return -1;
+                }
+            }
+        }
+        #endregion
+
 
         private _DTE dte;
         private IntPtr treeview;
