@@ -146,9 +146,20 @@ namespace Ankh.Solution
             // and assign the status image list to the tree
             this.treeview.StatusImageList = statusImageList.Handle;
 
-            // we assume there is a single root node
-            this.solutionNode = TreeNode.CreateSolutionNode( 
-                this.uiHierarchy.UIHierarchyItems.Item(1), this );
+            // avoid lots of flickering while we walk the tree
+            this.treeview.LockWindowUpdate( true );
+            try
+            {
+
+                // we assume there is a single root node
+                this.solutionNode = TreeNode.CreateSolutionNode( 
+                    this.uiHierarchy.UIHierarchyItems.Item(1), this );
+            }
+            finally
+            {
+                // done
+                this.treeview.LockWindowUpdate( false );
+            }
  
             Debug.WriteLine( "Created solution node", "Ankh" );
         }
