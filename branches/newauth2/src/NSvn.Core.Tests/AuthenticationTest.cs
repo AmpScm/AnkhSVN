@@ -30,6 +30,7 @@ namespace NSvn.Core.Tests
         public void TestSslServerPromptFail()
         {
             AuthenticationBaton baton = new AuthenticationBaton();
+            baton.SetParameter( AuthenticationBaton.ParamConfigDir, this.configDir );
             baton.Add( Authentication.GetSslServerTrustPromptProvider( new 
                 SslServerTrustPromptDelegate( this.SslServerTrustFailCallback  ) ) );
 
@@ -58,6 +59,7 @@ namespace NSvn.Core.Tests
         public void TestSslServerPromptSuccess()
         {
             AuthenticationBaton baton = new AuthenticationBaton();
+            baton.SetParameter( AuthenticationBaton.ParamConfigDir, this.configDir );
             baton.Add( Authentication.GetSslServerTrustPromptProvider( new 
                 SslServerTrustPromptDelegate( this.SslServerTrustAcceptCallback  ) ) );
 
@@ -71,6 +73,42 @@ namespace NSvn.Core.Tests
            
             Assertion.Assert( "No entries returned", entries.Length > 0 );
             Assertion.Assert( "Callback not called", this.callbackCalled );
+        }
+
+        [Test]
+        public void TestSslServerFileSuccess()
+        {
+            AuthenticationBaton baton = new AuthenticationBaton();
+            baton.SetParameter( AuthenticationBaton.ParamConfigDir, this.configDir );
+            baton.Add( Authentication.GetSslServerTrustFileProvider() );
+            baton.Add( Authentication.GetSslServerTrustPromptProvider( new 
+                SslServerTrustPromptDelegate( this.SslServerTrustAcceptCallback  ) ) );
+            
+
+            ClientContext ctx = new ClientContext();
+            ClientConfig.CreateConfigDir( this.configDir );
+            ctx.ClientConfig =  new ClientConfig( this.configDir  );
+            ctx.AuthBaton = baton;
+
+            // first get the certificate to be trusted
+            this.acceptedFailures = SslFailures.CertificateAuthorityUnknown |
+                SslFailures.CertificateNameMismatch | 
+                SslFailures.Other;
+            this.trustPermanently = true;
+
+            
+            Client.List( SSLTESTREPOS, Revision.Head, false, ctx );
+
+            // now try to get them to take it from the config dir
+            baton = new AuthenticationBaton();
+            baton.Add( Authentication.GetSslServerTrustFileProvider() );
+
+            ctx.AuthBaton = baton;
+            DirectoryEntry[] entries = Client.List( SSLTESTREPOS,
+                Revision.Head, false, ctx );
+            Assertion.Assert( "No entries returned", entries.Length > 0 );        
+
+            
         }
 
 

@@ -31,6 +31,10 @@ namespace NSvn
             static AuthenticationProviderObject* GetSslServerTrustPromptProvider( 
                 SslServerTrustPromptDelegate* trustDelegate );
 
+            /// <summary>Create and return an authentication provider that queries
+            /// the user's config area for certificate trust stuff.</summary>
+            static AuthenticationProviderObject* GetSslServerTrustFileProvider();
+
         private:
 
 
