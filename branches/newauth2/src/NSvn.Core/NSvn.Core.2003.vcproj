@@ -182,9 +182,6 @@
 				RelativePath="AprFileAdapter.h">
 			</File>
 			<File
-				RelativePath=".\Authentication.h">
-			</File>
-			<File
 				RelativePath=".\AuthenticationBaton.h">
 			</File>
 			<File
