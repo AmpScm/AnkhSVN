@@ -1,8 +1,8 @@
-$Id: README.rtf 923 2003-10-19 16:29:42Z Arild $
+$Id: README.rtf 1073 2004-01-26 23:20:27Z Arild $
 
 *AnkhSVN*
 
-This is the 0.4 release of AnkhSVN, a Visual Studio .NET addin for the Subversion version control system.
+This is the 0.4.1 release of AnkhSVN, a Visual Studio .NET addin for the Subversion version control system.
 
 AnkhSVN supports both VS.NET 2002 and VS.NET 2003. The installer will set up the correct registry entries for both environments. AnkhSVN 0.4 is built against Subversion 0.37, openssl 0.9.7 and Berkeley DB 4.2.52.
 

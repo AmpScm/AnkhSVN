@@ -267,11 +267,22 @@ namespace Ankh.Solution
             // we need to make sure its not hidden and that it is dockable
             bool linkable = solutionExplorerWindow.Linkable;
             bool hidden = solutionExplorerWindow.AutoHides;
+            bool isFloating = solutionExplorerWindow.IsFloating;
 
-            // this needs to be done in this *EXACT* order
-            // you cannot set AutoHides for a window that has Linkable=true
-            solutionExplorerWindow.Linkable = true;
-            solutionExplorerWindow.AutoHides = false;
+            // these two operations need to be done in an exact order, 
+            // depending on whether it is initially hidden
+            if ( hidden )
+            {
+                solutionExplorerWindow.AutoHides = false;
+                solutionExplorerWindow.IsFloating = false;
+                solutionExplorerWindow.Linkable = true;
+            }
+            else
+            {
+                solutionExplorerWindow.IsFloating = false;
+                solutionExplorerWindow.Linkable = true;
+                solutionExplorerWindow.AutoHides = false;
+            }
             
             // find the solution explorer window
             // Get the caption of the solution explorer            
@@ -311,8 +322,9 @@ namespace Ankh.Solution
                 throw new ApplicationException( 
                     "Could not attach to solution explorer treeview" );
 
-            // reset back to the original hiding-state and dockable state
+            // reset back to the original hiding-state and dockable state            
             solutionExplorerWindow.Linkable = linkable;
+            solutionExplorerWindow.IsFloating = isFloating;
             if ( solutionExplorerWindow.Linkable )
                 solutionExplorerWindow.AutoHides = hidden;
 
