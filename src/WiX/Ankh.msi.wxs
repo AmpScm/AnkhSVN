@@ -14,6 +14,8 @@
         <!-- Try to divide cab size, because win 2000 and below don't like large cab's -->
         <Media Id="1" Cabinet="Ankh.cab" EmbedCab="yes" CompressionLevel="high" />
         <Media Id="2" Cabinet="NSvn.cab" EmbedCab="yes" CompressionLevel="high" />
+        <CustomAction Id="DIRCA_TARGETDIR" Property="TARGETDIR" Value="[ProgramFilesFolder]\AnkhSVN\"
+            Execute="firstSequence" />
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Merge Id="MSM_NSvn_msm" src="$(var.installdir)\NSvn.msm" Language="1033" DiskId="2" />
         </Directory>
@@ -43,6 +45,7 @@
                 <Show Dialog="FinishedForm" OnExit="success" />
                 <!-- UI Install sequence-->
                 <LaunchConditions Sequence="100" />
+                <Custom Action="DIRCA_TARGETDIR" Before="CostInitialize">TARGETDIR=""</Custom>
                 <FindRelatedProducts Sequence="200" />
                 <AppSearch Sequence="400" />
                 <CCPSearch Sequence="500">NOT Installed</CCPSearch>
