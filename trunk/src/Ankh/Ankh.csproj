@@ -389,6 +389,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Extenders\ExtenderProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extenders\ResourceExtender.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extenders\TestExtender.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RepositoryExplorer\Controller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
