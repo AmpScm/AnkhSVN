@@ -48,8 +48,8 @@
     </target>
     
     <target name="compile" depends="init">
-        <property name="define" value="REPORTERROR;TRACE"/>
-        <property name="define" value="ALWAYSREGISTER;DEBUG;${define}" 
+        <property name="define" value="REPORTERROR;TRACE;ALWAYSREGISTER"/>
+        <property name="define" value="DEBUG;${define}" 
             if="${debug}"/>
         
         <property name="define" value="ALT_ADMIN_DIR;${define}" 
