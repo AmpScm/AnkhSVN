@@ -44,7 +44,7 @@ namespace Ankh.UI
         private void BuildSubTree( TreeNodeCollection nodes, RepositoryDirectory dir )
         {
             // set the wait cursor
-            Cursor current = this.Cursor;
+            //Cursor current = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
             // we have set a new root, so get rid of any existing nodes
             nodes.Clear();
@@ -59,7 +59,7 @@ namespace Ankh.UI
             foreach( RepositoryResource res in dict.Values )
                 res.Accept( visitor );
 
-            this.Cursor = current;
+            this.Cursor = Cursors.Default;
         }
 
         /// <summary>
