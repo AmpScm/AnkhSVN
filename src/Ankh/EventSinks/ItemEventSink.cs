@@ -38,6 +38,9 @@ namespace Ankh.EventSinks
                         }
 
                         SvnItem svnItem = this.Context.StatusCache[ file ];
+                        
+                        // make sure we have up to date info on this item.
+                        svnItem.Refresh(this.Context.Client);
                         if ( !svnItem.IsVersioned && svnItem.IsVersionable )
                             this.Context.Client.Add( file, false );
                     }
