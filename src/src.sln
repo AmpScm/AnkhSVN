@@ -53,6 +53,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Tests", "Ankh.Tests\An
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Tests.2003", "Utils.Tests.2003\Utils.Tests.csproj", "{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		(svnlib) Debug = (svnlib) Debug
@@ -200,6 +204,22 @@ Global
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.NSvn.Tests.Build.0 = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.ActiveCfg = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.Build.0 = Release|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug.ActiveCfg = Debug|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug.Build.0 = Debug|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug run.ActiveCfg = Debug|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug run.Build.0 = Debug|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) NSvn.Tests.ActiveCfg = Release|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) NSvn.Tests.Build.0 = Release|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Release.ActiveCfg = Release|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Release.Build.0 = Release|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Debug.ActiveCfg = Debug|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Debug.Build.0 = Debug|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Debug run.ActiveCfg = Debug|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Debug run.Build.0 = Debug|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.NSvn.Tests.ActiveCfg = Release|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.NSvn.Tests.Build.0 = Release|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Release.ActiveCfg = Release|.NET
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
