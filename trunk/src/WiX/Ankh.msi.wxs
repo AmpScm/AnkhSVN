@@ -50,7 +50,6 @@
             <ComponentRef Id="C_Ankh.UI.dll" />
             <ComponentRef Id="C_Utils.dll" />
             <FeatureRef Id="F_Libs" />
-            <FeatureRef Id="F_ReposInstaller" />
             <ComponentRef Id="apr_iconv" />
         </Feature>
 
