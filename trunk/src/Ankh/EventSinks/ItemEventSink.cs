@@ -157,5 +157,7 @@ namespace Ankh.EventSinks
                 this.Context.ErrorHandler.Handle( ex );
             }            
         }
+           
+        private bool renaming = false;
     }
 }
