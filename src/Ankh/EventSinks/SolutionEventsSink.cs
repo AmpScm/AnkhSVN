@@ -7,9 +7,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Event sink for solution related events.
     /// </summary>
-    public class SolutionEventsSink : ItemEventSink
+    internal class SolutionEventsSink : ItemEventSink
     {
-        public SolutionEventsSink( AnkhContext context ) : base( context )
+        internal SolutionEventsSink( AnkhContext context ) : base( context )
         {
             this.solutionEvents = context.DTE.Events.SolutionEvents;
             this.solutionEvents.ProjectAdded += new _dispSolutionEvents_ProjectAddedEventHandler(

@@ -17,7 +17,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents an item in the treeview.
     /// </summary>
-    public abstract class TreeNode
+    internal abstract class TreeNode
     {
 
         public event StatusChanged Changed;
@@ -283,8 +283,6 @@ namespace Ankh.Solution
 
                 Debug.Indent();
 
-                this.children = new ArrayList();
-
                 // retain the original expansion state
                 bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
 
@@ -297,8 +295,9 @@ namespace Ankh.Solution
                     this.uiItem.UIHierarchyItems.Expanded = true;
                     childItem = this.explorer.TreeView.GetChild( this.hItem );
                 }
-                
+
                 // iterate over the ui items and the treeview items in parallell
+                this.children = new ArrayList();
                 foreach( UIHierarchyItem child in this.uiItem.UIHierarchyItems )
                 {
                     Debug.Assert( childItem != IntPtr.Zero, 
@@ -325,16 +324,10 @@ namespace Ankh.Solution
                     this.uiItem.Name, "Ankh" );
                 this.uiItem.UIHierarchyItems.Expanded = isExpanded;
             }
-            catch( ArgumentException )
+            catch( ArgumentException ex )
             {
                 // thrown some times if the uiitem is invalid for some reason
-                this.explorer.Context.OutputPane.StartActionText( "ERROR" );
-                this.explorer.Context.OutputPane.WriteLine( 
-                    "ERROR: ArgumentException thrown by automation object. " + 
-                    "This project will not load." );
-                this.explorer.Context.OutputPane.WriteLine(
-                    "(Is this a third party project type?)" );
-                this.explorer.Context.OutputPane.EndActionText();
+                throw new SvnException( "Invalid UIHierarchyItem", ex );
             }
         }
 

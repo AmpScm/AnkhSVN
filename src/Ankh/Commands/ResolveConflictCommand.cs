@@ -21,7 +21,7 @@ namespace Ankh.Commands
      VSNetControl( "Item.Ankh", Position = 1 ),
      VSNetProjectNodeControl( "Ankh", Position = 1 ),
      VSNetControl( "Solution.Ankh", Position = 1)]
-    public class ResolveConflictCommand : CommandBase
+    internal class ResolveConflictCommand : CommandBase
     {    
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {

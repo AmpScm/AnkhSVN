@@ -7,7 +7,7 @@ namespace Ankh
     /// An attribute that describes a VS.NET command.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class VSNetCommandAttribute : Attribute
+    internal class VSNetCommandAttribute : Attribute
     {
         public VSNetCommandAttribute( string name )
         {

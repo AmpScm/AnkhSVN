@@ -19,7 +19,7 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
-    public class AnkhContext
+    internal class AnkhContext
     {
         /// <summary>
         /// Fired when the addin is unloading.

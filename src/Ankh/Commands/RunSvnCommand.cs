@@ -14,7 +14,7 @@ namespace Ankh.Commands
     /// This command should be aliased as "svn".
     /// </summary>
     [VSNetCommand("RunSvn")]
-    public class RunSvnCommand : CommandBase
+    internal class RunSvnCommand : CommandBase
     {
         public RunSvnCommand()
         {
@@ -147,7 +147,7 @@ dir     List the contents of the working directory
 
 
         /// <summary>
-        /// Change the public working directory.
+        /// Change the internal working directory.
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>The new path.</returns>
