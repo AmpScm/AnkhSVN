@@ -39,7 +39,7 @@
         <echo message="${lib.dir}/nunit.framework.dll"/>
         
         <csc target="library" output="${build.dir}/NSvn.Core.Tests.dll" 
-        verbose="${verbose}" define="${define}" debug="${debug}">
+            verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
