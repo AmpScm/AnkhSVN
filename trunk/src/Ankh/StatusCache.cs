@@ -46,16 +46,39 @@ namespace Ankh
                 {
                     System.Diagnostics.Debug.WriteLine( 
                         "Cached item not found for " + normPath, "Ankh" );
+                    this.cacheMisses++;
                     Status status = this.client.SingleStatus( normPath );
                     this.table[normPath] = item = new SvnItem( path, status );
                 }
                 else
+                {
+                    this.cacheHits++;
                     System.Diagnostics.Debug.WriteLine( 
                         "Cached item found for " + path,  
                         "Ankh" );
+                }
 
                 return item;
             }                
+        }
+
+        /// <summary>
+        /// Current success rate of the cache.
+        /// </summary>
+        public float CacheHitSuccess
+        {
+            get
+            { 
+                // we don't wanna divide by zero
+                if ( this.cacheHits + this.cacheMisses > 0 )
+                {
+                    return (100 / ((float)this.cacheHits + this.cacheMisses)) * this.cacheHits; 
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
 
         /// <summary>
@@ -141,6 +164,8 @@ namespace Ankh
             }
         }
 
+        private int cacheHits = 0;
+        private int cacheMisses = 0;
         
 
         private Hashtable deletions;
