@@ -19,9 +19,7 @@ namespace Ankh.Solution
             base( item, hItem, explorer, parent )
         {
             this.projectItem = (ProjectItem)item.Object;
-            this.FindResources();
-
-            this.FindChildren();                        
+            this.FindResources();                      
         }
 
         public override void GetResources(IList list, bool getChildItems, 

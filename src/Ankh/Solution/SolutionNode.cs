@@ -27,8 +27,6 @@ namespace Ankh.Solution
             this.solutionFolder.Changed += del;
 
             explorer.SetSolution( this );
-
-            this.FindChildren();
         }   
 
         public override void Accept(INodeVisitor visitor)

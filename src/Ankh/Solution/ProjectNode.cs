@@ -16,8 +16,6 @@ namespace Ankh.Solution
             this.project = (Project)item.Object;
 
             this.FindProjectResources(explorer);
-
-            this.FindChildren();
         }
 
         public override void GetResources( System.Collections.IList list, 
