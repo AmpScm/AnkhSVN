@@ -138,6 +138,11 @@
                     AssemblyName = "AnkhUserControlHostLib"
                     HintPath = "..\lib\AnkhUserControlHostLib.dll"
                 />
+                <Reference
+                    Name = "Interop.esproj"
+                    AssemblyName = "Interop.esproj"
+                    HintPath = "..\lib\Interop.esproj.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -224,7 +229,7 @@
                     RelPath = "Commands\CheckoutFolderCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />    
+                />
                 <File
                     RelPath = "Commands\CleanupCommand.cs"
                     SubType = "Code"
