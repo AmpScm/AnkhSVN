@@ -5,7 +5,7 @@
     <property name="debug" value="false"/>
     <property name="build.dir" value="build/Debug" if="${debug}"/>
     <property name="build.dir" value="build/Release" unless="${debug}"/>
-    <property name="deploy.dir" value="$build.dir"/>
+    <property name="deploy.dir" value="${build.dir}"/>
     <property name="lib.dir" value="lib"/>
     
     <target name="clean">
