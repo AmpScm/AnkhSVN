@@ -31,7 +31,7 @@ namespace Ankh.EventSinks
                     for( short i = 1; i <= item.FileCount; i++ )
                     {
                         string file = item.get_FileNames(i);
-                        SvnItem svnItem = this.Context.SolutionExplorer.StatusCache[ file ];
+                        SvnItem svnItem = this.Context.StatusCache[ file ];
                         if ( !svnItem.IsVersioned && svnItem.IsVersionable )
                             this.Context.Client.Add( file, false );
                     }
@@ -92,7 +92,7 @@ namespace Ankh.EventSinks
                 string dir = Path.GetDirectoryName( newName );
 
                 string oldPath = Path.Combine( dir, oldName );
-                SvnItem oldItem = this.Context.SolutionExplorer.StatusCache["oldPath"];
+                SvnItem oldItem = this.Context.StatusCache["oldPath"];
 
                 // is the item versioned?
                 if ( oldItem.Status.TextStatus != StatusKind.None )

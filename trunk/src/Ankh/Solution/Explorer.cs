@@ -240,16 +240,9 @@ namespace Ankh.Solution
             get{ return this.treeview; }
         }
 
-        internal Client Client
+        internal AnkhContext Context
         {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.context.Client; }
-        }
-
-        internal StatusCache StatusCache
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.statusCache; }
+            get{ return this.context; }
         }
 
         internal _DTE DTE
@@ -374,8 +367,7 @@ namespace Ankh.Solution
            
             Debug.WriteLine( "Getting status cache", "Ankh" );
             
-            this.statusCache = new StatusCache( this.Client );
-            this.statusCache.Status( solutionDir );
+            this.context.StatusCache.Status( solutionDir );
 
             t.End( "Got status cache", "Ankh" );
         }
@@ -508,7 +500,6 @@ namespace Ankh.Solution
         private TreeNode solutionNode;
         private ImageList statusImageList;
         private AnkhContext context;
-        private StatusCache statusCache;
         private TreeView treeview;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";

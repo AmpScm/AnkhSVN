@@ -17,9 +17,9 @@ namespace Ankh.Solution
             : base( item, hItem, explorer, null )
         {
             EnvDTE.Solution solution = this.Explorer.DTE.Solution;
-            this.solutionFile = this.Explorer.StatusCache[solution.FullName];
+            this.solutionFile = this.Explorer.Context.StatusCache[solution.FullName];
 
-            this.solutionFolder = this.Explorer.StatusCache[
+            this.solutionFolder = this.Explorer.Context.StatusCache[
                 Path.GetDirectoryName( solution.FullName )];
 
             StatusChanged del  = new StatusChanged( this.ChildOrResourceChanged );

@@ -32,7 +32,7 @@ namespace Ankh.EventSinks
                     for ( short i = 1; i <= document.ProjectItem.FileCount; i++ )
                     {
                         string filename = document.ProjectItem.get_FileNames(i);
-                        SvnItem item = this.Context.SolutionExplorer.StatusCache[ filename ];
+                        SvnItem item = this.Context.StatusCache[ filename ];
                         item.Refresh( this.Context.Client );
                     }
                 }
