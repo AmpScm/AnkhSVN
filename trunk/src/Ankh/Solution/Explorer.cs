@@ -457,20 +457,10 @@ namespace Ankh.Solution
         {        
             public int GetHashCode(object obj)
             {
-                string filename;
                 try
-                {
-                    try
-                    {
-                        filename = ((ProjectItem)obj).get_FileNames(1);
-                    }
-                    catch( ArgumentException )
-                    {
-                        // hack for those project types which use a 0-based index
-                        // (GRRRR)
-                        filename = ((ProjectItem)obj).get_FileNames(0);
-                    }
-                    string str = ((ProjectItem)obj).ContainingProject.FullName + "|" + filename;
+                {                    
+                    string str = ItemComparer.GetProjectName(obj) + "|" + 
+                        ItemComparer.GetFileName(obj);
                     return str.GetHashCode();
                 }
                 catch( Exception )
@@ -488,8 +478,8 @@ namespace Ankh.Solution
             {
                 try
                 {
-                    string str_a = ((ProjectItem)x).ContainingProject.FullName + "|" + GetFileName(x);
-                    string str_b = ((ProjectItem)y).ContainingProject.FullName + "|" + GetFileName(y);
+                    string str_a = GetProjectName(x) + "|" + GetFileName(x);
+                    string str_b = GetProjectName(y) + "|" + GetFileName(y);
                     return str_a.CompareTo(str_b);
                 }
                 catch( Exception )
@@ -498,14 +488,14 @@ namespace Ankh.Solution
                 }
             }
 
-            private static string GetFileName( object obj )
+            internal static string GetFileName( object obj )
             {
                 string filename = null;
                 try
                 {
                     filename = ((ProjectItem)obj).get_FileNames(1);
                 }
-                catch( ArgumentException )
+                catch( Exception )
                 {
                     // hack for those project types which use a 0-based index
                     // (GRRRR)
@@ -513,6 +503,21 @@ namespace Ankh.Solution
                 }
 
                 return filename;
+            }
+
+            internal static string GetProjectName( object obj )
+            {
+                string projectName = null;
+                try
+                {
+                    projectName = ((ProjectItem)obj).ContainingProject.FullName;
+                }
+                catch ( Exception )
+                {
+                    projectName = "";
+                }
+
+                return projectName;
             }
         }
         #endregion
