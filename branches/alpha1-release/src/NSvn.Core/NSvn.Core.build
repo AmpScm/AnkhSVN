@@ -8,6 +8,7 @@
     <property name="warninglevel" value="/warn:3"/>
     <property name="svndir" value="..\..\subversion"/>
     
+
     
     <property name="cl.options" value='/Od /I "${svndir}\apr\include" /I "${svndir}\apr-iconv\include" /I "${svndir}\apr-util\include" /I "${svndir}\subversion\include" /AI "..\NSvn.Common\bin\Debug" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /FD /EHsc /MDd /GS   /W3 /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\'
         if="${debug}"/>
