@@ -67,7 +67,7 @@ namespace Ankh.Commands
 
                     if(completed)
                     {
-                        foreach( SvnItem item in resources )
+                        foreach( SvnItem item in items )
                             item.Refresh( context.Client );                        
                     }
                 }
@@ -108,15 +108,7 @@ namespace Ankh.Commands
             Hashtable repositories = new Hashtable();
             foreach( SvnItem item in items )
             {
-                string uuid = item.Status.Entry.Uuid;
-
-                // freshly added items have no uuid
-                if ( uuid == null )
-                {
-                    string parentDir = Path.GetDirectoryName( item.Path );
-                    SvnItem parentItem = context.StatusCache[parentDir];
-                    uuid = parentItem.Status.Entry.Uuid;
-                }
+                string uuid = this.GetUuid( context, item );
 
                 // give up on this one
                 if ( uuid == null )
@@ -130,6 +122,31 @@ namespace Ankh.Commands
             }
 
             return repositories.Values;
+        }
+
+        private string GetUuid( IContext context, SvnItem item )
+        {
+            string uuid = item.Status.Entry.Uuid;
+            // freshly added items have no uuid
+            if ( uuid == null )
+            {
+                string parentDir = Path.GetDirectoryName( item.Path );
+                if ( Directory.Exists( parentDir ) )
+                {
+                    SvnItem parentItem = context.StatusCache[parentDir];
+                    uuid = parentItem.Status.Entry.Uuid;
+
+                    // still nothing? try the parent item
+                    if ( uuid == null )
+                        return this.GetUuid( context, parentItem );
+                }   
+                else
+                {
+                    return null; 
+                }                    
+            }
+            return uuid;
+
         }
 
         private string[] paths;
