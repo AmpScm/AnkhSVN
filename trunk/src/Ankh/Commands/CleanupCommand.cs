@@ -11,7 +11,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand( "Cleanup", Text="Cleanup", Tooltip = "Cleans up the working copy", 
          Bitmap = ResourceBitmaps.Cleanup ),
-    VSNetControl( "Folder.Ankh", Position = 1 ),
+    VSNetFolderNodeControl( "Ankh", Position = 1),
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1 )]
     internal class Cleanup : CommandBase
