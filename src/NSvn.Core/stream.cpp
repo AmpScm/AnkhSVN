@@ -1,5 +1,8 @@
+#include "stdafx.h"
+
 #include "stream.h"
 #include "ManagedPointer.h"
+
 
 using namespace System::IO;
 using namespace System::Runtime::InteropServices;

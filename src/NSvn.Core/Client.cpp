@@ -1,7 +1,11 @@
 // $Id$
+
+#include "stdafx.h"
+
 #include "Client.h"
 #include "StringHelper.h"
 #include "Notification.h"
+
 
 
 #include <svn_client.h>

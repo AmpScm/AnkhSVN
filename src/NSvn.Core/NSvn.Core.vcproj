@@ -26,7 +26,7 @@
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="3"
 				WarningLevel="3"
 				DebugInformationFormat="3"/>
 			<Tool
@@ -64,15 +64,18 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalUsingDirectories="..\NSvn.Common\bin\Debug"
+				AdditionalIncludeDirectories="..\..\subversion\apr\include;&quot;..\..\subversion\apr-iconv\include&quot;;&quot;..\..\subversion\apr-util\include&quot;;..\..\subversion\subversion\include"
+				AdditionalUsingDirectories="..\NSvn.Common\bin\Release"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				MinimalRebuild="FALSE"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="3"
 				WarningLevel="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib Advapi32.lib ..\..\Subversion\db4-win32\lib\libdb41.lib ..\..\Subversion\subversion\libsvn_repos\Release\libsvn_repos.lib ..\..\Subversion\subversion\libsvn_fs\Release\libsvn_fs.lib ..\..\Subversion\subversion\libsvn_ra_dav\Release\libsvn_ra_dav.lib ..\..\Subversion\subversion\libsvn_ra_local\Release\libsvn_ra_local.lib ..\..\Subversion\subversion\libsvn_ra\Release\libsvn_ra.lib ..\..\Subversion\subversion\libsvn_ra_svn\Release\libsvn_ra_svn.lib ..\..\Subversion\neon\libneon.lib ..\..\Subversion\subversion\libsvn_wc\Release\libsvn_wc.lib ..\..\Subversion\subversion\libsvn_subr\Release\libsvn_subr.lib ..\..\Subversion\subversion\libsvn_client\Release\libsvn_client.lib ..\..\Subversion\subversion\libsvn_delta\Release\libsvn_delta.lib ..\..\Subversion\subversion\libsvn_auth\Release\libsvn_auth.lib ..\..\Subversion\apr\LibR\apr.lib ..\..\Subversion\apr-util\LibR\aprutil.lib ..\..\Subversion\apr-iconv\LibR\apriconv.lib ..\..\Subversion\apr-util\xml\expat\lib\LibR\xml.lib"
 				OutputFile="$(OutDir)/NSvn.Core.dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"/>
