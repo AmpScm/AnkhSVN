@@ -102,7 +102,7 @@ namespace Ankh.Solution
                 Trace.WriteLine( "NullReferenceException thrown in ProjectItemNode" );
                 //swallow
             }   
-            catch( System.Runtime.InteropServices.SEHException sex )
+            catch( System.Runtime.InteropServices.SEHException )
             {
                 Trace.WriteLine( "SEHException thrown: " + this.projectItem.Name );
             }
