@@ -268,7 +268,7 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-            static void Resolve(String* path, bool recursive, ClientContext* context);       
+            static void Resolved(String* path, bool recursive, ClientContext* context);       
 
             ///<summary>Copy a file/directory.</summary>
             ///<param name="srcPath">Path to the file/directory to be copied.</param>

@@ -83,7 +83,7 @@ namespace Ankh.Commands
                             break;
                     }
 
-                    file.Resolve();
+                    file.Resolved();
                 }
                 catch( StatusException )
                 {
