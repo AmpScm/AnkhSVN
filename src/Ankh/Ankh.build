@@ -16,7 +16,7 @@
     
     <target name="clean">
         <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
-        <exec program="regsvr32" commandline="/u ${lib.dir}\VSUserControlHost.dll"/>
+        <exec program="regsvr32" commandline="/u ${lib.dir}\Ankh.ToolWindow.dll"/>
     </target>
     
     <target name="init">
