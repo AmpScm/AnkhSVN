@@ -102,6 +102,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "INotificationReceiver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NotificationEventArgs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Notifications.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NSvn.build"
                     BuildAction = "None"
                 />
@@ -117,6 +132,11 @@
                 />
                 <File
                     RelPath = "RepositoryItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SvnItem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

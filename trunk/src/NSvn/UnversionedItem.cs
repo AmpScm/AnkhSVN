@@ -8,7 +8,7 @@ namespace NSvn
 	/// <summary>
 	/// Represents an unversioned item in a working copy.
 	/// </summary>
-	public class UnversionedItem : ILocalItem
+	public class UnversionedItem : SvnItem, ILocalItem
 	{
         /// <summary>
         /// Constructor

@@ -1,7 +1,6 @@
 using System;
 using NSvn.Common;
 using NSvn.Core;
-using NSvn.Core.Tests;
 using NUnit.Framework;
 using System.IO;
 
@@ -15,12 +14,13 @@ namespace NSvn.Tests
 	{
 
         public override void SetUp()
-        {
-            
+        {            
             this.ExtractWorkingCopy();
             this.newFile = Path.Combine( this.WcPath, "newfile.txt" );
             this.newDir = Path.Combine( this.WcPath, "newdir" );
             this.fileInNewDir = Path.Combine( newDir, "file.txt" );
+
+            this.ResetNotificationCount();
         }
 
         [Test]
@@ -30,6 +30,11 @@ namespace NSvn.Tests
                 w.Write( "MOO" );
 
             UnversionedItem item = new UnversionedFile( this.newFile );
+            
+            this.SetupEventHandlers( item.Notifications );
+            
+            Assertion.AssertEquals( "Expected only one notification", 1,
+                this.NotificationCount );
             WorkingCopyItem wcItem = item.Add( false );
             Assertion.AssertEquals( "Wrong type returned. Should be working copy file",
                 typeof( WorkingCopyFile ), wcItem.GetType() );
@@ -56,8 +61,9 @@ namespace NSvn.Tests
                 StatusKind.Added, file.Status.TextStatus );
         }
 
+       
         private string newFile;
         private string newDir;
-        private string fileInNewDir;		
+        private string fileInNewDir;
 	}
 }
