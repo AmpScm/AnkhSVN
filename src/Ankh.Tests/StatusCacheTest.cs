@@ -30,7 +30,7 @@ namespace Ankh.Tests
             StatusCache cache = new StatusCache( this.Client );
             cache.Status( this.WcPath );
 
-            string formPath = Path.Combine(this.WcPath, "Form.cs");
+            string formPath = Path.Combine(this.WcPath, "Form1.cs");
 
             SvnItem item = cache[formPath];
             Assert.AreEqual( StatusKind.Normal, item.Status.TextStatus );
@@ -49,9 +49,9 @@ namespace Ankh.Tests
         public void TestGetDeletions()
         {
             StatusCache cache = new StatusCache( this.Client );
-            this.Client.Delete( new string[]{Path.Combine( this.WcPath, "Form.resx" )}, 
+            this.Client.Delete( new string[]{Path.Combine( this.WcPath, "Class1.cs" )}, 
                 true);
-            this.Client.Delete( new string[]{Path.Combine( this.WcPath, "GoogleOne.suo" )}, 
+            this.Client.Delete( new string[]{Path.Combine( this.WcPath, "WindowsApplication.sln" )}, 
                 true);
             
             // should be two deletions now
@@ -60,12 +60,12 @@ namespace Ankh.Tests
             Assert.AreEqual( 2, deletions.Count );
 
             // undelete one
-            this.Client.Revert(  new string[]{Path.Combine( this.WcPath, "Form.resx" )}, false );
+            this.Client.Revert(  new string[]{Path.Combine( this.WcPath, "Class1.cs" )}, false );
             deletions = cache.GetDeletions( this.WcPath );
             Assert.AreEqual( 1, deletions.Count );
 
             // this one should still be deleted
-            Assert.AreEqual( Path.Combine( this.WcPath, "GoogleOne.suo" ), 
+            Assert.AreEqual( Path.Combine( this.WcPath, "WindowsApplication.sln" ), 
                 ((SvnItem)deletions[0]).Path);  
 
             // undelete all
@@ -82,10 +82,10 @@ namespace Ankh.Tests
         {
             StatusCache cache = new StatusCache(this.Client);
             cache.Status( Path.Combine(this.WcPath, "doc") );
-            using( StreamWriter w = new StreamWriter(Path.Combine(this.WcPath, "Form.cs")) )
+            using( StreamWriter w = new StreamWriter(Path.Combine(this.WcPath, "Form1.cs")) )
                 w.WriteLine( "Foo" );
 
-            SvnItem item = cache[Path.Combine(this.WcPath, "Form.cs")];
+            SvnItem item = cache[Path.Combine(this.WcPath, "Form1.cs")];
             Assert.AreEqual( StatusKind.Modified, item.Status.TextStatus );            
         }
 
