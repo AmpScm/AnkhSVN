@@ -105,6 +105,26 @@
                     Project = "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "D:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "D:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "envdte"
+                    AssemblyName = "envdte"
+                    HintPath = "D:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\envdte.dll"
+                />
+                <Reference
+                    Name = "Ankh.UI.2003"
+                    Project = "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -114,13 +134,22 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "AnkhContextTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DteFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "repos.zip"
-                    Link = "..\NSvn.Core.Tests\repos.zip"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -134,8 +163,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "unversioned.zip"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "wc.zip"
-                    Link = "..\NSvn.Core.Tests\wc.zip"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>

@@ -48,7 +48,7 @@ namespace Ankh.Tests
         [Test]
         public void TestPath()
         {
-            string path = Path.Combine( this.WcPath, "Form.cs" );
+            string path = Path.Combine( this.WcPath, "Form1.cs" );
             Status status = this.Client.SingleStatus( path );
             SvnItem item = new SvnItem( path, status );  
 
@@ -87,7 +87,7 @@ namespace Ankh.Tests
             Zip.ExtractZipResource( otherWc, this.GetType(), this.WC_FILE );
             try
             {
-                using( StreamWriter w2 = new StreamWriter( Path.Combine(otherWc, "Form.cs") ) )
+                using( StreamWriter w2 = new StreamWriter( Path.Combine(otherWc, "Form1.cs") ) )
                     w2.WriteLine( "Something else" );
                 this.Client.Commit( new string[]{ otherWc }, false );
             }
@@ -151,7 +151,7 @@ namespace Ankh.Tests
             Zip.ExtractZipResource( otherWc, this.GetType(), this.WC_FILE );
             try
             {
-                using( StreamWriter w2 = new StreamWriter( Path.Combine(otherWc, "Form.cs") ) )
+                using( StreamWriter w2 = new StreamWriter( Path.Combine(otherWc, "Form1.cs") ) )
                     w2.WriteLine( "Something else" );
                 this.Client.Commit( new string[]{ otherWc }, false );
             }
@@ -235,7 +235,7 @@ namespace Ankh.Tests
             Zip.ExtractZipResource( otherWc, this.GetType(), this.WC_FILE );
             try
             {
-                using( StreamWriter w2 = new StreamWriter( Path.Combine(otherWc, "Form.cs") ) )
+                using( StreamWriter w2 = new StreamWriter( Path.Combine(otherWc, "Form1.cs") ) )
                     w2.WriteLine( "Something else" );
                 this.Client.Commit( new string[]{ otherWc }, false );
             }
@@ -296,7 +296,7 @@ namespace Ankh.Tests
         public void TestFilter()
         {
             SvnItem item1 = this.GetItem( this.WcPath );
-            SvnItem item2 = this.GetItem( Path.Combine(this.WcPath, "Form.cs" ));
+            SvnItem item2 = this.GetItem( Path.Combine(this.WcPath, "Form1.cs" ));
             SvnItem item3 = this.GetItem( Path.Combine(this.WcPath, "AssemblyInfo.cs" ));
 
             IList items = SvnItem.Filter( new SvnItem[]{item1, item2, item3}, 
@@ -317,14 +317,14 @@ namespace Ankh.Tests
         public void TestGetPaths()
         {
             SvnItem item1 = this.GetItem( this.WcPath );
-            SvnItem item2 = this.GetItem( Path.Combine(this.WcPath, "Form.cs" ));
+            SvnItem item2 = this.GetItem( Path.Combine(this.WcPath, "Form1.cs" ));
             SvnItem item3 = this.GetItem( Path.Combine(this.WcPath, "AssemblyInfo.cs" ));
 
             string[] paths = SvnItem.GetPaths(new SvnItem[]{item1, item2, item3});
             Assert.AreEqual( 3, paths.Length );
             Assert.IsTrue( Array.IndexOf( paths, this.WcPath ) >= 0 );
-            Assert.IsTrue( Array.IndexOf( paths, Path.Combine(this.WcPath, "Form.cs" ) ) >= 0 );
-            Assert.IsTrue( Array.IndexOf( paths, Path.Combine(this.WcPath, "Form.cs" ) ) >= 0 );
+            Assert.IsTrue( Array.IndexOf( paths, Path.Combine(this.WcPath, "Form1.cs" ) ) >= 0 );
+            Assert.IsTrue( Array.IndexOf( paths, Path.Combine(this.WcPath, "Form1.cs" ) ) >= 0 );
         }
         
         /// <summary>
@@ -339,7 +339,7 @@ namespace Ankh.Tests
 
         private SvnItem GetItem()
         {
-            string path = Path.Combine( this.WcPath, "Form.cs" );
+            string path = Path.Combine( this.WcPath, "Form1.cs" );
             return GetItem( path );            
         }
 
