@@ -5,6 +5,9 @@ using System.IO;
 using NSvn.Core;
 using Utils;
 using EnvDTE;
+using System.Threading;
+
+using Timer = System.Threading.Timer;
 
 namespace Ankh
 {
@@ -29,7 +32,7 @@ namespace Ankh
         FileModifiedEventArgs args );
 
     /// <summary>
-    /// Watches project files.
+    /// Watches files.
     /// </summary>
     public class FileWatcher
     {
@@ -42,6 +45,10 @@ namespace Ankh
         {
             client.Notification += new NotificationDelegate(this.OnNotification);
             this.projectWatchers = new ArrayList();
+
+            // set up the polling
+            this.timer = new Timer( new TimerCallback( this.DoPoll ), null, 
+                0, PollingInterval );
         }
 
         public void StartWatchingForChanges()
@@ -58,11 +65,14 @@ namespace Ankh
             get{ return this.dirty; }
         }
 
+        /// <summary>
+        /// Add a file to be watched.
+        /// </summary>
+        /// <param name="path"></param>
         public void AddFile( string path )
         {
             Watcher w = new Watcher( path, this );
             this.projectWatchers.Add( w );
-            w.Run();
         }
 
         /// <summary>
@@ -70,8 +80,6 @@ namespace Ankh
         /// </summary>
         public void Clear()
         {
-            foreach( IDisposable d in this.projectWatchers )
-                d.Dispose();
             this.projectWatchers.Clear();
             this.dirty = false;
         }
@@ -84,6 +92,11 @@ namespace Ankh
             this.dirty = false;
         }
 
+        /// <summary>
+        /// Callback for SVN notifications.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void OnNotification( object sender, NotificationEventArgs args )
         {
             if ( IsChanged( args.ContentState ) || args.Action == NotifyAction.Revert )
@@ -93,6 +106,11 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Whether a NotifyState indicates a change to an item.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         private static bool IsChanged( NotifyState state )
         {
             return  state == NotifyState.Changed || 
@@ -100,6 +118,11 @@ namespace Ankh
                 state == NotifyState.Merged;
         }
 
+        /// <summary>
+        /// Whether a given path is being watched.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private bool IsWatchee( string path )
         {
             foreach( Watcher w in this.projectWatchers )
@@ -110,75 +133,65 @@ namespace Ankh
             return false;
         }
 
+        /// <summary>
+        /// Timer callback. Performs the polling of the watchers.
+        /// </summary>
+        /// <param name="state"></param>
+        private void DoPoll( object state )
+        {
+            foreach( Watcher w in this.projectWatchers )
+                w.Poll();
+        }
+
         #region class Watcher
-        private class Watcher : IDisposable
+        private class Watcher 
         {
             public Watcher( string path, FileWatcher parent )
             {
                 this.parent = parent;
-                this.path = path;
-
-                string dir = Path.GetDirectoryName( path );
-                string file = Path.GetFileName( path );
-
-                this.fileSystemWatcher = new FileSystemWatcher( dir, file ); 
-                this.fileSystemWatcher.IncludeSubdirectories = false;
-                this.fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite |
-                    NotifyFilters.FileName;
-                this.fileSystemWatcher.Changed += new 
-                    FileSystemEventHandler(this.OnChanged);
-                //                this.fileSystemWatcher.Renamed += 
-                //                    new RenamedEventHandler(parent.OnRenamed);
+                this.path = path;    
+                this.lastWriteTime = File.GetLastWriteTime( this.path );
             }
 
-            ~Watcher()
-            {
-                this.Dispose();
-            }
-
+            /// <summary>
+            /// The path of this watcher.
+            /// </summary>
             public string FilePath
             {
                 get{ return this.path; }
             }
-
-            public void Stop()
-            {
-                this.fileSystemWatcher.EnableRaisingEvents = false;
-            }
-
-            public void Run()
-            {
-                this.fileSystemWatcher.EnableRaisingEvents = true;
-            }
             
-            #region IDisposable Members
-            public void Dispose()
-            {
-                this.fileSystemWatcher.Dispose();
-                GC.SuppressFinalize(this);
-            }
-            #endregion
 
-
-            private void OnChanged( object sender, FileSystemEventArgs args )
+            /// <summary>
+            /// Checks the last access time of this watcher.
+            /// </summary>
+            public void Poll()
             {
-                // nope, we are watching a project file
-                if ( this.parent.FileModified != null )
-                {
-                    FileModifiedEventArgs projArgs = new 
-                        FileModifiedEventArgs(this.path);
-                    this.parent.FileModified( this.parent, projArgs );
+                DateTime now = File.GetLastWriteTime( this.path );
+                if ( now - this.lastWriteTime > Delta )
+                {                    
+                    if ( this.parent.FileModified != null )
+                    {
+                        FileModifiedEventArgs projArgs = new 
+                            FileModifiedEventArgs(this.path);
+                        this.parent.FileModified( this.parent, projArgs );
+                    }
+
+                    this.lastWriteTime = now;
                 }
             }
 
             private FileWatcher parent;
-            private FileSystemWatcher fileSystemWatcher;
+            private DateTime lastWriteTime;
             private string path;
+            private static readonly TimeSpan Delta = new TimeSpan(0,0,1);
             
         }
         #endregion
 
         private ArrayList projectWatchers;
         private bool dirty;
+        private Timer timer;
+        private const long PollingInterval = 1000;
     }
 }
