@@ -3,10 +3,10 @@
         <DirectoryRef Id="TARGETDIR">
             <Component Id="C_ReposInstaller.dll" DiskId="1" Guid="6529FD7F-8C04-4ca0-A323-CF26905F072A">
                 <File Id="CF_ReposInstaller.dll" Name="REPOSI~1.DLL" LongName="ReposInstaller.dll"
-                Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
+                Checksum="yes" Vital="yes" KeyPath="yes"
                 src="$(var.builddir)\ReposInstaller.dll" />
                 <File Id="ReposInstaller_file1" Name="REPOSI~1.PDB" LongName="ReposInstaller.pdb"
-                Checksum="yes" Compressed="yes" Vital="yes"
+                Checksum="yes" Vital="yes"
                 src="$(var.builddir)\ReposInstaller.pdb" />
             </Component>
         </DirectoryRef>
