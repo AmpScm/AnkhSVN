@@ -88,7 +88,8 @@ namespace Ankh
                        s == StatusKind.Merged ||
                        s == StatusKind.Modified ||
                        s == StatusKind.Normal ||
-                       s == StatusKind.Replaced;
+                       s == StatusKind.Replaced ||
+                       s == StatusKind.Deleted;
             }
         }
 
