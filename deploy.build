@@ -102,7 +102,7 @@
     <target name="source">
         <ifnot test="${preserve.checkout.dir}">
             <echo message="Deleting ${checkout.dir}" />
-            <delete dir="${checkout.dir}"/>
+            <delete dir="${checkout.dir}" failonerror='false'/>
             <call target="checkout" /> 
         </ifnot> 
         
@@ -111,7 +111,7 @@
     
     <target name="clean">
         <echo message="Deleting ${checkout.dir}"/>
-        <delete dir="${checkout.dir}" />   
+        <delete dir="${checkout.dir}" failonerror='false' />   
     </target>
     
     
