@@ -140,6 +140,16 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AddSolutionDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AddSolutionDialog.resx"
+                    DependentUpon = "AddSolutionDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Ankh.UI.build"
                     BuildAction = "None"
                 />
