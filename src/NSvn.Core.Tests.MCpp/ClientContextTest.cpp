@@ -86,7 +86,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
     Assertion::Assert( S"Password not bar", strcmp( cred->password, "bar" ) == 0 );
 
     // next, the next
-    svn_auth_next_credentials( reinterpret_cast<void**>(&cred), iterState, pool );
+    svn_auth_next_credentials( reinterpret_cast<void**>(&cred), iterState );
 
     Assertion::Assert( S"Username not kung", strcmp( cred->username, "kung" ) == 0 );
     Assertion::Assert( S"Password not fu", strcmp( cred->password, "fu" ) == 0 );
