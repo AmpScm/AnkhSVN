@@ -1,0 +1,10 @@
+﻿                       
+<typeSafeCollections>
+    <typeSafeCollection>
+        <templateKind>Vector</templateKind>
+        <itemType>IAuthenticationProvider</itemType>
+        <collectionName>AuthenticationProviderCollection</collectionName>
+        <collectionNamespace>NSvn.Common</collectionNamespace>
+    </typeSafeCollection>
+</typeSafeCollections>
+
