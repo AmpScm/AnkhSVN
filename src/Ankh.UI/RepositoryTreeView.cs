@@ -186,50 +186,59 @@ namespace Ankh.UI
 
         private void BuildSubTree( TreeNodeCollection nodes, IRepositoryTreeNode node )
         {
-            this.Cursor = Cursors.WaitCursor;
-
-            // we have set a new root, so get rid of any existing nodes
-            nodes.Clear();
-
-            foreach( IRepositoryTreeNode child in node.GetChildren() )
+            try
             {
-                TreeNode newNode;
+                this.Cursor = Cursors.WaitCursor;
 
-                if ( child.IsDirectory )
+                // we have set a new root, so get rid of any existing nodes
+                nodes.Clear();
+
+                foreach( IRepositoryTreeNode child in node.GetChildren() )
                 {
-                    TreeNode dummy = new TreeNode( "" );
-                    dummy.Tag = DUMMY_NODE;
+                    TreeNode newNode;
 
-                    newNode = new TreeNode( child.Name, 
-                        new TreeNode[]{ dummy } );
+                    if ( child.IsDirectory )
+                    {
+                        TreeNode dummy = new TreeNode( "" );
+                        dummy.Tag = DUMMY_NODE;
 
-                    // start with the closed folder icon
-                    newNode.ImageIndex = this.closedFolderIndex;
-                    newNode.SelectedImageIndex = this.closedFolderIndex;
-                }
-                else
-                {
-                    newNode = new TreeNode( child.Name);
+                        newNode = new TreeNode( child.Name, 
+                            new TreeNode[]{ dummy } );
 
-                    // set the icon
-                    SHFILEINFO fi = new SHFILEINFO();
-                    Win32.SHGetFileInfo( child.Name, 0, ref fi, (uint)Marshal.SizeOf(fi),
-                        Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
-                        Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON |
-                        Constants.SHGFI_USEFILEATTRIBUTES );
-                    newNode.ImageIndex = fi.iIcon.ToInt32(); 
-                    newNode.SelectedImageIndex = fi.iIcon.ToInt32();
+                        // start with the closed folder icon
+                        newNode.ImageIndex = this.closedFolderIndex;
+                        newNode.SelectedImageIndex = this.closedFolderIndex;
+                    }
+                    else
+                    {
+                        newNode = new TreeNode( child.Name);
 
-                }
+                        // set the icon
+                        SHFILEINFO fi = new SHFILEINFO();
+                        Win32.SHGetFileInfo( child.Name, 0, ref fi, (uint)Marshal.SizeOf(fi),
+                            Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
+                            Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON |
+                            Constants.SHGFI_USEFILEATTRIBUTES );
+                        newNode.ImageIndex = fi.iIcon.ToInt32(); 
+                        newNode.SelectedImageIndex = fi.iIcon.ToInt32();
 
-                newNode.Tag = child;
+                    }
 
-                nodes.Add( newNode );
+                    newNode.Tag = child;
 
-            } // foreach
+                    nodes.Add( newNode );
 
-            
-            this.Cursor = Cursors.Default;
+                } // foreach
+            }
+            catch( ApplicationException )
+            {
+                this.Nodes.Clear();
+                this.Nodes.Add( new TreeNode( "An error occurred",  this.openFolderIndex, this.openFolderIndex ) );
+            }
+            finally
+            {           
+                this.Cursor = Cursors.Default;
+            }
         }
 
 

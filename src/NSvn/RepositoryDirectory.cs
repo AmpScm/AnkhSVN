@@ -57,12 +57,16 @@ namespace NSvn
             {
                 string url = System.IO.Path.Combine( this.Url, entry.Path ).Replace( "\\", "/" );
                 // dir or file?
+                RepositoryResource resource;
                 if ( entry.NodeKind == NodeKind.Directory )
-                    dict[entry.Path] = new RepositoryDirectory( url, this.Revision );
+                    resource = new RepositoryDirectory( url, this.Revision );
                 else if ( entry.NodeKind == NodeKind.File )
-                    dict[entry.Path] = new RepositoryFile( url, this.Revision );
+                    resource = new RepositoryFile( url, this.Revision );
                 else
                     throw new InvalidOperationException( "Expected a file or a directory" );
+
+                resource.Context = this.Context;
+                dict[entry.Path] = resource;
             }
 
             return dict;

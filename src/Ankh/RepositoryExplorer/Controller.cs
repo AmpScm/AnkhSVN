@@ -12,6 +12,11 @@ namespace Ankh.RepositoryExplorer
 	{
         public event EventHandler RootChanged;
 
+        public Controller( AnkhContext context )
+        {
+            this.context = context;
+        }
+
         public string RootText
         {
             get{ return this.rootNode != null ? this.rootNode.Resource.Url : "";  }
@@ -25,7 +30,10 @@ namespace Ankh.RepositoryExplorer
 
         public void SetRepository( string url, Revision revision )
         {
-            this.rootNode = new Node( new RepositoryDirectory( url, revision ) );
+            RepositoryDirectory dir = new RepositoryDirectory( url, revision );
+            dir.Context = this.context.Context;
+
+            this.rootNode = new Node( dir );
             this.OnRootChanged();
         }        
 
@@ -40,6 +48,7 @@ namespace Ankh.RepositoryExplorer
 
 
         private Node rootNode;
+        private AnkhContext context;
         private string rootText;		
 	}
 }

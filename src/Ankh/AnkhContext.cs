@@ -27,7 +27,7 @@ namespace Ankh
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
 
-            this.repositoryController = new RepositoryExplorer.Controller();
+            this.repositoryController = new RepositoryExplorer.Controller( this );
 
             this.CreateRepositoryExplorer();
 

@@ -325,6 +325,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\ShowRepositoryExplorerCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\SwitchItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
