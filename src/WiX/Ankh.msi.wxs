@@ -39,10 +39,9 @@
             <ComponentRef Id="C_Ankh_RegVS" />
             <ComponentRef Id="C_Bitmap.dll" />
             <ComponentRef Id="C_Ankh.UI.dll" />
-            <ComponentRef Id="C_ReposInstaller.dll" />
             <ComponentRef Id="C_Utils.dll" />
-            <ComponentRef Id="Libs" />
-            <ComponentRef Id="AUCH_RegAsm" />
+            <FeatureRef Id="F_Libs" />
+            <FeatureRef Id="F_ReposInstaller" />
             <ComponentRef Id="apr_iconv" />
         </Feature>
         <CustomAction Id="ReposInstaller_Install" BinaryKey="InstallUtil" 
