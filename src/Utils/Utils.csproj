@@ -96,15 +96,16 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Win32\Win32.cs"
+                    RelPath = "Win32\structs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Win32\Structs\SHFILEINFO.cs"
+                    RelPath = "Win32\Win32.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "Win32\Structs\" />
             </Include>
         </Files>
     </CSHARP>

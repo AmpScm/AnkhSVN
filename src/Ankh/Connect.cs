@@ -53,8 +53,7 @@ namespace Ankh
             this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
 
             this.commands= 
-                Ankh.CommandMap.RegisterCommands( this.context );          
-            
+                Ankh.CommandMap.RegisterCommands( this.context );    
 
 			if(connectMode == Extensibility.ext_ConnectMode.ext_cm_UISetup)
 			{
@@ -196,16 +195,47 @@ namespace Ankh
 		public void Exec(string commandName, EnvDTE.vsCommandExecOption executeOption, ref object varIn, ref object varOut, ref bool handled)
 		{
 			handled = false;
-			if(executeOption == EnvDTE.vsCommandExecOption.vsCommandExecOptionDoDefault)
-			{
-                ICommand cmd;
-                if ( (cmd = (ICommand)this.commands[commandName]) != null )
+            try
+            {
+                if(executeOption == EnvDTE.vsCommandExecOption.vsCommandExecOptionDoDefault)
                 {
-                    cmd.Execute( this.context );
-					handled = true;
-				}
-			}
+                    ICommand cmd;
+                    if ( (cmd = (ICommand)this.commands[commandName]) != null )
+                    {
+                        cmd.Execute( this.context );
+                        handled = true;
+                    }
+                }
+            }
+            catch( Exception ex )
+            {
+                System.Windows.Forms.MessageBox.Show( ex.Message + 
+                    Environment.NewLine + ex.StackTrace );
+            }
 		}
+
+        
+        private void AddCommandBars()
+        {
+            // remove any lingering around
+//            this.context.DTE.Commands.RemoveCommandBar( 
+//                this.context.DTE.CommandBars["Ankh"] );
+            CommandBar bar = this.context.DTE.CommandBars[ "Tools" ];
+           
+            CommandBar ankh = this.context.DTE.CommandBars.Add( "Ankha", 
+                MsoBarPosition.msoBarPopup, bar, true );
+            ankh.Visible = true;
+//            CommandBar ankh = (CommandBar)this.context.DTE.Commands.AddCommandBar( "Ankh", 
+//                vsCommandBarType.vsCommandBarTypePopup, bar, 10 );
+            
+
+//            CommandBarControl ctrl = this.context.DTE.CommandBars["Item"].Controls.Add( 
+//                vsCommandBarType.vsCommandBarTypePopup, Type.Missing, Type.Missing,
+//                Type.Missing, Type.Missing );
+//            ctrl.Caption = "Ankh";
+//            ctrl.Visible = true;
+
+        }
         private AnkhContext context;
         Ankh.CommandMap commands;
 		

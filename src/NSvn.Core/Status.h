@@ -28,6 +28,18 @@ namespace NSvn
                             else
                                 this->entry = 0;
                         }
+            Status() :
+                            textStatus( StatusKind::Unversioned ),
+                            propertyStatus( StatusKind::Unversioned ),
+                            locked( false ),
+                            copied( false ),
+                            repositoryTextStatus( StatusKind::Unversioned ),
+                            repositoryPropertyStatus( StatusKind::Unversioned ),
+                            entry( 0 )
+                        {;}
+
+
+
 
 
         public:
@@ -64,6 +76,10 @@ namespace NSvn
             __property StatusKind get_RepositoryPropertyStatus()
             { return this->repositoryPropertyStatus; }
 
+            /// <summary>Represents the status of an unversioned item</summary>
+            __property static Status* get_Unversioned()
+            { return Status::unversioned; }
+
         private:
             NSvn::Core::Entry* entry;
             StatusKind textStatus;
@@ -73,6 +89,8 @@ namespace NSvn
             bool switched;
             StatusKind repositoryTextStatus;
             StatusKind repositoryPropertyStatus;
+
+            static Status* unversioned;
         };
     }
 }

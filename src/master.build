@@ -23,7 +23,7 @@
         <copy file="Utils/${build.dir}/Utils.dll" tofile="${build.dir}/Utils.dll"/>
     </target>
     
-    <target name="build-Ankh" depends="build-Ankh.UI, build-NSvn">
+    <target name="build-Ankh" depends="build-Ankh.UI, build-NSvn, build-NSvn.Core, build-NSvn.Common, build-Utils">
         <nant buildfile="Ankh/Ankh.build" inheritall="true" target="build" />
         <copy file="Ankh/${build.dir}/Ankh.dll" tofile="${build.dir}/Ankh.dll"/>        
     </target>

@@ -1,4 +1,5 @@
 using System;
+using NSvn.Core;
 
 namespace NSvn
 {
@@ -27,6 +28,14 @@ namespace NSvn
         /// Is this a versioned item?
         /// </summary>
         bool IsVersioned
+        {
+            get;
+        }
+
+        /// <summary>
+        /// The status of this item.
+        /// </summary>
+        Status Status
         {
             get;
         }

@@ -96,7 +96,8 @@ namespace Ankh
             cmd.Command = context.DTE.Commands.AddNamedCommand( context.AddIn, attr.Name, attr.Text, attr.Tooltip, false,
                 1, ref contextGuids, (int)vsCommandStatus.vsCommandStatusUnsupported );
 
-            RegisterControl( cmd, type );           
+            RegisterControl( cmd, type );     
+      
 
             System.Windows.Forms.MessageBox.Show( "Registering command " + attr.Name );
         }
@@ -112,6 +113,7 @@ namespace Ankh
             foreach( VSNetControlAttribute control in type.GetCustomAttributes( 
                 typeof(VSNetControlAttribute), false) ) 
             {
+                
                 CommandBar cmdBar = (CommandBar)cmd.Command.DTE.CommandBars[ control.CommandBar ];
                 cmd.Command.AddControl( cmdBar, control.Position );
             }

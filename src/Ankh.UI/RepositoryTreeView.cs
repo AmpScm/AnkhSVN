@@ -6,7 +6,6 @@ using System.Data;
 using System.Windows.Forms;
 using NSvn;
 using Utils.Win32;
-using Utils.Win32.Structs;
 using System.Runtime.InteropServices;
 
 namespace Ankh.UI

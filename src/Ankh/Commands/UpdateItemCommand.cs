@@ -16,13 +16,16 @@ namespace Ankh.Commands
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
-            return vsCommandStatus.vsCommandStatusEnabled | 
+            if (context.DTE.SelectedItems.Count > 0)
+                return vsCommandStatus.vsCommandStatusEnabled | 
                 vsCommandStatus.vsCommandStatusSupported;
+            else
+                return vsCommandStatus.vsCommandStatusEnabled;
         }
 
         public override void Execute(AnkhContext context)
-        {   
-            System.Windows.Forms.MessageBox.Show( "Update invoked" );
+        {
+            context.SolutionExplorer.UpdateSelectionStatus();
         }
     
         #endregion

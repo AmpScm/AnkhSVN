@@ -112,7 +112,15 @@ namespace NSvn
         public abstract bool IsDirectory
         { 
             get;
-        }       
+        }  
+     
+        /// <summary>
+        /// The status of the item
+        /// </summary>
+        public Status Status
+        {
+            get{ return NSvn.Core.Status.Unversioned; }
+        }
 
 
         private string path;

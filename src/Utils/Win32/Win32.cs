@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using Utils.Win32.Structs;
 
 namespace Utils.Win32
 {
@@ -65,8 +64,8 @@ namespace Utils.Win32
         /// <returns>The return value specifies the result of the message processing; 
         /// it depends on the message sent.</returns>
         [DllImport("User32.dll")]
-        public static extern int SendMessage( IntPtr hWnd, uint msg, IntPtr wParam, 
-            IntPtr lParam );
+        public static extern int SendMessage( IntPtr hWnd, uint msg, [In, Out]IntPtr wParam, 
+            [In, Out]IntPtr lParam );
 
         /// <summary>
         /// The SendMessage function sends the specified message to a window or windows. 
@@ -87,8 +86,8 @@ namespace Utils.Win32
         /// <returns>The return value specifies the result of the message processing; 
         /// it depends on the message sent.</returns>
         [DllImport("User32.dll")]
-        public static extern int SendMessage( IntPtr hWnd, uint msg, uint wParam, 
-            uint lParam );
+        public static extern int SendMessage( IntPtr hWnd, uint msg, [In, Out]uint wParam, 
+            [In, Out]uint lParam );
 
         /// <summary>
         /// The SendMessage function sends the specified message to a window or windows. 
@@ -109,8 +108,8 @@ namespace Utils.Win32
         /// <returns>The return value specifies the result of the message processing; 
         /// it depends on the message sent.</returns>
         [DllImport("User32.dll")]
-        public static extern int SendMessage( IntPtr hWnd, uint msg, IntPtr wParam, 
-            uint lParam );
+        public static extern int SendMessage( IntPtr hWnd, uint msg, [In, Out]IntPtr wParam, 
+            [In, Out]uint lParam );
 
         /// <summary>
         /// The SendMessage function sends the specified message to a window or windows. 
@@ -131,8 +130,62 @@ namespace Utils.Win32
         /// <returns>The return value specifies the result of the message processing; 
         /// it depends on the message sent.</returns>
         [DllImport("User32.dll")]
-        public static extern int SendMessage( IntPtr hWnd, uint msg, uint wParam, 
-            IntPtr lParam );
+        public static extern int SendMessage( IntPtr hWnd, uint msg, [In, Out]uint wParam, 
+            [In, Out]IntPtr lParam );
+
+        /// <summary>
+        /// The SendMessage function sends the specified message to a window or windows. 
+        /// It calls the window procedure for the specified window and does not 
+        /// return until the window procedure has processed the message. 
+        /// To send a message and return immediately, use the SendMessageCallback or 
+        /// SendNotifyMessage function. To post a message to a thread's message queue 
+        /// and return immediately, use the PostMessage or PostThreadMessage function. 
+        /// </summary>
+        /// <param name="hWnd"> Handle to the window whose window procedure will receive the message. 
+        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level 
+        /// windows in the system, including disabled or invisible unowned windows, 
+        /// overlapped windows, and pop-up windows; but the message is not sent 
+        /// to child windows. </param>
+        /// <param name="msg">Specifies the message to be sent.</param>
+        /// <param name="wParam">Specifies additional message-specific information.</param>
+        /// <param name="lParam">Specifies additional message-specific information.</param>
+        /// <returns>The return value specifies the result of the message processing; 
+        /// it depends on the message sent.</returns>
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessage( IntPtr hwnd, uint msg, 
+            [In, Out]IntPtr wParam, [In, Out]TVITEMEX lParam );
+
+        /// <summary>
+        /// Retrieves the window object whose class name and window name 
+        /// match the specified strings.
+        /// </summary>
+        /// <param name="afterChild">Handle to a child window. The search begins with 
+        /// the next child window in the Z order. The child window must be 
+        /// a direct child window of hwndParent, not just a descendant window.</param>
+        /// <param name="className">Pointer to a null-terminated string that 
+        /// specifies the class name or a class atom created by a previous call to 
+        /// the RegisterClass or RegisterClassEx. </param>
+        /// <param name="parent">Handle to the parent window whose child windows 
+        /// are to be searched.  </param>
+        /// <param name="windowName">Pointer to a null-terminated string that 
+        /// specifies the window name (the window's title). If this parameter 
+        /// is NULL, all window names match. </param>
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindowEx( IntPtr parent, IntPtr afterChild, string className,
+            string windowName );
+
+        /// <summary>
+        /// Retrieves the window object whose class name and window name 
+        /// match the specified strings.
+        /// </summary>
+        /// <param name="className">Pointer to a null-terminated string that 
+        /// specifies the class name or a class atom created by a previous call to 
+        /// the RegisterClass or RegisterClassEx. </param>
+        /// <param name="windowName">Pointer to a null-terminated string that 
+        /// specifies the window name (the window's title). If this parameter 
+        /// is NULL, all window names match. </param>
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindow( string className, string windowName );
     
     }
 }
