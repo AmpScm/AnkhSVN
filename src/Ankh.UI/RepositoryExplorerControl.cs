@@ -36,6 +36,9 @@ namespace Ankh.UI
             this.components = new Container();
             this.SetToolTips();
 
+            Win32.SHAutoComplete( this.urlTextBox.Handle, 
+                Shacf.UrlAll | Shacf.Filesystem );
+
             this.ValidateRevision();
         }
 
