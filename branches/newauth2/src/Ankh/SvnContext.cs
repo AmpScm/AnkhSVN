@@ -23,11 +23,11 @@ namespace Ankh
 
             //Clears the pane when opening new solutions.
             this.ankhContext = ankhContext;
-            this.AddAuthenticationProvider( Authentication.GetSimpleProvider() );           
-            this.AddAuthenticationProvider( Authentication.GetSimplePromptProvider(
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSimpleProvider() );           
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSimplePromptProvider(
                 new SimplePromptDelegate( this.PasswordPrompt ), 3 ) );
-            this.AddAuthenticationProvider( Authentication.GetSslServerTrustFileProvider() );
-            this.AddAuthenticationProvider( Authentication.GetSslServerTrustPromptProvider(
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustFileProvider() );
+            this.AddAuthenticationProvider( AuthenticationProvider.GetSslServerTrustPromptProvider(
                 new SslServerTrustPromptDelegate( this.SslServerTrustPrompt ) ) );
 
         }
