@@ -40,11 +40,11 @@ namespace Ankh.Solution
                     System.Diagnostics.Debug.WriteLine( 
                         "Ankh", "Cached item not found for " + normPath );
                     Status status = this.client.SingleStatus( normPath );
-                    this.table[normPath] = item = new SvnItem( normPath, status );
+                    this.table[normPath] = item = new SvnItem( path, status );
                 }
                 else
                     System.Diagnostics.Debug.WriteLine( 
-                        "Ankh", "Cached item found for " + normPath );
+                        "Ankh", "Cached item found for " + path );
 
                 return item;
             }                
@@ -65,7 +65,7 @@ namespace Ankh.Solution
             if ( existingItem != null )
                 existingItem.Refresh( status );
             else
-                this.table[normPath] = new SvnItem( normPath, status );
+                this.table[normPath] = new SvnItem( path, status );
         }
 
         /// <summary>
