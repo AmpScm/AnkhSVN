@@ -100,7 +100,7 @@ namespace Ankh
 
                 // register the new ones
                 this.commands= 
-                    Ankh.CommandMap.LoadCommands( this.context, register );  
+                    Ankh.CommandMap.LoadCommands( this.context, register, this.context.Config );  
                
                 // is there already a solution open? 
                 // can happen if we are loaded after startup

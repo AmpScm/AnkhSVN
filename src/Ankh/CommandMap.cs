@@ -34,7 +34,7 @@ namespace Ankh
         /// Registers all commands present in this DLL.
         /// </summary>
         /// <param name="dte">TODO: what to do, what to do?</param>
-        public static CommandMap LoadCommands( IContext context, bool register )
+        public static CommandMap LoadCommands( IContext context, bool register, Config.Config cfg )
         {
             CreateReposExplorerPopup( context );
             CreateAnkhSubMenu( context );
@@ -58,7 +58,24 @@ namespace Ankh
                         commands.Dictionary[ context.AddIn.ProgID + "." + vsattrs[0].Name ] = cmd;
 
                         // do we want to register it?
-                        if ( register )
+                        // also consider config file
+                        bool add = false;
+
+                        switch ( type.Name ) {
+                            case "DiffExternalLocalItem":
+                                if (cfg.ChooseDiffMergeManual && cfg.DiffExePath != null )
+                                    add = true;
+                                break;
+                            case "ResolveConflictExternalCommand":
+                                if (cfg.ChooseDiffMergeManual && cfg.MergeExePath != null )
+                                    add = true;
+                                break;
+                            default:
+                                add = register;
+                                break;
+                        }
+
+                        if ( add )
                             RegisterVSNetCommand( vsattrs[0], cmd,  context );
                     }
                 }
