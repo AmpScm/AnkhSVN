@@ -2,7 +2,10 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Diff">
     <section>
-            Display the differences between two paths.
+            <p>
+                Besides the status icons, Ankh gives you a more detailed view of the changes made to files. 
+                This is done with the ‘Diff’ command. 
+            </p>
             <br/><br/>
             <p>
                 <b>Description</b>
