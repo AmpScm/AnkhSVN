@@ -98,6 +98,8 @@ namespace Ankh
                 if ( this.savedCredential != null )
                     return this.savedCredential;
 
+                loginDialog.Realm = realm;
+
                 if ( loginDialog.ShowDialog() == DialogResult.OK )
                     return this.lastCredential = new SimpleCredential( loginDialog.Username, 
                         loginDialog.Password );
