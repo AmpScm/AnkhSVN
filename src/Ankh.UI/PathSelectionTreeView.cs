@@ -3,6 +3,7 @@ using System;
 using System.Windows.Forms;
 using System.Collections;
 using System.Drawing;
+using System.Text;
 using System.Text.RegularExpressions;
 using Utils;
 
@@ -243,6 +244,8 @@ namespace Ankh.UI
                 foreach( object item in this.items )
                     this.AddNode( item );
 
+                this.TrimTree();
+
                 this.ExpandAll();
             }
             finally
@@ -303,6 +306,39 @@ namespace Ankh.UI
             newNode.ForeColor = DisabledColor;
             return newNode;
         }        
+
+        /// <summary>
+        /// Simplify the tree so top level node hierarchies with only 1 child
+        /// per node are reduced to a single node
+        /// </summary>
+        private void TrimTree()
+        {
+            foreach ( TreeNode topLevelNode in this.Nodes )
+            {
+                if ( topLevelNode.Nodes.Count == 1 )
+                {
+                    StringBuilder nodeName = new StringBuilder(topLevelNode.Text);
+
+                    // Recurse down the tree, adding nodes while relevant
+                    // We don't want to add the last child element
+                    TreeNode activeNode = topLevelNode;
+                    while ( activeNode.Nodes.Count == 1 && activeNode.Nodes[0].Nodes.Count != 0 )
+                    {
+                      activeNode = activeNode.Nodes[0];
+
+                      nodeName.Append(System.IO.Path.DirectorySeparatorChar);
+                      nodeName.Append(activeNode.Text);
+                    }
+
+                    // Rename the last node to include the full path
+                    activeNode.Text = nodeName.ToString();
+
+                    // Replace the top level node with the current one
+                    this.Nodes.Remove(topLevelNode);
+                    this.Nodes.Add(activeNode);
+                }
+            }
+        }
 
         private IList items;
         private TreeNode checkedNode;
