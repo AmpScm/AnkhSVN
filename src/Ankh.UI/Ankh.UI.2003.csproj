@@ -20,7 +20,7 @@
                 PostBuildEvent = ""
                 RootNamespace = "Ankh.UI"
                 RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = "Ankh.UI.DiffTab"
+                StartupObject = "Ankh.UI.PathSelectionTreeView"
             >
                 <Config
                     Name = "Debug"
@@ -303,6 +303,16 @@
                 <File
                     RelPath = "MimeTypePropertyEditor.resx"
                     DependentUpon = "MimeTypePropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "PathSelectionTreeView.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PathSelectionTreeView.resx"
+                    DependentUpon = "PathSelectionTreeView.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
