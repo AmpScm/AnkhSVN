@@ -23,6 +23,9 @@ namespace Ankh.Solution
         {
             lock(this)
             {
+                if ( !SvnUtils.IsWorkingCopyPath(dir) )
+                    return;
+
                 Debug.WriteLine( "Generating status cache for " + dir, "Ankh" );
                 this.currentPath = dir;
                 int youngest;
