@@ -155,18 +155,25 @@ namespace Ankh
                 // is this a file or at least something thats likely
                 // to be versioned?
                 ProjectItem pitem = item.Object as ProjectItem;
-                if ( pitem != null )
+                if ( pitem != null && pitem.FileCount > 0 )
                 {
-                    this.resource = SvnResource.FromLocalPath(
-                        pitem.get_FileNames(0) );
-                    this.outer.AddResource( pitem, this );
                     try
                     {
-                        this.UpdateStatus();
+                        this.resource = SvnResource.FromLocalPath(
+                            pitem.get_FileNames(0) );
+                        if ( this.resource != null )
+                        {
+                            this.outer.AddResource( pitem, this );
+                            
+                            this.UpdateStatus();
+                        }
+                            
                     }
+                
                     catch( Exception ex ) 
                     {
-                        Swf.MessageBox.Show( ex.Message + Environment.NewLine + 
+                        Swf.MessageBox.Show( ex.GetType().ToString() + ": " + 
+                            ex.Message + Environment.NewLine + 
                             ex.StackTrace );
                     }
                 }
@@ -193,6 +200,9 @@ namespace Ankh
                 get { return this.children;  }
             }
 
+            /// <summary>
+            /// Updates the status icon of this node.
+            /// </summary>
             public void UpdateStatus(  )
             {
                 if ( this.resource != null )
@@ -205,6 +215,8 @@ namespace Ankh
 
                     this.SetStatusImage( this.hItem, statusImage );
                 }
+                else 
+                    this.SetStatusImage( this.hItem, 0 );
             }
 
             /// <summary>
@@ -225,6 +237,9 @@ namespace Ankh
             /// </summary>
             private void FindChildren( UIHierarchyItem item )
             {
+                // retain the original expansion state
+                bool isExpanded = item.UIHierarchyItems.Expanded;
+
                 // get the treeview child
                 IntPtr childItem = (IntPtr)Win32.SendMessage( this.outer.treeview, Msg.TVM_GETNEXTITEM,
                     C.TVGN_CHILD, this.hItem );
@@ -250,6 +265,8 @@ namespace Ankh
                     childItem = (IntPtr)Win32.SendMessage( this.outer.treeview, Msg.TVM_GETNEXTITEM,
                         C.TVGN_NEXT, childItem );                    
                 }
+
+                item.UIHierarchyItems.Expanded = isExpanded;
             }
 
             private void SetStatusImage( IntPtr item, int status )
