@@ -37,6 +37,7 @@ namespace Ankh
         public static CommandMap LoadCommands( AnkhContext context, bool register )
         {
             CreateReposExplorerPopup( context );
+            CreateAnkhSubMenu( context );
 
             CommandMap commands = new CommandMap();
 
@@ -186,5 +187,21 @@ namespace Ankh
                     null, 1 );
         }
 
+        /// <summary>
+        /// Creates an "AnkhSVN" submenu on the Tools menu.
+        /// </summary>
+        /// <param name="context"></param>
+        private static void CreateAnkhSubMenu( AnkhContext context )
+        {
+            CommandBar menuBar = (CommandBar)
+                context.DTE.CommandBars[ "MenuBar" ];
+            
+            CommandBar toolMenu = 
+                ((CommandBarPopup)menuBar.Controls[ "Tools" ]).CommandBar;
+
+            context.DTE.Commands.AddCommandBar( "AnkhSVN", 
+                vsCommandBarType.vsCommandBarTypeMenu,
+                toolMenu, 1 );
+        }
     }
 }
