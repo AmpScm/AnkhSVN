@@ -64,7 +64,7 @@ namespace Utils.Win32
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public class CWPSTRUCT
+    public struct CWPSTRUCT
     {
         IntPtr lParam;
         IntPtr wParam;
