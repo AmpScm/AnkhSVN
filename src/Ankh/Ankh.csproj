@@ -135,11 +135,8 @@
                 />
                 <Reference
                     Name = "AnkhUserControlHostLib"
-                    Guid = "{A346E700-CCD2-4377-A4E5-5B30275493B1}"
-                    VersionMajor = "1"
-                    VersionMinor = "0"
-                    Lcid = "0"
-                    WrapperTool = "tlbimp"
+                    AssemblyName = "AnkhUserControlHostLib"
+                    HintPath = "..\lib\AnkhUserControlHostLib.dll"
                 />
             </References>
         </Build>
