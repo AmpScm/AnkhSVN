@@ -24,10 +24,11 @@ namespace Ankh.Solution
     /// </summary>
     public class Explorer : ISolutionExplorer
     {
-        public Explorer( _DTE dte, IContext context )
+        public Explorer( _DTE dte, IContext context, FileWatcher watcher )
         {
             this.dte = dte;
             this.context = context;
+            this.watcher = watcher;
             this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
                 new ItemComparer() );
             this.projects = new Hashtable( new ProjectHashCodeProvider(), 
@@ -44,6 +45,8 @@ namespace Ankh.Solution
         /// </summary>
         public void Load()
         {
+            this.watcher.Clear();
+            this.watcher.AddFile( this.DTE.Solution.FullName );
             this.Unload();
             this.SetUpTreeview();
             this.SyncAll();
@@ -65,7 +68,7 @@ namespace Ankh.Solution
                 originalImageList = IntPtr.Zero;
             }
             this.solutionNode = null;
-        }        
+        }    
 
         /// <summary>
         /// Refreshes the parents of the selected items.
@@ -372,6 +375,7 @@ namespace Ankh.Solution
         internal void AddResource( Project key, TreeNode node )
         {
             this.projects[key] = node;
+            this.watcher.AddFile( key.FullName );
         }
 
         internal void SetSolution( TreeNode node )
@@ -518,6 +522,7 @@ namespace Ankh.Solution
         private TreeNode solutionNode;
         private ImageList statusImageList;
         private IContext context;
+        private FileWatcher watcher;
         private TreeView treeview;
         private IntPtr originalImageList = IntPtr.Zero;
 
