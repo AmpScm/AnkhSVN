@@ -24,13 +24,12 @@ namespace Ankh.Commands
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
-//            CommitCandidateVisitor v = new CommitCandidateVisitor();
-//            context.SolutionExplorer.VisitSelectedItems( v, true );
-//            if ( v.Commitable )
+            if ( context.SolutionExplorer.GetSelectionResources( true, 
+                new ResourceFilterCallback( CommandBase.ModifiedFilter) ).Count > 0 )
                 return vsCommandStatus.vsCommandStatusEnabled |
                     vsCommandStatus.vsCommandStatusSupported;
-//            else
-//                return vsCommandStatus.vsCommandStatusSupported;
+            else
+                return vsCommandStatus.vsCommandStatusSupported;
         }
         public override void Execute(Ankh.AnkhContext context, string parameters)
         {
