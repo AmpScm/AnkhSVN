@@ -705,12 +705,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_63F7E35D7D8E4C1F81A7EBE6CE74550B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:N:\\SRC\\LIB\\2002\\LIBDB40.DLL"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_65F95039951B4F3EBCC474C3EC6A3D6F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\ISO646-DK.SO"
@@ -1443,6 +1437,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_CC2BE548A16341E7AEEEE1E22CDD613A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:I:\\BIN\\LIBDB42.DLL"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_CD00DB8730084A86ADCED78261D9F823"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\EBCDIC-FI-SE-A.SO"
@@ -1584,12 +1584,6 @@
         "MsmKey" = "8:_E6B696C9DC35457186A6642A98503892"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\WINDOWS-1256.SO"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E76BB066F9604185BC869A20BD84C34D"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:N:\\SRC\\LIB\\ANKHUSERCONTROLHOST.DLL"
         }
         "Entry"
         {
@@ -3960,26 +3954,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_63F7E35D7D8E4C1F81A7EBE6CE74550B"
-            {
-            "SourcePath" = "8:..\\..\\lib\\2002\\libdb40.dll"
-            "TargetName" = "8:libdb40.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_65F95039951B4F3EBCC474C3EC6A3D6F"
             {
             "SourcePath" = "8:N:\\subversion\\apr-iconv\\LibR\\iconv\\iso646-dk.so"
@@ -5925,6 +5899,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_CC2BE548A16341E7AEEEE1E22CDD613A"
+            {
+            "SourcePath" = "8:I:\\bin\\libdb42.dll"
+            "TargetName" = "8:libdb42.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_CD00DB8730084A86ADCED78261D9F823"
             {
             "SourcePath" = "8:N:\\subversion\\apr-iconv\\LibR\\iconv\\ebcdic-fi-se-a.so"
@@ -6372,26 +6366,6 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_E76BB066F9604185BC869A20BD84C34D"
-            {
-            "SourcePath" = "8:..\\..\\lib\\AnkhUserControlHost.dll"
-            "TargetName" = "8:AnkhUserControlHost.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
