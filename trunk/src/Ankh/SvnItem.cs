@@ -115,6 +115,12 @@ namespace Ankh
             get{ return this.status.Entry.Kind == NodeKind.File; }
         }
 
+        public override string ToString()
+        {
+            return this.path;
+        }
+
+
         /// <summary>
         /// Retrieves the paths from an IList of SvnItem instances.
         /// </summary>
