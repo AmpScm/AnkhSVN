@@ -60,6 +60,8 @@ namespace Ankh
                     ,notification.Path, notification.NodeKind.ToString()
                     ,Environment.NewLine );
             }
+            if (notification.Action == NotifyAction.UpdateCompleted)
+                this.ankhContext.OutputPane.WriteLine("\nUpdated at revision {0}.", notification.RevisionNumber);
         }
         
         private string GetTemplate()
