@@ -1,0 +1,130 @@
+
+Version 0.3.5 (released 24 Nov 2003 21:17:06 +0100, revision 984)
+This release was built against Subversion 0.33.1, Neon 0.24.4 and 
+Berkeley DB 4.0.14. 
+
+Changes:
+* A bug which would cause VS.NET to appear to be hung whenever you added a 
+new VC++ project to a solution has been fixed.
+* Progress reporting for checkouts has been improved slightly.
+* Some of the status messages have been changed.
+* 0.33.1 compatibility
+* We have added some code to better be able to diagnose the
+InvalidCastException thats being thrown for some users.
+
+------------------------------------------------------------------------
+Version 0.3.3 is (released Nov 2003 16:14:32 +0100, revision 967)
+This release was built against Subversion 0.31.
+
+Changes:
+* This adds the Checkout command that is missing from the other 0.3.x 
+releases. There are no other new features over
+0.3.2.
+
+------------------------------------------------------------------------
+Version 0.3.2 (released 21 Oct 2003 00:12:00 +0200, revision 944)
+This release was built against Subversion 0.31.
+
+Changes:
+This release addresses two show-stopper bugs in the installer for 0.3 and 
+0.3.1:
+
+   - ssleay32.dll and libeay32.dll was not included.
+   - The AnkhUserControlHost.dll Active X shim control was not included.
+
+Some known issues: 
+- checkout command missing.
+
+-------------------------------------------------------------------------
+Version 0.3.1  (released 20 Oct 2003 21:40:37 +0200, revision 939)
+This release was built against Subversion 0.31.
+
+Changes:
+* This bugfix release addresses the following issues with 0.3:
+    - Obsolete readme included
+    - A failure by the uninstaller to remove the VS.NET command bars would 
+cause
+    the uninstall to fail.
+    - Creating a new solution would cause an exception to be thrown.
+
+Some known issues:
+- ssleay32.dll and libeay32.dll was not included.
+- The AnkhUserControlHost.dll Active X shim control 
+
+
+------------------------------------------------------------------------
+Version 0.3 (released Oct 2003 22:47:03 +0200, revision 931)
+This release was built against Subversion 0.31.
+
+Changes:
+* You can rename files from within the IDE.
+* You can perform checkouts in the repository explorer.
+* New "Create Patch" command.
+* Various performance improvements
+* Lots of bugfixes
+
+Some known issues:
+- Obsolete readme included
+- A failure by the uninstaller to remove the VS.NET commandbars would cause 
+the uninstall to fail.
+- Creating a new solution would cause an exception to be thrown. 
+
+------------------------------------------------------------------------
+Version 0.2.5  (Aug 2003 16:53:13 +0200, revision 854)
+
+Changes:
+* intermediate release, besides Subversion 0.28.2 compatibility, there 
+are no new features.
+
+------------------------------------------------------------------------
+Version 0.2.1 (released Aug 2003 02:23:45 +0200, revision 831)
+
+Changes:
+* updated the MSI package, there was  a small flaw in the installer. The 
+installer originally failed to set the LoadBehavior registry key for the 
+addin to 1, meaning that the addin wouldn't automatically load with VS.NET 
+after the initial startup.
+
+If you already have the original package, there is no need to get the new 
+one. To ensure Ankh loads automatically when VS.NET starts,  just go into the 
+Tools->Addin Manager.. dialog and check the Startup checkbox next to "AnkhSVN 
+Addin"(That is, of course, if you want Ankh to load automatically with VS.NET).
+
+
+------------------------------------------------------------------------
+Version 0.2 (Alpha 2) (released Jul 2003 21:51:15 +0200, revision 831)
+
+Changes:
+* Supports both VS.NET 2002 and 2003 in a single installer.
+* Solution explorer shows the status of all files in your working copy(svn 
+status).
+* You can view selected files in the Repository Explorer(svn cat).
+* You can commit(svn commit), update(svn update), add(svn add), revert(svn 
+revert) and run diffs(svn diff) against the text base from within VS.NET. 
+This works on the solution, individual projects, folders and files.
+* Ankh calls svn delete on files deleted from the IDE.
+* You can clean up a locked working copy(svn cleanup)
+* You can resolve a conflict(svn resolve)
+* The Properties window shows svn info-style information about a file or a 
+directory.
+
+------------------------------------------------------------------------
+Version 0.1 (Alpha 1) (released 14 May 2003 18:30:33 +0200, revision 572)
+This release was built against Subversion 0.22.2
+
+Changes:
+* The VS.NET solution explorer shows the status of all files in your working 
+copy
+* You can commit, update, add, revert and run diffs against the text base 
+from within VS.NET. This works on the solution, individual projects, folders 
+and files.
+* You can write your log messages from within VS.NET
+* Ankh calls svn delete on files deleted from the IDE.
+* Ankh detects new files added to a project
+
+
+Some known issues:
+- There is a known issue with the setup process in that sometimes the menu entries added by Ankh don't show up in VS.NET on the first run after the installation. On subsequent runs they are present.
+- Currently, only VS.NET 2002 is officially supported, but we are interested in hearing from you if you attempt to install it under VS.NET 2003
+- You will still need to use the svn command line client for some of the more advanced Subversion operations, and you should download the Windows version of the Subversion tools from http://subversion.tigris.org/servlets/ProjectDocumentList
+
