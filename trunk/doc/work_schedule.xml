@@ -7,7 +7,7 @@
 	<item>
 		<text>Pilot project</text>
 		<start week="43" year="2002" />
-		<end week="5" year="2002" />
+		<end week="5"/>
 		<item>
 			<text>Write progress report </text>
 			<start week="43" year="2002" />
@@ -70,8 +70,8 @@
 		</item>
 		<item>
 			<text>Get familiar with  NAnt</text>
-			<start week="1" year="2002" />
-			<end week="8" year="2002" />
+			<start week="1" />
+			<end week="8"/>
 		</item>
 		<item>
 			<text>Learn C# programming</text>
