@@ -29,7 +29,7 @@ using namespace System::Runtime::CompilerServices;
 // You can specify all the value or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly:AssemblyVersionAttribute( "0.4.99.1296")];
+[assembly:AssemblyVersionAttribute( "0.5.3.1625")];
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
@@ -58,12 +58,12 @@ using namespace System::Runtime::CompilerServices;
 [assembly:AssemblyKeyNameAttribute("")];
 
 
-[assembly:NSvn::Common::LibraryAttribute( "Subversion", 1, 0, 5 )];
+[assembly:NSvn::Common::LibraryAttribute( "Subversion", 1, 0, 6 )];
 [assembly:NSvn::Common::LibraryAttribute( "Berkeley DB", 4, 2, 52 )];
 [assembly:NSvn::Common::LibraryAttribute( "apr", 0, 9, 5 )];
 [assembly:NSvn::Common::LibraryAttribute( "apr-util", 0, 9, 5 )];
 [assembly:NSvn::Common::LibraryAttribute( "apr-iconv", 0, 9, 5 )];
 [assembly:NSvn::Common::LibraryAttribute( "openssl", 0, 9, 7 )];
-[assembly:NSvn::Common::LibraryAttribute( "neon", 0, 24, 6 )];
+[assembly:NSvn::Common::LibraryAttribute( "neon", 0, 24, 7 )];
 
 

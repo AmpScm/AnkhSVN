@@ -13,10 +13,10 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("ViewRepositoryFile", Tooltip="View this file", Text = "In VS.NET" ),
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
-    public abstract class ViewRepositoryFileCommand : CommandBase
+    internal abstract class ViewRepositoryFileCommand : CommandBase
     {
         #region ICommand Members
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             // we enable it if it's a file.
             return context.RepositoryExplorer.SelectedNode != null &&
@@ -31,7 +31,7 @@ namespace Ankh.Commands
         /// </summary>
         protected class CatRunner : ProgressRunner
         {
-            public CatRunner( IContext context, string name, Revision revision, string url ) : 
+            public CatRunner( AnkhContext context, string name, Revision revision, string url ) : 
                 base( context )
             { 
                 this.path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), 
@@ -40,7 +40,7 @@ namespace Ankh.Commands
                 this.revision = revision;
             }
 
-            public CatRunner( IContext context,  Revision revision, string url,  
+            public CatRunner( AnkhContext context,  Revision revision, string url,  
                  string path ) : base(context)
             {
                 this.path = path;

@@ -8,9 +8,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Event sink for the ProjectEvents events.
     /// </summary>
-    public class ProjectsEventSink : EventSink
+    internal class ProjectsEventSink : EventSink
     {
-        public ProjectsEventSink( ProjectsEvents events, IContext context ) :
+        internal ProjectsEventSink( ProjectsEvents events, AnkhContext context ) :
             base( context )
         {
             this.events = events;
@@ -45,11 +45,11 @@ namespace Ankh.EventSinks
         {   
             try
             {
-                this.Context.SolutionExplorer.SyncAll();
+                this.Context.SolutionExplorer.SyncWithTreeView();
             }
             catch( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
 
@@ -61,7 +61,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
        

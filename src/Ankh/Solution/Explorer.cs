@@ -22,9 +22,9 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents the Solution Explorer window in the VS.NET IDE
     /// </summary>
-    public class Explorer : ISolutionExplorer
-    {
-        public Explorer( _DTE dte, IContext context )
+    internal class Explorer
+    {        
+        public Explorer( _DTE dte, AnkhContext context )
         {
             this.dte = dte;
             this.context = context;
@@ -47,7 +47,7 @@ namespace Ankh.Solution
             this.Unload();
             this.context.ProjectFileWatcher.AddFile( this.DTE.Solution.FullName );
             this.SetUpTreeview();
-            this.SyncAll();
+            this.SyncWithTreeView();
         }
 
         /// <summary>
@@ -67,7 +67,24 @@ namespace Ankh.Solution
             }
             this.context.ProjectFileWatcher.Clear();
             this.solutionNode = null;
-        }    
+        }
+
+        
+
+        /// <summary>
+        /// Updates the status of selected items.
+        /// </summary>
+        public void UpdateSelectionStatus()
+        {
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
+            {
+                TreeNode node = this.GetNode( item );
+                if ( node != null )
+                    node.Refresh();
+            }
+        }
+
+        
 
         /// <summary>
         /// Refreshes the parents of the selected items.
@@ -108,7 +125,7 @@ namespace Ankh.Solution
                 TreeNode node = this.GetNode( item );
                 // special care for the solution
                 if ( node == solutionNode )
-                    this.SyncAll();
+                    this.SyncWithTreeView();
                 else if ( node != null )
                     node.Refresh();
             }
@@ -119,14 +136,14 @@ namespace Ankh.Solution
         /// Updates the status of the given item.
         /// </summary>
         /// <param name="item"></param>
-        public void Refresh( ProjectItem item )
+        public void UpdateStatus( ProjectItem item )
         {
             TreeNode node = (TreeNode)this.projectItems[item];
             if ( node != null )
                 node.Refresh();
         }       
 
-        public void SyncAll()
+        public void SyncWithTreeView()
         {
             // build the whole tree anew
             Debug.WriteLine( "Synchronizing with treeview", "Ankh" );
@@ -207,23 +224,6 @@ namespace Ankh.Solution
         }
 
         /// <summary>
-        /// Returns all  the SvnItem resources from root
-        /// </summary>
-        /// <param name="filter">A callback used to filter the items
-        /// that are added.</param>
-        /// <returns>A list of SvnItem instances.</returns>
-        public IList GetAllResources( ResourceFilterCallback filter )
-        {
-            ArrayList list = new ArrayList();
-
-            TreeNode node = solutionNode; 	
-            if ( node != null )	 	
-                node.GetResources( list, true, filter );	 	
-
-            return list;
-        }
-
-        /// <summary>
         /// Retrieves the resources associated with a project item.
         /// </summary>
         /// <param name="item"></param>
@@ -244,10 +244,8 @@ namespace Ankh.Solution
         {
             Array array = (Array)this.uiHierarchy.SelectedItems;
             UIHierarchyItem uiItem = (UIHierarchyItem)array.GetValue(0);
-            return uiItem.Object as ProjectItem;
+            return (ProjectItem)uiItem.Object;
         }
-
-       
 
         internal TreeView TreeView
         {
@@ -255,7 +253,7 @@ namespace Ankh.Solution
             get{ return this.treeview; }
         }
 
-        internal IContext Context
+        internal AnkhContext Context
         {
             get{ return this.context; }
         }
@@ -381,6 +379,27 @@ namespace Ankh.Solution
             // we assume theres only one of these
             this.solutionNode = node;
         }
+
+        /// <summary>
+        /// Returns all  the SvnItem resources from root
+        /// </summary>
+        /// <param name="getChildItems">Whether children of the items in 
+        /// question should be included.</param>
+        /// <param name="filter">A callback used to filter the items
+        /// that are added.</param>
+        /// <returns>A list of SvnItem instances.</returns>
+        public IList GetAllResources( bool getChildItems, 
+            ResourceFilterCallback filter )
+        {
+            ArrayList list = new ArrayList();
+
+            TreeNode node = solutionNode; 	
+            if ( node != null )	 	
+                node.GetResources( list, getChildItems, filter );	 	
+
+            return list;
+        }
+ 
 
         private void GenerateStatusCache( string solutionPath )
         {
@@ -519,7 +538,7 @@ namespace Ankh.Solution
         private IDictionary projects;
         private TreeNode solutionNode;
         private ImageList statusImageList;
-        private IContext context;
+        private AnkhContext context;
         private TreeView treeview;
         private IntPtr originalImageList = IntPtr.Zero;
 

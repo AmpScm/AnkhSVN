@@ -8,18 +8,18 @@ using System.Collections;
 namespace Ankh
 {
 
-    public delegate void StatusChanged( object sender, EventArgs e );
+    internal delegate void StatusChanged( object sender, EventArgs e );
 
     
     /// <summary>
     /// Used to decide whether this particular SvnItem should be included in a collection.
     /// </summary>
-    public delegate bool ResourceFilterCallback( SvnItem item );
+    internal delegate bool ResourceFilterCallback( SvnItem item );
 
     /// <summary>
     /// Represents a version controlled path on disk, caching it's status.
     /// </summary>
-    public class SvnItem
+    internal class SvnItem
     {
         /// <summary>
         /// Fired when the status of this item changes.

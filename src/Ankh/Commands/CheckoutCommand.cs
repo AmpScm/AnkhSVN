@@ -14,14 +14,14 @@ namespace Ankh.Commands
          Text = "Checkout a repository directory...", 
          Bitmap = ResourceBitmaps.CheckoutDirectory),
     VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 ) ]
-    public class CheckoutCommand : CommandBase
+    internal class CheckoutCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             return Enabled;
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             using(CheckoutDialog dlg = new CheckoutDialog())
             {

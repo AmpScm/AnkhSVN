@@ -9,7 +9,7 @@ namespace Ankh
     /// An attribute used to describe where a command appears in the VS.NET IDE.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class VSNetControlAttribute : Attribute
+    internal class VSNetControlAttribute : Attribute
     {
         /// <summary>
         /// Constructor
@@ -47,7 +47,7 @@ namespace Ankh
         /// </summary>
         /// <param name="cmd"></param>
         /// <param name="context"></param>
-        public virtual void AddControl( ICommand cmd, IContext context, string tag )
+        public virtual void AddControl( ICommand cmd, AnkhContext context, string tag )
         {
             CommandBar bar = GetCommandBar( this.commandBar, context );
             CommandBarControl cntrl = cmd.Command.AddControl( bar, this.position );      
@@ -60,7 +60,7 @@ namespace Ankh
         /// <param name="name"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static CommandBar GetCommandBar( string name, IContext context )
+        public static CommandBar GetCommandBar( string name, AnkhContext context )
         {
             string[] path = name.Split( '.' );
             CommandBar bar;
@@ -97,7 +97,7 @@ namespace Ankh
         /// <param name="context"></param>
         /// <param name="tag"></param>
         protected void AddControls( string[] baseBars, ICommand cmd, 
-            IContext context, string tag)
+            AnkhContext context, string tag)
         {
             // Use each of the 
             foreach( string baseBar in baseBars )

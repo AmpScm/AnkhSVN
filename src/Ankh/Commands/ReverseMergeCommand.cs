@@ -18,9 +18,9 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 2 ),
     VSNetControl( "Solution.Ankh", Position = 2 ),
     VSNetFolderNodeControl( "Ankh", Position = 2)]
-    public class ReverseMergeCommand : CommandBase
+    internal class ReverseMergeCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             IList resources = context.SolutionExplorer.GetSelectionResources(
                 true, new ResourceFilterCallback(ReverseMergeCommand.VersionedFilter) );
@@ -30,7 +30,7 @@ namespace Ankh.Commands
                 return Disabled;
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             this.SaveAllDirtyDocuments( context );
 
@@ -76,7 +76,7 @@ namespace Ankh.Commands
         /// </summary>
         private class ReverseMergeRunner : ProgressRunner
         {
-            public ReverseMergeRunner( IContext context, IList items, Revision revision,
+            public ReverseMergeRunner( AnkhContext context, IList items, Revision revision,
                 bool recursive, bool dryRun ) : base(context)
             {
                 this.items = items;

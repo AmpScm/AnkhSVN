@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Ankh.UI" default="rebuild">
     <property name="verbose" value="false"/>
+    <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
+    <property name="build.dir" value="build-Release" unless="${debug}"/>
+    <property name="build.dir" value="build-Debug" if="${debug}"/>
     <property name="warninglevel" value="/warn:3"/>
     <property name="lib.dir" value="../lib"/>
-    <property name="installsource.dir" value="..\${installsource.dir}"/>
+    
     
     <target name="rebuild">
         <call target="clean"/>
@@ -12,8 +15,7 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" />
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" />
+        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
     </target>
     
     <target name="init">
@@ -31,36 +33,29 @@
            
         
         
-        <csc target="library" output="${build.dir}/Ankh.UI.dll" 
-            verbose="${verbose}" define="${define}" debug="${debug}">
+        <csc target="library" output="${build.dir}/Ankh.UI.dll" verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
-                <include name="${lib.dir}\Office.dll"/>
-                <include name="..\NSvn\${build.dir}\NSvn.dll"/>
-                <include name="..\Utils\${build.dir}\Utils.dll"/>
-                <include name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
-                <include name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
-                <include name="${lib.dir}\interop.shdocvw.dll"/>
-                <include name="${lib.dir}\axinterop.shdocvw.dll"/>
+                <includes name="${lib.dir}\Office.dll"/>
+                <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
+                <includes name="..\Utils\${build.dir}\Utils.dll"/>
+                <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
+                <includes name="${lib.dir}\interop.shdocvw.dll"/>
+                <includes name="${lib.dir}\axinterop.shdocvw.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
-                <include name="**/*.cs"/>
+                <includes name="**/*.cs"/>
             </sources>
             
             <resources>
-                <include name="*.resx"/>
+                <includes name="*.resx"/>
             </resources>
             
-            <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="${warninglevel}"/>
         </csc>
         
                 
-    </target>
-    
-    <target name="build-WiX">
-        <exec workingdir="${src.dir}" program="candle.exe"
-            commandline="-nologo -dbuilddir=${build.dir} -w0 Ankh.UI.wxs -out ${installsource.dir}\Ankh.UI.wixobj" />
     </target>
     
 </project>

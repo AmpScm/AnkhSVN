@@ -17,7 +17,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents an item in the treeview.
     /// </summary>
-    public abstract class TreeNode
+    internal abstract class TreeNode
     {
 
         public event StatusChanged Changed;

@@ -8,9 +8,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Event sink for the DocumentEvents events.
     /// </summary>
-    public class DocumentEventsSink : EventSink
+    internal class DocumentEventsSink : EventSink
     {
-        public DocumentEventsSink( IContext context ) : base( context )
+        public DocumentEventsSink( AnkhContext context ) : base( context )
         {
             this.events = context.DTE.Events.get_DocumentEvents( null );
             this.events.DocumentSaved += new _dispDocumentEvents_DocumentSavedEventHandler(
@@ -45,7 +45,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
 

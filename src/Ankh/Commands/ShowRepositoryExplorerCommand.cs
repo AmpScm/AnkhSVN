@@ -11,16 +11,16 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.ReposExplorer),
     VSNetControl( "MenuBar.View", Position = 1 ),
     VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 )]
-	public class ShowRepositoryExplorerCommand : CommandBase
+	internal class ShowRepositoryExplorerCommand : CommandBase
 	{
-        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
             return Enabled;
         }
 		
-        public override void Execute(Ankh.IContext context, string parameters)
+        public override void Execute(Ankh.AnkhContext context, string parameters)
         {
-            context.UIShell.ShowRepositoryExplorer( true );
+            context.RepositoryExplorerWindow.Visible = true;
         }        
    
 	}

@@ -14,9 +14,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Base class for the DiffLocalItem and CreatePatch commands
     /// </summary>
-    public abstract class LocalDiffCommandBase : CommandBase
+    internal abstract class LocalDiffCommandBase : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             // always allow diff - worst case you get an empty diff            
             return Enabled;
@@ -27,7 +27,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff( IContext context )
+        protected virtual string GetDiff( AnkhContext context )
         {
             // get the diff itself
             IList resources = context.SolutionExplorer.GetSelectionResources(

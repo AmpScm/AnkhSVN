@@ -34,7 +34,7 @@
         with %. -->
         <!--<ConfigDir>%AppData%\Subversion</ConfigDir>-->
         
-        <!--This path will be used for spawning svn.exe through the public
+        <!--This path will be used for spawning svn.exe through the internal
         svn command in the VS.NET command window. It is optional. 
         If left out, Ankh will attempt to spawn svn.exe from PATH -->
         <!--<SvnExePath>C:\bin\svn.exe</SvnExePath>-->

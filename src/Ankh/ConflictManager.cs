@@ -6,14 +6,14 @@ using System.IO;
 
 namespace Ankh
 {
-    public class ConflictManager
+    internal class ConflictManager
     {           
         
         /// <summary>
         /// ConflictManager
         /// Class to handle issues related to conflicts
         /// </summary>
-        public ConflictManager (IContext context)
+        public ConflictManager (AnkhContext context)
         {                         
             this.context = context;
 
@@ -42,14 +42,13 @@ namespace Ankh
             Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
             TaskList taskList = (TaskList) win.Object;
 
-            // add a task item for every conflict in the file
+            // add a task item for everu conflict in the file
             foreach(int lineNumber in conflictLines)
             {
-                if(!TaskExists(path, lineNumber, taskList))
-                    taskList.TaskItems.Add(ConflictTaskItemCategory, " ", 
-                        "AnkhSVN: file has a conflict. ", 
-                        vsTaskPriority.vsTaskPriorityHigh, 
-                        vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
+                taskList.TaskItems.Add(ConflictTaskItemCategory, " ", 
+                    "AnkhSVN: file has a conflict. ", 
+                    vsTaskPriority.vsTaskPriorityHigh, 
+                    vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
             }
         }
 
@@ -59,7 +58,7 @@ namespace Ankh
         /// </summary>
         public void CreateTaskItems()
         {
-            IList conflictItems =  this.context.SolutionExplorer.GetAllResources(new ResourceFilterCallback(ConflictedFilter)); 
+            IList conflictItems =  this.context.SolutionExplorer.GetAllResources(true,   new ResourceFilterCallback(ConflictedFilter)); 
             foreach(SvnItem item in conflictItems)
             {
                 this.AddTask(item.Path);
@@ -178,30 +177,8 @@ namespace Ankh
 
             return conflictLines;
         }
-        /// <summary>
-        ///  Look through the task items and return true is a conflict task item already exists for a file
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private bool TaskExists(String path, int lineNumber, TaskList taskList)
-        {
-            bool exists = false; 
-            foreach(TaskItem item in taskList.TaskItems)
-            {
-                if(item.Category == ConflictTaskItemCategory &&
-                    item.FileName == path && 
-                    item.Line == lineNumber)
-                {
-                    exists = true; 
-                    break;
-                }
-            }
-            return exists;
-        }
 
-
-
-        private IContext context; 
+        private AnkhContext context; 
         private const string ConflictTaskItemCategory = "Conflict"; 
         private const string SvnConflictString = "<<<<<<< .mine"; 
         private const int NotFound = -1;

@@ -60,7 +60,7 @@ namespace Ankh.Extenders
     [ClassInterface(ClassInterfaceType.None)]
     public class ResourceExtender : IResourceExtender
     {
-        public ResourceExtender( )
+        internal ResourceExtender( )
         {
             // empty
         }
@@ -139,7 +139,7 @@ namespace Ankh.Extenders
             get{ return this.status.PropertyStatus.ToString(); }
         }
 
-        public Status Status
+        internal Status Status
         {
             get{ return this.status; }
             set

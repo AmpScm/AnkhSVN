@@ -14,19 +14,19 @@ namespace Ankh.Commands
     /// This command should be aliased as "svn".
     /// </summary>
     [VSNetCommand("RunSvn")]
-    public class RunSvnCommand : CommandBase
+    internal class RunSvnCommand : CommandBase
     {
         public RunSvnCommand()
         {
             this.workingDirectory = Environment.CurrentDirectory;
         }
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             return Enabled;
         }
        
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             CommandWindow window = (CommandWindow)((Window)context.DTE.Windows.Item( 
                 EnvDTE.Constants.vsWindowKindCommandWindow )).Object;
@@ -147,7 +147,7 @@ dir     List the contents of the working directory
 
 
         /// <summary>
-        /// Change the public working directory.
+        /// Change the internal working directory.
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>The new path.</returns>
@@ -243,7 +243,7 @@ dir     List the contents of the working directory
             return (string[])arglist.ToArray( typeof(String) );
         }
 
-        private IContext context;
+        private AnkhContext context;
         private string workingDirectory;
         private readonly Regex INTRINSIC =  new Regex( @"\/\?|pwd|cd|dir" );
     }

@@ -17,14 +17,14 @@ namespace Ankh
     /// <summary>
     /// Summary description for SvnContext.
     /// </summary>
-    public class SvnClient : Client
+    internal class SvnClient : Client
     {
-        public SvnClient( IContext ankhContext, string configDir ) :  base( configDir )
+        public SvnClient( AnkhContext ankhContext, string configDir ) :  base( configDir )
         {
             this.Init( ankhContext );
         }
 
-        public SvnClient( IContext ankhContext ) 
+        public SvnClient( AnkhContext ankhContext ) 
         {
             this.Init( ankhContext );
         }
@@ -35,7 +35,7 @@ namespace Ankh
         /// </summary>
         /// <param name="commitItems"></param>
         /// <returns></returns>
-        public IList ShowLogMessageDialog(IList items, bool urlPaths)
+        internal IList ShowLogMessageDialog(IList items, bool urlPaths)
         {
             string templateText = this.GetTemplate();
             LogMessageTemplate template = new LogMessageTemplate( templateText );
@@ -269,7 +269,7 @@ namespace Ankh
             }
         }     
    
-        private void Init(IContext ankhContext)
+        private void Init(AnkhContext ankhContext)
         {
             this.ankhContext = ankhContext;
             this.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
@@ -322,7 +322,7 @@ namespace Ankh
         }
         
         static readonly Hashtable actionStatus = new Hashtable();
-        private IContext ankhContext;
+        private AnkhContext ankhContext;
         private static IDictionary map = new Hashtable();
         private string logMessage = null;
         private Control invoker;

@@ -6,9 +6,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Event sink for command events
     /// </summary>
-    public class CommandsEventSink : EventSink
+    internal class CommandsEventSink : EventSink
     {
-        public CommandsEventSink( IContext context ) : base( context )
+        public CommandsEventSink( AnkhContext context ) : base( context )
         {
             
             this.RegisterCommandEvents( );
@@ -47,7 +47,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                Error.Handle( ex );
             }
         }
 

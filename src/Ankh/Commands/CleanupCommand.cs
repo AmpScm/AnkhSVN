@@ -14,15 +14,15 @@ namespace Ankh.Commands
     VSNetFolderNodeControl( "Ankh", Position = 1),
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1 )]
-    public class Cleanup : CommandBase
+    internal class Cleanup : CommandBase
     {  
     
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             return Enabled;
         }
     
-        public override void Execute(IContext context, string parameters)
+        public override void Execute(AnkhContext context, string parameters)
         {
             context.StartOperation( "Running cleanup" );
 
