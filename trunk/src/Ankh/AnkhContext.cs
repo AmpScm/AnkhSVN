@@ -27,10 +27,12 @@ namespace Ankh
         public event EventHandler Unloading;
 
 
-        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin )
+        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell )
         {
             this.dte = dte;
             this.addin = addin;
+            this.uiShell = uiShell;
+            this.uiShell.Context = this;
 
             this.errorHandler = new ErrorHandler();
 
@@ -80,6 +82,15 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.addin; }
+        }
+
+        /// <summary>
+        /// The UI shell.
+        /// </summary>
+        public IUIShell UIShell
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.uiShell; }
         }
 
         /// <summary>
@@ -396,17 +407,8 @@ namespace Ankh
 
         private bool QueryWhetherAnkhShouldLoad( string solutionDir )
         {
-            string nl = Environment.NewLine;
-            string msg = "Ankh has detected that the solution file for this solution " + 
-                "is in a Subversion working copy." + nl + 
-                "Do you want to enable Ankh for this solution?" + nl +
-                "(If you select Cancel, Ankh will not be enabled, " + nl +
-                "but you will " +
-                "be asked this question again the next time you open the solution)";
+            DialogResult res = this.uiShell.QueryWhetherAnkhShouldLoad();
 
-            DialogResult res = MessageBox.Show( 
-                this.HostWindow, msg, "Ankh", 
-                MessageBoxButtons.YesNoCancel );
             if ( res == DialogResult.Yes )
             {
                 Debug.WriteLine( "Creating Ankh.Load", "Ankh" );
@@ -473,6 +475,8 @@ namespace Ankh
 
         private ProgressDialog progressDialog;
         private SvnClient client;
+
+        private IUIShell uiShell;
         
         private Ankh.Config.ConfigLoader configLoader;
     }
