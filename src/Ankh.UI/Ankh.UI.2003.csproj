@@ -20,7 +20,7 @@
                 PostBuildEvent = ""
                 RootNamespace = "Ankh.UI"
                 RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = "Ankh.UI.PathSelectionTreeView"
+                StartupObject = "Ankh.UI.ErrorDialog"
             >
                 <Config
                     Name = "Debug"
@@ -218,6 +218,16 @@
                 <File
                     RelPath = "EolStylePropertyEditor.resx"
                     DependentUpon = "EolStylePropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ErrorDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ErrorDialog.resx"
+                    DependentUpon = "ErrorDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Utils;
 using System.Reflection;
 using System.Diagnostics;
+using Ankh.UI;
 
 
 
@@ -83,18 +84,47 @@ namespace Ankh
                 MessageBoxIcon.Warning );
         }
 
+        private static void DoHandle( SvnClientException ex )
+        {
+            ShowErrorDialog(ex, false, false);
+        }
+
+        
+
         private static void DoHandle( Exception ex )
         {
-            {
 #if REPORTERROR
-                Utils.ErrorMessage.QuerySendByWeb( "http://arild.no-ip.com/error/report.aspx", ex,
-                    typeof(Connect).Assembly );
+            ShowErrorDialog(ex, true, true);
 #else
                 MessageBox.Show( ex.Message, "Unexpected error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error );
-#endif
-               
+#endif              
+
+        }
+
+        private static void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError )
+        {
+            string stackTrace = GetNestedStackTraces( ex );
+            using( ErrorDialog dlg = new ErrorDialog() )
+            {
+                dlg.ErrorMessage = ex.Message;
+                dlg.ShowStackTrace = showStackTrace;
+                dlg.StackTrace = stackTrace;
+                dlg.InternalError = internalError;
+                if ( dlg.ShowDialog() == DialogResult.Retry )
+                {
+                    Utils.ErrorMessage.SendByWeb( "http://arild.no-ip.com/error/report.aspx",
+                        ex, typeof(Connect).Assembly );
+                }
             }
+        }
+
+        private static string GetNestedStackTraces( Exception ex )
+        {
+            if ( ex == null )
+                return String.Empty;
+            else
+                return ex.StackTrace + NL + NL + GetNestedStackTraces( ex.InnerException );
         }
 
         private static readonly string NL = Environment.NewLine;
