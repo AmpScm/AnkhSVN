@@ -86,9 +86,15 @@ namespace Ankh
                         if ( cmd.Name != null && cmd.Name.StartsWith( context.AddIn.ProgID ) )
                             cmd.Delete();
                     }
+                    catch( System.IO.FileNotFoundException )
+                    {
+                        // swallow
+                        // HACK: find out why FileNotFoundException is thrown
+                    }
                     catch( COMException )
                     {
                         // swallow
+                        // HACK: ditto
                     }
                 }
             }
