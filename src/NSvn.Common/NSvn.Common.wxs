@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
-	<Fragment Id="FR_NSvn.Common">
-		<DirectoryRef Id="appDir" src=".\">
-			<Component Id="C__NSvn.Common.dll" Guid="AC546574-2B87-6C96-4E75-EAF862314D38">
-				<File Id="CF_NSvn.Common.dll" Name="NSVNCO~1.DLL" LongName="NSvn.Common.dll"
-					Vital="yes" KeyPath="yes" DiskId="1" src="..\build-Release\NSvn.Common.dll"/>
-			</Component>
-			<Component Id="C__NSvn.Common.pdb" Guid="1D1E9986-FBD2-49ce-90E9-1F5C271963BC">
-				<File Id="CF_NSvn.Common.pdb" Name="NSVNCO~1.PDB" LongName="NSvn.Common.pdb"
-					Vital="yes" KeyPath="yes" DiskId="1" src="..\build-Release\NSvn.Common.pdb"/>
-			</Component>
-		</DirectoryRef>
-	</Fragment>
+    <Fragment Id="FR_NSvn.Common">
+        <DirectoryRef Id="appDir" src=".\">
+            <Component Id="C__NSvn.Common.dll" Guid="AC546574-2B87-6C96-4E75-EAF862314D38">
+                <File Id="CF_NSvn.Common.dll" Name="NSVNCO~1.DLL" LongName="NSvn.Common.dll"
+                    Vital="yes" KeyPath="yes" DiskId="1" src="..\$(var.builddir)\NSvn.Common.dll"/>
+            </Component>
+            <Component Id="C__NSvn.Common.pdb" Guid="1D1E9986-FBD2-49ce-90E9-1F5C271963BC">
+                <File Id="CF_NSvn.Common.pdb" Name="NSVNCO~1.PDB" LongName="NSvn.Common.pdb"
+                    Vital="yes" KeyPath="yes" DiskId="1" src="..\$(var.builddir)\NSvn.Common.pdb"/>
+            </Component>
+        </DirectoryRef>
+    </Fragment>
 </Wix>
