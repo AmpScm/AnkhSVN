@@ -405,7 +405,7 @@
                 />
                 <File
                     RelPath = "RepositoryTreeView.cs"
-                    SubType = "Code"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
