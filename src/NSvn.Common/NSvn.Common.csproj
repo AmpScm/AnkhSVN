@@ -115,6 +115,11 @@
                     RelPath = "IAuthenticationProviderCollection.xml"
                     BuildAction = "Content"
                 />
+                <File
+                    RelPath = "SvnException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
             </Include>
         </Files>
     </CSHARP>
