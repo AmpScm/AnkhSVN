@@ -43,16 +43,10 @@ namespace Ankh.Solution
         public void VisitSelectedItems( ILocalResourceVisitor visitor )
         {
             //foreach( SelectedItem item in items )
-            SelectedItems items = this.dte.SelectedItems;
-            for( int i = 1; i <= items.Count; i++ )
+            object o = this.uiHierarchy.SelectedItems;
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
             {
-                SelectedItem item = items.Item(i);
-                if ( item.ProjectItem != null && this.projectItems.Contains(item.ProjectItem) )
-                    ((TreeNode)this.projectItems[item.ProjectItem]).VisitResources( visitor );
-                else if ( item.Project != null && this.projects.Contains(item.Project) )
-                    ((TreeNode)this.projects[item.Project]).VisitResources( visitor );  
-                else
-                    this.solutionNode.VisitResources( visitor );
+                this.GetNode( item ).VisitResources( visitor );
             }
         }
 
@@ -62,32 +56,24 @@ namespace Ankh.Solution
         public void UpdateSelectionStatus()
         {
             //TODO: this can be done slightly faster, with only a single lookup
-            SelectedItems items = this.dte.SelectedItems;
-            for( int i = 1; i <= items.Count; i++ )
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
             {
-                SelectedItem item = items.Item(i);
-                if ( item.ProjectItem != null && this.projectItems.Contains(item.ProjectItem) )
-                    ((TreeNode)this.projectItems[item.ProjectItem]).UpdateStatus();
-                else if ( item.Project != null && this.projects.Contains(item.Project) )
-                    ((TreeNode)this.projects[item.Project]).UpdateStatus(); 
-                else
-                    this.solutionNode.UpdateStatus();
+                this.GetNode(item).UpdateStatus();
             }
         }
+
+        
 
         /// <summary>
         /// Refreshes the parents of the selected items.
         /// </summary>
         public void RefreshSelectionParents()
         {
-            SelectedItems items = this.dte.SelectedItems;
-            for( int i = 1; i <= items.Count; i++ )
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
             {
-                SelectedItem item = items.Item(i);
-                if ( item.ProjectItem != null && this.projectItems.Contains(item.ProjectItem) )
-                    ((TreeNode)this.projectItems[item.ProjectItem]).Parent.Refresh();
-                else if ( item.Project != null && this.projects.Contains(item.Project) )
-                    ((TreeNode)this.projects[item.Project]).Parent.Refresh();                
+                TreeNode node = this.GetNode( item );
+                if ( node != null )
+                    node.Parent.Refresh();
             }
         }
 
@@ -101,24 +87,7 @@ namespace Ankh.Solution
             ((TreeNode)this.projectItems[item]).UpdateStatus();
         }
 
-        /// <summary>
-        /// Updates the resource associated with the given item 
-        /// </summary>
-
-        public void UpdateItem( ILocalResource oldResource, ILocalResource newResource )
-        {
-//            // HACK: fix this
-//            ProjectItem item = null;
-//            foreach( DictionaryEntry entry in this.projectItems )
-//            {
-//                if (((TreeNode)entry.Value).Resource == oldResource)
-//                {
-//                    item = (ProjectItem)entry.Key;
-//                    break;
-//                }                       
-//            }
-//            ((TreeNode)this.projectItems[item]).Resource = newResource;
-        }
+ 
 
         public void SyncWithTreeView()
         {
@@ -130,12 +99,18 @@ namespace Ankh.Solution
             
 
             // and the uihierarchy root
-            UIHierarchy hierarchy = (UIHierarchy)this.dte.Windows.Item( 
+            this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
                 DteConstants.vsWindowKindSolutionExplorer ).Object;           
+
+            this.solutionItem = this.uiHierarchy.UIHierarchyItems.Item(1);
+            if ( this.solutionItem.Object is EnvDTE.Solution )
+                System.Windows.Forms.MessageBox.Show( "Moo" );
+            else if ( this.solutionItem.Object == this.dte.Solution )
+                System.Windows.Forms.MessageBox.Show( "Baaaaahh!" );
 
             // we assume there is a single root node
             this.root = TreeNode.CreateSolutionNode( 
-                hierarchy.UIHierarchyItems.Item(1), root, this );
+                this.solutionItem, root, this );
         }
 
         internal IntPtr TreeView
@@ -210,6 +185,19 @@ namespace Ankh.Solution
         }
 
 
+        private TreeNode GetNode(UIHierarchyItem item)
+        {
+            if ( item.Object is ProjectItem && this.projectItems.Contains( item.Object ) )
+                return ((TreeNode)this.projectItems[item.Object]);
+            else if ( item.Object is Project && this.projects.Contains(item.Object) )
+                return ((TreeNode)this.projects[item.Object]); 
+            else if ( item == this.solutionItem )
+                return this.solutionNode;
+            else
+                return null;
+        }
+
+
         #region class TreeNode
         
         #endregion
@@ -258,7 +246,9 @@ namespace Ankh.Solution
 
         private _DTE dte;
         private IntPtr treeview;
+        private UIHierarchyItem solutionItem;
         private TreeNode root;
+        private UIHierarchy uiHierarchy;
         private const string VSNETWINDOW = "wndclass_desked_gsk";
         private const string GENERICPANE = "GenericPane";
         private const string UIHIERARCHY = "VsUIHierarchyBaseWin";
