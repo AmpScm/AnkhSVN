@@ -56,7 +56,19 @@ namespace Ankh.Solution
             if ( this.projectFolder == null )
                 return StatusKind.None;               
             else
-                return StatusFromResource( this.projectFolder );
+            {
+                // check status on the project folder
+                StatusKind folderStatus = StatusFromResource( this.projectFolder );
+                if (  folderStatus != StatusKind.Normal )
+                    return folderStatus;
+                else
+                {
+                    // check statuses on child resources
+                    ModifiedVisitor v = new ModifiedVisitor();
+                    this.VisitChildResources( v );
+                    return v.Modified ? StatusKind.Modified : StatusKind.Normal;
+                }
+            }
         }                    
 
         private WorkingCopyDirectory projectFolder;
