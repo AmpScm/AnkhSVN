@@ -106,6 +106,21 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "RepositoryDirectory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RepositoryFile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RepositoryItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "UnversionedDirectory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
