@@ -4,6 +4,8 @@ using System.Collections;
 using System.IO;
 using NSvn.Core;
 using EnvDTE;
+using Ankh.UI;
+using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
@@ -29,10 +31,25 @@ namespace Ankh.Commands
             IList resources = context.SolutionExplorer.GetSelectionResources(
                 true, new ResourceFilterCallback(CommandBase.ModifiedFilter) );
 
+            // are we shifted?
+            bool recurse = false;
+            if ( this.Shift )
+            {
+                using( PathSelector p = this.GetPathSelector( "Select items for diffing" ) )
+                {
+                    p.Items = resources;
+                    p.CheckedItems = resources;
+                    if ( p.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                        return String.Empty;
+                    resources = p.CheckedItems;
+                    recurse = p.Recursive;
+                }
+            }
+
             MemoryStream stream = new MemoryStream();
             foreach( SvnItem item in resources )
                 context.Client.Diff( new string[]{}, item.Path, Revision.Base, 
-                    item.Path, Revision.Working, false, true, false, stream, Stream.Null );
+                    item.Path, Revision.Working, recurse, true, false, stream, Stream.Null );
 
             return System.Text.Encoding.Default.GetString( stream.ToArray() );
         }
