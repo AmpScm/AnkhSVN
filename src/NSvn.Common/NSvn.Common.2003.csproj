@@ -99,6 +99,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LibraryAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NSvn.Common.build"
                     BuildAction = "None"
                 />
@@ -123,11 +128,6 @@
                 />
                 <File
                     RelPath = "PropListItem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SubversionVersionAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
