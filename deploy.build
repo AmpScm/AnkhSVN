@@ -67,8 +67,11 @@
             
             public static void ScriptMain( Project project )
             {
+               DirectoryInfo di = new DirectoryInfo(Path.GetFullPath(project.Properties[ "checkout.dir" ]));
+
                DirectoryScanner scanner = new DirectoryScanner();
-               scanner.BaseDirectory = project.Properties[ "checkout.dir" ];
+               scanner.BaseDirectory = di;
+               
                scanner.Includes.Add( @"**\AssemblyInfo.cs" );
                scanner.Includes.Add( @"**\AssemblyInfo.cpp" );
                
