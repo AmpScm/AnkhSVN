@@ -1,0 +1,36 @@
+<?xml version='1.0'?>
+<?xml-stylesheet type='text/xsl' href='..\UseCaseXSL1.xsl'?>
+<UseCase>
+    <Preface>
+        <Name>Cleanup</Name>
+        <ID>Cleanup</ID>
+        <Actors>
+            <ActorID>Developer</ActorID>
+        </Actors>
+        <Summary>Delete lock files in .svn working copy administrative area</Summary>
+    </Preface>
+    <MainFlow>
+        <Preconditions>
+            <Precondition>There are lock files in the working copy administrative area</Precondition>
+        </Preconditions>
+        <FlowElements>
+            <FlowElement></FlowElement>
+            <FlowElement></FlowElement>
+            <FlowElement></FlowElement>
+            <FlowElement></FlowElement>
+            <FlowElement>
+                <Step>Ask developer if he wants to run cleanup</Step>
+            </FlowElement>
+            <FlowElement>
+                <Step>Cleanup is run on the working copy area</Step>
+            </FlowElement>
+            <FlowElement>
+                <Include useCaseID='ShowSvnFeedback'></Include>
+            </FlowElement>
+        </FlowElements>
+        <Postconditions>
+            <Postcondition>The working copy is in an unlocked state</Postcondition>
+            <Postcondition>or cleanup failed</Postcondition>
+        </Postconditions>
+    </MainFlow>
+</UseCase>

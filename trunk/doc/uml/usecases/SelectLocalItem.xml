@@ -1,0 +1,26 @@
+<?xml version='1.0'?>
+<?xml-stylesheet type='text/xsl' href='..\UseCaseXSL1.xsl'?>
+<UseCase>
+    <Preface>
+        <Name>Select Local Item</Name>
+        <ID>SelectRepositoryItem</ID>
+        <Actors>
+            <ActorID>Developer</ActorID>
+            <ActorID>Repository</ActorID>
+        </Actors>
+        <Summary>Select a working copy item</Summary>
+    </Preface>
+    <MainFlow>
+        <Preconditions>
+            <Precondition>Item under revision control</Precondition>
+        </Preconditions>
+        <FlowElements>
+            <FlowElement>
+                <Step>The developer clicks on an item in Solution Explorer</Step>
+            </FlowElement>
+        </FlowElements>
+        <Postconditions>
+            <Postcondition>The item is selected</Postcondition>
+        </Postconditions>
+    </MainFlow>
+</UseCase>
