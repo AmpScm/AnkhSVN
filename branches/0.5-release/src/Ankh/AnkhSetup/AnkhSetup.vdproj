@@ -63,6 +63,24 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_054613BB8A30BF57EBAA5322B19585D0"
+        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
+        "MsmSig" = "8:utilst:\\ankh-release\\utils\\obj\\release\\utils.dll"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_054613BB8A30BF57EBAA5322B19585D0"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:utilst:\\ankh-release\\utils\\obj\\release\\utils.dll"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_054613BB8A30BF57EBAA5322B19585D0"
+        "OwnerKey" = "8:_5A362F0486C88BC183C58FAA422BA305"
+        "MsmSig" = "8:utilst:\\ankh-release\\utils\\obj\\release\\utils.dll"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_05F8F0E220554F36878DE5D67F8E11F2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\ADOBE-STDENC.SO"
@@ -123,27 +141,9 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0FF4D16A7E39883B3EF1DC0B8338165B"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:interop.esprojn:\\src2002\\lib\\interop.esproj.dll"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_1072FEB5FDCD4096AFF22FA5AD4984FF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\GB_2312-80.SO"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_10EF7B599A00325FABC4DE8431B23A49"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:axinterop.shdocvwn:\\src2002\\ankh.ui\\obj\\axinterop.shdocvw.dll"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_10EF7B599A00325FABC4DE8431B23A49"
-        "OwnerKey" = "8:_A8E11443D48907C371A0DBA8F9675153"
-        "MsmSig" = "8:axinterop.shdocvwn:\\src2002\\ankh.ui\\obj\\axinterop.shdocvw.dll"
         }
         "Entry"
         {
@@ -358,13 +358,13 @@
         "Entry"
         {
         "MsmKey" = "8:_2F9E17DA6C274B52B85F39F5C71431B1"
-        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
         "MsmSig" = "8:VC_User_CRT.BA9B6D09_0DE0_11D5_A548_0090278A1BB8"
         }
         "Entry"
         {
         "MsmKey" = "8:_2F9E17DA6C274B52B85F39F5C71431B1"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
         "MsmSig" = "8:VC_User_CRT.BA9B6D09_0DE0_11D5_A548_0090278A1BB8"
         }
         "Entry"
@@ -399,24 +399,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3512E9EB08FB2B1F4E3AAFBA9D9AFF84"
-        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
-        "MsmSig" = "8:utilsn:\\src2002\\utils\\obj\\release\\utils.dll"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3512E9EB08FB2B1F4E3AAFBA9D9AFF84"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:utilsn:\\src2002\\utils\\obj\\release\\utils.dll"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3512E9EB08FB2B1F4E3AAFBA9D9AFF84"
-        "OwnerKey" = "8:_A8E11443D48907C371A0DBA8F9675153"
-        "MsmSig" = "8:utilsn:\\src2002\\utils\\obj\\release\\utils.dll"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_37A3A74621F54596BF3FA3E447D75EFE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\CP10007.SO"
@@ -426,6 +408,24 @@
         "MsmKey" = "8:_3B060164563C427D91962B8DB8DBB4E2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\ISO-8859-5.SO"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3D72B32F41267A45D2B64FCB8E842C03"
+        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
+        "MsmSig" = "8:nsvn.commont:\\ankh-release\\nsvn.common\\obj\\release\\nsvn.common.dll"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3D72B32F41267A45D2B64FCB8E842C03"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:nsvn.commont:\\ankh-release\\nsvn.common\\obj\\release\\nsvn.common.dll"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3D72B32F41267A45D2B64FCB8E842C03"
+        "OwnerKey" = "8:_C4F21909AE9A01C6237DEA70680761DA"
+        "MsmSig" = "8:nsvn.commont:\\ankh-release\\nsvn.common\\obj\\release\\nsvn.common.dll"
         }
         "Entry"
         {
@@ -462,6 +462,12 @@
         "MsmKey" = "8:_4243847E63604ABCB17788395DBBA37B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\EUC-JP.SO"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_42759BD47163C120F82093A3B9A4F9FC"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:ankhusercontrolhostlibt:\\ankh-release\\lib\\ankhusercontrolhostlib.dll"
         }
         "Entry"
         {
@@ -543,9 +549,21 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5145ACCAF56FC299657BBAC53CC9AD91"
+        "MsmKey" = "8:_511FCF0A5D61426223A0465BF4332852"
+        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
+        "MsmSig" = "8:sharpziplib_2bad3caa945ce9bbcf2c1e7c784256c0"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_511FCF0A5D61426223A0465BF4332852"
         "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:extensibility_8c9c6e3362c636948ff73615c81d6576"
+        "MsmSig" = "8:sharpziplib_2bad3caa945ce9bbcf2c1e7c784256c0"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_511FCF0A5D61426223A0465BF4332852"
+        "OwnerKey" = "8:_054613BB8A30BF57EBAA5322B19585D0"
+        "MsmSig" = "8:sharpziplib_2bad3caa945ce9bbcf2c1e7c784256c0"
         }
         "Entry"
         {
@@ -579,24 +597,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_57C0724A7704D1E399AC0A267EEBE2E0"
-        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
-        "MsmSig" = "8:nsvn.coren:\\src2002\\nsvn.core\\release\\nsvn.core.dll"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_57C0724A7704D1E399AC0A267EEBE2E0"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:nsvn.coren:\\src2002\\nsvn.core\\release\\nsvn.core.dll"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_57C0724A7704D1E399AC0A267EEBE2E0"
-        "OwnerKey" = "8:_A8E11443D48907C371A0DBA8F9675153"
-        "MsmSig" = "8:nsvn.coren:\\src2002\\nsvn.core\\release\\nsvn.core.dll"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_57E89AA6EF72418EAD400EE390611184"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\EBCDIC-AT-DE.SO"
@@ -624,6 +624,12 @@
         "MsmKey" = "8:_5A30EADB8869477F8CF6DBD38467162B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\ADOBE-SYMBOL.SO"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5A362F0486C88BC183C58FAA422BA305"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:ankh.uit:\\ankh-release\\ankh.ui\\obj\\release\\ankh.ui.dll"
         }
         "Entry"
         {
@@ -672,6 +678,12 @@
         "MsmKey" = "8:_62062F06961647189D86A7FEFE01EC75"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\ISO-IR-60.SO"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_63695199704983D2A5B5610F7CADDF12"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:interop.esprojt:\\ankh-release\\lib\\interop.esproj.dll"
         }
         "Entry"
         {
@@ -732,6 +744,102 @@
         "MsmKey" = "8:_6D8EB33C24064408BB12BC0FE5C0728C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\ISO-8859-13.SO"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6EB874DCE8D660EDABD1A60BA8DE53E2"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:T:\\ANKH-RELEASE\\ANKH\\OBJ\\RELEASE\\ANKH.TLB"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_20C7DD1E073FB744F73A10B58FD1A45D"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_5A362F0486C88BC183C58FAA422BA305"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_AF51CD9E98C48EA5B08820E7F19BBA97"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_054613BB8A30BF57EBAA5322B19585D0"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_C4F21909AE9A01C6237DEA70680761DA"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_3D72B32F41267A45D2B64FCB8E842C03"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_511FCF0A5D61426223A0465BF4332852"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_F7A7106E699CB69E681CD1A355259868"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_53F00227D46E4F84A6FFDAACA5E5D90E"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_2E9372A990236F05308093D090A57083"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_CDCB1164919FDBC57457CF2D958A277A"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_87A14F6139AFDE759F79ABC05C5F62FC"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_42759BD47163C120F82093A3B9A4F9FC"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70DAD644506D4C65AFBF7CA5F4C4191B"
+        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
         }
         "Entry"
         {
@@ -826,7 +934,7 @@
         "Entry"
         {
         "MsmKey" = "8:_8598AFAE9E82A3D9FDFAC0D1200869A2"
-        "OwnerKey" = "8:_BF358F2696330381B71CCE0C632E6778"
+        "OwnerKey" = "8:_CDCB1164919FDBC57457CF2D958A277A"
         "MsmSig" = "8:D:\\WINDOWS\\SYSTEM32\\SHDOCVW.DLL"
         }
         "Entry"
@@ -846,6 +954,12 @@
         "MsmKey" = "8:_870D9A2E4F424F23AE85C3C83B04F41D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\MAC-THAI.SO"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_87A14F6139AFDE759F79ABC05C5F62FC"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:extensibility_8c9c6e3362c636948ff73615c81d6576"
         }
         "Entry"
         {
@@ -885,6 +999,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8CA3AC3F9E90AEAD149C5126302861E6"
+        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
+        "MsmSig" = "8:D:\\WINDOWS\\SYSTEM32\\MSWSOCK.DLL"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8CA3AC3F9E90AEAD149C5126302861E6"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:D:\\WINDOWS\\SYSTEM32\\MSWSOCK.DLL"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8D3A76DCCED5485E88473E0082A24470"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\MAC-ROMANIA.SO"
@@ -906,12 +1032,6 @@
         "MsmKey" = "8:_8EF9E8D418F344628A3AA049CA4229D5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\ISO-IR-10.SO"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_90286E0C4FAEE19A978CCCA8FD661C6D"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:ankhusercontrolhostlibn:\\src2002\\lib\\ankhusercontrolhostlib.dll"
         }
         "Entry"
         {
@@ -951,93 +1071,15 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_20C7DD1E073FB744F73A10B58FD1A45D"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_F7A7106E699CB69E681CD1A355259868"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_53F00227D46E4F84A6FFDAACA5E5D90E"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_2E9372A990236F05308093D090A57083"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_5145ACCAF56FC299657BBAC53CC9AD91"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_90286E0C4FAEE19A978CCCA8FD661C6D"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_A8E11443D48907C371A0DBA8F9675153"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_BF358F2696330381B71CCE0C632E6778"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_10EF7B599A00325FABC4DE8431B23A49"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_3512E9EB08FB2B1F4E3AAFBA9D9AFF84"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_57C0724A7704D1E399AC0A267EEBE2E0"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_FDC402E13689EC607927B37969E7A33F"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
-        "OwnerKey" = "8:_DAA65B28B6E3A1B96C4A85E885D91E65"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_95D5EABAEECF4DDCBB332BF2D9B43E03"
+        "MsmKey" = "8:_963B88413978EBD247A02B071D2F2664"
         "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        "MsmSig" = "8:D:\\WINDOWS\\SYSTEM32\\RPCRT4.DLL"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_963B88413978EBD247A02B071D2F2664"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:D:\\WINDOWS\\SYSTEM32\\RPCRT4.DLL"
         }
         "Entry"
         {
@@ -1083,12 +1125,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9E41406D83082F29E5EEA420276FC0AD"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:N:\\SRC2002\\ANKH\\OBJ\\RELEASE\\ANKH.TLB"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_9EDB7055100C42229D0BB6A5077D062A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\ISO-IR-158.SO"
@@ -1102,13 +1138,13 @@
         "Entry"
         {
         "MsmKey" = "8:_A041FFA1A51A41B49AE4EB1D099CC77E"
-        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
         "MsmSig" = "8:VC_User_STL.BA9B76E9_0DE0_11D5_A548_0090278A1BB8"
         }
         "Entry"
         {
         "MsmKey" = "8:_A041FFA1A51A41B49AE4EB1D099CC77E"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
         "MsmSig" = "8:VC_User_STL.BA9B76E9_0DE0_11D5_A548_0090278A1BB8"
         }
         "Entry"
@@ -1167,12 +1203,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A8E11443D48907C371A0DBA8F9675153"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:ankh.uin:\\src2002\\ankh.ui\\obj\\release\\ankh.ui.dll"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_AB3E2524A65F4F91BB1094120FEAB00E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\CP420.SO"
@@ -1182,6 +1212,18 @@
         "MsmKey" = "8:_AF1CCD87C894467CA021C43E090852CC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\HP-ROMAN8.SO"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AF51CD9E98C48EA5B08820E7F19BBA97"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:axinterop.shdocvwt:\\ankh-release\\ankh.ui\\obj\\axinterop.shdocvw.dll"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AF51CD9E98C48EA5B08820E7F19BBA97"
+        "OwnerKey" = "8:_5A362F0486C88BC183C58FAA422BA305"
+        "MsmSig" = "8:axinterop.shdocvwt:\\ankh-release\\ankh.ui\\obj\\axinterop.shdocvw.dll"
         }
         "Entry"
         {
@@ -1287,15 +1329,9 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_BF358F2696330381B71CCE0C632E6778"
-        "OwnerKey" = "8:_10EF7B599A00325FABC4DE8431B23A49"
-        "MsmSig" = "8:interop.shdocvwn:\\src2002\\lib\\interop.shdocvw.dll"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BF358F2696330381B71CCE0C632E6778"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:interop.shdocvwn:\\src2002\\lib\\interop.shdocvw.dll"
+        "MsmKey" = "8:_BED9A8D31A69E7100BCB7547110FFA49"
+        "OwnerKey" = "8:_42759BD47163C120F82093A3B9A4F9FC"
+        "MsmSig" = "8:D:\\PROGRAM FILES\\ANKHSVN\\ANKHUSERCONTROLHOST.DLL"
         }
         "Entry"
         {
@@ -1341,6 +1377,24 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C4F21909AE9A01C6237DEA70680761DA"
+        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
+        "MsmSig" = "8:nsvn.coret:\\ankh-release\\nsvn.core\\release\\nsvn.core.dll"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C4F21909AE9A01C6237DEA70680761DA"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:nsvn.coret:\\ankh-release\\nsvn.core\\release\\nsvn.core.dll"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C4F21909AE9A01C6237DEA70680761DA"
+        "OwnerKey" = "8:_5A362F0486C88BC183C58FAA422BA305"
+        "MsmSig" = "8:nsvn.coret:\\ankh-release\\nsvn.core\\release\\nsvn.core.dll"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C595EEF09B594EC88CA42ACB5E7899ED"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\ISO-IR-103.SO"
@@ -1356,6 +1410,18 @@
         "MsmKey" = "8:_CD00DB8730084A86ADCED78261D9F823"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\EBCDIC-FI-SE-A.SO"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CDCB1164919FDBC57457CF2D958A277A"
+        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
+        "MsmSig" = "8:interop.shdocvwt:\\ankh-release\\lib\\interop.shdocvw.dll"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CDCB1164919FDBC57457CF2D958A277A"
+        "OwnerKey" = "8:_AF51CD9E98C48EA5B08820E7F19BBA97"
+        "MsmSig" = "8:interop.shdocvwt:\\ankh-release\\lib\\interop.shdocvw.dll"
         }
         "Entry"
         {
@@ -1404,24 +1470,6 @@
         "MsmKey" = "8:_D83652C4E11147CDB6B189F806F570E0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\CP903.SO"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DAA65B28B6E3A1B96C4A85E885D91E65"
-        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
-        "MsmSig" = "8:sharpziplib_2bad3caa945ce9bbcf2c1e7c784256c0"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DAA65B28B6E3A1B96C4A85E885D91E65"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:sharpziplib_2bad3caa945ce9bbcf2c1e7c784256c0"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DAA65B28B6E3A1B96C4A85E885D91E65"
-        "OwnerKey" = "8:_3512E9EB08FB2B1F4E3AAFBA9D9AFF84"
-        "MsmSig" = "8:sharpziplib_2bad3caa945ce9bbcf2c1e7c784256c0"
         }
         "Entry"
         {
@@ -1570,7 +1618,7 @@
         "Entry"
         {
         "MsmKey" = "8:_F7A7106E699CB69E681CD1A355259868"
-        "OwnerKey" = "8:_A8E11443D48907C371A0DBA8F9675153"
+        "OwnerKey" = "8:_5A362F0486C88BC183C58FAA422BA305"
         "MsmSig" = "8:office_736ce26e3972ad23e1298f97ce43db19"
         }
         "Entry"
@@ -1608,24 +1656,6 @@
         "MsmKey" = "8:_FD60ED2FBBDF4EECB6FE4D7ED68426F3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:N:\\SUBVERSION\\APR-ICONV\\LIBR\\ICONV\\ISO-IR-152.SO"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FDC402E13689EC607927B37969E7A33F"
-        "OwnerKey" = "8:_00D7AD4A42A14FABA89786C6D98B958B"
-        "MsmSig" = "8:nsvn.commonn:\\src2002\\nsvn.common\\obj\\release\\nsvn.common.dll"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FDC402E13689EC607927B37969E7A33F"
-        "OwnerKey" = "8:_524DCC5D44364A3596F1DA169A04054D"
-        "MsmSig" = "8:nsvn.commonn:\\src2002\\nsvn.common\\obj\\release\\nsvn.common.dll"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FDC402E13689EC607927B37969E7A33F"
-        "OwnerKey" = "8:_57C0724A7704D1E399AC0A267EEBE2E0"
-        "MsmSig" = "8:nsvn.commonn:\\src2002\\nsvn.common\\obj\\release\\nsvn.common.dll"
         }
     }
     "Configurations"
@@ -1847,6 +1877,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_054613BB8A30BF57EBAA5322B19585D0"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Utils, Version=0.5.4.1649, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                    "_054613BB8A30BF57EBAA5322B19585D0"
+                    {
+                    "Name" = "8:Utils.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Utils.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_05F8F0E220554F36878DE5D67F8E11F2"
             {
             "SourcePath" = "8:N:\\subversion\\apr-iconv\\LibR\\iconv\\adobe-stdenc.so"
@@ -2047,37 +2108,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_0FF4D16A7E39883B3EF1DC0B8338165B"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Interop.esproj, Version=1.0.0.0, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_0FF4D16A7E39883B3EF1DC0B8338165B"
-                    {
-                    "Name" = "8:Interop.esproj.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Interop.esproj.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_1072FEB5FDCD4096AFF22FA5AD4984FF"
             {
             "SourcePath" = "8:N:\\subversion\\apr-iconv\\LibR\\iconv\\gb_2312-80.so"
@@ -2096,37 +2126,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_10EF7B599A00325FABC4DE8431B23A49"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AxInterop.SHDocVw, Version=1.1.0.0, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_10EF7B599A00325FABC4DE8431B23A49"
-                    {
-                    "Name" = "8:AxInterop.SHDocVw.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:AxInterop.SHDocVw.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_11DC4060518544A2B4F7FE98F6190634"
@@ -2871,37 +2870,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_3512E9EB08FB2B1F4E3AAFBA9D9AFF84"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Utils, Version=0.4.99.1296, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_3512E9EB08FB2B1F4E3AAFBA9D9AFF84"
-                    {
-                    "Name" = "8:Utils.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Utils.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_37A3A74621F54596BF3FA3E447D75EFE"
             {
             "SourcePath" = "8:N:\\subversion\\apr-iconv\\LibR\\iconv\\cp10007.so"
@@ -2940,6 +2908,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_3D72B32F41267A45D2B64FCB8E842C03"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NSvn.Common, Version=0.5.4.1649, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                    "_3D72B32F41267A45D2B64FCB8E842C03"
+                    {
+                    "Name" = "8:NSvn.Common.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NSvn.Common.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_3D7AA00BBB944BEB85113EF3979C6247"
@@ -3060,6 +3059,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_42759BD47163C120F82093A3B9A4F9FC"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:AnkhUserControlHostLib, Version=1.0.0.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                    "_42759BD47163C120F82093A3B9A4F9FC"
+                    {
+                    "Name" = "8:AnkhUserControlHostLib.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:AnkhUserControlHostLib.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_431220B2D717457DBE960990BE1428CD"
@@ -3322,20 +3352,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_5145ACCAF56FC299657BBAC53CC9AD91"
+            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_511FCF0A5D61426223A0465BF4332852"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+            "AssemblyAsmDisplayName" = "8:SharpZipLib, Version=0.31.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73"
                 "ScatterAssemblies"
                 {
-                    "_5145ACCAF56FC299657BBAC53CC9AD91"
+                    "_511FCF0A5D61426223A0465BF4332852"
                     {
-                    "Name" = "8:Extensibility.dll"
+                    "Name" = "8:SharpZipLib.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Extensibility.dll"
+            "SourcePath" = "8:SharpZipLib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
@@ -3444,37 +3474,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_57C0724A7704D1E399AC0A267EEBE2E0"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NSvn.Core, Version=0.4.99.1296, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_57C0724A7704D1E399AC0A267EEBE2E0"
-                    {
-                    "Name" = "8:NSvn.Core.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:NSvn.Core.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_57E89AA6EF72418EAD400EE390611184"
             {
             "SourcePath" = "8:N:\\subversion\\apr-iconv\\LibR\\iconv\\ebcdic-at-de.so"
@@ -3573,6 +3572,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_5A362F0486C88BC183C58FAA422BA305"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Ankh.UI, Version=0.5.4.1649, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                    "_5A362F0486C88BC183C58FAA422BA305"
+                    {
+                    "Name" = "8:Ankh.UI.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Ankh.UI.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_5B5C13EFB4C24E52826F5563BB799367"
@@ -3733,6 +3763,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_63695199704983D2A5B5610F7CADDF12"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Interop.esproj, Version=1.0.0.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                    "_63695199704983D2A5B5610F7CADDF12"
+                    {
+                    "Name" = "8:Interop.esproj.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Interop.esproj.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_638FB90C3B2A4E9D8923ED99195024E4"
@@ -3933,6 +3994,27 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_6EB874DCE8D660EDABD1A60BA8DE53E2"
+            {
+            "Signature" = "8:20000000604ca1816c84c401805335b87e84c401609a0e816c84c4010000000010160000000000000000000041006e006b0068002e0074006c00620000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            "SourcePath" = "8:Ankh.tlb"
+            "TargetName" = "8:Ankh.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_70E8525321BB4B3688C81C0BBE55A40E"
@@ -4237,7 +4319,7 @@
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_8598AFAE9E82A3D9FDFAC0D1200869A2"
             {
-            "Signature" = "8:20000000e05bf5b16676c40180b45ed46684c401000a45304b65c401000000000048150000000000000000007300680064006f006300760077002e0064006c006c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            "Signature" = "8:20000000e05bf5b16676c40140fe06f87a84c401000a45304b65c401000000000048150000000000000000007300680064006f006300760077002e0064006c006c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
             "SourcePath" = "8:shdocvw.dll"
             "TargetName" = "8:shdocvw.dll"
             "Tag" = "8:"
@@ -4314,6 +4396,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_87A14F6139AFDE759F79ABC05C5F62FC"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_87A14F6139AFDE759F79ABC05C5F62FC"
+                    {
+                    "Name" = "8:Extensibility.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Extensibility.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_87BA97D6CCAD43EDAB2C114C8D179F75"
@@ -4436,6 +4549,27 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_8CA3AC3F9E90AEAD149C5126302861E6"
+            {
+            "Signature" = "8:200000000060a90fc6f2c201e0fd12b77e84c4010060a90fc6f2c2010000000000f8030000000000000000006d007300770073006f0063006b002e0064006c006c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            "SourcePath" = "8:mswsock.dll"
+            "TargetName" = "8:mswsock.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_8D3A76DCCED5485E88473E0082A24470"
             {
             "SourcePath" = "8:N:\\subversion\\apr-iconv\\LibR\\iconv\\mac-romania.so"
@@ -4514,37 +4648,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_90286E0C4FAEE19A978CCCA8FD661C6D"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AnkhUserControlHostLib, Version=1.0.0.0, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_90286E0C4FAEE19A978CCCA8FD661C6D"
-                    {
-                    "Name" = "8:AnkhUserControlHostLib.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:AnkhUserControlHostLib.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_9129FB1DCEE347ADA23CCC1F49A5A21E"
@@ -4665,6 +4768,27 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_963B88413978EBD247A02B071D2F2664"
+            {
+            "Signature" = "8:20000000d01378a02822c401d05a18956c84c40100a2dc0b040bc4010000000000160a0000000000000000007200700063007200740034002e0064006c006c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            "SourcePath" = "8:rpcrt4.dll"
+            "TargetName" = "8:rpcrt4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_987E5E2ECA4546CAA035344571321397"
@@ -4805,27 +4929,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_9E41406D83082F29E5EEA420276FC0AD"
-            {
-            "Signature" = "8:2000000050b55801bcf4c301c01e4fb56a84c401703aa768b683c4010000000060070000000000000000000041006e006b0068002e0074006c00620000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-            "SourcePath" = "8:Ankh.tlb"
-            "TargetName" = "8:Ankh.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_9EDB7055100C42229D0BB6A5077D062A"
@@ -5028,37 +5131,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_A8E11443D48907C371A0DBA8F9675153"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Ankh.UI, Version=0.4.99.1312, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_A8E11443D48907C371A0DBA8F9675153"
-                    {
-                    "Name" = "8:Ankh.UI.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Ankh.UI.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_AB3E2524A65F4F91BB1094120FEAB00E"
             {
             "SourcePath" = "8:N:\\subversion\\apr-iconv\\LibR\\iconv\\cp420.so"
@@ -5097,6 +5169,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_AF51CD9E98C48EA5B08820E7F19BBA97"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:AxInterop.SHDocVw, Version=1.1.0.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                    "_AF51CD9E98C48EA5B08820E7F19BBA97"
+                    {
+                    "Name" = "8:AxInterop.SHDocVw.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:AxInterop.SHDocVw.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_AF5D7DE6B405465A9F7936D33706A82A"
@@ -5439,21 +5542,11 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_BF358F2696330381B71CCE0C632E6778"
+            "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_BED9A8D31A69E7100BCB7547110FFA49"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Interop.SHDocVw, Version=1.1.0.0, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_BF358F2696330381B71CCE0C632E6778"
-                    {
-                    "Name" = "8:Interop.SHDocVw.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Interop.SHDocVw.dll"
-            "TargetName" = "8:"
+            "Signature" = "8:200000000064c0566c84c401e0e9d35e7e84c4010064c0566c84c4010000000000a00100000000000000000041006e006b006800550073006500720043006f006e00740072006f006c0048006f00730074002e0064006c006c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041004e004b004800550053007e0031002e0044004c004c0000000000"
+            "SourcePath" = "8:AnkhUserControlHost.dll"
+            "TargetName" = "8:AnkhUserControlHost.dll"
             "Tag" = "8:"
             "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
             "Condition" = "8:"
@@ -5552,7 +5645,7 @@
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_C3EB9D9B6F6F12C99FB897C08BCE8FAD"
             {
-            "Signature" = "8:2000000000bf9f4cbbedc201c00344956784c40100bf9f4cbbedc2010000000000f0050000000000000000006400740065002e006f006c006200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            "Signature" = "8:2000000000bf9f4cbbedc201b0f41f877e84c40100bf9f4cbbedc2010000000000f0050000000000000000006400740065002e006f006c006200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
             "SourcePath" = "8:dte.olb"
             "TargetName" = "8:dte.olb"
             "Tag" = "8:"
@@ -5609,6 +5702,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_C4F21909AE9A01C6237DEA70680761DA"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NSvn.Core, Version=0.5.4.1649, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                    "_C4F21909AE9A01C6237DEA70680761DA"
+                    {
+                    "Name" = "8:NSvn.Core.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NSvn.Core.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_C595EEF09B594EC88CA42ACB5E7899ED"
@@ -5669,6 +5793,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_CDCB1164919FDBC57457CF2D958A277A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Interop.SHDocVw, Version=1.1.0.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                    "_CDCB1164919FDBC57457CF2D958A277A"
+                    {
+                    "Name" = "8:Interop.SHDocVw.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Interop.SHDocVw.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_CEBFBB57F21E49BC830427742B63F11A"
@@ -5829,37 +5984,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_DAA65B28B6E3A1B96C4A85E885D91E65"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:SharpZipLib, Version=0.31.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73"
-                "ScatterAssemblies"
-                {
-                    "_DAA65B28B6E3A1B96C4A85E885D91E65"
-                    {
-                    "Name" = "8:SharpZipLib.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:SharpZipLib.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_DAE082CC231F439BAF78DD928A615BF7"
@@ -6453,37 +6577,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{C7BF5952-4B9D-11D3-8E24-00C04F6837D0}:_FDC402E13689EC607927B37969E7A33F"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NSvn.Common, Version=0.4.99.1296, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_FDC402E13689EC607927B37969E7A33F"
-                    {
-                    "Name" = "8:NSvn.Common.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:NSvn.Common.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
         }
         "FileType"
         {
@@ -6950,7 +7043,7 @@
         {
             "{B1E2BB22-187D-11D3-8E02-00C04F6837D0}:_00D7AD4A42A14FABA89786C6D98B958B"
             {
-            "SourcePath" = "8:..\\..\\ReposInstaller\\obj\\Debug\\ReposInstaller.dll"
+            "SourcePath" = "8:..\\..\\ReposInstaller\\obj\\Release\\ReposInstaller.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
@@ -7008,7 +7101,7 @@
             }
             "{B1E2BB22-187D-11D3-8E02-00C04F6837D0}:_524DCC5D44364A3596F1DA169A04054D"
             {
-            "SourcePath" = "8:..\\obj\\Debug\\Ankh.dll"
+            "SourcePath" = "8:..\\obj\\Release\\Ankh.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D9EE4435F0FE476893ED55F076B24288"
@@ -7238,7 +7331,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{AC8774A4-3E09-11D3-8E14-00C04F6837D0}:_95D5EABAEECF4DDCBB332BF2D9B43E03"
+            "{AC8774A4-3E09-11D3-8E14-00C04F6837D0}:_70DAD644506D4C65AFBF7CA5F4C4191B"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
