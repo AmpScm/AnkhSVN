@@ -22,8 +22,7 @@ namespace NSvn
                     void TestRead();
 
                     [Test]
-                    [ExpectedException( __typeof(NSvn::Core::SvnClientException) )]
-                    void TestError();
+                    void TestReadFromNullStream();
 
                 };
             }
