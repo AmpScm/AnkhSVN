@@ -51,7 +51,7 @@
       <!--<Component Id="Ankh_component17" DiskId="1">
       <Registry Id="Ankh_registry17" Root="HKCR" 
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
-          Name="CodeBase" Value="file:///C:/projects/Ankh/src/build-Release/Ankh.dll" />
+          Name="CodeBase" Value="[TARGETDIR]\Ankh.dll" />
       </Component>-->
       <Component Id="Ankh_component18" DiskId="1" Guid="E620AD9A-EF0A-4b14-BD7C-DD777B31F7BD">
         <Registry Id="Ankh_registry18" Root="HKCR" Type="string" KeyPath="yes"
@@ -72,7 +72,7 @@
       <!--<Component Id="Ankh_component21" DiskId="1">
         <Registry Id="Ankh_registry21" Root="HKCR" 
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
-          Name="CodeBase" Value="file:///C:/projects/Ankh/src/build-Release/Ankh.dll" />
+          Name="CodeBase" Value="[TARGETDIR]\Ankh.dll" />
       </Component>-->
       <Component Id="Ankh_component22" DiskId="1" Guid="1B8DF8D1-B308-4084-B44A-02363826DC61">
         <Registry Id="Ankh_registry22" Root="HKCR" Type="string" KeyPath="yes"
@@ -89,7 +89,7 @@
       <Component Id="Ankh_register_comp0" DiskId="1" Guid="A2040CBF-FBAF-41c1-AFC5-824E466BEBCE">
         <Registry KeyPath="yes" Root="HKMU" 
           Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
-          Name="SatelliteDllPath" Type="string" Value="[appDir]" 
+          Name="SatelliteDllPath" Type="string" Value="[TARGETDIR]" 
           Id="_008A3D8ACC7C418BBA42A60F997428BF" />
       </Component>
       <Component Id="Ankh_register_comp1" DiskId="1" Guid="11F33777-8360-4627-9D8F-661294335B96">
@@ -107,7 +107,7 @@
       <Component Id="Ankh_register_comp3" DiskId="1" Guid="F7415AC9-12A3-4f15-922A-11AB98AF7153">
         <Registry KeyPath="yes" Root="HKMU" 
           Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
-          Name="AboutBoxIcon" Type="string" Value="[appDir]\1033\BitmapDll.dll,101"
+          Name="AboutBoxIcon" Type="string" Value="[TARGETDIR]\1033\BitmapDll.dll,101"
           Id="_653330477C2B4294AEEDBA1C043EB41B" />
       </Component>
       <Component Id="Ankh_register_comp4" DiskId="1" Guid="686B73EA-804A-4496-B725-9A08CA37189C">
@@ -144,7 +144,7 @@
       <Component Id="Ankh_register_comp9" DiskId="1" Guid="7B1933D7-0947-438f-888B-B5D81475DE24">
         <Registry KeyPath="yes" Root="HKMU" 
           Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
-          Name="SatelliteDllPath" Type="string" Value="[appDir]"
+          Name="SatelliteDllPath" Type="string" Value="[TARGETDIR]"
           Id="_671746B8A40547A7A502F7D64CCBFE2E" />        
       </Component>
       <Component Id="Ankh_register_comp10" DiskId="1" Guid="D247A2A9-AC41-4c2d-AA35-06CC3A3F783A">
