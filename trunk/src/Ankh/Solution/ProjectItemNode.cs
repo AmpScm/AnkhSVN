@@ -67,7 +67,17 @@ namespace Ankh.Solution
                 }
 
                 // just return the dir component of the first item
-                return Path.GetDirectoryName( ((SvnItem)this.resources[0]).Path );
+                if ( resources.Count > 0 )
+                    return Path.GetDirectoryName( ((SvnItem)this.resources[0]).Path );
+                else
+                {
+                    // oops, get the direectory from the parent then?
+                    if ( this.Parent != null )
+                        return this.Parent.Directory;
+                    else
+                        throw new ApplicationException( 
+                            "Could not determine directory for item. Should not happen" );
+                }
             }
         }
 
