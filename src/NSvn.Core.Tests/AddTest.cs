@@ -34,6 +34,9 @@ namespace NSvn.Core.Tests
             Client.Add( testFile, false, ctx );    
        
             Assertion.Assert( "No notification callbacks received", this.notifications.Count > 0 );
+
+            Assertion.AssertEquals( "svn st does not report the file as added", 
+                'A', this.GetSvnStatus( testFile ) );
                         
         }
 
