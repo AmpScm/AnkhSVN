@@ -57,7 +57,7 @@ namespace NSvn.Core.Tests
         {
             Assertion.AssertEquals( "Wrong number of commit items", 1, items.Length );
             Assertion.Assert( "Wrong path", items[0].Path.IndexOf( 
-                this.filepath.Replace( "\\", "/" ) ) >= 0 );
+                this.filepath ) >= 0 );
             Assertion.AssertEquals( "Wrong kind", NodeKind.File, items[0].Kind );
             Assertion.AssertEquals( "Wrong revision", 5, items[0].Revision );
 
