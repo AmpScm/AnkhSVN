@@ -6,7 +6,7 @@
     <property name="checkout.dir" value="Ankh-Release" />
     <property name="zip.file" value="Ankh.zip" />
     <property name="url" 
-        value="http://10.0.0.3:8088/svn/finalproject/branches/alpha1-release/src"/>
+        value="http://arild.no-ip.com:8088/svn/finalproject/branches/alpha1-release/src"/>
         
    
     
