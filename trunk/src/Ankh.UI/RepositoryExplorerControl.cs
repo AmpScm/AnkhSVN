@@ -325,7 +325,7 @@ namespace Ankh.UI
         private void ValidateAdd()
         {
             this.addButton.Enabled = this.revisionPicker.Valid && 
-                VALIDURL.IsMatch( this.urlTextBox.Text );
+                UriUtils.ValidUrl.IsMatch( this.urlTextBox.Text );
         }
 
         private void TreeViewMouseDown( object sender, MouseEventArgs args )
@@ -512,9 +512,6 @@ namespace Ankh.UI
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-        private static readonly Regex VALIDURL = new Regex(@"\S*?://\S+");
-
-        
     }
 
     /// <summary>
