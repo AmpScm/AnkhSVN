@@ -16,6 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.2003", "Ankh\Ankh.cspr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSvn.Core", "NSvn.Core\NSvn.Core.vcproj", "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
 	ProjectSection(ProjectDependencies) = postProject
+		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A3248E1E-8272-4227-AF02-BB86040FBED9}
 		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
 	EndProjectSection
 EndProject
@@ -243,8 +244,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
