@@ -42,9 +42,9 @@
         <delete dir="${installsource.dir}" failonerror="false"/>
         
         <regasm assembly="${build.dir}\Ankh.dll" verbose="${verbose}" codebase="true" unregister="true" failonerror="false"/>
-	
-	<delete dir="build-Release" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
-	<delete dir="build-Debug" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
+    
+    <delete dir="build-Release" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
+    <delete dir="build-Debug" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
     </target>
     
     
@@ -115,6 +115,16 @@
             </fileset>
          </copy>
     </target>
+
+    <target name="build-Ankh.Tests" depends="build-Ankh, build-NSvn.Core.Tests, build-NSvn.Common, build-NSvn.Core">
+        <nant buildfile="Ankh.Tests/Ankh.Tests.build" inheritall="true" target="build"/>
+        <copy todir="${build.dir}"> 
+            <fileset basedir="Ankh.Tests/${build.dir}">
+                <includes name="*.dll"/>
+                <includes name="*.pdb"/>
+            </fileset>
+         </copy>
+    </target>
     
     <target name="build-NSvn.Core.Tests" depends="build-NSvn.Common, build-NSvn.Core">
         <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" inheritall="true" target="build"/>
@@ -144,7 +154,7 @@
     <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn.Core"
         description="Build all necessary assemblies"/>
     
-    <target name="build-tests" depends="build, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"
+<target name="build-tests" depends="build, build-Ankh.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"
         description="Build all test assemblies"/>
     
     
@@ -154,14 +164,18 @@
                 <includes name="*.dll"/>
             </fileset>
         </copy>
-	<nunit2 failonerror="false" haltonerror="false">
-		<formatter type="Plain" />
-		<test assemblyname="${build.dir}/NSvn.Core.Tests.dll" failonerror="false" haltonerror="false"/>
-	</nunit2>
-	<nunit2 failonerror="false" haltonerror="false">
-		<formatter type="Plain" />
-		<test assemblyname="${build.dir}/NSvn.Core.Tests.MCpp.dll" failonerror="false" haltonerror="false"/>
-	</nunit2>
+    <nunit2 failonerror="false" haltonerror="false">
+        <formatter type="Plain" />
+        <test assemblyname="${build.dir}/NSvn.Core.Tests.dll" failonerror="false" haltonerror="false"/>
+    </nunit2>
+    <nunit2 failonerror="false" haltonerror="false">
+        <formatter type="Plain" />
+        <test assemblyname="${build.dir}/NSvn.Core.Tests.MCpp.dll" failonerror="false" haltonerror="false"/>
+    </nunit2>
+    <nunit2 failonerror="false" haltonerror="false">
+        <formatter type="Plain" />
+        <test assemblyname="${build.dir}/Ankh.Tests.dll" failonerror="false" haltonerror="false"/>
+    </nunit2>
     </target>
     
     <target name="deploy" depends = "rebuild, test" description="Run all tests, then create the MSI installer if the tests pass">
