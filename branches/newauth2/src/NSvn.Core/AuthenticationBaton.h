@@ -20,47 +20,47 @@ namespace NSvn
         {
         public:
             /// <summary>Constructor</summary>
-            AuthenticationBaton() : dirty( true ), authBaton(0)
+            AuthenticationBaton() : dirty( true ), authBaton(0) 
             {
                 this->providerObjects = new ArrayList();
+                this->parameters = new Hashtable();
                 this->pool = new GCPool();
             }
 
-            AuthenticationBaton( ICollection* providerObjects ) : dirty( true ), authBaton(0)
+            AuthenticationBaton( ICollection* providerObjects ) : dirty( true ), authBaton(0), 
+                paramSet(false)
             {
                 this->providerObjects = new ArrayList( providerObjects );
+                this->parameters = new Hashtable();
                 this->pool = new GCPool();
             }            
 
             /// <summary>Add an authentication provider</summary>
             void Add( AuthenticationProviderObject* obj )
-            {
+            {                
                 this->providerObjects->Add( obj );
+                this->dirty = true;
             }
 
             /// <summary>Add multiple authentication providers</summary>
             void Add( ICollection* providerObjects )
             {
                 this->providerObjects->Add( providerObjects );
+                this->dirty = true;
             }
 
             /// <summmary>Set a runtime parameter in the baton</summary>
             void SetParameter( String* name, String* value )
             {
-                this->CreateAuthBaton();
-                svn_auth_set_parameter( this->authBaton, 
-                    StringHelper(name).CopyToPool(this->pool->ToAprPool()), 
-                    StringHelper(value).CopyToPool(this->pool->ToAprPool()) );
+                this->parameters->set_Item( name, value );
+                this->dirty = true;
             }
 
             /// <summary>Get a runtime parameter from the baton</summary>
             String* GetParameter( String* name )
             {
-                this->CreateAuthBaton();
-                const void* param = svn_auth_get_parameter( this->authBaton,
-                    StringHelper(name) );
-
-                return StringHelper( static_cast<const char*>(param) );
+                return static_cast<String*>( 
+                    this->parameters->get_Item( name ) );
             }
 
             // TODO: docstrings here
@@ -108,14 +108,31 @@ namespace NSvn
                 // create the baton
                 svn_auth_baton_t* baton;
                 svn_auth_open( &baton, providers, pool->ToAprPool() );
-
                 this->authBaton = baton;
+
+                // set the parameters
+                IDictionaryEnumerator* iter = this->parameters->GetEnumerator();
+                while( iter->MoveNext() )
+                {
+                    const char* name = StringHelper( 
+                        static_cast<String*>(iter->get_Key()) ).CopyToPool(
+                        this->pool->ToAprPool() );
+                    const char* val = StringHelper(
+                        static_cast<String*>(iter->get_Value()) ).CopyToPool(
+                        this->pool->ToAprPool() );
+
+                    svn_auth_set_parameter( this->authBaton, name, val );
+                }
+
+                
                 this->dirty = false;
             }
 
 
+            Hashtable* parameters;
             ArrayList* providerObjects;
             bool dirty;
+            bool paramSet;
             svn_auth_baton_t* authBaton;
             GCPool* pool;
 
