@@ -19,7 +19,13 @@ namespace Ankh.RepositoryExplorer
 
         public string RootText
         {
-            get{ return this.rootNode != null ? this.rootNode.Resource.Url : "";  }
+            get
+            {
+                if ( this.rootNode != null ) 
+                     return this.rootNode.Resource.Url + " @ " + this.rootNode.Resource.Revision.ToString();
+                else 
+                     return "";
+            }
         }        
 
         public IRepositoryTreeNode RootNode
