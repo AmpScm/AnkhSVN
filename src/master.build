@@ -67,8 +67,6 @@
         <nant buildfile="ReposInstaller\ReposInstaller.build" target="build-WiX" inheritall="true" />
         <nant buildfile="Utils\Utils.build" target="build-WiX" inheritall="true" />
         
-        <nant buildfile="WiX\Ankh.msm.build" target="build-WiX" inheritall="true" />
-        
         <call target="wix-MSI" />
     </target>
     
