@@ -97,6 +97,18 @@ namespace Ankh
         /// <param name="html"></param>
         void DisplayHtml( string caption, string html, bool reuse );
 
+        /// <summary>
+        /// Show a "path selector dialog".
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
         PathSelectorInfo ShowPathSelector( PathSelectorInfo info );
+
+        /// <summary>
+        /// Shows the log dialog.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        LogDialogInfo ShowLogDialog( LogDialogInfo info );
 	}
 }

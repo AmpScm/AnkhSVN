@@ -320,6 +320,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "LogDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LogDialog.resx"
+                    DependentUpon = "LogDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "LoginDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"

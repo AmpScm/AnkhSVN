@@ -180,7 +180,7 @@ namespace Ankh
         public void DisplayHtml( string caption, string html, bool reuse )
         {
             string htmlFile = Path.GetTempFileName();
-            using( StreamWriter w = new StreamWriter( htmlFile, false, System.Text.Encoding.Default ) )
+            using( StreamWriter w = new StreamWriter( htmlFile, false, System.Text.Encoding.UTF8 ) )
                 w.Write( html );
 
             // the Start Page window is a web browser
@@ -246,6 +246,34 @@ namespace Ankh
                 {
                     return null;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Shows the log dialog.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public LogDialogInfo ShowLogDialog( LogDialogInfo info )
+        {
+            using( LogDialog dlg = new LogDialog() )
+            {
+                dlg.EnableRecursive = false;
+                dlg.Items = info.Items;
+                dlg.CheckedItems = info.CheckedItems;
+                dlg.Options = PathSelectorOptions.DisplayRevisionRange;
+                dlg.RevisionStart = info.RevisionStart;
+                dlg.RevisionEnd = info.RevisionEnd;
+                dlg.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
+                dlg.StopOnCopy = info.StopOnCopy;
+
+                if ( dlg.ShowDialog( this.Context.HostWindow ) != DialogResult.OK )
+                    return null;
+
+                info.CheckedItems = dlg.CheckedItems;
+                info.StopOnCopy = dlg.StopOnCopy;
+                
+                return info;
             }
         }
 
