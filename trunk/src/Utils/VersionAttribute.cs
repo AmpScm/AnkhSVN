@@ -61,7 +61,7 @@ namespace Utils
         public override string ToString()
         {
             if ( this.CustomText != null )
-                return this.CustomText;
+                return String.Format( "{0}{1}", this.Name, this.CustomText );
             else
                 return String.Format( "{0} {1}.{2}.{3}{4}", this.name, 
                     this.major, this.minor, this.patchLevel, this.tag );
