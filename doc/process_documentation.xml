@@ -2,15 +2,18 @@
 <?xml-stylesheet type="text/xsl" href="doc.xsl"?>
 <doc title="Process documentation">
      <section header="Front page (specified by HIO)">
-     </section>
+	 </section>
      
      <section header="Title page">
      </section>
      
-     <section header="Abstract">    
+     <section header="Abstract"> 
+      <p></p>   
      </section>
      
-     <section header="Preface">    
+     <section header="Preface"> 
+		<p>This document describe the reason for the selected approach and how the
+		process evolved.</p>   
      </section>
      
      <section header="Table of contents">    
@@ -31,8 +34,7 @@
 			</section>
      </section>
      
-      <section header="The development process">  
-			
+      <section header="The development process">  		
 			<section header="Relations to the employer CollabNet"> 
 				<p>How the relations to CollabNet evolved 
 				through the process</p>   
@@ -47,8 +49,7 @@
 			<section header="Deviations in project specifications">    
 			</section>
 			<section header="Future developments">    
-			</section>
-					
+			</section>				
      </section>
      
      <section header="Conclusion">  
