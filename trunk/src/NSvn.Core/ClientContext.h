@@ -12,11 +12,6 @@
 #include <apr_pools.h>
 #include <apr_tables.h>
 
-#using <NSvn.Common.dll>
-
-
-
-
 namespace
 {
     void notify_func( void *baton, const char *path, 

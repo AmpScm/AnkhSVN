@@ -4,6 +4,7 @@ using NSvn.Common;
 using NSvn.Core;
 using Ankh.UI;
 using System.Windows.Forms;
+using System.Collections;
 
 namespace Ankh
 {
@@ -12,8 +13,9 @@ namespace Ankh
 	/// </summary>
 	internal class SvnContext : NSvnContext
 	{
-        public SvnContext()
+        public SvnContext( AnkhContext ankhContext )
         {
+            this.ankhContext = ankhContext;
             this.AddAuthenticationProvider( new DialogProvider() );
         }
 		/// <summary>
@@ -31,31 +33,40 @@ namespace Ankh
         }
 
         protected override void NotifyCallback(NSvn.Core.Notification notification)
-        {
-        
+        {        
         }
 
         #region DialogProvider
         private class DialogProvider : IAuthenticationProvider
         {
-            private LoginDialog loginDialog = new LoginDialog();
+            
 
             #region Implementation of IAuthenticationProvider
-            public NSvn.Common.ICredential NextCredentials()
-            {
+            public NSvn.Common.ICredential NextCredentials( ICollection parameters )
+            {               
+
                 if ( loginDialog.ShowDialog() == DialogResult.OK )
-                    return new SimpleCredential( loginDialog.Username, 
+                    return this.lastCredential = new SimpleCredential( loginDialog.Username, 
                         loginDialog.Password );
                 else
-                    return null;
+                    return this.lastCredential = null;
             }
-            public NSvn.Common.ICredential FirstCredentials()
+            public NSvn.Common.ICredential FirstCredentials( ICollection parameters )
             {
+                if ( this.savedCredential != null )
+                    return this.savedCredential;
+
                 if ( loginDialog.ShowDialog() == DialogResult.OK )
-                    return new SimpleCredential( loginDialog.Username, 
+                    return this.lastCredential = new SimpleCredential( loginDialog.Username, 
                         loginDialog.Password );
                 else
-                    return null;
+                    return this.lastCredential = null;
+            }
+
+            public bool SaveCredentials( ICollection parameters )
+            {
+                this.savedCredential = this.lastCredential;
+                return true;
             }
             public string Kind
             {
@@ -65,7 +76,13 @@ namespace Ankh
                 }
             }
             #endregion
+
+            private LoginDialog loginDialog = new LoginDialog();
+            private ICredential lastCredential;
+            private ICredential savedCredential;
         }
         #endregion
+
+        private AnkhContext ankhContext;
     }
 }

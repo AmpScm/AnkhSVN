@@ -1,20 +1,30 @@
 // $Id$
 using System;
+using Ankh.UI;
+using EnvDTE;
 
 namespace Ankh.Commands
 {
 	/// <summary>
 	/// Summary description for ViewLog.
 	/// </summary>
-	public class ViewLog
+    [VSNetCommand("ViewLog", Text = "Repos Explorer", Tooltip = "Show the repository explorer"),
+    VSNetControl( "Item", Position = 4 ),
+    VSNetControl( "Tools", Position = 5 )]
+	internal class ViewLog : CommandBase
 	{
-		public ViewLog()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
-	}
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
+        {
+            return vsCommandStatus.vsCommandStatusEnabled |
+                vsCommandStatus.vsCommandStatusSupported;
+        }
+		
+	    public override void Execute(Ankh.AnkhContext context)
+        {
+            TestRepositoryExplorer exp = new TestRepositoryExplorer();
+            exp.ShowDialog();
+        }        
+    }
 }
 
 

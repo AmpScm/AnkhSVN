@@ -18,7 +18,7 @@ namespace Ankh
 		{
 			this.dte = dte;
             this.addin = addin;
-            this.context = new SvnContext();
+            this.context = new SvnContext( this );
             SetUpEvents();
         }
 

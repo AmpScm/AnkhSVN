@@ -22,6 +22,9 @@ namespace NSvn{
 
                     [Test]
                     void TestRevisionFromDate();
+
+                    [Test]
+                    void TestParameterDictionary();
                 };
             }
         }

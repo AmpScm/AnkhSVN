@@ -107,7 +107,6 @@ namespace Ankh
             this.root = new TreeNode( hierarchy.UIHierarchyItems.Item(1), root, this );
         }
 
-
         private void SetUpTreeview()
         {
             // TODO: error checking here
