@@ -40,6 +40,10 @@ EndProject
 Project("{D4EFD700-BBAA-11D2-8EE0-00C04F5E0C38}") = "Ankh help.2003", "Help.doc\Ankh help.2003.HWProj", "{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.2003", "Utils\Utils.2003.csproj", "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
 	ProjectSection(ProjectDependencies) = postProject
