@@ -75,8 +75,6 @@ Global
 		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Debug.ActiveCfg = Release
 		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Release.ActiveCfg = Release
 		{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}.Release.Build.0 = Release
-		{110FE3E0-9B08-420A-BAF8-06FF3E77EEA1}.Debug.ActiveCfg = Debug|Win32
-		{110FE3E0-9B08-420A-BAF8-06FF3E77EEA1}.Release.ActiveCfg = Release|Win32
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Debug.ActiveCfg = Debug|.NET
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Debug.Build.0 = Debug|.NET
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Release.ActiveCfg = Release|.NET
@@ -86,8 +84,8 @@ Global
 		Item:1 = master.build
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 6
 		ThisSolutionNotes = 
+		DPBuild = 6
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection

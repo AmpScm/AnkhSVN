@@ -87,6 +87,11 @@
                     Project = "{1C779D04-4D97-414E-93DF-F63E52660B2C}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Utils"
+                    Project = "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -222,16 +227,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "RepositoryExplorer.cs"
-                    SubType = "UserControl"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RepositoryExplorer.resx"
-                    DependentUpon = "RepositoryExplorer.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "RepositoryExplorerControl.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -239,6 +234,16 @@
                 <File
                     RelPath = "RepositoryExplorerControl.resx"
                     DependentUpon = "RepositoryExplorerControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "RepositoryTreeView.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RepositoryTreeView.resx"
+                    DependentUpon = "RepositoryTreeView.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

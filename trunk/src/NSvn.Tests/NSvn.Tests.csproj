@@ -107,6 +107,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AuthenticationTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NSvn.Tests.build"
                     BuildAction = "None"
                 />

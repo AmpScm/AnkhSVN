@@ -49,8 +49,13 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-			components = new System.ComponentModel.Container();
-		}
+            // 
+            // RepositoryExplorerControl
+            // 
+            this.Name = "RepositoryExplorerControl";
+            this.Size = new System.Drawing.Size(240, 184);
+
+        }
 		#endregion
 	}
 }

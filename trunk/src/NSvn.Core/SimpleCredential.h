@@ -19,7 +19,12 @@ namespace NSvn
 
             __property String* get_Kind()
             {
-                return StringHelper( SVN_AUTH_CRED_SIMPLE ); 
+                return SimpleCredential::AuthKind; 
+            }
+
+            __property static String* get_AuthKind()
+            {
+                return StringHelper( SVN_AUTH_CRED_SIMPLE );
             }
 
             /// <summary>Convert to an svn_auth_cred_simple_t*</summary>
