@@ -20,7 +20,6 @@ namespace NSvn.Core.Tests
             this.ExtractWorkingCopy();
             this.wc2 = this.FindDirName( Path.Combine( TestBase.BASEPATH, TestBase.WC_NAME ) );
             Zip.ExtractZipResource( this.wc2, this.GetType(), this.WC_FILE );
-            this.RenameAdminDirs( this.wc2 );
         }
 
         public override void TearDown()
@@ -38,7 +37,8 @@ namespace NSvn.Core.Tests
         {
             string filePath = Path.Combine( this.WcPath, "Form.cs" ); 
             File.Delete( filePath );
-            this.Client.Update( this.WcPath, Revision.Head, true );
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            Client.Update( this.WcPath, Revision.Head, true, ctx );
 
             Assertion.Assert( "File not restored after update", File.Exists( filePath ) );
         }
@@ -54,7 +54,8 @@ namespace NSvn.Core.Tests
                 w.Write( "Moo" );
             this.RunCommand( "svn", "ci -m \"\" " + this.wc2 );
 
-            this.Client.Update( this.WcPath, Revision.Head, true );
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            Client.Update( this.WcPath, Revision.Head, true, ctx );
 
             string s;
             using( StreamReader r = new StreamReader( Path.Combine( this.WcPath, "Form.cs" ) ) )

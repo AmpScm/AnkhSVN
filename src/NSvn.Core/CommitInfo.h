@@ -15,21 +15,9 @@ namespace NSvn
             CommitInfo( svn_client_commit_info_t* info ) 
             {
                 this->author = StringHelper( info->author );
-                try
-                {
-                    if ( info->date )
-                    {
-                        this->date = DateTime::ParseExact( StringHelper(info->date),  
-                            "yyyy-MM-dd\\THH:mm:ss.ffffff\\Z", 
-                            System::Globalization::CultureInfo::InvariantCulture );
-                    }
-                    else
-                        this->date = DateTime::MinValue;
-                }
-                catch( System::FormatException* )
-                {
-                    this->date = DateTime::MinValue;
-                }
+                this->date = DateTime::ParseExact( StringHelper(info->date),  
+                    "yyyy-MM-dd\\THH:mm:ss.ffffff\\Z", 
+                    System::Globalization::CultureInfo::CurrentCulture );
                 this->revision = info->revision;
             }
 

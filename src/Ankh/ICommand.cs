@@ -7,7 +7,7 @@ namespace Ankh
     /// <summary>
     /// Represents an Ankh command.
     /// </summary>
-    public interface ICommand
+    internal interface ICommand
     {
         /// <summary>
         /// Get the status of the command
@@ -17,7 +17,7 @@ namespace Ankh
         /// <summary>
         /// Execute the command
         /// </summary>
-        void Execute( AnkhContext context, string parameters );
+        void Execute( AnkhContext context );
 
         /// <summary>
         /// The EnvDTE.Command instance corresponding to this command.

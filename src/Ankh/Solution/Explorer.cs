@@ -2,29 +2,27 @@
 using System;
 using EnvDTE;
 using Utils;
-
+using NSvn;
 using NSvn.Core;
 using NSvn.Common;
 using Utils.Win32;
 using System.Collections;
 using System.Drawing;
 using System.Diagnostics;
-using System.IO;
 
 using C = Utils.Win32.Constants;
 using DteConstants = EnvDTE.Constants;
-using System.Windows.Forms;
+using Swf = System.Windows.Forms;
 
 
 namespace Ankh.Solution
 {
-
     /// <summary>
     /// Represents the Solution Explorer window in the VS.NET IDE
     /// </summary>
-    public class Explorer
+    internal class Explorer
     {
-        public Explorer( _DTE dte, AnkhContext context )
+        public Explorer( _DTE dte, SvnContext context )
         {
             this.dte = dte;
             this.context = context;
@@ -32,43 +30,60 @@ namespace Ankh.Solution
                 new ItemComparer() );
             this.projects = new Hashtable( new ProjectHashCodeProvider(), 
                 new ProjectComparer() );
-            
-            // get the uihierarchy root
-            this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
-                DteConstants.vsWindowKindSolutionExplorer ).Object; 
-            this.solutionNode = null;            
-        }
-
-        /// <summary>
-        ///  To be called when a solution is loaded.
-        /// </summary>
-        public void Load()
-        {
-            this.Unload();
+            this.solutionNode = null;
             this.SetUpTreeview();
             this.SyncWithTreeView();
         }
 
+        
+
         /// <summary>
-        ///  Resets the state of the object. To be called when a solution is unloaded.
+        /// Visits all the selected items.
         /// </summary>
-        public void Unload()
+        /// <param name="visitor"></param>
+        public void VisitSelectedItems( ILocalResourceVisitor visitor, bool recursive )
         {
-            Debug.WriteLine( "Unloading existing solution information", "Ankh" );
-            this.projectItems.Clear();
-            this.projects.Clear();
-            if ( this.treeview != null )
-                this.treeview.ClearStatusImages();
-            if ( this.originalImageList != IntPtr.Zero )
+            //foreach( SelectedItem item in items )
+            object o = this.uiHierarchy.SelectedItems;
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
             {
-                this.treeview.StatusImageList = originalImageList;
-                originalImageList = IntPtr.Zero;
+                TreeNode node = this.GetNode( item );
+                if ( node != null )
+                    node.VisitResources( visitor, recursive );
             }
-            this.solutionNode = null;
         }
 
+        /// <summary>
+        /// Visits all the selected nodes.
+        /// </summary>
+        /// <param name="visitor"></param>
+        public void VisitSelectedNodes( INodeVisitor visitor )
+        {
+            //foreach( SelectedItem item in items )
+            object o = this.uiHierarchy.SelectedItems;
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
+            {
+                TreeNode node = this.GetNode( item );
+                if ( node != null )
+                    node.Accept( visitor );
+            }
+        }
 
-        
+        public void VisitResources( ProjectItem item, ILocalResourceVisitor visitor,
+            bool recursive )
+        {
+            TreeNode node = this.GetNode( item );
+            if ( node != null )
+                node.VisitResources( visitor, recursive );
+        }
+
+        public void VisitResources( Project project, ILocalResourceVisitor visitor, 
+            bool recursive )
+        {
+            TreeNode node = this.GetNode( project );
+            if ( node != null )
+                node.VisitResources( visitor, recursive );
+        }
 
         /// <summary>
         /// Updates the status of selected items.
@@ -79,7 +94,7 @@ namespace Ankh.Solution
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
-                    node.Refresh();
+                    node.UpdateStatus();
             }
         }
 
@@ -139,122 +154,46 @@ namespace Ankh.Solution
         {
             TreeNode node = (TreeNode)this.projectItems[item];
             if ( node != null )
-                node.Refresh();
-        }       
+                node.UpdateStatus();
+        }
+
+ 
 
         public void SyncWithTreeView()
         {
-            Debug.WriteLine( "Synchronizing with treeview", "Ankh" );
-
             this.projectItems.Clear();
             this.projects.Clear();
-            
-            // generate a status cache
-            this.GenerateStatusCache( this.dte.Solution.FullName );
-            
-            // store the original image list
-            this.originalImageList = this.treeview.StatusImageList;
-            
-            // and assign the status image list to the tree
-            this.treeview.StatusImageList = statusImageList.Handle;
+            // find the root in the treeview
+            IntPtr root = (IntPtr)Win32.SendMessage( this.treeview, Msg.TVM_GETNEXTITEM,
+                C.TVGN_ROOT, IntPtr.Zero );
             
 
+            // and the uihierarchy root
+            this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
+                DteConstants.vsWindowKindSolutionExplorer ).Object;           
+
+            this.solutionItem = this.uiHierarchy.UIHierarchyItems.Item(1);
+            if ( this.solutionItem.Object is EnvDTE.Solution )
+                System.Windows.Forms.MessageBox.Show( "Moo" );
+            else if ( this.solutionItem.Object == this.dte.Solution )
+                System.Windows.Forms.MessageBox.Show( "Baaaaahh!" );
 
             // we assume there is a single root node
-            this.solutionNode = TreeNode.CreateSolutionNode( 
-                this.uiHierarchy.UIHierarchyItems.Item(1), this );
- 
-            Debug.WriteLine( "Created solution node", "Ankh" );
+            this.root = TreeNode.CreateSolutionNode( 
+                this.solutionItem, root, this );
+
+            //this.Hook();
         }
 
-        /// <summary>
-        /// Returns the SvnItem resources associated with the selected items
-        /// in the solution explorer.
-        /// </summary>
-        /// <param name="getChildItems">Whether children of the items in 
-        /// question should be included.</param>        /// 
-        /// <returns>A list of SvnItem instances.</returns>
-        public IList GetSelectionResources( bool getChildItems )
-        {
-            return this.GetSelectionResources( getChildItems, null );
-        }
-
-        /// <summary>	 	
-        /// Visits all the selected nodes.	 	
-        /// </summary>	 	
-        /// <param name="visitor"></param>	 	
-        public void VisitSelectedNodes( INodeVisitor visitor )	 	
-        {	 	
-            //foreach( SelectedItem item in items )	 	
-            object o = this.uiHierarchy.SelectedItems;	 	
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )	 	
-            {	 	
-                TreeNode node = this.GetNode( item );	 	
-                if ( node != null )	 	
-                    node.Accept( visitor );	 	
-            }	 	
-        }
-
-        
-
-
-        /// <summary>
-        /// Returns the SvnItem resources associated with the selected items
-        /// in the solution explorer.
-        /// </summary>
-        /// <param name="getChildItems">Whether children of the items in 
-        /// question should be included.</param>
-        /// <param name="filter">A callback used to filter the items
-        /// that are added.</param>
-        /// <returns>A list of SvnItem instances.</returns>
-        public IList GetSelectionResources( bool getChildItems, 
-            ResourceFilterCallback filter )
-        {
-            ArrayList list = new ArrayList();
-
-            object o = this.uiHierarchy.SelectedItems;	 	
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )	 	
-            {	 	
-                TreeNode node = this.GetNode( item );	 	
-                if ( node != null )	 	
-                    node.GetResources( list, getChildItems, filter );	 	
-            }
-
-            return list;
-        }
-
-        /// <summary>
-        /// Retrieves the resources associated with a project item.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="recursive"></param>
-        /// <returns></returns>
-        public IList GetItemResources( ProjectItem item, bool recursive )
-        {
-            ArrayList list = new ArrayList();
-
-            TreeNode node = this.GetNode(item);
-            if ( node != null )
-                node.GetResources( list, recursive, null );
-
-            return list;
-        }
-
-        public ProjectItem GetSelectedProjectItem()
-        {
-            Array array = (Array)this.uiHierarchy.SelectedItems;
-            UIHierarchyItem uiItem = (UIHierarchyItem)array.GetValue(0);
-            return (ProjectItem)uiItem.Object;
-        }
-
-        internal TreeView TreeView
+        internal IntPtr TreeView
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.treeview; }
         }
 
-        internal AnkhContext Context
+        internal NSvnContext Context
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.context; }
         }
 
@@ -264,98 +203,47 @@ namespace Ankh.Solution
             get{ return this.dte; }
         }
 
-        /// <summary>
-        /// Retrieves the window handle to the solution explorer treeview and uses it
-        /// to replace it's imagelist with our own.
-        /// </summary>
         internal void SetUpTreeview()
         {
-            // dragons be here - modify with care
-            Debug.WriteLine( "Setting up treeview", "Ankh" );
             Window solutionExplorerWindow = this.dte.Windows.Item(
                 EnvDTE.Constants.vsWindowKindSolutionExplorer);
 
-            // we need to make sure its not hidden and that it is dockable
-            bool linkable = solutionExplorerWindow.Linkable;
+            // we need to make sure its not hidden
             bool hidden = solutionExplorerWindow.AutoHides;
-            bool isFloating = solutionExplorerWindow.IsFloating;
-
-            // these two operations need to be done in an exact order, 
-            // depending on whether it is initially hidden
-            if ( hidden )
-            {
-                solutionExplorerWindow.AutoHides = false;
-                solutionExplorerWindow.IsFloating = false;
-                solutionExplorerWindow.Linkable = true;
-            }
-            else
-            {
-                solutionExplorerWindow.IsFloating = false;
-                solutionExplorerWindow.Linkable = true;
-                solutionExplorerWindow.AutoHides = false;
-            }
+            solutionExplorerWindow.AutoHides = false;
             
             // find the solution explorer window
             // Get the caption of the solution explorer            
             string slnExplorerCaption = solutionExplorerWindow.Caption;
-            Debug.WriteLine( "Caption of solution explorer window is " + slnExplorerCaption, 
-                "Ankh" );
             //            string vsnetCaption = this.dte.MainWindow.C
             IntPtr vsnet = (IntPtr)this.dte.MainWindow.HWnd;//Win32.FindWindow( VSNETWINDOW, null );
-
-            // first try finding it as a child of the main VS.NET window
             IntPtr slnExplorer = Win32.FindWindowEx( vsnet, IntPtr.Zero, GENERICPANE, 
                 slnExplorerCaption );
-
-            // not there? Try looking for a floating palette. These are toplevel windows for 
-            // some reason
-            if ( slnExplorer == IntPtr.Zero )
-            {
-                Debug.WriteLine( "Solution explorer not a child of VS.NET window. " + 
-                    "Searching floating windows", "Ankh" );
-                // we need to search for the caption of any of the potentially linked windows
-                IntPtr floatingPalette = IntPtr.Zero;
-                foreach( Window win in solutionExplorerWindow.LinkedWindowFrame.LinkedWindows )
-                {
-                    floatingPalette = Win32.FindWindow( VBFLOATINGPALETTE, 
-                        win.Caption );
-                    if ( floatingPalette != IntPtr.Zero )
-                        break;
-                }
-                
-                // the solution explorer should be a direct child of the palette
-                slnExplorer = Win32.FindWindowEx( floatingPalette, IntPtr.Zero, GENERICPANE,
-                    slnExplorerCaption );
-            }
-
             IntPtr uiHierarchy = Win32.FindWindowEx( slnExplorer, IntPtr.Zero, 
                 UIHIERARCHY, null );
-            IntPtr treeHwnd = Win32.FindWindowEx( uiHierarchy, IntPtr.Zero, TREEVIEW, 
+            this.treeview = Win32.FindWindowEx( uiHierarchy, IntPtr.Zero, TREEVIEW, 
                 null );         
  
-            if ( treeHwnd == IntPtr.Zero )
+            if ( this.treeview == IntPtr.Zero )
                 throw new ApplicationException( 
                     "Could not attach to solution explorer treeview" );
 
-            this.treeview = new TreeView( treeHwnd );
-
-            // reset back to the original hiding-state and dockable state            
-            solutionExplorerWindow.Linkable = linkable;
-            solutionExplorerWindow.IsFloating = isFloating;
-            if ( solutionExplorerWindow.Linkable )
-                solutionExplorerWindow.AutoHides = hidden;
+            // reset back to the original hiding-state(!?)
+            solutionExplorerWindow.AutoHides = hidden;
 
             // load the status images image strip
-            Debug.WriteLine( "Loading status images", "Ankh" );
             Bitmap statusImages = (Bitmap)Image.FromStream( 
                 this.GetType().Assembly.GetManifestResourceStream( STATUS_IMAGES ) );
 
             statusImages.MakeTransparent( statusImages.GetPixel(0,0) );
 
-            this.statusImageList = new ImageList();
+            this.statusImageList = new Swf.ImageList();
             this.statusImageList.ImageSize = new Size(7, 16);
             this.statusImageList.Images.AddStrip( statusImages );    
         
+            // and assign it to the tree
+            Win32.SendMessage( this.treeview, Msg.TVM_SETIMAGELIST, C.TVSIL_STATE,
+                this.statusImageList.Handle );
         }
 
         
@@ -379,32 +267,14 @@ namespace Ankh.Solution
             this.solutionNode = node;
         }
 
-        private void GenerateStatusCache( string solutionPath )
-        {
-            DebugTimer t = DebugTimer.Start();
-            string solutionDir = Path.GetDirectoryName( solutionPath );
-           
-            Debug.WriteLine( "Getting status cache", "Ankh" );
-            
-            this.context.StatusCache.Status( solutionDir );
-
-            t.End( "Got status cache", "Ankh" );
-        }
-
-        
-
-        
 
         private TreeNode GetNode(UIHierarchyItem item)
         {
-            if ( item.Object == null )
-                return null;
-
             if ( item.Object is ProjectItem && this.projectItems.Contains( item.Object ) )
                 return ((TreeNode)this.projectItems[item.Object]);
             else if ( item.Object is Project && this.projects.Contains(item.Object) )
                 return ((TreeNode)this.projects[item.Object]); 
-            else if ( item == this.uiHierarchy.UIHierarchyItems.Item(1) )
+            else if ( item == this.solutionItem )
                 return this.solutionNode;
             else
                 return null;
@@ -412,9 +282,6 @@ namespace Ankh.Solution
         
         private TreeNode GetNode( ProjectItem item )
         {
-            if ( item == null )
-                return null;
-
             if (this.projectItems.Contains( item ) )
                 return ((TreeNode)this.projectItems[item]);
             else
@@ -423,9 +290,6 @@ namespace Ankh.Solution
 
         private TreeNode GetNode( Project project )
         {
-            if ( project == null )
-                return null;
-
             if ( this.projects.Contains( project ) )
                 return ((TreeNode)this.projects[project]);
             else
@@ -440,14 +304,7 @@ namespace Ankh.Solution
         {        
             public int GetHashCode(object obj)
             {
-                try
-                {
-                    return ((ProjectItem)obj).get_FileNames(1).GetHashCode();
-                }
-                catch( Exception )
-                {
-                    return obj.GetHashCode();
-                }
+                return ((ProjectItem)obj).get_FileNames(1).GetHashCode();
             }
         }
         #endregion
@@ -457,15 +314,8 @@ namespace Ankh.Solution
         {        
             public int Compare(object x, object y)
             {
-                try
-                {
-                    return ((ProjectItem)x).get_FileNames(1).CompareTo(
-                        ((ProjectItem)y).get_FileNames(1) );
-                }
-                catch( Exception )
-                {
-                    return -1;
-                }
+                return ((ProjectItem)x).get_FileNames(1).CompareTo(
+                    ((ProjectItem)y).get_FileNames(1) );
             }
         }
         #endregion
@@ -474,14 +324,7 @@ namespace Ankh.Solution
         {        
             public int GetHashCode(object obj)
             {
-                try
-                {
-                    return ((Project)obj).FullName.GetHashCode();
-                }
-                catch( Exception )
-                {
-                    return obj.GetHashCode();
-                }
+                return ((Project)obj).FullName.GetHashCode();
             }
         }
         #endregion
@@ -491,34 +334,27 @@ namespace Ankh.Solution
         {        
             public int Compare(object x, object y)
             {
-                try
-                {
-                    return ((Project)x).FullName.CompareTo(
-                        ((Project)y).FullName );
-                }
-                catch( Exception )
-                {
-                    return -1;
-                }
+                return ((Project)x).FullName.CompareTo(
+                    ((Project)y).FullName );
             }
         }
         #endregion
 
 
         private _DTE dte;
+        private IntPtr treeview;
+        private UIHierarchyItem solutionItem;
+        private TreeNode root;
         private UIHierarchy uiHierarchy;
         private const string VSNETWINDOW = "wndclass_desked_gsk";
         private const string GENERICPANE = "GenericPane";
         private const string UIHIERARCHY = "VsUIHierarchyBaseWin";
         private const string TREEVIEW = "SysTreeView32";
-        private const string VBFLOATINGPALETTE = "VBFloatingPalette";
         private IDictionary projectItems;
         private IDictionary projects;
         private TreeNode solutionNode;
-        private ImageList statusImageList;
-        private AnkhContext context;
-        private TreeView treeview;
-        private IntPtr originalImageList = IntPtr.Zero;
+        private Swf.ImageList statusImageList;
+        private SvnContext context;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
     }

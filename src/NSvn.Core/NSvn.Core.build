@@ -3,8 +3,8 @@
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
-    <property name="build.dir" value="build-Release" unless="${debug}"/>
-    <property name="build.dir" value="build-Debug" if="${debug}"/>
+    <property name="build.dir" value="build/Release" unless="${debug}"/>
+    <property name="build.dir" value="build/Debug" if="${debug}"/>
     <property name="warninglevel" value="/warn:3"/>
     <property name="svndir" value="..\..\subversion"/>
     

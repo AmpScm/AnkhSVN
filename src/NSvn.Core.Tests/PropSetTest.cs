@@ -28,7 +28,7 @@ namespace NSvn.Core.Tests
             string filePath = Path.Combine( this.WcPath, "Form.cs" );
              
             byte[] propval = Encoding.UTF8.GetBytes ( "baa" );
-            this.Client.PropSet( new Property( "moo", propval ), filePath, false );
+            Client.PropSet( new Property( "moo", propval ), filePath, false );
             Assertion.AssertEquals( "PropSet didn't work!", 
                 "baa", this.RunCommand( "svn", "propget moo " + filePath ).Trim() );
         }
@@ -42,7 +42,7 @@ namespace NSvn.Core.Tests
             string filePath = Path.Combine( this.WcPath, "Form.cs" );
             
             byte[] propval = Encoding.UTF8.GetBytes ( "baa" );
-            this.Client.PropSet( new Property("moo", propval), this.WcPath, true );
+            Client.PropSet( new Property("moo", propval), this.WcPath, true );
 
             Assertion.AssertEquals( "PropSet didn't work on directory!", 
                 "baa", this.RunCommand( "svn", "propget moo " + this.WcPath ).Trim() );

@@ -37,12 +37,14 @@ namespace NSvn.Core.Tests
         public void TestImportFile()
         {
             string truePath = this.CreateTextFile( "testfile.txt" );
-            string trueDstUrl = this.ReposUrl + "/testfile.txt";
+            string trueDstUrl = this.ReposUrl;
+            string trueNewEntry = "testfile2.txt";
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
 
-            CommitInfo info = Client.Import( truePath, trueDstUrl, true );
+            CommitInfo info = Client.Import( truePath, trueDstUrl, trueNewEntry, true, ctx );
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-            Assertion.Assert( "File wasn't imported ", cmd.IndexOf( "testfile.txt" ) >= 0 );		   
+            Assertion.Assert( "File wasn't imported ", cmd.IndexOf( trueNewEntry ) >= 0 );		   
         }
 
         /// <summary>
@@ -55,12 +57,14 @@ namespace NSvn.Core.Tests
             string dir1, dir2, testFile1, testFile2;
             this.CreateSubdirectories(out dir1, out dir2, out testFile1, out testFile2);
 
-            string trueDstUrl = this.ReposUrl + "/newDir2";
+            string trueDstUrl = this.ReposUrl;
+            string trueNewEntry = "newDir2";
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
 
-            CommitInfo info = this.Client.Import( dir1, trueDstUrl, false );
+            CommitInfo info = Client.Import( dir1, trueDstUrl, trueNewEntry, false, ctx );
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-            Assertion.Assert( "File wasn't imported ", cmd.IndexOf( "newDir2" ) >= 0 );		   
+            Assertion.Assert( "File wasn't imported ", cmd.IndexOf( trueNewEntry ) >= 0 );		   
       
         }
 

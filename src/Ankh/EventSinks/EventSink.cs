@@ -4,16 +4,14 @@ using System.Collections;
 using EnvDTE;
 using Microsoft.Win32;
 using Microsoft;
-using Interop.esproj;
-using System.Threading;
-//using Microsoft.VisualStudio.VCProjectEngine;
+using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Ankh.EventSinks
 {
     /// <summary>
     /// Base class for event sink classes.
     /// </summary>
-    public abstract class EventSink
+    internal abstract class EventSink
     {
         protected EventSink( AnkhContext context )
         {
@@ -42,7 +40,7 @@ namespace Ankh.EventSinks
                 // VC++ projects are a special case
                 if ( project.Kind == VCPROJECTGUID )
                 {
-                    object events = 
+                    VCProjectEngineEvents events = (VCProjectEngineEvents)
                         context.DTE.Events.GetObject( VCPROJECT );
                     sinks.Add( new VCProjectEventSink( events, context ) );
 
@@ -74,28 +72,6 @@ namespace Ankh.EventSinks
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.context; }
         }  
-
-        /// <summary>
-        /// Whether a VC++ project is currently being added. This property is
-        /// used by the VCProjectEventSink to keep track of when a VC++ project is being 
-        /// added and suppress file added events during that time.
-        /// </summary>
-        protected static bool AddingProject
-        {
-            get{ return addingProject; }
-            set{ addingProject = value; }
-        }
-
-        /// <summary>
-        /// Refreshes the specified project after an interval.
-        /// </summary>
-        /// <param name="project"></param>
-        protected void DelayedRefresh( Project project )
-        {
-            System.Threading.Timer timer = new System.Threading.Timer(
-                new TimerCallback( this.RefreshCallback ), project, REFRESHDELAY, 
-                Timeout.Infinite );
-        }
       
         /// <summary>
         /// Retrieves a VSProjectsEventSink associated with the project 
@@ -107,45 +83,9 @@ namespace Ankh.EventSinks
         {
             string objectName = GetName( kind, "ProjectsEvents", context.DTE );    
             if ( objectName != null )
-            {
-                object projectsEvents;
-                try
-                {
-                    projectsEvents = context.DTE.Events.GetObject( objectName );
-                }
-                catch( System.Runtime.InteropServices.COMException )
-                {
-                    // all eVB projects just throw "Catastrophic failure" when trying 
-                    // to retrieve the event objects
-                    context.OutputPane.WriteLine( "Unable to retrieve project events object for " + 
-                        "project of type {0}", objectName );
-                    return null;
-                }
-
-                if ( projectsEvents is ProjectsEvents )
-                {
-                    return new ProjectsEventSink( (ProjectsEvents)
-                        projectsEvents,
-                        context );
-                }
-                else if ( projectsEvents is ICSharpEventsRoot )
-                {
-                    return new ProjectsEventSink( (ProjectsEvents)
-                        ((ICSharpEventsRoot)projectsEvents).CSharpProjectsEvents, 
-                        context );
-                }
-                else
-                {
-                    throw new ApplicationException( String.Format(
-                        @"Could not retrieve ProjectsEvents.
-kind: {0} 
-objectName: {1}
-type: {2}
-ToString(): {3}
-Please report this error.", kind, objectName, projectsEvents.GetType(), 
-                        projectsEvents.ToString() ) );
-                }
-            }
+                return new ProjectsEventSink( (ProjectsEvents)
+                    context.DTE.Events.GetObject( objectName ),
+                    context );
             else
                 return null;
         }
@@ -158,48 +98,11 @@ Please report this error.", kind, objectName, projectsEvents.GetType(),
         /// <returns></returns>
         private static ProjectItemsEventSink GetProjectItemsEvents( string kind, AnkhContext context )
         {
-            string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );   
-            
+            string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );    
             if ( objectName != null )
-            {
-                object events;
-                try
-                {
-                    events = context.DTE.Events.GetObject( objectName );
-                }
-                catch( System.Runtime.InteropServices.COMException )
-                {
-                    // all eVB projects just throw "Catastrophic failure" when trying 
-                    // to retrieve the event objects
-                    context.OutputPane.WriteLine( "Unable to retrieve project item events object for " + 
-                        "project of type {0}", objectName );
-                    return null;
-                }
-
-                if ( events is ProjectItemsEvents )
-                {
-                    return new ProjectItemsEventSink( (ProjectItemsEvents)
-                        events,
-                        context );
-                }
-                else if ( events is ICSharpEventsRoot )
-                {
-                    return new ProjectItemsEventSink( (ProjectItemsEvents)
-                        ((ICSharpEventsRoot)events).get_CSharpProjectItemsEvents( null ),
-                        context );
-                }
-                else
-                {
-                    throw new ApplicationException( String.Format(
-                        @"Could not retrieve ProjectItemsEvents.
-kind: {0} 
-objectName: {1}
-type: {2}
-ToString(): {3}
-Please report this error.", kind, objectName, events.GetType(), 
-                        events.ToString() ) );
-                }
-            }
+                return new ProjectItemsEventSink( (ProjectItemsEvents)
+                    context.DTE.Events.GetObject( objectName ),
+                    context );
             else
                 return null;
         }
@@ -242,27 +145,8 @@ Please report this error.", kind, objectName, events.GetType(),
             else
                 return key.GetValue( "Package" ).ToString();
         }
-
         
 
-        private void RefreshCallback( object state )
-        {
-            Project project = (Project) state;
-            try
-            {
-                project.Save( project.FileName );
-            }
-            catch( NotImplementedException )
-            {
-                System.Diagnostics.Debug.WriteLine( "Hi" );
-                // swallow 
-            }
-            this.Context.SolutionExplorer.Refresh( project );
-        }
-
-
-        protected const int REFRESHDELAY = 200;
-        private static bool addingProject = false;
         private AnkhContext context;
         private const string PROJECTPATH = @"\Projects\";
         private const string PACKAGEPATH = 

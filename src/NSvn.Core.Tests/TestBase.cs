@@ -10,8 +10,6 @@ using NUnit.Framework;
 using System.Collections;
 using System.Threading;
 using Utils;
-using Utils.Win32;
-using System.Text;
 
 namespace NSvn.Core.Tests
 {
@@ -32,9 +30,6 @@ namespace NSvn.Core.Tests
         public virtual void SetUp()
         {
             this.notifications = new ArrayList();
-            this.client = new Client( this.GetTempFile() );
-            this.client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
-            this.client.LogMessage += new LogMessageDelegate(LogMessage);
         }
 
         [TearDown]
@@ -80,9 +75,7 @@ namespace NSvn.Core.Tests
         public void ExtractWorkingCopy( )
         {
             this.wcPath = this.FindDirName( Path.Combine( BASEPATH, WC_NAME ) );
-            Zip.ExtractZipResource( this.wcPath, this.GetType(), WC_FILE );  
-      
-            this.RenameAdminDirs( wcPath );
+            Zip.ExtractZipResource( this.wcPath, this.GetType(), WC_FILE );        
 
         }
 
@@ -92,16 +85,11 @@ namespace NSvn.Core.Tests
         /// <param name="path">The path to check</param>
         /// <returns>Same character codes as used by svn st</returns>
         public char GetSvnStatus( string path )
-        {   
+        {            
+            string output = this.RunCommand( "svn", "st " + path );
 
-            string output = this.RunCommand( "svn", "st \"" + path + "\"" );
-
-            string regexString = String.Format( @"(\w).*\s{0}\s*", Regex.Escape(path) );
-            Match match = Regex.Match( output, regexString );
-            if ( match != Match.Empty )
-                return match.Groups[1].ToString()[0];
-            else 
-                return '-';
+            // status code is the first character
+            return output[ 0 ];
 
         }
 
@@ -123,8 +111,6 @@ namespace NSvn.Core.Tests
 
             proc.Start();
 
-            //Console.WriteLine( proc.MainModule.FileName );
-
             ProcessReader outreader = new ProcessReader( proc.StandardOutput );
             ProcessReader errreader = new ProcessReader( proc.StandardError );
             outreader.Start();
@@ -142,10 +128,7 @@ namespace NSvn.Core.Tests
                     "Command was " + 
                     proc.StartInfo.FileName + " " + proc.StartInfo.Arguments );
 
-
-            // normalize newlines
-            string[] lines = Regex.Split( outreader.Output, @"\r?\n" );  
-            return String.Join( Environment.NewLine, lines );
+            return outreader.Output;
         }
 
         
@@ -177,28 +160,16 @@ namespace NSvn.Core.Tests
         /// <summary>
         /// The notifications generated during a call to Client::Add
         /// </summary>
-        public NotificationEventArgs[] Notifications
+        public Notification[] Notifications
         {
-            get
-            {
-                return (NotificationEventArgs[])this.notifications.ToArray( 
-                    typeof(NotificationEventArgs) ); }
-        }
-
-        /// <summary>
-        /// The client object.
-        /// </summary>
-        public Client Client
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.client; }
+            get{ return (Notification[])this.notifications.ToArray( typeof(Notification) ); }
         }
 
         /// <summary>
         /// Callback method to be used as ClientContext.NotifyCallback
         /// </summary>
         /// <param name="notification">An object containing information about the notification</param>
-        public virtual void NotifyCallback( object sender, NotificationEventArgs notification )
+        public virtual void NotifyCallback( Notification notification )
         {
             this.notifications.Add( notification );
         }
@@ -253,42 +224,42 @@ namespace NSvn.Core.Tests
                 ++i;
             }
 
-            return Path.GetFullPath( dir );
+            return dir;
         }
 
-        protected string GetTempFile()
+        private class ProcessReader
         {
-            // ensure we get a long path
-            StringBuilder builder = new StringBuilder( 260 );
-            Win32.GetLongPathName( Path.GetTempFileName(), builder, 260 );
-            string tmpPath = builder.ToString();
-            File.Delete( tmpPath );
-
-            return tmpPath;
-        }    
-   
-        /// <summary>
-        /// Rename the administrative subdirectories if necessary.
-        /// </summary>
-        /// <param name="path"></param>
-        [Conditional("ALT_ADMIN_DIR")]
-        protected void RenameAdminDirs( string path )
-        {
-            string adminDir = Path.Combine( path, TRAD_WC_ADMIN_DIR );
-            string newDir = Path.Combine( path, Client.AdminDirectoryName );
-            if ( Directory.Exists( adminDir ) && 
-                TRAD_WC_ADMIN_DIR != Client.AdminDirectoryName )
+            public ProcessReader( StreamReader reader )
             {
-                Directory.Move( adminDir, newDir );
+                this.reader = reader;
+            }
+            
+            public void Start()
+            {
+                this.thread = new Thread( new ThreadStart( this.Read ) );
+                this.thread.Start();
             }
 
-            foreach( string dir in Directory.GetDirectories( path ) )
-                this.RenameAdminDirs( dir );
-        }
+            public void Wait()
+            {
+                this.thread.Join();
+            }
 
-        protected virtual void LogMessage( object sender, LogMessageEventArgs e )
-        {
-            e.Message = "";
+            public string Output
+            {
+                get{ return this.output; }
+            }
+
+            private void Read()
+            {
+                this.output = reader.ReadToEnd();
+            }
+
+            
+
+            private StreamReader reader;
+            private Thread thread;
+            private string output;
         }
         
        
@@ -319,15 +290,11 @@ namespace NSvn.Core.Tests
         protected const string BASEPATH = @"\tmp";
         protected readonly string WC_FILE;
         protected const string WC_NAME = "wc";
-        protected const string TRAD_WC_ADMIN_DIR = ".svn";
         private string reposUrl;
         private string wcPath;
-        private string reposPath;   
-        private Client client;
+        private string reposPath;       
     
         
         protected ArrayList notifications;
-
-        
     }
 }

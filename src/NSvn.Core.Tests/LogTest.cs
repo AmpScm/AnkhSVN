@@ -18,8 +18,6 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
-            base.SetUp();
-
             this.ExtractRepos();
         }
 
@@ -31,9 +29,9 @@ namespace NSvn.Core.Tests
             //the client prints them in a reverse order by default
             Array.Reverse( clientLogs );
 
-            this.Client.Log( new string[]{ this.ReposUrl },
+            Client.Log( new string[]{ this.ReposUrl },
                 Revision.FromNumber(1), Revision.Head, false, false, 
-                new LogMessageReceiver(this.LogCallback) );
+                new LogMessageReceiver(this.LogCallback), new ClientContext() );
 
             Assertion.AssertEquals( "Number of log entries differs", 
                 clientLogs.Length, this.logMessages.Count );

@@ -4,7 +4,6 @@
 	Version="7.10"
 	Name="NSvn.Core.Tests.MCpp"
 	ProjectGUID="{05E011D8-54B5-4558-80BF-A8AD64DDAC97}"
-	RootNamespace="NSvn.Core.Tests.MCpp"
 	Keyword="ManagedCProj">
 	<Platforms>
 		<Platform
@@ -34,7 +33,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Mswsock.lib comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib $(SVNSRC)\\db4-win32\lib\libdb42d.lib $(SVNSRC)\debug\subversion\libsvn_repos\libsvn_repos-1.lib $(SVNSRC)\debug\subversion\libsvn_fs\libsvn_fs-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_local\libsvn_ra_local-1.lib $(SVNSRC)\debug\subversion\libsvn_ra\libsvn_ra-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib $(SVNSRC)\debug\subversion\libsvn_wc\libsvn_wc-1.lib $(SVNSRC)\debug\subversion\libsvn_subr\libsvn_subr-1.lib $(SVNSRC)\debug\subversion\libsvn_client\libsvn_client-1.lib $(SVNSRC)\debug\subversion\libsvn_delta\libsvn_delta-1.lib $(SVNSRC)\debug\subversion\libsvn_diff\libsvn_diff-1.lib $(SVNSRC)\neon\libneonD.lib $(SVNSRC)\apr\LibD\apr.lib $(SVNSRC)\apr-util\LibD\aprutil.lib $(SVNSRC)\apr-iconv\LibD\apriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibD\xml.lib ..\NSvn.Core\$(ConfigurationName)\AprFileAdapter.obj ..\NSvn.Core\$(ConfigurationName)\AuthenticationProvider.obj ..\NSvn.Core\$(ConfigurationName)\Client.obj ..\NSvn.Core\$(ConfigurationName)\ClientContext.obj ..\NSvn.Core\$(ConfigurationName)\Revision.obj ..\NSvn.Core\$(ConfigurationName)\stream.obj ..\NSvn.Core\$(ConfigurationName)\SvnClientException.obj ..\NSvn.Core\$(ConfigurationName)\utils.obj"
+				AdditionalDependencies="Mswsock.lib comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib $(SVNSRC)\\db4-win32\lib\libdb40d.lib $(SVNSRC)\debug\subversion\libsvn_repos\libsvn_repos-1.lib $(SVNSRC)\debug\subversion\libsvn_fs\libsvn_fs-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_local\libsvn_ra_local-1.lib $(SVNSRC)\debug\subversion\libsvn_ra\libsvn_ra-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib $(SVNSRC)\debug\subversion\libsvn_wc\libsvn_wc-1.lib $(SVNSRC)\debug\subversion\libsvn_subr\libsvn_subr-1.lib $(SVNSRC)\debug\subversion\libsvn_client\libsvn_client-1.lib $(SVNSRC)\debug\subversion\libsvn_delta\libsvn_delta-1.lib $(SVNSRC)\debug\subversion\libsvn_diff\libsvn_diff-1.lib $(SVNSRC)\neon\libneonD.lib $(SVNSRC)\apr\LibD\apr.lib $(SVNSRC)\apr-util\LibD\aprutil.lib $(SVNSRC)\apr-iconv\LibD\apriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibD\xml.lib"
 				OutputFile="$(OutDir)/NSvn.Core.Tests.MCpp.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SVNSRC)\Release"
@@ -45,9 +44,7 @@
 				Name="VCPostBuildEventTool"/>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.dll $(OutDir)
-copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)
-"/>
+				CommandLine="copy ..\NSvn.Common\bin\Debug\NSvn.Common.dll $(OutDir)"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -85,7 +82,7 @@ copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Mswsock.lib rpcrt4.lib ws2_32.lib shlwapi.lib Advapi32.lib $(SVNSRC)\release\subversion\libsvn_repos\libsvn_repos-1.lib $(SVNSRC)\release\subversion\libsvn_fs\libsvn_fs-1.lib $(SVNSRC)\release\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib $(SVNSRC)\release\subversion\libsvn_ra_local\libsvn_ra_local-1.lib $(SVNSRC)\release\subversion\libsvn_ra\libsvn_ra-1.lib $(SVNSRC)\release\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib $(SVNSRC)\release\subversion\libsvn_wc\libsvn_wc-1.lib $(SVNSRC)\release\subversion\libsvn_subr\libsvn_subr-1.lib $(SVNSRC)\release\subversion\libsvn_client\libsvn_client-1.lib $(SVNSRC)\release\subversion\libsvn_delta\libsvn_delta-1.lib $(SVNSRC)\release\subversion\libsvn_diff\libsvn_diff-1.lib $(SVNSRC)\db4-win32\lib\libdb42.lib $(SVNSRC)\neon\libneon.lib $(SVNSRC)\apr\LibR\apr.lib $(SVNSRC)\apr-util\LibR\aprutil.lib $(SVNSRC)\apr-iconv\LibR\apriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibR\xml.lib ..\NSvn.Core\$(ConfigurationName)\AprFileAdapter.obj ..\NSvn.Core\$(ConfigurationName)\AuthenticationProvider.obj ..\NSvn.Core\$(ConfigurationName)\Client.obj ..\NSvn.Core\$(ConfigurationName)\ClientContext.obj ..\NSvn.Core\$(ConfigurationName)\Revision.obj ..\NSvn.Core\$(ConfigurationName)\stream.obj ..\NSvn.Core\$(ConfigurationName)\SvnClientException.obj ..\NSvn.Core\$(ConfigurationName)\utils.obj"
+				AdditionalDependencies="Mswsock.lib rpcrt4.lib ws2_32.lib shlwapi.lib Advapi32.lib $(SVNSRC)\release\subversion\libsvn_repos\libsvn_repos-1.lib $(SVNSRC)\release\subversion\libsvn_fs\libsvn_fs-1.lib $(SVNSRC)\release\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib $(SVNSRC)\release\subversion\libsvn_ra_local\libsvn_ra_local-1.lib $(SVNSRC)\release\subversion\libsvn_ra\libsvn_ra-1.lib $(SVNSRC)\release\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib $(SVNSRC)\release\subversion\libsvn_wc\libsvn_wc-1.lib $(SVNSRC)\release\subversion\libsvn_subr\libsvn_subr-1.lib $(SVNSRC)\release\subversion\libsvn_client\libsvn_client-1.lib $(SVNSRC)\release\subversion\libsvn_delta\libsvn_delta-1.lib $(SVNSRC)\release\subversion\libsvn_diff\libsvn_diff-1.lib $(SVNSRC)\db4-win32\lib\libdb40.lib $(SVNSRC)\neon\libneon.lib $(SVNSRC)\apr\LibR\apr.lib $(SVNSRC)\apr-util\LibR\aprutil.lib $(SVNSRC)\apr-iconv\LibR\apriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibR\xml.lib"
 				OutputFile="$(OutDir)/NSvn.Core.Tests.MCpp.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SVNSRC)\release"
@@ -113,18 +110,6 @@ copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)
 		</Configuration>
 	</Configurations>
 	<References>
-		<AssemblyReference
-			RelativePath="mscorlib.dll"/>
-		<AssemblyReference
-			RelativePath="System.dll"/>
-		<AssemblyReference
-			RelativePath="System.Data.dll"/>
-		<AssemblyReference
-			RelativePath="System.Drawing.dll"/>
-		<AssemblyReference
-			RelativePath="System.Windows.Forms.dll"/>
-		<AssemblyReference
-			RelativePath="System.XML.dll"/>
 	</References>
 	<Files>
 		<Filter
@@ -137,12 +122,6 @@ copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
-				RelativePath=".\AuthenticationBatonTest.cpp">
-			</File>
-			<File
-				RelativePath=".\AuthenticationTest.cpp">
-			</File>
-			<File
 				RelativePath="ClientContextTest.cpp">
 			</File>
 			<File
@@ -150,6 +129,9 @@ copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)
 			</File>
 			<File
 				RelativePath="MiscTests.cpp">
+			</File>
+			<File
+				RelativePath="NotificationTest.cpp">
 			</File>
 			<File
 				RelativePath="PoolTest.cpp">
@@ -183,12 +165,6 @@ copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)
 				RelativePath="AprFileAdapterTest.h">
 			</File>
 			<File
-				RelativePath=".\AuthenticationBatonTest.h">
-			</File>
-			<File
-				RelativePath=".\AuthenticationTest.h">
-			</File>
-			<File
 				RelativePath="ClientContextTest.h">
 			</File>
 			<File
@@ -196,6 +172,9 @@ copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)
 			</File>
 			<File
 				RelativePath="MiscTests.h">
+			</File>
+			<File
+				RelativePath="NotificationTest.h">
 			</File>
 			<File
 				RelativePath="PoolTest.h">

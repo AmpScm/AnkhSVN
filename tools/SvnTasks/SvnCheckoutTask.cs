@@ -1,75 +1,127 @@
 using System;
-using NAnt.Core;
-using NAnt.Core.Attributes;
+using SourceForge.NAnt;
+using SourceForge.NAnt.Attributes;
 using NSvn;
 using NSvn.Common;
 using NSvn.Core;
 
-namespace SvnTasks
+namespace Rogue.SvnTasks
 {
 	/// <summary>
 	/// A Nant task to check out from a SVN repository.
 	/// </summary>
 	[TaskName( "svncheckout" )]
-	public class SvnCheckoutTask : SvnBaseTask
+	public class SvnCheckoutTask : Task
 	{
-		protected bool m_recursive  = false;
+        /// <summary>
+        /// The local path to check out to.
+        /// </summary>
+        [TaskAttribute("localDir", Required = true )]
+        public string LocalDir
+        {
+            get{ return this.localDir; }
+            set{ this.localDir = value; }
+        }
 
-		[TaskAttribute("recursive", Required=false)]
-		public bool Recursive
-		{
-			get
-			{
-				return m_recursive;
-			}
-			set
-			{
-				m_recursive = value;
-			}
-		}
+        /// <summary>
+        /// The username to authenticate with.
+        /// </summary>
+        [TaskAttribute("username", Required=false)]
+        public string Username
+        {
+            get{ return this.username; }
+            set{ this.username = value; }
+        }
 
-		/// <summary>
-		/// The funky stuff happens here.
-		/// </summary>
-		protected override void ExecuteTask()
-		{
-			Log(Level.Info, "{0} {1} {2}",this.LogPrefix, this.Name, this.LocalDir);
-			
-			try
-			{
-				Revision revision = NSvn.Core.Revision.Head;
-				if ( this.Revision != -1 )
-					revision = NSvn.Core.Revision.FromNumber( this.Revision );
+        /// <summary>
+        /// The password to authenticate with.
+        /// </summary>
+        [TaskAttribute("password", Required=false)]
+        public string Password
+        {
+            get{ return this.password; }
+            set{ this.password = value; }
+        }
 
-				ClientContext clientContext = new ClientContext();
-				clientContext.AuthBaton = new AuthenticationBaton();
-				clientContext.AuthBaton.Add(AuthenticationProvider.GetUsernameProvider());
-				clientContext.AuthBaton.Add(AuthenticationProvider.GetSimpleProvider());
-				if ( this.Username != null && this.Password != null )
-				{
-					clientContext.AuthBaton.Add(
-						AuthenticationProvider.GetSimplePromptProvider(
-						new SimplePromptDelegate(this.SimplePrompt),1));
-				}
-				Client.Checkout(this.Url, this.LocalDir, revision, this.Recursive, clientContext);
-	
-			}
-			catch( AuthorizationFailedException )
-			{
-				throw new BuildException( "Unable to authorize against the repository." );
-			}
-			catch( SvnException ex )
-			{
-				throw new BuildException( "Unable to check out: " + ex.Message );
-			}
-			catch( Exception ex )
-			{
-				throw new BuildException( "Unexpected error: " + ex.Message );
-			}
-		}
+        /// <summary>
+        /// The URL to check out from.
+        /// </summary>
+        [TaskAttribute("url", Required=true)]
+        public string Url
+        {
+            get{ return this.url; }
+            set{ this.url = value; }
+        }
 
-	
+        /// <summary>
+        /// The revision to check out - defaults to HEAD.
+        /// </summary>
+        [TaskAttribute("revision", Required=false)]
+        public int Revision
+        {
+            get{ return this.revision; }
+            set{ this.revision = value; }
+        }
 
-      
+        /// <summary>
+        /// The funky stuff happens here.
+        /// </summary>
+        protected override void ExecuteTask()
+        {
+            try
+            {
+                Revision revision = NSvn.Core.Revision.Head;
+                if ( this.Revision != -1 )
+                    revision = NSvn.Core.Revision.FromNumber( this.Revision );
+
+                RepositoryDirectory dir = new RepositoryDirectory( this.Url, revision );
+
+                if( this.Verbose )
+                    dir.Context = new Context( this.LogPrefix );
+
+                if ( this.Username != null && this.Password != null )
+                {
+                    dir.Context.AddAuthenticationProvider( 
+                        new SimpleProvider( new SimpleCredential(this.Username, this.Password) ) );  
+                }
+
+                dir.Checkout( this.LocalDir, true );
+            }
+            catch( AuthorizationFailedException )
+            {
+                throw new BuildException( "Unable to authorize against the repository." );
+            }
+            catch( SvnException ex )
+            {
+                throw new BuildException( "Unable to check out: " + ex.Message );
+            }
+            catch( Exception ex )
+            {
+                throw new BuildException( "Unexpected error: " + ex.Message );
+            }
+        }
+
+        #region class Context	
+        private class Context : NSvnContext
+        {
+            public Context( string logPrefix )
+            {
+                this.logPrefix = logPrefix;
+            }
+
+            protected override void NotifyCallback(NSvn.Core.Notification notification)
+            {
+                Log.WriteLine( "{0}Checked out {1}", this.logPrefix, notification.Path + Environment.NewLine);
+            }
+
+            private string logPrefix;
+        }
+        #endregion
+
+        private string username = null;
+        private string password = null;
+        private string localDir = null;
+        private string url = null;
+        private int revision = -1;
 	}
 }

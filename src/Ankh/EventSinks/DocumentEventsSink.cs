@@ -8,7 +8,7 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Event sink for the DocumentEvents events.
     /// </summary>
-    public class DocumentEventsSink : EventSink
+    internal class DocumentEventsSink : EventSink
     {
         public DocumentEventsSink( AnkhContext context ) : base( context )
         {
@@ -19,7 +19,7 @@ namespace Ankh.EventSinks
 
         public override void Unhook()
         {
-            this.events.DocumentSaved -= new _dispDocumentEvents_DocumentSavedEventHandler(
+            this.events.DocumentSaved += new _dispDocumentEvents_DocumentSavedEventHandler(
                 this.DocumentSaved );
         }
 
@@ -27,25 +27,16 @@ namespace Ankh.EventSinks
         {
             try
             {
-                if ( document.ProjectItem != null )
-                {
-                    for ( short i = 1; i <= document.ProjectItem.FileCount; i++ )
-                    {
-                        string filename = document.ProjectItem.get_FileNames(i);
-                        SvnItem item = this.Context.StatusCache[ filename ];
-                        item.Refresh( this.Context.Client );
-                    }
-                }
+                this.Context.SolutionExplorer.UpdateStatus( document.ProjectItem );
             }
-            catch( COMException ex )
+            catch( COMException )
             {
-                System.Diagnostics.Debug.WriteLine( 
-                    "Exception thrown in DocumentSaved: " + ex, "Ankh" );
-                // swallow
+                // HACK: Swallow
             }
             catch( Exception ex )
             {
                 Error.Handle( ex );
+                throw;
             }
         }
 

@@ -27,10 +27,12 @@ namespace NSvn.Core.Tests
         public void TestMakeLocalDir()
         {
             string path = Path.Combine( this.WcPath, "foo" );
-            CommitInfo info = this.Client.MakeDir( new string[]{ path } );
+            ClientContext ctx = new ClientContext(( new NotifyCallback( this.NotifyCallback ) ) );
+            CommitInfo info = Client.MakeDir( new string[]{ path }, ctx );
             
             Assertion.AssertEquals( "MakeDir should return CommitInfo::Invalid for local operations",
                 CommitInfo.Invalid, info );
+            Assertion.AssertEquals( "Wrong number of notifications", 1, this.Notifications.Length );
             Assertion.AssertEquals( "Wrong status code", 'A', this.GetSvnStatus( path ) );
         }
 
@@ -41,7 +43,8 @@ namespace NSvn.Core.Tests
         public void TestMakeRepositoryDir()
         {
             string url = this.ReposUrl + "mooNewDirectory";
-            CommitInfo info = this.Client.MakeDir( new string[]{ url } );
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            CommitInfo info = Client.MakeDir( new string[]{ url }, ctx );
 
             string output = this.RunCommand( "svn", "ls " + this.ReposUrl );
             Assertion.Assert( "No new dir found: " + output, Regex.IsMatch( output, @"mooNewDirectory/" ) );

@@ -21,10 +21,7 @@ namespace NSvn
 
               {
                   // convert to a native path
-                  if ( item->path )
-                    this->path = StringHelper( svn_path_local_style(item->path, pool) );
-                  else 
-                      this->path = 0;
+                  this->path = StringHelper( svn_path_local_style(item->path, pool) );
               }
 
               ///<summary>The working copy path to this item</summary>

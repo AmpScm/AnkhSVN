@@ -29,11 +29,12 @@ namespace NSvn.Core.Tests
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
 
-            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            Client.Commit( new string[]{ this.WcPath }, false, ctx );
            
-            char status = this.GetSvnStatus( filepath );
-            Assertion.AssertEquals( "File not committed", '-', 
-                status );
+            string output = this.RunCommand( "svn", "st " + filepath );
+            Assertion.AssertEquals( "File not committed", ' ', 
+                output[0] );
         }
 
         /// <summary>
@@ -46,11 +47,12 @@ namespace NSvn.Core.Tests
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
 
-            CommitInfo info = this.Client.Commit( new string[]{ filepath }, true );
+            ClientContext ctx = new ClientContext();
+            CommitInfo info = Client.Commit( new string[]{ filepath }, true, ctx );
 
-            char status = this.GetSvnStatus( filepath );
-            Assertion.AssertEquals( "File not committed", '-', 
-                status );
+            string output = this.RunCommand( "svn", "st " + filepath );
+            Assertion.AssertEquals( "File not committed", ' ', 
+                output[0] );
 
         }
 
@@ -60,36 +62,16 @@ namespace NSvn.Core.Tests
             this.filepath = Path.Combine( this.WcPath, "Form.cs" );
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
-
-            AuthenticationBaton baton = new AuthenticationBaton();
-            this.Client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
-            this.Client.AuthBaton.SetParameter( 
-                AuthenticationBaton.ParamDefaultUsername, Environment.UserName );
-
-            
-            this.Client.LogMessage += new LogMessageDelegate(this.LogMessageCallback);
-
-            this.logMessage = "Moo ";
-            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
+            ClientContext ctx = new ClientContext();
+            ctx.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
+            CommitInfo info = Client.Commit( new string[]{ this.WcPath }, false, ctx );
 
             Assertion.AssertEquals( "Wrong username", Environment.UserName, info.Author );
             string output = this.RunCommand( "svn", "log " + this.filepath + " -r HEAD" );
-            
             Assertion.Assert( "Log message not set", 
-                output.IndexOf( this.logMessage ) >= 0 );
+                output.IndexOf( "Moo is the log message" ) >= 0 );
 
         } 
-
-        [Test]
-        public void TestCommitWithNonAnsiCharsInLogMessage()
-        {
-            this.filepath = Path.Combine( this.WcPath, "Form.cs" );
-            using ( StreamWriter w = new StreamWriter( filepath ) )
-                w.Write( "Moo" );
-            this.Client.LogMessage +=new LogMessageDelegate(this.LogMessageCallback);
-            this.logMessage = "Æ e i a æ å. Møøøø! über";
-            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
-        }
         
         /// <summary>
         /// Tests that you can cancel a commit.
@@ -100,8 +82,9 @@ namespace NSvn.Core.Tests
             string path = Path.Combine( this.WcPath, "Form.cs" );
             using( StreamWriter w = new StreamWriter( path ) )
                 w.Write( "MOO" );
-            this.Client.LogMessage += new LogMessageDelegate( this.CancelLogMessage );
-            CommitInfo info = this.Client.Commit( new string[]{ path }, true );
+            ClientContext ctx = new ClientContext();
+            ctx.LogMessageCallback = new LogMessageCallback( this.CancelLogMessage );
+            CommitInfo info = Client.Commit( new string[]{ path }, true, ctx );
 
             Assertion.AssertNull( "info should be null for a cancelled commit", 
                 info );
@@ -117,32 +100,28 @@ namespace NSvn.Core.Tests
         [ExpectedException( typeof(WorkingCopyLockedException) )]
         public void TestLockedWc()
         {
-            string lockPath = Path.Combine(
-                Path.Combine( this.WcPath, Client.AdminDirectoryName ), "lock" );
-            using( File.CreateText( lockPath ) )
-            {
-                this.Client.Commit( new string[]{ this.WcPath }, true );            
-            }
+            string lockPath = Path.Combine( this.WcPath, @".svn\lock" );
+            File.CreateText( lockPath );
+            Client.Commit( new string[]{ this.WcPath }, true, 
+                new ClientContext() );            
         }
 
-        private void LogMessageCallback( object sender, LogMessageEventArgs args )
+        private string LogMessageCallback( CommitItem[] items )
         {
-            Assertion.AssertEquals( "Wrong number of commit items", 1, args.CommitItems.Length );
-            Assertion.Assert( "Wrong path", args.CommitItems[0].Path.IndexOf( 
+            Assertion.AssertEquals( "Wrong number of commit items", 1, items.Length );
+            Assertion.Assert( "Wrong path", items[0].Path.IndexOf( 
                 this.filepath ) >= 0 );
-            Assertion.AssertEquals( "Wrong kind", NodeKind.File, args.CommitItems[0].Kind );
-            Assertion.AssertEquals( "Wrong revision", 6, args.CommitItems[0].Revision );
+            Assertion.AssertEquals( "Wrong kind", NodeKind.File, items[0].Kind );
+            Assertion.AssertEquals( "Wrong revision", 6, items[0].Revision );
 
-            args.Message = this.logMessage;
+            return "Moo is the log message";
         }
 
-        private void CancelLogMessage( object sender, LogMessageEventArgs args )
+        private string CancelLogMessage( CommitItem[] items )
         {
-            args.Message = null;
+            return null;
         }
 
-
-        private string logMessage;
         private string filepath;
     }
 }

@@ -3,16 +3,16 @@
 <doc title="Ankh">
     <section>
     <p>
-        The aim of Ankh is to provide an integration for the revision control 
+        The aim of this project was to provide an integration for the revision control 
         system Subversion (SVN) into the existing coding environment provided by Visual Studio .NET. 
-        Most Windows programmers would rather avoid using the command prompts required to use 
-        Subversion today. 
+        Most Windows users are not found of using command prompts which is needed by the 
+        use of Subversion today. 
         <br/><br/>
-        Because of Ankh, SVN is now available to Windows programmers, 
-        and revision control is easier for programmers already using subversion and Visual Studio .NET. 
-        Benefits of this addin are that be that SVN is accessed directly from within VS.NET 
-        itself which leads to increased productivity.
-        Ankh and Subversion are both open source.
+        By creating Ankh, SVN will be made available for a huge amount of new Windows programmers, 
+        and will also ease revision control for programmers already using subversion and Visual Studio .NET. 
+        Benefits of the addin will be that SVN is accessed directly from within VS.NET 
+        itself which will lead to increased productivity since revision control is directly accessible 
+        in VS.NET. Ankh and Subversion are both open source.
         <br/><br/>
     </p>
     </section>   

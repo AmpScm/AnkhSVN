@@ -4,15 +4,11 @@
     <property name="debug" value="false"/>
     <property name="deploy.dir" value="deploy"/>
     <property name="checkout.dir" value="Ankh-Release" />
-    
-    <property name="vs.2003" value="false"/>
+    <property name="zip.file" value="Ankh.zip" />
     <property name="major.version" value="0" />
-    <property name="minor.version" value="3" />
-    <property name="patch.version" value="0" />
-    <property name="zip.file" value="Ankh-${major.version}.${minor.version}.${patch.version}.zip" />
-    <property name="msi.file" value="AnkhSetup-${major.version}.${minor.version}.${patch.version}.msi" />
+    <property name="minor.version" value="1" />
     <property name="url" 
-        value="http://10.0.0.3:8088/svn/finalproject/branches/0.3-release/src"/>
+        value="http://arild.no-ip.com:8088/svn/finalproject/branches/alpha1-release/src"/>
         
    
     
@@ -59,7 +55,7 @@
                   revision = int.Parse( first );
                
                return project.ExpandProperties( 
-                    "${major.version}.${minor.version}.${patch.version}." + revision, location );
+                    "${major.version}.${minor.version}.42." + revision, location );
             }
             
             public static void ScriptMain( Project project )
@@ -80,7 +76,7 @@
                  
                   
                   string newContents =
-                     Regex.Replace( fileContents, @"AssemblyVersion(Attribute)*\(\s*"".*""\s*\)",
+                     Regex.Replace( fileContents, @"AssemblyVersion(Attribute)*\("".*""\)",
                         versionString );
                   
                   using( StreamWriter w = new StreamWriter( file ) )
@@ -102,7 +98,7 @@
     </target>
     
     <target name="clean">
-        <delete dir="${checkout.dir}" />   
+        <delete dir="${checkout.dir}" />       
     </target>
     
     
@@ -117,22 +113,8 @@
         
     </target>
     
-    <target name="deploydir">
-        <mkdir dir="${deploy.dir}"/>
-    </target>
     
-    <target name="msi" depends="source, deploydir">
-        <!--<nant buildfile="${checkout.dir}\master.build" inheritall="true" target="rebuild,msi"/>
-        
-        <copy todir="${deploy.dir}">
-            <fileset basedir="${checkout.dir}\installsource">
-                <includes name="*.msi"/>
-            </fileset>
-        </copy>-->
-    
-    
-            
-    
+    <target name="msi" depends="svndir, source"> 
         <property name="config" value="Debug" if="${debug}"/>
         <property name="config" value="Release" unless="${debug}" />
         
@@ -140,11 +122,14 @@
             commandline="${checkout.dir}\src.sln /build ${config} /project AnkhSetup"
             verbose="${verbose}">
             <environment>
-                <option name="SVNSRC" value="${svn.dir}"/>                    
+                <option name="SVNSRC" value="${svn.dir}"/>                   
             </environment>
         </exec>
-        <copy file="${checkout.dir}\Ankh\AnkhSetup\${config}\AnkhSetup.msi" 
-            tofile="${deploy.dir}\${msi.file}" />
+        <copy todir="${deploy.dir}">
+            <fileset basedir="${checkout.dir}\Ankh\AnkhSetup\${config}\">
+                <includes name="*.msi"/>
+            </fileset>
+        </copy>
         
     </target>
     
@@ -162,8 +147,8 @@
             target-ns="http://nant.sourceforge.net/schema/"/> 
     </target>
     
-    <target name="zip" depends="source, deploydir">
-        <zip zipfile="${deploy.dir}\${zip.file}" verbose="${verbose}">
+    <target name="zip" depends="source">
+        <zip zipfile="${zip.file}" verbose="${verbose}">
             <fileset basedir="${checkout.dir}">
                 <includes name="**/*"/>
                 <excludes name="**/.svn/**" />

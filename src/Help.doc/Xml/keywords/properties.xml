@@ -4,15 +4,12 @@
     <section>
         <p>
             Subversion has no particular policy regarding properties. You can use them for any purpose. 
-            Subversion asks only that you not use property names that begin with the prefix svn:. That's the 
-            namespace that it sets aside for its own use. In fact, Subversion defines certain properties that 
-            have magical effects on the files and directories to which they are attached. In this section, we'll 
-            untangle the mystery, and describe how these special properties make your life just a little easier.
+            Subversion asks only that you not use property names that begin with the prefix svn:. That's the namespace that its sets aside for its own use. In fact, Subversion defines certain properties that have magical effects on the files and directories to which they are attached. In this section, we'll untangle the mystery, and describe how these special properties make your life just a little easier.
             <b>svn:executable</b>
             <br/>
             The svn:executable property is used to control a versioned file's filesystem-level execute 
             permission bit in a semi-automated way. This property has no defined values—its mere presence 
-            indicates a desire that the execute permission bit to be kept enabled by Subversion. Removing this 
+            indicates a desire the execute permission bit to be kept enabled by Subversion. Removing this 
             property will restore full control of the execute bit back to the operating system.
             <br/><br/>
             On many operating systems, the ability to execute a file as a command is governed by the 

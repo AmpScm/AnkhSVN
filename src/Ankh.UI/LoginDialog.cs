@@ -36,7 +36,6 @@ namespace Ankh.UI
         public string Password
         {
             get{ return this.passwordTextBox.Text; }
-            set{ this.usernameTextBox.Text = value; }
         }
 
         /// <summary>
@@ -45,25 +44,6 @@ namespace Ankh.UI
         public string Username
         {
             get{ return this.usernameTextBox.Text; }
-            set{ this.usernameTextBox.Text = value; }
-        }
-
-        /// <summary>
-        /// Whether the user is allowed to save the credentials.
-        /// </summary>
-        public bool MaySave
-        {
-            get{ return this.saveCredentialsCheckBox.Enabled; }
-            set{ this.saveCredentialsCheckBox.Enabled = value; }
-        }
-
-        /// <summary>
-        /// Whether the user wants to save the credentials entered.
-        /// </summary>
-        public bool ShallSave
-        {
-            get{ return this.saveCredentialsCheckBox.Checked && this.MaySave; }
-            set{ this.saveCredentialsCheckBox.Checked = value; }
         }
 
         /// <summary>
@@ -106,7 +86,6 @@ namespace Ankh.UI
             this.cancelButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.realmLabel = new System.Windows.Forms.Label();
-            this.saveCredentialsCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // usernameLabel
@@ -146,7 +125,7 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(49, 168);
+            this.okButton.Location = new System.Drawing.Point(48, 152);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(79, 23);
             this.okButton.TabIndex = 5;
@@ -156,7 +135,7 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(137, 168);
+            this.cancelButton.Location = new System.Drawing.Point(136, 152);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(79, 23);
             this.cancelButton.TabIndex = 6;
@@ -179,29 +158,21 @@ namespace Ankh.UI
             this.realmLabel.Text = "realmLabel";
             this.realmLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // saveCredentialsCheckBox
-            // 
-            this.saveCredentialsCheckBox.Location = new System.Drawing.Point(72, 139);
-            this.saveCredentialsCheckBox.Name = "saveCredentialsCheckBox";
-            this.saveCredentialsCheckBox.Size = new System.Drawing.Size(128, 24);
-            this.saveCredentialsCheckBox.TabIndex = 10;
-            this.saveCredentialsCheckBox.Text = "Save credentials?";
-            // 
             // LoginDialog
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(226, 199);
-            this.Controls.Add(this.saveCredentialsCheckBox);
-            this.Controls.Add(this.realmLabel);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.okButton);
-            this.Controls.Add(this.passwordTextBox);
-            this.Controls.Add(this.usernameTextBox);
-            this.Controls.Add(this.passwordLabel);
-            this.Controls.Add(this.usernameLabel);
+            this.ClientSize = new System.Drawing.Size(224, 179);
+            this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.realmLabel,
+                                                                          this.label1,
+                                                                          this.cancelButton,
+                                                                          this.okButton,
+                                                                          this.passwordTextBox,
+                                                                          this.usernameTextBox,
+                                                                          this.passwordLabel,
+                                                                          this.usernameLabel});
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "LoginDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -218,7 +189,6 @@ namespace Ankh.UI
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label realmLabel;
-        private System.Windows.Forms.CheckBox saveCredentialsCheckBox;
         private System.Windows.Forms.Button cancelButton;
 
       

@@ -104,17 +104,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DebugTimer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ErrorMessage.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Exec.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -129,27 +119,7 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "PathUtils.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProcessReader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RegistryUtils.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Timer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "UriUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

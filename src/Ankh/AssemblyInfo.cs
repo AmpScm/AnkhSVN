@@ -16,10 +16,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
-
-// We only want the Connect class to be visible
-[assembly: System.Runtime.InteropServices.ComVisible(false)]
-
 //
 // Version information for an assembly consists of the following four values:
 //
@@ -31,7 +27,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the value or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersionAttribute( "0.4.99.1296")]
+[assembly: AssemblyVersion("1.1.0.492")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 

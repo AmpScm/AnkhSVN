@@ -2,7 +2,6 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Diff">
     <section>
-      Compare files to view changes. 
             <p>
                 Besides the status icons, Ankh gives you a more detailed view of the changes made to files. 
                 This is done with the ‘Diff’ command. 
@@ -12,7 +11,8 @@
                 <b>Description</b>
                     <br/>
                     Display the differences between two paths. Each TARGET can be either a working copy path or URL. 
-                    If TARGET is a working copy path, then the client compares base and working copies of TARGET.
+                    If TARGET is a working copy path, then the means:
+                    The client compares base and working copies of TARGET.
                     <br/><br/>
                     <b>Changes</b>
                     <br/>

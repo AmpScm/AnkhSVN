@@ -1,6 +1,6 @@
 // $Id$
 using System;
-
+using NSvn;
 using NSvn.Core;
 using NSvn.Common;
 using EnvDTE;
@@ -15,82 +15,89 @@ namespace Ankh.Commands
     /// Summary description for RevertItem.
     /// </summary>
 
-    [VSNetCommand("RevertItem", Text = "Revert...", Tooltip = "Reverts selected item",
+    [VSNetCommand("RevertItem", Text = "Revert", Tooltip = "Reverts selected item",
          Bitmap = ResourceBitmaps.Revert),
     VSNetControl( "Item.Ankh", Position = 1 ),
-    VSNetProjectNodeControl( "Ankh", Position = 1 ),
-    VSNetFolderNodeControl( "Ankh", Position = 1),
+    VSNetControl( "Project.Ankh", Position = 1 ),
+    VSNetControl( "Folder.Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1)]
-    public class RevertItemCommand : CommandBase
+    internal class RevertItemCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
-        {   
-            if ( context.SolutionExplorer.GetSelectionResources( true, 
-                new ResourceFilterCallback( CommandBase.ModifiedFilter ) ).Count > 0 )
-            {
-                return Enabled;
-            }
+        {
+            ModifiedVisitor m = new ModifiedVisitor();
+            context.SolutionExplorer.VisitSelectedItems( m, true );
+            
+            if ( m.Modified )
+                return vsCommandStatus.vsCommandStatusEnabled |
+                    vsCommandStatus.vsCommandStatusSupported;
             else
-                return Disabled;
+                return vsCommandStatus.vsCommandStatusSupported;
         }
 
-        public override void Execute(Ankh.AnkhContext context, string parameters)
+        public override void Execute(Ankh.AnkhContext context)
         {
-            this.SaveAllDirtyDocuments( context );
-
-            // get the modified resources
-            IList resources = context.SolutionExplorer.GetSelectionResources( true,
-                new ResourceFilterCallback( CommandBase.ModifiedFilter ) );
-
-            bool recursive = false;
-            bool confirmed = false;
-            // is Shift down?
-            if ( CommandBase.Shift )
-            {
-                using(PathSelector p = CommandBase.GetPathSelector( "Select items to revert" ))
-                {
-                    p.Items = resources;
-                    p.CheckedItems = resources;
-                    if ( p.ShowDialog( context.HostWindow ) != DialogResult.OK )
-                        return;
-                    confirmed = true;
-                    recursive = p.Recursive;
-                    resources = p.CheckedItems;
-                }
-            }
-            string[] paths = SvnItem.GetPaths( resources );
-            
-            // ask for confirmation if the Shift dialog hasn't been used
-            if ( !confirmed )
-            {
-                string msg = "Do you really want to reverse these item(s)?" + 
-                    Environment.NewLine + Environment.NewLine;            
-                msg += string.Join( Environment.NewLine, paths );
-
-                if( MessageBox.Show( context.HostWindow, msg, "Revert", MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Information ) != DialogResult.Yes )
-                {
-                    return;
-                }
-            }
+            RevertVisitor v = new RevertVisitor();
+            context.SolutionExplorer.VisitSelectedItems( v, true );
+                
+            v.Revert( context );
+            context.SolutionExplorer.RefreshSelectionParents();
                
-            // perform the actual revert 
-            context.OutputPane.StartActionText("Reverting");               
-            try
+        }
+        #endregion
+        
+        /// <summary>
+        /// A visitor reverts visited item in the Working copy.
+        /// </summary>
+        private class RevertVisitor : LocalResourceVisitorBase
+        { 
+            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
             {
-                context.Client.Revert( paths, recursive );
+                if ( resource.Status.TextStatus != StatusKind.Normal ||
+                    (resource.Status.PropertyStatus != StatusKind.Normal && 
+                    resource.Status.PropertyStatus != StatusKind.None ) )
+                    this.revertables.Add( resource );
             }
-            catch( NotVersionControlledException )
+
+            public void Revert(Ankh.AnkhContext context)
             {
-                // empty
+                // no revertables?
+                if ( this.revertables.Count < 1 )
+                    return;
+
+                // make the user confirm that he really wants to revert.
+                StringBuilder builder = new StringBuilder();
+                foreach( WorkingCopyResource r in this.revertables )
+                    builder.Append( NSvn.Utils.GetWorkingCopyRootedPath( r.Path ) + 
+                        Environment.NewLine );
+                string msg = "Do you really want to revert the following item(s)?" + 
+                    Environment.NewLine + Environment.NewLine + builder.ToString();
+
+                if( MessageBox.Show( msg, "Revert", MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Information ) == 
+                    DialogResult.Yes )
+                {
+                    context.OutputPane.StartActionText("Reverting");
+                    // do the actual revert
+                    foreach( WorkingCopyResource r in this.revertables )
+                    {
+                        try
+                        {
+                            r.Revert( true );
+                        }
+                        catch( NotVersionControlledException )
+                        {
+                            // empty
+                        }
+                    }
+                    context.OutputPane.EndActionText();
+                }
             }
-            foreach( SvnItem item in resources )
-                item.Refresh( context.Client );
-            context.OutputPane.EndActionText();
-        }               
-        #endregion       
+
+            private ArrayList revertables = new ArrayList();
+        }
     }
 }
 

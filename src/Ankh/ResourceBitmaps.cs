@@ -7,7 +7,7 @@ namespace Ankh
     /// Contains constants for the resource ids of the various bitmaps.
     /// TODO: enum
     /// </summary>
-    public class ResourceBitmaps
+    internal class ResourceBitmaps
     {
         private ResourceBitmaps()
         {
@@ -23,17 +23,6 @@ namespace Ankh
         public const int Diff           = 107;
         public const int Update         = 108;
         public const int ReposExplorer  = 109;
-        public const int ChangeAdminDirName = 110;
-        public const int ToggleAnkh = 111;
-        public const int Switch = 112;
-        public const int ViewInWindows = 113;
-        public const int ViewInVSNet = 114;
-        public const int MakeDirectory = 115;
-        public const int CheckoutSolution = 116;
-        public const int CheckoutDirectory = 117;
-        public const int CopyUrlToClipboard = 118;
-        public const int EditConfigFile = 119;
-        public const int SaveToFile = 120;
 
     }
 }

@@ -1,26 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?> 
-<!-- comment -->
+<!-- this is a comment -->
 <project default="build">
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
-    <property name="build.dir" value="build-Debug" if="${debug}"/>
-    <property name="build.dir" value="build-Release" unless="${debug}"/>
+    <property name="build.dir" value="build/Debug" if="${debug}"/>
+    <property name="build.dir" value="build/Release" unless="${debug}"/>
     <property name="deploy.dir" value="${build.dir}"/>
     <property name="lib.dir" value="lib"/>
-    <property name="vs.2003" value="false"/>
-    <property name="vs.ver" value="7.0" unless="${vs.2003}"/>
-    <property name="vs.ver" value="7.1" if="${vs.2003}"/>
-    <property name="vsnet.ver" value="2002" unless="${vs.2003}"/>
-    <property name="vsnet.ver" value="2003" if="${vs.2003}"/>
-    <property name="nant.default.framework" value="net-1.0"/>
-    <property name="installsource.dir" value="installsource"/>
-    <property name="deploy.dir" value="Deploy"/>
-    <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
-    <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>-->
     
-    
-    
-    <target name="clean" description="Cleans all output directories">
+    <target name="clean">
         <nant buildfile="NSvn/NSvn.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Common/NSvn.Common.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core/NSvn.Core.build" target="clean" inheritall="true" />
@@ -29,134 +17,61 @@
         <nant buildfile="NSvn.Tests/NSvn.Tests.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh.UI/Ankh.UI.build" target="clean" inheritall="true" />
         <nant buildfile="Ankh/Ankh.build" target="clean" inheritall="true" />
-        
-        <delete dir="${installsource.dir}" failonerror="false"/>
-        
-        <regasm assembly="${build.dir}\Ankh.dll" verbose="${verbose}" codebase="true" unregister="true" failonerror="false"/>
     </target>
     
-    
-     <target name="build-Utils">
+    <target name="build-Utils">
         <nant buildfile="Utils/Utils.build" inheritall="true" target="build"/>
-        <copy todir="${build.dir}"> 
-            <fileset basedir="Utils/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
+        <copy file="Utils/${build.dir}/Utils.dll" tofile="${build.dir}/Utils.dll"/>
     </target>
     
     <target name="build-Ankh" depends="build-Ankh.UI, build-NSvn, build-NSvn.Core, build-NSvn.Common, build-Utils">
         <nant buildfile="Ankh/Ankh.build" inheritall="true" target="build" />
-        <copy todir="${build.dir}"> 
-            <fileset basedir="Ankh/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
-
-         <!-- unfortunately necessary to get regasm to work -->
-         <copy todir="${build.dir}">
-            <fileset basedir="${lib.dir}">
-                <includes name="envdte.dll"/>
-                <includes name="extensibility.dll"/>
-            </fileset>
-        </copy>        
-         
-        <regasm assembly="${build.dir}\Ankh.dll" typelibrary="${build.dir}\Ankh.tlb" codebase="true" exporttypelib="true" verbose="${verbose}"/>
-
-        <!-- and now to get rid of them again -->
-        <delete>
-            <fileset basedir="${build.dir}">
-                <includes name="envdte.dll"/>
-                <includes name="extensibility.dll"/>
-            </fileset>
-        </delete>
+        <copy file="Ankh/${build.dir}/Ankh.dll" tofile="${build.dir}/Ankh.dll"/>        
     </target>
     
     <target name="build-Ankh.UI" depends="build-NSvn, build-Utils">
         <nant buildfile="Ankh.UI/Ankh.UI.build" inheritall="true" target="build" />
-        <copy todir="${build.dir}"> 
-            <fileset basedir="Ankh.UI/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
+        <copy file="Ankh.UI/${build.dir}/Ankh.UI.dll" tofile="${build.dir}/Ankh.UI.dll"/>        
     </target>
     
     <target name="build-NSvn.Common">
         <nant buildfile="NSvn.Common/NSvn.Common.build" inheritall="true" target="build"/>
-        <copy todir="${build.dir}"> 
-            <fileset basedir="NSvn.Common/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
+        <copy file="NSvn.Common/${build.dir}/NSvn.Common.dll" tofile="${build.dir}/NSvn.Common.dll"/>
     </target>
     
     <target name="build-NSvn" depends="build-NSvn.Common, build-NSvn.Core">
         <nant buildfile="NSvn/NSvn.build" inheritall="true" target="build"/>
-       <copy todir="${build.dir}"> 
-            <fileset basedir="NSvn/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
+        <copy file="NSvn/${build.dir}/NSvn.dll" tofile="${build.dir}/NSvn.dll"/>
     </target>
     
     <target name="build-NSvn.Tests" depends="build-NSvn, build-NSvn.Common, build-NSvn.Core, build-NSvn.Core.Tests">
         <nant buildfile="NSvn.Tests/NSvn.Tests.build" inheritall="true" target="build"/>
-        <copy todir="${build.dir}"> 
-            <fileset basedir="NSvn.Tests/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
+        <copy file="NSvn.Tests/${build.dir}/NSvn.Tests.dll" tofile="${build.dir}/NSvn.Tests.dll"/>
     </target>
     
     <target name="build-NSvn.Core" depends="build-NSvn.Common">
         <nant buildfile="NSvn.Core/NSvn.Core.build" inheritall="true" target="build"/>
-        <copy todir="${build.dir}"> 
-            <fileset basedir="NSvn.Core/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
+        <copy file="NSvn.Core/${build.dir}/NSvn.Core.dll" tofile="${build.dir}/NSvn.Core.dll"/>
     </target>
     
     <target name="build-NSvn.Core.Tests" depends="build-NSvn.Common, build-NSvn.Core">
         <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" inheritall="true" target="build"/>
-        <copy todir="${build.dir}"> 
-            <fileset basedir="NSvn.Core.Tests/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
+        <copy file="NSvn.Core.Tests/${build.dir}/NSvn.Core.Tests.dll" tofile="${build.dir}/NSvn.Core.Tests.dll"/>
     </target>
     
     <target name="build-NSvn.Core.Tests.MCpp" depends="build-NSvn.Common, build-NSvn.Core">
         <nant buildfile="NSvn.Core.Tests.MCpp/NSvn.Core.Tests.MCpp.build" inheritall="true" target="build"/>
-        <copy todir="${build.dir}"> 
-            <fileset basedir="NSvn.Core.Tests.MCpp/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
-            </fileset>
-         </copy>
+        <copy file="NSvn.Core.Tests.MCpp/${build.dir}/NSvn.Core.Tests.MCpp.dll" tofile="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
     </target>
     
-    <target name="rebuild" description="Clean all output directories before rebuilding">
+    <target name="rebuild">
         <call target="clean"/>
         <call target="build"/>
     </target>
     
-    <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn, build-NSvn.Core"
-        description="Build all necessary assemblies"/>
+    <target name="build" depends="build-Ankh, build-NSvn.Common, build-NSvn, build-NSvn.Tests, build-NSvn.Core, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"/>
     
-    <target name="build-tests" depends="build, build-NSvn.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"
-        description="Build all test assemblies"/>
-    
-    
-    <target name="test" depends="build-tests" description="Run all tests">
+    <target name="test" depends="build">
 	    <copy todir="${build.dir}">
 			<fileset basedir="${lib.dir}">
 				<includes name="*.dll"/>
@@ -164,157 +79,35 @@
 		</copy>
 		
         <exec program="nunit-console.exe"
-				commandline="${build.dir}/NSvn.Core.Tests.dll"/>
+				commandline="/assembly:${build.dir}/NSvn.Core.Tests.dll"/>
 		<exec program="nunit-console.exe"
-              commandline="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
+              commandline="/assembly:${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
         <exec program="nunit-console.exe"
-              commandline="${build.dir}/NSvn.Tests.dll"/>
+              commandline="/assembly:${build.dir}/NSvn.Tests.dll"/>
     </target>
     
-    <target name="deploy" depends = "rebuild, test" description="Run all tests, then create the MSI installer if the tests pass">
-        <call target="msi"/>
+    <target name="deploy">
+        <if propertytrue="debug">
+            <exec program="devenv.exe" 
+                commandline="src.sln /build Debug /project AnkhSetup"
+                verbose="${verbose}"/>
+            <copy todir="${deploy.dir}">
+                <fileset basedir="Ankh\AnkhSetup\Debug\">
+                    <includes name="*.msi"/>
+                </fileset>
+            </copy>
+        </if>
+        <if propertytrue="debug" if="false">
+            <exec program="devenv.exe" 
+                commandline="src.sln /build Release /project AnkhSetup"
+                verbose="${verbose}"/>
+            <copy todir="${deploy.dir}">
+                <fileset basedir="Ankh\AnkhSetup\Release\">
+                    <includes name="*.msi"/>
+                </fileset>
+            </copy>
+        </if>
+    
     </target>
-    
-    <target name="deploy-daily" depends="deploy" description="Run all tests, create MSI and then deploy it to a given directory">
-        <tstamp property="msi.tstamp" pattern="dd.MM.yyyy.HH.mm" verbose="${verbose}"/>                          
-        <copy tofile="${deploy.dir}\AnkhSVN${vsnet.ver}.${msi.tstamp}.msi" file="${installsource.dir}\AnkhSVN${vsnet.ver}.msi"/>
-    </target>
-    
-    <target name="msi" depends="build" description="Build the MSI installer">
-   
-        <property name="bdb.suffix" value="" unless="${debug}"/>
-        <property name="bdb.suffix" value="d" if="${debug}"/>
-        
-        <property name="ankh.progid" value="Ankh.2002" unless="${vs.2003}"/>
-        <property name="ankh.progid" value="Ankh.2003" if="${vs.2003}"/>
-        
-        
-        <property name="ankh.productcode" value="{62EA272B-52C6-429d-953F-75CF01B00BFF}" unless="${vs.2003}"/>
-        <property name="ankh.productcode" value="{741EB3B7-BBAA-4169-BC2A-FB096F49D4B4}" if="${vs.2003}"/>
-        
-        <property name="ankh.upgradecode" value="{02C9D1B6-B362-4fb2-BA6C-5E954880D190}" unless="${vs.2003}"/>
-        <property name="ankh.upgradecode" value="{62A0F0CD-90AD-49f3-95E8-1B7EA0CF2AA8}" if="${vs.2003}"/>
-        
-        <property name="ankh.folder" value="AnkhSVN ${vsnet.ver}" />
-        
-    
-        
-        <delete dir="${installsource.dir}" failonerror="false"/>
-        
-       
-        <!-- copy the stuff in the build dir -->
-        <copy todir="${installsource.dir}\${ankh.folder}">
-            <fileset basedir="${build.dir}">
-                <includes name="**"/>
-            </fileset>            
-        </copy>
-        
-        <!-- copy the readme and license files(maybe move these?) -->
-        <copy todir="${installsource.dir}\${ankh.folder}">
-            <fileset basedir=".">
-                <includes name="licence.rtf"/>
-                <includes name="readme.txt"/>            
-            </fileset>
-        </copy>
-        
-        <!-- copy required interop libs -->
-        <copy todir="${installsource.dir}\${ankh.folder}">
-            <fileset basedir="${lib.dir}">
-                <includes name="axinterop.shdocvw.dll"/>
-                <includes name="interop.shdocvw.dll"/>
-             </fileset>
-          </copy>
-        
-        <!-- copy the shim control -->
-        <copy todir="${installsource.dir}\${ankh.folder}">
-            <fileset basedir="${lib.dir}">
-                <includes name="Ankh.Toolwindow.dll"/>
-            </fileset>
-        </copy>
-        
-        <!-- copy the BDB dll -->
-        <copy todir="${installsource.dir}\${ankh.folder}">
-            <fileset basedir="${lib.dir}\${vsnet.ver}">
-                <includes name="libdb40${bdb.suffix}.dll"/>
-            </fileset>
-        </copy>
-        
-        
-        <!-- satellite dll -->
-        <mkdir dir="${installsource.dir}\${ankh.folder}\1033"/>
-        <copy todir="${installsource.dir}\${ankh.folder}\1033">
-            <fileset basedir="Ankh\1033">
-                <includes name="BitmapDll.dll"/>
-             </fileset>
-         </copy>
-        
-        <msi 
-            output="AnkhSVN${vsnet.ver}.msi"
-            sourcedir="${installsource.dir}"
-            debug="true"
-            license="${installsource.dir}\${ankh.folder}\licence.rtf"
-            verbose="true"
-        >
-        
-            <properties>
-                <property name="ProductName" value="${ankh.folder}"/>
-                <property name="ProductVersion" value="1.0.0.0"/>
-                <property name="Manufacturer" value="The AnkhSVN tigris.org project"/>
-                <property name="ProductCode" value="${ankh.productcode}"/>
-                <property name="UpgradeCode" value="${ankh.upgradecode}"/>
-             </properties>
-             
-             <directories>
-                <directory name="ANKH_FOLDER" foldername="${ankh.folder}" root="ProgramFilesFolder">
-                    <directory name="SATELLITE_FOLDER" foldername="1033"/>
-                 </directory>
-              </directories>
-              
-              <features>
-                <feature name="DefaultFeature" title="AnkhSVN Addin" display="1" typical="true">
-                    <description>The AnkhSVN Addin</description>
-                </feature>
-              </features>
-              
-              <components>
-                <component name="AnkhFiles" id="{909D204A-3F79-429F-AEDC-5135F02B3311}" attr="2" 
-                    directory="ANKH_FOLDER" feature="DefaultFeature">
-                    <key file="LICENCE.rtf"/>
-                    <fileset basedir="${installsource.dir}\${ankh.folder}"> 
-                        <includes name="*.dll"/>
-                        <includes name="*.pdb" />
-                        <includes name="*.tlb" />
-                        <includes name="*.rtf" />  
-                        <includes name="*.txt" />       
-                        <excludes name="*.msi"/>   
-                        <excludes name="*.Tests.*"/>            
-                    </fileset>     
-                 </component>    
-                 
-                 <component name="AnkhResources" id="{5B83D74E-AA83-474F-B7B5-BF8360FD09AC}" attr="2" 
-                    directory="SATELLITE_FOLDER" feature="DefaultFeature">
-                        <key file="BitmapDll.dll"/>
-                        <fileset basedir="${installsource.dir}\${ankh.folder}\1033">
-                            <includes name="BitmapDll.dll"/>
-                         </fileset>
-                   </component>
-                 
-              </components>
-              
-              <registry>
-                <key path="Software\Microsoft\VisualStudio\${vs.ver}\Addins\Ankh.${vsnet.ver}" root="machine" component="AnkhFiles">
-                    <value name="SatelliteDLLName" value="BitmapDLL.dll"/>
-                    <value name="SatelliteDLLPath" value="[ANKH_FOLDER]"/>
-                    <value name="FriendlyName" value="AnkhSVN Addin"/>
-                    <value name="Description" value="An addin for the Subversion version control system"/>
-                    <value name="CommandLineSafe" dword="0"/>
-                    <value name="CommandPreload" dword="1"/>
-                    <value name="LoadBehavior" dword="1"/>
-                    <value name="AboutBoxDetails" value="A VS.NET Addin for the Subversion version control system"/>
-                </key>
-              </registry>
-        </msi>              
-       </target>
-       
     
 </project>

@@ -27,6 +27,7 @@ namespace NSvn.Core.Tests
         public void TestRevertFile()
         {
             string filePath = Path.Combine( this.WcPath, "Form.cs" );
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ));
 
             string oldContents ;
             string newContents;
@@ -61,7 +62,8 @@ namespace NSvn.Core.Tests
             using ( StreamWriter writer = new StreamWriter (filePath ))
                 writer.WriteLine( "mooooooo" );
 
-            this.Client.Revert( new string[]{revertPath}, recursive );
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ));
+            Client.Revert( revertPath, recursive, ctx );
 
             using ( StreamReader reader = new StreamReader( filePath ))
                 newContents = reader.ReadToEnd();

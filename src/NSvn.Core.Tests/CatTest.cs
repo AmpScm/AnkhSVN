@@ -16,7 +16,6 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
-            base.SetUp();
             this.ExtractRepos();
             this.ExtractWorkingCopy();
         }
@@ -32,7 +31,7 @@ namespace NSvn.Core.Tests
             string clientOutput = this.RunCommand( "svn", "cat " + path );
 
             MemoryStream stream = new MemoryStream();
-            this.Client.Cat( stream, path, Revision.Working );
+            Client.Cat( stream, path, Revision.Working, new ClientContext() );
 
             string wrapperOutput = Encoding.ASCII.GetString( stream.ToArray() );
             Assertion.AssertEquals( "String from wrapper not the same as string from client",
@@ -51,7 +50,7 @@ namespace NSvn.Core.Tests
             string clientOutput = this.RunCommand( "svn", "cat " + path );
 
             MemoryStream stream = new MemoryStream();
-            this.Client.Cat( stream, path, Revision.Head );
+            Client.Cat( stream, path, Revision.Head, new ClientContext() );
 
             string wrapperOutput = Encoding.ASCII.GetString( stream.ToArray() );
             Assertion.AssertEquals( "String from wrapper not the same as string from client",

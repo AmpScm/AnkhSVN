@@ -1,8 +1,7 @@
 // $Id$
 using System;
 using EnvDTE;
-using System.Collections;
-
+using NSvn;
 
 namespace Ankh.Commands
 {
@@ -11,27 +10,34 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand( "Cleanup", Text="Cleanup", Tooltip = "Cleans up the working copy", 
          Bitmap = ResourceBitmaps.Cleanup ),
-    VSNetFolderNodeControl( "Ankh", Position = 1),
-    VSNetProjectNodeControl( "Ankh", Position = 1 ),
-    VSNetControl( "Solution.Ankh", Position = 1 )]
-    public class Cleanup : CommandBase
+     VSNetControl( "Folder.Ankh", Position = 1 ),
+     VSNetControl( "Project.Ankh", Position = 1 ),
+     VSNetControl( "Solution.Ankh", Position = 1 )]
+    internal class Cleanup : CommandBase
     {  
     
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
-            return Enabled;
+            return vsCommandStatus.vsCommandStatusEnabled | 
+                vsCommandStatus.vsCommandStatusSupported;
         }
     
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(AnkhContext context)
         {
-            context.StartOperation( "Running cleanup" );
+            context.OutputPane.StartActionText( "Running cleanup" );
 
-            IList resources = context.SolutionExplorer.GetSelectionResources( false,
-                new ResourceFilterCallback(CommandBase.DirectoryFilter) );
-            foreach( SvnItem item in resources )
-                context.Client.Cleanup( item.Path );
+            CleanupVisitor v = new CleanupVisitor();
+            context.SolutionExplorer.VisitSelectedItems( v, false );
 
-            context.EndOperation();
+            context.OutputPane.EndActionText();
+        }
+
+        private class CleanupVisitor : LocalResourceVisitorBase
+        {            
+            public override void VisitWorkingCopyDirectory(WorkingCopyDirectory dir)
+            {
+                dir.Cleanup();
+            }
         }
     }
 }

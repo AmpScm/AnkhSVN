@@ -7,12 +7,11 @@
             <p>
                 <b>Description</b>
                     <br/>
-                    Export a clean directory tree from the repository specified by URL into PATH
-                    at revision REV if it is given, otherwise at HEAD. If PATH is omitted, 
+                    This exports a clean directory tree from the repository specified by URL, 
+                    at revision REV if it is given, otherwise at HEAD, into PATH. If PATH is omitted, 
                     the last component of the URL is used for the local directory name.
                     <br/><br/>            
-                    By specifying PATH1 and PATH2, a clean directory tree from the working copy specified by 
-                    PATH1 is exported into PATH2. 
+                    By specifying PATH1 and PATH2, a clean directory tree from the working copy specified by PATH1 into PATH2. 
                     All local changes will be preserved, but files not under revision control will not be copied.
                     <br/><br/>
                     <b>Changes</b>

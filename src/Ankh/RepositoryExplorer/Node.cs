@@ -1,181 +1,77 @@
 using System;
 using Ankh.UI;
-using NSvn.Core;
-using System.IO;
-using System.ComponentModel;
-using Utils;
+using NSvn;
 using System.Collections;
 
 namespace Ankh.RepositoryExplorer
 {
-    /// <summary>
-    /// Define some extra properties we need to track.
-    /// </summary>
-    public interface INode : IRepositoryTreeNode
-    {
-        INode Parent
+	/// <summary>
+	/// Represents a node in the repository treeview.
+	/// </summary>
+	internal class Node : IRepositoryTreeNode
+	{	
+        public Node( RepositoryResource resource )
         {
-            get;
+            this.resource = resource;
         }
 
-        string Url
+        /// <summary>
+        /// The resource associated with this node.
+        /// </summary>
+        public RepositoryResource Resource
         {
-            get;
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.resource; }
         }
-
-        Revision Revision
-        {
-            get;
-        }
-    }
-    /// <summary>
-    /// Represents a normal node in the repository treeview.
-    /// </summary>
-    public class Node : INode
-    {  
-        public Node( INode parent, DirectoryEntry entry )
-        {
-            this.parent = parent;
-            this.entry = entry;
-        }
-
+	
         #region IRepositoryTreeNode Members
-        [Browsable(false)]
+
         public object Tag
         {
-            get
-            {
-                return this.tag;
-            }
-            set
-            {
-                this.tag = value;
-            }
+            [System.Diagnostics.DebuggerStepThrough]
+            get {  return this.tag;     }
+            [System.Diagnostics.DebuggerStepThrough]
+            set {  this.tag = value;  }
         }
 
-        [Category("Subversion")]
         public bool IsDirectory
         {
-            get{ return this.entry.NodeKind == NodeKind.Directory; }
+            [System.Diagnostics.DebuggerStepThrough]
+            // TODO: Implement IsDirectory in RepositoryResource
+            get  { return resource is RepositoryDirectory; }
         }
 
-        [Category("Subversion")]
         public string Name
         {
-            get{ return this.entry.Path; }
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return resource.Name; }
         }
+
+        public System.Collections.IEnumerable GetChildren()
+        {
+            try
+            {
+                if ( !this.IsDirectory )
+                    return new object[]{};
+                else
+                {
+                    ArrayList list = new ArrayList();
+                    foreach( RepositoryResource res in ((RepositoryDirectory)this.resource).GetChildren().Values )
+                        list.Add( new Node( res ) );
+                    return list;
+                }
+            }
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+                throw;
+            }
+        }
+
         #endregion
 
-        [Category("Subversion")]
-        public string Url
-        {
-            get{ return UriUtils.Combine( this.Parent.Url, this.entry.Path );}
-        }
-
-        [Category("Subversion")]
-        public string LastAuthor
-        {
-            get{ return this.entry.LastAuthor;}
-        }
-
-        [Category("Subversion")]
-        public bool HasProperties
-        {
-            get{ ;return this.entry.HasProperties; }
-        }
-
-        [Category("Subversion")]
-        public int CreatedRevision
-        {
-            get{ return this.entry.CreatedRevision; }
-        }
-
-        [Category("Subversion")]
-        public long Size
-        {
-            get{ return this.entry.Size; }
-        }
-
-        [Category("Subversion")]
-        public DateTime Time
-        {
-            get{ return this.entry.Time; }
-        }
-
-        [Browsable(false)]
-        public INode Parent
-        {
-            get{ return this.parent; }
-        }
-
-        [Category("Subversion")]
-        public Revision Revision
-        {
-            get{ return this.Parent.Revision; }
-        }
-
-        
 
         private object tag;
-        private DirectoryEntry entry;
-        private INode parent;
-    }
-
-    /// <summary>
-    /// Represents a root node in the treeview. This holds some information the others
-    /// don't.
-    /// </summary>
-    public class RootNode : INode
-    {
-        public RootNode( string url, Revision revision )
-        {
-            this.url = url;
-            this.revision = revision;
-        }
-    
-        #region IRepositoryTreeNode Members
-        [Browsable(false)]
-        public object Tag
-        {
-            get { return this.tag; }
-            set { this.tag = value; }
-        }
-
-        [Category("Subversion")]
-        public bool IsDirectory
-        {
-            get{ return true; }
-        }
-
-        [Category("Subversion")]
-        public string Name
-        {
-            get{ return this.url; }
-        }
-
-        
-        #endregion
-
-        [Browsable(false)]
-        public INode Parent
-        {
-            get{ return null; }
-        }
-
-        [Category("Subversion")]
-        public string Url
-        {
-            get{ return this.url; }
-        }
-
-        [Category("Subversion")]
-        public Revision Revision
-        {
-            get{ return this.revision; }
-        }
-
-        private object tag;
-        private string url;
-        private Revision revision;
+        private RepositoryResource resource;
     }
 }

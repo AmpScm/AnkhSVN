@@ -3,8 +3,8 @@
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
-    <property name="build.dir" value="build-Release" unless="${debug}"/>
-    <property name="build.dir" value="build-Debug" if="${debug}"/>
+    <property name="build.dir" value="build/Release" unless="${debug}"/>
+    <property name="build.dir" value="build/Debug" if="${debug}"/>
     <property name="lib.dir" value="..\lib"/>
     <property name="warninglevel" value="/warn:3"/>
     
@@ -16,7 +16,7 @@
     
     <target name="clean">
         <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
-        <comregister file="${lib.dir}\Ankh.ToolWindow.dll" unregister="true" failonerror="false"/>
+        <exec program="regsvr32" commandline="/u ${lib.dir}\Ankh.ToolWindow.dll"/>
     </target>
     
     <target name="init">
@@ -28,18 +28,14 @@
     </target>
     
     <target name="compile" depends="init">
-        <property name="define" value="REPORTERROR;TRACE"/>
-        <property name="define" value="ALWAYSREGISTER;DEBUG;${define}" if="${debug}"/>
+        <property name="define" value="TRACE"/>
+        <property name="define" value="DEBUG;${define}" if="${debug}"/>
         
-        <property name="define" value="VS2002;${define}" unless="${vs.2003}"/>
-        <property name="define" value="VS2003;${define}" if="${vs.2003}"/>
+        <exec program="regsvr32" commandline="/s ${lib.dir}\Ankh.ToolWindow.dll"/>
         
+        <exec program="tlbimp" commandline="/out:${build.dir}/AnkhToolWindowLib.dll ${lib.dir}\Ankh.ToolWindow.dll"/>
         
-        <comregister file="${lib.dir}\AnkhUserControlHost.dll"/>
-        
-        <tlbimp output="${build.dir}/AnkhUserControlHostLib.dll" typelib="${lib.dir}\AnkhUserControlHost.dll"/>
-        
-        <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}" debug="${debug}">
+        <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}">
             <references>
                 <includes name="${lib.dir}\EnvDTE.dll"/>
                 <includes name="${lib.dir}\extensibility.dll"/>
@@ -49,12 +45,10 @@
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
-                <includes name="${build.dir}/AnkhUserControlHostLib.dll"/>
-                <includes name="${lib.dir}\${vsnet.ver}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
+                <includes name="${build.dir}/AnkhToolWindowLib.dll"/>
+                <includes name="${lib.dir}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
                 <includes name="${lib.dir}\Interop.SHDocVw.dll"/>
             </references>
-            
-            <arg value="/resource:status_icons.bmp,Ankh.status_icons.bmp"/>
             
             <sources basedir="${src.dir}">
                 <includes name="**/*.cs"/>
@@ -62,8 +56,6 @@
             
             <arg value="${warninglevel}"/>
         </csc>
-        
-        
         
                 
     </target>

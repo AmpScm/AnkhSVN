@@ -1,15 +1,13 @@
 // $Id$
 using System;
-
+using NSvn;
 using NSvn.Core;
 using EnvDTE;
 using System.IO;
-using System.Collections;
-using System.Diagnostics;
 
 namespace Ankh.Solution
 {
-    public class ProjectNode : TreeNode
+    internal class ProjectNode : TreeNode
     {
         public ProjectNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
             TreeNode parent ) : 
@@ -18,109 +16,96 @@ namespace Ankh.Solution
             this.project = (Project)item.Object;
 
             this.FindProjectResources(explorer);
+
+            this.projectFile.Context = explorer.Context;
+            this.projectFolder.Context = explorer.Context;
         }
 
-        public override void GetResources( System.Collections.IList list, 
-            bool getChildItems, ResourceFilterCallback filter )
+        public override void Refresh()
         {
-            if ( filter == null || filter( this.projectFolder ) )
-                list.Add (this.projectFolder );
-            if ( filter == null || filter( this.projectFile ) )
-                list.Add( this.projectFile );
-
-            // add deleted items.
-            foreach( SvnItem item in this.additionalResources )
-            {
-                if ( filter == null || filter( item ) )
-                    list.Add( item );
-            }
-
-            this.GetChildResources( list, getChildItems, filter );
+            this.FindProjectResources( this.Explorer );
+            base.Refresh();
         }
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.VisitProject(this);
-        }
-
-        protected override void RescanHook()
-        {
-            this.additionalResources.Clear();
-            this.AddDeletions( this.projectFolder.Path, this.additionalResources, 
-                new StatusChanged(this.ChildOrResourceChanged) );
-        }
-
-
 
 
         private void FindProjectResources(Explorer explorer)
         {
             // find the directory containing the project
             string fullname = project.FullName;
-
-            this.additionalResources = new ArrayList();
-
-            // special treatment for VDs
-            if ( String.Compare( project.Kind, ProjectNode.VDPROJKIND, true ) == 0 )
-                fullname += ".vdproj";
-
             // the Solution Items project has no path
             if ( fullname != string.Empty && File.Exists( fullname ) )
             {
                 string parentPath = Path.GetDirectoryName( fullname );
-                this.projectFolder = this.Explorer.Context.StatusCache[ parentPath ];                
-                this.projectFile = this.Explorer.Context.StatusCache[ fullname ];
+                this.projectFolder = SvnResource.FromLocalPath( parentPath );
+                this.projectFile = SvnResource.FromLocalPath( fullname );
 
-                
-
-                this.Explorer.AddResource( project, this ); 
-
-                // attach event handlers
-                StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
-                this.projectFolder.Changed += del;
-                this.projectFile.Changed += del;  
-                
-                // we also want deleted items in this folder
-                this.AddDeletions( this.projectFolder.Path, 
-                    this.additionalResources, del );
+                this.Explorer.AddResource( project, this );                    
             }
             else
             {
-                this.projectFile = SvnItem.Unversionable;
-                this.projectFolder = SvnItem.Unversionable;
+                this.projectFile = SvnResource.Unversionable;
+                this.projectFolder = SvnResource.Unversionable;
             }
         }
 
         /// <summary>
-        /// The directory this project resides in.
+        /// The folder this project is contained in.
         /// </summary>
-        public override string Directory
+        public ILocalResource ProjectFolder
         {
-            [System.Diagnostics.DebuggerStepThrough()]
-            get { return this.projectFolder.Path; }
+            get{ return this.projectFolder; }
         }
 
+        /// <summary>
+        /// The project file itself.
+        /// </summary>
+        public ILocalResource ProjectFile
+        {
+            get{ return this.projectFile; }
+        }
 
         /// <summary>
-        /// The status of this node, not including children.
+        /// Accept an INodeVisitor.
         /// </summary>
-        /// <returns></returns>
-        protected override NodeStatus ThisNodeStatus()
+        /// <param name="visitor"></param>
+        public override void Accept( INodeVisitor visitor )
+        {
+            visitor.VisitProject( this );
+        }
+
+        
+
+        public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
         {            
+            if ( recursive )
+                this.VisitChildResources( visitor );
+
+            this.projectFolder.Accept( visitor );
+            this.projectFile.Accept( visitor );
+        } 
+            
+        protected override StatusKind GetStatus()
+        {
+            
             // check status on the project folder
-            return this.MergeStatuses( 
-                this.MergeStatuses(this.projectFolder, this.projectFile), 
-                this.MergeStatuses(this.additionalResources) );
-               
+            StatusKind folderStatus = StatusFromResource( this.projectFolder );
+            StatusKind fileStatus = StatusFromResource( this.projectFile );
+            if ( fileStatus != StatusKind.Normal )
+                return fileStatus;
+            else if (  folderStatus != StatusKind.Normal )
+                return folderStatus;
+            else
+            {
+                // check statuses on child resources
+                ModifiedVisitor v = new ModifiedVisitor();
+                this.VisitChildResources( v );
+                return v.Modified ? StatusKind.Modified : StatusKind.Normal;
+            }
         }                    
 
-        private SvnItem projectFolder;
-        private SvnItem projectFile;
-        private IList additionalResources;
+        private ILocalResource projectFolder;
+        private ILocalResource projectFile;
         private Project project;
-
-        private const string VDPROJKIND = @"{54435603-DBB4-11D2-8724-00A0C9A8B90C}";
-
     }  
 
 }

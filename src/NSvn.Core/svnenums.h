@@ -38,7 +38,9 @@ namespace NSvn
             /// <summary>Got a revert failed.</summary>          
             FailedRevert = svn_wc_notify_failed_revert,
             /// <summary>Got a resolve.</summary>          
-            Resolved = svn_wc_notify_resolved,
+            Resolve = svn_wc_notify_resolve,
+            /// <summary>Got a status.</summary>              
+            Status = svn_wc_notify_status,
             /// <summary>Got a skip.</summary>          
             Skip = svn_wc_notify_skip,
             /// <summary>Got a delete.</summary>          
@@ -98,7 +100,7 @@ namespace NSvn
             Added = svn_wc_status_added,
 
             /// <summary>The item is under version control, but is missing.</summary>
-            Missing = svn_wc_status_missing,
+            Absent = svn_wc_status_absent,
 
             /// <summary>The item is scheduled for deletion.</summary>
             Deleted = svn_wc_status_deleted,
@@ -115,17 +117,8 @@ namespace NSvn
             /// <summary>The item is in a conflicted state.</summary>
             Conflicted = svn_wc_status_conflicted,
 
-            /// <summary>A resource marked as ignored.</summary>
-            Ignored = svn_wc_status_ignored,
-
-            /// <summary>An unversioned local resource is in the way of the versioned resource.</summary>
-            Obstructed = svn_wc_status_obstructed,
-
-            /// <summary>An unversioned path populated by an svn:external property.</summary>
-            External = svn_wc_status_external,
-
-            /// <summary>A directory that doesn't contain a complete entries list.</summary>
-            Incomplete = svn_wc_status_incomplete
+            /// <summary>An unversioned local resource is in the way of the versioned resource</summary>
+            Obstructed = svn_wc_status_obstructed
 
         };
 
@@ -152,27 +145,6 @@ namespace NSvn
             Delete,
             Replace,
             Modify
-        };
-
-
-        /// <summary>SSL failures</summary>
-        [System::FlagsAttribute]
-        public __value enum SslFailures
-        {
-            /// <summary>The certificate is not yet valid.</summary>
-            NotYetValid = SVN_AUTH_SSL_NOTYETVALID,
-
-            /// <summary>The certificate has expired.</summary>
-            Expired = SVN_AUTH_SSL_EXPIRED,
-
-            /// <summary>The certificate hostname does not match.</summary>
-            CertificateNameMismatch = SVN_AUTH_SSL_CNMISMATCH,
-
-            /// <summary>The certificate authority is unknown.</summary>
-            CertificateAuthorityUnknown = SVN_AUTH_SSL_UNKNOWNCA,
-
-            /// <summary>Some other error.</summary>
-            Other = SVN_AUTH_SSL_OTHER
         };
     }
 }

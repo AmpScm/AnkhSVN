@@ -16,8 +16,6 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
-            base.SetUp();
-
             this.ExtractWorkingCopy();
         }
 
@@ -27,8 +25,8 @@ namespace NSvn.Core.Tests
             this.RunCommand( "svn", "ps foo bar " + this.WcPath );
             this.RunCommand( "svn", "ps kung foo " + this.WcPath );
 
-            PropListItem[] items = this.Client.PropList( this.WcPath, Revision.Working,
-                false );
+            PropListItem[] items = Client.PropList( this.WcPath, Revision.Working,
+                false, new ClientContext() );
 
             Assertion.AssertEquals( "Wrong number of proplist items", 1, items.Length );
             Assertion.AssertEquals( "Wrong number of properties", 2, 

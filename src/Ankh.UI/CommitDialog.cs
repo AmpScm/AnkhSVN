@@ -12,18 +12,13 @@ using System.IO;
 namespace Ankh.UI
 {
     /// <summary>
-    /// Dialog that lets a user enter a log message for a commit.
+    /// Summary description for CommitDialog.
     /// </summary>
     public class CommitDialog : System.Windows.Forms.Form
     {
-        public event DiffWantedDelegate DiffWanted
-        {
-            add{ this.diffView.DiffWanted += value; }
-            remove{ this.diffView.DiffWanted -= value; }
-        }
+        public event EventHandler DiffWanted;		
 
-
-        public CommitDialog()
+        public CommitDialog( CommitItem[] items )
         {
             //
             // Required for Windows Form Designer support
@@ -32,11 +27,14 @@ namespace Ankh.UI
 
             this.CreateToolTips();
 
-            this.commitItemsTree.GetPathInfo += new GetPathInfoDelegate(commitItemsTree_GetPathInfo);
-            this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
+            this.commitItems = items;
+
+            foreach( CommitItem item in items )
+                this.commitItemsList.Items.Add( item.Path );
+
+            this.diffView.Visible = false;
+
             
-            this.diffViewVisible = true;
-            this.ToggleDiffView();
         }
 
         /// <summary>
@@ -48,30 +46,8 @@ namespace Ankh.UI
             { 
                 return this.LogMessageTemplate.PostProcess( this.logMessageBox.Text );
             }
-            set
-            {
-                this.logMessageBox.Text = value;
-            }
         }
 
-        /// <summary>
-        /// The raw log message, with commented lines still embedded.
-        /// </summary>
-        public string RawLogMessage
-        {
-            get
-            {
-                return this.logMessageBox.Text;
-            }
-            set
-            {
-                this.logMessageBox.Text = value;
-            }
-        }
-
-        /// <summary>
-        /// The template to use for log messages.
-        /// </summary>
         public LogMessageTemplate LogMessageTemplate
         {
             [System.Diagnostics.DebuggerStepThrough]
@@ -81,31 +57,20 @@ namespace Ankh.UI
             set{ this.logMessageTemplate = value; }
         }
 
-        public IList CommitItems
+        /// <summary>
+        /// The diff to be displayed.
+        /// </summary>
+        public string Diff
         {
-            get{ return this.commitItemsTree.CheckedItems; }
+            get{ return this.diffView.Diff; }
             set
             { 
-                this.commitItemsTree.Items = value;
-                this.commitItemsTree.CheckedItems = value;
-                foreach( object item in value )
-                {
-                    // is this a file?
-                    if ( File.Exists( item.ToString() ))
-                        this.diffView.AddPage( item.ToString() );
-                }
+                this.diff = value; 
+                this.diffView.Diff = this.diff;
             }
         }
 
-        public bool UrlPaths
-        {
-            get
-            { return this.commitItemsTree.UrlPaths; }
-            set
-            { 
-                this.commitItemsTree.UrlPaths = value;
-            }
-        }
+        
 
         /// <summary>
         /// Clean up any resources being used.
@@ -144,269 +109,153 @@ namespace Ankh.UI
             //            commitToolTip.SetToolTip( this.logMessageControl, 
             //                "Write changes you have performed since last revision or update" ); 
             commitToolTip.SetToolTip( this.okButton, 
-                "Perform the commit." ); 
-            commitToolTip.SetToolTip( this.cancelButton, "Cancel the commit." );  
+                "Files and comment will be added to the repository and made available for your collegues." ); 
+            commitToolTip.SetToolTip( this.cancelButton, "The commit will be cancelled" );  
         }
 
         private void showDiffButton_Click(object sender, System.EventArgs e)
         {
-            this.ToggleDiffView();
-        }
-
-        private void ToggleDiffView()
-        {
-            if ( this.diffViewVisible )
+            if ( this.diffView.Visible )
             {
-                this.diffViewHeight = this.diffView.Height;
-                this.diffView.Height = 0;
-                this.Height -= this.diffViewHeight;
+                this.diffView.Visible = false;
+                this.Height -= this.diffView.Height;
+                this.showDiffButton.Text = "Show diff";  
             }
             else
             {
-                this.Height += this.diffViewHeight;
-                this.diffView.Height += this.diffViewHeight;
+                if ( this.diff == null && this.DiffWanted != null )
+                    this.DiffWanted( this, EventArgs.Empty );
+                this.Height += 400;
+                this.diffView.Visible = true;
+                this.showDiffButton.Text = "Hide diff";
             }
-
-            this.diffViewVisible = ! this.diffViewVisible;
-
-            //            if ( this.diffView.Visible )
-            //            {                
-            //                this.diffView.Visible = false;
-            //                this.Height = this.okButton.Top + this.okButton.Height + 40;
-            //                this.showDiffButton.Text = "Show diff";
-            //  
-            //                // reanchor these things to the bottom
-            //                this.showDiffButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            //                this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            //                this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            //                this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            //                    | System.Windows.Forms.AnchorStyles.Left) 
-            //                    | System.Windows.Forms.AnchorStyles.Right)));
-            //
-            //            }
-            //            else
-            //            {
-            //                // these items can no longer anchor to the bottom
-            //                this.logMessageBox.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-            //                this.showDiffButton.Anchor = AnchorStyles.Left | AnchorStyles.Top;
-            //                this.okButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-            //                this.cancelButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-            //                this.diffView.Top = this.okButton.Top + this.okButton.Height + 10;
-            //                this.Height += 400;
-            //                this.diffView.Visible = true;
-            //                this.showDiffButton.Text = "Hide diff";
-            //            }
-
-            // Center the dialog vertically
-            this.Top = (Screen.FromControl(this).Bounds.Height / 2) - (this.Height/2);
 
         }
 
         private void CommitDialog_VisibleChanged(object sender, System.EventArgs e)
         {
             if ( this.Visible && this.logMessageBox.Text == string.Empty )
-            {
-                ArrayList arr = new ArrayList();
-                foreach( object item in this.commitItemsTree.CheckedItems )
-                    arr.Add( item.ToString() );
-            
-                this.LogMessageTemplate.UrlPaths = this.commitItemsTree.UrlPaths;
-                this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( arr );
-            }
-            this.loaded = true;
+                this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( this.commitItems );
         }
 
-        private void ItemChecked(object sender, TreeViewEventArgs e )
-        {
-            // don't bother if the 
-            if ( ! this.loaded )
-                return;
-            
-            if ( e.Node.Checked )
-            {    
-                this.logMessageBox.Text = this.LogMessageTemplate.AddItem(
-                    this.logMessageBox.Text, e.Node.Tag.ToString() );
-            }
-            else 
-            {
-                this.logMessageBox.Text = this.logMessageTemplate.RemoveItem(
-                    this.logMessageBox.Text, e.Node.Tag.ToString() );                
-            }        
-        }
+        
 
-        #region Windows Form Designer generated code
+
+		#region Windows Form Designer generated code
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            this.diffView = new Ankh.UI.DiffTab();
-            this.bottomSplitter = new System.Windows.Forms.Splitter();
-            this.commitItemsTree = new Ankh.UI.PathSelectionTreeView();
-            this.topSplitter = new System.Windows.Forms.Splitter();
-            this.logMessagePanel = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.logMessageBox = new System.Windows.Forms.TextBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.logLabel = new System.Windows.Forms.Label();
+            this.commitItemsList = new System.Windows.Forms.ListBox();
             this.showDiffButton = new System.Windows.Forms.Button();
-            this.logMessagePanel.SuspendLayout();
+            this.diffView = new Ankh.UI.DiffView();
+            this.logMessageBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
-            // 
-            // diffView
-            // 
-            this.diffView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.diffView.Location = new System.Drawing.Point(0, 341);
-            this.diffView.Name = "diffView";
-            this.diffView.SelectedIndex = 0;
-            this.diffView.Size = new System.Drawing.Size(816, 296);
-            this.diffView.TabIndex = 0;
-            // 
-            // bottomSplitter
-            // 
-            this.bottomSplitter.BackColor = System.Drawing.SystemColors.Control;
-            this.bottomSplitter.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomSplitter.Location = new System.Drawing.Point(0, 338);
-            this.bottomSplitter.MinSize = 100;
-            this.bottomSplitter.Name = "bottomSplitter";
-            this.bottomSplitter.Size = new System.Drawing.Size(816, 3);
-            this.bottomSplitter.TabIndex = 1;
-            this.bottomSplitter.TabStop = false;
-            this.bottomSplitter.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.SplitterMoved);
-            // 
-            // commitItemsTree
-            // 
-            this.commitItemsTree.CheckBoxes = true;
-            this.commitItemsTree.Dock = System.Windows.Forms.DockStyle.Top;
-            this.commitItemsTree.ImageIndex = -1;
-            this.commitItemsTree.Items = new object[0];
-            this.commitItemsTree.Location = new System.Drawing.Point(0, 0);
-            this.commitItemsTree.Name = "commitItemsTree";
-            this.commitItemsTree.Recursive = false;
-            this.commitItemsTree.SelectedImageIndex = -1;
-            this.commitItemsTree.SingleCheck = false;
-            this.commitItemsTree.Size = new System.Drawing.Size(816, 136);
-            this.commitItemsTree.TabIndex = 2;
-            this.commitItemsTree.UrlPaths = false;
-            // 
-            // topSplitter
-            // 
-            this.topSplitter.BackColor = System.Drawing.SystemColors.Control;
-            this.topSplitter.Dock = System.Windows.Forms.DockStyle.Top;
-            this.topSplitter.Location = new System.Drawing.Point(0, 136);
-            this.topSplitter.MinSize = 100;
-            this.topSplitter.Name = "topSplitter";
-            this.topSplitter.Size = new System.Drawing.Size(816, 3);
-            this.topSplitter.TabIndex = 3;
-            this.topSplitter.TabStop = false;
-            this.topSplitter.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.SplitterMoved);
-            // 
-            // logMessagePanel
-            // 
-            this.logMessagePanel.Controls.Add(this.label1);
-            this.logMessagePanel.Controls.Add(this.logMessageBox);
-            this.logMessagePanel.Controls.Add(this.cancelButton);
-            this.logMessagePanel.Controls.Add(this.okButton);
-            this.logMessagePanel.Controls.Add(this.showDiffButton);
-            this.logMessagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logMessagePanel.Location = new System.Drawing.Point(0, 139);
-            this.logMessagePanel.Name = "logMessagePanel";
-            this.logMessagePanel.Size = new System.Drawing.Size(816, 199);
-            this.logMessagePanel.TabIndex = 4;
-            // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(8, 5);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 16);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Log message:";
-            // 
-            // logMessageBox
-            // 
-            this.logMessageBox.AcceptsReturn = true;
-            this.logMessageBox.AcceptsTab = true;
-            this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right)));
-            this.logMessageBox.Location = new System.Drawing.Point(0, 24);
-            this.logMessageBox.Multiline = true;
-            this.logMessageBox.Name = "logMessageBox";
-            this.logMessageBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.logMessageBox.Size = new System.Drawing.Size(816, 128);
-            this.logMessageBox.TabIndex = 3;
-            this.logMessageBox.Text = "";
             // 
             // cancelButton
             // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(728, 168);
+            this.cancelButton.Location = new System.Drawing.Point(710, 280);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.TabIndex = 2;
+            this.cancelButton.TabIndex = 1;
             this.cancelButton.Text = "Cancel";
             // 
             // okButton
             // 
-            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.okButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(632, 168);
+            this.okButton.Location = new System.Drawing.Point(622, 280);
             this.okButton.Name = "okButton";
-            this.okButton.TabIndex = 1;
-            this.okButton.Text = "OK";
+            this.okButton.TabIndex = 2;
+            this.okButton.Text = "Ok";
+            // 
+            // logLabel
+            // 
+            this.logLabel.Location = new System.Drawing.Point(0, 112);
+            this.logLabel.Name = "logLabel";
+            this.logLabel.Size = new System.Drawing.Size(296, 23);
+            this.logLabel.TabIndex = 4;
+            this.logLabel.Text = "Write log message:";
+            // 
+            // commitItemsList
+            // 
+            this.commitItemsList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.commitItemsList.Name = "commitItemsList";
+            this.commitItemsList.Size = new System.Drawing.Size(816, 108);
+            this.commitItemsList.TabIndex = 5;
             // 
             // showDiffButton
             // 
-            this.showDiffButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.showDiffButton.Location = new System.Drawing.Point(16, 168);
+            this.showDiffButton.Location = new System.Drawing.Point(8, 280);
             this.showDiffButton.Name = "showDiffButton";
-            this.showDiffButton.TabIndex = 0;
+            this.showDiffButton.TabIndex = 6;
             this.showDiffButton.Text = "Show diff";
             this.showDiffButton.Click += new System.EventHandler(this.showDiffButton_Click);
             // 
+            // diffView
+            // 
+            this.diffView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+                | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right);
+            this.diffView.Diff = "";
+            this.diffView.Font = new System.Drawing.Font("Courier New", 10F);
+            this.diffView.Location = new System.Drawing.Point(0, 312);
+            this.diffView.Name = "diffView";
+            this.diffView.Size = new System.Drawing.Size(814, 0);
+            this.diffView.TabIndex = 7;
+            // 
+            // logMessageBox
+            // 
+            this.logMessageBox.AcceptsTab = true;
+            this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right);
+            this.logMessageBox.Location = new System.Drawing.Point(0, 136);
+            this.logMessageBox.Name = "logMessageBox";
+            this.logMessageBox.Size = new System.Drawing.Size(816, 128);
+            this.logMessageBox.TabIndex = 8;
+            this.logMessageBox.Text = "";
+            // 
             // CommitDialog
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(816, 637);
-            this.ControlBox = false;
-            this.Controls.Add(this.logMessagePanel);
-            this.Controls.Add(this.topSplitter);
-            this.Controls.Add(this.commitItemsTree);
-            this.Controls.Add(this.bottomSplitter);
-            this.Controls.Add(this.diffView);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(816, 315);
+            this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.logMessageBox,
+                                                                          this.diffView,
+                                                                          this.showDiffButton,
+                                                                          this.commitItemsList,
+                                                                          this.logLabel,
+                                                                          this.okButton,
+                                                                          this.cancelButton});
             this.MinimumSize = new System.Drawing.Size(390, 320);
             this.Name = "CommitDialog";
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Commit";
-            this.Load += new System.EventHandler(this.CommitDialog_VisibleChanged);
-            this.logMessagePanel.ResumeLayout(false);
+            this.VisibleChanged += new System.EventHandler(this.CommitDialog_VisibleChanged);
             this.ResumeLayout(false);
 
         }
-        #endregion
+		#endregion
 
-        private LogMessageTemplate logMessageTemplate;
-       
-        private bool loaded = false;
-
-        private bool diffViewVisible;
-        private int diffViewHeight;
-        private Ankh.UI.DiffTab diffView;
-        private Ankh.UI.PathSelectionTreeView commitItemsTree;
-        private System.Windows.Forms.Button showDiffButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.TextBox logMessageBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Splitter bottomSplitter;
-        private System.Windows.Forms.Splitter topSplitter;
-        private System.Windows.Forms.Panel logMessagePanel;
-
-        private const int MINLOGMESSAGEPANELHEIGHT = 180;
+        private System.Windows.Forms.Label logLabel;
+        private System.Windows.Forms.ListBox commitItemsList;
+        private System.Windows.Forms.Button showDiffButton;
+        private string diff;
+        private Ankh.UI.DiffView diffView;
+        private System.Windows.Forms.RichTextBox logMessageBox;
+        private LogMessageTemplate logMessageTemplate;
+       
+        private CommitItem[] commitItems;
        
         /// <summary>
         /// Required designer variable.
@@ -414,28 +263,17 @@ namespace Ankh.UI
         private System.ComponentModel.Container components = null;
 
 
-        private void commitItemsTree_GetPathInfo(object sender, GetPathInfoEventArgs args)
-        {
-            args.Path = args.Item.ToString();
-        }
+        
 
-        private void SplitterMoved(object sender, System.Windows.Forms.SplitterEventArgs e)
-        {
-            if ( this.logMessagePanel.Height < MINLOGMESSAGEPANELHEIGHT )
-            {
-                int heightChange = (MINLOGMESSAGEPANELHEIGHT - this.logMessagePanel.Height) / 2;
-                this.diffView.Height -= heightChange;
-                this.commitItemsTree.Height -= heightChange;
-            }
-        }
+        //        [STAThread] 
+        //        public static void Main()
+        //        {
+        //            CommitDialog the = new CommitDialog();
+        //            the.ShowDialog();
+        //        }
 
-        [STAThread] 
-        public static void Main()
-        {
-            CommitDialog the = new CommitDialog();
-            the.LogMessageTemplate = new LogMessageTemplate();
-            the.ShowDialog();
-        }
+
+
     }
 }
 

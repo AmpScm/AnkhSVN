@@ -1,35 +1,28 @@
 // $Id$
 #include "Stdafx.h"
-
 #include "ClientContextTest.h"
 #include "SvnClientException.h"
+#include "SimpleCredential.h"
 #include "delegates.h"
-#include "CommitItem.h"
-#include "NotificationEventArgs.h"
-#include "LogMessageEventArgs.h"
-#include "CancelEventArgs.h"
+
+// necessary since a .NET assembly does not export methods with native signatures
+#include "ClientContext.cpp"
+#include "SvnClientException.cpp"
 
 
-#using <NSvn.Common.dll>
-
-using namespace NSvn::Common;
-using namespace NSvn::Core;
-using namespace System::Collections;
-
-
-
-void NSvn::Core::Tests::MCpp::ClientContextTest::OnNotification( 
-    NotificationEventArgs* notification )
+void NSvn::Core::Tests::MCpp::ClientContextTest::NotifyCallback( 
+    Notification* notification )
 {
     this->notification = notification;
 }
 
 
-void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotification()
+void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotifyCallback()
 {
     Pool pool;
 
-    ClientContext* ctx = new ClientContext( this );
+    ClientContext* ctx = new ClientContext(
+        new NSvn::Core::NotifyCallback( this, &ClientContextTest::NotifyCallback ) );
     svn_client_ctx_t* svnCtx = ctx->ToSvnContext( pool );
     svnCtx->notify_func( svnCtx->notify_baton, "Moo", svn_wc_notify_copy,
         svn_node_file, "text/moo", svn_wc_notify_state_unchanged, 
@@ -44,7 +37,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotification()
 
 }
 
-/*__gc class DummyProvider : public IAuthenticationProvider
+__gc class DummyProvider : public IAuthenticationProvider
 {
 public:
     DummyProvider() : Saved(false)
@@ -74,7 +67,7 @@ public:
     {
         return SVN_AUTH_CRED_SIMPLE;
     }
-};*/
+};
 
 
 
@@ -82,11 +75,61 @@ public:
 struct svn_auth_iterstate_t
 {};
 
-
-
-void NSvn::Core::Tests::MCpp::ClientContextTest::OnLogMessage( LogMessageEventArgs* args )
+void NSvn::Core::Tests::MCpp::ClientContextTest::TestEmptyAuthBaton()
 {
-    CommitItem* items[] = args->CommitItems;
+    Pool pool;
+
+    ClientContext* c = new ClientContext( 0 );
+    svn_client_ctx_t* ctx = c->ToSvnContext( pool );
+
+    svn_auth_cred_simple_t* cred;
+    svn_auth_iterstate_t* iterState;
+
+
+
+    HandleError( svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, 
+        SVN_AUTH_CRED_SIMPLE, "Realm of terror",
+        ctx->auth_baton,  pool ) );
+}
+
+
+void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
+{
+    Pool pool;
+
+    DummyProvider* provider = new DummyProvider();
+    AuthenticationBaton* bat = new AuthenticationBaton();
+    bat->Providers->Add( provider );
+
+    ClientContext* c = new ClientContext( 0, bat );
+
+    svn_client_ctx_t* ctx = c->ToSvnContext( pool );
+    svn_auth_cred_simple_t* cred;
+    svn_auth_iterstate_t* iterState;
+
+    // first the first
+    svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, SVN_AUTH_CRED_SIMPLE, 
+        "Realm of terror", ctx->auth_baton,  pool );
+
+    Assertion::Assert( S"Username not foo", strcmp( cred->username, "foo" ) == 0 );
+    Assertion::Assert( S"Password not bar", strcmp( cred->password, "bar" ) == 0 );
+
+    // next, the next
+    svn_auth_next_credentials( reinterpret_cast<void**>(&cred), iterState, pool );
+
+    Assertion::Assert( S"Username not kung", strcmp( cred->username, "kung" ) == 0 );
+    Assertion::Assert( S"Password not fu", strcmp( cred->password, "fu" ) == 0 );
+
+    // now try to save
+    svn_auth_save_credentials( iterState, pool );
+    Assertion::Assert( S"Credentials not saved", provider->Saved );
+
+    Assertion::AssertEquals( "Wrong realm", S"Realm of terror", provider->Realm );
+
+}
+
+String* NSvn::Core::Tests::MCpp::ClientContextTest::LogMsgCallback( CommitItem* items[] )
+{
     Assertion::AssertEquals( "Wrong number of items", 2, items->Length );
     Assertion::AssertEquals( "Wrong path", S"\\foo\\bar", items[0]->Path );
     Assertion::AssertEquals( "Wrong node kind", NodeKind::Directory, items[1]->Kind );
@@ -95,14 +138,14 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::OnLogMessage( LogMessageEventAr
         items[1]->CopyFromUrl );
     Assertion::AssertEquals( "Wrong url", S"http://www.porn.com", items[0]->Url );
 
-    args->Message = S"Hello world";
+    return S"Hello world";
 }
 
-void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessage()
+void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessageCallback()
 {
     Pool pool;
-    ClientContext* c = new ClientContext( this );
-
+    ClientContext* c = new ClientContext( 0 );
+    c->LogMessageCallback = new LogMessageCallback( this, &ClientContextTest::LogMsgCallback );
 
     svn_client_ctx_t* ctx = c->ToSvnContext( pool );
 
@@ -124,22 +167,6 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessage()
 
     // TODO: check encoding?
     Assertion::AssertEquals( "Log message wrong", S"Hello world", StringHelper( logMsg ) );
-}
-
-void NSvn::Core::Tests::MCpp::ClientContextTest::OnCancel( CancelEventArgs* args )
-{
-    args->Cancel = true;
-}
-
-void NSvn::Core::Tests::MCpp::ClientContextTest::TestCancel()
-{
-    Pool pool;
-    ClientContext* c = new ClientContext( this );
-
-    svn_client_ctx_t* ctx = c->ToSvnContext( pool );
-
-    svn_error_t* err = ctx->cancel_func( ctx->cancel_baton );
-    Assertion::Assert( "Not cancelled", err->apr_err == SVN_ERR_CANCELLED );
 }
 
 

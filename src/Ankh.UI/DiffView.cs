@@ -35,7 +35,7 @@ namespace Ankh.UI
                 
                 string path = Path.GetTempFileName();
                 Trace.WriteLine( path );
-                using ( StreamWriter w = new StreamWriter( path, true, System.Text.Encoding.Default ) )
+                using ( StreamWriter w = new StreamWriter( path ) )
                     w.Write( this.diffHtmlModel.GetHtml() );
                 
                 object url = "file://" + path;
@@ -94,6 +94,6 @@ namespace Ankh.UI
 
         private DiffHtmlModel diffHtmlModel;
 
-
+		
     }
 }

@@ -16,8 +16,6 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
-            base.SetUp();
-
             this.ExtractWorkingCopy();
             this.ExtractRepos();
         }
@@ -27,51 +25,38 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestLocalStatus()
         {
-            int youngest;      
-
             string unversioned = this.CreateTextFile( "unversioned.cs" );
             string added = this.CreateTextFile( "added.cs" );
             this.RunCommand( "svn", "add " + added );
+
             string changed = this.CreateTextFile( "Form.cs" );
-            string ignored = this.CreateTextFile( "foo.ignored" );
+
             string propChange = Path.Combine( this.WcPath, "App.ico" );
+
             this.RunCommand( "svn", "ps foo bar " + propChange );
-            this.RunCommand( "svn", "ps svn:ignore *.ignored " + this.WcPath );
 
-
-            this.Client.Status( out youngest, unversioned, Revision.Unspecified, 
-                new StatusCallback( this.StatusFunc ), false, false, false, 
-                false );
+            int youngest;
+            StatusDictionary dict = Client.Status( out youngest, unversioned, false, false, false, 
+                false, new ClientContext() );
             Assertion.AssertEquals( "Wrong text status on " + unversioned, 
-                this.currentStatus.TextStatus, StatusKind.Unversioned );
-            Assertion.AssertEquals( unversioned, this.currentPath );
+                dict.Get(unversioned).TextStatus, StatusKind.Unversioned );
 
-            this.Client.Status( out youngest, added,  Revision.Unspecified, 
-                new StatusCallback( this.StatusFunc ), false, false, false, 
-                false );
+            dict = Client.Status( out youngest, added, false, false, false, 
+                false, new ClientContext() );
             Assertion.AssertEquals( "Wrong text status on " + added, 
-                this.currentStatus.TextStatus, StatusKind.Added );
-            Assertion.AssertEquals( added, this.currentPath );
+                dict.Get(added).TextStatus, StatusKind.Added );
 
-            this.Client.Status( out youngest, changed, Revision.Unspecified,
-                new StatusCallback( this.StatusFunc ), false, false, false, 
-                false );
+            dict = Client.Status( out youngest, changed, false, false, false, 
+                false, new ClientContext() );
             Assertion.AssertEquals( "Wrong text status " + changed, 
-                this.currentStatus.TextStatus, StatusKind.Modified );
-            Assertion.AssertEquals( changed, this.currentPath );
+                dict.Get(changed).TextStatus, StatusKind.Modified );
 
-            this.Client.Status( out youngest, propChange, Revision.Unspecified,
-                new StatusCallback( this.StatusFunc ), false, false, false, 
-                false );
+            dict = Client.Status( out youngest, propChange, 
+                false, false, false, 
+                false, new ClientContext() );
             Assertion.AssertEquals( "Wrong property status " + propChange, 
-                this.currentStatus.PropertyStatus, StatusKind.Modified );
-            Assertion.AssertEquals( propChange, this.currentPath );
-
-            this.Client.Status( out youngest, ignored, Revision.Unspecified, 
-                new StatusCallback( this.StatusFunc ), false, false, false, 
-                false );
-            Assertion.AssertEquals( "Wrong property status " + ignored,
-                StatusKind.Ignored, this.currentStatus.TextStatus );
+                dict.Get(propChange).PropertyStatus, StatusKind.Modified );
+            
         }
 
         /// <summary>
@@ -83,15 +68,13 @@ namespace NSvn.Core.Tests
             string form = Path.Combine( this.WcPath, "Form.cs" );
             string output = this.RunCommand( "svn", "info " + form );
             Info info = new Info(output);
-
-            Status s = this.Client.SingleStatus( form );
                         
             int youngest;
-            this.Client.Status( out youngest, form,
-                Revision.Unspecified, new StatusCallback( this.StatusFunc ),
-                false, true, false, false );
+            StatusDictionary dict = Client.Status( out youngest, form, 
+                false, false, false, false, 
+                new ClientContext() );
 
-            info.CheckEquals( this.currentStatus.Entry );
+            info.CheckEquals( dict.Get(form).Entry );
         }
        
 
@@ -103,29 +86,21 @@ namespace NSvn.Core.Tests
         {
             // modify the file in another working copy and commit
             string wc2 = this.FindDirName( "wc2" );
-            try
-            {                
-                Zip.ExtractZipResource( wc2, this.GetType(), WC_FILE );
-                this.RenameAdminDirs( wc2 );
-                using( StreamWriter w = new StreamWriter( 
-                           Path.Combine(wc2, "Form.cs"), true ) )
-                    w.Write( "Hell worl" );
-                this.RunCommand( "svn", "ci -m \"\" " + wc2 );
+            Zip.ExtractZipResource( wc2, this.GetType(), WC_FILE );
+            using( StreamWriter w = new StreamWriter( 
+                       Path.Combine(wc2, "Form.cs"), true ) )
+                w.Write( "Hell worl" );
+            this.RunCommand( "svn", "ci -m \"\" " + wc2 );
 
-                // find the status in our own wc
-                int youngest;
-                string form = Path.Combine( this.WcPath, "Form.cs" );
-                this.Client.Status( out youngest, 
-                    form, Revision.Head, new StatusCallback( this.StatusFunc ),
-                    false, false, true, true );
+            // find the status in our own wc
+            int youngest;
+            string form = Path.Combine( this.WcPath, "Form.cs" );
+            StatusDictionary dict = Client.Status( out youngest, 
+                form, false, false, true, true, new ClientContext() );
 
-                Assertion.AssertEquals( "Wrong status", 
-                    this.currentStatus.RepositoryTextStatus, StatusKind.Modified );
-            }
-            finally
-            {
-                this.RecursiveDelete( wc2 );
-            }
+            Assertion.AssertEquals( "Wrong status", 
+                dict.Get(form).RepositoryTextStatus, StatusKind.Modified );
+            this.RecursiveDelete( wc2 );
         }
 
         [Test]
@@ -141,59 +116,28 @@ namespace NSvn.Core.Tests
 
             this.RunCommand( "svn", "ps foo bar " + propChange );
 
-            Status status = this.Client.SingleStatus( unversioned );
+            Status status = Client.SingleStatus( unversioned );
             Assertion.AssertEquals( "Wrong text status on " + unversioned, 
                 status.TextStatus, StatusKind.Unversioned );
 
-            status = this.Client.SingleStatus( added );
+            status = Client.SingleStatus( added );
             Assertion.AssertEquals( "Wrong text status on " + added, 
                 status.TextStatus, StatusKind.Added );
 
-            status = this.Client.SingleStatus( changed );
+            status = Client.SingleStatus( changed );
             Assertion.AssertEquals( "Wrong text status " + changed, 
                 status.TextStatus, StatusKind.Modified );
 
-            status = this.Client.SingleStatus( propChange );
+            status = Client.SingleStatus( propChange );
             Assertion.AssertEquals( "Wrong property status " + propChange, 
                 status.PropertyStatus, StatusKind.Modified );
 
         }
 
-        [Test]
-        public void TestStatusEquals()
-        {
-            string form = Path.Combine( this.WcPath, "Form.cs" );
-            Status status1 = this.Client.SingleStatus( form );
-            Status status2 = this.Client.SingleStatus( form );
-            Assertion.AssertEquals( "Should be equal", status1, status2 );
-            Assertion.AssertEquals( "Should be equal", status1.Entry, status2.Entry );
-
-            using( StreamWriter w = new StreamWriter( form, true ) )
-                w.WriteLine( "Moo" );
-
-            status2 = this.Client.SingleStatus( form );
-            Assertion.Assert( "Should be non-equal", !status1.Equals( status2 ) );
-            Assertion.AssertEquals( "Should be equal", status1.Entry, status2.Entry );
-
-            // unversioned items have no .Entry
-            string unversioned = Path.Combine( this.WcPath, "Unversioned.txt" );
-            using( StreamWriter w = new StreamWriter( unversioned, false ) )
-                w.WriteLine( "Moo" );
-            status2 = this.Client.SingleStatus( unversioned );
-            Assertion.AssertNull( ".Entry should be null", status2.Entry );
-            Assertion.Assert( "Should not be similar", !status2.Equals( status1 ) );
-        }
-
-        private void StatusFunc( string path, Status status )
-        {
-            this.currentPath = path;
-            this.currentStatus = status;
-        }
-
         private class Info
         {
-            private static readonly Regex INFO = new Regex(@"Path:\s(?'path'.+?)\s+Name:\s(?'name'\S+)\s+Url:\s(?'url'\S+)\s+Repository UUID:\s(?'reposuuid'\S+)\s+Revision:\s(?'revision'\S+)\s+Node Kind:\s(?'nodekind'\S+)\s+Schedule:\s(?'schedule'\S+)\s+Last Changed Author:\s+(?'lastchangedauthor'\S+)", 
-                RegexOptions.IgnoreCase );
+            private static readonly Regex INFO = new Regex(@"Path:\s(?'path'\S+)\s+Name:\s(?'name'\S+)\s+Url:\s(?'url'\S+)\s+Repository UUID:\s(?'reposuuid'\S+)\s+Revision:\s(?'revision'\S+)\s+Node Kind:\s(?'nodekind'\S+)\s+Schedule:\s(?'schedule'\S+)\s+Last Changed Author:\s+(?'lastchangedauthor'\S+)", 
+                (RegexOptions) 0);
 
             public Info( string output )
             {
@@ -221,10 +165,7 @@ namespace NSvn.Core.Tests
                     match.Groups["lastchangedauthor"].Value, entry.CommitAuthor );
             }
 
-            private string output;            
+            private string output;
         }
-
-        private string currentPath;
-        private Status currentStatus;
     }
 }

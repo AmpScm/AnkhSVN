@@ -25,7 +25,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE;ALT_ADMIN_DIR"
+                    DefineConstants = "DEBUG;TRACE"
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -43,7 +43,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE;ALT_ADMIN_DIR"
+                    DefineConstants = "TRACE"
                     DocumentationFile = ""
                     DebugSymbols = "false"
                     FileAlignment = "4096"
@@ -161,11 +161,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ExceptionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ExportTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -196,11 +191,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MiscTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "MoveTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -225,11 +215,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RelocateTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "repos.zip"
                     BuildAction = "EmbeddedResource"
                 />
@@ -240,11 +225,6 @@
                 />
                 <File
                     RelPath = "RevertTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RevisionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

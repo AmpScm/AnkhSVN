@@ -27,7 +27,7 @@ namespace Utils
             string msg = "";
             while( ex != null )
             {
-                msg += ex.GetType().FullName + ": " + Environment.NewLine;
+                msg = ex.GetType().FullName + ": " + Environment.NewLine;
                 msg += ex.Message + Environment.NewLine;
                 msg += ex.StackTrace + Environment.NewLine;
 

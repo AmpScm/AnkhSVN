@@ -32,12 +32,13 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestBasicCheckout()
         {
-            this.Client.Checkout( this.ReposUrl, this.newWc, Revision.Head, true );
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            Client.Checkout( this.ReposUrl, this.newWc, Revision.Head, true, ctx );
 
             Assertion.Assert( "Checked out file not there", 
                 File.Exists( Path.Combine( this.newWc, "Form.cs" ) ) );
-            Assertion.Assert( "No admin directory found", 
-                Directory.Exists( Path.Combine( this.newWc, Client.AdminDirectoryName ) ) );
+            Assertion.Assert( "No .svn directory found", 
+                Directory.Exists( Path.Combine( this.newWc, ".svn" ) ) );
             Assertion.AssertEquals( "Wrong status", "", this.RunCommand( "svn", "st " + 
                 this.newWc ).Trim() );
         }

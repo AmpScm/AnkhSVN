@@ -16,7 +16,6 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
-            base.SetUp();
             this.ExtractWorkingCopy();
            
 
@@ -31,15 +30,31 @@ namespace NSvn.Core.Tests
         {
             string testFile = this.CreateTextFile( "testfile.txt" );
 
-            this.Client.Notification += new NotificationDelegate(this.NotifyCallback);
-            this.Client.Add( testFile, false );    
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            Client.Add( testFile, false, ctx );    
        
             Assertion.Assert( "No notification callbacks received", this.Notifications.Length > 0 );
 
             Assertion.AssertEquals( "svn st does not report the file as added", 
                 'A', this.GetSvnStatus( testFile ) );
                         
-        }        
+        }
+
+        /// <summary>
+        /// Attempts to add a file with non-ansi characters in the filename
+        /// </summary>
+        [Ignore( "We cannot do non-Ansi characters for now" )]
+        [Test]
+        public void TestAwkwardName()
+        {
+            string testFile = this.CreateTextFile( "månedslønn.tæxt");
+            
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            Client.Add( testFile, false, ctx );
+
+            Assertion.AssertEquals( "svn st does not report the file as added", 
+                'A', this.GetSvnStatus( testFile ) );
+        }
 
         /// <summary>
         /// Creates a subdirectory with items in it, tries to add it non-recursively.
@@ -51,9 +66,9 @@ namespace NSvn.Core.Tests
             string dir1, dir2, testFile1, testFile2;
             this.CreateSubdirectories(out dir1, out dir2, out testFile1, out testFile2);
 
-            this.Client.Notification += new NotificationDelegate(this.NotifyCallback);
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
             // do a non-recursive add here
-            this.Client.Add( dir1, false );
+            Client.Add( dir1, false, ctx );
 
             Assertion.Assert( "Too many or no notifications received. Added recursively?", 
                 this.Notifications.Length == 1 );
@@ -82,9 +97,9 @@ namespace NSvn.Core.Tests
             string dir1, dir2, testFile1, testFile2;
             this.CreateSubdirectories( out dir1, out dir2, out testFile1, out testFile2 );
 
-            this.Client.Notification += new NotificationDelegate(this.NotifyCallback);
+            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
             // now a recursive add
-            this.Client.Add( dir1, true );
+            Client.Add( dir1, true, ctx );
 
             // enough notifications?
             Assertion.AssertEquals( "Received wrong number of notifications", 

@@ -3,7 +3,7 @@
 <doc title="Removing files">
     <section>
     <p>
-        Ankh is hooked directly into the Visual Studios delete command. 
+        Ankh is hooked directly into Visual Studios delete command. 
         If you delete a file with Visual Studio, 
         the file is automatically deleted from the working copy. 
         Items specified are scheduled for deletion upon the next commit. 

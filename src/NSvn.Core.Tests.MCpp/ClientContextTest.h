@@ -2,7 +2,6 @@
 #pragma once
 #include "stdafx.h"
 #include "ClientContext.h"
-#include "Client.h"
 #include "SvnClientException.h"
 
 using namespace NUnit::Framework;
@@ -11,15 +10,14 @@ namespace NSvn
 {
     namespace Core
     {
-        public __gc class NotificationEventArgs;
-        public __gc class LogMessageEventArgs;
 
         namespace Tests
         {
             namespace MCpp
             {
+
                 [TestFixture]
-                public __gc class ClientContextTest : public Client
+                public __gc class ClientContextTest
                 {
                 public:
                     [SetUp]
@@ -31,24 +29,26 @@ namespace NSvn
                     /// <summary>Test that a ClientContext can be converted to a 
                     /// svn_client_ctx_t with a working notify callback</summary>
                     [Test]
-                    void TestNotification();
+                    void TestNotifyCallback();
 
+                    /// <summary>Test that it works with an empty auth baton</summary>
+                    [Test]
+                    [ExpectedException(__typeof(SvnClientException))]
+                    void TestEmptyAuthBaton();
+
+                    /// <summary>Test that the auth baton stuff works</summary>
+                    [Test]
+                    void TestAuthBaton();
 
                     /// <summary>Test the log message stuff</summary>
                     [Test]
-                    void TestLogMessage();
+                    void TestLogMessageCallback();
 
-                    /// <summary>Guess what we're testing here?</summary>
-                    [Test]
-                    void TestCancel();
-
-                protected public:
-                    virtual void OnNotification( NotificationEventArgs* notification );
-                    virtual void OnLogMessage( LogMessageEventArgs* args );
-                    virtual void OnCancel( CancelEventArgs* args );
                 private:
+                    void NotifyCallback( Notification* notification );
+                    System::String* LogMsgCallback( CommitItem* items[] );
                     bool flag;
-                    NotificationEventArgs* notification;
+                    Notification* notification;
 
 
 

@@ -10,8 +10,7 @@ namespace NSvn
     {
         using namespace System;
 
-        [Serializable]
-        public __gc class Revision 
+        public __gc class Revision
         {
         public:
             /// <summary> No revision information given.</summary>    
@@ -29,19 +28,47 @@ namespace NSvn
             static Revision* const Head = new Revision( svn_opt_revision_head );
 
             /// <summary>Creates a revision from a revision number</summary>
-            static Revision* FromNumber( int revision );
+            static Revision* FromNumber( int revision )
+            {
+                Revision* rev = new Revision( svn_opt_revision_number );
+                rev->revision = revision;
+                return rev;
+            }
 
             /// <summary>Creates a revision from a date</summary>
-            static Revision* FromDate( DateTime date );
+            static Revision* FromDate( DateTime date )
+            {
+                Revision* rev = new Revision( svn_opt_revision_date);
+                rev->date = date;
+                return rev;
+            }
 
-            /// <summary>Create a revision by parsing a string.</summary>
-            static Revision* Parse( String* string );
 
             // convert to an svn_opt_revision_t*
             // allocate in pool
-            svn_opt_revision_t* ToSvnOptRevision( const Pool& pool );
+            svn_opt_revision_t* ToSvnOptRevision( const Pool& pool )
+            {
+                svn_opt_revision_t* rev = static_cast<svn_opt_revision_t*>(
+                    pool.PCalloc( sizeof(*rev) ) );
+                rev->kind = this->kind;
 
-            String* ToString();
+                //what kind?                
+                switch( this->kind )
+                {
+                case svn_opt_revision_date:
+                    {
+                        rev->value.date = DateTimeToAprTime( this->date );
+                        break;
+                    }
+                case svn_opt_revision_number:
+                    rev->value.number = this->revision;
+                    break;
+                default:
+                    break;
+                }
+
+                return rev;
+            }
 
         private:
             Revision( svn_opt_revision_kind kind ) : kind( kind )

@@ -12,7 +12,7 @@ namespace NSvn
         public __gc class DirectoryEntry
         {
         public:
-            DirectoryEntry( const char* path, svn_dirent_t* dirent ) : 
+            DirectoryEntry( const char* path, svn_dirent* dirent ) : 
               path( StringHelper( path ) ),
                   nodeKind( static_cast<NSvn::Core::NodeKind>(dirent->kind) ),
                   size( dirent->size ),

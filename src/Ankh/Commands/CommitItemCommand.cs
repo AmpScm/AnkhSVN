@@ -2,9 +2,7 @@
 using Ankh.UI;
 using System;
 using System.Windows.Forms;
-using System.Collections;
-using System.Threading;
-
+using NSvn;
 using NSvn.Core;
 using EnvDTE;
 
@@ -13,79 +11,60 @@ namespace Ankh.Commands
     /// <summary>
     /// Commits an item. 
     /// </summary>
-    [VSNetCommand("CommitItem", Text = "Commit...", Tooltip = "Commits an item",
+    [VSNetCommand("CommitItem", Text = "Commit", Tooltip = "Commits an item",
          Bitmap = ResourceBitmaps.Commit),
     VSNetControl( "Item", Position = 2 ),
-    VSNetProjectNodeControl( "", Position = 2 ),
-    VSNetFolderNodeControl( "", Position = 2),
+    VSNetControl( "Project", Position = 2 ),
+    VSNetControl( "Folder", Position = 2 ),
     VSNetControl( "Solution", Position = 2)]
-    public class CommitItem : CommandBase
+    internal class CommitItem : CommandBase
     {	
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
-            if ( context.SolutionExplorer.GetSelectionResources( true, 
-                new ResourceFilterCallback( CommandBase.ModifiedFilter) ).Count > 0 )
-                return Enabled;
+            CommitCandidateVisitor v = new CommitCandidateVisitor();
+            context.SolutionExplorer.VisitSelectedItems( v, true );
+            if ( v.Commitable )
+                return vsCommandStatus.vsCommandStatusEnabled |
+                    vsCommandStatus.vsCommandStatusSupported;
             else
-                return Disabled;
+                return vsCommandStatus.vsCommandStatusSupported;
         }
-        public override void Execute(Ankh.AnkhContext context, string parameters)
+        public override void Execute(Ankh.AnkhContext context)
         {
-            // make sure all files are saved
-            this.SaveAllDirtyDocuments( context );
+            ResourceGathererVisitor v = new ResourceGathererVisitor();
+            context.SolutionExplorer.VisitSelectedItems( v, true );
 
-            IList resources = context.SolutionExplorer.GetSelectionResources( true, 
-                new ResourceFilterCallback(CommandBase.ModifiedFilter) );
+            this.context = context;
+            WorkingCopyResource[] resources = (WorkingCopyResource[])
+                v.WorkingCopyResources.ToArray( typeof(WorkingCopyResource) );
 
-            resources = context.Client.ShowLogMessageDialog( resources, false );
+            WorkingCopyResource.Commit( resources, true );
 
-            // did the user cancel?
-            if ( resources == null ) 
-                return;
-
-            this.commitInfo = null;
-
-            try
-            {
-
-                context.StartOperation( "Committing" );
-                this.paths = SvnItem.GetPaths( resources );
-
-                ProgressRunner runner = new ProgressRunner( context, 
-                    new ProgressRunnerCallback( this.DoCommit ) );
-                runner.Start( "Committing" );
-
-                foreach( SvnItem item in resources )
-                    item.Refresh( context.Client );
-
-                context.Client.CommitCompleted();
-            }
-            catch( NSvn.Common.SvnException )
-            {
-                context.OutputPane.WriteLine( "Commit aborted" );
-                throw;
-            }
-            finally
-            {
-                if (this.commitInfo != null)
-                    context.OutputPane.WriteLine("\nCommitted revision {0}.", 
-                        this.commitInfo.Revision);
-
-                context.EndOperation();
-            }
-        }        
+            this.context.OutputPane.EndActionText();
+            context.SolutionExplorer.UpdateSelectionStatus();
+        }
+        
         #endregion
 
-        private void DoCommit( AnkhContext context )
-        {
-            this.commitInfo = context.Client.Commit( this.paths, true );
-        }
-
-        private string[] paths;
-        private CommitInfo commitInfo;
-
         
+
+        private class CommitCandidateVisitor : LocalResourceVisitorBase
+        {
+            public bool Commitable = false;
+
+            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
+            {
+                if ( (resource.Status.TextStatus & commitCandidates) != 0 ||
+                    (resource.Status.PropertyStatus & commitCandidates) != 0 )
+                    Commitable = true;
+            }
+
+            private const StatusKind commitCandidates = StatusKind.Added | 
+                StatusKind.Modified;
+        }
+        private AnkhContext context;
+
     }
 }
 

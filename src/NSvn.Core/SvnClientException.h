@@ -24,30 +24,11 @@ namespace NSvn
             NSvn::Common::SvnException( message, innerException )
             {;}
 
-            /// <summary>The SVN error code associated with this exception</summary>
-            __property int get_ErrorCode()
-            { return this->errorCode; }
-
-            /// <summary>The error message returned by the SVN libraries</summary>
-            __property System::String* get_SvnError()
-            { return this->svnError; }
-
-            /// <summary>The line number reported by Subversion.</summary>
-            __property int get_Line()
-            { return this->line; }
-
-            /// <summary>The filename reported by Subversion.</summary>
-            __property System::String* get_File()
-            { return this->file; }
 
         protected:
 
         private:
             static SvnClientException* CreateExceptionsRecursively( svn_error_t* err );
-            int errorCode;
-            System::String* svnError;
-            int line;
-            System::String* file;
 
         };
 
@@ -77,31 +58,10 @@ namespace NSvn
           {;}
     };
 
-     public __gc class ResourceOutOfDateException : public SvnClientException
+    inline void HandleError( svn_error_t* err )
     {
-    public:
-        ResourceOutOfDateException( System::Exception* innerException ) :
-          SvnClientException( "The resource is out of date relative to the repository. Run update.", innerException )
-          {;}
-    };
-
-    public __gc class IllegalTargetException : public SvnClientException 
-    {
-    public:
-        IllegalTargetException( System::Exception* innerException ) :
-            SvnClientException( "The item is not a valid target for this operation", innerException )
-            {;}
-    };
-
-    public __gc class OperationCancelledException : public SvnClientException 
-    {
-    public:
-        OperationCancelledException( System::Exception* innerException ) :
-            SvnClientException( "The operation was cancelled.", innerException )
-            {;}
-    };
-
-#define HandleError( func ) { svn_error_t* err__ = func; \
-        if ( (err__) != 0 ) throw NSvn::Core::SvnClientException::FromSvnError( (err__) ); }
+        if ( err != 0 )
+            throw NSvn::Core::SvnClientException::FromSvnError( err );
+    }
     }
 }

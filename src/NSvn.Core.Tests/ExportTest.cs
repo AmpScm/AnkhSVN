@@ -32,27 +32,28 @@ namespace NSvn.Core.Tests
         /// </summary>
         [Test]
         public void TestExportRepos()
-        {            
-            this.Client.Export( this.ReposUrl, this.newWc, Revision.Head, false );
+        {
+            ClientContext ctx = new ClientContext();
+            Client.Export( this.ReposUrl, this.newWc, Revision.Head, ctx );
 
             Assertion.Assert( "Exported file not there", 
                 File.Exists( Path.Combine( this.newWc, "Form.cs" ) ) );
             Assertion.Assert( ".svn directory found", 
-                !Directory.Exists( Path.Combine( this.newWc, Client.AdminDirectoryName ) ) );
+                !Directory.Exists( Path.Combine( this.newWc, ".svn" ) ) );
         }
         /// <summary>
         /// Test export operation from a working copy
         /// </summary>
         public void TestExportWc()
         { 
+            ClientContext ctx = new ClientContext();
             
-            
-            this.Client.Export( this.WcPath, this.newWc, Revision.Head, false );
+            Client.Export( this.WcPath, this.newWc, Revision.Head, ctx );
 
             Assertion.Assert( "Exported file not there", 
                 File.Exists( Path.Combine( this.newWc, "Form.cs" ) ) );
             Assertion.Assert( ".svn directory found", 
-                !Directory.Exists( Path.Combine( this.newWc, Client.AdminDirectoryName ) ) );
+                !Directory.Exists( Path.Combine( this.newWc, ".svn" ) ) );
         }
 
         private string newWc;

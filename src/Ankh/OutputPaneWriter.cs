@@ -12,10 +12,9 @@ namespace Ankh
     {
         public OutputPaneWriter( _DTE dte, string caption )
         {
-            this.outputWindow = dte.Windows.Item( EnvDTE.Constants.vsWindowKindOutput );
-
-            OutputWindow window = (OutputWindow)this.outputWindow.Object;
-            this.outputPane = window.OutputWindowPanes.Add( caption );		
+            OutputWindow window = (OutputWindow)dte.Windows.Item( 
+                EnvDTE.Constants.vsWindowKindOutput).Object;
+            this.outputPane = window.OutputWindowPanes.Add( caption );			
         }
 
         public override Encoding Encoding
@@ -29,11 +28,7 @@ namespace Ankh
         /// </summary>
         public void Activate()
         {
-            if ( !this.outputWindow.AutoHides )
-            {
-                this.outputWindow.Activate();
-                this.outputPane.Activate();
-            }
+            this.outputPane.Activate();
         }
 
         /// <summary>
@@ -54,12 +49,6 @@ namespace Ankh
             this.outputPane.OutputString( s );
         }
 
-        public override void WriteLine( string s )
-        {
-            this.outputPane.OutputString( s + Environment.NewLine );
-        }
-
-
         /// <summary>
         /// Writes Start text to outputpane.
         /// </summary>
@@ -68,8 +57,7 @@ namespace Ankh
         {
             
             this.Activate();
-            this.outputPane.OutputString( this.FormatMessage( action ) + Environment.NewLine + 
-                Environment.NewLine );
+            this.outputPane.OutputString( FormatMessage( action ) );
         }
 
         /// <summary>
@@ -77,8 +65,7 @@ namespace Ankh
         /// </summary>
         public void EndActionText()
         {
-            this.outputPane.OutputString( this.FormatMessage( "Done" ) + Environment.NewLine + 
-                Environment.NewLine );
+            this.outputPane.OutputString( FormatMessage( "Done" ));
         }
         
 
@@ -89,14 +76,12 @@ namespace Ankh
         /// <returns>Formatet text string</returns>
         private string FormatMessage( string action )
         {
-            int left = (LINELENGTH / 2) - (action.Length / 2);
-            int right = LINELENGTH - ( left + action.Length );
-            return new string( '-', left ) + action + new string( '-', right );
+            string message = line + action + " ";
+            return Environment.NewLine 
+                + message.PadRight(50, '-') + Environment.NewLine + Environment.NewLine;
         }
 
-        private const int LINELENGTH = 70;
-        private const char LINECHAR = '-';
+        private const string line = "---------------------- ";
         private OutputWindowPane outputPane;
-        private Window outputWindow;
     }
 }

@@ -12,7 +12,7 @@ namespace Ankh
     /// <summary>
     /// Responsible for registering the ICommand implementations in this assembly.
     /// </summary>
-    public class CommandMap : DictionaryBase
+    internal class CommandMap : DictionaryBase
     {
         /// <summary>
         /// Private constructor to avoid instantiation.
@@ -37,7 +37,6 @@ namespace Ankh
         public static CommandMap LoadCommands( AnkhContext context, bool register )
         {
             CreateReposExplorerPopup( context );
-            CreateAnkhSubMenu( context );
 
             CommandMap commands = new CommandMap();
 
@@ -136,13 +135,47 @@ namespace Ankh
             foreach( VSNetControlAttribute control in cmd.GetType().GetCustomAttributes( 
                 typeof(VSNetControlAttribute), false) ) 
             {
-                // get the actual name of the command
-                string name = ((VSNetCommandAttribute)cmd.GetType().GetCustomAttributes(
-                    typeof(VSNetCommandAttribute), false )[0]).Name;
-
-                control.AddControl( cmd, context, control.CommandBar + "." + name );
+             
+                CommandBar cmdBar = GetCommandBar( control.CommandBar, context );
+                cmd.Command.AddControl( cmdBar, control.Position );
+                
             }
-        }        
+        }
+
+        /// <summary>
+        /// Retrieve the command bar associated with a given path, creating them if missing.
+        /// </summary>
+        /// <param name="name">The path to the command bar, components separated by .</param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static CommandBar GetCommandBar( string name, AnkhContext context )
+        {
+            string[] path = name.Split( '.' );
+            CommandBar bar;
+
+            //TODO: is this really necessary?
+            if ( path[0] == context.RepositoryExplorer.CommandBar.Name )
+                bar = context.RepositoryExplorer.CommandBar;
+            else
+                bar = (CommandBar)context.DTE.CommandBars[ path[0] ];;
+            for( int i = 1; i < path.Length; i++ )
+            {
+                try
+                {
+                    // does this command bar already exist?
+                    CommandBarControl ctrl = bar.Controls[ path[i] ];
+                    bar = (CommandBar)((CommandBarPopup)ctrl).CommandBar;
+                }
+                catch( Exception )
+                {
+                    // no, create it
+                    bar = (CommandBar)context.DTE.Commands.AddCommandBar( path[i], 
+                        vsCommandBarType.vsCommandBarTypeMenu, bar, bar.Controls.Count + 1 );
+                }                
+            }
+
+            return bar;
+        }
 
         private static void CreateReposExplorerPopup( AnkhContext context )
         {
@@ -151,18 +184,5 @@ namespace Ankh
                     null, 1 );
         }
 
-        /// <summary>
-        /// Creates an "AnkhSVN" submenu on the Tools menu.
-        /// </summary>
-        /// <param name="context"></param>
-        private static void CreateAnkhSubMenu( AnkhContext context )
-        {
-            CommandBar toolMenu = (CommandBar)
-                context.DTE.CommandBars[ "Tools" ];
-
-            context.DTE.Commands.AddCommandBar( "AnkhSVN", 
-                vsCommandBarType.vsCommandBarTypeMenu,
-                toolMenu, 1 );
-        }
     }
 }

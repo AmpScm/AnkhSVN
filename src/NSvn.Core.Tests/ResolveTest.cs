@@ -16,9 +16,9 @@ namespace NSvn.Core.Tests
         public override void SetUp()
         {
             base.SetUp();
-            this.path = this.GetTempFile();
+            this.path = Path.GetTempFileName();
+            File.Delete ( this.path );
             Zip.ExtractZipResource( this.path, this.GetType(), "NSvn.Core.Tests.conflictwc.zip" );
-            this.RenameAdminDirs( this.path );
         }
 
         [TearDown]
@@ -36,7 +36,8 @@ namespace NSvn.Core.Tests
         {  
             string filePath = Path.Combine( this.path, "Form.cs" );
 
-            this.Client.Resolved( filePath, false );
+            ClientContext ctx = new ClientContext( new NotifyCallback ( this.NotifyCallback) );
+            Client.Resolve( filePath, false, ctx );
  
             Assertion.AssertEquals(" Resolve didn't work!", 'M', this.GetSvnStatus( filePath ) );
 
@@ -48,7 +49,8 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestResolveDirectory()
         {  
-            this.Client.Resolved( this.path, true );
+            ClientContext ctx = new ClientContext( new NotifyCallback ( this.NotifyCallback) );
+            Client.Resolve( this.path, true, ctx );
  
             Assertion.AssertEquals(" Resolve didn't work! Directory still conflicted", 'M', 
                 this.GetSvnStatus( this.path ) );

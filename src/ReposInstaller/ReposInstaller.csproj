@@ -73,6 +73,11 @@
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
+                    Name = "NSvn"
+                    Project = "{1C779D04-4D97-414E-93DF-F63E52660B2C}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
                     Name = "Utils"
                     Project = "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -92,16 +97,6 @@
                     AssemblyName = "System.Web"
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Web.dll"
                 />
-                <Reference
-                    Name = "envdte"
-                    AssemblyName = "EnvDTE"
-                    HintPath = "D:\WINDOWS\Microsoft.NET\Framework\v1.0.3705\envdte.dll"
-                />
-                <Reference
-                    Name = "NSvn.Core"
-                    Project = "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
-                    Package = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
-                />
             </References>
         </Build>
         <Files>
@@ -110,6 +105,10 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "repos.zip"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "ReposInstaller.cs"

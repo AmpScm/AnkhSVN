@@ -4,7 +4,6 @@
 	Version="7.10"
 	Name="NSvn.Core"
 	ProjectGUID="{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
-	RootNamespace="NSvn.Core"
 	Keyword="ManagedCProj">
 	<Platforms>
 		<Platform
@@ -23,7 +22,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SVNSRC)\apr\include&quot;;&quot;$(SVNSRC)\subversion\apr-iconv\include&quot;;&quot;$(SVNSRC)\apr-util\include&quot;;&quot;$(SVNSRC)\subversion\include&quot;"
 				AdditionalUsingDirectories="..\NSvn.Common\bin\Debug"
-				PreprocessorDefinitions="WIN32;_DEBUG;ALT_ADMIN_DIR"
+				PreprocessorDefinitions="WIN32;_DEBUG"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -35,11 +34,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Mswsock.lib comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib $(SVNSRC)\\db4-win32\lib\libdb42d.lib $(SVNSRC)\debug\subversion\libsvn_repos\libsvn_repos-1.lib $(SVNSRC)\debug\subversion\libsvn_fs\libsvn_fs-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_local\libsvn_ra_local-1.lib $(SVNSRC)\debug\subversion\libsvn_ra\libsvn_ra-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib $(SVNSRC)\debug\subversion\libsvn_wc\libsvn_wc-1.lib $(SVNSRC)\debug\subversion\libsvn_subr\libsvn_subr-1.lib $(SVNSRC)\debug\subversion\libsvn_client\libsvn_client-1.lib $(SVNSRC)\debug\subversion\libsvn_delta\libsvn_delta-1.lib $(SVNSRC)\debug\subversion\libsvn_diff\libsvn_diff-1.lib $(SVNSRC)\neon\libneonD.lib $(SVNSRC)\apr\LibD\apr.lib $(SVNSRC)\apr-util\LibD\aprutil.lib $(SVNSRC)\apr-iconv\LibD\apriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibD\xml.lib"
+				AdditionalDependencies="Mswsock.lib comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib $(SVNSRC)\\db4-win32\lib\libdb40d.lib $(SVNSRC)\debug\subversion\libsvn_repos\libsvn_repos-1.lib $(SVNSRC)\debug\subversion\libsvn_fs\libsvn_fs-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_local\libsvn_ra_local-1.lib $(SVNSRC)\debug\subversion\libsvn_ra\libsvn_ra-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib $(SVNSRC)\debug\subversion\libsvn_wc\libsvn_wc-1.lib $(SVNSRC)\debug\subversion\libsvn_subr\libsvn_subr-1.lib $(SVNSRC)\debug\subversion\libsvn_client\libsvn_client-1.lib $(SVNSRC)\debug\subversion\libsvn_delta\libsvn_delta-1.lib $(SVNSRC)\debug\subversion\libsvn_diff\libsvn_diff-1.lib $(SVNSRC)\neon\libneonD.lib $(SVNSRC)\apr\LibD\apr.lib $(SVNSRC)\apr-util\LibD\aprutil.lib $(SVNSRC)\apr-iconv\LibD\apriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibD\xml.lib"
 				OutputFile="$(OutDir)/NSvn.Core.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SVNSRC)\debug"
-				DelayLoadDLLs="libdb42d.dll;"
 				GenerateDebugInformation="TRUE"
 				ImportLibrary="$(TargetDir)\$(ProjectName).lib"/>
 			<Tool
@@ -76,7 +74,7 @@
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;$(SVNSRC)\apr\include&quot;;&quot;$(SVNSRC)\apr-iconv\include&quot;;&quot;$(SVNSRC)\apr-util\include&quot;;&quot;$(SVNSRC)\subversion\include&quot;"
 				AdditionalUsingDirectories="..\NSvn.Common\bin\Release"
-				PreprocessorDefinitions="WIN32;NDEBUG;ALT_ADMIN_DIR"
+				PreprocessorDefinitions="WIN32;NDEBUG"
 				MinimalRebuild="FALSE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -85,11 +83,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Mswsock.lib rpcrt4.lib ws2_32.lib shlwapi.lib Advapi32.lib $(SVNSRC)\release\subversion\libsvn_repos\libsvn_repos-1.lib $(SVNSRC)\release\subversion\libsvn_fs\libsvn_fs-1.lib $(SVNSRC)\release\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib $(SVNSRC)\release\subversion\libsvn_ra_local\libsvn_ra_local-1.lib $(SVNSRC)\release\subversion\libsvn_ra\libsvn_ra-1.lib $(SVNSRC)\release\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib $(SVNSRC)\release\subversion\libsvn_wc\libsvn_wc-1.lib $(SVNSRC)\release\subversion\libsvn_subr\libsvn_subr-1.lib $(SVNSRC)\release\subversion\libsvn_client\libsvn_client-1.lib $(SVNSRC)\release\subversion\libsvn_delta\libsvn_delta-1.lib $(SVNSRC)\release\subversion\libsvn_diff\libsvn_diff-1.lib $(SVNSRC)\db4-win32\lib\libdb42.lib $(SVNSRC)\neon\libneon.lib $(SVNSRC)\apr\LibR\apr.lib $(SVNSRC)\apr-util\LibR\aprutil.lib $(SVNSRC)\apr-iconv\LibR\apriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibR\xml.lib"
+				AdditionalDependencies="Mswsock.lib rpcrt4.lib ws2_32.lib shlwapi.lib Advapi32.lib $(SVNSRC)\release\subversion\libsvn_repos\libsvn_repos-1.lib $(SVNSRC)\release\subversion\libsvn_fs\libsvn_fs-1.lib $(SVNSRC)\release\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib $(SVNSRC)\release\subversion\libsvn_ra_local\libsvn_ra_local-1.lib $(SVNSRC)\release\subversion\libsvn_ra\libsvn_ra-1.lib $(SVNSRC)\release\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib $(SVNSRC)\release\subversion\libsvn_wc\libsvn_wc-1.lib $(SVNSRC)\release\subversion\libsvn_subr\libsvn_subr-1.lib $(SVNSRC)\release\subversion\libsvn_client\libsvn_client-1.lib $(SVNSRC)\release\subversion\libsvn_delta\libsvn_delta-1.lib $(SVNSRC)\release\subversion\libsvn_diff\libsvn_diff-1.lib $(SVNSRC)\db4-win32\lib\libdb40.lib $(SVNSRC)\neon\libneon.lib $(SVNSRC)\apr\LibR\apr.lib $(SVNSRC)\apr-util\LibR\aprutil.lib $(SVNSRC)\apr-iconv\LibR\apriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibR\xml.lib"
 				OutputFile="$(OutDir)/NSvn.Core.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SVNSRC)\release"
-				DelayLoadDLLs=""
 				GenerateDebugInformation="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -114,18 +111,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<AssemblyReference
-			RelativePath="mscorlib.dll"/>
-		<AssemblyReference
-			RelativePath="System.dll"/>
-		<AssemblyReference
-			RelativePath="System.Data.dll"/>
-		<AssemblyReference
-			RelativePath="System.Drawing.dll"/>
-		<AssemblyReference
-			RelativePath="System.Windows.Forms.dll"/>
-		<AssemblyReference
-			RelativePath="System.XML.dll"/>
 	</References>
 	<Files>
 		<Filter
@@ -138,16 +123,10 @@
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
-				RelativePath=".\AuthenticationProvider.cpp">
-			</File>
-			<File
 				RelativePath="Client.cpp">
 			</File>
 			<File
 				RelativePath="ClientContext.cpp">
-			</File>
-			<File
-				RelativePath=".\Revision.cpp">
 			</File>
 			<File
 				RelativePath="Stdafx.cpp">
@@ -171,9 +150,6 @@
 				RelativePath="SvnClientException.cpp">
 			</File>
 			<File
-				RelativePath=".\SvnUtils.cpp">
-			</File>
-			<File
 				RelativePath="utils.cpp">
 			</File>
 		</Filter>
@@ -185,15 +161,6 @@
 			</File>
 			<File
 				RelativePath="AprFileAdapter.h">
-			</File>
-			<File
-				RelativePath=".\AuthenticationBaton.h">
-			</File>
-			<File
-				RelativePath=".\AuthenticationProvider.h">
-			</File>
-			<File
-				RelativePath=".\CancelEventArgs.h">
 			</File>
 			<File
 				RelativePath="ChangedPath.h">
@@ -217,9 +184,6 @@
 				RelativePath="CommitItem.h">
 			</File>
 			<File
-				RelativePath=".\credentials.h">
-			</File>
-			<File
 				RelativePath="delegates.h">
 			</File>
 			<File
@@ -229,19 +193,13 @@
 				RelativePath="Entry.h">
 			</File>
 			<File
-				RelativePath=".\GCPool.h">
-			</File>
-			<File
 				RelativePath="LogMessage.h">
-			</File>
-			<File
-				RelativePath=".\LogMessageEventArgs.h">
 			</File>
 			<File
 				RelativePath="ManagedPointer.h">
 			</File>
 			<File
-				RelativePath=".\NotificationEventArgs.h">
+				RelativePath="Notification.h">
 			</File>
 			<File
 				RelativePath="ParameterDictionary.h">
@@ -251,6 +209,9 @@
 			</File>
 			<File
 				RelativePath="Revision.h">
+			</File>
+			<File
+				RelativePath="SimpleCredential.h">
 			</File>
 			<File
 				RelativePath="Status.h">
@@ -274,7 +235,7 @@
 				RelativePath="svnenums.h">
 			</File>
 			<File
-				RelativePath=".\SvnUtils.h">
+				RelativePath="UsernameCredential.h">
 			</File>
 			<File
 				RelativePath="utils.h">

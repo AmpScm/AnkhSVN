@@ -93,6 +93,12 @@
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\envdte.dll"
                 />
                 <Reference
+                    Name = "NSvn"
+                    Project = "{1C779D04-4D97-414E-93DF-F63E52660B2C}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Private = "True"
+                />
+                <Reference
                     Name = "NSvn.Common"
                     Project = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -127,38 +133,13 @@
                 />
                 <Reference
                     Name = "office"
-                    AssemblyName = "Office"
+                    AssemblyName = "office"
                     HintPath = "..\lib\office.dll"
-                />
-                <Reference
-                    Name = "System.Web"
-                    AssemblyName = "System.Web"
-                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Web.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AddSolutionDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AddSolutionDialog.resx"
-                    DependentUpon = "AddSolutionDialog.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "AdminDirDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AdminDirDialog.resx"
-                    DependentUpon = "AdminDirDialog.cs"
-                    BuildAction = "EmbeddedResource"
-                />
                 <File
                     RelPath = "Ankh.UI.build"
                     BuildAction = "None"
@@ -167,36 +148,6 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CheckoutDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CheckoutDialog.resx"
-                    DependentUpon = "CheckoutDialog.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "ClientCertDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ClientCertDialog.resx"
-                    DependentUpon = "ClientCertDialog.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "ClientCertPassphraseDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ClientCertPassphraseDialog.resx"
-                    DependentUpon = "ClientCertPassphraseDialog.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "CommitDialog.cs"
@@ -224,11 +175,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DiffTab.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "DiffView.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -246,16 +192,6 @@
                 <File
                     RelPath = "EolStylePropertyEditor.resx"
                     DependentUpon = "EolStylePropertyEditor.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "ErrorDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ErrorDialog.resx"
-                    DependentUpon = "ErrorDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -294,11 +230,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IRepositoryTreeView.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "KeywordsPropertyEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -306,6 +237,16 @@
                 <File
                     RelPath = "KeywordsPropertyEditor.resx"
                     DependentUpon = "KeywordsPropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Loader.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Loader.resx"
+                    DependentUpon = "Loader.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -344,36 +285,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "PathSelectionTreeView.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "PathSelectionTreeView.resx"
-                    DependentUpon = "PathSelectionTreeView.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "PathSelector.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "PathSelector.resx"
-                    DependentUpon = "PathSelector.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "PathTreeView.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "PathTreeView.resx"
-                    DependentUpon = "PathTreeView.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "PlainPropertyEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -384,16 +295,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "ProgressDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProgressDialog.resx"
-                    DependentUpon = "ProgressDialog.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "PropertyEditorDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -401,26 +302,6 @@
                 <File
                     RelPath = "PropertyEditorDialog.resx"
                     DependentUpon = "PropertyEditorDialog.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "RelocateDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RelocateDialog.resx"
-                    DependentUpon = "RelocateDialog.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "RenameDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RenameDialog.resx"
-                    DependentUpon = "RenameDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -444,16 +325,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "ReverseMergeDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ReverseMergeDialog.resx"
-                    DependentUpon = "ReverseMergeDialog.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "RevisionPicker.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -464,26 +335,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "SslServerTrustDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SslServerTrustDialog.resx"
-                    DependentUpon = "SslServerTrustDialog.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "SwitchDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SwitchDialog.resx"
-                    DependentUpon = "SwitchDialog.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "TestRepositoryExplorer.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -491,16 +342,6 @@
                 <File
                     RelPath = "TestRepositoryExplorer.resx"
                     DependentUpon = "TestRepositoryExplorer.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "UpdateDialog.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "UpdateDialog.resx"
-                    DependentUpon = "UpdateDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

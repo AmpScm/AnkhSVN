@@ -1,147 +1,133 @@
 // $Id$
 using System;
 using EnvDTE;
-
+using NSvn;
 using Ankh.UI;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
-using System.Collections;
-using NSvn.Core;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Allows the user to resolve a conflicted file.
     /// </summary>
-    [VSNetCommand( "ResolveConflict", Text="Resolve conflicted file...",  
-         Bitmap = ResourceBitmaps.Default, 
+    [VSNetCommand( "ResolveConflict", Text="Resolve",  Bitmap = ResourceBitmaps.Default, 
          Tooltip = "Resolve conflicted file"),
      VSNetControl( "Item.Ankh", Position = 1 ),
-     VSNetProjectNodeControl( "Ankh", Position = 1 ),
+     VSNetControl( "Project.Ankh", Position = 1 ),
      VSNetControl( "Solution.Ankh", Position = 1)]
-    public class ResolveConflictCommand : CommandBase
+    internal class ResolveConflict : CommandBase
     {    
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
-            int count = context.SolutionExplorer.GetSelectionResources(false, 
-                new ResourceFilterCallback(ResolveConflictCommand.ConflictedFilter) ).Count;
+            ConflictedVisitor v = new ConflictedVisitor();
+            context.SolutionExplorer.VisitSelectedItems( v, false );
 
-            if ( count > 0 )
-                return Enabled;
+            if ( v.Conflicted )
+                return vsCommandStatus.vsCommandStatusEnabled |
+                    vsCommandStatus.vsCommandStatusSupported;
             else
-                return Disabled;
+                return vsCommandStatus.vsCommandStatusSupported;
         }
 
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(AnkhContext context)
         {
-            this.SaveAllDirtyDocuments( context );
-
-            context.StartOperation( "Resolving" );
-
-            try
-            {
-                IList items = context.SolutionExplorer.GetSelectionResources(false, 
-                     new ResourceFilterCallback(ResolveConflictCommand.ConflictedFilter) );
-
-                foreach( SvnItem item in items )
-                {
-                    this.Resolve( context, item );
-                    item.Refresh( context.Client );
-                }
-            }
-            finally
-            {
-                context.EndOperation();
-            }
+            ResolveVisitor v = new ResolveVisitor();
+            context.SolutionExplorer.VisitSelectedItems( v, false );
+            context.SolutionExplorer.RefreshSelection();
         }
 
-        /// <summary>
-        /// Resolve an item.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="item"></param>
-        private void Resolve(AnkhContext context, SvnItem item)
+        private class ResolveVisitor : LocalResourceVisitorBase
         {
 
-            string mergeExe = context.Config.MergeExePath;
-            if (mergeExe == null)
+        
+            public override void VisitWorkingCopyFile(WorkingCopyFile file)
             {
-                string selection;
+                int oldRev, newRev;
+                this.GetRevisions( file.Path, out oldRev, out newRev );
 
-                using( ConflictDialog dialog = new ConflictDialog(  ) )
+                ConflictDialog.Choice selection;
+
+                using( ConflictDialog dialog = new ConflictDialog() )
                 {
-                    Entry entry = item.Status.Entry;
-                    dialog.Filenames = new string[]{
-                                                       entry.ConflictWorking,
-                                                       entry.ConflictNew,
-                                                       entry.ConflictOld,
-                                                       item.Path
-                                                   };
+                    dialog.OldRev = oldRev;
+                    dialog.NewRev = newRev;
+                    dialog.Filename = file.Path;
 
-                    if ( dialog.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                    if ( dialog.ShowDialog() != DialogResult.OK )
                         return;
-                        
+                    
                     selection = dialog.Selection;
-                }   
-    
-                if ( selection != item.Path )
-                    this.Copy( item.Path, selection );
+                }       
 
-                context.Client.Resolved( item.Path, false );
-                context.OutputPane.WriteLine( 
-                    "Resolved conflicted state of {0}", item.Path );
-            }
-            else
-            {
-                string itemPath = Path.GetDirectoryName( item.Path );
-                string oldPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictOld ));
-                string newPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictNew ));
-                string workingPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictWorking ));
-
-                string mergeString = mergeExe;
-                mergeString = mergeString.Replace( "%merged", item.Path );
-                mergeString = mergeString.Replace( "%base", oldPath );
-                mergeString = mergeString.Replace( "%theirs", newPath );
-                mergeString = mergeString.Replace( "%mine", workingPath );
-
-                // We can't use System.Diagnostics.Process here because we want to keep the
-                // program path and arguments together, which it doesn't allow.
-                Utils.Exec exec = new Utils.Exec();
-                exec.ExecPath( mergeString );
-                exec.WaitForExit();
-
-                if ( MessageBox.Show( "Have all conflicts been resolved?",
-                    "Resolve", MessageBoxButtons.YesNo, MessageBoxIcon.Question ) == DialogResult.Yes )
+                // should we copy one of the files over the original?
+                switch( selection )
                 {
-                    context.Client.Resolved( item.Path, false );
+                    case ConflictDialog.Choice.OldRev:
+                        this.Copy( file.Path, ".r" + oldRev.ToString () );
+                        break;
+                    case ConflictDialog.Choice.NewRev:
+                        this.Copy( file.Path, ".r" + newRev.ToString() );
+                        break;
+                    case ConflictDialog.Choice.Mine:
+                        this.Copy( file.Path, ".mine" );
+                        break;
+                    default:
+                        break;
                 }
+
+                file.Resolve();
             }
-        }        
 
-        private void Copy( string toPath, string fromFile )
-        {
-            string dir = Path.GetDirectoryName( toPath );
-            string fromPath = Path.Combine( dir, fromFile );
-            File.Copy( fromPath, toPath,  true );
-        }
+            private void GetRevisions( string path, out int oldRev, out int newRev )
+            {
+                string dir = Path.GetDirectoryName( path );
+                string file = Path.GetFileName( path );
+                string[] files = Directory.GetFiles( dir, file + "*" );
+                
+                int[] revs = new int[2];
+                int counter = 0;
+                foreach( string potential in files )
+                {
+                    if ( NUMBER.IsMatch( potential ) )
+                        revs[counter++] = int.Parse( NUMBER.Match( potential ).Groups[1].Value );
 
-        /// <summary>
-        /// Filter for conflicted items.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        private static bool ConflictedFilter( SvnItem item )
-        {
-            return item.Status.TextStatus == StatusKind.Conflicted; 
-        }
+                    Debug.Assert( counter <=2, "Should never have more than 2 resolvees with revisions" );
+                }
+
+                Debug.Assert( counter == 2, "Should have exactly 2 resolvees with revisions" );
+
+                if ( revs[0] <= revs[1] )
+                {
+                    oldRev = revs[0];
+                    newRev = revs[1];
+                }
+                else
+                {
+                    oldRev = revs[1];
+                    newRev = revs[0];
+                }
+            }  
+
+            private void Copy( string path, string extension )
+            {
+                string dir = Path.GetDirectoryName( path );
+                string file = Path.GetFileName( path );
+
+                string[] files = Directory.GetFiles( dir, string.Format( "{0}*{1}", file, extension ) );
+                Debug.Assert( files.Length == 1 );
+
+                File.Copy( Path.Combine( dir, files[0] ), path, true );
+            }
+
        
-        private readonly Regex NUMBER = new Regex( @".*\.r(\d+)" );
+            private readonly Regex NUMBER = new Regex( @".*\.r(\d+)" );
 
+        }
     }
 }
-
 
 
 

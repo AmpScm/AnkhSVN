@@ -3,8 +3,8 @@
     <property name="verbose" value="false"/>
     <property name="debug" value="false"/>
     <property name="src.dir" value="."/>
-    <property name="build.dir" value="build-Release" unless="${debug}"/>
-    <property name="build.dir" value="build-Debug" if="${debug}"/>
+    <property name="build.dir" value="build/Release" unless="${debug}"/>
+    <property name="build.dir" value="build/Debug" if="${debug}"/>
     <property name="warninglevel" value="/warn:3"/>
     <property name="svndir" value="..\..\subversion"/>
     <property name="lib.dir" value="..\lib"/>
@@ -56,7 +56,6 @@
         <link output="${build.dir}\NSvn.Core.Tests.MCpp.dll" options="${link.options}" verbose="true">
             <sources>
                 <includes name="${build.dir}\*.obj"/>
-                <includes name="..\NSvn.Core\${build.dir}\*.obj" />
             </sources>
         </link>
     </target>

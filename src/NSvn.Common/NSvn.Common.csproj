@@ -45,7 +45,7 @@
                     ConfigurationOverrideFile = ""
                     DefineConstants = "TRACE"
                     DocumentationFile = ""
-                    DebugSymbols = "true"
+                    DebugSymbols = "false"
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
                     Optimize = "true"
@@ -92,7 +92,26 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "LibraryAttribute.cs"
+                    RelPath = "AuthenticationBaton.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AuthenticationProviderCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AuthenticationProviderCollection.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "IAuthenticationProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ICredential.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -121,6 +140,11 @@
                 />
                 <File
                     RelPath = "PropListItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SimpleProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -3,18 +3,15 @@ namespace Ankh
 {
     using System;
     using Microsoft.Office.Core;
-    using Microsoft.Win32;
     using Extensibility;
     using System.Runtime.InteropServices;
     using EnvDTE;
     using System.Diagnostics;
     using System.Text.RegularExpressions;
-    
-    using System.IO;
 
     using Ankh.Commands;
 
-    #region Read me for Add-in installation and setup information.
+	#region Read me for Add-in installation and setup information.
     // When run, the Add-in wizard prepared the registry for the Add-in.
     // At a later time, if the Add-in becomes unavailable for reasons such as:
     //   1) You moved this project to a computer other than which is was originally created on.
@@ -22,14 +19,13 @@ namespace Ankh
     //   3) Registry corruption.
     // you will need to re-register the Add-in by building the MyAddin21Setup project 
     // by right clicking the project in the Solution Explorer, then choosing install.
-    #endregion
+	#endregion
 	
     /// <summary>
     ///   The object for implementing an Add-in.
     /// </summary>
     /// <seealso class='IDTExtensibility2' />
     [GuidAttribute("DA979B20-78DF-45BC-A7D7-F5EF9DC77D30"), ProgId("Ankh")]
-    [ComVisible(true)]
     public class Connect : Object, Extensibility.IDTExtensibility2, IDTCommandTarget
     {
         /// <summary>
@@ -38,9 +34,6 @@ namespace Ankh
         /// </summary>
         public Connect()
         {
-            //            File.Delete( "N:\\ankhlog.txt" );
-            //            Debug.Listeners.Add( new TextWriterTraceListener( "N:\\ankhlog.txt" ) );
-            //            Debug.AutoFlush = true;
         }
 
         /// <summary>
@@ -62,33 +55,12 @@ namespace Ankh
             // we don't want to load on command line builds.
             if ( Regex.IsMatch( Environment.CommandLine, "/build" ) )
                 return;
-#if LOGTOFILE
-            if ( connectMode != ext_ConnectMode.ext_cm_UISetup )
-            {
-                int num = 0;
-                string logfile;
-                while(true)
-                {
-                    logfile = Path.Combine( Environment.GetFolderPath(
-                        Environment.SpecialFolder.ApplicationData ), 
-                        Path.Combine("AnkhSVN", String.Format("ankhsvn-{0}.log", num++ )));
-                    if ( !File.Exists( logfile ) )
-                        break;
-                }
-                
-                Debug.Listeners.Add( new TextWriterTraceListener( logfile ) );
-                Debug.AutoFlush = true;
-            }
-#endif
+
             try
             {
-                
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
-                
 
-                Extenders.ExtenderProvider.Register( this.context );
-
-#if ALWAYSREGISTER
+#if REGISTER
                 bool register = true;
 #else
                 bool register = connectMode == ext_ConnectMode.ext_cm_UISetup;
@@ -99,16 +71,7 @@ namespace Ankh
 
                 // register the new ones
                 this.commands= 
-                    Ankh.CommandMap.LoadCommands( this.context, register );  
-
-                this.CreateAboutBoxText( ((_DTE)application).RegistryRoot );
-               
-                // is there already a solution open? 
-                // can happen if we are loaded after startup
-                if ( this.context.DTE.Solution.IsOpen )
-                    this.context.SolutionOpened();
-  
-                
+                    Ankh.CommandMap.LoadCommands( this.context, register );    
             }
             catch( Exception ex )
             {
@@ -130,18 +93,6 @@ namespace Ankh
         /// <seealso class='IDTExtensibility2' />
         public void OnDisconnection(Extensibility.ext_DisconnectMode disconnectMode, ref System.Array custom)
         {
-            try
-            {
-                if( this.context != null )
-                {
-                    Extenders.ExtenderProvider.Unregister( this.context.DTE );				
-                    this.context.Shutdown();
-                }
-            }
-            catch( Exception ex )
-            {
-                Error.Handle( ex );
-            }
         }
 
         /// <summary>
@@ -166,10 +117,6 @@ namespace Ankh
         /// <seealso class='IDTExtensibility2' />
         public void OnStartupComplete(ref System.Array custom)
         {
-            this.context.DTE.ExecuteCommand( "Tools.Alias", "svn Ankh.RunSvn" );
-            this.context.DTE.ExecuteCommand( "Tools.Alias", "cd Ankh.RunSvn cd" );
-            this.context.DTE.ExecuteCommand( "Tools.Alias", "pwd Ankh.RunSvn pwd" );
-            this.context.DTE.ExecuteCommand( "Tools.Alias", "dir Ankh.RunSvn dir" );
         }
 
         /// <summary>
@@ -203,44 +150,33 @@ namespace Ankh
         /// <seealso class='Exec' />
         public void QueryStatus(string commandName, EnvDTE.vsCommandStatusTextWanted neededText, ref EnvDTE.vsCommandStatus status, ref object commandText)
         {
-            Utils.DebugTimer t = Utils.DebugTimer.Start();
+            this.timer.Start();
             try
             {
+                
+
                 if( this.commands != null && 
                     neededText == EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedNone)
                 {
-                    // this the same command as the last QueryStatus call?
-                    if ( commandName == this.lastQueriedCommand && 
-                        (DateTime.Now-this.lastQuery).Milliseconds < CACHESTATUS_INTERVAL )
-                    {
-                        // don't bother looking it up - just use the same
-                        // as last time
-                        status = this.cachedStatus;                        
-                    }
-                    else
-                    {
-                        Ankh.ICommand cmd;
-                        if ( (cmd = (ICommand)this.commands[commandName]) != null )
-                            status = cmd.QueryStatus( this.context );
-                    }
-                    // store these
-                    this.lastQuery = DateTime.Now;
-                    this.lastQueriedCommand = commandName;
-                    this.cachedStatus = status;
+                    Ankh.ICommand cmd;
+                    if ( (cmd = (ICommand)this.commands[commandName]) != null )
+                        status = cmd.QueryStatus( this.context );
+
+                    //    status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
+                    //				if(commandName == "Ankh.Connect.Ankh")
+                    //				{
+                    //					status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
+                    //				}
                 }
             }
-//            catch( StatusException )
-//            {
-//                // couldn't get status for an item on disk - maybe its been renamed etc from
-//                // outside VS
-//                this.context.SolutionExplorer.RefreshSelection();
-//                status = vsCommandStatus.vsCommandStatusSupported;
-//            }
             catch( Exception ex )
             {   
                 Error.Handle( ex );
+                throw;
             }
-            t.End( "Query status for " + commandName + ": " + status, "Ankh" );
+            this.timer.End();
+
+            Trace.WriteLine( commandName + ": " + this.timer.Interval, "Ankh" );
         }
 
         /// <summary>
@@ -268,70 +204,26 @@ namespace Ankh
             handled = false;
             try
             {
-                if( (executeOption == vsCommandExecOption.vsCommandExecOptionDoDefault) ||
-                    ((executeOption & vsCommandExecOption.vsCommandExecOptionShowHelp) != 0) )
+                if(executeOption == EnvDTE.vsCommandExecOption.vsCommandExecOptionDoDefault)
                 {
-                    string args = (string)varIn;
-
-                    // does the user need help?
-                    if ((executeOption & vsCommandExecOption.vsCommandExecOptionShowHelp) != 0)
-                        args = "/?";
-
                     ICommand cmd;
                     if ( (cmd = (ICommand)this.commands[commandName]) != null )
                     { 
-                        cmd.Execute( this.context, args );
+                        cmd.Execute( this.context );
                         handled = true;
                     }
                 }
             }
-//            catch( StatusException )
-//            {
-//                // couldn't get status for an item on disk - maybe its been renamed etc from
-//                // outside VS
-//                this.context.SolutionExplorer.RefreshSelection();
-//            }
             catch( Exception ex )
             {   
                 Error.Handle( ex );
+                throw;
             }
         }
-
-        /// <summary>
-        /// Create the text that goes in the VS.NET about box, with the 
-        /// version numbers of Ankh and the linked libraries.
-        /// </summary>
-        private void CreateAboutBoxText( string registryRoot )
-        {
-            string text = "";			
-
-            // get the assembly version
-            string ankhVersion = 
-                typeof(NSvn.Core.Client).Assembly.GetName().Version.ToString();
-			
-            text += String.Format( "AnkhSVN {0}{1}", 
-                ankhVersion, Environment.NewLine );
-
-            // get the library versions
-            object[] attributes = typeof(NSvn.Core.Client).Assembly.GetCustomAttributes(
-                typeof(NSvn.Common.LibraryAttribute), true );
-            foreach( NSvn.Common.LibraryAttribute version in attributes )
-                text += version.ToString() + Environment.NewLine;
-
-            // set the registry value
-            RegistryKey key = Registry.CurrentUser.CreateSubKey( registryRoot + @"\AddIns\Ankh" );
-            key.SetValue( "AboutBoxDetails", text );
-        }
         
+        private Utils.Timer timer = new Utils.Timer();
         private AnkhContext context;
         Ankh.CommandMap commands;
-
-
-        private EnvDTE.vsCommandStatus cachedStatus;
-        private string lastQueriedCommand = "";
-        private DateTime lastQuery = DateTime.Now;
-
-        private const int CACHESTATUS_INTERVAL = 800;
 		
     }
 }

@@ -30,7 +30,8 @@ namespace NSvn.Core.Tests
             string srcPath = Path.Combine( this.WcPath, "Form.cs" );
             string dstPath = Path.Combine( this.WcPath, "renamedForm.cs" );
            
-            CommitInfo info = this.Client.Copy( srcPath, Revision.Head, dstPath ); 
+            ClientContext ctx = new ClientContext() ;
+            CommitInfo info = Client.Copy( srcPath, Revision.Head, dstPath, ctx ); 
 
             Assertion.Assert( " File wasn't copied ", File.Exists( dstPath ) );
             Assertion.Assert( " Source File don't exists ", File.Exists( srcPath ) );
@@ -45,8 +46,9 @@ namespace NSvn.Core.Tests
         {
             string srcPath = Path.Combine( this.WcPath, @"bin\Debug" );
             string dstPath = Path.Combine( this.WcPath, @"copyDebug" );
-
-            CommitInfo info = this.Client.Copy( srcPath, Revision.Head, dstPath ); 
+           
+            ClientContext ctx = new ClientContext() ;
+            CommitInfo info = Client.Copy( srcPath, Revision.Head, dstPath, ctx ); 
 
             Assertion.Assert( "Directory don't exist ", Directory.Exists( dstPath ) );
             Assertion.AssertEquals( " Status is not 'A'  ", 'A', this.GetSvnStatus( dstPath) );
@@ -61,7 +63,8 @@ namespace NSvn.Core.Tests
             string srcPath = Path.Combine( this.WcPath, @"bin\Debug" );
             string dstPath = Path.Combine( this.ReposUrl, @"copyDebug" );
            
-            CommitInfo info = this.Client.Copy( srcPath, Revision.Head, dstPath ); 
+            ClientContext ctx = new ClientContext() ;
+            CommitInfo info = Client.Copy( srcPath, Revision.Head, dstPath, ctx ); 
 
             Assertion.Assert( " Directory don't exist ", !Directory.Exists( dstPath ) );
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
@@ -77,7 +80,8 @@ namespace NSvn.Core.Tests
             string srcPath = Path.Combine( this.ReposUrl, "Form.cs" );
             string dstPath = Path.Combine( this.WcPath, "copyForm" );
            
-            CommitInfo info = this.Client.Copy( srcPath, Revision.Head, dstPath ); 
+            ClientContext ctx = new ClientContext();
+            CommitInfo info = Client.Copy( srcPath, Revision.Head, dstPath, ctx ); 
 
             Assertion.AssertEquals( " File is not copied  ", 'A', this.GetSvnStatus( dstPath) );
         }
@@ -91,7 +95,8 @@ namespace NSvn.Core.Tests
             string srcPath = Path.Combine( this.ReposUrl, "Form.cs" );
             string dstPath = Path.Combine( this.ReposUrl, "copyForm" );
            
-            CommitInfo info = this.Client.Copy( srcPath, Revision.Head, dstPath ); 
+            ClientContext ctx = new ClientContext();
+            CommitInfo info = Client.Copy( srcPath, Revision.Head, dstPath, ctx ); 
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
             Assertion.Assert( " File wasn't copied ", cmd.IndexOf( "Form.cs" ) >= 0 );

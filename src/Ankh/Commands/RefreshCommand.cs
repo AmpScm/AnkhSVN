@@ -11,28 +11,19 @@ namespace Ankh.Commands
     [VSNetCommand("Refresh", Text = "Refresh", Tooltip = "Refresh this view.", 
          Bitmap = ResourceBitmaps.Refresh),
     VSNetControl( "Solution.Ankh", Position = 1 ),
-    VSNetProjectNodeControl( "Ankh", Position = 1 ),
-    VSNetFolderNodeControl( "Ankh", Position = 1)]
-    public class RefreshCommand : CommandBase
+    VSNetControl( "Project.Ankh", Position = 1),
+    VSNetControl( "Folder.Ankh", Position = 1)]
+    internal class RefreshCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
-            return context.AnkhLoadedForSolution ? Enabled : Disabled;
+            return vsCommandStatus.vsCommandStatusEnabled | 
+                vsCommandStatus.vsCommandStatusSupported;
         }
 
-        public override void Execute(Ankh.AnkhContext context, string parameters)
+        public override void Execute(Ankh.AnkhContext context)
         {
-            try
-            {
-                context.StartOperation( "Refreshing solution explorer" );
-
-                context.SolutionExplorer.RefreshSelection();
-            }
-            finally
-            {
-                context.EndOperation();
-            }
-
+            context.SolutionExplorer.RefreshSelection();
         }
     }
 }

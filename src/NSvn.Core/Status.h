@@ -5,8 +5,6 @@
 #include "Entry.h"
 #include <svn_wc.h>
 
-
-
 namespace NSvn
 {
     namespace Core
@@ -108,25 +106,6 @@ namespace NSvn
             [System::Diagnostics::DebuggerStepThrough]
             __property static Status* get_None()
             { return Status::none; }
-
-            /// <summary>Test whether two Status instances are equal.</summary>
-            virtual bool Equals( Object* obj )
-            {
-                if ( !obj )
-                    return false;
-                if ( !this->GetType()->IsInstanceOfType( obj ) )
-                    return false;
-                Status* other = static_cast<Status*>(obj);             
-
-                return this->textStatus == other->textStatus &&
-                    this->propertyStatus == other->propertyStatus &&
-                    this->repositoryTextStatus == other->repositoryTextStatus &&
-                    this->repositoryPropertyStatus == other->repositoryPropertyStatus &&
-                    this->locked == other->locked &&
-                    this->copied == other->copied &&
-                    this->switched == other->switched &&
-                    OBJEQUALS(this->entry, other->entry);
-            }
 
         private:
             NSvn::Core::Entry* entry;

@@ -234,34 +234,6 @@ namespace Utils.Win32
         [DllImport("User32.DLL")]
         public static extern IntPtr GetActiveWindow ( );
 
-        [DllImport("Kernel32.Dll")]
-        public static extern int GetLongPathName( string shortPath,
-            StringBuilder longPath, int bufSize );
-
-        [DllImport("User32.dll")]
-        public static extern short GetAsyncKeyState( int vkey );
-
-        [DllImport("Shlwapi.dll")]
-        public static extern int SHAutoComplete( IntPtr window,
-            Shacf flags );
-
-        [DllImport("Kernel32.dll")]
-        public static extern int WaitForSingleObject( IntPtr handle,
-            UInt32 milliseconds );
-
-        [DllImport("Kernel32.dll")]
-        public static extern int CreateProcess( string appName,
-            string commandLine, IntPtr processAttributes,
-            IntPtr threadAttributes, bool inheritHandles, int creationFlags,
-            IntPtr environment, string currentDir, ref STARTUP_INFO si,
-            out PROCESS_INFORMATION pi );
-
-        [DllImport("Kernel32.dll")]
-        public static extern bool CloseHandle( IntPtr handle );
-
-        [DllImport("Kernel32.dll")]
-        public static extern bool SetEnvironmentVariable( string name, string value );
-
 
     }
 }

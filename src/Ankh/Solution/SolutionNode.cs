@@ -1,97 +1,90 @@
 // $Id$
 using System;
 using System.IO;
-
+using NSvn;
 using EnvDTE;
 using NSvn.Core;
-using System.Collections;
-using System.Diagnostics;
 
 namespace Ankh.Solution
 {
     /// <summary>
     /// A node representing a solution.
     /// </summary>
-    public class SolutionNode : TreeNode
+    internal class SolutionNode : TreeNode
     {
         public SolutionNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer )
             : base( item, hItem, explorer, null )
         {
-            EnvDTE.Solution solution = this.Explorer.DTE.Solution;
-            this.solutionFile = this.Explorer.Context.StatusCache[solution.FullName];
+            EnvDTE.Solution solution = explorer.DTE.Solution;
+            this.solutionFile = SvnResource.FromLocalPath( solution.FullName );
+            this.solutionFile.Context = explorer.Context;
 
-            this.solutionFolder = this.Explorer.Context.StatusCache[
-                Path.GetDirectoryName( solution.FullName )];
-
-            Debug.WriteLine( "Creating solution node for " + this.solutionFile.Path, "Ankh" );
-
-            StatusChanged del  = new StatusChanged( this.ChildOrResourceChanged );
-            this.solutionFile.Changed += del;
-            this.solutionFolder.Changed += del;
-
-            this.additionalResources = new ArrayList();
-            this.AddDeletions( this.solutionFolder.Path, this.additionalResources, del );
+            this.solutionFolder = SvnResource.FromLocalPath(
+                Path.GetDirectoryName( solution.FullName ) );
+            this.solutionFolder.Context = explorer.Context;
 
             explorer.SetSolution( this );
-        }   
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.VisitSolutionNode(this);
-        }
-
-    
-        public override void GetResources( IList list, 
-            bool getChildItems, ResourceFilterCallback filter )
-        {
-            if ( filter == null || filter( this.solutionFolder ) )
-                list.Add( this.solutionFolder );
-
-            if ( filter == null || filter( this.solutionFile ) )
-                list.Add( this.solutionFile );
-
-            // add deleted items.
-            foreach( SvnItem item in this.additionalResources )
-            {
-                if ( filter == null || filter( item ) )
-                    list.Add( item );
-            }
-
-            this.GetChildResources(list, getChildItems, filter );
         }
 
         
-        
-
-        /// <summary>
-        /// The path to the solution folder.
-        /// </summary>
-        public override string Directory
+        public ILocalResource SolutionFile
         {
-            [System.Diagnostics.DebuggerStepThrough()]
-            get{ return this.solutionFolder.Path; }
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.solutionFile; }
+        }
+
+        public ILocalResource SolutionFolder
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.solutionFolder; }
         }
 
 
 
+        public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
+        {
+            if ( recursive )
+                this.VisitChildResources( visitor);
+
+            this.SolutionFolder.Accept( visitor );
+            this.SolutionFile.Accept( visitor );
+        } 
+
+
         /// <summary>
-        /// Get the status for this node, not including children.
+        /// Accept an INodeVisitor.
         /// </summary>
-        /// <returns></returns>
-        protected override NodeStatus ThisNodeStatus()
+        /// <param name="visitor"></param>
+        public override void Accept( INodeVisitor visitor )
+        {
+            visitor.VisitSolutionNode( this );
+        }
+
+        protected override StatusKind GetStatus()
         {
             if ( this.solutionFile == null )
-                return NodeStatus.None;               
+                return StatusKind.None;               
             else
             {
-                return this.MergeStatuses(
-                    this.MergeStatuses( this.solutionFolder, this.solutionFile ),
-                    this.MergeStatuses( this.additionalResources ) );
+                StatusKind fileStatus = StatusFromResource( this.solutionFile );
+                StatusKind folderStatus = StatusFromResource( this.solutionFolder );
+                // no point in checking substatuses if we already have an abNormal status
+                // on the solution file
+                if ( fileStatus == StatusKind.Normal && folderStatus == 
+                    StatusKind.Normal )
+                {
+                    // check the status on the projects
+                    ModifiedVisitor v = new ModifiedVisitor();
+                    this.VisitChildResources( v );
+                    if ( v.Modified )
+                        return StatusKind.Modified;
+                }
+
+                return fileStatus == StatusKind.Normal ? folderStatus : fileStatus;
             }
         }
 
-        private SvnItem solutionFile;
-        private SvnItem solutionFolder;
-        private ArrayList additionalResources;
+        private ILocalResource solutionFile;
+        private ILocalResource solutionFolder;
     }
 }

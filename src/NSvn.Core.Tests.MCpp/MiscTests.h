@@ -12,6 +12,12 @@ namespace NSvn{
                 {
                 public:
                     [Test]
+                    void TestSimpleCredential();
+
+                    [Test]
+                    void TestUsernameCredential();
+
+                    [Test]
                     void TestRevisionFromNumber();
 
                     [Test]
