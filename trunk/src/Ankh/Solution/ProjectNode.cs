@@ -71,7 +71,7 @@ namespace Ankh.Solution
             }
         }                    
 
-        private WorkingCopyDirectory projectFolder;
+        private ILocalResource projectFolder;
     }  
 
 }
