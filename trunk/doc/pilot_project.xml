@@ -1,70 +1,74 @@
 <?xml version="1.0" ?> <?xml-stylesheet type="text/xsl"
 href="doc.xsl"?> <doc title="Pilot Project Report">
 
-    <p><b>Title:</b> Subversion plugin for Visual Studio .NET</p> <p>
+    <p><b>Title:</b> Subversion addin for Visual Studio .NET</p> <p>
     <b>Employer:</b>  CollabNet - http://www.collab.net</p> 
-    <p><b>Supervisor at CollabNet:</b>  Karl Fogel, Software Collaboration Specialist - kfogel@collab.net</p> 
-    <p><b>Supervisor at HIO:</b>Eva Hadler Vihovde - EvaHadler.Vihovde@iu.hio.no </p>
+    <p><b>Supervisor at CollabNet:</b> Karl Fogel, Software Collaboration Specialist - kfogel@collab.net</p> 
+    <p><b>Supervisor at HIO:</b> Eva Hadler Vihovde - EvaHadler.Vihovde@iu.hio.no </p>
     <p><b>Developers:  </b></p> 
     <list> 
         <item>Arild Fines - arild.fines@broadpark.no   </item> 
-        <item> Per August Kramer - per@perkramer.com</item> 
+        <item> Per August Krämer - per@perkramer.com</item> 
         <item>Kristin Borud - s106855@iu.hio.no</item> 
     </list> 
-    <p><b>Duration of project:</b>09.01.2003 - 19.06.2003</p>
+    <p><b>Duration of project: </b>09.01.2003 - 19.06.2003</p>
 
      <section header="Abstract"> 
-		<p>The development of Subversion (svn)
-		plugin for Visual Studio .NET will be conducted as a
-		final project at HIO in cooperation with CollabNet.
+		<p>The development of Subversion (SVN)
+		addin for Visual Studio .NET will be conducted as a
+		final year project at HiO in cooperation with CollabNet.
 		First step is to make a .NET wrapper for the
-		Subversion's client API, thereby use this wrapper to
-		create a Visual Studio .NET addin for svn. We
+		Subversion's client API, and thereby use this wrapper to
+		create a Visual Studio .NET addin for SVN. We
 		intend to write most of the system in the C#
 		programming language.</p> 
      </section>
 
      <section header="Background"> 
-		<p>Subversion is a free open source tool which makes it easier
-        for several people to work within the same set of files. The
-        files are placed into a central repository. The repository
-        is much like an ordinary file server, except that it
-        remembers every change ever made to your files. Each
-        individual programmer checks out a workingcopy. During the
-        project period these working copies can be updated and
-        synchronised with the repository. Today you have to write
-        commands in a prompt while using Subversion. Our 
-        intention is to integrate the revision control system into the platform
-        where the programming actually is performed, and make it more user friendly
-        by offering menus instead of commands. We therefor intend to make both a 
-        "GUI/plugin .NET layer" and a .NET wrapper layer.</p>
-
-		<p>The background for this specific
-		project is that we wanted to do a project in the Microsoft's
-		.NET environment. One of the group member had used
-		Subversion for several school and private projects for the last year.</p>
-		
-		<p>We decided to do a project
-		where both technologies were represented. After having
-		defined the project we contacted CollabNet. CollabNet provided the initial 
-		founding in 2000 to begin development work of Subversion and today pays 
-		the salary for several people that works on the Subversion project. CollabNet 
-		offers a wide range of products and services to improve software quality and 
-		accelerate time-to-market during product development. Their main product is 
-		SourceCast which is a Web-based software development platform. 
-		Subversion is aimed to be the successor of the existing revision control system (CVS)
-		integrated in the SourceCast platform. Our intention is to integrate Subversion into 
-		a "second" platform environment by making an addin in Visual Studio .NET. The free 
-		useful open source tool will thereby get a new audience and hopefully a
-		huge amount of new users. CollabNet provides our external 
-		supervisor, Karl Fogel.
-		</p> 
+        <section header="CollabNet">
+            <p>CollabNet is a California-based company which provided the initial 
+		    founding in 2000 to begin development work on Subversion and currently has several paid 
+		    developers working on the Subversion project. CollabNet 
+		    offers a wide range of products and services to improve software quality and 
+		    accelerate time-to-market during product development. Their main product is 
+		    SourceCast, which is a Web-based software development platform. 
+		    Subversion is aimed to be the successor of an existing revision control system called 
+		    CVS and CollabNet intends to make it a part of the SourceCast platform.</p>
+        </section>
+        <section header="Subversion">
+            <p>Subversion is a free open source tool which makes it easier
+            for several people to work within the same set of files. The
+            files are placed into a central repository. The repository
+            is much like an ordinary file server, except that it
+            remembers every change ever made to your files. Each
+            individual programmer checks out a working copy. During the
+            development work cycle these working copies are updated and
+            synchronised with the repository .
+            </p>
+        </section>
+          
+        <section header="Our project">
+            <p>We wanted to do a project in the Microsoft's
+		    .NET environment. Also, one of the group member had used
+		    Subversion for several school and private projects for the last year.</p>
+    		
+		    <p>Currently you have to use Subversion from the command prompt. This is a very common
+		    approach for UNIX developers, but developers on Windows are more accustomed to graphical 
+		    clients. The dominant developer tool on Windows is currently Microsoft Visual Studio.NET, 
+		    and integration into this environment would make Subversion a viable alternative to
+		    a large number of Windows developers. We decided this would be a worthwhile thing to for our
+		    final year project.</p>
+    		
+		    <p> After having defined the project we contacted CollabNet through the Subversion developer
+		    mailing list, and they immediately showed interest in being the 
+		    employer for our project and provided our contact person, Karl Fogel.</p>   
+		</section>     	
     </section>
 
     <section header="Aim"> 
 		<p>The aim of this project is to provide an
 		integration for Subversion into the existing
-		coding environment Visual Studio .NET. By making a plugin for
+		coding environment Visual Studio .NET. By making a addin for
 		Visual Studio .NET the revision control system can be
 		made available for a huge amount of new users. We
 		also hope to make the .NET wrapper layer available as a
@@ -75,9 +79,9 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
     <section header="External conditions"> 
         <p>The group will have
         weekly meetings with the HIO/IU supervisor, Eva H.Vihovde
-        Fridays at 2 PM.</p>
+        Fridays at 14:00.</p>
 
-        <p>Every Monday from 8:30 AM and Fridays from 1:30 PM the
+        <p>Every Tuesday from 08:30 and Fridays from 13:30 the
         group will work at the dedicated school PC. The group intends to
         work together until all the group members are familiar with
         the software to be used. At a later stage in the project it
@@ -87,7 +91,7 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         is to assess the quality of the work completed and plan
         the next steps.</p>
 
-        <p>Through the project periode we will continuously give
+        <p>Throughout the project period we will continuously give
         information of project news and progress in an online
         diary.</p>
 
@@ -98,7 +102,7 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         department. Kristin will be responsible for a weekly resume to
         the HIO/IU supervisor Eva H. Vihovde in the group meetings
         based on contribution from all the group members. The roles are
-        not definite and could be adjusted through the project
+        not definite and can be adjusted through the project
         process.</p>
 
         <p>To enforce an overall consistent look of the code we will
@@ -106,7 +110,7 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
 
         <p>Subversion will be used for revision control both for
         the source code and documentation. Guidelines will be
-        composed for how comments etc. are to be written.</p>
+        composed for how log messages are to be written.</p>
 
         <p>To ensure the sanity and quality of the system at any given moment,
         and to catch regression bugs we intend to conduct continuous
@@ -123,7 +127,7 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
 
         <p>We intend to perform code reviews on a regular basis.</p>
 
-        <p>Guidelines for how the documentation to be written in
+        <p>Guidelines for how documentation is to be written in
         XML will be composed. The intention is to transform these
         XML documents into both HTML and into a format suitable for
         printing using XSL.</p>
@@ -138,9 +142,10 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
         write most of the system in the C# programming language.
         However, it might be beneficial to consider alternative
         approaches in certain areas of the project. For example, it
-        might be a better choice to write the .NET wrapper layer
-        in Managed C++(C++ extensions for the .NET environment) since
-        this offers better integration with a C-based API such as that of
+        is conceivable that writing the .NET wrapper layer
+        in Managed C++(C++ extensions for the .NET environment) will be 
+        a better choice since Managed C++ offers better integration with C-based APIs 
+        such as that of
         Subversion. Another alternative might be to use a tool called
         <link url="http://www.swig.org">SWIG</link>(Simplified Wrapper
         and Interface Generator) - a tool that generates wrappers for C
@@ -152,7 +157,9 @@ href="doc.xsl"?> <doc title="Pilot Project Report">
     <section header="Conclusion"> 
         <p>Subversion integration with
         Visual Studio .NET can potentially make the revision control system
-        available to a huge amount of new users.</p> 
+        available to a huge amount of new users. Also, creating a .NET SVN library
+        will enable other developers to create Subversion clients in a .NET language.</p> 
     </section> 
     
+    <signature>Oslo University College, 31.01.2003</signature>    
  </doc>
