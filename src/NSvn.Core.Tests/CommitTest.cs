@@ -64,14 +64,28 @@ namespace NSvn.Core.Tests
                 w.Write( "Moo" );
             ClientContext ctx = new ClientContext();
             ctx.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
+            this.logMessage = "Moo ";
             CommitInfo info = Client.Commit( new string[]{ this.WcPath }, false, ctx );
 
             Assertion.AssertEquals( "Wrong username", Environment.UserName, info.Author );
             string output = this.RunCommand( "svn", "log " + this.filepath + " -r HEAD" );
+            
             Assertion.Assert( "Log message not set", 
-                output.IndexOf( "Moo is the log message" ) >= 0 );
+                output.IndexOf( this.logMessage ) >= 0 );
 
         } 
+
+        [Test]
+        public void TestCommitWithNonAnsiCharsInLogMessage()
+        {
+            this.filepath = Path.Combine( this.WcPath, "Form.cs" );
+            using ( StreamWriter w = new StreamWriter( filepath ) )
+                w.Write( "Moo" );
+            ClientContext ctx = new ClientContext();
+            ctx.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
+            this.logMessage = "Æ e i a æ å. Møøøø! über";
+            CommitInfo info = Client.Commit( new string[]{ this.WcPath }, false, ctx );
+        }
         
         /// <summary>
         /// Tests that you can cancel a commit.
@@ -116,7 +130,7 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "Wrong kind", NodeKind.File, items[0].Kind );
             Assertion.AssertEquals( "Wrong revision", 6, items[0].Revision );
 
-            return "Moo is the log message";
+            return this.logMessage;
         }
 
         private string CancelLogMessage( CommitItem[] items )
@@ -124,6 +138,8 @@ namespace NSvn.Core.Tests
             return null;
         }
 
+
+        private string logMessage;
         private string filepath;
     }
 }
