@@ -137,6 +137,10 @@
                     DependentUpon = "ReposInstaller.cs"
                     BuildAction = "EmbeddedResource"
                 />
+                <File
+                    RelPath = "ReposInstaller.wxs"
+                    BuildAction = "None"
+                />
             </Include>
         </Files>
     </CSHARP>

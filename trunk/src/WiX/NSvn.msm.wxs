@@ -5,7 +5,7 @@
         <Package Description="NSvn" Comments="NSvn Merge Module" 
             Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud" 
             InstallerVersion="200" Platforms="Intel"
-            Languages="1033" Compressed="yes" SummaryCodepage="1252"/>
+            Languages="1033" Compressed="yes" SummaryCodepage="1252" Id="????????-????-????-????-????????????"/>
             
         <Directory Id='TARGETDIR'   Name='SourceDir'>
             <Directory  Id='appDir' Name='.'/>
