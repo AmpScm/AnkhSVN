@@ -28,7 +28,12 @@ namespace ReposInstaller
 
         public override void Install(IDictionary stateSaver)
         {
+            MessageBox.Show( "Uninstall" );
             base.Install (stateSaver);
+
+#if DEBUG
+            
+#endif
 
             // create the about box text
             string text = "";			
@@ -172,7 +177,7 @@ namespace ReposInstaller
         private void AddAboutBoxDetails(string text, string registryRoot )
         {
             // user first
-            RegistryKey key = Registry.CurrentUser.OpenSubKey( registryRoot + @"\AddIns\Ankh", 
+            RegistryKey key = Registry.CurrentUser.OpenSubKey( registryRoot, 
                 true );
             if ( key != null )
                 key.SetValue( "AboutBoxDetails", text );
@@ -180,7 +185,7 @@ namespace ReposInstaller
             try
             {
                 // machine?
-                key = Registry.LocalMachine.OpenSubKey( registryRoot + @"\AddIns\Ankh", true );
+                key = Registry.LocalMachine.OpenSubKey( registryRoot, true );
                 if ( key != null )
                     key.SetValue( "AboutBoxDetails", text );
             }
