@@ -1,7 +1,9 @@
 using System;
 using Ankh.UI;
-
+using System.Collections;
+using System.Threading;
 using NSvn.Core;
+using System.Diagnostics;
 
 namespace Ankh.RepositoryExplorer
 {
@@ -14,10 +16,16 @@ namespace Ankh.RepositoryExplorer
             RepositoryExplorerControl repositoryExplorer )
         {
             this.repositoryExplorer = repositoryExplorer;
+            this.enableBackgroundListing = repositoryExplorer.EnableBackgroundListing;
+
             this.context = context;
 
+            this.repositoryExplorer.EnableBackgroundListingChanged += 
+                new EventHandler( this.BackgroundListingChanged );
             this.repositoryExplorer.GoClicked += new EventHandler(GoClicked);
             this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
+            
+            this.directories = new Hashtable();
         }
 
         /// <summary>
@@ -31,21 +39,40 @@ namespace Ankh.RepositoryExplorer
             try
             {
                 INode parent = (INode)args.Node;
+                INode[] children;
 
-                // we want to run this in a separate thread
-                ListRunner runner = new ListRunner( parent, this.context );
-                runner.Start( "Retrieving directory info." );
-                if ( !runner.Cancelled )
+                // first see if it has been found by the background thread
+                lock( this.directories )
+                    children = (INode[])this.directories[parent.Url];
+
+                if ( children != null )
                 {
-                    DirectoryEntry[] entries = runner.Entries;
-                    INode[] children = new INode[entries.Length];
-                    int i = 0;
-                    foreach( DirectoryEntry entry in entries )
-                        children[i++] = new Node( parent, entry );
-
-                    Array.Sort(children, Controller.NODECOMPARER);
-                    args.Children = children;
+                    Debug.WriteLine( "Repository directory listing found in cache" );
                 }
+                else
+                {
+                    // nope - we have to do the work ourselves
+                    Debug.WriteLine( "Repository directory listing *NOT* found in cache" );
+
+                    // we want to run this in a separate thread
+                    ListRunner runner = new ListRunner( parent, this.context );
+                    runner.Start( "Retrieving directory info." );
+                    if ( !runner.Cancelled )
+                    {
+                        DirectoryEntry[] entries = runner.Entries;
+                        children = new INode[entries.Length];
+                        int i = 0;
+                        foreach( DirectoryEntry entry in entries )
+                            children[i++] = new Node( parent, entry );
+                    }
+
+                    if ( this.enableBackgroundListing )
+                        new BackgroundLister( children, this ).Start();
+                }
+
+                // sort them nicely
+                Array.Sort(children, Controller.NODECOMPARER);
+                args.Children = children;
             }
             catch( Exception ex )
             {
@@ -63,7 +90,19 @@ namespace Ankh.RepositoryExplorer
         {
             string url = this.repositoryExplorer.Url;
             Revision revision = this.repositoryExplorer.Revision;
-            this.repositoryExplorer.AddRoot( url, new RootNode(url, revision) );
+            INode rootNode = new RootNode(url, revision);
+            this.repositoryExplorer.AddRoot( url, rootNode );
+        }
+
+
+        /// <summary>
+        /// The background listing checkbox' state has changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void BackgroundListingChanged( object sender, EventArgs args )
+        {
+            this.enableBackgroundListing = this.repositoryExplorer.EnableBackgroundListing;
         }
 
         /// <summary>
@@ -96,6 +135,98 @@ namespace Ankh.RepositoryExplorer
         }
 
         /// <summary>
+        /// Used for doing a breadth first listing of a 
+        /// repository recursively in the background.
+        /// </summary>
+        private class BackgroundLister
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="root">The parent directory for which to list children</param>
+            /// <param name="parent"></param>
+            public BackgroundLister( INode root, Controller parent )
+            {
+                this.parent = parent;
+                this.queue = new Queue( 50 );
+                this.queue.Enqueue( root );
+            }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="children">An array of children. The thread
+            /// will list the directories in this array.</param>
+            /// <param name="parent"></param>
+            public BackgroundLister( INode[] children, Controller parent )
+            {
+                this.parent = parent;
+                this.queue = new Queue( 50 );
+                foreach ( INode node in children )
+                    if ( node.IsDirectory )
+                        this.queue.Enqueue(node);
+            }
+
+            /// <summary>
+            /// Call this method to start the thread.
+            /// </summary>
+            public void Start()
+            {
+                Thread thread = new Thread( new ThreadStart(this.Work) );
+                thread.Name = "Background lister " + BackgroundLister.threadCount;
+                thread.Start();
+
+                Debug.WriteLine( "Starting " + 
+                    thread.Name, "Ankh" );
+
+                Interlocked.Increment( ref BackgroundLister.threadCount );
+            }
+
+            /// <summary>
+            /// The worker method, which does the actual listing.
+            /// </summary>
+            private void Work()
+            {
+                // run as long as there are items in the queue or until the user
+                // cancels background listing
+                while( queue.Count > 0 && this.parent.enableBackgroundListing )
+                {
+                    INode node = (INode)queue.Dequeue();
+                    Debug.WriteLine( Thread.CurrentThread.Name + " listing " + node.Url, 
+                        "Ankh" );
+                    DirectoryEntry[] entries = 
+                        this.parent.context.Client.List( 
+                        node.Url, node.Revision, false );
+                    INode[] children = new INode[entries.Length];
+                    for( int i=0; i < entries.Length; i++ )
+                    {
+                        children[i] = new Node( node, entries[i] );
+
+                        // we put the directories on the queue
+                        lock( this.parent.directories )
+                        {
+                            if ( children[i].IsDirectory &&
+                                !this.parent.directories.Contains(
+                                children[i].Url )                                 
+                                )
+                            {
+                                this.queue.Enqueue( children[i] );
+                            }
+                        }
+                    }
+
+                    // store the list in the hashtable
+                    lock( this.parent.directories )
+                        this.parent.directories[ node.Url ] = children;
+                }
+            }
+
+            private Controller parent;
+            private Queue queue;
+            private static int threadCount = 1;
+        }
+
+        /// <summary>
         /// Used for ordering the items in the repository explorer.
         /// </summary>
         private class NodeComparer : System.Collections.IComparer                    
@@ -121,7 +252,12 @@ namespace Ankh.RepositoryExplorer
 
 
         private static readonly NodeComparer NODECOMPARER = new NodeComparer();
-        RepositoryExplorerControl repositoryExplorer;
-        AnkhContext context;
+        private RepositoryExplorerControl repositoryExplorer;
+        private Hashtable directories;
+        private AnkhContext context;
+
+        private bool enableBackgroundListing = false;
+            
+
     }
 }

@@ -74,6 +74,16 @@ namespace Ankh.UI
         public event EventHandler GoClicked;
 
         /// <summary>
+        /// Fired if the background listing checkbox' state is changed.
+        /// </summary>
+        public event EventHandler EnableBackgroundListingChanged
+        {
+            add{ this.backgroundListingCheck.CheckedChanged += value; }
+            remove{ this.backgroundListingCheck.CheckedChanged -= value; }
+        }
+
+
+        /// <summary>
         /// Fired whenever a directory node is expanded.
         /// </summary>
         public event NodeExpandingDelegate NodeExpanding;
@@ -101,6 +111,14 @@ namespace Ankh.UI
                     (IRepositoryTreeNode)this.treeView.SelectedNode.Tag :
                     null;
             }
+        }
+
+        /// <summary>
+        /// Whether the "Enable background listing" checkbox is checked.
+        /// </summary>
+        public bool EnableBackgroundListing
+        {
+            get{ return this.backgroundListingCheck.Checked; }
         }
 
         /// <summary>
@@ -230,12 +248,13 @@ namespace Ankh.UI
             this.revisionLabel = new System.Windows.Forms.Label();
             this.browseButton = new System.Windows.Forms.Button();
             this.urlLabel = new System.Windows.Forms.Label();
+            this.backgroundListingCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // urlTextBox
             // 
-            this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left);
+            this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+                | System.Windows.Forms.AnchorStyles.Left)));
             this.urlTextBox.Location = new System.Drawing.Point(32, 8);
             this.urlTextBox.Name = "urlTextBox";
             this.urlTextBox.Size = new System.Drawing.Size(224, 20);
@@ -278,16 +297,24 @@ namespace Ankh.UI
             this.urlLabel.TabIndex = 5;
             this.urlLabel.Text = "Url:";
             // 
+            // backgroundListingCheck
+            // 
+            this.backgroundListingCheck.Location = new System.Drawing.Point(8, 88);
+            this.backgroundListingCheck.Name = "backgroundListingCheck";
+            this.backgroundListingCheck.Size = new System.Drawing.Size(184, 16);
+            this.backgroundListingCheck.TabIndex = 6;
+            this.backgroundListingCheck.Text = "Enable background listing";
+            // 
             // RepositoryExplorerControl
             // 
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.urlLabel,
-                                                                          this.browseButton,
-                                                                          this.revisionLabel,
-                                                                          this.goButton,
-                                                                          this.urlTextBox});
+            this.Controls.Add(this.backgroundListingCheck);
+            this.Controls.Add(this.urlLabel);
+            this.Controls.Add(this.browseButton);
+            this.Controls.Add(this.revisionLabel);
+            this.Controls.Add(this.goButton);
+            this.Controls.Add(this.urlTextBox);
             this.Name = "RepositoryExplorerControl";
-            this.Size = new System.Drawing.Size(408, 392);
+            this.Size = new System.Drawing.Size(376, 392);
             this.ResumeLayout(false);
 
         }
@@ -353,6 +380,7 @@ namespace Ankh.UI
         private Ankh.UI.RevisionPicker revisionPicker;
         private Ankh.UI.RepositoryTreeView treeView;
         private CommandBar commandBar;
+        private System.Windows.Forms.CheckBox backgroundListingCheck;
         private System.Windows.Forms.Label urlLabel;
 
         
