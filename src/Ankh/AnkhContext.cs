@@ -429,6 +429,10 @@ namespace Ankh
         {
             string solutionDir = this.SolutionDirectory;
 
+            // if we don't have a valid solution directory, no point in going on
+            if ( solutionDir == null )
+                return false;
+
             // maybe this solution has never been loaded before with Ankh?
             if ( File.Exists( Path.Combine( solutionDir, "Ankh.Load" ) ) )
             {
