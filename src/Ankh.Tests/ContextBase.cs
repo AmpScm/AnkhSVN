@@ -1,4 +1,9 @@
 using System;
+using Ankh.Config;
+using EnvDTE;
+using NSvn.Core;
+using System.Collections;
+using System.Windows.Forms;
 
 namespace Ankh.Tests
 {
@@ -7,6 +12,10 @@ namespace Ankh.Tests
     /// </summary>
     public class ContextBase : IContext
     {        
+        public ContextBase()
+        {
+            this.config = this.CreateConfig();
+        }
         #region IContext Members
 
         public virtual void EndOperation()
@@ -18,8 +27,9 @@ namespace Ankh.Tests
         {
             get
             {
-                // TODO:  Add ContextBase.OutputPane getter implementation
-                return null;
+                if ( this.outputPane == null )
+                    this.outputPane = new OutputPaneWriter( this.DTE, "Test" );
+                return this.outputPane;
             }
         }
 
@@ -36,8 +46,11 @@ namespace Ankh.Tests
         {
             get
             {
-                // TODO:  Add ContextBase.DTE getter implementation
-                return null;
+                if ( this.dte == null )
+                {
+                    this.dte = DteFactory.Create2003().Create();
+                }
+                return this.dte;
             }
         }
 
@@ -65,8 +78,7 @@ namespace Ankh.Tests
         {
             get
             {
-                // TODO:  Add ContextBase.Config getter implementation
-                return null;
+                return this.config;
             }
         }
 
@@ -83,8 +95,9 @@ namespace Ankh.Tests
         {
             get
             {
-                // TODO:  Add ContextBase.StatusCache getter implementation
-                return null;
+                if ( this.statusCache == null )
+                    this.statusCache = new StatusCache( this.Client );
+                return this.statusCache;
             }
         }
 
@@ -92,8 +105,9 @@ namespace Ankh.Tests
         {
             get
             {
-                // TODO:  Add ContextBase.UIShell getter implementation
-                return null;
+                if ( this.uiShell == null )
+                    this.uiShell = new UIShellImpl();
+                return this.uiShell;
             }
         }
 
@@ -101,8 +115,9 @@ namespace Ankh.Tests
         {
             get
             {
-                // TODO:  Add ContextBase.ErrorHandler getter implementation
-                return null;
+                if ( this.errorHandler == null )
+                    this.errorHandler = new ErrorHandlerImpl();
+                return this.errorHandler;
             }
         }
 
@@ -110,8 +125,9 @@ namespace Ankh.Tests
         {
             get
             {
-                // TODO:  Add ContextBase.ProjectFileWatcher getter implementation
-                return null;
+                if ( this.projectFileWatcher == null )
+                    this.projectFileWatcher = new FileWatcher( this.Client );
+                return this.projectFileWatcher;
             }
         }
 
@@ -143,8 +159,9 @@ namespace Ankh.Tests
         {
             get
             {
-                // TODO:  Add ContextBase.Client getter implementation
-                return null;
+                if ( this.client == null )
+                    this.client = new SvnClient( this );
+                return this.client;
             }
         }
 
@@ -175,12 +192,13 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual Ankh.Solution.Explorer SolutionExplorer
+        public virtual ISolutionExplorer SolutionExplorer
         {
             get
             {
-                // TODO:  Add ContextBase.SolutionExplorer getter implementation
-                return null;
+                if ( this.explorer == null )
+                    this.explorer = new ExplorerImpl(this);
+                return this.explorer;
             }
         }
 
@@ -196,5 +214,235 @@ namespace Ankh.Tests
         }
 
         #endregion
+
+        public void CheckForException()
+        {
+            ContextBase.ErrorHandlerImpl handler = 
+                (ContextBase.ErrorHandlerImpl)this.ErrorHandler;
+            if ( handler.Exception != null )
+                throw new Exception( "Exception thrown", handler.Exception );            
+        }
+
+        public class ErrorHandlerImpl : IErrorHandler
+        {
+            public Exception Exception;
+
+            #region IErrorHandler Members
+
+            public virtual void Handle(Exception ex)
+            {
+                this.Exception = ex;
+            }
+
+            #endregion
+        }
+
+        /// <summary>
+        /// An ISynchronizeInvoke for which InvokeRequired will always return false.
+        /// </summary>
+        public class NoSynch : System.ComponentModel.ISynchronizeInvoke
+        {
+            #region ISynchronizeInvoke Members
+
+            public object EndInvoke(IAsyncResult result)
+            {
+                // TODO:  Add NoSynch.EndInvoke implementation
+                return null;
+            }
+
+            public object Invoke(Delegate method, object[] args)
+            {
+                // TODO:  Add NoSynch.Invoke implementation
+                return null;
+            }
+
+            public bool InvokeRequired
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            public IAsyncResult BeginInvoke(Delegate method, object[] args)
+            {
+                // TODO:  Add NoSynch.BeginInvoke implementation
+                return null;
+            }
+
+            #endregion
+
+        }
+
+        public class ExplorerImpl : ISolutionExplorer
+        {
+            public ExplorerImpl( IContext ctx )
+            {
+                this.context = ctx;
+            }
+
+            #region ISolutionExplorer Members
+
+            public virtual System.Collections.IList GetItemResources(ProjectItem item, bool recursive)
+            {
+                ArrayList list = new ArrayList();
+                for( short i = 1; i <= item.FileCount; i++ )
+                {
+                    string path = item.get_FileNames(i);
+                    list.Add( new SvnItem( path, this.context.Client.SingleStatus(path) ) );
+                }
+                return list;
+            }
+
+            public virtual void Unload()
+            {
+                // TODO:  Add Explorer.Unload implementation
+            }
+
+            public virtual void VisitSelectedNodes(Ankh.Solution.INodeVisitor visitor)
+            {
+                // TODO:  Add Explorer.VisitSelectedNodes implementation
+            }
+
+            public virtual ProjectItem GetSelectedProjectItem()
+            {
+                // TODO:  Add Explorer.GetSelectedProjectItem implementation
+                return null;
+            }
+
+            public virtual void Refresh(ProjectItem item)
+            {
+                // TODO:  Add Explorer.Refresh implementation
+            }
+
+            void Ankh.ISolutionExplorer.Refresh(Project project)
+            {
+                // TODO:  Add Explorer.Ankh.ISolutionExplorer.Refresh implementation
+            }
+
+            #endregion
+
+            #region ISelectionContainer Members
+
+            public virtual void RefreshSelectionParents()
+            {
+                // TODO:  Add Explorer.RefreshSelectionParents implementation
+            }
+
+            public virtual void SyncAll()
+            {
+                // TODO:  Add Explorer.SyncAll implementation
+            }
+
+            public virtual System.Collections.IList GetSelectionResources(bool getChildItems, Ankh.ResourceFilterCallback filter)
+            {
+                // TODO:  Add Explorer.GetSelectionResources implementation
+                return null;
+            }
+
+            System.Collections.IList Ankh.ISelectionContainer.GetSelectionResources(bool getChildItems)
+            {
+                // TODO:  Add Explorer.Ankh.ISelectionContainer.GetSelectionResources implementation
+                return null;
+            }
+
+            public virtual void RefreshSelection()
+            {
+                // TODO:  Add Explorer.RefreshSelection implementation
+            }
+
+            public virtual System.Collections.IList GetAllResources(Ankh.ResourceFilterCallback filter)
+            {
+                // TODO:  Add Explorer.GetAllResources implementation
+                return null;
+            }
+
+            #endregion
+
+            private IContext context;
+
+        }
+
+
+        public class UIShellImpl : IUIShell
+        {
+            #region IUIShell Members
+
+            public virtual Ankh.UI.RepositoryExplorerControl RepositoryExplorer
+            {
+                get
+                {
+                    // TODO:  Add UIShellImpl.RepositoryExplorer getter implementation
+                    return null;
+                }
+            }
+
+            public virtual IContext Context
+            {
+                get
+                {
+                    // TODO:  Add UIShellImpl.Context getter implementation
+                    return null;
+                }
+                set
+                {
+                    // TODO:  Add UIShellImpl.Context setter implementation
+                }
+            }
+
+            public virtual void SetRepositoryExplorerSelection(object[] selection)
+            {
+                // TODO:  Add UIShellImpl.SetRepositoryExplorerSelection implementation
+            }
+
+            public virtual void ShowRepositoryExplorer(bool show)
+            {
+                // TODO:  Add UIShellImpl.ShowRepositoryExplorer implementation
+            }
+
+            public virtual DialogResult QueryWhetherAnkhShouldLoad()
+            {
+                // TODO:  Add UIShellImpl.QueryWhetherAnkhShouldLoad implementation
+                return new DialogResult ();
+            }
+
+            public virtual DialogResult ShowMessageBox(string text, 
+                string caption, MessageBoxButtons buttons, 
+                MessageBoxIcon icon)
+            {
+                // TODO:  Add UIShellImpl.ShowMessageBox implementation
+                return new DialogResult ();
+            }
+
+            public virtual System.Windows.Forms.DialogResult ShowMessageBox(string text, 
+                string caption, System.Windows.Forms.MessageBoxButtons buttons)
+            {
+                // TODO:  Add UIShellImpl.Ankh.IUIShell.ShowMessageBox implementation
+                return new System.Windows.Forms.DialogResult ();
+            }
+
+            #endregion
+        }
+
+
+        protected virtual Config.Config CreateConfig()
+        {
+            Config.Config config = new Config.Config();
+            config.AutoAddNewFiles = true;
+            config.AutoAddNewFiles = true;
+            config.LogMessageTemplate = "";
+            config.DisableSolutionReload = true;
+            return config;
+        }
+
+        public FileWatcher projectFileWatcher;
+        public Config.Config config;
+        public _DTE dte;
+        public SvnClient client;
+        public StatusCache statusCache;
+        public IErrorHandler errorHandler;
+        public OutputPaneWriter outputPane;
+        public ISolutionExplorer explorer;
+        public IUIShell uiShell;
     }
 }
