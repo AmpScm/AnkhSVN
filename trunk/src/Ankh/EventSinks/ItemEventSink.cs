@@ -57,12 +57,17 @@ namespace Ankh.EventSinks
         {
             try
             {
+                // rename on a folder will call rename on all subitems.
+                if ( item.Name == oldName )
+                    return;
+
                 // assume there is only one filename
                 string newPath = item.get_FileNames(1);
                 RenameVisitor v = new RenameVisitor( oldName, newPath );
                 this.Context.SolutionExplorer.VisitResources( item, v, false );
 
-                this.Context.SolutionExplorer.RefreshSelectionParents();
+                // we need to refresh the parents, since the actual treenode is replaced.
+               this.Context.SolutionExplorer.RefreshSelectionParents();
             }
             catch( Exception ex )
             {
@@ -99,6 +104,7 @@ namespace Ankh.EventSinks
 
             public override void VisitWorkingCopyFile(WorkingCopyFile file)
             {
+
                 // we need to rename the file back to  its original name
                 string dir = Path.GetDirectoryName( file.Path );
                 string oldPath = Path.Combine( dir, oldName );
@@ -107,6 +113,19 @@ namespace Ankh.EventSinks
                 // now have SVN rename it.
                 file.Move( this.newPath, true );
             }
+
+            public override void VisitWorkingCopyDirectory(WorkingCopyDirectory dir)
+            {
+                // strip off the trailing \ if necessary
+                string dirNoTrailing = dir.Path[ dir.Path.Length - 1 ] == '\\' ? dir.Path.Substring( 0, dir.Path.Length-1 ) : 
+                    dir.Path;
+                string parentDir = Path.GetDirectoryName( dirNoTrailing );
+                string oldPath = Path.Combine( parentDir, oldName );
+                Directory.Move( this.newPath, oldPath );
+
+                dir.Move( this.newPath, true );
+            }
+
 
 
             private string oldName;
