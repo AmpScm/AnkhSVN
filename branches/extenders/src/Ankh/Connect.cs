@@ -60,6 +60,8 @@ namespace Ankh
             {
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
 
+                Extenders.ExtenderProvider.Register( this.context );
+
 #if ALWAYSREGISTER
                 bool register = true;
 #else
@@ -93,6 +95,7 @@ namespace Ankh
         /// <seealso class='IDTExtensibility2' />
         public void OnDisconnection(Extensibility.ext_DisconnectMode disconnectMode, ref System.Array custom)
         {
+            Extenders.ExtenderProvider.Unregister( this.context.DTE );
         }
 
         /// <summary>
