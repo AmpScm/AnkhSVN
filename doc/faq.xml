@@ -57,10 +57,6 @@ FOR /R %%f IN (_svn) DO IF EXIST "%%f" (
     )      </code>
             <p>Before opening the web project, run hide-svn.  After the project is loaded (and refreshed it's vswebcache),  run restore-svn.  
                   It is only during initial loading and when using the refresh button in solution explorer that the .svn directories get in the way.</p>
-            <p>Matthew Mastracci suggests another alternative workaound in which you convert your "Web" projects to "Local" projects.  Change the "Web" string to "Local" 
-                  within your web .csproj, then you can reference it as a normal project, without worrying about any of the web mapping items. Debugging works as 
-                  expected, with the manual step of changing the debug application to "URL" and pointing it at your local share.  Note that these debug settings are stored 
-                  locally in the .suo file.</p>
         </section>
         <section header="I installed Ankh, Ankh menu entries are there but right clicking on a versioned file gives me a null pointer exception.">
             <p>Make sure the .sln file is under version control. See the readme file for more information.
