@@ -14,7 +14,7 @@ namespace NSvn
         public:
             /// <summary>Create an exception from an svn_error_t*</summary>
             static SvnClientException* FromSvnError( svn_error_t* error );
-        protected:
+
             SvnClientException()
             {;}
             SvnClientException( System::String* message ) : NSvn::Common::SvnException( message )
@@ -23,6 +23,9 @@ namespace NSvn
                 NSvn::Common::SvnException( message, innerException )
             {;}
 
+
+        protected:
+            
         private:
             static SvnClientException* CreateExceptionsRecursively( svn_error_t* err );
 

@@ -1,6 +1,8 @@
 // $Id$
 #pragma once
 #include <vcclr.h>
+#include <svn_utf.h>
+#include "SvnClientException.h"
 #include "Pool.h"
 #include <apr_strings.h>
 
@@ -60,12 +62,16 @@ namespace NSvn
                 return *this;
             }
 
-            /// <summary>Copy the string to Pool</summary>
-            char* CopyToPool( Pool& pool )
+            /// <summary>Copies the string to the pool, encoded as UTF8</summary>
+            char* CopyToPoolUtf8( apr_pool_t* pool )
             {
-                return CopyToPool( static_cast<apr_pool_t*>(pool) );
-            }
+                const char* utf8String;
+                HandleError( svn_utf_cstring_to_utf8( &utf8String, this->CopyToPool( pool ), 
+                    0, pool ) );
 
+                return const_cast<char*>(utf8String);
+            }
+            
             char* CopyToPool( apr_pool_t* pool )
             {
                //TODO: unicode issues
