@@ -177,6 +177,9 @@ NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
     // used to hold the result of the status call
     struct StatusHolder
     {
+        StatusHolder() : Status(0)
+        {}
+
         static void Callback( void* baton, const char* path, svn_wc_status_t* status )
         {
             StatusHolder* holder = static_cast<StatusHolder*>(baton);
@@ -194,7 +197,10 @@ NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
         StatusHolder::Callback, &holder, false, true, false, true, 
         this->context->ToSvnContext( pool ), pool ) );
 
-    return new NSvn::Core::Status( holder.Status );
+    if ( holder.Status != 0 )
+        return new NSvn::Core::Status( holder.Status );
+    else
+        return Status::None;
 }
 
 
