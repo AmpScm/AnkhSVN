@@ -8,25 +8,25 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Property editor for plain properties
-	/// </summary>
-	internal class PlainPropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
-	{
+    /// <summary>
+    /// Property editor for plain properties
+    /// </summary>
+    internal class PlainPropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    {
        
         public event EventHandler Changed;
         
-		public PlainPropertyEditor()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public PlainPropertyEditor()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
 
-			// TODO: Add any initialization after the InitForm call
+            // TODO: Add any initialization after the InitForm call
 
-		}
+        }
 
         public void Reset()
         {
@@ -58,28 +58,28 @@ namespace Ankh.UI
             }
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
 		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.valueTextBox = new System.Windows.Forms.TextBox();
             this.plainLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -152,6 +152,6 @@ namespace Ankh.UI
         {
         
         }
-	}
+    }
 }
 

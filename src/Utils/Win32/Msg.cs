@@ -3,17 +3,17 @@ using System;
 
 namespace Utils.Win32
 {
-	/// <summary>
-	/// Contains Win32 messages.
-	/// </summary>
-	public class Msg
-	{
+    /// <summary>
+    /// Contains Win32 messages.
+    /// </summary>
+    public class Msg
+    {
         /// <summary>
         /// Private ctor to avoid instantiation.
         /// </summary>
-		private Msg()
-		{			
-		}
+        private Msg()
+        {			
+        }
 
         /// <summary>
         /// Sets the normal or state image list for a tree-view control 
@@ -48,5 +48,5 @@ namespace Utils.Win32
         /// a specified item. 
         /// </summary>
         public const uint TVM_GETNEXTITEM = 4362;
-	}
+    }
 }
