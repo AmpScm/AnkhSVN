@@ -79,22 +79,35 @@ namespace ReposInstaller
 
 		public override void Uninstall(IDictionary savedState)
 		{
-			
-			//base.Uninstall( savedState );
-
-			// make sure VS.NET is closed down
-			while( this.VSIsRunningRunning() )
+			try
 			{
-				MessageBox.Show( "One or more instances of VS.NET are running. " + 
-					"Please close these before continuing", "VS.NET is running", MessageBoxButtons.OK,
-					MessageBoxIcon.Warning );
-			} 
-          
-			MessageBox.Show( "Hello 2" );
+			
+				//base.Uninstall( savedState );
 
-			// delete the commands
-			this.DeleteAnkhCommands( "VisualStudio.DTE.7" );
-			this.DeleteAnkhCommands( "VisualStudio.DTE.7.1" );
+				// make sure VS.NET is closed down
+				while( this.VSIsRunningRunning() )
+				{
+					MessageBox.Show( "One or more instances of VS.NET are running. " + 
+						"Please close these before continuing", "VS.NET is running", MessageBoxButtons.OK,
+						MessageBoxIcon.Warning );
+				} 
+          
+				MessageBox.Show( "Hello 2" );
+
+				// delete the commands
+				this.DeleteAnkhCommands( "VisualStudio.DTE.7" );
+				this.DeleteAnkhCommands( "VisualStudio.DTE.7.1" );
+			}
+			catch( Exception )
+			{
+				MessageBox.Show( "An error occurred during uninstallation of " + 
+					"Ankh VS.NET commands. \r\nThey might still be present. " + 
+					"Run devenv /setup from the command line to reset your VS.NET installation",
+					"Error", MessageBoxButtons.OK,
+					MessageBoxIcon.Error );
+
+				// swallow
+			}
             
 		}
 
@@ -118,7 +131,7 @@ namespace ReposInstaller
 					if ( cmd.Name.StartsWith( PROGID ) )
 						cmd.Delete();
 				}
-				catch( Exception ex )
+				catch( Exception )
 				{
 					// HACK: swallow
 				}
