@@ -30,6 +30,7 @@ namespace Utils
 
         public double Interval
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return (double)(this.endTime-this.startTime)/(double)frequency; }
         }
 

@@ -46,6 +46,7 @@ namespace NSvn
         /// </summary>
         public string Url
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.url; }
         }
 
@@ -62,6 +63,7 @@ namespace NSvn
         /// </summary>
         public Revision Revision
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.revision; }
         }
 

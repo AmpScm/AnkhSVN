@@ -19,6 +19,7 @@ namespace Ankh
 
         public override Encoding Encoding
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return Encoding.Default; }
         }
 

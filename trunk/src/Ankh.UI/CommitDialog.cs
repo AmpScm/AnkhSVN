@@ -50,7 +50,10 @@ namespace Ankh.UI
 
         public LogMessageTemplate LogMessageTemplate
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.logMessageTemplate; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.logMessageTemplate = value; }
         }
 

@@ -23,6 +23,7 @@ namespace Ankh
         /// </summary>
         public string CommandBar
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.commandBar; }
         }
 
@@ -32,7 +33,10 @@ namespace Ankh
         /// </summary>
         public int Position
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.position; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.position = value; }
         }
 

@@ -32,6 +32,7 @@ namespace Ankh.Solution
 
         public Explorer Explorer
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.explorer; }
         }
 
@@ -89,6 +90,7 @@ namespace Ankh.Solution
         /// </summary>
         public IList Children
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get { return this.children;  }
         }
 
@@ -135,6 +137,7 @@ namespace Ankh.Solution
         /// </summary>
         public TreeNode Parent
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.parent; }
         }
 

@@ -29,11 +29,13 @@ namespace Ankh.Solution
         
         public ILocalResource SolutionFile
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.solutionFile; }
         }
 
         public ILocalResource SolutionFolder
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.solutionFolder; }
         }
 

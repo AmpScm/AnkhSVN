@@ -25,22 +25,27 @@ namespace NSvn
               }
 
               ///<summary>The working copy path to this item</summary>
+              [System::Diagnostics::DebuggerStepThrough]
               __property String* get_Path()
               { return this->path; }
 
               /// <summary>The kind of node - file or dir</summary>
+              [System::Diagnostics::DebuggerStepThrough]
               __property NodeKind get_Kind()
               { return this->kind; }
 
               /// <summary>The repository URL to this item</summary>
+              [System::Diagnostics::DebuggerStepThrough]
               __property String* get_Url()
               { return this->url; }
 
               /// <summary>The revision number associated with this commit</summary>
+              [System::Diagnostics::DebuggerStepThrough]
               __property int get_Revision()
               { return this->revision; }
 
               /// <summary>The copy from URL</summary>
+              [System::Diagnostics::DebuggerStepThrough]
               __property String* get_CopyFromUrl()
               { return this->copyFromUrl; }
 

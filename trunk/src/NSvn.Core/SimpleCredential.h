@@ -18,11 +18,13 @@ namespace NSvn
           username( username ), password( password )
           {;}
 
+          [System::Diagnostics::DebuggerStepThrough]
           __property String* get_Kind()
           {
               return SimpleCredential::AuthKind; 
           }
 
+          [System::Diagnostics::DebuggerStepThrough]
           __property static String* get_AuthKind()
           {
               return StringHelper( SVN_AUTH_CRED_SIMPLE );

@@ -24,6 +24,7 @@ namespace Ankh.Solution
 
         public IList Resources
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.resources; }
         }
 

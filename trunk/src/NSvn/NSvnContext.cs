@@ -47,6 +47,7 @@ namespace NSvn
         /// </summary>
         protected internal ClientContext ClientContext
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.clientContext; }
         }
 

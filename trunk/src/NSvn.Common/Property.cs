@@ -43,6 +43,7 @@ namespace NSvn.Common
         /// </summary>
         public string Name
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.name; }
         }
 
@@ -51,6 +52,7 @@ namespace NSvn.Common
         /// </summary>
         public byte[] Data
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.data; }
         }
 

@@ -24,10 +24,12 @@ namespace Ankh.Commands
         /// </summary>
         public EnvDTE.Command Command
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get
             {
                 return this.command; 
             }
+            [System.Diagnostics.DebuggerStepThrough]
             set
             {
                 this.command = value;

@@ -43,6 +43,7 @@ namespace Ankh.UI
         /// </summary>
         public Choice Selection
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get { return this.selectedChoice; }
         }
 
@@ -51,7 +52,10 @@ namespace Ankh.UI
         /// </summary>
         public string Filename
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.filename; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set
             { 
                 this.filename = value;
@@ -63,7 +67,10 @@ namespace Ankh.UI
         /// </summary>
         public int OldRev
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get { return this.oldRev; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set { this.oldRev = value; }
         }
 
@@ -72,7 +79,10 @@ namespace Ankh.UI
         /// </summary>
         public int NewRev
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get { return this.newRev; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set { this.newRev = value; }
         }
         /// <summary>

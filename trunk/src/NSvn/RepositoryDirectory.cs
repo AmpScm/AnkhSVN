@@ -32,6 +32,17 @@ namespace NSvn
         }
 
         /// <summary>
+        /// The name of the directory
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                return NAME.Match( this.Url ).Groups[3].Value;
+            }
+        }
+
+        /// <summary>
         /// Retrieve the child resources of this directory.
         /// </summary>
         /// <returns>A RepositoryResourceDictionary containing the child resources of this
@@ -90,16 +101,7 @@ namespace NSvn
             visitor.VisitDirectory( this );
         }
 
-        /// <summary>
-        /// The name of the directory
-        /// </summary>
-        public override string Name
-        {
-            get
-            {
-                return NAME.Match( this.Url ).Groups[3].Value;
-            }
-        }
+        
 
         private readonly Regex NAME = new Regex( 
             @"\w{3,4}:///?[\w\-\.\:]+(:\d+)?(/\w+)*/(\w+)+/?" );

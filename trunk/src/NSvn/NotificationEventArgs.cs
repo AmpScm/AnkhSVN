@@ -19,6 +19,7 @@ namespace NSvn
         /// </summary>
         public Notification Notification
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.notification; }
         }
 

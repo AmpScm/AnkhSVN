@@ -187,16 +187,19 @@ namespace Ankh.Solution
 
         internal IntPtr TreeView
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.treeview; }
         }
 
         internal NSvnContext Context
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.context; }
         }
 
         internal _DTE DTE
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.dte; }
         }
 
@@ -287,9 +290,6 @@ namespace Ankh.Solution
 
         
 
-        #region class TreeNode
-        
-        #endregion
 
         #region class ItemHashCodeProvider
         private class ItemHashCodeProvider : IHashCodeProvider

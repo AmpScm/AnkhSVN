@@ -21,7 +21,10 @@ namespace NSvn.Common
         /// </summary>
         public AuthenticationProviderCollection Providers
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.providers; }
+
+            [System.Diagnostics.DebuggerStepThrough]
             set{ this.providers = value; }
         }
 
@@ -30,6 +33,7 @@ namespace NSvn.Common
         /// </summary>
         public StringDictionary Parameters
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.parameters; }
         }
 

@@ -69,6 +69,7 @@ namespace Ankh.EventSinks
 
         protected AnkhContext Context
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return this.context; }
         }  
       

@@ -76,32 +76,47 @@ namespace NSvn
             {;}
 
             // An authentication baton
+            [System::Diagnostics::DebuggerStepThrough]
             __property AuthenticationBaton* get_AuthBaton()
             { return this->authBaton; }
+
+            [System::Diagnostics::DebuggerStepThrough]
             __property void set_AuthBaton( AuthenticationBaton* value )
             { this->authBaton = value; }
 
             // A callback delegate for prompts
+            [System::Diagnostics::DebuggerStepThrough]
             __property PromptCallback* get_PromptCallback()
             { return this->promptCallback; }
+
+            [System::Diagnostics::DebuggerStepThrough]
             __property void set_PromptCallback( NSvn::Core::PromptCallback* value )
             { this->promptCallback = value; }
 
             // Callback delegate for notifications
+            [System::Diagnostics::DebuggerStepThrough]
             __property NotifyCallback* get_NotifyCallback()
             { return this->notifyCallback; }
+
+            [System::Diagnostics::DebuggerStepThrough]
             __property void set_NotifyCallback( NSvn::Core::NotifyCallback* value )
             { this->notifyCallback = value; }
 
             // Callback delegate for log messages
+            [System::Diagnostics::DebuggerStepThrough]
             __property LogMessageCallback* get_LogMessageCallback()
             { return this->logMessageCallback; }
+            
+            [System::Diagnostics::DebuggerStepThrough]
             __property void set_LogMessageCallback( NSvn::Core::LogMessageCallback* value )
             { this->logMessageCallback = value; }
 
             // The client configuration
+            [System::Diagnostics::DebuggerStepThrough]
             __property ClientConfig* get_ClientConfig()
             { return this->clientConfig; }
+
+            [System::Diagnostics::DebuggerStepThrough]
             __property void set_ClientConfig( NSvn::Core::ClientConfig* value )
             { this->clientConfig = value; }
 

@@ -22,17 +22,21 @@ namespace NSvn
             }
 
             ///<summary>Server side date of the commit</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property DateTime get_Date()
             { return this->date; }
 
             ///<summary>Author of the commit</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property String* get_Author()
             { return this->author; }
 
             ///<summary>The just committed revision</summary>
+            [System::Diagnostics::DebuggerStepThrough]
             __property int get_Revision()
             { return revision; }
 
+            [System::Diagnostics::DebuggerStepThrough]
             __property static CommitInfo* get_Invalid()
             { return CommitInfo::invalid; }
 

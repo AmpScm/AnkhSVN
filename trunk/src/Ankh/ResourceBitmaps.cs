@@ -5,6 +5,7 @@ namespace Ankh
 {
     /// <summary>
     /// Contains constants for the resource ids of the various bitmaps.
+    /// TODO: enum
     /// </summary>
     internal class ResourceBitmaps
     {

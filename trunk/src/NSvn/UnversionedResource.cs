@@ -86,6 +86,7 @@ namespace NSvn
         /// </summary>
         public string Path
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return path; }
         }
 
@@ -94,6 +95,7 @@ namespace NSvn
         /// </summary>
         public bool IsVersioned
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return false; }
         }
 
