@@ -123,15 +123,15 @@ public void FooBar()
 <code>
 public class Foo
 {
-//...
-    
-public void Bar()
-{
-    this.baz = 42; //yes
-    baz = 13; //no
-}
+    //...
+        
+    public void Bar()
+    {
+        this.baz = 42; //yes
+        baz = 13; //no
+    }
 
-private int baz;
+    private int baz;
 }
 </code>         </item>
             <item>Members of a class shall be ordered according to their protection level, 
@@ -150,5 +150,40 @@ private int baz;
             </item>
         </list>
     </section> <!-- formatting -->
+    
+    <section header="Comments">
+        <section header="General">
+            <p>Don't comment just to comment. Comments must always add information that you cannot get from
+            reading the code alone. Atrocities such as the following must be avoided at all cost:</p>
+            <code>// increase counter by 1
+counter++;</code>
+            
+            <p>Well chosen variable and method names can usually eliminate 
+            a lot of comments. Prefer short methods with a single purpose and a descriptive name. 
+            Whenever you feel the need to comment a block of code, consider whether the
+            block could be factored out into a separate method instead. 
+            If code seems to require a lot of comments to be understandable, rewrite it. The need for 
+            excessive commenting is often a <link url="http://c2.com/cgi/wiki?CodeSmell">code smell</link>.</p>
+            
+            <p>In general, avoid end-of-line comments unless absolutely necessary. The only exception is when
+            you are making a method/function call that takes a large number of arguments. In this case it 
+            is acceptable to put each argument on a separate line and adding a comment describing the 
+            parameter at the end of the line. Of course, most of our own method calls should take few 
+            parameters.</p>
+        </section>
+        <section header="XML documentation comments">
+            <p>All classes and methods that are part of a public API <i>must</i> have an extensive
+            documentation comment. Always keep in mind that these comments will be used to generate
+            documentation and write them accordingly. This means documenting <i>every</i> parameter, 
+            the return value and potential exceptions that are thrown by the method, as well as providing a 
+            verbose summary.</p>
+            <p>For entities that are not a part of a public API(protected/private methods, classes for
+            internal use etc...) the requirements are a little less stringent. You should still in general write 
+            documentation comments, but since they will not be a part of the API documentation they don't have
+            to be quite as formal. Always provide enough information so that others can discern what a method does
+            and what it's parameters are for. 
+            </p>
+        </section>
+    </section>
         
 </doc>
