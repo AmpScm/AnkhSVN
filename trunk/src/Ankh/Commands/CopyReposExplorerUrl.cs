@@ -14,7 +14,7 @@ namespace Ankh.Commands
 	/// </summary>
 	[VSNetCommand("CopyReposExplorerUrl", 
          Tooltip = "Copy the URL of this item to the system clipboard", 
-         Text = "Copy URL to clipboard" ),
+         Text = "Copy URL to clipboard", Bitmap = ResourceBitmaps.CopyUrlToClipboard ),
      VSNetControl( "ReposExplorer", Position=1 )]
 	internal class CopyReposExplorerUrl : CommandBase
 	{

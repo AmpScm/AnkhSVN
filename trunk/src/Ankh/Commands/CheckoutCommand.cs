@@ -11,7 +11,8 @@ namespace Ankh.Commands
     /// A command that lets you check out a repository directory.
     /// </summary>
     [VSNetCommand("Checkout", Tooltip="Checkout a repository directory", 
-         Text = "Checkout a repository directory..." ),
+         Text = "Checkout a repository directory...", 
+         Bitmap = ResourceBitmaps.CheckoutDirectory),
     VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 ) ]
     internal class CheckoutCommand : CommandBase
     {
