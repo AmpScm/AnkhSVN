@@ -54,6 +54,10 @@ namespace Ankh.Solution
 
         protected override StatusKind GetStatus()
         {
+            // any resources at all?
+            if ( this.resources.Count == 0 )
+                return StatusKind.None;
+
             // go through the resources belonging to this node
             foreach( ILocalResource resource in this.resources )
             {
