@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" ?> 
+<?xml-stylesheet type="text/xsl" href="doc.xsl"?>
+<doc title="Process documentation">
+     <section header="Front page (specified by HIO)">
+	 </section>
+     
+     <section header="Title page">
+     </section>
+     
+     <section header="Abstract"> 
+      <p></p>   
+     </section>
+     
+     <section header="Preface"> 
+		<p>This document describe the reason for the selected approach and how the
+		process evolved.</p>   
+     </section>
+     
+     <section header="Table of contents">    
+     </section>
+     
+     <section header="Introduction"> 
+			<section header="The birth of the project">    
+			</section>
+     
+			<section header="Theoretical background"> 
+				<p>Revision control systems. Subversion</p>   
+			</section>
+     
+			<section header="Planning and methodology">  
+				<p>Worked together until all group members were masters of
+				all new software and tools to be used during the project periode.
+				 </p>
+			</section>
+     </section>
+     
+      <section header="The development process">  		
+			<section header="Relations to the employer CollabNet"> 
+				<p>How the relations to CollabNet evolved 
+				through the process</p>   
+			</section>
+			<section header="Phases of evolution">  
+				<p>Waterfall method</p>  
+			</section>
+			<section header="Project challenges">    
+			</section>
+			<section header="Possible alternative approach">    
+			</section>
+			<section header="Deviations in project specifications">    
+			</section>
+			<section header="Future developments">    
+			</section>				
+     </section>
+     
+     <section header="Conclusion">  
+			<p>What we did, what we learnt, evaluation of worked performed. 
+				What can the product do for you ? What does the employer 
+				mean about the product ? Will it be available download from 
+				Subversion internet site ? Could the wrapper be used in another
+				context ? What could have been done different ?
+				</p>  
+			</section>
+</doc>
+    
