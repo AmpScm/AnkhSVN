@@ -113,6 +113,39 @@ namespace Ankh.Tests
             Assert.IsFalse( File.Exists( Path.Combine( this.WcPath, "Ankh.NoLoad" ) ) );
         }
 
+        /// <summary>
+        /// Test the OperationRunning property.
+        /// </summary>
+        [Test]
+        public void TestOperationRunning()
+        {
+            IContext context = this.CreateContext();
+            Assert.IsFalse( context.OperationRunning );
+
+            context.StartOperation( "Dummy operation" );
+            Assert.IsTrue( context.OperationRunning );
+
+            context.EndOperation();
+            Assert.IsFalse( context.OperationRunning );
+        }
+
+        /// <summary>
+        /// Test the unloading event.
+        /// </summary>
+        [Test]
+        public void TestUnloading()
+        {
+            Assert.IsFalse( this.unloadingCalled );
+
+            IContext context = this.CreateContext();
+            context.Unloading +=new EventHandler(context_Unloading);
+            context.DTE.Solution.Open( this.Solution );
+            context.Shutdown();
+
+            Assert.IsTrue( this.unloadingCalled );
+        }
+
+
 
 
         private string Solution
@@ -139,6 +172,12 @@ namespace Ankh.Tests
             return new AnkhContext( dte, ankh, new UIShell(), new ErrorHandler() );
         }
 
+        private void context_Unloading(object sender, EventArgs e)
+        {
+            this.unloadingCalled = true;
+        }
+
+        #region UIShell class
         private class UIShell : IUIShell
         {
             public RepositoryExplorerControl RepositoryExplorer
@@ -169,7 +208,9 @@ namespace Ankh.Tests
 
             public DialogResult AllowLoad = DialogResult.Yes;
         }
+        #endregion
 
+        #region ErrorHandler class
         private class ErrorHandler : IErrorHandler
         {
             #region IErrorHandler Members
@@ -182,8 +223,12 @@ namespace Ankh.Tests
             #endregion
 
         }
+        #endregion
 
 
         private DteFactory dteFactory;
-	}
+        private bool unloadingCalled = false;
+
+        
+    }
 }
