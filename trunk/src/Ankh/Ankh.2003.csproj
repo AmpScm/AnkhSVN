@@ -206,6 +206,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ISolutionExplorer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IUIShell.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
