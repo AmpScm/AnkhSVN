@@ -33,7 +33,7 @@
         
         <exec program="regsvr32" commandline="/s ${lib.dir}\Ankh.ToolWindow.dll"/>
         
-        <exec program="tlbimp" commandline="/out:${build.dir}/Ankh.ToolWindowLib.dll ${lib.dir}\Ankh.ToolWindow.dll"/>
+        <exec program="tlbimp" commandline="/out:${build.dir}/AnkhToolWindowLib.dll ${lib.dir}\Ankh.ToolWindow.dll"/>
         
         <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}">
             <references>
