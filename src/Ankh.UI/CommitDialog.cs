@@ -125,8 +125,8 @@ namespace Ankh.UI
             //            commitToolTip.SetToolTip( this.logMessageControl, 
             //                "Write changes you have performed since last revision or update" ); 
             commitToolTip.SetToolTip( this.okButton, 
-                "Files and comment will be added to the repository and made available for your collegues." ); 
-            commitToolTip.SetToolTip( this.cancelButton, "The commit will be cancelled" );  
+                "Perform the commit." ); 
+            commitToolTip.SetToolTip( this.cancelButton, "Cancel the commit." );  
         }
 
         private void showDiffButton_Click(object sender, System.EventArgs e)
