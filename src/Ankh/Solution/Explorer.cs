@@ -334,6 +334,9 @@ namespace Ankh.Solution
 
         private TreeNode GetNode(UIHierarchyItem item)
         {
+            if ( item.Object == null )
+                return null;
+
             if ( item.Object is ProjectItem && this.projectItems.Contains( item.Object ) )
                 return ((TreeNode)this.projectItems[item.Object]);
             else if ( item.Object is Project && this.projects.Contains(item.Object) )
@@ -346,6 +349,9 @@ namespace Ankh.Solution
         
         private TreeNode GetNode( ProjectItem item )
         {
+            if ( item == null )
+                return null;
+
             if (this.projectItems.Contains( item ) )
                 return ((TreeNode)this.projectItems[item]);
             else
@@ -354,6 +360,9 @@ namespace Ankh.Solution
 
         private TreeNode GetNode( Project project )
         {
+            if ( project == null )
+                return null;
+
             if ( this.projects.Contains( project ) )
                 return ((TreeNode)this.projects[project]);
             else
