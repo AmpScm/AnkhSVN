@@ -179,21 +179,11 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SolutionExplorer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "status_icons.bmp"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "SvnContext.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TreeNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -329,6 +319,16 @@
                 />
                 <File
                     RelPath = "Commands\ViewRepositoryFileCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\Explorer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\TreeNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

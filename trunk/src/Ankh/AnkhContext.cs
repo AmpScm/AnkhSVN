@@ -47,7 +47,7 @@ namespace Ankh
         /// <summary>
         /// The SolutionExplorer object.
         /// </summary>
-        public SolutionExplorer SolutionExplorer
+        public Explorer SolutionExplorer
         {
             get{ return this.solutionExplorer; }
         }
@@ -133,7 +133,7 @@ namespace Ankh
         {
             try
             {
-                this.solutionExplorer = new SolutionExplorer( this.DTE, this.Context );
+                this.solutionExplorer = new Explorer( this.DTE, this.Context );
             }
             catch( Exception ex )
             {
@@ -225,7 +225,7 @@ namespace Ankh
         private ProjectItemsEvents vbProjectItemsEvents;
         private ProjectItemsEvents vcProjectItemsEvents;
         private ProjectItemsEvents vjProjectItemsEvents;
-        private SolutionExplorer solutionExplorer = null;
+        private Explorer solutionExplorer = null;
 
         private SvnContext context;
         private RepositoryExplorerControl repositoryExplorer;
