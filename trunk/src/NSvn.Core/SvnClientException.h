@@ -63,6 +63,14 @@ namespace NSvn
           {;}
     };
 
+     public __gc class ResourceOutOfDateException : public SvnClientException
+    {
+    public:
+        ResourceOutOfDateException( System::Exception* innerException ) :
+          SvnClientException( "The resource is out of date relative to the repository. Run update.", innerException )
+          {;}
+    };
+
     inline void HandleError( svn_error_t* err )
     {
         if ( err != 0 )
