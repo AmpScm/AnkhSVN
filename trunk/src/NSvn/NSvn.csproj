@@ -154,6 +154,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "RepositoryResourceVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SvnResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

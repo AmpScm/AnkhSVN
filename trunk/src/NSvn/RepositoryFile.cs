@@ -25,5 +25,14 @@ namespace NSvn
         {
             // empty
         }
+
+        /// <summary>
+        /// Accept a RepositoryResourceVisitor.
+        /// </summary>
+        /// <param name="visitor">The RepositoryResourceVisitor to accept.</param>
+        public override void Accept( RepositoryResourceVisitor visitor )
+        {
+            visitor.VisitFile( this );
+        }
     }
 }
