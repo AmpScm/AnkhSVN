@@ -62,13 +62,17 @@ namespace NSvn
             /// <summary>Copy the string to Pool</summary>
             char* CopyToPool( Pool& pool )
             {
-                //TODO: unicode issues
+                return CopyToPool( static_cast<apr_pool_t*>(pool) );
+            }
+
+            char* CopyToPool( apr_pool_t* pool )
+            {
+               //TODO: unicode issues
 
                 char* hglobal = this->ConvertToCharPtr( this->string );
 
                 //make room in the pool and copy our string there
-                char* ptr = static_cast<char*>(pool.Alloc( this->string->Length + 1));
-                apr_cpystrn( ptr, hglobal, this->string->Length );
+                char* ptr = apr_pstrdup( pool, hglobal );
 
                 // free the hglobal
                 this->FreeCharPtr( hglobal );

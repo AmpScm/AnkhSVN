@@ -25,10 +25,13 @@ namespace NSvn
                     }
 
                     /// <summary>Test that a ClientContext can be converted to a 
-                    /// svn_client_ctx_t</summary>
+                    /// svn_client_ctx_t with a working notify callback</summary>
                     [Test]
-                    //[Ignore("Skip for now")]
-                    void TestSvnContextTConversion();
+                    void TestNotifyCallback();
+
+                    /// <summary>Test that the auth baton stuff works</summary>
+                    [Test]
+                    void TestAuthBaton();
 
                 private:
                     void NotifyCallback( Notification* notification );

@@ -8,6 +8,8 @@ namespace NSvn.Common
     {
         Credential FirstCredentials( );
         Credential NextCredentials( );
-        Credential SaveCredentials();
+
+        // TODO: implement
+        //Credential SaveCredentials();
     }
 }
