@@ -51,6 +51,7 @@ namespace Ankh.Commands
                 foreach( WorkingCopyResource resource in this.resources )
                 {
                     Trace.WriteLine( "Updating " + resource.Path, "Ankh" );
+                    resource.Update();
                 }
             }
 
