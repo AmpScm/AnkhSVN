@@ -144,7 +144,7 @@ void NSvn::Core::Client::PropSet(Property* property, String* target, bool recurs
 // implementation of Client::RevPropSet
 void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* revision, 
                                     [System::Runtime::InteropServices::Out]System::Int32*
-                                    revisionNumber, ClientContext* context)
+                                    revisionNumber, bool force, ClientContext* context)
 {
     Pool pool;
 
@@ -155,7 +155,7 @@ void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* r
 
     HandleError( svn_client_revprop_set(  StringHelper(property->Name), &propv, 
         truePath, revision->ToSvnOptRevision( pool ), &setRev, 
-        context->ToSvnContext (pool), pool));
+        context->ToSvnContext (pool), force, pool));
 
     *revisionNumber = setRev;
 }

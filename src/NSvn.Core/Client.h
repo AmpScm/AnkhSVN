@@ -322,7 +322,7 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
             static void RevPropSet(Property* property, String* url, Revision* revision, 
-                [System::Runtime::InteropServices::Out]System::Int32* setRev, ClientContext* context);
+                [System::Runtime::InteropServices::Out]System::Int32* setRev, bool force, ClientContext* context);
 
             ///<summary>Get properties from an entry in a working copy or repository.</summary>
             ///<param name="propName">Name of property.</param>
