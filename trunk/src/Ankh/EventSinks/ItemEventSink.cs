@@ -95,6 +95,7 @@ namespace Ankh.EventSinks
         {
             // we don't want to svn delete files that actually exist on disk -
             // they'll most likely just be "Exclude(d) from project"
+            item.Refresh( this.Context.Client );
             return item.IsVersioned && 
                 (!File.Exists( item.Path ) && !Directory.Exists(item.Path));
         }
@@ -113,11 +114,12 @@ namespace Ankh.EventSinks
 
                 string oldPath = Path.Combine( dir, oldName );
                 SvnItem oldItem = this.Context.StatusCache[oldPath];
+                oldItem.Refresh( this.Context.Client );
 
                 // is the item versioned?
                 if ( oldItem.IsVersioned )
                 {
-                    MessageBox.Show( this.Context.HostWindow, 
+                    this.Context.UIShell.ShowMessageBox( 
                         "You have attempted to rename a file that is under version control.\r\n" + 
                         "Use Ankh->Rename file... to rename the file instead", 
                         "Attempting to rename versioned item", 
