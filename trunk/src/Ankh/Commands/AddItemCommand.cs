@@ -4,6 +4,7 @@ using NSvn;
 using NSvn.Core;
 using NSvn.Common;
 using EnvDTE;
+using Ankh.UI;
 namespace Ankh.Commands
 {
 	/// <summary>
@@ -21,10 +22,10 @@ namespace Ankh.Commands
 
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
-            AddCandidateVisitor a = new AddCandidateVisitor();
+            UnversionedVisitor a = new UnversionedVisitor();
             context.SolutionExplorer.VisitSelectedItems( a );
             
-            if ( a.Addable )
+            if ( !a.IsVersioned )
                 return vsCommandStatus.vsCommandStatusEnabled |
                     vsCommandStatus.vsCommandStatusSupported;
             else
@@ -33,7 +34,6 @@ namespace Ankh.Commands
 
         public override void Execute(Ankh.AnkhContext context)
         {
-            UnversionedVisitor a = new UnversionedVisitor(); 
             context.SolutionExplorer.VisitSelectedItems( new AddVisitor() );
             
             context.SolutionExplorer.RefreshSelectionParents();

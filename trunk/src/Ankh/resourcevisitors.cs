@@ -60,18 +60,4 @@ namespace Ankh
             this.WorkingCopyResources.Add( resource );            
         }
     }
-
-    /// <summary>
-    /// Checks if the visited item is versioned.
-    /// </summary>
-    internal class AddCandidateVisitor : LocalResourceVisitorBase
-            {
-                public bool Addable = false;
-
-                public override void VisitUnversionedResource(NSvn.UnversionedResource resource)
-                {
-                    //nothing to check for when adding unversioned files.
-                    Addable = true;
-                }
-    }
 }
