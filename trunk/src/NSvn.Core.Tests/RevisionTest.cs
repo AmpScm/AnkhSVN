@@ -47,12 +47,12 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestParse()
         {
-            this.TestParse( "working", Revision.Working );
-            this.TestParse( "unspecified", Revision.Unspecified );
-            this.TestParse( "head", Revision.Head );
-            this.TestParse( "committed", Revision.Committed );
-            this.TestParse( "base", Revision.Base );
-            this.TestParse( "previous", Revision.Previous );
+            this.DoTestParse( "working", Revision.Working );
+            this.DoTestParse( "unspecified", Revision.Unspecified );
+            this.DoTestParse( "head", Revision.Head );
+            this.DoTestParse( "committed", Revision.Committed );
+            this.DoTestParse( "base", Revision.Base );
+            this.DoTestParse( "previous", Revision.Previous );
 
             Assertion.AssertEquals( "42", Revision.Parse("42").ToString() );
 
@@ -70,7 +70,7 @@ namespace NSvn.Core.Tests
 
         }
 
-        private void TestParse( string s, Revision rev )
+        private void DoTestParse( string s, Revision rev )
         {
             Assertion.AssertEquals( Revision.Parse(s), rev );
         }
