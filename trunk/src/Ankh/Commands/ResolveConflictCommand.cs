@@ -15,7 +15,8 @@ namespace Ankh.Commands
     /// <summary>
     /// Allows the user to resolve a conflicted file.
     /// </summary>
-    [VSNetCommand( "ResolveConflict", Text="Resolve",  Bitmap = ResourceBitmaps.Default, 
+    [VSNetCommand( "ResolveConflict", Text="Resolve conflicted file...",  
+         Bitmap = ResourceBitmaps.Default, 
          Tooltip = "Resolve conflicted file"),
      VSNetControl( "Item.Ankh", Position = 1 ),
      VSNetControl( "Project Node.Ankh", Position = 1 ),
@@ -65,41 +66,30 @@ namespace Ankh.Commands
         /// <param name="item"></param>
         private void Resolve(AnkhContext context, SvnItem item)
         {
-            int oldRev, newRev;
-            this.GetRevisions( item, out oldRev, out newRev );
 
             string mergeExe = context.Config.MergeExePath;
             if (mergeExe == null)
             {
-                ConflictDialog.Choice selection;
+                string selection;
 
                 using( ConflictDialog dialog = new ConflictDialog(  ) )
                 {
-                    dialog.OldRev = oldRev;
-                    dialog.NewRev = newRev;
-                    dialog.Filename = item.Path;
+                    Entry entry = item.Status.Entry;
+                    dialog.Filenames = new string[]{
+                                                       entry.ConflictWorking,
+                                                       entry.ConflictNew,
+                                                       entry.ConflictOld,
+                                                       item.Path
+                                                   };
 
                     if ( dialog.ShowDialog( context.HostWindow ) != DialogResult.OK )
                         return;
                         
                     selection = dialog.Selection;
-                }       
-
-                // should we copy one of the files over the original?
-                switch( selection )
-                {
-                    case ConflictDialog.Choice.OldRev:
-                        this.Copy( item.Path, item.Status.Entry.ConflictOld );
-                        break;
-                    case ConflictDialog.Choice.NewRev:
-                        this.Copy( item.Path, item.Status.Entry.ConflictNew  );
-                        break;
-                    case ConflictDialog.Choice.Mine:
-                        this.Copy( item.Path, item.Status.Entry.ConflictWorking );
-                        break;
-                    default:
-                        break;
-                }
+                }   
+    
+                if ( selection != item.Path )
+                    this.Copy( item.Path, selection );
 
                 context.Client.Resolved( item.Path, false );
                 context.OutputPane.WriteLine( 
@@ -130,19 +120,7 @@ namespace Ankh.Commands
                     context.Client.Resolved( item.Path, false );
                 }
             }
-        }
-
-        /// <summary>
-        /// Retrieve the conflicted revisions.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="oldRev"></param>
-        /// <param name="newRev"></param>
-        private void GetRevisions( SvnItem item, out int oldRev, out int newRev )
-        {
-            oldRev = int.Parse( NUMBER.Match( item.Status.Entry.ConflictOld ).Groups[1].Value );
-            newRev = int.Parse( NUMBER.Match( item.Status.Entry.ConflictNew ).Groups[1].Value );
-        }  
+        }        
 
         private void Copy( string toPath, string fromFile )
         {
