@@ -120,7 +120,7 @@ namespace Ankh.UI
             this.Name = "ProgressDialog";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Ankh";
+            this.Text = "Please wait...";
             this.Load += new System.EventHandler(this.ProgressDialog_Load);
             this.ResumeLayout(false);
 
