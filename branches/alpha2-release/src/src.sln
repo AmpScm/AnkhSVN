@@ -15,8 +15,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSvn.Core.Tests.MCpp", "NSv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn.Tests", "NSvn.Tests\NSvn.Tests.csproj", "{EC6D73BC-8445-4400-B910-784720330F05}"
 EndProject
-Project("{D4EFD700-BBAA-11D2-8EE0-00C04F5E0C38}") = "Ankh help", "Help.doc\Ankh help.HWProj", "{74AAB3DC-AE7B-4B19-8615-25150AAA41E8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReposInstaller", "ReposInstaller\ReposInstaller.csproj", "{6D2A5456-0DB3-4795-8005-7E591AB2A221}"
