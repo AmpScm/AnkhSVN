@@ -91,26 +91,7 @@ namespace Ankh
             string normdir = PathUtils.NormalizePath(dir, this.currentPath);
             if ( this.deletions.ContainsKey( normdir ) )
             {
-                // we need to make sure at this point that they are still valid
-                IList list = (IList)this.deletions[normdir];
-                IList newList = new ArrayList();
-                foreach( SvnItem item in list )
-                {
-                    // this item still valid?
-                    item.Refresh(this.client);
-                    if ( item.Status.TextStatus == StatusKind.Deleted )
-                        newList.Add( item );
-                }
-                if ( newList.Count > 0 )
-                {
-                    this.deletions[normdir] = newList;
-                    return (IList)this.deletions[normdir];
-                }
-                else
-                {
-                    this.deletions.Remove(normdir);             
-                    return new SvnItem[]{};
-                }
+                return (IList)this.deletions[normdir];
             }
             else
                 return new SvnItem[]{};
@@ -141,27 +122,65 @@ namespace Ankh
             else
             {
                 string containingDir;
-                // find the parent directory
-                if ( path[path.Length-1 ] == '\\' )
-                {
-                    containingDir = Path.GetDirectoryName(
-                        path.Substring(0, path.Length-1) );
-                }
-                else
-                {
-                    containingDir = Path.GetDirectoryName( path );
-                }
-
-                containingDir = PathUtils.NormalizePath( containingDir, this.currentPath );
+                containingDir = GetNormalizedParentDirectory(path);
 
                 // store the deletions keyed on the parent directory
                 IList list = (IList)this.deletions[ containingDir ];
                 if ( list == null )
                     list = new ArrayList();
-                list.Add( new SvnItem( path, status ) );
+                SvnItem deletedItem = new SvnItem( path, status );
+                deletedItem.Changed += new StatusChanged(this.DeletedItemChanged);
+                list.Add( deletedItem );
 
                 this.deletions[ containingDir ] = list;
             }
+        }
+
+        private void DeletedItemChanged(object sender, EventArgs e)
+        {
+            SvnItem deletedItem = (SvnItem)sender;
+            string parentDir = this.GetNormalizedParentDirectory( deletedItem.Path );
+
+            // are we tracking this item? we should
+            IList dirDeletions = (IList)this.deletions[ parentDir ];
+            if ( dirDeletions == null )
+            {
+                Debug.WriteLine( "Event raised from deleted item we're not tracking" );
+                return;
+            }
+
+            // get rid of the item from the directory
+            dirDeletions.Remove( deletedItem );
+
+            // is the list for that directory now empty?
+            if ( dirDeletions.Count == 0 )
+            {
+                dirDeletions.Remove( parentDir );
+            }
+
+            // if it's anything but deleted, put it in the regular table
+            if ( deletedItem.Status.TextStatus != StatusKind.None )
+            {
+                this.table[ deletedItem.Path ] = deletedItem;                
+            }
+        }
+
+        private string GetNormalizedParentDirectory(string path)
+        {
+            string containingDir;
+            // find the parent directory
+            if ( path[path.Length-1 ] == '\\' )
+            {
+                containingDir = Path.GetDirectoryName(
+                    path.Substring(0, path.Length-1) );
+            }
+            else
+            {
+                containingDir = Path.GetDirectoryName( path );
+            }
+
+            containingDir = PathUtils.NormalizePath( containingDir, this.currentPath );
+            return containingDir;
         }
 
         private int cacheHits = 0;
@@ -172,5 +191,7 @@ namespace Ankh
         private Hashtable table;
         private Client client;
         private string currentPath;
+
+        
     }
 }
