@@ -124,6 +124,22 @@ namespace Ankh.Solution
                 node.Refresh();
         }
 
+        /// <summary>
+        /// Refreshes the current selection.
+        /// </summary>
+        public void RefreshSelection()
+        {
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
+            {
+                TreeNode node = this.GetNode( item );
+                // special care for the solution
+                if ( node == solutionNode )
+                    this.SyncWithTreeView();
+                else if ( node != null )
+                    node.Refresh();
+            }
+        }
+
 
         /// <summary>
         /// Updates the status of the given item.
@@ -158,6 +174,8 @@ namespace Ankh.Solution
             // we assume there is a single root node
             this.root = TreeNode.CreateSolutionNode( 
                 this.solutionItem, root, this );
+
+            //this.Hook();
         }
 
         internal IntPtr TreeView
@@ -260,7 +278,7 @@ namespace Ankh.Solution
                 return null;
         }
 
-
+        
 
         #region class TreeNode
         
