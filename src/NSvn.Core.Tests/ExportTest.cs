@@ -34,7 +34,7 @@ namespace NSvn.Core.Tests
         public void TestExportRepos()
         {
             ClientContext ctx = new ClientContext();
-            Client.Export( this.ReposUrl, this.newWc, Revision.Head, ctx );
+            Client.Export( this.ReposUrl, this.newWc, Revision.Head, false, ctx );
 
             Assertion.Assert( "Exported file not there", 
                 File.Exists( Path.Combine( this.newWc, "Form.cs" ) ) );
@@ -48,7 +48,7 @@ namespace NSvn.Core.Tests
         { 
             ClientContext ctx = new ClientContext();
             
-            Client.Export( this.WcPath, this.newWc, Revision.Head, ctx );
+            Client.Export( this.WcPath, this.newWc, Revision.Head, false, ctx );
 
             Assertion.Assert( "Exported file not there", 
                 File.Exists( Path.Combine( this.newWc, "Form.cs" ) ) );

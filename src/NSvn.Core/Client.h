@@ -113,8 +113,6 @@ namespace NSvn
             ///         authenticating with the authentication baton</summary>
             ///<param name="path">Path to the file/directory.</param>
             ///<param name="url">Path to the files/directory in the repository.</param>
-            ///<param name="newEntry">New entry (directory) created in the repository  
-            ///	 					identified by url, may be null.</param>
             ///<param name="nonRecursive">Indicate that subdirectories of directory targets 
             ///                           should be ignored.</param>
             ///<param name="context">A client context object, which holds client specific 
@@ -124,7 +122,7 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns> 
-            static CommitInfo* Import(String* path, String* url, String* newEntry, bool nonRecursive, 
+            static CommitInfo* Import(String* path, String* url, bool nonRecursive, 
                 ClientContext* context);
 
             ///<summary>Commit file/directory into repository, authenticating with the 
@@ -396,11 +394,12 @@ namespace NSvn
             ///                 the exported tree.</param>
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
             ///                         for more information.</param>
+            ///<param name="force">Whether to force the export</param>
             ///<param name="context">A client context object, which holds client specific 
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>       
-            static void Export(String* from, String* to, Revision* revision, ClientContext* context);
+            static void Export(String* from, String* to, Revision* revision, bool force,  ClientContext* context);
 
             ///<summary>List the contents of an url or path.</summary>
             ///<param name="path">Path to the files/directory to be listed.</param>  
