@@ -72,17 +72,17 @@ namespace Ankh
 //            this.vcProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
 //                this.ItemAdded );
 
-            this.vbProjectItemsEvents = (ProjectItemsEvents)
-                this.DTE.Events.GetObject( "VBProjectItemsEvents" );
-            
-            this.vbProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
-                this.ItemAdded );
-
-            this.vjProjectItemsEvents = (ProjectItemsEvents)
-                this.DTE.Events.GetObject( "VJSharpProjectItemsEvents" );
-
-            this.vjProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
-                this.ItemAdded );
+//            this.vbProjectItemsEvents = (ProjectItemsEvents)
+//                this.DTE.Events.GetObject( "VBProjectItemsEvents" );
+//            
+//            this.vbProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
+//                this.ItemAdded );
+//
+//            this.vjProjectItemsEvents = (ProjectItemsEvents)
+//                this.DTE.Events.GetObject( "VJSharpProjectItemsEvents" );
+//
+//            this.vjProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
+//                this.ItemAdded );
 
        }
         #endregion

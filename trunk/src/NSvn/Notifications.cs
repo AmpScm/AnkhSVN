@@ -6,7 +6,7 @@ namespace NSvn
 	/// <summary>
 	/// An object dispatching notification events from SVN operations.
 	/// </summary>
-	public class Notifications : INotificationReceiver
+	public class Notifications 
 	{
         #region event declarations
         /// <summary>Got an add.</summary>         
@@ -74,6 +74,11 @@ namespace NSvn
         /// even will be fired <em>after</em> the specific notification events.       
         /// </summary>
         public event NotificationEventHandler NotificationReceived;
+
+        /// <summary>
+        /// Invoked when a log message is required.
+        /// </summary>
+        public event LogMessageEventHandler QueryLogMessage;
         #endregion
 
         #region Notify(very boring stuff)
@@ -82,7 +87,7 @@ namespace NSvn
         /// </summary>
         /// <param name="notification">A Notificaton object containing 
         /// information about the notification</param>
-        void INotificationReceiver.Notify( Notification notification )
+        internal void Notify( SvnResource resource, Notification notification )
         {
             NotificationEventArgs args = new NotificationEventArgs( notification );
 
@@ -173,5 +178,29 @@ namespace NSvn
                 this.NotificationReceived( this, args );
         }
         #endregion
+
+        /// <summary>
+        /// Callback method for log messages.
+        /// </summary>
+        /// <param name="resource">The resource this log message request is originating from
+        /// </param>
+        /// <param name="items">The targets to be committed.</param>
+        /// <returns>A string containing the log message, or null if the commit is canceled
+        /// </returns>
+        internal string LogMessageCallback( SvnResource resource, CommitItem[] items )
+        {
+            if ( this.QueryLogMessage != null )
+            {
+                LogMessageEventArgs args = new LogMessageEventArgs( items );
+                this.QueryLogMessage( resource, args );
+                if ( !args.Canceled )
+                    return args.LogMessage;
+                else
+                    return null;
+            }
+            else
+                return "";
+        }
+
 	}
 }

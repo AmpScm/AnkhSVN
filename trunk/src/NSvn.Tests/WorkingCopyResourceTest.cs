@@ -6,7 +6,7 @@ using NSvn.Core;
 namespace NSvn.Tests
 {
 	/// <summary>
-	/// Summary description for WorkingCopyItemTest.
+	/// Tests the WorkingCopyItem resource.
 	/// </summary>
 	[TestFixture]
 	public class WorkingCopyResourceTest : TestBase
@@ -19,6 +19,9 @@ namespace NSvn.Tests
         }
 
         #region TestCommit
+        /// <summary>
+        /// Tests committing.
+        /// </summary>
         [Test]
         public void TestCommit()
         {
@@ -33,11 +36,35 @@ namespace NSvn.Tests
             Assertion.AssertEquals( "Wrong status. Should be modified", StatusKind.Modified,
                 item.Status.TextStatus );
 
-            item.Commit( new LogMessageProvider( item.Path ), false );
+            item.Commit( false );
 
             Assertion.AssertEquals( "Wrong status. Should be normal", StatusKind.Normal,
                 item.Status.TextStatus );
            
+        }
+
+        /// <summary>
+        /// Tests committing multiple targets at once.
+        /// </summary>
+        [Test]
+        public void TestCommitMultipleTargets()
+        {
+            WorkingCopyResource item1 = WorkingCopyResource.FromPath( 
+                Path.Combine( this.WcPath, "Form.cs" ) );
+            WorkingCopyResource item2 = WorkingCopyResource.FromPath(
+                Path.Combine( this.WcPath, "App.ico" ) );
+
+            using( StreamWriter w1 = new StreamWriter( item1.Path, true ) )
+                w1.Write( "Moo" );
+            using( StreamWriter w2 = new StreamWriter( item2.Path, true ) )
+                w2.Write( "Moo" );
+
+            WorkingCopyResource.Commit( new WorkingCopyResource[]{ item1, item2 }, false );
+
+            Assertion.AssertEquals( "Wrong status", StatusKind.Normal, 
+                item1.Status.TextStatus );
+            Assertion.AssertEquals( "Wrong status", StatusKind.Normal, 
+                item2.Status.TextStatus );
         }
         #endregion
 
@@ -105,7 +132,7 @@ namespace NSvn.Tests
             WorkingCopyResource wc2item = new WorkingCopyFile( Path.Combine( wc2, "Form.cs" ) );
             using( StreamWriter w = new StreamWriter( wc2item.Path, false ) )
                 w.Write( "MOO" );
-            wc2item.Commit( "Log message", false );
+            wc2item.Commit( false );
 
             // try to update the primary wc
             WorkingCopyResource item = new WorkingCopyFile( Path.Combine( this.WcPath, "Form.cs" ) );
@@ -119,7 +146,7 @@ namespace NSvn.Tests
             // make sure you cannot commit a conflicted wc
             try
             {
-                item.Commit( "Should fail", false );
+                item.Commit( false );
                 Assertion.Fail( "Should not be able to commit a conflicted wc" );
             }
             catch( SvnClientException )
@@ -128,7 +155,7 @@ namespace NSvn.Tests
             WorkingCopyResource folderItem = new WorkingCopyDirectory( this.WcPath );
             try
             {
-                folderItem.Commit( "Should fail", true );
+                folderItem.Commit(  true );
                 Assertion.Fail( "Should not be able to commit a conflicted wc" );
             }
             catch( SvnClientException )

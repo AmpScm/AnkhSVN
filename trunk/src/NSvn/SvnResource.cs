@@ -9,12 +9,14 @@ namespace NSvn
 	/// Base class for all entity classes
 	/// </summary>
 	public class SvnResource
-	{
-        
-        
+	{       
         protected SvnResource()
         {
             this.clientContext = new ClientContext();
+            this.clientContext.LogMessageCallback = 
+                new LogMessageCallback( this.LogMessageCallback );
+            this.clientContext.NotifyCallback = 
+                new NotifyCallback( this.NotifyCallback );
             this.dispatchMapping = new Hashtable();
         }
 
@@ -49,12 +51,19 @@ namespace NSvn
                 if ( this.notifications == null )
                 {
                     this.notifications = new Notifications();
-                    this.clientContext.NotifyCallback = new NotifyCallback( 
-                        ((INotificationReceiver)this.notifications).Notify);
                 }
                 return this.notifications;
             }
+
+            set
+            {
+                this.notifications = value;
+            }
         }
+
+
+
+        
 
         /// <summary>
         /// Add an authentication provider.
@@ -85,6 +94,31 @@ namespace NSvn
         {
             get{ return this.clientContext; }
         }
+
+        /// <summary>
+        /// Callback receiver for notifications.
+        /// </summary>
+        /// <param name="notification">The notification.</param>
+        private void NotifyCallback( Notification notification )
+        {
+            if ( this.notifications != null )
+                this.notifications.Notify( this, notification );
+        }
+     
+        /// <summary>
+        /// Callback receiver for log message requests.
+        /// </summary>
+        /// <param name="items">The items that will be committed.</param>
+        /// <returns>A string containing the log message, or null if the 
+        /// commit is canceled.</returns>
+        private string LogMessageCallback( CommitItem[] items )
+        {
+            // no event listeners - no log message
+            if ( this.notifications == null )
+                return "";
+            return this.notifications.LogMessageCallback( this, items );    
+        }
+
         
         
             
