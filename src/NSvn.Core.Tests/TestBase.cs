@@ -225,7 +225,7 @@ namespace NSvn.Core.Tests
         /// </summary>
         /// <param name="baseName"></param>
         /// <returns></returns>
-        private string FindDirName( string baseName )
+        protected string FindDirName( string baseName )
         {
             string dir = baseName;
             int i = 1;

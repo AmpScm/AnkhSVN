@@ -78,7 +78,7 @@ StringDictionary* NSvn::Core::Client::Status( long* youngest, String* path, bool
     else
         return 0;
 }
-
+// implementation of Client::PropSet
 void NSvn::Core::Client::PropSet(String* propName, Byte propval[], String* target, bool recurse)
 {
     Pool pool;
@@ -87,6 +87,19 @@ void NSvn::Core::Client::PropSet(String* propName, Byte propval[], String* targe
     String* truePath = CanonicalizePath( target );
     HandleError( svn_client_propset( StringHelper(propName), &propv, StringHelper(truePath), recurse, pool) );
 }
+
+// implementation of Client::Checkout
+void NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision, 
+                                  bool recurse, ClientContext* ctx )
+{
+    Pool pool;
+    String* truePath = CanonicalizePath( path );
+    HandleError( svn_client_checkout( StringHelper( url ), StringHelper( truePath ), 
+        revision->ToSvnOptRevision( pool ), recurse, ctx->ToSvnContext( pool ), pool ) );
+}
+
+
+
 
 
 
