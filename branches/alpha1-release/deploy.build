@@ -152,6 +152,11 @@
             <fileset basedir="${checkout.dir}">
                 <includes name="**/*"/>
                 <excludes name="**/.svn/**" />
+                <excludes name="**/bin/**" />
+                <excludes name="**/obj/**" />
+                <excludes name="**/*.tmp" />
+                <excludes name="**/Debug/**" />
+                <excludes name="**/Release/**" />
             </fileset>
         </zip>
     </target>
