@@ -81,7 +81,7 @@ namespace Ankh.UI
         /// <returns></returns>
         public override string ToString()
         {
-            return "svn:externals";
+            return "externals";
         }
 
 		/// <summary> 

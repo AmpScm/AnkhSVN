@@ -118,7 +118,7 @@ namespace Ankh.UI
         /// <returns></returns>
         public override string ToString()
         {
-            return "svn:keywords";
+            return "keywords";
         }
 
 

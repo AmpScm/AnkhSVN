@@ -69,7 +69,7 @@ namespace Ankh.UI
 
         public override string ToString()
         {
-            return "svn:eol-style";
+            return "eol-style";
         }
 
 		/// <summary> 

@@ -138,7 +138,7 @@ namespace Ankh.UI
             // 
             // fromRevisionComboBox
             // 
-            this.fromRevisionComboBox.Location = new System.Drawing.Point(41, 24);
+            this.fromRevisionComboBox.Location = new System.Drawing.Point(48, 28);
             this.fromRevisionComboBox.Name = "fromRevisionComboBox";
             this.fromRevisionComboBox.Size = new System.Drawing.Size(121, 21);
             this.fromRevisionComboBox.TabIndex = 1;
@@ -148,7 +148,7 @@ namespace Ankh.UI
             // toRevisionComboBox
             // 
             this.toRevisionComboBox.Enabled = false;
-            this.toRevisionComboBox.Location = new System.Drawing.Point(41, 56);
+            this.toRevisionComboBox.Location = new System.Drawing.Point(48, 60);
             this.toRevisionComboBox.Name = "toRevisionComboBox";
             this.toRevisionComboBox.Size = new System.Drawing.Size(121, 21);
             this.toRevisionComboBox.TabIndex = 3;
@@ -167,7 +167,7 @@ namespace Ankh.UI
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(1, 24);
+            this.label2.Location = new System.Drawing.Point(8, 34);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 23);
             this.label2.TabIndex = 7;
@@ -175,7 +175,7 @@ namespace Ankh.UI
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(1, 56);
+            this.label3.Location = new System.Drawing.Point(8, 66);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(24, 23);
             this.label3.TabIndex = 8;
@@ -185,17 +185,18 @@ namespace Ankh.UI
             // 
             this.singleRevisionCheckBox.Checked = true;
             this.singleRevisionCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.singleRevisionCheckBox.Location = new System.Drawing.Point(166, 24);
+            this.singleRevisionCheckBox.Location = new System.Drawing.Point(432, 40);
             this.singleRevisionCheckBox.Name = "singleRevisionCheckBox";
             this.singleRevisionCheckBox.Size = new System.Drawing.Size(112, 24);
             this.singleRevisionCheckBox.TabIndex = 2;
-            this.singleRevisionCheckBox.Text = "Single revision";
+            this.singleRevisionCheckBox.Text = "Disable To";
             this.singleRevisionCheckBox.CheckedChanged += new System.EventHandler(this.singleRevisionCheckBoxChecked);
             // 
             // logRichTextBox
             // 
             this.logRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
+            this.logRichTextBox.Enabled = false;
             this.logRichTextBox.Location = new System.Drawing.Point(0, 160);
             this.logRichTextBox.Name = "logRichTextBox";
             this.logRichTextBox.ReadOnly = true;
@@ -220,6 +221,7 @@ namespace Ankh.UI
             this.getLogButton.Size = new System.Drawing.Size(99, 23);
             this.getLogButton.TabIndex = 9;
             this.getLogButton.Text = "Get log";
+            this.getLogButton.Click += new System.EventHandler(this.getLogButton_Click);
             // 
             // showDateCheckBox
             // 
@@ -268,14 +270,14 @@ namespace Ankh.UI
             // fromDateTimePicker
             // 
             this.fromDateTimePicker.Enabled = false;
-            this.fromDateTimePicker.Location = new System.Drawing.Point(384, 28);
+            this.fromDateTimePicker.Location = new System.Drawing.Point(184, 28);
             this.fromDateTimePicker.Name = "fromDateTimePicker";
             this.fromDateTimePicker.TabIndex = 20;
             // 
             // toDateTimePicker
             // 
             this.toDateTimePicker.Enabled = false;
-            this.toDateTimePicker.Location = new System.Drawing.Point(384, 61);
+            this.toDateTimePicker.Location = new System.Drawing.Point(184, 61);
             this.toDateTimePicker.Name = "toDateTimePicker";
             this.toDateTimePicker.TabIndex = 21;
             // 
@@ -310,7 +312,7 @@ namespace Ankh.UI
                                                                           this.fromRevisionComboBox,
                                                                           this.label1});
             this.Name = "ViewLogDialog";
-            this.Text = "ViewLogDialog";
+            this.Text = "View Log";
             this.ResumeLayout(false);
 
         }
@@ -486,6 +488,11 @@ namespace Ankh.UI
             {
                 EnableTextCombo(this.toRevisionComboBox.Text);
             }
+        }
+
+        private void getLogButton_Click(object sender, System.EventArgs e)
+        {
+            this.logRichTextBox.Enabled = true;
         }                                     
  
 	}
