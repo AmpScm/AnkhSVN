@@ -63,6 +63,13 @@ namespace Ankh
         /// </summary>
         void ResetCommitDialog();
 
+
+        /// <summary>
+        /// Whether the Repository Explorer window has focus
+        /// </summary>
+        /// <returns></returns>
+        bool RepositoryExplorerHasFocus();
+
         /// <summary>
         /// Executes the worker.Work method while displaying a progress dialog.
         /// </summary>
