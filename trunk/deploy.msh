@@ -43,17 +43,15 @@ $VSVARS="I:\Program Files\Microsoft Visual Studio .NET\Common7\Tools\vsvars32.ba
 # APR
 $APACHE_CVS = ":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
 
-$APR_BRANCH = "APR_0_9_BRANCH"
-$APR_MODULE = "apr"
+$APR = "http://svn.apache.org/repos/asf/apr/apr/branches/0.9.x"
 $APR_VERSION="0.9.5"
 
-$APR_UTIL_BRANCH = "APU_0_9_BRANCH"
-$APR_UTIL_MODULE = "apr-util"
+$APR_UTIL = "http://svn.apache.org/repos/asf/apr/apr-util/branches/0.9.x"
 $APR_UTIL_VERSION="0.9.5"
 
-$APR_ICONV_BRANCH = "API_0_9_BRANCH"
-$APR_ICONV_MODULE = "apr-iconv"
+$APR_ICONV = "http://svn.apache.org/repos/asf/apr/apr-iconv/branches/0.9.x"
 $APR_ICONV_VERSION="0.9.5"
+
 
 # Whether to use nant to build Ankh
 $USE_NANT = 1
@@ -61,6 +59,7 @@ $USE_NANT = 1
 
 $TMP = "T:"
 
+# setting CONFIG to the special value "_ALL_" will cause both Debug and Release to be built
 $CONFIG = "Release"
 
 $ErrorContinue = 0
@@ -254,11 +253,13 @@ function do_zlib
     }
 
     push-location
+    cd "subversion"
     new-directory "zlib"
     set-location "zlib"
     download_and_extract $ZLIB "." ""
+    $script:zlib_target_dir = resolve-path "."
     pop-location
-    $script:zlib_target_dir = resolve-path "zlib"
+    
 }
 
 function do_openssl
@@ -270,6 +271,7 @@ function do_openssl
     }
 
     push-location    
+    cd subversion
     download_and_extract $OPENSSL "." "openssl"
 
     
@@ -332,8 +334,20 @@ function do_berkeley
     
     $slnfile = combine-path ( combine-path $bdb_build_dir "build_win32" ) "Berkeley_DB.sln"
     
-    "Building $slnfile"
-    devenv $slnfile /Build $CONFIG /project "build_all"
+    if ( $config -eq "_ALL_" )
+    {
+        "Building $slnfile Debug"
+        devenv $slnfile /Build Debug /project "build_all"
+        
+        "Building $slnfile Release"
+        devenv $slnfile /Build Release /project "build_all"
+    }
+    else
+    {
+        "Building $slnfile $config"
+        devenv $slnfile /Build $config /project "build_all"
+    }
+    
 
     if ( ! $? )
     {
@@ -350,11 +364,24 @@ function do_berkeley
     "Copying header files to $bdb_target_dir\include"
     copy-item "$bdb_build_dir\build_win32\*.h" "$bdb_target_dir\include"
 
-    "Copying lib files to $bdb_target_dir\lib"
-    copy-item "$bdb_build_dir\build_win32\$CONFIG\*.lib" "$bdb_target_dir\lib"
+    if ( $config -eq "_ALL_" )
+    {
+        "Copying lib files to $bdb_target_dir\lib"
+        copy-item "$bdb_build_dir\build_win32\Debug\*.lib" "$bdb_target_dir\lib"
+        copy-item "$bdb_build_dir\build_win32\Release\*.lib" "$bdb_target_dir\lib"
 
-    "Copying DLL files to $bdb_target_dir\bin"
-    copy-item "$bdb_build_dir\build_win32\$CONFIG\*.dll" "$bdb_target_dir\bin"
+        "Copying DLL files to $bdb_target_dir\bin"
+        copy-item "$bdb_build_dir\build_win32\Debug\*.dll" "$bdb_target_dir\bin"
+        copy-item "$bdb_build_dir\build_win32\Release\*.dll" "$bdb_target_dir\bin"
+    }
+    else
+    {
+        "Copying lib files to $bdb_target_dir\lib"
+        copy-item "$bdb_build_dir\build_win32\$CONFIG\*.lib" "$bdb_target_dir\lib"
+
+        "Copying DLL files to $bdb_target_dir\bin"
+        copy-item "$bdb_build_dir\build_win32\$CONFIG\*.dll" "$bdb_target_dir\bin"
+    }
 
     pop-location
     
@@ -367,21 +394,20 @@ function do_apr
     ""
     
     "Checking out $APR_MODULE from $APACHE_CVS, the $APR_BRANCH branch"
-    cvs -d $APACHE_CVS co -r $APR_BRANCH $APR_MODULE 
+    svn co $APR apr
 
     "Checking out $APR_UTIL_MODULE from $APACHE_CVS, the $APR_UTIL_BRANCH branch"
-    cvs -d $APACHE_CVS co -r $APR_UTIL_BRANCH $APR_UTIL_MODULE
+    svn co $APR_UTIL apr-util
 
     "Checking out $APR_ICONV_MODULE from $APACHE_CVS, the $APR_ICONV_BRANCH branch"
-    cvs -d $APACHE_CVS co -r $APR_ICONV_BRANCH $APR_ICONV_MODULE
+    svn co $APR_ICONV apr-iconv
 
 }
 
 function do_subversion
 {
     
-    do_openssl
-    do_zlib
+    
 
     push-location   
 
@@ -394,6 +420,11 @@ function do_subversion
     {
         "No subversion dir. Doing it"
     }
+    
+    mkdir "subversion"
+    
+    do_openssl
+    do_zlib
     
     checkout $SUBVERSION "subversion" 
 
@@ -416,7 +447,7 @@ function do_subversion
     
     # quote appropriately
     $opts = $opts.Split() | qq 
-    showpath
+    #showpath
     "Generating VC++ solution files"
     echo "python gen-make.py $opts"
     python "gen-make.py" $opts
@@ -431,7 +462,15 @@ function do_subversion
 
     
     "Building Subversion"
-    devenv "subversion_vcnet.sln" /Build $CONFIG /project "__ALL__"
+    if ( $config -eq "_ALL_" )
+    {    
+        devenv "subversion_vcnet.sln" /Build Debug /project "__ALL__"
+        devenv "subversion_vcnet.sln" /Build Release /project "__ALL__"
+    }
+    else
+    {
+        devenv "subversion_vcnet.sln" /Build $config /project "__ALL__"
+    }
 
     #if ( ! $? ){ exit }
 
@@ -449,6 +488,7 @@ function get_revision($dir)
 
 function add_version( $name, $version )
 {
+    print "version: $version"
     $ver, $tag = $version.Split("-")
     $major, $minor, $patch, $rev = $ver.Split(".")
     if ( $rev -eq "" )
@@ -513,6 +553,25 @@ function checkout_tools
     $script:wix_binary_dir = convert-path "WiX"
 }
 
+function zip_svn_tree
+{
+    "<?xml version='1.0' encoding='utf-8' ?>`
+<project default='zip' xmlns='http://nant.sourceforge.net/schema/'>`
+    <target name='zip'>`
+        <zip zipfile='subversion.zip' verbose='true'>`
+            <fileset basedir='$subversion_dir'>`
+                <includes name='**/*.h'/>`
+                <includes name='**/*.lib'/>`
+                <exclude name='db-4*/**'/>`
+            </fileset>`
+        </zip>`
+    </target>`
+</project>" > zip.build
+    
+    nant /f:zip.build 
+
+}
+
 
 
 function do_ankh
@@ -528,6 +587,9 @@ function do_ankh
     $toname = "..\AnkhSetup-{0}.{1}.{2}.{3}-{4}.msi" -f $MAJOR, $MINOR, $PATCH, $REVISION, $LABEL
 
     checkout_tools
+    
+    zip_svn_tree
+    
 
     # get the version thing done
     create_assemblyinfo 
@@ -556,6 +618,8 @@ function do_ankh
 
         copy-item "Ankh\AnkhSetup\$CONFIG\AnkhSetup.msi" $toname
     }
+    
+    
 }
 
 $starttime = [DateTime].Now
