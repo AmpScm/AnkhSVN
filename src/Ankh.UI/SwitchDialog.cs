@@ -178,7 +178,7 @@ namespace Ankh.UI
             this.pathSelectionTreeView.Recursive = false;
             this.pathSelectionTreeView.SelectedImageIndex = -1;
             this.pathSelectionTreeView.SingleCheck = false;
-            this.pathSelectionTreeView.Size = new System.Drawing.Size(448, 248);
+            this.pathSelectionTreeView.Size = new System.Drawing.Size(480, 232);
             this.pathSelectionTreeView.TabIndex = 0;
             this.pathSelectionTreeView.UrlPaths = false;
             // 
@@ -187,9 +187,9 @@ namespace Ankh.UI
             this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.urlTextBox.Enabled = false;
-            this.urlTextBox.Location = new System.Drawing.Point(8, 336);
+            this.urlTextBox.Location = new System.Drawing.Point(8, 296);
             this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(432, 20);
+            this.urlTextBox.Size = new System.Drawing.Size(464, 20);
             this.urlTextBox.TabIndex = 1;
             this.urlTextBox.Text = "";
             this.urlTextBox.TextChanged += new System.EventHandler(this.urlTextBox_TextChanged);
@@ -197,7 +197,7 @@ namespace Ankh.UI
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.Location = new System.Drawing.Point(8, 312);
+            this.label1.Location = new System.Drawing.Point(8, 272);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 16);
             this.label1.TabIndex = 2;
@@ -208,7 +208,7 @@ namespace Ankh.UI
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Enabled = false;
-            this.okButton.Location = new System.Drawing.Point(256, 368);
+            this.okButton.Location = new System.Drawing.Point(288, 328);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 3;
             this.okButton.Text = "OK";
@@ -217,23 +217,24 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(352, 368);
+            this.cancelButton.Location = new System.Drawing.Point(384, 328);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 4;
             this.cancelButton.Text = "Cancel";
             // 
             // revisionPicker
             // 
-            this.revisionPicker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.revisionPicker.Location = new System.Drawing.Point(0, 280);
+            this.revisionPicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this.revisionPicker.Location = new System.Drawing.Point(8, 240);
             this.revisionPicker.Name = "revisionPicker";
             this.revisionPicker.Size = new System.Drawing.Size(344, 24);
             this.revisionPicker.TabIndex = 5;
             // 
             // recursiveCheckBox
             // 
-            this.recursiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.recursiveCheckBox.Location = new System.Drawing.Point(8, 248);
+            this.recursiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.recursiveCheckBox.Location = new System.Drawing.Point(368, 240);
             this.recursiveCheckBox.Name = "recursiveCheckBox";
             this.recursiveCheckBox.TabIndex = 6;
             this.recursiveCheckBox.Text = "Recursive";
@@ -242,7 +243,7 @@ namespace Ankh.UI
             // SwitchDialog
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(448, 397);
+            this.ClientSize = new System.Drawing.Size(480, 357);
             this.ControlBox = false;
             this.Controls.Add(this.recursiveCheckBox);
             this.Controls.Add(this.revisionPicker);
@@ -251,7 +252,7 @@ namespace Ankh.UI
             this.Controls.Add(this.label1);
             this.Controls.Add(this.urlTextBox);
             this.Controls.Add(this.pathSelectionTreeView);
-            this.MinimumSize = new System.Drawing.Size(352, 336);
+            this.MinimumSize = new System.Drawing.Size(488, 336);
             this.Name = "SwitchDialog";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
