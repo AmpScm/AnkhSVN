@@ -29,7 +29,7 @@
         ${svndir}\Debug\subversion\libsvn_fs_fs\libsvn_fs_fs-1.lib 
         ${svndir}\Debug\subversion\libsvn_fs_base\libsvn_fs_base-1.lib 
         ${svndir}\Debug\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib 
-        ${svndir}\subversion\libsvn_ra_local\libsvn_ra_local-1.lib 
+        ${svndir}\Debug\libsvn_ra_local\libsvn_ra_local-1.lib 
         ${svndir}\Debug\subversion\libsvn_ra\libsvn_ra-1.lib 
         ${svndir}\Debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib 
         ${svndir}\neon\libneonD.lib 
