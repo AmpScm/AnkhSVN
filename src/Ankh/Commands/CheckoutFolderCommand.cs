@@ -15,7 +15,7 @@ namespace Ankh.Commands
 	internal class CheckoutFolderCommand : 
         CheckoutCommand
 	{
-        public override void Execute(AnkhContext context)
+        public override void Execute(AnkhContext context, string parameters)
         {
             /// first get the parent folder
             FolderBrowser browser = new FolderBrowser();

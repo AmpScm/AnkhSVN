@@ -25,7 +25,7 @@ namespace Ankh.Commands
                 vsCommandStatus.vsCommandStatusSupported;
         }
     
-        public override void Execute(AnkhContext context)
+        public override void Execute(AnkhContext context, string parameters)
         {
             context.StartOperation( "Creating patch" );
             try

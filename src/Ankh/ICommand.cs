@@ -17,7 +17,7 @@ namespace Ankh
         /// <summary>
         /// Execute the command
         /// </summary>
-        void Execute( AnkhContext context );
+        void Execute( AnkhContext context, string parameters );
 
         /// <summary>
         /// The EnvDTE.Command instance corresponding to this command.
