@@ -24,12 +24,11 @@ namespace Ankh.Commands
             if ( context.SolutionExplorer.GetSelectionResources( false, 
                 new ResourceFilterCallback(RenameFileCommand.UnmodifiedSingleFileFilter) ).Count == 1 )
             {
-                return vsCommandStatus.vsCommandStatusEnabled | 
-                    vsCommandStatus.vsCommandStatusSupported; 
+                return Enabled;
             }
             else
             {
-                return vsCommandStatus.vsCommandStatusSupported;
+                return Disabled;
             }
         }
 

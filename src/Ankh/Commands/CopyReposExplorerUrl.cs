@@ -22,10 +22,9 @@ namespace Ankh.Commands
         {
             // all we need is a selection in the repos explorer
             if ( context.RepositoryExplorer.SelectedNode != null )
-                return vsCommandStatus.vsCommandStatusEnabled |
-                    vsCommandStatus.vsCommandStatusSupported;
+                return Enabled;
             else
-                return vsCommandStatus.vsCommandStatusSupported;
+                return Disabled;
 
         }
 

@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Utils;
 using EnvDTE;
 using Ankh.RepositoryExplorer;
+using Ankh.UI;
 
 namespace Ankh.Commands
 {
@@ -18,11 +19,14 @@ namespace Ankh.Commands
         #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
-            return context.RepositoryExplorer.SelectedNode.IsDirectory ? 
-                vsCommandStatus.vsCommandStatusSupported :
-                context.RepositoryExplorer.SelectedNode.Name.ToLower().EndsWith(".sln") ?
-                vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled :
-                vsCommandStatus.vsCommandStatusSupported;
+            IRepositoryTreeNode node = context.RepositoryExplorer.SelectedNode;
+            if ( node!= null && !node.IsDirectory && 
+                node.Name.ToLower().EndsWith(".sln" ) )
+            {
+                return Enabled;
+            }
+            else
+                return Disabled;
         }
         #endregion
 

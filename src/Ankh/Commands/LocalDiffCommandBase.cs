@@ -15,8 +15,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             // always allow diff - worst case you get an empty diff            
-            return vsCommandStatus.vsCommandStatusEnabled |
-                vsCommandStatus.vsCommandStatusSupported;
+            return Enabled;
         }
 
         /// <summary>

@@ -38,6 +38,13 @@ namespace Ankh.Commands
             }
         }
 
+        protected const vsCommandStatus Enabled = 
+            vsCommandStatus.vsCommandStatusEnabled |
+            vsCommandStatus.vsCommandStatusSupported;
+
+        protected const vsCommandStatus Disabled = 
+            vsCommandStatus.vsCommandStatusSupported;
+
         protected CommandBarControl GetControl(AnkhContext context, string barName, string name )
         {
             // TODO: either preload this or find a better way to map to 

@@ -26,10 +26,9 @@ namespace Ankh.Commands
         {
             if ( context.SolutionExplorer.GetSelectionResources( true, 
                 new ResourceFilterCallback( CommandBase.ModifiedFilter) ).Count > 0 )
-                return vsCommandStatus.vsCommandStatusEnabled |
-                    vsCommandStatus.vsCommandStatusSupported;
+                return Enabled;
             else
-                return vsCommandStatus.vsCommandStatusSupported;
+                return Disabled;
         }
         public override void Execute(Ankh.AnkhContext context, string parameters)
         {

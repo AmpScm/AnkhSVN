@@ -28,10 +28,9 @@ namespace Ankh.Commands
                 new ResourceFilterCallback(ResolveConflictCommand.ConflictedFilter) ).Count;
 
             if ( count > 0 )
-                return vsCommandStatus.vsCommandStatusEnabled |
-                    vsCommandStatus.vsCommandStatusSupported;
+                return Enabled;
             else
-                return vsCommandStatus.vsCommandStatusSupported;
+                return Disabled;
         }
 
         public override void Execute(AnkhContext context, string parameters)

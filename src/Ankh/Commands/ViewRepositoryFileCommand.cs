@@ -19,10 +19,9 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             // we enable it if it's a file.
-            return context.RepositoryExplorer.SelectedNode.IsDirectory ? 
-                vsCommandStatus.vsCommandStatusSupported : 
-                vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
-
+            return context.RepositoryExplorer.SelectedNode != null &&
+                !context.RepositoryExplorer.SelectedNode.IsDirectory ? 
+                Enabled : Disabled;
         }
         #endregion
 
