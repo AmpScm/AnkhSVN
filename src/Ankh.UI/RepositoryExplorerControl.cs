@@ -29,21 +29,13 @@ namespace Ankh.UI
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
  
-            // TODO: Add any initialization after the InitForm call
-
-            myInitializeComponents();
-
             //Set revision choices in combobox
             this.revisionPicker.WorkingEnabled = false;
             this.revisionPicker.BaseEnabled = false;
             this.revisionPicker.CommittedEnabled = false;
             this.revisionPicker.PreviousEnabled = false;
 
-            this.treeView.MouseUp += new MouseEventHandler( this.TreeViewMouseUp );
-            this.treeView.BeforeExpand += new TreeViewCancelEventHandler(treeView_BeforeExpand);
-            this.treeView.AfterSelect += new TreeViewEventHandler(treeView_AfterSelect);
-			
-            this.components = new System.ComponentModel.Container();
+            this.components = new Container();
             this.SetToolTips();
 
             this.ValidateRevision();
@@ -72,7 +64,7 @@ namespace Ankh.UI
         /// <summary>
         /// Fired whenever the user clicks Go.
         /// </summary>
-        public event EventHandler GoClicked;
+        public event EventHandler AddClicked;
 
         /// <summary>
         /// Fired if the background listing checkbox' state is changed.
@@ -171,6 +163,11 @@ namespace Ankh.UI
             this.treeView.LabelEdit = true;
             node.BeginEdit();
         }
+
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Button button1;
+        private Ankh.UI.RepositoryTreeView treeView;
+        private Ankh.UI.RevisionPicker revisionPicker;
 
         private INewDirectoryHandler newDirHandler;
 
@@ -276,13 +273,13 @@ namespace Ankh.UI
         }
 
         //Gives a tree view of repository if valid revision is selected
-        private void goButton_Click(object sender, System.EventArgs e)
+        private void addButton_Click(object sender, System.EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
             try
             {
-                if ( this.GoClicked != null ) 
-                    this.GoClicked( this, EventArgs.Empty );  
+                if ( this.AddClicked != null ) 
+                    this.AddClicked( this, EventArgs.Empty );  
                 this.treeView.Enabled = true;
             }
             finally
@@ -298,7 +295,7 @@ namespace Ankh.UI
 
         private void ValidateRevision()
         {
-            this.goButton.Enabled = this.revisionPicker.Valid;
+            this.addButton.Enabled = this.revisionPicker.Valid;
         }
 
         private void TreeViewMouseUp( object sender, MouseEventArgs args )
@@ -327,54 +324,57 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
             this.urlTextBox = new System.Windows.Forms.TextBox();
-            this.goButton = new System.Windows.Forms.Button();
+            this.addButton = new System.Windows.Forms.Button();
             this.revisionLabel = new System.Windows.Forms.Label();
             this.browseButton = new System.Windows.Forms.Button();
             this.urlLabel = new System.Windows.Forms.Label();
             this.backgroundListingCheck = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.treeView = new Ankh.UI.RepositoryTreeView();
+            this.revisionPicker = new Ankh.UI.RevisionPicker();
             this.SuspendLayout();
             // 
             // urlTextBox
             // 
-            this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left)));
-            this.urlTextBox.Location = new System.Drawing.Point(32, 8);
+            this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this.urlTextBox.Location = new System.Drawing.Point(4, 72);
             this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(224, 20);
+            this.urlTextBox.Size = new System.Drawing.Size(368, 20);
             this.urlTextBox.TabIndex = 1;
             this.urlTextBox.Text = "http://www.ankhsvn.com:8088/svn/test";
             this.urlTextBox.TextChanged += new System.EventHandler(this.urlTextBox_TextChanged);
             // 
-            // goButton
+            // addButton
             // 
-            this.goButton.Location = new System.Drawing.Point(264, 8);
-            this.goButton.Name = "goButton";
-            this.goButton.Size = new System.Drawing.Size(32, 23);
-            this.goButton.TabIndex = 2;
-            this.goButton.Text = "Go";
-            this.goButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.goButton.Click += new System.EventHandler(this.goButton_Click);
+            this.addButton.Location = new System.Drawing.Point(4, 99);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(64, 23);
+            this.addButton.TabIndex = 2;
+            this.addButton.Text = "Add";
+            this.addButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
             // revisionLabel
             // 
-            this.revisionLabel.Location = new System.Drawing.Point(0, 38);
+            this.revisionLabel.Location = new System.Drawing.Point(4, 8);
             this.revisionLabel.Name = "revisionLabel";
-            this.revisionLabel.Size = new System.Drawing.Size(344, 18);
+            this.revisionLabel.Size = new System.Drawing.Size(292, 18);
             this.revisionLabel.TabIndex = 3;
             this.revisionLabel.Text = "Select a revision or manually type the revision number:";
             // 
             // browseButton
             // 
-            this.browseButton.Location = new System.Drawing.Point(305, 8);
+            this.browseButton.Location = new System.Drawing.Point(73, 99);
             this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(56, 23);
+            this.browseButton.Size = new System.Drawing.Size(72, 23);
             this.browseButton.TabIndex = 4;
-            this.browseButton.Text = "Browse";
+            this.browseButton.Text = "Browse...";
             this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
             // 
             // urlLabel
             // 
-            this.urlLabel.Location = new System.Drawing.Point(7, 11);
+            this.urlLabel.Location = new System.Drawing.Point(4, 56);
             this.urlLabel.Name = "urlLabel";
             this.urlLabel.Size = new System.Drawing.Size(24, 16);
             this.urlLabel.TabIndex = 5;
@@ -382,62 +382,99 @@ namespace Ankh.UI
             // 
             // backgroundListingCheck
             // 
-            this.backgroundListingCheck.Location = new System.Drawing.Point(8, 88);
+            this.backgroundListingCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.backgroundListingCheck.Location = new System.Drawing.Point(0, 328);
             this.backgroundListingCheck.Name = "backgroundListingCheck";
             this.backgroundListingCheck.Size = new System.Drawing.Size(184, 16);
             this.backgroundListingCheck.TabIndex = 6;
             this.backgroundListingCheck.Text = "Enable background listing";
             // 
-            // RepositoryExplorerControl
+            // button1
             // 
-            this.Controls.Add(this.backgroundListingCheck);
-            this.Controls.Add(this.urlLabel);
-            this.Controls.Add(this.browseButton);
-            this.Controls.Add(this.revisionLabel);
-            this.Controls.Add(this.goButton);
-            this.Controls.Add(this.urlTextBox);
-            this.Name = "RepositoryExplorerControl";
-            this.Size = new System.Drawing.Size(376, 392);
-            this.ResumeLayout(false);
-
-        }
-		#endregion
-
-        
-        private void myInitializeComponents()
-        {
-            //initialize components outside of generated code area
-
-            this.treeView = new Ankh.UI.RepositoryTreeView();
-            this.revisionPicker = new Ankh.UI.RevisionPicker();
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(283, 99);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(88, 23);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Remove";
             // 
             // treeView
             // 
             this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
                 | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView.Enabled = false;
             this.treeView.ImageIndex = -1;
-            this.treeView.Location = new System.Drawing.Point(0, 110);
+            this.treeView.Location = new System.Drawing.Point(0, 128);
             this.treeView.Name = "treeView";
             this.treeView.SelectedImageIndex = -1;
-            this.treeView.Size = new System.Drawing.Size(407, 296);
-            this.treeView.TabIndex = 6;
+            this.treeView.Size = new System.Drawing.Size(376, 192);
+            this.treeView.TabIndex = 9;
+            this.treeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseUp);
+            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
+            this.treeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeExpand);
             // 
             // revisionPicker
             // 
-            this.revisionPicker.Location = new System.Drawing.Point(8, 60);
+            this.revisionPicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this.revisionPicker.Location = new System.Drawing.Point(4, 24);
             this.revisionPicker.Name = "revisionPicker";
-            this.revisionPicker.Size = new System.Drawing.Size(336, 24);
-            this.revisionPicker.TabIndex = 7;
-            this.revisionPicker.Changed += new System.EventHandler(this.revisionPicker_Changed);
+            this.revisionPicker.Size = new System.Drawing.Size(368, 20);
+            this.revisionPicker.TabIndex = 10;
             // 
             // RepositoryExplorerControl
             // 
             this.Controls.Add(this.revisionPicker);
             this.Controls.Add(this.treeView);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.backgroundListingCheck);
+            this.Controls.Add(this.urlLabel);
+            this.Controls.Add(this.browseButton);
+            this.Controls.Add(this.revisionLabel);
+            this.Controls.Add(this.addButton);
+            this.Controls.Add(this.urlTextBox);
+            this.Name = "RepositoryExplorerControl";
+            this.Size = new System.Drawing.Size(376, 352);
+            this.ResumeLayout(false);
 
         }
+		#endregion
+
+        
+//        private void myInitializeComponents()
+//        {
+//            //initialize components outside of generated code area
+//
+//            this.treeView = new Ankh.UI.RepositoryTreeView();
+//            this.revisionPicker = new Ankh.UI.RevisionPicker();
+//            // 
+//            // treeView
+//            // 
+//            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+//                | System.Windows.Forms.AnchorStyles.Left) 
+//                | System.Windows.Forms.AnchorStyles.Right)));
+//            this.treeView.Enabled = false;
+//            this.treeView.ImageIndex = -1;
+//            this.treeView.Location = new System.Drawing.Point(0, 110);
+//            this.treeView.Name = "treeView";
+//            this.treeView.SelectedImageIndex = -1;
+//            this.treeView.Size = new System.Drawing.Size(407, 296);
+//            this.treeView.TabIndex = 6;
+//            // 
+//            // revisionPicker
+//            // 
+//            this.revisionPicker.Location = new System.Drawing.Point(8, 60);
+//            this.revisionPicker.Name = "revisionPicker";
+//            this.revisionPicker.Size = new System.Drawing.Size(336, 24);
+//            this.revisionPicker.TabIndex = 7;
+//            this.revisionPicker.Changed += new System.EventHandler(this.revisionPicker_Changed);
+//            // 
+//            // RepositoryExplorerControl
+//            // 
+//            this.Controls.Add(this.revisionPicker);
+//            this.Controls.Add(this.treeView);
+//
+//        }
 
  
         private void browseButton_Click(object sender, System.EventArgs e)
@@ -457,11 +494,8 @@ namespace Ankh.UI
         
         }
         private System.Windows.Forms.TextBox urlTextBox;
-        private System.Windows.Forms.Button goButton;
         private System.Windows.Forms.Label revisionLabel;
         private System.Windows.Forms.Button browseButton;
-        private Ankh.UI.RevisionPicker revisionPicker;
-        private Ankh.UI.RepositoryTreeView treeView;
         private CommandBar commandBar;
         private System.Windows.Forms.CheckBox backgroundListingCheck;
         private System.Windows.Forms.Label urlLabel;

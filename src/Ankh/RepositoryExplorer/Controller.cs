@@ -26,7 +26,7 @@ namespace Ankh.RepositoryExplorer
 
             this.repositoryExplorer.EnableBackgroundListingChanged += 
                 new EventHandler( this.BackgroundListingChanged );
-            this.repositoryExplorer.GoClicked += new EventHandler(GoClicked);
+            this.repositoryExplorer.AddClicked += new EventHandler(AddClicked);
             this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
             this.repositoryExplorer.SelectionChanged +=new EventHandler(SelectionChanged);
             
@@ -151,7 +151,7 @@ namespace Ankh.RepositoryExplorer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void GoClicked(object sender, EventArgs args )
+        private void AddClicked(object sender, EventArgs args )
         {
             string url = this.repositoryExplorer.Url;
             Revision revision = this.repositoryExplorer.Revision;

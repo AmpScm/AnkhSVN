@@ -127,30 +127,30 @@ namespace Ankh.UI
             // 
             // revisionTypeBox
             // 
-            this.revisionTypeBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right);
-            this.revisionTypeBox.Location = new System.Drawing.Point(8, 0);
+            this.revisionTypeBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this.revisionTypeBox.Location = new System.Drawing.Point(0, 0);
             this.revisionTypeBox.Name = "revisionTypeBox";
-            this.revisionTypeBox.Size = new System.Drawing.Size(121, 21);
+            this.revisionTypeBox.Size = new System.Drawing.Size(200, 21);
             this.revisionTypeBox.TabIndex = 0;
             this.revisionTypeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.revisionTypeBox_KeyUp);
             this.revisionTypeBox.SelectionChangeCommitted += new System.EventHandler(this.revisionTypeBox_SelectionChangeCommitted);
             // 
             // datePicker
             // 
-            this.datePicker.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+            this.datePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.datePicker.Enabled = false;
-            this.datePicker.Location = new System.Drawing.Point(136, 0);
+            this.datePicker.Location = new System.Drawing.Point(200, 0);
             this.datePicker.Name = "datePicker";
+            this.datePicker.Size = new System.Drawing.Size(144, 20);
             this.datePicker.TabIndex = 1;
             // 
             // RevisionPicker
             // 
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.datePicker,
-                                                                          this.revisionTypeBox});
+            this.Controls.Add(this.datePicker);
+            this.Controls.Add(this.revisionTypeBox);
             this.Name = "RevisionPicker";
-            this.Size = new System.Drawing.Size(344, 24);
+            this.Size = new System.Drawing.Size(344, 20);
             this.ResumeLayout(false);
 
         }
