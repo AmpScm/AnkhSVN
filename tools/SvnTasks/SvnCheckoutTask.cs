@@ -79,8 +79,11 @@ namespace Rogue.SvnTasks
                 if( this.Verbose )
                     dir.Context = new Context( this.LogPrefix );
 
-                dir.Context.AddAuthenticationProvider( 
-                    new SimpleProvider( new SimpleCredential(this.Username, this.Password) ) );           
+                if ( this.Username != null && this.Password != null )
+                {
+                    dir.Context.AddAuthenticationProvider( 
+                        new SimpleProvider( new SimpleCredential(this.Username, this.Password) ) );  
+                }
 
                 dir.Checkout( this.LocalDir, true );
             }
