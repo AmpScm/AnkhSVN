@@ -22,17 +22,34 @@ namespace Ankh.Solution
             {
                 string parentPath = Path.GetDirectoryName( fullname );
                 this.projectFolder = SvnResource.FromLocalPath( parentPath );
+                this.projectFile = SvnResource.FromLocalPath( fullname );
+
                 explorer.AddResource( project, this );                    
             }
             else
+            {
+                this.projectFile = SvnResource.Unversionable;
                 this.projectFolder = SvnResource.Unversionable;
+            }
 
+            this.projectFile.Context = explorer.Context;
             this.projectFolder.Context = explorer.Context;
         }
 
+        /// <summary>
+        /// The folder this project is contained in.
+        /// </summary>
         public ILocalResource ProjectFolder
         {
             get{ return this.projectFolder; }
+        }
+
+        /// <summary>
+        /// The project file itself.
+        /// </summary>
+        public ILocalResource ProjectFile
+        {
+            get{ return this.projectFile; }
         }
 
         /// <summary>
@@ -49,6 +66,7 @@ namespace Ankh.Solution
         public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
         {
             this.projectFolder.Accept( visitor );
+            this.projectFile.Accept( visitor );
             if ( recursive )
                 this.VisitChildResources( visitor );
         } 
@@ -58,7 +76,10 @@ namespace Ankh.Solution
             
             // check status on the project folder
             StatusKind folderStatus = StatusFromResource( this.projectFolder );
-            if (  folderStatus != StatusKind.Normal )
+            StatusKind fileStatus = StatusFromResource( this.projectFile );
+            if ( fileStatus != StatusKind.Normal )
+                return fileStatus;
+            else if (  folderStatus != StatusKind.Normal )
                 return folderStatus;
             else
             {
@@ -70,6 +91,7 @@ namespace Ankh.Solution
         }                    
 
         private ILocalResource projectFolder;
+        private ILocalResource projectFile;
     }  
 
 }
