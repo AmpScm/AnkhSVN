@@ -61,16 +61,26 @@ namespace Ankh
             // we don't want to load on command line builds.
             if ( Regex.IsMatch( Environment.CommandLine, "/build" ) )
                 return;
-
+#if LOGTOFILE
+            if ( connectMode != ext_ConnectMode.ext_cm_UISetup )
+            {
+                int num = 0;
+                string logfile;
+                while(true)
+                {
+                    logfile = Path.Combine( Environment.GetFolderPath(
+                        Environment.SpecialFolder.ApplicationData ), 
+                        Path.Combine("AnkhSVN", String.Format("ankhsvn-{0}.log", num++ )));
+                    if ( !File.Exists( logfile ) )
+                        break;
+                }
+                
+                Debug.Listeners.Add( new TextWriterTraceListener( logfile ) );
+                Debug.AutoFlush = true;
+            }
+#endif
             try
             {
-#if LOGTOFILE
-				string logfile = Path.Combine( Environment.GetFolderPath(
-					Environment.SpecialFolder.ApplicationData ), 
-					Path.Combine("AnkhSVN", "ankhsvn.log" ) );
-				Debug.Listeners.Add( new TextWriterTraceListener( logfile ) );
-				Debug.AutoFlush = true;
-#endif
                 
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst );
                 
