@@ -46,13 +46,11 @@
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
           Name="RuntimeVersion" Value="v1.0.3705" />
       </Component>
-      
-      <!-- No codebase for now, as it isn't in the old setup either -->
-      <!--<Component Id="Ankh_component17" DiskId="1">
+      <Component Id="Ankh_component17" DiskId="1">
       <Registry Id="Ankh_registry17" Root="HKCR" 
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32" 
           Name="CodeBase" Value="[TARGETDIR]\Ankh.dll" />
-      </Component>-->
+      </Component>
       <Component Id="Ankh_component18" DiskId="1" Guid="E620AD9A-EF0A-4b14-BD7C-DD777B31F7BD">
         <Registry Id="Ankh_registry18" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
@@ -68,12 +66,11 @@
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
           Name="RuntimeVersion" Value="v1.0.3705" />
       </Component>
-      <!-- No codebase for now, as it isn't in the old setup either -->
-      <!--<Component Id="Ankh_component21" DiskId="1">
+      <Component Id="Ankh_component21" DiskId="1">
         <Registry Id="Ankh_registry21" Root="HKCR" 
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\InprocServer32\$(var.ankhversion)" 
           Name="CodeBase" Value="[TARGETDIR]\Ankh.dll" />
-      </Component>-->
+      </Component>
       <Component Id="Ankh_component22" DiskId="1" Guid="1B8DF8D1-B308-4084-B44A-02363826DC61">
         <Registry Id="Ankh_registry22" Root="HKCR" Type="string" KeyPath="yes"
           Key="CLSID\{DA979B20-78DF-45BC-A7D7-F5EF9DC77D30}\ProgId" 
