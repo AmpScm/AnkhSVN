@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn", "NSvn\NSvn.csproj", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSvn.Core", "NSvn.Core\NSvn.Core.vcproj", "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn.Core.Tests", "NSvn.Core.Tests\NSvn.Core.Tests.csproj", "{1882FE23-6EE3-46AF-82B2-929E371E6218}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -41,6 +43,10 @@ Global
 		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}.Debug.Build.0 = Debug|Win32
 		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}.Release.ActiveCfg = Release|Win32
 		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}.Release.Build.0 = Release|Win32
+		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Debug.ActiveCfg = Debug|.NET
+		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Debug.Build.0 = Debug|.NET
+		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Release.ActiveCfg = Release|.NET
+		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		ThisSolutionNotes = 
