@@ -105,13 +105,7 @@ NSvn::Core::StatusDictionary* NSvn::Core::Client::Status(
 NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
 {
     String* directory;
-
-    // find the directory containing this item
-    if ( Directory::Exists( path ) )
-        directory = path;
-    else
-        directory = Path::GetDirectoryName( path );
-
+    
     svn_wc_adm_access_t* admAccess;
     Pool pool;
 
