@@ -28,12 +28,21 @@ namespace NSvn
             __property int get_ErrorCode()
             { return this->errorCode; }
 
+            /// <summary>The error message returned by the SVN libraries</summary>
+            __property System::String* get_SvnError()
+            { return this->svnError; }
+
+            // <summary>Override the Message property to include the SVN error message</summary>
+            __property System::String* get_Message()
+            { return System::String::Concat( SvnException::get_Message(), System::Environment::NewLine, this->SvnError ); }
+
 
         protected:
 
         private:
             static SvnClientException* CreateExceptionsRecursively( svn_error_t* err );
             int errorCode;
+            System::String* svnError;
 
         };
 
