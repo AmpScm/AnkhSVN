@@ -80,8 +80,9 @@ namespace Ankh.Solution
             {                
                 if ( rescan )
                 {
-                    this.explorer.Context.StatusCache.Status( this.Directory );
+                    this.explorer.Context.StatusCache.Status( this.Directory );                    
                     this.FindChildren( );
+                    this.RescanHook();
                 }
                 this.currentStatus = this.MergeStatuses( this.ThisNodeStatus(), 
                     this.CheckChildStatuses() );
@@ -350,6 +351,14 @@ namespace Ankh.Solution
                 list.Add( deletedItem );
                 deletedItem.Changed += del;
             } 
+        }
+
+        /// <summary>
+        /// Called as part of a rescan of the current node.
+        /// </summary>
+        protected virtual void RescanHook()
+        {
+            // empty
         }
 
 

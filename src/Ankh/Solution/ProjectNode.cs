@@ -42,6 +42,14 @@ namespace Ankh.Solution
             visitor.VisitProject(this);
         }
 
+        protected override void RescanHook()
+        {
+            this.additionalResources.Clear();
+            this.AddDeletions( this.projectFolder.Path, this.additionalResources, 
+                new StatusChanged(this.ChildOrResourceChanged) );
+        }
+
+
 
 
         private void FindProjectResources(Explorer explorer)
