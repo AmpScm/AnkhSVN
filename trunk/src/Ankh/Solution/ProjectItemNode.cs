@@ -76,16 +76,12 @@ namespace Ankh.Solution
             try
             {
                 StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
-                for( short i = 1; i <= this.projectItem.FileCount; i++ ) 
-                {
-                    string path = this.projectItem.get_FileNames(i);
-                    if ( File.Exists( path ) || System.IO.Directory.Exists( path ) )
-                    {
-                        SvnItem item = this.Explorer.StatusCache[path];
-                        this.resources.Add( item );
-                        item.Changed += del;
-                    }                    
-                }
+                this.AddResourcesFromProjectItem( this.projectItem, del );
+
+                // is this a childless tree node? it might have hidden children after all
+                if ( this.Children.Count == 0 )
+                    this.AddSubItems( this.projectItem, del );
+                
                 this.Explorer.AddResource( this.projectItem, this );                    
             }
             catch( NullReferenceException )
@@ -97,6 +93,30 @@ namespace Ankh.Solution
             {
                 Debug.WriteLine( "SEHException thrown: " + this.projectItem.Name );
                 System.Windows.Forms.MessageBox.Show( "SEHException: " + this.projectItem.Name + sex.Message );
+            }
+        }
+
+        // recursively adds subitems of this projectitem.
+        private void AddSubItems( ProjectItem item, StatusChanged del )
+        {
+            foreach( ProjectItem subItem in item.ProjectItems )
+            {
+                this.AddResourcesFromProjectItem( subItem, del );
+                this.AddSubItems( subItem, del );
+            }
+        }
+
+        private void AddResourcesFromProjectItem( ProjectItem item, StatusChanged del )
+        {
+            for( short i = 1; i <= item.FileCount; i++ ) 
+            {
+                string path = item.get_FileNames(i);
+                if ( File.Exists( path ) || System.IO.Directory.Exists( path ) )
+                {
+                    SvnItem svnItem = this.Explorer.StatusCache[path];
+                    this.resources.Add( svnItem );
+                    svnItem.Changed += del;
+                }                    
             }
         }
 
