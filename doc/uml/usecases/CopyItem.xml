@@ -20,7 +20,7 @@
                 <Include useCaseID='SelectItem'></Include>
             </FlowElement>
             <FlowElement>
-                <Step>Developer chooses "Copy" from menu</Step>
+                <Step>Developer selects "Copy" from menu</Step>
             </FlowElement>
             <FlowElement>
                 <Include useCaseID='SelectItem'></Include>

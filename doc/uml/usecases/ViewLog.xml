@@ -19,7 +19,7 @@
                 <Include useCaseID='SelectItem'></Include>
             </FlowElement>
             <FlowElement>
-                <Step>Developer chooses "Log" from menu</Step>
+                <Step>Developer selects "Log" from menu</Step>
             </FlowElement>
             <FlowElement>
                 <Step>Optional: Developer choose revision range</Step>

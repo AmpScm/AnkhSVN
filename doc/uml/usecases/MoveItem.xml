@@ -26,7 +26,7 @@
                 <Include useCaseID='SelectItem'></Include>
             </FlowElement>
             <FlowElement>
-                <Step>Developer chooses "Paste" from menu</Step>
+                <Step>Developer selects "Paste" from menu</Step>
             </FlowElement>
             <FlowElement>
                 <Include useCaseID='WriteLogMessage'></Include>

@@ -19,10 +19,10 @@
                 <Include useCaseID='SelectLocalItem'></Include>
             </FlowElement>
             <FlowElement>
-                <Step>Developer chooses "Diff" from menu</Step>
+                <Step>Developer selects "Diff" from menu</Step>
             </FlowElement>
             <FlowElement>
-                <Step>Developer chooses revisions</Step>
+                <Step>Developer selects revisions</Step>
             </FlowElement>
             <FlowElement>
                 <Step>svn performs a diff</Step>
