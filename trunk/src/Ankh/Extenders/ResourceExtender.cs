@@ -74,12 +74,12 @@ namespace Ankh.Extenders
             if ( other == null )
                 return false;
 
-            return other.Status.Entry.Url == this.Status.Entry.Url;
+            return other.status.Entry.Url == this.status.Entry.Url;
         }
 
         public override int GetHashCode()
         {
-            return this.Status.Entry.Url.GetHashCode();
+            return this.status.Entry.Url.GetHashCode();
         }
 
 
@@ -139,13 +139,9 @@ namespace Ankh.Extenders
             get{ return this.status.PropertyStatus.ToString(); }
         }
 
-        public Status Status
+        public void SetStatus( Status status )
         {
-            get{ return this.status; }
-            set
-            {
-                this.status = value;                
-            }
+            this.status = status;                            
         }
 
         private Status status;
