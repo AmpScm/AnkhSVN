@@ -8,7 +8,7 @@
         
         <xs:element name="RepositoryExplorer">
           <xs:complexType>
-            <xs:sequence>
+            <xs:sequence>   
               <xs:element name="MruUrls" minOccurs="1" maxOccurs="1">
                 <xs:complexType>
                   <xs:sequence>
@@ -27,6 +27,8 @@
           </xs:complexType>
         </xs:element>
         
+        <xs:element name="LogMessageTemplate" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    
         
         <xs:element name="Subversion">
           <xs:complexType>

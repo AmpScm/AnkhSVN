@@ -136,8 +136,8 @@ namespace Ankh
         
         private string GetTemplate()
         {
-            return @"# All lines starting with a # will be ignored
-***# %path%";
+            return this.ankhContext.Config.LogMessageTemplate != null ? 
+                this.ankhContext.Config.LogMessageTemplate : "";
         }
 
         private void DiffWanted( object sender, EventArgs args )
