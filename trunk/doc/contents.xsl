@@ -77,12 +77,46 @@
         </a>
     </xsl:template>
     
+    <xsl:template match="img">
+        <img>
+            <xsl:attribute name='src'>
+                <xsl:value-of select="@src"/>
+            </xsl:attribute>
+            
+            <xsl:if test="@align">
+                <xsl:attribute name='align'>
+                    <xsl:value-of select="@align"/>
+                </xsl:attribute>
+            </xsl:if>
+            
+            <xsl:if test="@hspace">
+                <xsl:attribute name='hspace'>
+                    <xsl:value-of select="@hspace"/>
+                </xsl:attribute>
+            </xsl:if>
+            
+            <xsl:if test="@vspace">
+                <xsl:attribute name='vspace'>
+                    <xsl:value-of select="@vspace"/>
+                </xsl:attribute>
+            </xsl:if>
+
+        </img>
+    </xsl:template>
+    
     <xsl:template match="p">
         <p><xsl:apply-templates/></p>
     </xsl:template>
     
     <xsl:template match="br">
-        <br><xsl:apply-templates/></br>
+        <br>
+            <xsl:if test="@clear">
+                <xsl:attribute name='clear'>
+                    <xsl:value-of select="@clear"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:apply-templates/>
+        </br>
     </xsl:template>
     
     <xsl:template match="table">
