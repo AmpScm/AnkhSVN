@@ -102,6 +102,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "ConflictDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConflictDialog.resx"
+                    DependentUpon = "ConflictDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "EolStylePropertyEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
