@@ -42,7 +42,7 @@
 
         <tlbimp typelib="${lib.dir}\AnkhUserControlHost.dll" output="${build.dir}/AnkhUserControlHostLib.dll" />
         
-        <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}" debug="${debug}">
+        <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}" debug="true">
             <references>
                 <includes name="${lib.dir}\EnvDTE.dll"/>
                 <includes name="${lib.dir}\extensibility.dll"/>
