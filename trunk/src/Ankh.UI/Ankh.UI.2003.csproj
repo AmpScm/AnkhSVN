@@ -95,11 +95,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "envdte"
-                    AssemblyName = "EnvDTE"
-                    HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\envdte.dll"
-                />
-                <Reference
                     Name = "NSvn.Common"
                     Project = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
