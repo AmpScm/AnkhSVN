@@ -183,23 +183,29 @@ void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* r
 }
 
 // implementation of Client::Checkout
-void NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision, 
+int NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision, 
                                   bool recurse, ClientContext* context )
 {
     Pool pool;
     const char* truePath = CanonicalizePath( path, pool );
-    HandleError( svn_client_checkout( StringHelper( url ), truePath, 
+    svn_revnum_t rev;
+    HandleError( svn_client_checkout( &rev, StringHelper( url ), truePath, 
         revision->ToSvnOptRevision( pool ), recurse, context->ToSvnContext( pool ), pool ) );
+
+    return rev;
 }
 
 // implementation of Client::Update
-void NSvn::Core::Client::Update( String* path, Revision* revision, bool recurse, 
+int NSvn::Core::Client::Update( String* path, Revision* revision, bool recurse, 
                                 ClientContext* context )
 {
     Pool pool;
     const char* truePath = CanonicalizePath( path, pool );
-    HandleError( svn_client_update( truePath, revision->ToSvnOptRevision( pool ),
+    svn_revnum_t rev;
+    HandleError( svn_client_update( &rev, truePath, revision->ToSvnOptRevision( pool ),
         recurse, context->ToSvnContext( pool ), pool ) );
+
+    return rev;
 }
 
 // implementation of Client::Commit
@@ -238,14 +244,17 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath,
         return CommitInfo::Invalid;
 }
 // implementation of Client::Export
-void NSvn::Core::Client::Export(String* from, String* to, Revision* revision, bool force, ClientContext* context)
+int NSvn::Core::Client::Export(String* from, String* to, Revision* revision, bool force, ClientContext* context)
 {
     Pool pool;
     const char* trueSrcPath = CanonicalizePath( from, pool );
     const char* trueDstPath = CanonicalizePath( to, pool );
 
-    HandleError( svn_client_export ( trueSrcPath, trueDstPath, 
+    svn_revnum_t rev;
+    HandleError( svn_client_export ( &rev, trueSrcPath, trueDstPath, 
         revision->ToSvnOptRevision( pool ), force, context->ToSvnContext( pool ), pool ) );
+
+    return rev;
 }
 //TODO: Implement the variable optionalAdmAccess
 // implementation of Client::Copy
@@ -372,7 +381,7 @@ void NSvn::Core::Client::Cat( Stream* out, String* path, Revision* revision, Cli
 }
 
 // implementation of Client::Switch
-void NSvn::Core::Client::Switch( String* path, String* url, Revision* revision, bool recurse, 
+int NSvn::Core::Client::Switch( String* path, String* url, Revision* revision, bool recurse, 
                                 ClientContext* context)
 {
     Pool pool;
@@ -380,8 +389,11 @@ void NSvn::Core::Client::Switch( String* path, String* url, Revision* revision, 
     const char* truePath = CanonicalizePath( path, pool );
     const char* trueUrl = CanonicalizePath( url, pool );
 
-    HandleError( svn_client_switch( truePath, trueUrl, revision->ToSvnOptRevision( pool ), recurse,
+    svn_revnum_t rev;
+    HandleError( svn_client_switch( &rev, truePath, trueUrl, revision->ToSvnOptRevision( pool ), recurse,
         context->ToSvnContext( pool ), pool ) );
+
+    return rev;
 
 }
 
