@@ -4,6 +4,7 @@
       <Settings ApplicationIcon="" AssemblyKeyContainerName="" AssemblyName="Ankh.UI" AssemblyOriginatorKeyFile="" DefaultClientScript="JScript" DefaultHTMLPageLayout="Grid" DefaultTargetSchema="IE50" DelaySign="false" OutputType="Library" PreBuildEvent="" PostBuildEvent="" RootNamespace="Ankh.UI" RunPostBuildEvent="OnBuildSuccess" StartupObject="Ankh.UI.ErrorDialog">
         <Config Name="Debug" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="DEBUG;TRACE" DocumentationFile="" DebugSymbols="true" FileAlignment="4096" IncrementalBuild="true" NoStdLib="false" NoWarn="" Optimize="false" OutputPath="bin\Debug\" RegisterForComInterop="false" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
         <Config Name="Release" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="TRACE" DocumentationFile="" DebugSymbols="false" FileAlignment="4096" IncrementalBuild="false" NoStdLib="false" NoWarn="" Optimize="true" OutputPath="bin\Release\" RegisterForComInterop="false" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
+        <Config Name="debug run vsexpress" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="DEBUG;TRACE;WHIDBEY" DocumentationFile="" DebugSymbols="true" FileAlignment="4096" IncrementalBuild="true" NoStdLib="false" NoWarn="" Optimize="false" OutputPath="bin\Debug\" RegisterForComInterop="false" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
       </Settings>
       <References>
         <Reference Name="System" AssemblyName="System" HintPath="..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.dll" />
@@ -18,6 +19,7 @@
         <Reference Name="SHDocVw" Guid="{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}" VersionMajor="1" VersionMinor="1" Lcid="0" WrapperTool="tlbimp" />
         <Reference Name="AxSHDocVw" Guid="{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}" VersionMajor="1" VersionMinor="1" Lcid="0" WrapperTool="aximp" />
         <Reference Name="office" AssemblyName="Office" HintPath="I:\WINNT\Microsoft.NET\Framework\v1.1.4322\office.dll" />
+        <Reference Name="Microsoft.VisualStudio.CommandBars" AssemblyName="Microsoft.VisualStudio.CommandBars" HintPath="..\lib\envdte8\Microsoft.VisualStudio.CommandBars.dll" />
       </References>
     </Build>
     <Files>
