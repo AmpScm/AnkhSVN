@@ -132,8 +132,11 @@
                 />
                 <Reference
                     Name = "VSUserControlHostLib"
-                    AssemblyName = "VSUserControlHostLib"
-                    HintPath = "..\lib\VSUserControlHostLib.dll"
+                    Guid = "{280D96EA-474C-486E-88BE-5EB39FC4ACCB}"
+                    VersionMajor = "1"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
                 />
             </References>
         </Build>

@@ -28,8 +28,11 @@ namespace Ankh.EventSinks
         /// <param name="item">Projectitem to be scheduled for removal.</param>
         protected void ItemRemoved( ProjectItem item )
         {
+            this.Context.OutputPane.StartActionText( "Delete" );
             this.Context.SolutionExplorer.VisitResources( 
                 item, new RemoveProjectVisitor(), false );
+            this.Context.SolutionExplorer.Refresh ( item.ContainingProject );
+            this.Context.OutputPane.EndActionText();
         }
 
         protected void ItemRenamed( ProjectItem item, string oldName )
