@@ -2,6 +2,7 @@
 using System;
 using EnvDTE;
 using NSvn.Core;
+using Microsoft.Office.Core;
 
 namespace Ankh.Commands
 {
@@ -36,6 +37,17 @@ namespace Ankh.Commands
                 this.command = value;
             }
         }
+
+        protected CommandBarControl GetControl(AnkhContext context, string barName, string name )
+        {
+            // TODO: either preload this or find a better way to map to 
+            // the commandbarcontrols for a command
+            CommandBar bar = CommandMap.GetCommandBar( barName, context );           
+            CommandBarControl cntl = bar.FindControl( Type.Missing, Type.Missing, 
+                barName + "." + name, Type.Missing, Type.Missing );
+            return cntl;
+        }
+
 
         /// <summary>
         /// A ResourceFilterCallback method that filters for modified items.

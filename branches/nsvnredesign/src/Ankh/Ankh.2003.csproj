@@ -375,6 +375,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\ToggleAnkhCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\UpdateItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

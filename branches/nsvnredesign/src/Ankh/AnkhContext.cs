@@ -40,7 +40,7 @@ namespace Ankh
 
             
 
-            this.solutionExplorer = new Solution.Explorer( this.dte, this.client );
+            this.solutionExplorer = new Solution.Explorer( this.dte, this );
 
             this.progressDialog = new ProgressDialog();            
 

@@ -13,7 +13,7 @@ using System.IO;
 
 using C = Utils.Win32.Constants;
 using DteConstants = EnvDTE.Constants;
-using Swf = System.Windows.Forms;
+using System.Windows.Forms;
 
 
 namespace Ankh.Solution
@@ -24,10 +24,10 @@ namespace Ankh.Solution
     /// </summary>
     internal class Explorer
     {
-        public Explorer( _DTE dte, Client client )
+        public Explorer( _DTE dte, AnkhContext context )
         {
             this.dte = dte;
-            this.client = client;
+            this.context = context;
             this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
                 new ItemComparer() );
             this.projects = new Hashtable( new ProjectHashCodeProvider(), 
@@ -135,10 +135,7 @@ namespace Ankh.Solution
 
         public void SyncWithTreeView()
         {
-            // no point in doing anything if the solution dir isn't a wc
-            string solutionPath = this.dte.Solution.FullName;
-            if ( solutionPath == String.Empty || 
-                !SvnUtils.IsWorkingCopyPath( Path.GetDirectoryName( solutionPath ) ) )
+            if ( !this.CheckWhetherAnkhShouldLoad() )
                 return;
 
             this.projectItems.Clear();
@@ -220,7 +217,7 @@ namespace Ankh.Solution
         internal Client Client
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.client; }
+            get{ return this.context.Client; }
         }
 
         internal StatusCache StatusCache
@@ -316,7 +313,7 @@ namespace Ankh.Solution
 
             statusImages.MakeTransparent( statusImages.GetPixel(0,0) );
 
-            this.statusImageList = new Swf.ImageList();
+            this.statusImageList = new ImageList();
             this.statusImageList.ImageSize = new Size(7, 16);
             this.statusImageList.Images.AddStrip( statusImages );    
         
@@ -353,10 +350,56 @@ namespace Ankh.Solution
            
             Debug.WriteLine( "Getting status cache", "Ankh" );
             
-            this.statusCache = new StatusCache( this.client );
+            this.statusCache = new StatusCache( this.Client );
             this.statusCache.Status( solutionDir );
 
             t.End( "Got status cache", "Ankh" );
+        }
+
+        private bool CheckWhetherAnkhShouldLoad()
+        {
+            // no point in doing anything if the solution dir isn't a wc
+            string solutionPath = this.dte.Solution.FullName;
+            if ( solutionPath == String.Empty || 
+                !SvnUtils.IsWorkingCopyPath( Path.GetDirectoryName( solutionPath ) ) )
+                return false;
+
+            string adminDir = Path.Combine( Path.GetDirectoryName( solutionPath ),
+                SvnUtils.WC_ADMIN_AREA );
+
+            // maybe this solution has never been loaded before with Ankh?
+            if ( File.Exists( Path.Combine( adminDir, "Ankh.Load" ) ) )
+                return true;
+            else if ( File.Exists( Path.Combine(adminDir, "Ankh.NoLoad") ) )
+                return false;
+            else
+                return this.QueryWhetherAnkhShouldLoad( adminDir );
+        }
+
+        private bool QueryWhetherAnkhShouldLoad( string adminDir )
+        {
+            string nl = Environment.NewLine;
+            string msg = "Ankh has detected that the solution file for this solution " + 
+                "is in a Subversion working copy." + nl + 
+                "Do you want to enable Ankh for this solution?" + nl +
+                "(If you select Cancel, Ankh will not be enabled, " + nl +
+                "but you will " +
+                "be asked this question again the next time you open the solution)";
+
+            DialogResult res = MessageBox.Show( 
+                this.context.HostWindow, msg, "Ankh", 
+                MessageBoxButtons.YesNoCancel );
+            if ( res == DialogResult.Yes )
+            {
+                File.Create( Path.Combine(adminDir, "Ankh.Load") ).Close();
+                return true;
+            }
+            else if ( res == DialogResult.No )
+            {
+                File.Create( Path.Combine(adminDir, "Ankh.NoLoad") ).Close();
+            }
+
+            return false;
         }
 
         private TreeNode GetNode(UIHierarchyItem item)
@@ -482,8 +525,8 @@ namespace Ankh.Solution
         private IDictionary projectItems;
         private IDictionary projects;
         private TreeNode solutionNode;
-        private Swf.ImageList statusImageList;
-        private Client client;
+        private ImageList statusImageList;
+        private AnkhContext context;
         private StatusCache statusCache;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
