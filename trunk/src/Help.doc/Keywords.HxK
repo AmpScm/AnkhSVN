@@ -2,23 +2,23 @@
 <!DOCTYPE HelpIndex SYSTEM "ms-help://hx/resources/HelpIndex.DTD">
 
 <HelpIndex DTDVersion="1.0" Name="K">
- <Keyword Term = "about, helpfile">
-    <Jump Url = "xml\About_the_Ankh_help_file.xml"/>
+ <Keyword Term = "about">
+    <Jump Url = "xml\top\About_the_Ankh_help_file.xml"/>
   </Keyword>
 
   <Keyword Term = "introduction">
     <Jump Url = "xml\introduction\introduction.xml"/>
   </Keyword>
   
-  <Keyword Term = "Configuration">
+  <Keyword Term = "configuration">
     <Jump Url = "xml\using-ankh\using_ankh.xml"/>
   </Keyword>
   
-  <Keyword Term = "Basic operations, operations">
+  <Keyword Term = "operations">
     <Jump Url = "xml\basic-operations\basic_operations.xml"/>
   </Keyword>
   
-  <Keyword Term = "using, usage, Ankh">
+  <Keyword Term = "using">
     <Jump Url = "xml\using-ankh\using_ankh.xml"/>
   </Keyword>
   
