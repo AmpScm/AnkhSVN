@@ -33,9 +33,9 @@ namespace NSvn.Tests
             dir.GetChildren();
         }
 
-        public SimpleCredential SuccessPrompt( string realm, string username )
+        public SimpleCredential SuccessPrompt( string realm, string username, bool maySave )
         {
-            return new SimpleCredential( "foo", "bar" );
+            return new SimpleCredential( "foo", "bar", true );
         }
 
 
