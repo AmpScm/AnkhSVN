@@ -154,9 +154,9 @@ namespace Ankh
             CommandBar bar;
 
             //TODO: is this really necessary?
-//            if ( path[0] == context.RepositoryExplorer.CommandBar.Name )
-//                bar = context.RepositoryExplorer.CommandBar;
-//            else
+            if ( path[0] == context.RepositoryExplorer.CommandBar.Name )
+                bar = context.RepositoryExplorer.CommandBar;
+            else
                 bar = (CommandBar)context.DTE.CommandBars[ path[0] ];;
             for( int i = 1; i < path.Length; i++ )
             {
@@ -179,9 +179,9 @@ namespace Ankh
 
         private static void CreateReposExplorerPopup( AnkhContext context )
         {
-//            context.RepositoryExplorer.CommandBar = (CommandBar)
-//                context.DTE.Commands.AddCommandBar( "ReposExplorer", vsCommandBarType.vsCommandBarTypePopup,
-//                    null, 1 );
+            context.RepositoryExplorer.CommandBar = (CommandBar)
+                context.DTE.Commands.AddCommandBar( "ReposExplorer", vsCommandBarType.vsCommandBarTypePopup,
+                    null, 1 );
         }
 
     }

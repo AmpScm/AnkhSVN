@@ -12,34 +12,39 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.UI
 {
-    public interface IRepositoryTreeController
+
+    public class NodeExpandingEventArgs : EventArgs
     {
-        event EventHandler RootChanged;
+        public NodeExpandingEventArgs( IRepositoryTreeNode parentNode )
+        {
+            this.parentNode = parentNode;
+            this.children = new IRepositoryTreeNode[]{};
+        }
 
         /// <summary>
-        /// The text to put in the root.
+        /// The node being expanded.
         /// </summary>
-        string RootText
+        public IRepositoryTreeNode Node
         {
-            get;
+            get{ return this.parentNode; }
         }
-
-        void SetRepository( string url, Revision revision );
 
         /// <summary>
-        /// The IRepositoryTreeView associated with this controller.
+        /// Event handlers set this to a list of IRepositoryTreeNode 
+        /// instances.
         /// </summary>
-        IRepositoryTreeView TreeView
+        public IList Children
         {
-            set;
+            get{ return this.children; }
+            set{ this.children = value; }
         }
-           
 
-        IRepositoryTreeNode RootNode
-        {
-            get;
-        }
+        private IList children;
+        private IRepositoryTreeNode parentNode;
     }
+
+    public delegate void NodeExpandingDelegate( object sender, NodeExpandingEventArgs args );
+    
 
     /// <summary>
     /// Represents a node in the tree.
@@ -54,92 +59,54 @@ namespace Ankh.UI
             get;
         }
 
-        /// <summary>
-        /// Whether the node is a directory.
-        /// </summary>
         bool IsDirectory
         {
             get;
         }
 
-        /// <summary>
-        /// The child nodes - IRepositoryTreeNode objects.
-        /// </summary>
-        ICollection GetChildren();
 
-
-        /// <summary>
-        /// An arbitrary piece of data associated with the node.
-        /// </summary>
         object Tag
         {
             get;
             set;
         }
+        
     }
 
     /// <summary>
     /// Treeview that shows the layout of a SVN repository
     /// </summary>
-    public class RepositoryTreeView : System.Windows.Forms.TreeView, IRepositoryTreeView
+    public class RepositoryTreeView : System.Windows.Forms.TreeView
     {
         public RepositoryTreeView()
         {
             this.GetSystemImageList();       
-        }    
-    
-        /// <summary>
-        /// Sets or gets the IRepositoryTreeController associated with this control.
-        /// </summary>
-        public IRepositoryTreeController Controller
+        }   
+     
+        public void AddRoot( IRepositoryTreeNode node, string url )
         {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.controller; }
+            TreeNode root = new TreeNode( url, this.openFolderIndex, this.openFolderIndex );
 
-            set
-            {               
-                this.controller = value;   
-                if ( this.controller != null )
-                {
-                    this.controller.RootChanged += new EventHandler( this.RootChanged );
+            root.Tag = node;
+            node.Tag = root;          
 
-                    this.RootChanged( null, EventArgs.Empty );
-                }
-            }
+            this.Nodes.Add( root );
+
+            TreeNode dummy = new TreeNode("");
+            dummy.Tag = DUMMY_NODE;
+
+            root.Nodes.Add( dummy );
+
+            root.Expand();
         }
 
-        /// <summary>
-        /// The number of selected nodes.
-        /// </summary>
-        public int SelectionCount
+        public void AddChildren( IRepositoryTreeNode parent, IList childNodes )
         {
-            get{ return this.SelectedNode != null ? 1 : 0; }
+            TreeNode parentNode = (TreeNode)parent.Tag;
+            this.BuildSubTree( parentNode.Nodes, childNodes );
         }
-
-        /// <summary>
-        /// Returns the selected nodes.
-        /// </summary>
-        public IRepositoryTreeNode[] SelectedNodes
-        {
-            get
-            { 
-                if ( this.SelectedNode != null )
-                    return new IRepositoryTreeNode[]{ (IRepositoryTreeNode)this.SelectedNode.Tag };
-                else
-                    return new IRepositoryTreeNode[]{};
-            }
-        }
-
-        /// <summary>
-        /// Start loading the tree.
-        /// </summary>
-        public void Go()
-        {
-            if ( this.controller == null ) 
-                throw new ApplicationException( "No repository controller set" );
-
-            this.BuildSubTree( this.Nodes[0].Nodes, this.controller.RootNode );
-        }
+        
+        
         
 
         /// <summary>
@@ -183,16 +150,10 @@ namespace Ankh.UI
             System.Windows.Forms.TreeViewCancelEventArgs e)
         {
             base.OnBeforeExpand( e );
-            // is this uninitialized?
-            if ( e.Node.Nodes[0].Tag == DUMMY_NODE )
-            {
-                IRepositoryTreeNode dir = (IRepositoryTreeNode)e.Node.Tag;
-                this.BuildSubTree( e.Node.Nodes, dir );
-            }
+
             // switch to the open folder icon
             e.Node.ImageIndex = this.openFolderIndex;
-            e.Node.SelectedImageIndex = this.openFolderIndex;
-           
+            e.Node.SelectedImageIndex = this.openFolderIndex;           
         } 
 
         /// <summary>
@@ -209,19 +170,10 @@ namespace Ankh.UI
             e.Node.SelectedImageIndex = this.closedFolderIndex;
         }
 
-        private void RootChanged( object o, EventArgs e )
-        {
-            this.Nodes.Clear();
-
-            TreeNode root = new TreeNode( this.controller.RootText, this.openFolderIndex, this.openFolderIndex );
-            root.Tag = this.controller.RootNode;
-            root.Expand();
-
-            this.Nodes.Add( root );
-        }
+        
 
 
-        private void BuildSubTree( TreeNodeCollection nodes, IRepositoryTreeNode node )
+        private void BuildSubTree( TreeNodeCollection nodes, IList nodeList )
         {
             try
             {
@@ -229,9 +181,6 @@ namespace Ankh.UI
 
                 // we have set a new root, so get rid of any existing nodes
                 nodes.Clear();
-
-                ArrayList nodeList = new ArrayList( node.GetChildren() );
-                nodeList.Sort( RepositoryTreeView.Comparer );
 
                 foreach( IRepositoryTreeNode child in nodeList )
                 {
@@ -265,6 +214,7 @@ namespace Ankh.UI
                     }
 
                     newNode.Tag = child;
+                    child.Tag = newNode;
                     nodes.Add( newNode );
 
                 } // foreach
@@ -281,38 +231,12 @@ namespace Ankh.UI
             }
         }
 
-        private class NodeComparer : IComparer
-        {
-            #region IComparer Members
-
-            public int Compare(object x, object y)
-            {
-                IRepositoryTreeNode n1 = (IRepositoryTreeNode)x;
-                IRepositoryTreeNode n2 = (IRepositoryTreeNode)y;
-                
-                if( (n1.IsDirectory && n2.IsDirectory) || 
-                    (!n1.IsDirectory && !n2.IsDirectory) )
-                    return n1.Name.CompareTo(n2.Name);
-                else if ( n1.IsDirectory && !n2.IsDirectory )
-                    return -1;
-                else 
-                    return 1;
-            }
-            #endregion
-        }
-
-
-
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private static readonly object DUMMY_NODE = new object();
+        public static readonly object DUMMY_NODE = new object();
         private int openFolderIndex;
         private int closedFolderIndex;
-
-        private static readonly NodeComparer Comparer = new NodeComparer();
-
-        private IRepositoryTreeController controller;
     }
 
     

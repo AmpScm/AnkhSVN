@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
-using NSvn;
 using NSvn.Core;
 using Utils;
 using System.Text.RegularExpressions;
@@ -41,6 +40,7 @@ namespace Ankh.UI
             this.revisionPicker.PreviousEnabled = false;
 
             this.treeView.MouseUp += new MouseEventHandler( this.TreeViewMouseUp );
+            this.treeView.BeforeExpand += new TreeViewCancelEventHandler(treeView_BeforeExpand);
 			
             this.components = new System.ComponentModel.Container();
             this.SetToolTips();
@@ -58,23 +58,93 @@ namespace Ankh.UI
 
             [System.Diagnostics.DebuggerStepThrough]
             set{ this.commandBar = value; }
-        }        
+        }     
 
         /// <summary>
-        /// The IRepositoryTreeController that controls the view.
+        /// The revision selected by the user.
         /// </summary>
-        public IRepositoryTreeController Controller
+        public Revision Revision
         {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.treeView.Controller; }
+            get{ return this.revisionPicker.Revision; }
+        }
+        
+        /// <summary>
+        /// Fired whenever the user clicks Go.
+        /// </summary>
+        public event EventHandler GoClicked;
 
-            set
-            { 
-                this.treeView.Controller = value; 
-                value.TreeView = this.treeView;
+        /// <summary>
+        /// Fired whenever a directory node is expanded.
+        /// </summary>
+        public event NodeExpandingDelegate NodeExpanding;
+
+        /// <summary>
+        /// The URL entered in the text box.
+        /// </summary>
+        public string Url
+        {
+            get
+            {
+                return this.urlTextBox.Text;
             }
         }
 
+        /// <summary>
+        /// The selected node. Will be null if there is no selection.
+        /// </summary>
+        public IRepositoryTreeNode SelectedNode
+        {
+            get
+            { 
+                return 
+                    this.treeView.SelectedNode != null ? 
+                    (IRepositoryTreeNode)this.treeView.SelectedNode.Tag :
+                    null;
+            }
+        }
+
+        /// <summary>
+        /// Add a new URL root to the tree.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="node"></param>
+        public void AddRoot( string url, IRepositoryTreeNode node)
+        {
+            if ( !node.IsDirectory )
+                throw new ArgumentException( "The root needs to be a directory.", "node" );
+
+            this.treeView.AddRoot( node, url );
+        }
+
+        /// <summary>
+        /// The user wants to expand a node. Let him, but we have to list whats under it
+        /// first.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void treeView_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            // don't bother going to the server unless it's the dummy child
+            if ( e.Node.Nodes.Count > 0 &&
+                e.Node.Nodes[0].Tag != RepositoryTreeView.DUMMY_NODE )
+                return;
+
+            // now see if any event handlers want to provide the children
+            IRepositoryTreeNode node = (IRepositoryTreeNode)e.Node.Tag;
+            NodeExpandingEventArgs args = new NodeExpandingEventArgs( node );
+
+            try
+            {
+                if ( this.NodeExpanding != null )
+                    this.NodeExpanding( this, args );
+                this.treeView.AddChildren( node, args.Children );
+            }
+            catch( SvnClientException )
+            {
+                // don't open it - the user can click on the plus to try again
+                e.Cancel = true;
+            }
+        }
         
         /// <summary> 
         /// Clean up any resources being used.
@@ -116,9 +186,8 @@ namespace Ankh.UI
             this.Cursor = Cursors.WaitCursor;
             try
             {
-
-                this.treeView.Controller.SetRepository( this.urlTextBox.Text, this.revisionPicker.Revision );
-                this.treeView.Go();
+                if ( this.GoClicked != null ) 
+                    this.GoClicked( this, EventArgs.Empty );  
                 this.treeView.Enabled = true;
             }
             finally
@@ -237,7 +306,6 @@ namespace Ankh.UI
             this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
                 | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView.Controller = null;
             this.treeView.Enabled = false;
             this.treeView.ImageIndex = -1;
             this.treeView.Location = new System.Drawing.Point(0, 110);
@@ -287,7 +355,6 @@ namespace Ankh.UI
         private CommandBar commandBar;
         private System.Windows.Forms.Label urlLabel;
 
- 
-
+        
     }
 }
