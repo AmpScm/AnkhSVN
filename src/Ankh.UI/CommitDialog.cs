@@ -21,8 +21,8 @@ namespace Ankh.UI
     {
         public event DiffWantedDelegate DiffWanted
         {
-            add{ this.diffTab.DiffWanted += value; }
-            remove{ this.diffTab.DiffWanted -= value; }
+            add{ this.diffView.DiffWanted += value; }
+            remove{ this.diffView.DiffWanted -= value; }
         }
 
 
@@ -35,11 +35,11 @@ namespace Ankh.UI
 
             this.CreateToolTips();
 
-            this.commitItems = new ArrayList();
+            this.commitItemsTree.GetPathInfo += new GetPathInfoDelegate(commitItemsTree_GetPathInfo);
+            this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
+
             
-            this.diffTab.Visible = false;
-            
-            this.pathColumnHeader.Width = this.commitItemsView.Width - this.actionColumnHeader.Width - 5;
+            this.diffView.Visible = false;
         }
 
         /// <summary>
@@ -66,26 +66,17 @@ namespace Ankh.UI
             set{ this.logMessageTemplate = value; }
         }
 
-        public void AddCommitItem( CommitAction action, string path, 
-            object tag )
+        public IList CommitItems
         {
-            ListViewItem item = new ListViewItem( new string[]{ path, action.ToString() } );
-            item.Checked = true;
-            item.Tag = tag;
-
-            this.commitItemsView.Items.Add( item );
-
-            // we wanna see a diff too
-            this.diffTab.AddPage( path );
+            get{ return this.commitItemsTree.CheckedItems; }
+            set
+            { 
+                this.commitItemsTree.Paths = value;
+                this.commitItemsTree.CheckedItems = value;
+                foreach( object item in value )
+                    this.diffView.AddPage( item.ToString() );
+            }
         }
-
-        public Array GetSelectedTags( Type type )
-        {           
-            ArrayList arr = new ArrayList();
-            foreach( ListViewItem i in this.commitItemsView.CheckedItems )
-                arr.Add( i.Tag );
-            return arr.ToArray( type );
-        }        
 
         /// <summary>
         /// Clean up any resources being used.
@@ -130,9 +121,9 @@ namespace Ankh.UI
 
         private void showDiffButton_Click(object sender, System.EventArgs e)
         {
-            if ( this.diffTab.Visible )
+            if ( this.diffView.Visible )
             {                
-                this.diffTab.Visible = false;
+                this.diffView.Visible = false;
                 this.Height = this.okButton.Top + this.okButton.Height + 40;
                 this.showDiffButton.Text = "Show diff";
   
@@ -152,9 +143,9 @@ namespace Ankh.UI
                 this.showDiffButton.Anchor = AnchorStyles.Left | AnchorStyles.Top;
                 this.okButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
                 this.cancelButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-                this.diffTab.Top = this.okButton.Top + this.okButton.Height + 10;
+                this.diffView.Top = this.okButton.Top + this.okButton.Height + 10;
                 this.Height += 400;
-                this.diffTab.Visible = true;
+                this.diffView.Visible = true;
                 this.showDiffButton.Text = "Hide diff";
             }
 
@@ -168,36 +159,31 @@ namespace Ankh.UI
             if ( this.Visible && this.logMessageBox.Text == string.Empty )
             {
                 ArrayList arr = new ArrayList();
-                foreach( ListViewItem item in this.commitItemsView.Items )
-                    arr.Add( item.SubItems[0].Text );
+                foreach( object item in this.commitItemsTree.CheckedItems )
+                    arr.Add( item.ToString() );
             
                 this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( arr );
                 this.preprocessed = true;
             }
         }
 
-        private void ItemChecked(object sender, System.Windows.Forms.ItemCheckEventArgs e)
+        private void ItemChecked(object sender, TreeViewEventArgs e )
         {
             // don't bother if the 
             if ( ! this.preprocessed )
                 return;
-
-            ListViewItem item = this.commitItemsView.Items[e.Index];
-            if ( e.CurrentValue == CheckState.Checked )
-            {                
-                this.logMessageBox.Text = this.logMessageTemplate.RemoveItem(
-                    this.logMessageBox.Text, item.SubItems[0].Text );
-            }
-            else if ( e.CurrentValue == CheckState.Unchecked )
-            {
+            
+            if ( e.Node.Checked )
+            {    
                 this.logMessageBox.Text = this.LogMessageTemplate.AddItem(
-                    this.logMessageBox.Text, item.SubItems[0].Text );
+                    this.logMessageBox.Text, e.Node.Tag.ToString() );
+            }
+            else 
+            {
+                this.logMessageBox.Text = this.logMessageTemplate.RemoveItem(
+                    this.logMessageBox.Text, e.Node.Tag.ToString() );                
             }        
         }
-
-
-        
-
 
         #region Windows Form Designer generated code
         /// <summary>
@@ -210,11 +196,9 @@ namespace Ankh.UI
             this.okButton = new System.Windows.Forms.Button();
             this.logLabel = new System.Windows.Forms.Label();
             this.showDiffButton = new System.Windows.Forms.Button();
-            this.diffTab = new Ankh.UI.DiffTab();
+            this.diffView = new Ankh.UI.DiffTab();
             this.logMessageBox = new System.Windows.Forms.RichTextBox();
-            this.commitItemsView = new System.Windows.Forms.ListView();
-            this.pathColumnHeader = new System.Windows.Forms.ColumnHeader();
-            this.actionColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.commitItemsTree = new PathSelectionTreeView();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -254,13 +238,14 @@ namespace Ankh.UI
             // 
             // diffView
             // 
-            this.diffTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.diffView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
                 | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.diffTab.Font = new System.Drawing.Font("Courier New", 10F);
-            this.diffTab.Location = new System.Drawing.Point(0, 312);
-            this.diffTab.Name = "diffView";
-            this.diffTab.Size = new System.Drawing.Size(814, 0);
+            this.diffView.Font = new System.Drawing.Font("Courier New", 10F);
+            this.diffView.Location = new System.Drawing.Point(0, 312);
+            this.diffView.Name = "diffView";
+            this.diffView.TabIndex = 10;
+            this.diffView.Size = new System.Drawing.Size(814,0);
             // 
             // logMessageBox
             // 
@@ -275,41 +260,21 @@ namespace Ankh.UI
             this.logMessageBox.TabIndex = 8;
             this.logMessageBox.Text = "";
             // 
-            // commitItemsView
+            // commitItemsTree
             // 
-            this.commitItemsView.CheckBoxes = true;
-            this.commitItemsView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-                                                                                              this.pathColumnHeader,
-                                                                                              this.actionColumnHeader});
-            this.commitItemsView.Dock = System.Windows.Forms.DockStyle.Top;
-            this.commitItemsView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.commitItemsView.Location = new System.Drawing.Point(0, 0);
-            this.commitItemsView.Name = "commitItemsView";
-            this.commitItemsView.Size = new System.Drawing.Size(816, 112);
-            this.commitItemsView.TabIndex = 9;
-            this.commitItemsView.View = System.Windows.Forms.View.Details;
-            this.commitItemsView.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ItemChecked);
-            // 
-            // pathColumnHeader
-            // 
-            this.pathColumnHeader.Text = "Path";
-            this.pathColumnHeader.Width = 398;
-            // 
-            // actionColumnHeader
-            // 
-            this.actionColumnHeader.Text = "Action";
-            this.actionColumnHeader.Width = 85;
+            this.commitItemsTree.Location = new System.Drawing.Point(0, 0);
+            this.commitItemsTree.Name = "commitItemsTree";
+            this.commitItemsTree.Size = new System.Drawing.Size(816, 112);
+            this.commitItemsTree.TabIndex = 9;
             // 
             // CommitDialog
             // 
-            this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(816, 315);
             this.ControlBox = false;
-            this.Controls.Add(this.commitItemsView);
+            this.Controls.Add(this.commitItemsTree);
             this.Controls.Add(this.logMessageBox);
-            this.Controls.Add(this.diffTab);
+            this.Controls.Add(this.diffView);
             this.Controls.Add(this.showDiffButton);
             this.Controls.Add(this.logLabel);
             this.Controls.Add(this.okButton);
@@ -331,16 +296,12 @@ namespace Ankh.UI
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label logLabel;
         private System.Windows.Forms.Button showDiffButton;
-        private Ankh.UI.DiffTab diffTab;
         private System.Windows.Forms.RichTextBox logMessageBox;
         private LogMessageTemplate logMessageTemplate;
        
-        private ArrayList commitItems;
-        private System.Windows.Forms.ListView commitItemsView;
-        private System.Windows.Forms.ColumnHeader pathColumnHeader;
-        private System.Windows.Forms.ColumnHeader actionColumnHeader;
-
         private bool preprocessed = false;
+        private Ankh.UI.DiffTab diffView;
+        private PathSelectionTreeView commitItemsTree;
        
         /// <summary>
         /// Required designer variable.
@@ -358,20 +319,12 @@ namespace Ankh.UI
         //            the.ShowDialog();
         //        }
 
-
-
+        private void commitItemsTree_GetPathInfo(object sender, GetPathInfoEventArgs args)
+        {
+            args.Path = args.Item.ToString();
+        }
     }
 
-    /// <summary>
-    /// The various types of actions.
-    /// </summary>
-    public enum CommitAction
-    {
-        Added,
-        Deleted,
-        Modified,
-        None
-    }
 }
 
 
