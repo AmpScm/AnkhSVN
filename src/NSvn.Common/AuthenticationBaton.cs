@@ -22,6 +22,7 @@ namespace NSvn.Common
         public AuthenticationProviderCollection Providers
         {
             get{ return this.providers; }
+            set{ this.providers = providers; }
         }
 
         /// <summary>

@@ -63,29 +63,17 @@ namespace NSvn
 
 
 
+        /// <summary>
+        /// Gets or sets the collection of authentication providers
+        /// used with this resource.
+        /// </summary>
+        public AuthenticationProviderCollection AuthenticationProviders
+        {
+            get{ return this.clientContext.AuthBaton.Providers; }
+            set{ this.clientContext.AuthBaton.Providers = value; }
+        }
+
         
-
-        /// <summary>
-        /// Add an authentication provider.
-        /// </summary>
-        /// <param name="provider">The provider to add.</param>
-        public void AddAuthenticationProvider( IAuthenticationProvider provider )
-        {
-            if ( this.ClientContext.AuthBaton == null )
-                this.clientContext.AuthBaton = new AuthenticationBaton();
-
-            this.clientContext.AuthBaton.Providers.Add( provider );
-        }
-
-        /// <summary>
-        /// Remove an authentication provider.
-        /// </summary>
-        /// <param name="provider"></param>
-        public void RemoveAuthenticationProvider( IAuthenticationProvider provider )
-        {
-            if ( this.ClientContext.AuthBaton != null )
-                this.clientContext.AuthBaton.Providers.Remove( provider );
-        }
 
         /// <summary>
         /// The ClientContext to be used in version control operations
