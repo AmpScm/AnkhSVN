@@ -54,11 +54,9 @@ namespace Ankh
         /// <param name="action">Action.</param>
         public void StartActionText( string action )
         {
+            
             this.Activate();
-
-            this.outputPane.OutputString( Environment.NewLine + 
-                line + action + " " + line + Environment.NewLine 
-                + Environment.NewLine);
+            this.outputPane.OutputString( FormatMessage( action ) );
         }
 
         /// <summary>
@@ -66,8 +64,20 @@ namespace Ankh
         /// </summary>
         public void EndActionText()
         {
-            this.outputPane.OutputString( Environment.NewLine + line + "Done " + 
-                line + Environment.NewLine);
+            this.outputPane.OutputString( FormatMessage( "Done" ));
+        }
+        
+
+        /// <summary>
+        /// Formats the text for output.
+        /// </summary>
+        /// <param name="action">action string.</param>
+        /// <returns>Formatet text string</returns>
+        private string FormatMessage( string action )
+        {
+            string message = line + action + " ";
+            return Environment.NewLine 
+                + message.PadRight(50, '-') + Environment.NewLine + Environment.NewLine;
         }
 
         private const string line = "---------------------- ";
