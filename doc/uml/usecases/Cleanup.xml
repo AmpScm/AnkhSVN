@@ -7,15 +7,16 @@
         <Actors>
             <ActorID>Developer</ActorID>
         </Actors>
-        <Summary>Delete lock files in .svn working copy administrative area</Summary>
+        <Summary>Unlock a locked working copy</Summary>
     </Preface>
     <MainFlow>
         <Preconditions>
-            <Precondition>There are lock files in the working copy administrative area</Precondition>
+            <Precondition>The working copy is locked</Precondition>
+            <Precondition>An SVN operation has failed due to the locked wc</Precondition>
         </Preconditions>
         <FlowElements>
             <FlowElement>
-                <Step>Ask developer if he wants to run cleanup</Step>
+                <Step>Developer is asked whether a cleanup is desired</Step>
             </FlowElement>
             <FlowElement>
                 <Step>Cleanup is run on the working copy area</Step>
@@ -26,7 +27,7 @@
         </FlowElements>
         <Postconditions>
             <Postcondition>The working copy is in an unlocked state</Postcondition>
-            <Postcondition>or cleanup failed</Postcondition>
+            <Postcondition>OR: Cleanup failed</Postcondition>
         </Postconditions>
     </MainFlow>
 </UseCase>
