@@ -234,6 +234,11 @@ namespace Ankh.Tests
                 this.Exception = ex;
             }
 
+            public virtual void SendReport()
+            {
+                // empty
+            }
+
             #endregion
         }
 

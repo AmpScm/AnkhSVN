@@ -200,6 +200,11 @@
                     RelPath = "wc.zip"
                     BuildAction = "EmbeddedResource"
                 />
+                <File
+                    RelPath = "Commands\SendErrorReportTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
             </Include>
         </Files>
     </CSHARP>

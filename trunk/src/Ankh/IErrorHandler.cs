@@ -8,5 +8,10 @@ namespace Ankh
 	public interface IErrorHandler
 	{
 		void Handle( Exception ex );
+
+        /// <summary>
+        /// Send an report about a non-specific error.
+        /// </summary>
+        void SendReport();
 	}
 }

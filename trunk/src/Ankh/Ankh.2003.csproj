@@ -184,7 +184,7 @@
                 />
                 <Reference
                     Name = "envdte"
-                    AssemblyName = "envdte"
+                    AssemblyName = "EnvDTE"
                     HintPath = "..\lib\envdte.dll"
                 />
             </References>
@@ -384,6 +384,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\DiffExternalLocalItemCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\DiffLocalItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -454,11 +459,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Commands\DiffExternalLocalItemCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Commands\ReverseMergeCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -475,6 +475,11 @@
                 />
                 <File
                     RelPath = "Commands\SaveToFileCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\SendErrorReportCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

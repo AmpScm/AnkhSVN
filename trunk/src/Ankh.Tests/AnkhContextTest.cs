@@ -205,6 +205,11 @@ namespace Ankh.Tests
                 Assert.Fail( ex.Message + Environment.NewLine + ex.StackTrace );
             }
 
+            public void SendReport()
+            {
+                Assert.Fail( "Should not be called, I guess" );
+            }
+
             #endregion
 
         }
