@@ -8,14 +8,20 @@ namespace Ankh.Commands
 	/// </summary>
 	[VSNetCommand("CommitItem", Text = "Commit", Tooltip = "Commits an item")]
 	internal class CommitItem : ICommand
-	{
-		public CommitItem()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
-	}
+	{		
+	
+        #region Implementation of ICommand
+        public EnvDTE.vsCommandStatus QueryStatus(EnvDTE._DTE dte)
+        {
+            return new EnvDTE.vsCommandStatus();
+        }
+        public void Execute(EnvDTE._DTE dte)
+        {
+        
+        }
+    
+        #endregion
+    }
 }
 
 
