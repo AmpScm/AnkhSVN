@@ -11,9 +11,9 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand( "Cleanup", Text="Cleanup", Tooltip = "Cleans up the working copy", 
          Bitmap = ResourceBitmaps.Cleanup ),
-     VSNetControl( "Folder.Ankh", Position = 1 ),
-     VSNetControl( "Project.Ankh", Position = 1 ),
-     VSNetControl( "Solution.Ankh", Position = 1 )]
+    VSNetControl( "Folder.Ankh", Position = 1 ),
+    VSNetControl( "Project.Ankh", Position = 1 ),
+    VSNetControl( "Solution.Ankh", Position = 1 )]
     internal class Cleanup : CommandBase
     {  
     
@@ -30,7 +30,7 @@ namespace Ankh.Commands
             IList resources = context.SolutionExplorer.GetSelectionResources( false,
                 new ResourceFilterCallback(CommandBase.DirectoryFilter) );
             foreach( SvnItem item in resources )
-                context.Context.Cleanup( item.Path );
+                context.Client.Cleanup( item.Path );
 
             context.EndOperation();
         }

@@ -205,7 +205,7 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "SvnContext.cs"
+                    RelPath = "SvnClient.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

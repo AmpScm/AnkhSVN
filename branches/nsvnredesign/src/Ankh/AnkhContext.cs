@@ -29,10 +29,10 @@ namespace Ankh
 
             // should we use a custom configuration directory?
             if ( this.config.Subversion.ConfigDir != null )
-                this.context = new SvnContext( this, 
+                this.client = new SvnClient( this, 
                     Environment.ExpandEnvironmentVariables(this.config.Subversion.ConfigDir) );
             else
-                this.context = new SvnContext( this );
+                this.client = new SvnClient( this );
 
             this.hostWindow = new Win32Window( new IntPtr(dte.MainWindow.HWnd) );
 
@@ -40,7 +40,7 @@ namespace Ankh
 
             //this.repositoryController = new RepositoryExplorer.Controller( this );
 
-            this.solutionExplorer = new Solution.Explorer( this.dte, this.context );
+            this.solutionExplorer = new Solution.Explorer( this.dte, this.client );
 
             this.progressDialog = new ProgressDialog();            
 
@@ -91,21 +91,21 @@ namespace Ankh
             get{ return this.outputPane; }
         }
 
-//        public RepositoryExplorer.Controller RepositoryController
-//        {
-//            [System.Diagnostics.DebuggerStepThrough]
-//            get{ return this.repositoryController; }
-//        }
+        //        public RepositoryExplorer.Controller RepositoryController
+        //        {
+        //            [System.Diagnostics.DebuggerStepThrough]
+        //            get{ return this.repositoryController; }
+        //        }
 
 
 
         /// <summary>
         /// The SvnContext object used by the NSvn objects.
         /// </summary>
-        public SvnContext Context
+        public SvnClient Client
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.context; }
+            get{ return this.client; }
         }
 
         /// <summary>
@@ -242,23 +242,23 @@ namespace Ankh
 
         private void CreateRepositoryExplorer()
         {   
-//            object control = null;
-//            this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
-//                this.addin, "AnkhUserControlHost.AnkhUserControlHostCtl", 
-//                "Repository Explorer", REPOSEXPLORERGUID, ref control );
-//
-//            this.reposExplorerWindow.Visible = true;
-//            this.reposExplorerWindow.Caption = "Repository Explorer";
-//
-//            this.objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
-//
-//            this.repositoryExplorer = new RepositoryExplorerControl();
-//            this.objControl.HostUserControl( this.repositoryExplorer );
-//
-//            this.repositoryExplorer.Controller = this.RepositoryController;
-//
-//            System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
-//                "Could not create tool window" );
+            //            object control = null;
+            //            this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
+            //                this.addin, "AnkhUserControlHost.AnkhUserControlHostCtl", 
+            //                "Repository Explorer", REPOSEXPLORERGUID, ref control );
+            //
+            //            this.reposExplorerWindow.Visible = true;
+            //            this.reposExplorerWindow.Caption = "Repository Explorer";
+            //
+            //            this.objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
+            //
+            //            this.repositoryExplorer = new RepositoryExplorerControl();
+            //            this.objControl.HostUserControl( this.repositoryExplorer );
+            //
+            //            this.repositoryExplorer.Controller = this.RepositoryController;
+            //
+            //            System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
+            //                "Could not create tool window" );
         }
 
         #region Win32Window class
@@ -303,7 +303,7 @@ namespace Ankh
         private Ankh.Config.Config config;
 
         private ProgressDialog progressDialog;
-        private SvnContext context;
+        private SvnClient client;
         private RepositoryExplorerControl repositoryExplorer;
         private EnvDTE.Window reposExplorerWindow;
         private AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl objControl;

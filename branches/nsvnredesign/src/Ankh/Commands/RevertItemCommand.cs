@@ -57,14 +57,14 @@ namespace Ankh.Commands
                 context.OutputPane.StartActionText("Reverting");               
                 try
                 {
-                    context.Context.Revert( paths, false );
+                    context.Client.Revert( paths, false );
                 }
                 catch( NotVersionControlledException )
                 {
                     // empty
                 }
                 foreach( SvnItem item in resources )
-                    item.Refresh( context.Context );
+                    item.Refresh( context.Client );
                 context.OutputPane.EndActionText();
             }               
         }

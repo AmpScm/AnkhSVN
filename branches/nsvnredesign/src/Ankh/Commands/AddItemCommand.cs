@@ -38,8 +38,8 @@ namespace Ankh.Commands
 
             foreach( SvnItem item in resources )
             {
-                context.Context.Add( item.Path, true );
-                item.Refresh( context.Context );
+                context.Client.Add( item.Path, true );
+                item.Refresh( context.Client );
             }
 
 
