@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Ankh.Solution;
 using System.Collections;
 using System.IO;
+using System.Diagnostics;
 
 namespace Ankh
 {
@@ -339,11 +340,20 @@ namespace Ankh
 
             // maybe this solution has never been loaded before with Ankh?
             if ( File.Exists( Path.Combine( adminDir, "Ankh.Load" ) ) )
+            {
+                Debug.WriteLine( "Found Ankh.Load", "Ankh" );
                 return true;
+            }
             else if ( File.Exists( Path.Combine(adminDir, "Ankh.NoLoad") ) )
+            {
+                Debug.WriteLine( "Found Ankh.NoLoad", "Ankh" );
                 return false;
+            }
             else
+            {
+                Debug.WriteLine( "Found neither Ankh.Load nor Ankh.NoLoad", "Ankh" );
                 return this.QueryWhetherAnkhShouldLoad( adminDir );
+            }
         }
 
         private bool QueryWhetherAnkhShouldLoad( string adminDir )
@@ -361,11 +371,13 @@ namespace Ankh
                 MessageBoxButtons.YesNoCancel );
             if ( res == DialogResult.Yes )
             {
+                Debug.WriteLine( "Creating Ankh.Load", "Ankh" );
                 File.Create( Path.Combine(adminDir, "Ankh.Load") ).Close();
                 return true;
             }
             else if ( res == DialogResult.No )
             {
+                Debug.WriteLine( "Creating Ankh.NoLoad", "Ankh" );
                 File.Create( Path.Combine(adminDir, "Ankh.NoLoad") ).Close();
             }
 
@@ -375,6 +387,7 @@ namespace Ankh
 
         private void CreateRepositoryExplorer()
         {   
+            Debug.WriteLine( "Creating repository explorer", "Ankh" );
             object control = null;
             this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
                 this.addin, "AnkhUserControlHost.AnkhUserControlHostCtl", 
