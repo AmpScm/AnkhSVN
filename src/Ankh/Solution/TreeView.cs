@@ -9,7 +9,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Wraps a HWND to a Win32 treeview
     /// </summary>
-    internal class TreeView
+    public class TreeView
     {
         public TreeView( IntPtr hwnd )
         {

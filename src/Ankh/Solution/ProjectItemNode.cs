@@ -13,7 +13,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents a node containing a project item.
     /// </summary>
-    internal class ProjectItemNode : TreeNode
+    public class ProjectItemNode : TreeNode
     {
         public ProjectItemNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
             TreeNode parent ) :

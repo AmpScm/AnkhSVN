@@ -12,7 +12,7 @@ namespace Ankh.Solution
     /// <summary>
     /// A node representing a solution.
     /// </summary>
-    internal class SolutionNode : TreeNode
+    public class SolutionNode : TreeNode
     {
         public SolutionNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer )
             : base( item, hItem, explorer, null )

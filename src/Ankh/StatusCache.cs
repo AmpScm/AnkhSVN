@@ -10,7 +10,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Maintains path->SvnItem mappings.
     /// </summary>
-    internal class StatusCache
+    public class StatusCache
     {
         public StatusCache( Client client )
         {

@@ -13,7 +13,7 @@ namespace Ankh.Commands
     [VSNetCommand("CheckoutFolder", Tooltip="Checkout this folder", 
          Text = "Checkout Folder...", Bitmap = ResourceBitmaps.CheckoutDirectory ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
-	internal class CheckoutFolderCommand : 
+	public class CheckoutFolderCommand : 
         CommandBase
 	{
         #region ICommand Members

@@ -6,7 +6,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Summary description for INodeVisitor.
     /// </summary>
-    internal interface INodeVisitor
+    public interface INodeVisitor
     {
         void VisitProject( ProjectNode node );
         void VisitProjectItem( ProjectItemNode node );

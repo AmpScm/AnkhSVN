@@ -22,7 +22,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents the Solution Explorer window in the VS.NET IDE
     /// </summary>
-    internal class Explorer
+    public class Explorer
     {
         public Explorer( _DTE dte, AnkhContext context )
         {

@@ -11,7 +11,7 @@ namespace Ankh.Commands
          Tooltip="Refresh this item", Text = "Refresh",
          Bitmap = ResourceBitmaps.Refresh ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
-    internal class RefreshRepositoryItemCommand : CommandBase
+    public class RefreshRepositoryItemCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
