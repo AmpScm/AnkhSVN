@@ -188,11 +188,15 @@ namespace Ankh.UI
             this.newDirHandler = handler;
             this.treeView.AfterLabelEdit += new NodeLabelEditEventHandler(MakeDirAfterEdit);
 
+            // we assume there's always at least one child node
+            // if nothing else, at least the dummy node should be there
+            this.treeView.SelectedNode.FirstNode.EnsureVisible();
+
             // create a new node.
             TreeNode node = new TreeNode( "Newdir" );
             node.SelectedImageIndex = this.treeView.ClosedFolderIndex;
             node.ImageIndex = this.treeView.ClosedFolderIndex;
-            this.treeView.SelectedNode.Nodes.Add( node );
+            this.treeView.SelectedNode.Nodes.Add( node );  
 
             // start editing it
             this.treeView.LabelEdit = true;
@@ -226,7 +230,7 @@ namespace Ankh.UI
                         this.RefreshNode( (IRepositoryTreeNode)e.Node.Parent.Tag );
                 }
                 // if the user cancelled, just get rid of the new node.
-                if ( cancel ) 
+                if ( cancel && e.Node.Parent != null ) 
                     e.Node.Remove();
             }
             finally
@@ -246,6 +250,8 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void treeView_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
+            throw new Exception();
+
             // don't bother going to the server unless it's the dummy child
             if ( e.Node.Nodes.Count > 0 &&
                 e.Node.Nodes[0].Tag != RepositoryTreeView.DUMMY_NODE )
