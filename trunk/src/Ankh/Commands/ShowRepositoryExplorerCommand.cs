@@ -9,7 +9,8 @@ namespace Ankh.Commands
 	/// </summary>
     [VSNetCommand("ShowRepositoryExplorer", Text = "Repository Explorer", Tooltip = "Show the repository explorer window",
          Bitmap = ResourceBitmaps.ReposExplorer),
-    VSNetControl( "MenuBar.View", Position = 1 )]
+    VSNetControl( "MenuBar.View", Position = 1 ),
+    VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 )]
 	internal class ShowRepositoryExplorerCommand : CommandBase
 	{
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
