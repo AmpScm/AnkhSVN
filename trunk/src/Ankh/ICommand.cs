@@ -1,3 +1,4 @@
+// $Id
 namespace Ankh 
 {
     public interface ICommand
@@ -5,3 +6,4 @@ namespace Ankh
     }
 
 }
+

@@ -1,3 +1,4 @@
+// $Id
 using System;
 using System.Drawing;
 using System.Collections;
@@ -57,3 +58,4 @@ namespace Ankh.UI
 		#endregion
 	}
 }
+

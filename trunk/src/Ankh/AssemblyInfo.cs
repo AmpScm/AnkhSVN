@@ -1,3 +1,4 @@
+// $Id
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -52,3 +53,4 @@ using System.Runtime.CompilerServices;
 //<Assembly: AssemblyKeyFile("..\\..\\Ankh.snk")>
 
 [assembly: AssemblyKeyName("")]
+
