@@ -44,7 +44,8 @@ namespace Ankh.Commands
         /// <returns></returns>
         protected static bool ModifiedFilter( SvnItem item )
         {
-            if ( item.Status.TextStatus != StatusKind.Normal ||
+            if ( (item.Status.TextStatus != StatusKind.Normal &&
+                  item.Status.TextStatus != StatusKind.Unversioned) ||
                 (item.Status.PropertyStatus != StatusKind.Normal &&
                 item.Status.PropertyStatus != StatusKind.None) )
                 return true;
