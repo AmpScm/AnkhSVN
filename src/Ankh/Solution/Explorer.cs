@@ -147,7 +147,9 @@ namespace Ankh.Solution
         /// <param name="item"></param>
         public void UpdateStatus( ProjectItem item )
         {
-            ((TreeNode)this.projectItems[item]).UpdateStatus();
+            TreeNode node = (TreeNode)this.projectItems[item];
+            if ( node != null )
+                node.UpdateStatus();
         }
 
  
