@@ -22,7 +22,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents the Solution Explorer window in the VS.NET IDE
     /// </summary>
-    public class Explorer
+    public class Explorer 
     {
         public Explorer( _DTE dte, IContext context )
         {
@@ -46,7 +46,7 @@ namespace Ankh.Solution
         {
             this.Unload();
             this.SetUpTreeview();
-            this.SyncWithTreeView();
+            this.SyncAll();
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Ankh.Solution
                 TreeNode node = this.GetNode( item );
                 // special care for the solution
                 if ( node == solutionNode )
-                    this.SyncWithTreeView();
+                    this.SyncAll();
                 else if ( node != null )
                     node.Refresh();
             }
@@ -142,7 +142,7 @@ namespace Ankh.Solution
                 node.Refresh();
         }       
 
-        public void SyncWithTreeView()
+        public void SyncAll()
         {
             Debug.WriteLine( "Synchronizing with treeview", "Ankh" );
 
