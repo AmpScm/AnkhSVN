@@ -32,12 +32,6 @@ namespace Ankh
         /// <returns>A list of SvnItem instances.</returns>
         IList GetSelectionResources( bool getChildItems );
 
-        /// <summary>	 	
-        /// Visits all the selected nodes.	 	
-        /// </summary>	 	
-        /// <param name="visitor"></param>	 	
-        void VisitSelectedNodes( INodeVisitor visitor );
-
         /// <summary>
         /// Returns the SvnItem resources associated with the selected items
         /// in the solution explorer.
