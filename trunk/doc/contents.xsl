@@ -5,7 +5,9 @@
     <xsl:template match="/doc">
         <h1><xsl:value-of select="@title"/></h1>
         <xsl:call-template name="toc"/>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="section">
+            <xsl:with-param name="level" select="1"/>
+        </xsl:apply-templates>
     </xsl:template>
     
     
@@ -13,36 +15,30 @@
         <ul>
             <xsl:for-each select="section">
                 <li><a href="#{generate-id()}"><xsl:value-of select="@header"/></a>
-                <xsl:call-template name="toc"/></li>
+                    <xsl:call-template name="toc"/>
+                </li>
             </xsl:for-each>
         </ul>
     </xsl:template>
+    
         
     
-    <xsl:template match="/doc/section">
-        <a name="{generate-id()}"><h2><xsl:value-of select="@header"/></h2></a>
-        <xsl:apply-templates/>
+    <xsl:template match="section">
+        <xsl:param name="level"/>
+        
+        <a name="{generate-id()}">
+            <xsl:element name="{concat( 'h', $level )}">
+                <xsl:value-of select="@header"/>
+            </xsl:element>
+        </a>
+        
+        <xsl:apply-templates>
+            <xsl:with-param name="level" select="$level+1"/>
+        </xsl:apply-templates>
+        
     </xsl:template>
     
-    <xsl:template match="/doc/section/section">
-        <a name="{generate-id()}"><h3><xsl:value-of select="@header"/></h3></a>
-        <xsl:apply-templates/>
-    </xsl:template>
-    
-    <xsl:template match="/doc/section/section/section">
-        <a name="{generate-id()}"><h4><xsl:value-of select="@header"/></h4></a>
-        <xsl:apply-templates/>
-    </xsl:template>
-    
-    <xsl:template match="/doc/section/section/section/section">
-        <a name="{generate-id()}"><h5><xsl:value-of select="@header"/></h5></a>
-        <xsl:apply-templates/>
-    </xsl:template>
-    
-    <xsl:template match="/doc/section/section/section/section/section">
-        <a name="{generate-id()}"><h6><xsl:value-of select="@header"/></h6></a>
-        <xsl:apply-templates/>
-    </xsl:template>
+   
     
     <xsl:template match="list">
         <ul>
