@@ -4,6 +4,7 @@ using System;
 using System.Windows.Forms;
 using System.Collections;
 using System.Threading;
+using System.IO;
 
 using NSvn.Core;
 using EnvDTE;
@@ -45,7 +46,7 @@ namespace Ankh.Commands
                 return;
 
             // we need to commit to each repository separately
-            ICollection repositories = this.SortByRepository( resources );           
+            ICollection repositories = this.SortByRepository( context, resources );           
 
             this.commitInfo = null;
             
@@ -102,12 +103,25 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        private ICollection SortByRepository( IList items )
+        private ICollection SortByRepository( IContext context, IList items )
         {
             Hashtable repositories = new Hashtable();
             foreach( SvnItem item in items )
             {
                 string uuid = item.Status.Entry.Uuid;
+
+                // freshly added items have no uuid
+                if ( uuid == null )
+                {
+                    string parentDir = Path.GetDirectoryName( item.Path );
+                    SvnItem parentItem = context.StatusCache[parentDir];
+                    uuid = parentItem.Status.Entry.Uuid;
+                }
+
+                // give up on this one
+                if ( uuid == null )
+                    continue;
+
                 if ( !repositories.ContainsKey(uuid) )
                 {
                     repositories.Add( uuid, new ArrayList() ); 
