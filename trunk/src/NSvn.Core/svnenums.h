@@ -115,8 +115,17 @@ namespace NSvn
             /// <summary>The item is in a conflicted state.</summary>
             Conflicted = svn_wc_status_conflicted,
 
-            /// <summary>An unversioned local resource is in the way of the versioned resource</summary>
-            Obstructed = svn_wc_status_obstructed
+            /// <summary>A resource marked as ignored.</summary>
+            Ignored = svn_wc_status_ignored,
+
+            /// <summary>An unversioned local resource is in the way of the versioned resource.</summary>
+            Obstructed = svn_wc_status_obstructed,
+
+            /// <summary>An unversioned path populated by an svn:external property.</summary>
+            External = svn_wc_status_external,
+
+            /// <summary>A directory that doesn't contain a complete entries list.</summary>
+            Incomplete = svn_wc_status_incomplete
 
         };
 

@@ -33,8 +33,11 @@ namespace NSvn.Core.Tests
             string added = this.CreateTextFile( "added.cs" );
             this.RunCommand( "svn", "add " + added );
             string changed = this.CreateTextFile( "Form.cs" );
+            string ignored = this.CreateTextFile( "foo.ignored" );
             string propChange = Path.Combine( this.WcPath, "App.ico" );
             this.RunCommand( "svn", "ps foo bar " + propChange );
+            this.RunCommand( "svn", "ps svn:ignore *.ignored " + this.WcPath );
+
 
             this.Client.Status( out youngest, unversioned, Revision.Unspecified, 
                 new StatusCallback( this.StatusFunc ), false, false, false, 
@@ -63,6 +66,12 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "Wrong property status " + propChange, 
                 this.currentStatus.PropertyStatus, StatusKind.Modified );
             Assertion.AssertEquals( propChange, this.currentPath );
+
+            this.Client.Status( out youngest, ignored, Revision.Unspecified, 
+                new StatusCallback( this.StatusFunc ), false, false, false, 
+                false );
+            Assertion.AssertEquals( "Wrong property status " + ignored,
+                StatusKind.Ignored, this.currentStatus.TextStatus );
         }
 
         /// <summary>
