@@ -37,14 +37,14 @@
             
             <b>How to uninstall:</b>
             <br /><br />
-            There are to ways to uninstall Ankh. You can use Ankh installer, or you can use Windows <b>Add/remove program</b> wizard.
+            There are two ways to uninstall Ankh. You can use the Ankh installer, or you can use Windows <b>Add/remove program</b> wizard.
             Both will completly remove the Ankh Addin from your system.
             <br /><br />
             <b>Uninstallation with the Ankh installer:</b>
             <img src="../../img/uninstall_using_installer.png" align="left" />
             <br clear="all" /><br />
             <list>
-                <item>1. Start Ankh intaller.</item>
+                <item>1. Start the Ankh installer.</item>
                 <item>2. Select the <b>Remove AnkhSVN addin</b> button.</item>
                 <item>3. Press <b>Next</b>.</item>
             </list>

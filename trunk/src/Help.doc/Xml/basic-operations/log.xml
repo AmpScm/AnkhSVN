@@ -2,19 +2,20 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Log">
     <section>
-            Displays commit log messages.
+            Display commit log messages.
             <br/><br/>
             <p>
                 <b>Description</b>
                     <br/>
-                    When using the log operation, you can operate on either URLs or PATHs.
+                    Log operations can be used to operate on either URLs or PATHs.
                     The default target is the path of your current directory. 
                     If no arguments are supplied, svn log shows the log messages for all files and 
                     directories inside of (and including) the current working directory of your working copy. 
-                    You can refine the results by specifying one or more paths, one or more revisions, or any combination of the two.
+                    You can refine the results by specifying one or more paths, one or more revisions, or any 
+                    combination of the two.
                     <br/><br/>
                     If you specify a URL alone, then it prints log messages for everything that the URL contains. 
-                    If you spesify paths past the URL, only messages for those paths under that URL will be printed.
+                    If you specify paths past the URL, only messages for those paths under that URL will be printed.
                     <br/><br/>
                     Each log message is printed just once, even if more than one of the affected paths 
                     for that revision were explicitly requested. Logs cross copy history by default; 

@@ -8,7 +8,7 @@
                 <b>Description</b>
                     <br/>
                     List directory entries of a URL. 
-                    If URL is a file, just file entry will be displayed. SVN list does not work on paths 
+                    If URL is a file, just the file entry will be displayed. SVN list does not work on paths 
                     in your working copy.
                     <br/><br/>
                     <b>Changes</b>

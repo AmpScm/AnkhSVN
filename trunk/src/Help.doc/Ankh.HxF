@@ -84,7 +84,6 @@
     <File Url="img\menu-items\commit.png"/>
     <File Url="img\menu-items\diff.png"/>
     <File Url="img\menu-items\refresh.png"/>
-    <File Url="img\menu-items\revert.png"/>
     <File Url="Xml\keywords\output_window.xml"/>
     <File Url="img\menu-items\delete.png"/>
     <File Url="Xml\using-ankh\repos_explorer.xml"/>

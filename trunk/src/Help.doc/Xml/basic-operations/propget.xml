@@ -2,12 +2,12 @@
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
 <doc title="Property get">
     <section>
-           Prints the value of a property
+           Print the value of a property
             <br/><br/>
             <p>
                 <b>Description</b>
                 <br/>
-                    Prints the value of a property on files, directories, or revisions.
+                    Print the value of a property on files, directories, or revisions.
                     <br/>
                     See <link url="../using-ankh/soecial_properties.xml">Special properties</link> for a list of
                     predefined properties supported by Subversion.

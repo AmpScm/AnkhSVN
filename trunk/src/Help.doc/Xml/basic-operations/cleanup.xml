@@ -7,7 +7,7 @@
             <p>
                 <b>Description</b>
                     <br/>
-                    Recursively clean up the working copy, removing locks resuming unfinished operations. 
+                    Recursively clean up the working copy, remove locks, and resume unfinished operations. 
                     If you ever get a working copy locked error, run this command to remove stale locks and 
                     get your working copy into a useable state again. 
                     <br/><br/>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--<!DOCTYPE HelpTOC SYSTEM "ms-help://hx/resources/HelpTOC.DTD">-->
+<!DOCTYPE HelpTOC SYSTEM "ms-help://hx/resources/HelpTOC.DTD">
 <HelpTOC DTDVersion="1.0" FileVersion="1" FontSize="8" Font="Arial" ParentNodeIcon="Book">
 	<!-- Insert TOC Nodes Here -->
 	<HelpTOCNode Title="About the Ankh Help file" Url="\Xml\top\About_the_Ankh_help_file.xml">

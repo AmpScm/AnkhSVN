@@ -4,7 +4,7 @@
     <section>
         <p>
            Update brings changes from the repository into your working copy. <br />
-           It brings your working copy up-to-date with the HEAD (latest)
+           Following an update your working copy will be up-to-date with the HEAD (latest)
             revision in the repository. 
             <br /><br /><br />
             <b>How to update a working copy:</b>
@@ -16,7 +16,7 @@
                 </item>
                 <item>
                     <b>2.</b> Right click the selected item. A menu will pop up.
-                      By selecting a solution/project, 
+                      By selecting a solution/project 
                       update will be done recursively on all files under the selected item. 
                 </item>
                 <item>

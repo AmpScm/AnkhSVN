@@ -7,7 +7,7 @@
             <p>
                 <b>Description</b>
                     <br/>
-                    This removes properties from files, directories, or revisions. 
+                    Remove properties from files, directories, or revisions. 
                     <br/>
                     See <link url="../using-ankh/soecial_properties.xml">Special properties</link> for a list of
                     predefined properties supported by Subversion.

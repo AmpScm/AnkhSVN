@@ -6,7 +6,7 @@
            The Repository Explorer displays a file tree view of repository with file-type 
            icons corresponding to those used by VS .NET for a valid URL and revision. 
            It can display any revision in the repository, 
-           given as head, as specific date or a revision number. 
+           given as head, as a specific date or a revision number. 
            The head revision is the latest revision present in the repository. 
            If Date is selected in the dropdown the date-picker is enabled and a calendar is available. 
            <br/><br/><br/>
@@ -20,7 +20,7 @@
                     <b>1.</b> Type in the full path to a repository.
                 </item>
                 <item>
-                    <b>2.</b> Select a revision (Head, Date or type in a revision number manualy).
+                    <b>2.</b> Select a revision (Head, Date or type in a revision number manually).
                 </item>
                 <item>
                     <b>3.</b> Select a date if you have selected 'Date' in the the revision field (<b>2.</b>).
@@ -29,7 +29,7 @@
                     <b>4.</b> Click at <b>Go</b> button.
                 </item>
                 <item>
-                    <b>5.</b> Here you will se all the files in the selected repository.
+                    <b>5.</b> Here you will see all the files in the selected repository.
                 </item>
 
             </list>
