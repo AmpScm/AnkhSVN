@@ -160,6 +160,8 @@ namespace Ankh
                 typeof(RepositoryExplorerControl).Assembly.Location, 
                 "Ankh.UI.RepositoryExplorerControl" );
 
+            this.repositoryExplorer.Context = this.Context;
+
             System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
                 "Could not create tool window" );
         }

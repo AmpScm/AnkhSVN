@@ -58,7 +58,10 @@ namespace Ankh.UI
             // get the children of the root
             RepositoryResourceDictionary dict = dir.GetChildren();
             foreach( RepositoryResource res in dict.Values )
+            {
+                res.Context = dir.Context;
                 res.Accept( visitor );
+            }
 
             this.Cursor = Cursors.Default;
         }
