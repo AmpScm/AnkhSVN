@@ -15,31 +15,49 @@ namespace NSvn
         /// <summary>
         /// Constructor.
         /// </summary>
-        public NSvnContext()
+        /// <param name="configDir">The configuration directory to use.</param>
+        public NSvnContext( string configDir )
         {
+            ClientConfig.CreateConfigDir( configDir );
+            ClientConfig cfg = new ClientConfig( configDir );
+
             this.clientContext = new ClientContext( 
                 new NotifyCallback( this.NotifyCallback ),
                 new AuthenticationBaton() );
+            this.clientContext.ClientConfig = cfg;
+            this.clientContext.AuthBaton.SetParameter( 
+                AuthenticationBaton.ParamConfigDir, configDir );
+
             this.clientContext.LogMessageCallback = new LogMessageCallback(
                 this.LogMessageCallback );
+        }
+
+        public NSvnContext()
+        {
+            this.clientContext = new ClientContext(
+                new NotifyCallback( this.NotifyCallback ),
+                new AuthenticationBaton(), new ClientConfig() );
+            this.clientContext.LogMessageCallback = new LogMessageCallback(
+                this.LogMessageCallback );
+            
         }
 
         /// <summary>
         /// Add an authentication provider,
         /// </summary>
         /// <param name="provider">The provider to add.</param>
-        public void AddAuthenticationProvider( IAuthenticationProvider provider )
+        public void AddAuthenticationProvider( AuthenticationProvider provider )
         {
-            this.clientContext.AuthBaton.Providers.Add( provider );
+            this.clientContext.AuthBaton.Add( provider );
         }
 
         /// <summary>
         /// Remove an authentication provider.
         /// </summary>
         /// <param name="provider">The provider to remove.</param>
-        public void RemoveAuthenticationProvider( IAuthenticationProvider provider )
+        public void RemoveAuthenticationProvider( AuthenticationProvider provider )
         {
-            this.clientContext.AuthBaton.Providers.Remove( provider );
+            this.clientContext.AuthBaton.Add( provider );
         }
 
         

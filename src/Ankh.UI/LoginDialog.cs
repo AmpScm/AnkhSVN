@@ -36,6 +36,7 @@ namespace Ankh.UI
         public string Password
         {
             get{ return this.passwordTextBox.Text; }
+            set{ this.usernameTextBox.Text = value; }
         }
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace Ankh.UI
         public string Username
         {
             get{ return this.usernameTextBox.Text; }
+            set{ this.usernameTextBox.Text = value; }
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 // $Id$
 using System;
 using NUnit.Framework;
+using NSvn.Core;
 
 namespace NSvn.Tests
 {
@@ -17,6 +18,8 @@ namespace NSvn.Tests
         public void TestName()
         {
             RepositoryResource file = new RepositoryFile( "http://www.porn.com/foo/bar.txt" );
+            file.Context.AddAuthenticationProvider( AuthenticationProvider.GetUsernameProvider() );
+
             Assertion.AssertEquals( "Wrong file name", "bar.txt", file.Name );
 
             Assertion.AssertEquals( "Wrong dir name", "bar", 

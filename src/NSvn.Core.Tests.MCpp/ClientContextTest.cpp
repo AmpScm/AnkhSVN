@@ -1,7 +1,6 @@
 // $Id$
 #include "Stdafx.h"
 
-#include "SimpleCredential.h"
 #include "ClientContextTest.h"
 #include "SvnClientException.h"
 #include "delegates.h"
@@ -44,7 +43,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotifyCallback()
 
 }
 
-__gc class DummyProvider : public IAuthenticationProvider
+/*__gc class DummyProvider : public IAuthenticationProvider
 {
 public:
     DummyProvider() : Saved(false)
@@ -74,7 +73,7 @@ public:
     {
         return SVN_AUTH_CRED_SIMPLE;
     }
-};
+};*/
 
 
 
@@ -82,58 +81,7 @@ public:
 struct svn_auth_iterstate_t
 {};
 
-void NSvn::Core::Tests::MCpp::ClientContextTest::TestEmptyAuthBaton()
-{
-    Pool pool;
 
-    ClientContext* c = new ClientContext( 0 );
-    svn_client_ctx_t* ctx = c->ToSvnContext( pool );
-
-    svn_auth_cred_simple_t* cred;
-    svn_auth_iterstate_t* iterState;
-
-
-
-    HandleError( svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, 
-        SVN_AUTH_CRED_SIMPLE, "Realm of terror",
-        ctx->auth_baton,  pool ) );
-}
-
-
-void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
-{
-    Pool pool;
-
-    DummyProvider* provider = new DummyProvider();
-    AuthenticationBaton* bat = new AuthenticationBaton();
-    bat->Providers->Add( provider );
-
-    ClientContext* c = new ClientContext( 0, bat );
-
-    svn_client_ctx_t* ctx = c->ToSvnContext( pool );
-    svn_auth_cred_simple_t* cred;
-    svn_auth_iterstate_t* iterState;
-
-    // first the first
-    svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, SVN_AUTH_CRED_SIMPLE, 
-        "Realm of terror", ctx->auth_baton,  pool );
-
-    Assertion::Assert( S"Username not foo", strcmp( cred->username, "foo" ) == 0 );
-    Assertion::Assert( S"Password not bar", strcmp( cred->password, "bar" ) == 0 );
-
-    // next, the next
-    svn_auth_next_credentials( reinterpret_cast<void**>(&cred), iterState, pool );
-
-    Assertion::Assert( S"Username not kung", strcmp( cred->username, "kung" ) == 0 );
-    Assertion::Assert( S"Password not fu", strcmp( cred->password, "fu" ) == 0 );
-
-    // now try to save
-    svn_auth_save_credentials( iterState, pool );
-    Assertion::Assert( S"Credentials not saved", provider->Saved );
-
-    Assertion::AssertEquals( "Wrong realm", S"Realm of terror", provider->Realm );
-
-}
 
 String* NSvn::Core::Tests::MCpp::ClientContextTest::LogMsgCallback( CommitItem* items[] )
 {

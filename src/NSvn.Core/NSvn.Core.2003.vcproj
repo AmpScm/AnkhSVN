@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="NSvn.Core"
 	ProjectGUID="{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
+	RootNamespace="NSvn.Core"
 	Keyword="ManagedCProj">
 	<Platforms>
 		<Platform
@@ -111,6 +112,18 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<AssemblyReference
+			RelativePath="mscorlib.dll"/>
+		<AssemblyReference
+			RelativePath="System.dll"/>
+		<AssemblyReference
+			RelativePath="System.Data.dll"/>
+		<AssemblyReference
+			RelativePath="System.Drawing.dll"/>
+		<AssemblyReference
+			RelativePath="System.Windows.Forms.dll"/>
+		<AssemblyReference
+			RelativePath="System.XML.dll"/>
 	</References>
 	<Files>
 		<Filter
@@ -121,6 +134,9 @@
 			</File>
 			<File
 				RelativePath="AssemblyInfo.cpp">
+			</File>
+			<File
+				RelativePath=".\AuthenticationProvider.cpp">
 			</File>
 			<File
 				RelativePath="Client.cpp">
@@ -166,6 +182,12 @@
 				RelativePath="AprFileAdapter.h">
 			</File>
 			<File
+				RelativePath=".\AuthenticationBaton.h">
+			</File>
+			<File
+				RelativePath=".\AuthenticationProvider.h">
+			</File>
+			<File
 				RelativePath="ChangedPath.h">
 			</File>
 			<File
@@ -187,6 +209,9 @@
 				RelativePath="CommitItem.h">
 			</File>
 			<File
+				RelativePath=".\credentials.h">
+			</File>
+			<File
 				RelativePath="delegates.h">
 			</File>
 			<File
@@ -194,6 +219,9 @@
 			</File>
 			<File
 				RelativePath="Entry.h">
+			</File>
+			<File
+				RelativePath=".\GCPool.h">
 			</File>
 			<File
 				RelativePath="LogMessage.h">
@@ -212,9 +240,6 @@
 			</File>
 			<File
 				RelativePath="Revision.h">
-			</File>
-			<File
-				RelativePath="SimpleCredential.h">
 			</File>
 			<File
 				RelativePath="Status.h">
@@ -236,9 +261,6 @@
 			</File>
 			<File
 				RelativePath="svnenums.h">
-			</File>
-			<File
-				RelativePath="UsernameCredential.h">
 			</File>
 			<File
 				RelativePath="utils.h">

@@ -109,6 +109,9 @@
 				RelativePath="AssemblyInfo.cpp">
 			</File>
 			<File
+				RelativePath="AuthenticationProvider.cpp">
+			</File>
+			<File
 				RelativePath="Client.cpp">
 			</File>
 			<File
@@ -150,6 +153,9 @@
 			</File>
 			<File
 				RelativePath="AprFileAdapter.h">
+			</File>
+			<File
+				RelativePath="AuthenticationProvider.h">
 			</File>
 			<File
 				RelativePath="ChangedPath.h">
@@ -213,9 +219,6 @@
 			</File>
 			<File
 				RelativePath="SvnClientException.h">
-			</File>
-			<File
-				RelativePath="UsernameCredential.h">
 			</File>
 			<File
 				RelativePath="delegates.h">

@@ -31,14 +31,6 @@ namespace NSvn
                     [Test]
                     void TestNotifyCallback();
 
-                    /// <summary>Test that it works with an empty auth baton</summary>
-                    [Test]
-                    [ExpectedException(__typeof(SvnClientException))]
-                    void TestEmptyAuthBaton();
-
-                    /// <summary>Test that the auth baton stuff works</summary>
-                    [Test]
-                    void TestAuthBaton();
 
                     /// <summary>Test the log message stuff</summary>
                     [Test]

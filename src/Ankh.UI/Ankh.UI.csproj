@@ -155,6 +155,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ClientCertDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClientCertDialog.resx"
+                    DependentUpon = "ClientCertDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ClientCertPassphraseDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClientCertPassphraseDialog.resx"
+                    DependentUpon = "ClientCertPassphraseDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "CommitDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -352,6 +372,16 @@
                 <File
                     RelPath = "RevisionPicker.resx"
                     DependentUpon = "RevisionPicker.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SslServerTrustDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SslServerTrustDialog.resx"
+                    DependentUpon = "SslServerTrustDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

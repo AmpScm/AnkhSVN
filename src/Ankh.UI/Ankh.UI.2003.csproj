@@ -20,7 +20,7 @@
                 PostBuildEvent = ""
                 RootNamespace = "Ankh.UI"
                 RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = "Ankh.UI.Loader"
+                StartupObject = "Ankh.UI.ClientCertDialog"
             >
                 <Config
                     Name = "Debug"
@@ -155,6 +155,26 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClientCertDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClientCertDialog.resx"
+                    DependentUpon = "ClientCertDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ClientCertPassphraseDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClientCertPassphraseDialog.resx"
+                    DependentUpon = "ClientCertPassphraseDialog.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "CommitDialog.cs"
@@ -354,6 +374,16 @@
                 <File
                     RelPath = "RevisionPicker.resx"
                     DependentUpon = "RevisionPicker.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SslServerTrustDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SslServerTrustDialog.resx"
+                    DependentUpon = "SslServerTrustDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
