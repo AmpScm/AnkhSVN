@@ -195,6 +195,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "StatusCache.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SvnClient.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -514,11 +518,6 @@
                 />
                 <File
                     RelPath = "Solution\SolutionNode.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Solution\StatusCache.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
