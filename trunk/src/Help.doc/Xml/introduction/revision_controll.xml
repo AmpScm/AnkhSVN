@@ -10,11 +10,8 @@
         most developers prefer to implement version control tools such as the one described here. 
         Version control tools allow an individual developer to maintain control over an item 
         such as a source file while they implement and test changes to it. 
-        <br/><br/>
-        During this period, while the file is "checked out", no one else is allowed to modify it. 
-        When the developer is satisfied that the changes have been implemented successfully and 
-        that they broke nothing in the meantime, the file may be "checked in" to the baseline 
-        database for use by everyone. 
+        <br/><br/> 
+         
         </p>
     </section>   
     

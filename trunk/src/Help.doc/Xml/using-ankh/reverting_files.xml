@@ -10,10 +10,11 @@
         <b>How to revert files:</b>
         <list>
             <item>
-                <b>1.</b>Select and right click on the file(s) you want to revert.
+                <b>1.</b>Select and right click on the file(s) you want to revert in Solution Explorer. 
+                         A menu will pop up.
             </item>
             <item>
-                <b>2.</b>Select <b>'Revert'</b> from the items menu.
+                <b>2.</b>Select <b>Revert</b> from the menu.
                 <br/><br/>
                 <img src="../../img/menu-items/revert.png" align="left"/>
                 <br clear="all"/>
