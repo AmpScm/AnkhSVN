@@ -59,6 +59,8 @@ namespace Ankh
         public void ShowRepositoryExplorer(bool show)
         {
             this.repositoryExplorerWindow.Visible = show;
+            if ( show )
+                this.EnsureWindowSize( this.repositoryExplorerWindow );
 
         }
     
@@ -94,6 +96,8 @@ namespace Ankh
 
             this.commitDialogWindow.Visible = true;
             this.commitDialogModal = true;
+
+            this.EnsureWindowSize( this.commitDialogWindow );
 
             // Fired when user clicks Commit or Cancel.
             this.commitDialog.Proceed += new EventHandler( this.ProceedCommit );
@@ -133,6 +137,9 @@ namespace Ankh
 
             this.commitDialogWindow.Visible = show;
             this.commitDialog.ButtonsEnabled = this.commitDialogModal;
+
+            if ( show )
+                this.EnsureWindowSize( this.commitDialogWindow );
         }
 
 
@@ -294,6 +301,8 @@ namespace Ankh
             
             this.repositoryExplorerWindow.Visible = true;
             this.repositoryExplorerWindow.Caption = "Repository Explorer";
+            this.repositoryExplorerWindow.Width = 200;
+            this.repositoryExplorerWindow.Height = 400;
             
             AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl 
                 objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
@@ -357,6 +366,22 @@ namespace Ankh
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;
             args.Path = item.Path;
+        }
+
+        private void EnsureWindowSize( Window window )
+        {
+            try
+            {
+                if ( window.Width < 150 )
+                    window.Width = 400;
+
+                if ( window.Height < 100 )
+                    window.Height = 500;
+            }
+            catch( System.Runtime.InteropServices.COMException )
+            {
+                // swallow, no biggie
+            }
         }
 
 
