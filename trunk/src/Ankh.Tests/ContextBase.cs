@@ -64,6 +64,11 @@ namespace Ankh.Tests
             }
         }
 
+        public virtual string SolutionDirectory
+        {
+            get{ return null; }
+        }
+
         public virtual void SolutionClosing()
         {
             // TODO:  Add ContextBase.SolutionClosing implementation
