@@ -22,6 +22,8 @@ namespace Ankh.EventSinks
             this.vcProjectEventsType = asm.GetType( 
                 "Microsoft.VisualStudio.VCProjectEngine._dispVCProjectEngineEvents_Event", 
                 true );
+            this.vcFileType = asm.GetType(
+                "Microsoft.VisualStudio.VCProjectEngine.VCFile", true );
 
             // the ItemAdded event handler
             Type itemAddedType = asm.GetType( "Microsoft.VisualStudio.VCProjectEngine._dispVCProjectEngineEvents_ItemAddedEventHandler", false );
@@ -51,17 +53,43 @@ namespace Ankh.EventSinks
 
         protected void ItemAdded( object item, object parent )
         {
-            // is this a project being added?
-            if ( parent == null ) 
+            try
             {
-                EventSink.AddingProject = true;
+                // is this a project being added?
+                if ( parent == null ) 
+                {
+                    EventSink.AddingProject = true;
+                }
+
+                // is there a project currently being added?
+                if ( EventSink.AddingProject )
+                    return;
+
+                EventSink.AddingProject = false;
+
+                // should we auto-add this?
+                if ( this.Context.Config.AutoAddNewFiles )
+                {
+                    // must be a file
+                    if ( this.vcFileType.IsInstanceOfType( item ) )
+                    {
+                        PropertyInfo fullPath = this.vcFileType.GetProperty( "FullPath" );
+                        string path = (string)fullPath.GetValue( item, new object[]{} );
+
+                        SvnItem svnItem = this.Context.SolutionExplorer.StatusCache[path];
+                        if ( !svnItem.IsVersioned && svnItem.IsVersionable )
+                        {
+                            this.Context.Client.Add( path, false );
+                        }
+                    }
+                }
+
+                this.Context.SolutionExplorer.RefreshSelectionParents();
             }
-
-            // is there a project currently being added?
-            if ( EventSink.AddingProject )
-                return;
-
-            this.Context.SolutionExplorer.RefreshSelectionParents();
+            catch( Exception ex )
+            {
+                Error.Handle( ex );
+            }
         }
 
         protected void ItemRemoved( object item, object parent )
@@ -74,6 +102,7 @@ namespace Ankh.EventSinks
         private readonly Delegate itemAddedDelegate;
         private readonly Delegate itemRemovedDelegate;
         private readonly Type vcProjectEventsType;
+        private readonly Type vcFileType;
         private readonly object events;
     }
 }
