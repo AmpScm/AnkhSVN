@@ -136,6 +136,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "WorkingCopyDirectoryTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WorkingCopyResourceTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace NSvn
 {
@@ -13,7 +14,7 @@ namespace NSvn
         /// <param name="path">The path to the file.</param>
 		public WorkingCopyFile( string path ) : base( path )
 		{
-			// empty for now
+			this.lastModTime = File.GetLastWriteTime( this.Path );
 		}
 
         /// <summary>
@@ -22,6 +23,27 @@ namespace NSvn
         public override bool IsDirectory
         {
             get{ return false; }
-        }        
+        }   
+
+        /// <summary>
+        /// Whether this resource has been modified
+        /// </summary>
+        protected override bool IsModified
+        {
+            get
+            { 
+                return File.GetLastWriteTime( this.Path ) > this.lastModTime; 
+            }
+        }
+
+        /// <summary>
+        /// Invalidates instance data associated with this file.
+        /// </summary>
+        protected override void DoInvalidate()
+        {
+            this.lastModTime = File.GetLastWriteTime( this.Path );
+        }
+     
+        private DateTime lastModTime;
 	}
 }
