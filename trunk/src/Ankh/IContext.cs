@@ -59,6 +59,12 @@ namespace Ankh
         bool AnkhLoadedForSolution { get; }
 
         /// <summary>
+        /// Reloads the current solution.
+        /// </summary>
+        /// <returns>True if the solution has been reloaded.</returns>
+        bool ReloadSolutionIfNecessary();
+
+        /// <summary>
         /// The Ankh configuration.
         /// </summary>
         Ankh.Config.Config Config { get; }
