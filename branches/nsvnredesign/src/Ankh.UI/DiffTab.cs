@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Ankh.UI
 {
@@ -106,7 +107,7 @@ namespace Ankh.UI
             {
                 // create subtabs
                 this.diffPage = new TabPage( "Diff" );
-                this.sourcePage = new TabPage( "Source" );
+                this.sourcePage = new TabPage( "Source" );  
 
                 // create an inner tab control to hold the subtabs
                 TabControl innerControl = new TabControl();
@@ -149,14 +150,14 @@ namespace Ankh.UI
             {
                 set
                 {
-                    TextBox box = new TextBox();
+                    RichTextBox box = new RichTextBox();
                     box.Multiline = true;
-                    box.ScrollBars = ScrollBars.Both;
+                    box.ScrollBars = RichTextBoxScrollBars.Both;
                     box.Text = value;
                     this.sourcePage.Controls.Add( box );
                     box.Dock = DockStyle.Fill;
                 }
-            }                         
+            }  
 
             private TabPage diffPage;
             private TabPage sourcePage;
@@ -192,7 +193,7 @@ namespace Ankh.UI
         }
 
         public string Source
-        {
+        { 
             get{ return this.source; }
             set{ this.source = value; }
         }
