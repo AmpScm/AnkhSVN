@@ -13,26 +13,20 @@ namespace Ankh
     /// <summary>
     /// Encapsulates error handling functionality.
     /// </summary>
-    public class Error
+    public class ErrorHandler : IErrorHandler
     {
-        private Error()
-        {
-            // nothing to see here
-        }
-
-
         /// <summary>
         /// Handles an exception.
         /// </summary>
         /// <param name="ex"></param>
-        public static void Handle( Exception ex )
+        public void Handle( Exception ex )
         {
             try
             {
-                Type t = typeof(Error);
-                t.InvokeMember( "DoHandle", BindingFlags.InvokeMethod |BindingFlags.Static |
+                Type t = typeof(ErrorHandler);
+                t.InvokeMember( "DoHandle", BindingFlags.InvokeMethod | BindingFlags.Instance |
                     BindingFlags.NonPublic, null, 
-                    null, new object[]{ ex } );
+                    this, new object[]{ ex } );
             }
             catch( Exception x )
             {
@@ -40,7 +34,7 @@ namespace Ankh
             }
         }
 
-        private static void DoHandle( ProgressRunner.ProgressRunnerException ex )
+        private void DoHandle( ProgressRunner.ProgressRunnerException ex )
         {
             // we're only interested in the inner exception - we know where the 
             // outer one comes from
@@ -48,7 +42,7 @@ namespace Ankh
         }
 
 
-        private static void DoHandle( WorkingCopyLockedException ex )
+        private void DoHandle( WorkingCopyLockedException ex )
         {
             MessageBox.Show( "Your working copy appear to be locked. " + NL + 
                 "Run Cleanup to amend the situation.", 
@@ -56,7 +50,7 @@ namespace Ankh
                 MessageBoxIcon.Warning );
         }
 
-        private static void DoHandle( AuthorizationFailedException ex )
+        private void DoHandle( AuthorizationFailedException ex )
         {
             MessageBox.Show( 
                 "You failed to authorize against the remote repository. ",
@@ -64,7 +58,7 @@ namespace Ankh
                 MessageBoxIcon.Warning );
         }
         
-        private static void DoHandle( ResourceOutOfDateException ex )
+        private void DoHandle( ResourceOutOfDateException ex )
         {
             MessageBox.Show(
                 "One or more of your local resources are out of date. " + 
@@ -73,7 +67,7 @@ namespace Ankh
                 MessageBoxIcon.Warning );
         }
 
-        private static void DoHandle( IllegalTargetException ex )
+        private void DoHandle( IllegalTargetException ex )
         {
             MessageBox.Show(  
                 "One or more of the resources selected are not valid targets for this operation" + 
@@ -84,7 +78,7 @@ namespace Ankh
                 MessageBoxIcon.Warning );
         }
 
-        private static void DoHandle( SvnClientException ex )
+        private void DoHandle( SvnClientException ex )
         {
             if ( ex.ErrorCode == LockedFileErrorCode )
             {
@@ -105,7 +99,7 @@ namespace Ankh
 
         
 
-        private static void DoHandle( Exception ex )
+        private void DoHandle( Exception ex )
         {
 #if REPORTERROR
             ShowErrorDialog(ex, true, true);
@@ -116,7 +110,7 @@ namespace Ankh
 
         }
 
-        private static void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError )
+        private void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError )
         {
             string stackTrace = GetNestedStackTraces( ex );
             string message = GetNestedMessages( ex );
