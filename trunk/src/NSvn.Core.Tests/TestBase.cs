@@ -17,6 +17,13 @@ namespace NSvn.Core.Tests
     [TestFixture]
     public class TestBase
     {
+        public TestBase()
+        {
+            string asm = this.GetType().FullName;
+            this.REPOS_FILE = asm.Substring(0, asm.LastIndexOf(".")) + ".repos.zip";
+            this.WC_FILE = asm.Substring(0, asm.LastIndexOf(".")) + ".wc.zip";
+        }
+
         [SetUp]
         public virtual void SetUp()
         {
@@ -313,10 +320,10 @@ namespace NSvn.Core.Tests
 //            
 //        }
         private const int BUF_SIZE = 4096;
-        protected const string REPOS_FILE="NSvn.Core.Tests.repos.zip";
+        protected readonly string REPOS_FILE;
         private const string REPOS_NAME = "repos";
         protected const string BASEPATH = @"\tmp";
-        protected const string WC_FILE = "NSvn.Core.Tests.wc.zip";
+        protected readonly string WC_FILE;
         protected const string WC_NAME = "wc";
         private string reposUrl;
         private string wcPath;

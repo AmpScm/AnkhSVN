@@ -17,7 +17,7 @@ namespace NSvn.Core.Tests
             this.ExtractRepos();
             this.ExtractWorkingCopy();
             this.wc2 = this.FindDirName( Path.Combine( TestBase.BASEPATH, TestBase.WC_NAME ) );
-            this.ExtractZipFile( this.wc2, TestBase.WC_FILE );
+            this.ExtractZipFile( this.wc2, this.WC_FILE );
         }
 
         /// <summary>
