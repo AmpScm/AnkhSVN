@@ -14,6 +14,9 @@ openssl 0.9.7 and Berkeley DB 4.2.52
   responsive(there's a modal dialog in place to prevent you from doing 
   anything useful with the responsiveness, though ;-))
 * Support for adding an existing solution to a repository from Ankh
+* Ability to export a folder from a repository added to repository explorer.
+* When conflicts occur a task for each conflict is added to the task list.  
+   Clicking on the task takes the user to that line in the file.
 * Optionally auto-add new files to Subversion
 * Support committing SVN deletions
 * Support for switch
