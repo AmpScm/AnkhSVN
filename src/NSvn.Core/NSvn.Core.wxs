@@ -2,12 +2,12 @@
   <Fragment Id="FR_NSvn.Core">
     <DirectoryRef Id="appDir">
       <Component Id="NSvn.Core.component0" DiskId="1" Guid="07D7100D-D005-4a9d-A591-8D4EB28D8A4A">
-        <File Id="NSvn.Core.file0" Name="NSVNCO~1.DLL" LongName="NSvn.Core.dll"
+        <File Id="NSvn.Core.file0" Name="NSVNCO~2.DLL" LongName="NSvn.Core.dll"
           Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
           src="..\$(var.builddir)\NSvn.Core.dll" />
       </Component>
       <Component Id="NSvn.Core.component1" DiskId="1" Guid="48DFA7F1-A2DF-4c1c-B059-F2BE237F02A6">        
-        <File Id="NSvn.Core.file1" Name="NSVNCO~1.PDB" LongName="NSvn.Core.pdb"
+        <File Id="NSvn.Core.file1" Name="NSVNCO~2.PDB" LongName="NSvn.Core.pdb"
           Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
           src="..\$(var.builddir)\NSvn.Core.pdb" />
       </Component>
@@ -21,12 +21,12 @@
             Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
             src="$(var.svndir)\apr\Release\libapr.dll" />
       </Component>
-      <Component Id="LibAprUtil.component4" DiskId="1" Guid="F8A86574-96D2-4505-B524-9A1758B50CA7">
+      <Component Id="LibAprUtil.component4" DiskId="1" Guid="965C4B3D-E84A-486f-89BE-5EB202418788">
         <File Id="LibAprUtil.file4" Name="LIBAPR~1.DLL" LongName="LibAprUtil.Dll"
             Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
             src="$(var.svndir)\apr-util\Release\libaprUtil.dll" />
       </Component>
-      <Component Id="LibAprIconv.component5" DiskId="1" Guid="F8A86574-96D2-4505-B524-9A1758B50CA7">
+      <Component Id="LibAprIconv.component5" DiskId="1" Guid="A01F9583-A9C5-4276-9A3B-46C231F5070E">
         <File Id="LibAprIconv.file5" Name="LIBAPR~2.DLL" LongName="LibAprIconv.Dll"
             Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
             src="$(var.svndir)\apr-iconv\Release\libapriconv.dll" />
