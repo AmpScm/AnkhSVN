@@ -18,8 +18,11 @@ namespace Ankh.EventSinks
         {
             _DTE dte = this.Context.DTE;
 
-            this.projectShowAll.AfterExecute -= new _dispCommandEvents_AfterExecuteEventHandler(
-                this.AfterProjectShowAll );
+            if ( this.projectShowAll != null )
+            {
+                this.projectShowAll.AfterExecute -= new _dispCommandEvents_AfterExecuteEventHandler(
+                    this.AfterProjectShowAll );
+            }
         }
 
         private void RegisterCommandEvents( )
@@ -27,9 +30,18 @@ namespace Ankh.EventSinks
             _DTE dte = this.Context.DTE;
 
             // Project.ShowAll
-            this.projectShowAll = dte.Events.get_CommandEvents( PROJECTSHOWALLGUID, 600 );
-            this.projectShowAll.AfterExecute += new _dispCommandEvents_AfterExecuteEventHandler(
-                this.AfterProjectShowAll );
+            try
+            {
+                this.projectShowAll = dte.Events.get_CommandEvents( PROJECTSHOWALLGUID, 600 );
+                this.projectShowAll.AfterExecute += new _dispCommandEvents_AfterExecuteEventHandler(
+                    this.AfterProjectShowAll );
+            }
+            catch( NullReferenceException )
+            {
+                // happens if Visual Assist X is installed
+                this.Context.OutputPane.WriteLine( "Unable to attach to the Project.ShowAll event." + 
+                    Environment.NewLine + "Possible conflict with other installed plugin." );
+            }
             
         }
 
