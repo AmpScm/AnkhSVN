@@ -170,11 +170,14 @@ namespace Ankh.Config
                 }
             }
             catch( Exception )
-            {
-                mutex.ReleaseMutex();
+            {                
                 if ( reposRootPath != null )
                     File.Delete( reposRootPath );
                 throw;
+            }
+            finally
+            {
+                mutex.ReleaseMutex();
             }
         }
 
