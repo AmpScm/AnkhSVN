@@ -10,14 +10,14 @@
                     Send changes from your working copy to the repository. 
                     <br/><br/>
                     A commit operation can publish changes to any number of files and directories as a single atomic transaction. 
-                    In your working copy, you can change files, contents, create, delete, rename and copy files and directories,
+                    In your working copy, you can change the content of files,  create, delete, rename and copy files and directories,
                     and then commit the complete set of changes as a unit.
                     <br/><br/>
                     In the repository, each commit is treated as an atomic transaction: either all the commit's changes take 
                     place, or none of them take place. Subversion tries to retain this atomicity in the face of program crashes, 
                     system crashes, network problems, and other users' actions.
                     <br/><br/>
-                    Each time the repository accepts a commit, this creates a new state of the filesystem tree, called a revision. 
+                    Each time the repository accepts a commit, a new state of the filesystem tree is created.  This state is called a revision. 
                     Each revision is assigned a unique natural number, one greater than the number of the previous revision. 
                     The initial revision of a freshly created repository is numbered zero, and consists of nothing but an 
                     empty root directory.

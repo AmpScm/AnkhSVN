@@ -3,9 +3,9 @@
 <doc title="Examining changes">
     <section>
         <p>
-            Besides the <link url="../keywords/status_icons.xml">status icons</link>
+            Aside from the <link url="../keywords/status_icons.xml">status icons</link>
             in front of files in the Solution Explorer, 
-            Ankh gives you a more detailed view of the changes made to files. 
+            a more detailed view of the changes made to files can be obtained with Ankh. 
             This is done with the <b>Diff</b> command. 
         </p>
         <br/><br/>
@@ -29,7 +29,7 @@
             <img src="../../img/diff_file.png" align="left" />
             <list>
                 <item><b>1.</b> Shows which file that has been diff'ed.</item>
-                <item><b>2.</b> Shows which revision the file is beeing diff'ed against.</item>
+                <item><b>2.</b> Shows which revision the file is being diff'ed against.</item>
                 <item><b>3.</b> Shows the line number and position of a section that differs.</item>
                 <item><b>4.</b> <b>+</b> indicates added text fragment. </item>
                 <item><b>5.</b> <b>-</b> indicates removed text fragment. </item>

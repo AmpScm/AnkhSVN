@@ -8,7 +8,7 @@
                 <b>Description</b>
                 <br/>
                     In the first form, URL1 and URL2 are URLs specified at revisions N and M. 
-                    These are the two sources to be compared. The revisions default to HEAD if omitted.
+                    These are the two sources to be compared. The revisions defaults to HEAD if omitted.
                     <br/><br/>
                     In the second form TARGET can be a URL, or it can be a working copy path, 
                     in which case the corresponding URL is used. This URL, at revisions N and M, 
