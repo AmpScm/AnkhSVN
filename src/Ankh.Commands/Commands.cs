@@ -3,6 +3,7 @@ using System.Collections;
 using System.Reflection;
 using EnvDTE;
 using System.Diagnostics;
+using Microsoft.Office.Core;
 
 namespace Ankh.Commands
 {
@@ -90,13 +91,30 @@ namespace Ankh.Commands
             ICommand cmd = (ICommand)Activator.CreateInstance( type );
             commands.Dictionary[ addin.ProgID + "." + attr.Name ] = cmd;
 
-
             // register the command with the environment
             object []contextGuids = new object[] { };
-            dte.Commands.AddNamedCommand( addin, attr.Name, attr.Text, attr.Tooltip, false,
+            Command command = dte.Commands.AddNamedCommand( addin, attr.Name, attr.Text, attr.Tooltip, false,
                 1, ref contextGuids, (int)vsCommandStatus.vsCommandStatusUnsupported );
 
+            RegisterControl( command, type );           
+
             System.Windows.Forms.MessageBox.Show( "Registering command " + attr.Name );
+        }
+
+        /// <summary>
+        /// Registers a commandbar. 
+        /// </summary>
+        /// <param name="command">The Command to attach the command bar to.</param>
+        /// <param name="type">The type that handles the command.</param>
+        private static void RegisterControl( Command command, Type type )
+        {
+            // register the command bars
+            foreach( VSNetControlAttribute control in type.GetCustomAttributes( 
+                typeof(VSNetControlAttribute), false) ) 
+            {
+                CommandBar cmdBar = (CommandBar)command.DTE.CommandBars[ control.CommandBar ];
+                command.AddControl( cmdBar, control.Position );
+            }
         }
 	}
 }

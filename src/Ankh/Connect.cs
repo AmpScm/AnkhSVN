@@ -162,8 +162,11 @@ namespace Ankh
 		{
 			if(neededText == EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedNone)
 			{
-                if ( this.commands[commandName] != null )
-                    status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
+                Ankh.Commands.ICommand cmd;
+                if ( (cmd = (ICommand)this.commands[commandName]) != null )
+                    status = cmd.QueryStatus( this.applicationObject );
+
+                //    status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
 //				if(commandName == "Ankh.Connect.Ankh")
 //				{
 //					status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
@@ -196,10 +199,11 @@ namespace Ankh
 			handled = false;
 			if(executeOption == EnvDTE.vsCommandExecOption.vsCommandExecOptionDoDefault)
 			{
-				if(commandName == "Ankh.Connect.Ankh")
-				{
+                ICommand cmd;
+                if ( (cmd = (ICommand)this.commands[commandName]) != null )
+                {
+                    cmd.Execute( this.applicationObject );
 					handled = true;
-					return;
 				}
 			}
 		}
