@@ -48,19 +48,8 @@ namespace Ankh.Commands
 
             public override void VisitUnversionedResource(NSvn.UnversionedResource resource)
             {
-                if ( !resource.IsVersioned )
-                    Addable = true;
-            }
-        }
-        /// <summary>
-        /// Visitor that adds visited item to the Working copy
-        /// </summary>
-
-        private class AddVisitor : LocalResourceVisitorBase
-        {
-            public override void VisitUnversionedResource(NSvn.UnversionedResource resource)
-            {
-                resource.Add( true );
+                //nothing to check for when adding unversioned files.
+                Addable = true;
             }
         }
     }
