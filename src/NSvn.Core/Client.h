@@ -387,17 +387,17 @@ namespace NSvn
             ///                      for more information.</param> 
 	        ///<returns>String table of the paths to be listed.</returns>
 	        static String* Ls(String* url, Revision* revision, bool recurse, ClientContext* context)[];
-
+*/
             ///<summary>List the contents of a file.</summary>
             ///<param name="out"></param>  
-            ///<param name="url">Path to the file to be edited.</param>  
+            ///<param name="path">Path to the file to be edited.</param>  
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
             ///                         for more information.</param>
             ///<param name="context">A client context object, which holds client specific 
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-	        static void Cat(Stream* out, String* url, Revision* revision, ClientContext* context);*/
+	        static void Cat(Stream* out, String*path, Revision* revision, ClientContext* context);
         private:
             // ctor made private to avoid instantiation of this class
             Client(){;}
