@@ -92,7 +92,7 @@ namespace Ankh.Commands
             XPathDocument doc = new XPathDocument( new StreamReader( path) );
             
             XslTransform transform = new XslTransform();
-            transform.Load( doc, null, null  );
+            transform.Load( doc );
 
             return transform;
         }
