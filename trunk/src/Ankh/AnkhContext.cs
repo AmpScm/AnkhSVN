@@ -31,8 +31,29 @@ namespace Ankh
             this.dte = dte;
             this.addin = addin;
 
+            this.hostWindow = new Win32Window( new IntPtr(dte.MainWindow.HWnd) );
+
             this.configLoader = new Ankh.Config.ConfigLoader();
-            this.config = this.configLoader.LoadConfig( );
+
+            // try to load the configuration file
+            try
+            {
+                this.config = this.configLoader.LoadConfig( );
+            }
+            catch( Ankh.Config.ConfigException ex )
+            {
+                MessageBox.Show( this.HostWindow, 
+                    "There is an error in your configuration file:" + 
+                    Environment.NewLine + Environment.NewLine + 
+                    ex.Message + Environment.NewLine + Environment.NewLine + 
+                    "Please edit the " + this.configLoader.ConfigPath + 
+                    " file and correct the error." + Environment.NewLine + 
+                    "Ankh will now load a default configuration.", "Configuration error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error );
+
+                // fall back on the default configuration
+                this.config = this.configLoader.LoadDefaultConfig();
+            }
 
             // should we use a custom configuration directory?
             if ( this.config.Subversion.ConfigDir != null )
@@ -41,7 +62,6 @@ namespace Ankh
             else
                 this.client = new SvnClient( this );
 
-            this.hostWindow = new Win32Window( new IntPtr(dte.MainWindow.HWnd) );
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
             this.solutionExplorer = new Solution.Explorer( this.dte, this );
             this.progressDialog = new ProgressDialog();            
@@ -183,6 +203,7 @@ namespace Ankh
                 this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
 
                 timer.End( "Solution opened", "Ankh" );
+                MessageBox.Show( timer.ToString() );
             }
             catch( Exception ex )
             {
@@ -238,8 +259,7 @@ namespace Ankh
         /// Miscellaneous cleanup stuff goes here.
         /// </summary>
         public void Shutdown()
-        {            
-            this.configLoader.SaveConfig( this.config );
+        {  
             if ( this.Unloading != null )
                 this.Unloading( this, EventArgs.Empty );
         }
