@@ -38,7 +38,7 @@ namespace NSvn.Core.Tests
             Assertion.Assert( "Exported file not there", 
                 File.Exists( Path.Combine( this.newWc, "Form.cs" ) ) );
             Assertion.Assert( ".svn directory found", 
-                !Directory.Exists( Path.Combine( this.newWc, ".svn" ) ) );
+                !Directory.Exists( Path.Combine( this.newWc, Client.AdminDirectoryName ) ) );
         }
         /// <summary>
         /// Test export operation from a working copy
@@ -52,7 +52,7 @@ namespace NSvn.Core.Tests
             Assertion.Assert( "Exported file not there", 
                 File.Exists( Path.Combine( this.newWc, "Form.cs" ) ) );
             Assertion.Assert( ".svn directory found", 
-                !Directory.Exists( Path.Combine( this.newWc, ".svn" ) ) );
+                !Directory.Exists( Path.Combine( this.newWc, Client.AdminDirectoryName ) ) );
         }
 
         private string newWc;
