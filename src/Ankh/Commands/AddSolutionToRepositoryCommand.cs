@@ -7,6 +7,7 @@ using System.IO;
 using System.Collections;
 using NSvn.Core;
 using NSvn.Common;
+using System.Reflection;
 
 namespace Ankh.Commands
 {
@@ -23,6 +24,14 @@ namespace Ankh.Commands
     VSNetControl( "File", Position=14 )]
     public class AddSolutionToRepositoryCommand : CommandBase
     {
+        public AddSolutionToRepositoryCommand()
+        {
+            Assembly asm = Assembly.Load( 
+                "Microsoft.VisualStudio.VCProjectEngine");
+            this.vcFilterType = asm.GetType(
+                "Microsoft.VisualStudio.VCProjectEngine.VCFilter", true );
+        }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.AnkhLoadedForSolution || 
@@ -219,7 +228,8 @@ namespace Ankh.Commands
                     }
                     try
                     {
-                        if ( File.Exists( file ) || Directory.Exists( file ) )
+                        if ( (File.Exists( file ) || Directory.Exists( file )) &&
+                            !this.vcFilterType.IsInstanceOfType(item.Object) )
                         {
                             // for now we only support files that are under the solution root
                             if ( !PathUtils.IsSubPathOf( file, solutionDir ) )
@@ -348,5 +358,6 @@ namespace Ankh.Commands
         }
 
         private IList paths;
+        private readonly Type vcFilterType;
     }
 }
