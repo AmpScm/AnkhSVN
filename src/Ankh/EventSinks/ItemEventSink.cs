@@ -104,7 +104,7 @@ namespace Ankh.EventSinks
                 SvnItem oldItem = this.Context.StatusCache[oldPath];
 
                 // is the item versioned?
-                if ( oldItem.Status.TextStatus != StatusKind.None )
+                if ( oldItem.IsVersioned )
                 {
                     MessageBox.Show( this.Context.HostWindow, 
                         "You have attempted to rename a file that is under version control.\r\n" + 
