@@ -34,6 +34,8 @@ namespace Ankh
 
             this.progressDialog = new ProgressDialog();
 
+            this.config = Ankh.Config.ConfigLoader.LoadConfig( @"T:\ankhconfig.xml" );
+
             this.CreateRepositoryExplorer();
 
             // is there a solution opened?
@@ -112,6 +114,16 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.reposExplorerWindow; }
         }   
+
+        /// <summary>
+        /// The Ankh configuration.
+        /// </summary>
+        public Ankh.Config.Config Config
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.config; }
+        }
+
      
         /// <summary>
         /// An IWin32Window to be used for parenting dialogs.
@@ -154,7 +166,8 @@ namespace Ankh
         /// Miscellaneous cleanup stuff goes here.
         /// </summary>
         public void Shutdown()
-        {
+        {            
+            Ankh.Config.ConfigLoader.SaveConfig( this.config, @"T:\ankhconfig.xml" );
             this.SolutionClosing();
         }
 
@@ -275,6 +288,8 @@ namespace Ankh
         //required to ensure events will still fire
         private SolutionEvents solutionEvents;
         private Explorer solutionExplorer = null;
+
+        private Ankh.Config.Config config;
 
         private ProgressDialog progressDialog;
         private SvnContext context;
