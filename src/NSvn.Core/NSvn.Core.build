@@ -27,7 +27,8 @@
     </target>
     
     <target name="clean">
-        <delete dir="${build.dir}" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
+        <delete dir="build-Release" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
+        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
     </target>
     
     <target name="init">
