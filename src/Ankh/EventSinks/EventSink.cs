@@ -72,6 +72,17 @@ namespace Ankh.EventSinks
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.context; }
         }  
+
+        /// <summary>
+        /// Whether a VC++ project is currently being added. This property is
+        /// used by the VCProjectEventSink to keep track of when a VC++ project is being 
+        /// added and suppress file added events during that time.
+        /// </summary>
+        protected static bool AddingProject
+        {
+            get{ return addingProject; }
+            set{ addingProject = value; }
+        }
       
         /// <summary>
         /// Retrieves a VSProjectsEventSink associated with the project 
@@ -147,6 +158,7 @@ namespace Ankh.EventSinks
         }
         
 
+        private static bool addingProject = false;
         private AnkhContext context;
         private const string PROJECTPATH = @"\Projects\";
         private const string PACKAGEPATH = 
