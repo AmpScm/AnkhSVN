@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Config xmlns="http://ankhsvn.com/Config.xsd">
+    <RepositoryExplorer>
+        <MruUrls>
+            <Url>http://ankhsvn.com:8088/svn/test</Url>
+            <Url>http://svn.collab.net/repos/svn</Url>
+        </MruUrls>
+    </RepositoryExplorer>
+    <Subversion>
+        <ConfigDir>%AppData%\Subversion</ConfigDir>
+    </Subversion>
+</Config>

@@ -381,6 +381,29 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Config\Config.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\Config.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Config\Config.xsd"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Config\Config.xsx"
+                    DependentUpon = "Config.xsd"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Config\ConfigLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "EventSinks\CommandsEventSink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
