@@ -13,7 +13,8 @@ using namespace NSvn::Core;
 
 // forward declarations of callbacks
 svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton, 
-                                const char* realm, const char* username, apr_pool_t* pool );
+                                const char* realm, const char* username, svn_boolean_t may_save, 
+                                apr_pool_t* pool );
 
 svn_error_t* svn_auth_ssl_server_trust_prompt_func( 
     svn_auth_cred_ssl_server_trust_t **cred_p,
@@ -21,13 +22,18 @@ svn_error_t* svn_auth_ssl_server_trust_prompt_func(
     const char *realm,
     apr_uint32_t failures,
     const svn_auth_ssl_server_cert_info_t *cert_info,
+    svn_boolean_t may_save,
     apr_pool_t *pool );
 
 svn_error_t* svn_auth_ssl_client_cert_prompt_func( svn_auth_cred_ssl_client_cert_t **cred, 
-                                                  void *baton, apr_pool_t *pool );
+                                                  void *baton, const char* realm,
+                                                  svn_boolean_t may_save, 
+                                                  apr_pool_t *pool );
 
 svn_error_t* svn_auth_ssl_client_cert_pw_prompt_func( svn_auth_cred_ssl_client_cert_pw_t **cred, 
-                                                  void *baton, apr_pool_t *pool );
+                                                  void *baton, const char* realm,
+                                                  svn_boolean_t may_save,
+                                                  apr_pool_t *pool );
 
 
 
@@ -126,9 +132,9 @@ AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertPass
     return new AuthenticationProvider( provider, pool );
 }
 
-// implementation of GetSslServerTrustFileProvider
+// implementation of GetSslClientCertPromptProvider
 AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertPromptProvider(
-    SslClientCertPromptDelegate* promptDelegate )
+    SslClientCertPromptDelegate* promptDelegate, int retryLimit )
 {
     GCPool* pool = new GCPool();
     svn_auth_provider_object_t* provider;
@@ -137,15 +143,15 @@ AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertProm
         ManagedPointer<SslClientCertPromptDelegate*>(promptDelegate));
 
     svn_client_get_ssl_client_cert_prompt_provider( &provider, 
-        svn_auth_ssl_client_cert_prompt_func, baton, 
+        svn_auth_ssl_client_cert_prompt_func, baton, retryLimit,
         pool->ToAprPool() );
 
     return new AuthenticationProvider( provider, pool );
 }
 
-// implementation of GetSslServerTrustFileProvider
+// implementation of GetSslClientCertPasswordPromptProvider
 AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertPasswordPromptProvider(
-    SslClientCertPasswordPromptDelegate* promptDelegate )
+    SslClientCertPasswordPromptDelegate* promptDelegate, int retryLimit )
 {
     GCPool* pool = new GCPool();
     svn_auth_provider_object_t* provider;
@@ -154,7 +160,7 @@ AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertPass
         ManagedPointer<SslClientCertPasswordPromptDelegate*>(promptDelegate));
 
     svn_client_get_ssl_client_cert_pw_prompt_provider( &provider, 
-        svn_auth_ssl_client_cert_pw_prompt_func, baton, 
+        svn_auth_ssl_client_cert_pw_prompt_func, baton, retryLimit,
         pool->ToAprPool() );
 
     return new AuthenticationProvider( provider, pool );
@@ -162,7 +168,8 @@ AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslClientCertPass
 
 // callback function for a simple prompt provider
 svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton,
-                                const char* realm, const char* username, apr_pool_t* pool )
+                                const char* realm, const char* username, 
+                                svn_boolean_t may_save, apr_pool_t* pool )
 {
     // get hold of the delegate and call it
     SimplePromptDelegate* delegate = *(static_cast<ManagedPointer<SimplePromptDelegate*>* >(
@@ -170,7 +177,8 @@ svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton,
     String* realmString = (realm != 0) ? static_cast<String*>(StringHelper(realm)) : 0;
     String* usernameString = (username != 0) ? static_cast<String*>(StringHelper(username)) : 0;
 
-    SimpleCredential* simpleCred = delegate->Invoke( realmString, usernameString );
+    SimpleCredential* simpleCred = delegate->Invoke( realmString, usernameString, 
+        may_save != 0 );
 
     if ( simpleCred != 0 )
         *cred = simpleCred->GetCredential( pool );
@@ -187,6 +195,7 @@ svn_error_t* svn_auth_ssl_server_trust_prompt_func(
     const char *realm,
     apr_uint32_t failures,
     const svn_auth_ssl_server_cert_info_t *cert_info,
+    svn_boolean_t may_save,
     apr_pool_t *pool )
 {
     SslServerTrustPromptDelegate* delegate = *(static_cast<ManagedPointer<
@@ -195,7 +204,8 @@ svn_error_t* svn_auth_ssl_server_trust_prompt_func(
     // invoke the managed callback
     String* realmString = StringHelper(realm);
     SslServerTrustCredential* cred = delegate->Invoke( realmString, 
-        static_cast<SslFailures>(failures), new SslServerCertificateInfo(cert_info) );
+        static_cast<SslFailures>(failures), new SslServerCertificateInfo(cert_info),
+        may_save != 0 );
 
     // null?
     if ( cred != 0 )
@@ -207,13 +217,15 @@ svn_error_t* svn_auth_ssl_server_trust_prompt_func(
 }
 
 svn_error_t* svn_auth_ssl_client_cert_prompt_func( svn_auth_cred_ssl_client_cert_t **cred_p, 
-                                                  void *baton, apr_pool_t *pool )
+                                                  void *baton, const char* realm, 
+                                                  svn_boolean_t may_save,
+                                                  apr_pool_t *pool )
 {
     SslClientCertPromptDelegate* delegate = *(static_cast<ManagedPointer<
         SslClientCertPromptDelegate*>*>(baton));
 
     // invoke the managed callback
-    SslClientCertificateCredential* cred = delegate->Invoke();
+    SslClientCertificateCredential* cred = delegate->Invoke( StringHelper(realm), may_save != 0 );
 
     // null?
     if ( cred != 0 )
@@ -225,13 +237,16 @@ svn_error_t* svn_auth_ssl_client_cert_prompt_func( svn_auth_cred_ssl_client_cert
 }
 
 svn_error_t* svn_auth_ssl_client_cert_pw_prompt_func( svn_auth_cred_ssl_client_cert_pw_t **cred_p, 
-                                                  void *baton, apr_pool_t *pool )
+                                                  void *baton, const char* realm,
+                                                  svn_boolean_t may_save,
+                                                  apr_pool_t *pool )
 {
     SslClientCertPasswordPromptDelegate* delegate = *(static_cast<ManagedPointer<
         SslClientCertPasswordPromptDelegate*>*>(baton));
 
     // invoke the managed callback
-    SslClientCertificatePasswordCredential* cred = delegate->Invoke();
+    SslClientCertificatePasswordCredential* cred = delegate->Invoke( StringHelper(realm), 
+        may_save != 0 );
 
     // null?
     if ( cred != 0 )

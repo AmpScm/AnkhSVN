@@ -25,15 +25,17 @@ namespace NSvn
         public __delegate void PromptCallback();
 
         public __delegate SimpleCredential* SimplePromptDelegate( 
-            System::String* realm, String* username );
+            System::String* realm, String* username, bool maySave );
 
         public __delegate SslServerTrustCredential* SslServerTrustPromptDelegate(
-            System::String* realm, SslFailures failures, SslServerCertificateInfo* info );
+            System::String* realm, SslFailures failures, SslServerCertificateInfo* info, 
+            bool maySave );
 
-        public __delegate SslClientCertificateCredential* SslClientCertPromptDelegate();
+        public __delegate SslClientCertificateCredential* SslClientCertPromptDelegate( 
+            String* realm, bool maySave );
 
         public __delegate SslClientCertificatePasswordCredential* 
-            SslClientCertPasswordPromptDelegate();
+            SslClientCertPasswordPromptDelegate( String* realm, bool maySave );
 
         public __delegate void StatusCallback( System::String* path, Status* status );
 

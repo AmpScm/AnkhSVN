@@ -53,12 +53,12 @@ namespace NSvn
             /// <summary>Create and return an authentication provider that prompts
             /// the user for a client certificate.</summary>
             static AuthenticationProvider* GetSslClientCertPromptProvider( 
-                SslClientCertPromptDelegate* promptDelegate );
+                SslClientCertPromptDelegate* promptDelegate, int retryLimit );
 
             /// <summary>Create and return an authentication provider that prompts
             /// the user for a passphrase for a client certificate.</summary>
             static AuthenticationProvider* GetSslClientCertPasswordPromptProvider( 
-                SslClientCertPasswordPromptDelegate* promptDelegate );
+                SslClientCertPasswordPromptDelegate* promptDelegate, int retryLimit );
 
         private public:
             /// <summary>Note that provider *must* be allocated on pool</summary>

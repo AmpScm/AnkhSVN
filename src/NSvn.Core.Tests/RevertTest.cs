@@ -63,7 +63,7 @@ namespace NSvn.Core.Tests
                 writer.WriteLine( "mooooooo" );
 
             ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ));
-            Client.Revert( revertPath, recursive, ctx );
+            Client.Revert( new string[]{revertPath}, recursive, ctx );
 
             using ( StreamReader reader = new StreamReader( filePath ))
                 newContents = reader.ReadToEnd();

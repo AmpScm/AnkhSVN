@@ -59,7 +59,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestDefaultUsernameAndPas
 }
 
 NSvn::Core::SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationBatonTest::SimplePrompt( 
-    String* realm, String* username )
+    String* realm, String* username, bool maySave )
 {
     Assertion::AssertEquals( "Realm string is wrong", S"Realm", realm );
     Assertion::AssertEquals( "Username is wrong", Environment::UserName, username );

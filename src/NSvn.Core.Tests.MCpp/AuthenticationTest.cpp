@@ -135,7 +135,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordFi
 void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPromptProvider()
 {
     AuthenticationProvider* provider = AuthenticationProvider::GetSslClientCertPromptProvider(
-        new SslClientCertPromptDelegate( this, CertificatePrompt ) );
+        new SslClientCertPromptDelegate( this, CertificatePrompt ), 1 );
 
     Pool pool;
 
@@ -153,7 +153,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPromptProv
 
     // try a null
     provider = AuthenticationProvider::GetSslClientCertPromptProvider(
-        new SslClientCertPromptDelegate( this, NullCertificatePrompt ) );
+        new SslClientCertPromptDelegate( this, NullCertificatePrompt ), 1 );
     baton = GetBaton( provider->GetProvider(), pool );
 
     HandleError( svn_auth_first_credentials( ((void**)&cred), &iterstate, 
@@ -168,7 +168,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordPr
 {
     AuthenticationProvider* provider = 
         AuthenticationProvider::GetSslClientCertPasswordPromptProvider(
-        new SslClientCertPasswordPromptDelegate( this, PasswordPrompt ) );
+        new SslClientCertPasswordPromptDelegate( this, PasswordPrompt ), 1 );
 
     Pool pool;
 
@@ -186,7 +186,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordPr
 
     // try a null
     provider = AuthenticationProvider::GetSslClientCertPasswordPromptProvider(
-        new SslClientCertPasswordPromptDelegate( this, NullPasswordPrompt ) );
+        new SslClientCertPasswordPromptDelegate( this, NullPasswordPrompt ), 1 );
     baton = GetBaton( provider->GetProvider(), pool );
 
     HandleError( svn_auth_first_credentials( ((void**)&cred), &iterstate, 
@@ -199,7 +199,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordPr
 
 
 SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::SimplePrompt( 
-    String* realm, String* username )
+    String* realm, String* username, bool maySave )
 {
     Assertion::AssertEquals( "Realm string is wrong", S"Realm", realm );
     Assertion::AssertEquals( "Username is wrong", Environment::UserName, username );
@@ -208,28 +208,33 @@ SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::SimplePrompt(
 }
 
 SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::NullSimplePrompt( 
-    String* realm, String* username )
+    String* realm, String* username, bool maySave )
 {
     Assertion::AssertNull( "Realm should be null", realm );
 
     return 0;
 }
 
-SslClientCertificateCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::CertificatePrompt()
+SslClientCertificateCredential* 
+    NSvn::Core::Tests::MCpp::AuthenticationTest::CertificatePrompt( String* realm, 
+        bool maySave )
 {
     SslClientCertificateCredential* cred = new SslClientCertificateCredential();
     cred->CertificateFile = S"C:\\cert.txt";
     return cred;
 }
 
-SslClientCertificateCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::NullCertificatePrompt()
+SslClientCertificateCredential* 
+    NSvn::Core::Tests::MCpp::AuthenticationTest::NullCertificatePrompt( String* realm,
+        bool maySave)
 {
     return 0;
 }
 
 
 SslClientCertificatePasswordCredential* 
-    NSvn::Core::Tests::MCpp::AuthenticationTest::PasswordPrompt()
+    NSvn::Core::Tests::MCpp::AuthenticationTest::PasswordPrompt( String* realm, 
+        bool maySave )
 {
     SslClientCertificatePasswordCredential* cred = new SslClientCertificatePasswordCredential();
     cred->Password = S"Secret";
@@ -237,7 +242,8 @@ SslClientCertificatePasswordCredential*
 }
 
 SslClientCertificatePasswordCredential* 
-    NSvn::Core::Tests::MCpp::AuthenticationTest::NullPasswordPrompt()
+    NSvn::Core::Tests::MCpp::AuthenticationTest::NullPasswordPrompt( String* realm,
+        bool maySave )
 {
     return 0;
 }

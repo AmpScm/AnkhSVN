@@ -56,7 +56,7 @@ namespace NSvn
         {
         public:
             /// <summary>Trust this certificate permanently?</summary>
-            bool TrustPermanently;
+            bool MaySave;
 
             /// <summary>A collection of flags of which kinds of failures should be accepted 
             /// permanently.</summary>
@@ -68,7 +68,7 @@ namespace NSvn
                     static_cast<svn_auth_cred_ssl_server_trust_t*>( 
                         apr_pcalloc(pool, sizeof(*cred)) );
                 cred->accepted_failures = static_cast<int>(this->AcceptedFailures);
-                cred->trust_permanently = this->TrustPermanently;
+                cred->may_save = this->MaySave;
                 return cred;
             }
         };
