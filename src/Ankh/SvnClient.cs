@@ -10,6 +10,7 @@ using EnvDTE;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Text;
+using System.Diagnostics;
 
 namespace Ankh
 {
@@ -89,8 +90,19 @@ namespace Ankh
                 args.Message = this.logMessage;
         }
 
+        private delegate void OnNotificationDelegate(NotificationEventArgs notification);
+
         protected override void OnNotification(NotificationEventArgs notification)
         {  
+            if ( this.invoker.InvokeRequired )
+            {
+                Debug.WriteLine( "OnNotification: Invoking back to main GUI thread", 
+                    "Ankh" );
+                this.invoker.Invoke( new OnNotificationDelegate(this.OnNotification),
+                    new object[]{notification} );
+                return;
+            }
+
             base.OnNotification( notification );
 
             if ( actionStatus[notification.Action] != null)
@@ -277,6 +289,10 @@ namespace Ankh
             this.AuthBaton.Add( 
                 AuthenticationProvider.GetSslClientCertPromptProvider( 
                 new SslClientCertPromptDelegate( this.ClientCertificatePrompt ), 3 ) );
+
+            // assume we're on the main thread now.
+            this.invoker = new Control();
+            this.invoker.CreateControl();
         }
 
         /// <summary>
@@ -308,5 +324,6 @@ namespace Ankh
         private AnkhContext ankhContext;
         private static IDictionary map = new Hashtable();
         private string logMessage = null;
+        private Control invoker;
     }
 }
