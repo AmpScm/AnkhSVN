@@ -20,6 +20,8 @@ public:
 	HRESULT OnButtonOK(IHTMLElement *pElement);
 	HRESULT OnButtonCancel(IHTMLElement *pElement);
 
+    HRESULT ShowWordDoc( IHTMLElement* pElement );
+
 // Implementation
 protected:
 	HICON m_hIcon;

@@ -15,6 +15,8 @@
 BEGIN_DHTML_EVENT_MAP(CAutorunDlg)
 	DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
 	DHTML_EVENT_ONCLICK(_T("ButtonCancel"), OnButtonCancel)
+
+    DHTML_EVENT_ONCLICK(_T("processDocumentation.doc"), ShowWordDoc )
 END_DHTML_EVENT_MAP()
 
 
@@ -95,4 +97,14 @@ HRESULT CAutorunDlg::OnButtonCancel(IHTMLElement* /*pElement*/)
 {
 	OnCancel();
 	return S_OK;
+}
+
+HRESULT CAutorunDlg::ShowWordDoc( IHTMLElement* pElement )
+{
+    BSTR bstr;
+    pElement->get_id( &bstr );
+
+    HINSTANCE ret = ShellExecute( NULL, "open", COLE2T(bstr), NULL, _T("N:\\doc\\"), SW_SHOW );
+
+    SysFreeString( bstr );
 }
