@@ -49,7 +49,7 @@ namespace Ankh.UI
 
 			set
 			{
-				TextPropertyItem item = (TextPropertyItem)value;
+                this.executableCheckBox.Checked = true;
 			}
 		}
 
