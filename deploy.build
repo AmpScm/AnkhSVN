@@ -8,7 +8,7 @@
     <property name="vs.2003" value="false"/>
     <property name="major.version" value="0" />
     <property name="minor.version" value="2" />
-    <property name="patch.version" value="5" />
+    <property name="patch.version" value="9" />
     <property name="url" 
         value="http://arild.no-ip.com:8088/svn/finalproject/trunk/src"/>
         
@@ -78,7 +78,7 @@
                  
                   
                   string newContents =
-                     Regex.Replace( fileContents, @"AssemblyVersion(Attribute)*\("".*""\)",
+                     Regex.Replace( fileContents, @"AssemblyVersion(Attribute)*\(\s*"".*""\s*\)",
                         versionString );
                   
                   using( StreamWriter w = new StreamWriter( file ) )
