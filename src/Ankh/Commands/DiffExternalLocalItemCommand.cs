@@ -18,6 +18,15 @@ namespace Ankh.Commands
     VSNetFolderNodeControl( "", Position = 2)]
     public class DiffExternalLocalItem : DiffLocalItem
     {
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        {
+            // Allow external diff if enabled in config file
+            if ( context.Config.ChooseDiffMergeManual && context.Config.DiffExePath != null )
+                return Enabled;
+            else 
+                return vsCommandStatus.vsCommandStatusInvisible;
+        }
+
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.
         /// </summary>
