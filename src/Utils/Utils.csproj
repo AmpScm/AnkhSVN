@@ -15,7 +15,7 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Exe"
+                OutputType = "Library"
                 RootNamespace = "Utils"
                 StartupObject = ""
             >
