@@ -38,6 +38,15 @@ namespace Ankh.Solution
         public override void Accept(INodeVisitor visitor)
         {
             visitor.VisitProjectItem(this);
+
+            // if this isn't a directory node, visit children as well
+            if ( !
+                (this.resources.Count == 1 && 
+                System.IO.Directory.Exists( ((SvnItem)this.resources[0]).Path )))
+            {
+                foreach( TreeNode node in this.Children )
+                    node.Accept( visitor );
+            }
         }
 
 
