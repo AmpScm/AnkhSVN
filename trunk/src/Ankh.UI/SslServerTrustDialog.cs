@@ -55,6 +55,24 @@ namespace Ankh.UI
         }
 
         /// <summary>
+        /// Whether the user is allowed to save the credentials.
+        /// </summary>
+        public bool MaySave
+        {
+            get{ return this.saveCredentialsCheckBox.Enabled; }
+            set{ this.saveCredentialsCheckBox.Enabled = value; }
+        }
+
+        /// <summary>
+        /// Whether the user wants to save the credentials entered.
+        /// </summary>
+        public bool ShallSave
+        {
+            get{ return this.saveCredentialsCheckBox.Checked && this.MaySave; }
+            set{ this.saveCredentialsCheckBox.Checked = value; }
+        }
+
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose( bool disposing )
@@ -86,7 +104,6 @@ namespace Ankh.UI
             this.caUnknownLabel = new System.Windows.Forms.Label();
             this.invalidDateLabel = new System.Windows.Forms.Label();
             this.serverMismatchLabel = new System.Windows.Forms.Label();
-            this.acceptPermanentlyButton = new System.Windows.Forms.Button();
             this.acceptTemporarilyButton = new System.Windows.Forms.Button();
             this.rejectButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -101,6 +118,7 @@ namespace Ankh.UI
             this.validToLabel = new System.Windows.Forms.Label();
             this.hostnameLabel = new System.Windows.Forms.Label();
             this.certificateLabel = new System.Windows.Forms.Label();
+            this.saveCredentialsCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // icons
@@ -168,28 +186,19 @@ namespace Ankh.UI
             this.serverMismatchLabel.TabIndex = 8;
             this.serverMismatchLabel.Text = "The certificate\'s hostname matches the server\'s.";
             // 
-            // acceptPermanentlyButton
-            // 
-            this.acceptPermanentlyButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.acceptPermanentlyButton.Location = new System.Drawing.Point(120, 464);
-            this.acceptPermanentlyButton.Name = "acceptPermanentlyButton";
-            this.acceptPermanentlyButton.Size = new System.Drawing.Size(120, 23);
-            this.acceptPermanentlyButton.TabIndex = 9;
-            this.acceptPermanentlyButton.Text = "Accept permanently";
-            // 
             // acceptTemporarilyButton
             // 
-            this.acceptTemporarilyButton.DialogResult = System.Windows.Forms.DialogResult.Retry;
-            this.acceptTemporarilyButton.Location = new System.Drawing.Point(248, 464);
+            this.acceptTemporarilyButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.acceptTemporarilyButton.Location = new System.Drawing.Point(248, 488);
             this.acceptTemporarilyButton.Name = "acceptTemporarilyButton";
             this.acceptTemporarilyButton.Size = new System.Drawing.Size(112, 23);
             this.acceptTemporarilyButton.TabIndex = 10;
-            this.acceptTemporarilyButton.Text = "Accept temporarily";
+            this.acceptTemporarilyButton.Text = "Accept";
             // 
             // rejectButton
             // 
             this.rejectButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.rejectButton.Location = new System.Drawing.Point(368, 464);
+            this.rejectButton.Location = new System.Drawing.Point(368, 488);
             this.rejectButton.Name = "rejectButton";
             this.rejectButton.Size = new System.Drawing.Size(112, 23);
             this.rejectButton.TabIndex = 11;
@@ -292,12 +301,21 @@ namespace Ankh.UI
             this.certificateLabel.TabIndex = 23;
             this.certificateLabel.Text = "label7";
             // 
+            // saveCredentialsCheckBox
+            // 
+            this.saveCredentialsCheckBox.Location = new System.Drawing.Point(64, 464);
+            this.saveCredentialsCheckBox.Name = "saveCredentialsCheckBox";
+            this.saveCredentialsCheckBox.Size = new System.Drawing.Size(136, 24);
+            this.saveCredentialsCheckBox.TabIndex = 24;
+            this.saveCredentialsCheckBox.Text = "Store credentials?";
+            // 
             // SslServerTrustDialog
             // 
             this.AcceptButton = this.acceptTemporarilyButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.rejectButton;
-            this.ClientSize = new System.Drawing.Size(498, 495);
+            this.ClientSize = new System.Drawing.Size(498, 519);
+            this.Controls.Add(this.saveCredentialsCheckBox);
             this.Controls.Add(this.certificateLabel);
             this.Controls.Add(this.hostnameLabel);
             this.Controls.Add(this.validToLabel);
@@ -312,7 +330,6 @@ namespace Ankh.UI
             this.Controls.Add(this.label3);
             this.Controls.Add(this.rejectButton);
             this.Controls.Add(this.acceptTemporarilyButton);
-            this.Controls.Add(this.acceptPermanentlyButton);
             this.Controls.Add(this.serverMismatchLabel);
             this.Controls.Add(this.invalidDateLabel);
             this.Controls.Add(this.caUnknownLabel);
@@ -400,7 +417,6 @@ namespace Ankh.UI
         private System.Windows.Forms.Label headerLabel;
         private System.Windows.Forms.PictureBox caUnknownImage;
         private System.Windows.Forms.Label caUnknownLabel;
-        private System.Windows.Forms.Button acceptPermanentlyButton;
         private System.Windows.Forms.Button acceptTemporarilyButton;
         private System.Windows.Forms.Button rejectButton;
         private System.Windows.Forms.Label label3;
@@ -425,6 +441,7 @@ namespace Ankh.UI
         private System.Windows.Forms.Label serverMismatchLabel;
         private System.Windows.Forms.PictureBox serverMismatchImage;
         private System.Windows.Forms.PictureBox invalidDateImage;
+        private System.Windows.Forms.CheckBox saveCredentialsCheckBox;
         private const int OKIMAGE = 1;
         #endregion
     }
