@@ -132,6 +132,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "RegistryUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Timer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
