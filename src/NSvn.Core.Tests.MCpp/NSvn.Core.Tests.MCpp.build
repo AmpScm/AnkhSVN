@@ -105,7 +105,7 @@
         <cl outputdir="${build.dir}" verbose="${verbose}"
              options="${cl.options}">
             <sources>
-                <includes name="**/*.cpp"/>
+                <include name="**/*.cpp"/>
             </sources>
             
         </cl>                
@@ -115,8 +115,8 @@
         <link output="${build.dir}\NSvn.Core.Tests.MCpp.dll" 
             options="${link.options}" verbose="${verbose}">
             <sources>
-                <includes name="${build.dir}\*.obj"/>
-                <includes name="..\NSvn.Core\${build.dir}\*.obj" />
+                <include name="${build.dir}\*.obj"/>
+                <include name="..\NSvn.Core\${build.dir}\*.obj" />
             </sources>
         </link>
     </target>

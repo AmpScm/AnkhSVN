@@ -37,16 +37,16 @@
         <csc target="library" output="${build.dir}/NSvn.Core.Tests.dll" 
             verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
-                <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
-                <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
-                <includes name="..\Utils\${build.dir}\Utils.dll"/>
-                <includes name="${lib.dir}\nunit.framework.dll"/>
-                <includes name="${lib.dir}\Sharpziplib.dll"/>
+                <include name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
+                <include name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <include name="..\Utils\${build.dir}\Utils.dll"/>
+                <include name="${lib.dir}\nunit.framework.dll"/>
+                <include name="${lib.dir}\Sharpziplib.dll"/>
                 
             </references>
             
             <sources basedir="${src.dir}">
-                <includes name="**/*.cs"/>
+                <include name="**/*.cs"/>
             </sources>
             
             <arg value="/debug:pdbonly" unless="${debug}"/>

@@ -13,9 +13,10 @@
     <property name="installsource.dir" value="installsource"/>
     <property name="deploy.dir" value="Deploy"/>
     <property name="alt.admin.dir" value="true"/>
-    <ifnot propertyexists="svndir">
+
+    <ifnot test="${property::exists('svndir')}">
         <sysinfo />
-        <ifnot propertyexists="sys.env.SVNSRC">
+        <ifnot test="${property::exists('sys.env.SVNSRC')}">
             <fail message="Either provide the svndir property, or set the SVNSRC env var to point to the Subversion source tree" />
         </ifnot>
         <property name="svndir" value="${sys.env.SVNSRC}" />
@@ -65,8 +66,8 @@
         <nant buildfile="Utils/Utils.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="Utils/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
             </fileset>
          </copy>
     </target>
@@ -75,29 +76,29 @@
         <nant buildfile="Ankh/Ankh.build" inheritall="true" target="build" />
         <copy todir="${build.dir}"> 
             <fileset basedir="Ankh/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
             </fileset>
         </copy>
 
         <!-- unfortunately necessary to get regasm to work -->
         <copy todir="${build.dir}">
             <fileset basedir="${lib.dir}">
-                <includes name="envdte.dll"/>
-                <includes name="extensibility.dll"/>
+                <include name="envdte.dll"/>
+                <include name="extensibility.dll"/>
             </fileset>
         </copy>        
         
         <copy todir="${build.dir}" flatten="true">
             <fileset basedir="${svndir}">
-                <includes name="apr\Debug\libapr.dll" if="${debug}" />
-                <includes name="apr\Release\libapr.dll" unless="${debug}" />
-                <includes name="apr-util\Debug\libaprutil.dll" if="${debug}" />
-                <includes name="apr-util\Release\libaprutil.dll" unless="${debug}" />
-                <includes name="apr-iconv\Debug\libapriconv.dll" if="${debug}" />
-                <includes name="apr-iconv\Release\libapriconv.dll" unless="${debug}" />
-                <includes name="db4-win32\bin\libdb42d.dll" if="${debug}" />
-                <includes name="db4-win32\bin\libdb42.dll" unless="${debug}" />
+                <include name="apr\Debug\libapr.dll" if="${debug}" />
+                <include name="apr\Release\libapr.dll" unless="${debug}" />
+                <include name="apr-util\Debug\libaprutil.dll" if="${debug}" />
+                <include name="apr-util\Release\libaprutil.dll" unless="${debug}" />
+                <include name="apr-iconv\Debug\libapriconv.dll" if="${debug}" />
+                <include name="apr-iconv\Release\libapriconv.dll" unless="${debug}" />
+                <include name="db4-win32\bin\libdb42d.dll" if="${debug}" />
+                <include name="db4-win32\bin\libdb42.dll" unless="${debug}" />
             </fileset>
         </copy>
          
@@ -106,8 +107,8 @@
         <!-- and now to get rid of them again -->
         <delete>
             <fileset basedir="${build.dir}">
-                <includes name="envdte.dll"/>
-                <includes name="extensibility.dll"/>
+                <include name="envdte.dll"/>
+                <include name="extensibility.dll"/>
             </fileset>
         </delete>
     </target>
@@ -116,8 +117,8 @@
         <nant buildfile="Ankh.UI/Ankh.UI.build" inheritall="true" target="build" />
         <copy todir="${build.dir}"> 
             <fileset basedir="Ankh.UI/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
             </fileset>
          </copy>
     </target>
@@ -126,8 +127,8 @@
         <nant buildfile="NSvn.Common/NSvn.Common.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="NSvn.Common/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
             </fileset>
          </copy>
     </target>
@@ -136,8 +137,8 @@
         <nant buildfile="NSvn.Core/NSvn.Core.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="NSvn.Core/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
             </fileset>
          </copy>
     </target>
@@ -146,8 +147,8 @@
         <nant buildfile="Ankh.Tests/Ankh.Tests.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="Ankh.Tests/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
             </fileset>
          </copy>
     </target>
@@ -156,8 +157,8 @@
         <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="NSvn.Core.Tests/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
             </fileset>
          </copy>
     </target>
@@ -166,8 +167,8 @@
         <nant buildfile="NSvn.Core.Tests.MCpp/NSvn.Core.Tests.MCpp.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="NSvn.Core.Tests.MCpp/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
             </fileset>
          </copy>
     </target>
@@ -176,8 +177,8 @@
         <nant buildfile="ReposInstaller/ReposInstaller.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="ReposInstaller/${build.dir}">
-                <includes name="*.dll"/>
-                <includes name="*.pdb"/>
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
             </fileset>
          </copy>
     </target>
@@ -198,7 +199,7 @@
     <target name="test" depends="build-tests" description="Run all tests">
         <copy todir="${build.dir}">
             <fileset basedir="${lib.dir}">
-                <includes name="*.dll"/>
+                <include name="*.dll"/>
             </fileset>
         </copy>
         <nunit2 failonerror="false" haltonerror="false">
@@ -249,37 +250,37 @@
         <!-- copy the stuff in the build dir -->
         <copy todir="${installsource.dir}\${ankh.folder}">
             <fileset basedir="${build.dir}">
-                <includes name="**"/>
+                <include name="**"/>
             </fileset>            
         </copy>
         
         <!-- copy the readme and license files(maybe move these?) -->
         <copy todir="${installsource.dir}\${ankh.folder}">
             <fileset basedir=".">
-                <includes name="licence.rtf"/>
-                <includes name="readme.txt"/>            
+                <include name="licence.rtf"/>
+                <include name="readme.txt"/>            
             </fileset>
         </copy>
         
         <!-- copy required interop libs -->
         <copy todir="${installsource.dir}\${ankh.folder}">
             <fileset basedir="${lib.dir}">
-                <includes name="axinterop.shdocvw.dll"/>
-                <includes name="interop.shdocvw.dll"/>
+                <include name="axinterop.shdocvw.dll"/>
+                <include name="interop.shdocvw.dll"/>
              </fileset>
           </copy>
         
         <!-- copy the shim control -->
         <copy todir="${installsource.dir}\${ankh.folder}">
             <fileset basedir="${lib.dir}">
-                <includes name="Ankh.Toolwindow.dll"/>
+                <include name="Ankh.Toolwindow.dll"/>
             </fileset>
         </copy>
         
         <!-- copy the BDB dll -->
         <copy todir="${installsource.dir}\${ankh.folder}">
             <fileset basedir="${lib.dir}\${vsnet.ver}">
-                <includes name="libdb40${bdb.suffix}.dll"/>
+                <include name="libdb40${bdb.suffix}.dll"/>
             </fileset>
         </copy>
         
@@ -288,7 +289,7 @@
         <mkdir dir="${installsource.dir}\${ankh.folder}\1033"/>
         <copy todir="${installsource.dir}\${ankh.folder}\1033">
             <fileset basedir="Ankh\1033">
-                <includes name="BitmapDll.dll"/>
+                <include name="BitmapDll.dll"/>
              </fileset>
          </copy>
         
@@ -325,13 +326,13 @@
                     directory="ANKH_FOLDER" feature="DefaultFeature">
                     <key file="LICENCE.rtf"/>
                     <fileset basedir="${installsource.dir}\${ankh.folder}"> 
-                        <includes name="*.dll"/>
-                        <includes name="*.pdb" />
-                        <includes name="*.tlb" />
-                        <includes name="*.rtf" />  
-                        <includes name="*.txt" />       
-                        <excludes name="*.msi"/>   
-                        <excludes name="*.Tests.*"/>            
+                        <include name="*.dll"/>
+                        <include name="*.pdb" />
+                        <include name="*.tlb" />
+                        <include name="*.rtf" />  
+                        <include name="*.txt" />       
+                        <exclude name="*.msi"/>   
+                        <exclude name="*.Tests.*"/>            
                     </fileset>     
                  </component>    
                  
@@ -339,7 +340,7 @@
                     directory="SATELLITE_FOLDER" feature="DefaultFeature">
                         <key file="BitmapDll.dll"/>
                         <fileset basedir="${installsource.dir}\${ankh.folder}\1033">
-                            <includes name="BitmapDll.dll"/>
+                            <include name="BitmapDll.dll"/>
                          </fileset>
                    </component>
                  

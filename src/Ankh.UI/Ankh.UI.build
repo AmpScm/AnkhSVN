@@ -34,21 +34,21 @@
         <csc target="library" output="${build.dir}/Ankh.UI.dll" 
             verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
-                <includes name="${lib.dir}\Office.dll"/>
-                <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
-                <includes name="..\Utils\${build.dir}\Utils.dll"/>
-                <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
-                <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
-                <includes name="${lib.dir}\interop.shdocvw.dll"/>
-                <includes name="${lib.dir}\axinterop.shdocvw.dll"/>
+                <include name="${lib.dir}\Office.dll"/>
+                <include name="..\NSvn\${build.dir}\NSvn.dll"/>
+                <include name="..\Utils\${build.dir}\Utils.dll"/>
+                <include name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <include name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
+                <include name="${lib.dir}\interop.shdocvw.dll"/>
+                <include name="${lib.dir}\axinterop.shdocvw.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
-                <includes name="**/*.cs"/>
+                <include name="**/*.cs"/>
             </sources>
             
             <resources>
-                <includes name="*.resx"/>
+                <include name="*.resx"/>
             </resources>
             
             <arg value="/debug:pdbonly" unless="${debug}"/>
