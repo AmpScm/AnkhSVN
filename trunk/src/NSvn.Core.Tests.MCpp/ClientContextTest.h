@@ -30,6 +30,10 @@ namespace NSvn
                     [Test]
                     void TestNotifyCallback();
 
+                    /// <summary>Test that it works with an empty auth baton</summary>
+                    [Test]
+                    void TestEmptyAuthBaton();
+
                     /// <summary>Test that the auth baton stuff works</summary>
                     [Test]
                     void TestAuthBaton();

@@ -32,9 +32,9 @@ namespace NSvn
 
 	        static void Add(String* path, bool recursive, ClientContext* context);
             
-            /*
+            
 	        static CommitInfo* MakeDir(String* path, ClientContext* context);
-
+/*
 	        static CommitInfo* Delete(String* path, AdminAccessBaton* admAccessBaton, bool force, 
                 ClientContext* context);
 
@@ -56,9 +56,9 @@ namespace NSvn
 	        static void Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
                 String* targetWcPath, bool recurse, bool force, bool dryRun, ClientContext* context);
 
-	        static void Cleanup(String* dir);
+	        */static void Cleanup(String* dir);
 
-	        static void Revert(String* path, bool recursive, ClientContext* context);
+	        static void Revert(String* path, bool recursive, ClientContext* context);/*
 
 	        static void Resolve(String* path, bool recursive, ClientContext* context);
 

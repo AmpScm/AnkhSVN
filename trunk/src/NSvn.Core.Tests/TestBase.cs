@@ -16,8 +16,14 @@ namespace NSvn.Core.Tests
     [TestFixture]
     public class TestBase
     {
+        [SetUp]
+        public virtual void SetUp()
+        {
+            this.notifications = new ArrayList();
+        }
+
         //[TearDown]
-        public void TearDown()
+        public virtual void TearDown()
         {
             // clean up
             try
@@ -45,6 +51,8 @@ namespace NSvn.Core.Tests
             ExtractToTempPath(this.reposPath, REPOS_FILE );
             this.reposUrl = "file://" + 
                 this.reposPath.Replace( "\\", "/" );
+            if( this.reposUrl[ this.reposUrl.Length-1 ] != '/' )
+                this.reposUrl = this.reposUrl + "/";
 
 
         }
@@ -83,7 +91,7 @@ namespace NSvn.Core.Tests
         /// <returns>The output from the command</returns>
         public string RunCommand( string command, string args )
         {
-            ProcessStartInfo psi = new ProcessStartInfo( "svn", args );
+            ProcessStartInfo psi = new ProcessStartInfo( command, args );
             psi.CreateNoWindow = true;
             psi.RedirectStandardOutput = true;
             psi.UseShellExecute = false;
@@ -93,7 +101,7 @@ namespace NSvn.Core.Tests
             p.WaitForExit();
 
             if ( p.ExitCode != 0 )
-                throw new ApplicationException( "svn exit code was not 0" );
+                throw new ApplicationException( "command exit code was not 0" );
 
             return output;
         }
