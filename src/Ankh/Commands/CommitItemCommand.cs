@@ -120,7 +120,7 @@ namespace Ankh.Commands
 
                 // give up on this one
                 if ( uuid == null )
-                    continue;
+                    uuid = DefaultUuid;
 
                 if ( !repositories.ContainsKey(uuid) )
                 {
@@ -135,6 +135,7 @@ namespace Ankh.Commands
         private string[] paths;
         private CommitInfo commitInfo;
 
+        private const string DefaultUuid = Guid.NewGuid().ToString();
         
     }
 }
