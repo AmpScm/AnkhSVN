@@ -190,7 +190,7 @@ void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, 
         context->ToSvnContext( pool ), pool ) );
 }
 
-NSvn::Common::PathToPropertyMapping* NSvn::Core::Client::PropGet(String* propName, 
+NSvn::Common::PropertyDictionary* NSvn::Core::Client::PropGet(String* propName, 
                                                          String* target, Revision* revision, 
                                                         bool recurse, ClientContext* context)
 {
@@ -203,7 +203,7 @@ NSvn::Common::PathToPropertyMapping* NSvn::Core::Client::PropGet(String* propNam
         revision->ToSvnOptRevision( pool ), recurse, context->ToSvnContext( pool ), pool );
     HandleError( err );
 
-    return ConvertPropertyHash( propertyHash, propName, pool );
+    return ConvertPathToPropertyMapping( propertyHash, propName, pool );
 
 }
 //TODO: Implement the variable admAccessBaton
@@ -311,10 +311,10 @@ struct apr_hash_index_t
 {};
 
 // converts a apr_hash_t of const char* -> svn_string_t mappings
-NSvn::Common::PathToPropertyMapping* NSvn::Core::Client::ConvertPropertyHash( 
+NSvn::Common::PropertyDictionary* NSvn::Core::Client::ConvertPathToPropertyMapping( 
     apr_hash_t* propertyHash, String* propertyName, Pool& pool )
 {
-    PathToPropertyMapping* mapping = new PathToPropertyMapping();
+    PropertyDictionary* mapping = new PropertyDictionary();
 
     // iterate over the items in the hash
     apr_hash_index_t* idx = apr_hash_first( pool, propertyHash );
