@@ -108,6 +108,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "NSvn.Common.wxs"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "ParameterDictionaryBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
