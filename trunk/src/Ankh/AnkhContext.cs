@@ -19,6 +19,7 @@ namespace Ankh
 			this.dte = dte;
             this.addin = addin;
             this.context = new SvnContext( this );
+            this.repositoryExplorer = new TestRepositoryExplorer();
             SetUpEvents();
         }
 
@@ -54,6 +55,14 @@ namespace Ankh
         public SvnContext Context
         {
             get{ return this.context; }
+        }
+
+        /// <summary>
+        /// The repository explorer control.
+        /// </summary>
+        public TestRepositoryExplorer RepositoryExplorer
+        {
+            get{ return this.repositoryExplorer; }
         }
 
         
@@ -163,5 +172,6 @@ namespace Ankh
         private SolutionExplorer solutionExplorer = null;
 
         private SvnContext context;
+        private TestRepositoryExplorer repositoryExplorer;
 	}
 }
