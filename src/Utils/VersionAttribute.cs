@@ -7,14 +7,14 @@ namespace Utils
     /// An attribute that describes a library
     /// </summary>
     [AttributeUsage( AttributeTargets.Assembly, AllowMultiple=true )]
-    public class LibraryAttribute : Attribute
+    public class VersionAttribute : Attribute
     {
-        public LibraryAttribute() : this( "", 0, 0, 0 )
+        public VersionAttribute() : this( "", 0, 0, 0 )
         {
             // empty
         }
 
-        public LibraryAttribute( string name, int major, int minor, int patchLevel )
+        public VersionAttribute( string name, int major, int minor, int patchLevel )
         {
             this.name = name;
             this.major = major;
@@ -46,15 +46,33 @@ namespace Utils
             set{ this.patchLevel = patchLevel; }
         }
 
+        public string Tag
+        {
+            get{ return this.tag; }
+            set{ this.tag = value; }
+        }
+
+        public string CustomText
+        {
+            get{ return this.customText; }
+            set{ this.customText = value; }
+        }
+
         public override string ToString()
         {
-            return String.Format( "{0} {1}.{2}.{3}", this.name, this.major, this.minor, this.patchLevel );
+            if ( this.CustomText != null )
+                return this.CustomText;
+            else
+                return String.Format( "{0} {1}.{2}.{3}{4}", this.name, 
+                    this.major, this.minor, this.patchLevel, this.tag );
         }
 
 
+        private string customText = null;
         private string name;
         private int major;
         private int minor;
         private int patchLevel;
+        private string tag = "";
     }
 }

@@ -129,11 +129,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "LibraryAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "PathUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -165,6 +160,11 @@
                 <File
                     RelPath = "Utils.wxs"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "VersionAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Zip.cs"
