@@ -200,14 +200,35 @@ namespace NSvn
                 String* path2, Revision* revision2, bool recurse, bool noDiffDeleted, 
                 Stream* outfile, Stream* errFile, ClientContext* context);
 
-
+*/
+            ///<summary>Apply file differences into a working copy. Merge changes 
+            ///         from url1/revision1 to url2/revision2 into a working-copy. 
+            ///</summary>
+            ///<param name="url1">Path to first file/directory in repository.</param> 
+            ///<param name="revision1">First revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
+            ///                      for more information.</param> 
+            ///<param name="url2">Path to second file/directory in repository.</param> 
+            ///<param name="revision2">Second revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
+            ///                      for more information.</param> 
+            ///<param name="targetWCPath">Working copy paths for desired merge.</param>
+            ///<param name="recurse">If recursive is set, assuming path is a directory 
+            ///                      all of its contents will be included in the merge.</param> 
+            ///<param name="force">If force is set locally modified or 
+            ///                    unversioned items will be deleted if essential.</param>
+            ///<param name="dryRun">If dryRun is true  the merge is carried out, and full 
+            ///                     notfication feedback is provided, but the working 
+            ///                     copy is not modified.</param> 
+            ///<param name="context">A client context object, which holds client specific 
+            ///                      callbacks, batons, serves as a cache for configuration options, 
+            ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
+            ///                      for more information.</param> 
 	        static void Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
                 String* targetWcPath, bool recurse, bool force, bool dryRun, ClientContext* context);
 
             ///<summary>Cleanup a working copy directory, finishing any incomplete operations, 
             ///         removing lockfiles, etc.</summary>
             ///<param name="dir">Path to the directory.</param>
-              */static void Cleanup(String* dir);
+            static void Cleanup(String* dir);
 
             ///<summary>Restore the pristine version of a working copy path.</summary>
             ///<param name="path">Path to the file/directory</param>

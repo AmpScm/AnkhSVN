@@ -173,6 +173,20 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcR
         return CommitInfo::Invalid;
 }
 
+// implementation of Client::Merge
+void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
+                String* targetWcPath, bool recurse, bool force, bool dryRun, ClientContext* context)
+{
+    Pool pool;
+    const char* trueSrcPath1 = CanonicalizePath( url1, pool );
+    const char* trueSrcPath2 = CanonicalizePath( url2, pool );
+    const char* trueDstPath = CanonicalizePath( targetWcPath, pool );
+
+    HandleError( svn_client_merge ( trueSrcPath1 , revision1->ToSvnOptRevision( pool ),
+        trueSrcPath2, revision2->ToSvnOptRevision( pool ),
+        trueDstPath, recurse, force, dryRun,
+        context->ToSvnContext( pool ), pool ) );
+}
 
 NSvn::Common::PropertyMapping* NSvn::Core::Client::PropGet(String* propName, 
                                                          String* target, Revision* revision, 
