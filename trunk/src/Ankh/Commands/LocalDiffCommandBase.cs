@@ -64,12 +64,39 @@ namespace Ankh.Commands
                     }
                 }
 
-                MemoryStream stream = new MemoryStream();
-                foreach( SvnItem item in resources )
-                    context.Client.Diff( new string[]{}, item.Path, Revision.Base, 
-                        item.Path, Revision.Working, recurse, true, false, stream, Stream.Null );
+                
+                string curdir = Environment.CurrentDirectory;
+                
+                // we go to the solution directory so that the diff paths will be relative 
+                // to that directory
+                string slndir = context.SolutionDirectory;
+                Debug.Assert( slndir != null, "Solution directory should not be null" );
 
-                return System.Text.Encoding.Default.GetString( stream.ToArray() );
+                try
+                {
+                    // switch to the solution dir, so we can get relative paths.
+                    Environment.CurrentDirectory = slndir;
+
+                    MemoryStream stream = new MemoryStream();
+                    foreach( SvnItem item in resources )
+                    {
+                        // try to get a relative path to the item from the solution directory
+                        string path = Utils.Win32.Win32.PathRelativePathTo( slndir, 
+                            Utils.Win32.FileAttribute.Directory, item.Path, 
+                            Utils.Win32.FileAttribute.Normal );
+                        path = path != null ? path : item.Path;
+
+                        context.Client.Diff( new string[]{}, path, Revision.Base, 
+                            path, Revision.Working, recurse, true, false, stream, Stream.Null );
+                    }
+
+                    return System.Text.Encoding.Default.GetString( stream.ToArray() );
+                }
+                finally
+                {
+                    Environment.CurrentDirectory = curdir;
+                }
+                
             }
             else
             {
