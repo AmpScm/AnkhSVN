@@ -19,6 +19,26 @@ namespace NSvn
         }
 
         /// <summary>
+        /// Create a ILocalResource from a local path.
+        /// </summary>
+        /// <param name="path">The path to the file/directory.</param>
+        /// <returns>An ILocalResource object.</returns>
+        public static ILocalResource FromLocalPath( string path )
+        {
+            int youngest;
+            StatusDictionary dict = Client.Status( out youngest, path, 
+                false, true, false, false, new ClientContext() );
+            Status status = dict.GetFirst();
+            System.Diagnostics.Debug.Assert( status != null, 
+                "Couldn't get status for " + path );
+
+            if ( status.TextStatus != StatusKind.Unversioned )
+                return WorkingCopyResource.FromPath( path, status );
+            else
+                return UnversionedResource.FromPath( path );
+        }
+
+        /// <summary>
         /// An object dispatching notification events.
         /// </summary>
         public Notifications Notifications

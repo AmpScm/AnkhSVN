@@ -15,7 +15,7 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "WinExe"
+                OutputType = "Library"
                 RootNamespace = "Ankh.UI"
                 StartupObject = "Ankh.UI.TestRepositoryExplorer"
             >

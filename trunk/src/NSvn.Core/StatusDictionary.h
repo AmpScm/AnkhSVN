@@ -17,6 +17,14 @@ namespace NSvn
             virtual Status* Get( String* path )
             { return static_cast<Status*>(this->Dictionary->Item[ path ]); }
 
+            virtual Status* GetFirst( )
+            {
+                System::Collections::IEnumerator* en = this->Keys->GetEnumerator();
+                en->MoveNext();
+                return this->Get( static_cast<String*>(en->Current) );
+            }
+
+
             
 
             virtual void Add( String* path, Status* status )

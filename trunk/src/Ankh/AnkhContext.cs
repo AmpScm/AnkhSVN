@@ -42,6 +42,7 @@ namespace Ankh
             get{ return this.solutionExplorer; }
         }
 
+        #region SetUpEvents
         /// <summary>
         /// Sets up event handlers.
         /// </summary>
@@ -54,7 +55,37 @@ namespace Ankh
                 _dispSolutionEvents_OpenedEventHandler( this.SolutionOpened );
             this.solutionEvents.AfterClosing += new 
                 _dispSolutionEvents_AfterClosingEventHandler( this.SolutionClosed );
-        }
+
+            this.documentEvents = this.DTE.Events.get_DocumentEvents( null );
+            this.documentEvents.DocumentSaved += new 
+                _dispDocumentEvents_DocumentSavedEventHandler( this.DocumentSaved );
+
+            this.csProjectItemsEvents = (ProjectItemsEvents)
+                this.DTE.Events.GetObject( "CSharpProjectItemsEvents" );
+
+            this.csProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
+                this.ItemAdded );
+
+//            this.vcProjectItemsEvents = (ProjectItemsEvents)
+//                this.DTE.Events.GetObject( "VCProjectItemsEvents" );
+//
+//            this.vcProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
+//                this.ItemAdded );
+
+            this.vbProjectItemsEvents = (ProjectItemsEvents)
+                this.DTE.Events.GetObject( "VBProjectItemsEvents" );
+            
+            this.vbProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
+                this.ItemAdded );
+
+            this.vjProjectItemsEvents = (ProjectItemsEvents)
+                this.DTE.Events.GetObject( "VJSharpProjectItemsEvents" );
+
+            this.vjProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
+                this.ItemAdded );
+
+       }
+        #endregion
 
         /// <summary>
         /// Event handler for the SolutionOpened event.
@@ -63,7 +94,6 @@ namespace Ankh
         {
             try
             {
-                System.Windows.Forms.MessageBox.Show( "Solution opened" );
                 this.solutionExplorer = new SolutionExplorer( this.DTE );
             }
             catch( Exception ex )
@@ -83,14 +113,35 @@ namespace Ankh
             this.solutionExplorer = null;
         }
 
+        /// <summary>
+        /// Called when a document is saved.
+        /// </summary>
+        private void DocumentSaved( Document document )
+        {
+            if ( this.SolutionExplorer != null )
+                this.SolutionExplorer.UpdateStatus( document.ProjectItem );
+        }
 
+        /// <summary>
+        ///  Called when a document is added
+        /// </summary>
+        private void ItemAdded( ProjectItem item )
+        {
+//            System.Windows.Forms.MessageBox.Show( "moo" );
+            if ( this.SolutionExplorer != null )
+                this.SolutionExplorer.SyncWithTreeView();
+        }
 
         private EnvDTE._DTE dte;
         private EnvDTE.AddIn addin;
 
         //required to ensure events will still fire
         private SolutionEvents solutionEvents;
+        private DocumentEvents documentEvents;
+        private ProjectItemsEvents csProjectItemsEvents;
+        private ProjectItemsEvents vbProjectItemsEvents;
+        private ProjectItemsEvents vcProjectItemsEvents;
+        private ProjectItemsEvents vjProjectItemsEvents;
         private SolutionExplorer solutionExplorer = null;
-
 	}
 }

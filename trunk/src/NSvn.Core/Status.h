@@ -90,7 +90,7 @@ namespace NSvn
             StatusKind repositoryTextStatus;
             StatusKind repositoryPropertyStatus;
 
-            static Status* unversioned;
+            static Status* unversioned = new Status();
         };
     }
 }

@@ -222,7 +222,7 @@ namespace Ankh
 //                this.context.DTE.CommandBars["Ankh"] );
             CommandBar bar = this.context.DTE.CommandBars[ "Tools" ];
            
-            CommandBar ankh = this.context.DTE.CommandBars.Add( "Ankha", 
+            CommandBar ankh = this.context.DTE.CommandBars.Add( "Ankh", 
                 MsoBarPosition.msoBarPopup, bar, true );
             ankh.Visible = true;
 //            CommandBar ankh = (CommandBar)this.context.DTE.Commands.AddCommandBar( "Ankh", 

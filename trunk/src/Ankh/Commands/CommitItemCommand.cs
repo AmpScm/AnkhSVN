@@ -1,5 +1,7 @@
 // $Id$
 using System;
+using NSvn;
+using NSvn.Core;
 using EnvDTE;
 
 namespace Ankh.Commands
@@ -14,19 +16,31 @@ namespace Ankh.Commands
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
-            if (context.DTE.SelectedItems.Count > 0)
-                return vsCommandStatus.vsCommandStatusEnabled | 
-                    vsCommandStatus.vsCommandStatusSupported;
-            else
-                return vsCommandStatus.vsCommandStatusEnabled;
+            ILocalResource[] resources = context.SolutionExplorer.GetSelectedItems();
+            foreach( ILocalResource resource in resources )
+            {
+                if ( (resource.Status.TextStatus & commitCandidates) != 0 ||
+                    (resource.Status.PropertyStatus & commitCandidates) != 0 )
+                    return vsCommandStatus.vsCommandStatusEnabled | 
+                        vsCommandStatus.vsCommandStatusSupported;
+            }
+            
+            return vsCommandStatus.vsCommandStatusEnabled;
         }
         public override void Execute(Ankh.AnkhContext context)
         {
-//            context.SolutionExplorer.ChangeStatus( 
-//                context.DTE.SelectedItems );
+            ILocalResource[] resources = context.SolutionExplorer.GetSelectedItems();
+            foreach( ILocalResource resource in resources )
+                if ( resource.IsVersioned )
+                    ((WorkingCopyResource)resource).Commit( "", false );
+           
+            context.SolutionExplorer.UpdateSelectionStatus();
         }
         
         #endregion
+
+        private const StatusKind commitCandidates = StatusKind.Added | 
+            StatusKind.Modified;
     }
 }
 
