@@ -85,7 +85,7 @@ namespace Ankh
 
             #region Implementation of IAuthenticationProvider
             public NSvn.Common.ICredential NextCredentials( ICollection parameters )
-            {               
+            {              
 
                 if ( loginDialog.ShowDialog() == DialogResult.OK )
                     return this.lastCredential = new SimpleCredential( loginDialog.Username, 
@@ -93,7 +93,7 @@ namespace Ankh
                 else
                     return this.lastCredential = null;
             }
-            public NSvn.Common.ICredential FirstCredentials( ICollection parameters )
+            public NSvn.Common.ICredential FirstCredentials(  string realm, ICollection parameters )
             {
                 if ( this.savedCredential != null )
                     return this.savedCredential;

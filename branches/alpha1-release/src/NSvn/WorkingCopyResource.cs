@@ -177,7 +177,7 @@ namespace NSvn
         public void Diff( Stream outStream, Stream errStream )
         {
             Client.Diff( new string[]{}, this.Path, Revision.Base, this.Path,
-                Revision.Working, false, false, outStream, errStream, 
+                Revision.Working, false, true, false, outStream, errStream, 
                 this.ClientContext );
         }
 
