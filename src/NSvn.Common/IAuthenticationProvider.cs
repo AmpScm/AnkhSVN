@@ -7,8 +7,16 @@ namespace NSvn.Common
     /// </summary>
     public interface IAuthenticationProvider
     {
-        Credential FirstCredentials( );
-        Credential NextCredentials( );
+        ICredential FirstCredentials( );
+        ICredential NextCredentials( );
+
+        /// <summary>
+        /// The kind of credential provided by this provider
+        /// </summary>
+        string Kind
+        {
+            get;
+        }
 
         // TODO: implement
         //Credential SaveCredentials();

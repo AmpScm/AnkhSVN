@@ -1,5 +1,6 @@
 // $Id$
 #include "ClientContext.h"
+#include "UsernameCredential.h"
 //#include <svn_client.h>
 //#include <apr_pools.h>
 //#include "Notification.h"
@@ -47,33 +48,32 @@ namespace NSvn
             AuthenticationBaton* baton )
         {
             apr_array_header_t* providers = 0;
+
             // any providers provided?
-            if ( baton != 0 )
+            if ( baton == 0 )
             {
-                 // create an array to put our providers in
-                providers = apr_array_make( pool, baton->Providers->Count, 
-                    sizeof( svn_auth_provider_object_t* ) );
-
-                // put our providers in the array
-                for( int i = 0; i < baton->Providers->Count; i++ )
-                {
-                    svn_auth_provider_object_t* providerObject = 
-                        this->CreateProvider( pool, baton->Providers->Item[i] );
-
-                    *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
-                        providerObject;
-                }
+                // Create one anyway
+                baton = new AuthenticationBaton();
             }
-            else
+
+            // always put this one in, since it seems to be needed
+            // TODO: is there a better way?
+            baton->Providers->Add( new SimpleProvider( UsernameCredential::LoggedInUser ) );
+
+            // create an array to put our providers in, leaving room for the LoggedInUser provider
+            providers = apr_array_make( pool, baton->Providers->Count + 1, 
+                sizeof( svn_auth_provider_object_t* ) );
+
+            // put our providers in the array
+            for( int i = 0; i < baton->Providers->Count; i++ )
             {
-                // no providers - just give them the invalid provider
-                providers = apr_array_make( pool, 1, 
-                    sizeof( svn_auth_provider_object_t* ) );
                 svn_auth_provider_object_t* providerObject = 
-                    this->CreateProvider( pool, InvalidProvider::Instance );
+                    this->CreateProvider( pool, baton->Providers->Item[i] );
+
                 *((svn_auth_provider_object_t **)apr_array_push (providers)) = 
-                        providerObject;
+                    providerObject;
             }
+         
 
 
             // create the actual baton
@@ -89,7 +89,7 @@ namespace NSvn
 
             svn_auth_provider_t* provider = static_cast<svn_auth_provider_t*>(
                 pool.PCalloc( sizeof(*provider) ) );
-            provider->cred_kind = SVN_AUTH_CRED_SIMPLE;
+            provider->cred_kind = StringHelper( authProvider->Kind ).CopyToPool( pool );
 
             // these simple callback functions merely delegate to our IAuth object
             provider->first_credentials = first_credentials;
@@ -111,7 +111,7 @@ namespace NSvn
     }
 }
 
-// necessary to get the managed compiler to generate metadata for the type
+// necessary to get the managed compiler to generate metadata for the types
 struct apr_pool_t
 {};
 
@@ -138,19 +138,12 @@ namespace
 
     }
 
-    svn_auth_cred_simple_t* GetCredentials( Credential* credential, apr_pool_t* pool  )
+    void* GetCredentials( ICredential* credential, apr_pool_t* pool  )
     {
         // did we get a valid credential?
-        if ( credential != Credential::Invalid )
-        {
-            // a simple credential will do for now
-            svn_auth_cred_simple_t* creds = static_cast<svn_auth_cred_simple_t*>(
-                apr_pcalloc( pool, sizeof(*creds)) );
-
-            creds->username = StringHelper( credential->Username ).CopyToPool( pool );
-            creds->password = StringHelper( credential->Password ).CopyToPool( pool );
-
-            return creds;
+        if ( credential != 0 )
+        {            
+            return credential->GetCredential( pool ).ToPointer();
         }
         else 
             return 0;

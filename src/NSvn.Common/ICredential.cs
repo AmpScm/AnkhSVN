@@ -8,16 +8,11 @@ namespace NSvn.Common
 	public interface ICredential
     {
         /// <summary>
-        /// The type of credential
-        /// </summary>
-        string Kind 
-        { 
-            get;
-        }
-            
-        /// <summary>
         /// For internal use - creates an svn credential from this object
         /// </summary>
         IntPtr GetCredential( IntPtr pool );
+
+        string Kind
+        { get; }
     }
 }

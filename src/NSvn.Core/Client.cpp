@@ -7,21 +7,6 @@
 #include <apr_general.h>
 #include "SvnClientException.h"
 
-namespace
-{
-    using namespace NSvn::Core;
-    using namespace System::Runtime::InteropServices;
-
-    inline void HandleError( svn_error_t* err )
-    {
-        if ( err != 0 )
-            throw NSvn::Core::SvnClientException::FromSvnError( err );
-    }
-
-    
-}
-
-
 
 // implementation of Client::Add
 void NSvn::Core::Client::Add( String* path, bool recursive, ClientContext* ctx )

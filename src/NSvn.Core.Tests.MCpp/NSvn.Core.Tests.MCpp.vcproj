@@ -105,6 +105,9 @@
 				RelativePath="ManagedPointerTest.cpp">
 			</File>
 			<File
+				RelativePath="MiscTests.cpp">
+			</File>
+			<File
 				RelativePath="NotificationTest.cpp">
 			</File>
 			<File
@@ -137,6 +140,9 @@
 			</File>
 			<File
 				RelativePath="ManagedPointerTest.h">
+			</File>
+			<File
+				RelativePath="MiscTests.h">
 			</File>
 			<File
 				RelativePath="NotificationTest.h">

@@ -2,6 +2,7 @@
 #pragma once
 #include "stdafx.h"
 #include "ClientContext.h"
+#include "SvnClientException.h"
 
 using namespace NUnit::Framework;
 
@@ -32,6 +33,7 @@ namespace NSvn
 
                     /// <summary>Test that it works with an empty auth baton</summary>
                     [Test]
+                    [ExpectedException(__typeof(SvnClientException))]
                     void TestEmptyAuthBaton();
 
                     /// <summary>Test that the auth baton stuff works</summary>

@@ -27,5 +27,11 @@ namespace NSvn
             static SvnClientException* CreateExceptionsRecursively( svn_error_t* err );
 
         };
+
+        inline void HandleError( svn_error_t* err )
+        {
+            if ( err != 0 )
+                throw NSvn::Core::SvnClientException::FromSvnError( err );
+        }
     }
 }

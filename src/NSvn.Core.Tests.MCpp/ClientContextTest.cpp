@@ -1,9 +1,12 @@
 // $Id$
 #include "Stdafx.h"
 #include "ClientContextTest.h"
+#include "SvnClientException.h"
+#include "SimpleCredential.h"
 
 // necessary since a .NET assembly does not export methods with native signatures
 #include "ClientContext.cpp"
+#include "SvnClientException.cpp"
 
 
 void NSvn::Core::Tests::MCpp::ClientContextTest::NotifyCallback( 
@@ -35,14 +38,19 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotifyCallback()
 
 __gc class DummyProvider : public IAuthenticationProvider
 {
-    Credential* FirstCredentials()
+    ICredential* FirstCredentials()
     {
-        return new Credential( "foo", "bar" );
+        return new SimpleCredential( "foo", "bar" );
     }
 
-    Credential* NextCredentials()
+    ICredential* NextCredentials()
     {
-        return new Credential( "kung", "fu" );
+        return new SimpleCredential( "kung", "fu" );
+    }
+
+    String* get_Kind()
+    {
+        return SVN_AUTH_CRED_SIMPLE;
     }
 };
 
@@ -62,11 +70,11 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestEmptyAuthBaton()
     svn_auth_cred_simple_t* cred;
     svn_auth_iterstate_t* iterState;
 
-    svn_error_t* err = svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, 
+   
+
+    HandleError( svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, 
         SVN_AUTH_CRED_SIMPLE, 
-        ctx->auth_baton, pool );
-    Assertion::Assert( "Error returned", err == 0 );
-    Assertion::Assert( "cred not null", cred == 0 );
+        ctx->auth_baton, pool ) );
 }
 
 
@@ -98,19 +106,6 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
     Assertion::Assert( S"Password not fu", strcmp( cred->password, "fu" ) == 0 );
 
 
-    // now try with the invalid credentials
-    bat = new AuthenticationBaton();
-    bat->Providers->Add( InvalidProvider::Instance );
-
-    c = new ClientContext( 0, bat );
-
-    ctx = c->ToSvnContext( pool );
-
-    // again the first
-    svn_auth_first_credentials( reinterpret_cast<void**>(&cred), &iterState, SVN_AUTH_CRED_SIMPLE, 
-        ctx->auth_baton,  pool );
-
-    Assertion::Assert( "cred not NULL", cred == 0 );
 }
 
 
