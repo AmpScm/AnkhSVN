@@ -42,7 +42,7 @@ namespace Ankh.Solution
             // if this isn't a directory node, visit children as well
             if ( !
                 (this.resources.Count == 1 && 
-                System.IO.Directory.Exists( ((SvnItem)this.resources[0]).Path )))
+                ((SvnItem)this.resources[0]).IsDirectory) )
             {
                 foreach( TreeNode node in this.Children )
                     node.Accept( visitor );
@@ -71,7 +71,7 @@ namespace Ankh.Solution
                 // is one of the resources a directory?
                 foreach( SvnItem item in this.resources )
                 {
-                    if ( System.IO.Directory.Exists( item.Path ) )
+                    if ( item.IsDirectory )
                         return item.Path;
                 }
 
@@ -180,14 +180,14 @@ namespace Ankh.Solution
                     continue;
                 }
 
-                if ( File.Exists( path ) || System.IO.Directory.Exists( path ) )
+                SvnItem svnItem = this.Explorer.Context.StatusCache[path];
+                if ( svnItem.IsFile || svnItem.IsDirectory )
                 {
-                    SvnItem svnItem = this.Explorer.Context.StatusCache[path];
                     this.resources.Add( svnItem );
                     svnItem.Changed += del;
 
                     // if its a dir, we want the deleted paths too
-                    if ( System.IO.Directory.Exists( path ) )
+                    if ( svnItem.IsDirectory )
                     {
                         this.AddDeletions( path, this.resources, del );
                     }
