@@ -1,7 +1,7 @@
 // $Id$
 using System;
-using Microsoft.VisualStudio.VCProjectEngine;
 using EnvDTE;
+using System.Reflection;
 
 namespace Ankh.EventSinks
 {
@@ -10,22 +10,43 @@ namespace Ankh.EventSinks
     /// </summary>
     internal class VCProjectEventSink : EventSink
     {
-        internal VCProjectEventSink( VCProjectEngineEvents events, AnkhContext context )
+        internal VCProjectEventSink( object events, AnkhContext context )
             : base( context )
         {
             this.events = events;
-            this.events.ItemAdded += new _dispVCProjectEngineEvents_ItemAddedEventHandler(
-                this.ItemAdded );
-            this.events.ItemRemoved += new _dispVCProjectEngineEvents_ItemRemovedEventHandler(
-                this.ItemRemoved );
+            // this should load the correct assembly, according to the version of VS
+            Assembly asm = Assembly.Load( 
+                "Microsoft.VisualStudio.VCProjectEngine");
+
+            // the type on which VC project events are dispatched
+            this.vcProjectEventsType = asm.GetType( 
+                "Microsoft.VisualStudio.VCProjectEngine._dispVCProjectEngineEvents_Event", 
+                true );
+
+            // the ItemAdded event handler
+            Type itemAddedType = asm.GetType( "Microsoft.VisualStudio.VCProjectEngine._dispVCProjectEngineEvents_ItemAddedEventHandler", false );
+            this.itemAddedDelegate = Delegate.CreateDelegate( itemAddedType, this, "ItemAdded" );
+
+            this.vcProjectEventsType.GetEvent( "ItemAdded" ).AddEventHandler( events, 
+                this.itemAddedDelegate );
+
+            // the ItemRemoved event handler
+            Type itemRemovedType = asm.GetType( "Microsoft.VisualStudio.VCProjectEngine._dispVCProjectEngineEvents_ItemRemovedEventHandler", false );
+            this.itemRemovedDelegate = Delegate.CreateDelegate( itemRemovedType, this, "ItemRemoved" );
+
+            this.vcProjectEventsType.GetEvent( "ItemRemoved" ).AddEventHandler( events, 
+                this.itemRemovedDelegate );
+
         }
 
+//
         public override void Unhook()
         {
-            this.events.ItemAdded -= new _dispVCProjectEngineEvents_ItemAddedEventHandler(
-                this.ItemAdded );
-            this.events.ItemRemoved -= new _dispVCProjectEngineEvents_ItemRemovedEventHandler(
-                this.ItemRemoved );
+            this.vcProjectEventsType.GetEvent( "ItemAdded" ).RemoveEventHandler( 
+                this.events, this.itemAddedDelegate );
+            this.vcProjectEventsType.GetEvent( "ItemRemoved" ).RemoveEventHandler( 
+                this.events, this.itemRemovedDelegate );
+               
         }
 
         protected void ItemAdded( object item, object parent )
@@ -38,6 +59,9 @@ namespace Ankh.EventSinks
             this.Context.SolutionExplorer.RefreshSelectionParents();
         }
 
-        private VCProjectEngineEvents events;
+        private readonly Delegate itemAddedDelegate;
+        private readonly Delegate itemRemovedDelegate;
+        private readonly Type vcProjectEventsType;
+        private readonly object events;
     }
 }
