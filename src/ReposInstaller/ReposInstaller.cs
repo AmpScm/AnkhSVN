@@ -91,9 +91,7 @@ namespace ReposInstaller
 						"Please close these before continuing", "VS.NET is running", MessageBoxButtons.OK,
 						MessageBoxIcon.Warning );
 				} 
-          
-				MessageBox.Show( "Hello 2" );
-
+        
 				// delete the commands
 				this.DeleteAnkhCommands( "VisualStudio.DTE.7" );
 				this.DeleteAnkhCommands( "VisualStudio.DTE.7.1" );

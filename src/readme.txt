@@ -1,11 +1,8 @@
-$Id: $
 
-Ankh – Subversion Addin for Visual Studio.NET           =====================================================
+This is the 0.3.5 release of Ankh.
 
+This release supports both VS.NET 2002 and VS.NET 2003. The installer will set up the correct registry entries for both environments. It is built against Subversion 0.31. This means it is only guaranteed to interoperate against 0.30, 0.31 and 0.32 servers.
 
-This is the second release of the Ankh addin for Visual Studio .NET. It is not quite finished, but the most common operations are implemented. You will still need to use the svn command line client for some of the more advanced tasks(fortunately, these are the ones you don’t perform very often). The command line tools can be downloaded from http://subversion.tigris.org/servlets/ProjectDocumentList 
-
-This release officially supports both VS.NET 2002 and VS.NET 2003. The installer will set up the correct registry entries for both environments.
 
 If you have any problems with Ankh, there is a mailing list set up at http://ankhsvn.tigris.org. To subscribe, send a mail to users-subscribe@ankhsvn.tigris.org - if you don’t want to subscribe, you can mail users@ankhsvn.tigris.org and we will accommodate any requests to CC you directly.
 
@@ -15,20 +12,21 @@ There is also an issue tracker set up at http://ankhsvn.tigris.org/servlets/Proj
 What is currently supported:
 
 ·	The solution explorer shows the status of all files in your working copy(svn status).
-·   You can view selected files in the Repository Explorer(svn cat).
+·   	You can view selected files in the Repository Explorer(svn cat).
+·	You can checkout directories from the Repository Explorer.
 ·	You can commit(svn commit), update(svn update), add(svn add), revert(svn revert) and run diffs(svn diff) against the text base from within VS.NET. This works on the solution, individual projects, folders and files.
 ·	Ankh calls svn delete on files deleted from the IDE.
-·	You can clean up a locked working copy(svn cleanup)
-·   You can resolve a conflict(svn resolve)
+·	You can rename files from within the IDE(svn rename).
+·	You can clean up a locked working copy(svn cleanup).
+·   You can resolve a conflict(svn resolve).
 ·   The Properties window displays svn info-style information about a file.
 
 
 Known issues:
 
-·	If installed on a clean machine, the Ankh menu entries sometimes don’t get registered on the first run. We have not been able to figure out why this happens only in some cases; however, restarting VS.NET will usually fix it. If you encounter this, and restarting doesn’t work, please let us know. 
 ·	If you delete a file, the status on the project node will not change. To be able to commit a delete, you need to change something else, then run commit on the project or solution.
 ·	Adding a (web)form will not automatically add the corresponding .resx(or code behind) file. To add these files, click the Show All Files button in the solution explorer, and then add them the usual way.
-·	No support for checkout and import – you will need to create your repository and import your source to it using the command line tools. For details on how to use these, see http://svnbook.red-bean.com
+·	No support for import – you will need to create your repository and import your source to it using the command line tools. For details on how to use these, see http://svnbook.red-bean.com
 ·	No support for editing SVN properties – this still needs to be done from the command line.
 
 Error reporting

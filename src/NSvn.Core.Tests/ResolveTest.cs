@@ -16,7 +16,8 @@ namespace NSvn.Core.Tests
         public override void SetUp()
         {
             base.SetUp();
-            this.path = this.GetTempFile();
+            this.path = Path.GetTempFileName();
+            File.Delete ( this.path );
             Zip.ExtractZipResource( this.path, this.GetType(), "NSvn.Core.Tests.conflictwc.zip" );
         }
 
