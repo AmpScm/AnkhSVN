@@ -32,6 +32,7 @@
         
         <csc target="library" output="${build.dir}/Ankh.UI.dll" verbose="${verbose}" define="${define}">
             <references>
+                <includes name="${lib.dir}\Office.dll"/>
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
