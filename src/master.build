@@ -40,7 +40,9 @@
         <nant buildfile="WiX\NSvn.msm.build" target="build-WiX" inheritall="true" />
     </target>
     
-    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm" />
+    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm">
+        <nant buildfile="Ankh.UI/Ankh.UI.build" target="build-WiX" inheritall="true"/>
+    </target>
     
     <target name="clean" description="Cleans all output directories">
         <nant buildfile="NSvn.Common/NSvn.Common.build" target="clean" inheritall="true" />

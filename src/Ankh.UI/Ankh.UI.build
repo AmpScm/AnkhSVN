@@ -4,7 +4,7 @@
     <property name="src.dir" value="."/>
     <property name="warninglevel" value="/warn:3"/>
     <property name="lib.dir" value="../lib"/>
-    
+    <property name="installsource.dir" value="..\${installsource.dir}"/>
     
     <target name="rebuild">
         <call target="clean"/>
@@ -58,6 +58,11 @@
         </csc>
         
                 
+    </target>
+    
+    <target name="build-WiX">
+        <exec workingdir="${src.dir}" program="candle.exe"
+            commandline="-nologo -dbuilddir=${build.dir} -w0 Ankh.UI.wxs -out ${installsource.dir}\Ankh.UI.wixobj" />
     </target>
     
 </project>
