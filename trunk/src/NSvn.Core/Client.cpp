@@ -190,7 +190,7 @@ void NSvn::Core::Client::Merge(String* url1, Revision* revision1, String* url2, 
         context->ToSvnContext( pool ), pool ) );
 }
 
-NSvn::Common::PropertyMapping* NSvn::Core::Client::PropGet(String* propName, 
+NSvn::Common::PathToPropertyMapping* NSvn::Core::Client::PropGet(String* propName, 
                                                          String* target, Revision* revision, 
                                                         bool recurse, ClientContext* context)
 {
@@ -311,10 +311,10 @@ struct apr_hash_index_t
 {};
 
 // converts a apr_hash_t of const char* -> svn_string_t mappings
-NSvn::Common::PropertyMapping* NSvn::Core::Client::ConvertPropertyHash( 
+NSvn::Common::PathToPropertyMapping* NSvn::Core::Client::ConvertPropertyHash( 
     apr_hash_t* propertyHash, String* propertyName, Pool& pool )
 {
-    PropertyMapping* mapping = new PropertyMapping();
+    PathToPropertyMapping* mapping = new PathToPropertyMapping();
 
     // iterate over the items in the hash
     apr_hash_index_t* idx = apr_hash_first( pool, propertyHash );
