@@ -18,9 +18,18 @@ namespace Ankh.Tests
         public override void SetUp()
         {
             base.SetUp();
+            TestUtils.ToggleAnkh( false, "7.1" );
             this.dteFactory = DteFactory.Create2003();
             this.ExtractWorkingCopy();
         }
+
+        [TearDown]
+        public override void TearDown()
+        {
+            base.TearDown ();
+            TestUtils.ToggleAnkh( true, "7.1" );
+        }
+
 
         /// <summary>
         /// Test the SolutionIsOpen property.
@@ -160,15 +169,7 @@ namespace Ankh.Tests
         private AnkhContext CreateContext()
         {
             _DTE dte = this.dteFactory.Create();
-            AddIn ankh = null;
-            foreach( AddIn addin in dte.AddIns )
-            {
-                if ( addin.ProgID == "Ankh" )
-                {
-                    ankh = addin;
-                    break;
-                }
-            }
+            AddIn ankh = TestUtils.GetAddin( "Ankh", dte );
             return new AnkhContext( dte, ankh, new UIShell(), new ErrorHandler() );
         }
 
