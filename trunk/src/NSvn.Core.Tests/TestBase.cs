@@ -30,7 +30,7 @@ namespace NSvn.Core.Tests
             this.notifications = new ArrayList();
         }
 
-        //[TearDown]
+        [TearDown]
         public virtual void TearDown()
         {
             // clean up
@@ -39,9 +39,9 @@ namespace NSvn.Core.Tests
                 if ( this.ReposPath != null )
                     Directory.Delete( this.ReposPath, true );
                 if ( this.WcPath != null )
-                    Directory.Delete( this.WcPath, true );
+                    this.RecursiveDelete( this.wcPath );
             }
-            catch( Exception )
+            catch( NSvn.Common.SvnException )
             {
                 // swallow 
             }
@@ -197,6 +197,19 @@ namespace NSvn.Core.Tests
             this.ExtractZipStream( zipStream, destinationPath );
         }
 
+        protected void RecursiveDelete( string path )
+        {
+            foreach( string dir in Directory.GetDirectories( path ) )
+            {
+                this.RecursiveDelete( dir );
+            }
+
+            foreach( string file in Directory.GetFiles( path ) )
+                File.SetAttributes( file, FileAttributes.Normal );
+
+            File.SetAttributes( path, FileAttributes.Normal );
+            Directory.Delete( path, true );
+        }
        
 
         /// <summary>

@@ -98,6 +98,7 @@ namespace NSvn.Core.Tests
 
             Assertion.AssertEquals( "Wrong status", 
                 dict.Get(form).RepositoryTextStatus, StatusKind.Modified );
+            this.RecursiveDelete( wc2 );
         }
 
         [Test]

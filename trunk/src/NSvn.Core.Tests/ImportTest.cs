@@ -24,7 +24,7 @@ namespace NSvn.Core.Tests
         [TearDown]
         public override void TearDown()
         {
-           // base.TearDown();
+           base.TearDown();
         }
 
 		
