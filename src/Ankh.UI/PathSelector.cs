@@ -6,11 +6,11 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// Summary description for PathSelector.
-	/// </summary>
-	public class PathSelector : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// Summary description for PathSelector.
+    /// </summary>
+    public class PathSelector : System.Windows.Forms.Form
+    {
         /// <summary>
         /// Invoked when the treeview needs more information about a node.
         /// </summary>
@@ -21,17 +21,17 @@ namespace Ankh.UI
         }
 
 
-		public PathSelector()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        public PathSelector()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
-		}
+            //
+            // TODO: Add any constructor code after InitializeComponent call
+            //
+        }
 
         /// <summary>
         /// The text to display in the label area.
@@ -53,8 +53,8 @@ namespace Ankh.UI
         /// </summary>
         public IList Items
         {
-            get{ return this.pathSelectionTreeView.Paths; }
-            set{ this.pathSelectionTreeView.Paths = value; }
+            get{ return this.pathSelectionTreeView.Items; }
+            set{ this.pathSelectionTreeView.Items = value; }
         }
 
         /// <summary>
@@ -89,33 +89,33 @@ namespace Ankh.UI
         }
 
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
         private void RecursiveCheckedChanged(object sender, System.EventArgs e)
         {
             this.pathSelectionTreeView.Recursive = this.recursiveCheckBox.Checked;        
         }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.pathSelectionTreeView = new Ankh.UI.PathSelectionTreeView();
             this.recursiveCheckBox = new System.Windows.Forms.CheckBox();
             this.okButton = new System.Windows.Forms.Button();
@@ -193,7 +193,7 @@ namespace Ankh.UI
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         private Ankh.UI.PathSelectionTreeView pathSelectionTreeView;
         private System.Windows.Forms.CheckBox recursiveCheckBox;
@@ -206,5 +206,5 @@ namespace Ankh.UI
         private System.ComponentModel.Container components = null;
 
        
-	}
+    }
 }
