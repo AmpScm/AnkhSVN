@@ -53,5 +53,15 @@ namespace NSvn.Core.Tests
             string url = Client.UrlFromPath( @"C:\" );
             Assertion.AssertNull( "Url should be null for an unversioned path", url );
         }
+
+        [Test]
+        public void TestUuidFromUrl()
+        {
+            string realUuid = this.RunCommand( "svnlook", "uuid " + this.ReposPath ).Trim();
+
+            string uuid = Client.UuidFromUrl( this.ReposUrl, new ClientContext() );
+            Assertion.AssertEquals( "UUID wrong", realUuid, uuid );
+        }
+
     }
 }
