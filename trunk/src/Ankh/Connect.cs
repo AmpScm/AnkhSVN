@@ -13,7 +13,7 @@ namespace Ankh
 
     using Ankh.Commands;
 
-	#region Read me for Add-in installation and setup information.
+    #region Read me for Add-in installation and setup information.
     // When run, the Add-in wizard prepared the registry for the Add-in.
     // At a later time, if the Add-in becomes unavailable for reasons such as:
     //   1) You moved this project to a computer other than which is was originally created on.
@@ -21,7 +21,7 @@ namespace Ankh
     //   3) Registry corruption.
     // you will need to re-register the Add-in by building the MyAddin21Setup project 
     // by right clicking the project in the Solution Explorer, then choosing install.
-	#endregion
+    #endregion
 	
     /// <summary>
     ///   The object for implementing an Add-in.
@@ -36,9 +36,9 @@ namespace Ankh
         /// </summary>
         public Connect()
         {
-//            File.Delete( "N:\\ankhlog.txt" );
-//            Debug.Listeners.Add( new TextWriterTraceListener( "N:\\ankhlog.txt" ) );
-//            Debug.AutoFlush = true;
+            //            File.Delete( "N:\\ankhlog.txt" );
+            //            Debug.Listeners.Add( new TextWriterTraceListener( "N:\\ankhlog.txt" ) );
+            //            Debug.AutoFlush = true;
         }
 
         /// <summary>
@@ -164,9 +164,24 @@ namespace Ankh
                 if( this.commands != null && 
                     neededText == EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedNone)
                 {
-                    Ankh.ICommand cmd;
-                    if ( (cmd = (ICommand)this.commands[commandName]) != null )
-                        status = cmd.QueryStatus( this.context );
+                    // this the same command as the last QueryStatus call?
+                    if ( commandName == this.lastQueriedCommand && 
+                        (DateTime.Now-this.lastQuery).Milliseconds < CACHESTATUS_INTERVAL )
+                    {
+                        // don't bother looking it up - just use the same
+                        // as last time
+                        status = this.cachedStatus;                        
+                    }
+                    else
+                    {
+                        Ankh.ICommand cmd;
+                        if ( (cmd = (ICommand)this.commands[commandName]) != null )
+                            status = cmd.QueryStatus( this.context );
+                    }
+                    // store these
+                    this.lastQuery = DateTime.Now;
+                    this.lastQueriedCommand = commandName;
+                    this.cachedStatus = status;
                 }
             }
             catch( StatusException )
@@ -234,6 +249,12 @@ namespace Ankh
         
         private AnkhContext context;
         Ankh.CommandMap commands;
+
+        private EnvDTE.vsCommandStatus cachedStatus;
+        private string lastQueriedCommand = "";
+        private DateTime lastQuery = DateTime.Now;
+
+        private const int CACHESTATUS_INTERVAL = 800;
 		
     }
 }
