@@ -21,12 +21,23 @@ namespace Ankh.Solution
             this.solutionFolder = this.Explorer.StatusCache[
                 Path.GetDirectoryName( solution.FullName )];
 
-            this.solutionFolder.Changed += new StatusChanged( this.ChildOrResourceChanged );
+            StatusChanged del  = new StatusChanged( this.ChildOrResourceChanged );
+            this.solutionFile.Changed += del;
+            this.solutionFolder.Changed += del;
 
             explorer.SetSolution( this );
 
             this.FindChildren();
-        }       
+        }   
+    
+        public override void GetResources( System.Collections.ArrayList list, bool getChildItems )
+        {
+            list.Add( this.solutionFolder );
+            list.Add( this.solutionFile );
+            this.GetChildResources(list, getChildItems);
+        }
+
+        
         
 
         /// <summary>

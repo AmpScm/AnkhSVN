@@ -143,8 +143,15 @@ namespace Ankh.Solution
             get{ return this.currentStatus; }
         }
 
-
         /// <summary>
+        /// Derived classes implement this method to append their resources
+        /// to the list.
+        /// </summary>
+        /// <param name="list"></param>
+        public abstract void GetResources( ArrayList list, bool getChildItems );
+        
+
+       /// <summary>
         /// Gets the status of the resources belonging to one specific node, 
         /// not including children.
         /// </summary>
@@ -328,6 +335,16 @@ namespace Ankh.Solution
             }
             return statusMerger.CurrentStatus;
         }
+
+        protected void GetChildResources(System.Collections.ArrayList list, bool getChildItems)
+        {
+            if ( getChildItems )
+            {
+                foreach( TreeNode node in this.Children )
+                    node.GetResources( list, getChildItems );
+            }
+        }
+
 
         /// <summary>
         /// Used for merging several NodeStatuses into a single NodeStatus.

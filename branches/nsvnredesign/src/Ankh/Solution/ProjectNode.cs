@@ -20,6 +20,14 @@ namespace Ankh.Solution
             this.FindChildren();
         }
 
+        public override void GetResources( System.Collections.ArrayList list, bool getChildItems )
+        {
+            list.Add( this.projectFile );
+            list.Add (this.projectFolder );
+            this.GetChildResources( list, getChildItems );
+        }
+
+
         private void FindProjectResources(Explorer explorer)
         {
             // find the directory containing the project

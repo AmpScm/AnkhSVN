@@ -156,6 +156,17 @@ namespace Ankh.Solution
                 this.solutionItem, root, this );
         }
 
+        public void GetSelectionResources( ArrayList list, bool getChildItems )
+        {
+            object o = this.uiHierarchy.SelectedItems;	 	
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )	 	
+            {	 	
+                TreeNode node = this.GetNode( item );	 	
+                if ( node != null )	 	
+                    node.GetResources( list, getChildItems );	 	
+            }
+        }
+
         internal IntPtr TreeView
         {
             [System.Diagnostics.DebuggerStepThrough]

@@ -24,6 +24,13 @@ namespace Ankh.Solution
             this.FindChildren();                        
         }
 
+        public override void GetResources(ArrayList list, bool getChildItems)
+        {
+            list.AddRange( this.resources );
+            this.GetChildResources( list, getChildItems );
+        }
+
+
         /// <summary>
         /// The status of this node, not including children.
         /// </summary>
