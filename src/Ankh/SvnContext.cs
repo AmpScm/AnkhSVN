@@ -21,12 +21,7 @@ namespace Ankh
         public SvnContext( AnkhContext ankhContext )
         {
             this.ankhContext = ankhContext;
-            this.AddAuthenticationProvider( new DialogProvider() );
-
-            OutputWindow outputWindow = (OutputWindow)this.ankhContext.DTE.Windows.Item(
-                EnvDTE.Constants.vsWindowKindOutput).Object;
-
-            this.outputPane = outputWindow.OutputWindowPanes.Add( "Subversion" );
+            this.AddAuthenticationProvider( new DialogProvider() );           
         }
         /// <summary>
         /// Invokes the LogMessage dialog.
@@ -54,11 +49,8 @@ namespace Ankh
 
         protected override void NotifyCallback(NSvn.Core.Notification notification)
         {
-            this.outputPane.Activate();
-
-            this.outputPane.OutputString( string.Format( "File: {0}\tAction: {1}{2}", 
-                notification.Path, notification.Action, Environment.NewLine ) );         
-       
+            this.ankhContext.OutputPane.Write( "File: {0}\tAction: {1}{2}", 
+                notification.Path, notification.Action, Environment.NewLine );
         }
         
         private string GetTemplate()
@@ -127,7 +119,6 @@ namespace Ankh
 
        
         private AnkhContext ankhContext;
-        private OutputWindowPane outputPane;
         private static IDictionary map = new Hashtable();
     }
 }
