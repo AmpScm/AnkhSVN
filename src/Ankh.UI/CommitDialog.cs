@@ -228,11 +228,11 @@ namespace Ankh.UI
             this.commitItemsTree = new Ankh.UI.PathSelectionTreeView();
             this.topSplitter = new System.Windows.Forms.Splitter();
             this.logMessagePanel = new System.Windows.Forms.Panel();
-            this.showDiffButton = new System.Windows.Forms.Button();
-            this.okButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.logMessageBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.logMessageBox = new System.Windows.Forms.TextBox();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.okButton = new System.Windows.Forms.Button();
+            this.showDiffButton = new System.Windows.Forms.Button();
             this.logMessagePanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -297,32 +297,13 @@ namespace Ankh.UI
             this.logMessagePanel.Size = new System.Drawing.Size(816, 199);
             this.logMessagePanel.TabIndex = 4;
             // 
-            // showDiffButton
+            // label1
             // 
-            this.showDiffButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.showDiffButton.Location = new System.Drawing.Point(16, 168);
-            this.showDiffButton.Name = "showDiffButton";
-            this.showDiffButton.TabIndex = 0;
-            this.showDiffButton.Text = "Show diff";
-            this.showDiffButton.Click += new System.EventHandler(this.showDiffButton_Click);
-            // 
-            // okButton
-            // 
-            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(632, 168);
-            this.okButton.Name = "okButton";
-            this.okButton.TabIndex = 1;
-            this.okButton.Text = "OK";
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(728, 168);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.TabIndex = 2;
-            this.cancelButton.Text = "Cancel";
+            this.label1.Location = new System.Drawing.Point(8, 5);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(100, 16);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Log message:";
             // 
             // logMessageBox
             // 
@@ -339,13 +320,32 @@ namespace Ankh.UI
             this.logMessageBox.TabIndex = 3;
             this.logMessageBox.Text = "";
             // 
-            // label1
+            // cancelButton
             // 
-            this.label1.Location = new System.Drawing.Point(8, 5);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 16);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Log message:";
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(728, 168);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.TabIndex = 2;
+            this.cancelButton.Text = "Cancel";
+            // 
+            // okButton
+            // 
+            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.okButton.Location = new System.Drawing.Point(632, 168);
+            this.okButton.Name = "okButton";
+            this.okButton.TabIndex = 1;
+            this.okButton.Text = "OK";
+            // 
+            // showDiffButton
+            // 
+            this.showDiffButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.showDiffButton.Location = new System.Drawing.Point(16, 168);
+            this.showDiffButton.Name = "showDiffButton";
+            this.showDiffButton.TabIndex = 0;
+            this.showDiffButton.Text = "Show diff";
+            this.showDiffButton.Click += new System.EventHandler(this.showDiffButton_Click);
             // 
             // CommitDialog
             // 
@@ -364,6 +364,7 @@ namespace Ankh.UI
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Commit";
+            this.Load += new System.EventHandler(this.CommitDialog_VisibleChanged);
             this.logMessagePanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
