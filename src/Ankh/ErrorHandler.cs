@@ -122,7 +122,7 @@ namespace Ankh
                 dlg.InternalError = internalError;
                 if ( dlg.ShowDialog() == DialogResult.Retry )
                 {
-                    Utils.ErrorMessage.SendByWeb( "http://arild.no-ip.com/error/report.aspx",
+                    Utils.ErrorMessage.SendByWeb( ErrorReportUrl,
                         ex, typeof(Connect).Assembly );
                 }
             }
@@ -146,5 +146,6 @@ namespace Ankh
 
         private static readonly string NL = Environment.NewLine;
         private const int LockedFileErrorCode = 720032;
+        private const string ErrorReportUrl = "http://ankhsvn.com/error/report.aspx";
     }
 }
