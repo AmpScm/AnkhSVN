@@ -83,7 +83,8 @@ namespace Ankh
             get
             { 
                 return this.status.TextStatus != StatusKind.None &&
-                    this.status.TextStatus != StatusKind.Unversioned;
+                    this.status.TextStatus != StatusKind.Unversioned && 
+                    this.status.TextStatus != StatusKind.Ignored;
             }
         }
 

@@ -105,9 +105,10 @@ namespace Ankh
         private static void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError )
         {
             string stackTrace = GetNestedStackTraces( ex );
+            string message = GetNestedMessages( ex );
             using( ErrorDialog dlg = new ErrorDialog() )
             {
-                dlg.ErrorMessage = ex.Message;
+                dlg.ErrorMessage = message;
                 dlg.ShowStackTrace = showStackTrace;
                 dlg.StackTrace = stackTrace;
                 dlg.InternalError = internalError;
@@ -125,6 +126,14 @@ namespace Ankh
                 return String.Empty;
             else
                 return ex.StackTrace + NL + NL + GetNestedStackTraces( ex.InnerException );
+        }
+
+        private static string GetNestedMessages( Exception ex )
+        {
+            if ( ex == null )
+                return String.Empty;
+            else
+                return ex.Message + NL + NL + GetNestedMessages( ex.InnerException );
         }
 
         private static readonly string NL = Environment.NewLine;
