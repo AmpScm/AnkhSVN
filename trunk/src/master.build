@@ -24,7 +24,7 @@
         <property name="svndir" value="${sys.env.SVNSRC}" />
     </ifnot>
 
-    <property name="bdb.lib" value="${svndir}db4-win32\lib\libdb42d.lib"/>
+    <property name="bdb.lib" value="${svndir}\db4-win32\lib\libdb42d.lib"/>
     <property name="bdb.dll" value="libdb42d.dll"/>
     <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
     <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>-->
