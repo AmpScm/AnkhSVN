@@ -98,6 +98,7 @@ namespace
         const char *mime_type, svn_wc_notify_state_t content_state, 
         svn_wc_notify_state_t prop_state, svn_revnum_t revision )
     {
+
         // TODO: isn't it a bit inefficient to create a pool here?
         Pool pool;
         String* nativePath = ToNativePath( path, pool );
@@ -106,7 +107,17 @@ namespace
             mime_type, content_state, prop_state, revision );
         Client* client = 
             *(static_cast<ManagedPointer<Client*>* >(baton) );
-        client->OnNotification( args );
+
+        try
+        {
+            client->OnNotification( args );
+        }
+        catch( Exception* ex )
+        {
+            // Swallow - we cannot let it propagate back into
+            // Subversion code
+            System::Diagnostics::Trace::WriteLine( ex );
+        }
     }
 
     // delegate the log message callback back into managed space
@@ -134,7 +145,17 @@ namespace
         LogMessageEventArgs* args = new LogMessageEventArgs( items );
 
         // get the log message
-        client->OnLogMessage( args );
+        try
+        {
+            client->OnLogMessage( args );
+        }
+        catch( Exception* ex )
+        {
+            // Swallow - we can't let it propagate back into Subversion code
+            System::Diagnostics::Trace::WriteLine( ex );
+            return svn_error_create( SVN_ERR_CL_BAD_LOG_MESSAGE, NULL, 
+                "Exception thrown by managed event handler" );
+        }
         const char* logMessage = StringHelper( args->Message ).CopyToPool(pool);
 
         // a null indicates a canceled commit
@@ -164,7 +185,19 @@ namespace
         Client* client = *(static_cast<ManagedPointer<Client*>*>(
             baton) );
         CancelEventArgs* args = new CancelEventArgs();
-        client->OnCancel( args );
+
+        try
+        {
+            client->OnCancel( args );
+        }
+        catch( Exception* ex )
+        {
+            // Swallow - we cannot let it propagate back into Subversion
+            System::Diagnostics::Trace::WriteLine( ex );
+            // TODO: return some other error?
+            return svn_error_create( SVN_ERR_BASE, NULL, 
+                "Exception thrown by managed event handler" );;
+        }
 
         if ( args->Cancel ) 
             return svn_error_create( SVN_ERR_CANCELLED, NULL, "caught SIGINT" );
