@@ -1,22 +1,25 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.0.9466"
-        SchemaVersion = "1.0"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
         ProjectGuid = "{CEE703F9-32DF-49B9-B7E9-6FE1082417F3}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Rogue.SvnTasks"
+                AssemblyName = "SvnTasks"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = ""
                 RootNamespace = "Rogue.SvnTasks"
+                RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
                 <Config
@@ -30,6 +33,8 @@
                     DebugSymbols = "true"
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
+                    NoStdLib = "false"
+                    NoWarn = ""
                     Optimize = "false"
                     OutputPath = "bin\Debug\"
                     RegisterForComInterop = "false"
@@ -48,6 +53,8 @@
                     DebugSymbols = "false"
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
                     Optimize = "true"
                     OutputPath = "bin\Release\"
                     RegisterForComInterop = "false"
@@ -78,24 +85,19 @@
                     HintPath = "I:\bin\NAnt.Core.dll"
                 />
                 <Reference
-                    Name = "Utils"
-                    AssemblyName = "Utils"
-                    HintPath = "I:\bin\Utils.dll"
-                />
-                <Reference
-                    Name = "NSvn.Common"
-                    AssemblyName = "NSvn.Common"
-                    HintPath = "I:\bin\NSvn.Common.dll"
+                    Name = "NSvn"
+                    AssemblyName = "NSvn"
+                    HintPath = "..\..\src\NSvn\bin\Debug\NSvn.dll"
                 />
                 <Reference
                     Name = "NSvn.Core"
                     AssemblyName = "NSvn.Core"
-                    HintPath = "I:\bin\NSvn.Core.dll"
+                    HintPath = "..\..\src\NSvn\bin\Debug\NSvn.Core.dll"
                 />
                 <Reference
-                    Name = "NSvn"
-                    AssemblyName = "NSvn"
-                    HintPath = "I:\bin\NSvn.dll"
+                    Name = "NSvn.Common"
+                    AssemblyName = "NSvn.Common"
+                    HintPath = "..\..\..\..\..\Program Files\Tigris\AnkhSVN Addin\NSvn.Common.dll"
                 />
             </References>
         </Build>
@@ -107,7 +109,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SvnBaseTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SvnCheckoutTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SvnCommitTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SvnExportTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SvnRevisionTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SvnUpdateTask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

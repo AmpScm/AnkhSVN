@@ -8,11 +8,12 @@ using NSvn.Core;
 namespace SvnTasks
 {
 	/// <summary>
-	/// A Nant task to check out from a SVN repository.
+	/// A Nant task to update from a SVN repository.
 	/// </summary>
-	[TaskName( "svncheckout" )]
-	public class SvnCheckoutTask : SvnBaseTask
+	[TaskName( "svnupdate" )]
+	public class SvnUpdateTask : SvnBaseTask
 	{
+      
 		protected bool m_recursive  = false;
 
 		[TaskAttribute("recursive", Required=false)]
@@ -27,14 +28,12 @@ namespace SvnTasks
 				m_recursive = value;
 			}
 		}
-
 		/// <summary>
 		/// The funky stuff happens here.
 		/// </summary>
 		protected override void ExecuteTask()
 		{
-			Log(Level.Info, "{0} {1} {2}",this.LogPrefix, this.Name, this.LocalDir);
-			
+			this.Log(Level.Info, "{0} {1}",this.LogPrefix, this.LocalDir);
 			try
 			{
 				Revision revision = NSvn.Core.Revision.Head;
@@ -51,8 +50,8 @@ namespace SvnTasks
 						AuthenticationProvider.GetSimplePromptProvider(
 						new SimplePromptDelegate(this.SimplePrompt),1));
 				}
-				Client.Checkout(this.Url, this.LocalDir, revision, this.Recursive, clientContext);
-	
+				Client.Update(this.LocalDir, revision, true, clientContext);
+
 			}
 			catch( AuthorizationFailedException )
 			{
@@ -66,10 +65,6 @@ namespace SvnTasks
 			{
 				throw new BuildException( "Unexpected error: " + ex.Message );
 			}
-		}
-
-	
-
-      
+		}      
 	}
 }

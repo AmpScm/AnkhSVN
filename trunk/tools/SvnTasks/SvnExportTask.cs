@@ -8,33 +8,32 @@ using NSvn.Core;
 namespace SvnTasks
 {
 	/// <summary>
-	/// A Nant task to check out from a SVN repository.
+	/// A Nant task to export from a SVN repository.
 	/// </summary>
-	[TaskName( "svncheckout" )]
-	public class SvnCheckoutTask : SvnBaseTask
+	[TaskName( "svnexport" )]
+	public class SvnExportTask : SvnBaseTask
 	{
-		protected bool m_recursive  = false;
-
-		[TaskAttribute("recursive", Required=false)]
-		public bool Recursive
+		private bool m_force = false;
+		
+		[TaskAttribute("force", Required=false)]
+		public bool Force
 		{
 			get
 			{
-				return m_recursive;
+				return m_force;
 			}
 			set
 			{
-				m_recursive = value;
+				m_force = value;
 			}
 		}
-
+      
 		/// <summary>
 		/// The funky stuff happens here.
 		/// </summary>
 		protected override void ExecuteTask()
 		{
-			Log(Level.Info, "{0} {1} {2}",this.LogPrefix, this.Name, this.LocalDir);
-			
+			Log(Level.Info, "{0} {1} to {2}",this.Name, this.Url, this.LocalDir);
 			try
 			{
 				Revision revision = NSvn.Core.Revision.Head;
@@ -51,25 +50,40 @@ namespace SvnTasks
 						AuthenticationProvider.GetSimplePromptProvider(
 						new SimplePromptDelegate(this.SimplePrompt),1));
 				}
-				Client.Checkout(this.Url, this.LocalDir, revision, this.Recursive, clientContext);
-	
+				
+				Client.Export(this.Url, this.LocalDir, revision, this.Force, clientContext );
+
 			}
 			catch( AuthorizationFailedException )
 			{
 				throw new BuildException( "Unable to authorize against the repository." );
 			}
-			catch( SvnException ex )
+			catch( WorkingCopyLockedException )
 			{
-				throw new BuildException( "Unable to check out: " + ex.Message );
+				throw new BuildException( "The working copy is Locked." );
+			}
+			catch( NotVersionControlledException )
+			{
+				throw new BuildException( "The directory specified is not under version control." );
+			}
+			catch( ResourceOutOfDateException )
+			{
+				throw new BuildException( "The resource is of of date." );
+			}
+			catch( IllegalTargetException )
+			{
+				throw new BuildException( "Illegal target." );
+			}
+			catch( SvnException ex )
+			{	
+				throw new BuildException( "Unable to export. Does the local directory already exsist? Use force option to overwrite.\n" + ex );
 			}
 			catch( Exception ex )
 			{
-				throw new BuildException( "Unexpected error: " + ex.Message );
+				throw new BuildException( "Unexpected error: " + ex );
 			}
 		}
 
-	
-
-      
+		
 	}
 }
