@@ -23,7 +23,7 @@ namespace Ankh.Tests
             TestUtils.ToggleAnkh( false, "7.1" );
 
             this.uiShell = new MyUIShellImpl();
-            this.ctx = new ContextBase( );
+            this.ctx = new MyContext( );
             this.uiShell.Context = this.ctx;
             this.explorer = new ContextBase.ExplorerImpl( this.ctx );            
             this.ctx.UIShell = this.uiShell;
@@ -115,6 +115,39 @@ namespace Ankh.Tests
             Assert.AreEqual( "42", this.message.Message );
         }
 
+        /// <summary>
+        /// Commits items from two different repositories
+        /// </summary>
+        [Test]
+        public void CommitMultipleRepositories()
+        {
+            // we need a second repos
+            string repos2Path = Path.Combine( @"\tmp", "repos2" );
+            string repos2Url = ExtractRepos( "Ankh.Tests.repos2.zip", repos2Path, this.GetType() );
+            string wc2Path = this.FindDirName( Path.Combine(@"\tmp", "wc2") );
+            this.RunCommand( "svn", String.Format( "co {0} {1}", repos2Url, wc2Path ) );
+            string path1 = Path.Combine( wc2Path, "AssemblyInfo.cs" );
+            this.Modify( path1 );
+            SvnItem item1 = this.ctx.StatusCache[path1];
+            
+            string path2 = Path.Combine( this.WcPath, "Class1.cs" );
+            this.Modify( path2 );
+            SvnItem item2 = this.ctx.StatusCache[path2];
+
+            Assert.AreEqual( item1.Status.TextStatus, StatusKind.Modified );
+            Assert.AreEqual( item2.Status.TextStatus, StatusKind.Modified );
+
+            this.uiShell.CommitItems = new SvnItem[]{ item1, item2 };
+            this.cmd.Execute( this.ctx, "" );
+
+            Assert.AreEqual( item1.Status.TextStatus, StatusKind.Normal );
+            Assert.AreEqual( item2.Status.TextStatus, StatusKind.Normal );
+
+            Assert.IsTrue( this.ctx.Description.IndexOf( item1.Status.Entry.Uuid ) >= 0 );
+            Assert.IsTrue( this.ctx.Description.IndexOf( item2.Status.Entry.Uuid ) >= 0 );
+            
+        }
+
         private void Modify( string path )
         {
             using( StreamWriter w = new StreamWriter( path ) )
@@ -146,6 +179,17 @@ namespace Ankh.Tests
             } 
         }
 
+        private class MyContext : ContextBase
+        {
+            public override void StartOperation(string description)
+            {
+                this.Description += description;
+            }
+
+            public string Description = "";
+
+        }
+
         private class MyUIShellImpl : ContextBase.UIShellImpl
         {
             public override CommitContext ShowCommitDialogModal(CommitContext ctx)
@@ -165,7 +209,7 @@ namespace Ankh.Tests
             public IList CommitItems = new object[]{};
         }        
 
-        private ContextBase ctx;
+        private MyContext ctx;
         private ContextBase.ExplorerImpl explorer;
         private MyUIShellImpl uiShell;
         private CommitItemCommand cmd;

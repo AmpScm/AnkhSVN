@@ -183,6 +183,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "repos2.zip"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "SolutionExplorerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
