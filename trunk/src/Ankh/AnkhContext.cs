@@ -203,7 +203,7 @@ namespace Ankh
                 this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
 
                 timer.End( "Solution opened", "Ankh" );
-                MessageBox.Show( timer.ToString() );
+                //MessageBox.Show( timer.ToString() );
             }
             catch( Exception ex )
             {
