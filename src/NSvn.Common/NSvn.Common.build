@@ -45,7 +45,7 @@
     </target>
     
     <target name="build-WiX">
-        <exec workingdir="${src.dir}" program="candle.exe"
+        <exec workingdir="${src.dir}" program="${wix-binary.dir}\candle.exe"
             commandline="-nologo -w0 -dbuilddir=${build.dir} NSvn.Common.wxs -out ${installsource.dir}\NSvn.Common.wixobj" />
     </target>
     

@@ -58,7 +58,7 @@
     
     <target name="build-WiX">
         <property name="build.dir" value="${path::get-full-path(build.dir)}" />
-        <exec workingdir="${src.dir}" program="candle.exe"
+        <exec workingdir="${src.dir}" program="${wix-binary.dir}\candle.exe"
             commandline="-nologo -dbuilddir=${build.dir} -w0 ReposInstaller.wxs -out ${installsource.dir}\ReposInstaller.wixobj" />
     </target>
     

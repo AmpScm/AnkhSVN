@@ -119,7 +119,7 @@
     </target>
     
     <target name="build-WiX" depends="build">
-        <exec workingdir="${src.dir}" program="candle.exe"
+        <exec workingdir="${src.dir}" program="${wix-binary.dir}\candle.exe"
             commandline="-nologo -w0 -dbuilddir=${build.dir} -dsvndir=${svndir} NSvn.Core.wxs -out ${installsource.dir}\NSvn.Core.wixobj" />
     </target>
     

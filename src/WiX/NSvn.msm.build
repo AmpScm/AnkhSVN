@@ -23,17 +23,17 @@
     </target>
     
     <target name="precompile" depends="copy">
-        <exec workingdir="${installsource.dir}" program="lit.exe"
+        <exec workingdir="${installsource.dir}" program="${wix-binary.dir}\lit.exe"
             commandline="-nologo -out NSvn.wixlib NSvn.Core.wixobj NSvn.Common.wixobj"/>
     </target>
     
     <target name="compile" depends="precompile">
-        <exec workingdir="${src.dir}" program="candle.exe"
+        <exec workingdir="${src.dir}" program="${wix-binary.dir}\candle.exe"
             commandline="-nologo NSvn.msm.wxs -dsvn.dir=${path::get-full-path(svndir)} -out ${installsource.dir}\NSvn.wixobj" />
     </target>
     
     <target name="link" depends="precompile, compile">
-        <exec workingdir="${installsource.dir}" program="light.exe"
+        <exec workingdir="${installsource.dir}" program="${wix-binary.dir}\light.exe"
             commandline="-nologo -out NSvn.msm NSvn.wixobj NSvn.wixlib" />
     </target>
     

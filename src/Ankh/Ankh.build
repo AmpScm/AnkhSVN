@@ -92,7 +92,7 @@
     
     <target name="build-WiX" depends="version">
         <property name="build.dir" value="${path::get-full-path(build.dir)}" />
-        <exec workingdir="${src.dir}" program="candle.exe"
+        <exec workingdir="${src.dir}" program="${wix-binary.dir}\candle.exe"
             commandline="-nologo -dbuilddir=${build.dir} -dankhversion=${ankh.version} -w0 Ankh.wxs -out ${installsource.dir}\Ankh.wixobj" />
     </target>
     
