@@ -67,7 +67,7 @@ namespace NSvn.Common
                 dir = Path.GetDirectoryName( path );
             else 
                 dir = path;
-            return Directory.Exists( Path.Combine( path, WC_ADMIN_AREA ) );
+            return Directory.Exists( Path.Combine( dir, WC_ADMIN_AREA ) );
                 
         }
 
