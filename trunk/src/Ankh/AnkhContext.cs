@@ -177,7 +177,6 @@ namespace Ankh
         {            
             Ankh.Config.ConfigLoader.SaveConfig( this.config, AnkhContext.CONFIGDIR, 
                 AnkhContext.CONFIGFILE );
-            this.SolutionClosing();
         }
 
 
