@@ -2,6 +2,7 @@
 using System;
 using EnvDTE;
 using System.Reflection;
+using System.Threading;
 
 namespace Ankh.EventSinks
 {
@@ -24,6 +25,8 @@ namespace Ankh.EventSinks
                 true );
             this.vcFileType = asm.GetType(
                 "Microsoft.VisualStudio.VCProjectEngine.VCFile", true );
+            this.vcProjectType = asm.GetType(
+                "Microsoft.VisualStudio.VCProjectEngine.VCProject", true );
 
             // the ItemAdded event handler
             Type itemAddedType = asm.GetType( "Microsoft.VisualStudio.VCProjectEngine._dispVCProjectEngineEvents_ItemAddedEventHandler", false );
@@ -84,7 +87,7 @@ namespace Ankh.EventSinks
                     }
                 }
 
-                this.Context.SolutionExplorer.RefreshSelectionParents();
+                this.VCDelayedRefresh( item );
             }
             catch( Exception ex )
             {
@@ -97,12 +100,57 @@ namespace Ankh.EventSinks
             // this a project being removed?
             if ( parent != null )
                 this.Context.SolutionExplorer.RefreshSelectionParents();
+
+            this.VCDelayedRefresh( item );
+        }
+
+        /// <summary>
+        /// Saves the containing project of item after an interval.
+        /// </summary>
+        /// <param name="item"></param>
+        private void VCDelayedRefresh( object item )
+        {
+            object vcproj = this.vcFileType.GetProperty("project").GetValue(
+                item, new object[]{} );
+
+            System.Threading.Timer timer = new System.Threading.Timer(
+                new TimerCallback( this.RefreshCallback ), vcproj, REFRESHDELAY, 
+                Timeout.Infinite );
+        }
+
+        private void RefreshCallback( object vcproj )
+        {
+            this.vcProjectType.InvokeMember( "Save", 
+                BindingFlags.InvokeMethod | BindingFlags.IgnoreCase, null, 
+                vcproj, new object[]{} );
+            
+            this.Context.SolutionExplorer.Refresh( 
+                this.GetProjectForVCProject( vcproj ) );
+        }
+
+        /// <summary>
+        /// Gets the Project instance corresponding to a VCProject
+        /// </summary>
+        /// <param name="vcproj"></param>
+        /// <returns></returns>
+        private Project GetProjectForVCProject( object vcproj )
+        {
+            string name = (string)this.vcProjectType.GetProperty("ProjectFile").GetValue(
+                vcproj, new object[]{} );
+
+            foreach( Project p in this.Context.DTE.Solution.Projects )
+            {
+                if ( String.Compare( p.FileName, name, true ) == 0 )
+                    return p;
+            }
+            throw new ApplicationException( "Could not find Project object for " + name );
         }
 
         private readonly Delegate itemAddedDelegate;
         private readonly Delegate itemRemovedDelegate;
         private readonly Type vcProjectEventsType;
         private readonly Type vcFileType;
+        private readonly Type vcProjectType;
         private readonly object events;
     }
 }

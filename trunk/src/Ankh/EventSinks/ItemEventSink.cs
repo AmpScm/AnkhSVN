@@ -18,8 +18,6 @@ namespace Ankh.EventSinks
         {
             // empty
         }
-     
- 
 
         protected void ItemAdded( ProjectItem item )
         {
@@ -37,7 +35,7 @@ namespace Ankh.EventSinks
                     }
                 }
 
-                this.Context.SolutionExplorer.Refresh( item.ContainingProject );
+                this.DelayedRefresh( item.ContainingProject );
             }
             catch( Exception ex )
             {
@@ -65,9 +63,7 @@ namespace Ankh.EventSinks
                 string[] paths = SvnItem.GetPaths( items );
                 this.Context.Client.Delete( paths, true );
                 
-                foreach( SvnItem svnItem in items )
-                    svnItem.Refresh( this.Context.Client );
-
+                this.DelayedRefresh( item.ContainingProject );
             }
             catch ( Exception ex )
             {
@@ -117,7 +113,7 @@ namespace Ankh.EventSinks
                 {
                     // we must still ensure that the project is rescanned, since 
                     // it will lose it's status icon otherwise
-                    this.Context.SolutionExplorer.RefreshSelectionParents();
+                    this.DelayedRefresh( item.ContainingProject );
                 }
             }
             catch( Exception ex )
