@@ -45,40 +45,47 @@ namespace Ankh.Commands
         
             public override void VisitWorkingCopyFile(WorkingCopyFile file)
             {
-                int oldRev, newRev;
-                this.GetRevisions( file, out oldRev, out newRev );
-
-                ConflictDialog.Choice selection;
-
-                using( ConflictDialog dialog = new ConflictDialog() )
+                try
                 {
-                    dialog.OldRev = oldRev;
-                    dialog.NewRev = newRev;
-                    dialog.Filename = file.Path;
+                    int oldRev, newRev;
+                    this.GetRevisions( file, out oldRev, out newRev );
 
-                    if ( dialog.ShowDialog() != DialogResult.OK )
-                        return;
+                    ConflictDialog.Choice selection;
+
+                    using( ConflictDialog dialog = new ConflictDialog() )
+                    {
+                        dialog.OldRev = oldRev;
+                        dialog.NewRev = newRev;
+                        dialog.Filename = file.Path;
+
+                        if ( dialog.ShowDialog() != DialogResult.OK )
+                            return;
                     
-                    selection = dialog.Selection;
-                }       
+                        selection = dialog.Selection;
+                    }       
 
-                // should we copy one of the files over the original?
-                switch( selection )
-                {
-                    case ConflictDialog.Choice.OldRev:
-                        this.Copy( file.Path, file.Status.Entry.ConflictOld );
-                        break;
-                    case ConflictDialog.Choice.NewRev:
-                        this.Copy( file.Path, file.Status.Entry.ConflictNew  );
-                        break;
-                    case ConflictDialog.Choice.Mine:
-                        this.Copy( file.Path, file.Status.Entry.ConflictWorking );
-                        break;
-                    default:
-                        break;
+                    // should we copy one of the files over the original?
+                    switch( selection )
+                    {
+                        case ConflictDialog.Choice.OldRev:
+                            this.Copy( file.Path, file.Status.Entry.ConflictOld );
+                            break;
+                        case ConflictDialog.Choice.NewRev:
+                            this.Copy( file.Path, file.Status.Entry.ConflictNew  );
+                            break;
+                        case ConflictDialog.Choice.Mine:
+                            this.Copy( file.Path, file.Status.Entry.ConflictWorking );
+                            break;
+                        default:
+                            break;
+                    }
+
+                    file.Resolve();
                 }
-
-                file.Resolve();
+                catch( StatusException )
+                {
+                    // swallow
+                }
             }
 
             private void GetRevisions( WorkingCopyFile file, out int oldRev, out int newRev )

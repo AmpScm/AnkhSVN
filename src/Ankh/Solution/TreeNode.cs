@@ -114,7 +114,16 @@ namespace Ankh.Solution
             }
 
             // text or property changes on the project file itself?
-            this.currentStatus = this.GetStatus();
+            try
+            {
+                this.currentStatus = this.GetStatus();
+            }
+            catch( StatusException stex )
+            {
+                Debug.WriteLine( stex.Message );
+                this.currentStatus = StatusKind.Deleted;
+            }
+
             this.SetStatusImage( this.currentStatus );
 
             // propagate to the parent nodes.

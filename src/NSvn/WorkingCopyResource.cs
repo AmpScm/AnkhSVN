@@ -175,13 +175,20 @@ namespace NSvn
         {
             get
             {
-                this.CheckForModifications();
-                if ( this.status == null )
+                try
                 {
-                    Trace.WriteLine( "Refreshing status for " + this.path, "NSvn" );
-                    this.status = Client.SingleStatus( this.Path );
+                    this.CheckForModifications();
+                    if ( this.status == null )
+                    {
+                        Trace.WriteLine( "Refreshing status for " + this.path, "NSvn" );
+                        this.status = Client.SingleStatus( this.Path );
+                    }
+                    return this.status;
                 }
-                return this.status;
+                catch( IOException ioex )
+                {
+                    throw new StatusException( "Could not retrieve status for " + this.Path, ioex );
+                }
             }
         }
 
