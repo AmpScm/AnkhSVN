@@ -5,4 +5,5 @@
 
 #include "stdafx.h"
 #include "SimpleCredential.h"
+#include "UsernameCredential.h"
 

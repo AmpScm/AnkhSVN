@@ -97,11 +97,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Credential.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "IAuthenticationProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -121,13 +116,13 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "InvalidProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "NSvn.Common.build"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "SimpleProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "SvnException.cs"

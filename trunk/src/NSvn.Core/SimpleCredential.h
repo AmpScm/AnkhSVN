@@ -19,13 +19,13 @@ namespace NSvn
 
             __property String* get_Kind()
             {
-                return StringHelper( SVN_AUTH_CRED_USERNAME ); 
+                return StringHelper( SVN_AUTH_CRED_SIMPLE ); 
             }
 
             /// <summary>Convert to an svn_auth_cred_simple_t*</summary>
-            void* GetCredential( void* p )
+            IntPtr GetCredential( IntPtr p )
             {
-                apr_pool_t* pool = static_cast<apr_pool_t*>(p);
+                apr_pool_t* pool = static_cast<apr_pool_t*>(p.ToPointer());
                 svn_auth_cred_simple_t* cred = static_cast<svn_auth_cred_simple_t*>( 
                     apr_palloc( pool, sizeof(*cred) ) );
                 cred->username = apr_pstrdup( pool, StringHelper( username ) );
