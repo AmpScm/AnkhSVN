@@ -3,10 +3,10 @@
         <DirectoryRef Id="TARGETDIR">
             <Component Id="C_Utils.dll" DiskId="1" Guid="CB47CC24-915F-45ea-90F8-A2B1CEF64056">
                 <File Id="Utils_file0" Name="UTILS.DLL" LongName="Utils.dll" 
-                    Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes" 
+                    Checksum="yes" Vital="yes" KeyPath="yes" 
                     src="$(var.builddir)\Utils.dll" />
                 <File Id="Utils_file1" Name="UTILS.PDB"
-                    Checksum="yes" Compressed="yes" Vital="yes"
+                    Checksum="yes" Vital="yes"
                     src="$(var.builddir)\Utils.pdb" />
             </Component>
         </DirectoryRef>
