@@ -22,6 +22,11 @@ namespace NSvn
                     [Test]
                     void TestAllocateObject();
 
+                    [Test]
+                    void TestAlloc();
+
+                    [Test]
+                    void TestPCalloc();
                 };
             }
         }
