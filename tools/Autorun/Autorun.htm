@@ -1,21 +1,84 @@
 <HTML>
-<BODY ID=CAutorunDlg BGCOLOR=LIGHTGREY>
-
-<TABLE WIDTH=100%>
-<TR>
-<TD ALIGN=RIGHT>
-<BUTTON STYLE="WIDTH:100" ID="ButtonOK">OK</BUTTON><BR>
-<BUTTON STYLE="WIDTH:100" ID="ButtonCancel">Cancel</BUTTON>
-
-<span id="processDocumentation.doc">WOrd doc</span>
-</TD>
-</TR>
-<TR WIDTH=100% HEIGHT=75>
-<TD ALIGN=CENTER VALIGN=BOTTOM>
-TODO: Place controls here.
-</TD>
-</TR>
-</TABLE>
-
-</BODY>
+    <style type="text/css">
+    
+    a.link
+    {
+        font-size: 9pt;
+        color: Black;
+        font-family: Arial;
+        position: static;
+    }
+    a.link:hover
+    {
+        color: #FFFFFF;
+    }
+    h1
+    {
+	    font-family: Verdana;
+	    font-size: 12pt;
+    }
+    body
+    {
+	    font-size: 9pt;
+        font-family: Arial;
+    }
+    
+ </style>
+    <BODY ID="CAutorunDlg" BGCOLOR="lightgrey" background="file:bg.png">
+        <br>
+        <br>
+        <br>
+        <hr>
+        <table cellpadding="0" cellspacing="0" border="0" ID="Table1">
+            <tr>
+                <td width="160" height="32" background="file:button.png" align="center" valign="middle">
+                    <a class="link" href="" style="text-decoration:none" id="processDocumentation.doc">Process 
+                        documentation</a>
+                </td>
+            </tr>
+            <tr>
+                <td width="160" height="32" background="file:button.png" align="center" valign="middle">
+                    <a class="link" href="" id="productDocumentation.doc" style="text-decoration:none">
+                    Procduct documentation</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="160" height="32" background="file:button.png" align="center" valign="middle">
+                    <a class="link" href="" id="testDocumentation.doc" style="text-decoration:none">Test 
+                        Documentation</a>
+                </td>
+            </tr>
+            <tr>
+                <td width="160" height="32" background="file:button.png" align="center" valign="middle">
+                    <a class="link" href="/Help.doc/index.html" target="_blank" style="text-decoration:none">
+                        Help documentation</a>
+                </td>
+            </tr>
+            <tr>
+                <td width="160" height="32" background="file:button.png" align="center" valign="middle">
+                    <a class="link" href="/src/index.html" target="_blank" style="text-decoration:none">
+                        Source code</a>
+                </td>
+            </tr>
+            <tr>
+                <td width="160" height="32" background="file:button.png" align="center" valign="middle">
+                    <a class="link" id="AnkhSetup.msi" href="" style="text-decoration:none">Ankh 
+                        installer</a>
+                </td>
+            </tr>
+            <tr>
+                <td width="160" height="32" background="file:button.png" align="center" valign="middle">
+                    <a class="link" id="Log files" href="doc/log.html" target="_blank" style="text-decoration:none">
+                        SVN log</a>
+                </td>
+            </tr>
+        </table>
+        <TABLE WIDTH="100%">
+            <TR>
+                <TD ALIGN="left"><BR>
+                    <BUTTON STYLE="WIDTH:100px" ID="ButtonOK" type="button">Exit</BUTTON>
+                </TD>
+            </TR>
+        </TABLE>
+    </BODY>
 </HTML>
