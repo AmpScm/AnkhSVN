@@ -498,6 +498,22 @@ void NSvn::Core::Client::Log( String* targets[], Revision* start, Revision* end,
         context->ToSvnContext(pool), pool ) ); 
 }
 
+// implementation of Client::UrlFromPath
+String* NSvn::Core::Client::UrlFromPath( String* path )
+{
+    Pool pool;
+
+    const char* realPath = CanonicalizePath( path, pool );
+
+    const char * url;
+
+    HandleError( svn_client_url_from_path( &url, realPath, pool ) );
+
+    if ( url ) 
+        return (String*)StringHelper( url );
+    else
+        return 0;
+}
 
 
 struct apr_hash_index_t

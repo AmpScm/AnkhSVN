@@ -425,6 +425,11 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
             static void Cat(Stream* out, String*path, Revision* revision, ClientContext* context);
+
+
+            /// <summary>Retrieves an URL from a working copy path</summary>
+            /// <param name="path">The working copy path.</param>
+            static String* UrlFromPath( String* path );
         private:
             // ctor made private to avoid instantiation of this class
             Client(){;}
