@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Collections;
 using Ankh.RepositoryExplorer;
 using Ankh.UI;
+using Utils;
 
 namespace Ankh.Commands
 {
@@ -43,7 +44,7 @@ namespace Ankh.Commands
             public bool MakeDir(IRepositoryTreeNode parent, string dirname)
             {
                 // first show the log message dialog
-                this.url = Node.UriCombine( ((INode)parent).Url, dirname );
+                this.url = UriUtils.Combine( ((INode)parent).Url, dirname );
                 IList list = this.Context.Client.ShowLogMessageDialog( 
                     new string[]{this.url}, true );
                 if ( list == null || list.Count == 0 )

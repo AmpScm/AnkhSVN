@@ -3,7 +3,7 @@ using Ankh.UI;
 using NSvn.Core;
 using System.IO;
 using System.ComponentModel;
-
+using Utils;
 using System.Collections;
 
 namespace Ankh.RepositoryExplorer
@@ -69,7 +69,7 @@ namespace Ankh.RepositoryExplorer
         [Category("Subversion")]
         public string Url
         {
-            get{ return UriCombine( this.Parent.Url, this.entry.Path );}
+            get{ return UriUtils.Combine( this.Parent.Url, this.entry.Path );}
         }
 
         [Category("Subversion")]
@@ -114,25 +114,7 @@ namespace Ankh.RepositoryExplorer
             get{ return this.Parent.Revision; }
         }
 
-        /// <summary>
-        /// Concatenates two URI segments, placing a / in between as appropriate.
-        /// </summary>
-        /// <param name="uri1"></param>
-        /// <param name="uri2"></param>
-        /// <returns></returns>
-        public static string UriCombine( string uri1, string uri2 )
-        {
-            
-            bool uri1HasSlash = uri1.EndsWith("/");
-            bool uri2HasSlash = uri2.StartsWith( "/" );
-
-            if ( uri1HasSlash && uri2HasSlash )
-                return uri1.Substring(0, uri1.Length-1) + uri2;
-            else if ( uri1HasSlash ^ uri2HasSlash )
-                return uri1 + uri2;
-            else
-                return uri1 + "/" + uri2;
-        }
+        
 
         private object tag;
         private DirectoryEntry entry;
