@@ -103,8 +103,7 @@
                 <Reference
                     Name = "stdole"
                     AssemblyName = "stdole"
-                    HintPath = "D:\Program Files\Microsoft.NET\Primary Interop Assemblies\stdole.dll"
-                    AssemblyFolderKey = "hklm\primary interop assemblies"
+                    HintPath = "..\lib\stdole.dll"
                 />
             </References>
         </Build>
