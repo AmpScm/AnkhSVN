@@ -1,12 +1,14 @@
 using System;
 using EnvDTE;
+using Ankh.UI;
 
 namespace Ankh.Commands
 {
 	/// <summary>
 	/// Command that refreshes the tree view
 	/// </summary>
-    [VSNetCommand("Refresh", Text = "Refresh", Tooltip = "Refresh this view."),
+    [VSNetCommand("Refresh", Text = "Refresh", Tooltip = "Refresh this view.", 
+         Bitmap = ResourceBitmaps.Refresh),
     VSNetControl( "Solution.Ankh", Position = 1 ),
     VSNetControl( "Project.Ankh", Position = 1) ]
 	internal class RefreshCommand : CommandBase

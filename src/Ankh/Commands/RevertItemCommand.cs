@@ -12,7 +12,8 @@ namespace Ankh.Commands
 	/// Summary description for RevertItem.
 	/// </summary>
 
-    [VSNetCommand("RevertItem", Text = "Revert", Tooltip = "Reverts selected item"),
+    [VSNetCommand("RevertItem", Text = "Revert", Tooltip = "Reverts selected item",
+         Bitmap = ResourceBitmaps.Revert),
     VSNetControl( "Item.Ankh", Position = 1 ),
     VSNetControl( "Project.Ankh", Position = 1 ),
     VSNetControl( "Folder.Ankh", Position = 1 ),
