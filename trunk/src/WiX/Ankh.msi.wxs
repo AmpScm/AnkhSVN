@@ -112,7 +112,7 @@
             <MigrateFeatureStates Sequence="1200"/>
             <InstallValidate Sequence="1400"/>
             <InstallInitialize Sequence="1500"/>            
-            <RemoveExistingProducts Sequence="1525">NEWERPRODUCTFOUND</RemoveExistingProducts>
+            <RemoveExistingProducts Sequence="1525">NEWERVERSIONFOUND</RemoveExistingProducts>
             <AllocateRegistrySpace Sequence="1550">NOT Installed</AllocateRegistrySpace>
             <ProcessComponents Sequence="1600"/>
             <UnpublishComponents Sequence="1700"/>
