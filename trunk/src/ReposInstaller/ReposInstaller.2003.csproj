@@ -15,7 +15,7 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Library"
+                OutputType = "Exe"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
                 RootNamespace = "ReposInstaller"
@@ -104,6 +104,11 @@
                     AssemblyName = "System.Web"
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Web.dll"
                 />
+                <Reference
+                    Name = "envdte"
+                    AssemblyName = "envdte"
+                    HintPath = "D:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\envdte.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -126,6 +131,11 @@
                     RelPath = "ReposInstaller.resx"
                     DependentUpon = "ReposInstaller.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Test.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
             </Include>
         </Files>
