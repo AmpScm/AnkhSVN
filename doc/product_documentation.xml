@@ -57,6 +57,8 @@
             coded in C#. The .NET wrapper is called NSvn.
 			</p>
 		</section>
+		<img src="img/layers.png" align="center" hspace="30" vspace="10"/>
+   
 	
 		<section header="Namespaces"> 
 			<p>The code contains more than
