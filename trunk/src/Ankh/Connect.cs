@@ -210,7 +210,15 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                System.Windows.Forms.MessageBox.Show( ex.Message + 
+                string msg = ex.Message;
+                Exception innerEx = ex.InnerException;
+                while ( innerEx != null )
+                {
+                    msg += innerEx.Message;
+                    innerEx = innerEx.InnerException;
+                }
+                   
+                System.Windows.Forms.MessageBox.Show( msg + 
                     Environment.NewLine + ex.StackTrace );
             }
 		}
