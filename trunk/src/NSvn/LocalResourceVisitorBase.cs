@@ -9,30 +9,30 @@ namespace NSvn
 	public class LocalResourceVisitorBase : ILocalResourceVisitor
 	{	
         #region Implementation of ILocalResourceVisitor
-        public void VisitUnversionedDirectory(NSvn.UnversionedDirectory dir)
+        public virtual void VisitUnversionedDirectory(NSvn.UnversionedDirectory dir)
         {
             this.VisitUnversionedResource( dir );
         }
-        public void VisitUnversionedFile(NSvn.UnversionedFile file)
+        public virtual void VisitUnversionedFile(NSvn.UnversionedFile file)
         {
             this.VisitUnversionedResource( file );        
         }
-        public void VisitWorkingCopyDirectory(NSvn.WorkingCopyDirectory dir)
+        public virtual void VisitWorkingCopyDirectory(NSvn.WorkingCopyDirectory dir)
         {
             this.VisitWorkingCopyResource( dir );
         }
-        public void VisitWorkingCopyFile(NSvn.WorkingCopyFile file)
+        public virtual void VisitWorkingCopyFile(NSvn.WorkingCopyFile file)
         {
             this.VisitWorkingCopyResource( file );
         }    
         #endregion
 
-        public void VisitWorkingCopyResource( WorkingCopyResource resource )
+        public virtual void VisitWorkingCopyResource( WorkingCopyResource resource )
         {
             // empty
         }
 
-        public void VisitUnversionedResource( UnversionedResource resource )
+        public virtual void VisitUnversionedResource( UnversionedResource resource )
         {
             // empty
         }

@@ -12,40 +12,49 @@ namespace Ankh.Commands
 	/// Commits an item.
 	/// </summary>
 	[VSNetCommand("CommitItem", Text = "Commit", Tooltip = "Commits an item"),
-     VSNetControl( "Item", Position = 2 )]
+     VSNetControl( "Item", Position = 2 ),
+     VSNetControl( "Project", Position = 2 )]
 	internal class CommitItem : CommandBase
 	{	
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
-            ILocalResource[] resources = context.SolutionExplorer.GetSelectedItems();
-            foreach( ILocalResource resource in resources )
-            {
-                if ( (resource.Status.TextStatus & commitCandidates) != 0 ||
-                    (resource.Status.PropertyStatus & commitCandidates) != 0 )
-                    return vsCommandStatus.vsCommandStatusEnabled | 
-                        vsCommandStatus.vsCommandStatusSupported;
-            }
-            
-            return vsCommandStatus.vsCommandStatusEnabled;
+            CommitCandidateVisitor v = new CommitCandidateVisitor();
+            context.SolutionExplorer.VisitSelectedItems( v );
+            if ( v.Commitable )
+                return vsCommandStatus.vsCommandStatusEnabled |
+                    vsCommandStatus.vsCommandStatusSupported;
+            else
+                return vsCommandStatus.vsCommandStatusEnabled;
         }
         public override void Execute(Ankh.AnkhContext context)
         {
-            ILocalResource[] resources = context.SolutionExplorer.GetSelectedItems();
-            WorkingCopyResource[] wcResources = new WorkingCopyResource[ resources.Length ];
-            resources.CopyTo( wcResources, 0 );
+            ResourceGathererVisitor v = new ResourceGathererVisitor();
+            context.SolutionExplorer.VisitSelectedItems( v );
 
-            WorkingCopyResource.Commit( wcResources, false );
+            WorkingCopyResource.Commit( (WorkingCopyResource[])
+                v.WorkingCopyResources.ToArray( typeof(WorkingCopyResource) ), 
+                false );
 
             context.SolutionExplorer.UpdateSelectionStatus();
         }
         
         #endregion
 
-        
+        private class CommitCandidateVisitor : LocalResourceVisitorBase
+        {
+            public bool Commitable = false;
 
-        private const StatusKind commitCandidates = StatusKind.Added | 
-            StatusKind.Modified;
+            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
+            {
+                if ( (resource.Status.TextStatus & commitCandidates) != 0 ||
+                    (resource.Status.PropertyStatus & commitCandidates) != 0 )
+                    Commitable = true;
+            }
+
+            private const StatusKind commitCandidates = StatusKind.Added | 
+                StatusKind.Modified;
+        }
     }
 }
 
