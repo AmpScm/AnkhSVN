@@ -35,11 +35,11 @@
         <csc target="library" output="${build.dir}/Utils.dll" verbose="${verbose}" 
             define="${define}" debug="${debug}">
             <references>
-                <includes name="${lib.dir}\Sharpziplib.dll"/>
+                <include name="${lib.dir}\Sharpziplib.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
-                <includes name="**/*.cs"/>
+                <include name="**/*.cs"/>
             </sources>
             
             <arg value="/debug:pdbonly" unless="${debug}"/>

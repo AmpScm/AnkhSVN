@@ -43,16 +43,16 @@
         <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" 
             define="${define}" debug="${debug}">
             <references>
-                <includes name="${lib.dir}\EnvDTE.dll"/>
-                <includes name="${lib.dir}\extensibility.dll"/>
-                <includes name="${lib.dir}\Office.dll"/>
-                <includes name="..\Ankh.UI\${build.dir}\Ankh.UI.dll"/>
-                <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
-                <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
-                <includes name="..\Utils\${build.dir}\Utils.dll"/>
-                <includes name="${build.dir}/AnkhUserControlHostLib.dll"/>
-                <includes name="${lib.dir}\Interop.SHDocVw.dll"/>
-                <includes name="${lib.dir}\Interop.esproj.dll" />
+                <include name="${lib.dir}\EnvDTE.dll"/>
+                <include name="${lib.dir}\extensibility.dll"/>
+                <include name="${lib.dir}\Office.dll"/>
+                <include name="..\Ankh.UI\${build.dir}\Ankh.UI.dll"/>
+                <include name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
+                <include name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <include name="..\Utils\${build.dir}\Utils.dll"/>
+                <include name="${build.dir}/AnkhUserControlHostLib.dll"/>
+                <include name="${lib.dir}\Interop.SHDocVw.dll"/>
+                <include name="${lib.dir}\Interop.esproj.dll" />
             </references>
             
             
@@ -61,7 +61,7 @@
             <arg value="/debug:pdbonly" unless="${debug}"/>
             
             <sources basedir="${src.dir}">
-                <includes name="**/*.cs"/>
+                <include name="**/*.cs"/>
             </sources>
             
             <arg value="${warninglevel}"/>

@@ -102,7 +102,7 @@
         <cl outputdir="${build.dir}" verbose="${verbose}"
              options="${cl.options}">
             <sources>
-                <includes name="**/*.cpp"/>
+                <include name="**/*.cpp"/>
             </sources>
             
         </cl>
@@ -111,7 +111,7 @@
     <target name="link" depends="compile, init">
         <link output="${build.dir}\NSvn.Core.dll" options="${link.options}" verbose="${verbose}">
             <sources>
-                <includes name="${build.dir}\*.obj"/>
+                <include name="${build.dir}\*.obj"/>
             </sources>
         </link>
     </target>

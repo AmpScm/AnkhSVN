@@ -36,16 +36,16 @@
         <csc target="library" output="${build.dir}/ReposInstaller.dll" verbose="${verbose}" 
             define="${define}" debug="${debug}">
             <references>
-                <includes name="${lib.dir}\EnvDTE.dll"/>
-                <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
-                <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
-                <includes name="..\Utils\${build.dir}\Utils.dll"/>
+                <include name="${lib.dir}\EnvDTE.dll"/>
+                <include name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
+                <include name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <include name="..\Utils\${build.dir}\Utils.dll"/>
             </references>
             
             <arg value="/debug:pdbonly" unless="${debug}"/>
             
             <sources basedir="${src.dir}">
-                <includes name="**/*.cs"/>
+                <include name="**/*.cs"/>
             </sources>
             
             <arg value="${warninglevel}"/>

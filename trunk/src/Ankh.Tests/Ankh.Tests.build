@@ -37,22 +37,22 @@
         <csc target="library" output="${build.dir}/Ankh.Tests.dll" 
             verbose="${verbose}" define="${define}" debug="${debug}">
             <references>
-                <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
-                <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
-                <includes name="..\NSvn.Core.Tests\${build.dir}\NSvn.Core.Tests.dll"/>
-                <includes name="..\Ankh\${build.dir}\Ankh.dll"/>
-                <includes name="..\Ankh.UI\${build.dir}\Ankh.UI.dll"/>
-                <includes name="..\Utils\${build.dir}\Utils.dll"/>
-                <includes name="${build.dir}/AnkhUserControlHostLib.dll"/>
-                <includes name="${lib.dir}\nunit.framework.dll"/>
-                <includes name="${lib.dir}\Sharpziplib.dll"/>
-                <includes name="${lib.dir}\EnvDTE.dll"/>
-                <includes name="${lib.dir}\extensibility.dll"/>
-                <includes name="${lib.dir}\Office.dll"/>                
+                <include name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
+                <include name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
+                <include name="..\NSvn.Core.Tests\${build.dir}\NSvn.Core.Tests.dll"/>
+                <include name="..\Ankh\${build.dir}\Ankh.dll"/>
+                <include name="..\Ankh.UI\${build.dir}\Ankh.UI.dll"/>
+                <include name="..\Utils\${build.dir}\Utils.dll"/>
+                <include name="${build.dir}/AnkhUserControlHostLib.dll"/>
+                <include name="${lib.dir}\nunit.framework.dll"/>
+                <include name="${lib.dir}\Sharpziplib.dll"/>
+                <include name="${lib.dir}\EnvDTE.dll"/>
+                <include name="${lib.dir}\extensibility.dll"/>
+                <include name="${lib.dir}\Office.dll"/>                
             </references>
             
             <sources basedir="${src.dir}">
-                <includes name="**/*.cs"/>
+                <include name="**/*.cs"/>
             </sources>
             
             

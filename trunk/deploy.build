@@ -18,7 +18,7 @@
     
     
     <target name="checkout">
-        <svncheckout localDir="${checkout.dir}" url="${url}" verbose="${verbose}" />
+        <svn-checkout destination="${checkout.dir}" uri="${url}" verbose="true" />
     </target>
     
     <target name="version" depends="source">    
@@ -29,6 +29,9 @@
             {
                Location location = new Location( "GetVersionString" );
                string dirname = project.ExpandProperties( "${checkout.dir}", location );
+               
+               // because of bug in Nant svn task:
+               dirname = Path.Combine( dirname, "src" );
                
                System.Diagnostics.Process proc = new System.Diagnostics.Process();
                proc.StartInfo.RedirectStandardOutput = true; 
@@ -92,9 +95,7 @@
     </target>
     
     <target name="source">
-        <available type="Directory" resource="${checkout.dir}" 
-            property="checkout.dir.present"/>
-        <ifnot propertytrue="checkout.dir.present">
+        <ifnot test="${directory::exists(checkout.dir)}">
             <call target="checkout" /> 
         </ifnot>
         
@@ -107,12 +108,12 @@
     
     
     <target name="svndir">
-        <ifnot propertyexists="svn.dir">
+        <ifnot test="${property::exists('svndir')}">
             <sysinfo/>
-            <ifnot propertyexists="sys.env.SVNSRC">
-                <fail message="Either provide the svn.dir property, or set the SVNSRC env var to point to the Subversion source tree" />
+            <ifnot test="${property::exists('sys.env.SVNSRC')}">
+                <fail message="Either provide the svndir property, or set the SVNSRC env var to point to the Subversion source tree" />
             </ifnot>
-            <property name="svn.dir" value="${sys.env.SVNSRC}" />
+            <property name="svndir" value="${sys.env.SVNSRC}" />
         </ifnot>
         
     </target>
@@ -126,7 +127,7 @@
         
         <copy todir="${deploy.dir}">
             <fileset basedir="${checkout.dir}\installsource">
-                <includes name="*.msi"/>
+                <include name="*.msi"/>
             </fileset>
         </copy>-->
     
@@ -165,13 +166,13 @@
     <target name="zip" depends="source, deploydir">
         <zip zipfile="${deploy.dir}\${zip.file}" verbose="${verbose}">
             <fileset basedir="${checkout.dir}">
-                <includes name="**/*"/>
-                <excludes name="**/.svn/**" />
-                <excludes name="**/bin/**" />
-                <excludes name="**/obj/**" />
-                <excludes name="**/*.tmp" />
-                <excludes name="**/Debug/**" />
-                <excludes name="**/Release/**" />
+                <include name="**/*"/>
+                <exclude name="**/.svn/**" />
+                <exclude name="**/bin/**" />
+                <exclude name="**/obj/**" />
+                <exclude name="**/*.tmp" />
+                <exclude name="**/Debug/**" />
+                <exclude name="**/Release/**" />
             </fileset>
         </zip>
     </target>
