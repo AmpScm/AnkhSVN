@@ -32,7 +32,7 @@ namespace Ankh.Commands
                 "Microsoft.VisualStudio.VCProjectEngine.VCFilter", true );
         }
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
         {
             if ( context.AnkhLoadedForSolution || 
                 !File.Exists(context.DTE.Solution.FullName))

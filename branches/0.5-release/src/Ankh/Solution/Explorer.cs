@@ -24,7 +24,7 @@ namespace Ankh.Solution
     /// </summary>
     internal class Explorer
     {        
-        public Explorer( _DTE dte, IContext context )
+        public Explorer( _DTE dte, AnkhContext context )
         {
             this.dte = dte;
             this.context = context;
