@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
+<doc title="Keywords">
+    <section>
+        <p>This section explains some of the basics used in Ankh, Subversion and Revision Controll systems.
+        </p>
+    </section>
+</doc>
+

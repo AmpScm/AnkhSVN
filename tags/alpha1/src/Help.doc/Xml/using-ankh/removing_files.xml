@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
+<doc title="Removing files">
+    <section>
+    </section> 
+    <section>
+        <p>
+            <hr></hr>
+            <link url="adding_files.xml">back </link>
+            <link url="moving_files.xml">next</link>
+        </p>
+    </section>    
+</doc>
+
