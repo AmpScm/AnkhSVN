@@ -33,6 +33,7 @@ namespace Ankh
         
         public WorkingCopyResource[] ShowLogMessageDialog( WorkingCopyResource[] commitItems )
         {
+
             string templateText = this.GetTemplate();
             LogMessageTemplate template = new LogMessageTemplate( templateText );
 
@@ -59,6 +60,19 @@ namespace Ankh
 
                 dialog.LogMessageTemplate = template;
 
+                // is there a previous log message?
+                if ( this.logMessage != null )
+                {
+                    if ( MessageBox.Show( this.ankhContext.HostWindow, 
+                        "The previous commit did not complete." + Environment.NewLine + 
+                        "Do you want to reuse the log message?", 
+                        "Previous log message", MessageBoxButtons.YesNo ) ==
+                        DialogResult.Yes )
+
+                        dialog.LogMessage = this.logMessage;
+                }
+
+
                 dialog.DiffWanted += new EventHandler( this.DiffWanted );
                 if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
                 {
@@ -72,7 +86,14 @@ namespace Ankh
                     return null;
                 }
             }
+        }
 
+        /// <summary>
+        /// To be called when a commit is finished, so the context can clean up.
+        /// </summary>
+        public void CommitCompleted()
+        {
+            this.logMessage = null;
         }
         
         protected override string LogMessageCallback(NSvn.Core.CommitItem[] commitItems)
