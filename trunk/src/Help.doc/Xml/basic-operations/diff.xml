@@ -8,21 +8,13 @@
                 <b>Description</b>
                 <br/>
                 Display the differences between two paths. Each TARGET can be either a working copy path or URL. 
-                
                 If TARGET is a working copy path, then the means:
-               
                 The client compares base and working copies of TARGET.
-                <br/><br/>
-                If the alternate syntax is used, the server compares URL1 and URL2 at revisions N and M respectively. 
-                If either N or M are ommitted, a value of HEAD is assumed.
                 <br/><br/>
                 <b>Changes</b>
                 <br/>
                 Nothing
-
-
             </p>
-    
         </section>
         <section>
             <p>

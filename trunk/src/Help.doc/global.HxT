@@ -11,20 +11,13 @@
 		<HelpTOCNode Title="Revision controll" Url="\Xml\introduction\revision_controll.xml"/>
 		<HelpTOCNode Title="Why Revision controll ?" Url="\Xml\introduction\why_revision_controll.xml"/>
 		<HelpTOCNode Title="Why Ankh ?" Url="\Xml\introduction\why_ankh.xml"/>
-    
-    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
 	<HelpTOCNode Title="Configuration" Url="\Xml\configuration\configuration.xml">
-		
-    
-    <HelpTOCNode Title="Setting up the Ankh addin" Url="\Xml\configuration\setting_up_anhk.xml"/>
-    </HelpTOCNode>
+		<HelpTOCNode Title="Setting up the Ankh addin" Url="\Xml\configuration\setting_up_anhk.xml"/>
+	</HelpTOCNode>
 	<HelpTOCNode Title="Using Ankh" Url="\Xml\using-ankh\using_ankh.xml">
-		
 		<HelpTOCNode Title="Adding files" Url="\Xml\using-ankh\adding_files.xml"/>
-    
-    
-    </HelpTOCNode>
+	</HelpTOCNode>
 	<HelpTOCNode Title="Basic operations" Url="\Xml\basic-operations\basic_operations.xml">
 		<HelpTOCNode Title="Remove" Url="\Xml\basic-operations\remove.xml"/>
 		<HelpTOCNode Title="Check out" Url="\Xml\basic-operations\check_out.xml"/>
@@ -41,27 +34,10 @@
 		<HelpTOCNode Title="Merge" Url="\Xml\basic-operations\merge.xml"/>
 		<HelpTOCNode Title="Copy" Url="\Xml\basic-operations\copy.xml"/>
 		<HelpTOCNode Title="Move" Url="\Xml\basic-operations\move.xml"/>
-		<HelpTOCNode Title="Set property" Url="\Xml\basic-operations\set_properties.xml"/>
 		<HelpTOCNode Title="Export" Url="\Xml\basic-operations\export.xml"/>
 		<HelpTOCNode Title="List" Url="\Xml\basic-operations\list.xml"/>
 		<HelpTOCNode Title="Cat" Url="\Xml\basic-operations\cat.xml"/>
-		<HelpTOCNode Title="Get property " Url="\Xml\basic-operations\get_properties.xml"/>
-	
-    
-    </HelpTOCNode>
-    
-    
-    
-    <ToolData Name="MSTOCEXPST" Value="Expanded"/>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <ToolData Name="MSTOCMRUDIR" Value="C:\gr03-10\finalproject\src\Help.doc\Xml\introduction\"/>
-    <ToolData Name="MSTOCMRUFT" Value="0"/></HelpTOC>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
+	<ToolData Name="MSTOCMRUDIR" Value="C:\gr03-10\finalproject\src\Help.doc\Xml\introduction\"/>
+	<ToolData Name="MSTOCMRUFT" Value="0"/>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOC>

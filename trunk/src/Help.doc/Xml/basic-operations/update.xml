@@ -8,7 +8,7 @@
                 <b>Description</b>
                 <br/>
                 svn update brings changes from the repository into your working copy. 
-                If no revision given, it brings your working copy up-to-date with the HEAD revision. 
+                If no revision is given, it brings your working copy up-to-date with the HEAD revision. 
                 <br/><br/>
                 For each updated item a line will start with a character reporting the action taken. 
                 These characters have the following meaning:

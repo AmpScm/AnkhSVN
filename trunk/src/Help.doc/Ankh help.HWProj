@@ -18,7 +18,6 @@
     <File Url="Xml\Basic-operations\copy.xml"/>
     <File Url="Xml\Basic-operations\diff.xml"/>
     <File Url="Xml\Basic-operations\export.xml"/>
-    <File Url="Xml\Basic-operations\get_properties.xml"/>
     <File Url="Xml\Basic-operations\import.xml"/>
     <File Url="Xml\Basic-operations\list.xml"/>
     <File Url="Xml\Basic-operations\log.xml"/>
@@ -26,7 +25,6 @@
     <File Url="Xml\Basic-operations\merge.xml"/>
     <File Url="Xml\Basic-operations\move.xml"/>
     <File Url="Xml\Basic-operations\remove.xml"/>
-    <File Url="Xml\Basic-operations\set_properties.xml"/>
     <File Url="Xml\Basic-operations\status.xml"/>
     <File Url="Xml\configuration\configuration.xml"/>
     <File Url="Xml\basic-operations\basic_operations.xml"/>
@@ -42,9 +40,12 @@
     <File Url="Xml\introduction\revision_controll.xml"/>
     <File Url="Xml\introduction\why_ankh.xml"/>
     <File Url="Xml\introduction\why_revision_controll.xml"/>
+    <File Url="img\subversion_big_picture.png"/>
+    <File Url="img\repository.png"/>
     </Files>
 	<Dirs>
 		<Dir Url="html"/>
+    <Dir Url="img"/>
     <Dir Url="Xml"/>
     <Dir Url="Xml\basic-operations"/>
     <Dir Url="Xml\configuration"/>

@@ -52,6 +52,11 @@
     </section>   
     <section>
         <p>
+        <img src="../../img/subversion_big_picture.png"></img>
+        </p>
+    </section>
+    <section>
+        <p>
             <k>(from "Subversion: The Definitive Guide" <link url="http://svnbook.red-bean.com/html-chunk/index.html">
             http://svnbook.red-bean.com/html-chunk/index.html</link>)</k>
         </p>
