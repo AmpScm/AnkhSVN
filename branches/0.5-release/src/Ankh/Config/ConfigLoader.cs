@@ -127,6 +127,14 @@ namespace Ankh.Config
                 XmlSerializer serializer = new XmlSerializer( typeof(string[]) );
                 return (string[])serializer.Deserialize( reader );
             }
+            catch( InvalidOperationException ex )
+            {
+                throw new ConfigException( "Xml error: " + ex.InnerException.Message );
+            }
+            catch( XmlException ex )
+            {
+                throw new ConfigException( "Xml error: " + ex.Message );
+            }
             finally
             {
                 reader.Close();

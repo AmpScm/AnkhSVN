@@ -5,7 +5,7 @@ using System.Collections;
 using System.IO;
 using System.Diagnostics;
 
-namespace Ankh.Solution
+namespace Ankh
 {
     /// <summary>
     /// Maintains path->SvnItem mappings.
