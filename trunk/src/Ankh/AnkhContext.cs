@@ -43,8 +43,10 @@ namespace Ankh
 
             this.LoadConfig();
 
+            this.fileWatcher = new FileWatcher(this.client);
+
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
-            this.solutionExplorer = new Solution.Explorer( this.dte, this );
+            this.solutionExplorer = new Solution.Explorer( this.dte, this, this.fileWatcher );
             this.progressDialog = new ProgressDialog();             
 
             string iconvdir = Path.Combine( 
@@ -53,6 +55,8 @@ namespace Ankh
             Utils.Win32.Win32.SetEnvironmentVariable( "APR_ICONV_PATH", iconvdir );
 
             this.ankhLoadedForSolution = false;
+
+            
 
             this.SetUpEvents();    
             
@@ -101,7 +105,7 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.solutionExplorer; }
-        }
+        }       
 
         /// <summary>
         /// The output pane.
@@ -275,6 +279,30 @@ namespace Ankh
             }
 
             this.ankhLoadedForSolution = false;
+        }
+
+        /// <summary>
+        /// Reloads the current solution.
+        /// </summary>
+        /// <returns>True if the solution has been reloaded.</returns>
+        public bool ReloadSolutionIfNecessary()
+        {
+            if ( this.fileWatcher.HasDirtyProjects && !this.Config.DisableSolutionReload )
+            {
+                if ( MessageBox.Show( this.HostWindow, 
+                    "One or more of your project files have changed." + Environment.NewLine +
+                    "It is recommended that you reload the solution now. " + Environment.NewLine +
+                    "Do you want to reload the solution?", "Project files changed", 
+                    MessageBoxButtons.YesNo ) == DialogResult.Yes )
+                {
+                    string filename = this.dte.Solution.FullName;
+                    this.dte.Solution.Close( true );
+                    this.dte.Solution.Open( filename );
+                    this.fileWatcher.Reset();
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -473,6 +501,8 @@ namespace Ankh
 
         private ConflictManager conflictManager; 
         private IErrorHandler errorHandler;
+
+        private FileWatcher fileWatcher;
 
         private ProgressDialog progressDialog;
         private SvnClient client;
