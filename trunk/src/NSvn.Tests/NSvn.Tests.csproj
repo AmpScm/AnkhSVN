@@ -116,6 +116,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "RepositoryDirectoryTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "UnversionedItemTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
