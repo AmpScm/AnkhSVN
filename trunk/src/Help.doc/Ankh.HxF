@@ -60,4 +60,12 @@
     <File Url="img\propeditor_1.png"/>
     <File Url="img\propeditor_2.png"/>
     <File Url="Xml\keywords\properties.xml"/>
+    <File Url="Xml\keywords\status_icons.xml"/>
+    <File Url="img\unrevisioned.png"/>
+    <File Url="img\conflicted.png"/>
+    <File Url="img\deleted.png"/>
+    <File Url="img\locked.png"/>
+    <File Url="img\modified.png"/>
+    <File Url="img\ok.png"/>
+    <File Url="img\add.png"/>
     </HelpFileList>

@@ -58,12 +58,14 @@
 		<HelpTOCNode Title="Update" Url="\Xml\basic-operations\update.xml"/>
 	</HelpTOCNode>
 	<HelpTOCNode Title="Keywords" Url="\Xml\Keywords\keywords.xml">
-		<HelpTOCNode Title="Properties" Url="\Xml\keywords\properties.xml"/>
+		<HelpTOCNode Title="Status icons" Url="\Xml\keywords\status_icons.xml"/>
+    <HelpTOCNode Title="Properties" Url="\Xml\keywords\properties.xml"/>
 		<HelpTOCNode Title="Revisions: numbers, keywords and dates" Url="\Xml\Keywords\revision.xml"/>
     
-    
     <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
-	<ToolData Name="MSTOCMRUDIR" Value="C:\finalproject\Ankh\src\Help.doc\Xml\Keywords\"/>
-	<ToolData Name="MSTOCMRUFT" Value="0"/>
+	
+	
     
-    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOC>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/>
+    <ToolData Name="MSTOCMRUDIR" Value="C:\gr03-10\finalproject\src\Help.doc\Xml\keywords\"/>
+    <ToolData Name="MSTOCMRUFT" Value="0"/></HelpTOC>
