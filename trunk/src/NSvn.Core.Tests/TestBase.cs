@@ -60,15 +60,22 @@ namespace NSvn.Core.Tests
         {
             //already exists?
             this.reposPath = Path.Combine( BASEPATH, REPOS_NAME );
-            if ( Directory.Exists( this.reposPath ) )
-                Directory.Delete( this.reposPath, true );
+            this.reposUrl = ExtractRepos( REPOS_FILE, this.reposPath, this.GetType() );
+        }
 
-            Zip.ExtractZipResource(this.reposPath, this.GetType(), REPOS_FILE );
-            this.reposUrl = "file://" + 
-                this.reposPath.Replace( "\\", "/" );
-            if( this.reposUrl[ this.reposUrl.Length-1 ] != '/' )
-                this.reposUrl = this.reposUrl + "/";
+        public static string ExtractRepos( string resourceName, string path, Type type )
+        {
+            //already exists?
+            if ( Directory.Exists( path ) )
+                Directory.Delete( path, true );
 
+            Zip.ExtractZipResource(path, type, resourceName );
+            string reposUrl = "file://" + 
+                path.Replace( "\\", "/" );
+            if( reposUrl[ reposUrl.Length-1 ] != '/' )
+                reposUrl = reposUrl + "/";
+
+            return reposUrl;
 
         }
 
