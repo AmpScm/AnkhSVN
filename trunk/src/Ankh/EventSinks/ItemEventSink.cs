@@ -55,18 +55,19 @@ namespace Ankh.EventSinks
 
             try
             {
-                
-                this.Context.StartOperation( "Deleting" );
-
                 IList items = 
                     this.Context.SolutionExplorer.GetItemResources(item, true);
 
                 items = SvnItem.Filter( items, new ResourceFilterCallback( 
                     this.DeletableFilter ) );
                 string[] paths = SvnItem.GetPaths( items );
-                this.Context.Client.Delete( paths, true );
-                
-                this.DelayedRefresh( item.ContainingProject );
+                if ( paths.Length > 0 )
+                {
+                    this.Context.StartOperation( "Deleting" );
+                    this.Context.Client.Delete( paths, true );
+
+                    this.DelayedRefresh( item.ContainingProject );
+                }
             }
             catch ( Exception ex )
             {
@@ -74,13 +75,16 @@ namespace Ankh.EventSinks
             }
             finally
             {
-                this.Context.EndOperation();
+                if ( this.Context.OperationRunning )
+                    this.Context.EndOperation();
             }
         }
 
         private bool DeletableFilter( SvnItem item )
         {
-            return item.IsVersioned;
+            // we don't want to svn delete files that actually exist on disk -
+            // they'll most likely just be "Exclude(d) from project"
+            return item.IsVersioned && !File.Exists( item.Path );
         }
 
         /// <summary>
