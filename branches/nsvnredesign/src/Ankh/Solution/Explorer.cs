@@ -157,17 +157,32 @@ namespace Ankh.Solution
                 this.solutionItem, root, this );
         }
 
-        public void GetSelectionResources( IList list, bool getChildItems )
+        /// <summary>
+        /// Returns the SvnItem resources associated with the selected items
+        /// in the solution explorer.
+        /// </summary>
+        /// <param name="getChildItems">Whether children of the items in 
+        /// question should be included.</param>        /// 
+        /// <returns>A list of SvnItem instances.</returns>
+        public IList GetSelectionResources( bool getChildItems )
         {
-            this.GetSelectionResources( list, getChildItems, null );
+            return this.GetSelectionResources( getChildItems, null );
         }
 
 
-        public void GetSelectionResources( IList list, bool getChildItems, 
+        /// <summary>
+        /// Returns the SvnItem resources associated with the selected items
+        /// in the solution explorer.
+        /// </summary>
+        /// <param name="getChildItems">Whether children of the items in 
+        /// question should be included.</param>
+        /// <param name="filter">A callback used to filter the items
+        /// that are added.</param>
+        /// <returns>A list of SvnItem instances.</returns>
+        public IList GetSelectionResources( bool getChildItems, 
             ResourceFilterCallback filter )
         {
-            Debug.Assert( !list.IsFixedSize && !list.IsReadOnly, 
-                "list is read only or fixed size" );
+            ArrayList list = new ArrayList();
 
             object o = this.uiHierarchy.SelectedItems;	 	
             foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )	 	
@@ -176,6 +191,8 @@ namespace Ankh.Solution
                 if ( node != null )	 	
                     node.GetResources( list, getChildItems, filter );	 	
             }
+
+            return list;
         }
 
         internal IntPtr TreeView

@@ -34,8 +34,7 @@ namespace Ankh.Commands
         public override void Execute(Ankh.AnkhContext context, string parameters)
         {
             // get the modified resources
-            ArrayList resources = new ArrayList();
-            context.SolutionExplorer.GetSelectionResources( resources, true,
+            IList resources = context.SolutionExplorer.GetSelectionResources( true,
                 new ResourceFilterCallback( CommandBase.ModifiedFilter ) );
 
             // does the user really want to revert these items?
