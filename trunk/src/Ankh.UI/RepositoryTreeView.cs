@@ -98,10 +98,13 @@ namespace Ankh.UI
 
             set
             {               
-                this.controller = value;                
-                this.controller.RootChanged += new EventHandler( this.RootChanged );
+                this.controller = value;   
+                if ( this.controller != null )
+                {
+                    this.controller.RootChanged += new EventHandler( this.RootChanged );
 
-                this.RootChanged( null, EventArgs.Empty );
+                    this.RootChanged( null, EventArgs.Empty );
+                }
             }
         }
 

@@ -107,9 +107,18 @@ namespace Ankh.UI
         //Gives a tree view of repository if valid revision is selected
         private void goButton_Click(object sender, System.EventArgs e)
         {
-            this.treeView.Controller.SetRepository( this.urlTextBox.Text, this.revisionPicker.Revision );
-            this.treeView.Go();
-            this.treeView.Enabled = true;
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+
+                this.treeView.Controller.SetRepository( this.urlTextBox.Text, this.revisionPicker.Revision );
+                this.treeView.Go();
+                this.treeView.Enabled = true;
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private void revisionPicker_Changed(object sender, System.EventArgs e)
@@ -169,9 +178,9 @@ namespace Ankh.UI
             // 
             this.revisionLabel.Location = new System.Drawing.Point(1, 29);
             this.revisionLabel.Name = "revisionLabel";
+            this.revisionLabel.Size = new System.Drawing.Size(350, 20);
             this.revisionLabel.TabIndex = 2;
             this.revisionLabel.Text = "Select a revision or manually type the revision number:";
-            this.revisionLabel.Size = new System.Drawing.Size( 350, 20 );
             // 
             // goButton
             // 
@@ -184,15 +193,16 @@ namespace Ankh.UI
             // 
             // treeView
             // 
-            this.treeView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
                 | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right);
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeView.Controller = null;
             this.treeView.Enabled = false;
             this.treeView.ImageIndex = -1;
             this.treeView.Location = new System.Drawing.Point(0, 80);
             this.treeView.Name = "treeView";
             this.treeView.SelectedImageIndex = -1;
-            this.treeView.Size = new System.Drawing.Size(368, 288);
+            this.treeView.Size = new System.Drawing.Size(400, 296);
             this.treeView.TabIndex = 6;
             // 
             // revisionPicker
@@ -205,15 +215,14 @@ namespace Ankh.UI
             // 
             // RepositoryExplorerControl
             // 
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.revisionPicker,
-                                                                          this.treeView,
-                                                                          this.goButton,
-                                                                          this.revisionLabel,
-                                                                          this.urlTextBox,
-                                                                          this.urlLabel});
+            this.Controls.Add(this.revisionPicker);
+            this.Controls.Add(this.treeView);
+            this.Controls.Add(this.goButton);
+            this.Controls.Add(this.revisionLabel);
+            this.Controls.Add(this.urlTextBox);
+            this.Controls.Add(this.urlLabel);
             this.Name = "RepositoryExplorerControl";
-            this.Size = new System.Drawing.Size(376, 376);
+            this.Size = new System.Drawing.Size(400, 376);
             this.ResumeLayout(false);
 
         }
