@@ -44,11 +44,14 @@ namespace Ankh
             this.repositoryController = new RepositoryExplorer.Controller( this, 
                 this.repositoryExplorer, this.reposExplorerWindow );
 
+            string iconvdir = Path.Combine( 
+                Path.GetDirectoryName(this.GetType().Assembly.CodeBase), 
+                "iconv" );
+            Utils.Win32.Win32.SetEnvironmentVariable( "APR_ICONV_PATH", iconvdir );
+
             this.ankhLoadedForSolution = false;
 
-            this.SetUpEvents();
-
-           
+            this.SetUpEvents();           
         }
 
         
