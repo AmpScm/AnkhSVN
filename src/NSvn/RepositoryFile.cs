@@ -1,5 +1,6 @@
 // $Id$
 using System;
+using System.IO;
 using NSvn.Common;
 using NSvn.Core;
 
@@ -37,6 +38,15 @@ namespace NSvn
                 return System.IO.Path.GetFileName( this.Url );
             }
         }
+
+        /// <summary>
+        /// Writes the file from the repository into the specified stream.
+        /// </summary>
+        /// <param name="stream">The stream to write the file into.</param>
+        public void Cat( Stream stream )
+        {
+            Client.Cat( stream, this.Url, this.Revision, this.ClientContext );
+        }        
 
         /// <summary>
         /// Accept a RepositoryResourceVisitor.
