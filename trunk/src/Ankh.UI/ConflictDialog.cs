@@ -35,7 +35,8 @@ namespace Ankh.UI
             this.oldRevRadioButton.Tag = Choice.OldRev;
             this.newRevRadioButton.Tag = Choice.NewRev;
             this.fileRadioButton.Tag = Choice.ConflictMarkers;
-		}
+            CreateMyToolTip();
+            }
 
         public Choice Selection
         {
@@ -70,15 +71,15 @@ namespace Ankh.UI
         {
             base.OnVisibleChanged ( e );
             this.mineFileRadioButton.Text = string.Format 
-                ("Latest local file({0}.mime)", this.filename );
+                ("{0}.mime", this.filename );
             this.oldRevRadioButton.Text = string.Format 
-                ("Latest updated version without conflict ({0}.r{1})", 
+                ("{0}.r{1}", 
                 this.filename, this.OldRev);
             this.newRevRadioButton.Text = string.Format 
-                ("Latest version in repository ({0}.r{1})", 
+                ("{0}.r{1}", 
                 this.filename, this.NewRev);
             this.fileRadioButton.Text = string.Format 
-                ("File with conflict markers ({0})", 
+                ("{0}", 
                 this.filename);
         }
 
@@ -108,6 +109,28 @@ namespace Ankh.UI
                 this.EditClicked (this, EventArgs.Empty); 
         }
 
+        private void CreateMyToolTip()
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip conflictToolTip = new ToolTip(this.components);
+
+            // Set up the delays in milliseconds for the ToolTip.
+            conflictToolTip.AutoPopDelay = 5000;
+            conflictToolTip.InitialDelay = 1000;
+            conflictToolTip.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            conflictToolTip.ShowAlways = true;
+         
+            // Set up the ToolTip text for the Button and Checkbox.
+            conflictToolTip.SetToolTip( this.mineFileRadioButton, "Latest local file" ); 
+            conflictToolTip.SetToolTip( this.oldRevRadioButton, "Latest updated revision" );
+            conflictToolTip.SetToolTip( this.newRevRadioButton, "Latest version in repository" );
+            conflictToolTip.SetToolTip( this.fileRadioButton, "File with conflict markers" );
+            conflictToolTip.SetToolTip( this.editButton, "Selected file is edited" );
+            conflictToolTip.SetToolTip( this.okButton, "Conflict is resolved and the three files that are not selected will be deleted" ); 
+            conflictToolTip.SetToolTip( this.cancelButton, "Latest local file" );  
+        }
+
 
 		#region Windows Form Designer generated code
 		/// <summary>
@@ -116,6 +139,7 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
             this.mineFileRadioButton = new System.Windows.Forms.RadioButton();
             this.oldRevRadioButton = new System.Windows.Forms.RadioButton();
             this.newRevRadioButton = new System.Windows.Forms.RadioButton();
@@ -123,13 +147,14 @@ namespace Ankh.UI
             this.cancelButton = new System.Windows.Forms.Button();
             this.editButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.conflictLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mineFileRadioButton
             // 
             this.mineFileRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
-            this.mineFileRadioButton.Location = new System.Drawing.Point(16, 8);
+            this.mineFileRadioButton.Location = new System.Drawing.Point(16, 24);
             this.mineFileRadioButton.Name = "mineFileRadioButton";
             this.mineFileRadioButton.Size = new System.Drawing.Size(348, 24);
             this.mineFileRadioButton.TabIndex = 0;
@@ -141,7 +166,7 @@ namespace Ankh.UI
             // 
             this.oldRevRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
-            this.oldRevRadioButton.Location = new System.Drawing.Point(16, 32);
+            this.oldRevRadioButton.Location = new System.Drawing.Point(16, 48);
             this.oldRevRadioButton.Name = "oldRevRadioButton";
             this.oldRevRadioButton.Size = new System.Drawing.Size(348, 24);
             this.oldRevRadioButton.TabIndex = 1;
@@ -153,7 +178,7 @@ namespace Ankh.UI
             // 
             this.newRevRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
-            this.newRevRadioButton.Location = new System.Drawing.Point(16, 56);
+            this.newRevRadioButton.Location = new System.Drawing.Point(16, 72);
             this.newRevRadioButton.Name = "newRevRadioButton";
             this.newRevRadioButton.Size = new System.Drawing.Size(348, 24);
             this.newRevRadioButton.TabIndex = 2;
@@ -165,7 +190,7 @@ namespace Ankh.UI
             // 
             this.fileRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
-            this.fileRadioButton.Location = new System.Drawing.Point(16, 80);
+            this.fileRadioButton.Location = new System.Drawing.Point(16, 96);
             this.fileRadioButton.Name = "fileRadioButton";
             this.fileRadioButton.Size = new System.Drawing.Size(348, 24);
             this.fileRadioButton.TabIndex = 3;
@@ -177,7 +202,7 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(292, 110);
+            this.cancelButton.Location = new System.Drawing.Point(292, 129);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "Cancel";
@@ -185,7 +210,7 @@ namespace Ankh.UI
             // editButton
             // 
             this.editButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
-            this.editButton.Location = new System.Drawing.Point(132, 110);
+            this.editButton.Location = new System.Drawing.Point(132, 129);
             this.editButton.Name = "editButton";
             this.editButton.TabIndex = 4;
             this.editButton.Text = "Edit";
@@ -195,16 +220,25 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(212, 110);
+            this.okButton.Location = new System.Drawing.Point(212, 129);
             this.okButton.Name = "okButton";
             this.okButton.TabIndex = 5;
             this.okButton.Text = "Resolve";
             // 
+            // conflictLabel
+            // 
+            this.conflictLabel.Location = new System.Drawing.Point(16, 5);
+            this.conflictLabel.Name = "conflictLabel";
+            this.conflictLabel.Size = new System.Drawing.Size(352, 16);
+            this.conflictLabel.TabIndex = 7;
+            this.conflictLabel.Text = "Select file:";
+            // 
             // ConflictDialog
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(376, 149);
+            this.ClientSize = new System.Drawing.Size(376, 160);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.conflictLabel,
                                                                           this.okButton,
                                                                           this.editButton,
                                                                           this.cancelButton,
@@ -232,10 +266,8 @@ namespace Ankh.UI
         private System.Windows.Forms.RadioButton oldRevRadioButton;
         private System.Windows.Forms.RadioButton newRevRadioButton;
         private System.Windows.Forms.Button editButton;
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
+        private System.Windows.Forms.Label conflictLabel;
+        private System.ComponentModel.IContainer components;
         
 
         [STAThread] 
@@ -256,6 +288,7 @@ namespace Ankh.UI
 
         }
 
+  
         
 	}
 

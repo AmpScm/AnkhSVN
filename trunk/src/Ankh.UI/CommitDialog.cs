@@ -19,8 +19,7 @@ namespace Ankh.UI
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-
-			
+            CreateMyToolTip();
 		}
 
 		/// <summary>
@@ -38,6 +37,34 @@ namespace Ankh.UI
 			base.Dispose( disposing );
 		}
 
+        /// <summary>
+        /// Makes tooltips on buttons and fields. 
+        /// </summary>
+        private void CreateMyToolTip()
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip commitToolTip = new ToolTip(this.components);
+
+            // Set up the delays in milliseconds for the ToolTip.
+            commitToolTip.AutoPopDelay = 5000;
+            commitToolTip.InitialDelay = 1000;
+            commitToolTip.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            commitToolTip.ShowAlways = true;
+         
+            // Set up the ToolTip text for the Button and Checkbox.
+            commitToolTip.SetToolTip( this.fileTreeView, 
+                "Three view of files you attempt to publish/commit. Files will be added into the repository." ); 
+             //Doesn't work:(. Don't understand why.
+            commitToolTip.SetToolTip( this.logMessageControl, 
+                "Write changes you have performed since last revision or update" ); 
+            commitToolTip.SetToolTip( this.okButton, 
+                "Files and comment will be added to the repository and made available for your collegues." ); 
+            commitToolTip.SetToolTip( this.cancelButton, "The commit will be cancelled" );  
+        }
+
+
+
 		#region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
@@ -45,10 +72,11 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
             this.fileTreeView = new System.Windows.Forms.TreeView();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.logMessageControl1 = new Ankh.UI.LogMessageControl();
+            this.logMessageControl = new Ankh.UI.LogMessageControl();
             this.logLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -79,15 +107,15 @@ namespace Ankh.UI
             this.okButton.TabIndex = 2;
             this.okButton.Text = "Ok";
             // 
-            // logMessageControl1
+            // logMessageControl
             // 
-            this.logMessageControl1.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.logMessageControl.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
                 | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right);
-            this.logMessageControl1.Location = new System.Drawing.Point(0, 184);
-            this.logMessageControl1.Name = "logMessageControl1";
-            this.logMessageControl1.Size = new System.Drawing.Size(508, 128);
-            this.logMessageControl1.TabIndex = 3;
+            this.logMessageControl.Location = new System.Drawing.Point(0, 184);
+            this.logMessageControl.Name = "logMessageControl";
+            this.logMessageControl.Size = new System.Drawing.Size(508, 128);
+            this.logMessageControl.TabIndex = 3;
             // 
             // logLabel
             // 
@@ -103,7 +131,7 @@ namespace Ankh.UI
             this.ClientSize = new System.Drawing.Size(512, 341);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
                                                                           this.logLabel,
-                                                                          this.logMessageControl1,
+                                                                          this.logMessageControl,
                                                                           this.okButton,
                                                                           this.cancelButton,
                                                                           this.fileTreeView});
@@ -117,13 +145,22 @@ namespace Ankh.UI
 
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
-        private Ankh.UI.LogMessageControl logMessageControl1;
         private System.Windows.Forms.Label logLabel;
         private System.Windows.Forms.TreeView fileTreeView;
+        private Ankh.UI.LogMessageControl logMessageControl;
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
+
+        [STAThread] 
+        public static void Main()
+        {
+            CommitDialog the = new CommitDialog();
+            the.ShowDialog();
+        }
+
+
 
 	}
 }
