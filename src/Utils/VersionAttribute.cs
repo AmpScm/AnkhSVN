@@ -31,19 +31,19 @@ namespace Utils
         public int Major
         {
             get{ return this.major; }
-            set{ this.major = major; }
+            set{ this.major = value; }
         }
 
         public int Minor
         {
-            get{ return this.major; }
-            set{ this.major = major; }
+            get{ return this.minor; }
+            set{ this.major = value; }
         }
 
         public int PatchLevel
         {
             get{ return this.patchLevel; }
-            set{ this.patchLevel = patchLevel; }
+            set{ this.patchLevel = value; }
         }
 
         public string Tag
