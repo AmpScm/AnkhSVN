@@ -11,7 +11,7 @@
             Id="????????-????-????-????-????????????" />
         
         <Upgrade Id="D35F7A64-E1AA-46eb-8835-36401261EB2A">
-            <UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" Minimum="0.6.0" 
+            <UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" Minimum="0.5.0" 
                 Maximum="$(var.ankhversion)" MigrateFeatures="yes" />
             <UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhversion)" />
         </Upgrade>
@@ -28,7 +28,7 @@
         
         <CustomAction Id="DIRCA_TARGETDIR" Property="TARGETDIR" Value="[ProgramFilesFolder]\AnkhSVN\"
             Execute="firstSequence" />
-        <CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]"/>
+        
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Merge Id="MSM_NSvn_msm" src="$(var.installdir)\NSvn.msm" Language="1033" DiskId="2" />
         </Directory>
@@ -56,6 +56,11 @@
         <CustomAction Id="ReposInstaller_Uninstall.SetProperty" 
             Property="ReposInstaller_Uninstall" 
             Value="/installtype=notransaction /action=uninstall /LogFile= &quot;[#CF_ReposInstaller.dll]&quot;" />
+            
+        <!-- Errormessages -->
+        <CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]" />
+        <CustomAction Id="ERRCA_UIANDADVERTISED" Error="[VSDUIANDADVERTISED]" />
+
         <UI>
             <InstallUISequence>
                 <!-- Error, Exit and Finished forms -->
