@@ -57,6 +57,7 @@ apr_array_header_t* NSvn::Core::StringArrayToAprArray( String* strings[], bool i
     return array;
 }
 
+
 // converts apr_array of paths into a .NET array of Strings
 String* NSvn::Core::AprArrayToStringArray( apr_array_header_t* aprArray ) []
 {
@@ -104,6 +105,15 @@ void NSvn::Core::ByteArrayToSvnString( svn_string_t* string, Byte array[], const
     string->data = static_cast<char*>(pool.Alloc( array.Length));
     Marshal::Copy( array, 0, const_cast<char*>(string->data), array.Length );
 
+}
+
+
+Byte NSvn::Core::SvnStringToByteArray( svn_string_t* string )[]
+{
+    Byte array[] = new Byte[ string->len ] ;
+    Marshal::Copy ( const_cast<char*>(string->data), array, 0, string->len );
+
+    return array;
 }
 
 
