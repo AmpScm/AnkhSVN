@@ -190,6 +190,7 @@ namespace Ankh.UI
         public void Reset()
         {
             this.logMessageBox.Text = "";
+            this.dialogResult = CommitDialogResult.Cancel;
             this.CommitItems = new object[]{};
         }
 

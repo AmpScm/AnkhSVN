@@ -95,11 +95,9 @@ namespace Ankh
             this.commitDialog.ButtonsEnabled = true;
             this.commitDialog.Initialize();
 
-            while ( this.commitDialogModal ) 
+            while ( this.commitDialogModal && this.commitDialogWindow.Visible ) 
             {
                 Application.DoEvents();
-                if ( !this.commitDialogWindow.Visible && this.commitDialogModal )
-                    this.commitDialogWindow.Visible = true;
             }
 
             ctx.LogMessage = this.commitDialog.LogMessage;
