@@ -6,9 +6,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for ShowLocalChanges.
     /// </summary>
-    public class ShowLocalChanges
+    internal class ShowLocalChangesCommand
     {
-        public ShowLocalChanges()
+        public ShowLocalChangesCommand()
         {
             //
             // TODO: Add constructor logic here

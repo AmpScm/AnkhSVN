@@ -6,9 +6,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for MakeDirectory.
     /// </summary>
-    public class MakeDirectory
+    internal class MakeDirectoryCommand
     {
-        public MakeDirectory()
+        public MakeDirectoryCommand()
         {
             //
             // TODO: Add constructor logic here

@@ -6,9 +6,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for ImportSolution.
     /// </summary>
-    public class ImportSolution
+    public class ImportSolutionCommand
     {
-        public ImportSolution()
+        public ImportSolutionCommand()
         {
             //
             // TODO: Add constructor logic here

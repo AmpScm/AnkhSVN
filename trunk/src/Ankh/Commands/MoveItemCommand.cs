@@ -6,9 +6,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for MoveItem.
     /// </summary>
-    public class MoveItem
+    internal class MoveItemCommand
     {
-        public MoveItem()
+        public MoveItemCommand()
         {
             //
             // TODO: Add constructor logic here
