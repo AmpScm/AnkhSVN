@@ -46,7 +46,9 @@ namespace Ankh.Solution
             object o = this.uiHierarchy.SelectedItems;
             foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
             {
-                this.GetNode( item ).VisitResources( visitor );
+                TreeNode node = this.GetNode( item );
+                if ( node != null )
+                    node.VisitResources( visitor );
             }
         }
 
@@ -58,7 +60,9 @@ namespace Ankh.Solution
             //TODO: this can be done slightly faster, with only a single lookup
             foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
             {
-                this.GetNode(item).UpdateStatus();
+                TreeNode node = this.GetNode( item );
+                if ( node != null )
+                    node.UpdateStatus();
             }
         }
 
