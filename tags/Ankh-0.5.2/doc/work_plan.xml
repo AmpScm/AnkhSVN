@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="doc.xsl"?>
+<doc title="Work plan">
+    <section header="Pilot project">
+        <list>
+            <item>Write progress report - 2002-10-25</item>
+            <item>Write project proposal - 2002-11-29</item>
+            <item>Maintain website for project</item>
+            <item>Create project diary</item>
+            <item>Write pilot project report                  2003-01-31</item>
+            <item>Make work plan </item>
+            <item>Make work schedule</item>
+    
+        </list>
+   </section>
+   
+   <section header="Learning">
+        <list>    
+            <item>Get familiar with Subversion </item>
+            <item>Get familiar with Visual Studio.NET </item>
+            <item>Get familiar with  Nunit V2.0</item>
+            <item>Get familiar with  Visual Studio .NET plugin architecture</item>
+            <item>Get familiar with  Nant</item>
+            <item>Learn C# programming</item>
+            <item>Get better understanding of Subversion client API</item>
+       </list>
+    </section>
+ 
+    <section header="Employer's specifications">
+        <list>
+            <item>Write specifications for Visual Studio.NET addin for svn</item>
+        </list>
+    </section>
+ 
+    <section header="Design/Development">
+        <list>
+            <item>Install software</item>
+            <item>Develop use cases/domain analysis</item>
+            <item>Programming</item>
+        </list>
+    </section>
+
+    <section header="Testing">
+        <list>
+            <item>Unit testing - continuously</item>
+            <item>Functional testing</item>
+            <item>(Public?)Alpha release</item>
+            <item>(Public?)Beta release</item>
+        </list>
+    </section>
+
+    <section header="Documentation">
+        <list>
+            <item>Make process documentation (diary)</item>
+            <item>Make documentation of functional testing</item>
+            <item>Make user guide</item>
+            <item>Make product documentation</item>
+        </list>
+    </section>
+
+    <section header="Completion">
+        <list>
+            <item>Deliver final report - 28.05.2003</item>
+            <item>Prepare for presentation - 10.06.2003</item>
+            <item>Presentation</item>
+        </list>
+    </section>
+</doc>
+
