@@ -159,18 +159,28 @@ namespace Ankh
 		/// <seealso class='Exec' />
 		public void QueryStatus(string commandName, EnvDTE.vsCommandStatusTextWanted neededText, ref EnvDTE.vsCommandStatus status, ref object commandText)
 		{
-			if(neededText == EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedNone)
-			{
-                Ankh.ICommand cmd;
-                if ( (cmd = (ICommand)this.commands[commandName]) != null )
-                    status = cmd.QueryStatus( this.context );
+            try
+            {
+                if( this.commands != null && 
+                    neededText == EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedNone)
+                {
+                    Ankh.ICommand cmd;
+                    if ( (cmd = (ICommand)this.commands[commandName]) != null )
+                        status = cmd.QueryStatus( this.context );
 
-                //    status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
-//				if(commandName == "Ankh.Connect.Ankh")
-//				{
-//					status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
-//				}
-			}
+                    //    status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
+                    //				if(commandName == "Ankh.Connect.Ankh")
+                    //				{
+                    //					status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
+                    //				}
+                }
+            }
+            catch( Exception ex )
+            {                                  
+                System.Windows.Forms.MessageBox.Show( 
+                    this.GenerateNestedExceptionMessage( ex )+ 
+                    Environment.NewLine + ex.StackTrace );
+            }
 		}
 
 		/// <summary>
@@ -209,16 +219,9 @@ namespace Ankh
                 }
             }
             catch( Exception ex )
-            {
-                string msg = ex.Message;
-                Exception innerEx = ex.InnerException;
-                while ( innerEx != null )
-                {
-                    msg += innerEx.Message;
-                    innerEx = innerEx.InnerException;
-                }
-                   
-                System.Windows.Forms.MessageBox.Show( msg + 
+            {                                  
+                System.Windows.Forms.MessageBox.Show( 
+                    this.GenerateNestedExceptionMessage( ex )+ 
                     Environment.NewLine + ex.StackTrace );
             }
 		}
@@ -244,6 +247,18 @@ namespace Ankh
 //            ctrl.Caption = "Ankh";
 //            ctrl.Visible = true;
 
+        }
+
+        private string GenerateNestedExceptionMessage( Exception ex )
+        {
+            string msg = ex.Message;
+            Exception innerEx = ex.InnerException;
+            while ( innerEx != null )
+            {
+                msg += innerEx.Message;
+                innerEx = innerEx.InnerException;
+            }
+            return msg;
         }
         private AnkhContext context;
         Ankh.CommandMap commands;
