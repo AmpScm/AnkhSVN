@@ -25,8 +25,8 @@ namespace Ankh
             this.dte = dte;
             this.addin = addin;
 
-            this.config = Ankh.Config.ConfigLoader.LoadConfig( AnkhContext.CONFIGDIR, 
-                AnkhContext.CONFIGFILE );
+            this.configLoader = new Ankh.Config.ConfigLoader();
+            this.config = this.configLoader.LoadConfig( );
 
             // should we use a custom configuration directory?
             if ( this.config.Subversion.ConfigDir != null )
@@ -135,6 +135,15 @@ namespace Ankh
             get{ return this.config; }
         }
 
+        /// <summary>
+        /// The configloader.
+        /// </summary>
+        public Ankh.Config.ConfigLoader ConfigLoader
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.configLoader; }
+        }
+
      
         /// <summary>
         /// An IWin32Window to be used for parenting dialogs.
@@ -224,8 +233,7 @@ namespace Ankh
         /// </summary>
         public void Shutdown()
         {            
-            Ankh.Config.ConfigLoader.SaveConfig( this.config, AnkhContext.CONFIGDIR, 
-                AnkhContext.CONFIGFILE );
+            this.configLoader.SaveConfig( this.config );
         }
 
 
@@ -358,8 +366,7 @@ namespace Ankh
         private RepositoryExplorerControl repositoryExplorer;
         private EnvDTE.Window reposExplorerWindow;
         private AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl objControl;
-        private const string CONFIGDIR = "AnkhSVN";
-        private const string CONFIGFILE = "ankhsvn.xml";
+        private Ankh.Config.ConfigLoader configLoader;
         public static readonly string REPOSEXPLORERGUID = 
             "{1C5A739C-448C-4401-9076-5990300B0E1B}";
     }

@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.Schema;
 using System.Reflection;
+using System.Collections;
 
 namespace Ankh.Config
 {
@@ -12,9 +13,14 @@ namespace Ankh.Config
     /// </summary>
     internal sealed class ConfigLoader
     {
-        private ConfigLoader()
+        public ConfigLoader( string configDir )
         {
-            // nada
+            this.configDir = configDir;
+            this.errors = new ArrayList();
+        }
+
+        public ConfigLoader() : this( ConfigLoader.DefaultConfigDir )
+        {
         }
 
         static ConfigLoader()
@@ -25,25 +31,35 @@ namespace Ankh.Config
 
             XmlReader reader = new XmlTextReader( assembly.GetManifestResourceStream(
                 ConfigLoader.configSchemaResource ) );
-            ConfigLoader.schemas.Add( ConfigLoader.configNamespace, reader );
+            ConfigLoader.schemas.Add( ConfigLoader.configNamespace, reader );            
+        }
 
-
-            ConfigLoader.errors = new System.Collections.ArrayList();
+        /// <summary>
+        /// The default config directory - usually %APPDATA%\AnkhSVN
+        /// </summary>
+        public static string DefaultConfigDir
+        {
+            get
+            {
+                return Path.Combine( Environment.GetFolderPath(
+                    Environment.SpecialFolder.ApplicationData ), 
+                    ConfigLoader.CONFIGDIRNAME );
+            }
         }
 
         /// <summary>
         /// Loads the Ankh configuration file from the given path.
         /// </summary>
         /// <returns>A Config object.</returns>
-        public static Config LoadConfig( string path )
+        public Config LoadConfig()
         {
             errors.Clear();
 
             // make sure there actually is a config file
-            EnsureConfig( path );
+            EnsureConfig( this.ConfigPath );
 
             Assembly assembly = Assembly.GetExecutingAssembly();
-            XmlTextReader reader = new XmlTextReader( path );
+            XmlTextReader reader = new XmlTextReader( this.ConfigPath );
             try                                                            
             {
                 XmlValidatingReader vr = new XmlValidatingReader( reader );
@@ -61,27 +77,16 @@ namespace Ankh.Config
             }
 
         }
-
+       
         /// <summary>
-        /// Loads a Config object from the dir subdir of the user's configuration directory.
-        /// </summary>
-        /// <param name="config">The Config object to save.</param>
-        /// <param name="dir">The subdirectory of the user's configuration directory.</param>
-        /// <param name="file">The filename of the config file.</param>
-        public static Config LoadConfig( string dir, string file )
-        {
-            return LoadConfig( BuildConfigDirectoryPath(dir, file) );
-        }
-
-        /// <summary>
-        /// Saves the supplied Config object to the given path.
+        /// Saves the supplied Config object
         /// </summary>
         /// <param name="config"></param>
-        public static void SaveConfig( Config config, string path )
+        public void SaveConfig( Config config )
         {
-            EnsureConfig( path );
+            EnsureConfig( this.ConfigPath );
 
-            using( StreamWriter writer = new StreamWriter( path ) )
+            using( StreamWriter writer = new StreamWriter( this.ConfigPath  ) )
             {
                 XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
                 ns.Add( "", ConfigLoader.configNamespace );
@@ -90,26 +95,14 @@ namespace Ankh.Config
             }
         }
 
-        /// <summary>
-        /// Saves the config in the dir subdir of the user's configuration directory.
-        /// </summary>
-        /// <param name="config">The Config object to save.</param>
-        /// <param name="dir">The subdirectory of the user's configuration directory.</param>
-        /// <param name="file">The filename of the config file.</param>
-        public static void SaveConfig( Config config, string dir, string file )
-        {
-            string path = BuildConfigDirectoryPath(dir, file);
-            SaveConfig( config, path );
-        }
-
         
 
         /// <summary>
         /// Returns the errors from the last attempt to load a configuration file.
         /// </summary>
-        public static string[] Errors
+        public string[] Errors
         {
-            get{ return (string[])ConfigLoader.errors.ToArray( typeof(string[]) ); }
+            get{ return (string[])this.errors.ToArray( typeof(string[]) ); }
         }
 
 
@@ -140,20 +133,22 @@ namespace Ankh.Config
             }
         }
 
-        private static void ValidationEventHandler(object sender, ValidationEventArgs e)
+        private string ConfigPath
+        {
+            get{ return Path.Combine( this.configDir, CONFIGFILENAME ); }
+        }
+
+        private void ValidationEventHandler(object sender, ValidationEventArgs e)
         {
             if ( e.Severity == XmlSeverityType.Error )
                 errors.Add( e.Message );
         }
 
-        static private string BuildConfigDirectoryPath(string dir, string file)
-        {
-            return Path.Combine( Environment.GetFolderPath(
-                Environment.SpecialFolder.ApplicationData ), Path.Combine( dir, file ) );
-        }
+        private string configDir;
 
-
-        private static System.Collections.ArrayList errors;
+        private const string CONFIGFILENAME = "ankhsvn.xml";
+        private const string CONFIGDIRNAME = "AnkhSVN";
+        private System.Collections.ArrayList errors;
         private static readonly XmlSchemaCollection schemas;
         private const string configNamespace = "http://ankhsvn.com/Config.xsd";
         private const string configFileResource = "Ankh.Config.Config.xml";
