@@ -101,9 +101,11 @@ namespace NSvn.Core.Tests
         public void TestLockedWc()
         {
             string lockPath = Path.Combine( this.WcPath, @".svn\lock" );
-            File.CreateText( lockPath );
-            Client.Commit( new string[]{ this.WcPath }, true, 
-                new ClientContext() );            
+            using( File.CreateText( lockPath ) )
+            {
+                Client.Commit( new string[]{ this.WcPath }, true, 
+                    new ClientContext() );            
+            }
         }
 
         private string LogMessageCallback( CommitItem[] items )
