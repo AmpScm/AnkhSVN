@@ -23,6 +23,15 @@
     <!-- Whether new files should be automatically added to Subversion -->
     <AutoAddNewFiles>true</AutoAddNewFiles>
     
+    <!-- Whether to reuse the last comment if a commit failed -->
+    <AutoReuseComment>false</AutoReuseComment>
+    
+    <!-- Whether to offer diffing and merging methods to be chosen manually
+         Method 1: Internal diff. (Context menu location as before)
+         Method 2: Diff specified in <MergeExePath>. (Context menu entry like Method 1, but " External" added to item name)
+     -->
+    <ChooseDiffMergeManual>false</ChooseDiffMergeManual>
+    
     <!-- Whether AnkhSVN should offer to automatically reload a solution if a project file
     is modified -->
     <DisableSolutionReload>false</DisableSolutionReload>

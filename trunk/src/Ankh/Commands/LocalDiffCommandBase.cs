@@ -23,6 +23,19 @@ namespace Ankh.Commands
         }
 
         /// <summary>
+        /// Gets path to the diff executable while taking care of config file settings.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns>The exe path.</returns>
+        protected virtual string GetExe( Ankh.IContext context )
+        {
+            if ( !context.Config.ChooseDiffMergeManual )
+                return context.Config.DiffExePath;
+            else 
+                return null;
+        }
+
+        /// <summary>
         /// Generates the diff from the current selection.
         /// </summary>
         /// <param name="context"></param>
@@ -33,7 +46,7 @@ namespace Ankh.Commands
             IList resources = context.SolutionExplorer.GetSelectionResources(
                 true, new ResourceFilterCallback(CommandBase.ModifiedFilter) );
 
-            string diffExe = context.Config.DiffExePath;
+            string diffExe = GetExe( context );
             if (diffExe == null)
             {
                 // are we shifted?
