@@ -150,6 +150,15 @@ namespace Ankh
             this.OutputPane.EndActionText();
         }
 
+        /// <summary>
+        /// Miscellaneous cleanup stuff goes here.
+        /// </summary>
+        public void Shutdown()
+        {
+            this.SolutionClosing();
+        }
+
+
         #region SetUpEvents
         /// <summary>
         /// Sets up event handlers.
