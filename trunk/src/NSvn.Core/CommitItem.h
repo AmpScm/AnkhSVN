@@ -1,5 +1,7 @@
 #include "StdAfx.h"
 #include <svn_client.h>
+#include <svn_path.h>
+#include <svn_pools.h>
 #include "svnenums.h"
 
 namespace NSvn
@@ -10,14 +12,16 @@ namespace NSvn
         public __gc class CommitItem
         {
         public:
-            CommitItem( svn_client_commit_item_t* item ) : 
-                path( StringHelper( item->path ) ), 
+            CommitItem( svn_client_commit_item_t* item, apr_pool_t* pool ) :                 
                 kind( static_cast<NodeKind>(item->kind) ),
                 url( StringHelper( item->url ) ),
                 revision( item->revision ),
                 copyFromUrl( StringHelper( item->copyfrom_url ) )
 
-                {;}
+                {
+                    // convert to a native path
+                    this->path = StringHelper( svn_path_local_style(item->path, pool) );
+                }
                 
             ///<summary>The working copy path to this item</summary>
             __property String* get_Path()
