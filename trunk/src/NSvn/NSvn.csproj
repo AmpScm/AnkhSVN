@@ -106,6 +106,21 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "UnversionedDirectory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "UnversionedFile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "UnversionedItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WorkingCopyDirectory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
