@@ -131,8 +131,16 @@
                     HintPath = "..\lib\Interop.SHDocVw.dll"
                 />
                 <Reference
-                    Name = "VSUserControlHostLib"
-                    Guid = "{280D96EA-474C-486E-88BE-5EB39FC4ACCB}"
+                    Name = "stdole"
+                    Guid = "{00020430-0000-0000-C000-000000000046}"
+                    VersionMajor = "2"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "primary"
+                />
+                <Reference
+                    Name = "AnkhToolWindowLib"
+                    Guid = "{2DE57F3E-1C4C-4E9E-A124-FE5B230C0D30}"
                     VersionMajor = "1"
                     VersionMinor = "0"
                     Lcid = "0"
