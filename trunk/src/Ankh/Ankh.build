@@ -46,7 +46,7 @@
         <comregister file="${lib.dir}\AnkhUserControlHost.dll"/>
 
         <tlbimp typelib="${lib.dir}\AnkhUserControlHost.dll" 
-            output="${build.dir}/AnkhUserControlHostLib.dll" />
+            output="${build.dir}\AnkhUserControlHostLib.dll" />
         
         <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" 
             define="${define}" debug="${debug}">
@@ -67,6 +67,7 @@
             
             
             <arg value="/resource:status_icons.bmp,Ankh.status_icons.bmp"/>
+            <arg value="/resource:Config/Config.xsd,Ankh.Config.Config.xsd"/>
             <arg value="/debug:pdbonly" unless="${debug}"/>
             
             <sources basedir="${src.dir}">
