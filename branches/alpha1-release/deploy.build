@@ -5,6 +5,8 @@
     <property name="deploy.dir" value="deploy"/>
     <property name="checkout.dir" value="Ankh-Release" />
     <property name="zip.file" value="Ankh.zip" />
+    <property name="major.version" value="0" />
+    <property name="minor.version" value="2" />
     <property name="url" 
         value="http://arild.no-ip.com:8088/svn/finalproject/branches/alpha1-release/src"/>
         
@@ -15,12 +17,84 @@
         <svncheckout localDir="${checkout.dir}" url="${url}" verbose="${verbose}" />
     </target>
     
+    <target name="version" depends="source">    
+        <script language="C#">
+        
+            <code><![CDATA[
+            public static string GetVersionString( Project project )
+            {
+               Location location = new Location( "GetVersionString" );
+               string dirname = project.ExpandProperties( "${checkout.dir}", location );
+               
+               System.Diagnostics.Process proc = new System.Diagnostics.Process();
+               proc.StartInfo.RedirectStandardOutput = true; 
+               proc.StartInfo.UseShellExecute = false;
+               proc.StartInfo.FileName="svnversion.exe";
+               proc.StartInfo.Arguments = dirname;
+               proc.StartInfo.CreateNoWindow = true;
+               
+               proc.Start();
+               
+               string output = proc.StandardOutput.ReadToEnd();
+               proc.WaitForExit();
+               
+               if ( proc.ExitCode != 0 )
+                  throw new ApplicationException( "svnversion returned an error code" );   
+                  
+               Regex rex = new Regex( @"(?'first'\d*)?:?(?'second'\d*)?[MS]*" );
+               if ( !rex.IsMatch( output ) )
+                  throw new ApplicationException( "svnversion output not as expected: " + output );
+               
+               string first = rex.Match( output ).Groups["first"].Value;
+               string second = rex.Match( output ).Groups["second"].Value;
+               
+               int revision;
+               if ( second != "" )
+                  revision = int.Parse( second );
+               else
+                  revision = int.Parse( first );
+               
+               return project.ExpandProperties( 
+                    "${major.version}.${minor.version}.42." + revision, location );
+            }
+            
+            public static void ScriptMain( Project project )
+            {
+               DirectoryScanner scanner = new DirectoryScanner();
+               scanner.BaseDirectory = project.Properties[ "checkout.dir" ];
+               scanner.Includes.Add( @"**\AssemblyInfo.cs" );
+               scanner.Includes.Add( @"**\AssemblyInfo.cpp" );
+               
+               string versionString = "AssemblyVersionAttribute( \"" + GetVersionString( project ) +"\")";
+                              
+               foreach( string file in scanner.FileNames )
+               {
+                  string fileContents = null;
+                  Console.WriteLine( file );
+                  using(StreamReader r = new StreamReader( file ) )
+                     fileContents = r.ReadToEnd();                 
+                 
+                  
+                  string newContents =
+                     Regex.Replace( fileContents, @"AssemblyVersion(Attribute)*\("".*""\)",
+                        versionString );
+                  
+                  using( StreamWriter w = new StreamWriter( file ) )
+                    w.Write( newContents );
+               }
+            }]]></code>   
+        </script>
+    
+    </target>
+    
     <target name="source">
         <available type="Directory" resource="${checkout.dir}" 
             property="checkout.dir.present"/>
         <ifnot propertytrue="checkout.dir.present">
-            <call target="checkout" />
+            <call target="checkout" /> 
         </ifnot>
+        
+        <call target="version" />
     </target>
     
     <target name="clean">
