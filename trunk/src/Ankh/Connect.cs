@@ -84,6 +84,8 @@ namespace Ankh
                     Ankh.CommandMap.LoadCommands( this.context, register );  
 
                 this.CreateAboutBoxText( ((_DTE)application).RegistryRoot );
+
+                
   
                 
             }
@@ -140,6 +142,10 @@ namespace Ankh
         /// <seealso class='IDTExtensibility2' />
         public void OnStartupComplete(ref System.Array custom)
         {
+            this.context.DTE.ExecuteCommand( "Tools.Alias", "svn Ankh.RunSvn" );
+            this.context.DTE.ExecuteCommand( "Tools.Alias", "cd Ankh.RunSvn cd" );
+            this.context.DTE.ExecuteCommand( "Tools.Alias", "pwd Ankh.RunSvn pwd" );
+            this.context.DTE.ExecuteCommand( "Tools.Alias", "dir Ankh.RunSvn dir" );
         }
 
         /// <summary>
@@ -239,12 +245,19 @@ namespace Ankh
             handled = false;
             try
             {
-                if(executeOption == EnvDTE.vsCommandExecOption.vsCommandExecOptionDoDefault)
+                if( (executeOption == vsCommandExecOption.vsCommandExecOptionDoDefault) ||
+                    ((executeOption & vsCommandExecOption.vsCommandExecOptionShowHelp) != 0) )
                 {
+                    string args = (string)varIn;
+
+                    // does the user need help?
+                    if ((executeOption & vsCommandExecOption.vsCommandExecOptionShowHelp) != 0)
+                        args = "/?";
+
                     ICommand cmd;
                     if ( (cmd = (ICommand)this.commands[commandName]) != null )
                     { 
-                        cmd.Execute( this.context, (string)varIn );
+                        cmd.Execute( this.context, args );
                         handled = true;
                     }
                 }
