@@ -72,65 +72,11 @@
     
     <directory path="design">
         <name>Design documents</name>
-        <directory path="diagrams">
-            <name>UML diagrams</name>
-            <permissions>group, supervisor, collabnet</permissions>
+
             
-            <file path="Ankh.Commands.PNG">
-                <realpath>doc/uml/Ankh.Commands.PNG</realpath>
-                <name>Ankh.Commands.PNG</name>
-                <description>Class diagram for the Ankh.Commands 
-                namespace</description>
-            </file>
-
-            <file path="Ankh.PNG">
-                <realpath>doc/uml/Ankh.PNG</realpath>
-                <name>Ankh.PNG</name>
-                <description>Class diagram for the Ankh namespace</description>
-            </file>
-
-            <file path="Ankh.UI.PNG">
-                <realpath>doc/uml/Ankh.UI.PNG</realpath>
-                <name>Ankh.UI.PNG</name>
-                <description>Class diagram for the Ankh.UI namespace</description>
-            </file>
-
-            <file path="packages.png">
-                <realpath>doc/uml/packages.png</realpath>
-                <name>packages.png</name>
-                <description>Package diagram for Ankh</description>
-            </file>
-
-
-            <file path="uc1.png">
-                <realpath>doc/uml/uc1.png</realpath>
-                <name>Use case diagram I</name>
-                <description>A use case diagram</description>
-            </file>
-           
-            <file path="uc2.png">
-                <realpath>doc/uml/uc2.png</realpath>
-                <name>Use case diagram II</name>
-                <description>A use case diagram</description>
-            </file>
-            <file path="uc3.png">
-                <realpath>doc/uml/uc3.png</realpath>
-                <name>Use case diagram III</name>
-                <description>A use case diagram</description>
-            </file>
-            <file path="uc4.png">
-                <realpath>doc/uml/uc4.png</realpath>
-                <name>Use case diagram IV</name>
-                <description>A use case diagram</description>
-            </file>
-            <file path="diff.png">
-                <realpath>doc/uml/diff.png</realpath>
-                <name>Yet another use case diagram I</name>
-                <description>A use case diagram</description>
-            </file>
-        </directory>
 
         <include>doc/usecases.xml</include> 
+        <include>doc/umldiagrams.xml</include>
 
     </directory>
     
