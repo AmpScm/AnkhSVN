@@ -24,7 +24,8 @@ namespace Ankh.EventSinks
             try
             {
                 // do we want to automatically add it?
-                if ( this.Context.Config.AutoAddNewFiles )
+                // no autoadds if another operation is running.
+                if ( this.Context.Config.AutoAddNewFiles && !this.Context.OperationRunning )
                 {
                     for( short i = 1; i <= item.FileCount; i++ )
                     {
@@ -68,7 +69,7 @@ namespace Ankh.EventSinks
         protected void ItemRemoved( ProjectItem item )
         {
             // is a rename back operation going on?
-            if ( this.renaming )
+            if ( this.Context.OperationRunning )
                 return;
 
             try
