@@ -176,11 +176,11 @@ class Directory:
                 font-size: 10pt;
                 font-family: 'Arial Narrow';
             }
+            </style>
                 <title>%(basename)s
                 </title>
             </head>
         <body>
-        <img src="src\Help.doc\img\logo(250x68).png"/>
         <h3>%(basename)s</h3>
         <a href="../list.html">Up</a> <br/> <br/>
         """ % locals()
@@ -209,9 +209,15 @@ def generate():
     framesetname = os.path.join( outputdir, os.path.basename( inputdir ), 
         "index.html" )
     frameset = open( framesetname, "w" )
-    print >> frameset, """<html><head><title>Source code</title></head>
-    <frameset cols="20%,*">
-        <frame frameborder="1" name="list" src="list.html"/>
+    print >> frameset, """
+    <html>
+        <head>
+        <title>Source code</title></head>
+        <frameset cols="25%,*">
+        <frameset rows="15%,*" >
+            <frame frameborder="0" name="banner" src="Help.doc/img/logo(250x68).png"/>
+            <frame frameborder="0" name="list" src="list.html"/>
+            </frameset>
         <frame frameborder="1" name="source" src=""/>
     </frameset></html>"""
     frameset.close()
