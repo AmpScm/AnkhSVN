@@ -141,11 +141,13 @@ namespace Ankh.RepositoryExplorer
             set { this.tag = value; }
         }
 
+        [Category("Subversion")]
         public bool IsDirectory
         {
             get{ return true; }
         }
 
+        [Category("Subversion")]
         public string Name
         {
             get{ return this.url; }
@@ -160,11 +162,13 @@ namespace Ankh.RepositoryExplorer
             get{ return null; }
         }
 
+        [Category("Subversion")]
         public string Url
         {
             get{ return this.url; }
         }
 
+        [Category("Subversion")]
         public Revision Revision
         {
             get{ return this.revision; }
