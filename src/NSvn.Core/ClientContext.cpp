@@ -223,7 +223,7 @@ namespace
         {
             svn_client_commit_item_t* item = ((svn_client_commit_item_t**)
                 (commit_items->elts))[i];
-            items[ i ] = new CommitItem( item );
+            items[ i ] = new CommitItem( item, pool );
         }
 
         //TODO: should we support tmp_file?
