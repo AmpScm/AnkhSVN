@@ -7,5 +7,6 @@ namespace NSvn
         __delegate void NotifyCallback();
         __delegate void LogMessageCallback();
         __delegate void LogMessageReceiver();
+        __delegate void PromptCallback();
     }
 }
