@@ -10,12 +10,6 @@
                 Print the status of working copy files and directories. With no args, 
                 it prints only locally modified items (no repository access). 
                 <br/><br/>
-                The first five columns in the output are each one character wide, 
-                and each column gives you information about different aspects of each working copy 
-                item.
-                <br/><br/>
-                The first column indicates that an item was added, deleted, or otherwise changed.
-                <br/><br/>
                 <list>
                     <item>' ' - No modifications. </item>
                     <item>'A' - Item is scheduled for Addition.</item>
@@ -26,6 +20,7 @@
                     <item>'!' - Item is missing (e.g. you moved or deleted it without using svn).</item>
                     <item>'~' - Item is versioned as a directory, but has been replaced by a file, 
                     or vice versa
+                <br/><br/>
                     The second column tells the status of a file's or directory's properties.</item>
                     <item>' ' - No modifications.</item>
                     <item>'M' - Properties for this item have been modified.</item>
@@ -43,7 +38,6 @@
                     <item>' ' - The item in your working copy is up-to-date.</item>
                     <item>'*' - A newer revision of the item exists on the server.</item>
                 </list>
-               The working copy path is always the final field, so it can include spaces.
                 <br/><br/>
                 <b>Changes</b>
                 <br/>

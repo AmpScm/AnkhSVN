@@ -7,7 +7,7 @@
             <p>
                 <b>Description</b>
                 <br/>
-                Items specified on the command line are scheduled for deletion upon the next commit. 
+                Items specified are scheduled for deletion upon the next commit. 
                 Files (and directories that have not been committed) are immediately removed from the working copy. 
                 If run on an URL, the item is deleted from the repository via an immediate commit.
 

@@ -15,7 +15,7 @@
 
                 <br/><br/><br/>
                 A commit operation can publish changes to any number of files and directories as a single atomic transaction. 
-                In your working copy, you can change files' contents, create, delete, rename and copy files and directories,
+                In your working copy, you can change files, contents, create, delete, rename and copy files and directories,
                 and then commit the complete set of changes as a unit.
                 <br/><br/>
                 In the repository, each commit is treated as an atomic transaction: either all the commit's changes take 

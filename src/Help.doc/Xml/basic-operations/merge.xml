@@ -15,7 +15,6 @@
                     defines the two sources to be compared.
                     <br/><br/>
                     PATH is the working copy path that will receive the changes. 
-                    If omitted, a default value of '.' is assumed.
                 <br/><br/>
                 <b>Changes</b>
                 <br/>

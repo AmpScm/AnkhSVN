@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <?xml-stylesheet type="text/xsl" href="../doc.xsl"?>
-<doc title="About the Ankh Help file">
+<doc title="About this Help file">
     <section>
         <p>This is the documentation for Ankh, a Microsoft Visualstudio .NET addin.
            Here you will find information on installing, configuring and using the application. 
            Use the navigation bar to find the right topic, or search for keywords.
            If you still can’t find what you where looking for you can check out the Ankh homepages at:
-           <link url="ankhsvn.no-ip.com">Ankh</link>
+           <link url="http://ankhsvn.no-ip.com">ankhsvn.no-ip.com</link>
         </p> 
     </section>
 </doc>
