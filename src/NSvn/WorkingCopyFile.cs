@@ -27,9 +27,12 @@ namespace NSvn
             visitor.VisitWorkingCopyFile( this );
         }
 
-        public void Resolve()
+        /// <summary>
+        /// Mark this resource as resolved of conflicts and make it committable.
+        /// </summary>
+        public void Resolved()
         {
-            Client.Resolve( this.Path, false, this.ClientContext );
+            Client.Resolved( this.Path, false, this.ClientContext );
         }
 
         /// <summary>

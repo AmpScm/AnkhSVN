@@ -7,11 +7,9 @@ using System.Data;
 using System.Windows.Forms;
 using NSvn;
 using NSvn.Core;
-using Utils;
 using System.Text.RegularExpressions;
 using Microsoft.Office.Core;
 using System.Diagnostics;
-using System.Web;
 
 namespace Ankh.UI
 {
@@ -19,20 +17,16 @@ namespace Ankh.UI
     /// Gives a tree view of the repository based on revision.
     /// </summary>
     public class RepositoryExplorerControl : System.Windows.Forms.UserControl
-    {
+    {		
         /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        public RepositoryExplorerControl()
+        public RepositoryExplorerControl( )
         {
-            // This call is required by the Windows.Forms Form Designer.
+            //This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
- 
-            // TODO: Add any initialization after the InitForm call
-
-            myInitializeComponents();
 
             //Set revision choices in combobox
             this.revisionPicker.WorkingEnabled = false;
@@ -156,81 +150,46 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.urlTextBox = new System.Windows.Forms.TextBox();
-            this.goButton = new System.Windows.Forms.Button();
-            this.revisionLabel = new System.Windows.Forms.Label();
-            this.browseButton = new System.Windows.Forms.Button();
             this.urlLabel = new System.Windows.Forms.Label();
+            this.urlTextBox = new System.Windows.Forms.TextBox();
+            this.revisionLabel = new System.Windows.Forms.Label();
+            this.goButton = new System.Windows.Forms.Button();
+            this.treeView = new Ankh.UI.RepositoryTreeView();
+            this.revisionPicker = new Ankh.UI.RevisionPicker();
             this.SuspendLayout();
-            // 
-            // urlTextBox
-            // 
-            this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left);
-            this.urlTextBox.Location = new System.Drawing.Point(32, 8);
-            this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(224, 20);
-            this.urlTextBox.TabIndex = 1;
-            this.urlTextBox.Text = "http://www.ankhsvn.com:8088/svn/test";
-            this.urlTextBox.TextChanged += new System.EventHandler(this.urlTextBox_TextChanged);
-            // 
-            // goButton
-            // 
-            this.goButton.Location = new System.Drawing.Point(264, 8);
-            this.goButton.Name = "goButton";
-            this.goButton.Size = new System.Drawing.Size(32, 23);
-            this.goButton.TabIndex = 2;
-            this.goButton.Text = "Go";
-            this.goButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.goButton.Click += new System.EventHandler(this.goButton_Click);
-            // 
-            // revisionLabel
-            // 
-            this.revisionLabel.Location = new System.Drawing.Point(0, 38);
-            this.revisionLabel.Name = "revisionLabel";
-            this.revisionLabel.Size = new System.Drawing.Size(344, 18);
-            this.revisionLabel.TabIndex = 3;
-            this.revisionLabel.Text = "Select a revision or manually type the revision number:";
-            // 
-            // browseButton
-            // 
-            this.browseButton.Location = new System.Drawing.Point(305, 8);
-            this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(56, 23);
-            this.browseButton.TabIndex = 4;
-            this.browseButton.Text = "Browse";
-            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
             // 
             // urlLabel
             // 
-            this.urlLabel.Location = new System.Drawing.Point(7, 11);
+            this.urlLabel.Location = new System.Drawing.Point(1, 8);
             this.urlLabel.Name = "urlLabel";
-            this.urlLabel.Size = new System.Drawing.Size(24, 16);
-            this.urlLabel.TabIndex = 5;
+            this.urlLabel.Size = new System.Drawing.Size(24, 23);
+            this.urlLabel.TabIndex = 0;
             this.urlLabel.Text = "Url:";
             // 
-            // RepositoryExplorerControl
+            // urlTextBox
             // 
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.urlLabel,
-                                                                          this.browseButton,
-                                                                          this.revisionLabel,
-                                                                          this.goButton,
-                                                                          this.urlTextBox});
-            this.Name = "RepositoryExplorerControl";
-            this.Size = new System.Drawing.Size(408, 392);
-            this.ResumeLayout(false);
-
-        }
-		#endregion
-
-        
-        private void myInitializeComponents()
-        {
-            //initialize components outside of generated code area
-
-            this.treeView = new Ankh.UI.RepositoryTreeView();
-            this.revisionPicker = new Ankh.UI.RevisionPicker();
+            this.urlTextBox.Location = new System.Drawing.Point(28, 5);
+            this.urlTextBox.Name = "urlTextBox";
+            this.urlTextBox.Size = new System.Drawing.Size(220, 20);
+            this.urlTextBox.TabIndex = 1;
+            this.urlTextBox.Text = "http://www.ankhsvn.com:8088/svn/test";
+            // 
+            // revisionLabel
+            // 
+            this.revisionLabel.Location = new System.Drawing.Point(1, 29);
+            this.revisionLabel.Name = "revisionLabel";
+            this.revisionLabel.Size = new System.Drawing.Size(350, 20);
+            this.revisionLabel.TabIndex = 2;
+            this.revisionLabel.Text = "Select a revision or manually type the revision number:";
+            // 
+            // goButton
+            // 
+            this.goButton.Enabled = false;
+            this.goButton.Location = new System.Drawing.Point(256, 4);
+            this.goButton.Name = "goButton";
+            this.goButton.TabIndex = 5;
+            this.goButton.Text = "Go";
+            this.goButton.Click += new System.EventHandler(this.goButton_Click);
             // 
             // treeView
             // 
@@ -240,7 +199,7 @@ namespace Ankh.UI
             this.treeView.Controller = null;
             this.treeView.Enabled = false;
             this.treeView.ImageIndex = -1;
-            this.treeView.Location = new System.Drawing.Point(0, 88);
+            this.treeView.Location = new System.Drawing.Point(0, 80);
             this.treeView.Name = "treeView";
             this.treeView.SelectedImageIndex = -1;
             this.treeView.Size = new System.Drawing.Size(400, 296);
@@ -248,7 +207,7 @@ namespace Ankh.UI
             // 
             // revisionPicker
             // 
-            this.revisionPicker.Location = new System.Drawing.Point(8, 60);
+            this.revisionPicker.Location = new System.Drawing.Point(8, 48);
             this.revisionPicker.Name = "revisionPicker";
             this.revisionPicker.Size = new System.Drawing.Size(336, 24);
             this.revisionPicker.TabIndex = 7;
@@ -258,36 +217,28 @@ namespace Ankh.UI
             // 
             this.Controls.Add(this.revisionPicker);
             this.Controls.Add(this.treeView);
+            this.Controls.Add(this.goButton);
+            this.Controls.Add(this.revisionLabel);
+            this.Controls.Add(this.urlTextBox);
+            this.Controls.Add(this.urlLabel);
+            this.Name = "RepositoryExplorerControl";
+            this.Size = new System.Drawing.Size(400, 376);
+            this.ResumeLayout(false);
 
         }
+		#endregion
 
- 
-        private void browseButton_Click(object sender, System.EventArgs e)
-        {
-            // Browse to a local repository
-
-            FolderBrowser browser = new FolderBrowser();
-
-             //convert the returned directory path to a URL - for a local path URL no need for encoding
-            if ( browser.ShowDialog() == DialogResult.OK) 
-                urlTextBox.Text ="file:///" +  browser.DirectoryPath.Replace( '\\', '/');
-
-        }
-
-        private void urlTextBox_TextChanged(object sender, System.EventArgs e)
-        {
-        
-        }
-        private System.Windows.Forms.TextBox urlTextBox;
-        private System.Windows.Forms.Button goButton;
-        private System.Windows.Forms.Label revisionLabel;
-        private System.Windows.Forms.Button browseButton;
-        private Ankh.UI.RevisionPicker revisionPicker;
-        private Ankh.UI.RepositoryTreeView treeView;
-        private CommandBar commandBar;
         private System.Windows.Forms.Label urlLabel;
-
- 
-
+        private System.Windows.Forms.TextBox urlTextBox;
+        private System.Windows.Forms.Label revisionLabel;
+        private Ankh.UI.RepositoryTreeView treeView;
+        private System.Windows.Forms.Button goButton;
+        private Ankh.UI.RevisionPicker revisionPicker;
+        private CommandBar commandBar;
+		
+						
     }
 }
+
+
+

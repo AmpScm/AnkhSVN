@@ -38,7 +38,7 @@ namespace NSvn
             /// <summary>Got a revert failed.</summary>          
             FailedRevert = svn_wc_notify_failed_revert,
             /// <summary>Got a resolve.</summary>          
-            Resolve = svn_wc_notify_resolve,
+            Resolved = svn_wc_notify_resolved,
             /// <summary>Got a status.</summary>              
             Status = svn_wc_notify_status,
             /// <summary>Got a skip.</summary>          
