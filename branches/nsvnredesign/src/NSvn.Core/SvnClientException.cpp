@@ -37,6 +37,9 @@ namespace
         case SVN_ERR_ILLEGAL_TARGET:
             return new IllegalTargetException( child );
             break;
+        case SVN_ERR_CANCELLED:
+            return new OperationCancelledException( child );
+            break;
         default:
             return new SvnClientException( FormatMessage( err ), child );
             break;
