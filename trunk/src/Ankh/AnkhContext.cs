@@ -200,6 +200,22 @@ namespace Ankh
             get{ return this.operationRunning; }
         }
 
+        public string SolutionDirectory
+        {
+            get
+            {
+                if ( !this.SolutionIsOpen )
+                    return null; 
+
+                // no point in doing anything if the solution dir doesn't exist
+                string solutionPath = this.dte.Solution.FullName;
+                if ( solutionPath == String.Empty || !File.Exists(solutionPath))
+                    return null;
+
+                return Path.GetDirectoryName( solutionPath );
+            }
+        }
+
      
         /// <summary>
         /// An IWin32Window to be used for parenting dialogs.
@@ -411,12 +427,7 @@ namespace Ankh
         
         private bool CheckWhetherAnkhShouldLoad()
         {
-            // no point in doing anything if the solution dir doesn't exist
-            string solutionPath = this.dte.Solution.FullName;
-            if ( solutionPath == String.Empty || !File.Exists(solutionPath))
-                return false;
-
-            string solutionDir = Path.GetDirectoryName( solutionPath );
+            string solutionDir = this.SolutionDirectory;
 
             // maybe this solution has never been loaded before with Ankh?
             if ( File.Exists( Path.Combine( solutionDir, "Ankh.Load" ) ) )

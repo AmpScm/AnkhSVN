@@ -33,6 +33,8 @@ namespace Ankh
         /// </summary>
         ISolutionExplorer SolutionExplorer { get; }
 
+        string SolutionDirectory{ get; }
+
         /// <summary>
         /// The output pane.
         /// </summary>
