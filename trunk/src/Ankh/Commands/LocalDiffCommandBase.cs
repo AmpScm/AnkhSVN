@@ -51,15 +51,26 @@ namespace Ankh.Commands
             {
                 // are we shifted?
                 bool recurse = false;
+                
+                Revision revisionStart = Revision.Base;
+                Revision revisionEnd = Revision.Working;
+
                 if ( CommandBase.Shift )
                 {
                     PathSelectorInfo info = new PathSelectorInfo( "Select items for diffing", 
                         resources, resources );
+                    info.RevisionStart = revisionStart;
+                    info.RevisionEnd = revisionEnd;
+
                     info = context.UIShell.ShowPathSelector( info );
+                    
                     if ( info == null )
                         return null;
+                    
                     resources = info.CheckedItems;
                     recurse = info.Recursive;
+                    revisionEnd = info.RevisionEnd;
+                    revisionStart = info.RevisionStart;
                 }
 
                 
@@ -84,8 +95,8 @@ namespace Ankh.Commands
                             Utils.Win32.FileAttribute.Normal );
                         path = path != null ? path : item.Path;
 
-                        context.Client.Diff( new string[]{}, path, Revision.Base, 
-                            path, Revision.Working, recurse, true, false, stream, Stream.Null );
+                        context.Client.Diff( new string[]{}, path, revisionStart, 
+                            path, revisionEnd, recurse, true, false, stream, Stream.Null );
                     }
 
                     return System.Text.Encoding.Default.GetString( stream.ToArray() );
