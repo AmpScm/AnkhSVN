@@ -12,6 +12,7 @@ namespace NSvn
         public __gc class Revision
         {
         public:
+            //TODO: doc comments
             static Revision* const Unspecified = new Revision( svn_opt_revision_unspecified );
             static Revision* const Committed = new Revision( svn_opt_revision_committed );
             static Revision* const Previous = new Revision( svn_opt_revision_previous );

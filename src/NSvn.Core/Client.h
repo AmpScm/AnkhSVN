@@ -279,7 +279,7 @@ namespace NSvn
             ///                      for more information.</param> 
               static void RevPropSet(String* propName, Byte propval[], String* url, Revision* revision, 
                 RevisionNumber* setRev, ClientContext* context);
-
+            */
             ///<summary>Get properties from an entry in a working copy or repository.</summary>
             ///<param name="propName">Name of property.</param>
             ///<param name="target">Target of property. Which file/directory to get the property.</param>         
@@ -291,8 +291,10 @@ namespace NSvn
             ///                      callbacks, batons, serves as a cache for configuration options, 
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
-	        static StringDictionary* PropGet(String* propName, String* target, Revision* revision, 
+	        static PropertyMapping* PropGet(String* propName, String* target, Revision* revision, 
                 bool recurse, ClientContext* context);
+
+            /*
    
             ///<summary>Get a revision property from a repository.</summary>
             ///<param name="propName">Name of property.</param>
@@ -376,6 +378,11 @@ namespace NSvn
             static void ByteArrayToSvnString( svn_string_t* string, Byte array[], 
                 const Pool& pool );
             static const char* CanonicalizePath( String* path, Pool& pool );
+
+            static PropertyMapping* ConvertPropertyHash( 
+                apr_hash_t* propertyHash, String* propertyName, Pool& pool );
+
+            static String* ToNativePath( const char* path, Pool& pool );
 
             static apr_array_header_t* StringArrayToAprArray( String* strings[], Pool& pool );
         };
