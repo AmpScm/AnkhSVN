@@ -171,36 +171,30 @@ void NSvn::Core::Client::Status(
     *youngest = revnum;
 }
 
+// implementation of Client::SingleStatus
 NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
 {
-    svn_wc_adm_access_t* admAccess;
+    // used to hold the result of the status call
+    struct StatusHolder
+    {
+        static void Callback( void* baton, const char* path, svn_wc_status_t* status )
+        {
+            StatusHolder* holder = static_cast<StatusHolder*>(baton);
+            holder->Status = status;
+        }
+        svn_wc_status_t* Status;
+    } holder;
+
     Pool pool;
+    const char* truePath = CanonicalizePath( path, pool );
+    svn_revnum_t youngest;    
 
-    // lock the directory
-    svn_error_t* err = svn_wc_adm_probe_open( &admAccess, 0, CanonicalizePath( path, pool ), 
-        false, false, pool );
+    HandleError( svn_client_status( &youngest, truePath, 
+        Revision::Unspecified->ToSvnOptRevision( pool ),
+        StatusHolder::Callback, &holder, false, true, false, true, 
+        this->context->ToSvnContext( pool ), pool ) );
 
-    if( err && err->apr_err == SVN_ERR_WC_NOT_DIRECTORY )
-        return Status::None;
-    else
-        HandleError( err );
-
-    try
-    {
-        //retrieve the status
-        svn_wc_status_t* status;    
-        const char* truePath = CanonicalizePath( path, pool );
-
-        HandleError( svn_wc_status( &status, truePath, admAccess, pool ) );
-
-        return new NSvn::Core::Status( status );
-    }
-    __finally
-    {
-
-        // and unlock again
-        HandleError( svn_wc_adm_close( admAccess ) );
-    }    
+    return new NSvn::Core::Status( holder.Status );
 }
 
 

@@ -136,6 +136,8 @@ namespace NSvn.Core.Tests
             this.RunCommand( "svn", "add " + added );
 
             string changed = this.CreateTextFile( "Form.cs" );
+            string ignored = this.CreateTextFile( "foo.bar" );
+            this.RunCommand( "svn", "ps svn:ignore foo.bar " + this.WcPath );
 
             string propChange = Path.Combine( this.WcPath, "App.ico" );
 
@@ -157,7 +159,12 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "Wrong property status " + propChange, 
                 status.PropertyStatus, StatusKind.Modified );
 
+            status = this.Client.SingleStatus( ignored );
+            Assert.AreEqual( StatusKind.Ignored, status.TextStatus, 
+                "Ignore status not found" );
+
         }
+
 
         [Test]
         public void TestStatusEquals()
