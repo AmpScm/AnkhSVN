@@ -2,8 +2,12 @@
 # The URL to build from
 $ANKHSVN = "http://10.0.0.3/svn/finalproject/branches/0.5-release/src"
 
+# version numbers to put in the filename
+$MAJOR, $MINOR, $PATCH, $LABEL = 0, 5, 6, "test"
+
 # The URL of the Subversion version
 $SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.0.8/"
+$subversion_dir=""
 
 # The URL of neon
 $NEON = "http://www.webdav.org/neon/neon-0.24.7.tar.gz"
@@ -23,7 +27,7 @@ $env:OPENSSL_STATIC = 1
 $BUILDDIR = "build"
 
 # The location of the vsvars file
-$VSVARS="n:\vsvars2002.msh"
+$VSVARS="I:\Program Files\Microsoft Visual Studio .NET\Common7\Tools\vsvars32.bat"
 
 # APR
 $APACHE_CVS = ":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
@@ -74,6 +78,60 @@ function create_build_directory
 
     return $dir
 }
+
+function get_env_from_bat( $batfile )
+{
+	$run_bat = combine-path $TMP "run_bat.cmd"
+	echo "call %1" > $run_bat
+	echo "set" >> $run_bat
+	
+	$newenv = cmd.exe "/c" $run_bat "$batfile"
+	
+	$newenv -match "=" | foreach{
+	   $var, $value = $_.Split("=")
+		"Setting environment variable $var to $value"
+		set-env $var $value
+	}
+
+	remove-item $run_bat
+}
+
+function parse_args
+{
+	# go through any var=val args on the command line
+	$a = [String[]] $args
+	$a | where { $_ -match "=" } | foreach	{ 
+		$var, $value = $_.Split("=")
+		"Setting $var to $value"
+		set-variable $var $value
+	}
+
+	$do_vsvars = 1
+	
+	# get any other args
+	$a | foreach {
+		switch( $_ )
+		{
+			{ $_ -ieq "/novsvars" }
+			{
+				$do_vsvars = 0
+			}
+		}
+	}
+
+	if ( $do_vsvars )
+	{
+		"Doing vsvars"
+		get_env_from_bat( $VSVARS )
+	}
+	else
+	{
+		"Not doing vsvars"
+	}
+			
+}
+
+
 
 
 # Downloads and extracts a zip or a tarball
@@ -282,6 +340,7 @@ function do_subversion
     python "gen-make.py" $opts
 
 	# make sure our built subversion lets us set the admin dir
+	"Patching the Subversion source to allow us to set the admin dir"
 	patch -p0 --input "..\src\NSvn.Core\admindir.patch"
 
 	"Building Subversion"
@@ -290,7 +349,7 @@ function do_subversion
 	pop-location
 
 	# so that the Ankh  build will pick up on it.
-	$env:svnsrc = convert-path "subversion"
+	$script:subversion_dir = convert-path "subversion"
 	 
 }
 
@@ -300,28 +359,41 @@ function do_ankh
 	#
 	checkout $ANKHSVN
 
-	#$env:svnsrc="N:\tmp\build-0\subversion"
-	do_subversion 
+	if ( ! $subversion_dir )
+	{
+		"Doing subversion"
+		do_subversion 
+	}
+	else
+	{
+		"Not doing subversion"
+	}
+	
+	$env:svnsrc=$subversion_dir
 
+
+	"svnsrc: $env:svnsrc"
 	set-location "src"
 	devenv src.sln /build $CONFIG /project "AnkhSetup"
+
+	$toname = "..\AnkhSetup-{0}.{1}.{2}{3}.msi" -f $MAJOR, $MINOR, $PATCH, $LABEL
+
+	copy-item "Ankh\AnkhSetup\$CONFIG\AnkhSetup.msi" $toname
 }
 
 $starttime = [DateTime].Now
 
-# first set the environment for VC++ tools
-#. $VSVARS
-
+# parse any arguments given on the command line
+parse_args( $args )
+die
 push-location
 
+# create the build directory
 $dir = create_build_directory
 new-directory $dir
 set-location $dir
 
 "Created build directory {0}" -f $dir
-
-
-
 
 #do_subversion
 #do_openssl
