@@ -59,6 +59,8 @@ Project("{D4EFD700-BBAA-11D2-8EE0-00C04F5E0C38}") = "Ankh help.2003", "Help.doc\
 	EndProjectSection
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.2003", "Utils\Utils.2003.csproj", "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -68,7 +70,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReposInstaller.2003", "Repo
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnkhUserControlHost", "N:\src\AnkhUserControlHost\AnkhUserControlHost.2003.vcproj", "{F127E743-7C19-4139-8A36-7222B5F5AF79}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnkhUserControlHost", "AnkhUserControlHost\AnkhUserControlHost.2003.vcproj", "{F127E743-7C19-4139-8A36-7222B5F5AF79}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -157,9 +159,7 @@ Global
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.Release.ActiveCfg = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.Release.Build.0 = Release|.NET
 		{F127E743-7C19-4139-8A36-7222B5F5AF79}.Debug.ActiveCfg = Debug|Win32
-		{F127E743-7C19-4139-8A36-7222B5F5AF79}.Debug.Build.0 = Debug|Win32
 		{F127E743-7C19-4139-8A36-7222B5F5AF79}.Debug run.ActiveCfg = Debug|Win32
-		{F127E743-7C19-4139-8A36-7222B5F5AF79}.Debug run.Build.0 = Debug|Win32
 		{F127E743-7C19-4139-8A36-7222B5F5AF79}.NSvn.Tests.ActiveCfg = Release|Win32
 		{F127E743-7C19-4139-8A36-7222B5F5AF79}.NSvn.Tests.Build.0 = Release|Win32
 		{F127E743-7C19-4139-8A36-7222B5F5AF79}.Release.ActiveCfg = Release|Win32
@@ -174,8 +174,8 @@ Global
 		readme.txt = readme.txt
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
