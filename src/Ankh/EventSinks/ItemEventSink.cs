@@ -61,7 +61,7 @@ namespace Ankh.EventSinks
                 this.Context.StartOperation( "Deleting" );
 
                 IList items = 
-                    this.Context.SolutionExplorer.GetSelectionResources(true);
+                    this.Context.SolutionExplorer.GetItemResources(item, true);
                 string[] paths = SvnItem.GetPaths( items );
                 this.Context.Client.Delete( paths, true );
                 
