@@ -328,14 +328,17 @@ namespace Ankh.UI
                 VALIDURL.IsMatch( this.urlTextBox.Text );
         }
 
-        private void TreeViewMouseUp( object sender, MouseEventArgs args )
+        private void TreeViewMouseDown( object sender, MouseEventArgs args )
         {
             Debug.Assert( this.commandBar != null, "commandBar is null" );
-
+            
             if ( args.Button != MouseButtons.Right )
                 return;
-            Point screen = this.treeView.PointToScreen( new Point(args.X, args.Y) );
 
+            // make sure right click causes a selection
+            this.treeView.SelectedNode = this.treeView.GetNodeAt( args.X, args.Y );
+
+            Point screen = this.treeView.PointToScreen( new Point(args.X, args.Y) );
             this.commandBar.ShowPopup( screen.X, screen.Y );
         }
 
@@ -347,7 +350,7 @@ namespace Ankh.UI
         }
 
 
-		#region Component Designer generated code
+        #region Component Designer generated code
         /// <summary> 
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
@@ -442,7 +445,7 @@ namespace Ankh.UI
             this.treeView.SelectedImageIndex = -1;
             this.treeView.Size = new System.Drawing.Size(376, 192);
             this.treeView.TabIndex = 9;
-            this.treeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseUp);
+            this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseDown);
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
             this.treeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeExpand);
             // 
@@ -472,7 +475,7 @@ namespace Ankh.UI
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         private void browseButton_Click(object sender, System.EventArgs e)
         {
@@ -480,7 +483,7 @@ namespace Ankh.UI
 
             FolderBrowser browser = new FolderBrowser();
 
-             //convert the returned directory path to a URL - for a local path URL no need for encoding
+            //convert the returned directory path to a URL - for a local path URL no need for encoding
             if ( browser.ShowDialog() == DialogResult.OK) 
                 urlTextBox.Text ="file:///" +  browser.DirectoryPath.Replace( '\\', '/');
 
