@@ -165,6 +165,14 @@ namespace NSvn.Core.Tests
 
         }
 
+        [Test]
+        public void TestSingleStatusNonExistentPath()
+        {
+            string doesntExist = Path.Combine( this.WcPath, "doesnt.exist" );
+            Status status = this.Client.SingleStatus( doesntExist );
+            Assert.AreEqual( Status.None, status );
+        }
+
 
         [Test]
         public void TestStatusEquals()
