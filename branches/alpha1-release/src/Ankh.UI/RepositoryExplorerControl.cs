@@ -158,7 +158,7 @@ namespace Ankh.UI
             this.urlTextBox.Name = "urlTextBox";
             this.urlTextBox.Size = new System.Drawing.Size(220, 20);
             this.urlTextBox.TabIndex = 1;
-            this.urlTextBox.Text = "http://arild.no-ip.com:8088/svn/test";
+            this.urlTextBox.Text = "http://www.ankhsvn.com:8088/svn/test";
             // 
             // revisionLabel
             // 
