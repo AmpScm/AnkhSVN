@@ -113,9 +113,10 @@ namespace Ankh
             foreach( VSNetControlAttribute control in type.GetCustomAttributes( 
                 typeof(VSNetControlAttribute), false) ) 
             {
-                
+             
                 CommandBar cmdBar = (CommandBar)cmd.Command.DTE.CommandBars[ control.CommandBar ];
                 cmd.Command.AddControl( cmdBar, control.Position );
+                
             }
         }
 	}

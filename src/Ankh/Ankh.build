@@ -35,7 +35,7 @@
                 <includes name="${lib.dir}\EnvDTE.dll"/>
                 <includes name="${lib.dir}\extensibility.dll"/>
                 <includes name="${lib.dir}\Office.dll"/>
-                <includes name="..\Ankh.Gui\${build.dir}\Ankh.Gui.dll"/>
+                <includes name="..\Ankh.UI\${build.dir}\Ankh.UI.dll"/>
                 <includes name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>

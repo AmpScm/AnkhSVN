@@ -1,6 +1,7 @@
 // $Id$
 using System;
 using EnvDTE;
+using Ankh.UI;
 
 namespace Ankh.Commands
 {
@@ -25,7 +26,8 @@ namespace Ankh.Commands
 
         public override void Execute(AnkhContext context)
         {
-            context.SolutionExplorer.UpdateSelectionStatus();
+            new TestRepositoryExplorer().ShowDialog();
+            //context.SolutionExplorer.UpdateSelectionStatus();
         }
     
         #endregion

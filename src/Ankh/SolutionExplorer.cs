@@ -27,7 +27,7 @@ namespace Ankh
             this.resources = new Hashtable( new ItemHashCodeProvider(),
                 new ItemComparer() );
             this.SetUpTreeview();
-            this.GenerateNodes();
+            this.SyncWithTreeView();
 		}
 
         /// <summary>
@@ -52,7 +52,48 @@ namespace Ankh
                ((TreeNode)this.resources[item.ProjectItem]).UpdateStatus(); 
         }
 
-        
+        /// <summary>
+        /// Updates the status of the given item.
+        /// </summary>
+        /// <param name="item"></param>
+        public void UpdateStatus( ProjectItem item )
+        {
+            ((TreeNode)this.resources[item]).UpdateStatus();
+        }
+
+        /// <summary>
+        /// Updates the resource associated with the given item 
+        /// </summary>
+
+        public void UpdateItem( ILocalResource oldResource, ILocalResource newResource )
+        {
+            ProjectItem item = null;
+            foreach( DictionaryEntry entry in this.resources )
+            {
+                if (((TreeNode)entry.Value).Resource == oldResource)
+                {
+                    item = (ProjectItem)entry.Key;
+                    break;
+                }                       
+            }
+            ((TreeNode)this.resources[item]).Resource = newResource;
+        }
+
+        public void SyncWithTreeView()
+        {
+            this.resources.Clear();
+            // find the root in the treeview
+            IntPtr root = (IntPtr)Win32.SendMessage( this.treeview, Msg.TVM_GETNEXTITEM,
+                C.TVGN_ROOT, IntPtr.Zero );
+            
+
+            // and the uihierarchy root
+            UIHierarchy hierarchy = (UIHierarchy)this.dte.Windows.Item( 
+                DteConstants.vsWindowKindSolutionExplorer ).Object;           
+
+            // we assume there is a single root node
+            this.root = new TreeNode( hierarchy.UIHierarchyItems.Item(1), root, this );
+        }
 
 
         private void SetUpTreeview()
@@ -81,29 +122,16 @@ namespace Ankh
 
             statusImages.MakeTransparent( statusImages.GetPixel(0,0) );
 
-            Swf.ImageList list = new Swf.ImageList();
-            list.ImageSize = new Size(7, 16);
-            list.Images.AddStrip( statusImages );    
+            this.statusImageList = new Swf.ImageList();
+            this.statusImageList.ImageSize = new Size(7, 16);
+            this.statusImageList.Images.AddStrip( statusImages );    
         
             // and assign it to the tree
             Win32.SendMessage( this.treeview, Msg.TVM_SETIMAGELIST, C.TVSIL_STATE,
-                list.Handle );
+                this.statusImageList.Handle );
         }
 
-        private void GenerateNodes()
-        {
-            // find the root in the treeview
-            IntPtr root = (IntPtr)Win32.SendMessage( this.treeview, Msg.TVM_GETNEXTITEM,
-                C.TVGN_ROOT, IntPtr.Zero );
-            
-
-            // and the uihierarchy root
-            UIHierarchy hierarchy = (UIHierarchy)this.dte.Windows.Item( 
-                DteConstants.vsWindowKindSolutionExplorer ).Object;           
-
-            // we assume there is a single root node
-            this.root = new TreeNode( hierarchy.UIHierarchyItems.Item(1), root, this );
-        }
+        
 
         private void AddResource( ProjectItem key, TreeNode node )
         {
@@ -121,13 +149,15 @@ namespace Ankh
             {                
                 this.hItem = hItem;
                 this.outer = outer;
-                this.SetStatusImage( hItem, 2 );
+                
                 this.FindChildren( item );   
            
+                // is this a file or at least something thats likely
+                // to be versioned?
                 ProjectItem pitem = item.Object as ProjectItem;
                 if ( pitem != null )
                 {
-                    this.resource = WorkingCopyResource.FromPath(
+                    this.resource = SvnResource.FromLocalPath(
                         pitem.get_FileNames(0) );
                     this.outer.AddResource( pitem, this );
                     try
@@ -140,7 +170,17 @@ namespace Ankh
                             ex.StackTrace );
                     }
                 }
+                else
+                    this.SetStatusImage( hItem, 0 );
             }
+
+            static TreeNode()
+            {
+                statusMap[ StatusKind.Normal ] = 1;
+                statusMap[ StatusKind.Unversioned ] = 4;
+                statusMap[ StatusKind.Modified ] = 11;
+            }
+        
 
             /// <summary>
             /// Child nodes of this node
@@ -156,7 +196,11 @@ namespace Ankh
                 {
                     StatusKind status = 
                         this.resource.Status.TextStatus;
-                    this.SetStatusImage( this.hItem, (int)status );
+                    int statusImage = 6;
+                    if ( statusMap.Contains(status) )
+                        statusImage = (int)statusMap[status];
+
+                    this.SetStatusImage( this.hItem, statusImage );
                 }
             }
 
@@ -166,6 +210,11 @@ namespace Ankh
             public ILocalResource Resource
             {
                 get{ return this.resource; }
+                set
+                {
+                    this.resource = value; 
+                    this.UpdateStatus();
+                }
             }
 
             /// <summary>
@@ -220,6 +269,7 @@ namespace Ankh
             private IntPtr hItem;
             private IList children;
             private SolutionExplorer outer;
+            private static IDictionary statusMap = new Hashtable();
         }
         #endregion
 
@@ -259,6 +309,7 @@ namespace Ankh
         private const string UIHIERARCHY = "VsUIHierarchyBaseWin";
         private const string TREEVIEW = "SysTreeView32";
         private IDictionary resources;
+        private Swf.ImageList statusImageList;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
 	}
