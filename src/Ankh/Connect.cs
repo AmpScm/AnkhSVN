@@ -198,7 +198,7 @@ namespace Ankh
                 {
                     ICommand cmd;
                     if ( (cmd = (ICommand)this.commands[commandName]) != null )
-                    {
+                    { 
                         cmd.Execute( this.context );
                         handled = true;
                     }
