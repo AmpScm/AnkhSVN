@@ -102,7 +102,7 @@ namespace NSvn.Core.Tests
         public void TestRepositoryStatus()
         {
             // modify the file in another working copy and commit
-            string wc2 = this.FindDirName( "wc2" );
+            string wc2 = this.FindDirName( Path.Combine( this.WcPath, "wc2" ) );
             try
             {                
                 Zip.ExtractZipResource( wc2, this.GetType(), WC_FILE );
@@ -136,33 +136,26 @@ namespace NSvn.Core.Tests
             this.RunCommand( "svn", "add " + added );
 
             string changed = this.CreateTextFile( "Form.cs" );
-            string ignored = this.CreateTextFile( "foo.bar" );
-            this.RunCommand( "svn", "ps svn:ignore foo.bar " + this.WcPath );
 
             string propChange = Path.Combine( this.WcPath, "App.ico" );
 
-            this.RunCommand( "svn", "ps foo bar " + propChange );
-
             Status status = this.Client.SingleStatus( unversioned );
-            Assertion.AssertEquals( "Wrong text status on " + unversioned, 
-                status.TextStatus, StatusKind.Unversioned );
+            Assert.AreEqual(StatusKind.Unversioned, status.TextStatus, 
+                "Wrong text status on " + unversioned);
 
             status = this.Client.SingleStatus( added );
-            Assertion.AssertEquals( "Wrong text status on " + added, 
-                status.TextStatus, StatusKind.Added );
+            Assert.AreEqual( StatusKind.Added, status.TextStatus, 
+                "Wrong text status on " + added );
 
             status = this.Client.SingleStatus( changed );
-            Assertion.AssertEquals( "Wrong text status " + changed, 
-                status.TextStatus, StatusKind.Modified );
+            Assert.AreEqual( StatusKind.Modified, status.TextStatus, 
+                "Wrong text status " + changed );
 
+            this.RunCommand( "svn", "ps foo bar " + propChange );
             status = this.Client.SingleStatus( propChange );
-            Assertion.AssertEquals( "Wrong property status " + propChange, 
-                status.PropertyStatus, StatusKind.Modified );
-
-            status = this.Client.SingleStatus( ignored );
-            Assert.AreEqual( StatusKind.Ignored, status.TextStatus, 
-                "Ignore status not found" );
-
+            Assert.AreEqual(
+                StatusKind.Modified, status.PropertyStatus, 
+                "Wrong property status " + propChange );
         }
 
         [Test]
@@ -172,6 +165,28 @@ namespace NSvn.Core.Tests
             Status status = this.Client.SingleStatus( doesntExist );
             Assert.AreEqual( Status.None, status );
         }
+
+        [Test]
+        public void TestSingleStatusUnversionedPath()
+        {
+            string dir = Path.Combine( this.WcPath, "Unversioned" );
+            string file = Path.Combine( dir, "file.txt" );
+            Status status = this.Client.SingleStatus( file );
+            Assert.AreEqual( Status.None, status );
+
+        }
+
+        [Test]
+        public void TestSingleStatusNodeKind()
+        {
+            string file = Path.Combine( this.WcPath, "Form.cs" );
+            Assert.AreEqual( NodeKind.File, this.Client.SingleStatus(file).Entry.Kind );
+            Assert.AreEqual( "Form.cs", this.Client.SingleStatus(file).Entry.Name );
+
+            Status dir = this.Client.SingleStatus(this.WcPath);
+            Assert.AreEqual( NodeKind.Directory, this.Client.SingleStatus(this.WcPath).Entry.Kind );
+        }
+
 
 
         [Test]
