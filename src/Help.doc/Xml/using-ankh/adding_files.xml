@@ -38,7 +38,7 @@
             <br></br><br></br>
             <b>NOTE:</b> If you add something and change your mind before committing,
                  you can unschedule the addition using the 
-            <link url="reverting_files.xml">revert</link> command.
+            <link url="reverting_files.xml">revert</link> command. This will change the item back to an unrevisioned item. 
         </p>
     </section>
     <section>

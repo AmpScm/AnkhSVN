@@ -91,6 +91,11 @@
     <File Url="img\menu-items\revert.png"/>
     <File Url="Xml\keywords\output_window.xml"/>
     <File Url="img\menu-items\delete.png"/>
+    <File Url="Xml\using-ankh\repos_explorer.xml"/>
+    <File Url="img\repos_explorer.png"/>
+    <File Url="img\anksvn_output.png"/>
+    <File Url="img\modified_file.png"/>
+    <File Url="img\login.png"/>
     </Files>
 	<Dirs>
 		<Dir Url="html"/>
