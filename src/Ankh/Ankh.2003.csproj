@@ -256,6 +256,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\CreatePatchCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\DiffLocalItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
