@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections;
 using NSvn.Core;
+using System.Diagnostics;
 
 
 namespace NSvn
@@ -168,6 +169,18 @@ namespace NSvn
         }
 
         /// <summary>
+        /// Performs a diff against the text base.
+        /// </summary>
+        /// <param name="outStream"></param>
+        /// <param name="errStream"></param>
+        public void Diff( Stream outStream, Stream errStream )
+        {
+            Client.Diff( new string[]{}, this.Path, Revision.Base, this.Path,
+                Revision.Working, false, false, outStream, errStream, 
+                this.ClientContext );
+        }
+
+        /// <summary>
         /// The status of the resource.
         /// </summary>
         public Status Status
@@ -228,7 +241,8 @@ namespace NSvn
 
                 // we'll have to get a new status...
                 this.status = null;
-
+//                Trace.WriteLine( "Cached value for WorkingCopyResource object invalidated",
+//                    "NSvn" );
                 this.DoInvalidate();
             }
         }

@@ -32,6 +32,7 @@ namespace Ankh
         protected override string LogMessageCallback(NSvn.Core.CommitItem[] commitItems)
         {
             CommitDialog dialog = new CommitDialog( commitItems );
+            dialog.DiffWanted += new EventHandler( this.DiffWanted );
             if ( dialog.ShowDialog() == DialogResult.OK )
                 return dialog.LogMessage;
             else
@@ -45,6 +46,17 @@ namespace Ankh
             this.outputPane.OutputString( string.Format( "File: {0}\tAction: {1}{2}", 
                 notification.Path, notification.Action, Environment.NewLine ) );         
        
+        }
+        
+
+        private void DiffWanted( object sender, EventArgs args )
+        {  
+            DiffVisitor visitor = new DiffVisitor();
+
+            this.ankhContext.SolutionExplorer.VisitSelectedItems( visitor, true );
+
+            CommitDialog dialog = (CommitDialog)sender;
+            dialog.Diff = visitor.Diff;    
         }
 
             #region DialogProvider

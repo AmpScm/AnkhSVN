@@ -130,6 +130,14 @@
                     AssemblyName = "Microsoft.VisualStudio.VCProjectEngine"
                     HintPath = "I:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.VCProjectEngine.dll"
                 />
+                <Reference
+                    Name = "SHDocVw"
+                    Guid = "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}"
+                    VersionMajor = "1"
+                    VersionMinor = "1"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
+                />
             </References>
         </Build>
         <Files>
@@ -369,6 +377,26 @@
                 />
                 <File
                     RelPath = "Solution\Explorer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\INodeVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\ProjectItemNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\ProjectNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\SolutionNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
