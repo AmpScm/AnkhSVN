@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+<?xml-stylesheet type='text/xsl' href='..\UseCaseXSL1.xsl'?>
+<UseCase>
+    <Preface>
+        <Name>Switch Item</Name>
+        <ID>SwitchItem</ID>
+        <Actors>
+            <ActorID>Developer</ActorID>
+            <ActorID>Repository</ActorID>
+        </Actors>
+        <Summary></Summary>
+    </Preface>
+    <MainFlow>
+        <Preconditions></Preconditions>
+        <FlowElements></FlowElements>
+        <Postconditions></Postconditions>
+    </MainFlow>
+</UseCase>
