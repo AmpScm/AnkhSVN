@@ -151,8 +151,8 @@ namespace Ankh
             this.solutionEvents = this.DTE.Events.SolutionEvents;
             this.solutionEvents.Opened += new 
                 _dispSolutionEvents_OpenedEventHandler( this.SolutionOpened );
-            this.solutionEvents.AfterClosing += new 
-                _dispSolutionEvents_AfterClosingEventHandler( this.SolutionClosed );
+            this.solutionEvents.BeforeClosing += new 
+                _dispSolutionEvents_BeforeClosingEventHandler( this.SolutionClosing);
         }
         #endregion        
 
@@ -181,7 +181,7 @@ namespace Ankh
         /// <summary>
         /// Called when a solution is closed.
         /// </summary>
-        private void SolutionClosed()
+        private void SolutionClosing()
         {
             this.solutionExplorer = null;
 
