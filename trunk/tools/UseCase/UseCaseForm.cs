@@ -585,7 +585,7 @@ namespace UseCase
                     this.UnsubscribeFromEvents();
                     this.useCaseModel = UseCaseModel.FromFile( ofd.FileName ); 
                     this.filename = ofd.FileName;
-                    this.Text += " " + ofd.FileName;
+                    this.Text = ofd.FileName;
                     this.SubscribeToEvents();
                     this.RefreshFromModel();
 
@@ -633,6 +633,9 @@ namespace UseCase
             this.useCaseModel = new UseCaseModel();
             this.SubscribeToEvents();
             this.RefreshFromModel();
+            this.Text = "";
+
+            this.filename = null;
         }
 
         private bool SaveAs()
@@ -650,7 +653,7 @@ namespace UseCase
                     this.useCaseModel.Save( sfd.FileName, this.xslTextBox.Text );
                     this.filename = sfd.FileName;
 
-                    this.Text += " " + this.filename;
+                    this.Text = this.filename;
 
                     this.isDirty = false;
 
