@@ -109,6 +109,16 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "repos.zip"
+                    Link = "..\NSvn.Core.Tests\repos.zip"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "wc.zip"
+                    Link = "..\NSvn.Core.Tests\wc.zip"
+                    BuildAction = "EmbeddedResource"
+                />
             </Include>
         </Files>
     </CSHARP>
