@@ -62,6 +62,9 @@ Global
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Release.ActiveCfg = Release|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Release.Build.0 = Release|Win32
 	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Item:1 = master.build
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		ThisSolutionNotes = 
 	EndGlobalSection

@@ -178,6 +178,9 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;r">
 		</Filter>
 		<File
+			RelativePath="NSvn.Core.build">
+		</File>
+		<File
 			RelativePath="ReadMe.txt">
 		</File>
 	</Files>

@@ -116,6 +116,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "NSvn.Common.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "SvnException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
