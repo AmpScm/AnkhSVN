@@ -8,7 +8,7 @@ namespace NSvn
 	/// <summary>
 	/// Represents an item in the repository.
 	/// </summary>
-	public class RepositoryItem
+	public class RepositoryItem : SvnItem
 	{
         /// <summary>
         /// Constructor.

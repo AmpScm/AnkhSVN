@@ -224,7 +224,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RevPropGet.cs"
+                    RelPath = "RevPropGetTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -7,7 +7,7 @@ namespace NSvn
 	/// <summary>
 	/// Represents an item(file or directory) in a working copy.
 	/// </summary>
-	public class WorkingCopyItem : ILocalItem
+	public class WorkingCopyItem : SvnItem, ILocalItem
 	{
         /// <summary>
         /// Constructor.
@@ -16,8 +16,8 @@ namespace NSvn
 		public WorkingCopyItem( string path )
 		{
 			this.path = System.IO.Path.GetFullPath(path);
-            this.clientContext = new ClientContext();
-            this.clientContext.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
+            //TODO: pull this up
+            this.ClientContext.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
 		}
 
 
@@ -84,13 +84,6 @@ namespace NSvn
             get{ return this.path; }
         }
 
-        /// <summary>
-        /// The ClientContext object used by this item.
-        /// </summary>
-        protected ClientContext ClientContext
-        {
-            get{ return this.clientContext; }
-        }
 
         /// <summary>
         /// Callback function for log messages
@@ -104,7 +97,6 @@ namespace NSvn
 
 
         private string path;
-        private ClientContext clientContext;
         private ILogMessageProvider logMessageProvider;
 	}
 }

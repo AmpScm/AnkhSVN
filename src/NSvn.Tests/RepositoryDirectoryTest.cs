@@ -1,5 +1,4 @@
 using System;
-using NSvn.Core.Tests;
 using NSvn.Core;
 using System.IO;
 using NUnit.Framework;
@@ -23,7 +22,7 @@ namespace NSvn.Tests
         {
             base.TearDown();
             try{ Directory.Delete( this.localDir ); }
-            catch( Exception ex ){}
+            catch( Exception ){}
         }
 
         [Test]

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using NSvn.Core.Tests;
 using NSvn.Core;
 
 namespace NSvn.Tests
@@ -25,19 +24,19 @@ namespace NSvn.Tests
         {
             WorkingCopyItem item  = new WorkingCopyFile( Path.Combine( this.WcPath, "Form.cs" ) );
             
-            Assertion.AssertEquals( "Wrong status. Should be normal", item.Status.TextStatus, 
-                StatusKind.Normal );
+            Assertion.AssertEquals( "Wrong status. Should be normal", StatusKind.Normal,
+                item.Status.TextStatus  );
 
             using( StreamWriter w = new StreamWriter( item.Path, true ) )
                 w.Write( "Moo" );
 
-            Assertion.AssertEquals( "Wrong status. Should be modified", item.Status.TextStatus,
-                StatusKind.Modified );
+            Assertion.AssertEquals( "Wrong status. Should be modified", StatusKind.Modified,
+                item.Status.TextStatus );
 
             item.Commit( new LogMessageProvider( item.Path ), false );
 
-            Assertion.AssertEquals( "Wrong status. Should be normal", item.Status.TextStatus, 
-                StatusKind.Normal );
+            Assertion.AssertEquals( "Wrong status. Should be normal", StatusKind.Normal,
+                item.Status.TextStatus );
            
         }
         #endregion
@@ -97,7 +96,7 @@ namespace NSvn.Tests
             WorkingCopyItem folderItem = new WorkingCopyDirectory( this.WcPath );
             try
             {
-                item.Commit( "Should fail", true );
+                folderItem.Commit( "Should fail", true );
                 Assertion.Fail( "Should not be able to commit a conflicted wc" );
             }
             catch( SvnClientException )
@@ -113,7 +112,7 @@ namespace NSvn.Tests
             WorkingCopyItem file = new WorkingCopyItem(Path.Combine(this.WcPath, "Form.cs") );
             this.RunCommand( "svn",  "ps foo moo " + file.Path );
             Assertion.AssertEquals( "property status should have been modified", 
-                file.Status.PropertyStatus, StatusKind.Modified );
+                StatusKind.Modified, file.Status.PropertyStatus );
 
             //TODO: more here?
         }
