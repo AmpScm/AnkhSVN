@@ -243,7 +243,7 @@ namespace Ankh.Solution
         {
             Array array = (Array)this.uiHierarchy.SelectedItems;
             UIHierarchyItem uiItem = (UIHierarchyItem)array.GetValue(0);
-            return (ProjectItem)uiItem.Object;
+            return uiItem.Object as ProjectItem;
         }
 
        
