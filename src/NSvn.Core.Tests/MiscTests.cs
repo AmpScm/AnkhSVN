@@ -26,8 +26,7 @@ namespace NSvn.Core.Tests
         public void TestUrlFromDirPath()
         {
             string info = this.RunCommand( "svn", "info " + this.WcPath );
-            string realUrl = Regex.Match( info, @"Url: (.*)" ).Groups[1].ToString().Trim();
-
+            string realUrl = this.GetUrl( this.WcPath );
             string url = Client.UrlFromPath( this.WcPath );
 
             Assertion.AssertEquals( "URL wrong", realUrl, url );
@@ -37,9 +36,7 @@ namespace NSvn.Core.Tests
         public void TestUrlFromFilePath()
         {
             string formPath = Path.Combine( this.WcPath, "Form.cs" );
-            string info = this.RunCommand( "svn", "info " + formPath );
-            string realUrl = Regex.Match( info, @"Url: (.*)" ).Groups[1].ToString().Trim();
-
+            string realUrl = this.GetUrl( formPath );
             string url = Client.UrlFromPath( formPath );
 
             Assertion.AssertEquals( "URL wrong", realUrl, url );
@@ -61,6 +58,12 @@ namespace NSvn.Core.Tests
 
             string uuid = Client.UuidFromUrl( this.ReposUrl, new ClientContext() );
             Assertion.AssertEquals( "UUID wrong", realUuid, uuid );
+        }
+
+        private string GetUrl( string path )
+        {
+            string info = this.RunCommand( "svn", "info " + path );
+            return Regex.Match( info, @"URL: (.*)", RegexOptions.IgnoreCase ).Groups[1].ToString().Trim();
         }
 
     }
