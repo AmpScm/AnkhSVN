@@ -15,7 +15,7 @@ namespace NSvn.Core.Tests
         {
             base.SetUp();
             this.ExtractRepos();
-            this.newWc = this.FindDirName( Path.GetTempPath() );
+            this.newWc = this.FindDirName( Path.Combine( Path.GetTempPath(), "moo" ) );
         }
 
         [TearDown]

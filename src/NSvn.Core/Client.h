@@ -25,9 +25,9 @@ namespace NSvn
             static void Checkout(String* url, String* path, Revision* revision, bool recurse, 
                 ClientContext* context);
 
-	        /*static void Update(String* path, Revision* revision, bool recurse, ClientContext* context);
+	        static void Update(String* path, Revision* revision, bool recurse, ClientContext* context);
 
-	        static void Switch(String* path, String* url, Revision* revision, bool recurse, 
+	        /*static void Switch(String* path, String* url, Revision* revision, bool recurse, 
                 ClientContext* context);*/
 
 	        static void Add(String* path, bool recursive, ClientContext* context);

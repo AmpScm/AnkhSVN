@@ -98,6 +98,16 @@ void NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision
         revision->ToSvnOptRevision( pool ), recurse, ctx->ToSvnContext( pool ), pool ) );
 }
 
+// implementation of Client::Update
+void NSvn::Core::Client::Update( String* path, Revision* revision, bool recurse, 
+                                ClientContext* ctx )
+{
+    Pool pool;
+    String* truePath = CanonicalizePath( path );
+    HandleError( svn_client_update( StringHelper(truePath), revision->ToSvnOptRevision( pool ),
+        recurse, ctx->ToSvnContext( pool ), pool ) );
+}
+
 
 
 
