@@ -60,7 +60,7 @@ namespace Ankh
         public void OnConnection(object application, Extensibility.ext_ConnectMode connectMode, object addInInst, ref System.Array custom)
         {
             // we don't want to load on command line builds.
-            if ( Regex.IsMatch( Environment.CommandLine, "/build" ) )
+            if ( Regex.IsMatch( Environment.CommandLine, "/build|/rebuild|/clean" ) )
                 return;
 #if LOGTOFILE
             if ( connectMode != ext_ConnectMode.ext_cm_UISetup )
