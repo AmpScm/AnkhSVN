@@ -131,6 +131,9 @@
 			<File
 				RelativePath="StringHelperTest.cpp">
 			</File>
+			<File
+				RelativePath="streamtest.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -155,6 +158,9 @@
 			</File>
 			<File
 				RelativePath="StringHelperTest.h">
+			</File>
+			<File
+				RelativePath="streamtest.h">
 			</File>
 		</Filter>
 		<Filter
