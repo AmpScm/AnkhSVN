@@ -33,6 +33,8 @@ namespace Ankh.UI
             // Required for Windows Form Designer support
             //
             InitializeComponent();
+
+            this.Options = PathSelectorOptions.NoRevision;
         }
 
         /// <summary>
@@ -102,13 +104,13 @@ namespace Ankh.UI
         public NSvn.Core.Revision RevisionStart
         {
             get{ return this.revisionPickerStart.Revision; }
-            //set{ this.revisionPickerStart.Revision = value; }
+            set{ this.revisionPickerStart.Revision = value; }
         }
 
         public NSvn.Core.Revision RevisionEnd
         {
             get{ return this.revisionPickerEnd.Revision; }
-            //set{ this.revisionPickerEnd.Revision = value; }
+            set{ this.revisionPickerEnd.Revision = value; }
         }
 
         public PathSelectorOptions Options
