@@ -218,6 +218,7 @@ Global
 		WiX\apr-iconv.wxs = WiX\apr-iconv.wxs
 		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
 		CHANGES = CHANGES
+		CONTRIBUTERS = CONTRIBUTERS
 		..\deploy.build = ..\deploy.build
 		lib\lib.build = lib\lib.build
 		lib\lib.wxs = lib\lib.wxs
@@ -231,8 +232,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
