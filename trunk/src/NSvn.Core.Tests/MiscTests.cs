@@ -118,6 +118,31 @@ namespace NSvn.Core.Tests
 
         }
 
+        /// <summary>
+        /// Test the Client::IsIgnored method.
+        /// </summary>
+        [Test]
+        public void TestIsFileIgnored()
+        {
+            string ignored = this.CreateTextFile( "foo.bar" );
+            this.RunCommand( "svn", "ps svn:ignore foo.bar " + this.WcPath );
+
+            Assert.IsTrue( this.Client.IsIgnored( ignored ) );
+            Assert.IsFalse( this.Client.IsIgnored( 
+                Path.Combine( this.WcPath, "Form1.cs" ) ) );
+        }
+
+        [Test]
+        public void TestIsDirectoryIgnored()
+        {
+            string ignored = Path.Combine( this.WcPath, "Foo" );
+            Directory.CreateDirectory( ignored );
+            this.RunCommand( "svn", "ps svn:ignore Foo " + this.WcPath );
+
+            Assert.IsTrue( this.Client.IsIgnored( ignored ) );
+
+        }
+
         private string GetUrl( string path )
         {
             string info = this.RunCommand( "svn", "info " + path );
