@@ -76,8 +76,8 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" includeEmptyDirs="true"/>
+        <delete dir="build-Release" verbose="${verbose}" failonerror="false" />
+        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" />
     </target>
     
     <target name="init">
