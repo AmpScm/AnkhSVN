@@ -89,6 +89,9 @@ struct apr_hash_t
 struct svn_config_t
 {};
 
+struct apr_allocator_t
+{};
+
 namespace
 {
     using namespace NSvn::Core;
