@@ -117,7 +117,7 @@ namespace Ankh.Solution
         /// Updates the status of the given item.
         /// </summary>
         /// <param name="item"></param>
-        public void UpdateStatus( ProjectItem item )
+        public void Refresh( ProjectItem item )
         {
             TreeNode node = (TreeNode)this.projectItems[item];
             if ( node != null )
