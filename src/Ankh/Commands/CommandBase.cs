@@ -15,12 +15,12 @@ namespace Ankh.Commands
         /// <summary>
         /// Get the status of the command
         /// </summary>
-        public abstract vsCommandStatus QueryStatus( AnkhContext context );
+        public abstract vsCommandStatus QueryStatus( IContext context );
 
         /// <summary>
         /// Execute the command
         /// </summary>
-        public abstract void Execute( AnkhContext context, string parameters );
+        public abstract void Execute( IContext context, string parameters );
 
         /// <summary>
         /// The EnvDTE.Command instance corresponding to this command.
@@ -51,7 +51,7 @@ namespace Ankh.Commands
             }
         }
 
-        protected void SaveAllDirtyDocuments( AnkhContext context )
+        protected void SaveAllDirtyDocuments( IContext context )
         {
             foreach( Document doc in context.DTE.Documents )
             {
@@ -83,7 +83,7 @@ namespace Ankh.Commands
         protected const vsCommandStatus Disabled = 
             vsCommandStatus.vsCommandStatusSupported;
 
-        protected CommandBarControl GetControl(AnkhContext context, string barName, string name )
+        protected CommandBarControl GetControl(IContext context, string barName, string name )
         {
             // TODO: either preload this or find a better way to map to 
             // the commandbarcontrols for a command

@@ -9,7 +9,7 @@ namespace Ankh.EventSinks
     /// </summary>
     public class SolutionEventsSink : ItemEventSink
     {
-        public SolutionEventsSink( AnkhContext context ) : base( context )
+        public SolutionEventsSink( IContext context ) : base( context )
         {
             this.solutionEvents = context.DTE.Events.SolutionEvents;
             this.solutionEvents.ProjectAdded += new _dispSolutionEvents_ProjectAddedEventHandler(

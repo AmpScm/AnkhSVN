@@ -18,7 +18,7 @@ namespace Ankh.Commands
         CommandBase
 	{
         #region ICommand Members
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             IRepositoryTreeNode node = context.RepositoryExplorer.SelectedNode;
             if ( node!= null && !node.IsDirectory && 
@@ -31,7 +31,7 @@ namespace Ankh.Commands
         }
         #endregion
 
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             /// first get the parent folder
             FolderBrowser browser = new FolderBrowser();

@@ -20,7 +20,7 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             AddFilter filter = new AddFilter();
             if ( context.SolutionExplorer.GetSelectionResources( false, 
@@ -32,7 +32,7 @@ namespace Ankh.Commands
                 return Disabled;
         }
 
-        public override void Execute(Ankh.AnkhContext context, string parameters )
+        public override void Execute(IContext context, string parameters )
         {
             AddFilter filter = new AddFilter();
             IList resources = context.SolutionExplorer.GetSelectionResources( false,

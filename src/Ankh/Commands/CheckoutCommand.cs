@@ -16,12 +16,12 @@ namespace Ankh.Commands
     VSNetControl( "MenuBar.Tools.AnkhSVN", Position = 1 ) ]
     public class CheckoutCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             return Enabled;
         }
 
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             using(CheckoutDialog dlg = new CheckoutDialog())
             {

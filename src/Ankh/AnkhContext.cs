@@ -19,7 +19,7 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
-    public class AnkhContext
+    public class AnkhContext : IContext
     {
         /// <summary>
         /// Fired when the addin is unloading.
@@ -315,7 +315,7 @@ namespace Ankh
         /// <summary>
         /// Sets up event handlers.
         /// </summary>
-        private void SetUpEvents()
+        public void SetUpEvents()
         {
             // apparently necessary to avoid the SolutionEvents object being
             // gc'd :-/
@@ -330,7 +330,7 @@ namespace Ankh
         /// <summary>
         /// try to load the configuration file
         /// </summary>
-        private void LoadConfig()
+        public void LoadConfig()
         {
             try
             {
@@ -366,7 +366,7 @@ namespace Ankh
 #endif
         }
         
-        private bool CheckWhetherAnkhShouldLoad()
+        public bool CheckWhetherAnkhShouldLoad()
         {
             // no point in doing anything if the solution dir doesn't exist
             string solutionPath = this.dte.Solution.FullName;
@@ -400,7 +400,7 @@ namespace Ankh
             }
         }
 
-        private bool QueryWhetherAnkhShouldLoad( string solutionDir )
+        public bool QueryWhetherAnkhShouldLoad( string solutionDir )
         {
             string nl = Environment.NewLine;
             string msg = "Ankh has detected that the solution file for this solution " + 
@@ -429,7 +429,7 @@ namespace Ankh
         }
         
 
-        private void CreateRepositoryExplorer()
+        public void CreateRepositoryExplorer()
         {   
             Debug.WriteLine( "Creating repository explorer", "Ankh" );
             object control = null;

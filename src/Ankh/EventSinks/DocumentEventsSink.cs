@@ -10,7 +10,7 @@ namespace Ankh.EventSinks
     /// </summary>
     public class DocumentEventsSink : EventSink
     {
-        public DocumentEventsSink( AnkhContext context ) : base( context )
+        public DocumentEventsSink( IContext context ) : base( context )
         {
             this.events = context.DTE.Events.get_DocumentEvents( null );
             this.events.DocumentSaved += new _dispDocumentEvents_DocumentSavedEventHandler(

@@ -10,7 +10,7 @@ namespace Ankh.EventSinks
     /// </summary>
     public class ProjectsEventSink : EventSink
     {
-        public ProjectsEventSink( ProjectsEvents events, AnkhContext context ) :
+        public ProjectsEventSink( ProjectsEvents events, IContext context ) :
             base( context )
         {
             this.events = events;

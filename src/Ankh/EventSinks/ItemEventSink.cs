@@ -14,7 +14,7 @@ namespace Ankh.EventSinks
     /// </summary>
     public abstract class ItemEventSink : EventSink
     {
-        protected ItemEventSink( AnkhContext context ) : base( context )
+        protected ItemEventSink( IContext context ) : base( context )
         {
             // empty
         }

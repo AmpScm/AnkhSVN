@@ -13,7 +13,7 @@ namespace Ankh.Commands
     /// </summary>
     public class ExportRunner : ProgressRunner
     {
-        public ExportRunner( AnkhContext context, string path, Revision revision, 
+        public ExportRunner( IContext context, string path, Revision revision, 
             string url, bool recurse ) 
             : base( context )
         { 
@@ -23,7 +23,7 @@ namespace Ankh.Commands
             this.recurse = recurse;
         }
 
-        public ExportRunner( AnkhContext context, string path, Revision revision, 
+        public ExportRunner( IContext context, string path, Revision revision, 
             string url ) : this( context, path, revision, url, true )
         {
             // empty

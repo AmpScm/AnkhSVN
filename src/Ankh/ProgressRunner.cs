@@ -5,7 +5,7 @@ using NSvn.Core;
 
 namespace Ankh
 {
-    public delegate void ProgressRunnerCallback( AnkhContext context );
+    public delegate void ProgressRunnerCallback( IContext context );
 
     /// <summary>
     /// Used to run lengthy operations in a separate thread while 
@@ -19,13 +19,13 @@ namespace Ankh
         /// <param name="context"></param>
         /// <param name="callback">The callback which performs 
         /// the actual operation.</param>
-        public ProgressRunner( AnkhContext context, ProgressRunnerCallback callback )
+        public ProgressRunner( IContext context, ProgressRunnerCallback callback )
         {
             this.context = context;
             this.callback = callback;
         }
 
-        public ProgressRunner( AnkhContext context ) : this( context, null )
+        public ProgressRunner( IContext context ) : this( context, null )
         {}
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Ankh
                 throw new ProgressRunnerException(this.exception);
         }  
       
-        protected AnkhContext Context
+        protected IContext Context
         {
             get{ return this.context; }
         }
@@ -125,7 +125,7 @@ namespace Ankh
         private bool cancel = false;
         private bool cancelled = false;
         private Exception exception;
-        private AnkhContext context;
+        private IContext context;
         private ProgressRunnerCallback callback;
     }
 }

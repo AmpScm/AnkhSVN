@@ -13,7 +13,7 @@ namespace Ankh
         /// ConflictManager
         /// Class to handle issues related to conflicts
         /// </summary>
-        public ConflictManager (AnkhContext context)
+        public ConflictManager (IContext context)
         {                         
             this.context = context;
 
@@ -201,7 +201,7 @@ namespace Ankh
 
 
 
-        private AnkhContext context; 
+        private IContext context; 
         private const string ConflictTaskItemCategory = "Conflict"; 
         private const string SvnConflictString = "<<<<<<< .mine"; 
         private const int NotFound = -1;

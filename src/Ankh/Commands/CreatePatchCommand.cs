@@ -18,7 +18,7 @@ namespace Ankh.Commands
     public class CreatePatchCommand : LocalDiffCommandBase
     {    
     
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             this.SaveAllDirtyDocuments( context );
 

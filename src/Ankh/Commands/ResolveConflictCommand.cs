@@ -23,7 +23,7 @@ namespace Ankh.Commands
      VSNetControl( "Solution.Ankh", Position = 1)]
     public class ResolveConflictCommand : CommandBase
     {    
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             int count = context.SolutionExplorer.GetSelectionResources(false, 
                 new ResourceFilterCallback(ResolveConflictCommand.ConflictedFilter) ).Count;
@@ -34,7 +34,7 @@ namespace Ankh.Commands
                 return Disabled;
         }
 
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             this.SaveAllDirtyDocuments( context );
 
@@ -62,7 +62,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <param name="item"></param>
-        private void Resolve(AnkhContext context, SvnItem item)
+        private void Resolve(IContext context, SvnItem item)
         {
 
             string mergeExe = context.Config.MergeExePath;

@@ -14,7 +14,7 @@ namespace Ankh
             // empty
         }
 
-        public override void AddControl(ICommand cmd, AnkhContext context, string tag)
+        public override void AddControl(ICommand cmd, IContext context, string tag)
         {
             this.AddControls( Bars, cmd, context, tag );
         }

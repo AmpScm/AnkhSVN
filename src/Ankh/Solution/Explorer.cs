@@ -24,7 +24,7 @@ namespace Ankh.Solution
     /// </summary>
     public class Explorer
     {
-        public Explorer( _DTE dte, AnkhContext context )
+        public Explorer( _DTE dte, IContext context )
         {
             this.dte = dte;
             this.context = context;
@@ -253,7 +253,7 @@ namespace Ankh.Solution
             get{ return this.treeview; }
         }
 
-        internal AnkhContext Context
+        internal IContext Context
         {
             get{ return this.context; }
         }
@@ -537,7 +537,7 @@ namespace Ankh.Solution
         private IDictionary projects;
         private TreeNode solutionNode;
         private ImageList statusImageList;
-        private AnkhContext context;
+        private IContext context;
         private TreeView treeview;
         private IntPtr originalImageList = IntPtr.Zero;
 

@@ -13,7 +13,7 @@ namespace Ankh.Extenders
     [GuidAttribute("BAB7BC93-6097-486e-B29D-CFEA4AB9107B"), ProgId("Ankh.ExtenderProvider")]	
     public class ExtenderProvider : IExtenderProvider
     {
-        private ExtenderProvider( AnkhContext context )
+        private ExtenderProvider( IContext context )
         {
             this.context = context;
             this.extenders = new Hashtable();
@@ -82,7 +82,7 @@ namespace Ankh.Extenders
         /// <summary>
         /// Registers the extender provider for all the cathegories we want.
         /// </summary>
-        public static void Register( AnkhContext context )
+        public static void Register( IContext context )
         {
             ExtenderProvider.provider = new ExtenderProvider( context );
 
@@ -118,7 +118,7 @@ namespace Ankh.Extenders
         private static ArrayList cookies = new ArrayList();
         private Hashtable extenders;
 
-        private AnkhContext context;
+        private IContext context;
 
         private readonly static string[] CATIDS = new string[]{
                                                                   "{8D58E6AF-ED4E-48B0-8C7B-C74EF0735451}", // C# File Browse

@@ -14,7 +14,7 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 1 )]
     public class RelocateCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.SolutionExplorer.GetSelectionResources( false, 
                 new ResourceFilterCallback(CommandBase.DirectoryFilter) ).Count == 1 )
@@ -27,7 +27,7 @@ namespace Ankh.Commands
             }
         }
 
-        public override void Execute(AnkhContext context, string parameters)
+        public override void Execute(IContext context, string parameters)
         {
             // We know now that there is exactly one resource
             SvnItem dir = (SvnItem)context.SolutionExplorer.GetSelectionResources(
@@ -65,7 +65,7 @@ namespace Ankh.Commands
         /// </summary>
         private class RelocateRunner : ProgressRunner
         {
-            public RelocateRunner( AnkhContext context, 
+            public RelocateRunner( IContext context, 
                 string path, string from, string to, 
                 bool recurse ) : base( context )
             {

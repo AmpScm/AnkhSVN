@@ -11,7 +11,7 @@ namespace Ankh.EventSinks
     /// </summary>
     public class VCProjectEventSink : EventSink
     {
-        public VCProjectEventSink( object events, AnkhContext context )
+        public VCProjectEventSink( object events, IContext context )
             : base( context )
         {
             this.events = events;

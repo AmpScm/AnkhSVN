@@ -18,7 +18,7 @@ namespace Ankh.Commands
     VSNetFolderNodeControl( "", Position = 2)]
     public class DiffLocalItem : LocalDiffCommandBase
     {
-        public override void Execute(Ankh.AnkhContext context, string parameters)
+        public override void Execute(Ankh.IContext context, string parameters)
         {
             try
             {

@@ -16,7 +16,7 @@ namespace Ankh.Commands
     /// </summary>
     public abstract class LocalDiffCommandBase : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // always allow diff - worst case you get an empty diff            
             return Enabled;
@@ -27,7 +27,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff( AnkhContext context )
+        protected virtual string GetDiff( IContext context )
         {
             // get the diff itself
             IList resources = context.SolutionExplorer.GetSelectionResources(
