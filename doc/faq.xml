@@ -6,11 +6,6 @@
         <section header="What versions of VS.NET does Ankh run on?">
             <p>Ankh currently supports both VS.NET 2002 and VS.NET 2003.  It is the same install file (msi)  for both versions. </p>
         </section>
-        <section header="I get a message about not being able to attach to Solution Explorer?">
-            <p>This is a known bug. It happens if you have your solution explorer window set to auto-hide. The only
-            workaround is to not have it set on auto-hide while a project loads. Once the project is fully loaded you can
-            set it back on auto-hide again. This bug is fixed in HEAD and the fix will be incorporated in the next release.</p>
-        </section>
         <section header="What else do I need to have installed to use Ankh?">
             <p>Ankh links into the same libraries that svn.exe does, so if the Subversion repository is already created it is possible to use Ankh
              without ever installing Subversion at all.  However, with Ankh you cannot yet do some things, including but not limited to creating a repository,
