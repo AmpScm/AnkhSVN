@@ -99,13 +99,12 @@ namespace Ankh.Solution
             }
             catch( NullReferenceException )
             {
-                Debug.WriteLine( "NullReferenceException thrown in ProjectItemNode" );
+                Trace.WriteLine( "NullReferenceException thrown in ProjectItemNode" );
                 //swallow
             }   
             catch( System.Runtime.InteropServices.SEHException sex )
             {
-                Debug.WriteLine( "SEHException thrown: " + this.projectItem.Name );
-                System.Windows.Forms.MessageBox.Show( "SEHException: " + this.projectItem.Name + sex.Message );
+                Trace.WriteLine( "SEHException thrown: " + this.projectItem.Name );
             }
             finally
             {
