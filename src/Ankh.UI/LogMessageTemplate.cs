@@ -55,7 +55,7 @@ namespace Ankh.UI
                 text = LINETEMPLATE.Replace( this.template, this.SubstituteLinePattern( linePattern, paths ) );
                 
             }
-            return text;
+            return text.Trim() + Environment.NewLine;
         }
 
         public virtual string PostProcess( string message )
@@ -69,7 +69,7 @@ namespace Ankh.UI
                     while( (line=reader.ReadLine()) != null )
                         if ( !COMMENTPATTERN.IsMatch( line ) )
                             writer.WriteLine( line );
-                    return writer.ToString();
+                    return writer.ToString().Trim() + Environment.NewLine;
                 }
             }
         }

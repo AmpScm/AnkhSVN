@@ -208,8 +208,8 @@ namespace Ankh.UI
             this.logLabel = new System.Windows.Forms.Label();
             this.showDiffButton = new System.Windows.Forms.Button();
             this.diffView = new Ankh.UI.DiffTab();
-            this.logMessageBox = new System.Windows.Forms.RichTextBox();
             this.commitItemsTree = new Ankh.UI.PathSelectionTreeView();
+            this.logMessageBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -259,19 +259,6 @@ namespace Ankh.UI
             this.diffView.Size = new System.Drawing.Size(814, 0);
             this.diffView.TabIndex = 10;
             // 
-            // logMessageBox
-            // 
-            this.logMessageBox.AcceptsTab = true;
-            this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right)));
-            this.logMessageBox.DetectUrls = false;
-            this.logMessageBox.Location = new System.Drawing.Point(0, 136);
-            this.logMessageBox.Name = "logMessageBox";
-            this.logMessageBox.Size = new System.Drawing.Size(816, 128);
-            this.logMessageBox.TabIndex = 8;
-            this.logMessageBox.Text = "";
-            // 
             // commitItemsTree
             // 
             this.commitItemsTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -288,13 +275,27 @@ namespace Ankh.UI
             this.commitItemsTree.TabIndex = 9;
             this.commitItemsTree.UrlPaths = false;
             // 
+            // logMessageBox
+            // 
+            this.logMessageBox.AcceptsReturn = true;
+            this.logMessageBox.AcceptsTab = true;
+            this.logMessageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+                | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this.logMessageBox.Location = new System.Drawing.Point(0, 136);
+            this.logMessageBox.Multiline = true;
+            this.logMessageBox.Name = "logMessageBox";
+            this.logMessageBox.Size = new System.Drawing.Size(816, 136);
+            this.logMessageBox.TabIndex = 11;
+            this.logMessageBox.Text = "";
+            // 
             // CommitDialog
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(816, 315);
             this.ControlBox = false;
-            this.Controls.Add(this.commitItemsTree);
             this.Controls.Add(this.logMessageBox);
+            this.Controls.Add(this.commitItemsTree);
             this.Controls.Add(this.diffView);
             this.Controls.Add(this.showDiffButton);
             this.Controls.Add(this.logLabel);
@@ -317,12 +318,12 @@ namespace Ankh.UI
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label logLabel;
         private System.Windows.Forms.Button showDiffButton;
-        private System.Windows.Forms.RichTextBox logMessageBox;
         private LogMessageTemplate logMessageTemplate;
        
         private bool preprocessed = false;
         private Ankh.UI.DiffTab diffView;
         private PathSelectionTreeView commitItemsTree;
+        private System.Windows.Forms.TextBox logMessageBox;
        
         /// <summary>
         /// Required designer variable.
