@@ -11,6 +11,7 @@ using Utils;
 using System.Text.RegularExpressions;
 using Microsoft.Office.Core;
 using System.Diagnostics;
+using System.Web;
 
 namespace Ankh.UI
 {
@@ -264,11 +265,12 @@ namespace Ankh.UI
         private void browseButton_Click(object sender, System.EventArgs e)
         {
             // Browse to a local repository
+
             FolderBrowser browser = new FolderBrowser();
-            browser.ShowDialog();
-            //convert the returned directory path to a URL 
-            if (browser.DirectoryPath.Length != 0) 
-                urlTextBox.Text = "file:///" + browser.DirectoryPath.Replace( '\\', '/');
+
+             //convert the returned directory path to a URL - for a local path URL no need for encoding
+            if ( browser.ShowDialog() == DialogResult.OK) 
+                urlTextBox.Text ="file:///" +  browser.DirectoryPath.Replace( '\\', '/');
 
         }
 
