@@ -2,38 +2,37 @@
 <?xml-stylesheet type='text/xsl' href='..\UseCaseXSL1.xsl'?>
 <UseCase>
     <Preface>
-        <Name>Switch Item</Name>
-        <ID>SwitchItem</ID>
+        <Name>Export Item</Name>
+        <ID>ExportItem</ID>
         <Actors>
             <ActorID>Developer</ActorID>
             <ActorID>Repository</ActorID>
         </Actors>
-        <Summary>Switch a working copy item to another part of the repository</Summary>
+        <Summary>Export an item from the repository</Summary>
     </Preface>
     <MainFlow>
         <Preconditions>
-            <Precondition>Working copy item exists</Precondition>
-            <Precondition>Repository path exists</Precondition>
+            <Precondition>The item exists in the repository</Precondition>
         </Preconditions>
         <FlowElements>
-            <FlowElement>
-                <Include useCaseID='SelectLocalItem'></Include>
-            </FlowElement>
-            <FlowElement>
-                <Step>Developer selects "Switch"</Step>
-            </FlowElement>
             <FlowElement>
                 <Include useCaseID='SelectRepositoryItem'></Include>
             </FlowElement>
             <FlowElement>
-                <Step>Developer confirms the operation</Step>
+                <Step>Developer selects "Export"</Step>
             </FlowElement>
             <FlowElement>
-                <Step>SVN switches to the specified path</Step>
+                <Step>Developer selects local folder to export to</Step>
+            </FlowElement>
+            <FlowElement>
+                <Step>SVN exports the item</Step>
+            </FlowElement>
+            <FlowElement>
+                <Include useCaseID='ShowSvnFeedback'></Include>
             </FlowElement>
         </FlowElements>
         <Postconditions>
-            <Postcondition>The working copy is updated to the specified path</Postcondition>
+            <Postcondition>The item is exported to a local directory</Postcondition>
         </Postconditions>
     </MainFlow>
 </UseCase>
