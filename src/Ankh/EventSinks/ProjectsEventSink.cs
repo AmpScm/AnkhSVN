@@ -31,20 +31,18 @@ namespace Ankh.EventSinks
                 this.ItemRenamed );
         }
 
-        protected void ItemAdded( Project item )
+        protected void ItemAdded( Project project )
         {
-            this.Context.SolutionExplorer.SyncWithTreeView();
+            this.Context.SolutionExplorer.Refresh( project );
         }
 
         /// <summary>
         /// Schedules a Project for removal on commit.
         /// </summary>
         /// <param name="item">Projectitem to be scheduled for removal.</param>
-        protected void ItemRemoved( Project item )
-        {
-            this.Context.SolutionExplorer.VisitResources( 
-                item, new RemoveProjectVisitor() );
-            this.Context.SolutionExplorer.SyncWithTreeView();
+        protected void ItemRemoved( Project project )
+        {            
+            this.Context.SolutionExplorer.Refresh( project );
         }
 
         protected void ItemRenamed( Project item, string oldName )

@@ -8,7 +8,7 @@ namespace Ankh.EventSinks
 	/// <summary>
 	/// Event sink for the ProjectItemsEvent
 	/// </summary>
-	internal class ProjectItemsEventSink : EventSink
+	internal class ProjectItemsEventSink : ItemEventSink
 	{
 		internal ProjectItemsEventSink( ProjectItemsEvents events, 
             AnkhContext context )
@@ -33,38 +33,6 @@ namespace Ankh.EventSinks
                 this.ItemRenamed );
         }
 
-
-        protected void ItemAdded( ProjectItem item )
-        {
-            this.Context.SolutionExplorer.SyncWithTreeView();
-        }
-
-        /// <summary>
-        /// Schedules a Projectitem for removal on commit.
-        /// </summary>
-        /// <param name="item">Projectitem to be scheduled for removal.</param>
-        protected void ItemRemoved( ProjectItem item )
-        {
-            this.Context.SolutionExplorer.VisitResources( 
-                item, new RemoveProjectVisitor() );
-            this.Context.SolutionExplorer.SyncWithTreeView();
-        }
-
-        protected void ItemRenamed( ProjectItem item, string oldName )
-        {
-            string s = item.Kind;
-        }
-
-        /// <summary>
-        /// A visitor that schedules a remove of visited item on commit
-        /// </summary>
-        private class RemoveProjectVisitor : LocalResourceVisitorBase
-        {
-            public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
-            {
-                resource.Remove( true );
-            }
-        }
         private ProjectItemsEvents events;
 
 	}
