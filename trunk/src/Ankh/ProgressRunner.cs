@@ -59,7 +59,7 @@ namespace Ankh
                 this.Context.OutputPane.WriteLine( "Cancelled" );
             }
             else if ( this.exception != null )
-                throw this.exception;
+                throw new ProgressRunnerException(this.exception);
         }  
       
         protected AnkhContext Context
@@ -109,6 +109,16 @@ namespace Ankh
         private void Cancel(object sender, CancelEventArgs args)
         {
             args.Cancel = this.cancel;
+        }
+
+        /// <summary>
+        /// To be used to wrap exceptions thrown from the other thread.
+        /// </summary>
+        public class ProgressRunnerException : ApplicationException
+        {
+            public ProgressRunnerException( Exception realException ) : 
+                base( "Exception thrown in progress runner thread", realException )
+            {}            
         }
 
         private bool done = false;

@@ -39,6 +39,13 @@ namespace Ankh
             }
         }
 
+        private static void DoHandle( ProgressRunner.ProgressRunnerException ex )
+        {
+            // we're only interested in the inner exception - we know where the 
+            // outer one comes from
+            Handle( ex.InnerException );
+        }
+
 
         private static void DoHandle( WorkingCopyLockedException ex )
         {
