@@ -84,14 +84,21 @@ namespace NSvn.Core.Tests
         public void TestChangeAdminDirectoryName()
         {
             Client.AdminDirectoryName = "__SVN__";
-            Assertion.AssertEquals( "Admin directory name should now be __SVN__",
-                "__SVN__", Client.AdminDirectoryName );
+            try
+            {
+                Assertion.AssertEquals( "Admin directory name should now be __SVN__",
+                    "__SVN__", Client.AdminDirectoryName );
 
-            string newwc = this.FindDirName( Path.Combine( Path.GetTempPath(), "moo" ) );
-            this.Client.Checkout( this.ReposUrl, newwc, Revision.Head, true );
+                string newwc = this.FindDirName( Path.Combine( Path.GetTempPath(), "moo" ) );
+                this.Client.Checkout( this.ReposUrl, newwc, Revision.Head, true );
 
-            Assertion.Assert( "Admin directory with new name not found", 
-                Directory.Exists( Path.Combine( newwc, "__SVN__" ) ) );
+                Assertion.Assert( "Admin directory with new name not found", 
+                    Directory.Exists( Path.Combine( newwc, "__SVN__" ) ) );
+            }
+            finally
+            {
+                Client.AdminDirectoryName = ".svn";
+            }
         }
 
         private string GetUrl( string path )
