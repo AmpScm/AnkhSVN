@@ -18,7 +18,6 @@
             <FlowElement>
                 <Include useCaseID='SelectItem'></Include>
             </FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>Developer chooses "Log" from menu</Step>
             </FlowElement>

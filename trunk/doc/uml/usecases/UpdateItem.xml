@@ -18,7 +18,6 @@
             <FlowElement>
                 <Include useCaseID='SelectLocalItem'></Include>
             </FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>Developer chooses "Update" from the menu</Step>
             </FlowElement>

@@ -15,12 +15,9 @@
             <Precondition>A conflict must have occured</Precondition>
         </Preconditions>
         <FlowElements>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Include useCaseID='SelectLocalItem'></Include>
             </FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>Developer chooses which of the revisions he wants to retain</Step>
             </FlowElement>

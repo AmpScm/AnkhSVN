@@ -15,7 +15,6 @@
             <Precondition>Item under revision control</Precondition>
         </Preconditions>
         <FlowElements>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>The developer specifies an URL to the repository</Step>
             </FlowElement>

@@ -14,10 +14,6 @@
             <Precondition>There are lock files in the working copy administrative area</Precondition>
         </Preconditions>
         <FlowElements>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>Ask developer if he wants to run cleanup</Step>
             </FlowElement>

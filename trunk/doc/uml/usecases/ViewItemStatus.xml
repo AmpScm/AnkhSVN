@@ -14,7 +14,6 @@
             <Precondition>The item is under revision control</Precondition>
         </Preconditions>
         <FlowElements>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>An icon is displayed in the Solution Explorer next to the item signifying its status</Step>
             </FlowElement>

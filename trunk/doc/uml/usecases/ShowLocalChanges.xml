@@ -17,9 +17,6 @@
             <FlowElement>
                 <Include useCaseID='SelectLocalItem'></Include>
             </FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>Developer choose "Show Local Changes" from menu</Step>
             </FlowElement>

@@ -19,7 +19,6 @@
             <FlowElement>
                 <Include useCaseID='SelectItem'></Include>
             </FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>Developer chooses "Copy" from menu</Step>
             </FlowElement>
@@ -32,7 +31,6 @@
             <FlowElement>
                 <Include useCaseID='Developer chooses "Paste" from menu'></Include>
             </FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Step>svn copies item</Step>
             </FlowElement>

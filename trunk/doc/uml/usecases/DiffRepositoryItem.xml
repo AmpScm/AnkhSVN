@@ -2,7 +2,7 @@
 <?xml-stylesheet type='text/xsl' href='..\UseCaseXSL1.xsl'?>
 <UseCase>
     <Preface>
-        <Name>DiffRepositoryItem</Name>
+        <Name>Diff Repository Item</Name>
         <ID>DiffRepositoryItem</ID>
         <Actors>
             <ActorID>Developer</ActorID>
@@ -15,12 +15,6 @@
             <Precondition>The item exists in the repository</Precondition>
         </Preconditions>
         <FlowElements>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
-            <FlowElement></FlowElement>
             <FlowElement>
                 <Include useCaseID='SelectRepositoryItem'></Include>
             </FlowElement>
