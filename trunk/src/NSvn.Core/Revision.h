@@ -10,7 +10,8 @@ namespace NSvn
     {
         using namespace System;
 
-        public __gc class Revision
+        [Serializable]
+        public __gc class Revision 
         {
         public:
             /// <summary> No revision information given.</summary>    
@@ -32,6 +33,9 @@ namespace NSvn
 
             /// <summary>Creates a revision from a date</summary>
             static Revision* FromDate( DateTime date );
+
+            /// <summary>Create a revision by parsing a string.</summary>
+            static Revision* Parse( String* string );
 
             // convert to an svn_opt_revision_t*
             // allocate in pool

@@ -77,3 +77,44 @@ String* NSvn::Core::Revision::ToString()
         return S"Invalid revision";
     }
 }
+
+NSvn::Core::Revision* NSvn::Core::Revision::Parse( String* s )
+{
+    String* lc = s->ToLower();
+
+    if ( lc->Equals( "head" ) )
+        return NSvn::Core::Revision::Head;
+    else if ( lc->Equals( "base" ) )
+        return NSvn::Core::Revision::Base;
+    else if ( lc->Equals( "committed" ) )
+        return NSvn::Core::Revision::Committed;
+    else if ( lc->Equals( "working" ) )
+        return NSvn::Core::Revision::Working;
+    else if ( lc->Equals( "unspecified" ) )
+        return NSvn::Core::Revision::Unspecified;
+    else if ( lc->Equals( "previous" ) )
+        return NSvn::Core::Revision::Previous;
+
+    // not one of the special ones
+
+    // perhaps it's a number?
+    double rev;
+    if ( Double::TryParse( s, System::Globalization::NumberStyles::Integer,
+        System::Globalization::CultureInfo::InvariantCulture, &rev ) )
+        return NSvn::Core::Revision::FromNumber(static_cast<int>(rev));
+    else
+    { 
+        // last chance - is it a datetime?
+        try
+        {
+            DateTime t = DateTime::Parse( s );
+            return NSvn::Core::Revision::FromDate( t );
+        }
+        catch( FormatException* ex )
+        {
+            throw new FormatException( "Cannot parse string to a valid revision object",
+                ex );
+        }
+    }
+
+}
