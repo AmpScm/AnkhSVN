@@ -469,33 +469,8 @@ namespace Ankh.UI
             ToolTip.SetToolTip( this.propListView, "List of defined properties");
         }
 
-        private void propListViewDefaultValue()
-        {
-            IgnorePropertyEditor def = new IgnorePropertyEditor();
-            this.nameCombo.SelectedItem = def;
-
-            IPropertyEditor selectedItem = (IPropertyEditor)this.nameCombo.SelectedItem; 
-
-            // is the selection a special svn: keyword?
-            if ( selectedItem != null)
-        {
-            SetNewEditor(selectedItem);
-
-            //clear any existing selection in the list view
-            this.propListView.SelectedItems.Clear();
-
-            // is there already set a property of this type?
-            //HACK: find better way
-            foreach( ListViewItem item in this.propListView.Items )
-        {
-                if ( item.Text == selectedItem.ToString() )
-            {                        
-                currentEditor.PropertyItem = (PropertyItem)item.Tag;
-                item.Selected = true;
-            }
-    }
-} 
-    }
+  
+    
 
 
         private ArrayList propItems;
