@@ -67,6 +67,41 @@ namespace Ankh.UI
                 else
                     return null;
             }
+            set
+            {
+                switch( value.Type )
+                {
+                    case RevisionType.Number:
+                        this.revisionTypeBox.Text = value.Number.ToString();
+                        break;
+                    case RevisionType.Date:
+                        this.datePicker.Value = value.Date;
+                        this.revisionTypeBox.SelectedItem = this.dateRevisionChoice;
+                        this.datePicker.Enabled = true;
+                        break;
+                    case RevisionType.Base:
+                        this.revisionTypeBox.SelectedItem = RevisionChoice.Base;
+                        break;
+
+                    case RevisionType.Working:
+                        this.revisionTypeBox.SelectedItem = RevisionChoice.Working;
+                        break;
+
+                    case RevisionType.Commmitted:
+                        this.revisionTypeBox.SelectedItem = RevisionChoice.Committed;
+                        break;
+
+                    case RevisionType.Head:
+                        this.revisionTypeBox.SelectedItem = RevisionChoice.Head;
+                        break;
+
+                    case RevisionType.Previous:
+                        this.revisionTypeBox.SelectedItem = RevisionChoice.Previous;
+                        break;
+                    default:
+                        throw new ArgumentException( "Invalid revision" );
+                }
+            }
         }
 
         public bool HeadEnabled
@@ -254,8 +289,32 @@ namespace Ankh.UI
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        
+        private static void Main()
+        {
+            p1 = new RevisionPicker();
 
-        
+            p2 = new RevisionPicker();
+            p2.Top = 40;
+
+            Button ok = new Button();
+            ok.Text = "OK";
+            ok.Click += new EventHandler(ok_Click);
+            ok.Top = 80;
+
+            Form f = new Form();
+            f.Controls.Add( p1 );
+            f.Controls.Add( p2 );
+            f.Controls.Add( ok );
+
+            f.ShowDialog();
+        }
+
+        private static RevisionPicker p1, p2;
+
+        private static void ok_Click(object sender, EventArgs e)
+        {
+            p2.Revision = p1.Revision;
+
+        }
     }
 }
