@@ -1,7 +1,6 @@
 // $Id$
 #include "stdafx.h"
 #include "stream.h"
-#include "stream.cpp"
 #include <svn_io.h>
 #include "SvnClientException.h"
 using namespace System::IO;
