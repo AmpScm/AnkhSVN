@@ -140,7 +140,7 @@
                 />
                 <Reference
                     Name = "office"
-                    AssemblyName = "office"
+                    AssemblyName = "Office"
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.1.4322\office.dll"
                 />
             </References>

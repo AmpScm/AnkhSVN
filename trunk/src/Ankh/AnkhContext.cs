@@ -27,6 +27,8 @@ namespace Ankh
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
 
+            this.repositoryController = new RepositoryExplorer.Controller();
+
             this.CreateRepositoryExplorer();
 
             // is there a solution opened?
@@ -73,6 +75,13 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.outputPane; }
         }
+
+        public RepositoryExplorer.Controller RepositoryController
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.repositoryController; }
+        }
+
 
 
         /// <summary>
@@ -168,7 +177,7 @@ namespace Ankh
                 typeof(RepositoryExplorerControl).Assembly.Location, 
                 "Ankh.UI.RepositoryExplorerControl" );
 
-            this.repositoryExplorer.Context = this.Context;
+            this.repositoryExplorer.Controller = this.RepositoryController;
 
             System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
                 "Could not create tool window" );
@@ -178,6 +187,8 @@ namespace Ankh
         private EnvDTE.AddIn addin;
 
         private IList eventSinks;
+
+        private RepositoryExplorer.Controller repositoryController;
 
         private OutputPaneWriter outputPane;
 

@@ -6,11 +6,70 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 using NSvn;
+using NSvn.Core;
 using Utils.Win32;
 using System.Runtime.InteropServices;
 
 namespace Ankh.UI
 {
+    public interface IRepositoryTreeController
+    {
+        event EventHandler RootChanged;
+
+        /// <summary>
+        /// The text to put in the root.
+        /// </summary>
+        string RootText
+        {
+            get;
+        }
+
+        void SetRepository( string url, Revision revision );
+           
+
+        IRepositoryTreeNode RootNode
+        {
+            get;
+        }
+    }
+
+    /// <summary>
+    /// Represents a node in the tree.
+    /// </summary>
+    public interface IRepositoryTreeNode
+    {
+        /// <summary>
+        /// The filename.
+        /// </summary>
+        string Name
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Whether the node is a directory.
+        /// </summary>
+        bool IsDirectory
+        {
+            get;
+        }
+
+        /// <summary>
+        /// The child nodes - IRepositoryTreeNode objects.
+        /// </summary>
+        IEnumerable GetChildren();
+
+
+        /// <summary>
+        /// An arbitrary piece of data associated with the node.
+        /// </summary>
+        object Tag
+        {
+            get;
+            set;
+        }
+    }
+
     /// <summary>
     /// Treeview that shows the layout of a SVN repository
     /// </summary>
@@ -18,54 +77,34 @@ namespace Ankh.UI
     {
         public RepositoryTreeView()
         {
-            this.GetSystemImageList();
-            
-            this.ContextMenu = new ContextMenu();
-        }        
+            this.GetSystemImageList();       
+        }    
+    
+        public IRepositoryTreeController Controller
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.controller; }
+
+            set
+            {               
+                this.controller = value;                
+                this.controller.RootChanged += new EventHandler( this.RootChanged );
+
+                this.RootChanged( null, EventArgs.Empty );
+            }
+        }
 
         /// <summary>
-        /// The root folder of the repository to be explored by this treeview.
+        /// Start loading the tree.
         /// </summary>
-        public RepositoryDirectory RepositoryRoot
+        public void Go()
         {
-            get{ return this.root; }
-            set
-            { 
-                this.root = value;               
-                this.Nodes.Clear();
-                
-                if( this.root != null )
-                {
-                    this.Nodes.Add( new TreeNode( this.root.Url ) );
-                    this.BuildSubTree( this.Nodes[0].Nodes, this.root );
-                    this.Nodes[0].Expand();
-                }
-            }
+            if ( this.controller == null ) 
+                throw new ApplicationException( "No repository controller set" );
+
+            this.BuildSubTree( this.Nodes[0].Nodes, this.controller.RootNode );
         }
-
-        private void BuildSubTree( TreeNodeCollection nodes, RepositoryDirectory dir )
-        {
-            // set the wait cursor
-            //Cursor current = this.Cursor;
-            this.Cursor = Cursors.WaitCursor;
-            // we have set a new root, so get rid of any existing nodes
-            nodes.Clear();
-
-            if( this.root == null )
-                return;
-
-            ResourceVisitor visitor = new ResourceVisitor( nodes, this );
-
-            // get the children of the root
-            RepositoryResourceDictionary dict = dir.GetChildren();
-            foreach( RepositoryResource res in dict.Values )
-            {
-                res.Context = dir.Context;
-                res.Accept( visitor );
-            }
-
-            this.Cursor = Cursors.Default;
-        }
+        
 
         /// <summary>
         /// Retrieve the system image list and assign it to this treeview.
@@ -97,57 +136,7 @@ namespace Ankh.UI
             this.closedFolderIndex = fileinfo.iIcon.ToInt32();
 
 
-        }
-
-
-        #region ResourceVisitor
-        /// <summary>
-        /// Inner class to traverse a list of RepositoryResource objects.
-        /// </summary>
-        private class ResourceVisitor : IRepositoryResourceVisitor
-        {
-            public ResourceVisitor( TreeNodeCollection nodes, RepositoryTreeView tree )
-            {
-                this.nodes = nodes; 
-                this.tree = tree;
-            }
-            
-            public void VisitFile( RepositoryFile file )
-            {
-                TreeNode node = new TreeNode( file.Name );
-                node.Tag = file;
-                this.nodes.Add( node );
-
-                // set the icon
-                SHFILEINFO fi = new SHFILEINFO();
-                Win32.SHGetFileInfo( file.Name, 0, ref fi, (uint)Marshal.SizeOf(fi),
-                    Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
-                    Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON |
-                    Constants.SHGFI_USEFILEATTRIBUTES );
-                node.ImageIndex = fi.iIcon.ToInt32(); 
-                node.SelectedImageIndex = fi.iIcon.ToInt32();
-            }
-
-            public void VisitDirectory( RepositoryDirectory dir )
-            {
-                TreeNode dummy = new TreeNode( "" );
-                dummy.Tag = DUMMY_NODE;
-
-                TreeNode node = new TreeNode( dir.Name, 
-                    new TreeNode[]{ dummy } );
-                node.Tag = dir;
-                this.nodes.Add( node );
-
-                // start with the closed folder icon
-                node.ImageIndex = this.tree.closedFolderIndex;
-                node.SelectedImageIndex = this.tree.closedFolderIndex;
-            }
-
-            private TreeNodeCollection nodes;
-            private RepositoryTreeView tree;
-
-        }
-        #endregion
+        }        
 
         /// <summary>
         /// Event handler for the Expand event.
@@ -161,7 +150,7 @@ namespace Ankh.UI
             // is this uninitialized?
             if ( e.Node.Nodes[0].Tag == DUMMY_NODE )
             {
-                RepositoryDirectory dir = (RepositoryDirectory)e.Node.Tag;
+                IRepositoryTreeNode dir = (IRepositoryTreeNode)e.Node.Tag;
                 this.BuildSubTree( e.Node.Nodes, dir );
             }
             // switch to the open folder icon
@@ -183,12 +172,76 @@ namespace Ankh.UI
             e.Node.ImageIndex = this.closedFolderIndex;
             e.Node.SelectedImageIndex = this.closedFolderIndex;
         }
+
+        private void RootChanged( object o, EventArgs e )
+        {
+            this.Nodes.Clear();
+
+            TreeNode root = new TreeNode( this.controller.RootText, this.openFolderIndex, this.openFolderIndex );
+            root.Expand();
+
+            this.Nodes.Add( root );
+        }
+
+
+        private void BuildSubTree( TreeNodeCollection nodes, IRepositoryTreeNode node )
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            // we have set a new root, so get rid of any existing nodes
+            nodes.Clear();
+
+            foreach( IRepositoryTreeNode child in node.GetChildren() )
+            {
+                TreeNode newNode;
+
+                if ( child.IsDirectory )
+                {
+                    TreeNode dummy = new TreeNode( "" );
+                    dummy.Tag = DUMMY_NODE;
+
+                    newNode = new TreeNode( child.Name, 
+                        new TreeNode[]{ dummy } );
+
+                    // start with the closed folder icon
+                    newNode.ImageIndex = this.closedFolderIndex;
+                    newNode.SelectedImageIndex = this.closedFolderIndex;
+                }
+                else
+                {
+                    newNode = new TreeNode( child.Name);
+
+                    // set the icon
+                    SHFILEINFO fi = new SHFILEINFO();
+                    Win32.SHGetFileInfo( child.Name, 0, ref fi, (uint)Marshal.SizeOf(fi),
+                        Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
+                        Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON |
+                        Constants.SHGFI_USEFILEATTRIBUTES );
+                    newNode.ImageIndex = fi.iIcon.ToInt32(); 
+                    newNode.SelectedImageIndex = fi.iIcon.ToInt32();
+
+                }
+
+                newNode.Tag = child;
+
+                nodes.Add( newNode );
+
+            } // foreach
+
+            
+            this.Cursor = Cursors.Default;
+        }
+
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private RepositoryDirectory root;
         private static readonly object DUMMY_NODE = new object();
         private int openFolderIndex;
         private int closedFolderIndex;
+
+        private IRepositoryTreeController controller;
     }
+
+    
 }
