@@ -32,8 +32,7 @@
             <p>Here are instructions for setting up an Apache server on Windows  <link url="http://tortoisesvn.tigris.org/serverinstall.html">http://tortoisesvn.tigris.org/serverinstall.html</link>.  </p>
         </section>
         <section header='I am getting the error "Unable to retrieve folder information from the server with my ASP.NET web project".'>
-            <p>This problem is described in detail <link url=
-            "http://groups.google.com/groups?hl=en&amp;lr=&amp;ie=UTF-8&amp;oe=UTF-8&amp;threadm=018901c370ad%2467041600%24a301280a%40phx.gbl&amp;rnum=1&amp;prev=/groups%3Fq%3DRefreshing%2Bthe%2Bproject%2Bfailed.%2BUnable%2Bto%2Bretrieve%2Bfolder%2Binformation%2Bfrom%2Bthe%2Bserver.%26hl%3Den%26lr%3D%26ie%3DUTF-8%26oe%3DUTF-8%26selm%3D018901c370ad%252467041600%2524a301280a%2540phx.gbl%26rnum%3D1">
+            <p>This problem is described in detail <link url="http://groups.google.com/groups?hl=en&amp;lr=&amp;ie=UTF-8&amp;oe=UTF-8&amp;threadm=018901c370ad%2467041600%24a301280a%40phx.gbl&amp;rnum=1&amp;prev=/groups%3Fq%3DRefreshing%2Bthe%2Bproject%2Bfailed.%2BUnable%2Bto%2Bretrieve%2Bfolder%2Binformation%2Bfrom%2Bthe%2Bserver.%26hl%3Den%26lr%3D%26ie%3DUTF-8%26oe%3DUTF-8%26selm%3D018901c370ad%252467041600%2524a301280a%2540phx.gbl%26rnum%3D1">
             here</link>. 
             The solution is to avoid using the Web Project wizard and to create or convert your projects to 
             use standard class libraries, which you then tweak to enable use of all the web component wizards. A
@@ -86,10 +85,30 @@ FOR /R %%f IN (_svn) DO IF EXIST "%%f" (
         <section header="Why would I want to use subversion and not Visual SourceSafe?">
             <p>Here is a discussion on that topic: <link url="http://www.wadhome.org/svn_vs_vss.txt">http://www.wadhome.org/svn_vs_vss.txt</link></p>
         </section>
+        <section header="I get the exception System.NullReferenceException:Object reference not set to an 
+instance of an object when I open my project, and I have Visual Assist X installed.">
+            <p>Check to see if this is your stack trace:</p>
+            <code>
+System.NullReferenceException:
+Object reference not set to an instance of an object.
+    at EnvDTE.Events.get_CommandEvents(String Guid, Int32 ID)
+    at Ankh.EventSinks.CommandsEventSink.RegisterCommandEvents() in
+    T:\Ankh-Release2\Ankh\EventSinks\CommandsEventSink.cs:line 30 at
+    Ankh.EventSinks.EventSink.CreateEventSinks(AnkhContext context) in
+    T:\Ankh-Release2\Ankh\EventSinks\EventSink.cs:line 65 at
+    Ankh.AnkhContext.SolutionOpened() in
+    T:\Ankh-Release2\Ankh\AnkhContext.cs:line 214
+</code>
+            <p>If that is your stack trace then it's probably caused by a conflict with 
+the Visual Assist X beta addin . The exception should go away if you uninstall 
+the VAX beta. This has been reported to Whole Tomato and it is hoped that they 
+will fix it in a future release. </p>
+            <p>If you have this stack trace and do not have the VAX beta installed, it's 
+possible that some other addin is interfering with Ankh in the same way. </p>
+        </section>
         <section header="There is nothing about my problem here!">
             <p>Don't despair. Either send a mail to our developers mailing list(dev AT ankhsvn.tigris.org) describing the 
             problem (in as much detail as possible) or visit us in our IRC channel #ankhsvn on the irc.freenode.net server.</p>
         </section>
- 
     </section>
 </doc>
