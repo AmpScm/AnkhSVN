@@ -102,6 +102,7 @@ function Usage
 	"	build		Merely builds the provider, does no installation"
 	"	createzip	Creates a zip file containing all the necessary files"
 	"	help		Show this message"
+	"	uninstall	Uninstall an existing installation of the provider"
 	""
 }
 
