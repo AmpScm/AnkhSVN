@@ -449,6 +449,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\ResolveConflictExternalCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\DiffExternalLocalItemCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\ReverseMergeCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
