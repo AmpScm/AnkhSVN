@@ -75,6 +75,26 @@ namespace NSvn
             Client.Commit( (string[])targets.ToArray(typeof(string)), !recursive, 
                 resources[0].ClientContext );
         }
+
+        /// <summary>
+        /// Reverts items to the state before they where modified
+        /// </summary>
+        /// <param name="recursive">Whether subitems should be recursively reverted</param>
+        public WorkingCopyResource Revert( bool recursive )
+        {
+            Client.Revert( this.Path, recursive, this.ClientContext );
+            return WorkingCopyResource.FromPath( this.Path );            
+        }
+
+        /// <summary>
+        /// Reverts resources to the state before they where modified
+        /// </summary>
+        /// <param name="resources"></param>
+        /// <param name="recursive"></param>
+        public static WorkingCopyResource Revert( string path, bool recursive )
+        {
+            return FromPath( path ).Revert( recursive );     
+        }    
 /*
         /// <summary>
         /// Copy resource to repository.
