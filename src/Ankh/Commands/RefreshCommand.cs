@@ -19,7 +19,7 @@ namespace Ankh.Commands
     {
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.AnkhContext context)
         {
-            return Enabled;
+            return context.AnkhLoadedForSolution ? Enabled : Disabled;
         }
 
         public override void Execute(Ankh.AnkhContext context, string parameters)
