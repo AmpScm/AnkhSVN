@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<typeSafeCollections>
+   <typeSafeCollection>
+        <templateKind>HashTable</templateKind>
+        <accessibility>public</accessibility>
+        <keyType>string</keyType>
+        <itemType>ILocalResource</itemType>
+        <collectionName>LocalResourceDictionary</collectionName>
+        <collectionNamespace>NSvn</collectionNamespace>
+    </typeSafeCollection>
+</typeSafeCollections>

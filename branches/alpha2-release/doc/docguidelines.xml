@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet type="text/xsl" href="doc.xsl"?>
+<doc title="Documentation guidelines">
+    <section header="Introduction and rationale">
+        <p>All internal documentation shall be produced in a simple XML format. This is due to the
+        requirement that we have to turn in both HTML-based and written documentation at the end of the
+        project. The intention is to transform theses XML documents into both HTML and into a format
+        suitable for printing(XSL Formatting Objects) using XSL.</p>
+    </section>
+    <section header="The available tags">
+        <p>While a schema might be more formal, for the time being we shall use this informal list of tags as
+        a reference:</p>
+        <definitionlist>
+            <definition word="doc">This is the root tag. It takes the attribute "title" which will be used
+                as the title of the document. A <inlinecode>doc</inlinecode> tag can contain
+                one or more <inlinecode>code</inlinecode> tags.</definition>
+            <definition word="section">This indicates a logical section in the document. It takes
+                the attribute "header" which will be used as the section header. Section tags can and should
+                be nested to indicate the logical structure of the document. Section tags can contain 
+                other section tags, <inlinecode>list</inlinecode>, <inlinecode>definitionlist</inlinecode> 
+                and <inlinecode>p</inlinecode> tags.</definition>
+            <definition word="p">This serves the same use as in HTML - to define a paragraph.</definition>
+            <definition word="anchor">Defines a target for an internal link. Takes the attribute "name"</definition>
+            <definition word="internallink">Defines an internal hyperlink. Takes the attribute "target"</definition>
+            <definition word="link">Defines an external hyperlink. Takes the attribute "url"></definition>
+            <definition word="list">Defines an unordered list of items. Contains one or more 
+            <inlinecode>item</inlinecode> tags</definition>
+            <definition word="item">Defines an item in a <inlinecode>list</inlinecode></definition>
+            <definition word="definitionlist">Defines an unordered list of items to be defined. Contains one or
+            more <inlinecode>definition</inlinecode> items.</definition>
+            <definition word="definition">Takes the attribute "word", which indicates the word to define.</definition>
+            <definition word="inlinecode">Defines it's contents as a source code snippet that will be rendered inline in the text</definition>
+            <definition word="code">Defines it's contents as source code, that will be rendered in a separate paragraph
+            with it's formatting preserved.</definition>      
+            <definition word="b">This serves the same purpose as in HTML.</definition> 
+            <definition word="i">Ditto.</definition>
+            
+        </definitionlist>
+        
+        <section header="Example">
+            <p>A small example:</p>
+<code>
+&lt;doc title="Foo"&gt;
+    &lt;section header="Bar"&gt;
+        &lt;p&gt; Quidquid latine dictum sit, altum videtur.&lt;/p&gt;
+        &lt;list&gt;
+            &lt;item&gt;Quidquid&lt;/item&gt;
+            &lt;item&gt;latine&lt;/item&gt;
+            &lt;item&gt;sit&lt;/item&gt;
+            &lt;item&gt;altum&lt;/item&gt;
+            &lt;item&gt;videtur&lt;/item&gt;
+        &lt;/list&gt;
+        
+        &lt;section header="A closer investigation"&gt;
+            &lt;p&gt;This is what it all means:&lt;/p&gt;
+            &lt;definitionlist&gt;
+                &lt;definition word="quidquid"&gt;Whatever&lt;/definition&gt;
+                &lt;definition word="latine"&gt;Latin&lt;/definition&gt;
+                &lt;definition word="sit"&gt;is said&lt;/definition&gt;
+                &lt;definition word="altum"&gt;sounds&lt;/definition&gt;
+                &lt;definition word="videtur"&gt;profound&lt;/definition&gt;
+            &lt;/definitionlist&gt;
+            
+        &lt;/section&gt;        
+    &lt;/section&gt;
+&lt;/doc&gt;
+</code>
+        </section>
+        
+    </section>
+</doc>
+
+
