@@ -45,11 +45,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReposInstaller.2003", "Repo
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Tests", "Ankh.Tests\Ankh.Tests.csproj", "{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Tests.2003", "Utils.Tests\Utils.Tests.2003.csproj", "{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Tests.2003", "Utils.Tests\Utils.Tests.2003.csproj", "{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Tests.2003", "Ankh.Tests\Ankh.Tests.2003.csproj", "{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -177,21 +177,6 @@ Global
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.NSvn.Tests.ActiveCfg = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.NSvn.Tests.Build.0 = Release|.NET
 		{6D2A5456-0DB3-4795-8005-7E591AB2A221}.Release.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug.ActiveCfg = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug.Build.0 = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug run.ActiveCfg = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) NSvn.Tests.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) NSvn.Tests.Build.0 = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Release.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Release.Build.0 = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.ActiveCfg = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.Build.0 = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug run.ActiveCfg = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug run.Build.0 = Debug|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.NSvn.Tests.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.NSvn.Tests.Build.0 = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.Build.0 = Release|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug.ActiveCfg = Debug|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug.Build.0 = Debug|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug run.ActiveCfg = Debug|.NET
@@ -208,6 +193,22 @@ Global
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.NSvn.Tests.Build.0 = Release|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Release.ActiveCfg = Release|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Release.Build.0 = Release|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug.ActiveCfg = Debug|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug.Build.0 = Debug|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug run.ActiveCfg = Debug|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug run.Build.0 = Debug|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) NSvn.Tests.ActiveCfg = Release|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) NSvn.Tests.Build.0 = Release|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Release.ActiveCfg = Release|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Release.Build.0 = Release|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.ActiveCfg = Debug|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.Build.0 = Debug|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug run.ActiveCfg = Debug|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug run.Build.0 = Debug|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.NSvn.Tests.ActiveCfg = Release|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.NSvn.Tests.Build.0 = Release|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.ActiveCfg = Release|.NET
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
@@ -230,8 +231,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
