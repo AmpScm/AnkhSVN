@@ -8,6 +8,7 @@ namespace Ankh
     using EnvDTE;
     using System.Diagnostics;
     using System.Text.RegularExpressions;
+    using NSvn;
 
     using Ankh.Commands;
 
@@ -156,21 +157,20 @@ namespace Ankh
             this.timer.Start();
             try
             {
-                
-
                 if( this.commands != null && 
                     neededText == EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedNone)
                 {
                     Ankh.ICommand cmd;
                     if ( (cmd = (ICommand)this.commands[commandName]) != null )
                         status = cmd.QueryStatus( this.context );
-
-                    //    status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
-                    //				if(commandName == "Ankh.Connect.Ankh")
-                    //				{
-                    //					status = (vsCommandStatus)vsCommandStatus.vsCommandStatusSupported|vsCommandStatus.vsCommandStatusEnabled;
-                    //				}
                 }
+            }
+            catch( StatusException stex )
+            {
+                // couldn't get status for an item on disk - maybe its been renamed etc from
+                // outside VS
+                this.context.SolutionExplorer.RefreshSelection();
+                status = vsCommandStatus.vsCommandStatusSupported;
             }
             catch( Exception ex )
             {   
@@ -216,6 +216,12 @@ namespace Ankh
                         handled = true;
                     }
                 }
+            }
+            catch( StatusException stex )
+            {
+                // couldn't get status for an item on disk - maybe its been renamed etc from
+                // outside VS
+                this.context.SolutionExplorer.RefreshSelection();
             }
             catch( Exception ex )
             {   

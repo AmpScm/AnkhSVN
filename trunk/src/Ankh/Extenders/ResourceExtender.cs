@@ -63,56 +63,59 @@ namespace Ankh.Extenders
         [Category( "Subversion" )]
         public string Url
         {
-            get{ return this.resource.Status.Entry.Url; }
+            get{ return this.status.Entry.Url; }
         }
 
         [Category( "Subversion" )]
         public string RepositoryUuid
         {
-            get  {  return this.resource.Status.Entry.Uuid; }
+            get  {  return this.status.Entry.Uuid; }
         }
 
         [Category( "Subversion" )]
         public string LastCommittedAuthor
         {
-            get{ return this.resource.Status.Entry.CommitAuthor; }
+            get{ return this.status.Entry.CommitAuthor; }
         }
 
         [Category("Subversion")]
         public int Revision
         {
-            get{ return this.resource.Status.Entry.Revision; }
+            get{ return this.status.Entry.Revision; }
         }
 
         [Category("Subversion")]
         public DateTime LastCommittedDate
         {
-            get{ return this.resource.Status.Entry.CommitDate; }
+            get{ return this.status.Entry.CommitDate; }
         }
 
         [Category("Subversion")]
         public int LastCommittedRevision
         {
-            get{ return this.resource.Status.Entry.CommitRevision; }
+            get{ return this.status.Entry.CommitRevision; }
         }
 
         [Category("Subversion")]
         public string TextStatus
         {
-            get{ return this.resource.Status.TextStatus.ToString(); }
+            get{ return this.status.TextStatus.ToString(); }
         }
 
         [Category("Subversion")]
         public string PropertyStatus
         {
-            get{ return this.resource.Status.PropertyStatus.ToString(); }
+            get{ return this.status.PropertyStatus.ToString(); }
         }
 
-        internal WorkingCopyResource Resource
+        internal Status Status
         {
-            set{ this.resource = value; }
+            set
+            {
+                this.status = value;                
+            }
         }
 
-        private WorkingCopyResource resource;
+        private Status status;
     }
 }

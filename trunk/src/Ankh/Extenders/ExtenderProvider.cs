@@ -32,11 +32,15 @@ namespace Ankh.Extenders
                 // have the extender know about the selected item.
                 if ( v.WorkingCopyResources.Count > 0 )
                 {
-                    this.extender.Resource = (WorkingCopyResource)v.WorkingCopyResources[0];
+                    this.extender.Status = ((WorkingCopyResource)v.WorkingCopyResources[0]).Status;
                     return this.extender;
                 }
                 else
                     return null;
+            }
+            catch( StatusException )
+            {
+                return null;
             }
             catch( Exception ex )
             {
@@ -114,8 +118,5 @@ namespace Ankh.Extenders
                                                                   "{EE8299CB-19B6-4f20-ABEA-E1FD9A33B683}", // C++ Project Browse Object
                                                                   "{610d4611-d0d5-11d2-8599-006097c68e81}" // generic project
                                                               };
-
-
-
         }
 }

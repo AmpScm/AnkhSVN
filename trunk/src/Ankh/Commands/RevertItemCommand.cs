@@ -55,10 +55,17 @@ namespace Ankh.Commands
         { 
             public override void VisitWorkingCopyResource(NSvn.WorkingCopyResource resource)
             {
-                if ( resource.Status.TextStatus != StatusKind.Normal ||
-                    (resource.Status.PropertyStatus != StatusKind.Normal && 
-                    resource.Status.PropertyStatus != StatusKind.None ) )
-                    this.revertables.Add( resource );
+                try
+                {
+                    if ( resource.Status.TextStatus != StatusKind.Normal ||
+                        (resource.Status.PropertyStatus != StatusKind.Normal && 
+                        resource.Status.PropertyStatus != StatusKind.None ) )
+                        this.revertables.Add( resource );
+                }
+                catch( StatusException )
+                {
+                    // swallow
+                }
             }
 
             public void Revert(Ankh.AnkhContext context)
