@@ -42,9 +42,9 @@ namespace NSvn
         /// Commit local changes to the repository.
         /// </summary>
         /// <param name="recursive">Whether subresources should be recursively committed.</param>
-        public void Commit( bool recursive )
+        public CommitInfo Commit( bool recursive )
         {
-            Client.Commit( new string[]{ this.Path }, !recursive, this.ClientContext );
+            return Client.Commit( new string[]{ this.Path }, !recursive, this.ClientContext );
         }
 
         /// <summary>
@@ -52,12 +52,11 @@ namespace NSvn
         /// </summary>
         /// <param name="resources">The resources to commit.</param>
         /// <param name="recursive">Whether subitems should be recursively committed.</param>
-        public static void Commit( WorkingCopyResource[] resources, bool recursive )
+        public static CommitInfo Commit( WorkingCopyResource[] resources, bool recursive )
         {
             string[] targets = GetPaths(resources);
 
-            Client.Commit( targets, recursive, 
-                resources[0].ClientContext );
+            return Client.Commit( targets, recursive, resources[0].ClientContext );
         }
 
 

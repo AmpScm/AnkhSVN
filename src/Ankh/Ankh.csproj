@@ -309,6 +309,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\SaveToFileCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\ShowLocalChangesCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -320,6 +325,16 @@
                 />
                 <File
                     RelPath = "Commands\UpdateItemCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\ViewInVSNetCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\ViewInWindowsCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
