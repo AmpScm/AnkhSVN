@@ -51,7 +51,6 @@ namespace Ankh.Extenders
             catch( Exception ex )
             {
                 Error.Handle( ex );
-                throw;
             }
         }
 
@@ -72,7 +71,6 @@ namespace Ankh.Extenders
             catch( Exception ex )
             {
                 Error.Handle( ex );
-                throw;
             }
         }
 
