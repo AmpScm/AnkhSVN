@@ -8,6 +8,7 @@ using Utils;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Ankh.Solution;
+using System.Collections;
 
 namespace Ankh
 {
@@ -73,9 +74,7 @@ namespace Ankh
         public EnvDTE.Window RepositoryExplorerWindow
         {
             get{ return this.reposExplorerWindow; }
-        }
-
-        
+        }        
 
         #region SetUpEvents
         /// <summary>
@@ -90,43 +89,8 @@ namespace Ankh
                 _dispSolutionEvents_OpenedEventHandler( this.SolutionOpened );
             this.solutionEvents.AfterClosing += new 
                 _dispSolutionEvents_AfterClosingEventHandler( this.SolutionClosed );
-
-            
-
-            this.documentEvents = this.DTE.Events.get_DocumentEvents( null );
-            this.documentEvents.DocumentSaved += new 
-                _dispDocumentEvents_DocumentSavedEventHandler( this.DocumentSaved );
-
-            this.csProjectItemsEvents = (ProjectItemsEvents)
-                this.DTE.Events.GetObject( "CSharpProjectItemsEvents" );
-
-            this.csProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
-                this.ItemAdded );
-
-
-
-//            this.vcProjectItemsEvents = (ProjectItemsEvents)
-//                this.DTE.Events.GetObject( "VCProjectItemsEvents" );
-//
-//            this.vcProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
-//                this.ItemAdded );
-
-//            this.vbProjectItemsEvents = (ProjectItemsEvents)
-//                this.DTE.Events.GetObject( "VBProjectItemsEvents" );
-//            
-//            this.vbProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
-//                this.ItemAdded );
-//
-//            this.vjProjectItemsEvents = (ProjectItemsEvents)
-//                this.DTE.Events.GetObject( "VJSharpProjectItemsEvents" );
-//
-//            this.vjProjectItemsEvents.ItemAdded += new _dispProjectItemsEvents_ItemAddedEventHandler(
-//                this.ItemAdded );
-
-       }
-        #endregion
-
-        
+        }
+        #endregion        
 
         /// <summary>
         /// Event handler for the SolutionOpened event.
@@ -136,6 +100,7 @@ namespace Ankh
             try
             {
                 this.solutionExplorer = new Explorer( this.DTE, this.Context );
+                this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
             }
             catch( Exception ex )
             {
@@ -149,47 +114,11 @@ namespace Ankh
         private void SolutionClosed()
         {
             this.solutionExplorer = null;
-        }
 
-        /// <summary>
-        /// Called when a document is saved.
-        /// </summary>
-        private void DocumentSaved( Document document )
-        {
-            if ( this.SolutionExplorer != null )
-                this.SolutionExplorer.UpdateStatus( document.ProjectItem );
+            // unhook events.
+            foreach( EventSinks.EventSink sink in this.eventSinks )
+                sink.Unhook();
         }
-
-        /// <summary>
-        ///  Called when a document is added
-        /// </summary>
-        private void ItemAdded( ProjectItem item )
-        {
-//            System.Windows.Forms.MessageBox.Show( "moo" );
-            if ( this.SolutionExplorer != null )
-                this.SolutionExplorer.SyncWithTreeView();
-        }
-
-//        private void CreateRepositoryExplorer()
-//        {
-//            
-//            ProgIdAttribute attr = (ProgIdAttribute)
-//                typeof(RepositoryExplorerControl).GetCustomAttributes(
-//                typeof(ProgIdAttribute), false )[0];
-//
-//            object control = null;
-//
-//            this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
-//                this.addin, attr.Value, 
-//                "Repository Explorer", REPOSEXPLORERGUID, ref control );
-//
-//            System.Diagnostics.Debug.Assert( control != null, 
-//                "Could not create tool window" );
-//            this.reposExplorerWindow.Visible = true;
-//
-//            this.repositoryExplorer = (RepositoryExplorerControl)control;
-//            this.repositoryExplorer.Visible = true;
-//        }
 
         private void CreateRepositoryExplorer()
         {   
@@ -209,21 +138,15 @@ namespace Ankh
 
             System.Diagnostics.Debug.Assert( this.repositoryExplorer != null, 
                 "Could not create tool window" );
-            
-
-            //this.repositoryExplorer.Visible = true;
         }
 
         private EnvDTE._DTE dte;
         private EnvDTE.AddIn addin;
 
+        private IList eventSinks;
+
         //required to ensure events will still fire
         private SolutionEvents solutionEvents;
-        private DocumentEvents documentEvents;
-        private ProjectItemsEvents csProjectItemsEvents;
-        private ProjectItemsEvents vbProjectItemsEvents;
-        private ProjectItemsEvents vcProjectItemsEvents;
-        private ProjectItemsEvents vjProjectItemsEvents;
         private Explorer solutionExplorer = null;
 
         private SvnContext context;
