@@ -65,6 +65,9 @@ namespace NSvn
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.revision; }
+
+            [System.Diagnostics.DebuggerStepThrough]
+            set{ this.revision = value; }
         }
 
 
