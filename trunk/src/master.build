@@ -14,6 +14,23 @@
         <nant buildfile="NSvn.Core.Tests/NSvn.Core.Tests.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Core.Tests.MCpp/NSvn.Core.Tests.MCpp.build" target="clean" inheritall="true" />
         <nant buildfile="NSvn.Tests/NSvn.Tests.build" target="clean" inheritall="true" />
+        <nant buildfile="Ankh.UI/Ankh.UI.build" target="clean" inheritall="true" />
+        <nant buildfile="Ankh/Ankh.build" target="clean" inheritall="true" />
+    </target>
+    
+    <target name="build-Utils">
+        <nant buildfile="Utils/Utils.build" inheritall="true" target="build"/>
+        <copy file="Utils/${build.dir}/Utils.dll" tofile="${build.dir}/Utils.dll"/>
+    </target>
+    
+    <target name="build-Ankh" depends="build-Ankh.UI, build-NSvn">
+        <nant buildfile="Ankh/Ankh.build" inheritall="true" target="build" />
+        <copy file="Ankh/${build.dir}/Ankh.dll" tofile="${build.dir}/Ankh.dll"/>        
+    </target>
+    
+    <target name="build-Ankh.UI" depends="build-NSvn, build-Utils">
+        <nant buildfile="Ankh.UI/Ankh.UI.build" inheritall="true" target="build" />
+        <copy file="Ankh.UI/${build.dir}/Ankh.UI.dll" tofile="${build.dir}/Ankh.UI.dll"/>        
     </target>
     
     <target name="build-NSvn.Common">
@@ -51,7 +68,7 @@
         <call target="build"/>
     </target>
     
-    <target name="build" depends="build-NSvn.Common, build-NSvn, build-NSvn.Tests, build-NSvn.Core, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"/>
+    <target name="build" depends="build-Ankh, build-NSvn.Common, build-NSvn, build-NSvn.Tests, build-NSvn.Core, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp"/>
     
     <target name="test" depends="build">
 	    <copy todir="${build.dir}">
