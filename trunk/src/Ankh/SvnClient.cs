@@ -204,7 +204,7 @@ namespace Ankh
                 dialog.Failures = failures;
                 dialog.CertificateInfo = info;
                 dialog.MaySave = maySave;
-                DialogResult result = dialog.ShowDialog();
+                DialogResult result = dialog.ShowDialog( this.ankhContext.HostWindow );
 
                 // Cancel means reject.
                 if ( result == DialogResult.Cancel )
@@ -232,7 +232,7 @@ namespace Ankh
                 dialog.MaySave = maySave;
                 dialog.Realm = realm;
 
-                if ( dialog.ShowDialog() == DialogResult.OK )
+                if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
                 {
                     SslClientCertificatePasswordCredential cred = new 
                         SslClientCertificatePasswordCredential();
@@ -256,7 +256,7 @@ namespace Ankh
                 dialog.Realm = realm;
                 dialog.MaySave = maySave;
 
-                if ( dialog.ShowDialog() == DialogResult.OK )
+                if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
                 {
                     SslClientCertificateCredential cred = new 
                         SslClientCertificateCredential();
