@@ -135,8 +135,6 @@ namespace Ankh
             this.DTE.StatusBar.Animate( true, vsStatusAnimation.vsStatusAnimationSync );
 
             this.progressDialog.Caption = description;
-            this.progressDialog.Show();
-            this.progressDialog.Refresh();
         }
 
         /// <summary>
@@ -144,7 +142,6 @@ namespace Ankh
         /// </summary>
         public void EndOperation()
         {
-            this.progressDialog.Hide();
             this.DTE.StatusBar.Text = "Ready";
             this.DTE.StatusBar.Animate( false, vsStatusAnimation.vsStatusAnimationSync );
         }
@@ -210,17 +207,16 @@ namespace Ankh
         {   
             object control = null;
             this.reposExplorerWindow = this.dte.Windows.CreateToolWindow( 
-                this.addin, "Ankh.ToolWindow", 
+                this.addin, "AnkhUserControlHost.AnkhUserControlHostCtl", 
                 "Repository Explorer", REPOSEXPLORERGUID, ref control );
 
             this.reposExplorerWindow.Visible = true;
             this.reposExplorerWindow.Caption = "Repository Explorer";
 
-            this.objControl = (AnkhToolWindowLib.IAnkhToolWindowCtl)control;
+            this.objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
 
-            this.repositoryExplorer = (RepositoryExplorerControl)this.objControl.HostUserControl( 
-                typeof(RepositoryExplorerControl).Assembly.Location, 
-                "Ankh.UI.RepositoryExplorerControl" );
+            this.repositoryExplorer = new RepositoryExplorerControl();
+            this.objControl.HostUserControl( this.repositoryExplorer );
 
             this.repositoryExplorer.Controller = this.RepositoryController;
 
@@ -271,7 +267,7 @@ namespace Ankh
         private SvnContext context;
         private RepositoryExplorerControl repositoryExplorer;
         private EnvDTE.Window reposExplorerWindow;
-        private AnkhToolWindowLib.IAnkhToolWindowCtl objControl;
+        private AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl objControl;
         public static readonly string REPOSEXPLORERGUID = 
             "{1C5A739C-448C-4401-9076-5990300B0E1B}";
     }

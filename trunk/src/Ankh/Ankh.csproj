@@ -134,8 +134,8 @@
                     WrapperTool = "primary"
                 />
                 <Reference
-                    Name = "AnkhToolWindowLib"
-                    Guid = "{2DE57F3E-1C4C-4E9E-A124-FE5B230C0D30}"
+                    Name = "AnkhUserControlHostLib"
+                    Guid = "{A346E700-CCD2-4377-A4E5-5B30275493B1}"
                     VersionMajor = "1"
                     VersionMinor = "0"
                     Lcid = "0"
