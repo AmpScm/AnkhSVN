@@ -135,7 +135,7 @@ namespace Ankh.Commands
         private string[] paths;
         private CommitInfo commitInfo;
 
-        private const string DefaultUuid = Guid.NewGuid().ToString();
+        private static readonly string DefaultUuid = Guid.NewGuid().ToString();
         
     }
 }
