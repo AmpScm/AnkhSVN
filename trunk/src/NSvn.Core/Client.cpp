@@ -3,6 +3,7 @@
 #include "StringHelper.h"
 #include "Notification.h"
 
+
 #include <svn_client.h>
 #include <svn_path.h>
 #include <svn_utf.h>
@@ -11,6 +12,8 @@
 #include "SvnClientException.h"
 #include "stream.h"
 #include <svn_io.h>
+
+using namespace System::Collections;
 
 
 // implementation of Client::Add
@@ -203,7 +206,7 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::PropGet(String* propName,
         revision->ToSvnOptRevision( pool ), recurse, context->ToSvnContext( pool ), pool );
     HandleError( err );
 
-    return ConvertPathToPropertyMapping( propertyHash, propName, pool );
+    return ConvertToPropertyDictionary( propertyHash, propName, pool );
 
 }
 //TODO: Implement the variable admAccessBaton
@@ -254,6 +257,21 @@ void NSvn::Core::Client::Cat( Stream* out, String* path, Revision* revision, Cli
 
     HandleError( svn_client_cat( svnStream, truePath, revision->ToSvnOptRevision( pool ), 
         context->ToSvnContext( pool ), pool ) );
+}
+
+NSvn::Common::PropListItem* NSvn::Core::Client::PropList( String* path, Revision* revision, bool recurse, 
+                                  ClientContext* context ) []
+{
+    Pool pool;
+
+    const char* truePath = CanonicalizePath( path, pool );
+    apr_array_header_t* propListItems;
+
+    HandleError( svn_client_proplist( &propListItems, truePath, 
+        revision->ToSvnOptRevision( pool ), recurse, context->ToSvnContext( pool ),
+        pool ) );
+
+    return ConvertPropListArray( propListItems, pool );
 }
 
 // Converts array of .NET strings to apr array of const char
@@ -311,7 +329,9 @@ struct apr_hash_index_t
 {};
 
 // converts a apr_hash_t of const char* -> svn_string_t mappings
-NSvn::Common::PropertyDictionary* NSvn::Core::Client::ConvertPathToPropertyMapping( 
+// if propertyName is not null, use propertyName as the name of the property
+// else use the key as the name of the property
+NSvn::Common::PropertyDictionary* NSvn::Core::Client::ConvertToPropertyDictionary( 
     apr_hash_t* propertyHash, String* propertyName, Pool& pool )
 {
     PropertyDictionary* mapping = new PropertyDictionary();
@@ -320,25 +340,58 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::ConvertPathToPropertyMappi
     apr_hash_index_t* idx = apr_hash_first( pool, propertyHash );
     while( idx != 0 )
     {
-        const char* path;
+        const char* key;
         apr_ssize_t keyLength;
         svn_string_t* propVal;
 
-        apr_hash_this( idx, reinterpret_cast<const void**>(&path), &keyLength,
+        apr_hash_this( idx, reinterpret_cast<const void**>(&key), &keyLength,
             reinterpret_cast<void**>(&propVal) );
 
         // copy the bytes into managed space
         Byte bytes[] = new Byte[ propVal->len ];
         Marshal::Copy( const_cast<char*>(propVal->data), bytes, 0, propVal->len );
 
-        // Add it to the mapping collection as a Property object
-        Property* property = new Property( propertyName, bytes );
-        mapping->Add( ToNativePath( path, pool ), property );
+        // Add it to the mapping collection as a Property object        
+        if ( propertyName != 0 )
+        {
+            Property* property = new Property( propertyName, bytes );
+            mapping->Add( ToNativePath( key, pool ), property );
+        }
+        else 
+        {
+            String* name = StringHelper( key );
+            Property* property = new Property( name, bytes );
+            mapping->Add( name, property );
+        }
 
         idx = apr_hash_next( idx );
     }
 
     return mapping;
+}
+
+// converts an array of proplist_item's to an array of PropListItem objects
+NSvn::Common::PropListItem* NSvn::Core::Client::ConvertPropListArray( 
+    apr_array_header_t* propListItems, Pool& pool ) []
+{
+    ArrayList* propList = new ArrayList();
+
+    for( int i = 0; i < propListItems->nelts; i++ )
+    {
+        svn_client_proplist_item_t* item = 
+            ((svn_client_proplist_item_t**)propListItems->elts)[i];
+
+        PropertyDictionary* dict = ConvertToPropertyDictionary( 
+            item->prop_hash, 0, pool );
+
+
+        // TODO: is node_name->data always nullterminated?
+        String* nodeName = StringHelper( item->node_name->data );
+        propList->Add( new PropListItem( nodeName, dict ) );
+    }
+
+    return static_cast<PropListItem*[]>(
+        propList->ToArray( __typeof(NSvn::Common::PropListItem) ) );
 }
 
 String* NSvn::Core::Client::ToNativePath( const char* path, Pool& pool )

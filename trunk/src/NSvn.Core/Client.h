@@ -2,10 +2,10 @@
 #using <mscorlib.dll>
 #using <NSvn.Common.dll>
 #using <System.dll>
+#include <apr_tables.h>
 
 #include "Revision.h"
 #include "CommitInfo.h"
-#include "PropListItem.h"
 #include "ClientContext.h"
 
 
@@ -335,7 +335,7 @@ namespace NSvn
             ///<returns></returns>
 	        static Byte RevPropGet(String* propName, String* url, Revision* revision, 
                 RevisionNumber* setRev, ClientContext* context) [];
-
+*/
             ///<summary>List the properties on an entry in a working copy or repository.</summary>          
             ///<param name="target">An url or working copy path.</param>         
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
@@ -348,7 +348,7 @@ namespace NSvn
             ///                      for more information.</param>  
             ///<returns></returns>
 	        static PropListItem* PropList(String* target, Revision* revision, bool recurse, ClientContext* context)[];
-
+/*
             ///<summary>List the revision properties on an entry in a repository.</summary>
             ///<param name="url">Path to the "revision" in the repository.</param>
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
@@ -405,12 +405,16 @@ namespace NSvn
                 const Pool& pool );
             static const char* CanonicalizePath( String* path, Pool& pool );
 
-            static PropertyDictionary* ConvertPathToPropertyMapping( 
+            static NSvn::Common::PropertyDictionary* ConvertToPropertyDictionary( 
                 apr_hash_t* propertyHash, String* propertyName, Pool& pool );
+
+            static NSvn::Common::PropListItem* ConvertPropListArray( 
+                apr_array_header_t* propListItems, Pool& pool ) [];
 
             static String* ToNativePath( const char* path, Pool& pool );
 
-            static apr_array_header_t* StringArrayToAprArray( String* strings[], Pool& pool );
+            static apr_array_header_t* StringArrayToAprArray( String* strings[], 
+                Pool& pool );
         };
     }
 }
