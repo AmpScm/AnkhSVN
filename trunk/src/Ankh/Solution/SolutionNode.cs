@@ -41,7 +41,8 @@ namespace Ankh.Solution
 
         public override void VisitResources( ILocalResourceVisitor visitor, bool recursive )
         {
-            this.solutionFile.Accept( visitor );
+            this.SolutionFolder.Accept( visitor );
+            this.SolutionFile.Accept( visitor );
             if ( recursive )
                 this.VisitChildResources( visitor);
         } 
@@ -62,19 +63,21 @@ namespace Ankh.Solution
                 return StatusKind.None;               
             else
             {
-                StatusKind status = StatusFromResource( this.solutionFile );
-                // no point in checking substatuses if we already have a Normal status
+                StatusKind fileStatus = StatusFromResource( this.solutionFile );
+                StatusKind folderStatus = StatusFromResource( this.solutionFolder );
+                // no point in checking substatuses if we already have an abNormal status
                 // on the solution file
-                if ( status == StatusKind.Normal )
+                if ( fileStatus == StatusKind.Normal && folderStatus == 
+                    StatusKind.Normal )
                 {
                     // check the status on the projects
                     ModifiedVisitor v = new ModifiedVisitor();
                     this.VisitChildResources( v );
                     if ( v.Modified )
-                        status = StatusKind.Modified;
+                        return StatusKind.Modified;
                 }
 
-                return status;
+                return fileStatus == StatusKind.Normal ? folderStatus : fileStatus;
             }
         }
 

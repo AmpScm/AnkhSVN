@@ -25,11 +25,8 @@ namespace Ankh.Solution
                     
                     ILocalResource res = SvnResource.FromLocalPath( pitem.get_FileNames(i) );
                     // does this resource exist?
-                    if ( res != null )
-                    {
-                        res.Context = explorer.Context;
-                        this.resources.Add( res );
-                    }
+                    res.Context = explorer.Context;
+                    this.resources.Add( res );
                 }
                 explorer.AddResource( pitem, this );                    
             }

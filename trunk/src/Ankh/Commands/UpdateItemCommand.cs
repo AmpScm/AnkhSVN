@@ -63,7 +63,7 @@ namespace Ankh.Commands
             public void VisitProject(Ankh.Solution.ProjectNode node)
             {
                 // some project types dont necessarily have a project folder
-                if ( node.ProjectFolder != null )
+                if ( node.ProjectFolder != SvnResource.Unversionable )
                     this.resources.Add( node.ProjectFolder );
                 else
                     node.VisitResources( this, true );
@@ -77,7 +77,7 @@ namespace Ankh.Commands
             public void VisitSolutionNode(Ankh.Solution.SolutionNode node)
             {
                 string solutionPath = ";"; // illegal in a path
-                if ( node.SolutionFolder != null )
+                if ( node.SolutionFolder != SvnResource.Unversionable )
                 {
                     node.SolutionFolder.Accept( this );
                     solutionPath = node.SolutionFolder.Path.ToLower();
@@ -87,7 +87,8 @@ namespace Ankh.Commands
                 foreach( TreeNode n in node.Children )
                 {
                     ProjectNode pNode = n as ProjectNode;
-                    if ( pNode != null && ( pNode.ProjectFolder == null ||
+                    if ( pNode != null && ( 
+                        pNode.ProjectFolder == SvnResource.Unversionable ||
                         pNode.ProjectFolder.Path.ToLower().IndexOf( 
                         solutionPath ) != 0 ) )
                     {
