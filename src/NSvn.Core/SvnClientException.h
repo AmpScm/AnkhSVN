@@ -32,6 +32,24 @@ namespace NSvn
 
         };
 
+        public __gc class AuthorizationFailedException : public SvnClientException
+        {
+        public:
+            AuthorizationFailedException( System::Exception* innerException ) :
+            SvnClientException( "Authorization failed", innerException )
+            {;}
+        };
+
+            
+
+        public __gc class WorkingCopyLockedException : public SvnClientException
+        {
+        public:
+            WorkingCopyLockedException( System::Exception* innerException ) :
+              SvnClientException( "Working copy locked", innerException )
+              {;}
+        };
+
         inline void HandleError( svn_error_t* err )
         {
             if ( err != 0 )
