@@ -29,6 +29,24 @@
 
 using namespace System::Collections;
 
+// used to persist the pool and the status callback
+struct StatusBaton
+{
+    NSvn::Core::Pool* pool;
+    NSvn::Core::ManagedPointer <NSvn::Core::StatusCallback*>* statusCallback;
+};
+
+
+
+ /// callback function for Client::Log
+svn_error_t* svn_log_message_receiver(void *baton, 
+                                      apr_hash_t *changed_paths, svn_revnum_t revision, 
+                                      const char *author, const char *date, const char *message, 
+                                      apr_pool_t *pool); 
+
+/// callback function for Client::Status
+void svn_status_func( void* baton, const char* path, svn_wc_status_t* status );
+
 
 // implementation of Client::Add
 void NSvn::Core::Client::Add( String* path, bool recursive, ClientContext* context )
@@ -84,23 +102,27 @@ void NSvn::Core::Client::Resolved(String* path, bool recursive, ClientContext* c
 
 
 // implementation of Client::Status
-NSvn::Core::StatusDictionary* NSvn::Core::Client::Status( 
+void NSvn::Core::Client::Status( 
     [System::Runtime::InteropServices::Out]System::Int32* youngest, 
-    String* path, bool descend, bool getAll, bool update,  
+    String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll, bool update,  
     bool noIgnore, ClientContext* context )
 {
-    apr_hash_t* statushash = 0;
     Pool pool;
+    StatusBaton baton;
+
+    ManagedPointer<StatusCallback*> statusBaton(statusCallback);
+
+    baton.pool = &pool;
+    baton.statusCallback = &statusBaton;
+
     const char* truePath = CanonicalizePath( path, pool );
 
     svn_revnum_t revnum;
-    HandleError( svn_client_status( &statushash, &revnum, truePath, descend,
+    HandleError( svn_client_status( &revnum, truePath, 
+        revision->ToSvnOptRevision( pool ), svn_status_func, &baton, descend,
         getAll, update, noIgnore, context->ToSvnContext( pool ), pool ) );
 
     *youngest = revnum;
-
-    // convert to a StatusDictionary
-    return StatusDictionary::FromStatusHash( statushash, pool );
 }
 
 NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
@@ -548,7 +570,7 @@ NSvn::Common::PropListItem* NSvn::Core::Client::ConvertPropListArray(
 }
 
 /// marshall the callback into managed space
-svn_error_t* NSvn::Core::svn_log_message_receiver(void *baton, 
+svn_error_t* svn_log_message_receiver(void *baton, 
                                                   apr_hash_t *changed_paths, svn_revnum_t revision, 
                                                   const char *author, const char *date, const char *message, 
                                                   apr_pool_t *pool)
@@ -572,5 +594,19 @@ svn_error_t* NSvn::Core::svn_log_message_receiver(void *baton,
     receiver->Invoke( logMessage );
 
     return SVN_NO_ERROR;
+}
+
+/// marshall the status callback into managed space
+void svn_status_func(void* baton, const char* path, svn_wc_status_t* status)
+{
+    using namespace NSvn::Core;
+
+    StatusBaton* statusBaton = static_cast<StatusBaton*>(baton);
+    StatusCallback* statusCallback = *(static_cast<ManagedPointer<StatusCallback*>*>(statusBaton->statusCallback));
+
+    String* nativePath = ToNativePath( path, *(statusBaton->pool) );
+
+
+    statusCallback->Invoke( nativePath, new Status( status ) );
 }
 

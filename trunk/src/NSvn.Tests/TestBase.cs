@@ -94,13 +94,7 @@ namespace NSvn.Tests
         {
             Assertion.AssertEquals( "Wrong type of notification", 
                 NotifyAction.FailedRevert, args.Notification.Action );
-        }
-
-        private void StatusReceived( object sender, NotificationEventArgs args )
-        {
-            Assertion.AssertEquals( "Wrong type of notification", 
-                NotifyAction.Status, args.Notification.Action );
-        }
+        }        
 
         private void SkipReceived( object sender, NotificationEventArgs args )
         {

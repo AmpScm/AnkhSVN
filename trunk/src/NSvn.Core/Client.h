@@ -161,10 +161,10 @@ namespace NSvn
             ///                      for more information.</param> 
             ///<returns>StatusDictionary object containing status information. 
             ///        <see cref="NSvn.Core.StatusDictionary"></returns>
-            static StatusDictionary* Status(
+            static void Status(
                 [System::Runtime::InteropServices::Out]System::Int32* youngest, 
-                String* path, bool descend, bool getAll, bool upDate,  
-                bool noIgnore, ClientContext* context);
+                String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll,
+                bool update,  bool noIgnore, ClientContext* context );
 
 
 
@@ -438,11 +438,5 @@ namespace NSvn
 
 
         };
-
-        /// callback function for Client::Log
-        svn_error_t* svn_log_message_receiver(void *baton, 
-            apr_hash_t *changed_paths, svn_revnum_t revision, 
-            const char *author, const char *date, const char *message, 
-            apr_pool_t *pool); 
     }
 }

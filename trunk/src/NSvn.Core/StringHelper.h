@@ -67,7 +67,7 @@ namespace NSvn
             {
                 const char* utf8String;
                 HandleError( svn_utf_cstring_to_utf8( &utf8String, this->CopyToPool( pool ), 
-                    0, pool ) );
+                    pool ) );
 
                 return const_cast<char*>(utf8String);
             }
