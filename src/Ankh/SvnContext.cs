@@ -25,7 +25,7 @@ namespace Ankh
 		/// <returns></returns>
 	    protected override string LogMessageCallback(NSvn.Core.CommitItem[] commitItems)
         {
-            CommitDialog dialog = new CommitDialog();
+            CommitDialog dialog = new CommitDialog( commitItems );
             if ( dialog.ShowDialog() == DialogResult.OK )
                 return dialog.LogMessage;
             else

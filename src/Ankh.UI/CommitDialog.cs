@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using NSvn.Core;
 
 namespace Ankh.UI
 {
@@ -13,13 +14,16 @@ namespace Ankh.UI
 	public class CommitDialog : System.Windows.Forms.Form
 	{
         
-		public CommitDialog()
+		public CommitDialog( CommitItem[] items )
 		{
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
             CreateMyToolTip();
+
+            foreach( CommitItem item in items )
+                this.commitItemsList.Items.Add( item.Path );
 		}
 
         /// <summary>
@@ -61,8 +65,8 @@ namespace Ankh.UI
             commitToolTip.ShowAlways = true;
          
             // Set up the ToolTip text for the Button and Checkbox.
-            commitToolTip.SetToolTip( this.fileTreeView, 
-                "Three view of files you attempt to publish/commit. Files will be added into the repository." ); 
+//            commitToolTip.SetToolTip( this.fileTreeView, 
+//                "Three view of files you attempt to publish/commit. Files will be added into the repository." ); 
              //Doesn't work:(. Don't understand why.
             commitToolTip.SetToolTip( this.logMessageControl, 
                 "Write changes you have performed since last revision or update" ); 
@@ -80,21 +84,12 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.fileTreeView = new System.Windows.Forms.TreeView();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.logMessageControl = new Ankh.UI.LogMessageControl();
             this.logLabel = new System.Windows.Forms.Label();
+            this.commitItemsList = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
-            // 
-            // fileTreeView
-            // 
-            this.fileTreeView.Dock = System.Windows.Forms.DockStyle.Top;
-            this.fileTreeView.ImageIndex = -1;
-            this.fileTreeView.Name = "fileTreeView";
-            this.fileTreeView.SelectedImageIndex = -1;
-            this.fileTreeView.Size = new System.Drawing.Size(512, 152);
-            this.fileTreeView.TabIndex = 0;
             // 
             // cancelButton
             // 
@@ -132,6 +127,13 @@ namespace Ankh.UI
             this.logLabel.TabIndex = 4;
             this.logLabel.Text = "Write log message:";
             // 
+            // commitItemsList
+            // 
+            this.commitItemsList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.commitItemsList.Name = "commitItemsList";
+            this.commitItemsList.Size = new System.Drawing.Size(512, 147);
+            this.commitItemsList.TabIndex = 5;
+            // 
             // CommitDialog
             // 
             this.AcceptButton = this.okButton;
@@ -139,11 +141,11 @@ namespace Ankh.UI
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(512, 341);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.commitItemsList,
                                                                           this.logLabel,
                                                                           this.logMessageControl,
                                                                           this.okButton,
-                                                                          this.cancelButton,
-                                                                          this.fileTreeView});
+                                                                          this.cancelButton});
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(390, 350);
             this.Name = "CommitDialog";
@@ -157,19 +159,19 @@ namespace Ankh.UI
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label logLabel;
-        private System.Windows.Forms.TreeView fileTreeView;
         private Ankh.UI.LogMessageControl logMessageControl;
+        private System.Windows.Forms.ListBox commitItemsList;
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        [STAThread] 
-        public static void Main()
-        {
-            CommitDialog the = new CommitDialog();
-            the.ShowDialog();
-        }
+//        [STAThread] 
+//        public static void Main()
+//        {
+//            CommitDialog the = new CommitDialog();
+//            the.ShowDialog();
+//        }
 
 
 

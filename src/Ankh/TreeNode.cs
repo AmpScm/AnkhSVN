@@ -15,7 +15,7 @@ namespace Ankh
     /// <summary>
     /// Represents an item in the treeview.
     /// </summary>
-    internal class TreeNode
+    internal abstract class TreeNode
     {
         private TreeNode( UIHierarchyItem item, IntPtr hItem, 
             SolutionExplorer explorer )
@@ -26,29 +26,21 @@ namespace Ankh
             this.FindChildren( item );  
         }
 
-        internal void VisitResources( ILocalResourceVisitor visitor )
-        {            
-            this.DoVisitResources( visitor );
-            foreach( TreeNode node in this.Children )
-                node.VisitResources( visitor );
-        }
-
-        
+        public abstract void VisitResources( ILocalResourceVisitor visitor );        
         
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
             SolutionExplorer explorer )
         {
             TreeNode node = null;
             // what kind of node is this?
-            if ( item.Object is Project || item.Object is Solution )
+            if ( item.Object is Project )
                 node = new ProjectNode( item, hItem, explorer );
             else if ( item.Object is ProjectItem )
                 node = new ProjectItemNode( item, hItem, explorer );
-            else
-                node = new TreeNode( item, hItem, explorer );
 
             // make sure it has the correct status
-            node.UpdateStatus();
+            if ( node != null )
+                node.UpdateStatus();
 
             return node;
         }
@@ -56,7 +48,7 @@ namespace Ankh
         public static TreeNode CreateSolutionNode( UIHierarchyItem item, IntPtr hItem,
             SolutionExplorer explorer )
         {
-            TreeNode node = new ProjectNode( item, hItem, explorer );
+            TreeNode node = new SolutionNode( item, hItem, explorer );
             node.UpdateStatus();
             
             return node;
@@ -94,21 +86,17 @@ namespace Ankh
 
             // text or property changes on the project file itself?
             StatusKind status = this.GetStatus();
-            if ( status != StatusKind.Normal )
-                this.SetStatusImage( status );            
-            else
-            {
-                // whats the status on the children?
-                ModifiedVisitor v = new ModifiedVisitor();
-                this.VisitResources( v );
-                if ( v.Modified )
-                    this.SetStatusImage( StatusKind.Modified );
-                else
-                    // no non-normal statuses found
-                    this.SetStatusImage( StatusKind.Normal );
-            }
+            this.SetStatusImage( status );
+        }
 
-            
+        /// <summary>
+        /// Visits the children of this node.
+        /// </summary>
+        /// <param name="visitor"></param>
+        public void VisitChildren( ILocalResourceVisitor visitor )
+        {
+            foreach( TreeNode node in this.Children )
+                node.VisitResources( visitor );
         }
 
         /// <summary>
@@ -122,19 +110,50 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Visit the resources belonging to one specific node, not 
-        /// including children
+        /// Sets the status image on this node.
         /// </summary>
-        /// <param name="visitor"></param>
-        protected virtual void DoVisitResources( ILocalResourceVisitor visitor )
-        {}
+        /// <param name="status">The status on this node.</param>
+        protected void SetStatusImage( StatusKind status )
+        {
+            int statusImage = 0;
+            if ( statusMap.Contains(status) )
+                statusImage = (int)statusMap[status];
 
-        
+            TVITEMEX tvitem = new TVITEMEX();
+            tvitem.mask = C.TVIF_STATE | C.TVIF_HANDLE;
+            tvitem.hItem = this.hItem;
+            // bits 12-15 indicate the state image
+            tvitem.state = (uint)(statusImage << 12);
+            tvitem.stateMask = C.TVIS_STATEIMAGEMASK;
+
+            int retval = Win32.SendMessage( this.explorer.TreeView, Msg.TVM_SETITEM, IntPtr.Zero, 
+                tvitem ).ToInt32();
+            Debug.Assert( Convert.ToBoolean( retval ), 
+                "Could not set treeview state image" );
+                
+        }
+
+        /// <summary>
+        /// Returns a status from a resource, taking into account both text status and 
+        /// property status.
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <returns></returns>
+        protected static StatusKind StatusFromResource( ILocalResource resource )
+        {
+            if ( resource.Status.TextStatus != StatusKind.Normal )
+                return resource.Status.TextStatus;
+            else if ( resource.Status.PropertyStatus != StatusKind.Normal &&
+                resource.Status.PropertyStatus != StatusKind.None )
+                return resource.Status.PropertyStatus;  
+            else
+                return StatusKind.Normal;
+        }
 
         /// <summary>
         /// Finds the child nodes of this node.
         /// </summary>
-        private void FindChildren( UIHierarchyItem item )
+        protected void FindChildren( UIHierarchyItem item )
         {
             // retain the original expansion state
             bool isExpanded = item.UIHierarchyItems.Expanded;
@@ -157,8 +176,9 @@ namespace Ankh
                 Debug.Assert( childItem != IntPtr.Zero, 
                     "Could not get treeview item" );
                     
-
-                this.children.Add( TreeNode.CreateNode( child, childItem, this.explorer ) );
+                TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer );
+                if (childNode != null )
+                    this.children.Add( childNode );
 
                 // and the next child
                 childItem = (IntPtr)Win32.SendMessage( this.explorer.TreeView, Msg.TVM_GETNEXTITEM,
@@ -166,26 +186,6 @@ namespace Ankh
             }
 
             item.UIHierarchyItems.Expanded = isExpanded;
-        }
-
-        protected void SetStatusImage( StatusKind status )
-        {
-            int statusImage = 0;
-            if ( statusMap.Contains(status) )
-                statusImage = (int)statusMap[status];
-
-            TVITEMEX tvitem = new TVITEMEX();
-            tvitem.mask = C.TVIF_STATE | C.TVIF_HANDLE;
-            tvitem.hItem = this.hItem;
-            // bits 12-15 indicate the state image
-            tvitem.state = (uint)(statusImage << 12);
-            tvitem.stateMask = C.TVIS_STATEIMAGEMASK;
-
-            int retval = Win32.SendMessage( this.explorer.TreeView, Msg.TVM_SETITEM, IntPtr.Zero, 
-                tvitem ).ToInt32();
-            Debug.Assert( Convert.ToBoolean( retval ), 
-                "Could not set treeview state image" );
-                
         }
 
         /// <summary>
@@ -196,49 +196,80 @@ namespace Ankh
             public ProjectNode( UIHierarchyItem item, IntPtr hItem, SolutionExplorer explorer ) : 
                 base( item, hItem, explorer )
             {
-                if ( item.Object is Project )
+                Project project = (Project)item.Object;
+
+                // find the directory containing the project
+                string fullname = project.FullName;
+                // the Solution Items project has no path
+                if ( fullname != string.Empty )
                 {
-                    // find the directory containing the project
-                    string fullname = ((Project)item.Object).FullName;
-                    // the Solution Items project has no path
-                    if ( fullname != string.Empty )
-                    {
-                        string parentPath = Path.GetDirectoryName( fullname );
-                        this.resource = SvnResource.FromLocalPath( parentPath );
-                        explorer.AddResource( (Project)item.Object, this );                    
-                    }
+                    string parentPath = Path.GetDirectoryName( fullname );
+                    this.projectFolder = SvnResource.FromLocalPath( parentPath );
+                    explorer.AddResource( project, this );                    
                 }
-                else
-                {
-                    // a solution
-                    this.resource = SvnResource.FromLocalPath(explorer.DTE.Solution.FullName);
-                    explorer.AddResource( explorer.DTE.Solution, this );                    
-                }
-                if ( this.resource != null )
-                    this.resource.Context = explorer.Context;
+                if ( this.projectFolder != null )
+                    this.projectFolder.Context = explorer.Context;
             }
+
+            public override void VisitResources( ILocalResourceVisitor visitor )
+            {
+                if ( this.projectFolder != null )
+                    this.projectFolder.Accept( visitor );
+            } 
             
             protected override StatusKind GetStatus()
             {
-                if ( this.resource == null )
-                    return StatusKind.None;
-
-                if ( this.resource.Status.TextStatus != StatusKind.Normal ) 
-                    return this.resource.Status.TextStatus;
-                else if ( this.resource.Status.PropertyStatus != StatusKind.Normal &&
-                    this.resource.Status.PropertyStatus != StatusKind.None )
-                    return this.resource.Status.PropertyStatus;
+                if ( this.projectFolder == null )
+                    return StatusKind.None;               
                 else
-                    return StatusKind.Normal;
-            }
-            
-            protected override void DoVisitResources( ILocalResourceVisitor visitor )
-            {
-                this.resource.Accept( visitor );
-            }            
+                    return StatusFromResource( this.projectFolder );
+            }                    
 
-            private ILocalResource resource;
-        }        
+            private ILocalResource projectFolder;
+        }     
+   
+        /// <summary>
+        /// A node representing a solution.
+        /// </summary>
+        private class SolutionNode : TreeNode
+        {
+            public SolutionNode( UIHierarchyItem item, IntPtr hItem, SolutionExplorer explorer )
+                : base( item, hItem, explorer )
+            {
+                Solution solution = explorer.DTE.Solution;
+                this.solutionFile = SvnResource.FromLocalPath( solution.FullName );
+            }
+
+            public override void VisitResources( ILocalResourceVisitor visitor )
+            {
+                this.solutionFile.Accept( visitor );
+                this.VisitChildren( visitor );
+            } 
+
+            protected override StatusKind GetStatus()
+            {
+                if ( this.solutionFile == null )
+                    return StatusKind.None;               
+                else
+                {
+                    StatusKind status = StatusFromResource( this.solutionFile );
+                    if ( status != StatusKind.Normal )
+                    {
+                        // check the status on the projects
+                        ModifiedVisitor v = new ModifiedVisitor();
+                        this.VisitChildren( v );
+                        if ( v.Modified )
+                            status = StatusKind.Modified;
+                    }
+
+                    return status;
+                }
+            }
+
+            
+
+            private ILocalResource solutionFile;
+        }
 
         /// <summary>
         /// Represents a node containing a project item.
@@ -268,9 +299,7 @@ namespace Ankh
                 catch( NullReferenceException )
                 {
                     //swallow
-                }
-
-                
+                }                
             }
 
             protected override StatusKind GetStatus()
@@ -278,20 +307,20 @@ namespace Ankh
                 // go through the resources belonging to this node
                 foreach( ILocalResource resource in this.resources )
                 {
-                    if ( resource.Status.TextStatus != StatusKind.Normal )
-                        return resource.Status.TextStatus;
-                    else if ( resource.Status.PropertyStatus != StatusKind.Normal &&
-                        resource.Status.PropertyStatus != StatusKind.None )
-                        return resource.Status.PropertyStatus;                    
+                    StatusKind status = StatusFromResource( resource );
+                    if ( status != StatusKind.Normal )
+                        return status;
                 }
                                 
                 return StatusKind.Normal;            
             }
 
-            protected override void DoVisitResources( ILocalResourceVisitor visitor )
+            public override void VisitResources( ILocalResourceVisitor visitor )
             {
                 foreach( ILocalResource resource in this.resources )
                     resource.Accept( visitor );
+
+                this.VisitChildren( visitor );
             }
 
             private IList resources;
