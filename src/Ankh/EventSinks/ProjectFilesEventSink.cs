@@ -6,9 +6,9 @@ namespace Ankh.EventSinks
     /// <summary>
     /// Handles changes to the project and solution files.
     /// </summary>
-    public class ProjectFilesEventSink : EventSink
+    internal class ProjectFilesEventSink : EventSink
     {
-        public ProjectFilesEventSink( IContext context ) : base( context )
+        public ProjectFilesEventSink( AnkhContext context ) : base( context )
         {
             this.Context.ProjectFileWatcher.FileModified += 
                 new FileModifiedDelegate(this.ProjectFileModified);
