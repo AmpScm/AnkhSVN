@@ -1,12 +1,10 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
     <Fragment Id="FR_ReposInstaller">
         <DirectoryRef Id="TARGETDIR">
-            <Component Id="ReposInstaller_component0" DiskId="1" Guid="6529FD7F-8C04-4ca0-A323-CF26905F072A">
-                <File Id="ReposInstaller_file0" Name="REPOSI~1.DLL" LongName="ReposInstaller.dll"
+            <Component Id="C_ReposInstaller.dll" DiskId="1" Guid="6529FD7F-8C04-4ca0-A323-CF26905F072A">
+                <File Id="CF_ReposInstaller.dll" Name="REPOSI~1.DLL" LongName="ReposInstaller.dll"
                 Checksum="yes" Compressed="yes" Vital="yes" KeyPath="yes"
                 src="$(var.builddir)\ReposInstaller.dll" />
-            </Component>
-            <Component Id="ReposInstaller_component1" DiskId="1" Guid="ABEB5BFD-E4AA-48a6-8907-6182C4D5EB79">
                 <File Id="ReposInstaller_file1" Name="REPOSI~1.PDB" LongName="ReposInstaller.pdb"
                 Checksum="yes" Compressed="yes" Vital="yes"
                 src="$(var.builddir)\ReposInstaller.pdb" />
