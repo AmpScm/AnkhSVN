@@ -106,6 +106,8 @@ namespace Ankh.Extenders
                                                                   "{E6FDF86A-F3D1-11D4-8576-0002A516ECE8}", // VJ# folder browse
                                                                   "{E6FDF86C-F3D1-11D4-8576-0002A516ECE8}", // VJ# project browse
                                                                   "{A2392464-7C22-11d3-BDCA-00C04F688E50}", // solution browse object
+                                                                  "{EE8299C9-19B6-4f20-ABEA-E1FD9A33B683}", // C++ File Browse object
+                                                                  "{EE8299CB-19B6-4f20-ABEA-E1FD9A33B683}", // C++ Project Browse Object
                                                                   "{610d4611-d0d5-11d2-8599-006097c68e81}" // generic project
                                                               };
 
