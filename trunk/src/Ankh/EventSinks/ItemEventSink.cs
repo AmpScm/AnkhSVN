@@ -50,7 +50,8 @@ namespace Ankh.EventSinks
                         
                         // make sure we have up to date info on this item.
                         svnItem.Refresh(this.Context.Client);
-                        if ( !svnItem.IsVersioned && svnItem.IsVersionable )
+                        if ( !svnItem.IsVersioned && svnItem.IsVersionable &&
+                            !this.Context.Client.IsIgnored( svnItem.Path ) )
                             this.Context.Client.Add( file, false );
                     }
                 }
