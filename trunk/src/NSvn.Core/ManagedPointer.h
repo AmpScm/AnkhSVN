@@ -14,7 +14,23 @@ namespace NSvn
             ManagedPointer( T ptr ) : ptr( ptr )
             { ; }
 
-            ///<summary>Implicit conversion to the wrapped class</summary>
+            ManagedPointer( const ManagedPointer<T>& other )
+            {
+                this->ptr = other.ptr;
+            }
+
+            ManagedPointer& operator=( const ManagedPointer<T>& other )
+            {
+                this->ptr = other.ptr;
+                return *this;
+            }
+
+            ManagedPointer& operator=( T t )
+            {
+                this->ptr = t;
+            }   
+
+            ///<summary>Implicit conversion to the wrapped class pointer</summary>
             operator T()
             {
                 return ptr;

@@ -1,10 +1,26 @@
+#pragma once
 #using <mscorlib.dll>
+#using <NSvn.Common.dll>
 
 #include "delegates.h"
-#include "AuthenticationBaton.h"
 #include "AdminAccessBaton.h"
 #include "ClientConfig.h"
+#include "ManagedPointer.h"
+#include "Pool.h"
 #include <svn_client.h>
+#include <apr_pools.h>
+
+using namespace NSvn::Common;
+
+
+
+namespace
+{
+    void notify_func( void *baton, const char *path, 
+        svn_wc_notify_action_t action, svn_node_kind_t kind, 
+        const char *mime_type, svn_wc_notify_state_t content_state, 
+        svn_wc_notify_state_t prop_state, svn_revnum_t revision );
+}
 
 namespace NSvn
 {
@@ -13,6 +29,7 @@ namespace NSvn
         // .NET representation of the svn_client_ctx_t structure
         public __gc class ClientContext
         {
+        public:
             ClientContext( NotifyCallback* callback ) : notifyCallback( callback )
             {;}
 
@@ -55,14 +72,60 @@ namespace NSvn
             __property void set_ClientConfig( NSvn::Core::ClientConfig* value )
             { this->clientConfig = value; }
 
-            svn_client_ctx_t* ToSvnContext( Pool& pool );
+            svn_client_ctx_t* ToSvnContext( const Pool& pool );
 
         private:
-            NSvn::Core::AuthenticationBaton* authBaton;
+            NSvn::Common::AuthenticationBaton* authBaton;
             NSvn::Core::PromptCallback* promptCallback;
             NSvn::Core::NotifyCallback* notifyCallback;
             NSvn::Core::LogMessageCallback* logMessageCallback;
             NSvn::Core::ClientConfig* clientConfig;
         };
+
+        
+
+        // implementation
+
+
+        inline svn_client_ctx_t* ClientContext::ToSvnContext( const Pool& pool )
+        {
+            svn_client_ctx_t* ctx = static_cast<svn_client_ctx_t*>(
+                apr_palloc( pool, sizeof( svn_client_ctx_t ) ) );
+
+            if ( this->NotifyCallback != 0 )
+            {
+                ctx->notify_func = notify_func;
+
+                ctx->notify_baton = pool.Allocate( 
+                    ManagedPointer<NSvn::Core::NotifyCallback*>( this->NotifyCallback ) );
+            }
+
+            return ctx; 
+
+
+        }
     }
+}
+
+// necessary to get the managed compiler to generate metadata for the type
+struct apr_pool_t
+{};
+
+namespace
+{
+    using namespace NSvn::Core;
+    void notify_func( void *baton, const char *path, 
+        svn_wc_notify_action_t action, svn_node_kind_t kind, 
+        const char *mime_type, svn_wc_notify_state_t content_state, 
+        svn_wc_notify_state_t prop_state, svn_revnum_t revision )
+    {
+        Notification* notification = new Notification( path, action, kind,
+            mime_type, content_state, prop_state, revision );
+        NotifyCallback* callback = 
+            *(static_cast<ManagedPointer<NotifyCallback*>* >(baton) );
+        callback->Invoke( notification );
+
+    }
+
+
 }

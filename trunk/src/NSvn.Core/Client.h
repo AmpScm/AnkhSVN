@@ -1,14 +1,17 @@
+#using <mscorlib.dll>
+#using <NSvn.Common.dll>
+#using <System.dll>
 
 #include "Revision.h"
 #include "CommitInfo.h"
 #include "PropListItem.h"
 #include "ClientContext.h"
 
-#using <mscorlib.dll>
-#using <System.dll>
+
 
 using namespace System;
 using namespace System::IO;
+using namespace NSvn::Common;
 using namespace System::Collections::Specialized;
 
 namespace NSvn
@@ -18,7 +21,7 @@ namespace NSvn
         public __gc class Client
         {
         public:            
-            static void Checkout(String* url, String* path, Revision* revision, bool recurse, 
+            /*static void Checkout(String* url, String* path, Revision* revision, bool recurse, 
                 ClientContext* context);
 
 	        static void Update(String* path, Revision* revision, bool recurse, ClientContext* context);
@@ -84,7 +87,7 @@ namespace NSvn
 
 	        static String* Ls(String* url, Revision* revision, bool recurse, ClientContext* context)[];
 
-	        static void Cat(Stream* out, String* url, Revision* revision, ClientContext* context);
+	        static void Cat(Stream* out, String* url, Revision* revision, ClientContext* context);*/
         private:
             // ctor made private to avoid instantiation of this class
             Client(){;}

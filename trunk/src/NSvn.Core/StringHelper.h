@@ -1,37 +1,64 @@
-#include "Stdafx.h"
+#pragma once
 #include <vcclr.h>
-using namespace System;
-using namespace System::Runtime::InteropServices;
 
 namespace NSvn
 {
     namespace Core
     {
+        using namespace System;
+        using namespace System::Runtime::InteropServices;
+
         // Helper class to effect string conversions
         class StringHelper
         {
         public:
-            // constructor that takes a System::String
+            // <summary>constructor that takes a System::String</summary>
             StringHelper( String __gc* string )
             {
                 this->string = string;
                 this->charPtr = 0;
             }
 
-            // constructor that takes a const char*
+            /// <summary>constructor that takes a const char*</summary>
             StringHelper( const char* charPtr )
             {
                 this->string = this->ConvertToSystemString( charPtr );
                 this->charPtr = 0;
             }
 
-            // implicit conversion to a System::String
+            /// <summary>implicit conversion to a System::String</summary>
             operator String*() const
             {
                 return this->string;
             }
 
-            // implicit conversion to a const char*
+            /// <summary>Copy constructor</summary>
+            StringHelper( const StringHelper& other )
+            {
+                //System::Strings can be shared
+                this->string = other.string;
+
+                //char ptrs can not
+                this->charPtr = 0;
+            }
+
+            /// <summary>Assignment operator</summary>
+            StringHelper& operator=( const StringHelper& other )
+            {
+                if ( this == &other )
+                    return *this;
+
+                this->string = other.string;
+                if( this->charPtr != 0 )
+                    this->FreeCharPtr( this->charPtr );
+
+                this->charPtr = 0;
+
+                return *this;
+            }
+                
+
+            /// <summary>implicit conversion to a const char*</summary>
             operator const char* () const
             {
                 // lazy creation of the char* - we might not need it
@@ -41,7 +68,7 @@ namespace NSvn
                 return this->charPtr;
             }
 
-            // dtor - get rid of the char ptr
+            // <summary>dtor - get rid of the char ptr</summary>
             ~StringHelper()
             {
                 if ( this->charPtr != 0 )
@@ -49,19 +76,19 @@ namespace NSvn
             }
 
         private:
-            // convert a char ptr to a System::String
+            /// <summary>convert a char ptr to a System::String</summary>
             String __gc* ConvertToSystemString( const char* ptr )
             {
                 return Marshal::PtrToStringAnsi( static_cast<IntPtr>(const_cast<char*>(ptr) ) );
             }
 
-            // convert a System::String to a char*
+            /// <summary>convert a System::String to a char*</summary>
             char* ConvertToCharPtr( String __gc* string ) const
             {
                 return static_cast<char*>( Marshal::StringToHGlobalAnsi( string ).ToPointer() );
             }
 
-            // free the memory allocated by the StringToHGlobalAnsi call
+            /// <summary>free the memory allocated by the StringToHGlobalAnsi call</summary>
             void FreeCharPtr( char* ptr )
             {
                 Marshal::FreeHGlobal( static_cast<IntPtr>( static_cast<void*>(ptr) ) );

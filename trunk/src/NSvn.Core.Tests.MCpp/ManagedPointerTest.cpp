@@ -25,3 +25,23 @@ void NSvn::Core::Tests::MCpp::ManagedPointerTest::TestBasic()
     //implicitly convert to void*
     voidFunc( ptr );
 }
+
+void NSvn::Core::Tests::MCpp::ManagedPointerTest::TestAssignment()
+{
+    String* str = S"Moo world";
+    ManagedPointer<String*> ptr1( str );
+    ManagedPointer<String*> ptr2( S"Bleh" );
+
+    ptr2 = ptr1;
+    Assertion::AssertEquals( ptr1, ptr2 );
+    Assertion::AssertEquals( ptr2, S"Moo world" );
+}
+
+void NSvn::Core::Tests::MCpp::ManagedPointerTest::TestCopying()
+{
+    String* str = S"Moo world";
+    ManagedPointer<String*> ptr1( str );
+    ManagedPointer<String*> ptr2( ptr1 );
+
+    Assertion::AssertEquals( ptr1, ptr2 );
+}
