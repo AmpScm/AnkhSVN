@@ -56,10 +56,13 @@ namespace Ankh.Commands
                     new ProgressRunnerCallback( this.DoCommit ) );
                 runner.Start( "Committing" );
 
-                foreach( SvnItem item in resources )
-                    item.Refresh( context.Client );
+                if(!runner.Cancelled)
+                {
+                    foreach( SvnItem item in resources )
+                        item.Refresh( context.Client );
 
-                context.Client.CommitCompleted();
+                    context.Client.CommitCompleted();
+                }
             }
             catch( NSvn.Common.SvnException )
             {

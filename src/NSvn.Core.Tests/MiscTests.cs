@@ -101,6 +101,21 @@ namespace NSvn.Core.Tests
             }
         }
 
+        [Test]
+        public void TestHasBinaryProp()
+        {
+            // first on a file
+            Assert.IsFalse( this.Client.HasBinaryProp( Path.Combine( 
+                this.WcPath, "Form.cs" ) ) );
+
+            Assert.IsTrue( this.Client.HasBinaryProp( Path.Combine(
+                this.WcPath, "App.ico" ) ) );
+
+            // check what happens for a dir
+            Assert.IsFalse( this.Client.HasBinaryProp( this.WcPath ) );
+
+        }
+
         private string GetUrl( string path )
         {
             string info = this.RunCommand( "svn", "info " + path );

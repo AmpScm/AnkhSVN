@@ -53,19 +53,7 @@ namespace Ankh.Commands
 
         protected void SaveAllDirtyDocuments( AnkhContext context )
         {
-            foreach( Document doc in context.DTE.Documents )
-            {
-                try
-                {
-                    if ( !doc.Saved )
-                        doc.Save( doc.FullName );
-                }
-                catch( InvalidCastException )
-                {
-                    // can be thrown if the document type has a leaky automation model
-                    System.Diagnostics.Trace.WriteLine( "Unable to save document" );
-                }
-            }
+            context.DTE.ExecuteCommand( "File.SaveAll", "" );
         }
 
         protected static PathSelector GetPathSelector( string text )

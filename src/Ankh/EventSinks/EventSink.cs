@@ -65,6 +65,8 @@ namespace Ankh.EventSinks
 
             sinks.Add( new CommandsEventSink( context ) );
 
+            sinks.Add( new ProjectFilesEventSink( context ) );
+
             return sinks;
         }
 
@@ -84,18 +86,7 @@ namespace Ankh.EventSinks
         {
             get{ return addingProject; }
             set{ addingProject = value; }
-        }
-
-        /// <summary>
-        /// Refreshes the specified project after an interval.
-        /// </summary>
-        /// <param name="project"></param>
-        protected void DelayedRefresh( Project project )
-        {
-            System.Threading.Timer timer = new System.Threading.Timer(
-                new TimerCallback( this.RefreshCallback ), project, REFRESHDELAY, 
-                Timeout.Infinite );
-        }
+        }        
       
         /// <summary>
         /// Retrieves a VSProjectsEventSink associated with the project 
@@ -242,25 +233,7 @@ Please report this error.", kind, objectName, events.GetType(),
             else
                 return key.GetValue( "Package" ).ToString();
         }
-
         
-
-        private void RefreshCallback( object state )
-        {
-            Project project = (Project) state;
-            try
-            {
-                project.Save( project.FileName );
-            }
-            catch( NotImplementedException )
-            {
-                System.Diagnostics.Debug.WriteLine( "Hi" );
-                // swallow 
-            }
-            this.Context.SolutionExplorer.Refresh( project );
-        }
-
-
         protected const int REFRESHDELAY = 200;
         private static bool addingProject = false;
         private AnkhContext context;

@@ -23,12 +23,11 @@ namespace Ankh.Solution
     /// Represents the Solution Explorer window in the VS.NET IDE
     /// </summary>
     internal class Explorer
-    {
-        public Explorer( _DTE dte, AnkhContext context, FileWatcher watcher )
+    {        
+        public Explorer( _DTE dte, IContext context )
         {
             this.dte = dte;
             this.context = context;
-            this.watcher = watcher;
             this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
                 new ItemComparer() );
             this.projects = new Hashtable( new ProjectHashCodeProvider(), 
@@ -44,10 +43,9 @@ namespace Ankh.Solution
         ///  To be called when a solution is loaded.
         /// </summary>
         public void Load()
-        {
-            this.watcher.Clear();
-            this.watcher.AddFile( this.DTE.Solution.FullName );
+        {           
             this.Unload();
+            this.context.ProjectFileWatcher.AddFile( this.DTE.Solution.FullName );
             this.SetUpTreeview();
             this.SyncWithTreeView();
         }
@@ -67,6 +65,7 @@ namespace Ankh.Solution
                 this.treeview.StatusImageList = originalImageList;
                 originalImageList = IntPtr.Zero;
             }
+            this.context.ProjectFileWatcher.Clear();
             this.solutionNode = null;
         }
 
@@ -146,6 +145,7 @@ namespace Ankh.Solution
 
         public void SyncWithTreeView()
         {
+            // build the whole tree anew
             Debug.WriteLine( "Synchronizing with treeview", "Ankh" );
 
             this.projectItems.Clear();
@@ -159,8 +159,6 @@ namespace Ankh.Solution
             
             // and assign the status image list to the tree
             this.treeview.StatusImageList = statusImageList.Handle;
-            
-
 
             // we assume there is a single root node
             this.solutionNode = TreeNode.CreateSolutionNode( 
@@ -373,7 +371,7 @@ namespace Ankh.Solution
         internal void AddResource( Project key, TreeNode node )
         {
             this.projects[key] = node;
-            this.watcher.AddFile( key.FullName );
+            this.context.ProjectFileWatcher.AddFile( key.FullName );
         }
 
         internal void SetSolution( TreeNode node )
@@ -541,7 +539,6 @@ namespace Ankh.Solution
         private TreeNode solutionNode;
         private ImageList statusImageList;
         private AnkhContext context;
-        private FileWatcher watcher;
         private TreeView treeview;
         private IntPtr originalImageList = IntPtr.Zero;
 

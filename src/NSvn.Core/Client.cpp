@@ -258,15 +258,19 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonR
 {
     Pool pool;
     apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
-    svn_client_commit_info_t* commitInfoPtr;
+    svn_client_commit_info_t* commitInfoPtr = 0;
 
     HandleError( svn_client_commit( &commitInfoPtr, aprArrayTargets, nonRecursive, 
         this->context->ToSvnContext( pool ), pool ) );
-
-    if ( commitInfoPtr )
+    
+    if ( commitInfoPtr && commitInfoPtr->revision != SVN_INVALID_REVNUM )
+    {
         return new CommitInfo( commitInfoPtr );
+    }
     else 
-        return 0;
+    {
+        return CommitInfo::Invalid;
+    }
 }
 // implementation of Client::Move
 NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath, 
@@ -570,9 +574,9 @@ void NSvn::Core::Client::Relocate( String* dir, String* from, String* to,
 {
     Pool pool;
     HandleError( svn_client_relocate( 
-        StringHelper(dir),
-        StringHelper(from),
-        StringHelper(to),
+        CanonicalizePath( dir, pool ),
+        CanonicalizePath( from, pool ),
+        CanonicalizePath( to, pool ),
         recurse,
         this->context->ToSvnContext(pool), pool ) );
 }
@@ -606,6 +610,33 @@ String* NSvn::Core::Client::UuidFromUrl( String* url )
         pool ) );
 
     return (String*)StringHelper( uuid );
+}
+
+
+bool NSvn::Core::Client::HasBinaryProp( String* path )
+{
+    Pool pool;
+    const char* realPath = CanonicalizePath( path, pool );
+
+    // lock the directory
+    svn_wc_adm_access_t* admAccess;
+    svn_error_t* err = svn_wc_adm_probe_open( &admAccess, 0, CanonicalizePath( path, pool ), 
+        false, false, pool );    
+
+    if( err != 0 && err->apr_err == SVN_ERR_WC_NOT_DIRECTORY )
+        return false;
+    else
+        HandleError( err );
+    try
+    {
+        svn_boolean_t hasBinaryProp = 0;
+        HandleError(svn_wc_has_binary_prop( &hasBinaryProp, realPath, admAccess, pool ));
+        return hasBinaryProp != 0;
+    }
+    __finally
+    {
+        svn_wc_adm_close( admAccess );
+    }
 }
 
 void NSvn::Core::Client::OnNotification( NotificationEventArgs* args )

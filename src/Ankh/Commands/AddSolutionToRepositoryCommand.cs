@@ -7,6 +7,7 @@ using System.IO;
 using System.Collections;
 using NSvn.Core;
 using NSvn.Common;
+using System.Reflection;
 
 namespace Ankh.Commands
 {
@@ -23,7 +24,15 @@ namespace Ankh.Commands
     VSNetControl( "File", Position=14 )]
     internal class AddSolutionToRepositoryCommand : CommandBase
     {
-        public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
+        public AddSolutionToRepositoryCommand()
+        {
+            Assembly asm = Assembly.Load( 
+                "Microsoft.VisualStudio.VCProjectEngine");
+            this.vcFilterType = asm.GetType(
+                "Microsoft.VisualStudio.VCProjectEngine.VCFilter", true );
+        }
+
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.AnkhLoadedForSolution || 
                 !File.Exists(context.DTE.Solution.FullName))
@@ -93,6 +102,22 @@ namespace Ankh.Commands
 
                 this.AddProjects( context.DTE.Solution.Projects, context, solutionDir );  
             }
+            catch( Exception )
+            {
+                // oops, bad stuff happened
+                context.StartOperation( "Error: Reverting changes" );
+                try
+                {
+                    context.Client.Revert( new string[]{ solutionDir }, true );
+                    PathUtils.RecursiveDelete( 
+                        Path.Combine(solutionDir, Client.AdminDirectoryName) );
+                }
+                finally
+                {
+                    context.EndOperation();
+                }
+                throw;                
+            }
             finally
             {
                 context.EndOperation();
@@ -107,6 +132,8 @@ namespace Ankh.Commands
                 try
                 {
                     context.Client.Revert( new string[]{ solutionDir }, true );
+                    PathUtils.RecursiveDelete( 
+                        Path.Combine(solutionDir, Client.AdminDirectoryName) );
                 }
                 finally
                 {
@@ -146,13 +173,23 @@ namespace Ankh.Commands
         {
             foreach( Project project in projects )
             {
-                // project.FileName throws an ArgumentException if the project 
-                // hasn't been loaded.
                 string filename;
                 try
                 {
-                    filename = this.GetProjectFileName( project, 
-                        context.DTE.Solution );
+                    // treat soln items and misc items specially
+                    if ( this.IsSpecialProject( project ) )
+                    {
+                        if ( project.ProjectItems != null )
+                            this.AddProjectItems( project.ProjectItems, context, solutionDir );
+                        continue;
+                    }
+                    else
+                    {
+                        // project.FileName throws an ArgumentException if the project 
+                        // hasn't been loaded.
+                        filename = this.GetProjectFileName( project, 
+                            context.DTE.Solution );
+                    }
                 }
                 catch( ArgumentException )
                 {
@@ -219,7 +256,8 @@ namespace Ankh.Commands
                     }
                     try
                     {
-                        if ( File.Exists( file ) || Directory.Exists( file ) )
+                        if ( (File.Exists( file ) || Directory.Exists( file )) &&
+                            !this.vcFilterType.IsInstanceOfType(item.Object) )
                         {
                             // for now we only support files that are under the solution root
                             if ( !PathUtils.IsSubPathOf( file, solutionDir ) )
@@ -319,6 +357,18 @@ namespace Ankh.Commands
             context.Client.Commit( paths, true );
         }
 
+        private bool IsSpecialProject( Project project )
+        {
+            foreach( string guid in SpecialProjects )
+            {
+                if ( String.Compare( project.Kind, guid, true ) == 0 )
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// A progress runner for creating repository directories.
         /// </summary>
@@ -347,6 +397,12 @@ namespace Ankh.Commands
             private string logMessage;            
         }
 
+        private static readonly string[] SpecialProjects = new String[]{
+            "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}",
+            "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}" 
+                                                                       };
+
         private IList paths;
+        private readonly Type vcFilterType;
     }
 }

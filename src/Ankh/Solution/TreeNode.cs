@@ -47,12 +47,10 @@ namespace Ankh.Solution
             // what kind of node is this?
             if ( item.Object is Project )
             {
-                Debug.WriteLine( "Creating ProjectNode for " + item.Name, "Ankh" );
                 node = new ProjectNode( item, hItem, explorer, parent );
             }
             else if ( item.Object is ProjectItem )
             {
-                Debug.WriteLine( "Creating ProjectItemNode for " + item.Name, "Ankh" );
                 node = new ProjectItemNode( item, hItem, explorer, parent );           
             }
 
@@ -87,9 +85,7 @@ namespace Ankh.Solution
         public virtual void Refresh( bool rescan )
         {
             try
-            {  
-                Debug.WriteLine( "Refreshing " + this.uiItem.Name + ". rescan=" + rescan,
-                    "Ankh" );
+            {                  
                 if ( rescan )
                 {
                     this.explorer.Context.StatusCache.Status( this.Directory );                    
@@ -278,11 +274,7 @@ namespace Ankh.Solution
         protected void FindChildren()
         {
             try
-            {
-                Debug.WriteLine( "Retrieving child items of node " + this.uiItem.Name, "Ankh" );
-
-                Debug.Indent();
-
+            {                
                 this.children = new ArrayList();
 
                 // retain the original expansion state
@@ -303,7 +295,6 @@ namespace Ankh.Solution
                 {
                     Debug.Assert( childItem != IntPtr.Zero, 
                         "Could not get treeview item" );
-                    Debug.WriteLine( "Found child node " + child.Name, "Ankh" );
 
                     if ( child.Name != Client.AdminDirectoryName )
                     {                    
@@ -320,9 +311,7 @@ namespace Ankh.Solution
                     // and the next child
                     childItem = this.explorer.TreeView.GetNextSibling( childItem );               
                 }
-                Debug.Unindent();
-                Debug.WriteLine( "Finished retrieving child items of node " + 
-                    this.uiItem.Name, "Ankh" );
+                
                 this.uiItem.UIHierarchyItems.Expanded = isExpanded;
             }
             catch( ArgumentException )

@@ -57,8 +57,6 @@ namespace Ankh.UI
                 Debug.Assert( value.Length == 4, "There should be 4 filenames" );
                 this.mineFileRadioButton.Text = Path.GetFileName(value[0]);
                 this.mineFileRadioButton.Tag = value[0];
-                this.mineFileRadioButton.Checked = true;
-                this.selectedChoice = value[0];
 
                 this.oldRevRadioButton.Text = Path.GetFileName(value[1]);
                 this.oldRevRadioButton.Tag = value[1];
@@ -68,8 +66,32 @@ namespace Ankh.UI
 
                 this.fileRadioButton.Text = Path.GetFileName(value[3]);
                 this.fileRadioButton.Tag = value[3];
+                this.selectedChoice = value[3];
+                this.fileRadioButton.Checked = true;
 
                 
+            }
+        }
+
+        /// <summary>
+        /// Whether this is a merge of two binary files.
+        /// </summary>
+        public bool Binary
+        {
+            get{ return this.binary; }
+            set
+            {
+                this.binary = value;
+                
+                this.mineFileRadioButton.Enabled = 
+                    this.mineFileRadioButton.Visible = !this.binary;
+
+                // make sure there's at least one button checked.
+                if ( this.binary )
+                {
+                    this.fileRadioButton.Checked = true;
+                    this.selectedChoice = (string)this.fileRadioButton.Tag;
+                }
             }
         }
 
@@ -129,7 +151,7 @@ namespace Ankh.UI
             // 
             this.mineFileRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.mineFileRadioButton.Location = new System.Drawing.Point(8, 24);
+            this.mineFileRadioButton.Location = new System.Drawing.Point(8, 96);
             this.mineFileRadioButton.Name = "mineFileRadioButton";
             this.mineFileRadioButton.Size = new System.Drawing.Size(280, 24);
             this.mineFileRadioButton.TabIndex = 0;
@@ -165,7 +187,7 @@ namespace Ankh.UI
             // 
             this.fileRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileRadioButton.Location = new System.Drawing.Point(8, 96);
+            this.fileRadioButton.Location = new System.Drawing.Point(8, 24);
             this.fileRadioButton.Name = "fileRadioButton";
             this.fileRadioButton.Size = new System.Drawing.Size(280, 24);
             this.fileRadioButton.TabIndex = 3;
@@ -238,6 +260,7 @@ namespace Ankh.UI
         private System.Windows.Forms.GroupBox groupBox1;
 
         private System.ComponentModel.IContainer components = null;
+        private bool binary = false;
     }
 
 }
