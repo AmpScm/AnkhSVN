@@ -65,6 +65,9 @@ namespace Ankh.UI
             using( StringWriter writer = new StringWriter() )
             {
                 this.WriteProlog( writer );
+                string escapedDiff = this.diff.Replace( "<", "&lt;" ).
+                    Replace( ">", "&gt;" );
+
                 using( StringReader reader = new StringReader( this.diff ) )
                 {
                     string line;
@@ -76,7 +79,8 @@ namespace Ankh.UI
                     }
                 }
                 this.WriteEpilog( writer );
-                return writer.ToString().Replace( "<", "&lt;" ).Replace( ">", "&gt;" );    
+
+                return writer.ToString();
             }            
         }
 
