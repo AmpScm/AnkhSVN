@@ -38,7 +38,7 @@ namespace Ankh.Commands
             {
                 // are we shifted?
                 bool recurse = false;
-                if ( this.Shift )
+                if ( CommandBase.Shift )
                 {
                     using( PathSelector p = this.GetPathSelector( "Select items for diffing" ) )
                     {
