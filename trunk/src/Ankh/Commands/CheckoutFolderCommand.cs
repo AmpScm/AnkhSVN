@@ -13,7 +13,7 @@ namespace Ankh.Commands
     [VSNetCommand("CheckoutFolder", Tooltip="Checkout this folder", Text = "Checkout Folder..." ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
 	internal class CheckoutFolderCommand : 
-        CheckoutCommand
+        CommandBase
 	{
         #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(AnkhContext context)
