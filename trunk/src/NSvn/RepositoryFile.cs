@@ -7,7 +7,7 @@ namespace NSvn
 	/// <summary>
 	/// Represents a file in the repository.
 	/// </summary>
-    public class RepositoryFile : RepositoryItem
+    public class RepositoryFile : RepositoryResource
     {
         /// <summary>
         /// Constructor.

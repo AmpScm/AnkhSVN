@@ -7,7 +7,7 @@ namespace NSvn
 	/// <summary>
 	/// Represents a directory in a repository.
 	/// </summary>
-	public class RepositoryDirectory : RepositoryItem
+	public class RepositoryDirectory : RepositoryResource
 	{
         /// <summary>
         /// Constructor. Defaults to the HEAD revision.
@@ -37,8 +37,10 @@ namespace NSvn
         /// be checked out.</param>
         public WorkingCopyDirectory Checkout( string localPath, bool recurse )
         {
-            return RepositoryDirectory.Checkout( this.Url, localPath, 
-                this.Revision, recurse );
+            Client.Checkout( url, localPath, revision, recurse,
+                new ClientContext() );
+
+            return new WorkingCopyDirectory( localPath );
         }
 
         /// <summary>
@@ -48,10 +50,10 @@ namespace NSvn
             string localPath, Revision revision, bool recurse )
         {
             // TODO: what to do with ClientContext here?
-            Client.Checkout( url, localPath, revision, recurse,
-                new ClientContext() );
+            return new RepositoryDirectory( url, revision ).Checkout( 
+                localPath, recurse );
 
-            return new WorkingCopyDirectory( localPath );
+            
         }
 	}
 }

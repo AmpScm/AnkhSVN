@@ -8,14 +8,14 @@ namespace NSvn
 	/// <summary>
 	/// Represents an item in the repository.
 	/// </summary>
-	public class RepositoryItem : SvnResource
+	public class RepositoryResource : SvnResource
 	{
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="url">The URL to the item in the repository.</param>
         /// <param name="revision">The revision of the item.</param>
-		protected RepositoryItem( string url, Revision revision )
+		protected RepositoryResource( string url, Revision revision )
 		{
             this.url = url;
             this.revision = revision;
@@ -26,7 +26,7 @@ namespace NSvn
         /// Constructor. Defaults to the HEAD revision.
         /// </summary>
         /// <param name="url">The URL to the item in the repository</param>
-        protected RepositoryItem( string url ) : 
+        protected RepositoryResource( string url ) : 
             this( url, Revision.Head )
         {
             // empty
