@@ -152,9 +152,6 @@ copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)
 				RelativePath="MiscTests.cpp">
 			</File>
 			<File
-				RelativePath=".\NotificationEventArgsTest.cpp">
-			</File>
-			<File
 				RelativePath="PoolTest.cpp">
 			</File>
 			<File
@@ -199,9 +196,6 @@ copy ..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb $(OutDir)
 			</File>
 			<File
 				RelativePath="MiscTests.h">
-			</File>
-			<File
-				RelativePath=".\NotificationEventArgsTest.h">
 			</File>
 			<File
 				RelativePath="PoolTest.h">
