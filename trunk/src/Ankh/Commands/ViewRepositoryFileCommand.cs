@@ -2,6 +2,7 @@
 using EnvDTE;
 using NSvn;
 using System.IO;
+using System.Collections;
 
 namespace Ankh.Commands
 {
@@ -10,7 +11,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("ViewRepositoryFile", Tooltip="View this file", Text = "In VS.NET" ),
      VSNetControl( "ReposExplorer.View", Position = 1 ) ]
-    internal class ViewRepositoryFile : CommandBase
+    internal abstract class ViewRepositoryFileCommand : CommandBase
     {
        
     
@@ -22,32 +23,36 @@ namespace Ankh.Commands
             return v.IsFile ? vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled :
                 vsCommandStatus.vsCommandStatusSupported;
         }
-
-        public override void Execute(AnkhContext context)
-        {
-            CatVisitor v = new CatVisitor( context.DTE );
-            context.RepositoryController.VisitSelectedNodes( v );
-        }
         #endregion
 
-        private class CatVisitor : RepositoryResourceVisitorBase
-        {
-            public CatVisitor( _DTE dte )
+        #region CatVisitor
+        protected class CatVisitor : RepositoryResourceVisitorBase
+        {          
+            public virtual IEnumerable FileNames
             {
-                this.dte = dte;
+                get{ return this.fileNames; }
             }
 
             public override void VisitFile(RepositoryFile file)
             {
-                string filename = Path.Combine( Path.GetTempPath(), file.Name );
-                using( FileStream fs = new FileStream( filename, FileMode.Create, FileAccess.Write ) )
-                    file.Cat( fs );                
+                string filename = this.GetPath( file.Name );
+                if ( filename != null )
+                {
+                    using( FileStream fs = new FileStream( filename, FileMode.Create, FileAccess.Write ) )
+                        file.Cat( fs );  
 
-                this.dte.ItemOperations.OpenFile( filename, Constants.vsViewKindPrimary );
+                    this.fileNames.Add( filename );
+                }
             }
 
-            private _DTE dte;
+            protected virtual string GetPath( string filename )
+            {
+                return  Path.Combine( Path.GetTempPath(), filename );
+            }
+
+            private ArrayList fileNames = new ArrayList();
         }
+        #endregion
     }
 }
 
