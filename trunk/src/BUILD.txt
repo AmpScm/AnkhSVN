@@ -1,4 +1,4 @@
-** Ankh source code **
+** Ankh source code ***
 
 * Subversion *
 
