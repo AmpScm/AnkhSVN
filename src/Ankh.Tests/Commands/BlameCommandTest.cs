@@ -84,6 +84,7 @@ namespace Ankh.Tests
             Assert.IsFalse( this.uiShell.Html == String.Empty );
             Assert.IsFalse( this.uiShell.Reuse );
             Assert.IsTrue( this.uiShell.ProgressDialogCalled );
+            Assert.IsTrue( this.uiShell.ShowPathSelectorCalled );
             Assert.AreEqual( this.uiShell.Caption, "Class1.cs" );
 
         }
@@ -104,7 +105,15 @@ namespace Ankh.Tests
                 return base.RunWithProgressDialog (worker, caption);
             }
 
+            public override PathSelectorInfo ShowPathSelector(PathSelectorInfo info)
+            {
+                this.ShowPathSelectorCalled = true;
+                return base.ShowPathSelector (info);
+            }
 
+
+
+            public bool ShowPathSelectorCalled = false;
             public bool ProgressDialogCalled = false;
             public bool Called = false;
             public string Caption ;
