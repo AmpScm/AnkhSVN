@@ -5,25 +5,31 @@ using NSvn.Core;
 using Ankh.UI;
 using System.Windows.Forms;
 using System.Collections;
+using EnvDTE;
 
 namespace Ankh
 {
 	/// <summary>
 	/// Summary description for SvnContext.
 	/// </summary>
-	internal class SvnContext : NSvnContext
-	{
+    internal class SvnContext : NSvnContext
+    {
         public SvnContext( AnkhContext ankhContext )
         {
             this.ankhContext = ankhContext;
             this.AddAuthenticationProvider( new DialogProvider() );
+
+            OutputWindow outputWindow = (OutputWindow)this.ankhContext.DTE.Windows.Item(
+                EnvDTE.Constants.vsWindowKindOutput).Object;
+
+            this.outputPane = outputWindow.OutputWindowPanes.Add( "Subversion" );
         }
-		/// <summary>
-		/// Invokes the LogMessage dialog.
-		/// </summary>
-		/// <param name="commitItems"></param>
-		/// <returns></returns>
-	    protected override string LogMessageCallback(NSvn.Core.CommitItem[] commitItems)
+        /// <summary>
+        /// Invokes the LogMessage dialog.
+        /// </summary>
+        /// <param name="commitItems"></param>
+        /// <returns></returns>
+        protected override string LogMessageCallback(NSvn.Core.CommitItem[] commitItems)
         {
             CommitDialog dialog = new CommitDialog( commitItems );
             if ( dialog.ShowDialog() == DialogResult.OK )
@@ -33,7 +39,10 @@ namespace Ankh
         }
 
         protected override void NotifyCallback(NSvn.Core.Notification notification)
-        {        
+        {
+            this.outputPane.OutputString( string.Format( "File: {0}\tAction: {1}{2}", 
+                notification.Path, notification.Action, Environment.NewLine ) );         
+       
         }
 
             #region DialogProvider
@@ -84,5 +93,7 @@ namespace Ankh
         #endregion
 
         private AnkhContext ankhContext;
+        private OutputWindowPane outputPane;
+        private static IDictionary map = new Hashtable();
     }
 }
