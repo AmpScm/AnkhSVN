@@ -16,7 +16,6 @@
                 }
                 .details
                 {
-                    font-family: Lucida Console, monospace;
                     font-size: 8pt;
                 }
                 h1 
@@ -29,7 +28,7 @@
                 <title>Log</title>
             </head>
             <body>
-                <h1>Logg messages:</h1>
+                <h1>Log messages:</h1>
                 <hr />
                 <xsl:apply-templates />
             </body>
@@ -60,12 +59,13 @@
         <span class="details">
             <xsl:call-template name="string-replace">
                 <xsl:with-param name="string" select="msg" />
-                <xsl:with-param name="from" select="'&#13;'" />
+                <xsl:with-param name="from" select="'&#10;'" />
                 <xsl:with-param name="to">
-                <br />
+                    <br />
                 </xsl:with-param>
+                
             </xsl:call-template>
-        </span>
+            </span>
         <hr />
     </xsl:template>
     <xsl:template name="string-replace">
