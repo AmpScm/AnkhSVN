@@ -25,6 +25,10 @@
         <!-- Error messages -->
         <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
         <Property Id="VSDUIANDADVERTISED">This advertised application will not be installed because it might be unsafe. Contact your administrator to change the installation user interface option of the package to basic.</Property>
+        
+        <!-- Secure these -->
+        <Property Id="NEWERPRODUCTFOUND" Secure="yes" />
+
         <!-- Try to divide cab size, because win 2000 and below don't like large cab's -->
         <Media Id="1" Cabinet="Ankh.cab" EmbedCab="yes" CompressionLevel="high" />
         <Media Id="2" Cabinet="NSvn.cab" EmbedCab="yes" CompressionLevel="high" />
