@@ -21,7 +21,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\NSvn.Core;..\..\subversion\apr\include;&quot;..\..\subversion\apr-iconv\include&quot;;&quot;..\..\subversion\apr-util\include&quot;;..\..\subversion\subversion\include"
-				AdditionalUsingDirectories="&quot;I:\Program Files\NUnit V2.0\bin&quot;;..\NSvn.Common\bin\Debug"
+				AdditionalUsingDirectories="..\NSvn.Common\bin\Debug;&quot;I:\Program Files\NUnit V2.0\bin&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
@@ -42,7 +42,8 @@
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCPreBuildEventTool"
+				CommandLine="copy ..\NSvn.Common\bin\Debug\NSvn.Common.dll $(OutDir)"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
