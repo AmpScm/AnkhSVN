@@ -15,8 +15,10 @@
     </target>
     
     <target name="clean">
-        <delete dir="build-Release" verbose="${verbose}" failonerror="false" includeEmptyDirs="true" />
-        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" includeEmptyDirs="true" />
+        <delete dir="build-Release" verbose="${verbose}" failonerror="false" 
+        includeEmptyDirs="true" />
+        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" 
+        includeEmptyDirs="true" />
     </target>
     
     <target name="init">
@@ -33,7 +35,8 @@
         
         <echo message="Utils.debug: ${debug}"/>
 
-        <csc target="library" output="${build.dir}/Utils.dll" verbose="${verbose}" define="${define}" debug="true">
+        <csc target="library" output="${build.dir}/Utils.dll" verbose="${verbose}" 
+            define="${define}" debug="true">
             <references>
                 <includes name="${lib.dir}\Sharpziplib.dll"/>
             </references>
