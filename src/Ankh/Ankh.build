@@ -31,9 +31,9 @@
         <property name="define" value="TRACE"/>
         <property name="define" value="DEBUG;${define}" if="${debug}"/>
         
-        <exec program="regsvr32" commandline="/s ${lib.dir}\VSUserControlHost.dll"/>
+        <exec program="regsvr32" commandline="/s ${lib.dir}\Ankh.ToolWindow.dll"/>
         
-        <exec program="tlbimp" commandline="/out:${build.dir}/VSUserControlHostLib.dll ${lib.dir}\VSUserControlHost.dll"/>
+        <exec program="tlbimp" commandline="/out:${build.dir}/Ankh.ToolWindowLib.dll ${lib.dir}\Ankh.ToolWindow.dll"/>
         
         <csc target="library" output="${build.dir}/Ankh.dll" verbose="${verbose}" define="${define}">
             <references>
@@ -45,7 +45,7 @@
                 <includes name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
                 <includes name="..\NSvn\${build.dir}\NSvn.dll"/>
                 <includes name="..\Utils\${build.dir}\Utils.dll"/>
-                <includes name="${build.dir}/VSUserControlHostLib.dll"/>
+                <includes name="${build.dir}/Ankh.ToolWindowLib.dll"/>
                 <includes name="${lib.dir}\Microsoft.VisualStudio.VCProjectEngine.dll"/>
                 <includes name="${lib.dir}\Interop.SHDocVw.dll"/>
             </references>
