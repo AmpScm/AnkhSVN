@@ -17,6 +17,20 @@ namespace SvnTasks
 		protected string localDir = null;
 		protected string url = null;
 		protected int revision = -1;
+        protected Client client;
+
+        protected override void InitializeTask(System.Xml.XmlNode taskNode)
+        {
+            base.InitializeTask (taskNode);
+
+            this.client = new Client();
+            this.client.AuthBaton.Add( AuthenticationProvider.GetSimplePromptProvider(
+                new SimplePromptDelegate(this.SimplePrompt), 1 ) );
+            this.client.AuthBaton.Add( AuthenticationProvider.GetSimpleProvider() );
+            this.client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
+            this.client.Notification += new NotificationDelegate(this.Notify);
+        }
+
 
         /// <summary>
         /// The local path to check out to.
@@ -72,30 +86,15 @@ namespace SvnTasks
 			this.ExecuteTask();
 		}
 
-		protected SimpleCredential SimplePrompt(string realm, string password)
+		protected SimpleCredential SimplePrompt(string realm, string password, bool maySave)
 		{
-			return new SimpleCredential(this.Username, this.Password);
+			return new SimpleCredential(this.Username, this.Password, maySave);
 		}
-		#region class Context	
-		protected class Context : NSvnContext
-		{
-			private string logPrefix;
-			private Task parent;
-			private string message;
 
-			public Context(string logPrefix, Task parent, string message)
-			{
-				this.logPrefix = logPrefix;
-				this.parent = parent;
-				this.message = message;
-			}
-			protected override void NotifyCallback(NSvn.Core.Notification notification)
-			{
-				this.parent.Log(Level.Info, "{0} {1} {2}", 
-					this.logPrefix, this.message, notification.Path + Environment.NewLine);
-			}
-		}
-		#endregion
-
+        protected void Notify( object sender, NSvn.Core.NotificationEventArgs args )
+        {
+            this.Log(Level.Info, "{0} {1}", 
+                args.Action, args.Path + Environment.NewLine);
+        }
 	}
 }

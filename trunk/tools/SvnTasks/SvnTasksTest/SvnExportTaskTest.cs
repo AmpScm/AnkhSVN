@@ -52,8 +52,8 @@ namespace Tests.SvnTasks
 
 			string result = this.RunBuild(FormatBuildFile(m_exportXml, args), Level.Debug);
 			Assert.IsTrue(Directory.Exists(m_localExportDir));
-			Assertion.Assert("File does not exist, export probably did not work.", 
-				File.Exists(checkFilePath));
+			Assert.IsTrue(File.Exists(checkFilePath), 
+                "File does not exist, export probably did not work." );
 		}
 		
 	}

@@ -80,24 +80,22 @@
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
-                    Name = "NAnt.Core"
-                    AssemblyName = "NAnt.Core"
-                    HintPath = "I:\bin\NAnt.Core.dll"
-                />
-                <Reference
-                    Name = "NSvn"
-                    AssemblyName = "NSvn"
-                    HintPath = "..\..\src\NSvn\bin\Debug\NSvn.dll"
-                />
-                <Reference
                     Name = "NSvn.Core"
                     AssemblyName = "NSvn.Core"
-                    HintPath = "..\..\src\NSvn\bin\Debug\NSvn.Core.dll"
+                    HintPath = "..\..\..\src\NSvn.Core\Release\NSvn.Core.dll"
+                    Private = "True"
                 />
                 <Reference
                     Name = "NSvn.Common"
                     AssemblyName = "NSvn.Common"
-                    HintPath = "..\..\..\..\..\Program Files\Tigris\AnkhSVN Addin\NSvn.Common.dll"
+                    HintPath = "..\..\..\src\NSvn.Common\bin\Release\NSvn.Common.dll"
+                    Private = "True"
+                />
+                <Reference
+                    Name = "NAnt.Core"
+                    AssemblyName = "NAnt.Core"
+                    HintPath = "D:\Program Files\nant-0.85\build\net-1.1.win32\nant-0.85-debug\bin\NAnt.Core.dll"
+                    Private = "False"
                 />
             </References>
         </Build>

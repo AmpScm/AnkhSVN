@@ -80,44 +80,25 @@
                     HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\Program Files\NUnit V2.1\bin\nunit.framework.dll"
+                    Name = "SvnTasks"
+                    Project = "{CEE703F9-32DF-49B9-B7E9-6FE1082417F3}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
                     Name = "NAnt.Core"
                     AssemblyName = "NAnt.Core"
-                    HintPath = "..\..\..\rezolution\ConfigMgmt\NAnt\bin\NAnt.Core.dll"
+                    HintPath = "D:\Program Files\nant-0.85\bin\NAnt.Core.dll"
                 />
                 <Reference
-                    Name = "NSvn"
-                    AssemblyName = "NSvn"
-                    HintPath = "..\..\..\..\..\Program Files\Tigris\AnkhSVN Addin\NSvn.dll"
-                />
-                <Reference
-                    Name = "NSvn.Core"
-                    AssemblyName = "NSvn.Core"
-                    HintPath = "..\..\..\..\..\Program Files\Tigris\AnkhSVN Addin\NSvn.Core.dll"
-                />
-                <Reference
-                    Name = "NSvn.Common"
-                    AssemblyName = "NSvn.Common"
-                    HintPath = "..\..\..\..\..\Program Files\Tigris\AnkhSVN Addin\NSvn.Common.dll"
-                />
-                <Reference
-                    Name = "NAnt.Tests"
-                    AssemblyName = "NAnt.Tests"
-                    HintPath = "..\..\bin\NAnt.Tests.dll"
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "D:\Program Files\NUnit 2.2\\bin\nunit.framework.dll"
+                    AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
                     Name = "NAnt.Core.Tests"
                     AssemblyName = "NAnt.Core.Tests"
-                    HintPath = "..\..\bin\NAnt.Core.Tests.dll"
-                />
-                <Reference
-                    Name = "SvnTasks"
-                    Project = "{CEE703F9-32DF-49B9-B7E9-6FE1082417F3}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    HintPath = "D:\Program Files\nant-0.85\build\net-1.1.win32\nant-0.85-debug\bin\NAnt.Core.Tests.dll"
                 />
             </References>
         </Build>

@@ -28,17 +28,7 @@ namespace SvnTasks
 				if ( this.Revision != -1 )
 					revision = NSvn.Core.Revision.FromNumber( this.Revision );
 
-				ClientContext clientContext = new ClientContext();
-				clientContext.AuthBaton = new AuthenticationBaton();
-				clientContext.AuthBaton.Add(AuthenticationProvider.GetUsernameProvider());
-				clientContext.AuthBaton.Add(AuthenticationProvider.GetSimpleProvider());
-				if ( this.Username != null && this.Password != null )
-				{
-					clientContext.AuthBaton.Add(
-						AuthenticationProvider.GetSimplePromptProvider(
-						new SimplePromptDelegate(this.SimplePrompt),1));
-				}
-				DirectoryEntry[] dirs = Client.List(this.Url, revision, false, clientContext);
+				DirectoryEntry[] dirs = this.client.List(this.Url, revision, false);
 				
 				foreach (DirectoryEntry de in dirs)
 				{
