@@ -35,7 +35,8 @@ namespace Ankh.Commands
         {
             UnversionedVisitor a = new UnversionedVisitor(); 
             context.SolutionExplorer.VisitSelectedItems( new AddVisitor() );
-            context.SolutionExplorer.UpdateSelectionStatus();
+            
+            context.SolutionExplorer.RefreshSelectionParents();
         }
         #endregion
         

@@ -34,19 +34,7 @@ namespace Ankh.Solution
             this.SyncWithTreeView();
 		}
 
-        /// <summary>
-        /// Gets the selected items in the Solution Explorer.
-        /// </summary>
-        /// <returns></returns>
-        public ILocalResource[] GetSelectedItems()
-        {
-//            ArrayList list = new ArrayList();
-//            foreach( SelectedItem item in this.dte.SelectedItems )
-//                list.Add( ((TreeNode)this.projectItems[item.ProjectItem]).Resource );
-//
-//            return (ILocalResource[])list.ToArray( typeof(ILocalResource) );
-            return null;
-        }
+        
 
         /// <summary>
         /// Visits all the selected items.
@@ -86,6 +74,23 @@ namespace Ankh.Solution
                     this.solutionNode.UpdateStatus();
             }
         }
+
+        /// <summary>
+        /// Refreshes the parents of the selected items.
+        /// </summary>
+        public void RefreshSelectionParents()
+        {
+            SelectedItems items = this.dte.SelectedItems;
+            for( int i = 1; i <= items.Count; i++ )
+            {
+                SelectedItem item = items.Item(i);
+                if ( item.ProjectItem != null && this.projectItems.Contains(item.ProjectItem) )
+                    ((TreeNode)this.projectItems[item.ProjectItem]).Parent.Refresh();
+                else if ( item.Project != null && this.projects.Contains(item.Project) )
+                    ((TreeNode)this.projects[item.Project]).Parent.Refresh();                
+            }
+        }
+
 
         /// <summary>
         /// Updates the status of the given item.
