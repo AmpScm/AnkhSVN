@@ -21,6 +21,7 @@ namespace NSvn.Core.Tests
         /// <summary>
         /// Modifies a file in the working copy and commits it
         /// </summary>
+        [Test]
         public void TestBasicCommit()
         {
             string filepath = Path.Combine( this.WcPath, "Form.cs" );
@@ -34,5 +35,11 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "File not committed", "", 
                 output );
         }
+
+        [Ignore("We need to implement this" )]
+        [Test]
+        public void TestCommitWithLogMessage()
+        {
+        } 
 	}
 }

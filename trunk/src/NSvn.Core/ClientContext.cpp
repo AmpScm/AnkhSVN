@@ -27,6 +27,16 @@ namespace NSvn
 
             // is there an auth baton? (should be)
             ctx->auth_baton = this->CreateAuthBaton( pool, this->AuthBaton );
+
+            // log message callback?
+            if ( this->LogMessageCallback != 0 )
+            {
+                ctx->log_msg_func = log_msg_func;
+                ctx->log_msg_baton = pool.AllocateObject( 
+                    ManagedPointer<NSvn::Core::LogMessageCallback*>( 
+                    this->LogMessageCallback ) );
+            }
+
             
             // client configuration
             if ( this->ClientConfig != 0 )
@@ -196,6 +206,46 @@ namespace
     {
         // TODO: implement this
         *saved = false;
+        return SVN_NO_ERROR;
+    }
+
+    // delegate the log message callback back into managed space
+    svn_error_t* log_msg_func( const char **log_msg, 
+        const char **tmp_file, 
+        apr_array_header_t *commit_items, 
+        void *baton, 
+        apr_pool_t *pool)
+    {
+        // convert all the commit items to CommitItem objects
+        CommitItem* items[] = new CommitItem*[ commit_items->nelts ];
+        for( int i = 0; i < commit_items->nelts; i++ )
+        {
+            svn_client_commit_item_t* item = ((svn_client_commit_item_t**)
+                (commit_items->elts))[i];
+            items[ i ] = new CommitItem( item );
+        }
+
+        //TODO: should we support tmp_file?
+        *tmp_file = 0;
+
+        LogMessageCallback* callback = *(static_cast<
+            ManagedPointer<LogMessageCallback*>* >( baton ) );
+
+        // get the log message
+        String* logMessage = callback->Invoke( items );
+
+        // get rid of all \r\n's
+        logMessage = logMessage->Replace( Environment::NewLine, "\n" );
+
+        // the log message must be in UTF 8
+        Byte bytes[] = System::Text::Encoding::UTF8->GetBytes( logMessage );
+        *log_msg = static_cast<const char*>(apr_pcalloc( pool, bytes->Length + 1 ));
+        System::Runtime::InteropServices::Marshal::Copy( bytes, 0, 
+            const_cast<char*>(*log_msg), bytes->Length );
+
+        //make sure to terminate the string
+        (const_cast<char*>(*log_msg))[ bytes->Length ] = 0;
+
         return SVN_NO_ERROR;
     }
 

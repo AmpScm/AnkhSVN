@@ -108,6 +108,47 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestAuthBaton()
 
 }
 
+String* NSvn::Core::Tests::MCpp::ClientContextTest::LogMsgCallback( CommitItem* items[] )
+{
+    Assertion::AssertEquals( "Wrong number of items", 2, items->Length );
+    Assertion::AssertEquals( "Wrong path", S"/foo/bar", items[0]->Path );
+    Assertion::AssertEquals( "Wrong node kind", NodeKind::Directory, items[1]->Kind );
+    Assertion::AssertEquals( "Wrong revision", 42, items[0]->Revision );
+    Assertion::AssertEquals( "Wrong copy from url", S"http://copy.from.url", 
+        items[1]->CopyFromUrl );
+    Assertion::AssertEquals( "Wrong url", S"http://www.porn.com", items[0]->Url );
+
+    return S"Hello world";
+}
+
+void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessageCallback()
+{
+    Pool pool;
+    ClientContext* c = new ClientContext( 0 );
+    c->LogMessageCallback = new LogMessageCallback( this, &ClientContextTest::LogMsgCallback );
+
+    svn_client_ctx_t* ctx = c->ToSvnContext( pool );
+
+    apr_array_header_t* commitItems = apr_array_make( pool, 2, 
+        sizeof( svn_client_commit_item_t* ) );
+
+    // TODO: deal with wcprop_changes
+    svn_client_commit_item_t item1 = { "/foo/bar", svn_node_file,  "http://www.porn.com",
+        42, "http://copy.from.url", 42, 0 };
+     svn_client_commit_item_t item2 = { "/kung/fu", svn_node_dir,  "http://www.42.com",
+        42, "http://copy.from.url", 43, 0 };
+
+     *((svn_client_commit_item_t**)apr_array_push( commitItems ) ) = &item1;
+     *((svn_client_commit_item_t**)apr_array_push( commitItems ) ) = &item2;
+    
+    const char* logMsg;
+    const char* tmpFile;
+    ctx->log_msg_func( &logMsg, &tmpFile, commitItems, ctx->log_msg_baton, pool );
+
+    // TODO: check encoding?
+    Assertion::AssertEquals( "Log message wrong", S"Hello world", StringHelper( logMsg ) );
+}
+
 
 
 

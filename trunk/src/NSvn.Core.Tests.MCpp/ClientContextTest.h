@@ -40,8 +40,13 @@ namespace NSvn
                     [Test]
                     void TestAuthBaton();
 
+                    /// <summary>Test the log message stuff</summary>
+                    [Test]
+                    void TestLogMessageCallback();
+
                 private:
                     void NotifyCallback( Notification* notification );
+                    String* LogMsgCallback( CommitItem* items[] );
                     bool flag;
                     Notification* notification;
 
