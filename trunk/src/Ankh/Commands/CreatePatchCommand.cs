@@ -27,7 +27,7 @@ namespace Ankh.Commands
             {
                 string diff = this.GetDiff( context );
                 
-                if ( diff.Trim() == String.Empty )
+                if ( diff == null )
                 {
                     MessageBox.Show( context.HostWindow, "Nothing to diff here. Move along." );
                     return;
