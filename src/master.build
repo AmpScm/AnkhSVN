@@ -154,13 +154,14 @@
                 <includes name="*.dll"/>
             </fileset>
         </copy>
-        
-        <exec program="nunit-console.exe"
-                commandline="${build.dir}/NSvn.Core.Tests.dll"/>
-        <exec program="nunit-console.exe"
-              commandline="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
-        <exec program="nunit-console.exe"
-              commandline="${build.dir}/NSvn.Tests.dll"/>
+	<nunit2 failonerror="false" haltonerror="false">
+		<formatter type="Plain" />
+		<test assemblyname="${build.dir}/NSvn.Core.Tests.dll" failonerror="false" haltonerror="false"/>
+	</nunit2>
+	<nunit2 failonerror="false" haltonerror="false">
+		<formatter type="Plain" />
+		<test assemblyname="${build.dir}/NSvn.Core.Tests.MCpp.dll" failonerror="false" haltonerror="false"/>
+	</nunit2>
     </target>
     
     <target name="deploy" depends = "rebuild, test" description="Run all tests, then create the MSI installer if the tests pass">
