@@ -1,6 +1,7 @@
 // $Id$
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Utils.Win32
 {
@@ -215,5 +216,24 @@ namespace Utils.Win32
         [DllImport("user32.dll")]
         public static extern int CallNextHookEx( IntPtr hook, int code, 
             IntPtr wParam, CWPSTRUCT lParam );
+
+        [DllImport ( "Shell32.DLL" )]
+        public static extern int SHGetMalloc ( out IMalloc ppMalloc );
+
+        [DllImport ( "Shell32.DLL" )]
+        public static extern int SHGetSpecialFolderLocation ( 
+            IntPtr hwndOwner, int nFolder, out IntPtr ppidl );
+
+        [DllImport ( "Shell32.DLL" )]
+        public static extern int SHGetPathFromIDList ( 
+            IntPtr pidl, StringBuilder Path );
+
+        [DllImport ( "Shell32.DLL", CharSet=CharSet.Auto )]
+        public static extern IntPtr SHBrowseForFolder ( ref BROWSEINFO bi );
+
+        [DllImport("User32.DLL")]
+        public static extern IntPtr GetActiveWindow ( );
+
+
     }
 }
