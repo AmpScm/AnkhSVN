@@ -1,8 +1,8 @@
 // $Id$
 #include "StdAfx.h"
 #include "aprfileadaptertest.h"
+#include "AprFileAdapter.h"
 #include "StringHelper.h"
-#include "AprFileAdapter.cpp"
 
 #using <mscorlib.dll>
 using namespace System::IO;

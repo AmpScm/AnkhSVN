@@ -1,13 +1,20 @@
 // $Id$
 #include "Stdafx.h"
+
+#include "SimpleCredential.h"
 #include "ClientContextTest.h"
 #include "SvnClientException.h"
-#include "SimpleCredential.h"
 #include "delegates.h"
+#include "Notification.h"
+#include "CommitItem.h"
 
-// necessary since a .NET assembly does not export methods with native signatures
-#include "ClientContext.cpp"
-#include "SvnClientException.cpp"
+
+#using <NSvn.Common.dll>
+
+using namespace NSvn::Common;
+using namespace NSvn::Core;
+using namespace System::Collections;
+
 
 
 void NSvn::Core::Tests::MCpp::ClientContextTest::NotifyCallback( 
