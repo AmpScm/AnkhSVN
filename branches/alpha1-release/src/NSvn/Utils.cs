@@ -76,12 +76,14 @@ namespace NSvn
                     return Directory.Exists( Path.Combine( baseDir, WC_ADMIN_AREA ) );
                 }
             }
-            else
+            else if ( File.Exists( path ) )
             {
                 // is there a .svn directory in the dir containing this file?
                 baseDir = Path.GetDirectoryName( path );
                 return Directory.Exists( Path.Combine( baseDir, WC_ADMIN_AREA ) );
             }
+            else
+                return false;
         }
 
         public const string WC_ADMIN_AREA = ".svn";

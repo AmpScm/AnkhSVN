@@ -46,7 +46,7 @@ namespace NSvn
             else if ( System.IO.Directory.Exists( path ) )
                 resource = new WorkingCopyDirectory( path );
             else
-                throw new ArgumentException( "Path must be a file or a directory", "path" );  
+                throw new ArgumentException( "Path must be a file or a directory: " + path, "path" );  
 
             resource.status = status;
             return resource;
