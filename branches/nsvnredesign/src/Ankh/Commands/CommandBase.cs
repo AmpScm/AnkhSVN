@@ -52,6 +52,21 @@ namespace Ankh.Commands
                 return false;
         }
 
+        /// <summary>
+        /// A ResourceFilterCallback that filters for versioned directories.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected static bool DirectoryFilter( SvnItem item )
+        {
+            if ( item.Status.Entry != null && 
+                item.Status.Entry.Kind == NodeKind.Directory &&
+                item.Status.TextStatus != StatusKind.None )
+                return true;
+            else
+                return false;
+        }
+
         private EnvDTE.Command command;
     }
 }
