@@ -22,7 +22,7 @@ namespace NSvn.Core.Tests
         public override void TearDown()
         {
             base.TearDown();
-            //Directory.Delete( this.newWc, true );
+            this.RecursiveDelete( this.newWc );
         }
 
         /// <summary>

@@ -20,6 +20,12 @@ namespace NSvn.Core.Tests
             this.ExtractZipFile( this.wc2, this.WC_FILE );
         }
 
+        public override void TearDown()
+        {
+            base.TearDown();
+            this.RecursiveDelete( this.wc2 );
+        }
+
         /// <summary>
         /// Deletes a file, then calls update on the working copy to restore it 
         /// from the text-base

@@ -19,6 +19,13 @@ namespace NSvn.Core.Tests
             this.ExtractZipFile( this.path, "NSvn.Core.Tests.conflictwc.zip" );
         }
 
+        [TearDown]
+        public override void TearDown()
+        {
+            base.TearDown();
+            this.RecursiveDelete( this.path );
+        }
+
         /// <summary>
         ///Attempts to resolve a conflicted file. 
         /// </summary>
