@@ -308,6 +308,40 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::RevPropList( String* path,
     return ConvertToPropertyDictionary( propListItems, 0, pool );
 }
 
+// Implementation of Client::List
+NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* revision, 
+    bool recurse, ClientContext* context) []
+{
+    Pool pool;
+
+    const char* truePath = CanonicalizePath( path, pool );
+    apr_hash_t* entriesHash;
+
+    HandleError( svn_client_ls( &entriesHash, truePath, 
+        revision->ToSvnOptRevision( pool ), recurse,
+        context->ToSvnContext( pool ), pool ) );
+
+    ArrayList* entries = new ArrayList();
+
+    apr_hash_index_t* idx = apr_hash_first( pool, entriesHash );
+    while( idx != 0 )
+    {
+        const char* path;
+        apr_ssize_t keyLength;
+        svn_dirent* dirent;
+
+        apr_hash_this( idx, reinterpret_cast<const void**>(&path), &keyLength,
+            reinterpret_cast<void**>(&dirent) );
+
+        entries->Add( new DirectoryEntry( path, dirent ) );
+
+        idx = apr_hash_next( idx );
+    }
+
+    return static_cast<DirectoryEntry*[]>( 
+        entries->ToArray( __typeof(DirectoryEntry) ) );
+}
+
 // Converts array of .NET strings to apr array of const char
 apr_array_header_t* NSvn::Core::Client::StringArrayToAprArray( String* strings[], Pool& pool )
 {

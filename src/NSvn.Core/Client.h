@@ -7,6 +7,7 @@
 #include "Revision.h"
 #include "CommitInfo.h"
 #include "ClientContext.h"
+#include "DirectoryEntry.h"
 
 
 
@@ -375,9 +376,9 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param>       
 	        static void Export(String* from, String* to, Revision* revision, ClientContext* context);
-/*
+
             ///<summary>List the contents of an url or path.</summary>
-            ///<param name="url">Path to the files/directory to be listed.</param>  
+            ///<param name="path">Path to the files/directory to be listed.</param>  
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
             ///                         for more information.</param>
             ///<param name="recurse">If recurse is true, then propname will be received recursively 
@@ -387,8 +388,9 @@ namespace NSvn
             ///                      and other various things. <see cref="NSvn.Core.ClientContext"/> 
             ///                      for more information.</param> 
 	        ///<returns>String table of the paths to be listed.</returns>
-	        static String* Ls(String* url, Revision* revision, bool recurse, ClientContext* context)[];
-*/
+	        static DirectoryEntry* List(String* path, Revision* revision, bool recurse, 
+                ClientContext* context) [];
+
             ///<summary>List the contents of a file.</summary>
             ///<param name="out"></param>  
             ///<param name="path">Path to the file to be edited.</param>  

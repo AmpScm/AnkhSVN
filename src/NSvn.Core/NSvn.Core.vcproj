@@ -149,6 +149,9 @@
 				RelativePath="CommitItem.h">
 			</File>
 			<File
+				RelativePath="DirectoryEntry.h">
+			</File>
+			<File
 				RelativePath="ManagedPointer.h">
 			</File>
 			<File
