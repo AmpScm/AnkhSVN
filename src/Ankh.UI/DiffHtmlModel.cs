@@ -68,7 +68,7 @@ namespace Ankh.UI
                 string escapedDiff = this.diff.Replace( "<", "&lt;" ).
                     Replace( ">", "&gt;" );
 
-                using( StringReader reader = new StringReader( this.diff ) )
+                using( StringReader reader = new StringReader( escapedDiff ) )
                 {
                     string line;
                     while( (line=reader.ReadLine()) != null )
