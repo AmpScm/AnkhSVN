@@ -201,11 +201,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "resourcevisitors.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "status_icons.bmp"
                     BuildAction = "EmbeddedResource"
                 />
