@@ -73,7 +73,7 @@
     </directory>
 
     <directory path="src">
-        <name>Source code</name>
+        <name>Ankh source code</name>
         <realpath>/hovedprosjekter/2003/data/10/src/index.html</realpath>
         <description>The Ankh source code</description>
     </directory>
