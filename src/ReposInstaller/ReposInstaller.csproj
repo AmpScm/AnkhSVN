@@ -112,10 +112,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "repos.zip"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "ReposInstaller.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
