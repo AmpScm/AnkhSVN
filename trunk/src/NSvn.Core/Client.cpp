@@ -5,7 +5,9 @@
 
 #include <svn_client.h>
 #include <svn_path.h>
+#include <svn_utf.h>
 #include <apr_general.h>
+#include <apr_hash.h>
 #include "SvnClientException.h"
 
 
@@ -172,6 +174,24 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcR
 }
 
 
+NSvn::Common::PropertyMapping* NSvn::Core::Client::PropGet(String* propName, 
+                                                         String* target, Revision* revision, 
+                                                        bool recurse, ClientContext* context)
+{
+    Pool pool;
+    apr_hash_t* propertyHash;
+
+    const char* trueTarget = CanonicalizePath( target, pool );
+
+    svn_error_t* err = svn_client_propget( &propertyHash, StringHelper( propName ), trueTarget,
+        revision->ToSvnOptRevision( pool ), recurse, context->ToSvnContext( pool ), pool );
+    HandleError( err );
+
+    return ConvertPropertyHash( propertyHash, propName, pool );
+
+}
+
+
 // Converts array of .NET strings to apr array of const char
 apr_array_header_t* NSvn::Core::Client::StringArrayToAprArray( String* strings[], Pool& pool )
 {
@@ -221,4 +241,47 @@ void NSvn::Core::Client::ByteArrayToSvnString( svn_string_t* string, Byte array[
     string->data = static_cast<char*>(pool.Alloc( array.Length));
     Marshal::Copy( array, 0, const_cast<char*>(string->data), array.Length );
 
+}
+
+struct apr_hash_index_t
+{};
+
+// converts a apr_hash_t of const char* -> svn_string_t mappings
+NSvn::Common::PropertyMapping* NSvn::Core::Client::ConvertPropertyHash( 
+    apr_hash_t* propertyHash, String* propertyName, Pool& pool )
+{
+    PropertyMapping* mapping = new PropertyMapping();
+
+    // iterate over the items in the hash
+    apr_hash_index_t* idx = apr_hash_first( pool, propertyHash );
+    while( idx != 0 )
+    {
+        const char* path;
+        apr_ssize_t keyLength;
+        svn_string_t* propVal;
+
+        apr_hash_this( idx, reinterpret_cast<const void**>(&path), &keyLength,
+            reinterpret_cast<void**>(&propVal) );
+
+        // copy the bytes into managed space
+        Byte bytes[] = new Byte[ propVal->len ];
+        Marshal::Copy( const_cast<char*>(propVal->data), bytes, 0, propVal->len );
+
+        // Add it to the mapping collection as a Property object
+        Property* property = new Property( propertyName, bytes );
+        mapping->Add( ToNativePath( path, pool ), property );
+
+        idx = apr_hash_next( idx );
+    }
+
+    return mapping;
+}
+
+String* NSvn::Core::Client::ToNativePath( const char* path, Pool& pool )
+{
+    // convert to a native path    
+    const char* cstringPath;
+    HandleError( svn_utf_cstring_from_utf8( &cstringPath, path, pool ) );
+    const char* nativePath = svn_path_local_style( cstringPath, pool );
+    return StringHelper( nativePath );
 }
