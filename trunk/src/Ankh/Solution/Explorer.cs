@@ -14,7 +14,7 @@ using DteConstants = EnvDTE.Constants;
 using Swf = System.Windows.Forms;
 
 
-namespace Ankh
+namespace Ankh.Solution
 {
 	/// <summary>
 	/// Represents the Solution Explorer window in the VS.NET IDE
@@ -54,12 +54,17 @@ namespace Ankh
         /// <param name="visitor"></param>
         public void VisitSelectedItems( ILocalResourceVisitor visitor )
         {
-            foreach( SelectedItem item in this.dte.SelectedItems )
+            //foreach( SelectedItem item in items )
+            SelectedItems items = this.dte.SelectedItems;
+            for( int i = 1; i <= items.Count; i++ )
             {
+                SelectedItem item = items.Item(i);
                 if ( item.ProjectItem != null && this.projectItems.Contains(item.ProjectItem) )
                     ((TreeNode)this.projectItems[item.ProjectItem]).VisitResources( visitor );
                 else if ( item.Project != null && this.projects.Contains(item.Project) )
-                    ((TreeNode)this.projects[item.Project]).VisitResources( visitor );                
+                    ((TreeNode)this.projects[item.Project]).VisitResources( visitor );  
+                else
+                    this.solutionNode.VisitResources( visitor );
             }
         }
 
@@ -69,12 +74,16 @@ namespace Ankh
         public void UpdateSelectionStatus()
         {
             //TODO: this can be done slightly faster, with only a single lookup
-            foreach( SelectedItem item in this.dte.SelectedItems )
+            SelectedItems items = this.dte.SelectedItems;
+            for( int i = 1; i <= items.Count; i++ )
             {
+                SelectedItem item = items.Item(i);
                 if ( item.ProjectItem != null && this.projectItems.Contains(item.ProjectItem) )
                     ((TreeNode)this.projectItems[item.ProjectItem]).UpdateStatus();
                 else if ( item.Project != null && this.projects.Contains(item.Project) )
-                    ((TreeNode)this.projects[item.Project]).UpdateStatus();    
+                    ((TreeNode)this.projects[item.Project]).UpdateStatus(); 
+                else
+                    this.solutionNode.UpdateStatus();
             }
         }
 
@@ -189,7 +198,7 @@ namespace Ankh
             this.projects[key] = node;
         }
 
-        internal void AddResource( Solution key, TreeNode node )
+        internal void SetSolution( TreeNode node )
         {
             // we assume theres only one of these
             this.solutionNode = node;

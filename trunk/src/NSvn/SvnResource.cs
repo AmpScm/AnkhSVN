@@ -25,10 +25,14 @@ namespace NSvn
             if ( !IsVersioned( path ) )
                 return null;
 
+            //HACK:
+            if ( path[ path.Length - 1 ] == Path.DirectorySeparatorChar )
+                path = path.Substring(0, path.Length - 1);
+
             int youngest;
             StatusDictionary dict = Client.Status( out youngest, path, 
                 false, true, false, false, new ClientContext() );
-            Status status = dict.GetFirst();
+            Status status = dict.Get( path );
             System.Diagnostics.Debug.Assert( status != null, 
                 "Couldn't get status for " + path );
 

@@ -10,7 +10,7 @@ using System.IO;
 
 using C = Utils.Win32.Constants;
 
-namespace Ankh
+namespace Ankh.Solution
 {
     /// <summary>
     /// Represents an item in the treeview.
@@ -215,6 +215,7 @@ namespace Ankh
             {
                 if ( this.projectFolder != null )
                     this.projectFolder.Accept( visitor );
+                this.VisitChildren( visitor );
             } 
             
             protected override StatusKind GetStatus()
@@ -236,8 +237,11 @@ namespace Ankh
             public SolutionNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer )
                 : base( item, hItem, explorer )
             {
-                Solution solution = explorer.DTE.Solution;
+                EnvDTE.Solution solution = explorer.DTE.Solution;
                 this.solutionFile = SvnResource.FromLocalPath( solution.FullName );
+                this.solutionFile.Context = explorer.Context;
+
+                explorer.SetSolution( this );
             }
 
             public override void VisitResources( ILocalResourceVisitor visitor )

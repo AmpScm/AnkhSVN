@@ -7,6 +7,7 @@ using Ankh.UI;
 using Utils;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Ankh.Solution;
 
 namespace Ankh
 {

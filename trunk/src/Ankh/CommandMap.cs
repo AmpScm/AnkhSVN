@@ -68,7 +68,7 @@ namespace Ankh
         /// <summary>
         /// Get rid of any old commands hanging around.
         /// </summary>
-        private static void DeleteCommands( AnkhContext context )
+        public static void DeleteCommands( AnkhContext context )
         {
             if ( context.DTE.Commands != null )
             {
