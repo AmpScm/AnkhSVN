@@ -31,7 +31,7 @@ namespace Ankh
     /// <summary>
     /// Watches project files.
     /// </summary>
-    public class FileWatcher
+    internal class FileWatcher
     {
         /// <summary>
         /// A project file is modified.
