@@ -8,10 +8,10 @@ using NSvn.Core;
 namespace SvnTasks
 {
 	/// <summary>
-	/// A Nant task to check out from a SVN repository.
+	/// A Nant task to commit a file to a SVN repository.
 	/// </summary>
-	[TaskName( "svncheckout" )]
-	public class SvnCheckoutTask : SvnBaseTask
+	[TaskName( "svncommit" )]
+	public class SvnCommitTask : SvnBaseTask
 	{
 		protected bool m_recursive  = false;
 
@@ -33,7 +33,7 @@ namespace SvnTasks
 		/// </summary>
 		protected override void ExecuteTask()
 		{
-			Log(Level.Info, "{0} {1} {2}",this.LogPrefix, this.Name, this.LocalDir);
+			this.Log(Level.Info, "{0} {1}",this.Name, this.LocalDir);
 			
 			try
 			{
@@ -51,8 +51,9 @@ namespace SvnTasks
 						AuthenticationProvider.GetSimplePromptProvider(
 						new SimplePromptDelegate(this.SimplePrompt),1));
 				}
-				Client.Checkout(this.Url, this.LocalDir, revision, this.Recursive, clientContext);
-	
+				string[] targets = new string[1];
+				targets[0] = this.LocalDir;
+				Client.Commit(targets, !this.Recursive, clientContext);
 			}
 			catch( AuthorizationFailedException )
 			{
@@ -66,10 +67,6 @@ namespace SvnTasks
 			{
 				throw new BuildException( "Unexpected error: " + ex.Message );
 			}
-		}
-
-	
-
-      
+		}      
 	}
 }
