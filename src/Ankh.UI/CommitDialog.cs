@@ -78,6 +78,16 @@ namespace Ankh.UI
             }
         }
 
+        public bool UrlPaths
+        {
+            get
+            { return this.commitItemsTree.UrlPaths; }
+            set
+            { 
+                this.commitItemsTree.UrlPaths = value;
+            }
+        }
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -162,6 +172,7 @@ namespace Ankh.UI
                 foreach( object item in this.commitItemsTree.CheckedItems )
                     arr.Add( item.ToString() );
             
+                this.LogMessageTemplate.UrlPaths = this.commitItemsTree.UrlPaths;
                 this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( arr );
                 this.preprocessed = true;
             }

@@ -39,6 +39,12 @@ namespace Ankh.UI
             
         }
 
+        public bool UrlPaths
+        {
+            get{ return this.urlPaths; }
+            set{ this.urlPaths = value; }
+        }
+
         public virtual string PreProcess( IList paths )        
         {
             string text = this.Template;
@@ -101,8 +107,8 @@ namespace Ankh.UI
 
         private string LineForPath( string path )
         {
-            string rootedPath = NSvn.Common.SvnUtils.GetWorkingCopyRootedPath(
-                path );
+            string rootedPath = this.urlPaths ? path : 
+                NSvn.Common.SvnUtils.GetWorkingCopyRootedPath( path );
             string linePattern = LINETEMPLATE.Match( this.template ).Groups[ 
                 "linepattern" ].Value.Trim();
             return linePattern.Replace( "%path%", rootedPath );
@@ -122,6 +128,7 @@ namespace Ankh.UI
         }
 
         private string template;
+        private bool urlPaths;
         private static readonly Regex LINETEMPLATE = new Regex(@"^\*\*\*(?'linepattern'.+)$", 
             RegexOptions.Multiline | RegexOptions.ExplicitCapture);
         private static readonly Regex COMMENTPATTERN = new Regex( @"^#.*?$", 
