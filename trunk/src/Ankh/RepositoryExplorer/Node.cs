@@ -47,7 +47,7 @@ namespace Ankh.RepositoryExplorer
             get{ return resource.Name; }
         }
 
-        public System.Collections.IEnumerable GetChildren()
+        public System.Collections.ICollection GetChildren()
         {
             try
             {

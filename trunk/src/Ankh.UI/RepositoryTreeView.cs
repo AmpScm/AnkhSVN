@@ -65,7 +65,7 @@ namespace Ankh.UI
         /// <summary>
         /// The child nodes - IRepositoryTreeNode objects.
         /// </summary>
-        IEnumerable GetChildren();
+        ICollection GetChildren();
 
 
         /// <summary>
@@ -230,7 +230,10 @@ namespace Ankh.UI
                 // we have set a new root, so get rid of any existing nodes
                 nodes.Clear();
 
-                foreach( IRepositoryTreeNode child in node.GetChildren() )
+                ArrayList nodeList = new ArrayList( node.GetChildren() );
+                nodeList.Sort( RepositoryTreeView.Comparer );
+
+                foreach( IRepositoryTreeNode child in nodeList )
                 {
                     TreeNode newNode;
 
@@ -262,10 +265,10 @@ namespace Ankh.UI
                     }
 
                     newNode.Tag = child;
-
                     nodes.Add( newNode );
 
                 } // foreach
+
             }
             catch( ApplicationException )
             {
@@ -278,6 +281,27 @@ namespace Ankh.UI
             }
         }
 
+        private class NodeComparer : IComparer
+        {
+            #region IComparer Members
+
+            public int Compare(object x, object y)
+            {
+                IRepositoryTreeNode n1 = (IRepositoryTreeNode)x;
+                IRepositoryTreeNode n2 = (IRepositoryTreeNode)y;
+                
+                if( (n1.IsDirectory && n2.IsDirectory) || 
+                    (!n1.IsDirectory && !n2.IsDirectory) )
+                    return n1.Name.CompareTo(n2.Name);
+                else if ( n1.IsDirectory && !n2.IsDirectory )
+                    return -1;
+                else 
+                    return 1;
+            }
+            #endregion
+        }
+
+
 
         /// <summary> 
         /// Required designer variable.
@@ -285,6 +309,8 @@ namespace Ankh.UI
         private static readonly object DUMMY_NODE = new object();
         private int openFolderIndex;
         private int closedFolderIndex;
+
+        private static readonly NodeComparer Comparer = new NodeComparer();
 
         private IRepositoryTreeController controller;
     }
