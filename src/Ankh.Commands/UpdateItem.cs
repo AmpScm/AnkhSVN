@@ -1,4 +1,4 @@
-// $Id
+// $Id$
 using System;
 
 namespace Ankh.Commands
