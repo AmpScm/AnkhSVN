@@ -27,6 +27,7 @@
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
+				ExpandAttributedSource="TRUE"
 				WarningLevel="3"
 				DebugInformationFormat="3"/>
 			<Tool
