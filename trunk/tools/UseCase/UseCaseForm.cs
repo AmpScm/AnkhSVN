@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.IO;
 
 namespace UseCase
 {
@@ -32,6 +33,9 @@ namespace UseCase
 
             this.useCaseModel.ElementsChanged +=
                 new ModelChangedEventHandler( this.ElementsChanged );
+
+            this.idTextBox.Leave += new EventHandler( 
+                    this.IdChanged );
 		}
 
 		/// <summary>
@@ -72,6 +76,9 @@ namespace UseCase
             this.moveElementUpButton = new System.Windows.Forms.Button();
             this.moveElementDownButton = new System.Windows.Forms.Button();
             this.viewXmlButton = new System.Windows.Forms.Button();
+            this.fileNameTextBox = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.browseButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // nameTextBox
@@ -144,7 +151,7 @@ namespace UseCase
             this.actorList.Location = new System.Drawing.Point(24, 72);
             this.actorList.Name = "actorList";
             this.actorList.Size = new System.Drawing.Size(336, 96);
-            this.actorList.TabIndex = 12;
+            this.actorList.TabIndex = 3;
             this.actorList.Title = "Actors";
             this.actorList.Delete += new UseCase.ActionPerformedEventHandler(this.DeleteItem);
             this.actorList.Add += new UseCase.ActionPerformedEventHandler(this.AddItem);
@@ -154,7 +161,7 @@ namespace UseCase
             this.preConditionsList.Location = new System.Drawing.Point(24, 240);
             this.preConditionsList.Name = "preConditionsList";
             this.preConditionsList.Size = new System.Drawing.Size(336, 88);
-            this.preConditionsList.TabIndex = 13;
+            this.preConditionsList.TabIndex = 5;
             this.preConditionsList.Title = "Preconditions";
             this.preConditionsList.Delete += new UseCase.ActionPerformedEventHandler(this.DeleteItem);
             this.preConditionsList.Add += new UseCase.ActionPerformedEventHandler(this.AddItem);
@@ -164,7 +171,7 @@ namespace UseCase
             this.postConditionsList.Location = new System.Drawing.Point(24, 480);
             this.postConditionsList.Name = "postConditionsList";
             this.postConditionsList.Size = new System.Drawing.Size(336, 88);
-            this.postConditionsList.TabIndex = 14;
+            this.postConditionsList.TabIndex = 7;
             this.postConditionsList.Title = "Postconditions";
             this.postConditionsList.Delete += new UseCase.ActionPerformedEventHandler(this.DeleteItem);
             this.postConditionsList.Add += new UseCase.ActionPerformedEventHandler(this.AddItem);
@@ -175,7 +182,7 @@ namespace UseCase
             this.addElementTextBox.Location = new System.Drawing.Point(120, 344);
             this.addElementTextBox.Name = "addElementTextBox";
             this.addElementTextBox.Size = new System.Drawing.Size(280, 20);
-            this.addElementTextBox.TabIndex = 15;
+            this.addElementTextBox.TabIndex = 6;
             this.addElementTextBox.Text = "";
             // 
             // addElementButton
@@ -204,6 +211,7 @@ namespace UseCase
             this.moveElementUpButton.Name = "moveElementUpButton";
             this.moveElementUpButton.TabIndex = 18;
             this.moveElementUpButton.Text = "Up";
+            this.moveElementUpButton.Click += new System.EventHandler(this.moveElementUpClicked);
             // 
             // moveElementDownButton
             // 
@@ -212,21 +220,56 @@ namespace UseCase
             this.moveElementDownButton.Name = "moveElementDownButton";
             this.moveElementDownButton.TabIndex = 19;
             this.moveElementDownButton.Text = "Down";
+            this.moveElementDownButton.Click += new System.EventHandler(this.moveElementDownClicked);
             // 
             // viewXmlButton
             // 
+            this.viewXmlButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.viewXmlButton.Location = new System.Drawing.Point(560, 24);
             this.viewXmlButton.Name = "viewXmlButton";
+            this.viewXmlButton.Size = new System.Drawing.Size(75, 20);
             this.viewXmlButton.TabIndex = 20;
             this.viewXmlButton.Text = "View XML";
             this.viewXmlButton.Click += new System.EventHandler(this.viewXmlClick);
+            // 
+            // fileNameTextBox
+            // 
+            this.fileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fileNameTextBox.Location = new System.Drawing.Point(120, 576);
+            this.fileNameTextBox.Name = "fileNameTextBox";
+            this.fileNameTextBox.Size = new System.Drawing.Size(392, 20);
+            this.fileNameTextBox.TabIndex = 21;
+            this.fileNameTextBox.Text = "";
+            // 
+            // button1
+            // 
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(32, 576);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 20);
+            this.button1.TabIndex = 22;
+            this.button1.Text = "Save as...";
+            this.button1.Click += new System.EventHandler(this.saveButtonClicked);
+            // 
+            // browseButton
+            // 
+            this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.browseButton.Location = new System.Drawing.Point(528, 576);
+            this.browseButton.Name = "browseButton";
+            this.browseButton.Size = new System.Drawing.Size(75, 20);
+            this.browseButton.TabIndex = 23;
+            this.browseButton.Text = "Browse...";
+            this.browseButton.Click += new System.EventHandler(this.browseButtonClick);
             // 
             // UseCaseForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(656, 595);
+            this.ClientSize = new System.Drawing.Size(656, 611);
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                          this.browseButton,
+                                                                          this.button1,
+                                                                          this.fileNameTextBox,
                                                                           this.viewXmlButton,
                                                                           this.moveElementDownButton,
                                                                           this.moveElementUpButton,
@@ -267,11 +310,15 @@ namespace UseCase
         private void ElementsChanged( object sender, EventArgs e )
         {
             this.elementsView.Nodes.Clear();
+            int i = 1;
             foreach( IElement element in this.useCaseModel.Elements )
             {
-                TreeNode node = new TreeNode( element.Text );
+                TreeNode node = new TreeNode( 
+                    String.Format( "{0:0#}: {1}", i, element.Text ) );
                 node.Tag = element;
                 this.elementsView.Nodes.Add( node );
+
+                ++i;
             }
         }
 
@@ -285,6 +332,18 @@ namespace UseCase
             else if ( sender == this.postConditionsList )
                 this.useCaseModel.PostConditions.Add( e.Text );
         
+        }
+
+        private void IdChanged( object sender, EventArgs e )
+        {
+            if ( idTextBox.Text.Trim() != string.Empty &&
+                fileNameTextBox.Text.Trim() != string.Empty )
+            {
+                string directory = Path.GetDirectoryName( fileNameTextBox.Text.Trim() );
+                fileNameTextBox.Text = Path.Combine( 
+                    directory, idTextBox.Text + ".xml" );
+                
+            }
         }
 
         private void DeleteItem(object sender, UseCase.ActionPerformedEventArgs e)
@@ -334,6 +393,62 @@ namespace UseCase
             this.xmlViewForm = null;
         }
 
+        
+        private void IdEntered(object sender, System.EventArgs e)
+        {
+            this.useCaseModel.Id = this.idTextBox.Text;            
+        }
+
+        private void TitleEntered(object sender, System.EventArgs e)
+        {
+            this.useCaseModel.Name = this.nameTextBox.Text;        
+        }
+
+        private void SummaryEntered(object sender, System.EventArgs e)
+        {
+            this.useCaseModel.Summary = this.summaryTextBox.Text;
+        }
+
+        private void moveElementUpClicked(object sender, System.EventArgs e)
+        {
+            if( this.elementsView.SelectedNode != null &&
+                this.elementsView.SelectedNode.PrevNode != null )
+            {
+                this.useCaseModel.MoveElementBefore( 
+                    (IElement)this.elementsView.SelectedNode.Tag,
+                    (IElement)this.elementsView.SelectedNode.PrevNode.Tag );
+            }
+        }
+
+        private void moveElementDownClicked(object sender, System.EventArgs e)
+        {
+            if ( this.elementsView.SelectedNode != null &&
+                this.elementsView.SelectedNode.NextNode != null )
+            {
+                this.useCaseModel.MoveElementAfter(
+                    (IElement)this.elementsView.SelectedNode.Tag,
+                    (IElement)this.elementsView.SelectedNode.NextNode.Tag );
+            }
+        
+        }
+
+        private void browseButtonClick(object sender, System.EventArgs e)
+        {
+            using( SaveFileDialog sfd = new SaveFileDialog() )
+            {
+                sfd.DefaultExt = ".xml";
+                if ( sfd.ShowDialog() == DialogResult.OK )
+                    fileNameTextBox.Text = sfd.FileName;
+            }      
+        }
+
+        private void saveButtonClicked(object sender, System.EventArgs e)
+        {
+            XmlModel model = new XmlModel( this.useCaseModel );
+            model.Xsl = "UseCaseXSL1.xsl";
+            model.Save( fileNameTextBox.Text );        
+        }
+
         private UseCaseModel useCaseModel;
 
         private XmlViewForm xmlViewForm;
@@ -353,30 +468,19 @@ namespace UseCase
         private System.Windows.Forms.Button viewXmlButton;
         private System.Windows.Forms.TextBox summaryTextBox;
         private System.Windows.Forms.TextBox nameTextBox;
+        private System.Windows.Forms.TextBox fileNameTextBox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button browseButton;
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        private void titleEntered(object sender, System.EventArgs e)
-        {
-            
-        }
+        
 
-        private void IdEntered(object sender, System.EventArgs e)
-        {
-            this.useCaseModel.Id = this.idTextBox.Text;
-        }
+       
 
-        private void TitleEntered(object sender, System.EventArgs e)
-        {
-            this.useCaseModel.Name = this.nameTextBox.Text;        
-        }
-
-        private void SummaryEntered(object sender, System.EventArgs e)
-        {
-            this.useCaseModel.Summary = this.summaryTextBox.Text;
-        }
+        
 
         
         
