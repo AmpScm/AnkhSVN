@@ -75,7 +75,7 @@ namespace Ankh
         /// <summary>
         /// Is this item versioned?
         /// </summary>
-        public bool IsVersioned
+        public virtual bool IsVersioned
         {
             get
             { 
@@ -87,12 +87,13 @@ namespace Ankh
         /// <summary>
         /// Is this resource modified(implies that it is versioned)?
         /// </summary>
-        public bool IsModified
+        public virtual bool IsModified
         {
             get
             {
                 return (this.Status.TextStatus != StatusKind.Normal &&
-                  this.Status.TextStatus != StatusKind.Unversioned) ||
+                  this.Status.TextStatus != StatusKind.Unversioned &&
+                  this.status.TextStatus != StatusKind.None) ||
                 (this.Status.PropertyStatus != StatusKind.Normal &&
                 this.Status.PropertyStatus != StatusKind.None);
             }
@@ -101,7 +102,7 @@ namespace Ankh
         /// <summary>
         /// Is this item a directory?
         /// </summary>
-        public bool IsDirectory
+        public virtual bool IsDirectory
         {
             get{ return this.status.Entry.Kind == NodeKind.Directory; }
         }
@@ -109,7 +110,7 @@ namespace Ankh
         /// <summary>
         /// Is this item a file?
         /// </summary>
-        public bool IsFile
+        public virtual bool IsFile
         {
             get{ return this.status.Entry.Kind == NodeKind.File; }
         }
@@ -155,6 +156,42 @@ namespace Ankh
             {
                 // empty
             }
+
+            public override bool IsDirectory
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            public override bool IsFile
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            public override bool IsModified
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            public override bool IsVersioned
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+
+
+
         }
 
         /// <summary>
