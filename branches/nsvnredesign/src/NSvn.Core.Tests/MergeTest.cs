@@ -35,9 +35,8 @@ namespace NSvn.Core.Tests
             string dstPath = this.WcPath;
             string comparePath = Path.Combine (this.WcPath, Path.Combine("doc", "text_r5.txt" ) );           
 
-            ClientContext ctx = new ClientContext() ;
-            Client.Merge( srcPath, Revision.FromNumber(5) , srcPath, Revision.FromNumber(4) ,
-                dstPath, true, true, false, false, ctx ); 
+            this.Client.Merge( srcPath, Revision.FromNumber(5) , srcPath, Revision.FromNumber(4) ,
+                dstPath, true, true, false, false ); 
 
             Assertion.AssertEquals( "Wrong status", 'D', this.GetSvnStatus( comparePath ) );
        

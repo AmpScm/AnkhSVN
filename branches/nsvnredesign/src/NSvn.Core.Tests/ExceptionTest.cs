@@ -27,7 +27,7 @@ namespace NSvn.Core.Tests
         public void TestAddFileInNonVersionedDir()
         {
             string tempFile = Path.GetTempFileName();
-            Client.Add( tempFile, true, new ClientContext() );
+            this.Client.Add( tempFile, true );
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace NSvn.Core.Tests
             string lockPath = Path.Combine( Path.Combine( this.WcPath, ".svn" ), "lock" );
             File.Create( lockPath ).Close();
 
-            Client.Update( this.WcPath, Revision.Head, true, new ClientContext() );
+            this.Client.Update( this.WcPath, Revision.Head, true );
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace NSvn.Core.Tests
                 using (StreamWriter w2 = new StreamWriter( Path.Combine( wc2, "Form.cs" ), true ) )
                     w2.Write( "Moo" );
 
-                Client.Commit( new string[]{ wc2 }, false, new ClientContext() );
+                this.Client.Commit( new string[]{ wc2 }, false );
             }
             finally
             {

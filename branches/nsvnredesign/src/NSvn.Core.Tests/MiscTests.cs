@@ -27,7 +27,7 @@ namespace NSvn.Core.Tests
         {
             string info = this.RunCommand( "svn", "info " + this.WcPath );
             string realUrl = this.GetUrl( this.WcPath );
-            string url = Client.UrlFromPath( this.WcPath );
+            string url = this.Client.UrlFromPath( this.WcPath );
 
             Assertion.AssertEquals( "URL wrong", realUrl, url );
         }
@@ -37,7 +37,7 @@ namespace NSvn.Core.Tests
         {
             string formPath = Path.Combine( this.WcPath, "Form.cs" );
             string realUrl = this.GetUrl( formPath );
-            string url = Client.UrlFromPath( formPath );
+            string url = this.Client.UrlFromPath( formPath );
 
             Assertion.AssertEquals( "URL wrong", realUrl, url );
             
@@ -47,7 +47,7 @@ namespace NSvn.Core.Tests
         [Ignore( "Dunno how this is supposed to work" )]
         public void TestUrlFromUnversionedPath()
         {
-            string url = Client.UrlFromPath( @"C:\" );
+            string url = this.Client.UrlFromPath( @"C:\" );
             Assertion.AssertNull( "Url should be null for an unversioned path", url );
         }
 
@@ -56,27 +56,24 @@ namespace NSvn.Core.Tests
         {
             string realUuid = this.RunCommand( "svnlook", "uuid " + this.ReposPath ).Trim();
 
-            string uuid = Client.UuidFromUrl( this.ReposUrl, new ClientContext() );
+            string uuid = this.Client.UuidFromUrl( this.ReposUrl );
             Assertion.AssertEquals( "UUID wrong", realUuid, uuid );
         }
 
         [Test]
-        [ExpectedException( typeof(WorkingCopyLockedException) )]
+        [ExpectedException(typeof(WorkingCopyLockedException))]
         public void TestCancel()
         {
-            ClientContext ctx = new ClientContext();
-            AuthenticationBaton baton = new AuthenticationBaton();
-            ctx.AuthBaton = baton;
-            ctx.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
-            ctx.CancelCallback = new CancelCallback( this.CancelCallback );
+            this.Client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
+            this.Client.Cancel += new CancelDelegate(this.Cancel);
 
-            Client.Update( this.WcPath, Revision.Head, true, ctx );
+            this.Client.Update( this.WcPath, Revision.Head, true );
             
             Assertion.Assert( "No cancellation callbacks", this.cancels > 0 );
 
-            // no idea why this throws *WorkingCopyLockedException*...
-            ctx.CancelCallback = new CancelCallback( this.ReallyCancelCallback );
-            Client.Update( this.WcPath, Revision.Head, true, ctx );
+            this.Client.Cancel -= new CancelDelegate(this.Cancel);
+            this.Client.Cancel += new CancelDelegate(this.ReallyCancel);
+            this.Client.Update( this.WcPath, Revision.Head, true );
         }
 
         private string GetUrl( string path )
@@ -85,16 +82,16 @@ namespace NSvn.Core.Tests
             return Regex.Match( info, @"URL: (.*)", RegexOptions.IgnoreCase ).Groups[1].ToString().Trim();
         }
 
-        private CancelOperation CancelCallback()
+        private void Cancel( object sender, CancelEventArgs args )
         {
             this.cancels++;
-            return CancelOperation.DontCancel;
+            args.Cancel = false;
         }
 
-        private CancelOperation ReallyCancelCallback()
+        private void ReallyCancel( object sender, CancelEventArgs args )
         {
             this.cancels++;
-            return CancelOperation.Cancel;
+            args.Cancel = true;
         }
 
         private int cancels = 0;

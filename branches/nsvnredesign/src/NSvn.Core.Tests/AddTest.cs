@@ -16,6 +16,7 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
+            base.SetUp();
             this.ExtractWorkingCopy();
            
 
@@ -30,8 +31,8 @@ namespace NSvn.Core.Tests
         {
             string testFile = this.CreateTextFile( "testfile.txt" );
 
-            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
-            Client.Add( testFile, false, ctx );    
+            this.Client.Notification += new NotificationDelegate(this.NotifyCallback);
+            this.Client.Add( testFile, false );    
        
             Assertion.Assert( "No notification callbacks received", this.Notifications.Length > 0 );
 
@@ -50,9 +51,9 @@ namespace NSvn.Core.Tests
             string dir1, dir2, testFile1, testFile2;
             this.CreateSubdirectories(out dir1, out dir2, out testFile1, out testFile2);
 
-            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            this.Client.Notification += new NotificationDelegate(this.NotifyCallback);
             // do a non-recursive add here
-            Client.Add( dir1, false, ctx );
+            this.Client.Add( dir1, false );
 
             Assertion.Assert( "Too many or no notifications received. Added recursively?", 
                 this.Notifications.Length == 1 );
@@ -81,9 +82,9 @@ namespace NSvn.Core.Tests
             string dir1, dir2, testFile1, testFile2;
             this.CreateSubdirectories( out dir1, out dir2, out testFile1, out testFile2 );
 
-            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
+            this.Client.Notification += new NotificationDelegate(this.NotifyCallback);
             // now a recursive add
-            Client.Add( dir1, true, ctx );
+            this.Client.Add( dir1, true );
 
             // enough notifications?
             Assertion.AssertEquals( "Received wrong number of notifications", 

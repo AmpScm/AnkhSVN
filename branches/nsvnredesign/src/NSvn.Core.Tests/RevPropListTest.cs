@@ -14,6 +14,8 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
+            base.SetUp();
+
             this.ExtractRepos();
         }
 
@@ -29,8 +31,8 @@ namespace NSvn.Core.Tests
             int headRev = int.Parse( this.RunCommand( "svnlook", "youngest " + this.ReposPath ) );
 
             int rev;
-            PropertyDictionary dict = Client.RevPropList( this.ReposUrl, Revision.Head, out rev, 
-                new ClientContext() );
+            PropertyDictionary dict = this.Client.RevPropList( this.ReposUrl, Revision.Head, 
+                out rev );
 
             Assertion.AssertEquals( "Revision wrong", headRev, rev );
             Assertion.AssertEquals( "Wrong property value", "bar", dict["foo"].ToString() );

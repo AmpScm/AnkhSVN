@@ -15,6 +15,8 @@ namespace NSvn.Core.Tests
         [SetUp]
         public override void SetUp()
         {
+            base.SetUp();
+
             this.ExtractWorkingCopy();
         }
 
@@ -24,13 +26,12 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestRemoveLockFile()
         {
-            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
             string lockPath = Path.Combine( this.WcPath, ".svn" );
             lockPath = Path.Combine( lockPath, "lock" );
 
             File.CreateText( lockPath ).Close();
 
-            Client.Cleanup( this.WcPath, ctx );
+            this.Client.Cleanup( this.WcPath );
 
             Assertion.Assert( "lock file still in place after running Client::Cleanup",
                 !File.Exists( lockPath ) );

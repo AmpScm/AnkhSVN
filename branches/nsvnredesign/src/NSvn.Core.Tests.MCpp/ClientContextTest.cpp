@@ -4,8 +4,10 @@
 #include "ClientContextTest.h"
 #include "SvnClientException.h"
 #include "delegates.h"
-#include "Notification.h"
 #include "CommitItem.h"
+#include "NotificationEventArgs.h"
+#include "LogMessageEventArgs.h"
+#include "CancelEventArgs.h"
 
 
 #using <NSvn.Common.dll>
@@ -16,19 +18,18 @@ using namespace System::Collections;
 
 
 
-void NSvn::Core::Tests::MCpp::ClientContextTest::NotifyCallback( 
-    Notification* notification )
+void NSvn::Core::Tests::MCpp::ClientContextTest::OnNotification( 
+    NotificationEventArgs* notification )
 {
     this->notification = notification;
 }
 
 
-void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotifyCallback()
+void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotification()
 {
     Pool pool;
 
-    ClientContext* ctx = new ClientContext(
-        new NSvn::Core::NotifyCallback( this, &ClientContextTest::NotifyCallback ) );
+    ClientContext* ctx = new ClientContext( this );
     svn_client_ctx_t* svnCtx = ctx->ToSvnContext( pool );
     svnCtx->notify_func( svnCtx->notify_baton, "Moo", svn_wc_notify_copy,
         svn_node_file, "text/moo", svn_wc_notify_state_unchanged, 
@@ -83,8 +84,9 @@ struct svn_auth_iterstate_t
 
 
 
-String* NSvn::Core::Tests::MCpp::ClientContextTest::LogMsgCallback( CommitItem* items[] )
+void NSvn::Core::Tests::MCpp::ClientContextTest::OnLogMessage( LogMessageEventArgs* args )
 {
+    CommitItem* items[] = args->CommitItems;
     Assertion::AssertEquals( "Wrong number of items", 2, items->Length );
     Assertion::AssertEquals( "Wrong path", S"\\foo\\bar", items[0]->Path );
     Assertion::AssertEquals( "Wrong node kind", NodeKind::Directory, items[1]->Kind );
@@ -93,14 +95,14 @@ String* NSvn::Core::Tests::MCpp::ClientContextTest::LogMsgCallback( CommitItem* 
         items[1]->CopyFromUrl );
     Assertion::AssertEquals( "Wrong url", S"http://www.porn.com", items[0]->Url );
 
-    return S"Hello world";
+    args->Message = S"Hello world";
 }
 
-void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessageCallback()
+void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessage()
 {
     Pool pool;
-    ClientContext* c = new ClientContext( 0 );
-    c->LogMessageCallback = new LogMessageCallback( this, &ClientContextTest::LogMsgCallback );
+    ClientContext* c = new ClientContext( this );
+
 
     svn_client_ctx_t* ctx = c->ToSvnContext( pool );
 
@@ -122,6 +124,22 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessageCallback()
 
     // TODO: check encoding?
     Assertion::AssertEquals( "Log message wrong", S"Hello world", StringHelper( logMsg ) );
+}
+
+void NSvn::Core::Tests::MCpp::ClientContextTest::OnCancel( CancelEventArgs* args )
+{
+    args->Cancel = true;
+}
+
+void NSvn::Core::Tests::MCpp::ClientContextTest::TestCancel()
+{
+    Pool pool;
+    ClientContext* c = new ClientContext( this );
+
+    svn_client_ctx_t* ctx = c->ToSvnContext( pool );
+
+    svn_error_t* err = ctx->cancel_func( ctx->cancel_baton );
+    Assertion::Assert( "Not cancelled", err->apr_err == SVN_ERR_CANCELLED );
 }
 
 

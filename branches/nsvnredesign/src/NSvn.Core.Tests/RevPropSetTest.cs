@@ -29,12 +29,11 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestRevSetPropDir()
         {  
-            ClientContext ctx = new ClientContext( );  
             byte[] propval = Encoding.UTF8.GetBytes ( "moo" );
             int rev;
 
-            Client.RevPropSet( new Property( "cow", propval ), this.ReposUrl, 
-                Revision.Head, out rev, true, ctx );
+            this.Client.RevPropSet( new Property( "cow", propval ), this.ReposUrl, 
+                Revision.Head, out rev, true );
             Assertion.AssertEquals( "Couldn't set prop on selected Repos!", 
                 "moo", this.RunCommand( "svn", "propget cow --revprop -r head " + this.ReposUrl).Trim() );
         }

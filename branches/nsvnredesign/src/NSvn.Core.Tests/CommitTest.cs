@@ -29,8 +29,7 @@ namespace NSvn.Core.Tests
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
 
-            ClientContext ctx = new ClientContext( new NotifyCallback( this.NotifyCallback ) );
-            Client.Commit( new string[]{ this.WcPath }, false, ctx );
+            this.Client.Commit( new string[]{ this.WcPath }, false );
            
             char status = this.GetSvnStatus( filepath );
             Assertion.AssertEquals( "File not committed", '-', 
@@ -47,8 +46,7 @@ namespace NSvn.Core.Tests
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
 
-            ClientContext ctx = new ClientContext();
-            CommitInfo info = Client.Commit( new string[]{ filepath }, true, ctx );
+            CommitInfo info = this.Client.Commit( new string[]{ filepath }, true );
 
             char status = this.GetSvnStatus( filepath );
             Assertion.AssertEquals( "File not committed", '-', 
@@ -62,17 +60,17 @@ namespace NSvn.Core.Tests
             this.filepath = Path.Combine( this.WcPath, "Form.cs" );
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
-            ClientContext ctx = new ClientContext();
 
             AuthenticationBaton baton = new AuthenticationBaton();
-            baton.Add( AuthenticationProvider.GetUsernameProvider() );
-            baton.SetParameter( AuthenticationBaton.ParamDefaultUsername, Environment.UserName );
+            this.Client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
+            this.Client.AuthBaton.SetParameter( 
+                AuthenticationBaton.ParamDefaultUsername, Environment.UserName );
 
-            ctx.AuthBaton = baton;
+            
+            this.Client.LogMessage += new LogMessageDelegate(this.LogMessageCallback);
 
-            ctx.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
             this.logMessage = "Moo ";
-            CommitInfo info = Client.Commit( new string[]{ this.WcPath }, false, ctx );
+            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
 
             Assertion.AssertEquals( "Wrong username", Environment.UserName, info.Author );
             string output = this.RunCommand( "svn", "log " + this.filepath + " -r HEAD" );
@@ -88,10 +86,9 @@ namespace NSvn.Core.Tests
             this.filepath = Path.Combine( this.WcPath, "Form.cs" );
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
-            ClientContext ctx = new ClientContext();
-            ctx.LogMessageCallback = new LogMessageCallback( this.LogMessageCallback );
+            this.Client.LogMessage +=new LogMessageDelegate(this.LogMessageCallback);
             this.logMessage = "Æ e i a æ å. Møøøø! über";
-            CommitInfo info = Client.Commit( new string[]{ this.WcPath }, false, ctx );
+            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
         }
         
         /// <summary>
@@ -103,9 +100,8 @@ namespace NSvn.Core.Tests
             string path = Path.Combine( this.WcPath, "Form.cs" );
             using( StreamWriter w = new StreamWriter( path ) )
                 w.Write( "MOO" );
-            ClientContext ctx = new ClientContext();
-            ctx.LogMessageCallback = new LogMessageCallback( this.CancelLogMessage );
-            CommitInfo info = Client.Commit( new string[]{ path }, true, ctx );
+            this.Client.LogMessage += new LogMessageDelegate( this.CancelLogMessage );
+            CommitInfo info = this.Client.Commit( new string[]{ path }, true );
 
             Assertion.AssertNull( "info should be null for a cancelled commit", 
                 info );
@@ -124,25 +120,24 @@ namespace NSvn.Core.Tests
             string lockPath = Path.Combine( this.WcPath, @".svn\lock" );
             using( File.CreateText( lockPath ) )
             {
-                Client.Commit( new string[]{ this.WcPath }, true, 
-                    new ClientContext() );            
+                this.Client.Commit( new string[]{ this.WcPath }, true );            
             }
         }
 
-        private string LogMessageCallback( CommitItem[] items )
+        private void LogMessageCallback( object sender, LogMessageEventArgs args )
         {
-            Assertion.AssertEquals( "Wrong number of commit items", 1, items.Length );
-            Assertion.Assert( "Wrong path", items[0].Path.IndexOf( 
+            Assertion.AssertEquals( "Wrong number of commit items", 1, args.CommitItems.Length );
+            Assertion.Assert( "Wrong path", args.CommitItems[0].Path.IndexOf( 
                 this.filepath ) >= 0 );
-            Assertion.AssertEquals( "Wrong kind", NodeKind.File, items[0].Kind );
-            Assertion.AssertEquals( "Wrong revision", 6, items[0].Revision );
+            Assertion.AssertEquals( "Wrong kind", NodeKind.File, args.CommitItems[0].Kind );
+            Assertion.AssertEquals( "Wrong revision", 6, args.CommitItems[0].Revision );
 
-            return this.logMessage;
+            args.Message = this.logMessage;
         }
 
-        private string CancelLogMessage( CommitItem[] items )
+        private void CancelLogMessage( object sender, LogMessageEventArgs args )
         {
-            return null;
+            args.Message = null;
         }
 
 
