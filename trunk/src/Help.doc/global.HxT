@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE HelpTOC SYSTEM "ms-help://hx/resources/HelpTOC.DTD">
+<HelpTOC DTDVersion="1.0" FileVersion="1" FontSize="8" Font="Arial" ParentNodeIcon="Book">
+	<!-- Insert TOC Nodes Here -->
+	<HelpTOCNode Title="About the Ankh Help file" Url="\Xml\top\About_the_Ankh_help_file.xml">
+		<ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
+	<HelpTOCNode Title="Credits" Url="\Xml\top\credits.xml"/>
+	<HelpTOCNode Title="Introduction" Url="\Xml\introduction\introduction.xml">
+		<HelpTOCNode Title="Ankh"/>
+		<HelpTOCNode Title="About Subversion"/>
+		<HelpTOCNode Title="Revision controll"/>
+		<HelpTOCNode Title="Why Revision controll ?"/>
+		<HelpTOCNode Title="Why Ankh ?" Url="\Xml\introduction\introduction.xml"/>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
+	<HelpTOCNode Title="Configuration" Url="\Xml\configuration\configuration.xml">
+		<HelpTOCNode Title="New Topic"/>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
+	<HelpTOCNode Title="Using Ankh" Url="\Xml\using-ankh\using_ankh.xml">
+		<HelpTOCNode Title="New Topic"/>
+		<HelpTOCNode Title="New Topic"/>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOCNode>
+	<HelpTOCNode Title="Basic operations" Url="\Xml\basic-operations\basic_operations.xml">
+		<HelpTOCNode Title="Remove" Url="\Xml\basic-operations\remove.xml"/>
+		<HelpTOCNode Title="Check out" Url="\Xml\basic-operations\check_out.xml"/>
+		<HelpTOCNode Title="Update" Url="\Xml\basic-operations\update.xml"/>
+		<HelpTOCNode Title="Switch" Url="\Xml\basic-operations\switch.xml"/>
+		<HelpTOCNode Title="Log" Url="\Xml\basic-operations\log.xml"/>
+		<HelpTOCNode Title="Commit" Url="\Xml\basic-operations\commit.xml"/>
+		<HelpTOCNode Title="Status" Url="\Xml\basic-operations\status.xml"/>
+		<HelpTOCNode Title="Cleanup" Url="\Xml\basic-operations\cleanup.xml"/>
+		<HelpTOCNode Title="Add" Url="\Xml\basic-operations\add.xml"/>
+		<HelpTOCNode Title="Make directory" Url="\Xml\basic-operations\make_directory.xml"/>
+		<HelpTOCNode Title="Import" Url="\Xml\basic-operations\import.xml"/>
+		<HelpTOCNode Title="Diff" Url="\Xml\basic-operations\diff.xml"/>
+		<HelpTOCNode Title="Merge" Url="\Xml\basic-operations\merge.xml"/>
+		<HelpTOCNode Title="Copy" Url="\Xml\basic-operations\copy.xml"/>
+		<HelpTOCNode Title="Move" Url="\Xml\basic-operations\move.xml"/>
+		<HelpTOCNode Title="Set property" Url="\Xml\basic-operations\set_properties.xml"/>
+		<HelpTOCNode Title="Export" Url="\Xml\basic-operations\export.xml"/>
+		<HelpTOCNode Title="List" Url="\Xml\basic-operations\list.xml"/>
+		<HelpTOCNode Title="Cat" Url="\Xml\basic-operations\cat.xml"/>
+		<HelpTOCNode Title="Get property " Url="\Xml\basic-operations\get_properties.xml"/>
+	</HelpTOCNode>
+	<ToolData Name="MSTOCMRUDIR" Value="C:\gr03-10\finalproject\doc\Help-doc\Xml\top\"/>
+	<ToolData Name="MSTOCMRUFT" Value="0"/>
+    <ToolData Name="MSTOCEXPST" Value="Expanded"/></HelpTOC>
