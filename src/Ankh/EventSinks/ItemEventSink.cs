@@ -45,11 +45,11 @@ namespace Ankh.EventSinks
                 if ( this.renaming )
                     return;
 
-                //this.Context.OutputPane.StartActionText( "Delete" );
+                this.Context.StartOperation( "Deleting" );
                 this.Context.SolutionExplorer.VisitResources( 
                     item, new RemoveProjectVisitor(), false );
                 this.Context.SolutionExplorer.Refresh ( item.ContainingProject );
-                //this.Context.OutputPane.EndActionText();
+                this.Context.EndOperation();
 
             }
             catch ( Exception ex )
