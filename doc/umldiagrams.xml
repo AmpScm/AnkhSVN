@@ -2,7 +2,6 @@
 <directories>
     <directory path="umldiagrams">
         <name>UML Diagrams</name>
-        <permissions>group, collabnet, supervisor</permissions>
     <file path="Core.png">
       <realpath>doc/uml/Core.png</realpath>
       <name>Core</name>
