@@ -19,6 +19,9 @@ namespace Utils
             RegistryKey typedUrl = Registry.CurrentUser.OpenSubKey( 
                 TypedUrl, true );
 
+            if ( typedUrl == null )
+                return;
+
             // make sure the entry isn't there already
             foreach( string val in typedUrl.GetValueNames() )
             {

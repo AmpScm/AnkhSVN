@@ -368,10 +368,10 @@ namespace Ankh.Solution
             this.projectItems[key] = node;
         }
 
-        internal void AddResource( Project key, TreeNode node )
+        internal void AddResource( Project key, TreeNode node, string projectFile )
         {
             this.projects[key] = node;
-            this.context.ProjectFileWatcher.AddFile( key.FullName );
+            this.context.ProjectFileWatcher.AddFile( projectFile );
         }
 
         internal void SetSolution( TreeNode node )

@@ -71,8 +71,11 @@ namespace Ankh
         /// <param name="path"></param>
         public void AddFile( string path )
         {
-            Watcher w = new Watcher( path, this );
-            this.projectWatchers.Add( w );
+            if ( File.Exists( path ) )
+            {
+                Watcher w = new Watcher( path, this );
+                this.projectWatchers.Add( w );
+            }
         }
 
         /// <summary>
