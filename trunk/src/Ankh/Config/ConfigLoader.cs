@@ -124,8 +124,8 @@ namespace Ankh.Config
             XmlTextReader reader = new XmlTextReader( reposRootPath );
             try
             {
-                XmlSerializer serializer = new XmlSerializer( typeof(string[]) );
-                return (string[])serializer.Deserialize( reader );
+                XmlSerializer serializer = new XmlSerializer( typeof(ArrayOfStrings) );
+                return ((ArrayOfStrings)serializer.Deserialize( reader )).Strings;
             }
             catch( InvalidOperationException ex )
             {
@@ -159,14 +159,18 @@ namespace Ankh.Config
             if ( !ownsMutex )
                 return;
 
+            // Use a helper object to work around a bug in the runtime caused by a specific hotfix (see issue #188 for details)
+            ArrayOfStrings helperArray = new ArrayOfStrings();
+            helperArray.Strings = roots;
+
             string reposRootPath = null;
             try
             {
                 reposRootPath = Path.Combine( this.configDir, REPOSROOTS );
                 using( StreamWriter writer = new StreamWriter( reposRootPath ) )
                 {
-                    XmlSerializer serializer = new XmlSerializer( typeof(string[]) );
-                    serializer.Serialize( writer, roots );
+                    XmlSerializer serializer = new XmlSerializer( typeof(ArrayOfStrings) );
+                    serializer.Serialize( writer, helperArray );
                 }
             }
             catch( Exception )
@@ -264,5 +268,14 @@ namespace Ankh.Config
         private const string configFileResource = "Ankh.Config.Config.xml";
         private const string configSchemaResource = "Ankh.Config.Config.xsd";
 
+    }
+
+    
+    [Serializable]
+    [XmlRoot("ArrayOfString")]
+    public class ArrayOfStrings
+    {
+        [XmlElement("string")]
+        public string[] Strings;
     }
 }
