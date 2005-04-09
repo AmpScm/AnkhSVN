@@ -125,6 +125,7 @@ namespace Ankh.Config
             try
             {
                 XmlSerializer serializer = new XmlSerializer( typeof(ArrayOfStrings) );
+                // Use a helper object to work around a bug in the runtime caused by a specific hotfix (see issue #188 for details)
                 return ((ArrayOfStrings)serializer.Deserialize( reader )).Strings;
             }
             catch( InvalidOperationException ex )
