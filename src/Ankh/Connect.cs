@@ -80,12 +80,13 @@ namespace Ankh
                 Debug.AutoFlush = true;
             }
 #endif
+            ErrorHandler handler = new ErrorHandler();
             try
             {
                 
                 
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst,
-                    new UIShell(), new ErrorHandler() );
+                    new UIShell(), handler );
                 
 
                 Extenders.ExtenderProvider.Register( this.context );
@@ -112,7 +113,7 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                this.context.ErrorHandler.Handle( ex );
+                handler.Handle( ex );
                 throw;
             }
         }
