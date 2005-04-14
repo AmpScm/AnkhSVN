@@ -137,9 +137,6 @@ namespace Ankh.Solution
             this.projectItems.Clear();
             this.projects.Clear();
             
-            // generate a status cache
-            this.GenerateStatusCache( this.dte.Solution.FullName );
-            
             // store the original image list
             this.originalImageList = this.treeview.StatusImageList;
             
@@ -397,22 +394,6 @@ namespace Ankh.Solution
             // we assume theres only one of these
             this.solutionNode = node;
         }
-
-        private void GenerateStatusCache( string solutionPath )
-        {
-            DebugTimer t = DebugTimer.Start();
-            string solutionDir = Path.GetDirectoryName( solutionPath );
-           
-            Debug.WriteLine( "Getting status cache", "Ankh" );
-            
-            this.context.StatusCache.Status( solutionDir );
-
-            t.End( "Got status cache", "Ankh" );
-        }
-
-        
-
-        
 
         private TreeNode GetNode(UIHierarchyItem item)
         {
