@@ -20,18 +20,36 @@ namespace Ankh
             this.deletions = new Hashtable();
         }
 
+        /// <summary>
+        /// Fill the cache by running status recursively on this directory.
+        /// </summary>
+        /// <param name="dir"></param>
         public void Status( string dir )
+        {
+            this.Status( dir, true );
+        }
+
+        /// <summary>
+        /// Fill the cache by running status on this directory.
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="recurse">Whether to recurse to subdirectories.</param>
+        public void Status( string dir, bool recurse )
         {
             lock(this)
             {
                 if ( !SvnUtils.IsWorkingCopyPath(dir) )
                     return;
 
-                Debug.WriteLine( "Generating status cache for " + dir, "Ankh" );
+                Debug.WriteLine( 
+                    String.Format("Generating {0} status cache for {1}",
+                        recurse ? "recursive" : "nonrecursive", dir), 
+                    "Ankh" );
+
                 this.currentPath = dir;
                 int youngest;
                 this.client.Status( out youngest, dir, Revision.Unspecified, 
-                    new StatusCallback( this.Callback ), true, true, false, true );
+                    new StatusCallback( this.Callback ), recurse, true, false, true );
             }
         }
 
@@ -47,6 +65,13 @@ namespace Ankh
                     System.Diagnostics.Debug.WriteLine( 
                         "Cached item not found for " + normPath, "Ankh" );
                     this.cacheMisses++;
+
+                    // fill the status cache from this directory
+                    string directory = normPath;
+                    if ( File.Exists( directory ) )
+                        directory = Path.GetDirectoryName( directory );
+                    this.Status( directory, false );
+
                     Status status = this.client.SingleStatus( normPath );
                     this.table[normPath] = item = new SvnItem( path, status );
                 }
