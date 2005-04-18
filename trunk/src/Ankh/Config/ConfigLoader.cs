@@ -277,6 +277,6 @@ namespace Ankh.Config
     public class ArrayOfStrings
     {
         [XmlElement("string")]
-        public string[] Strings;
+        public string[] Strings = new string[0];
     }
 }
