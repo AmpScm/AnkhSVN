@@ -326,6 +326,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "VSCommandBars.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "VSNetCommandAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

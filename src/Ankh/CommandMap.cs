@@ -138,10 +138,8 @@ namespace Ankh
         private static void RegisterVSNetCommand( VSNetCommandAttribute attr, 
             ICommand cmd, IContext context )
         {
-            // register the command with the environment
-            object []contextGuids = new object[] { };
-            cmd.Command = context.DTE.Commands.AddNamedCommand( context.AddIn, attr.Name, attr.Text, attr.Tooltip, false,
-                attr.Bitmap, ref contextGuids, (int)vsCommandStatus.vsCommandStatusUnsupported );
+            cmd.Command = context.CommandBars.AddNamedCommand(
+                attr.Name, attr.Text, attr.Tooltip, attr.Bitmap, 0 );
 
             RegisterControl( cmd, context );     
         }
@@ -167,9 +165,10 @@ namespace Ankh
 
         private static void CreateReposExplorerPopup( IContext context )
         {
-            context.RepositoryExplorer.CommandBar = (CommandBar)
-                context.DTE.Commands.AddCommandBar( "ReposExplorer", vsCommandBarType.vsCommandBarTypePopup,
-                    null, 1 );
+            context.RepositoryExplorer.CommandBar = 
+                context.CommandBars.AddCommandBar( "ReposExplorer", 
+                    vsCommandBarType.vsCommandBarTypePopup, null, 
+                    VSCommandBars.AddCommandBarToEnd );
         }
 
         /// <summary>
@@ -178,12 +177,9 @@ namespace Ankh
         /// <param name="context"></param>
         private static void CreateAnkhSubMenu( IContext context )
         {
-            CommandBar toolMenu = (CommandBar)
-                context.DTE.CommandBars[ "Tools" ];
-
-            context.DTE.Commands.AddCommandBar( "AnkhSVN", 
-                vsCommandBarType.vsCommandBarTypeMenu,
-                toolMenu, 1 );
+            object toolMenu = context.CommandBars.GetCommandBar( "Tools" );
+            context.CommandBars.AddCommandBar( "AnkhSVN", 
+                vsCommandBarType.vsCommandBarTypeMenu, toolMenu, 1 );
         }
     }
 }

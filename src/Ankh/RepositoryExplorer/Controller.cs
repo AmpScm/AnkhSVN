@@ -50,7 +50,7 @@ namespace Ankh.RepositoryExplorer
         /// <summary>
         /// The command bar associated with the repository explorer.
         /// </summary>
-        public Microsoft.Office.Core.CommandBar CommandBar
+        public object CommandBar
         {
             get{ return this.repositoryExplorer.CommandBar; }
             set{ this.repositoryExplorer.CommandBar = value; }

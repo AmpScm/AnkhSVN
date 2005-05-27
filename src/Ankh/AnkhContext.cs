@@ -55,8 +55,8 @@ namespace Ankh
             Utils.Win32.Win32.SetEnvironmentVariable( "APR_ICONV_PATH", iconvdir );
 
             this.ankhLoadedForSolution = false;
-
-            
+           
+            this.commandBars = VSCommandBars.Create(this);
 
             this.SetUpEvents();    
             
@@ -245,6 +245,12 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.projectFileWatcher; }
+        }
+
+        public VSCommandBars CommandBars
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get{ return this.commandBars; }
         }
 
 
@@ -534,5 +540,7 @@ namespace Ankh
         private IUIShell uiShell;
         
         private Ankh.Config.ConfigLoader configLoader;
+
+        private VSCommandBars commandBars;
     }
 }

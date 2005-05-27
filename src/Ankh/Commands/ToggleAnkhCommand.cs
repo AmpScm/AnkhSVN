@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using EnvDTE;
 using NSvn.Core;
-using Microsoft.Office.Core;
 
 namespace Ankh.Commands
 {
@@ -28,7 +27,7 @@ namespace Ankh.Commands
 
             try
             {
-                 CommandBarControl cntl = this.GetControl( context, "Solution.Ankh", 
+                 object cntl = this.GetControl( context, "Solution.Ankh", 
                     "ToggleAnkh" );
 
                 string solutionPath = context.DTE.Solution.FullName;
@@ -42,14 +41,16 @@ namespace Ankh.Commands
                 if ( ( !context.SolutionIsOpen ) )
                 {
                     // we want it to show "Enable" if we're not in a wc
-                    cntl.Caption = cntl.TooltipText = "Enable Ankh for this solution";
+                    this.SetToolTipAndCaption( context, cntl, 
+                        "Enable Ankh for this solution" );
                     return Disabled;
                 }
 
                 // now we have to figure out what text to set for the command    
                 if ( File.Exists( Path.Combine( solutionDir, "Ankh.Load" ) ) ) 
                 {
-                    cntl.Caption = cntl.TooltipText = "Disable Ankh for this solution";
+                    this.SetToolTipAndCaption( context, cntl, 
+                        "Disable Ankh for this solution" );
                 }
                 else 
                 {
@@ -58,11 +59,13 @@ namespace Ankh.Commands
                     if (!SvnUtils.IsWorkingCopyPath(
                         solutionDir))
                     {
-                        cntl.Caption = cntl.TooltipText = "Force Ankh to load for this solution";
+                        this.SetToolTipAndCaption( context, cntl, 
+                            "Force Ankh to load for this solution" );
                     }
                     else
                     { 
-                        cntl.Caption = cntl.TooltipText = "Enable Ankh for this solution";
+                        this.SetToolTipAndCaption( context, cntl, 
+                            "Enable Ankh for this solution" );
                     }
                 }               
 
@@ -94,6 +97,12 @@ namespace Ankh.Commands
                 File.Create( load ).Close();
                 context.SolutionOpened();
             }
+        }
+
+        private void SetToolTipAndCaption( IContext context, object ctrl, string text )
+        {
+            context.CommandBars.SetControlCaption( ctrl, text );
+            context.CommandBars.SetControlToolTip( ctrl, text );
         }
 
         private bool updating = false;

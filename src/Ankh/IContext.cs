@@ -107,6 +107,11 @@ namespace Ankh
         FileWatcher ProjectFileWatcher{ get; }
 
         /// <summary>
+        /// Wrapper over the VS command bar model.
+        /// </summary>
+        VSCommandBars CommandBars{ get; }
+
+        /// <summary>
         /// Event handler for the SolutionOpened event. Can also be called at
         /// addin load time, or if Ankh is enabled for a solution.
         /// </summary>

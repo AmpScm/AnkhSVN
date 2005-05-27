@@ -2,6 +2,7 @@
 using System;
 using EnvDTE;
 using Microsoft.Office.Core;
+using System.Reflection;
 
 namespace Ankh
 {
@@ -49,9 +50,10 @@ namespace Ankh
         /// <param name="context"></param>
         public virtual void AddControl( ICommand cmd, IContext context, string tag )
         {
-            CommandBar bar = GetCommandBar( this.commandBar, context );
-            CommandBarControl cntrl = cmd.Command.AddControl( bar, this.position );      
-            cntrl.Tag = tag;
+            object bar = GetCommandBar( this.commandBar, context );
+            object cntrl = context.CommandBars.AddControl(cmd.Command, bar, this.position);
+            context.CommandBars.SetControlTag(cntrl, tag);
+            
         }
 
         /// <summary>
@@ -60,30 +62,31 @@ namespace Ankh
         /// <param name="name"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static CommandBar GetCommandBar( string name, IContext context )
+        public static object GetCommandBar( string name, IContext context )
         {
             string[] path = name.Split( '.' );
-            CommandBar bar;
+            object bar;
 
             //TODO: is this really necessary?
-            if ( path[0] == context.RepositoryExplorer.CommandBar.Name )
+            if ( path[0] == "ReposExplorer" )
                 bar = context.RepositoryExplorer.CommandBar;
             else
-                bar = (CommandBar)context.DTE.CommandBars[ path[0] ];;
+                bar = context.CommandBars.GetCommandBar( path[0] );
+
             for( int i = 1; i < path.Length; i++ )
             {
                 try
                 {
                     // does this command bar already exist?
-                    CommandBarControl ctrl = bar.Controls[ path[i] ];
-                    bar = (CommandBar)((CommandBarPopup)ctrl).CommandBar;
+                    object ctrl = context.CommandBars.GetBarControl(bar, path[i]);
+                    bar = context.CommandBars.GetPopupCommandBar(ctrl); 
                 }
                 catch( Exception )
                 {
-                    // no, create it
-                    bar = (CommandBar)context.DTE.Commands.AddCommandBar( path[i], 
-                        vsCommandBarType.vsCommandBarTypeMenu, bar, bar.Controls.Count + 1 );
-                }                
+                    context.CommandBars.AddCommandBar( path[i],
+                        vsCommandBarType.vsCommandBarTypeMenu, bar, 
+                        VSCommandBars.AddCommandBarToEnd );
+               }                
             }
 
             return bar;
@@ -110,10 +113,12 @@ namespace Ankh
                 else
                     barName = baseBar + "." + this.CommandBar;
 
-                CommandBar bar = 
+                object bar = 
                     VSNetControlAttribute.GetCommandBar(barName, context);
-                CommandBarControl cntrl = cmd.Command.AddControl( bar, this.Position );
-                cntrl.Tag = tag;
+                object cntrl = context.CommandBars.AddControl( cmd.Command, bar, 
+                    this.position );
+
+                context.CommandBars.SetControlTag( cntrl, tag );
             }
         }
 
