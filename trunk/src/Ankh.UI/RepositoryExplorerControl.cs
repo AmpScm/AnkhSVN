@@ -8,9 +8,9 @@ using System.Windows.Forms;
 using NSvn.Core;
 using Utils;
 using System.Text.RegularExpressions;
-using Microsoft.Office.Core;
 using System.Diagnostics;
 using Utils.Win32;
+using System.Reflection;
 
 namespace Ankh.UI
 {
@@ -43,7 +43,7 @@ namespace Ankh.UI
         /// <summary>
         /// The command bar to be used for a context menu.
         /// </summary>
-        public CommandBar CommandBar
+        public object CommandBar
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.commandBar; }
@@ -338,7 +338,9 @@ namespace Ankh.UI
             this.treeView.SelectedNode = this.treeView.GetNodeAt( args.X, args.Y );
 
             Point screen = this.treeView.PointToScreen( new Point(args.X, args.Y) );
-            this.commandBar.ShowPopup( screen.X, screen.Y );
+            this.commandBar.GetType().InvokeMember(
+                "ShowPopup", BindingFlags.InvokeMethod, null, 
+                this.commandBar, new object[]{ screen.X, screen.Y } );
         }
 
         private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -497,7 +499,7 @@ namespace Ankh.UI
         private System.Windows.Forms.TextBox urlTextBox;
         private System.Windows.Forms.Label revisionLabel;
         private System.Windows.Forms.Button browseButton;
-        private CommandBar commandBar;
+        private object commandBar;
         private System.Windows.Forms.CheckBox backgroundListingCheck;
         private System.Windows.Forms.Label urlLabel;
         

@@ -2,7 +2,6 @@
 using System;
 using EnvDTE;
 using NSvn.Core;
-using Microsoft.Office.Core;
 using Ankh.UI;
 using System.Xml.Xsl;
 using System.Xml.XPath;
@@ -67,14 +66,12 @@ namespace Ankh.Commands
         protected const vsCommandStatus Disabled = 
             vsCommandStatus.vsCommandStatusSupported;
 
-        protected CommandBarControl GetControl(IContext context, string barName, string name )
+        protected object GetControl(IContext context, string barName, string name )
         {
             // TODO: either preload this or find a better way to map to 
             // the commandbarcontrols for a command
-            CommandBar bar = VSNetControlAttribute.GetCommandBar( barName, context );           
-            CommandBarControl cntl = bar.FindControl( Type.Missing, Type.Missing, 
-                barName + "." + name, Type.Missing, Type.Missing );
-            return cntl;
+            object bar = VSNetControlAttribute.GetCommandBar( barName, context );           
+            return context.CommandBars.FindControl(bar, barName + "." + name);
         }
 
         protected static XslTransform GetTransform( IContext context, string name )
