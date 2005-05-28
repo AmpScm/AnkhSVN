@@ -269,6 +269,20 @@ namespace Utils.Win32
         [DllImport("Kernel32.dll")]
         public static extern bool SetEnvironmentVariable( string name, string value );
 
+        [DllImport("User32.dll")]
+        public static extern bool GetMessage( out Message msg, IntPtr hwnd, 
+            uint filterMin, uint filterMax );
+
+        [DllImport("User32.dll")]
+        public static extern bool PeekMessage( out Message msg, IntPtr hwnd, 
+            uint filterMin, uint filterMax, uint removeMessage );
+
+        [DllImport("User32.dll")]
+        public static extern bool TranslateMessage( out Message msg );
+
+        [DllImport("User32.dll")]
+        public static extern bool DispatchMessage( out Message msg );
+
         [DllImport("shlwapi.dll", CharSet=CharSet.Unicode)]
         private static extern bool PathRelativePathToW( StringBuilder result, string from,
             FileAttribute fromAttr, string to, FileAttribute toAttr );
