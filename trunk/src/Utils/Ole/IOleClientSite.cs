@@ -16,7 +16,7 @@ namespace Utils.Ole
   {
     void SaveObject();
     void GetMoniker(uint dwAssign, uint dwWhichMoniker, ref object ppmk);
-    void GetContainer(ref object ppContainer);
+    void GetContainer( [MarshalAs(UnmanagedType.Interface)] ref object ppContainer);
     void ShowObject();
     void OnShowWindow(bool fShow);
     void RequestNewObjectLayout();

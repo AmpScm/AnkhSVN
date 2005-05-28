@@ -95,7 +95,7 @@ namespace Utils.Ole
     object GetDropTarget(ref object pDropTarget);
 
     [PreserveSig]
-    void GetExternal([MarshalAs(UnmanagedType.IDispatch)] out object ppDispatch);
+    void GetExternal([MarshalAs(UnmanagedType.Interface)] out object ppDispatch);
 
     [PreserveSig]
     uint TranslateUrl(uint dwTranslate, 
