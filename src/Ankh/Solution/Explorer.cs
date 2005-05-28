@@ -143,20 +143,7 @@ namespace Ankh.Solution
             // and assign the status image list to the tree
             this.treeview.StatusImageList = statusImageList.Handle;
 
-            // avoid lots of flickering while we walk the tree
-            this.treeview.LockWindowUpdate( true );
-            try
-            {
-
-                // we assume there is a single root node
-                this.solutionNode = TreeNode.CreateSolutionNode( 
-                    this.uiHierarchy.UIHierarchyItems.Item(1), this );
-            }
-            finally
-            {
-                // done
-                this.treeview.LockWindowUpdate( false );
-            }
+            SolutionLoadStrategy.GetStrategy( dte.Version ).Load( this );            
  
             Debug.WriteLine( "Created solution node", "Ankh" );
         }
@@ -432,8 +419,121 @@ namespace Ankh.Solution
                 return null;
         }
 
-        
+        #region SolutionLoadStrategy
+        /// <summary>
+        /// Encapsulates the details of how to handle a solution load.
+        /// </summary>
+        private class SolutionLoadStrategy
+        {
+            protected SolutionLoadStrategy()
+            {
+            }
 
+            public virtual void Load( Explorer outer )
+            {
+                DateTime startTime = DateTime.Now;
+                outer.context.StartOperation( "Synchronizing with solution explorer");
+                
+
+                // avoid lots of flickering while we walk the tree
+                outer.treeview.LockWindowUpdate(true);
+                try
+                {
+
+                    // we assume there is a single root node
+                    outer.solutionNode = TreeNode.CreateSolutionNode(
+                        outer.uiHierarchy.UIHierarchyItems.Item(1), outer);
+
+                    // and we're done
+                    outer.context.OutputPane.WriteLine( "Time: {0}", DateTime.Now - startTime );
+                }
+                finally
+                {
+                    // done
+                    outer.treeview.LockWindowUpdate(false);
+                    outer.context.EndOperation();
+                }
+            }
+
+            public virtual void CancelLoad()
+            {
+                // no-op, since it will never be called
+            }
+
+            public static SolutionLoadStrategy GetStrategy( string version )
+            {
+                // just load right away if we're on vs7.x, poll on a 
+                // thread if we're on 8(+).x
+                if ( strategy == null )
+                {
+                    if ( version[0] == '7' )
+                        strategy = new SolutionLoadStrategy();
+                    else
+                        strategy = new SolutionLoadStrategy2005();
+                }
+
+                return strategy;
+            }
+
+            private static SolutionLoadStrategy strategy;
+        }
+
+
+        private class SolutionLoadStrategy2005 : SolutionLoadStrategy
+        {
+            public override void Load( Explorer outer )
+            {
+                this.outer = outer;
+
+                // create a thread to poll the solution explorer
+                System.Threading.Thread thread = new System.Threading.Thread(
+                    new System.Threading.ThreadStart(this.ThreadProc) );
+                thread.Start();
+            }
+
+            public override void CancelLoad()
+            {
+                this.done = true;
+            }
+
+
+            private void ThreadProc()
+            {
+                try
+                {
+                    this.done = false;
+
+                    // loop until all the items have been loaded in the solution explorer
+                    while( !done )
+                    {
+                        UIHierarchyItem item = outer.uiHierarchy.UIHierarchyItems.Item(1);
+
+                        Debug.WriteLine( String.Format("UIHierarchyItems: {0}, Projects.Count: {1}",
+                            item.UIHierarchyItems.Count, outer.dte.Solution.Projects.Count),
+                            "Ankh" );
+ 
+                        if ( item.UIHierarchyItems.Count == outer.DTE.Solution.Projects.Count )
+                        {
+                            // make sure this is invoked on the main GUI thread
+                            this.outer.Context.Client.SynchronizingObject.Invoke( 
+                                new LoadDelegate( base.Load ), 
+                                new object[]{ this.outer } );
+                            done = true;
+                        }
+                        System.Threading.Thread.Sleep( 250 );
+                    }
+                }
+                catch( Exception ex )
+                {
+                    Debug.WriteLine( ex );
+                }
+            }
+
+            private delegate void LoadDelegate( Explorer outer );
+            private Explorer outer;
+            private bool done;
+        }
+        #endregion
 
         #region class ItemHashCodeProvider
         private class ItemHashCodeProvider : IHashCodeProvider
