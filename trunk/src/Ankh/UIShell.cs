@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using SHDocVw;
 using System.IO;
+using Utils.Win32;
 
 namespace Ankh
 {
@@ -106,9 +107,15 @@ namespace Ankh
             this.commitDialog.ButtonsEnabled = true;
             this.commitDialog.Initialize();
 
+            // run a message pump while the commit dialog's open
+            Utils.Win32.Message msg;
             while ( this.commitDialogModal && this.commitDialogWindow.Visible ) 
             {
-                Application.DoEvents();
+                if ( Win32.GetMessage( out msg, IntPtr.Zero, 0, 0 ))
+                {
+                    Win32.TranslateMessage( out msg );
+                    Win32.DispatchMessage( out msg );                    
+                }
             }
 
             ctx.LogMessage = this.commitDialog.LogMessage;
@@ -197,7 +204,7 @@ namespace Ankh
 
             // the Start Page window is a web browser
             Window browserWindow = context.DTE.Windows.Item( 
-                Constants.vsWindowKindWebBrowser );
+                EnvDTE.Constants.vsWindowKindWebBrowser );
             WebBrowser browser = (WebBrowser)browserWindow.Object;
 
 //            if ( !reuse ) 

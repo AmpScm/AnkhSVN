@@ -132,5 +132,20 @@ namespace Utils.Win32
         public IntPtr		stdError;
     }
 
+    public struct Message
+    {
+        public IntPtr Hwnd;
+        public uint Msg;
+        public uint WParam;
+        public uint LParam;
+        public uint Time;
+
+        public struct PointType
+        {
+            int X, Y;
+        }
+        public PointType Point;
+    }   
+
 
 }
