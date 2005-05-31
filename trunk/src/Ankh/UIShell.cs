@@ -308,8 +308,11 @@ namespace Ankh
             
             this.repositoryExplorerWindow.Visible = true;
             this.repositoryExplorerWindow.Caption = "Repository Explorer";
-            this.repositoryExplorerWindow.Width = 200;
-            this.repositoryExplorerWindow.Height = 400;
+            if ( !this.repositoryExplorerWindow.AutoHides )
+            {
+                this.repositoryExplorerWindow.Width = 200;
+                this.repositoryExplorerWindow.Height = 400;
+            }
             
             AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl 
                 objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
