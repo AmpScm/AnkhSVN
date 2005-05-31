@@ -127,6 +127,35 @@
           Name="AboutBoxDetails" Type="string"
           Id="_8A2A6E99964F4519A46862AD81634E49" />
       </Component>
+      <Component Id="C_Ankh_RegVS2005" DiskId="1" Guid="6D3470BB-C30A-4df2-909A-422EAFBED0BE">
+        <Registry Root="HKMU" KeyPath="yes"
+          Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
+          Name="SatelliteDllPath" Type="string" Value="[TARGETDIR]" />
+        <Registry Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
+          Name="LoadBehavior" Type="integer" Value="1" />
+        <Registry Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
+          Name="CommandPreload" Type="integer" Value="1" />
+        <Registry Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
+          Name="AboutBoxIcon" Type="string" />
+        <Registry Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
+          Name="CommandLineSafe" Type="integer" Value="0" />
+        <Registry Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
+          Name="Description" Type="string" Value="Subversion addin for Visual Studio .NET" />
+        <Registry Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
+          Name="FriendlyName" Type="string" Value="AnkhSVN Addin" />
+        <Registry Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
+          Name="SatelliteDllName" Type="string" Value="BitmapDll.dll" />
+        <Registry Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
+          Name="AboutBoxDetails" Type="string" />
+      </Component>
       
 
       <Component Id="C_Ankh.dll" DiskId="1" Guid="02BBB6F8-8035-421f-83EC-7CA51E05B981">
