@@ -86,11 +86,16 @@ namespace Ankh
         /// Formats the text for output.
         /// </summary>
         /// <param name="action">action string.</param>
-        /// <returns>Formatet text string</returns>
+        /// <returns>Formated text string</returns>
         private string FormatMessage( string action )
         {
             int left = (LINELENGTH / 2) - (action.Length / 2);
             int right = LINELENGTH - ( left + action.Length );
+            
+            // Avoid those values to be negative
+            left = Math.Max( left, 3 );
+            right = Math.Max( right, 3 );
+
             return new string( '-', left ) + action + new string( '-', right );
         }
 
