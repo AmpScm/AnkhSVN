@@ -15,7 +15,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("UpdateItem", Text = "Update...", Tooltip = "Updates the local item",
          Bitmap = ResourceBitmaps.Update),
-    VSNetControl( "Item", Position = 2 ),
+    VSNetProjectItemControl( "", Position = 2 ),
     VSNetProjectNodeControl( "", Position = 2 ),
     VSNetControl( "Solution", Position = 2 ),
     VSNetFolderNodeControl( "", Position = 2)]

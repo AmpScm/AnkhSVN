@@ -20,6 +20,7 @@ namespace Ankh
         }
 
 
-        private static readonly string[] Bars = new string[]{ "Folder", "Web Reference Folder" };
+        private static readonly string[] Bars = new string[]{ "Folder", 
+            "Web Reference Folder", "Web Folder" };
     }
 }

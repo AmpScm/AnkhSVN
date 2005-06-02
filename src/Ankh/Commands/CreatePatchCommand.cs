@@ -11,7 +11,7 @@ namespace Ankh.Commands
     [VSNetCommand( "CreatePatch", Text="Create patch...", 
          Tooltip="Create a patch file.", 
          Bitmap = ResourceBitmaps.CreatePatch),
-    VSNetControl( "Item.Ankh", Position=1 ),
+    VSNetProjectItemControl( "Ankh", Position=1 ),
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1 ),
     VSNetFolderNodeControl( "Ankh", Position = 1)]

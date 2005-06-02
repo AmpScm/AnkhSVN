@@ -28,7 +28,14 @@ namespace Ankh
 
         public virtual object GetCommandBar( string name )
         {
-            return this.context.DTE.CommandBars[name];
+            try
+            {
+                return this.context.DTE.CommandBars[name];
+            }
+            catch( Exception )
+            {
+                return null;
+            }
         }
 
         public virtual object AddCommandBar( string name, vsCommandBarType type, object parent,
