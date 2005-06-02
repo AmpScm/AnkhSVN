@@ -446,7 +446,8 @@ namespace Ankh.Commands
 
         private static readonly string[] SpecialProjects = new String[]{
             "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}",
-            "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}" 
+            "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}",
+			"{E24C65DC-7377-472b-9ABA-BC803B73C61A}"
                                                                        };
 
         private IList paths;
