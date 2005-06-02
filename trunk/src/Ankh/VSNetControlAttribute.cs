@@ -51,8 +51,11 @@ namespace Ankh
         public virtual void AddControl( ICommand cmd, IContext context, string tag )
         {
             object bar = GetCommandBar( this.commandBar, context );
-            object cntrl = context.CommandBars.AddControl(cmd.Command, bar, this.position);
-            context.CommandBars.SetControlTag(cntrl, tag);
+            if ( bar != null )
+            {
+                object cntrl = context.CommandBars.AddControl(cmd.Command, bar, this.position);
+                context.CommandBars.SetControlTag(cntrl, tag);
+            }
             
         }
 
@@ -72,6 +75,9 @@ namespace Ankh
                 bar = context.RepositoryExplorer.CommandBar;
             else
                 bar = context.CommandBars.GetCommandBar( path[0] );
+
+            if ( bar == null )
+                return null;
 
             for( int i = 1; i < path.Length; i++ )
             {
@@ -115,10 +121,12 @@ namespace Ankh
 
                 object bar = 
                     VSNetControlAttribute.GetCommandBar(barName, context);
-                object cntrl = context.CommandBars.AddControl( cmd.Command, bar, 
-                    this.position );
-
-                context.CommandBars.SetControlTag( cntrl, tag );
+                if ( bar != null )
+                {
+                    object cntrl = context.CommandBars.AddControl( cmd.Command, bar, 
+                        this.position );
+                    context.CommandBars.SetControlTag( cntrl, tag );
+                }
             }
         }
 

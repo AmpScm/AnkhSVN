@@ -14,7 +14,7 @@ namespace Ankh.Commands
     [VSNetCommand( "ReverseMerge", Text="Revert to revision...", 
          Tooltip="Go back to a previous version of this item.", 
          Bitmap = ResourceBitmaps.Diff),
-    VSNetControl( "Item.Ankh", Position=2 ),
+    VSNetProjectItemControl( "Ankh", Position=2 ),
     VSNetProjectNodeControl( "Ankh", Position = 2 ),
     VSNetControl( "Solution.Ankh", Position = 2 ),
     VSNetFolderNodeControl( "Ankh", Position = 2)]

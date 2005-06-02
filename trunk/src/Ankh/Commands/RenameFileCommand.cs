@@ -16,7 +16,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("RenameFile", Text = "Rename item...", Tooltip = "Rename this item...", 
          Bitmap = ResourceBitmaps.Refresh),
-    VSNetControl( "Item.Ankh", Position = 1 ),
+    VSNetProjectItemControl( "Ankh", Position = 1 ),
     VSNetControl( "Folder.Ankh", Position = 1 )]
     public class RenameFileCommand : CommandBase
     {

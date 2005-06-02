@@ -16,7 +16,7 @@ namespace Ankh.Commands
     VSNetControl( "Solution.Ankh", Position=1 ),
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetFolderNodeControl( "Ankh", Position = 1),
-    VSNetControl( "Item.Ankh", Position=1 )]
+    VSNetProjectItemControl( "Ankh", Position=1 )]
     public class SwitchItemCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
