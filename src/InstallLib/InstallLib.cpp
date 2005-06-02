@@ -118,9 +118,11 @@ UINT __stdcall UnInstall ( MSIHANDLE hModule )
 
     RegRemove(VS70REGPATH);
     RegRemove(VS71REGPATH);
+    RegRemove(VS80REGPATH);
 
     RemoveCommands(lpszVS70PROGID);
     RemoveCommands(lpszVS71PROGID);
+    RemoveCommands(lpszVS80PROGID);
 
     return ERROR_SUCCESS;
 }
@@ -129,6 +131,7 @@ UINT __stdcall Install ( MSIHANDLE hModule )
 {
     AddAboutBoxDetails(VS70REGPATH);
     AddAboutBoxDetails(VS71REGPATH);
+    AddAboutBoxDetails(VS80REGPATH);
 
     return ERROR_SUCCESS;
 }
