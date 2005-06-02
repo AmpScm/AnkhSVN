@@ -143,7 +143,7 @@
             </fileset>
         </copy>
          
-        <regasm assembly="${build.dir}\Ankh.dll" typelib="${build.dir}\Ankh.tlb" codebase="true" exporttypelib="true" verbose="${verbose}"/>
+        <regasm assembly="${build.dir}\Ankh.dll" typelib="${build.dir}\Ankh.tlb" failonerror="false"  codebase="true" exporttypelib="true" verbose="${verbose}"/>
 
         <!-- and now to get rid of them again -->
         <delete>
