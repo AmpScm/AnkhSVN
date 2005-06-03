@@ -325,6 +325,7 @@
 
                 // if there are any VersionAttributes on the assembly, we'll use them
                 object[] attrs = ankh.GetCustomAttributes( typeof(Utils.VersionAttribute), false );
+               
                 if ( attrs.Length > 0 )
                 {
                     // we'll use the last one
@@ -346,10 +347,12 @@
                     ankhVersion, Environment.NewLine );
 
                 // get the library versions
-                object[] attributes = typeof(NSvn.Core.Client).Assembly.GetCustomAttributes(
-                    typeof(Utils.VersionAttribute), true );
+                object[] attributes = typeof(Ankh.Connect).Assembly.GetCustomAttributes(
+                    typeof(Utils.VersionAttribute), false );
                 foreach( Utils.VersionAttribute version in attributes )
+                {
                     text += version.ToString() + Environment.NewLine;           
+                }
                 
                 project.Log(Level.Info, "Detected AboutBoxText: {0}", text);
                 
