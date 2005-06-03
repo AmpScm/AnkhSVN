@@ -209,6 +209,8 @@ namespace Ankh.RepositoryExplorer
 
             foreach( string root in roots  ) 
             {                
+                if ( root == null )
+                    continue;
                 string[] components = root.Split( '|' );
 
                 // silently ignore invalid entries
