@@ -91,6 +91,8 @@ namespace Ankh
             this.commitDialog.LogMessageTemplate = ctx.LogMessageTemplate;
             if ( ctx.LogMessage != null )
                 this.commitDialog.LogMessage = ctx.LogMessage;
+            else
+                this.commitDialog.LogMessage = "";
 
             // we want to preserve the original state.
             bool originalVisibility = this.commitDialogWindow.Visible;
