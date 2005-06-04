@@ -207,6 +207,9 @@ namespace Ankh.RepositoryExplorer
                 return;
             }
 
+            if ( roots == null )
+                return;
+
             foreach( string root in roots  ) 
             {                
                 if ( root == null )
@@ -260,7 +263,8 @@ namespace Ankh.RepositoryExplorer
         private void SelectionChanged(object sender, EventArgs e)
         {
             this.selection[0] = this.repositoryExplorer.SelectedNode;
-            this.context.UIShell.SetRepositoryExplorerSelection( selection );
+            if(this.selection[0] != null)
+                this.context.UIShell.SetRepositoryExplorerSelection( selection );
         }
 
         #region class ListRunner
