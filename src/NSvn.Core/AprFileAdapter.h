@@ -21,7 +21,7 @@ namespace NSvn
             System::Threading::Thread* thread;
             System::IO::Stream* stream;
             apr_file_t __nogc* outfile;
-            static const BUFSIZE = 500;
+            static const int BUFSIZE = 500;
             System::String* errorMessage;
         };
     }
