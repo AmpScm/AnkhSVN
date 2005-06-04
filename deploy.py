@@ -11,7 +11,7 @@ MAJOR, MINOR, PATCH, LABEL = 0, 6, 0, "snapshot2"
 
 # The URL of the Subversion version
 SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.2.0/"
-SUBVERSION_VERSION="1.1.0"
+SUBVERSION_VERSION="1.2.0"
 subversion_dir=""
 
 # The URL of neon
@@ -29,13 +29,13 @@ OPENSSL_VERSION="0.9.7-d"
 openssl_target_dir = ""
 
 # ZLIB
-ZLIB = "http://www.gzip.org/zlib/contrib/zlib113-win32.zip"
-ZLIB_VERSION="1.1.3"
+ZLIB = "http://www.gzip.org/zlib/zlib122.zip"
+ZLIB_VERSION="1.2.2"
 zlib_target_dir = ""
 
 # Whether to build openssl as a static library
 # Must be an environment variable so that neon.mak picks up on it
-os.putenv( "OPENSSL_STATIC", "1" )
+os.environ[ "OPENSSL_STATIC" ] = "1"
 
 # The build directory
 BUILDDIR = "build"
@@ -62,7 +62,7 @@ USE_NANT = 1
 
 TMP = "T:\\"
 
-# setting CONFIG to the special value "_ALL_" will cause both Debug and Release to be built
+# setting CONFIG to the special value "__ALL__" will cause both Debug and Release to be built
 CONFIG = "Release"
 
 ErrorContinue = 0
@@ -222,7 +222,7 @@ def do_openssl():
         print "Already have OpenSSL. Not doing it"
         return
         
-    push_location    
+    push_location()    
     os.chdir( "subversion" )
     download_and_extract( OPENSSL, ".", "openssl" )
     
@@ -279,7 +279,7 @@ def do_berkeley():
     
     slnfile = os.path.join( os.path.join(bdb_build_dir, "build_win32" ), "Berkeley_DB.sln" )
     
-    if CONFIG == "_ALL_":
+    if CONFIG == "__ALL__":
         print "Building %s Debug" % slnfile
         run( "devenv %s /Build Debug /project build_all" % slnfile )
         
@@ -303,24 +303,24 @@ def do_berkeley():
     copy_glob( "%s\\build_win32\\*.h" % bdb_build_dir, 
         "%s\\include" % bdb_target_dir )
 
-    if CONFIG == "_ALL_":
-        print "Copying lib files to %s\lib" % bdb_target_dir
+    if CONFIG == "__ALL__":
+        print "Copying lib files to %s\\lib" % bdb_target_dir
         copy_glob( "%s\\build_win32\\Debug\\*.lib" % bdb_build_dir, 
-            "%s\lib" % bdb_target_dir )
+            "%s\\lib" % bdb_target_dir )
         copy_glob( "%s\\build_win32\\Release\\*.lib" %bdb_build_dir, 
-            "%s\lib" % bdb_target_dir )
+            "%s\\lib" % bdb_target_dir )
 
-        print "Copying DLL files to %s\bin" % bdb_target_dir
+        print "Copying DLL files to %s\\bin" % bdb_target_dir
         copy_glob( "%s\\build_win32\\Debug\\*.dll" % bdb_build_dir, 
-            "%s\bin" % bdb_target_dir )
+            "%s\\bin" % bdb_target_dir )
         copy_glob( "%s\\build_win32\\Release\\*.dll" %bdb_build_dir, 
-            "%s\bin" % bdb_target_dir )
+            "%s\\bin" % bdb_target_dir )
     else:
-        print "Copying lib files to %s\lib" % bdb_target_dir
+        print "Copying lib files to %s\\lib" % bdb_target_dir
         copy_glob( "%s\\build_win32\\%s\\*.lib" %(bdb_build_dir, CONFIG), 
             "%s\\lib" % bdb_target_dir )
 
-        print "Copying DLL files to %s\bin" % bdb_target_dir
+        print "Copying DLL files to %s\\bin" % bdb_target_dir
         copy_glob( "%s\\build_win32\\%s\\*.dll" %(bdb_build_dir, CONFIG),
             "%s\\bin" % bdb_target_dir )
 
@@ -355,8 +355,8 @@ def do_subversion():
     print "Creating directory 'subversion'"
     os.mkdir("subversion")
     
-    #do_openssl()
-    #do_zlib()
+    do_openssl()
+    do_zlib()
     
     checkout( SUBVERSION, "subversion" )
 
@@ -388,11 +388,11 @@ def do_subversion():
     run ( "patch -p0 --input ..\\src\NSvn.Core\\admindir.patch" )
     
     "Building Subversion"
-    if CONFIG == "_ALL_":
-        run ( "devenv subversion_vcnet.sln /Build Debug /project __ALL__" )
-        run ( "devenv subversion_vcnet.sln /Build Release /project __ALL__" )
+    if CONFIG == "__ALL__":
+        run ( "devenv subversion_vcnet.sln /Build Debug /project svn" )
+        run ( "devenv subversion_vcnet.sln /Build Release /project svn" )
     else:
-        run ( "devenv subversion_vcnet.sln /Build %s /project __ALL__" % CONFIG )
+        run ( "devenv subversion_vcnet.sln /Build %s /project svn" % CONFIG )
 
     pop_location()
 
@@ -432,6 +432,7 @@ def create_assemblyinfo():
     ankhversion="%s-%s" % (versiontuple, LABEL)
     
     print "Creating AssemblyInfo.cs"
+    print os.getcwd()
     
     open( "AssemblyInfo.cs", "w").write( """using System.Reflection;
 using System.Runtime.CompilerServices;
