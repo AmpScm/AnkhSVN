@@ -34,5 +34,7 @@ namespace NSvn
             bool isPath, Pool& pool );
 
         String* AprArrayToStringArray( apr_array_header_t* aprArray ) [];
+
+        int AprArrayToIntArray( apr_array_header_t* aprArray ) __gc [];
     }
 }

@@ -63,6 +63,31 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "File not updated", "Moo", s );
         }
 
+        [Test]
+        public void TestUpdateMultipleFiles()
+        {
+            using( StreamWriter w = new StreamWriter( Path.Combine( this.wc2, "Form.cs" ) ) )
+                w.Write( "Moo" );
+            using( StreamWriter w = new StreamWriter( Path.Combine( this.wc2, "AssemblyInfo.cs" ) ) )
+                w.Write( "Moo" );
+            this.RunCommand( "svn", "ci -m \"\" " + this.wc2 );
+
+            int[] revs = this.Client.Update( new string[]{ 
+                                                             Path.Combine( this.WcPath, "Form.cs" ),
+                                                             Path.Combine( this.WcPath, "AssemblyInfo.cs" )
+                                                         }, Revision.Head, false, true );
+            Assert.AreEqual( 2, revs.Length );
+
+            string s;
+            using( StreamReader r = new StreamReader( Path.Combine( this.WcPath, "Form.cs" ) ) )
+                s = r.ReadToEnd();
+            Assertion.AssertEquals( "File not updated", "Moo", s );
+
+            using( StreamReader r = new StreamReader( Path.Combine( this.WcPath, "AssemblyInfo.cs" ) ) )
+                s = r.ReadToEnd();
+            Assertion.AssertEquals( "File not updated", "Moo", s );
+        }
+
         private string wc2;
     }
 }
