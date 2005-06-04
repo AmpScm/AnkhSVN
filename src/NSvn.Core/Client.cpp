@@ -277,6 +277,23 @@ int NSvn::Core::Client::Update( String* path, Revision* revision, bool recurse )
     return rev;
 }
 
+Int32 NSvn::Core::Client::Update(String* paths[], Revision* revision, 
+                               bool recurse, bool ignoreExternals ) __gc []
+{
+    Pool pool;
+    apr_array_header_t* truePaths = StringArrayToAprArray( paths, true, pool );
+    apr_array_header_t* revnums;
+    HandleError( svn_client_update2( &revnums, truePaths, 
+        revision->ToSvnOptRevision(pool), recurse, ignoreExternals, 
+        this->context->ToSvnContext( pool ), pool ) );
+
+    if ( revnums != 0 )
+        return AprArrayToIntArray( revnums );
+    else
+        return 0;
+
+}
+
 // implementation of Client::Commit
 NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonRecursive )
 {

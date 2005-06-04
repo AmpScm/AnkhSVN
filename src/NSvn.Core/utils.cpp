@@ -72,6 +72,17 @@ String* NSvn::Core::AprArrayToStringArray( apr_array_header_t* aprArray ) []
     return array;
 }
 
+int NSvn::Core::AprArrayToIntArray( apr_array_header_t* aprArray ) __gc []
+{
+    Int32 array[] = __gc new Int32[ aprArray->nelts ];
+    for( int i = 0; i < aprArray->nelts; i++ )
+    {
+        array[i] = ((int*)aprArray->elts)[i];
+    }
+
+    return array;
+}
+
 // Canonicalizes a path to the correct format expected by SVN
 const char* NSvn::Core::CanonicalizePath( String* path, Pool& pool )
 {

@@ -86,6 +86,18 @@ namespace NSvn
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
             int Update(String* path, Revision* revision, bool recurse );
 
+            ///<summary>Update working tree path to revision.</summary>
+            ///<param name="paths">An array of paths to be updated.</param>
+            ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
+            ///                      for more information.</param>
+            ///<param name="recurse">If recursive is set, assuming path is a directory 
+            ///                        all of its contents will be scheduled for addition as well.</param>            
+            ///<param name="ignoreExternals">If ignoreExternals is set, any externals will 
+            /// not be processed.</param>                        
+            /// <returns>The numbers of the revisions affected</returns>
+            ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
+            Int32 Update(String* paths[], Revision* revision, bool recurse, bool ignoreExternals ) __gc [];
+
             ///<summary>Switch working tree path to url at revision, authenticating with the 
             ///         authentication baton </summary>
             ///<param name="path">Path to the file/directory.</param>
