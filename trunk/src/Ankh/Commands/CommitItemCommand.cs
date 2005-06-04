@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Threading;
 using System.IO;
+using Utils;
 
 using NSvn.Core;
 using EnvDTE;
@@ -130,7 +131,7 @@ namespace Ankh.Commands
             // freshly added items have no uuid
             if ( uuid == null )
             {
-                string parentDir = Path.GetDirectoryName( item.Path );
+                string parentDir = PathUtils.GetParent( item.Path );
                 if ( Directory.Exists( parentDir ) )
                 {
                     SvnItem parentItem = context.StatusCache[parentDir];
