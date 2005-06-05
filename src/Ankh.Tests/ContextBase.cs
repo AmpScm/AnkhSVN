@@ -448,10 +448,9 @@ namespace Ankh.Tests
                 return false;
             }
 
-            public virtual CommitContext ShowCommitDialogModal( CommitContext ctx )
+            public virtual void ShowCommitDialogModal( CommitContext ctx )
             {
                 // TODO: Add implementation
-                return null;
             }
 
             public virtual void ToggleCommitDialog( bool show )
@@ -505,6 +504,8 @@ namespace Ankh.Tests
             {
                 return null;
             }
+
+			public event CommitDialogEventHandler LogEntered;
 
             private IContext context;
 
