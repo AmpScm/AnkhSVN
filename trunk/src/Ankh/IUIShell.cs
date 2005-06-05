@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace Ankh
 {
-	/// <summary>
-	/// Represents the UI of the addin.
-	/// </summary>
-	public interface IUIShell
-	{
+    /// <summary>
+    /// Represents the UI of the addin.
+    /// </summary>
+    public interface IUIShell
+    {
        
         /// <summary>
         /// The repository explorer UI.
@@ -50,8 +50,7 @@ namespace Ankh
         /// Displays the commit dialog modally.
         /// </summary>
         /// <param name="ctx"></param>
-        /// <returns></returns>
-        CommitContext ShowCommitDialogModal( CommitContext ctx );
+        void ShowCommitDialogModal( CommitContext ctx );
 
         /// <summary>
         /// Shows/hides the commit dialog
@@ -117,5 +116,10 @@ namespace Ankh
         /// <param name="info"></param>
         /// <returns></returns>
         LogDialogInfo ShowLogDialog( LogDialogInfo info );
-	}
+
+        /// <summary>
+        /// Occurs after the log message has been entered.
+        /// </summary>
+        event CommitDialogEventHandler LogEntered;
+    }
 }

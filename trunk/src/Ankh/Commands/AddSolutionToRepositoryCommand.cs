@@ -54,15 +54,15 @@ namespace Ankh.Commands
 
         public override void Execute( IContext context, string parameters)
         {
+            this.context = context;
             this.SaveAllDirtyDocuments( context );
 
-            string url;
             using( AddSolutionDialog dlg = new AddSolutionDialog() )
             {
                 if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
                     return;
 
-                url = dlg.BaseUrl;
+                this.url = dlg.BaseUrl;
 
                 // do we need to create a new repository directory?
                 if ( dlg.CreateSubDirectory )
@@ -70,8 +70,8 @@ namespace Ankh.Commands
                     context.StartOperation( "Creating repository directory" );
                     try
                     {
-                        url = UriUtils.Combine( url, dlg.SubDirectoryName );
-                        MakeDirWorker makeDirWorker = new MakeDirWorker( url, 
+                        this.url = UriUtils.Combine( this.url, dlg.SubDirectoryName );
+                        MakeDirWorker makeDirWorker = new MakeDirWorker(this.url, 
                             dlg.LogMessage, context );
                         context.UIShell.RunWithProgressDialog( makeDirWorker, 
                             "Creating directory" ); 
@@ -85,13 +85,12 @@ namespace Ankh.Commands
 
             // now check out the repository directory into the solution dir
             context.StartOperation( "Checking out repository directory" );
-            string solutionDir = Path.GetDirectoryName( 
-                context.DTE.Solution.FullName );
+            string solutionDir = Path.GetDirectoryName( context.DTE.Solution.FullName );
             try
             {
                 // check out the repository directory specified               
                 CheckoutRunner checkoutRunner = new CheckoutRunner(  
-                    solutionDir, Revision.Head, url );
+                    solutionDir, Revision.Head, this.url );
                 context.UIShell.RunWithProgressDialog( checkoutRunner, "Checking out" );
             }
             finally
@@ -126,55 +125,65 @@ namespace Ankh.Commands
                 {
                     context.EndOperation();
                 }
-                throw;                
+                throw;
             }
             finally
             {
                 context.EndOperation();
             }
 
+            context.Client.LogMessageCompleted += new LogMessageCompletedEventHandler(Client_LogMessageCompleted);
+            context.Client.ShowLogMessageDialog( this.paths, false );
+        }
+
+        private void Client_LogMessageCompleted(object sender, LogMessageEventArgs e)
+        {
+            ((SvnClient)sender).LogMessageCompleted -= new LogMessageCompletedEventHandler(Client_LogMessageCompleted);
             // now commit the added files
-            this.paths = context.Client.ShowLogMessageDialog( this.paths, false );
+            this.paths = e.CommitItems;
+            string solutionDir = Path.GetDirectoryName(
+                this.context.DTE.Solution.FullName );
+
             if ( this.paths == null )
             {
                 // oops - after all this work, the user cancelled
-                context.StartOperation( "Aborted - reverting" );
+                this.context.StartOperation( "Aborted - reverting" );
                 try
                 {
-                    context.Client.Revert( new string[]{ solutionDir }, true );
+                    this.context.Client.Revert( new string[]{ solutionDir }, true );
                     PathUtils.RecursiveDelete( 
                         Path.Combine(solutionDir, Client.AdminDirectoryName) );
                 }
                 finally
                 {
-                    context.EndOperation();
+                    this.context.EndOperation();
                 }
             }
             else
             {  
                 // go ahead with the commit
-                context.StartOperation( "Committing added files" );
+                this.context.StartOperation( "Committing added files" );
                 try
                 {
-                    bool completed = context.UIShell.RunWithProgressDialog( 
+                    bool completed = this.context.UIShell.RunWithProgressDialog( 
                         new SimpleProgressWorker( 
                         new SimpleProgressWorkerCallback(this.DoCommit)), "Committing" ); 
 
                     if ( completed )
-                        context.Client.CommitCompleted();
+                        this.context.Client.CommitCompleted();
                     else
                         return;
                 }
                 finally
                 {
-                    context.EndOperation();
+                    this.context.EndOperation();
                 }
                         
                 // we want ankh to get enabled right away
-                context.DTE.ExecuteCommand( "Ankh.ToggleAnkh", "" );
+                this.context.DTE.ExecuteCommand( "Ankh.ToggleAnkh", "" );
 
                 // Make sure the URL typed gets remembered.
-                RegistryUtils.CreateNewTypedUrl( url );
+                RegistryUtils.CreateNewTypedUrl( this.url );
                     
             }
         }
@@ -452,5 +461,7 @@ namespace Ankh.Commands
 
         private IList paths;
         private readonly Type vcFilterType;
+        private IContext context;
+        private string url;
     }
 }
