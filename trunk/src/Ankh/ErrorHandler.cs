@@ -16,6 +16,11 @@ namespace Ankh
     /// </summary>
     public class ErrorHandler : IErrorHandler
     {
+        public ErrorHandler( string dteVersion )
+        {
+            this.dteVersion = dteVersion;
+        }
+
         /// <summary>
         /// Handles an exception.
         /// </summary>
@@ -40,7 +45,11 @@ namespace Ankh
         /// </summary>
         public void SendReport()
         {
-            Utils.ErrorMessage.SendByWeb( ErrorReportUrl, null, typeof(Connect).Assembly );
+            System.Collections.Specialized.StringDictionary dict = new
+                System.Collections.Specialized.StringDictionary();
+
+            Utils.ErrorMessage.SendByWeb( ErrorReportUrl, null, typeof(Connect).Assembly,
+               dict );
         }
 
         public void Write( string message, Exception ex, TextWriter writer )
@@ -130,6 +139,10 @@ namespace Ankh
         {
             string stackTrace = GetNestedStackTraces( ex );
             string message = GetNestedMessages( ex );
+            System.Collections.Specialized.StringDictionary additionalInfo = 
+                new System.Collections.Specialized.StringDictionary();
+            additionalInfo["dte"] = this.dteVersion;
+
             using( ErrorDialog dlg = new ErrorDialog() )
             {
                 dlg.ErrorMessage = message;
@@ -139,7 +152,7 @@ namespace Ankh
                 if ( dlg.ShowDialog() == DialogResult.Retry )
                 {
                     Utils.ErrorMessage.SendByWeb( ErrorReportUrl,
-                        ex, typeof(Connect).Assembly );
+                        ex, typeof(Connect).Assembly, additionalInfo );
                 }
             }
         }
@@ -160,6 +173,7 @@ namespace Ankh
                 return ex.Message + NL + NL + GetNestedMessages( ex.InnerException );
         }
 
+        private string dteVersion;
         private static readonly string NL = Environment.NewLine;
         private const int LockedFileErrorCode = 720032;
         private const string ErrorReportUrl = "http://ankhsvn.com/error/report.aspx";
