@@ -4,6 +4,10 @@ using System.Diagnostics;
 using System.Web;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Collections.Specialized;
+using System.Collections;
+using System.Text;
+
 namespace Utils
 {
     /// <summary>
@@ -70,14 +74,17 @@ namespace Utils
         /// <param name="ex"></param>
         /// <param name="assembly">The assembly where the error originated. This will 
         /// be used to extract version information.</param>
-        public static void SendByWeb( string url, Exception ex, Assembly assembly )
+        public static void SendByWeb( string url, Exception ex, Assembly assembly,
+            StringDictionary additionalInfo )
         {
             try
             {
                 string msg = GetMessage( ex );
-                string command = string.Format( "{0}?message={1}&version={2}", 
+                string attributes = GetAttributes( additionalInfo );
+                string command = string.Format( "{0}?message={1}&version={2}&{3}", 
                     url, HttpUtility.UrlEncode( msg ), 
-                    HttpUtility.UrlEncode( assembly.GetName().Version.ToString() ) );
+                    HttpUtility.UrlEncode( assembly.GetName().Version.ToString() ),
+                    attributes );
 
                 Process p = new Process();
                 p.StartInfo.FileName = command;
@@ -126,9 +133,21 @@ namespace Utils
                 message,
                 "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error ) == DialogResult.Yes )
             {
-                SendByWeb( url, ex, assembly );
+                SendByWeb( url, ex, assembly, new StringDictionary() );
             }
 
+        }
+
+        private static string GetAttributes( StringDictionary additionalInfo )
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach( DictionaryEntry de in additionalInfo )
+            {
+                builder.AppendFormat( "{0}={1}&", HttpUtility.UrlEncode( (string)de.Key ), 
+                    HttpUtility.UrlEncode( (string)de.Value ) );
+            }
+
+            return builder.ToString();
         }
     }
 }

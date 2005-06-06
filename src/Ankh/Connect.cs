@@ -80,7 +80,7 @@ namespace Ankh
                 Debug.AutoFlush = true;
             }
 #endif
-            ErrorHandler handler = new ErrorHandler();
+            ErrorHandler handler = new ErrorHandler( ((_DTE)application).Version );
             try
             {
                 
