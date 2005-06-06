@@ -6,19 +6,20 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using SHDocVw;
 using System.IO;
+using Utils.Win32;
 
 namespace Ankh
 {
-    /// <summary>
-    /// Summary description for UIShell.
-    /// </summary>
-    public class UIShell : IUIShell
-    {
-        public UIShell()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
+	/// <summary>
+	/// Summary description for UIShell.
+	/// </summary>
+	public class UIShell : IUIShell
+	{
+		public UIShell()
+		{
+			//
+			// TODO: Add constructor logic here
+			//
         }
         #region IUIShell Members
         public RepositoryExplorerControl RepositoryExplorer
@@ -79,13 +80,11 @@ namespace Ankh
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public void ShowCommitDialogModal( CommitContext ctx )
+        public CommitContext ShowCommitDialogModal( CommitContext ctx )
         {
             if ( this.commitDialogWindow == null ) 
                 this.CreateCommitDialog();
             Debug.Assert( this.commitDialog != null );
-
-            this.commitContext = ctx;
 
             this.commitDialog.CommitItems = ctx.CommitItems;
             this.commitDialog.UrlPaths = ctx.UrlPaths;
@@ -96,7 +95,7 @@ namespace Ankh
                 this.commitDialog.LogMessage = "";
 
             // we want to preserve the original state.
-            this.originalVisibility = this.commitDialogWindow.Visible;
+            bool originalVisibility = this.commitDialogWindow.Visible;
 
             this.commitDialogWindow.Visible = true;
             this.commitDialogModal = true;
@@ -109,6 +108,33 @@ namespace Ankh
             // we need the buttons enabled now, since it's pseudo-modal.
             this.commitDialog.ButtonsEnabled = true;
             this.commitDialog.Initialize();
+
+            // run a message pump while the commit dialog's open
+            Utils.Win32.Message msg;
+            while ( this.commitDialogModal && this.commitDialogWindow.Visible ) 
+            {
+                if ( Win32.GetMessage( out msg, IntPtr.Zero, 0, 0 ))
+                {
+                    Win32.TranslateMessage( out msg );
+                    Win32.DispatchMessage( out msg );                    
+                }
+            }
+
+            ctx.LogMessage = this.commitDialog.LogMessage;
+            ctx.RawLogMessage = this.commitDialog.RawLogMessage;
+            ctx.CommitItems = this.commitDialog.CommitItems;
+
+            if ( this.commitDialog.CommitDialogResult != CommitDialogResult.Cancel )
+            {
+                ctx.Cancelled = false;
+            }
+
+            // restore the pre-modal state.
+            this.commitDialog.ButtonsEnabled = false;
+            this.commitDialogWindow.Visible = originalVisibility;
+            this.commitDialog.CommitItems = new object[]{};
+
+            return ctx;
         }
 
         public void ToggleCommitDialog( bool show )
@@ -329,25 +355,6 @@ namespace Ankh
             this.commitDialog.Proceed -= new EventHandler( this.ProceedCommit );
             this.commitDialogModal = false;
             this.commitDialogWindow.Visible = false;
-
-            CommitContext ctx = this.commitContext;
-
-            ctx.LogMessage = this.commitDialog.LogMessage;
-            ctx.RawLogMessage = this.commitDialog.RawLogMessage;
-            ctx.CommitItems = this.commitDialog.CommitItems;
-
-            if ( this.commitDialog.CommitDialogResult != CommitDialogResult.Cancel )
-            {
-                ctx.Cancelled = false;
-            }
-
-            // restore the pre-modal state.
-            this.commitDialog.ButtonsEnabled = false;
-            this.commitDialogWindow.Visible = originalVisibility;
-            this.commitDialog.CommitItems = new object[]{};
-
-            if(this.logEntered != null)
-                this.logEntered(this, new CommitDialogEventArgs(ctx));
         }
 
         
@@ -389,12 +396,6 @@ namespace Ankh
             }
         }
 
-        public event CommitDialogEventHandler LogEntered
-        {
-            add { this.logEntered += value; }
-            remove { this.logEntered -= value; }
-        }
-
 
         private WebBrowser newBrowser;
         private void NewWindow2(ref object ppDisp, ref bool Cancel)
@@ -408,29 +409,12 @@ namespace Ankh
         private Window commitDialogWindow;
         private IContext context;
         private bool commitDialogModal;
-        private bool originalVisibility;
-        private CommitContext commitContext;
-        private event CommitDialogEventHandler logEntered;
         
         public const string REPOSEXPLORERGUID = 
             "{1C5A739C-448C-4401-9076-5990300B0E1B}";
         private const string CommitDialogGuid = 
             "{08BD45A4-7716-49b0-BB41-CFEBCD098728}";
+
+        
     }
-
-    public delegate void CommitDialogEventHandler(object sender, CommitDialogEventArgs e);
-
-    public class CommitDialogEventArgs : EventArgs
-    {
-        public CommitDialogEventArgs(CommitContext context)
-        {
-            this.context = context;
-        }
-        public CommitContext CommitContext
-        {
-            get { return this.context; }
-        }
-        private CommitContext context;
-    }
-
 }

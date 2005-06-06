@@ -192,7 +192,7 @@ namespace Ankh.Tests
 
         private class MyUIShellImpl : ContextBase.UIShellImpl
         {
-            public override void ShowCommitDialogModal(CommitContext ctx )
+            public override CommitContext ShowCommitDialogModal(CommitContext ctx)
             {
                 ctx.LogMessage = this.LogMessage;
                 ctx.Cancelled = this.Cancelled;
@@ -200,7 +200,7 @@ namespace Ankh.Tests
 
                 this.ShowCommitDialogModalCalled = true;
 
-                //return ctx;
+                return ctx;
             }
 
             public bool ShowCommitDialogModalCalled = false;
