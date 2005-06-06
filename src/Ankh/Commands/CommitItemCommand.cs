@@ -32,26 +32,15 @@ namespace Ankh.Commands
             else
                 return Disabled;
         }
-
         public override void Execute(Ankh.IContext context, string parameters)
         {
-            this.context = context;
-
             // make sure all files are saved
             this.SaveAllDirtyDocuments( context );
 
             IList resources = context.SolutionExplorer.GetSelectionResources( true, 
                 new ResourceFilterCallback(CommandBase.ModifiedFilter) );
 
-            context.Client.LogMessageCompleted += new LogMessageCompletedEventHandler(Client_LogMessageCompleted);
-            context.Client.ShowLogMessageDialog( resources, false );
-        }
-
-        private void Client_LogMessageCompleted(object sender, LogMessageEventArgs e)
-        {
-            ((SvnClient)sender).LogMessageCompleted -=  new LogMessageCompletedEventHandler(Client_LogMessageCompleted);
-            IContext context = this.context;
-            IList resources = e.CommitItems;
+            resources = context.Client.ShowLogMessageDialog( resources, false );
 
             // did the user cancel?
             if ( resources == null ) 
@@ -163,7 +152,6 @@ namespace Ankh.Commands
 
         private string[] paths;
         private CommitInfo commitInfo;
-        private IContext context;
 
         private static readonly string DefaultUuid = Guid.NewGuid().ToString();
         

@@ -44,7 +44,7 @@ namespace Ankh
         /// </summary>
         /// <param name="commitItems"></param>
         /// <returns></returns>
-        public void ShowLogMessageDialog(IList items, bool urlPaths)
+        public IList ShowLogMessageDialog(IList items, bool urlPaths)
         {
             string templateText = this.GetTemplate();
             LogMessageTemplate template = new LogMessageTemplate( templateText );
@@ -67,28 +67,17 @@ namespace Ankh
             // we must give it diffs if it wants em
             ctx.DiffWanted += new DiffWantedDelegate( this.DiffWanted );
 
-            this.ankhContext.UIShell.LogEntered += new CommitDialogEventHandler(CommitDialog_LogEntered);
-            this.ankhContext.UIShell.ShowCommitDialogModal( ctx );
-        }
-
-        private void CommitDialog_LogEntered(object sender, CommitDialogEventArgs e)
-        {
-            ((IUIShell)sender).LogEntered -= new CommitDialogEventHandler(CommitDialog_LogEntered);
-            IList commitItems = null;
-
-            CommitContext ctx = e.CommitContext;
+            ctx = this.ankhContext.UIShell.ShowCommitDialogModal( ctx );
             if ( ctx.Cancelled )
             {
                 this.logMessage = ctx.RawLogMessage;
+                return null;                
             }
             else
             {
                 this.logMessage = ctx.LogMessage;
-                commitItems = ctx.CommitItems;                
+                return ctx.CommitItems;                
             }
-
-            if(this.logMessageCompleted != null)
-                this.logMessageCompleted(this, new LogMessageEventArgs(commitItems));
         }
 
         /// <summary>
@@ -100,7 +89,7 @@ namespace Ankh
             this.ankhContext.UIShell.ResetCommitDialog();
         }
         
-        protected override void OnLogMessage(NSvn.Core.LogMessageEventArgs args)
+        protected override void OnLogMessage(LogMessageEventArgs args)
         {
             base.OnLogMessage( args );
             if ( args.Message == null )
@@ -337,46 +326,11 @@ namespace Ankh
             actionStatus[NotifyAction.CommitReplaced] =         "Replaced";
             actionStatus[NotifyAction.CommitPostfixTxDelta] =   null;
         }
-
-        /// <summary>
-        /// Fires when the log message has been entered
-        /// </summary>
-        public event LogMessageCompletedEventHandler LogMessageCompleted
-        {
-            add { this.logMessageCompleted += value; }
-            remove { this.logMessageCompleted -= value; }
-        }
         
         static readonly Hashtable actionStatus = new Hashtable();
         private IContext ankhContext;
         private static IDictionary map = new Hashtable();
         private string logMessage = null;
         private System.ComponentModel.ISynchronizeInvoke invoker;
-        private event LogMessageCompletedEventHandler logMessageCompleted;
-    }
-
-    public delegate void LogMessageCompletedEventHandler(object sender, LogMessageEventArgs e);
-
-    public class LogMessageEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogMessageEventArgs"/> 
-        /// class, with specified commitItems.
-        /// </summary>
-        /// <param name="commitItems">An <see cref="IList"/> containing the items to be committed</param>
-        public LogMessageEventArgs(IList commitItems)
-        {
-            this.commitItems = commitItems;
-        }
-
-        /// <summary>
-        /// Gets an <see cref="IList"/> containing the items to be committed
-        /// </summary>
-        public IList CommitItems
-        {
-            get { return this.commitItems; }
-        }
-
-        private IList commitItems;
     }
 }

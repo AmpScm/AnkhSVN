@@ -211,34 +211,29 @@ namespace Ankh.UI
                 this.MakeDirAfterEdit );
             this.treeView.LabelEdit = false;
 
+            bool cancel = true;
             try
             {
                 // did the user actually enter a name?
                 if ( this.newDirHandler != null && e.Label != null )
                 {  
-                    this.newDirHandler.DirectoryCreated += new DirectoryCreatedEventHandler(newDirHandler_DirectoryCreated);
                     // create the new dir and refresh the parent dir.
-                    this.newDirHandler.MakeDir(
-                        (IRepositoryTreeNode)e.Node.Parent.Tag, e.Node, e.Label );
-                    this.RefreshNode( (IRepositoryTreeNode)e.Node.Parent.Tag );
+                    cancel = !this.newDirHandler.MakeDir(
+                        (IRepositoryTreeNode)e.Node.Parent.Tag, e.Label );
+                    if ( !cancel )
+                        this.RefreshNode( (IRepositoryTreeNode)e.Node.Parent.Tag );
                 }
+                // if the user cancelled, just get rid of the new node.
+                if ( cancel ) 
+                    e.Node.Remove();
             }
             finally
             {
                 this.newDirHandler = null;
+                e.CancelEdit = cancel;
             }
         }
 
-        private void newDirHandler_DirectoryCreated(object sender, DirectoryCreatedEventArgs e)
-        {
-            if(!e.SuccessfullyCreated)
-            {
-                // remove the newly created directory, if commit didn't succeed
-                TreeNode parent = e.Node.Parent;
-                e.Node.Remove();
-                this.RefreshNode( (IRepositoryTreeNode)parent.Tag );
-            }
-        }
 
 
         /// <summary>
@@ -525,32 +520,6 @@ namespace Ankh.UI
     /// </summary>
     public interface INewDirectoryHandler
     {
-        void MakeDir( IRepositoryTreeNode parent, TreeNode node, string dirname );
-        event DirectoryCreatedEventHandler DirectoryCreated;
+        bool MakeDir( IRepositoryTreeNode parent, string dirname );
     }
-
-    public delegate void DirectoryCreatedEventHandler(object sender, DirectoryCreatedEventArgs e);
-
-    public class DirectoryCreatedEventArgs : EventArgs
-    {
-        public DirectoryCreatedEventArgs(bool success, TreeNode node)
-        {
-            this.success = success;
-            this.node = node;
-    }
-
-        public bool SuccessfullyCreated
-        {
-            get { return this.success; }
-        }
-
-        public TreeNode Node
-        {
-            get { return this.node; }
-        }
-
-        private bool success;
-        private TreeNode node;
-    }
-
 }
