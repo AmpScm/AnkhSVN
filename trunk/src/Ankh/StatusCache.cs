@@ -38,13 +38,23 @@ namespace Ankh
         {
             lock(this)
             {
-                if ( !SvnUtils.IsWorkingCopyPath(dir) )
-                    return;
-
                 Debug.WriteLine( 
                     String.Format("Generating {0} status cache for {1}",
-                        recurse ? "recursive" : "nonrecursive", dir), 
+                    recurse ? "recursive" : "nonrecursive", dir), 
                     "Ankh" );
+                if ( !SvnUtils.IsWorkingCopyPath(dir) )
+                {
+                    foreach (string file in Directory.GetFiles( dir ) )
+                    {
+                        string normPath = PathUtils.NormalizePath(file);
+                        SvnItem existingItem = (SvnItem)this.table[normPath];
+                        if ( existingItem != null )
+                            existingItem.Refresh( SvnItem.Unversionable.Status );
+                        else
+                            this.table[normPath] = SvnItem.Unversionable;
+                    }
+                    return;
+                }
 
                 this.currentPath = dir;
                 int youngest;
@@ -70,7 +80,9 @@ namespace Ankh
                     string directory = normPath;
                     if ( File.Exists( directory ) )
                         directory = Path.GetDirectoryName( directory );
-                    this.Status( directory, false );
+
+                    if ( Directory.Exists( directory ) )
+                        this.Status( directory, false );
 
                     Status status = this.client.SingleStatus( normPath );
                     this.table[normPath] = item = new SvnItem( path, status );
