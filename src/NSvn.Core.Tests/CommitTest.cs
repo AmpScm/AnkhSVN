@@ -37,6 +37,27 @@ namespace NSvn.Core.Tests
         }
 
         /// <summary>
+        /// Locks and modifies a file in the working copy and commits the containing directory keeping, and not keeping locks
+        /// </summary>
+        [Test]
+        public void TestBasicCommitKeepingLocks()
+        {
+            string filepath = Path.Combine( this.WcPath, "Form.cs" );
+            using ( StreamWriter w = new StreamWriter( filepath ) )
+                w.Write( "Moo" );
+
+            this.RunCommand( "svn", "lock " + filepath );
+
+            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false, true );
+            char locked = this.RunCommand( "svn", "status Form.cs" )[5];
+            Assertion.Assert( "File was unlocked while lock should be kept", locked == 'M' );
+            
+            info = this.Client.Commit( new string[]{ this.WcPath }, false, false );
+            locked = this.RunCommand( "svn", "status Form.cs" )[5];
+            Assertion.Assert( "File was unlocked while lock should be kept", locked == ' ' );
+        }
+
+        /// <summary>
         /// Commits a single file
         /// </summary>
         [Test]

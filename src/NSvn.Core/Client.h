@@ -161,7 +161,18 @@ namespace NSvn
             ///                           should be ignored.</param>
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
+            [System::Obsolete("Deprecated in Subversion 1.2 Use Commit(string[], bool, bool) instead")]
             CommitInfo* Commit(String __gc* targets[], bool nonRecursive);
+
+            ///<summary>Commit file/directory into repository, authenticating with the 
+            ///         authentication baton.</summary>
+            ///<param name="targets">Array of paths to commit.</param>
+            ///<param name="recurse">Indicates that subdirectories of directory targets 
+            ///                           should be descended.</param>
+            ///<param name="keepLocks">Locked items are unlocked, unless set to true</params>
+            ///<returns>Commit info object containing information about revision, date and author. 
+            ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
+            CommitInfo* Commit(String __gc* targets[], bool recurse, bool keepLocks );
 
             /// TODO: doc comments
             Status* SingleStatus( String* path );
