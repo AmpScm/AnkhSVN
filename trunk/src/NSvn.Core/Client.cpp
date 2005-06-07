@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 
+
 #include "Client.h"
 
 #include "StringHelper.h"
@@ -229,6 +230,16 @@ void NSvn::Core::Client::Lock(String __gc* targets[], String __gc* comment, bool
 
     StringHelper msg(comment);
     HandleError( svn_client_lock( aprArrayTargets, msg.CopyToPoolUtf8(pool), stealLock,
+        this->context->ToSvnContext( pool ), pool ) );
+}
+
+// implemtation of Client::Unlock
+void NSvn::Core::Client::Unlock( String __gc* targets[], bool breakLock )
+{
+    Pool pool;
+    apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
+
+    HandleError( svn_client_unlock( aprArrayTargets, breakLock, 
         this->context->ToSvnContext( pool ), pool ) );
 }
 
