@@ -27,6 +27,7 @@ namespace error
         //protected System.Web.UI.WebControls.TextBox versionBox;
         protected System.Web.UI.WebControls.Image Image1;
         protected System.Web.UI.WebControls.TextBox versionBox;
+        protected System.Web.UI.WebControls.TextBox dteVersionBox;
         protected System.Web.UI.WebControls.Label Label1;
     
 		private void Page_Load(object sender, System.EventArgs e)
@@ -64,6 +65,9 @@ namespace error
 
             if ( this.Request["version"] != null )
                 this.versionBox.Text = this.Request["version"];
+            
+            if ( this.Request["dte"] != null )
+                this.dteVersionBox.Text = this.Request["dte"];
         }
 
         private void sendButton_Click(object sender, System.EventArgs e)
@@ -78,7 +82,8 @@ namespace error
             msg.Body = this.errorMessageBox.Text + 
                 Environment.NewLine + Environment.NewLine + 
                 this.commentsBox.Text + Environment.NewLine + Environment.NewLine + 
-                "Version: " + this.versionBox.Text;
+                "Version: " + this.versionBox.Text + Environment.NewLine + 
+                "DTE Version: " + this.dteVersionBox.Text;
 
             SmtpMail.SmtpServer = ConfigurationSettings.AppSettings["smtpserver"];
             SmtpMail.Send( msg );
