@@ -238,6 +238,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LockTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "LogTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

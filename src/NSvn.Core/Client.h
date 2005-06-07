@@ -196,6 +196,16 @@ namespace NSvn
                 String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll,
                 bool update,  bool noIgnore );
 
+            ///<summary>Lock specified targets in the repository</summary>
+            ///<param name="targets">specifies the paths - either all working 
+            ///                      copy paths or URLs. All targets must be 
+            ///                      in the same repository.</param>
+            ///<param name="comment">an xml-escapable description stored with
+            ///                      each lock in the repository</param>
+            ///<param name="stealLock">If a target is already locked, indicates 
+            ///                        wether to steal the lock</param>
+            ///<remarks>Each acquired lock will be stored in the working copy if the targets are WC paths.</remarks>
+            void Lock( String __gc* targets[], String __gc* comment, bool stealLock );
 
 
             ///<summary>Obtain log information from the repository.</summary>
