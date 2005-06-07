@@ -4,6 +4,7 @@
 #using <System.dll>
 #include <apr_tables.h>
 
+
 #include "stdafx.h"
 #include "delegates.h"
 
@@ -207,6 +208,29 @@ namespace NSvn
             ///<remarks>Each acquired lock will be stored in the working copy if the targets are WC paths.</remarks>
             void Lock( String __gc* targets[], String __gc* comment, bool stealLock );
 
+            ///<summary>Unlock specified targets in the repository</summary>
+            ///<param name="targets">specifies the paths - either all working 
+            ///                      copy paths or URLs. All targets must be 
+            ///                      in the same repository.</param>
+            ///<param name="breakLock">Indicates wether to break locks.
+            ///                        If false, the WC must contain a lock
+            ///                        for each target. 
+            ///                        If true, the locks will be broken in 
+            ///                        the repository. 
+            ///                        In both cases, the locks, if any, will
+            ///                        be removed from the working copy if the
+            ///                        targets are WC paths.</param>
+            ///<remarks>
+            ///<p>
+            ///If breakLocks is false, and targets are URLs, the locks may still 
+            ///be broken, but only if the lock owner is the same as the authenticated user.
+            ///</p><p>
+            ///If breakLock is false, and the WC does not contain a lock on 
+            ///every target, or the WC lock doesn't match the lock 
+            ///token in the repository, an error will be signaled.
+            ///</p>
+            ///</remarks>
+            void Unlock( String __gc* targets[], bool breakLock );
 
             ///<summary>Obtain log information from the repository.</summary>
             ///<param name="targets">Targets contains all the working copy paths for 

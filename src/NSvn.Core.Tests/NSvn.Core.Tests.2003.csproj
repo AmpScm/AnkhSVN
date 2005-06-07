@@ -341,6 +341,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "UnlockTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "UpdateTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
