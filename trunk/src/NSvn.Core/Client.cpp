@@ -221,6 +221,16 @@ NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
     }    
 }
 
+// implementation of Client::Lock
+void NSvn::Core::Client::Lock(String __gc* targets[], String __gc* comment, bool stealLock)
+{
+    Pool pool;
+    apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
+
+    StringHelper msg(comment);
+    HandleError( svn_client_lock( aprArrayTargets, msg.CopyToPoolUtf8(pool), stealLock,
+        this->context->ToSvnContext( pool ), pool ) );
+}
 
 // implementation of Client::PropSet
 void NSvn::Core::Client::PropSet(Property* property, String* target, bool recurse)
