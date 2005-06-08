@@ -300,8 +300,9 @@ int NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision,
 {
     SubPool pool(*(this->rootPool));;
     const char* truePath = CanonicalizePath( path, pool );
+    const char* trueUrl = CanonicalizePath( url, pool );
     svn_revnum_t rev;
-    HandleError( svn_client_checkout( &rev, StringHelper( url ), truePath, 
+    HandleError( svn_client_checkout( &rev, trueUrl, truePath, 
         revision->ToSvnOptRevision( pool ), recurse, this->context->ToSvnContext( pool ), pool ) );
 
     return rev;
