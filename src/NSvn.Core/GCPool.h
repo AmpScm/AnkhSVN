@@ -16,9 +16,6 @@ namespace NSvn
         private public:
             GCPool()
             { this->pool = new Pool(); }
-
-            GCPool( apr_pool_t* aprPool )
-            { this->pool = new Pool( aprPool, true ); }
         
             apr_pool_t* ToAprPool()
             {
