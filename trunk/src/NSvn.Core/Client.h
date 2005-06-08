@@ -31,7 +31,7 @@ namespace NSvn
         public __gc class AuthenticationProvider;
         public __gc class AuthenticationBaton;
 
-        public __gc class Client
+        public __gc class Client : public System::IDisposable
         {
         public:
             ///<summary>This event is fired to alert about various actions performed 
@@ -48,6 +48,8 @@ namespace NSvn
 
             ///<summary>Constructor.</summary>
             Client();
+            ~Client();
+            void Dispose();
             
 
             ///<summary>Constructor.</summary>
@@ -462,6 +464,11 @@ namespace NSvn
 
             /// <summary>Invokes the Cancel event.</summary>
             virtual void OnCancel( CancelEventArgs* args );
+
+        private public:
+            Pool& GetPool()
+            { return *(this->rootPool); }
+
             
 
         private:
@@ -472,6 +479,11 @@ namespace NSvn
                 apr_array_header_t* propListItems, Pool& pool ) [];
 
             ClientContext* context;
+
+            void Dispose( bool disposing );
+
+            Pool* rootPool;
+
         };
     }
 }

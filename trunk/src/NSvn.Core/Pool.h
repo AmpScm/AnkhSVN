@@ -22,16 +22,11 @@ namespace NSvn
         class Pool
         {
         public:
-            // ctor creates a new apr pool
-            Pool() : ownsPool( true )
+            // ctor creates a new top level apr pool
+            Pool()
             {
                 this->pool = svn_pool_create( 0 );
-            }
-
-            // uses an existing pool - 
-            Pool( apr_pool_t* pool, bool ownsPool ) :
-            pool( pool ), ownsPool( ownsPool )
-            {;}
+            }          
 
 
             // ctor destroys the existing pool if it owns it
@@ -57,6 +52,11 @@ namespace NSvn
             void* PCalloc( int size ) const
             { 
                 return apr_pcalloc( this->pool, size );
+            }
+
+            void Clear()
+            {
+                svn_pool_clear( this->pool );                    
             }
 
 
@@ -85,8 +85,12 @@ namespace NSvn
 
                 return newT;
             }
-
-
+        protected:
+             // uses an existing pool as the parent - 
+            Pool( apr_pool_t* parentPool )
+            {
+                this->pool = svn_pool_create( parentPool );
+            }
 
         private:
 
@@ -97,6 +101,18 @@ namespace NSvn
             bool ownsPool;
 
             apr_pool_t* pool;
+        };
+
+        class SubPool : public Pool
+        {
+        public:
+            SubPool( apr_pool_t* parentPool ) : Pool(parentPool)
+            {;}
+
+            ~SubPool()
+            {
+                this->Clear();
+            }
         };
     }
 }
