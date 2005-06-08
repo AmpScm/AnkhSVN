@@ -246,7 +246,7 @@ NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
 // implementation of Client::Lock
 void NSvn::Core::Client::Lock(String __gc* targets[], String __gc* comment, bool stealLock)
 {
-    Pool pool;
+    SubPool pool(*(this->rootPool));
     apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
 
     StringHelper msg(comment);
@@ -257,7 +257,7 @@ void NSvn::Core::Client::Lock(String __gc* targets[], String __gc* comment, bool
 // implemtation of Client::Unlock
 void NSvn::Core::Client::Unlock( String __gc* targets[], bool breakLock )
 {
-    Pool pool;
+    SubPool pool(*(this->rootPool));
     apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
 
     HandleError( svn_client_unlock( aprArrayTargets, breakLock, 
