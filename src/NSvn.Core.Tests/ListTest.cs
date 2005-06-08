@@ -78,11 +78,12 @@ namespace NSvn.Core.Tests
                 else 
                     this.size = 0;
 
-                System.IFormatProvider format =
-                    new System.Globalization.CultureInfo("en-US", true);
+                System.IFormatProvider format = 
+                    System.Globalization.CultureInfo.CurrentCulture;
 
                 // get the month and day
                 string date = match.Groups[4].ToString();
+                Console.WriteLine(date);
                 this.time = DateTime.ParseExact( date, "MMM' 'dd", 
                     format );                
 
