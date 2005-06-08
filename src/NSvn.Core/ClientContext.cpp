@@ -37,14 +37,17 @@ namespace NSvn
     namespace Core
     {
 
-        svn_client_ctx_t* ClientContext::ToSvnContext( const Pool& pool )
+        svn_client_ctx_t* ClientContext::ToSvnContext( )
         {
-            // PCalloc zeros out the returned mem
+            // already initialized?
+            if ( this->context != 0 )
+                return this->context;
 
             svn_client_ctx_t* ctx;
-            HandleError( svn_client_create_context( &ctx, pool ) );
+            Pool* pool = this->client->GetPool();
+            HandleError( svn_client_create_context( &ctx, *pool ) );
 
-            void* clientBaton = pool.AllocateObject(
+            void* clientBaton = pool->AllocateObject(
                 ManagedPointer<NSvn::Core::Client*>(
                 this->client) );
 
@@ -69,10 +72,9 @@ namespace NSvn
             
             ctx->config = this->clientConfig->GetHash();
            
+            this->context = ctx;
             return ctx; 
-
-        }
-        
+        }        
     }
 }
 
