@@ -466,8 +466,8 @@ namespace NSvn
             virtual void OnCancel( CancelEventArgs* args );
 
         private public:
-            Pool& GetPool()
-            { return *(this->rootPool); }
+            Pool* GetPool()
+            { return this->rootPool; }
 
             
 

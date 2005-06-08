@@ -26,11 +26,12 @@ namespace NSvn
         {
         public:
 
-            ClientContext( Client* client ) : client(client)
+            ClientContext( Client* client ) : client(client), context(0)
             {;}
 
             ClientContext( Client* client, AuthenticationBaton* baton, 
-                ClientConfig* config ) : client(client), authBaton(baton), clientConfig(config)
+                ClientConfig* config ) : client(client), authBaton(baton), clientConfig(config),
+                                         context(0)
             {;}
             
 
@@ -53,11 +54,12 @@ namespace NSvn
             { this->clientConfig = value; }
 
         private public:
-            svn_client_ctx_t* ToSvnContext( const Pool& pool );
+            svn_client_ctx_t* ToSvnContext();
 
         private:
             Client* client;
 
+            svn_client_ctx_t* context;
             NSvn::Core::AuthenticationBaton* authBaton;
             NSvn::Core::ClientConfig* clientConfig;
 
