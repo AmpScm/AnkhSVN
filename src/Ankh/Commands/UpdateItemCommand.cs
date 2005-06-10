@@ -39,19 +39,20 @@ namespace Ankh.Commands
             {
                 // save all files
                 this.SaveAllDirtyDocuments( context );
-
                 context.StartOperation( "Updating" );
+
+                IList resources = context.SolutionExplorer.GetSelectionResources( true,
+                    new ResourceFilterCallback(CommandBase.VersionedFilter) );
 
 
                 // we assume by now that all items are working copy resources.                
-                UpdateRunner visitor = new UpdateRunner( context );
-                context.SolutionExplorer.VisitSelectedNodes( visitor );
-                if ( !visitor.MaybeShowUpdateDialog() )
+                UpdateRunner runner = new UpdateRunner( context, resources );
+                if ( !runner.MaybeShowUpdateDialog() )
                     return;
 
                 // run the actual update on another thread
                 context.ProjectFileWatcher.StartWatchingForChanges();
-                bool completed = context.UIShell.RunWithProgressDialog( visitor, "Updating" );
+                bool completed = context.UIShell.RunWithProgressDialog( runner, "Updating" );
 
                 // this *must* happen on the primary thread.
                 if ( completed )
@@ -71,11 +72,12 @@ namespace Ankh.Commands
         #endregion
 
         #region UpdateVisitor
-        private class UpdateRunner : IProgressWorker, INodeVisitor
+        private class UpdateRunner : IProgressWorker
         {
-            public UpdateRunner( IContext context ) 
+            public UpdateRunner( IContext context, IList resources ) 
             {
                 this.context = context;
+                this.resources = resources;
             }
 
             public IContext Context
@@ -127,11 +129,8 @@ namespace Ankh.Commands
 
                 try
                 {
-                    foreach( SvnItem item in this.resources )
-                    {
-                        Debug.WriteLine( "Updating " + item.Path, "Ankh" );
-                        context.Client.Update( item.Path, revision, recursive );                    
-                    }
+                    string[] paths = SvnItem.GetPaths( this.resources );
+                    context.Client.Update( paths, revision, recursive, false );
                 }
                 finally
                 {       
@@ -140,49 +139,8 @@ namespace Ankh.Commands
               
                 if (this.conflictsOccurred) 
                     context.ConflictManager.NavigateTaskList();
-                
-
 
             }
-
-            public void VisitProject(Ankh.Solution.ProjectNode node)
-            {
-                // some project types dont necessarily have a project folder
-                node.GetResources( this.resources, false, 
-                    new ResourceFilterCallback(CommandBase.VersionedFilter) );
-            }           
-
-            public void VisitProjectItem(Ankh.Solution.ProjectItemNode node)
-            {
-                node.GetResources( this.resources, false, 
-                    new ResourceFilterCallback(CommandBase.VersionedFilter) );
-            } 
-
-            public void VisitSolutionNode(Ankh.Solution.SolutionNode node)
-            {
-                string solutionPath = ";"; // illegal in a path
-                node.GetResources( this.resources, false, 
-                    new ResourceFilterCallback(CommandBase.VersionedFilter) );
-
-                // update all projects whose folder is not under the solution root
-                foreach( Ankh.Solution.TreeNode n in node.Children )
-                {
-                    ProjectNode pNode = n as ProjectNode;
-
-                    if ( pNode != null )
-                    {
-                        SvnItem folder2 = 
-                            this.Context.StatusCache[pNode.Directory];
-                        if ( !folder2.IsVersioned ||
-                            folder2.Path.IndexOf( 
-                            solutionPath ) != 0 )
-                        {
-                            pNode.Accept( this );
-                        }
-                    }
-                }
-            }
-
             
             /// <summary>
             ///  Handlke event for onNotification that conflicts occurred from update
