@@ -130,7 +130,7 @@ Byte NSvn::Core::SvnStringToByteArray( svn_string_t* string )[]
 }
 
 
-String* NSvn::Core::ToNativePath( const char* path, Pool& pool )
+String* NSvn::Core::ToNativePath( const char* path, apr_pool_t* pool )
 {
     // convert to a native path    
     const char* cstringPath;

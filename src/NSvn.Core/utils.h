@@ -28,7 +28,7 @@ namespace NSvn
 
         const char* CanonicalizePath( String* path, Pool& pool );
 
-        String* ToNativePath( const char* path, Pool& pool );
+        String* ToNativePath( const char* path, apr_pool_t* pool );
 
         apr_array_header_t* StringArrayToAprArray( String* strings[], 
             bool isPath, Pool& pool );

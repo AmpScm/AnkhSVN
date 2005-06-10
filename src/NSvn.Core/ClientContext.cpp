@@ -18,10 +18,8 @@
 
 namespace
 {
-    void notify_func( void *baton, const char *path, 
-        svn_wc_notify_action_t action, svn_node_kind_t kind, 
-        const char *mime_type, svn_wc_notify_state_t content_state, 
-        svn_wc_notify_state_t prop_state, svn_revnum_t revision );
+    void notify_func( void *baton, const svn_wc_notify_t* notify, 
+        apr_pool_t* pool );
     
     svn_error_t* log_msg_func( const char **log_msg, 
         const char **tmp_file, 
@@ -51,8 +49,8 @@ namespace NSvn
                 ManagedPointer<NSvn::Core::Client*>(
                 this->client) );
 
-            ctx->notify_func = notify_func;
-            ctx->notify_baton = clientBaton;
+            ctx->notify_func2 = notify_func;
+            ctx->notify_baton2 = clientBaton;
 
             // is there an auth baton? (should be)
             if ( this->authBaton != 0 )
@@ -98,18 +96,14 @@ namespace
 {
     using namespace NSvn::Core;
 
-    void notify_func( void *baton, const char *path, 
-        svn_wc_notify_action_t action, svn_node_kind_t kind, 
-        const char *mime_type, svn_wc_notify_state_t content_state, 
-        svn_wc_notify_state_t prop_state, svn_revnum_t revision )
+    void notify_func( void *baton, const svn_wc_notify_t* notify, apr_pool_t* pool )
     {
+         String* nativePath = ToNativePath( notify->path, pool );
 
-        // TODO: isn't it a bit inefficient to create a pool here?
-        Pool pool;
-        String* nativePath = ToNativePath( path, pool );
-
-        NotificationEventArgs* args = new NotificationEventArgs( nativePath, action, kind,
-            mime_type, content_state, prop_state, revision );
+        NotificationEventArgs* args = new NotificationEventArgs( nativePath, 
+            notify->action, notify->kind,
+            notify->mime_type, notify->content_state, notify->prop_state, 
+            notify->revision );
         Client* client = 
             *(static_cast<ManagedPointer<Client*>* >(baton) );
 
