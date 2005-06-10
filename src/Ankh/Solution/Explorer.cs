@@ -109,10 +109,7 @@ namespace Ankh.Solution
             foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
             {
                 TreeNode node = this.GetNode( item );
-                // special care for the solution
-                if ( node == solutionNode )
-                    this.SyncAll();
-                else if ( node != null )
+                if ( node != null )
                     node.Refresh();
             }
         }
