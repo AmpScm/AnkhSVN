@@ -216,6 +216,8 @@ copy &quot;..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb&quot; &quot;$
 		<AssemblyReference
 			RelativePath="mscorlib.dll"/>
 		<AssemblyReference
+			RelativePath="$(SolutionDir)lib\nunit.framework.dll"/>
+		<AssemblyReference
 			RelativePath="System.dll"/>
 		<AssemblyReference
 			RelativePath="System.Data.dll"/>
