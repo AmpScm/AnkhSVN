@@ -30,10 +30,17 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotification()
     Pool pool;
 
     ClientContext* ctx = new ClientContext( this );
-    svn_client_ctx_t* svnCtx = ctx->ToSvnContext( pool );
-    svnCtx->notify_func( svnCtx->notify_baton, "Moo", svn_wc_notify_copy,
-        svn_node_file, "text/moo", svn_wc_notify_state_unchanged, 
-        svn_wc_notify_state_changed, 42 );
+    svn_client_ctx_t* svnCtx = ctx->ToSvnContext();
+    svn_wc_notify_t* notify = svn_wc_create_notify( "Moo", svn_wc_notify_copy, pool );
+    notify->kind = svn_node_file;
+    notify->content_state = svn_wc_notify_state_unchanged;
+    notify->revision = 42;
+    notify->prop_state = svn_wc_notify_state_changed;
+    void* clientBaton = pool.AllocateObject(
+                ManagedPointer<NSvn::Core::Client*>(
+                this) );
+
+    svnCtx->notify_func2( clientBaton, notify, pool );
 
     Assertion::AssertEquals( this->notification->Path, S"Moo" );
     Assertion::AssertEquals( this->notification->Action, NotifyAction::Copy );
@@ -104,7 +111,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessage()
     ClientContext* c = new ClientContext( this );
 
 
-    svn_client_ctx_t* ctx = c->ToSvnContext( pool );
+    svn_client_ctx_t* ctx = c->ToSvnContext();
 
     apr_array_header_t* commitItems = apr_array_make( pool, 2, 
         sizeof( svn_client_commit_item_t* ) );
@@ -136,7 +143,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestCancel()
     Pool pool;
     ClientContext* c = new ClientContext( this );
 
-    svn_client_ctx_t* ctx = c->ToSvnContext( pool );
+    svn_client_ctx_t* ctx = c->ToSvnContext();
 
     svn_error_t* err = ctx->cancel_func( ctx->cancel_baton );
     Assertion::Assert( "Not cancelled", err->apr_err == SVN_ERR_CANCELLED );
