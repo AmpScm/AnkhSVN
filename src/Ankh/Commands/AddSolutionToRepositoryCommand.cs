@@ -71,10 +71,12 @@ namespace Ankh.Commands
                     try
                     {
                         url = UriUtils.Combine( url, dlg.SubDirectoryName );
-                        MakeDirWorker makeDirWorker = new MakeDirWorker( url, 
-                            dlg.LogMessage, context );
-                        context.UIShell.RunWithProgressDialog( makeDirWorker, 
-                            "Creating directory" ); 
+                        using( MakeDirWorker makeDirWorker = new MakeDirWorker( url, 
+                                   dlg.LogMessage, context ) )
+                        {
+                            context.UIShell.RunWithProgressDialog( makeDirWorker, 
+                                "Creating directory" ); 
+                        }
                     }
                     finally
                     {
@@ -420,14 +422,20 @@ namespace Ankh.Commands
         /// <summary>
         /// A progress runner for creating repository directories.
         /// </summary>
-        private class MakeDirWorker : IProgressWorker
+        private class MakeDirWorker : IProgressWorker, IDisposable
         {
             public MakeDirWorker( string url, string logMessage, IContext context ) 
             {
                 this.url = url;
                 this.logMessage = logMessage;
-                context.Client.LogMessage += 
+                this.context = context;
+                this.context.Client.LogMessage += 
                     new NSvn.Core.LogMessageDelegate(this.LogMessage);
+            }
+
+            ~MakeDirWorker()
+            {
+                this.Dispose(false);
             }
 
             public void Work( IContext context )
@@ -435,13 +443,33 @@ namespace Ankh.Commands
                 context.Client.MakeDir( new string[]{ this.url } );
             }
 
+            public void Dispose()
+            {
+                this.Dispose(true);
+            }
+
+            private void Dispose( bool disposing )
+            {
+                this.context.Client.LogMessage -=
+                    new NSvn.Core.LogMessageDelegate(this.LogMessage);
+                if ( disposing )
+                    GC.SuppressFinalize(this);
+            }
+
             private void LogMessage(object sender, NSvn.Core.LogMessageEventArgs args)
             {
                 args.Message = this.logMessage;
             }
 
+            
+
+            private IContext context;
             private string url;
             private string logMessage;            
+            #region IDisposable Members
+
+            
+            #endregion
         }
 
         private static readonly string[] SpecialProjects = new String[]{
