@@ -80,6 +80,18 @@ AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSimpleProvider()
     return new AuthenticationProvider( provider, pool );
 }
 
+// implementation of GetWindowsSimpleProvider
+AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetWindowsSimpleProvider()
+{
+    // TODO: refactor this
+    GCPool* pool = new GCPool();
+    svn_auth_provider_object_t* provider;
+
+    svn_client_get_windows_simple_provider( &provider, pool->ToAprPool() );
+
+    return new AuthenticationProvider( provider, pool );
+}
+
 // implementation of GetSslServerTrustPromptProvider
 AuthenticationProvider* NSvn::Core::AuthenticationProvider::GetSslServerTrustPromptProvider(
     SslServerTrustPromptDelegate* promptDelegate )

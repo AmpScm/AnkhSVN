@@ -13,6 +13,65 @@ namespace NSvn.Core.Tests
         public override void SetUp()
         {
             base.SetUp();
+            this.ExtractRepos();
+            
+        }
+
+        [Test]
+        public void TestWindowsSimpleProvider()
+        {
+            string configDir = this.FindDirName( this.GetTempFile() );
+            ClientConfig.CreateConfigDir( configDir );
+            Client client = new Client( configDir );
+            client.AuthBaton.Add( AuthenticationProvider.GetWindowsSimpleProvider() );
+            client.AuthBaton.Add( AuthenticationProvider.GetSimplePromptProvider(
+                new SimplePromptDelegate( this.SimplePrompt ), 1 ) );
+            
+
+            this.SetReposAuth();
+            System.Diagnostics.Process process = this.StartSvnServe( this.ReposPath );
+            try
+            {
+                DirectoryEntry[] entries;
+                // this time we should be prompted
+                entries = client.List( string.Format( "svn://localhost:{0}", PortNumber ), 
+                    Revision.Head, false );
+                Assert.IsTrue( this.prompted );
+                Assert.IsTrue( entries.Length > 0 );
+                this.prompted = false;
+
+                // create a new client, against the same config dir
+                client = new Client( configDir );
+                client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
+                client.AuthBaton.Add( AuthenticationProvider.GetSimplePromptProvider(
+                    new SimplePromptDelegate( NullPrompt ), 1 ) );
+
+                // this should fail
+                try
+                {
+                    client.List( string.Format( "svn://localhost:{0}", PortNumber ), 
+                        Revision.Head, false );
+                    Assert.Fail( "Should have failed" );
+                }
+                catch( AuthorizationFailedException )
+                {
+                    // swallow
+                }
+
+                // with the new baton, it should succeed
+                client = new Client( configDir );
+                client.AuthBaton.Add( AuthenticationProvider.GetWindowsSimpleProvider() );
+
+                // do it once more. This will fail if the provider didn't cache
+                entries = client.List( string.Format( "svn://localhost:{0}", PortNumber ), 
+                    Revision.Head, false );
+                Assert.IsTrue( entries.Length > 0 );
+                Assert.IsFalse( this.prompted );
+            }
+            finally
+            {
+                process.Kill();
+            }
         }
 
        
@@ -105,6 +164,19 @@ namespace NSvn.Core.Tests
             return cred;
         }
 
+        private SimpleCredential SimplePrompt( string realm, string username, bool maySave )
+        {
+            this.prompted = true;
+            return new SimpleCredential( "user", "password", maySave );
+        }
+
+        private SimpleCredential NullPrompt( string realm, string username, bool maySave )
+        {
+            // fails
+            return null;
+        }
+
+        private bool prompted = false;
         private SslFailures acceptedFailures = 0;
         private bool maySave = false;
         private bool callbackCalled = false;
