@@ -191,9 +191,17 @@ namespace Ankh
 
             public override object GetBarControl(object bar, string name)
             {
-                return bar.GetType().InvokeMember(
-                    "Controls", BindingFlags.GetProperty, null,
-                    bar, new object[]{ name } );
+                try
+                {
+                    return bar.GetType().InvokeMember(
+                        "Controls", BindingFlags.GetProperty, null,
+                        bar, new object[]{ name } );
+                }
+                catch( TargetInvocationException )
+                {
+                    // swallow, means the control wasn't found
+                    return null;
+                }
             }
 
             public override object GetPopupCommandBar(object popup)
