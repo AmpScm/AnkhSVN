@@ -77,7 +77,22 @@ namespace NSvn
             ///                        all of its contents will be scheduled for addition as well.</param>            
             /// <returns>The revision affected</returns>
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
+            [System::Obsolete("Deprecated in Subversion 1.2 Use Checkout(String, String, Revision, Revision, bool, bool) instead")]
             int Checkout(String* url, String* path, Revision* revision, bool recurse);
+
+            ///<summary>Checkout a working copy.</summary>
+            ///<param name="url">Path to the files/directory in the repository to be checked out.</param>
+            ///<param name="path">Path to the destination.</param>
+            ///<param name="pegRevision">The peg revision used to look up the URL</param>
+            ///<param name="revision">A revision, specified in Core::Revision.<see cref="NSvn.Core.Revision"/> 
+            ///                      for more information.</param>
+            ///<param name="recurse">If recursive is set, assuming path is a directory 
+            ///                      all of its contents will be scheduled for addition as well.</param>
+            ///<param name="ignoreExternals">When true, does not process externals 
+            ///                              definitions as part of this operation.</param>
+            /// <returns>The revision affected</returns>
+            ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
+            int Checkout(String* url, String* path, Revision* pegRevision, Revision* revision, bool recurse, bool ignoreExternals);
 
             ///<summary>Update working tree path to revision.</summary>
             ///<param name="path">Path to the file/directory.</param>
