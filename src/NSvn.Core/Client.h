@@ -143,6 +143,14 @@ namespace NSvn
             ///                        all of its contents will be scheduled for addition as well.</param>
             void Add(String* path, bool recursive);
 
+            ///<summary>Add a file/directory, not already under revision control to a working copy.</summary>
+            ///<param name="path">Path to the file/directory.</param>
+            ///<param name="recursive">If recursive is set, assuming path is a directory 
+            ///                        all of its contents will be scheduled for addition as well.</param>
+            ///<param name="force">If force is not set and path is already under version control, return the error SVN_ERR_ENTRY_EXISTS. 
+            ///If force is set, do not error on already-versioned items. </para>
+            void Add(String* path, bool recursive, bool force);
+
             ///<summary>Create a directory, either in a repository or a working copy.</summary>
             ///<param name="path">Path to the directory.</param>
             ///<returns>Commit info object containing information about revision, date and author. 

@@ -127,6 +127,16 @@ void NSvn::Core::Client::Add( String* path, bool recursive )
     const char* truePath = CanonicalizePath( path, pool );
     HandleError( svn_client_add( truePath, recursive, this->context->ToSvnContext(), pool ) );
 }
+
+// implementation of Client::Add
+void NSvn::Core::Client::Add( String* path, bool recursive, bool force )
+{
+    SubPool pool(*(this->rootPool));;
+
+    const char* truePath = CanonicalizePath( path, pool );
+    HandleError( svn_client_add2( truePath, recursive, force, this->context->ToSvnContext(), pool ) );
+}
+
 // implementation of Client::MakeDir
 NSvn::Core::CommitInfo* NSvn::Core::Client::MakeDir( String* paths[] )
 {
