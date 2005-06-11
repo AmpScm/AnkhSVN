@@ -29,9 +29,14 @@ namespace NSvn
             /// information from the user's ~/.subversion configuration directory </summary>
             static AuthenticationProvider* GetUsernameProvider();
 
-            /// <summary>Create and return an authentication provider that gets username and
-            /// password information from the user's ~/.subversion configuration directory </summary>
+            /// <summary>Create and return an authentication provider that gets/sets username and
+            /// password information from the user's %appdata%\subversion configuration directory </summary>
             static AuthenticationProvider* GetSimpleProvider();
+
+            /// <summary>Create and return an authentication provider that gets/sets username and
+            /// password information from the user's %appdata%\subversion configuration directory.
+            /// Unlike GetSimpleProvider(), the information is encrypted.</summary>
+            static AuthenticationProvider* GetWindowsSimpleProvider();
 
             /// <summary>Create and return an authentication provider that queries the user
             /// whether to trust a specific SSL server certificate</summary>
