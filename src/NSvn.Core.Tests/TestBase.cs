@@ -302,6 +302,15 @@ namespace NSvn.Core.Tests
             return p;
         }
 
+        protected void SetReposAuth()
+        {
+            string conf = Path.Combine( this.reposPath, 
+                Path.Combine( "conf", "svnserve.conf" ) );
+            string authConf = Path.Combine( this.reposPath,
+                Path.Combine( "conf", "svnserve.auth.conf" ) );
+            File.Copy( authConf, conf, true );
+        }
+
         protected const int PortNumber = 7777;
         
        
