@@ -95,6 +95,24 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "File in subsubdirectory not added", 'A', this.GetSvnStatus( testFile2 ) );
         }
 
+        [Test]
+        public void TestWithForce()
+        {
+            string file = Path.Combine( this.WcPath, "AssemblyInfo.cs" );
+            try
+            {
+                this.Client.Add( file, false, false );
+                Assert.Fail( "Should have failed" );
+            }
+            catch( SvnClientException )
+            {
+                // swallow
+            }
+
+            // should not fail
+            this.Client.Add( file, false, true );
+        }
+
 
 
         private void CreateSubdirectories(out string dir1, out string dir2, out string testFile1, out string testFile2)
