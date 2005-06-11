@@ -40,22 +40,6 @@ namespace NSvn.Core.Tests
             }
         }
 
-        /// <summary>
-        /// Starts a svnserve instance.
-        /// </summary>
-        /// <param name="root">The root directory to use for svnserve.</param>
-        /// <returns></returns>
-        private Process StartSvnServe( string root )
-        {
-            ProcessStartInfo psi = new ProcessStartInfo( "svnserve", 
-                String.Format( "--daemon --root {0} --listen-port {1}", root, 
-                PortNumber ) );
-            Process p = new Process();
-            p.StartInfo = psi;
-            p.Start();
-            return p;
-        }
-
-        private const int PortNumber = 7777;
+        
 	}
 }
