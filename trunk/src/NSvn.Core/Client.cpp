@@ -298,7 +298,7 @@ void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* r
 int NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision, 
                                   bool recurse )
 {
-    SubPool pool(*(this->rootPool));;
+    SubPool pool(*(this->rootPool));
     const char* truePath = CanonicalizePath( path, pool );
     const char* trueUrl = CanonicalizePath( url, pool );
     svn_revnum_t rev;
@@ -307,6 +307,21 @@ int NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision,
 
     return rev;
 }
+
+int NSvn::Core::Client::Checkout( String* url, String* path, Revision* pegRevision,
+                                  Revision* revision, bool recurse, bool ignoreExternals)
+{
+    SubPool pool(*(this ->rootPool));
+    const char* truePath = CanonicalizePath( path, pool );
+    const char* trueUrl = CanonicalizePath( url, pool );
+    svn_revnum_t rev;
+    HandleError( svn_client_checkout2( &rev, trueUrl, truePath,
+        pegRevision->ToSvnOptRevision( pool ), revision->ToSvnOptRevision( pool ),
+        recurse, ignoreExternals, this->context->ToSvnContext( ), pool ) );
+
+    return rev;
+}
+
 
 // implementation of Client::Update
 int NSvn::Core::Client::Update( String* path, Revision* revision, bool recurse )
