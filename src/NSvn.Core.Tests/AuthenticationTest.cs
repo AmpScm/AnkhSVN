@@ -20,10 +20,25 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestWindowsSimpleProvider()
         {
+            AuthenticationProvider winProvider = 
+                AuthenticationProvider.GetWindowsSimpleProvider();
+            DoTestCachingProviders( winProvider );
+        }
+
+        [Test]
+        public void TestSimpleProvider()
+        {
+            AuthenticationProvider simpleProvider = 
+                AuthenticationProvider.GetSimpleProvider();
+            DoTestCachingProviders( simpleProvider );
+        }
+
+        private void DoTestCachingProviders( AuthenticationProvider provider )
+        {
             string configDir = this.FindDirName( this.GetTempFile() );
             ClientConfig.CreateConfigDir( configDir );
             Client client = new Client( configDir );
-            client.AuthBaton.Add( AuthenticationProvider.GetWindowsSimpleProvider() );
+            client.AuthBaton.Add( provider );
             client.AuthBaton.Add( AuthenticationProvider.GetSimplePromptProvider(
                 new SimplePromptDelegate( this.SimplePrompt ), 1 ) );
             
@@ -60,7 +75,7 @@ namespace NSvn.Core.Tests
 
                 // with the new baton, it should succeed
                 client = new Client( configDir );
-                client.AuthBaton.Add( AuthenticationProvider.GetWindowsSimpleProvider() );
+                client.AuthBaton.Add( provider );
 
                 // do it once more. This will fail if the provider didn't cache
                 entries = client.List( string.Format( "svn://localhost:{0}", PortNumber ), 
