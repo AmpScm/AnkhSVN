@@ -94,8 +94,12 @@ namespace Ankh
                 {
                     try
                     {
-                        if ( cmd.Name != null && cmd.Name.StartsWith( context.AddIn.ProgID ) )
-                            cmd.Delete();
+						if (cmd.Name != null && cmd.Name.StartsWith(context.AddIn.ProgID))
+						{
+							Debug.Write( "Deleting command " + cmd.Name + ".", "Ankh" );
+							cmd.Delete();
+                            Debug.WriteLine( "Deleted!", "Ankh" );
+						}
                     }
                     catch( System.IO.FileNotFoundException fex )
                     {
@@ -178,8 +182,14 @@ namespace Ankh
         private static void CreateAnkhSubMenu( IContext context )
         {
             object toolMenu = context.CommandBars.GetCommandBar( "Tools" );
-            context.CommandBars.AddCommandBar( "AnkhSVN", 
-                vsCommandBarType.vsCommandBarTypeMenu, toolMenu, 1 );
+
+            // check that the menu isn't already there (only necessary in 2005)
+            object ankhMenu = context.CommandBars.GetBarControl( toolMenu, "AnkhSVN" );
+            if ( ankhMenu == null )
+            {
+                context.CommandBars.AddCommandBar( "AnkhSVN", 
+                    vsCommandBarType.vsCommandBarTypeMenu, toolMenu, 1 );
+            }
         }
     }
 }
