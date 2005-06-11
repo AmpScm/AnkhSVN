@@ -44,7 +44,7 @@ namespace Ankh.Commands
         {
             // get the diff itself
             IList resources = context.SolutionExplorer.GetSelectionResources(
-                true, new ResourceFilterCallback(CommandBase.ModifiedFilter) );
+                true, new ResourceFilterCallback(CommandBase.VersionedFilter) );
 
             string diffExe = GetExe( context );
             if (diffExe == null)
@@ -61,6 +61,8 @@ namespace Ankh.Commands
                         resources, resources );
                     info.RevisionStart = revisionStart;
                     info.RevisionEnd = revisionEnd;
+                    info.Recursive = true;
+                    info.EnableRecursive = true;
 
                     info = context.UIShell.ShowPathSelector( info );
                     
