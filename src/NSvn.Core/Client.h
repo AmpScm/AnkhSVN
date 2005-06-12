@@ -461,6 +461,14 @@ namespace NSvn
             ///                         for more information.</param>
             void Cat(Stream* out, String*path, Revision* revision);
 
+            ///<summary>List the contents of a file.</summary>
+            ///<param name="out"></param>  
+            ///<param name="path">Path to the file to be edited.</param>  
+            ///<param name="pegRevision"> The actual node revision selected is determined by the path as it exists in pegRevision</param>
+            ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
+            ///                         for more information.</param>
+            void Cat(Stream* out, String*path, Revision* pegRevision, Revision* revision);
+
 
             /// <summary>Retrieves an URL from a working copy path</summary>
             /// <param name="path">The working copy path.</param>

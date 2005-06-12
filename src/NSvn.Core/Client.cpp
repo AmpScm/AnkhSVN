@@ -523,12 +523,20 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, bo
 // implementation of Client::Cat
 void NSvn::Core::Client::Cat( Stream* out, String* path, Revision* revision )
 {
+    this->Cat( out, path, revision, revision );
+}
+
+void NSvn::Core::Client::Cat( Stream* out, String* path, 
+                             Revision* pegRevision, Revision* revision )
+{
     SubPool pool(*(this->rootPool));; 
 
     const char* truePath = CanonicalizePath( path, pool );
     svn_stream_t* svnStream = CreateSvnStream( out, pool );
 
-    HandleError( svn_client_cat( svnStream, truePath, revision->ToSvnOptRevision( pool ), 
+    HandleError( svn_client_cat2( svnStream, truePath, 
+        pegRevision->ToSvnOptRevision( pool ),
+        revision->ToSvnOptRevision( pool ), 
         this->context->ToSvnContext(), pool ) );
 }
 

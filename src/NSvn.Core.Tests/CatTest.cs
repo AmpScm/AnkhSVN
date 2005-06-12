@@ -55,8 +55,28 @@ namespace NSvn.Core.Tests
 
             string wrapperOutput = Encoding.ASCII.GetString( stream.ToArray() );
             Assertion.AssertEquals( "String from wrapper not the same as string from client",
-                clientOutput, wrapperOutput );           
-
+                clientOutput, wrapperOutput );      
         }        
+
+        [Test]
+        public void TestCatPeg()
+        {
+            string path = Path.Combine( this.ReposUrl, "Form.cs" );
+            string toPath = Path.Combine( this.ReposUrl, "Moo.cs" );
+
+            CommitInfo info = this.Client.Move( path, Revision.Head, toPath, false );
+            
+            string clientOutput = this.RunCommand( "svn", 
+                string.Format( "cat {0}@{1} -r {2}", toPath, info.Revision, info.Revision-1 ) );
+
+            MemoryStream stream = new MemoryStream();
+            this.Client.Cat( stream, toPath, Revision.FromNumber(info.Revision),
+                Revision.FromNumber(info.Revision-1) );
+
+            string wrapperOutput = Encoding.ASCII.GetString( stream.ToArray() );
+            Assertion.AssertEquals( "String from wrapper not the same as string from client",
+                clientOutput, wrapperOutput ); 
+
+        }
     }
 }
