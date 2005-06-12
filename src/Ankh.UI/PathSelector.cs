@@ -246,7 +246,6 @@ namespace Ankh.UI
             this.revisionPickerStart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.revisionPickerStart.Location = new System.Drawing.Point(3, 16);
             this.revisionPickerStart.Name = "revisionPickerStart";
-            this.revisionPickerStart.Revision = ((NSvn.Core.Revision)(resources.GetObject("revisionPickerStart.Revision")));
             this.revisionPickerStart.Size = new System.Drawing.Size(362, 29);
             this.revisionPickerStart.TabIndex = 1;
             // 
@@ -267,7 +266,6 @@ namespace Ankh.UI
             this.revisionPickerEnd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.revisionPickerEnd.Location = new System.Drawing.Point(3, 16);
             this.revisionPickerEnd.Name = "revisionPickerEnd";
-            this.revisionPickerEnd.Revision = ((NSvn.Core.Revision)(resources.GetObject("revisionPickerEnd.Revision")));
             this.revisionPickerEnd.Size = new System.Drawing.Size(362, 29);
             this.revisionPickerEnd.TabIndex = 2;
             // 
