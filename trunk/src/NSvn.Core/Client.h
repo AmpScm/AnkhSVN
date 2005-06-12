@@ -76,8 +76,7 @@ namespace NSvn
             ///<param name="recurse">If recursive is set, assuming path is a directory 
             ///                        all of its contents will be scheduled for addition as well.</param>            
             /// <returns>The revision affected</returns>
-            ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-            [System::Obsolete("Deprecated in Subversion 1.2 Use Checkout(String, String, Revision, Revision, bool, bool) instead")]
+            ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>            
             int Checkout(String* url, String* path, Revision* revision, bool recurse);
 
             ///<summary>Checkout a working copy.</summary>
@@ -187,7 +186,6 @@ namespace NSvn
             ///                           should be ignored.</param>
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
-            [System::Obsolete("Deprecated in Subversion 1.2 Use Commit(string[], bool, bool) instead")]
             CommitInfo* Commit(String __gc* targets[], bool nonRecursive);
 
             ///<summary>Commit file/directory into repository, authenticating with the 
