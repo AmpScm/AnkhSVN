@@ -399,18 +399,31 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath,
         return CommitInfo::Invalid;
 }
 // implementation of Client::Export
-int NSvn::Core::Client::Export(String* from, String* to, Revision* revision, bool force)
+int NSvn::Core::Client::Export(String* from, String* to, Revision* revision, bool overwrite)
 {
+    return this->Export( from, to, Revision::Unspecified, revision, overwrite, false, true,
+        0 );
+}
+
+int NSvn::Core::Client::Export(String* from, String* to, Revision* pegRevision, 
+                Revision* revision, bool overwrite, bool ignoreExternals, bool recurse,
+                String* nativeEol )
+{
+
     SubPool pool(*(this->rootPool));;
     const char* trueSrcPath = CanonicalizePath( from, pool );
     const char* trueDstPath = CanonicalizePath( to, pool );
 
     svn_revnum_t rev;
-    HandleError( svn_client_export ( &rev, trueSrcPath, trueDstPath, 
-        revision->ToSvnOptRevision( pool ), force, this->context->ToSvnContext(), pool ) );
+    HandleError( svn_client_export3 ( &rev, trueSrcPath, trueDstPath,
+        pegRevision->ToSvnOptRevision( pool ),
+        revision->ToSvnOptRevision( pool ), overwrite,
+        ignoreExternals, recurse, StringHelper(nativeEol),
+        this->context->ToSvnContext(), pool ) );
 
     return rev;
 }   
+
 //TODO: Implement the variable optionalAdmAccess
 // implementation of Client::Copy
 NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcRevision, String* dstPath)
