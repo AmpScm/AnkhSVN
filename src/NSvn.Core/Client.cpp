@@ -122,10 +122,7 @@ void NSvn::Core::Client::set_AdminDirectoryName( String* name )
 // implementation of Client::Add
 void NSvn::Core::Client::Add( String* path, bool recursive )
 {
-    SubPool pool(*(this->rootPool));;
-
-    const char* truePath = CanonicalizePath( path, pool );
-    HandleError( svn_client_add( truePath, recursive, this->context->ToSvnContext(), pool ) );
+    this->Add( path, recursive, false );
 }
 
 // implementation of Client::Add
@@ -308,14 +305,7 @@ void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* r
 int NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision, 
                                   bool recurse )
 {
-    SubPool pool(*(this->rootPool));
-    const char* truePath = CanonicalizePath( path, pool );
-    const char* trueUrl = CanonicalizePath( url, pool );
-    svn_revnum_t rev;
-    HandleError( svn_client_checkout( &rev, trueUrl, truePath, 
-        revision->ToSvnOptRevision( pool ), recurse, this->context->ToSvnContext(), pool ) );
-
-    return rev;
+    return this->Checkout( url, path, revision, revision, recurse, false );
 }
 
 int NSvn::Core::Client::Checkout( String* url, String* path, Revision* pegRevision,
@@ -336,13 +326,13 @@ int NSvn::Core::Client::Checkout( String* url, String* path, Revision* pegRevisi
 // implementation of Client::Update
 int NSvn::Core::Client::Update( String* path, Revision* revision, bool recurse )
 {
-    SubPool pool(*(this->rootPool));;
-    const char* truePath = CanonicalizePath( path, pool );
-    svn_revnum_t rev;
-    HandleError( svn_client_update( &rev, truePath, revision->ToSvnOptRevision( pool ),
-        recurse, this->context->ToSvnContext(), pool ) );
-
-    return rev;
+    String* paths[] = new String*[1];
+    paths[0] = path;
+    Int32 revnums[] = this->Update( paths, revision, recurse, false );
+    if ( revnums != 0 && revnums->Length > 0 )
+        return revnums[0];
+    else
+        return SVN_INVALID_REVNUM;
 }
 
 Int32 NSvn::Core::Client::Update(String* paths[], Revision* revision, 
@@ -365,21 +355,7 @@ Int32 NSvn::Core::Client::Update(String* paths[], Revision* revision,
 // implementation of Client::Commit
 NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonRecursive )
 {
-    SubPool pool(*(this->rootPool));;
-    apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
-    svn_client_commit_info_t* commitInfoPtr = 0;
-
-    HandleError( svn_client_commit( &commitInfoPtr, aprArrayTargets, nonRecursive, 
-        this->context->ToSvnContext(), pool ) );
-    
-    if ( commitInfoPtr && commitInfoPtr->revision != SVN_INVALID_REVNUM )
-    {
-        return new CommitInfo( commitInfoPtr );
-    }
-    else 
-    {
-        return CommitInfo::Invalid;
-    }
+    return this->Commit( targets, !nonRecursive, true );
 }
 
 NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool recurse, 
