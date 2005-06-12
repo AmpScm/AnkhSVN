@@ -43,10 +43,9 @@ namespace NSvn.Core.Tests
         /// <summary>
         /// Test export operation from a working copy
         /// </summary>
+        [Test]
         public void TestExportWc()
-        { 
-            
-            
+        {   
             this.Client.Export( this.WcPath, this.newWc, Revision.Head, false );
 
             Assertion.Assert( "Exported file not there", 
@@ -54,6 +53,14 @@ namespace NSvn.Core.Tests
             Assertion.Assert( ".svn directory found", 
                 !Directory.Exists( Path.Combine( this.newWc, Client.AdminDirectoryName ) ) );
         }
+
+        [Test]
+        public void TestExportNonRecursive()
+        {
+            this.Client.Export( this.WcPath, this.newWc, Revision.Unspecified, Revision.Head,
+                false, false, false, null );
+            Assert.AreEqual( 0, Directory.GetDirectories( this.newWc ).Length );
+        }       
 
         private string newWc;
 

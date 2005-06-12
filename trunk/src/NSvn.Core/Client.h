@@ -473,6 +473,24 @@ namespace NSvn
             /// <returns>The revision affected</returns>
             int Export(String* from, String* to, Revision* revision, bool force);
 
+            ///<summary>Export the contents of either a subversion repository or a subversion. </summary>
+            ///         working copy into a directory with no svn administrative directories (.svn).</summary> 
+            ///<param name="from">Path to the files/directory to be exported.</param>
+            ///<param name="to">Path to the directory where you wish to create 
+            ///                 the exported tree.</param>
+            ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
+            ///                         for more information.</param>
+            ///<param name="overwrite">Whether to force the export by overwriting any existing
+            /// files at to.</param>   
+            ///<param name="ignoreExternals">Whether to ignore any externals.</param>
+            ///<param name="recurse">Whether to export recursively.</param>
+            ///<param name="nativeEol">Allows you to override the standard EOL marker. Can be 
+            ///either "CR", "LF", "CRLF" or null. null will use the default marker.
+            /// <returns>The revision affected</returns>
+            int Export(String* from, String* to, Revision* pegRevision, 
+                Revision* revision, bool overwrite, bool ignoreExternals, bool recurse,
+                String* nativeEol );
+
             ///<summary>List the contents of an url or path.</summary>
             ///<param name="path">Path to the files/directory to be listed.</param>  
             ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
