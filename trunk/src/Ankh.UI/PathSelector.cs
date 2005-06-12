@@ -101,12 +101,14 @@ namespace Ankh.UI
             }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public NSvn.Core.Revision RevisionStart
         {
             get{ return this.revisionPickerStart.Revision; }
             set{ this.revisionPickerStart.Revision = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public NSvn.Core.Revision RevisionEnd
         {
             get{ return this.revisionPickerEnd.Revision; }

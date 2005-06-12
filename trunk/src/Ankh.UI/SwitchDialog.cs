@@ -37,6 +37,7 @@ namespace Ankh.UI
         /// <summary>
         /// The revision picked.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Revision Revision
         {
             get{ return this.revisionPicker.Revision; }
