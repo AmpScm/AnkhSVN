@@ -38,6 +38,7 @@ namespace Ankh.UI
         /// <summary>
         /// The selected revision.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public NSvn.Core.Revision Revision
         {
             get{ return this.revisionPicker.Revision; }

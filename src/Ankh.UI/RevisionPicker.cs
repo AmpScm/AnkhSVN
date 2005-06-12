@@ -51,6 +51,7 @@ namespace Ankh.UI
         /// <summary>
         /// The revision selected by the user.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Revision Revision
         {
             get
@@ -273,6 +274,7 @@ namespace Ankh.UI
                 this.picker = picker;
             }
 
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public override Revision Revision
             {
                 get{ return Revision.FromDate( this.picker.Value ); }
