@@ -500,6 +500,18 @@ namespace NSvn
             ///<returns>String table of the paths to be listed.</returns>
             DirectoryEntry* List(String* path, Revision* revision, bool recurse) [];
 
+            ///<summary>List the contents of an url or path.</summary>
+            ///<param name="path">Path to the files/directory to be listed.</param>  
+            ///<param name="pegRevision"> The actual node revision selected is determined by 
+            /// the path as it exists in peg_revision. If pegRevision is Revision::Unspecified,
+            /// pegRevision defaults to Revision::Head for URLs and Revision::Working for WC targets.</param>
+            ///<param name="revision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
+            ///                         for more information.</param>
+            ///<param name="recurse">If recurse is true, then propname will be received recursively 
+            ///                      on target and all children.</param> 
+            ///<returns>String table of the paths to be listed.</returns>
+            DirectoryEntry* List(String* path, Revision* pegRevision, Revision* revision, bool recurse) [];
+
             ///<summary>List the contents of a file.</summary>
             ///<param name="out"></param>  
             ///<param name="path">Path to the file to be edited.</param>  

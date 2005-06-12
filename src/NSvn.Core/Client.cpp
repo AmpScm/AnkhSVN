@@ -607,12 +607,20 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::RevPropList( String* path,
 NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* revision, 
                                                      bool recurse) []
 {
+    return this->List( path, revision, revision, recurse );
+}
+
+NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* pegRevision,
+                                                     Revision* revision, 
+                                                     bool recurse) []
+{
     SubPool pool(*(this->rootPool));;
 
     const char* truePath = CanonicalizePath( path, pool );
     apr_hash_t* entriesHash;
 
-    HandleError( svn_client_ls( &entriesHash, truePath, 
+    HandleError( svn_client_ls2( &entriesHash, truePath, 
+        pegRevision->ToSvnOptRevision( pool ),
         revision->ToSvnOptRevision( pool ), recurse,
         this->context->ToSvnContext(), pool ) );
 
