@@ -305,7 +305,7 @@ void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* r
 int NSvn::Core::Client::Checkout( String* url, String* path, Revision* revision, 
                                   bool recurse )
 {
-    return this->Checkout( url, path, revision, revision, recurse, false );
+    return this->Checkout( url, path, Revision::Unspecified, revision, recurse, false );
 }
 
 int NSvn::Core::Client::Checkout( String* url, String* path, Revision* pegRevision,
