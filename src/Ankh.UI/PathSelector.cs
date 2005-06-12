@@ -187,10 +187,8 @@ namespace Ankh.UI
             // 
             // pathSelectionTreeView
             // 
-            this.pathSelectionTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right)));
             this.pathSelectionTreeView.CheckBoxes = true;
+            this.pathSelectionTreeView.Dock = System.Windows.Forms.DockStyle.Top;
             this.pathSelectionTreeView.ImageIndex = -1;
             this.pathSelectionTreeView.Items = new object[0];
             this.pathSelectionTreeView.Location = new System.Drawing.Point(0, 0);
@@ -198,14 +196,14 @@ namespace Ankh.UI
             this.pathSelectionTreeView.Recursive = false;
             this.pathSelectionTreeView.SelectedImageIndex = -1;
             this.pathSelectionTreeView.SingleCheck = false;
-            this.pathSelectionTreeView.Size = new System.Drawing.Size(368, 184);
+            this.pathSelectionTreeView.Size = new System.Drawing.Size(368, 240);
             this.pathSelectionTreeView.TabIndex = 0;
             this.pathSelectionTreeView.UrlPaths = false;
             // 
             // recursiveCheckBox
             // 
             this.recursiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.recursiveCheckBox.Location = new System.Drawing.Point(8, 340);
+            this.recursiveCheckBox.Location = new System.Drawing.Point(8, 388);
             this.recursiveCheckBox.Name = "recursiveCheckBox";
             this.recursiveCheckBox.Size = new System.Drawing.Size(88, 24);
             this.recursiveCheckBox.TabIndex = 3;
@@ -216,8 +214,9 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(208, 344);
+            this.okButton.Location = new System.Drawing.Point(208, 392);
             this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 24);
             this.okButton.TabIndex = 4;
             this.okButton.Text = "OK";
             // 
@@ -225,16 +224,17 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(288, 344);
+            this.cancelButton.Location = new System.Drawing.Point(288, 392);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 5;
             this.cancelButton.Text = "Cancel";
             // 
             // revisionStartGroupBox
             // 
-            this.revisionStartGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.revisionStartGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.revisionStartGroupBox.Controls.Add(this.revisionPickerStart);
-            this.revisionStartGroupBox.Location = new System.Drawing.Point(0, 192);
+            this.revisionStartGroupBox.Location = new System.Drawing.Point(0, 248);
             this.revisionStartGroupBox.Name = "revisionStartGroupBox";
             this.revisionStartGroupBox.Size = new System.Drawing.Size(368, 48);
             this.revisionStartGroupBox.TabIndex = 4;
@@ -243,16 +243,19 @@ namespace Ankh.UI
             // 
             // revisionPickerStart
             // 
-            this.revisionPickerStart.Location = new System.Drawing.Point(8, 16);
+            this.revisionPickerStart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.revisionPickerStart.Location = new System.Drawing.Point(3, 16);
             this.revisionPickerStart.Name = "revisionPickerStart";
-            this.revisionPickerStart.Size = new System.Drawing.Size(352, 24);
+            this.revisionPickerStart.Revision = ((NSvn.Core.Revision)(resources.GetObject("revisionPickerStart.Revision")));
+            this.revisionPickerStart.Size = new System.Drawing.Size(362, 29);
             this.revisionPickerStart.TabIndex = 1;
             // 
             // revisionEndGroupBox
             // 
-            this.revisionEndGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.revisionEndGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.revisionEndGroupBox.Controls.Add(this.revisionPickerEnd);
-            this.revisionEndGroupBox.Location = new System.Drawing.Point(0, 248);
+            this.revisionEndGroupBox.Location = new System.Drawing.Point(0, 304);
             this.revisionEndGroupBox.Name = "revisionEndGroupBox";
             this.revisionEndGroupBox.Size = new System.Drawing.Size(368, 48);
             this.revisionEndGroupBox.TabIndex = 5;
@@ -261,16 +264,19 @@ namespace Ankh.UI
             // 
             // revisionPickerEnd
             // 
-            this.revisionPickerEnd.Location = new System.Drawing.Point(8, 16);
+            this.revisionPickerEnd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.revisionPickerEnd.Location = new System.Drawing.Point(3, 16);
             this.revisionPickerEnd.Name = "revisionPickerEnd";
-            this.revisionPickerEnd.Size = new System.Drawing.Size(352, 24);
+            this.revisionPickerEnd.Revision = ((NSvn.Core.Revision)(resources.GetObject("revisionPickerEnd.Revision")));
+            this.revisionPickerEnd.Size = new System.Drawing.Size(362, 29);
             this.revisionPickerEnd.TabIndex = 2;
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(0, 304);
+            this.groupBox1.Location = new System.Drawing.Point(0, 352);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(368, 32);
             this.groupBox1.TabIndex = 6;
@@ -287,7 +293,7 @@ namespace Ankh.UI
             // PathSelector
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(368, 373);
+            this.ClientSize = new System.Drawing.Size(368, 421);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.revisionStartGroupBox);
@@ -296,6 +302,7 @@ namespace Ankh.UI
             this.Controls.Add(this.recursiveCheckBox);
             this.Controls.Add(this.pathSelectionTreeView);
             this.Controls.Add(this.revisionEndGroupBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(376, 0);
             this.Name = "PathSelector";
             this.ShowInTaskbar = false;

@@ -55,7 +55,8 @@ namespace Ankh.UI
             // 
             // stopOnCopyCheckBox
             // 
-            this.stopOnCopyCheckBox.Location = new System.Drawing.Point(104, 340);
+            this.stopOnCopyCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.stopOnCopyCheckBox.Location = new System.Drawing.Point(88, 388);
             this.stopOnCopyCheckBox.Name = "stopOnCopyCheckBox";
             this.stopOnCopyCheckBox.Size = new System.Drawing.Size(96, 24);
             this.stopOnCopyCheckBox.TabIndex = 7;
@@ -65,7 +66,7 @@ namespace Ankh.UI
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.Caption = "Log";
-            this.ClientSize = new System.Drawing.Size(368, 381);
+            this.ClientSize = new System.Drawing.Size(368, 420);
             this.Controls.Add(this.stopOnCopyCheckBox);
             this.Name = "LogDialog";
             this.Text = "Log";
