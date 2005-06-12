@@ -629,6 +629,14 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
                               String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, bool noDiffDeleted, 
                               Stream* outfile, Stream* errfile )
 {
+    this->Diff( diffOptions, path1, revision1, path2, revision2, recurse, ignoreAncestry,
+        noDiffDeleted, false, outfile, errfile );
+}
+
+void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* revision1,
+                              String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, bool noDiffDeleted, 
+                              bool ignoreContentType, Stream* outfile, Stream* errfile )
+{
     SubPool pool(*(this->rootPool));;
 
     apr_array_header_t* diffOptArray = StringArrayToAprArray( diffOptions, false, pool );
@@ -640,9 +648,10 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
     apr_file_t* aprOut = outAdapter->Start( pool );
     apr_file_t* aprErr = errAdapter->Start( pool );    
 
-    HandleError( svn_client_diff( diffOptArray, truePath1, 
+    HandleError( svn_client_diff2( diffOptArray, truePath1, 
         revision1->ToSvnOptRevision( pool ), truePath2, 
         revision2->ToSvnOptRevision(pool), recurse, ignoreAncestry, noDiffDeleted,
+        ignoreContentType,
         aprOut, aprErr, this->context->ToSvnContext(), pool ) );
 
     apr_file_close( aprOut );

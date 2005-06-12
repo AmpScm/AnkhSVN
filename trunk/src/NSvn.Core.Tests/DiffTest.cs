@@ -66,6 +66,42 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "Diffs differ", clientDiff, apiDiff );
         }
 
+        [Test]
+        public void TestDiffBinary()
+        {
+            string path = Path.Combine( this.WcPath, "Form.cs" );
+            this.RunCommand( "svn", "propset svn:mime-type application/octet-stream " + 
+                path );
+            this.RunCommand( "svn", "ci -m '' " + path );
+
+            using( StreamWriter w = new StreamWriter(path) )
+                w.WriteLine( "Hi there" );
+            
+
+            MemoryStream outstream = new MemoryStream();
+            MemoryStream errstream = new MemoryStream();
+
+            // this should not diff a binary file
+            this.Client.Diff( new string[]{}, path, Revision.Base, 
+                path, Revision.Working, true, true, false, outstream,
+                errstream );
+            string diff = Encoding.ASCII.GetString( outstream.ToArray() );
+            Assert.IsTrue( diff.IndexOf( "application/octet-stream" ) >= 0 );
+            
+
+            outstream = new MemoryStream();
+            errstream = new MemoryStream();
+
+            this.Client.Diff( new string[]{}, path, Revision.Base, 
+                path, Revision.Working, true, true, false, true, outstream,
+                errstream );
+
+            Assert.IsTrue( outstream.Length > 0 );
+            diff = Encoding.ASCII.GetString( outstream.ToArray() );
+            Assert.IsTrue( diff.IndexOf( "application/octet-stream" ) < 0 );
+
+        }
+
         		
     }
 }

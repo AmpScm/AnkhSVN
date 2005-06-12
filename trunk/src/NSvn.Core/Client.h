@@ -295,6 +295,34 @@ namespace NSvn
                 bool noDiffDeleted, 
                 Stream* outfile, Stream* errFile);
 
+            ///<summary>Produce diff output which describes the delta between path1/revision1 
+            ///         and path2/revision2.</summary>
+            ///<param name="path1">Path to first file/directory in working copy or repository.</param> 
+            ///<param name="revision1">First revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
+            ///                      for more information.</param> 
+            ///<param name="path2">Path to second file/directory in working copy or repository.</param> 
+            ///<param name="revision2">Second revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
+            ///                      for more information.</param> 
+            ///<param name="recurse">If recursive is set, assuming path is a directory 
+            ///                        all of its contents will be scheduled for addition as well.</param> 
+            ///<param name="ignoreAncestry">Use ignore_ancestry to control whether or not items 
+            /// being diffed will be checked for relatedness first. Unrelated items are 
+            /// typically transmitted to the editor as a deletion of one thing and the 
+            /// addition of another, but if this flag is TRUE, unrelated items will be 
+            /// diffed as if they were related. </param>
+
+
+            ///<param name="noDiffDeleted">If noDiffDeleted is true, then no diff output will 
+            ///                             be generated on deleted files</param> 
+            ///<param name="ignoreContentType">Ignore the content type of the files and output
+            /// a diff even for binary content types.</param>
+            ///<param name="outfile">File that contains output of the diff.</param> 
+            ///<param name="errFile">File that contains errors of the diff.</param>  
+            void Diff(String* diffOptions[], String* path1, Revision* revision1, 
+                String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, 
+                bool noDiffDeleted, bool ignoreContentType,
+                Stream* outfile, Stream* errFile);
+
             String* GetPristinePath(String* path);
 
             ///<summary>Apply file differences into a working copy. Merge changes 
