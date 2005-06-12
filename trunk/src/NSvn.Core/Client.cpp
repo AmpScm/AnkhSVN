@@ -383,14 +383,20 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath,
                                                  Revision* srcRevision, String* dstPath, 
                                                  bool force )
 {
+    return this->Move( srcPath, dstPath, force );
+}
+
+NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath, String* dstPath, 
+                                                 bool force )
+{
     SubPool pool(*(this->rootPool));;
     const char* trueSrcPath = CanonicalizePath( srcPath, pool );
     const char* trueDstPath = CanonicalizePath( dstPath, pool );
 
     svn_client_commit_info_t* commitInfoPtr = 0;
 
-    HandleError( svn_client_move ( &commitInfoPtr, trueSrcPath, 
-        srcRevision->ToSvnOptRevision( pool ), trueDstPath, force, 
+    HandleError( svn_client_move2 ( &commitInfoPtr, trueSrcPath, 
+        trueDstPath, force, 
         this->context->ToSvnContext(), pool ) );
 
     if ( commitInfoPtr != 0 )

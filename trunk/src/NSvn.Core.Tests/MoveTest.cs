@@ -30,7 +30,7 @@ namespace NSvn.Core.Tests
             string srcPath = Path.Combine( this.WcPath, "Form.cs" );
             string dstPath = Path.Combine( this.WcPath, "renamedForm.cs" );
            
-            CommitInfo info = this.Client.Move( srcPath, Revision.Unspecified, dstPath, false ); 
+            CommitInfo info = this.Client.Move( srcPath, dstPath, false ); 
 
             Assertion.Assert( " File wasn't moved ", File.Exists( dstPath ) );
             Assertion.Assert( " Source File still exists ", !File.Exists( srcPath ) );
@@ -46,7 +46,7 @@ namespace NSvn.Core.Tests
             string srcPath = Path.Combine( this.WcPath, @"bin\Debug" );
             string dstPath = Path.Combine( this.WcPath, @"renamedDebug" );
            
-            CommitInfo info = this.Client.Move( srcPath, Revision.Unspecified, dstPath, false ); 
+            CommitInfo info = this.Client.Move( srcPath, dstPath, false ); 
 
             Assertion.Assert( " Directory wasn't moved ", Directory.Exists( dstPath ) );
             Assertion.AssertEquals( " Status is not 'D'  ", 'D', this.GetSvnStatus( srcPath) );
@@ -61,7 +61,7 @@ namespace NSvn.Core.Tests
             string srcPath = Path.Combine( this.ReposUrl, "Form.cs" );
             string dstPath = Path.Combine( this.ReposUrl, "renamedForm" );
            
-            CommitInfo info = this.Client.Move( srcPath, Revision.Head, dstPath, false ); 
+            CommitInfo info = this.Client.Move( srcPath, dstPath, false ); 
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
             Assertion.Assert( " File wasn't moved ", cmd.IndexOf( "Form.cs" ) == -1 );

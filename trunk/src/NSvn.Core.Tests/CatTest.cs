@@ -64,7 +64,7 @@ namespace NSvn.Core.Tests
             string path = Path.Combine( this.ReposUrl, "Form.cs" );
             string toPath = Path.Combine( this.ReposUrl, "Moo.cs" );
 
-            CommitInfo info = this.Client.Move( path, Revision.Head, toPath, false );
+            CommitInfo info = this.Client.Move( path, toPath, false );
             
             string clientOutput = this.RunCommand( "svn", 
                 string.Format( "cat {0}@{1} -r {2}", toPath, info.Revision, info.Revision-1 ) );

@@ -380,14 +380,25 @@ namespace NSvn
 
             ///<summary>Move a file/directory.</summary>
             ///<param name="srcPath">Path to the file/directory to be moved.</param>
-            ///<param name="srcRevision">A revision, specified in Core::Revision. <see cref="NSvn.Core.Revision"/> 
-            ///                         for more information.</param>
+            ///<param name="srcRevision">This parameter has no effect and is included only for 
+            /// backwards compatibility.</param>
             ///<param name="dstPath">Path to the destination.</param>
             ///<param name="force">If force is set locally modified and/or unversioned items will 
             ///                     be removed.</param>
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
+            [ObsoleteAttribute( "Deprecated with SVN 1.2. Use Move(String* srcPath, Revision* srcRevision, String* dstPath, bool force) instead" )]
             CommitInfo* Move(String* srcPath, Revision* srcRevision, String* dstPath, 
+                bool force);
+
+            ///<summary>Move a file/directory.</summary>
+            ///<param name="srcPath">Path to the file/directory to be moved.</param>
+            ///<param name="dstPath">Path to the destination.</param>
+            ///<param name="force">If force is set locally modified and/or unversioned items will 
+            ///                     be removed.</param>
+            ///<returns>Commit info object containing information about revision, date and author. 
+            ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>            
+            CommitInfo* Move(String* srcPath, String* dstPath, 
                 bool force);
 
             ///<summary>Set a property to a file/directory</summary>
