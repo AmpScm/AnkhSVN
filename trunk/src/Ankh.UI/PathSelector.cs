@@ -22,8 +22,16 @@ namespace Ankh.UI
         /// </summary>
         public event GetPathInfoDelegate GetPathInfo
         {
-            add{ this.pathSelectionTreeView.GetPathInfo += value; }
-            remove{ this.pathSelectionTreeView.GetPathInfo -= value; }
+            add
+            { 
+                this.getPathInfo += value;
+                this.pathSelectionTreeView.GetPathInfo += value; 
+            }
+            remove
+            { 
+                this.pathSelectionTreeView.GetPathInfo -= value; 
+                this.getPathInfo -= value;
+            }
         }
 
 
@@ -141,6 +149,27 @@ namespace Ankh.UI
                         throw new ArgumentException( "Invalid value for Options" );
                 }
             }
+        }
+
+        protected PathSelectionTreeView TreeView
+        {
+            get{ return this.pathSelectionTreeView; }
+        }
+
+        protected void RaiseGetPathInfo( GetPathInfoEventArgs args )
+        {
+            if ( this.getPathInfo != null )
+                this.getPathInfo( this, args );
+        }
+
+        protected Button OkButton
+        {
+            get{ return this.okButton; }
+        }
+
+        protected new Button CancelButton
+        {
+            get{ return this.cancelButton; }
         }
 
 
@@ -302,7 +331,6 @@ namespace Ankh.UI
             this.Controls.Add(this.recursiveCheckBox);
             this.Controls.Add(this.pathSelectionTreeView);
             this.Controls.Add(this.revisionEndGroupBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(376, 0);
             this.Name = "PathSelector";
             this.ShowInTaskbar = false;
@@ -316,22 +344,24 @@ namespace Ankh.UI
         }
         #endregion
 
-        private Ankh.UI.PathSelectionTreeView pathSelectionTreeView;
-        private System.Windows.Forms.CheckBox recursiveCheckBox;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.Button cancelButton;
+        protected Ankh.UI.PathSelectionTreeView pathSelectionTreeView;
+        protected System.Windows.Forms.CheckBox recursiveCheckBox;
+        protected System.Windows.Forms.Button okButton;
+        protected System.Windows.Forms.Button cancelButton;
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-        private System.Windows.Forms.GroupBox revisionStartGroupBox;
+        protected System.Windows.Forms.GroupBox revisionStartGroupBox;
         private Ankh.UI.RevisionPicker revisionPickerStart;
-        private System.Windows.Forms.GroupBox revisionEndGroupBox;
+        protected System.Windows.Forms.GroupBox revisionEndGroupBox;
         private Ankh.UI.RevisionPicker revisionPickerEnd;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label1;
+        protected System.Windows.Forms.GroupBox groupBox1;
+        protected System.Windows.Forms.Label label1;
 
         private PathSelectorOptions options;
+        private GetPathInfoDelegate getPathInfo;
 
 
         public static void Main()
