@@ -271,6 +271,29 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Shows the lock dialog.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public LockDialogInfo ShowLockDialog( LockDialogInfo info )
+        {
+            using( LockDialog dlg = new LockDialog() )
+            {
+                dlg.Items = info.Items;
+                dlg.CheckedItems = info.CheckedItems;
+                dlg.Message = info.Message;
+                dlg.StealLocks = info.StealLocks;
+                if ( dlg.ShowDialog( this.Context.HostWindow ) != DialogResult.OK )
+                    return null;
+
+                info.CheckedItems = dlg.CheckedItems;
+                info.Message = dlg.Message;
+                info.StealLocks = dlg.StealLocks;
+                return info;
+            }
+        }
+
+        /// <summary>
         /// Shows the log dialog.
         /// </summary>
         /// <param name="info"></param>

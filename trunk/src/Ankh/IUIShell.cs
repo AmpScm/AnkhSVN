@@ -112,6 +112,13 @@ namespace Ankh
         PathSelectorInfo ShowPathSelector( PathSelectorInfo info );
 
         /// <summary>
+        /// Shows the lock dialog.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        LockDialogInfo ShowLockDialog( LockDialogInfo info );
+
+        /// <summary>
         /// Shows the log dialog.
         /// </summary>
         /// <param name="info"></param>
