@@ -117,5 +117,13 @@ namespace Ankh
         /// <param name="info"></param>
         /// <returns></returns>
         LogDialogInfo ShowLogDialog( LogDialogInfo info );
+
+
+        /// <summary>
+        /// Shows the switch dialog.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        SwitchDialogInfo ShowSwitchDialog( SwitchDialogInfo info );
 	}
 }

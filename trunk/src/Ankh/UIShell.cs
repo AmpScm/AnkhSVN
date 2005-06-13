@@ -298,6 +298,29 @@ namespace Ankh
             }
         }
 
+        public SwitchDialogInfo ShowSwitchDialog( SwitchDialogInfo info )
+        {
+            using( SwitchDialog dialog = new SwitchDialog() )
+            {
+                dialog.GetPathInfo += new GetPathInfoDelegate(GetUrlPathinfo);
+                dialog.Items = info.Items;
+                dialog.SingleSelection = true;
+                dialog.CheckedItems = info.Items;
+                dialog.Options = PathSelectorOptions.DisplaySingleRevision;
+                dialog.Recursive = true;
+
+                if ( dialog.ShowDialog(this.Context.HostWindow) != DialogResult.OK )
+                    return null;
+                
+                info.SwitchToUrl = dialog.ToUrl;
+                info.Recursive = dialog.Recursive;
+                info.Path = dialog.SelectedPath;
+                info.RevisionStart = dialog.RevisionStart;
+
+                return info;
+            }
+        }
+
         #endregion
 
         private void CreateRepositoryExplorer()
@@ -380,6 +403,13 @@ namespace Ankh
             args.Path = item.Path;
         }
 
+        protected static void GetUrlPathinfo(object sender, GetPathInfoEventArgs args)
+        {
+            SvnItem item = (SvnItem)args.Item;
+            args.IsDirectory = item.IsDirectory;
+            args.Path = item.Status.Entry.Url;
+        }
+
         private void EnsureWindowSize( Window window )
         {
             try
@@ -415,6 +445,6 @@ namespace Ankh
         private const string CommitDialogGuid = 
             "{08BD45A4-7716-49b0-BB41-CFEBCD098728}";
 
-        
+       
     }
 }
