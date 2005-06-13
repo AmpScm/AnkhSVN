@@ -272,6 +272,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LockDialogInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "LogDialogInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -471,6 +476,11 @@
                 />
                 <File
                     RelPath = "Commands\LocalDiffCommandBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\LockCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
