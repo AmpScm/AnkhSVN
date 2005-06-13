@@ -36,31 +36,23 @@ namespace Ankh.Commands
             IList resources = context.SolutionExplorer.GetSelectionResources(
                 false, new ResourceFilterCallback( CommandBase.VersionedFilter ) );
 
-            string path = null;
-            string url = null;
-            Revision revision = null;
-            bool recursive = false;
+            if ( resources.Count == 0 )
+                return;
 
-            // now let the user choose which item to switch
-            using ( SwitchDialog dialog = new SwitchDialog() )
-            {
-                foreach( SvnItem item in resources )
-                    dialog.AddItem( item.Path, item.Status.Entry.Url );
+            SwitchDialogInfo info = new SwitchDialogInfo( resources, 
+                new object[]{resources[0]} );
 
-                if ( dialog.ShowDialog( context.HostWindow ) != DialogResult.OK )
-                    return;
-                path = dialog.Path;
-                url = dialog.Url;
-                revision = dialog.Revision;
-                recursive = dialog.Recursive;
-            }
+            info = context.UIShell.ShowSwitchDialog( info );
+
+            if ( info == null ) 
+                return;
 
             context.StartOperation( "Switching" );
             context.ProjectFileWatcher.StartWatchingForChanges();
             try
             {
-                SwitchRunner runner = new SwitchRunner(path, url, revision,
-                    recursive );
+                SwitchRunner runner = new SwitchRunner(info.Path, info.SwitchToUrl, 
+                    info.RevisionStart, info.Recursive );
                 context.UIShell.RunWithProgressDialog( runner, "Switching" );
                 if ( !context.ReloadSolutionIfNecessary() )
                 {
