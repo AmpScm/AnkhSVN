@@ -172,6 +172,16 @@ namespace Ankh.UI
             get{ return this.cancelButton; }
         }
 
+        protected RevisionPicker RevisionPickerStart
+        {
+            get{ return this.revisionPickerStart; }
+        }
+
+        protected RevisionPicker RevisionPickerEnd
+        {
+            get{ return this.revisionPickerEnd; }
+        }
+
 
         /// <summary>
         /// Clean up any resources being used.
