@@ -210,7 +210,6 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(PathSelector));
             this.pathSelectionTreeView = new Ankh.UI.PathSelectionTreeView();
             this.recursiveCheckBox = new System.Windows.Forms.CheckBox();
             this.okButton = new System.Windows.Forms.Button();
@@ -219,11 +218,11 @@ namespace Ankh.UI
             this.revisionPickerStart = new Ankh.UI.RevisionPicker();
             this.revisionEndGroupBox = new System.Windows.Forms.GroupBox();
             this.revisionPickerEnd = new Ankh.UI.RevisionPicker();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.suppressGroupBox = new System.Windows.Forms.GroupBox();
+            this.suppressLabel = new System.Windows.Forms.Label();
             this.revisionStartGroupBox.SuspendLayout();
             this.revisionEndGroupBox.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.suppressGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // pathSelectionTreeView
@@ -310,31 +309,31 @@ namespace Ankh.UI
             this.revisionPickerEnd.Size = new System.Drawing.Size(362, 29);
             this.revisionPickerEnd.TabIndex = 2;
             // 
-            // groupBox1
+            // suppressGroupBox
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.suppressGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(0, 352);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(368, 32);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
+            this.suppressGroupBox.Controls.Add(this.suppressLabel);
+            this.suppressGroupBox.Location = new System.Drawing.Point(0, 352);
+            this.suppressGroupBox.Name = "suppressGroupBox";
+            this.suppressGroupBox.Size = new System.Drawing.Size(368, 32);
+            this.suppressGroupBox.TabIndex = 6;
+            this.suppressGroupBox.TabStop = false;
             // 
-            // label1
+            // suppressLabel
             // 
-            this.label1.Location = new System.Drawing.Point(8, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(344, 16);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "You can suppress this dialog by holding down the Shift key";
+            this.suppressLabel.Location = new System.Drawing.Point(8, 12);
+            this.suppressLabel.Name = "suppressLabel";
+            this.suppressLabel.Size = new System.Drawing.Size(344, 16);
+            this.suppressLabel.TabIndex = 0;
+            this.suppressLabel.Text = "You can suppress this dialog by holding down the Shift key";
             // 
             // PathSelector
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(368, 421);
             this.ControlBox = false;
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.suppressGroupBox);
             this.Controls.Add(this.revisionStartGroupBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
@@ -348,7 +347,7 @@ namespace Ankh.UI
             this.Text = "PathSelector";
             this.revisionStartGroupBox.ResumeLayout(false);
             this.revisionEndGroupBox.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.suppressGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -367,10 +366,10 @@ namespace Ankh.UI
         private Ankh.UI.RevisionPicker revisionPickerStart;
         protected System.Windows.Forms.GroupBox revisionEndGroupBox;
         private Ankh.UI.RevisionPicker revisionPickerEnd;
-        protected System.Windows.Forms.GroupBox groupBox1;
-        protected System.Windows.Forms.Label label1;
 
         private PathSelectorOptions options;
+        protected System.Windows.Forms.Label suppressLabel;
+        protected System.Windows.Forms.GroupBox suppressGroupBox;
         private GetPathInfoDelegate getPathInfo;
 
 
