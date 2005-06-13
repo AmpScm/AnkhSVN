@@ -115,7 +115,7 @@ namespace Ankh.UI
         {
             this.urlGroupBox = new System.Windows.Forms.GroupBox();
             this.urlTextBox = new System.Windows.Forms.TextBox();
-            this.groupBox1.SuspendLayout();
+            this.suppressGroupBox.SuspendLayout();
             this.urlGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -154,18 +154,18 @@ namespace Ankh.UI
             this.revisionEndGroupBox.Name = "revisionEndGroupBox";
             this.revisionEndGroupBox.Size = new System.Drawing.Size(362, 48);
             // 
-            // groupBox1
+            // suppressGroupBox
             // 
-            this.groupBox1.Location = new System.Drawing.Point(0, 384);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(370, 32);
-            this.groupBox1.Visible = false;
+            this.suppressGroupBox.Location = new System.Drawing.Point(0, 384);
+            this.suppressGroupBox.Name = "suppressGroupBox";
+            this.suppressGroupBox.Size = new System.Drawing.Size(370, 32);
+            this.suppressGroupBox.Visible = false;
             // 
-            // label1
+            // suppressLabel
             // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.Location = new System.Drawing.Point(5, 8);
-            this.label1.Name = "label1";
+            this.suppressLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.suppressLabel.Location = new System.Drawing.Point(5, 8);
+            this.suppressLabel.Name = "suppressLabel";
             // 
             // urlGroupBox
             // 
@@ -200,14 +200,14 @@ namespace Ankh.UI
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Switch";
             this.Controls.SetChildIndex(this.revisionEndGroupBox, 0);
-            this.Controls.SetChildIndex(this.groupBox1, 0);
+            this.Controls.SetChildIndex(this.suppressGroupBox, 0);
             this.Controls.SetChildIndex(this.revisionStartGroupBox, 0);
             this.Controls.SetChildIndex(this.pathSelectionTreeView, 0);
             this.Controls.SetChildIndex(this.recursiveCheckBox, 0);
             this.Controls.SetChildIndex(this.okButton, 0);
             this.Controls.SetChildIndex(this.cancelButton, 0);
             this.Controls.SetChildIndex(this.urlGroupBox, 0);
-            this.groupBox1.ResumeLayout(false);
+            this.suppressGroupBox.ResumeLayout(false);
             this.urlGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
