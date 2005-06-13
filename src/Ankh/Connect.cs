@@ -113,8 +113,10 @@ namespace Ankh
             }
             catch( Exception ex )
             {
-                handler.Handle( ex );
-                throw;
+                string msg = ex.ToString();
+                System.Windows.Forms.MessageBox.Show( msg, 
+                    "An error occurred while Ankh was loading " + 
+                    "(Press Ctrl-C to copy this message to the clipboard)" );
             }
         }
 
