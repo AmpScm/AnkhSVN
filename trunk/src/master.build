@@ -242,7 +242,7 @@
     
     <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn.Core, build-ReposInstaller"
         description="Build all necessary assemblies">
-        <call target="build-InstallLib"/>
+        
     </target>
     
     <target name="build-tests" depends="build, build-Ankh.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp, build-Utils.Tests"
