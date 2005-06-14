@@ -185,6 +185,7 @@ namespace Ankh
         /// <seealso class='IDTExtensibility2' />
         public void OnBeginShutdown(ref System.Array custom)
         {
+            this.shuttingDown = true;
         }
 		
         /// <summary>
@@ -241,7 +242,8 @@ namespace Ankh
                 //            }
             catch( Exception ex )
             {   
-                this.context.ErrorHandler.Handle( ex );
+                if ( !shuttingDown )
+                    this.context.ErrorHandler.Handle( ex );
             }
             t.End( "Query status for " + commandName + ": " + status, "Ankh" );
         }
@@ -295,8 +297,9 @@ namespace Ankh
                 //                this.context.SolutionExplorer.RefreshSelection();
                 //            }
             catch( Exception ex )
-            {   
-                this.context.ErrorHandler.Handle( ex );
+            {  
+                if ( !shuttingDown )
+                    this.context.ErrorHandler.Handle( ex );
             }
         }
         
@@ -307,6 +310,8 @@ namespace Ankh
         private EnvDTE.vsCommandStatus cachedStatus;
         private string lastQueriedCommand = "";
         private DateTime lastQuery = DateTime.Now;
+
+        private bool shuttingDown = false;
 
         private const int CACHESTATUS_INTERVAL = 800;
 		
