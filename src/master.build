@@ -62,7 +62,7 @@
             commandline="-nologo -w0 Ankh-UI.wixobj Ankh.msi.wixobj apr-iconv.wixobj Ankh.wixobj Ankh.UI.wixobj ReposInstaller.wixobj Utils.wixobj lib.wixobj -out Ankh.msi" />
     </target>
     
-    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm, build-apr-iconv.wxs, version, AboutBoxDetails">
+    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm, build-InstallLib, build-apr-iconv.wxs, version, AboutBoxDetails">
         <nant buildfile="Ankh.UI\Ankh.UI.build" target="build-WiX" inheritall="true"/>
         <nant buildfile="Ankh\Ankh.build" target="build-WiX" inheritall="true" />
         <nant buildfile="lib\lib.build" target="build-WiX" inheritall="true" />
