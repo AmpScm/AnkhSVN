@@ -6,5 +6,9 @@
 #pragma once
 
 #using <mscorlib.dll>
+#using <NSvn.Common.dll>
+#if _MSC_VER < 1310
+#using <NUnit.Framework.dll>
+#endif
 
 
