@@ -91,6 +91,9 @@ namespace Ankh.Commands
                 if ( item.IsVersioned )
                     return false;
 
+                if ( ! (File.Exists( item.Path ) || Directory.Exists( item.Path ) ) )
+                    return false;
+
                 if ( item.IsDirectory )
                 {
                     if ( item.IsVersionable )
