@@ -436,7 +436,6 @@ namespace Ankh.Solution
                 outer.treeview.LockWindowUpdate(true);
                 try
                 {
-
                     // we assume there is a single root node
                     outer.solutionNode = TreeNode.CreateSolutionNode(
                         outer.uiHierarchy.UIHierarchyItems.Item(1), outer);
@@ -513,8 +512,8 @@ namespace Ankh.Solution
                         {
                             // make sure this is invoked on the main GUI thread
                             this.outer.Context.Client.SynchronizingObject.Invoke( 
-                                new LoadDelegate( base.Load ), 
-                                new object[]{ this.outer } );
+                                new LoadDelegate( this.DoLoad ), 
+                                new object[]{} );
                             done = true;
                         }
                         System.Threading.Thread.Sleep( 250 );
@@ -526,7 +525,21 @@ namespace Ankh.Solution
                 }
             }
 
-            private delegate void LoadDelegate( Explorer outer );
+            private void DoLoad()
+            {
+                try
+                {
+                    base.Load( this.outer );
+                }
+                catch( Exception ex )
+                {
+                    this.outer.Context.ErrorHandler.Handle( ex );
+                }
+            }
+
+
+
+            private delegate void LoadDelegate( );
             private Explorer outer;
             private bool done;
         }
