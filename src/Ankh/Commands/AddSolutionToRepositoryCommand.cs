@@ -271,7 +271,7 @@ namespace Ankh.Commands
                     {
                         file = item.get_FileNames(i);
                     }
-                    catch( NullReferenceException )
+                    catch( Exception )
                     {
                         context.OutputPane.WriteLine( "Unable to add file" );
                         continue;
