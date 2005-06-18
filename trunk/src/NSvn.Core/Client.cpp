@@ -980,8 +980,11 @@ svn_error_t* svn_blame_func(void *baton, apr_int64_t line_no, svn_revnum_t revis
     }
     catch( FormatException* ex )
     {
-        StringHelper msg(ex->Message);
-        return svn_error_create( SVN_ERR_BAD_DATE, NULL, msg.CopyToPoolUtf8(pool) );
+        StringHelper dateString(date);
+        String* msg = String::Concat( ex->Message, 
+            String::Concat( Environment::NewLine, dateString ) );
+        return svn_error_create( SVN_ERR_BAD_DATE, NULL, 
+            StringHelper(msg).CopyToPoolUtf8(pool) );
     }
 
     try
