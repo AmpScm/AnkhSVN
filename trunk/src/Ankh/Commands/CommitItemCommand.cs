@@ -127,7 +127,7 @@ namespace Ankh.Commands
 
         private string GetUuid( IContext context, SvnItem item )
         {
-            string uuid = item.Status.Entry.Uuid;
+            string uuid = item.Status.Entry != null ? item.Status.Entry.Uuid : null;
             // freshly added items have no uuid
             if ( uuid == null )
             {
@@ -135,7 +135,7 @@ namespace Ankh.Commands
                 if ( Directory.Exists( parentDir ) )
                 {
                     SvnItem parentItem = context.StatusCache[parentDir];
-                    uuid = parentItem.Status.Entry.Uuid;
+                    uuid = parentItem.Status.Entry != null ? parentItem.Status.Entry.Uuid : null;
 
                     // still nothing? try the parent item
                     if ( uuid == null )
