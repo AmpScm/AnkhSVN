@@ -73,7 +73,14 @@ namespace Ankh
 
         public virtual object GetBarControl( object bar, string name )
         {
-            return ((CommandBar)bar).Controls[name];
+            try
+            {
+                return ((CommandBar)bar).Controls[name];
+            }
+            catch( Exception )
+            {
+                return null;
+            }
         }
 
         public virtual object GetPopupCommandBar( object popup )
@@ -140,9 +147,20 @@ namespace Ankh
 
             public override object GetCommandBar(string name)
             {
-                return this.commandBarsType.InvokeMember(
-                    "Item", BindingFlags.GetProperty, null, 
-                    this.commandBars, new object[]{name} );                
+                try
+                {
+                    return this.commandBarsType.InvokeMember(
+                        "Item", BindingFlags.GetProperty, null, 
+                        this.commandBars, new object[]{name} );                
+                }
+                catch( TargetInvocationException ex )
+                {
+                    // swallow, command bar not found
+                    if ( ex.InnerException is ArgumentException )
+                        return null;
+                    else 
+                        throw;
+                }
             }
 
             public override object AddCommandBar(string name, 
@@ -197,11 +215,15 @@ namespace Ankh
                         "Controls", BindingFlags.GetProperty, null,
                         bar, new object[]{ name } );
                 }
-                catch( TargetInvocationException )
+                catch( TargetInvocationException ex )
                 {
                     // swallow, means the control wasn't found
-                    return null;
+                    if ( ex.InnerException is ArgumentException )
+                        return null;
+                    else
+                        throw;
                 }
+
             }
 
             public override object GetPopupCommandBar(object popup)
