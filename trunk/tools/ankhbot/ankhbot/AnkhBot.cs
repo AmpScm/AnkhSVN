@@ -102,7 +102,8 @@ namespace AnkhBot
 		public void Listen()
 		{
 			this.client.Listen();
-			this.client.Disconnect();
+			if ( this.client.IsConnected )
+				this.client.Disconnect();
 		}
 
 		public void SendPM( string user, string message )
@@ -119,6 +120,11 @@ namespace AnkhBot
 		{
 			foreach (string channel in this.client.GetChannels())
 				this.SendMessage( channel, msg );
+		}
+
+		public void Quit()
+		{
+			this.client.RfcQuit();
 		}
 		
 
@@ -143,6 +149,8 @@ namespace AnkhBot
 		private string nick = "";
 		private string network = "";
 		private const int Port = 6667;
+
+
 
 
 
