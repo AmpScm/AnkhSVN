@@ -4,12 +4,12 @@ using System.Text;
 
 namespace AnkhBot
 {
-	[Command( "die" )]
-	class DieCommand : ICommand
-	{
-		public void Execute( CommandArgs args )
-		{
-			args.Bot.Quit();
-		}
-}
+    [Command( "die" )]
+    class DieCommand : ICommand
+    {
+        public void Execute( CommandArgs args )
+        {
+            args.Bot.Quit();
+        }
+    }
 }

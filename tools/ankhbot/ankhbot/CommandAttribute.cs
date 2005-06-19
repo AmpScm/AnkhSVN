@@ -4,19 +4,19 @@ using System.Text;
 
 namespace AnkhBot
 {
-	[AttributeUsage(AttributeTargets.Class, Inherited=false, AllowMultiple=true)]
-	class CommandAttribute : Attribute
-	{
-		public CommandAttribute( string command )
-		{
-			this.command = command;
-		}
+    [AttributeUsage( AttributeTargets.Class, Inherited = false, AllowMultiple = true )]
+    class CommandAttribute : Attribute
+    {
+        public CommandAttribute( string command )
+        {
+            this.command = command;
+        }
 
-		public string Command
-		{
-			get { return command; }
-		}
+        public string Command
+        {
+            get { return command; }
+        }
 
-		private string command;	
-	}
+        private string command;
+    }
 }
