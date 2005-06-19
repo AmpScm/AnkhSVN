@@ -272,6 +272,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "lock.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "LockDialogInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -300,6 +304,10 @@
                     RelPath = "ProgressRunner.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "readonly.bmp"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "ResourceBitmaps.cs"

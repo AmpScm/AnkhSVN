@@ -164,6 +164,18 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Whether the item is read only on disk.
+        /// </summary>
+        public virtual bool IsReadOnly
+        {
+            get
+            {
+                return this.IsFile &&
+                    (File.GetAttributes( this.Path ) & FileAttributes.ReadOnly) != 0;
+            }
+        }
+
         public override string ToString()
         {
             return this.path;

@@ -8,6 +8,7 @@ using NSvn.Common;
 using Utils.Win32;
 using System.Collections;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Diagnostics;
 using System.IO;
 
@@ -349,6 +350,16 @@ namespace Ankh.Solution
             Bitmap statusImages = (Bitmap)Image.FromStream( 
                 this.GetType().Assembly.GetManifestResourceStream( STATUS_IMAGES ) );
 
+            Bitmap readOnly = (Bitmap)Image.FromStream( 
+                this.GetType().Assembly.GetManifestResourceStream( READONLY_IMAGE ) );
+            readOnly.MakeTransparent( readOnly.GetPixel(0, 0) );
+
+            Bitmap lockImage = (Bitmap)Image.FromStream( 
+                this.GetType().Assembly.GetManifestResourceStream( LOCK_IMAGE ) );
+            lockImage.MakeTransparent( lockImage.GetPixel(0, 0) );
+            
+            statusImages = this.MergeStatusIcons( statusImages, readOnly, lockImage );
+
             statusImages.MakeTransparent( statusImages.GetPixel(0,0) );
 
             this.statusImageList = new ImageList();
@@ -414,6 +425,44 @@ namespace Ankh.Solution
                 return ((TreeNode)this.projects[project]);
             else
                 return null;
+        }
+
+        /// <summary>
+        /// Merges the status icons with the icons for locked and read only.
+        /// </summary>
+        /// <param name="foundation"></param>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        private Bitmap MergeStatusIcons( Bitmap foundation, Bitmap b1, Bitmap b2 )
+        {
+            Bitmap result = new Bitmap( foundation.Width * 4, foundation.Height );
+            Graphics target = Graphics.FromImage( result );
+            for( int i = 0; i < 4; i++ )
+            {
+                target.CompositingMode = CompositingMode.SourceCopy;
+                target.DrawImage( foundation, foundation.Width * i, 0 );
+
+                if ( i == 1 || i == 3 )
+                {
+                    target.CompositingMode = CompositingMode.SourceOver;
+                    for( int j = 0; j < foundation.Width / b1.Width; j++ )
+                    {
+                        target.DrawImage( b1, foundation.Width * i + b1.Width * j, 0 );                        
+                    }
+                }
+
+                if ( i == 2 || i == 3 )
+                {
+                    target.CompositingMode = CompositingMode.SourceOver;
+                    for( int j = 0; j < foundation.Width / b2.Width; j++ )
+                    {
+                        target.DrawImage( b2, foundation.Width * i + b2.Width * j, 0 );                        
+                    }
+
+                }
+            }
+            return result;
         }
 
         #region SolutionLoadStrategy
@@ -716,5 +765,7 @@ namespace Ankh.Solution
         private IntPtr originalImageList = IntPtr.Zero;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
+        private const string LOCK_IMAGE = "Ankh.lock.bmp";
+        private const string READONLY_IMAGE = "Ankh.readonly.bmp";
     }
 }

@@ -119,13 +119,13 @@ namespace Ankh.Solution
 
         static TreeNode()
         {
-            statusMap[ NodeStatus.Normal ]      = 1;
-            statusMap[ NodeStatus.Added ]       = 2;
-            statusMap[ NodeStatus.Deleted ]     = 3;
-            statusMap[ NodeStatus.IndividualStatusesConflicting ] = 7;
-            statusMap[ NodeStatus.Conflicted ]  = 6;
-            statusMap[ NodeStatus.Unversioned ] = 8;
-            statusMap[ NodeStatus.Modified ]    = 9;
+            statusMap[ NodeStatusKind.Normal ]      = 1;
+            statusMap[ NodeStatusKind.Added ]       = 2;
+            statusMap[ NodeStatusKind.Deleted ]     = 3;
+            statusMap[ NodeStatusKind.IndividualStatusesConflicting ] = 7;
+            statusMap[ NodeStatusKind.Conflicted ]  = 6;
+            statusMap[ NodeStatusKind.Unversioned ] = 8;
+            statusMap[ NodeStatusKind.Modified ]    = 9;
             
         }
         
@@ -207,8 +207,11 @@ namespace Ankh.Solution
         protected void SetStatusImage( NodeStatus status )
         {
             int statusImage = 0;
-            if ( statusMap.Contains(status) )
-                statusImage = (int)statusMap[status];
+            if ( statusMap.Contains(status.Kind) )
+                statusImage = (int)statusMap[status.Kind];
+
+            if ( status.ReadOnly )
+                statusImage += 10;
 
             this.explorer.TreeView.SetStatusImage( this.hItem, statusImage );                
         }
@@ -219,15 +222,21 @@ namespace Ankh.Solution
         /// </summary>
         /// <param name="resource"></param>
         /// <returns></returns>
-        protected NodeStatus GenerateStatus(Status status)
+        protected NodeStatus GenerateStatus(SvnItem item)
         {  
+            Status status = item.Status;
+            NodeStatus newStatus = new NodeStatus();
             if ( status.TextStatus != StatusKind.Normal )
-                return (NodeStatus)status.TextStatus;
+                newStatus.Kind = (NodeStatusKind)status.TextStatus;
             else if ( status.PropertyStatus != StatusKind.Normal &&
                 status.PropertyStatus != StatusKind.None )
-                return (NodeStatus)status.PropertyStatus;  
+                newStatus.Kind = (NodeStatusKind)status.PropertyStatus;  
             else
-                return NodeStatus.Normal;
+                newStatus.Kind = NodeStatusKind.Normal;
+
+            newStatus.ReadOnly = item.IsReadOnly;
+
+            return newStatus;
         }
 
         /// <summary>
@@ -263,7 +272,7 @@ namespace Ankh.Solution
         {   
             StatusMerger statusMerger = new StatusMerger();
             foreach( SvnItem item in items )
-                statusMerger.NewStatus( this.GenerateStatus(item.Status) );
+                statusMerger.NewStatus( this.GenerateStatus(item) );
 
             return statusMerger.CurrentStatus;
         }
@@ -384,29 +393,35 @@ namespace Ankh.Solution
         {
             public void NewStatus( NodeStatus status )
             {
-                if ( this.CurrentStatus == NodeStatus.None )
-                    this.CurrentStatus = status;
-                else if ( status != NodeStatus.None && status != NodeStatus.Ignored )
+                if ( this.currentStatus.Kind == NodeStatusKind.None || this.currentStatus.Kind == 0 )
+                    this.currentStatus.Kind = status.Kind;
+                else if ( status.Kind != NodeStatusKind.None && 
+                    status.Kind != NodeStatusKind.Ignored &&
+                    status.Kind != 0 )
                 {
-                    if ( this.CurrentStatus == NodeStatus.Normal )
+                    if ( this.currentStatus.Kind == NodeStatusKind.Normal )
                     {
-                        this.CurrentStatus = status;
+                        this.currentStatus.Kind = status.Kind;
                     }
-                    else if ( status != NodeStatus.Normal &&
-                        this.CurrentStatus != status )
+                    else if ( status.Kind != NodeStatusKind.Normal &&
+                        this.currentStatus.Kind != status.Kind )
                     {
-                        this.CurrentStatus = NodeStatus.IndividualStatusesConflicting;
+                        this.currentStatus.Kind = NodeStatusKind.IndividualStatusesConflicting;
                     }
                 }
+
+                if ( status.ReadOnly )
+                    this.currentStatus.ReadOnly = true;
+
+                if ( status.Locked )
+                    this.currentStatus.Locked = true;
                                                     
             }
 
             public NodeStatus CurrentStatus
             {
                 get
-                {
-                    if ( this.currentStatus == (NodeStatus)0 )
-                        this.currentStatus = NodeStatus.None;
+                {                    
                     return this.currentStatus;
                 }
                 set{ this.currentStatus = value; }
@@ -417,7 +432,47 @@ namespace Ankh.Solution
         /// <summary>
         /// Describes the status of a tree node.
         /// </summary>
-        protected enum NodeStatus
+        protected struct NodeStatus
+        {
+            public NodeStatusKind Kind;
+            public bool ReadOnly;
+            public bool Locked;
+
+            public NodeStatus( NodeStatusKind kind, bool readOnly, bool locked )
+            {
+                this.Kind = kind;
+                this.ReadOnly = readOnly;
+                this.Locked = locked;
+            }
+
+            public static bool operator==( NodeStatus s1, NodeStatus s2 )
+            {
+                return s1.Kind == s2.Kind && 
+                        s1.Locked == s2.Locked && 
+                        s1.ReadOnly == s2.ReadOnly;
+            }
+
+            public static bool operator!=( NodeStatus s1, NodeStatus s2 )
+            {
+                return !(s1 == s2);
+            }
+
+            public override bool Equals(object obj)
+            {
+                return this == (NodeStatus)obj;
+            }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode ();
+            }
+
+
+
+            public static readonly NodeStatus None = new NodeStatus( NodeStatusKind.None, false, false );
+        }
+
+        protected enum NodeStatusKind
         {
             None = StatusKind.None,
             Normal = StatusKind.Normal,
