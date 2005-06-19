@@ -504,7 +504,7 @@ namespace Ankh.Solution
                     {
                         UIHierarchyItem item = outer.uiHierarchy.UIHierarchyItems.Item(1);
 
-                        Debug.WriteLine( String.Format("UIHierarchyItems: {0}, Projects.Count: {1}",
+                        Trace.WriteLine( String.Format("UIHierarchyItems: {0}, Projects.Count: {1}",
                             item.UIHierarchyItems.Count, outer.dte.Solution.Projects.Count),
                             "Ankh" );
  
