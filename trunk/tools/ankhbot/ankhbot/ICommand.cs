@@ -4,8 +4,8 @@ using System.Text;
 
 namespace AnkhBot
 {
-	interface ICommand
-	{
-		void Execute( CommandArgs args );
-	}
+    interface ICommand
+    {
+        void Execute( CommandArgs args );
+    }
 }
