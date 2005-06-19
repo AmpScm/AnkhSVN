@@ -47,7 +47,7 @@ namespace AnkhBot
 			{
 				string module = args.Args[1];
 				string status = 
-					args.Bot.ServiceProvider.GetService<DracoService>().BuildStatus( module );
+					args.Bot.ServiceProvider.GetService<DracoService>().GetBuildStatus( module );
 				args.SendMessage( string.Format( "Status of {0}: {1}", module, status ) );
 			}
 		}

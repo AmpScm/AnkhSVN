@@ -4,6 +4,7 @@ using System.Text;
 using Draco.Core.Remote;
 using System.Runtime.Remoting;
 
+
 namespace AnkhBot
 {
 	class DracoService : RemotelyDelegatableObject, IService
@@ -15,26 +16,17 @@ namespace AnkhBot
 			RemotingConfiguration.Configure( AppDomain.CurrentDomain.SetupInformation.ConfigurationFile );
 
 			this.monitor = new RemoteEventMonitor();
-			BuildStatusChangedEventHandler changed = delegate( BuildEventArgs args )
-			{
-				if (args.Status != Draco.Core.Remote.BuildStatus.Queued)
-				{
-					this.bot.Broadcast( String.Format( "New status for {0}: {1}.",
-						args.BuildName, args.Status ) );
-				}
-			};
+			this.monitor.BuildStatusChanged += this.BuildStatusChanged;
 
 			this.monitor.BuildStarted += delegate( string moduleName )
 			{
 				this.bot.Broadcast( "Starting build of " + moduleName );
-				this.monitor.BuildStatusChanged += changed;
 			};
 
 			this.monitor.BuildCompleted += delegate( BuildEventArgs args )
 			{
 				this.bot.Broadcast( string.Format( "Build of {0} completed with status {1}",
 					args.BuildName, args.Status ) );
-				this.monitor.BuildStatusChanged -= changed;
 			};
 
 			this.monitor.ServerStatusChanged += delegate( ServerStatusChangedEventArgs args )
@@ -112,7 +104,7 @@ namespace AnkhBot
 			this.draco.StopBuild( module );
 		}
 
-		public string BuildStatus( string module )
+		public string GetBuildStatus( string module )
 		{
 			return this.draco.GetBuildStatus( module ).ToString();
 		}
@@ -126,6 +118,15 @@ namespace AnkhBot
 		public string[] GetBuilds()
 		{
 			return this.draco.GetAvailableBuilds();
+		}
+
+		private void BuildStatusChanged( BuildEventArgs args )
+		{
+			if (args.Status == BuildStatus.CheckingOut ||
+				args.Status == BuildStatus.Sleeping)
+			{
+				this.bot.Broadcast( String.Format( "Status of {0}: {1}", args.BuildName, args.Status ) );
+			}
 		}
 
 		/// <summary>
@@ -172,6 +173,8 @@ namespace AnkhBot
 						{
 							_remote.BuildStatusChanged -= new BuildStatusChangedEventHandler( BuildStatusChangedCallback );
 							_remote.ServerStatusChanged -= new ServerStatusChangedEventHandler( ServerStatusChangedCallback );
+							_remote.BuildStarted -= new BuildStartedEventHandler( BuildStartedCallback );
+							_remote.BuildCompleted -= new BuildCompletedEventHandler( BuildCompletedCallback );
 						}
 					}
 					catch (Exception)
@@ -185,6 +188,8 @@ namespace AnkhBot
 					{
 						_remote.BuildStatusChanged += new BuildStatusChangedEventHandler( BuildStatusChangedCallback );
 						_remote.ServerStatusChanged += new ServerStatusChangedEventHandler( ServerStatusChangedCallback );
+						_remote.BuildStarted += new BuildStartedEventHandler( BuildStartedCallback );
+						_remote.BuildCompleted += new BuildCompletedEventHandler( BuildCompletedCallback );
 					}
 					catch (Exception)
 					{
@@ -204,6 +209,7 @@ namespace AnkhBot
 		private AnkhBot bot;
 		private IDracoRemote draco;
 		private RemoteEventMonitor monitor;
+		private List<string> currentBuilds = new List<string>();
 
 
 	}
