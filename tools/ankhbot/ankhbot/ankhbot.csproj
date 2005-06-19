@@ -49,6 +49,7 @@
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="CommandBase.cs" />
     <Compile Include="CommandDispatcher.cs" />
+    <Compile Include="DieCommand.cs" />
     <Compile Include="DracoCommand.cs" />
     <Compile Include="DracoService.cs" />
     <Compile Include="ICommand.cs" />
