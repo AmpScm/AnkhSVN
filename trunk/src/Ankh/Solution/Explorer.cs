@@ -498,19 +498,26 @@ namespace Ankh.Solution
                 try
                 {
                     this.done = false;
+                    DateTime startTime = DateTime.Now;
 
                     // loop until all the items have been loaded in the solution explorer
-                    while( !done )
-                    {
-                        UIHierarchyItem item = outer.uiHierarchy.UIHierarchyItems.Item(1);
+                    UIHierarchyItem item = outer.uiHierarchy.UIHierarchyItems.Item(1);
 
+                    // if there is a Misc Items project in the solution, 
+                    // it doesn't necessarily appear as an UIHierarchyItem
+                    int targetCount = outer.DTE.Solution.Projects.Count;
+                    targetCount = this.HasMiscItems() ? targetCount - 1 : targetCount;
+
+                    while( !done && DateTime.Now - startTime < TimeOut )
+                    {
                         Trace.WriteLine( String.Format("UIHierarchyItems: {0}, Projects.Count: {1}",
                             item.UIHierarchyItems.Count, outer.dte.Solution.Projects.Count),
                             "Ankh" );
  
-                        if ( item.UIHierarchyItems.Count == outer.DTE.Solution.Projects.Count )
+                        if ( item.UIHierarchyItems.Count >= targetCount )
                         {
                             // make sure this is invoked on the main GUI thread
+                            Trace.WriteLine( "Found all UIHierarchyItems, loading", "Ankh" );
                             this.outer.Context.Client.SynchronizingObject.Invoke( 
                                 new LoadDelegate( this.DoLoad ), 
                                 new object[]{} );
@@ -518,11 +525,43 @@ namespace Ankh.Solution
                         }
                         System.Threading.Thread.Sleep( 250 );
                     }
+
+                    if ( !done )
+                    {
+                        // if we have discovered some, load anyway
+                        if ( item.UIHierarchyItems.Count > 0 )
+                        {
+                            Trace.WriteLine( "UIHierarchyItems for all projects not found, " + 
+                                "loading those present", "Ankh" );
+                            Trace.WriteLine(  String.Format("UIHierarchyItems: {0}, Projects.Count: {1}",
+                                item.UIHierarchyItems.Count, outer.dte.Solution.Projects.Count),
+                                "Ankh" );
+                            this.outer.Context.Client.SynchronizingObject.Invoke( 
+                                new LoadDelegate( this.DoLoad ), 
+                                new object[]{} );
+                        }
+                        else
+                        {
+                            Trace.WriteLine( "No UIHierarchyItems found during solution load", "Ankh" );
+
+                            this.outer.Context.Client.SynchronizingObject.Invoke(
+                                new LoadDelegate( this.ShowTimeOutMessage ),
+                                new object[]{} );                        
+                        }
+                    }
                 }
                 catch( Exception ex )
                 {
                     Debug.WriteLine( ex );
                 }
+            }
+
+            private void ShowTimeOutMessage()
+            {
+                outer.Context.UIShell.ShowMessageBox( 
+                    "Solution is under version control, but UIHiearchyItems " + 
+                    "in the solution explorer failed to appear", 
+                    "Solution load timed out", MessageBoxButtons.OK );
             }
 
             private void DoLoad()
@@ -537,8 +576,19 @@ namespace Ankh.Solution
                 }
             }
 
+            private bool HasMiscItems()
+            {
+                foreach (Project project in this.outer.DTE.Solution.Projects)
+                {
+                    if (project.Kind == MiscItemsKind)
+                        return true;
+                }
+                return false;
+            }
 
 
+            private const string MiscItemsKind = "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}";
+            private readonly static TimeSpan TimeOut = new TimeSpan(0, 0, 10);
             private delegate void LoadDelegate( );
             private Explorer outer;
             private bool done;
