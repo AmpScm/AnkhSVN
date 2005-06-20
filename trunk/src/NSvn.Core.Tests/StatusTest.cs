@@ -227,19 +227,20 @@ namespace NSvn.Core.Tests
         public void LocalLockSingleStatus()
         {
             string form = Path.Combine( this.WcPath, "Form.cs" );
-            this.RunCommand( "svn", "lock " + form );
+            this.RunCommand( "svn", "lock -m test " + form );
 
             Status s = this.Client.SingleStatus( form );
             Assert.IsNotNull( s.Entry.LockToken );
             Assert.AreEqual( Environment.UserName, s.Entry.LockOwner );
             Assert.AreEqual( DateTime.Now.Date, s.Entry.LockCreationDate.Date );
+            Assert.AreEqual( "test", s.Entry.LockComment );
         }
 
         [Test]
         public void LocalLockStatus()
         {
             string form = Path.Combine( this.WcPath, "Form.cs" );
-            this.RunCommand( "svn", "lock " + form );
+            this.RunCommand( "svn", "lock -m test " + form );
 
             int youngest;
             this.Client.Status( out youngest, form, Revision.Unspecified, 
@@ -249,13 +250,15 @@ namespace NSvn.Core.Tests
             Assert.IsNotNull( s.Entry.LockToken );
             Assert.AreEqual( Environment.UserName, s.Entry.LockOwner );
             Assert.AreEqual( DateTime.Now.Date, s.Entry.LockCreationDate.Date );
+            Assert.AreEqual( "test", s.Entry.LockComment );
+
         }
 
         [Test]
         public void RepositoryLockStatus()
         {
             string form = Path.Combine( this.WcPath, "Form.cs" );
-            this.RunCommand( "svn", "lock " + form );
+            this.RunCommand( "svn", "lock -m test " + form );
 
             int youngest;
             this.Client.Status( out youngest, form, Revision.Unspecified, new StatusCallback(this.StatusFunc), 
@@ -263,7 +266,9 @@ namespace NSvn.Core.Tests
             Status status = this.currentStatus;
             Assert.IsNotNull( status.ReposLock );
             Assert.AreEqual( Environment.UserName, status.ReposLock.Owner );
-            Assert.AreEqual( status.ReposLock.CreationDate.Date, DateTime.Now.Date );            
+            Assert.AreEqual( status.ReposLock.CreationDate.Date, DateTime.Now.Date );  
+            Assert.AreEqual( "test", status.ReposLock.Comment );
+            Assert.IsFalse( status.ReposLock.IsDavComment );
         }
 
         private void StatusFunc( string path, Status status )
