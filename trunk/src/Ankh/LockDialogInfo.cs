@@ -11,6 +11,8 @@ namespace Ankh
 		public LockDialogInfo(IList items, IList checkedItems) :
             base( string.Empty, items, checkedItems )
 		{
+            this.message = "";
+            this.stealLocks = false;
 		}
 
         public string Message
