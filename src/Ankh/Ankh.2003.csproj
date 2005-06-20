@@ -582,6 +582,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\UnlockCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\UpdateItemCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
