@@ -194,18 +194,13 @@ void NSvn::Core::Client::Resolved(String* path, bool recursive )
 }  
 
 
-// implementation of Client::Status
-void NSvn::Core::Client::Status( 
-    [System::Runtime::InteropServices::Out]System::Int32* youngest, 
-    String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll, bool update,  
-    bool noIgnore )
-{
-    this->Status( youngest, path, revision, statusCallback, descend, getAll, update, noIgnore, false );
-}
+
 
 void NSvn::Core::Client::Status(
                 [System::Runtime::InteropServices::Out]System::Int32* youngest, 
-                String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll,
+                String* path, Revision* revision, 
+                StatusCallback* statusCallback, bool descend, 
+                bool getAll,
                 bool update,  bool noIgnore, bool ignoreExternals )
 {
     SubPool pool(*(this->rootPool));;
@@ -224,6 +219,15 @@ void NSvn::Core::Client::Status(
         getAll, update, noIgnore, ignoreExternals, this->context->ToSvnContext(), pool ) );
 
     *youngest = revnum;
+}
+
+// implementation of Client::Status
+void NSvn::Core::Client::Status( 
+    [System::Runtime::InteropServices::Out]System::Int32* youngest, 
+    String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll, bool update,  
+    bool noIgnore )
+{
+    this->Status( youngest, path, revision, statusCallback, descend, getAll, update, noIgnore, false );
 }
 
 NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
@@ -825,7 +829,7 @@ bool NSvn::Core::Client::IsIgnored( String* path )
     int youngest;
     this->Status( &youngest, path, Revision::Working, 
         new StatusCallback( holder, StatusHolder::Callback ), false, true,
-        false, false );
+        false, false, false );
 
     if ( holder->Status != 0 )
         return holder->Status->TextStatus == StatusKind::Ignored;
