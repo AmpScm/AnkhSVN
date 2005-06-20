@@ -109,7 +109,7 @@ namespace NSvn.Core.Tests
                 return match.Groups[1].ToString()[0];
             else 
             {
-                Trace.WriteLine( output );
+                Console.WriteLine( output );
                 return '-';
             }
 
