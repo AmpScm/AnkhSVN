@@ -283,6 +283,21 @@ namespace Utils.Win32
         [DllImport("User32.dll")]
         public static extern bool DispatchMessage( out Message msg );
 
+        [DllImport("comctl32.dll")]
+        public static extern IntPtr ImageList_GetIcon( IntPtr imageList, int i, uint flags );
+
+        [DllImport("comctl32.dll")]
+        public static extern int ImageList_Add( IntPtr imageList, IntPtr image, IntPtr mask );
+
+        [DllImport("comctl32.dll")]
+        public static extern int ImageList_AddMasked( IntPtr imageList, IntPtr image, int color );
+
+        [DllImport("comctl32.dll")]
+        public static extern int ImageList_AddIcon( IntPtr imageList, IntPtr icon );
+
+        [DllImport("comctl32.dll")]
+        public static extern bool ImageList_SetOverlayImage( IntPtr imageList, int image, int overlay );
+
         [DllImport("shlwapi.dll", CharSet=CharSet.Unicode)]
         private static extern bool PathRelativePathToW( StringBuilder result, string from,
             FileAttribute fromAttr, string to, FileAttribute toAttr );
