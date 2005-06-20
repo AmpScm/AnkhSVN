@@ -57,7 +57,7 @@ svn_error_t* svn_log_message_receiver(void *baton,
                                       apr_pool_t *pool); 
 
 /// callback function for Client::Status
-void svn_status_func( void* baton, const char* path, svn_wc_status_t* status );
+void svn_status_func2( void* baton, const char* path, svn_wc_status2_t* status );
 
 svn_error_t* svn_blame_func( void *baton, apr_int64_t line_no, svn_revnum_t revision, 
                             const char *author, const char *date, 
@@ -200,6 +200,14 @@ void NSvn::Core::Client::Status(
     String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll, bool update,  
     bool noIgnore )
 {
+    this->Status( youngest, path, revision, statusCallback, descend, getAll, update, noIgnore, false );
+}
+
+void NSvn::Core::Client::Status(
+                [System::Runtime::InteropServices::Out]System::Int32* youngest, 
+                String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll,
+                bool update,  bool noIgnore, bool ignoreExternals )
+{
     SubPool pool(*(this->rootPool));;
     StatusBaton baton;
 
@@ -211,9 +219,9 @@ void NSvn::Core::Client::Status(
     const char* truePath = CanonicalizePath( path, pool );
 
     svn_revnum_t revnum;
-    HandleError( svn_client_status( &revnum, truePath, 
-        revision->ToSvnOptRevision( pool ), svn_status_func, &baton, descend,
-        getAll, update, noIgnore, this->context->ToSvnContext(), pool ) );
+    HandleError( svn_client_status2( &revnum, truePath, 
+        revision->ToSvnOptRevision( pool ), svn_status_func2, &baton, descend,
+        getAll, update, noIgnore, ignoreExternals, this->context->ToSvnContext(), pool ) );
 
     *youngest = revnum;
 }
@@ -235,10 +243,10 @@ NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
     try
     {
         //retrieve the status
-        svn_wc_status_t* status;    
+        svn_wc_status2_t* status;    
         const char* truePath = CanonicalizePath( path, pool );
 
-        HandleError( svn_wc_status( &status, truePath, admAccess, pool ) );
+        HandleError( svn_wc_status2( &status, truePath, admAccess, pool ) );
 
         return new NSvn::Core::Status( status );
     }
@@ -944,7 +952,7 @@ svn_error_t* svn_log_message_receiver(void *baton,
 }
 
 /// marshall the status callback into managed space
-void svn_status_func(void* baton, const char* path, svn_wc_status_t* status)
+void svn_status_func2(void* baton, const char* path, svn_wc_status2_t* status)
 {
     using namespace NSvn::Core;
 

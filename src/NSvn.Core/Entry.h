@@ -38,7 +38,11 @@ namespace NSvn
             checkSum( StringHelper(entry->checksum) ),
             commitRevision( entry->cmt_rev ),
             commitDate( AprTimeToDateTime(entry->cmt_date) ),
-            commitAuthor( StringHelper(entry->cmt_author) )
+            commitAuthor( StringHelper(entry->cmt_author) ),
+            lockToken( StringHelper(entry->lock_token) ),
+            lockOwner( StringHelper(entry->lock_owner) ),
+            lockComment( StringHelper(entry->lock_comment) ),
+            lockCreationDate( AprTimeToDateTime(entry->lock_creation_date) )
 
         {;}
 
@@ -149,7 +153,27 @@ namespace NSvn
             __property String* get_CommitAuthor()
             { return this->commitAuthor; }
 
-            /// <summary>Test whether to Entry instances are equal.</summary>
+            /// <summary>The lock token.</summary>
+            [System::Diagnostics::DebuggerStepThrough]
+            __property String* get_LockToken()
+            { return this->lockToken; }
+
+            /// <summary>The owner of the lock.</summary>
+            [System::Diagnostics::DebuggerStepThrough]
+            __property String* get_LockOwner()
+            { return this->lockOwner; }
+
+            /// <summary>The comment associated with the lock</summary>
+            [System::Diagnostics::DebuggerStepThrough]
+            __property String* get_LockComment()
+            { return this->lockComment; }
+
+            /// <summary>The creation time of the lock</summary>
+            [System::Diagnostics::DebuggerStepThrough]
+            __property DateTime get_LockCreationDate()
+            { return this->lockCreationDate; }
+
+            /// <summary>Test whether two Entry instances are equal.</summary>
             virtual bool Equals( Object* obj )
             {
                 if ( !obj )
@@ -179,7 +203,11 @@ namespace NSvn
                     OBJEQUALS(this->checkSum, other->checkSum) &&
                     this->commitRevision == other->commitRevision &&
                     this->commitDate.Equals( __box(other->commitDate) ) &&
-                    OBJEQUALS(this->commitAuthor, other->commitAuthor );
+                    OBJEQUALS(this->commitAuthor, other->commitAuthor ) &&
+                    OBJEQUALS(this->lockToken, other->lockToken) &&
+                    OBJEQUALS(this->lockComment, other->lockComment) &&
+                    OBJEQUALS(this->lockOwner, other->lockOwner) &&
+                    this->lockCreationDate.Equals( __box(other->lockCreationDate) );
             }
 
         private:
@@ -204,6 +232,10 @@ namespace NSvn
             svn_revnum_t commitRevision;
             DateTime commitDate;
             String* commitAuthor;
+            String* lockToken;
+            String* lockOwner;
+            String* lockComment;
+            DateTime lockCreationDate; 
         };
     }
 }

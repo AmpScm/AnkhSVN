@@ -345,6 +345,9 @@
 				RelativePath=".\GCPool.h">
 			</File>
 			<File
+				RelativePath=".\LockToken.h">
+			</File>
+			<File
 				RelativePath="LogMessage.h">
 			</File>
 			<File

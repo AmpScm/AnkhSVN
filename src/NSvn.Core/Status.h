@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "svnenums.h"
 #include "Entry.h"
+#include "LockToken.h"
 #include <svn_wc.h>
 
 
@@ -15,7 +16,7 @@ namespace NSvn
         public __gc class Status
         {
         private public:
-            Status( svn_wc_status_t* status ) :
+            Status( svn_wc_status2_t* status ) :
         textStatus( static_cast<StatusKind>(status->text_status) ),
             propertyStatus( static_cast<StatusKind>(status->prop_status) ),
             locked( status->locked != 0 ),
@@ -30,6 +31,11 @@ namespace NSvn
                 this->entry = new NSvn::Core::Entry(status->entry);
             else
                 this->entry = 0;
+
+            if ( status->repos_lock != 0 )
+                this->reposLock = new NSvn::Core::LockToken( status->repos_lock );
+            else
+                this->reposLock = 0;
         }
         Status()                         
         {;}
@@ -99,6 +105,10 @@ namespace NSvn
             __property StatusKind get_RepositoryPropertyStatus()
             { return this->repositoryPropertyStatus; }
 
+            [System::Diagnostics::DebuggerStepThrough]
+            __property LockToken* get_ReposLock()
+            { return this->reposLock; }
+
             /// <summary>Represents the status of an unversioned item</summary>
             [System::Diagnostics::DebuggerStepThrough]
             __property static Status* get_Unversioned()
@@ -108,6 +118,8 @@ namespace NSvn
             [System::Diagnostics::DebuggerStepThrough]
             __property static Status* get_None()
             { return Status::none; }
+
+            
 
             /// <summary>Test whether two Status instances are equal.</summary>
             virtual bool Equals( Object* obj )
@@ -137,6 +149,7 @@ namespace NSvn
             bool switched;
             StatusKind repositoryTextStatus;
             StatusKind repositoryPropertyStatus;
+            NSvn::Core::LockToken* reposLock;
 
             static Status* unversioned = new Status();
             static Status* none = new Status();

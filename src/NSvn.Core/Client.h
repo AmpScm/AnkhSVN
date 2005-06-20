@@ -220,6 +220,24 @@ namespace NSvn
                 String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll,
                 bool update,  bool noIgnore );
 
+            ///<summary>Obtain the statuses of all the items in a working copy path.</summary>
+            ///<param name="youngest">A revision number</param>
+            ///<param name="path">Path to the file/directory.</param>
+            ///<param name="descend">If descend is true, recurse fully, else do only 
+            ///                      immediate children. (-n flag: nonrecursive)</param>
+            ///<param name="getAll">If getAll is set, then all entries are retrieved; otherwise 
+            ///                     only "interesting" entries will be fetched. (-v flag: verbose)</param>
+            ///<param name="upDate">If upDate is set, then the repository will be contacted, so that 
+            ///                     the structures in statushash are augmented with information 
+            ///                     about out-of-dateness, and *youngest is set to the youngest 
+            ///                     repository revision. (-u flag: show update) </param>
+            ///<param name="noIgnore"></param>
+            ///<param name="ignoreExternals">Ignore any externals present.</param>
+            void Status(
+                [System::Runtime::InteropServices::Out]System::Int32* youngest, 
+                String* path, Revision* revision, StatusCallback* statusCallback, bool descend, bool getAll,
+                bool update,  bool noIgnore, bool ignoreExternals );
+
             ///<summary>Lock specified targets in the repository</summary>
             ///<param name="targets">specifies the paths - either all working 
             ///                      copy paths or URLs. All targets must be 
