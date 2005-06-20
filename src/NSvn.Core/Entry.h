@@ -7,7 +7,7 @@
 
 
 #define OBJEQUALS( obj1, obj2 ) ((((obj1) == 0 && (obj2) == 0)) || \
-                                      (((obj2) != 0) && ((obj1)->Equals(obj2))))
+                                      (((obj1) !=0) && ((obj2) != 0) && ((obj1)->Equals(obj2))))
 
 namespace NSvn
 {
@@ -186,7 +186,7 @@ namespace NSvn
                 return OBJEQUALS(this->name, other->name) &&
                     this->revision == other->revision &&
                     OBJEQUALS(this->url, other->url) &&
-                    OBJEQUALS(this->repository, other->repository);// &&
+                    OBJEQUALS(this->repository, other->repository) &&
                     OBJEQUALS(this->uuid, other->uuid) &&
                     this->kind == other->kind &&
                     this->schedule == other->schedule &&
