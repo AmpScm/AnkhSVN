@@ -104,13 +104,12 @@ namespace NSvn.Core.Tests
             string output = this.RunCommand( "svn", "st \"" + path + "\"" );
 
             string regexString = String.Format( @"(\w).*\s{0}\s*", Regex.Escape(path) );
-            Match match = Regex.Match( output, regexString );
+            Match match = Regex.Match( output, regexString, RegexOptions.IgnoreCase );
             if ( match != Match.Empty )
                 return match.Groups[1].ToString()[0];
             else 
             {
-                Console.WriteLine( output );
-                return '-';
+                Assert.Fail( "TestBase.GetSvnStatus - Regex match failed: " + output );
             }
 
         }
