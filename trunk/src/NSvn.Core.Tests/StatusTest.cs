@@ -73,25 +73,26 @@ namespace NSvn.Core.Tests
             Assertion.AssertEquals( "Wrong property status " + ignored,
                 StatusKind.Ignored, this.currentStatus.TextStatus );
         }
+        
 
-        /// <summary>
-        /// Tests that the Entry property is somewhat correct
-        /// </summary>
         [Test]
         public void TestEntry()
         {
             string form = Path.Combine( this.WcPath, "Form.cs" );
+            this.RunCommand( "svn", "lock "+ form );
+
             string output = this.RunCommand( "svn", "info " + form );
             Info info = new Info(output);
 
             Status s = this.Client.SingleStatus( form );
-                        
             int youngest;
             this.Client.Status( out youngest, form,
                 Revision.Unspecified, new StatusCallback( this.StatusFunc ),
                 false, true, false, false );
 
             info.CheckEquals( this.currentStatus.Entry );
+
+            
         }
        
 
@@ -214,6 +215,57 @@ namespace NSvn.Core.Tests
             Assertion.Assert( "Should not be similar", !status2.Equals( status1 ) );
         }
 
+        [Test]
+        public void LockSingleStatusIsNullForUnlocked()
+        {
+            string form = Path.Combine( this.WcPath, "Form.cs" );
+            Status status1 = this.Client.SingleStatus( form );
+            Assert.IsNull( status1.Entry.LockToken );            
+        }
+
+        [Test]
+        public void LocalLockSingleStatus()
+        {
+            string form = Path.Combine( this.WcPath, "Form.cs" );
+            this.RunCommand( "svn", "lock " + form );
+
+            Status s = this.Client.SingleStatus( form );
+            Assert.IsNotNull( s.Entry.LockToken );
+            Assert.AreEqual( Environment.UserName, s.Entry.LockOwner );
+            Assert.AreEqual( DateTime.Now.Date, s.Entry.LockCreationDate.Date );
+        }
+
+        [Test]
+        public void LocalLockStatus()
+        {
+            string form = Path.Combine( this.WcPath, "Form.cs" );
+            this.RunCommand( "svn", "lock " + form );
+
+            int youngest;
+            this.Client.Status( out youngest, form, Revision.Unspecified, 
+                new StatusCallback(this.StatusFunc), false, true, false, false );
+            Status s = this.currentStatus;
+
+            Assert.IsNotNull( s.Entry.LockToken );
+            Assert.AreEqual( Environment.UserName, s.Entry.LockOwner );
+            Assert.AreEqual( DateTime.Now.Date, s.Entry.LockCreationDate.Date );
+        }
+
+        [Test]
+        public void RepositoryLockStatus()
+        {
+            string form = Path.Combine( this.WcPath, "Form.cs" );
+            this.RunCommand( "svn", "lock " + form );
+
+            int youngest;
+            this.Client.Status( out youngest, form, Revision.Unspecified, new StatusCallback(this.StatusFunc), 
+                false, true, true, false );
+            Status status = this.currentStatus;
+            Assert.IsNotNull( status.ReposLock );
+            Assert.AreEqual( Environment.UserName, status.ReposLock.Owner );
+            Assert.AreEqual( status.ReposLock.CreationDate.Date, DateTime.Now.Date );            
+        }
+
         private void StatusFunc( string path, Status status )
         {
             this.currentPath = path;
@@ -222,8 +274,12 @@ namespace NSvn.Core.Tests
 
         private class Info
         {
-            private static readonly Regex INFO = new Regex(@"Path:\s(?'path'.+?)\s+Name:\s(?'name'\S+)\s+Url:\s(?'url'\S+)\s+Repository UUID:\s(?'reposuuid'\S+)\s+Revision:\s(?'revision'\S+)\s+Node Kind:\s(?'nodekind'\S+)\s+Schedule:\s(?'schedule'\S+)\s+Last Changed Author:\s+(?'lastchangedauthor'\S+)", 
-                RegexOptions.IgnoreCase );
+            private static readonly Regex INFO = new Regex(@"Path:\s(?'path'.+?)\s+Name:\s(?'name'\S+)\s+" + 
+                @"Url:\s(?'url'\S+)\s+Repository UUID:\s(?'reposuuid'\S+)\s+Revision:\s(?'revision'\S+)\s+" + 
+                @"Node Kind:\s(?'nodekind'\S+)\s+Schedule:\s(?'schedule'\S+)\s+Last Changed Author:\s+" + 
+                @"(?'lastchangedauthor'\S+).*Lock Token:\s+(?'locktoken'\S+)\s+" + 
+                @"Lock Owner:\s+(?'lockowner'\S+)\s+Lock Created:\s+(?'lockcreated'\S+)", 
+                RegexOptions.IgnoreCase | RegexOptions.Singleline );
 
             public Info( string output )
             {
@@ -249,6 +305,8 @@ namespace NSvn.Core.Tests
                     match.Groups["schedule"].Value.ToLower(), entry.Schedule.ToString().ToLower() );
                 Assertion.AssertEquals( "Last changed author differs", 
                     match.Groups["lastchangedauthor"].Value, entry.CommitAuthor );
+                Assert.AreEqual( match.Groups["locktoken"].Value, entry.LockToken, "Lock token differs" );
+                Assert.AreEqual( match.Groups["lockowner"].Value, entry.LockOwner, "Lock owner differs" );
             }
 
             private string output;            

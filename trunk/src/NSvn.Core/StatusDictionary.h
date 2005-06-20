@@ -50,7 +50,7 @@ namespace NSvn
 
     public private:
         /// <summary>Creates a StatusDictionary from an apr_hash_t</summary>
-        static StatusDictionary* FromStatusHash( apr_hash_t* statushash, Pool& pool )
+        /*static StatusDictionary* FromStatusHash( apr_hash_t* statushash, Pool& pool )
         {
             StatusDictionary* dict = new StatusDictionary();
             apr_hash_index_t* idx = apr_hash_first( pool, statushash );
@@ -70,7 +70,7 @@ namespace NSvn
             }
 
             return dict;
-        }
+        }*/
     };
     }
 }
