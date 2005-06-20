@@ -207,16 +207,17 @@ namespace Ankh.Solution
         protected void SetStatusImage( NodeStatus status )
         {
             int statusImage = 0;
+            int overlay = 0;
             if ( statusMap.Contains(status.Kind) )
                 statusImage = (int)statusMap[status.Kind];
 
             if ( status.ReadOnly )
-               this.explorer.TreeView.SetOverlayImage( this.hItem, Explorer.ReadonlyOverlay );
+                overlay = Explorer.ReadonlyOverlay;
 
             if ( status.Locked )
-               this.explorer.TreeView.SetOverlayImage( this.hItem, Explorer.LockOverlay );
+               overlay = Explorer.LockOverlay;
 
-            this.explorer.TreeView.SetStatusImage( this.hItem, statusImage );                
+            this.explorer.TreeView.SetStateAndOverlayImage( this.hItem, overlay, statusImage );                
         }
 
         /// <summary>
