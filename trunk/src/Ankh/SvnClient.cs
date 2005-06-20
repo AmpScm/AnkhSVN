@@ -325,6 +325,10 @@ namespace Ankh
             actionStatus[NotifyAction.CommitDeleted] =          "Deleted";
             actionStatus[NotifyAction.CommitReplaced] =         "Replaced";
             actionStatus[NotifyAction.CommitPostfixTxDelta] =   null;
+            actionStatus[NotifyAction.Locked] =                 "Locked";
+            actionStatus[NotifyAction.Unlocked] =               "Unlocked";
+            actionStatus[NotifyAction.FailedLock] =             "Failed lock";
+            actionStatus[NotifyAction.FailedUnlock] =           "Failed unlock";
         }
         
         static readonly Hashtable actionStatus = new Hashtable();
