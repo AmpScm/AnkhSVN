@@ -17,7 +17,7 @@ namespace Ankh.Commands
         public override void Execute(IContext context, string parameters)
         {
             IList resources = context.SolutionExplorer.GetSelectionResources(true, 
-                new ResourceFilterCallback( CommandBase.VersionedFilter) );
+                new ResourceFilterCallback( CommandBase.NotLockedFilter ) );
 
             this.info = new LockDialogInfo( resources, resources );
             
@@ -31,7 +31,7 @@ namespace Ankh.Commands
 
             context.UIShell.RunWithProgressDialog( new SimpleProgressWorker( 
                 new SimpleProgressWorkerCallback( this.ProgressCallback ) ), "Locking files" );
-            foreach( SvnItem item in resources )
+            foreach( SvnItem item in info.CheckedItems )
                 item.Refresh( context.Client );
         }
 
@@ -44,7 +44,9 @@ namespace Ankh.Commands
 
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            return Enabled;
+            IList resources = context.SolutionExplorer.GetSelectionResources( true,
+                new ResourceFilterCallback(CommandBase.NotLockedFilter) );
+            return resources.Count > 0 ? Enabled : Disabled;
         }
         
         private LockDialogInfo info;
