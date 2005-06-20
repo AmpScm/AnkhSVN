@@ -211,7 +211,10 @@ namespace Ankh.Solution
                 statusImage = (int)statusMap[status.Kind];
 
             if ( status.ReadOnly )
-                statusImage += 10;
+               this.explorer.TreeView.SetOverlayImage( this.hItem, Explorer.ReadonlyOverlay );
+
+            if ( status.Locked )
+               this.explorer.TreeView.SetOverlayImage( this.hItem, Explorer.LockOverlay );
 
             this.explorer.TreeView.SetStatusImage( this.hItem, statusImage );                
         }
@@ -235,6 +238,7 @@ namespace Ankh.Solution
                 newStatus.Kind = NodeStatusKind.Normal;
 
             newStatus.ReadOnly = item.IsReadOnly;
+            newStatus.Locked = item.IsLocked;
 
             return newStatus;
         }

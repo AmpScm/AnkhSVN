@@ -349,25 +349,38 @@ namespace Ankh.Solution
             Debug.WriteLine( "Loading status images", "Ankh" );
             Bitmap statusImages = (Bitmap)Image.FromStream( 
                 this.GetType().Assembly.GetManifestResourceStream( STATUS_IMAGES ) );
+            statusImages.MakeTransparent( statusImages.GetPixel(0, 0) );
 
-            Bitmap readOnly = (Bitmap)Image.FromStream( 
-                this.GetType().Assembly.GetManifestResourceStream( READONLY_IMAGE ) );
-            readOnly.MakeTransparent( readOnly.GetPixel(0, 0) );
-
-            Bitmap lockImage = (Bitmap)Image.FromStream( 
-                this.GetType().Assembly.GetManifestResourceStream( LOCK_IMAGE ) );
-            lockImage.MakeTransparent( lockImage.GetPixel(0, 0) );
-            
-            statusImages = this.MergeStatusIcons( statusImages, readOnly, lockImage );
-
-            statusImages.MakeTransparent( statusImages.GetPixel(0,0) );
+            CreateOverlayImages();
 
             this.statusImageList = new ImageList();
             this.statusImageList.ImageSize = new Size(7, 16);
-            this.statusImageList.Images.AddStrip( statusImages );    
-        
+            this.statusImageList.Images.AddStrip( statusImages );         
         }
 
+        /// <summary>
+        /// Create overlay images for locked and read only files.
+        /// </summary>
+        private void CreateOverlayImages()
+        {
+            IntPtr imageList = this.TreeView.ImageList;
+
+            Icon lockIcon = new Icon(
+                this.GetType().Assembly.GetManifestResourceStream( LOCK_ICON ) );
+            Icon readonlyIcon = new Icon(
+                this.GetType().Assembly.GetManifestResourceStream( READONLY_ICON ) );
+
+            int lockImageIndex = Win32.ImageList_AddIcon( imageList, lockIcon.Handle );
+            int readonlyImageIndex = Win32.ImageList_AddIcon( imageList, readonlyIcon.Handle );
+
+            // We don't abort here if the overlay image cannot be set
+            if (  !Win32.ImageList_SetOverlayImage( imageList, lockImageIndex, LockOverlay ) )
+                Trace.WriteLine( "Could not set overlay image for the lock icon" );
+
+            if (  !Win32.ImageList_SetOverlayImage( imageList, readonlyImageIndex, ReadonlyOverlay ) )
+                Trace.WriteLine( "Could not set overlay image for the readonly icon" );
+
+        }
         
 
         /// <summary>
@@ -749,6 +762,8 @@ namespace Ankh.Solution
         #endregion
 
 
+        internal const int LockOverlay = 15;
+        internal const int ReadonlyOverlay = 14;
         private _DTE dte;
         private UIHierarchy uiHierarchy;
         private const string VSNETWINDOW = "wndclass_desked_gsk";
@@ -765,7 +780,7 @@ namespace Ankh.Solution
         private IntPtr originalImageList = IntPtr.Zero;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
-        private const string LOCK_IMAGE = "Ankh.lock.bmp";
-        private const string READONLY_IMAGE = "Ankh.readonly.bmp";
+        private const string LOCK_ICON = "Ankh.lock.ico";
+        private const string READONLY_ICON = "Ankh.readonly.ico";
     }
 }

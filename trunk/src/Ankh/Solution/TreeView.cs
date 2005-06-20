@@ -86,7 +86,22 @@ namespace Ankh.Solution
             }
         }
 
-
+        /// <summary>
+        /// Sets the imagelist to be used for the status images.
+        /// </summary>
+        public IntPtr ImageList
+        {
+            get
+            {
+                return (IntPtr)Win32.SendMessage( this.hwnd, Msg.TVM_GETIMAGELIST,
+                    Constants.TVSIL_NORMAL, IntPtr.Zero );
+            }
+            set
+            {
+                Win32.SendMessage( this.hwnd, Msg.TVM_SETIMAGELIST, Constants.TVSIL_NORMAL,
+                    value );
+            }
+        }
 
         /// <summary>
         /// Sets the status image for a specific item.
@@ -103,6 +118,21 @@ namespace Ankh.Solution
             // bits 12-15 indicate the state image
             tvitem.state = (uint)(imageIndex << 12);
             tvitem.stateMask = Constants.TVIS_STATEIMAGEMASK;
+
+            Win32.SendMessage( this.hwnd, Msg.TVM_SETITEM, IntPtr.Zero, 
+                tvitem ).ToInt32();
+        }
+
+        public void SetOverlayImage( IntPtr item, int imageIndex )
+        {
+            this.CheckForZero( item, "item" );
+
+            TVITEMEX tvitem = new TVITEMEX();
+            tvitem.mask = Constants.TVIF_STATE | Constants.TVIF_HANDLE;
+            tvitem.hItem = item;
+            // bits 8-11 indicate the state image
+            tvitem.state = (uint)(imageIndex << 8);
+            tvitem.stateMask = Constants.TVIS_OVERLAYMASK;
 
             Win32.SendMessage( this.hwnd, Msg.TVM_SETITEM, IntPtr.Zero, 
                 tvitem ).ToInt32();
