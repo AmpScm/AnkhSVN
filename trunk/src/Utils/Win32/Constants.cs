@@ -207,7 +207,12 @@ namespace Utils.Win32
         /// <summary>
         /// Mask for the bits used to specify the item's state image index. 
         /// </summary>
-        public const int TVIS_STATEIMAGEMASK = 61440;
+        public const int TVIS_STATEIMAGEMASK = 0xF000;
+
+        /// <summary>
+        /// Mask for the bits used to specify the item's overly mask index
+        /// </summary>
+        public const int TVIS_OVERLAYMASK = 0xF00;
 
 
         /// <summary>
