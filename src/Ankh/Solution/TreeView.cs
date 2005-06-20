@@ -138,6 +138,21 @@ namespace Ankh.Solution
                 tvitem ).ToInt32();
         }
 
+        public void SetStateAndOverlayImage( IntPtr item, int overlay, int stateImage )
+        {
+            this.CheckForZero( item, "item" );
+
+            TVITEMEX tvitem = new TVITEMEX();
+            tvitem.mask = Constants.TVIF_STATE | Constants.TVIF_HANDLE;
+            tvitem.hItem = item;
+            // bits 8-11 indicate the state image
+            tvitem.state = (uint)(overlay << 8) | (uint)(stateImage << 12);
+            tvitem.stateMask = Constants.TVIS_OVERLAYMASK | Constants.TVIS_STATEIMAGEMASK;
+
+            Win32.SendMessage( this.hwnd, Msg.TVM_SETITEM, IntPtr.Zero, 
+                tvitem ).ToInt32();
+        }
+
         /// <summary>
         /// Clears all status images.
         /// </summary>
