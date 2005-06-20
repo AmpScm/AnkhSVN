@@ -63,7 +63,22 @@ namespace NSvn
             /// <summary>Got a commit replaced.</summary>              
             CommitReplaced = svn_wc_notify_commit_replaced,
             ///<summary>Delta was sent to the repository.</summary>              
-            CommitPostfixTxDelta = svn_wc_notify_commit_postfix_txdelta
+            CommitPostfixTxDelta = svn_wc_notify_commit_postfix_txdelta,
+
+            ///<summary>Processed a single revision's blame.</summary>
+            BlameRevision = svn_wc_notify_blame_revision,
+ 
+            ///<summary>Locked a path.</summary>
+            Locked = svn_wc_notify_locked,
+             
+            ///<summary>Unlocked a path</summary>
+            Unlocked = svn_wc_notify_unlocked,
+             
+            ///<summary>Failed to lock a path</summary>
+            FailedLock = svn_wc_notify_failed_lock,
+             
+            ///<summary>Failed to unlock a path.</summary>
+            FailedUnlock = svn_wc_notify_failed_unlock
         };
 
         ///<summary>The type of notification that is occuring. </summary>
