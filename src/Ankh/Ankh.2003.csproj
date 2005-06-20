@@ -272,7 +272,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "lock.bmp"
+                    RelPath = "lock.ico"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -306,7 +306,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "readonly.bmp"
+                    RelPath = "readonly.ico"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

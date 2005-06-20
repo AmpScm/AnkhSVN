@@ -176,6 +176,19 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Whether the item is locked
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IsLocked
+        {
+            get
+            {
+                return this.Status.Entry != null &&
+                    this.Status.Entry.LockToken != null;
+            }
+        }
+
         public override string ToString()
         {
             return this.path;
@@ -282,6 +295,15 @@ namespace Ankh
                     return false;
                 }
             }
+
+            public override bool IsReadOnly
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
 
 
 
