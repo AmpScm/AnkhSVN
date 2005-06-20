@@ -110,6 +110,7 @@ namespace NSvn.Core.Tests
             else 
             {
                 Assert.Fail( "TestBase.GetSvnStatus - Regex match failed: " + output );
+                return '-';
             }
 
         }
