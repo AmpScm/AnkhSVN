@@ -108,7 +108,10 @@ namespace NSvn.Core.Tests
             if ( match != Match.Empty )
                 return match.Groups[1].ToString()[0];
             else 
+            {
+                Trace.WriteLine( output );
                 return '-';
+            }
 
         }
 
