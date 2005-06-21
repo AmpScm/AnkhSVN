@@ -38,7 +38,7 @@ namespace Ankh.EventSinks
             {
                 try
                 {
-                    Project project = projects.Item(1);
+                    Project project = projects.Item(i);
                     // only create one set of sinks for each project type
                     if ( foundKinds.Contains( project.Kind ) ) 
                         continue;
