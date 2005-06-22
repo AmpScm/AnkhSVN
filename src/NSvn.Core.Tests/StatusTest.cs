@@ -232,7 +232,7 @@ namespace NSvn.Core.Tests
             Status s = this.Client.SingleStatus( form );
             Assert.IsNotNull( s.Entry.LockToken );
             Assert.AreEqual( Environment.UserName, s.Entry.LockOwner );
-            Assert.AreEqual( DateTime.Now.Date, s.Entry.LockCreationDate.Date );
+            Assert.AreEqual( DateTime.Now.Date, s.Entry.LockCreationDate.ToLocalTime().Date );
             Assert.AreEqual( "test", s.Entry.LockComment );
         }
 
@@ -249,7 +249,7 @@ namespace NSvn.Core.Tests
 
             Assert.IsNotNull( s.Entry.LockToken );
             Assert.AreEqual( Environment.UserName, s.Entry.LockOwner );
-            Assert.AreEqual( DateTime.Now.Date, s.Entry.LockCreationDate.Date );
+            Assert.AreEqual( DateTime.Now.Date, s.Entry.LockCreationDate.ToLocalTime().Date );
             Assert.AreEqual( "test", s.Entry.LockComment );
 
         }
@@ -266,7 +266,7 @@ namespace NSvn.Core.Tests
             Status status = this.currentStatus;
             Assert.IsNotNull( status.ReposLock );
             Assert.AreEqual( Environment.UserName, status.ReposLock.Owner );
-            Assert.AreEqual( status.ReposLock.CreationDate.Date, DateTime.Now.Date );  
+            Assert.AreEqual( status.ReposLock.CreationDate.ToLocalTime().Date, DateTime.Now.Date );  
             Assert.AreEqual( "test", status.ReposLock.Comment );
             Assert.IsFalse( status.ReposLock.IsDavComment );
         }
