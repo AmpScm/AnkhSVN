@@ -171,8 +171,15 @@ namespace Ankh
         {
             get
             {
-                return this.IsFile &&
-                    (File.GetAttributes( this.Path ) & FileAttributes.ReadOnly) != 0;
+                try
+                {
+                    return this.IsFile &&
+                        (File.GetAttributes( this.Path ) & FileAttributes.ReadOnly) != 0;
+                }
+                catch( IOException )
+                {
+                    return false;
+                }
             }
         }
 
