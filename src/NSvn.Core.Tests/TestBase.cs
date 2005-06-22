@@ -103,6 +103,9 @@ namespace NSvn.Core.Tests
 
             string output = this.RunCommand( "svn", "st \"" + path + "\"" );
 
+            if ( output == String.Empty )
+                return (char)0;
+
             string regexString = String.Format( @"(\w).*\s{0}\s*", Regex.Escape(path) );
             Match match = Regex.Match( output, regexString, RegexOptions.IgnoreCase );
             if ( match != Match.Empty )
@@ -110,7 +113,7 @@ namespace NSvn.Core.Tests
             else 
             {
                 Assert.Fail( "TestBase.GetSvnStatus - Regex match failed: " + output );
-                return '-';
+                return (char)0; // not necessary, but compiler complains..
             }
 
         }
