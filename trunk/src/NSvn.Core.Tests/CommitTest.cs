@@ -32,8 +32,7 @@ namespace NSvn.Core.Tests
             CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
            
             char status = this.GetSvnStatus( filepath );
-            Assertion.AssertEquals( "File not committed", '-', 
-                status );
+            Assert.AreEqual( 0, status, "File not committed" );
         }
 
         /// <summary>
@@ -70,8 +69,7 @@ namespace NSvn.Core.Tests
             CommitInfo info = this.Client.Commit( new string[]{ filepath }, true );
 
             char status = this.GetSvnStatus( filepath );
-            Assertion.AssertEquals( "File not committed", '-', 
-                status );
+            Assert.AreEqual( 0, status, "File not committed" );
 
         }
 
