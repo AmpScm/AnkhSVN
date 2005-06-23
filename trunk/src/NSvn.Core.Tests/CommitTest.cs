@@ -47,13 +47,21 @@ namespace NSvn.Core.Tests
 
             this.RunCommand( "svn", "lock " + filepath );
 
-            this.Client.Commit( new string[]{ this.WcPath }, false, true );
+            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, true, true );
+            Assert.IsNotNull( info );
+            Assert.IsTrue( info != CommitInfo.Invalid );
             char locked = this.RunCommand( "svn", "status " + filepath )[5];
-            Assertion.Assert( "File was unlocked while lock should be kept", locked == 'K' );
+            Assert.IsTrue( locked == 'K', "File was unlocked while lock should be kept" );
+
+            using ( StreamWriter w = new StreamWriter( filepath ) )
+                w.Write( "Bah" );
             
-            this.Client.Commit( new string[]{ this.WcPath }, false, false );
-            locked = this.RunCommand( "svn", "status " + filepath )[5];
-            Assertion.Assert( "File was not unlocked", locked != 'K' );
+            info = this.Client.Commit( new string[]{ this.WcPath }, true, false );
+            Assert.IsNotNull( info );
+            Assert.IsTrue( info != CommitInfo.Invalid );
+
+            string output = this.RunCommand( "svn", "status " + filepath );
+            Assert.AreEqual( String.Empty, output );
         }
 
         /// <summary>
