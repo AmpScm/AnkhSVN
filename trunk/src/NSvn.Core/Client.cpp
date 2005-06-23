@@ -825,10 +825,12 @@ bool NSvn::Core::Client::IsIgnored( String* path )
 {
     StatusHolder* holder = new StatusHolder();
 
+    StatusCallback * callBack = new StatusCallback( holder, &StatusHolder::Callback );
+
     // Status() takes care of canonicalizing etc
     int youngest;
     this->Status( &youngest, path, Revision::Working, 
-        new StatusCallback( holder, StatusHolder::Callback ), false, true,
+        callBack , false, true,
         false, false, false );
 
     if ( holder->Status != 0 )
