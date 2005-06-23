@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostCommit.Service", "PostC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostCommit.Remoting", "PostCommit.Remoting\PostCommit.Remoting.csproj", "{B94AAB5E-C84E-407F-8A33-7A34EE96146A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostCommit.Test", "PostCommit.Test\PostCommit.Test.csproj", "{0E4CEA7B-B00E-48A1-AD68-02A944BCAC79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{B94AAB5E-C84E-407F-8A33-7A34EE96146A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B94AAB5E-C84E-407F-8A33-7A34EE96146A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B94AAB5E-C84E-407F-8A33-7A34EE96146A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E4CEA7B-B00E-48A1-AD68-02A944BCAC79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E4CEA7B-B00E-48A1-AD68-02A944BCAC79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E4CEA7B-B00E-48A1-AD68-02A944BCAC79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E4CEA7B-B00E-48A1-AD68-02A944BCAC79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
