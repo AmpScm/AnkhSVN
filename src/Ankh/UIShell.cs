@@ -226,6 +226,9 @@ namespace Ankh
         {
             using( PathSelector selector = new PathSelector() )
             {
+                // to provide information about the paths
+                selector.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
+
                 selector.EnableRecursive = info.EnableRecursive;
                 selector.Items = info.Items;
                 selector.CheckedItems = info.CheckedItems;
@@ -250,8 +253,7 @@ namespace Ankh
                     selector.Options = PathSelectorOptions.DisplayRevisionRange;
                 }
 
-                // to provide information about the paths
-                selector.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
+                
 
                 // show it
                 if ( selector.ShowDialog( this.Context.HostWindow ) == DialogResult.OK )
