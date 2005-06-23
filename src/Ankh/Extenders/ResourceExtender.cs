@@ -8,6 +8,7 @@ using NSvn.Core;
 namespace Ankh.Extenders
 {
 
+    [ComVisible(true)]
     [InterfaceType( ComInterfaceType.InterfaceIsDual )]
     public interface IResourceExtender
     {
@@ -53,10 +54,16 @@ namespace Ankh.Extenders
             get;
         }
 
+        bool Locked
+        {
+            get;
+        }
+
     }
     /// <summary>
     /// Summary description for TestExtender.
     /// </summary>
+    [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class ResourceExtender : IResourceExtender
     {
@@ -137,6 +144,13 @@ namespace Ankh.Extenders
         public string PropertyStatus
         {
             get{ return this.status.PropertyStatus.ToString(); }
+        }
+
+        [Category("Subversion"),
+        Description( "Locked" )]
+        public bool Locked
+        {
+            get{ return this.status.Entry != null && this.status.Entry.LockToken != null; }
         }
 
         public void SetStatus( Status status )
