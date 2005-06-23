@@ -108,12 +108,22 @@ namespace AnkhBot
 
         public void SendPM( string user, string message )
         {
-            this.client.RfcPrivmsg( user, message );
+            string[] lines = message.Trim().Split( '\n' );
+            foreach ( string line in lines )
+            {
+                this.client.RfcPrivmsg( user, line );
+                Thread.Sleep( Sleep );
+            }
         }
 
         public void SendMessage( string channel, string message )
         {
-            this.client.SendMessage( SendType.Message, channel, message );
+            string[] lines = message.Trim().Split( '\n' );
+            foreach ( string line in lines )
+            {
+                this.client.SendMessage( SendType.Message, channel, line );
+                Thread.Sleep( Sleep );
+            }
         }
 
         public void Broadcast( string msg )
@@ -149,6 +159,8 @@ namespace AnkhBot
         private string nick = "";
         private string network = "";
         private const int Port = 6667;
+
+        private const int Sleep = 500;
 
 
 
