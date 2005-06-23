@@ -13,8 +13,6 @@ namespace AnkhBot
         {
             this.bot = bot;
 
-            RemotingConfiguration.Configure( AppDomain.CurrentDomain.SetupInformation.ConfigurationFile );
-
             this.monitor = new RemoteEventMonitor();
             this.monitor.BuildStatusChanged += this.BuildStatusChanged;
 
