@@ -100,14 +100,16 @@ namespace NSvn.Core.Tests
         /// <returns>Same character codes as used by svn st</returns>
         public char GetSvnStatus( string path )
         {   
+            string output = this.RunCommand( "svn", "st --non-recursive \"" + path + "\"" );
 
-            string output = this.RunCommand( "svn", "st \"" + path + "\"" );
-
-            if ( output == String.Empty )
+            if ( output.Trim() == String.Empty )
                 return (char)0;
 
-            string regexString = String.Format( @"(\w).*\s{0}\s*", Regex.Escape(path) );
-            Match match = Regex.Match( output, regexString, RegexOptions.IgnoreCase );
+            string[] lines = output.Trim().Split( '\n' );
+            Array.Sort( lines, new StringLengthComparer() );  
+          
+            string regexString = String.Format( @"(.).*\s{0}\s*", Regex.Escape(path) );
+            Match match = Regex.Match( lines[0], regexString, RegexOptions.IgnoreCase );
             if ( match != Match.Empty )
                 return match.Groups[1].ToString()[0];
             else 
@@ -117,6 +119,17 @@ namespace NSvn.Core.Tests
             }
 
         }
+
+        private class StringLengthComparer : IComparer
+        {
+            public int Compare(object x, object y)
+            {
+                return ((string)x).Length - ((string)y).Length;
+            }
+        }
+
+
+
 
         /// <summary>
         /// Runs a command
