@@ -9,7 +9,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestSingleProvider()
 
     AuthenticationBaton* baton = new AuthenticationBaton();
     baton->Add( AuthenticationProvider::GetSimplePromptProvider(
-        new SimplePromptDelegate( this, SimplePrompt ), 1 ) );
+        new SimplePromptDelegate( this, &AuthenticationBatonTest::SimplePrompt ), 1 ) );
 
     svn_auth_cred_simple_t* creds;
     svn_auth_iterstate_t* iterstate;
@@ -38,7 +38,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestDefaultUsernameAndPas
     AuthenticationBaton* baton = new AuthenticationBaton();
 
     baton->Add( AuthenticationProvider::GetSimplePromptProvider(
-        new SimplePromptDelegate( this, SimplePrompt ), 1 ) );
+        new SimplePromptDelegate( this, &AuthenticationBatonTest::SimplePrompt ), 1 ) );
 
     
     baton->SetParameter( AuthenticationBaton::ParamDefaultUsername, S"Humpty" );

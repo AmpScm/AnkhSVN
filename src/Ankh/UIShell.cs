@@ -4,7 +4,7 @@ using Ankh.UI;
 using EnvDTE;
 using System.Diagnostics;
 using System.Windows.Forms;
-using SHDocVw;
+using SH = SHDocVw; 
 using System.IO;
 using Utils.Win32;
 
@@ -207,7 +207,7 @@ namespace Ankh
             // the Start Page window is a web browser
             Window browserWindow = context.DTE.Windows.Item( 
                 EnvDTE.Constants.vsWindowKindWebBrowser );
-            WebBrowser browser = (WebBrowser)browserWindow.Object;
+            SH.WebBrowser browser = (SH.WebBrowser)browserWindow.Object;
 
 //            if ( !reuse ) 
 //                browser = this.NewBrowserWindow( browser );
@@ -405,10 +405,10 @@ namespace Ankh
             this.commitDialogWindow.Visible = false;
         }
 
-        
-        private WebBrowser NewBrowserWindow( WebBrowser browser )
+
+        private SH.WebBrowser NewBrowserWindow(SH.WebBrowser browser)
         {
-            browser.NewWindow2 += new DWebBrowserEvents2_NewWindow2EventHandler(this.NewWindow2);
+            browser.NewWindow2 += new SH.DWebBrowserEvents2_NewWindow2EventHandler(this.NewWindow2);
             object nullObject = null;
             object newWindowFlag = 0x1;
             object aboutBlank = "about:blank";
@@ -452,10 +452,10 @@ namespace Ankh
         }
 
 
-        private WebBrowser newBrowser;
+        private SH.WebBrowser newBrowser;
         private void NewWindow2(ref object ppDisp, ref bool Cancel)
         {
-            this.newBrowser = (WebBrowser)ppDisp;
+            this.newBrowser = (SH.WebBrowser)ppDisp;
         }
 
         private RepositoryExplorerControl repositoryExplorerControl;        

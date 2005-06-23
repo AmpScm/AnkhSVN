@@ -298,6 +298,7 @@
     <Compile Include="Commands\LocalDiffCommandBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\LockCommand.cs" />
     <Compile Include="Commands\LogCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -433,6 +434,7 @@
     <Compile Include="IUIShell.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LockDialogInfo.cs" />
     <Compile Include="LogDialogInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -487,9 +489,11 @@
     <Compile Include="SvnItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SwitchDialogInfo.cs" />
     <Compile Include="UIShell.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="VSCommandBars.cs" />
     <Compile Include="VSNetCommandAttribute.cs">
       <SubType>Code</SubType>
     </Compile>

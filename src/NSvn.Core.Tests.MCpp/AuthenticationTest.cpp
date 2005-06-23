@@ -36,7 +36,7 @@ struct svn_auth_iterstate_t
 void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
 {
     AuthenticationProvider* obj = AuthenticationProvider::GetSimplePromptProvider( 
-        new SimplePromptDelegate(this, SimplePrompt), 3);
+        new SimplePromptDelegate(this, &AuthenticationTest::SimplePrompt), 3);
 
     Pool pool;
 
@@ -54,7 +54,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
 
 
     obj = AuthenticationProvider::GetSimplePromptProvider( 
-        new SimplePromptDelegate(this, NullSimplePrompt), 3);
+        new SimplePromptDelegate(this, &AuthenticationTest::NullSimplePrompt), 3);
     authBaton = GetBaton( obj->GetProvider(), pool );
 
     HandleError( svn_auth_first_credentials( ((void**)&creds), &iterstate, SVN_AUTH_CRED_SIMPLE,
@@ -135,7 +135,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordFi
 void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPromptProvider()
 {
     AuthenticationProvider* provider = AuthenticationProvider::GetSslClientCertPromptProvider(
-        new SslClientCertPromptDelegate( this, CertificatePrompt ), 1 );
+        new SslClientCertPromptDelegate( this, &AuthenticationTest::CertificatePrompt ), 1 );
 
     Pool pool;
 
@@ -153,7 +153,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPromptProv
 
     // try a null
     provider = AuthenticationProvider::GetSslClientCertPromptProvider(
-        new SslClientCertPromptDelegate( this, NullCertificatePrompt ), 1 );
+        new SslClientCertPromptDelegate( this, &AuthenticationTest::NullCertificatePrompt ), 1 );
     baton = GetBaton( provider->GetProvider(), pool );
 
     HandleError( svn_auth_first_credentials( ((void**)&cred), &iterstate, 
@@ -168,7 +168,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordPr
 {
     AuthenticationProvider* provider = 
         AuthenticationProvider::GetSslClientCertPasswordPromptProvider(
-        new SslClientCertPasswordPromptDelegate( this, PasswordPrompt ), 1 );
+        new SslClientCertPasswordPromptDelegate( this, &AuthenticationTest::PasswordPrompt ), 1 );
 
     Pool pool;
 
@@ -186,7 +186,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordPr
 
     // try a null
     provider = AuthenticationProvider::GetSslClientCertPasswordPromptProvider(
-        new SslClientCertPasswordPromptDelegate( this, NullPasswordPrompt ), 1 );
+        new SslClientCertPasswordPromptDelegate( this, &AuthenticationTest::NullPasswordPrompt ), 1 );
     baton = GetBaton( provider->GetProvider(), pool );
 
     HandleError( svn_auth_first_credentials( ((void**)&cred), &iterstate, 
