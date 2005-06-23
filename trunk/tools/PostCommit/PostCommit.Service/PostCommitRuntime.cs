@@ -66,8 +66,8 @@ namespace PostCommit.Service
                     Message msg = queue.Receive( new TimeSpan( 0, 0, 10 ) );
 
                     Commit commit = (Commit)msg.Body;
-                    if ( this.Committed != null )
-                        this.Committed( null, new CommitEventArgs( commit ) );
+                    this.RaiseCommitted( new CommitEventArgs( commit ) );
+                    
                 }
                 catch ( MessageQueueException ex )
                 {
@@ -76,6 +76,22 @@ namespace PostCommit.Service
 
                     if ( this.Error != null )
                         this.Error( this, new ErrorEventArgs( ex ) );
+                }
+            }
+        }
+
+        private void RaiseCommitted( CommitEventArgs args )
+        {
+            foreach ( CommittedEventHandler handler in this.Committed.GetInvocationList() )
+            {
+                try
+                {
+                    handler.Invoke( null, args );
+                }
+                catch ( Exception /* ex */ )
+                {
+                    //this.Error( this, new ErrorEventArgs( ex ) );
+                    Delegate.Remove( this.Committed, handler );
                 }
             }
         }
