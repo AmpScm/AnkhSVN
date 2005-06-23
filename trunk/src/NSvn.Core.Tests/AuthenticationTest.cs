@@ -15,6 +15,14 @@ namespace NSvn.Core.Tests
             base.SetUp();
             this.ExtractRepos();
             
+        }        
+
+        [Test]
+        public void TestSimpleProvider()
+        {
+            AuthenticationProvider simpleProvider = 
+                AuthenticationProvider.GetSimpleProvider();
+            DoTestCachingProviders( simpleProvider );
         }
 
         [Test]
@@ -23,14 +31,6 @@ namespace NSvn.Core.Tests
             AuthenticationProvider winProvider = 
                 AuthenticationProvider.GetWindowsSimpleProvider();
             DoTestCachingProviders( winProvider );
-        }
-
-        [Test]
-        public void TestSimpleProvider()
-        {
-            AuthenticationProvider simpleProvider = 
-                AuthenticationProvider.GetSimpleProvider();
-            DoTestCachingProviders( simpleProvider );
         }
 
         private void DoTestCachingProviders( AuthenticationProvider provider )
@@ -85,7 +85,10 @@ namespace NSvn.Core.Tests
             }
             finally
             {
-                process.Kill();
+                process.CloseMainWindow();
+                System.Threading.Thread.Sleep( 500 );
+                if ( !process.HasExited )
+                    process.Kill();
             }
         }
 
