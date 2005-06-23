@@ -25,10 +25,10 @@ namespace PostCommit.Hook
             try
             {
                 // get the info we want
-                string author = SvnLook( "author", repos, revisionString );
-                string logMessage = SvnLook( "log", repos, revisionString );
-                string changedPathsString = SvnLook( "changed", repos, revisionString );
-                string changedDirsString = SvnLook( "dirs-changed", repos, revisionString );
+                string author = SvnLook( "author", repos, revisionString ).Trim();
+                string logMessage = SvnLook( "log", repos, revisionString ).Trim();
+                string changedPathsString = SvnLook( "changed", repos, revisionString ).Trim();
+                string changedDirsString = SvnLook( "dirs-changed", repos, revisionString ).Trim();
 
                 // convert the path strings to arrays
                 string[] changedPaths = changedPathsString.Split( '\n' );
