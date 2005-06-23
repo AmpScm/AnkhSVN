@@ -5,24 +5,64 @@ using System.Data;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
+using System.Messaging;
+using PostCommit.Remoting;
+using System.Configuration;
+using System.Runtime.Remoting;
 
 namespace PostCommit.Service
 {
-    partial class Service : ServiceBase
+    partial class PostCommitService : ServiceBase
     {
-        public Service()
+        public PostCommitService()
         {
             InitializeComponent();
         }
 
-        protected override void OnStart( string[] args )
+        protected override void OnStart( string[] a )
         {
-            // TODO: Add code here to start your service.
+            RemotingConfiguration.Configure( AppDomain.CurrentDomain.SetupInformation.ConfigurationFile );
+
+            this.runtime = PostCommitRuntime.Instance;
+            this.runtime.Error += delegate( object o, ErrorEventArgs args )
+            {
+                this.EventLog.WriteEntry( args.Exception.Message, EventLogEntryType.Error );
+            };
+
+            this.runtime.Start();
         }
 
         protected override void OnStop()
         {
-            // TODO: Add code here to perform any tear-down necessary to stop your service.
+            this.runtime.Stop();
         }
+
+        public static void Main()
+        {
+            PostCommitService service = new PostCommitService();
+
+            if ( Debugger.IsAttached )
+            {
+                DebugRun( service );
+            }
+            else
+            {
+                ServiceBase.Run( new ServiceBase[] { service } );
+            }
+        }
+
+        private static void DebugRun( PostCommitService service )
+        {
+            service.OnStart( new string[] { } );
+            while ( true )
+            {
+                Thread.Sleep( 1000 );
+            }
+
+            service.OnStop();
+        }
+
+        private PostCommitRuntime runtime;
     }
 }
