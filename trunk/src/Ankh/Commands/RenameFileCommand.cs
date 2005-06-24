@@ -64,6 +64,15 @@ namespace Ankh.Commands
             string parent = PathUtils.GetParent( item.Path );
             string name = PathUtils.GetName( item.Path );
 
+            // remove the old file and add the new to the project
+            ProjectItem prjItem = context.SolutionExplorer.GetSelectedProjectItem();
+            if ( DteUtils.IsSolutionItemsOrMiscItemsProject( prjItem.ContainingProject ) )
+            {
+                context.UIShell.ShowMessageBox( "Solution items cannot be renamed using Ankh", 
+                    "Unable to rename a solution item", MessageBoxButtons.OK, MessageBoxIcon.Stop );
+                return;
+            }
+
             using( RenameDialog dialog = new RenameDialog( name ) )
             {
                 if ( dialog.ShowDialog() == DialogResult.OK )
@@ -72,8 +81,7 @@ namespace Ankh.Commands
                     context.OutputPane.WriteLine( "Renaming {0} to {1}", item.Path, newPath );
                     context.Client.Move( item.Path, Revision.Unspecified, newPath, true );
 
-                    // remove the old file and add the new to the project
-                    ProjectItem prjItem = context.SolutionExplorer.GetSelectedProjectItem();
+                    
 
                     Project project = prjItem.ContainingProject;
                     prjItem.Remove();
