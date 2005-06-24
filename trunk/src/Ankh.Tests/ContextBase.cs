@@ -16,6 +16,7 @@ namespace Ankh.Tests
         public ContextBase()
         {
             this.config = this.CreateConfig();
+            this.control = new Control();
         }
         #region IContext Members
 
@@ -32,6 +33,11 @@ namespace Ankh.Tests
                     this.outputPane = new OutputPaneWriter( this.DTE, "Test" );
                 return this.outputPane;
             }
+        }
+
+        public virtual System.ComponentModel.ISynchronizeInvoke SynchronizingObject
+        {
+            get{ return this.control; }
         }
 
         public virtual System.Windows.Forms.IWin32Window HostWindow
@@ -543,5 +549,6 @@ namespace Ankh.Tests
         public IUIShell uiShell;
         private ConfigLoader configLoader;
         private VSCommandBars commandBars;
+        private Control control;
     }
 }
