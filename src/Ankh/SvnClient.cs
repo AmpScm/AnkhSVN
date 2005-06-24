@@ -27,16 +27,7 @@ namespace Ankh
         public SvnClient( IContext ankhContext ) 
         {
             this.Init( ankhContext );
-        }
-
-        /// <summary>
-        /// This object is used to synchronize notification callbacks.
-        /// </summary>
-        public System.ComponentModel.ISynchronizeInvoke SynchronizingObject
-        {
-            get{ return this.invoker; }
-            set{ this.invoker = value; }
-        }
+        }       
 
         
         /// <summary>
@@ -100,11 +91,12 @@ namespace Ankh
 
         protected override void OnNotification(NotificationEventArgs notification)
         {  
-            if ( this.invoker.InvokeRequired )
+            if ( this.ankhContext.UIShell.SynchronizingObject.InvokeRequired )
             {
                 Debug.WriteLine( "OnNotification: Invoking back to main GUI thread", 
                     "Ankh" );
-                this.invoker.Invoke( new OnNotificationDelegate(this.OnNotification),
+                this.ankhContext.UIShell.SynchronizingObject.Invoke(
+                    new OnNotificationDelegate(this.OnNotification),
                     new object[]{notification} );
                 return;
             }
@@ -297,9 +289,6 @@ namespace Ankh
                 AuthenticationProvider.GetSslClientCertPromptProvider( 
                 new SslClientCertPromptDelegate( this.ClientCertificatePrompt ), 3 ) );
 
-            // assume we're on the main thread now.
-            this.invoker = new Control();
-            ((Control)this.invoker).CreateControl();
         }
 
         /// <summary>
@@ -335,6 +324,5 @@ namespace Ankh
         private IContext ankhContext;
         private static IDictionary map = new Hashtable();
         private string logMessage = null;
-        private System.ComponentModel.ISynchronizeInvoke invoker;
     }
 }
