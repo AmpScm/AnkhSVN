@@ -20,6 +20,14 @@ namespace Ankh
         }
 
         /// <summary>
+        /// This object is used to synchronize notification callbacks, among other things.
+        /// </summary>
+        System.ComponentModel.ISynchronizeInvoke SynchronizingObject
+        {
+            get;
+        }
+
+        /// <summary>
         /// An IContext.
         /// </summary>
         IContext Context

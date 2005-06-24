@@ -41,6 +41,11 @@ namespace Ankh
             set{ this.context = value; }
         }
 
+        public System.ComponentModel.ISynchronizeInvoke SynchronizingObject
+        {
+            get{ return this.RepositoryExplorer; }
+        }
+
         public DialogResult QueryWhetherAnkhShouldLoad()
         {
             string nl = Environment.NewLine;

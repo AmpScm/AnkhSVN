@@ -580,7 +580,7 @@ namespace Ankh.Solution
                         {
                             // make sure this is invoked on the main GUI thread
                             Trace.WriteLine( "Found all UIHierarchyItems, loading", "Ankh" );
-                            this.outer.Context.Client.SynchronizingObject.Invoke( 
+                            this.outer.Context.UIShell.SynchronizingObject.Invoke( 
                                 new LoadDelegate( this.DoLoad ), 
                                 new object[]{} );
                             done = true;
@@ -598,7 +598,7 @@ namespace Ankh.Solution
                             Trace.WriteLine(  String.Format("UIHierarchyItems: {0}, Projects.Count: {1}",
                                 item.UIHierarchyItems.Count, outer.dte.Solution.Projects.Count),
                                 "Ankh" );
-                            this.outer.Context.Client.SynchronizingObject.Invoke( 
+                            this.outer.Context.UIShell.SynchronizingObject.Invoke( 
                                 new LoadDelegate( this.DoLoad ), 
                                 new object[]{} );
                         }
@@ -606,7 +606,7 @@ namespace Ankh.Solution
                         {
                             Trace.WriteLine( "No UIHierarchyItems found during solution load", "Ankh" );
 
-                            this.outer.Context.Client.SynchronizingObject.Invoke(
+                            this.outer.Context.UIShell.SynchronizingObject.Invoke(
                                 new LoadDelegate( this.ShowTimeOutMessage ),
                                 new object[]{} );                        
                         }
