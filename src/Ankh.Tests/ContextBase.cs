@@ -35,10 +35,7 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual System.ComponentModel.ISynchronizeInvoke SynchronizingObject
-        {
-            get{ return this.control; }
-        }
+        
 
         public virtual System.Windows.Forms.IWin32Window HostWindow
         {
@@ -437,6 +434,11 @@ namespace Ankh.Tests
                 {
                     this.context = value;
                 }
+            }
+
+            public virtual System.ComponentModel.ISynchronizeInvoke SynchronizingObject
+            {
+                get{ return new NoSynch(); }
             }
 
             public virtual void SetRepositoryExplorerSelection(object[] selection)

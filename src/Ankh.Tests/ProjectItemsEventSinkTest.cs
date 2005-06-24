@@ -206,7 +206,6 @@ namespace Ankh.Tests
             TestUtils.ToggleAnkh( false, "7.1" );
 
             ContextBase ctx = new ContextBase();
-            ctx.Client.SynchronizingObject = new ContextBase.NoSynch();
 
             ctx.DTE.Solution.Open( 
                 Path.Combine( this.WcPath, "WindowsApplication.sln" ) );

@@ -29,8 +29,6 @@ namespace Ankh.Tests
             this.explorer = new ContextBase.ExplorerImpl( this.ctx );            
             this.ctx.UIShell = this.uiShell;
             this.ctx.SolutionExplorer = this.explorer;
-
-            ctx.Client.SynchronizingObject = new ContextBase.NoSynch();
         }
 
         [Test]
