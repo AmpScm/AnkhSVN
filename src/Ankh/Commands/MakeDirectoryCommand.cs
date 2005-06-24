@@ -48,17 +48,18 @@ namespace Ankh.Commands
             {
                 // first show the log message dialog
                 this.url = UriUtils.Combine( ((INode)parent).Url, dirname );
-                IList list = this.Context.Client.ShowLogMessageDialog( 
-                    new string[]{this.url}, true );
-                if ( list == null || list.Count == 0 )
+                CommitOperation operation = new CommitOperation(
+                    this, new string[]{ this.url }, context );
+                operation.UrlPaths = true;
+
+                if ( !operation.ShowLogMessageDialog() )
                     return false;
 
                 this.Context.StartOperation( "Creating directory " + url );
                 try
                 {
                     bool completed= 
-                        this.Context.UIShell.RunWithProgressDialog( this, "Creating directory" );
-                    this.Context.Client.CommitCompleted();
+                        operation.Run( "Creating directory" );
                     return completed;
                 }
                 catch( Exception ex )

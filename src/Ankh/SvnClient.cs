@@ -29,64 +29,6 @@ namespace Ankh
             this.Init( ankhContext );
         }       
 
-        
-        /// <summary>
-        /// Invokes the LogMessage dialog.
-        /// </summary>
-        /// <param name="commitItems"></param>
-        /// <returns></returns>
-        public IList ShowLogMessageDialog(IList items, bool urlPaths)
-        {
-            string templateText = this.GetTemplate();
-            LogMessageTemplate template = new LogMessageTemplate( templateText );
-
-            CommitContext ctx = new CommitContext( template, items, urlPaths );            
-
-            // is there a previous log message?
-            if ( this.logMessage != null )
-            {
-                if ( ankhContext.Config.AutoReuseComment ||
-                    MessageBox.Show( this.ankhContext.HostWindow, 
-                    "The previous commit did not complete." + Environment.NewLine + 
-                    "Do you want to reuse the log message?", 
-                    "Previous log message", MessageBoxButtons.YesNo ) ==
-                    DialogResult.Yes )
-
-                    ctx.LogMessage = this.logMessage;
-            }
-
-            // we must give it diffs if it wants em
-            ctx.DiffWanted += new DiffWantedDelegate( this.DiffWanted );
-
-            ctx = this.ankhContext.UIShell.ShowCommitDialogModal( ctx );
-            if ( ctx.Cancelled )
-            {
-                this.logMessage = ctx.RawLogMessage;
-                return null;                
-            }
-            else
-            {
-                this.logMessage = ctx.LogMessage;
-                return ctx.CommitItems;                
-            }
-        }
-
-        /// <summary>
-        /// To be called when a commit is finished, so the context can clean up.
-        /// </summary>
-        public void CommitCompleted()
-        {
-            this.logMessage = null;
-            this.ankhContext.UIShell.ResetCommitDialog();
-        }
-        
-        protected override void OnLogMessage(LogMessageEventArgs args)
-        {
-            base.OnLogMessage( args );
-            if ( args.Message == null )
-                args.Message = this.logMessage;
-        }
-
         private delegate void OnNotificationDelegate(NotificationEventArgs notification);
 
         protected override void OnNotification(NotificationEventArgs notification)
@@ -132,34 +74,6 @@ namespace Ankh
             base.OnCancel( args );
             System.Diagnostics.Debug.WriteLine( "Cancel called. Cancelled: " + args.Cancel, 
                 "Ankh" );
-        }
-
-        
-        private string GetTemplate()
-        {
-            return this.ankhContext.Config.LogMessageTemplate != null ? 
-                this.ankhContext.Config.LogMessageTemplate : "";
-        }
-
-        /// <summary>
-        /// The commit dialog wants a diff. Give it one.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void DiffWanted( object sender, DiffWantedEventArgs args )
-        {  
-            // run the diff itself
-            using ( MemoryStream diff = new MemoryStream() )
-            {
-                this.ankhContext.Client.Diff( new string[]{}, args.Path, Revision.Base, 
-                    args.Path, Revision.Working, false, true, false, diff, Stream.Null );
-                args.Diff = Encoding.Default.GetString( diff.ToArray() );                
-            }
-
-            // and provide the source file a verbo as well
-            using( StreamReader reader = new StreamReader( args.Path, Encoding.Default ) )
-                args.Source = reader.ReadToEnd();
-
         }
 
         /// <summary>
