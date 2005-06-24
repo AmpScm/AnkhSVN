@@ -222,6 +222,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CommitOperation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ConflictManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

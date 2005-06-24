@@ -40,10 +40,15 @@ namespace Ankh.Commands
             IList resources = context.SolutionExplorer.GetSelectionResources( true, 
                 new ResourceFilterCallback(CommandBase.ModifiedFilter) );
 
-            resources = context.Client.ShowLogMessageDialog( resources, false );
+            CommitOperation operation = new CommitOperation( new SimpleProgressWorker(
+                new SimpleProgressWorkerCallback(this.DoCommit)), resources, context);
 
-            // did the user cancel?
-            if ( resources == null ) 
+            operation.LogMessage = this.storedLogMessage;
+
+            // bail out if the user cancels
+            bool cancelled = !operation.ShowLogMessageDialog();
+            this.storedLogMessage = operation.LogMessage;
+            if ( cancelled )
                 return;
 
             // we need to commit to each repository separately
@@ -62,9 +67,7 @@ namespace Ankh.Commands
                 {
                     this.paths = SvnItem.GetPaths( items );
 
-                    bool completed = context.UIShell.RunWithProgressDialog( 
-                        new SimpleProgressWorker( 
-                            new SimpleProgressWorkerCallback( this.DoCommit ) ), "Committing" );
+                    bool completed = operation.Run( "Committing" );
 
                     if(completed)
                     {
@@ -90,7 +93,7 @@ namespace Ankh.Commands
 
             // not in the finally, because we want to preserve the message for a 
             // non-successful commit
-            context.Client.CommitCompleted();
+            this.storedLogMessage = null;
         }        
         #endregion
 
@@ -152,6 +155,7 @@ namespace Ankh.Commands
 
         private string[] paths;
         private CommitInfo commitInfo;
+        private string storedLogMessage = null;
 
         private static readonly string DefaultUuid = Guid.NewGuid().ToString();
         

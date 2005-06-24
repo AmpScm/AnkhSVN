@@ -136,8 +136,10 @@ namespace Ankh.Commands
             }
 
             // now commit the added files
-            this.paths = context.Client.ShowLogMessageDialog( this.paths, false );
-            if ( this.paths == null )
+            CommitOperation operation = new CommitOperation( new SimpleProgressWorker( 
+                        new SimpleProgressWorkerCallback(this.DoCommit)), this.paths, context );
+
+            if ( !operation.ShowLogMessageDialog( ) )
             {
                 // oops - after all this work, the user cancelled
                 context.StartOperation( "Aborted - reverting" );
@@ -158,13 +160,9 @@ namespace Ankh.Commands
                 context.StartOperation( "Committing added files" );
                 try
                 {
-                    bool completed = context.UIShell.RunWithProgressDialog( 
-                        new SimpleProgressWorker( 
-                        new SimpleProgressWorkerCallback(this.DoCommit)), "Committing" ); 
+                    bool completed = operation.Run( "Committing" ); 
 
-                    if ( completed )
-                        context.Client.CommitCompleted();
-                    else
+                    if ( !completed )
                         return;
                 }
                 finally

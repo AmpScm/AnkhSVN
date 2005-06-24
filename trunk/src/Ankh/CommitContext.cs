@@ -10,8 +10,6 @@ namespace Ankh
     /// </summary>
     public class CommitContext
     {
-        public event DiffWantedDelegate DiffWanted;
-
         public CommitContext( LogMessageTemplate template, IList commitItems, 
             bool urlPaths )
         {
