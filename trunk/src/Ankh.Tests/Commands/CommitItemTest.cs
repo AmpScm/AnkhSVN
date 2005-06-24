@@ -29,8 +29,6 @@ namespace Ankh.Tests
             this.ctx.UIShell = this.uiShell;
             this.ctx.SolutionExplorer = this.explorer;
 
-            ctx.Client.SynchronizingObject = new ContextBase.NoSynch();
-
             this.cmd = new CommitItemCommand();
 
         }
