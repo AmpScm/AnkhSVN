@@ -142,7 +142,7 @@ namespace Utils.Win32
 
         public struct PointType
         {
-            int X, Y;
+            public int X, Y;
         }
         public PointType Point;
     }   
