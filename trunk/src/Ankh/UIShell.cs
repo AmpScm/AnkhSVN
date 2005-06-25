@@ -289,6 +289,8 @@ namespace Ankh
         {
             using( LockDialog dlg = new LockDialog() )
             {
+                dlg.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
+
                 dlg.Items = info.Items;
                 dlg.CheckedItems = info.CheckedItems;
                 dlg.Message = info.Message;
@@ -477,7 +479,5 @@ namespace Ankh
             "{1C5A739C-448C-4401-9076-5990300B0E1B}";
         private const string CommitDialogGuid = 
             "{08BD45A4-7716-49b0-BB41-CFEBCD098728}";
-
-       
     }
 }
