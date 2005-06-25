@@ -94,6 +94,8 @@ namespace Ankh
             this.commitDialog.CommitItems = ctx.CommitItems;
             this.commitDialog.UrlPaths = ctx.UrlPaths;
             this.commitDialog.LogMessageTemplate = ctx.LogMessageTemplate;
+            this.commitDialog.KeepLocks = ctx.KeepLocks;
+
             if ( ctx.LogMessage != null )
                 this.commitDialog.LogMessage = ctx.LogMessage;
             else
@@ -128,6 +130,7 @@ namespace Ankh
             ctx.LogMessage = this.commitDialog.LogMessage;
             ctx.RawLogMessage = this.commitDialog.RawLogMessage;
             ctx.CommitItems = this.commitDialog.CommitItems;
+            ctx.KeepLocks = this.commitDialog.KeepLocks;
 
             if ( this.commitDialog.CommitDialogResult != CommitDialogResult.Cancel )
             {

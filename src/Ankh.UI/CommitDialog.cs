@@ -122,6 +122,12 @@ namespace Ankh.UI
             }
         }
 
+        public bool KeepLocks
+        {
+            get{ return this.keepLocksCheckBox.Checked; }
+            set{ this.keepLocksCheckBox.Checked = value; }
+        }
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -243,6 +249,7 @@ namespace Ankh.UI
             this.logMessageBox = new System.Windows.Forms.TextBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.commitButton = new System.Windows.Forms.Button();
+            this.keepLocksCheckBox = new System.Windows.Forms.CheckBox();
             this.logMessagePanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -257,7 +264,7 @@ namespace Ankh.UI
             this.commitItemsTree.Recursive = false;
             this.commitItemsTree.SelectedImageIndex = -1;
             this.commitItemsTree.SingleCheck = false;
-            this.commitItemsTree.Size = new System.Drawing.Size(808, 112);
+            this.commitItemsTree.Size = new System.Drawing.Size(752, 112);
             this.commitItemsTree.TabIndex = 2;
             this.commitItemsTree.UrlPaths = false;
             // 
@@ -267,19 +274,20 @@ namespace Ankh.UI
             this.topSplitter.Dock = System.Windows.Forms.DockStyle.Top;
             this.topSplitter.Location = new System.Drawing.Point(0, 112);
             this.topSplitter.Name = "topSplitter";
-            this.topSplitter.Size = new System.Drawing.Size(808, 3);
+            this.topSplitter.Size = new System.Drawing.Size(752, 3);
             this.topSplitter.TabIndex = 3;
             this.topSplitter.TabStop = false;
             // 
             // logMessagePanel
             // 
+            this.logMessagePanel.Controls.Add(this.keepLocksCheckBox);
             this.logMessagePanel.Controls.Add(this.logMessageBox);
             this.logMessagePanel.Controls.Add(this.cancelButton);
             this.logMessagePanel.Controls.Add(this.commitButton);
             this.logMessagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logMessagePanel.Location = new System.Drawing.Point(0, 115);
             this.logMessagePanel.Name = "logMessagePanel";
-            this.logMessagePanel.Size = new System.Drawing.Size(808, 149);
+            this.logMessagePanel.Size = new System.Drawing.Size(752, 149);
             this.logMessagePanel.TabIndex = 4;
             // 
             // logMessageBox
@@ -293,7 +301,7 @@ namespace Ankh.UI
             this.logMessageBox.Multiline = true;
             this.logMessageBox.Name = "logMessageBox";
             this.logMessageBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.logMessageBox.Size = new System.Drawing.Size(808, 123);
+            this.logMessageBox.Size = new System.Drawing.Size(752, 123);
             this.logMessageBox.TabIndex = 3;
             this.logMessageBox.Text = "";
             // 
@@ -301,7 +309,7 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(720, 125);
+            this.cancelButton.Location = new System.Drawing.Point(664, 125);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Cancel";
@@ -311,11 +319,19 @@ namespace Ankh.UI
             // 
             this.commitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.commitButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.commitButton.Location = new System.Drawing.Point(640, 125);
+            this.commitButton.Location = new System.Drawing.Point(584, 125);
             this.commitButton.Name = "commitButton";
             this.commitButton.TabIndex = 0;
             this.commitButton.Text = "Commit";
             this.commitButton.Click += new System.EventHandler(this.RaiseProceed);
+            // 
+            // keepLocksCheckBox
+            // 
+            this.keepLocksCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.keepLocksCheckBox.Location = new System.Drawing.Point(0, 124);
+            this.keepLocksCheckBox.Name = "keepLocksCheckBox";
+            this.keepLocksCheckBox.TabIndex = 4;
+            this.keepLocksCheckBox.Text = "Keep locks";
             // 
             // CommitDialog
             // 
@@ -323,7 +339,7 @@ namespace Ankh.UI
             this.Controls.Add(this.topSplitter);
             this.Controls.Add(this.commitItemsTree);
             this.Name = "CommitDialog";
-            this.Size = new System.Drawing.Size(808, 264);
+            this.Size = new System.Drawing.Size(752, 264);
             this.logMessagePanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -341,6 +357,7 @@ namespace Ankh.UI
         private System.Windows.Forms.Panel logMessagePanel;
         private System.Windows.Forms.Button commitButton;
         private CommitDialogResult dialogResult = CommitDialogResult.Cancel;
+        private System.Windows.Forms.CheckBox keepLocksCheckBox;
 
        
         /// <summary>

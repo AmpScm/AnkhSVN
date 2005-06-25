@@ -16,6 +16,7 @@ namespace Ankh
             this.LogMessageTemplate = template;
             this.CommitItems = commitItems;
             this.urlPaths = urlPaths;
+            this.keepLocks = false;
         }
 
         public string LogMessage
@@ -55,6 +56,12 @@ namespace Ankh
             set{ this.cancelled = value; }
         }
 
+        public bool KeepLocks
+        {
+            get{ return this.keepLocks; }
+            set{ this.keepLocks = value; }                      
+        }
+
         private bool cancelled = true;
 
         private bool urlPaths;
@@ -62,6 +69,7 @@ namespace Ankh
         private LogMessageTemplate logMessageTemplate;
         private string rawLogMessage = null;
         private string logMessage = null;
+        private bool keepLocks;
         
     }
 }
