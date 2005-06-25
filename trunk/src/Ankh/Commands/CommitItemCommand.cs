@@ -51,6 +51,8 @@ namespace Ankh.Commands
             if ( cancelled )
                 return;
 
+            this.commitContext = operation.CommitContext;
+
             // we need to commit to each repository separately
             ICollection repositories = this.SortByRepository( context, resources );           
 
@@ -99,7 +101,7 @@ namespace Ankh.Commands
 
         private void DoCommit( IContext context )
         {
-            this.commitInfo = context.Client.Commit( this.paths, true );
+            this.commitInfo = context.Client.Commit( this.paths, true, this.commitContext.KeepLocks );
         }
 
         /// <summary>
@@ -155,6 +157,7 @@ namespace Ankh.Commands
 
         private string[] paths;
         private CommitInfo commitInfo;
+        private CommitContext commitContext;
         private string storedLogMessage = null;
 
         private static readonly string DefaultUuid = Guid.NewGuid().ToString();
