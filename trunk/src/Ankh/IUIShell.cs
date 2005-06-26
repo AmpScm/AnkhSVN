@@ -61,6 +61,13 @@ namespace Ankh
         /// <returns></returns>
         CommitContext ShowCommitDialogModal( CommitContext ctx );
 
+
+        /// <summary>
+        /// Shows the "New directory" dialog.
+        /// </summary>
+        /// <returns>The name of the new dialog, or null.</returns>
+        string ShowNewDirectoryDialog();
+
         /// <summary>
         /// Shows/hides the commit dialog
         /// </summary>

@@ -9,7 +9,7 @@ using Utils;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Summary description for MakeDirectory.
+    /// A command for creating a new remote directory (in the repos explorer).
     /// </summary>
     [VSNetCommand("MakeDirectoryCommand", 
          Tooltip="Create new directory here", Text = "New directory...",
@@ -31,63 +31,45 @@ namespace Ankh.Commands
 
         public override void Execute(IContext context, string parameters)
         {
-            context.RepositoryExplorer.MakeDir( new NewDirHandler(context) );           
+            INode node = context.RepositoryExplorer.SelectedNode;
+            System.Diagnostics.Debug.Assert( node != null );
+
+            string dirname = context.UIShell.ShowNewDirectoryDialog();
+
+            // did the user bail out?
+            if ( dirname == null )
+                return;
+
+            // first show the log message dialog
+            this.url = UriUtils.Combine( node.Url, dirname );
+            CommitOperation operation = new CommitOperation(
+                new SimpleProgressWorker( new SimpleProgressWorkerCallback(this.DoCreateDir) ), 
+                new string[]{ this.url }, context );
+            operation.UrlPaths = true;
+
+            if ( !operation.ShowLogMessageDialog() )
+                return;
+
+            context.StartOperation( "Creating directory " + url );
+            try
+            {
+                operation.Run( "Creating directory" );
+                context.RepositoryExplorer.Refresh( context.RepositoryExplorer.SelectedNode );
+            }
+            finally
+            {
+                context.EndOperation();
+            }           
+
         }
 
-        /// <summary>
-        /// This class handles the actual creation of the new dir.
-        /// </summary>
-        private class NewDirHandler : IProgressWorker, INewDirectoryHandler
+        private void DoCreateDir( IContext context )
         {
-            public NewDirHandler( IContext context ) 
-            {
-                this.context = context;
-            }
-
-            public bool MakeDir(IRepositoryTreeNode parent, string dirname)
-            {
-                // first show the log message dialog
-                this.url = UriUtils.Combine( ((INode)parent).Url, dirname );
-                CommitOperation operation = new CommitOperation(
-                    this, new string[]{ this.url }, context );
-                operation.UrlPaths = true;
-
-                if ( !operation.ShowLogMessageDialog() )
-                    return false;
-
-                this.Context.StartOperation( "Creating directory " + url );
-                try
-                {
-                    bool completed= 
-                        operation.Run( "Creating directory" );
-                    return completed;
-                }
-                catch( Exception ex )
-                {
-                    this.Context.ErrorHandler.Handle( ex );
-                    return false;
-                }
-                finally
-                {
-                    this.Context.EndOperation();
-                }
-            }
-
-            protected IContext Context
-            {
-                get{ return this.context; }
-            }
-
-            public void Work( IContext context )
-            {
-                // create the dir.
-                context.Client.MakeDir( new string[]{this.url} );
-            }
-
-
-            private string url;
-            private IContext context;
+            // create the dir.
+            context.Client.MakeDir( new string[]{this.url} );
         }
+
+        private string url;        
     }
 }
 

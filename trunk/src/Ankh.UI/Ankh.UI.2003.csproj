@@ -375,6 +375,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "NewDirectoryDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NewDirectoryDialog.resx"
+                    DependentUpon = "NewDirectoryDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "PathSelectionTreeView.cs"
                     SubType = "Component"
                     BuildAction = "Compile"

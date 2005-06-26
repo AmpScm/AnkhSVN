@@ -356,6 +356,17 @@ namespace Ankh
             }
         }
 
+        public string ShowNewDirectoryDialog()
+        {
+            using( NewDirectoryDialog dlg = new NewDirectoryDialog() )
+            {
+                if ( dlg.ShowDialog(this.Context.HostWindow) != DialogResult.OK )
+                    return null;
+                
+                return dlg.DirectoryName;
+            }
+        }
+
         #endregion
 
         private void CreateRepositoryExplorer()
