@@ -524,6 +524,11 @@ namespace Ankh.Tests
                 return null;
             }
 
+            public virtual string ShowNewDirectoryDialog()
+            {
+                return null;
+            }
+
             private IContext context;
 
             #endregion
