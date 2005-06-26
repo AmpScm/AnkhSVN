@@ -180,9 +180,10 @@ namespace Ankh.UI
                 ArrayList arr = new ArrayList();
                 foreach( object item in this.commitItemsTree.CheckedItems )
                     arr.Add( item.ToString() );
+                this.LogMessageTemplate.UrlPaths = this.commitItemsTree.UrlPaths; 
                 this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( arr );
         
-                this.LogMessageTemplate.UrlPaths = this.commitItemsTree.UrlPaths; 
+                
             }
 
             this.loaded = true;
