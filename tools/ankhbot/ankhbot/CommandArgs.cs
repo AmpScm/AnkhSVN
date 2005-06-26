@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AnkhBot
 {
-    class CommandArgs
+    public class CommandArgs
     {
         public CommandArgs( AnkhBot bot, string[] args, string user, string channel, bool isPM )
         {

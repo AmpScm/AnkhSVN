@@ -61,6 +61,8 @@
     <Compile Include="DracoService.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="IService.cs" />
+    <Compile Include="IssuezillaCommand.cs" />
+    <Compile Include="IssuezillaService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemotingHelper.cs" />

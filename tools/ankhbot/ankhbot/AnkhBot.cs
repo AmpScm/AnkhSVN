@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace AnkhBot
 {
-    class AnkhBot
+    public class AnkhBot
     {
         public AnkhBot( TextWriter output, TextWriter error )
         {

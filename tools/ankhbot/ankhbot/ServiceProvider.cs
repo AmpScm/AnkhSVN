@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace AnkhBot
 {
-    class ServiceProvider
+    public class ServiceProvider
     {
         public ServiceProvider( AnkhBot bot )
         {
