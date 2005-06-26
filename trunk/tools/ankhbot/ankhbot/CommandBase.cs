@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace AnkhBot
 {
-    class CommandBase : ICommand
+    public class CommandBase : ICommand
     {
         public CommandBase()
         {
