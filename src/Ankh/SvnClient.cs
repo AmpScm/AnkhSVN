@@ -237,6 +237,5 @@ namespace Ankh
         static readonly Hashtable actionStatus = new Hashtable();
         private IContext ankhContext;
         private static IDictionary map = new Hashtable();
-        private string logMessage = null;
     }
 }
