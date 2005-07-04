@@ -369,9 +369,12 @@ namespace Ankh.Solution
                 this.GetType().Assembly.GetManifestResourceStream( LOCK_ICON ) );
             Icon readonlyIcon = new Icon(
                 this.GetType().Assembly.GetManifestResourceStream( READONLY_ICON ) );
+            Icon lockedAndReadonlyIcon = new Icon(
+                this.GetType().Assembly.GetManifestResourceStream( LOCKEDREADONLY_ICON ) );
 
             int lockImageIndex = Win32.ImageList_AddIcon( imageList, lockIcon.Handle );
             int readonlyImageIndex = Win32.ImageList_AddIcon( imageList, readonlyIcon.Handle );
+            int lockedAndReadonlyIndex = Win32.ImageList_AddIcon( imageList, lockedAndReadonlyIcon.Handle );
 
             // We don't abort here if the overlay image cannot be set
             if (  !Win32.ImageList_SetOverlayImage( imageList, lockImageIndex, LockOverlay ) )
@@ -379,6 +382,9 @@ namespace Ankh.Solution
 
             if (  !Win32.ImageList_SetOverlayImage( imageList, readonlyImageIndex, ReadonlyOverlay ) )
                 Trace.WriteLine( "Could not set overlay image for the readonly icon" );
+
+            if ( !Win32.ImageList_SetOverlayImage( imageList, lockedAndReadonlyIndex, LockReadonlyOverlay ) )
+                Trace.WriteLine( "Could not set overlay image for the lockreadonly icon" );
 
         }
         
@@ -764,6 +770,7 @@ namespace Ankh.Solution
 
         internal const int LockOverlay = 15;
         internal const int ReadonlyOverlay = 14;
+        internal const int LockReadonlyOverlay = 13;
         private _DTE dte;
         private UIHierarchy uiHierarchy;
         private const string VSNETWINDOW = "wndclass_desked_gsk";
@@ -782,5 +789,6 @@ namespace Ankh.Solution
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
         private const string LOCK_ICON = "Ankh.lock.ico";
         private const string READONLY_ICON = "Ankh.readonly.ico";
+        private const string LOCKEDREADONLY_ICON = "Ankh.lockedreadonly.ico";
     }
 }
