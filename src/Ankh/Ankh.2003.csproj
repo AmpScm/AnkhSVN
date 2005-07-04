@@ -291,6 +291,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "lockedreadonly.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "LogDialogInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

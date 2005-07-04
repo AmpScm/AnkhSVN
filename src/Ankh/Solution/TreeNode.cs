@@ -211,10 +211,11 @@ namespace Ankh.Solution
             if ( statusMap.Contains(status.Kind) )
                 statusImage = (int)statusMap[status.Kind];
 
-            if ( status.ReadOnly )
+            if ( status.ReadOnly && status.Locked )
+                overlay = Explorer.LockReadonlyOverlay;
+            else if ( status.ReadOnly )
                 overlay = Explorer.ReadonlyOverlay;
-
-            if ( status.Locked )
+            else if ( status.Locked )
                overlay = Explorer.LockOverlay;
 
             this.explorer.TreeView.SetStateAndOverlayImage( this.hItem, overlay, statusImage );                
