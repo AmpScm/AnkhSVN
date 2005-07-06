@@ -223,6 +223,9 @@
     <Compile Include="KeywordsPropertyEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="LockDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="LogDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -237,6 +240,9 @@
     </Compile>
     <Compile Include="MimeTypePropertyEditor.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NewDirectoryDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PathSelectionTreeView.cs">
       <SubType>Component</SubType>
@@ -334,6 +340,9 @@
     <EmbeddedResource Include="KeywordsPropertyEditor.resx">
       <DependentUpon>KeywordsPropertyEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LockDialog.resx">
+      <DependentUpon>LockDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LogDialog.resx">
       <DependentUpon>LogDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -345,6 +354,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MimeTypePropertyEditor.resx">
       <DependentUpon>MimeTypePropertyEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewDirectoryDialog.resx">
+      <DependentUpon>NewDirectoryDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelectionTreeView.resx">
       <DependentUpon>PathSelectionTreeView.cs</DependentUpon>

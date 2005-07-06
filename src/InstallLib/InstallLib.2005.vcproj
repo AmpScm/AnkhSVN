@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="InstallLib"
 	ProjectGUID="{2A753B40-AB06-4D27-A093-D1D351BC9522}"
 	RootNamespace="InstallLib"
 	Keyword="AtlProj"
+	SignManifests="true"
 	>
 	<Platforms>
 		<Platform
@@ -353,10 +354,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\customdetails.h"
-				>
-			</File>
-			<File
 				RelativePath=".\InstallLib.def"
 				>
 			</File>
@@ -385,10 +382,6 @@
 		</Filter>
 		<File
 			RelativePath=".\InstallLib.build"
-			>
-		</File>
-		<File
-			RelativePath=".\ReadMe.txt"
 			>
 		</File>
 	</Files>
