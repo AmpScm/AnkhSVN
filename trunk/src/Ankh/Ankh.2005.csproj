@@ -195,9 +195,8 @@
       <Name>System.XML</Name>
     </Reference>
     <ProjectReference Include="..\Ankh.UI\Ankh.UI.2005.csproj">
-      <Name>Ankh.UI</Name>
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Name>Ankh.UI.2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\NSvn.Common\NSvn.Common.2005.csproj">
       <Name>NSvn.Common</Name>
@@ -365,6 +364,7 @@
     <Compile Include="CommitContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CommitOperation.cs" />
     <Compile Include="Config\Config.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -377,6 +377,7 @@
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DteUtils.cs" />
     <Compile Include="ErrorHandler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -503,6 +504,7 @@
     <Compile Include="VSNetFolderNodeControlAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="VSNetProjectItemControlAttribute.cs" />
     <Compile Include="VSNetProjectNodeControlAttribute.cs">
       <SubType>Code</SubType>
     </Compile>

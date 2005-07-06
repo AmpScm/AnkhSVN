@@ -176,9 +176,8 @@
       <Name>System.XML</Name>
     </Reference>
     <ProjectReference Include="..\NSvn.Common\NSvn.Common.2005.csproj">
-      <Name>NSvn.Common</Name>
       <Project>{3A8DF134-05F1-4357-9682-AB14CDDA48A9}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Name>NSvn.Common.2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\NSvn.Core\NSvn.Core.2005.vcproj">
       <Name>NSvn.Core</Name>
@@ -186,9 +185,8 @@
       <Package>{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}</Package>
     </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.2005.csproj">
-      <Name>Utils</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Name>Utils.2005</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +235,7 @@
     <Compile Include="ListTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LockTest.cs" />
     <Compile Include="LogTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -291,6 +290,7 @@
     <Compile Include="TestBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UnlockTest.cs" />
     <Compile Include="UpdateTest.cs">
       <SubType>Code</SubType>
     </Compile>
