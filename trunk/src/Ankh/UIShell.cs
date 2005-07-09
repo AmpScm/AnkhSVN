@@ -367,6 +367,17 @@ namespace Ankh
             }
         }
 
+        public RepositoryRootInfo ShowAddRepositoryRootDialog()
+        {
+            using( AddRepositoryRootDialog dlg = new AddRepositoryRootDialog() )
+            {
+                if ( dlg.ShowDialog(this.Context.HostWindow) != DialogResult.OK )
+                    return null;
+
+                return new RepositoryRootInfo( dlg.Url, dlg.Revision );
+            }
+        }
+
         #endregion
 
         private void CreateRepositoryExplorer()

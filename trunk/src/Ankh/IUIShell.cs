@@ -147,5 +147,11 @@ namespace Ankh
         /// <param name="info"></param>
         /// <returns></returns>
         SwitchDialogInfo ShowSwitchDialog( SwitchDialogInfo info );
+
+        /// <summary>
+        /// Shows the dialog for adding a new root to the repository.
+        /// </summary>
+        /// <returns></returns>
+        RepositoryRootInfo ShowAddRepositoryRootDialog();
 	}
 }

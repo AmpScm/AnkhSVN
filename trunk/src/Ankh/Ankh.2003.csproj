@@ -324,6 +324,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "RepositoryRootInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ResourceBitmaps.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -394,6 +399,11 @@
                 />
                 <File
                     RelPath = "Commands\AddItemCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\AddRepositoryRootCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -532,6 +542,11 @@
                 />
                 <File
                     RelPath = "Commands\RelocateCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\RemoveRepositoryRootCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
