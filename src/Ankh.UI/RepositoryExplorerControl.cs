@@ -324,6 +324,7 @@ namespace Ankh.UI
             // 
             // toolBar
             // 
+            this.toolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
             this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
                                                                                        this.enableBackgroundListingButton});
             this.toolBar.ButtonSize = new System.Drawing.Size(16, 16);
