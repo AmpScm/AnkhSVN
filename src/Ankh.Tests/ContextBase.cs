@@ -529,6 +529,11 @@ namespace Ankh.Tests
                 return null;
             }
 
+            public virtual RepositoryRootInfo ShowAddRepositoryRootDialog()
+            {
+                return null;
+            }
+
             private IContext context;
 
             #endregion
