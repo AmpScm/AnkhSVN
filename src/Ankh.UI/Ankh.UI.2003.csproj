@@ -137,6 +137,16 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AddRepositoryRootDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AddRepositoryRootDialog.resx"
+                    DependentUpon = "AddRepositoryRootDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "AddSolutionDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -552,6 +562,10 @@
                 <File
                     RelPath = "ViewLogDialog.resx"
                     DependentUpon = "ViewLogDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Graphics\EnableBackgroundListing.ico"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>

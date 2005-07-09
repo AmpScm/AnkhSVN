@@ -27,8 +27,6 @@ namespace Ankh.RepositoryExplorer
 
             this.repositoryExplorer.EnableBackgroundListingChanged += 
                 new EventHandler( this.BackgroundListingChanged );
-            this.repositoryExplorer.AddClicked += new EventHandler(AddClicked);
-            this.repositoryExplorer.RemoveClicked += new EventHandler(RemoveClicked);
             this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
             this.repositoryExplorer.SelectionChanged +=new EventHandler(SelectionChanged);
 
@@ -63,6 +61,34 @@ namespace Ankh.RepositoryExplorer
         public void MakeDir( INewDirectoryHandler handler )
         {
             this.repositoryExplorer.MakeDir( handler );
+        }
+
+        /// <summary>
+        /// Add a new root node to the repository explorer.
+        /// </summary>
+        /// <param name="info"></param>
+        public void AddRoot( RepositoryRootInfo info )
+        {
+            INode rootNode = new RootNode(info.Url, info.Revision);
+            string label = String.Format( "{0} [{1}]", 
+                rootNode.Url, rootNode.Revision );
+            this.repositoryExplorer.AddRoot( label, rootNode );
+
+            // Create a registry key for it
+            RegistryUtils.CreateNewTypedUrl( rootNode.Url );
+        }
+
+        public void RemoveRoot( INode node )
+        {            
+            if ( !(node is RootNode) )
+                throw new ArgumentException( "Must be a root node" );
+
+            this.repositoryExplorer.RemoveRoot( node );
+        }
+
+        public bool IsRootNode( INode node )
+        {
+            return node is RootNode;
         }
 
         /// <summary>
@@ -150,36 +176,9 @@ namespace Ankh.RepositoryExplorer
             {
                 this.context.ErrorHandler.Handle(ex);
             }
-        }
+        }        
 
-        /// <summary>
-        /// The user wants to add an URL.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void AddClicked(object sender, EventArgs args )
-        {           
-            INode rootNode = new RootNode(
-                this.repositoryExplorer.Url, this.repositoryExplorer.Revision);
-            string label = String.Format( "{0} [{1}]", 
-                rootNode.Url, rootNode.Revision );
-            this.repositoryExplorer.AddRoot( label, rootNode );
-
-            // Create a registry key for it
-            RegistryUtils.CreateNewTypedUrl( rootNode.Url );
-        }
-
-        /// <summary>
-        /// The user wants to remove an URL.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void RemoveClicked(object sender, EventArgs args)
-        {
-            if ( this.repositoryExplorer.SelectedNode != null )
-                this.repositoryExplorer.RemoveRoot( 
-                    this.repositoryExplorer.SelectedNode );
-        }
+        
 
         /// <summary>
         /// Load the stored roots in the config dir.
