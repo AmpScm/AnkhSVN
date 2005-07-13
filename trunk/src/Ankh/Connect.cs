@@ -121,6 +121,7 @@ namespace Ankh
                 System.Windows.Forms.MessageBox.Show( msg, 
                     "An error occurred while Ankh was loading " + 
                     "(Press Ctrl-C to copy this message to the clipboard)" );
+                throw;
             }
         }
 
