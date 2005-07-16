@@ -12,11 +12,10 @@ namespace Ankh.Solution
     public class ProjectNode : TreeNode
     {
         public ProjectNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
-            TreeNode parent ) : 
+            TreeNode parent, Project project ) : 
             base( item, hItem, explorer, parent )
         {
-            this.project = (Project)item.Object;
-
+            this.project = project;
             this.FindProjectResources(explorer);
         }
 

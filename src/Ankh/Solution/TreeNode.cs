@@ -43,18 +43,32 @@ namespace Ankh.Solution
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
             Explorer explorer, TreeNode parent )
         {
-            TreeNode node = null;
             // what kind of node is this?
-            if ( item.Object is Project )
+            Project project = item.Object as Project;
+            if ( project != null )
             {
-                node = new ProjectNode( item, hItem, explorer, parent );
-            }
-            else if ( item.Object is ProjectItem )
-            {
-                node = new ProjectItemNode( item, hItem, explorer, parent );           
+                // Check if we have a Project.
+                return new ProjectNode( item, hItem, explorer, parent, project );
             }
 
-            return node;
+            ProjectItem projectItem = item.Object as ProjectItem;
+            if(projectItem != null)
+            {
+                // Check if we have a subproject inside an Enterprise Template project
+                if ( projectItem.Kind == ETPROJITEMKIND && 
+                    parent.uiItem.Object is Project &&
+                    ((Project)parent.uiItem.Object).Kind == ETPROJKIND )
+                {
+                    return new ProjectNode( item, hItem, explorer, parent, projectItem.SubProject );
+                }
+                else
+                {
+                    // If we don't, it's just a ProjectItem
+                    return new ProjectItemNode( item, hItem, explorer, parent );
+                }
+            }
+               
+            return null;
         }
 
         public static TreeNode CreateSolutionNode( UIHierarchyItem item, 
@@ -498,5 +512,7 @@ namespace Ankh.Solution
         private Explorer explorer;
         private NodeStatus currentStatus;
         private static readonly IDictionary statusMap = new Hashtable();
+        private const string ETPROJKIND = "{7D353B21-6E36-11D2-B35A-0000F81F0C06}";
+        private const string ETPROJITEMKIND = "{EA6618E8-6E24-4528-94BE-6889FE16485C}";
     }
 }
