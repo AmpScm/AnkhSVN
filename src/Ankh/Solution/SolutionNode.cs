@@ -19,6 +19,7 @@ namespace Ankh.Solution
         {
             EnvDTE.Solution solution = this.Explorer.DTE.Solution;
             this.solutionFile = this.Explorer.Context.StatusCache[solution.FullName];
+			this.parser=new ParsedSolution(solution.FullName, explorer.Context);
 
             this.solutionFolder = this.Explorer.Context.StatusCache[
                 Path.GetDirectoryName( solution.FullName )];
@@ -31,6 +32,8 @@ namespace Ankh.Solution
             this.AddDeletions( this.solutionFolder.Path, this.additionalResources, del );
 
             explorer.SetSolution( this );
+                
+            this.FindChildren();  
         }   
 
         public override void Accept(INodeVisitor visitor)
@@ -58,20 +61,6 @@ namespace Ankh.Solution
             this.GetChildResources(list, getChildItems, filter );
         }
 
-        
-        
-
-        /// <summary>
-        /// The path to the solution folder.
-        /// </summary>
-        public override string Directory
-        {
-            [System.Diagnostics.DebuggerStepThrough()]
-            get{ return this.solutionFolder.Path; }
-        }
-
-
-
         /// <summary>
         /// Get the status for this node, not including children.
         /// </summary>
@@ -86,8 +75,24 @@ namespace Ankh.Solution
                     this.MergeStatuses( this.solutionFolder, this.solutionFile ),
                     this.MergeStatuses( this.additionalResources ) );
             }
+        }       
+
+        /// <summary>
+        /// The path to the solution folder.
+        /// </summary>
+        public override string Directory
+        {
+            [System.Diagnostics.DebuggerStepThrough()]
+            get{ return this.solutionFolder.Path; }
         }
 
+		public ParsedSolution Parser
+		{
+			[System.Diagnostics.DebuggerStepThrough()]
+			get{ return this.parser; }
+		}
+
+		private ParsedSolution parser;
         private SvnItem solutionFile;
         private SvnItem solutionFolder;
         private ArrayList additionalResources;

@@ -734,6 +734,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Solution\ParsedSolution.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\ParsedSolutionItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Solution\ProjectItemNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

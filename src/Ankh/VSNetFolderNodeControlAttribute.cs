@@ -19,8 +19,8 @@ namespace Ankh
             this.AddControls( Bars, cmd, context, tag );
         }
 
-
-        private static readonly string[] Bars = new string[]{ "Folder", 
-            "Web Reference Folder", "Web Folder" };
+        private static readonly string[] Bars = new string[]{
+            "Folder", "Web Reference Folder", "Web Folder", "DB Project Folder",
+            "Script" };
     }
 }

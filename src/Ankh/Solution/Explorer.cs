@@ -31,7 +31,7 @@ namespace Ankh.Solution
             this.context = context;
             this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
                 new ItemComparer() );
-            this.projects = new Hashtable( new ProjectHashCodeProvider(), 
+            this.projects = new Hashtable( new ProjectHashCodeProvider(this), 
                 new ProjectComparer() );
             
             // get the uihierarchy root
@@ -115,7 +115,6 @@ namespace Ankh.Solution
             }
         }
 
-
         /// <summary>
         /// Updates the status of the given item.
         /// </summary>
@@ -141,7 +140,7 @@ namespace Ankh.Solution
             // and assign the status image list to the tree
             this.treeview.StatusImageList = statusImageList.Handle;
 
-            SolutionLoadStrategy.GetStrategy( dte.Version ).Load( this );            
+            SolutionLoadStrategy.GetStrategy( dte.Version ).Load( this );     
  
             Debug.WriteLine( "Created solution node", "Ankh" );
         }
@@ -158,20 +157,20 @@ namespace Ankh.Solution
             return this.GetSelectionResources( getChildItems, null );
         }
 
-        /// <summary>	 	
-        /// Visits all the selected nodes.	 	
-        /// </summary>	 	
-        /// <param name="visitor"></param>	 	
-        public void VisitSelectedNodes( INodeVisitor visitor )	 	
-        {	 	
-            //foreach( SelectedItem item in items )	 	
-            object o = this.uiHierarchy.SelectedItems;	 	
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )	 	
-            {	 	
-                TreeNode node = this.GetNode( item );	 	
-                if ( node != null )	 	
-                    node.Accept( visitor );	 	
-            }	 	
+        /// <summary>         
+        /// Visits all the selected nodes.         
+        /// </summary>         
+        /// <param name="visitor"></param>         
+        public void VisitSelectedNodes( INodeVisitor visitor )         
+        {         
+            //foreach( SelectedItem item in items )         
+            object o = this.uiHierarchy.SelectedItems;         
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )         
+            {         
+                TreeNode node = this.GetNode( item );         
+                if ( node != null )         
+                    node.Accept( visitor );         
+            }         
         }
 
         
@@ -191,12 +190,12 @@ namespace Ankh.Solution
         {
             ArrayList list = new ArrayList();
 
-            object o = this.uiHierarchy.SelectedItems;	 	
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )	 	
-            {	 	
-                TreeNode node = this.GetNode( item );	 	
-                if ( node != null )	 	
-                    node.GetResources( list, getChildItems, filter );	 	
+            object o = this.uiHierarchy.SelectedItems;         
+            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )         
+            {         
+                TreeNode node = this.GetNode( item );         
+                if ( node != null )         
+                    node.GetResources( list, getChildItems, filter );         
             }
 
             return list;
@@ -212,9 +211,9 @@ namespace Ankh.Solution
         {
             ArrayList list = new ArrayList();
 
-            TreeNode node = solutionNode; 	
-            if ( node != null )	 	
-                node.GetResources( list, true, filter );	 	
+            TreeNode node = solutionNode;     
+            if ( node != null )         
+                node.GetResources( list, true, filter );         
 
             return list;
         }
@@ -392,9 +391,16 @@ namespace Ankh.Solution
         /// <summary>
         /// Adds a new resource to the tree.
         /// </summary>
-        internal void AddResource( ProjectItem key, TreeNode node )
+        internal void AddResource( ProjectItem key, ParsedSolutionItem parsedKey, TreeNode node )
         {
-            this.projectItems[key] = node;
+            if(key!=null)
+            {
+                this.projectItems[key] = node;
+            }
+            else if(parsedKey!=null)
+            {
+                this.projectItems[parsedKey] = node;
+            }
         }
 
         internal void AddResource( Project key, TreeNode node, string projectFile )
@@ -406,7 +412,7 @@ namespace Ankh.Solution
         internal void SetSolution( TreeNode node )
         {
             // we assume theres only one of these
-            this.solutionNode = node;
+            this.solutionNode = (SolutionNode)node;
         }
 
         private TreeNode GetNode(UIHierarchyItem item)
@@ -498,14 +504,13 @@ namespace Ankh.Solution
             {
                 DateTime startTime = DateTime.Now;
                 outer.context.StartOperation( "Synchronizing with solution explorer");
-                
 
                 // avoid lots of flickering while we walk the tree
                 outer.treeview.LockWindowUpdate(true);
                 try
                 {
                     // we assume there is a single root node
-                    outer.solutionNode = TreeNode.CreateSolutionNode(
+                    outer.solutionNode = (SolutionNode)TreeNode.CreateSolutionNode(
                         outer.uiHierarchy.UIHierarchyItems.Item(1), outer);
 
                     // and we're done
@@ -662,7 +667,7 @@ namespace Ankh.Solution
             private bool done;
         }
         #endregion
-
+                
         #region class ItemHashCodeProvider
         private class ItemHashCodeProvider : IHashCodeProvider
         {        
@@ -702,15 +707,27 @@ namespace Ankh.Solution
             internal static string GetFileName( object obj )
             {
                 string filename = null;
-                try
+
+                if(obj is ParsedSolutionItem)
                 {
-                    filename = ((ProjectItem)obj).get_FileNames(1);
+                    filename=((ParsedSolutionItem)obj).FileName;
                 }
-                catch( Exception )
+                else if(obj is ProjectItem)
                 {
-                    // hack for those project types which use a 0-based index
-                    // (GRRRR)
-                    filename = ((ProjectItem)obj).get_FileNames(0);
+                    try
+                    {
+                        filename = ((ProjectItem)obj).get_FileNames(1);
+                    }
+                    catch( Exception )
+                    {
+                        // hack for those project types which use a 0-based index
+                        // (GRRRR)
+                        filename = ((ProjectItem)obj).get_FileNames(0);
+                    }
+                }
+                else
+                {
+                    throw new ApplicationException("Unknown type to get file name from");
                 }
 
                 return filename;
@@ -719,13 +736,30 @@ namespace Ankh.Solution
             internal static string GetProjectName( object obj )
             {
                 string projectName = null;
-                try
+
+                if(obj is ParsedSolutionItem)
                 {
-                    projectName = ((ProjectItem)obj).ContainingProject.FullName;
+                    ParsedSolutionItem item=(ParsedSolutionItem)obj;
+                    while(item.Parent!=null)
+                    {
+                        item=item.Parent;
+                    }
+                    projectName=item.FileName;
                 }
-                catch ( Exception )
+                else if(obj is ProjectItem)
                 {
-                    projectName = "";
+                    try
+                    {
+                        projectName = ((ProjectItem)obj).ContainingProject.FullName;
+                    }
+                    catch ( Exception )
+                    {
+                        projectName = "";
+                    }
+                }
+                else
+                {
+                    throw new ApplicationException("Unknown type to get project name from");
                 }
 
                 return projectName;
@@ -735,17 +769,42 @@ namespace Ankh.Solution
         #region class ProjectHashCodeProvider
         private class ProjectHashCodeProvider : IHashCodeProvider
         {        
+			public ProjectHashCodeProvider(Explorer explorer)
+			{
+				this.explorer=explorer;
+			}
+
             public int GetHashCode(object obj)
             {
-                try
+                if(obj is Project)
                 {
-                    return ((Project)obj).FullName.GetHashCode();
+                    Project project=(Project)obj;
+                    string projectFile=explorer.solutionNode.Parser.GetProjectFile(project.Name);
+                    if(projectFile!=null && projectFile!="")
+                    {
+                        return projectFile.GetHashCode();
+                    }
+
+                    try
+                    {
+                        return project.FullName.GetHashCode();
+                    }
+                    catch( Exception )
+                    {
+                        return obj.GetHashCode();
+                    }
                 }
-                catch( Exception )
+                else if(obj is ParsedSolutionItem)
                 {
-                    return obj.GetHashCode();
+                    return ((ParsedSolutionItem)obj).FileName.GetHashCode();
+                }
+                else
+                {
+                    throw new ApplicationException("Unknown type");
                 }
             }
+
+			private Explorer explorer;
         }
         #endregion
 
@@ -780,7 +839,7 @@ namespace Ankh.Solution
         private const string VBFLOATINGPALETTE = "VBFloatingPalette";
         private IDictionary projectItems;
         private IDictionary projects;
-        private TreeNode solutionNode;
+        private SolutionNode solutionNode;
         private ImageList statusImageList;
         private IContext context;
         private TreeView treeview;

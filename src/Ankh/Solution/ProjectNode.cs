@@ -16,7 +16,11 @@ namespace Ankh.Solution
             base( item, hItem, explorer, parent )
         {
             this.project = project;
+            this.modeled=true;
+
             this.FindProjectResources(explorer);
+                
+            this.FindChildren();  
         }
 
         public override void GetResources( System.Collections.IList list, 
@@ -55,12 +59,21 @@ namespace Ankh.Solution
         private void FindProjectResources(Explorer explorer)
         {
             // find the directory containing the project
-            string fullname = project.FullName;
+            string fullname = null;
+            try
+            {
+                fullname = this.project.FullName;
+            }
+            catch(NotImplementedException)  //deal with unmodeled projects (database)
+            {
+                fullname=((SolutionNode)this.Parent).Parser.GetProjectFile(project.Name);
+                this.modeled=false;
+            }
 
             this.additionalResources = new ArrayList();
 
             // special treatment for VDs
-            if (String.Compare(project.Kind, ProjectNode.VDPROJKIND, true) == 0)
+            if (String.Compare(this.project.Kind, ProjectNode.VDPROJKIND, true) == 0)
                 fullname += ".vdproj";
 
             StatusChanged del = new StatusChanged(this.ChildOrResourceChanged);
@@ -71,7 +84,7 @@ namespace Ankh.Solution
                 this.projectFolder = this.Explorer.Context.StatusCache[parentPath];
                 this.projectFile = this.Explorer.Context.StatusCache[fullname];
 
-                this.Explorer.AddResource(project, this, fullname);
+                this.Explorer.AddResource(this.project, this, fullname);
 
                 // attach event handlers                
                 this.projectFolder.Changed += del;
@@ -107,6 +120,32 @@ namespace Ankh.Solution
             get { return this.projectFolder.Path; }
         }
 
+		/// <summary>
+		/// True if this project is supported via Visual Studio Automation
+		/// </summary>
+        public bool Modeled
+        {
+            [System.Diagnostics.DebuggerStepThrough()]
+            get{ return this.modeled; }
+        }
+
+        /// <summary>
+		/// Name of the project
+		/// </summary>
+        public string Name
+        {
+            [System.Diagnostics.DebuggerStepThrough()]
+            get{ return this.project.Name; }
+        }
+
+		/// <summary>
+		/// The Visual Studio Automation project object
+		/// </summary>
+        public Project Project
+        {
+            [System.Diagnostics.DebuggerStepThrough()]
+            get { return this.project; }
+        }
 
         /// <summary>
         /// The status of this node, not including children.
@@ -122,6 +161,7 @@ namespace Ankh.Solution
                
         }                    
 
+        private bool modeled;
         private SvnItem projectFolder;
         private SvnItem projectFile;
         private IList additionalResources;
