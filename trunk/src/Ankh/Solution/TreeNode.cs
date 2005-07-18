@@ -29,8 +29,6 @@ namespace Ankh.Solution
             this.hItem = hItem;
             this.explorer = explorer;
             this.parent = parent;
-                
-            this.FindChildren();  
         }
 
 
@@ -43,17 +41,15 @@ namespace Ankh.Solution
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
             Explorer explorer, TreeNode parent )
         {
-            // what kind of node is this?
-            Project project = item.Object as Project;
-            if ( project != null )
-            {
-                // Check if we have a Project.
-                return new ProjectNode( item, hItem, explorer, parent, project );
-            }
 
-            ProjectItem projectItem = item.Object as ProjectItem;
-            if(projectItem != null)
+			// what kind of node is this?
+			if ( item.Object is Project )
+			{
+                return new ProjectNode( item, hItem, explorer, parent, (Project)item.Object );
+            }
+            else if ( item.Object is ProjectItem )
             {
+				ProjectItem projectItem = item.Object as ProjectItem;
                 // Check if we have a subproject inside an Enterprise Template project
                 if ( projectItem.Kind == ETPROJITEMKIND && 
                     parent.uiItem.Object is Project &&
@@ -61,13 +57,38 @@ namespace Ankh.Solution
                 {
                     return new ProjectNode( item, hItem, explorer, parent, projectItem.SubProject );
                 }
-                else
+                else  //normal project item
                 {
-                    // If we don't, it's just a ProjectItem
-                    return new ProjectItemNode( item, hItem, explorer, parent );
+                    return new ProjectItemNode( item, hItem, explorer, parent, null );
                 }
             }
-               
+            else if ( parent is SolutionNode ) //deal with unmodeled projects (database)
+            {
+                for(int i=1; i<=item.DTE.Solution.Projects.Count; i++)
+                {
+                    Project project=item.DTE.Solution.Projects.Item(i);
+                    if(project.Name==item.Name)
+                    {
+                        return new ProjectNode( item, hItem, explorer, parent, project );
+                    }
+                }
+            }
+            else if ( parent is ProjectNode && !((ProjectNode)parent).Modeled ) //deal with items in unmodeled projects
+            {
+                ProjectNode projectNode=(ProjectNode)parent;
+                ParsedSolutionItem parsedItem=((SolutionNode)projectNode.parent).Parser.GetProjectItem(projectNode.Name, item.Name);
+                return new ProjectItemNode( item, hItem, explorer, parent, parsedItem );  
+            }
+            else if ( parent is ProjectItemNode ) //deal with sub items in unmodeled projects
+            {
+                ProjectItemNode parentNode=(ProjectItemNode)parent;
+				if(parentNode.ParsedItem!=null)
+				{
+					ParsedSolutionItem parsedItem=parentNode.ParsedItem.GetChild(item.Name);
+					return new ProjectItemNode( item, hItem, explorer, parent, parsedItem );  
+				}
+            }
+
             return null;
         }
 
