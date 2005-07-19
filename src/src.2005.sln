@@ -376,7 +376,6 @@ Global
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Debug|Any CPU.Build.0 = Debug|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Debug|Win32.ActiveCfg = Debug|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Debug|Win32.Build.0 = Debug|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.NSvn.Tests|Any CPU.ActiveCfg = Debug|Win32
@@ -623,7 +622,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal
