@@ -164,7 +164,7 @@
          </copy>
     </target>
     
-    <target name="build-NSvn.Common">
+    <target name="build-NSvn.Common" depends="build-Utils">
         <nant buildfile="NSvn.Common/NSvn.Common.build" inheritall="true" target="build"/>
         <copy todir="${build.dir}"> 
             <fileset basedir="NSvn.Common/${build.dir}">
