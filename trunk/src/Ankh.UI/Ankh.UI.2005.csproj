@@ -131,10 +131,8 @@
       <Name>System.XML</Name>
     </Reference>
     <ProjectReference Include="..\NSvn.Common\NSvn.Common.2005.csproj">
-      <Name>NSvn.Common</Name>
       <Project>{3A8DF134-05F1-4357-9682-AB14CDDA48A9}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-      <Private>True</Private>
+      <Name>NSvn.Common.2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\NSvn.Core\NSvn.Core.2005.vcproj">
       <Name>NSvn.Core</Name>
@@ -163,6 +161,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddRepositoryRootDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AddSolutionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -295,6 +296,9 @@
     <Compile Include="ViewLogDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <EmbeddedResource Include="AddRepositoryRootDialog.resx">
+      <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AddSolutionDialog.resx">
       <DependentUpon>AddSolutionDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -411,6 +415,9 @@
     </EmbeddedResource>
     <None Include="Ankh.UI.build" />
     <None Include="Ankh.UI.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\EnableBackgroundListing.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
