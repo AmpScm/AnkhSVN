@@ -85,6 +85,7 @@ namespace Ankh.Solution
                 this.projectFile = this.Explorer.Context.StatusCache[fullname];
 
                 this.Explorer.AddResource(this.project, this, fullname);
+                this.Explorer.AddResource(this.uiItem.Object, this, fullname);
 
                 // attach event handlers                
                 this.projectFolder.Changed += del;
@@ -100,6 +101,7 @@ namespace Ankh.Solution
                 this.projectFolder = this.Explorer.Context.StatusCache[fullname];
                 this.projectFile = SvnItem.Unversionable;
                 this.Explorer.AddResource(project, this, fullname);
+                this.Explorer.AddResource(this.uiItem.Object, this, fullname);
 
                 this.projectFolder.Changed += del;
                 this.AddDeletions(this.projectFolder.Path, this.additionalResources, del);

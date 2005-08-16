@@ -526,7 +526,7 @@ namespace Ankh.Solution
             IndividualStatusesConflicting
         }
 
-        private UIHierarchyItem uiItem;
+        protected UIHierarchyItem uiItem;
         private TreeNode parent;
         private IntPtr hItem;
         private IList children;

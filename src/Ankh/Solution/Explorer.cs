@@ -391,19 +391,28 @@ namespace Ankh.Solution
         /// <summary>
         /// Adds a new resource to the tree.
         /// </summary>
-        internal void AddResource( ProjectItem key, ParsedSolutionItem parsedKey, TreeNode node )
+        /// <param name="projectKey">The modeled ProjectItem or an unmodeled placeholder for it</param>
+        /// <param name="parsedKey">A parsed item for unmodeled projects</param>
+        /// <param name="node">Our own representation</param>
+        internal void AddResource( object projectKey, ParsedSolutionItem parsedKey, ProjectItemNode node )
         {
-            if(key!=null)
+            if(projectKey!=null)
             {
-                this.projectItems[key] = node;
+                this.projectItems[projectKey] = node;
             }
-            else if(parsedKey!=null)
+            if(parsedKey!=null)
             {
                 this.projectItems[parsedKey] = node;
             }
         }
 
-        internal void AddResource( Project key, TreeNode node, string projectFile )
+		/// <summary>
+		/// Adds a new resource to the tree
+		/// </summary>
+		/// <param name="key">The modeled Project or an unmodeled placeholder for it</param>
+		/// <param name="node">Our own representation</param>
+		/// <param name="projectFile">Filename for the project</param>
+        internal void AddResource( object key, ProjectNode node, string projectFile )
         {
             this.projects[key] = node;
             this.context.ProjectFileWatcher.AddFile( projectFile );
@@ -420,9 +429,9 @@ namespace Ankh.Solution
             if ( item.Object == null )
                 return null;
 
-            if ( item.Object is ProjectItem && this.projectItems.Contains( item.Object ) )
+            if ( this.projectItems.Contains( item.Object ) )
                 return ((TreeNode)this.projectItems[item.Object]);
-            else if ( item.Object is Project && this.projects.Contains(item.Object) )
+            else if ( this.projects.Contains(item.Object) )
                 return ((TreeNode)this.projects[item.Object]); 
             else if ( item == this.uiHierarchy.UIHierarchyItems.Item(1) )
                 return this.solutionNode;
@@ -690,19 +699,24 @@ namespace Ankh.Solution
         #region class ItemComparer
         private class ItemComparer : IComparer
         {        
-            public int Compare(object x, object y)
-            {
-                try
-                {
-                    string str_a = GetProjectName(x) + "|" + GetFileName(x);
-                    string str_b = GetProjectName(y) + "|" + GetFileName(y);
-                    return str_a.CompareTo(str_b);
-                }
-                catch( Exception )
-                {
-                    return -1;
-                }
-            }
+			public int Compare(object x, object y)
+			{
+				if(x is ProjectItem && y is ProjectItem)
+				{
+					string str_a = GetProjectName(x) + "|" + GetFileName(x);
+					string str_b = GetProjectName(y) + "|" + GetFileName(y);
+					return str_a.CompareTo(str_b);
+				}
+				if(x is ProjectItem)
+				{
+					return 1;
+				}
+				if(y is ProjectItem)
+				{
+					return -1;
+				}
+				return x.GetHashCode().CompareTo(y.GetHashCode());
+			}
 
             internal static string GetFileName( object obj )
             {
@@ -800,7 +814,7 @@ namespace Ankh.Solution
                 }
                 else
                 {
-                    throw new ApplicationException("Unknown type");
+					return obj.GetHashCode();
                 }
             }
 
@@ -813,15 +827,51 @@ namespace Ankh.Solution
         {        
             public int Compare(object x, object y)
             {
-                try
-                {
-                    return ((Project)x).FullName.CompareTo(
-                        ((Project)y).FullName );
-                }
-                catch( Exception )
-                {
-                    return -1;
-                }
+				string xName=null;
+				if(x is Project)
+				{
+					try
+					{
+						xName=((Project)x).FullName;
+					}
+					catch(NotImplementedException)
+					{
+					}
+				}
+				else if(x is ParsedSolutionItem)
+				{
+					xName=((ParsedSolutionItem)x).FileName;
+				}
+
+				string yName=null;
+				if(y is Project)
+				{
+					try
+					{
+						yName=((Project)y).FullName;
+					}
+					catch(NotImplementedException)
+					{
+					}
+				}
+				else if(y is ParsedSolutionItem)
+				{
+					yName=((ParsedSolutionItem)y).FileName;
+				}
+
+				if(xName!=null && yName!=null)
+				{
+					return xName.CompareTo(yName);
+				}
+				if(xName!=null)
+				{
+					return 1;
+				}
+				if(yName!=null)
+				{
+					return -1;
+				}
+				return x.GetHashCode().CompareTo(y.GetHashCode());
             }
         }
         #endregion
