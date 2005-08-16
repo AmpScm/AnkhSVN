@@ -19,7 +19,7 @@ namespace Ankh.Solution
             TreeNode parent, ParsedSolutionItem parsedItem ) :
             base( item, hItem, explorer, parent )
         {
-            this.projectItem = item.Object as ProjectItem;
+            this.projectItem = item.Object;
             this.parsedProjectItem=parsedItem;
                 
             this.FindChildren();  
@@ -102,13 +102,13 @@ namespace Ankh.Solution
             try
             {
                 StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
-                this.AddResourcesFromProjectItem( this.projectItem, del );
+                this.AddResourcesFromProjectItem( this.ProjectItem, del );
                 this.AddResourcesFromProjectItem( this.parsedProjectItem, del );
 
                 // is this a childless tree node? it might have hidden children after all
                 if ( this.Children.Count == 0 )
                 {
-                    this.AddSubItems( this.projectItem, del );
+                    this.AddSubItems( this.ProjectItem, del );
                     this.AddSubItems( this.parsedProjectItem, del );
                 }
                
@@ -120,7 +120,7 @@ namespace Ankh.Solution
             }   
             catch( System.Runtime.InteropServices.SEHException )
             {
-                Trace.WriteLine( "SEHException thrown: " + this.projectItem.Name );
+                Trace.WriteLine( "SEHException thrown: " + this.ProjectItem.Name );
             }
             finally
             {
@@ -245,8 +245,16 @@ namespace Ankh.Solution
             get{ return this.parsedProjectItem; }
         }
 
+		/// <summary>
+		/// The modeled Project Item
+		/// </summary>
+		public ProjectItem ProjectItem
+		{
+			get{ return projectItem as ProjectItem; }
+		}
+
         private ParsedSolutionItem parsedProjectItem;
-        private ProjectItem projectItem;
+        private object projectItem;
         private IList resources;
     }    
 
