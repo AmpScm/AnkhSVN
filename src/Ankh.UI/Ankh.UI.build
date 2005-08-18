@@ -51,6 +51,8 @@
                 <include name="*.resx"/>
             </resources>
             
+            <arg value="/resource:Graphics\EnableBackgroundListing.ico,Ankh.UI.Graphics.EnableBackgroundListing.ico"/>
+            
             <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="${warninglevel}"/>
         </csc>
