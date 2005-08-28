@@ -209,6 +209,9 @@ namespace Ankh.Solution
         /// <returns>A list of SvnItem instances.</returns>
         public IList GetAllResources( ResourceFilterCallback filter )
         {
+			if ( !context.AnkhLoadedForSolution )
+				return new SvnItem[]{};
+
             ArrayList list = new ArrayList();
 
             TreeNode node = solutionNode;     
@@ -426,7 +429,7 @@ namespace Ankh.Solution
 
         private TreeNode GetNode(UIHierarchyItem item)
         {
-            if ( item.Object == null )
+            if ( item.Object == null || !this.context.AnkhLoadedForSolution )
                 return null;
 
             if ( this.projectItems.Contains( item.Object ) )
