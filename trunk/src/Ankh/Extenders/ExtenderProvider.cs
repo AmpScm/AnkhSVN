@@ -59,6 +59,9 @@ namespace Ankh.Extenders
         {
             try
             {
+				if (!this.context.AnkhLoadedForSolution)
+				return false;
+
                 IList resources = 
                     this.context.SolutionExplorer.GetSelectionResources(false);
                 if ( resources.Count > 0 )
