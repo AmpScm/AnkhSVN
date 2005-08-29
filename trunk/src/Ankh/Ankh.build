@@ -60,6 +60,7 @@
             <arg value="/resource:status_icons.bmp,Ankh.status_icons.bmp"/>
             <arg value="/resource:lock.ico,Ankh.lock.ico"/>
             <arg value="/resource:readonly.ico,Ankh.readonly.ico"/>
+            <arg value="/resource:lockedreadonly.ico,Ankh.lockedreadonly.ico"/>
             <arg value="/resource:Config/Config.xsd,Ankh.Config.Config.xsd"/>
             <arg value="/resource:Config/Config.xml,Ankh.Config.Config.xml"/>
             <arg value="/resource:Commands/blame.xsl,Ankh.Commands.blame.xsl"/>
