@@ -50,16 +50,23 @@ namespace Utils
         /// <param name="assembly">The assembly where the error originated. This will 
         /// be used to extract version information.</param>
         public static void SendByMail( string recipient, string subject, Exception ex, 
-            Assembly assembly )
+            Assembly assembly, StringDictionary additionalInfo )
         {
-            string msg = GetMessage( ex );
+			string attributes = GetAttributes( additionalInfo );
+
+			string msg = GetMessage( ex ) + Environment.NewLine + Environment.NewLine + 
+				attributes;
+
             msg += Environment.NewLine + Environment.NewLine + "Version: " + 
-                assembly.GetName().Version.ToString();
+                assembly.GetName().Version.ToString();		
+	
+			msg = HttpUtility.UrlEncode( msg ).Replace("+", "%20");
 
             string command = string.Format( "mailto:{0}?subject={1}&body={2}",
                 recipient, HttpUtility.UrlEncode(subject), 
                 msg );
 
+			Debug.WriteLine(command);
             Process p = new Process();
             p.StartInfo.FileName = command;
             p.StartInfo.UseShellExecute = true;
@@ -107,12 +114,12 @@ namespace Utils
         /// <param name="assembly">The assembly where the error originated. This will 
         /// be used to extract version information.</param>
         public static void QuerySendByMail( string recipient, string subject, Exception ex,
-            Assembly assembly )
+            Assembly assembly, StringDictionary additionalInfo )
         {
             if ( MessageBox.Show( "An error has occurred. Do you wish to send an error report?",
                 "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error ) == DialogResult.Yes )
             {
-                SendByMail( recipient, subject, ex, assembly );
+                SendByMail( recipient, subject, ex, assembly, additionalInfo );
             }
 
         }
