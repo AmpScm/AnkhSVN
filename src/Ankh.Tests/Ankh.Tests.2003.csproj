@@ -80,12 +80,6 @@
                     HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\nunit20\build\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
                     Name = "Ankh.2003"
                     Project = "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -129,6 +123,19 @@
                     Name = "NSvn.Common.2003"
                     Project = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "AnkhUserControlHostLib"
+                    Guid = "{A346E700-CCD2-4377-A4E5-5B30275493B1}"
+                    VersionMajor = "1"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\lib\nunit.framework.dll"
                 />
             </References>
         </Build>

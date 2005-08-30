@@ -48,8 +48,8 @@ namespace Ankh
             System.Collections.Specialized.StringDictionary dict = new
                 System.Collections.Specialized.StringDictionary();
 
-            Utils.ErrorMessage.SendByWeb( ErrorReportUrl, null, typeof(Connect).Assembly,
-               dict );
+            Utils.ErrorMessage.SendByMail( ErrorReportMailAddress, ErrrorReportSubject, null, 
+				typeof(Connect).Assembly, dict );
         }
 
         public void Write( string message, Exception ex, TextWriter writer )
@@ -151,8 +151,8 @@ namespace Ankh
                 dlg.InternalError = internalError;
                 if ( dlg.ShowDialog() == DialogResult.Retry )
                 {
-                    Utils.ErrorMessage.SendByWeb( ErrorReportUrl,
-                        ex, typeof(Connect).Assembly, additionalInfo );
+                    Utils.ErrorMessage.SendByMail( ErrorReportMailAddress, 
+						ErrrorReportSubject, ex, typeof(Connect).Assembly, additionalInfo ); 
                 }
             }
         }
@@ -177,5 +177,7 @@ namespace Ankh
         private static readonly string NL = Environment.NewLine;
         private const int LockedFileErrorCode = 720032;
         private const string ErrorReportUrl = "http://ankhsvn.com/error/report.aspx";
+		private const string ErrorReportMailAddress = "error@ankhsvn.tigris.org";
+		private const string ErrrorReportSubject = "Exception";
     }
 }
