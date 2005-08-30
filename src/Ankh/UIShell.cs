@@ -328,6 +328,8 @@ namespace Ankh
 
                 info.CheckedItems = dlg.CheckedItems;
                 info.StopOnCopy = dlg.StopOnCopy;
+				info.RevisionStart = dlg.RevisionStart;
+				info.RevisionEnd = dlg.RevisionEnd;
                 
                 return info;
             }
