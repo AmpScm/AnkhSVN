@@ -49,8 +49,8 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
     HandleError( svn_auth_first_credentials( ((void**)&creds), &iterstate, SVN_AUTH_CRED_SIMPLE, 
         "Realm", authBaton, pool ) );
 
-    Assertion::AssertEquals( "Username not correct", S"Arild", StringHelper( creds->username ) );
-    Assertion::AssertEquals( "Password not correct", S"Fines", StringHelper( creds->password ) );
+    Assertion::AssertEquals( "Username not correct", S"Arild", Utf8ToString( creds->username, pool ) );
+    Assertion::AssertEquals( "Password not correct", S"Fines", Utf8ToString( creds->password, pool ) );
 
 
     obj = AuthenticationProvider::GetSimplePromptProvider( 
@@ -58,7 +58,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
     authBaton = GetBaton( obj->GetProvider(), pool );
 
     HandleError( svn_auth_first_credentials( ((void**)&creds), &iterstate, SVN_AUTH_CRED_SIMPLE,
-        0, authBaton, pool ) );
+        "Realm", authBaton, pool ) );
 
     Assertion::Assert( "Creds should be null", creds==0 );
 }
@@ -91,8 +91,8 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetUsernameProvider()
         "Realm", authBaton, pool ) );
 
     if ( credsUnmanaged && credsUnmanaged )
-        Assertion::AssertEquals( "Usernames different", StringHelper(credsUnmanaged->username), 
-            StringHelper(credsManaged->username) );  
+        Assertion::AssertEquals( "Usernames different", Utf8ToString(credsUnmanaged->username, pool), 
+            Utf8ToString(credsManaged->username, pool) );  
     else if ( (credsManaged != 0) ^ (credsUnmanaged != 0) )
         Assertion::Fail( "Credentials are different" );
 
@@ -210,8 +210,6 @@ SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::SimplePrompt(
 SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::NullSimplePrompt( 
     String* realm, String* username, bool maySave )
 {
-    Assertion::AssertNull( "Realm should be null", realm );
-
     return 0;
 }
 

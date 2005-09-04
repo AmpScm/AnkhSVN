@@ -21,6 +21,7 @@ namespace NSvn.Core.Tests
             base.SetUp();
 
             this.ExtractRepos();
+			this.logMessages.Clear();
         }
 
         [Test]
@@ -35,11 +36,23 @@ namespace NSvn.Core.Tests
                 Revision.FromNumber(1), Revision.Head, false, false, 
                 new LogMessageReceiver(this.LogCallback) );
 
-            Assertion.AssertEquals( "Number of log entries differs", 
-                clientLogs.Length, this.logMessages.Count );
+            Assert.AreEqual( clientLogs.Length, this.logMessages.Count, 
+				"Number of log entries differs" );
             for( int i = 0; i < this.logMessages.Count; i++ )
                 clientLogs[i].CheckMatch( (LogMessage)this.logMessages[i] );                        
         }
+
+		[Test]
+		public void TestLogNonAsciiChars()
+		{
+			this.RunCommand( "svn", "propset svn:log --revprop -r 1  \"Æ e i a æ å, sjø\" " + 
+				this.ReposUrl );
+			this.Client.Log( new string[]{ this.ReposUrl }, 
+				Revision.FromNumber(1), Revision.FromNumber(1), false, false, 
+				new LogMessageReceiver(this.LogCallback) );
+			Assert.AreEqual( 1, this.logMessages.Count );
+			Assert.AreEqual( "Æ e i a æ å, sjø", ((LogMessage)this.logMessages[0]).Message );
+		}
 
         private void LogCallback( LogMessage logMessage )
         {
@@ -89,10 +102,10 @@ namespace NSvn.Core.Tests
             /// <param name="msg"></param>
             public void CheckMatch( LogMessage msg )
             {
-                Assertion.AssertEquals( "Author differs", this.author, msg.Author );
-                Assertion.AssertEquals( "Message differs", this.message, msg.Message );
-                Assertion.AssertEquals( "Revision differs", this.revision, msg.Revision );
-                Assertion.AssertEquals( "Date differs", this.date, msg.Date );
+                Assert.AreEqual( this.author, msg.Author, "Author differs" );
+                Assert.AreEqual( this.message, msg.Message, "Message differs" );
+                Assert.AreEqual( this.revision, msg.Revision, "Revision differs" );
+                Assert.AreEqual( this.date, msg.Date, "Date differs" );
             }
 
             private DateTime ParseTime( string dateString )

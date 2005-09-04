@@ -186,8 +186,8 @@ svn_error_t* simple_prompt_func( svn_auth_cred_simple_t** cred, void* baton,
     // get hold of the delegate and call it
     SimplePromptDelegate* delegate = *(static_cast<ManagedPointer<SimplePromptDelegate*>* >(
         baton ));
-    String* realmString = (realm != 0) ? static_cast<String*>(StringHelper(realm)) : 0;
-    String* usernameString = (username != 0) ? static_cast<String*>(StringHelper(username)) : 0;
+    String* realmString = (realm != 0) ? Utf8ToString(realm, pool) : 0;
+    String* usernameString = (username != 0) ? Utf8ToString(username, pool) : 0;
 
     SimpleCredential* simpleCred = delegate->Invoke( realmString, usernameString, 
         may_save != 0 );
@@ -214,9 +214,9 @@ svn_error_t* svn_auth_ssl_server_trust_prompt_func(
         SslServerTrustPromptDelegate*>*>(baton));
 
     // invoke the managed callback
-    String* realmString = StringHelper(realm);
+    String* realmString = Utf8ToString(realm, pool);
     SslServerTrustCredential* cred = delegate->Invoke( realmString, 
-        static_cast<SslFailures>(failures), new SslServerCertificateInfo(cert_info),
+        static_cast<SslFailures>(failures), new SslServerCertificateInfo(cert_info, pool),
         may_save != 0 );
 
     // null?
@@ -237,7 +237,8 @@ svn_error_t* svn_auth_ssl_client_cert_prompt_func( svn_auth_cred_ssl_client_cert
         SslClientCertPromptDelegate*>*>(baton));
 
     // invoke the managed callback
-    SslClientCertificateCredential* cred = delegate->Invoke( StringHelper(realm), may_save != 0 );
+    SslClientCertificateCredential* cred = delegate->Invoke( Utf8ToString(realm, pool), 
+		may_save != 0 );
 
     // null?
     if ( cred != 0 )
@@ -257,7 +258,7 @@ svn_error_t* svn_auth_ssl_client_cert_pw_prompt_func( svn_auth_cred_ssl_client_c
         SslClientCertPasswordPromptDelegate*>*>(baton));
 
     // invoke the managed callback
-    SslClientCertificatePasswordCredential* cred = delegate->Invoke( StringHelper(realm), 
+    SslClientCertificatePasswordCredential* cred = delegate->Invoke( Utf8ToString(realm, pool), 
         may_save != 0 );
 
     // null?

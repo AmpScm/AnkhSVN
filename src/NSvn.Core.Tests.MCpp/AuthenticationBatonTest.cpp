@@ -2,6 +2,7 @@
 
 #include "AuthenticationBatonTest.h"
 #include "AuthenticationBaton.h"
+#include "SvnClientException.h"
 
 void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestSingleProvider()
 {
@@ -18,8 +19,8 @@ void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestSingleProvider()
     HandleError( svn_auth_first_credentials( ((void**)&creds), &iterstate, SVN_AUTH_CRED_SIMPLE, 
         "Realm", baton->GetAuthBaton(), pool ) );
 
-    Assertion::AssertEquals( "Username not correct", S"Arild", StringHelper( creds->username ) );
-    Assertion::AssertEquals( "Password not correct", S"Fines", StringHelper( creds->password ) );
+    Assertion::AssertEquals( "Username not correct", S"Arild", Utf8ToString( creds->username , pool ) );
+    Assertion::AssertEquals( "Password not correct", S"Fines", Utf8ToString( creds->password , pool ) );
 
 }
 
@@ -53,8 +54,8 @@ void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestDefaultUsernameAndPas
     HandleError( svn_auth_first_credentials( ((void**)&creds), &iterstate, SVN_AUTH_CRED_SIMPLE, 
         "Realm", baton->GetAuthBaton(), pool ) );
 
-    Assertion::AssertEquals( "Username not correct", S"Humpty", StringHelper( creds->username ) );
-    Assertion::AssertEquals( "Password not correct", S"Dumpty", StringHelper( creds->password ) );
+    Assertion::AssertEquals( "Username not correct", S"Humpty", Utf8ToString( creds->username, pool ) );
+    Assertion::AssertEquals( "Password not correct", S"Dumpty", Utf8ToString( creds->password, pool ) );
 
 }
 

@@ -51,7 +51,7 @@ apr_array_header_t* NSvn::Core::StringArrayToAprArray( String* strings[], bool i
         if ( isPath )
             newString = CanonicalizePath( strings[i], pool );
         else
-            newString = StringHelper( strings[i] ).CopyToPool( pool );
+            newString = StringToUtf8(strings[i], pool );
 
         *((const char**)apr_array_push(array)) = newString;
     }
@@ -61,12 +61,12 @@ apr_array_header_t* NSvn::Core::StringArrayToAprArray( String* strings[], bool i
 
 
 // converts apr_array of paths into a .NET array of Strings
-String* NSvn::Core::AprArrayToStringArray( apr_array_header_t* aprArray ) []
+String* NSvn::Core::AprArrayToStringArray( apr_array_header_t* aprArray, apr_pool_t* pool ) []
 {
     String* array[] = new String*[ aprArray->nelts ];
     for( int i = 0; i < aprArray->nelts; i++ )
     {
-        array[i] = StringHelper( ((const char**)aprArray->elts)[i] );
+        array[i] = Utf8ToString( ((const char**)aprArray->elts)[i], pool );
     }
 
     return array;
@@ -86,7 +86,7 @@ int NSvn::Core::AprArrayToIntArray( apr_array_header_t* aprArray ) __gc []
 // Canonicalizes a path to the correct format expected by SVN
 const char* NSvn::Core::CanonicalizePath( String* path, Pool& pool )
 {
-    const char* utf8path = StringHelper( path ).CopyToPoolUtf8( pool );
+    const char* utf8path = StringToUtf8( path, pool );
 
     // is this an URL?
     if ( !svn_path_is_url( utf8path ) )
@@ -136,5 +136,32 @@ String* NSvn::Core::ToNativePath( const char* path, apr_pool_t* pool )
     const char* cstringPath;
     HandleError( svn_utf_cstring_from_utf8( &cstringPath, path, pool ) );
     const char* nativePath = svn_path_local_style( cstringPath, pool );
-    return StringHelper( nativePath );
+	return Utf8ToString( nativePath, pool );
+}
+
+String* NSvn::Core::Utf8ToString( const char* string, apr_pool_t* pool )
+{
+	const char* cstring;
+	if ( string != 0 )
+	{
+		HandleError( svn_utf_cstring_from_utf8( &cstring, string, pool ) );
+		return Marshal::PtrToStringAnsi(
+			static_cast<IntPtr>(const_cast<char*>(cstring)));
+	}
+	else
+		return 0;
+}
+
+const char* NSvn::Core::StringToUtf8( String* string, apr_pool_t* pool )
+{
+	if ( string != 0 )
+	{
+		char* ansi = static_cast<char*>(Marshal::StringToHGlobalAnsi(string).ToPointer());
+		const char* utf8;
+		HandleError( svn_utf_cstring_to_utf8( &utf8, ansi, pool ) );
+
+		return utf8;
+	}
+	else
+		return 0;
 }

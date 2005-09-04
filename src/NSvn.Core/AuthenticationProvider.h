@@ -84,13 +84,14 @@ namespace NSvn
         public __gc class SslServerCertificateInfo
         {
         private public:
-            SslServerCertificateInfo( const svn_auth_ssl_server_cert_info_t* info ) : 
-                HostName(StringHelper(info->hostname)), 
-                FingerPrint(StringHelper(info->fingerprint)),
-                ValidFrom(StringHelper(info->valid_from)), 
-                ValidUntil(StringHelper(info->valid_until)),
-                Issuer(StringHelper(info->issuer_dname)), 
-                AsciiCertificate(StringHelper(info->ascii_cert))
+            SslServerCertificateInfo( const svn_auth_ssl_server_cert_info_t* info, 
+				apr_pool_t* pool ) : 
+                HostName(Utf8ToString( info->hostname, pool )), 
+                FingerPrint(Utf8ToString( info->fingerprint, pool )),
+                ValidFrom(Utf8ToString( info->valid_from, pool )), 
+                ValidUntil(Utf8ToString( info->valid_until, pool )),
+                Issuer(Utf8ToString( info->issuer_dname, pool )), 
+                AsciiCertificate(Utf8ToString( info->ascii_cert, pool ))
             {
             }
         public:

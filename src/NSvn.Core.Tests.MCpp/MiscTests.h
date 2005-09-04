@@ -19,6 +19,13 @@ namespace NSvn{
 
                     [Test]
                     void TestParameterDictionary();
+
+					[Test]
+					void TestStringToUtf8();
+
+					[Test]
+					void TestUtf8ToString();
+
                 };
             }
         }

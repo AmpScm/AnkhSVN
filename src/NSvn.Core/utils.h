@@ -33,8 +33,12 @@ namespace NSvn
         apr_array_header_t* StringArrayToAprArray( String* strings[], 
             bool isPath, Pool& pool );
 
-        String* AprArrayToStringArray( apr_array_header_t* aprArray ) [];
+        String* AprArrayToStringArray( apr_array_header_t* aprArray, apr_pool_t* pool ) [];
 
         int AprArrayToIntArray( apr_array_header_t* aprArray ) __gc [];
+
+		String* Utf8ToString( const char* charPtr, apr_pool_t* pool );
+		const char* StringToUtf8( String* string, apr_pool_t* pool );
+
     }
 }

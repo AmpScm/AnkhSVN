@@ -12,13 +12,13 @@ namespace NSvn
         public __gc class DirectoryEntry
         {
         public:
-            DirectoryEntry( const char* path, svn_dirent_t* dirent ) : 
-              path( StringHelper( path ) ),
+            DirectoryEntry( const char* path, svn_dirent_t* dirent, apr_pool_t* pool ) : 
+              path( Utf8ToString( path , pool )),
                   nodeKind( static_cast<NSvn::Core::NodeKind>(dirent->kind) ),
                   size( dirent->size ),
                   hasProps( dirent->has_props != 0 ),
                   createdRev( dirent->created_rev ),
-                  lastAuthor( StringHelper(dirent->last_author) )
+                  lastAuthor( Utf8ToString(dirent->last_author, pool) )
               {
                   this->time = AprTimeToDateTime( dirent->time );
               }

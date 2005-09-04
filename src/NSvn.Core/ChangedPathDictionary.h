@@ -57,9 +57,9 @@ namespace NSvn
 
                 apr_hash_this( idx, reinterpret_cast<const void**>(&path), &keyLength,
                     reinterpret_cast<void**>(&changedPath) );
-                String* managedPath = StringHelper( 
-                    svn_path_local_style(path, pool) );
-                dict->Add( managedPath, new ChangedPath(changedPath) );
+                String* managedPath = Utf8ToString( 
+                    svn_path_local_style(path, pool), pool );
+                dict->Add( managedPath, new ChangedPath(changedPath, pool) );
 
                 idx = apr_hash_next( idx );
             }

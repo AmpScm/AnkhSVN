@@ -19,9 +19,9 @@ namespace NSvn
                 const char* author, const char* date, const char* message,
                 apr_pool_t* pool ) :
             revision( revision ),
-                author( StringHelper(author) ),
+                author( Utf8ToString(author, pool) ),
                 date( ParseDate(date, pool) ),
-                message( StringHelper(message) )
+                message( Utf8ToString(message, pool) )
 
             {
                 if ( changedPaths != 0 )
