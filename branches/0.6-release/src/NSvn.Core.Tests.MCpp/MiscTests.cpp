@@ -6,6 +6,8 @@
 #include "ParameterDictionary.h"
 #include "Revision.h"
 #include <svn_auth.h>
+#include <svn_utf.h>
+#include "SvnClientException.h"
 
 
 void NSvn::Core::Tests::MCpp::MiscTests::TestRevisionFromNumber()
@@ -39,7 +41,7 @@ void NSvn::Core::Tests::MCpp::MiscTests::TestRevisionFromDate()
 
 
     Assertion::AssertEquals( "Wrong revision kind", svn_opt_revision_date, svnRev->kind );
-    Assertion::AssertEquals( "Wrong date", nowString, StringHelper( dateString ) );
+    Assertion::AssertEquals( "Wrong date", nowString, Utf8ToString( dateString, pool ) );
 
 }
 
@@ -63,3 +65,25 @@ void NSvn::Core::Tests::MCpp::MiscTests::TestParameterDictionary()
     ParameterDictionary* dict3 = new ParameterDictionary( hash, pool );
     Assertion::Assert( "Remove not working", !dict3->Contains( S"Hello" ) );
 }
+
+void NSvn::Core::Tests::MCpp::MiscTests::TestStringToUtf8()
+{
+	String* s = S"Æ e i a æ å, sjø";
+	Pool pool;
+	const char* utf8 = StringToUtf8( s, pool );
+	const char* ansi;
+	HandleError( svn_utf_cstring_from_utf8( &ansi, utf8, pool ) );
+	Assert::IsTrue( strcmp( "Æ e i a æ å, sjø", ansi ) == 0 );
+}
+
+void NSvn::Core::Tests::MCpp::MiscTests::TestUtf8ToString()
+{
+	const char* ansi = "Æ e i a æ å, sjø";
+	const char* utf8;
+	Pool pool;
+	HandleError( svn_utf_cstring_to_utf8( &utf8, ansi, pool ) );
+	String* s = Utf8ToString( utf8, pool );
+	Assert::AreEqual( S"Æ e i a æ å, sjø", s );
+}
+
+

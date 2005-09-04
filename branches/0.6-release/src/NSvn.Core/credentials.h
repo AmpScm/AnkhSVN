@@ -48,8 +48,8 @@ namespace NSvn
           {
               svn_auth_cred_simple_t* cred = static_cast<svn_auth_cred_simple_t*>( 
                   apr_palloc( pool, sizeof(*cred) ) );
-              cred->username = StringHelper( username ).CopyToPoolUtf8( pool );
-              cred->password = StringHelper( password ).CopyToPoolUtf8( pool );
+              cred->username = StringToUtf8( username, pool );
+              cred->password = StringToUtf8( password, pool );
               cred->may_save = this->maySave;
               return cred;
           }
@@ -94,8 +94,7 @@ namespace NSvn
                 svn_auth_cred_ssl_client_cert_t* cred = 
                     static_cast<svn_auth_cred_ssl_client_cert_t*>(
                         apr_pcalloc(pool, sizeof(*cred) ) );
-                cred->cert_file = StringHelper( 
-                    this->CertificateFile ).CopyToPoolUtf8(pool);
+				cred->cert_file = StringToUtf8( this->CertificateFile, pool );
                 cred->may_save = this->MaySave;
 
                 return cred;
@@ -115,7 +114,7 @@ namespace NSvn
                 svn_auth_cred_ssl_client_cert_pw_t* cred = 
                     static_cast<svn_auth_cred_ssl_client_cert_pw_t*>(
                         apr_pcalloc(pool, sizeof(*cred) ) );
-                cred->password = StringHelper( this->Password ).CopyToPoolUtf8( pool );
+				cred->password = StringToUtf8( this->Password, pool );
                 cred->may_save = this->MaySave;
 
                 return cred;

@@ -16,12 +16,13 @@ namespace NSvn
             NotificationEventArgs( String* path, svn_wc_notify_action_t action, 
                 svn_node_kind_t kind, const char *mime_type, 
                 svn_wc_notify_state_t content_state, 
-                svn_wc_notify_state_t prop_state, svn_revnum_t revision )
+                svn_wc_notify_state_t prop_state, svn_revnum_t revision, 
+				apr_pool_t* pool )
             {
                 this->path = path;
                 this->action = static_cast<NSvn::Core::NotifyAction>(action);
                 this->nodeKind = static_cast<NSvn::Core::NodeKind>(kind);
-                this->mimeType = StringHelper( mime_type );
+                this->mimeType = Utf8ToString( mime_type, pool );
                 this->contentState = static_cast<NSvn::Core::NotifyState>(content_state);
                 this->propertyState = static_cast<NSvn::Core::NotifyState>(prop_state);
                 this->revisionNumber = revision;
@@ -91,12 +92,13 @@ namespace NSvn
             Notification( const char *path, svn_wc_notify_action_t action, 
                 svn_node_kind_t kind, const char *mime_type, 
                 svn_wc_notify_state_t content_state, 
-                svn_wc_notify_state_t prop_state, svn_revnum_t revision )
+                svn_wc_notify_state_t prop_state, svn_revnum_t revision,
+				apr_pool_t* pool )
             {
-                this->path = StringHelper( path );
+                this->path = Utf8ToString( path, pool );
                 this->action = static_cast<NSvn::Core::NotifyAction>(action);
                 this->nodeKind = static_cast<NSvn::Core::NodeKind>(kind);
-                this->mimeType = StringHelper( mime_type );
+                this->mimeType = Utf8ToString( mime_type, pool );
                 this->contentState = static_cast<NSvn::Core::NotifyState>(content_state);
                 this->propertyState = static_cast<NSvn::Core::NotifyState>(prop_state);
                 this->revisionNumber = revision;

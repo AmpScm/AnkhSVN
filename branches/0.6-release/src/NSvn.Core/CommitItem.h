@@ -15,14 +15,14 @@ namespace NSvn
         public:
             CommitItem( svn_client_commit_item_t* item, apr_pool_t* pool ) :                 
               kind( static_cast<NodeKind>(item->kind) ),
-                  url( StringHelper( item->url ) ),
+                  url( Utf8ToString( item->url, pool ) ),
                   revision( item->revision ),
-                  copyFromUrl( StringHelper( item->copyfrom_url ) )
+                  copyFromUrl( Utf8ToString( item->copyfrom_url, pool ) )
 
               {
                   // convert to a native path
                   if ( item->path )
-                    this->path = StringHelper( svn_path_local_style(item->path, pool) );
+                    this->path = Utf8ToString( svn_path_local_style(item->path, pool), pool );
                   else 
                       this->path = 0;
               }

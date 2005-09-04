@@ -1,6 +1,7 @@
 // $Id$
 #include "StdAfx.h"
 #include "aprfileadapter.h"
+#include "utils.h"
 
 using namespace System;
 using namespace System::Threading;
@@ -11,7 +12,7 @@ using namespace System::Runtime::InteropServices;
 struct apr_file_t
 {};
 
-apr_file_t* NSvn::Core::AprFileAdapter::Start( Pool& pool )
+apr_file_t* NSvn::Core::AprFileAdapter::Start()
 {
     apr_file_t* infile;
     apr_file_t* outfile;
@@ -39,7 +40,7 @@ void NSvn::Core::AprFileAdapter::Read()
     {
         if( status != APR_SUCCESS )
         {
-            String* str = StringHelper(apr_strerror(status, unmanagedBuffer, BUFSIZE) );
+            String* str = Utf8ToString(apr_strerror(status, unmanagedBuffer, BUFSIZE), pool );
             this->errorMessage = str;
             throw new IOException( str );
         }

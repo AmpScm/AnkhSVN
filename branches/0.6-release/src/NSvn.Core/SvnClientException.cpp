@@ -2,6 +2,7 @@
 #include "StdAfx.h"
 #include "svnclientexception.h"
 #include "StringHelper.h"
+#include "utils.h"
 
 #using <mscorlib.dll>
 
@@ -35,7 +36,7 @@ namespace
             break;
         default:
             if ( err->message )
-                return new SvnClientException( StringHelper(err->message), child );
+                return new SvnClientException( Utf8ToString(err->message, err->pool), child );
             else
                 return new SvnClientException( S"", child );
             break;
@@ -69,12 +70,12 @@ SvnClientException* NSvn::Core::SvnClientException::CreateExceptionsRecursively(
 
     exception->errorCode = err->apr_err;
     if ( err->message )
-        exception->svnError = StringHelper(err->message);
+		exception->svnError = Utf8ToString(err->message, err->pool);
     else
         exception->svnError = S"";
     
     if ( exception->file )
-        exception->file = StringHelper(err->file);
+		exception->file = Utf8ToString(err->file, err->pool);
     else
         exception->file = S"";
 
