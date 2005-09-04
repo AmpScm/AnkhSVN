@@ -113,12 +113,10 @@ namespace NSvn
                 IDictionaryEnumerator* iter = this->parameters->GetEnumerator();
                 while( iter->MoveNext() )
                 {
-                    const char* name = StringHelper( 
-                        static_cast<String*>(iter->get_Key()) ).CopyToPool(
-                        this->pool->ToAprPool() );
-                    const char* val = StringHelper(
-                        static_cast<String*>(iter->get_Value()) ).CopyToPool(
-                        this->pool->ToAprPool() );
+					const char* name = StringToUtf8(static_cast<String*>(iter->get_Key()), 
+						this->pool->ToAprPool());
+					const char* val = StringToUtf8(static_cast<String*>(iter->get_Value()), 
+						this->pool->ToAprPool());					
 
                     svn_auth_set_parameter( this->authBaton, name, val );
                 }

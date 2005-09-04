@@ -23,31 +23,33 @@ namespace NSvn
 
             ClientConfig( String* configDir )
             {
-                this->Init( StringHelper(configDir) );
+                this->Init( configDir );
             }
 
             /// <summary>Set a value for the given option in the given section</summary>
             void Set( String* section, String* option, String* value )
             {
-                svn_config_set( this->config, StringHelper(section), 
-                    StringHelper(option), StringHelper(value).CopyToPool(this->pool->ToAprPool()) );
+				svn_config_set( this->config, StringToUtf8(section, this->pool->ToAprPool()), 
+					StringToUtf8(option, this->pool->ToAprPool()), 
+					StringToUtf8(value, this->pool->ToAprPool()) );
             }
 
             /// <summary>Retrieve the value for option in the given section</summary>
             String* Get( String* section, String* option, String* defaultValue )
             {
                 const char* val;
-                svn_config_get( this->config, &val, StringHelper(section),
-                    StringHelper(option), StringHelper(defaultValue) );
+				svn_config_get( this->config, &val, StringToUtf8(section, this->pool->ToAprPool()),
+					StringToUtf8(option, this->pool->ToAprPool()), 
+					StringToUtf8(defaultValue, this->pool->ToAprPool()) );
 
-                return StringHelper(val);
+				return Utf8ToString(val, this->pool->ToAprPool());
             }
 
             /// <summary>Create a subversion configuration directory at path.</summary>
             static void CreateConfigDir( String* path )
             {
                 Pool pool;
-                HandleError( svn_config_ensure( StringHelper(path), pool ) );
+                HandleError( svn_config_ensure( StringToUtf8(path, pool), pool ) );
             }
 
         private public:
@@ -58,9 +60,11 @@ namespace NSvn
 
         private:
 
-            void Init( const char* configDir )
+            void Init( String* dir )
             {
                 this->pool = new GCPool();
+
+				const char* configDir = StringToUtf8(dir, pool->ToAprPool());
 
                 // get the hash containing all the configs
                 apr_hash_t* configs;

@@ -108,14 +108,16 @@ NSvn::Core::AuthenticationBaton* NSvn::Core::Client::get_AuthBaton()
 // Retrieve the name of the administrative subdirectory.
 String* NSvn::Core::Client::get_AdminDirectoryName()
 {
-    return StringHelper( SVN_WC_ADM_DIR_NAME );
+	Pool pool;
+	return Utf8ToString( SVN_WC_ADM_DIR_NAME, pool );
 }
 #if defined(ALT_ADMIN_DIR)
 // Set the name of the administative subdirectory.
 // This functionality depends on a specially compiled Subversion.
 void NSvn::Core::Client::set_AdminDirectoryName( String* name )
 {
-    svn_wc_set_adm_dir_name( StringHelper(name) );
+	Pool pool;
+    svn_wc_set_adm_dir_name( StringToUtf8( name, pool ) );
 }
 #endif
 
@@ -146,7 +148,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::MakeDir( String* paths[] )
         pool ) );
 
     if ( commitInfo != 0 )
-        return new CommitInfo( commitInfo );
+        return new CommitInfo( commitInfo, pool );
     else
         return CommitInfo::Invalid;
 }
@@ -252,7 +254,7 @@ NSvn::Core::Status* NSvn::Core::Client::SingleStatus( String* path )
 
         HandleError( svn_wc_status2( &status, truePath, admAccess, pool ) );
 
-        return new NSvn::Core::Status( status );
+        return new NSvn::Core::Status( status, pool );
     }
     __finally
     {
@@ -268,8 +270,7 @@ void NSvn::Core::Client::Lock(String __gc* targets[], String __gc* comment, bool
     SubPool pool(*(this->rootPool));
     apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
 
-    StringHelper msg(comment);
-    HandleError( svn_client_lock( aprArrayTargets, msg.CopyToPoolUtf8(pool), stealLock,
+    HandleError( svn_client_lock( aprArrayTargets, StringToUtf8( comment, pool ), stealLock,
         this->context->ToSvnContext(), pool ) );
 }
 
@@ -290,7 +291,8 @@ void NSvn::Core::Client::PropSet(Property* property, String* target, bool recurs
     svn_string_t propv;
     ByteArrayToSvnString( &propv, property->Data, pool );    
     const char* truePath = CanonicalizePath( target, pool );
-    HandleError( svn_client_propset( StringHelper(property->Name), &propv, truePath, recurse, pool) );
+    HandleError( svn_client_propset( StringToUtf8( property->Name, pool ), &propv, 
+		truePath, recurse, pool) );
 }
 
 
@@ -306,7 +308,7 @@ void NSvn::Core::Client::RevPropSet(Property* property, String* url, Revision* r
     ByteArrayToSvnString( &propv, property->Data, pool );
     svn_revnum_t setRev; 
 
-    HandleError( svn_client_revprop_set(  StringHelper(property->Name), &propv, 
+    HandleError( svn_client_revprop_set(  StringToUtf8( property->Name, pool ), &propv, 
         truePath, revision->ToSvnOptRevision( pool ), &setRev, 
         force, this->context->ToSvnContext(), pool));
 
@@ -382,7 +384,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool recu
     
     if ( commitInfoPtr && commitInfoPtr->revision != SVN_INVALID_REVNUM )
     {
-        return new CommitInfo( commitInfoPtr );
+        return new CommitInfo( commitInfoPtr, pool );
     }
     else 
     {
@@ -412,7 +414,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Move( String* srcPath, String* dstPa
         this->context->ToSvnContext(), pool ) );
 
     if ( commitInfoPtr != 0 )
-        return new CommitInfo( commitInfoPtr );
+        return new CommitInfo( commitInfoPtr, pool );
     else
         return CommitInfo::Invalid;
 }
@@ -436,7 +438,7 @@ int NSvn::Core::Client::Export(String* from, String* to, Revision* pegRevision,
     HandleError( svn_client_export3 ( &rev, trueSrcPath, trueDstPath,
         pegRevision->ToSvnOptRevision( pool ),
         revision->ToSvnOptRevision( pool ), overwrite,
-        ignoreExternals, recurse, StringHelper(nativeEol),
+        ignoreExternals, recurse, StringToUtf8( nativeEol, pool ),
         this->context->ToSvnContext(), pool ) );
 
     return rev;
@@ -457,7 +459,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Copy(String* srcPath, Revision* srcR
         this->context->ToSvnContext(), pool ) );
 
     if ( commitInfoPtr != 0 )
-        return new CommitInfo( commitInfoPtr );
+        return new CommitInfo( commitInfoPtr, pool );
     else
         return CommitInfo::Invalid;
 }
@@ -487,7 +489,7 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::PropGet(String* propName,
 
     const char* trueTarget = CanonicalizePath( target, pool );
 
-    svn_error_t* err = svn_client_propget( &propertyHash, StringHelper( propName ), trueTarget,
+    svn_error_t* err = svn_client_propget( &propertyHash, StringToUtf8(  propName, pool ) , trueTarget,
         revision->ToSvnOptRevision( pool ), recurse, this->context->ToSvnContext(), pool );
     HandleError( err );
 
@@ -504,7 +506,7 @@ NSvn::Common::Property*  NSvn::Core::Client::RevPropGet(String* propName, String
     svn_string_t* propv;
     svn_revnum_t setRev; 
 
-    HandleError( svn_client_revprop_get(  StringHelper( propName ), &propv, 
+    HandleError( svn_client_revprop_get(  StringToUtf8(  propName, pool ), &propv, 
         truePath, revision->ToSvnOptRevision( pool ), &setRev, 
         this->context->ToSvnContext(), pool));
 
@@ -529,7 +531,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* paths[], bool force)
         this->context->ToSvnContext(), pool ) );
 
     if ( commitInfoPtr != 0 )
-        return new CommitInfo( commitInfoPtr );
+        return new CommitInfo( commitInfoPtr, pool );
     else
         return CommitInfo::Invalid;
 }
@@ -546,7 +548,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Import(String* path, String* url, bo
         this->context->ToSvnContext(), pool ) );
 
     if ( commitInfoPtr != 0 )
-        return new CommitInfo( commitInfoPtr );
+        return new CommitInfo( commitInfoPtr, pool );
     else
         return CommitInfo::Invalid;
 }
@@ -654,7 +656,7 @@ NSvn::Core::DirectoryEntry* NSvn::Core::Client::List(String* path, Revision* peg
         apr_hash_this( idx, reinterpret_cast<const void**>(&path), &keyLength,
             reinterpret_cast<void**>(&dirent) );
 
-        entries->Add( new DirectoryEntry( path, dirent ) );
+        entries->Add( new DirectoryEntry( path, dirent, pool ) );
 
         idx = apr_hash_next( idx );
     }
@@ -682,10 +684,10 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
     const char* truePath1 = CanonicalizePath( path1, pool );
     const char* truePath2 = CanonicalizePath( path2, pool );
 
-    AprFileAdapter* outAdapter = new AprFileAdapter(outfile);
-    AprFileAdapter* errAdapter = new AprFileAdapter(errfile);
-    apr_file_t* aprOut = outAdapter->Start( pool );
-    apr_file_t* aprErr = errAdapter->Start( pool );    
+    AprFileAdapter* outAdapter = new AprFileAdapter(outfile, pool);
+    AprFileAdapter* errAdapter = new AprFileAdapter(errfile, pool);
+    apr_file_t* aprOut = outAdapter->Start();
+    apr_file_t* aprErr = errAdapter->Start();    
 
     HandleError( svn_client_diff2( diffOptArray, truePath1, 
         revision1->ToSvnOptRevision( pool ), truePath2, 
@@ -709,7 +711,7 @@ String* NSvn::Core::Client::GetPristinePath(String* path)
     HandleError(svn_wc_get_pristine_copy_path(realPath, &pristinePath, pool));
 
     if ( pristinePath ) 
-        return (String*)StringHelper( pristinePath );
+        return Utf8ToString(  pristinePath, pool );
     else
         return 0;
 }
@@ -755,7 +757,7 @@ String* NSvn::Core::Client::UrlFromPath( String* path )
     HandleError( svn_client_url_from_path( &url, realPath, pool ) );
 
     if ( url ) 
-        return (String*)StringHelper( url );
+        return Utf8ToString(  url, pool );
     else
         return 0;
 }
@@ -771,7 +773,7 @@ String* NSvn::Core::Client::UuidFromUrl( String* url )
     HandleError( svn_client_uuid_from_url( &uuid, realUrl, this->context->ToSvnContext(),
         pool ) );
 
-    return (String*)StringHelper( uuid );
+    return Utf8ToString(  uuid, pool );
 }
 
 
@@ -885,7 +887,8 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::ConvertToPropertyDictionar
 
         // copy the bytes into managed space
         Byte bytes[] = new Byte[ propVal->len ];
-        Marshal::Copy( const_cast<char*>(propVal->data), bytes, 0, propVal->len );
+		System::Runtime::InteropServices::Marshal::Copy( 
+			const_cast<char*>(propVal->data), bytes, 0, propVal->len );
 
         // Add it to the mapping collection as a Property object        
         if ( propertyName != 0 )
@@ -895,7 +898,7 @@ NSvn::Common::PropertyDictionary* NSvn::Core::Client::ConvertToPropertyDictionar
         }
         else 
         {
-            String* name = StringHelper( key );
+            String* name = Utf8ToString(  key, pool );
             Property* property = new Property( name, bytes );
             mapping->Add( name, property );
         }
@@ -922,7 +925,7 @@ NSvn::Common::PropListItem* NSvn::Core::Client::ConvertPropListArray(
 
 
         // TODO: is node_name->data always nullterminated?
-        String* nodeName = StringHelper( item->node_name->data );
+        String* nodeName = Utf8ToString(  item->node_name->data, pool );
         propList->Add( new PropListItem( nodeName, dict ) );
     }
 
@@ -967,8 +970,7 @@ void svn_status_func2(void* baton, const char* path, svn_wc_status2_t* status)
 
     String* nativePath = ToNativePath( path, *(statusBaton->pool) );
 
-
-    statusCallback->Invoke( nativePath, new Status( status ) );
+    statusCallback->Invoke( nativePath, new Status( status, *(statusBaton->pool) ) );
 }
 
 // marshall the blame callback into managed space
@@ -985,7 +987,7 @@ svn_error_t* svn_blame_func(void *baton, apr_int64_t line_no, svn_revnum_t revis
     {
         if ( date != 0 )
         {
-            dt = DateTime::ParseExact( StringHelper(date),
+            dt = DateTime::ParseExact( Utf8ToString( date, pool ),
                 "yyyy-MM-dd\\THH:mm:ss.ffffff\\Z",
                 System::Globalization::CultureInfo::CurrentCulture ).ToLocalTime();
         }
@@ -994,26 +996,24 @@ svn_error_t* svn_blame_func(void *baton, apr_int64_t line_no, svn_revnum_t revis
     }
     catch( FormatException* ex )
     {
-        StringHelper dateString(date);
         String* msg = String::Concat( ex->Message, 
-            String::Concat( Environment::NewLine, dateString ) );
+            String::Concat( Environment::NewLine, Utf8ToString(date, pool) ) );
         return svn_error_create( SVN_ERR_BAD_DATE, NULL, 
-            StringHelper(msg).CopyToPoolUtf8(pool) );
+			StringToUtf8(msg, pool) );
     }
 
     try
     {
-        String* authorString = StringHelper(author);
+        String* authorString = Utf8ToString( author, pool );
         if ( authorString == 0 )
             authorString = "";
 
         receiver->Invoke( line_no, revision, authorString, dt, 
-            StringHelper(line) );
+            Utf8ToString(line, pool) );
     }
     catch( Exception* ex )
     {
-        StringHelper msg(ex->Message);
-        return svn_error_create( SVN_ERR_BASE, NULL, msg.CopyToPoolUtf8(pool) );
+        return svn_error_create( SVN_ERR_BASE, NULL, StringToUtf8(ex->Message, pool) );
     }  
     return SVN_NO_ERROR;
 }

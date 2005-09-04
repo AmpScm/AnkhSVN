@@ -12,14 +12,14 @@ namespace NSvn
         public __gc class CommitInfo
         {
         public:
-            CommitInfo( svn_client_commit_info_t* info ) 
+            CommitInfo( svn_client_commit_info_t* info, apr_pool_t* pool ) 
             {
-                this->author = StringHelper( info->author );
+                this->author = Utf8ToString( info->author, pool );
                 try
                 {
                     if ( info->date )
                     {
-                        this->date = DateTime::ParseExact( StringHelper(info->date),  
+                        this->date = DateTime::ParseExact( Utf8ToString(info->date, pool),  
                             "yyyy-MM-dd\\THH:mm:ss.ffffff\\Z", 
                             System::Globalization::CultureInfo::InvariantCulture );
                     }

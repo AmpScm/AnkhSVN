@@ -11,8 +11,8 @@ namespace NSvn
         public __gc class ChangedPath
         {
         public:
-            ChangedPath( svn_log_changed_path_t* changedPath ) :
-              copyFromPath( StringHelper(changedPath->copyfrom_path) ),
+            ChangedPath( svn_log_changed_path_t* changedPath, apr_pool_t* pool ) :
+              copyFromPath( Utf8ToString( changedPath->copyfrom_path, pool ) ),
                   copyFromRevision( changedPath->copyfrom_rev )
               {
                   switch( changedPath->action )

@@ -103,7 +103,7 @@ namespace
         NotificationEventArgs* args = new NotificationEventArgs( nativePath, 
             notify->action, notify->kind,
             notify->mime_type, notify->content_state, notify->prop_state, 
-            notify->revision );
+            notify->revision, pool );
         Client* client = 
             *(static_cast<ManagedPointer<Client*>* >(baton) );
 
@@ -155,7 +155,7 @@ namespace
             return svn_error_create( SVN_ERR_CL_BAD_LOG_MESSAGE, NULL, 
                 "Exception thrown by managed event handler" );
         }
-        const char* logMessage = StringHelper( args->Message ).CopyToPool(pool);
+        const char* logMessage = StringToUtf8( args->Message, pool );
 
         // a null indicates a canceled commit
         if ( logMessage != 0 )

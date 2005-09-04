@@ -16,7 +16,7 @@ namespace NSvn
         public __gc class Status
         {
         private public:
-            Status( svn_wc_status2_t* status ) :
+            Status( svn_wc_status2_t* status, apr_pool_t* pool ) :
         textStatus( static_cast<StatusKind>(status->text_status) ),
             propertyStatus( static_cast<StatusKind>(status->prop_status) ),
             locked( status->locked != 0 ),
@@ -28,12 +28,12 @@ namespace NSvn
 
         {
             if ( status->entry != 0)
-                this->entry = new NSvn::Core::Entry(status->entry);
+                this->entry = new NSvn::Core::Entry( status->entry, pool );
             else
                 this->entry = 0;
 
             if ( status->repos_lock != 0 )
-                this->reposLock = new NSvn::Core::LockToken( status->repos_lock );
+                this->reposLock = new NSvn::Core::LockToken( status->repos_lock, pool );
             else
                 this->reposLock = 0;
         }

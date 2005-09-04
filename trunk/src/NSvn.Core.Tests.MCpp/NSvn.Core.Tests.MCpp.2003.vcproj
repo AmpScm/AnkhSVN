@@ -286,9 +286,6 @@ copy &quot;..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb&quot; &quot;$
 			<File
 				RelativePath="streamtest.cpp">
 			</File>
-			<File
-				RelativePath="StringHelperTest.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -319,9 +316,6 @@ copy &quot;..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb&quot; &quot;$
 			</File>
 			<File
 				RelativePath="streamtest.h">
-			</File>
-			<File
-				RelativePath="StringHelperTest.h">
 			</File>
 		</Filter>
 		<Filter

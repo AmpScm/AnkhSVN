@@ -130,7 +130,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessage()
     ctx->log_msg_func( &logMsg, &tmpFile, commitItems, ctx->log_msg_baton, pool );
 
     // TODO: check encoding?
-    Assertion::AssertEquals( "Log message wrong", S"Hello world", StringHelper( logMsg ) );
+    Assertion::AssertEquals( "Log message wrong", S"Hello world", Utf8ToString( logMsg, pool ) );
 }
 
 void NSvn::Core::Tests::MCpp::ClientContextTest::OnCancel( CancelEventArgs* args )

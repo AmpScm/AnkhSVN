@@ -17,31 +17,31 @@ namespace NSvn
         public __gc class Entry
         {
         private public:
-            Entry( svn_wc_entry_t* entry ) : 
-        name( StringHelper(entry->name) ),
+            Entry( svn_wc_entry_t* entry, apr_pool_t* pool ) : 
+        name( Utf8ToString(entry->name, pool) ),
             revision( entry->revision ),
-            url( StringHelper(entry->url) ),
-            repository( StringHelper(entry->repos) ),
-            uuid( StringHelper(entry->uuid) ),
+            url( Utf8ToString(entry->url, pool) ),
+            repository( Utf8ToString(entry->repos, pool) ),
+            uuid( Utf8ToString(entry->uuid, pool) ),
             kind( static_cast<NodeKind>(entry->kind) ),
             schedule( static_cast<NSvn::Core::Schedule>(entry->schedule) ),
             copied( entry->copied != 0 ),
             deleted( entry->deleted != 0 ),
-            copyFromUrl( StringHelper(entry->copyfrom_url) ),
+            copyFromUrl( Utf8ToString(entry->copyfrom_url, pool) ),
             copyFromRevision( entry->copyfrom_rev ),
-            conflictOld( StringHelper(entry->conflict_old) ),
-            conflictNew( StringHelper(entry->conflict_new) ),
-            conflictWorking( StringHelper(entry->conflict_wrk) ),
-            propertyRejectFile( StringHelper(entry->prejfile) ),
+            conflictOld( Utf8ToString(entry->conflict_old, pool) ),
+            conflictNew( Utf8ToString(entry->conflict_new, pool) ),
+            conflictWorking( Utf8ToString(entry->conflict_wrk, pool) ),
+            propertyRejectFile( Utf8ToString(entry->prejfile, pool) ),
             textTime( AprTimeToDateTime(entry->text_time) ),
             propertyTime( AprTimeToDateTime(entry->prop_time) ),
-            checkSum( StringHelper(entry->checksum) ),
+            checkSum( Utf8ToString(entry->checksum, pool) ),
             commitRevision( entry->cmt_rev ),
             commitDate( AprTimeToDateTime(entry->cmt_date) ),
-            commitAuthor( StringHelper(entry->cmt_author) ),
-            lockToken( StringHelper(entry->lock_token) ),
-            lockOwner( StringHelper(entry->lock_owner) ),
-            lockComment( StringHelper(entry->lock_comment) ),
+            commitAuthor( Utf8ToString(entry->cmt_author, pool) ),
+            lockToken( Utf8ToString(entry->lock_token, pool) ),
+            lockOwner( Utf8ToString(entry->lock_owner, pool) ),
+            lockComment( Utf8ToString(entry->lock_comment, pool) ),
             lockCreationDate( AprTimeToDateTime(entry->lock_creation_date) )
 
         {;}

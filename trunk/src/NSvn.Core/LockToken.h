@@ -10,11 +10,11 @@ namespace NSvn
         public __gc class LockToken
         {
         public:
-            LockToken( svn_lock_t* lock ) :
-                path( StringHelper(lock->path) ),
-                token( StringHelper(lock->token) ),
-                owner( StringHelper(lock->owner) ),
-                comment( StringHelper(lock->comment) ),
+            LockToken( svn_lock_t* lock, apr_pool_t* pool ) :
+                path( Utf8ToString(lock->path, pool) ),
+                token( Utf8ToString(lock->token, pool) ),
+                owner( Utf8ToString(lock->owner, pool) ),
+                comment( Utf8ToString(lock->comment, pool) ),
                 isDavComment( lock->is_dav_comment != 0 ),
                 creationDate( AprTimeToDateTime(lock->creation_date) ),
                 expirationDate( AprTimeToDateTime(lock->expiration_date) )
