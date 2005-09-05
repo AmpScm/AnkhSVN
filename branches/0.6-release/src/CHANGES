@@ -1,4 +1,43 @@
-Version 0.5.3(released 17.08.2004)
+Version 0.6.0 (released ??.09.2004)
+This release was built against Subversion 1.0.6, Neon 0.24.7, 
+openssl 0.9.7 and Berkeley DB 4.2.52
+
+* New installer using WiX instead of the VS.NET setup projects
+* Fix bug in which Ankh would refuse to load if VC++ wasn't installed
+* Prevent .svn dir from being autoadded 
+* Support rename on folders in projects
+* Prevent Ankh from autoadding ignored files
+* Prevent the solution explorer from repainting itself while Ankh is 
+   scanning the tree, improving solution load performance
+* Running of SVN commands from the VS command line is now streamy
+* New command that lets user send a suggestion or error report without
+   actually experiencing an error
+* Diff/Patch uses path relative to the solution directory
+* Better support for third party project types
+* Support commits on working copies created from multiple repositories
+* Commit dialog is now "pseudomodal", allowing the user to diff or view
+   files using VS directly
+* Ankh no longer loads on command line builds that use /rebuild or /clean
+* Support for blame
+* Diff/patch between arbitrary revisions
+* Use the correct name for the Tools menu in non-english versions of VS
+* Support for log
+* Better support for file deletions
+* More intelligent status cache, improving performance (especially in 
+  pathological cases)
+* Support for VS 2005 beta 2
+* Error reports contains the DTE version (and thus implicitly the version of 
+   VS)
+* Support for lock/unlock
+* NSvn now supports svn 1.2 functions
+* New design for the repository explorer
+* Support for Enterprise Template projects
+* Support for database projects
+* Lots of tweaks, bug fixes and performance enhancements.
+
+
+------------------------------------------------------------------------
+Version 0.5.5(released 17.08.2004)
 This release was built against Subversion 1.0.6, Neon 0.24.7, 
 openssl 0.9.7 and Berkeley DB 4.2.52
 
