@@ -14,8 +14,6 @@ namespace Ankh
 
     using Ankh.Commands;
 
-	using Microsoft.VisualStudio.Shell.Interop;
-
     #region Read me for Add-in installation and setup information.
     // When run, the Add-in wizard prepared the registry for the Add-in.
     // At a later time, if the Add-in becomes unavailable for reasons such as:
@@ -114,19 +112,8 @@ namespace Ankh
                 // can happen if we are loaded after startup
                 if ( this.context.DTE.Solution.IsOpen )
                     this.context.SolutionOpened();
-
-				Microsoft.VisualStudio.OLE.Interop.IServiceProvider provider = 
-					(Microsoft.VisualStudio.OLE.Interop.IServiceProvider)this.context.DTE;
-				Guid svc = typeof(SVsTrackProjectDocuments).GUID;
-				Guid iface = typeof(IVsTrackProjectDocuments2).GUID;
-				IntPtr output;
-				
-				provider.QueryService( ref svc, ref iface, out output );
-				IVsTrackProjectDocuments2 evts = (IVsTrackProjectDocuments2) 
-					Marshal.GetObjectForIUnknown( output );
-				uint cookie;
-				this.tracker = new Tracker();
-				evts.AdviseTrackProjectDocumentsEvents( this.tracker, out cookie );
+  
+                
             }
             catch( Exception ex )
             {
@@ -332,96 +319,8 @@ namespace Ankh
         private bool shuttingDown = false;
 
         private const int CACHESTATUS_INTERVAL = 800;
-		private Tracker tracker;
 		
     }
-
-	public class Tracker : IVsTrackProjectDocumentsEvents2
-	{
-		#region IVsTrackProjectDocumentsEvents2 Members
-
-		public int OnAfterRenameDirectories(int cProjects, int cDirs, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, Microsoft.VisualStudio.Shell.Interop.VSRENAMEDIRECTORYFLAGS[] rgFlags)
-		{
-			// TODO:  Add Tracker.OnAfterRenameDirectories implementation
-			return 0;
-		}
-
-		public int OnQueryRenameFiles(IVsProject pProject, int cFiles, string[] rgszMkOldNames, string[] rgszMkNewNames, Microsoft.VisualStudio.Shell.Interop.VSQUERYRENAMEFILEFLAGS[] rgFlags, Microsoft.VisualStudio.Shell.Interop.VSQUERYRENAMEFILERESULTS[] pSummaryResult, Microsoft.VisualStudio.Shell.Interop.VSQUERYRENAMEFILERESULTS[] rgResults)
-		{
-			// TODO:  Add Tracker.OnQueryRenameFiles implementation
-			return 0;
-		}
-
-		public int OnQueryRemoveDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, Microsoft.VisualStudio.Shell.Interop.VSQUERYREMOVEDIRECTORYFLAGS[] rgFlags, Microsoft.VisualStudio.Shell.Interop.VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, Microsoft.VisualStudio.Shell.Interop.VSQUERYREMOVEDIRECTORYRESULTS[] rgResults)
-		{
-			// TODO:  Add Tracker.OnQueryRemoveDirectories implementation
-			return 0;
-		}
-
-		public int OnAfterSccStatusChanged(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, uint[] rgdwSccStatus)
-		{
-			// TODO:  Add Tracker.OnAfterSccStatusChanged implementation
-			return 0;
-		}
-
-		public int OnAfterAddDirectoriesEx(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, Microsoft.VisualStudio.Shell.Interop.VSADDDIRECTORYFLAGS[] rgFlags)
-		{
-			// TODO:  Add Tracker.OnAfterAddDirectoriesEx implementation
-			return 0;
-		}
-
-		public int OnQueryRenameDirectories(IVsProject pProject, int cDirs, string[] rgszMkOldNames, string[] rgszMkNewNames, Microsoft.VisualStudio.Shell.Interop.VSQUERYRENAMEDIRECTORYFLAGS[] rgFlags, Microsoft.VisualStudio.Shell.Interop.VSQUERYRENAMEDIRECTORYRESULTS[] pSummaryResult, Microsoft.VisualStudio.Shell.Interop.VSQUERYRENAMEDIRECTORYRESULTS[] rgResults)
-		{
-			// TODO:  Add Tracker.OnQueryRenameDirectories implementation
-			return 0;
-		}
-
-		public int OnAfterRenameFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, Microsoft.VisualStudio.Shell.Interop.VSRENAMEFILEFLAGS[] rgFlags)
-		{
-			// TODO:  Add Tracker.OnAfterRenameFiles implementation
-			return 0;
-		}
-
-		public int OnAfterRemoveFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, Microsoft.VisualStudio.Shell.Interop.VSREMOVEFILEFLAGS[] rgFlags)
-		{
-			// TODO:  Add Tracker.OnAfterRemoveFiles implementation
-			return 0;
-		}
-
-		public int OnQueryRemoveFiles(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, Microsoft.VisualStudio.Shell.Interop.VSQUERYREMOVEFILEFLAGS[] rgFlags, Microsoft.VisualStudio.Shell.Interop.VSQUERYREMOVEFILERESULTS[] pSummaryResult, Microsoft.VisualStudio.Shell.Interop.VSQUERYREMOVEFILERESULTS[] rgResults)
-		{
-			// TODO:  Add Tracker.OnQueryRemoveFiles implementation
-			return 0;
-		}
-
-		public int OnAfterAddFilesEx(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, Microsoft.VisualStudio.Shell.Interop.VSADDFILEFLAGS[] rgFlags)
-		{
-			// TODO:  Add Tracker.OnAfterAddFilesEx implementation
-			return 0;
-		}
-
-		public int OnQueryAddFiles(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, Microsoft.VisualStudio.Shell.Interop.VSQUERYADDFILEFLAGS[] rgFlags, Microsoft.VisualStudio.Shell.Interop.VSQUERYADDFILERESULTS[] pSummaryResult, Microsoft.VisualStudio.Shell.Interop.VSQUERYADDFILERESULTS[] rgResults)
-		{
-			// TODO:  Add Tracker.OnQueryAddFiles implementation
-			return 0;
-		}
-
-		public int OnQueryAddDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, Microsoft.VisualStudio.Shell.Interop.VSQUERYADDDIRECTORYFLAGS[] rgFlags, Microsoft.VisualStudio.Shell.Interop.VSQUERYADDDIRECTORYRESULTS[] pSummaryResult, Microsoft.VisualStudio.Shell.Interop.VSQUERYADDDIRECTORYRESULTS[] rgResults)
-		{
-			// TODO:  Add Tracker.OnQueryAddDirectories implementation
-			return 0;
-		}
-
-		public int OnAfterRemoveDirectories(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, Microsoft.VisualStudio.Shell.Interop.VSREMOVEDIRECTORYFLAGS[] rgFlags)
-		{
-			// TODO:  Add Tracker.OnAfterRemoveDirectories implementation
-			return 0;
-		}
-
-		#endregion
-
-	}
-
 }
 
 
