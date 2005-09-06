@@ -277,8 +277,6 @@ namespace Ankh.Commands
 
                 for( short i = 1; i <= item.FileCount; i++ )
                 {
-                    
-
                     string file;
                     try
                     {
