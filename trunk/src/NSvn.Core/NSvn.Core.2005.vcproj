@@ -6,6 +6,7 @@
 	ProjectGUID="{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
 	RootNamespace="NSvn.Core"
 	Keyword="ManagedCProj"
+	SignManifests="true"
 	>
 	<Platforms>
 		<Platform
@@ -650,10 +651,6 @@
 			</File>
 			<File
 				RelativePath="stream.h"
-				>
-			</File>
-			<File
-				RelativePath="StringHelper.h"
 				>
 			</File>
 			<File
