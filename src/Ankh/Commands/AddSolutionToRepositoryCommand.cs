@@ -189,66 +189,72 @@ namespace Ankh.Commands
             for( int i = 1; i <= projects.Count; i++ )
             {
                 Project project = projects.Item(i);
-                string filename;
-                try
+                AddProject(context, solutionDir, project);
+            }
+            
+        }
+
+        private void AddProject( IContext context, string solutionDir, Project project )
+        {
+            string filename;
+            try
+            {
+                // treat soln items and misc items specially
+                if ( this.IsSpecialProject(project) )
                 {
-                    // treat soln items and misc items specially
-                    if ( this.IsSpecialProject( project ) )
-                    {
-                        if ( project.ProjectItems != null )
-                            this.AddProjectItems( project.ProjectItems, context, solutionDir );
-                        continue;
-                    }
-                    else
-                    {
-                        // project.FileName returns null if the filename can't be retrieved
-                        filename = this.GetProjectFileName( project, 
-                            context.DTE.Solution );
-                        if ( filename == null )
-                        {
-                            context.OutputPane.WriteLine( "Unable to add project" );
-                            continue;
-                        }
-                    }
-                }
-                catch( ArgumentException )
-                {
-                    context.OutputPane.WriteLine( "Unable to add project" );
-                    continue;
-                }
-
-                string dir = Path.GetDirectoryName( filename );
-                try
-                {
-                    // for now we only support projects that are under the solution root
-                    if ( !PathUtils.IsSubPathOf( dir, solutionDir ) )
-                    {
-                        context.OutputPane.WriteLine( 
-                            dir + ": AnkhSVN does not currently support automatically " + 
-                            "importing projects " +  
-                            "that are not under the solution root directory." );
-                        continue;
-                    }
-
-                    if ( Directory.Exists( dir ) && 
-                        !SvnUtils.IsWorkingCopyPath( dir ) )
-                    {
-                        this.Add( dir, solutionDir, context );
-                    }
-
-                    if ( File.Exists( filename ) )
-                    {
-                        this.Add( filename, solutionDir, context );
-                    }
-
-                    // ProjectItems can be null for some project types
                     if ( project.ProjectItems != null )
-                        this.AddProjectItems( project.ProjectItems, context, solutionDir );
+                        this.AddProjectItems(project.ProjectItems, context, solutionDir);
+                    return;
                 }
-                catch( SvnClientException ex )
+                else
                 {
-                    context.OutputPane.WriteLine( ex.Message );
+                    // project.FileName returns null if the filename can't be retrieved
+                    filename = this.GetProjectFileName(project,
+                        context.DTE.Solution);
+                    if ( filename == null )
+                    {
+                        context.OutputPane.WriteLine("Unable to add project");
+                        return;
+                    }
                 }
+            }
+            catch ( ArgumentException )
+            {
+                context.OutputPane.WriteLine("Unable to add project");
+                return;
+            }
+
+            string dir = Path.GetDirectoryName(filename);
+            try
+            {
+                // for now we only support projects that are under the solution root
+                if ( !PathUtils.IsSubPathOf(dir, solutionDir) )
+                {
+                    context.OutputPane.WriteLine(
+                        dir + ": AnkhSVN does not currently support automatically " +
+                        "importing projects " +
+                        "that are not under the solution root directory.");
+                    return;
+                }
+
+                if ( Directory.Exists(dir) &&
+                    !SvnUtils.IsWorkingCopyPath(dir) )
+                {
+                    this.Add(dir, solutionDir, context);
+                }
+
+                if ( File.Exists(filename) )
+                {
+                    this.Add(filename, solutionDir, context);
+                }
+
+                // ProjectItems can be null for some project types
+                if ( project.ProjectItems != null )
+                    this.AddProjectItems(project.ProjectItems, context, solutionDir);
+            }
+            catch ( SvnClientException ex )
+            {
+                context.OutputPane.WriteLine(ex.Message);
             }
         }
 
@@ -262,8 +268,17 @@ namespace Ankh.Commands
         {
             foreach( ProjectItem item in items )
             {
+                // if it's a solution folder, item.Object will be the project
+                if ( item.Object is Project )
+                {
+                    this.AddProject( context, solutionDir, item.Object as Project );
+                    continue;
+                }
+
                 for( short i = 1; i <= item.FileCount; i++ )
                 {
+                    
+
                     string file;
                     try
                     {
