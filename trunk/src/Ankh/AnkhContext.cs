@@ -47,6 +47,9 @@ namespace Ankh
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
             this.solutionExplorer = new Solution.Explorer( this.dte, this);
+            this.solutionExplorer.SolutionFinishedLoading += this.HandleSolutionFinishedLoading;
+
+
             this.progressDialog = new ProgressDialog();             
 
             string iconvdir = Path.Combine( 
@@ -277,7 +280,6 @@ namespace Ankh
 
                 timer.End( "Solution opened", "Ankh" );
                 
-                this.ankhLoadedForSolution = true;
                 //MessageBox.Show( timer.ToString() );
 
                 // Add Conflict tasks for all conflicts in solution
@@ -298,6 +300,8 @@ namespace Ankh
         /// </summary>
         public void SolutionClosing()
         {
+            this.ankhLoadedForSolution = false;
+
             this.conflictManager.RemoveAllTaskItems();
             this.SolutionExplorer.Unload();
 
@@ -308,7 +312,6 @@ namespace Ankh
                     sink.Unhook();
             }
 
-            this.ankhLoadedForSolution = false;
         }
 
         /// <summary>
@@ -391,6 +394,10 @@ namespace Ankh
         }
         #endregion        
 
+        private void HandleSolutionFinishedLoading( object sender, EventArgs args )
+        {
+            this.ankhLoadedForSolution = true;
+        }
         /// <summary>
         /// try to load the configuration file
         /// </summary>
