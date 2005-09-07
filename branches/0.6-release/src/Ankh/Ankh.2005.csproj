@@ -199,10 +199,8 @@
       <Name>Ankh.UI.2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\NSvn.Common\NSvn.Common.2005.csproj">
-      <Name>NSvn.Common</Name>
       <Project>{3A8DF134-05F1-4357-9682-AB14CDDA48A9}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-      <Private>True</Private>
+      <Name>NSvn.Common.2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\NSvn.Core\NSvn.Core.2005.vcproj">
       <Name>NSvn.Core</Name>
@@ -457,6 +455,7 @@
     <Compile Include="RepositoryExplorer\Node.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RepositoryRootInfo.cs" />
     <Compile Include="ResourceBitmaps.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -466,6 +465,8 @@
     <Compile Include="Solution\INodeVisitor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Solution\ParsedSolution.cs" />
+    <Compile Include="Solution\ParsedSolutionItem.cs" />
     <Compile Include="Solution\ProjectItemNode.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -516,6 +517,15 @@
     <EmbeddedResource Include="Config\Config.xml" />
     <EmbeddedResource Include="Config\Config.xsd" />
     <EmbeddedResource Include="status_icons.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="lock.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="lockedreadonly.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="readonly.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

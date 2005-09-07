@@ -124,11 +124,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Utils\Utils.2005.csproj">
-      <Name>Utils.2003</Name>
-      <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
@@ -141,6 +136,12 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="Utils.Tests.build" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utils\Utils.2005.csproj">
+      <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
+      <Name>Utils.2005</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

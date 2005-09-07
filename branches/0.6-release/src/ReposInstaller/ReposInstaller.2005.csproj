@@ -137,14 +137,12 @@
       <Name>System.XML</Name>
     </Reference>
     <ProjectReference Include="..\Ankh\Ankh.2005.csproj">
-      <Name>Ankh.2003</Name>
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Name>Ankh.2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\NSvn.Common\NSvn.Common.2005.csproj">
-      <Name>NSvn.Common.2003</Name>
       <Project>{3A8DF134-05F1-4357-9682-AB14CDDA48A9}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Name>NSvn.Common.2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\NSvn.Core\NSvn.Core.2005.vcproj">
       <Name>NSvn.Core</Name>
