@@ -57,9 +57,13 @@ namespace Ankh.Solution
                 {
                     return new ProjectNode( item, hItem, explorer, parent, projectItem.SubProject );
                 }
+                else if ( projectItem.Object is Project )
+                {
+                    return new ProjectNode(item, hItem, explorer, parent, projectItem.Object as Project );
+                }
                 else  //normal project item
                 {
-                    return new ProjectItemNode( item, hItem, explorer, parent, null );
+                    return new ProjectItemNode(item, hItem, explorer, parent, null);
                 }
             }
             else if ( parent is SolutionNode ) //deal with unmodeled projects (database)
