@@ -25,6 +25,8 @@ namespace Ankh.Solution
     /// </summary>
     public class Explorer : ISolutionExplorer
     {
+        public event EventHandler SolutionFinishedLoading;
+
         public Explorer( _DTE dte, IContext context )
         {
             this.dte = dte;
@@ -527,6 +529,8 @@ namespace Ankh.Solution
 
                     // and we're done
                     outer.context.OutputPane.WriteLine( "Time: {0}", DateTime.Now - startTime );
+                    if ( outer.SolutionFinishedLoading != null )
+                        outer.SolutionFinishedLoading( outer, EventArgs.Empty );
                 }
                 finally
                 {
