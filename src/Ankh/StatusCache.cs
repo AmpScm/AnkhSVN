@@ -151,7 +151,7 @@ namespace Ankh
             {
                 // is there already an item for this path?
                 SvnItem existingItem = (SvnItem)this.table[normPath];
-                if ( existingItem != null )
+                if ( existingItem != null && existingItem != SvnItem.Unversionable )
                     existingItem.Refresh( status );
                 else
                     this.table[normPath] = new SvnItem( path, status );
