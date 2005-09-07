@@ -47,7 +47,8 @@ namespace Ankh
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
             this.solutionExplorer = new Solution.Explorer( this.dte, this);
-            this.solutionExplorer.SolutionFinishedLoading += this.HandleSolutionFinishedLoading;
+            this.solutionExplorer.SolutionFinishedLoading += 
+                new EventHandler(this.HandleSolutionFinishedLoading);
 
 
             this.progressDialog = new ProgressDialog();             
