@@ -16,10 +16,13 @@ namespace Ankh.Solution
     public class ProjectItemNode : TreeNode
     {
         public ProjectItemNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
-            TreeNode parent ) :
+            TreeNode parent, ParsedSolutionItem parsedItem ) :
             base( item, hItem, explorer, parent )
         {
-            this.projectItem = (ProjectItem)item.Object;
+            this.projectItem = item.Object as ProjectItem;
+            this.parsedProjectItem=parsedItem;
+                
+            this.FindChildren();  
             
             this.FindResources();                      
         }
@@ -93,17 +96,21 @@ namespace Ankh.Solution
 
         protected void FindResources()
         {
-            this.Explorer.AddResource( this.projectItem, this ); 
+            this.Explorer.AddResource( this.projectItem, this.parsedProjectItem, this ); 
 
             this.resources = new ArrayList();
             try
             {
                 StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
                 this.AddResourcesFromProjectItem( this.projectItem, del );
+                this.AddResourcesFromProjectItem( this.parsedProjectItem, del );
 
                 // is this a childless tree node? it might have hidden children after all
                 if ( this.Children.Count == 0 )
+                {
                     this.AddSubItems( this.projectItem, del );
+                    this.AddSubItems( this.parsedProjectItem, del );
+                }
                
             }
             catch( NullReferenceException )
@@ -123,7 +130,7 @@ namespace Ankh.Solution
         // recursively adds subitems of this projectitem.
         private void AddSubItems( ProjectItem item, StatusChanged del )
         {
-            if ( item.ProjectItems == null ) 
+            if ( item==null || item.ProjectItems == null ) 
                 return;
 
             // some object models might throw when accessing the .ProjectItems property
@@ -148,9 +155,25 @@ namespace Ankh.Solution
             }
         }
 
+        // recursively adds subitems of this projectitem.
+        private void AddSubItems( ParsedSolutionItem item, StatusChanged del )
+        {
+            if ( item==null || item.Children.Count == 0 ) 
+                return;
+
+            foreach( ParsedSolutionItem subItem in item.Children )
+            {
+                if ( subItem.Name != Client.AdminDirectoryName )
+                {
+                    this.AddResourcesFromProjectItem( subItem, del );
+                    this.AddSubItems( subItem, del );
+                }
+            } 
+        }
+
         private void AddResourcesFromProjectItem( ProjectItem item, StatusChanged del )
         {
-            if ( item.FileCount == 0 )
+            if ( item==null || item.FileCount == 0 )
                 return;
 
             // HACK: figure out if we're dealing with a 0 or 1 based collection
@@ -195,6 +218,34 @@ namespace Ankh.Solution
             }
         }
 
+        private void AddResourcesFromProjectItem( ParsedSolutionItem item, StatusChanged del )
+        {
+            if(item==null)
+                return;
+
+            SvnItem svnItem = this.Explorer.Context.StatusCache[item.FileName];
+            if ( svnItem.IsFile || svnItem.IsDirectory )
+            {
+                this.resources.Add( svnItem );
+                svnItem.Changed += del;
+
+                // if its a dir, we want the deleted paths too
+                if ( svnItem.IsDirectory )
+                {
+                    this.AddDeletions( item.FileName, this.resources, del );
+                }
+            }  
+        }
+
+		/// <summary>
+		/// The item for an unmodeled project
+		/// </summary>
+        public ParsedSolutionItem ParsedItem
+        {
+            get{ return this.parsedProjectItem; }
+        }
+
+        private ParsedSolutionItem parsedProjectItem;
         private ProjectItem projectItem;
         private IList resources;
     }    
