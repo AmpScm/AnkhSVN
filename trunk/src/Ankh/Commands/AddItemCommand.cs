@@ -23,7 +23,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             AddFilter filter = new AddFilter();
-            if ( context.SolutionExplorer.GetSelectionResources( false, 
+            if ( context.SolutionExplorer.GetSelectionResources( true, 
                 new ResourceFilterCallback(filter.Filter)).Count > 0 )
             {
                 return Enabled;
@@ -35,18 +35,15 @@ namespace Ankh.Commands
         public override void Execute(IContext context, string parameters )
         {
             AddFilter filter = new AddFilter();
-            IList resources = context.SolutionExplorer.GetSelectionResources( false,
+            IList resources = context.SolutionExplorer.GetSelectionResources( true,
                 new ResourceFilterCallback(filter.Filter) );
-
-            bool recursive = false;
 
             // are we shifted?
             if ( !CommandBase.Shift )
             {                
                 PathSelectorInfo info = new PathSelectorInfo( "Select items to add",
                     resources, resources );
-                info.EnableRecursive = true;
-                info.Recursive = false;
+                info.EnableRecursive = false;
 
                 info = context.UIShell.ShowPathSelector( info );
 
@@ -54,7 +51,6 @@ namespace Ankh.Commands
                     return;
 
                 resources = info.CheckedItems;
-                recursive = info.Recursive;
             }
 
             context.StartOperation( "Adding" );
@@ -63,7 +59,7 @@ namespace Ankh.Commands
 
                 foreach( SvnItem item in resources )
                 {
-                    context.Client.Add( item.Path, recursive );
+                    context.Client.Add( item.Path, false );
                 }
                 context.SolutionExplorer.RefreshSelection();
             }
