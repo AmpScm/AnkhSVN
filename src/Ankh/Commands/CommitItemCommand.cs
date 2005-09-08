@@ -54,7 +54,7 @@ namespace Ankh.Commands
             this.commitContext = operation.CommitContext;
 
             // we need to commit to each repository separately
-            ICollection repositories = this.SortByRepository( context, resources );           
+            ICollection repositories = this.SortByRepository( context, operation.Items );           
 
             this.commitInfo = null;
             
