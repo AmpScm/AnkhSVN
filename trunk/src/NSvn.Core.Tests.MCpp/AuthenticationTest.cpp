@@ -6,7 +6,6 @@
 #include "../NSvn.Core/credentials.h"
 #include "../NSvn.Core/Pool.h"
 #include "../NSvn.Core/SvnClientException.h"
-#include "../NSvn.Core/StringHelper.h"
 
 
 #using <mscorlib.dll>

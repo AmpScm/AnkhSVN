@@ -1,7 +1,6 @@
 // $Id$
 #pragma once
 #include "stdafx.h"
-#include "StringHelper.h"
 #include "svnenums.h"
 
 namespace NSvn
@@ -77,7 +76,6 @@ namespace NSvn
 // $Id$
 #pragma once
 #include "stdafx.h"
-#include "StringHelper.h"
 #include "svnenums.h"
 
 namespace NSvn

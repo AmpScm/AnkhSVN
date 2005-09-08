@@ -3,7 +3,6 @@
 #pragma once
 #include "StdAfx.h"
 #include <svn_auth.h>
-#include "StringHelper.h"
 #include <apr_strings.h>
 #include "svnenums.h"
 #include "utils.h"

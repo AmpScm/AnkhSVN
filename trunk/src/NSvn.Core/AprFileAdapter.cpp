@@ -27,7 +27,6 @@ apr_file_t* NSvn::Core::AprFileAdapter::Start()
 
     return infile;
 }
-#include "StringHelper.h"
 void NSvn::Core::AprFileAdapter::Read()
 {
     char unmanagedBuffer[BUFSIZE];

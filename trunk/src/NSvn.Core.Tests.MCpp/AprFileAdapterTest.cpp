@@ -2,7 +2,6 @@
 #include "StdAfx.h"
 #include "aprfileadaptertest.h"
 #include "AprFileAdapter.h"
-#include "StringHelper.h"
 #include "utils.h"
 
 #using <mscorlib.dll>

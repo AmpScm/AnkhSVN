@@ -3,7 +3,6 @@
 
 #include <svn_config.h>
 #include <apr_hash.h>
-#include "StringHelper.h"
 #include "SvnClientException.h"
 #include "GCPool.h"
 

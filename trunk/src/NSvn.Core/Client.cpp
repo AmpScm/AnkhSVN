@@ -5,7 +5,6 @@
 
 #include "Client.h"
 
-#include "StringHelper.h"
 
 
 #include "Status.h"
