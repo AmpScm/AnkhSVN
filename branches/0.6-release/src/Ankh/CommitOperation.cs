@@ -35,6 +35,11 @@ namespace Ankh
             set{ this.logMessage = value; }
         }
 
+        public IList Items
+        {
+            get { return this.items; }
+        }
+
         public bool ShowLogMessageDialog()
         {
             string templateText = this.context.Config.LogMessageTemplate != null ? 
@@ -64,6 +69,7 @@ namespace Ankh
             }
             else
             {
+                this.items = commitContext.CommitItems;
                 this.logMessage = commitContext.LogMessage;
                 return true;                
             }

@@ -2,7 +2,7 @@
 
 using namespace System::Reflection;
 using namespace System::Runtime::CompilerServices;
-[assembly:AssemblyVersionAttribute("0.6.0.2150")];
+[assembly:AssemblyVersionAttribute("0.6.0.2155")];
         [assembly:Utils::VersionAttribute( "Subversion", 1, 2, 3, Tag="" )];
 [assembly:Utils::VersionAttribute( "Neon", 0, 24, 7, Tag="" )];
 [assembly:Utils::VersionAttribute( "Berkeley DB", 4, 2, 52, Tag="" )];
@@ -11,4 +11,4 @@ using namespace System::Runtime::CompilerServices;
 [assembly:Utils::VersionAttribute( "apr", 0, 9, 5, Tag="" )];
 [assembly:Utils::VersionAttribute( "apr-util", 0, 9, 5, Tag="" )];
 [assembly:Utils::VersionAttribute( "apr-iconv", 0, 9, 5, Tag="" )];
-[assembly:Utils::VersionAttribute( "Ankh", 0, 6, 0, Tag="snapshot_18" )];
+[assembly:Utils::VersionAttribute( "Ankh", 0, 6, 0, Tag="snapshot_19" )];
