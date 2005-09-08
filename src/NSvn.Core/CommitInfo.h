@@ -1,6 +1,5 @@
 // $Id$
 #using <mscorlib.dll>
-#include "StringHelper.h"
 #include <svn_client.h>
 
 namespace NSvn

@@ -2,7 +2,6 @@
 #include "StdAfx.h"
 #include "MiscTests.h"
 #include "Pool.h"
-#include "StringHelper.h"
 #include "ParameterDictionary.h"
 #include "Revision.h"
 #include <svn_auth.h>

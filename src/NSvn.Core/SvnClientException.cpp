@@ -1,7 +1,6 @@
 // $Id$
 #include "StdAfx.h"
 #include "svnclientexception.h"
-#include "StringHelper.h"
 #include "utils.h"
 
 #using <mscorlib.dll>

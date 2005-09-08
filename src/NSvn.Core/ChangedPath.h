@@ -2,7 +2,6 @@
 #pragma once
 #include "stdafx.h"
 #include <svn_types.h>
-#include "StringHelper.h"
 
 namespace NSvn
 {

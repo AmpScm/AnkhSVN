@@ -5,7 +5,6 @@
 #include <svn_path.h>
 #include <svn_time.h>
 #include <svn_utf.h>
-#include "StringHelper.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
