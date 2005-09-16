@@ -6,11 +6,11 @@
         </Feature>
         <DirectoryRef Id="TARGETDIR" src="$(var.builddir)\">
             <Component Id="C_ReposInstaller.dll" DiskId="1" Guid="6529FD7F-8C04-4ca0-A323-CF26905F072A">
-                <File Id="CF_ReposInstaller.dll" Name="REPOSI~1.DLL" LongName="ReposInstaller.dll"
+                <File Id="CF_ReposInstaller.dll" Name="REPOINST.DLL" LongName="ReposInstaller.dll"
                     Checksum="yes" Vital="yes" KeyPath="yes" />
             </Component>
             <Component Id="C_ReposInstaller.pdb" DiskId="1" Guid="305C091E-3267-4302-8A3B-6951E549157D">
-                <File Id="CF_ReposInstaller.pdb" Name="REPOSI~1.PDB" LongName="ReposInstaller.pdb"
+                <File Id="CF_ReposInstaller.pdb" Name="REPOINST.PDB" LongName="ReposInstaller.pdb"
                     Checksum="yes" Vital="yes" KeyPath="yes"/>
             </Component>
         </DirectoryRef>
