@@ -167,15 +167,15 @@
 
             <Component Id="Libs1" DiskId="1" Guid="6EB4C04C-5B15-4fc3-99E9-4CC9302C3CD4" KeyPath="yes">
                 <File Id="CF_AnkhUserControlHost.dll" 
-                    Name="ANKHUS~1.DLL" LongName="AnkhUserControlHost.dll"
+                    Name="AUCH.DLL" LongName="AnkhUserControlHost.dll"
                     Vital="yes" DiskId="1" />
             </Component>
             <Component Id="Libs2" DiskId="1" Guid="77EE427F-33F3-414F-8283-E1A7A09201AB">
-                <File Id="CF_AnkhUserControlHostLib.dll" Name="ANKHUS~2.DLL" LongName="AnkhUserControlHostLib.dll"
+                <File Id="CF_AnkhUserControlHostLib.dll" Name="AUCHL.DLL" LongName="AnkhUserControlHostLib.dll"
                     Vital="yes" DiskId="1" />
             </Component>
             <Component Id="Libs3" DiskId="1" Guid="C700AA54-4729-4FE7-BFB1-50A507A46373">
-                <File Id="CF_AxInterop.SHDocVw.dll" Name="AXINTE~1.DLL" LongName="AxInterop.SHDocVw.dll"
+                <File Id="CF_AxInterop.SHDocVw.dll" Name="AXINTER.DLL" LongName="AxInterop.SHDocVw.dll"
                     Vital="yes" DiskId="1" />
             </Component>
             <Component Id="Libs4" DiskId="1" Guid="F1A9C647-82F3-422A-9D93-371A671E5750">
@@ -183,15 +183,15 @@
                     Vital="yes" DiskId="1" />
             </Component>
             <Component Id="Libs5" DiskId="1" Guid="B1B0F173-FA04-481D-8043-3D961522786C">
-                <File Id="CF_extensibility.dll" Name="EXTENS~1.DLL" LongName="extensibility.dll"
+                <File Id="CF_extensibility.dll" Name="EXTENSIB.DLL" LongName="extensibility.dll"
                     Vital="yes" DiskId="1" />
             </Component>
             <Component Id="Libs6" DiskId="1" Guid="9F2B1C9A-A5BE-4B0F-8F5C-573E5D1934FA">
-                <File Id="CF_Interop.esproj.dll" Name="INTERO~1.DLL" LongName="Interop.esproj.dll"
+                <File Id="CF_Interop.esproj.dll" Name="INTERESP.DLL" LongName="Interop.esproj.dll"
                     Vital="yes" DiskId="1" />
             </Component>
             <Component Id="Libs7" DiskId="1" Guid="EE26B734-825A-445B-BA85-C6B9BCC0B84A">
-                <File Id="CF_Interop.SHDocVw.dll" Name="INTERO~2.DLL" LongName="Interop.SHDocVw.dll"
+                <File Id="CF_Interop.SHDocVw.dll" Name="INTERSHD.DLL" LongName="Interop.SHDocVw.dll"
                     Vital="yes" DiskId="1" />
             </Component>
             <Component Id="Libs8" DiskId="1" Guid="6EE2156E-B81E-41E5-9DE9-06DAC7CBD956">
@@ -199,7 +199,7 @@
                     Vital="yes" DiskId="1" />
             </Component>
             <Component Id="Libs9" DiskId="1" Guid="C6C9A8B7-1DCF-4B11-974D-086CF6303CDD">
-                <File Id="CF_SharpZipLib.dll" Name="SHARPZ~1.DLL" LongName="SharpZipLib.dll"
+                <File Id="CF_SharpZipLib.dll" Name="SHARPZIP.DLL" LongName="SharpZipLib.dll"
                     Vital="yes" DiskId="1" />
             </Component>
         </DirectoryRef>

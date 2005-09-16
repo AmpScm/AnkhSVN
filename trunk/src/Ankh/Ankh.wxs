@@ -149,7 +149,7 @@
 
       <Directory Id="Ankh_directory1" Name="1033">
         <Component Id="C_Bitmap.dll" DiskId="1" Guid="7609179F-82F7-4659-A4F8-FF1FB0ABFE53">
-          <File Id="Ankh_file3" KeyPath="yes" Name="BITMAP~1.DLL" LongName="BitmapDll.dll" Checksum="yes" Vital="yes" src="$(var.builddir)\..\1033\BitmapDll.dll" />
+          <File Id="Ankh_file3" KeyPath="yes" Name="BITMAPDL.DLL" LongName="BitmapDll.dll" Checksum="yes" Vital="yes" src="$(var.builddir)\..\1033\BitmapDll.dll" />
         </Component>
       </Directory>
     </DirectoryRef>
