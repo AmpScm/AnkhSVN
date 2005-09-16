@@ -37,15 +37,18 @@
         <Property Id="ButtonText_Next">&amp;Next &gt;</Property>
         <Property Id="LogoText">AnkhSVN</Property>
 
-        <Property Id="WelcomeForm_NextArgs">FolderForm</Property>
+        <Property Id="WelcomeForm_NextArgs">LicenseForm</Property>
+        <Property Id="LicenseForm_NextArgs">FolderForm</Property>
         <Property Id="WelcomeForm_InstalledNextArgs">MaintenanceForm</Property>
         <Property Id="ApplicationUsers">AllUsers</Property>
-        <Property Id="FolderForm_PrevArgs">WelcomeForm</Property>
+        <Property Id="LicenseForm_PrevArgs">WelcomeForm</Property>
+        <Property Id="FolderForm_PrevArgs">LicenseForm</Property>
         <Property Id="FolderForm_NextArgs">ConfirmInstallForm</Property>
         <Property Id="ConfirmInstallForm_PrevArgs">FolderForm</Property>
         <Property Id="MaintenanceForm_PrevArgs">WelcomeForm</Property>
         <Property Id="MaintenanceForm_NextArgs">ConfirmInstallForm</Property>
         <Property Id="MaintenanceForm_Action">Repair</Property>
+        <Property Id="EulaForm_Property">No</Property>
 
         <UI>
             <TextStyle Id="VsdDefaultUIFont" FaceName="MS Sans Serif" Size="9" /> <!--Red="0" Green="0" Blue="0" /-->
@@ -223,6 +226,55 @@ Click Next to continue.</Text>
                 </Control>
                 <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="374" Height="0" />
             </Dialog>
+
+<!-- ******************************************************-->
+            <Dialog Id="LicenseForm" Width="370" Height="270" Title="[Setup] - [ProductName]"
+                NoMinimize="yes">
+                <Control Id="NextButton" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes"
+                    Text="[ButtonText_Next]">
+                    <Publish Event="EndDialog" Value="Return">LicenseForm_NextArgs=""</Publish>
+                    <Publish Event="NewDialog" Value="[LicenseForm_NextArgs]">LicenseForm_NextArgs&lt;&gt;""</Publish>
+                    <Condition Action="disable">EulaForm_Property&lt;&gt;"Yes"</Condition>
+                    <Condition Action="enable">EulaForm_Property="Yes"</Condition>
+                </Control>
+                <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes"
+                    Text="[ButtonText_Cancel]">
+                    <Publish Event="SpawnDialog" Value="Cancel" />
+                </Control>
+                <Control Id="AgreeRadioGroup" Type="RadioButtonGroup" X="18" Y="200" Width="348" Height="15" Property="EulaForm_Property">
+                    <Text>MsiRadioButtonGroup</Text>
+                    <RadioButtonGroup Property="EulaForm_Property">
+                        <RadioButton Value="No" X="0" Y="0" Width="138" Height="15" Text="I &amp;Do Not Agree" />
+                        <RadioButton Value="Yes" X="138" Y="0" Width="138" Height="15" Text="I &amp;Agree" />
+                    </RadioButtonGroup>
+                </Control>
+                <Control Id="LicenseText" Type="ScrollableText" X="18" Y="55" Width="348" Height="120" 
+                    Sunken="yes" TabSkip="no">
+                    <Text src="..\LICENSE.rtf" />
+                </Control>
+                <Control Id="BottomLine" Type="Line" X="4" Y="234" Width="370" Height="0" />
+                <Control Id="Logo" Type="Text" X="4" Y="228" Width="44" Height="12" Disabled="yes" Text="[LogoText]" />
+                <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Disabled="yes"
+                    Text="[ButtonText_Back]">
+                    <Publish Event="NewDialog" Value="[LicenseForm_PrevArgs]">LicenseForm_PrevArgs&lt;&gt;""</Publish>
+                    <Condition Action="disable">LicenseForm_PrevArgs=""</Condition>
+                    <Condition Action="enable">LicenseForm_PrevArgs&lt;&gt;""</Condition>
+                </Control>
+                <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="374" Height="44" FixedSize="yes"
+                    Text="[BannerBitmap]" />
+                <Control Id="BannerTitle" Type="Text" X="18" Y="6" Width="300" Height="11" Transparent="yes"
+                    NoPrefix="yes">
+                    <Text>{\BannerTitle}License Agreement</Text>
+                </Control>
+                <Control Id="BannerSubTitle" Type="Text" X="32" Y="18" Width="300" Height="22" Transparent="yes"
+                    NoPrefix="yes">
+		    <Text>{\BannerSubTitle}<![CDATA[Please take a moment to read the license agreement now. If you accept the
+terms below, click "I Agree", then "Next". Otherwise click "Cancel"]]></Text>
+                </Control>
+                <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="374" Height="0" />
+            </Dialog>
+<!-- ******************************************************-->
+
             <Dialog Id="ConfirmInstallForm" Width="370" Height="270" Title="[Setup] - [ProductName]"
                 NoMinimize="yes">
                 <Control Id="NextButton" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes"
