@@ -251,7 +251,7 @@ Global
 		..\deploy.build = ..\deploy.build
 		lib\lib.build = lib\lib.build
 		lib\lib.wxs = lib\lib.wxs
-		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
+		LICENSE.rtf = LICENSE.rtf
 		master.build = master.build
 		WiX\NSvn.msm.build = WiX\NSvn.msm.build
 		WiX\NSvn.msm.wxs = WiX\NSvn.msm.wxs
@@ -261,8 +261,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
