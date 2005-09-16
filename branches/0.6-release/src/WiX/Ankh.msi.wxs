@@ -84,7 +84,6 @@
                 <MigrateFeatureStates Sequence="1200" />
                 <Show Dialog="WelcomeForm" Sequence="1230">NOT RESUME AND ((NOT Installed) OR (Installed AND NOT Preselected))</Show>
                 <Show Dialog="ResumeForm" Sequence="1240">Installed AND (RESUME OR Preselected)</Show>
-                <Show Dialog="MaintenanceForm" Sequence="1250">Installed AND NOT(RESUME OR Preselected)</Show>
                 <Show Dialog="ProgressForm" Sequence="1280" />
                 <ExecuteAction Sequence="1300" />
             </InstallUISequence>

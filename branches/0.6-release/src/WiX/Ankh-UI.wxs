@@ -151,14 +151,19 @@
                 <Control Id="BottomLine" Type="Line" X="4" Y="234" Width="370" Height="0" />
                 <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Disabled="yes"
                     Text="[ButtonText_Back]">
+                    <Publish Property="SETUPTYPE" Value="Setup">NOT Installed</Publish>
+                    <Publish Property="SETUPTYPE" Value="Maintenance">Installed</Publish>
                     <Publish Event="NewDialog" Value="[MaintenanceForm_PrevArgs]">MaintenanceForm_PrevArgs&lt;&gt;""</Publish>
                     <Condition Action="disable">MaintenanceForm_PrevArgs=""</Condition>
                     <Condition Action="enable">MaintenanceForm_PrevArgs&lt;&gt;""</Condition>
                 </Control>
                 <Control Id="NextButton" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes"
                     Text="[ButtonText_Next]">
+                    <Publish Property="SETUPTYPE" Value="Repair">MaintenanceForm_Action="Repair"</Publish>
                     <Publish Property="REINSTALL" Value="ALL">MaintenanceForm_Action="Repair"</Publish>
                     <Publish Event="Reinstall" Value="ALL">MaintenanceForm_Action="Repair"</Publish>
+                    
+                    <Publish Property="SETUPTYPE" Value="Remove">MaintenanceForm_Action="Remove"</Publish>
                     <Publish Property="REMOVE" Value="ALL">MaintenanceForm_Action="Remove"</Publish>
                     <Publish Event="Remove" Value="ALL">MaintenanceForm_Action="Remove"</Publish>
                     <!--                    <Publish Event="NewDialog" Value="[MaintenanceForm_NextArgs]">(MaintenanceForm_Action="Modify") AND (MaintenanceForm_NextArgs&lt;&gt;"")</Publish>-->
@@ -314,6 +319,8 @@ Click Install to start the installation.</Text>
                     Text="[ButtonText_Back]" />
                 <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes"
                     Text="[ButtonText_Next]">
+                    <Publish Property="SETUPTYPE" Value="Setup">NOT Installed</Publish>
+                    <Publish Property="SETUPTYPE" Value="Maintenance">Installed</Publish>
                     <Publish Event="EndDialog" Value="Return">WelcomeForm_NextArgs=""</Publish>
                     <Publish Event="NewDialog" Value="[WelcomeForm_NextArgs]">(NOT Installed) AND (WelcomeForm_NextArgs&lt;&gt;"")</Publish>
                     <Publish Event="NewDialog" Value="[WelcomeForm_InstalledNextArgs]">Installed AND (WelcomeForm_InstalledNextArgs&lt;&gt;"")</Publish>
@@ -443,69 +450,6 @@ Click Install to start the installation.</Text>
                 </Control>
                 <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="374" Height="0" />
             </Dialog>
-            <Dialog Id="SelectVirtDirDialog" Width="370" Height="270" Title="[Setup] - [ProductName]"
-                NoMinimize="yes" TrackDiskSpace="yes">
-                <Control Id="VDirLabel" Type="Text" X="18" Y="114" Width="348" Height="12" TabSkip="no">
-                    <Text>&amp;Virtual directory:</Text>
-                </Control>
-                <Control Id="VDirEdit" Type="Edit" X="18" Y="126" Width="252" Height="18" Property="TARGETVDIR"
-                    Sunken="yes" />
-                <Control Id="PortLabel" Type="Text" X="18" Y="150" Width="348" Height="12" TabSkip="no">
-                    <Text>&amp;Port:</Text>
-                </Control>
-                <Control Id="PortEdit" Type="Edit" X="18" Y="162" Width="48" Height="18" Property="TARGETPORT"
-                    Sunken="yes" />
-                <Control Id="Logo" Type="Text" X="4" Y="228" Width="44" Height="12" Disabled="yes" Text="[LogoText]" />
-                <Control Id="BottomLine" Type="Line" X="4" Y="234" Width="370" Height="0" />
-                <Control Id="OKButton" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes"
-                    Text="[ButtonText_OK]">
-                    <Publish Event="DoAction" Value="WEBCA_CreateURLs">1</Publish>
-                    <Publish Event="DoAction" Value="WEBCA_EvaluateURLsMB">1</Publish>
-                    <Publish Event="SetTargetPath" Value="[_BrowseProperty]">1</Publish>
-                    <Publish Event="EndDialog" Value="Return">1</Publish>
-                </Control>
-                <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes"
-                    Text="[ButtonText_Cancel]">
-                    <Publish Event="Reset" Value="{}">1</Publish>
-                    <Publish Event="EndDialog" Value="Return">1</Publish>
-                </Control>
-                <Control Id="ComboLabel" Type="Text" X="25" Y="58" Width="44" Height="10" Text="&amp;Look in:" />
-                <Control Id="DirectoryCombo" Type="DirectoryCombo" X="70" Y="55" Width="220" Height="80"
-                    Property="_BrowseProperty" Indirect="yes" Removable="yes" Fixed="yes" Remote="yes" RAMDisk="yes"
-                    Floppy="yes" Text="MsiDirectoryCombo">
-                    <Subscribe Event="IgnoreChange" Attribute="IgnoreChange" />
-                    <Condition Action="show">_BrowseProperty&lt;&gt;WebTargetProperty</Condition>
-                    <Condition Action="hide">_BrowseProperty=WebTargetProperty</Condition>
-                </Control>
-                <Control Id="FolderUpButton" Type="PushButton" X="298" Y="55" Width="19" Height="19" ToolTip="Up One Level"
-                    Icon="yes" FixedSize="yes" IconSize="16" Text="[FldUpBtn]">
-                    <Publish Event="DirectoryListUp" Value="{}">1</Publish>
-                    <Condition Action="show">_BrowseProperty&lt;&gt;WebTargetProperty</Condition>
-                    <Condition Action="hide">_BrowseProperty=WebTargetProperty</Condition>
-                </Control>
-                <Control Id="NewFolderButton" Type="PushButton" X="325" Y="55" Width="19" Height="19" ToolTip="Create A New Folder"
-                    Icon="yes" FixedSize="yes" IconSize="16" Text="[FldNewBtn]">
-                    <Publish Event="DirectoryListNew" Value="{}">1</Publish>
-                    <Condition Action="show">_BrowseProperty&lt;&gt;WebTargetProperty</Condition>
-                    <Condition Action="hide">_BrowseProperty=WebTargetProperty</Condition>
-                </Control>
-                <Control Id="FolderList" Type="DirectoryList" X="25" Y="83" Width="320" Height="110" Property="_BrowseProperty"
-                    Sunken="yes" Indirect="yes" Text="MsiDirectoryList">
-                    <Condition Action="show">_BrowseProperty&lt;&gt;WebTargetProperty</Condition>
-                    <Condition Action="hide">_BrowseProperty=WebTargetProperty</Condition>
-                </Control>
-                <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="374" Height="44" FixedSize="yes"
-                    Text="[BannerBitmap]" />
-                <Control Id="BannerTitle" Type="Text" X="18" Y="6" Width="300" Height="11" Transparent="yes"
-                    NoPrefix="yes">
-                    <Text>{\BannerTitle}Change Website Location</Text>
-                </Control>
-                <Control Id="BannerSubTitle" Type="Text" X="32" Y="18" Width="300" Height="12" Transparent="yes"
-                    NoPrefix="yes">
-                    <Text>{\BannerSubTitle}Select the destination folder</Text>
-                </Control>
-                <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="374" Height="0" />
-            </Dialog>
             <Dialog Id="DiskCost" Width="361" Height="192" Title="[ProductName] Disk Space" NoMinimize="yes"
                 TrackDiskSpace="yes">
                 <Control Id="OKButton" Type="PushButton" X="288" Y="165" Width="66" Height="18" Default="yes"
@@ -559,7 +503,6 @@ Click Install to start the installation.</Text>
                 <Control Id="Browse" Type="PushButton" X="290" Y="198" Width="56" Height="17" Text="[ButtonText_Browse]">
                     <Publish Property="_BrowseProperty" Value="SelectionPath">1</Publish>
                     <Publish Event="SelectionBrowse" Value="SelectFolderDialog">_BrowseProperty&lt;&gt;WebTargetProperty</Publish>
-                    <Publish Event="SelectionBrowse" Value="SelectVirtDirDialog">_BrowseProperty=WebTargetProperty</Publish>
                     <Subscribe Event="SelectionPathOn" Attribute="Visible" />
                     <Condition Action="hide">Installed</Condition>
                 </Control>
