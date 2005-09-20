@@ -32,7 +32,7 @@ namespace NSvn.Core.Tests
                     String.Format("svn://localhost:{0}/", PortNumber), 
                     true );
                 string url = this.Client.SingleStatus( this.WcPath ).Entry.Url;
-                Assertion.Assert( url.StartsWith( "svn://localhost" ) );
+                Assert.IsTrue( url.StartsWith( "svn://localhost" ) );
             }
             finally
             {

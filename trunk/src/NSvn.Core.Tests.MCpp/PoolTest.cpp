@@ -20,18 +20,18 @@ void NSvn::Core::Tests::MCpp::PoolTest::TestAllocateObject()
     Pool* p = new Pool();
     Class* ptr = p->AllocateObject( Class() );
 
-    Assertion::Assert( ptr != 0 );
+	Assert::IsTrue( ptr != 0 );
 
     //deleting the pool should cause cleanup functions to be run
     delete p;
 
-    Assertion::Assert( "Destructor not called", destructorCalled );
+	Assert::IsTrue( destructorCalled, "Destructor not called" );
 }
 
 void NSvn::Core::Tests::MCpp::PoolTest::TestAlloc()
 {
     Pool p;
-    Assertion::Assert( p.Alloc( 100 ) != 0 );
+	Assert::IsTrue( p.Alloc( 100 ) != 0 );
 }
 
 void NSvn::Core::Tests::MCpp::PoolTest::TestPCalloc()
@@ -40,7 +40,7 @@ void NSvn::Core::Tests::MCpp::PoolTest::TestPCalloc()
     char* ptr = static_cast<char*>(p.PCalloc( 100 ) );
 
     for ( int i = 0; i < 100; i++ )
-        Assertion::Assert( ptr[i] == 0 );
+		Assert::IsTrue( ptr[i] == 0 );
 }
 
 

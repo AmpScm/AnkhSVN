@@ -42,36 +42,36 @@ namespace NSvn.Core.Tests
             this.Client.Status( out youngest, unversioned, Revision.Unspecified, 
                 new StatusCallback( this.StatusFunc ), false, false, false, 
                 false );
-            Assertion.AssertEquals( "Wrong text status on " + unversioned, 
-                this.currentStatus.TextStatus, StatusKind.Unversioned );
-            Assertion.AssertEquals( unversioned, this.currentPath );
+            Assert.AreEqual( this.currentStatus.TextStatus, StatusKind.Unversioned, 
+                "Wrong text status on " + unversioned );
+            Assert.AreEqual( unversioned, this.currentPath );
 
             this.Client.Status( out youngest, added,  Revision.Unspecified, 
                 new StatusCallback( this.StatusFunc ), false, false, false, 
                 false );
-            Assertion.AssertEquals( "Wrong text status on " + added, 
-                this.currentStatus.TextStatus, StatusKind.Added );
-            Assertion.AssertEquals( added, this.currentPath );
+            Assert.AreEqual( this.currentStatus.TextStatus, StatusKind.Added, 
+                "Wrong text status on " + added );
+            Assert.AreEqual( added, this.currentPath );
 
             this.Client.Status( out youngest, changed, Revision.Unspecified,
                 new StatusCallback( this.StatusFunc ), false, false, false, 
                 false );
-            Assertion.AssertEquals( "Wrong text status " + changed, 
-                this.currentStatus.TextStatus, StatusKind.Modified );
-            Assertion.AssertEquals( changed, this.currentPath );
+            Assert.AreEqual( this.currentStatus.TextStatus, StatusKind.Modified, 
+                "Wrong text status " + changed );
+            Assert.AreEqual( changed, this.currentPath );
 
             this.Client.Status( out youngest, propChange, Revision.Unspecified,
                 new StatusCallback( this.StatusFunc ), false, false, false, 
                 false );
-            Assertion.AssertEquals( "Wrong property status " + propChange, 
-                this.currentStatus.PropertyStatus, StatusKind.Modified );
-            Assertion.AssertEquals( propChange, this.currentPath );
+            Assert.AreEqual( this.currentStatus.PropertyStatus, StatusKind.Modified, 
+                "Wrong property status " + propChange );
+            Assert.AreEqual( propChange, this.currentPath );
 
             this.Client.Status( out youngest, ignored, Revision.Unspecified, 
                 new StatusCallback( this.StatusFunc ), false, false, false, 
                 false );
-            Assertion.AssertEquals( "Wrong property status " + ignored,
-                StatusKind.Ignored, this.currentStatus.TextStatus );
+            Assert.AreEqual( StatusKind.Ignored, this.currentStatus.TextStatus,
+                "Wrong property status " + ignored );
         }
         
 
@@ -120,8 +120,8 @@ namespace NSvn.Core.Tests
                     form, Revision.Head, new StatusCallback( this.StatusFunc ),
                     false, false, true, true );
 
-                Assertion.AssertEquals( "Wrong status", 
-                    this.currentStatus.RepositoryTextStatus, StatusKind.Modified );
+                Assert.AreEqual( this.currentStatus.RepositoryTextStatus, 
+                    StatusKind.Modified, "Wrong status" );
             }
             finally
             {
@@ -196,23 +196,23 @@ namespace NSvn.Core.Tests
             string form = Path.Combine( this.WcPath, "Form.cs" );
             Status status1 = this.Client.SingleStatus( form );
             Status status2 = this.Client.SingleStatus( form );
-            Assertion.AssertEquals( "Should be equal", status1, status2 );
-            Assertion.AssertEquals( "Should be equal", status1.Entry, status2.Entry );
+            Assert.AreEqual( status1, status2 );
+            Assert.AreEqual( status1.Entry, status2.Entry );
 
             using( StreamWriter w = new StreamWriter( form, true ) )
                 w.WriteLine( "Moo" );
 
             status2 = this.Client.SingleStatus( form );
-            Assertion.Assert( "Should be non-equal", !status1.Equals( status2 ) );
-            Assertion.AssertEquals( "Should be equal", status1.Entry, status2.Entry );
+            Assert.IsTrue( !status1.Equals( status2 ), "Should be non-equal" );
+            Assert.AreEqual( status1.Entry, status2.Entry );
 
             // unversioned items have no .Entry
             string unversioned = Path.Combine( this.WcPath, "Unversioned.txt" );
             using( StreamWriter w = new StreamWriter( unversioned, false ) )
                 w.WriteLine( "Moo" );
             status2 = this.Client.SingleStatus( unversioned );
-            Assertion.AssertNull( ".Entry should be null", status2.Entry );
-            Assertion.Assert( "Should not be similar", !status2.Equals( status1 ) );
+            Assert.IsNull( status2.Entry, "Entry should be null" );
+            Assert.IsTrue( !status2.Equals( status1 ), "Should not be similar" );
         }
 
         [Test]
@@ -298,18 +298,18 @@ namespace NSvn.Core.Tests
 
                 Match match = INFO.Match(this.output);
 
-                Assertion.AssertEquals( "Url differs", match.Groups["url"].Value, entry.Url );
-                Assertion.AssertEquals( "Name differs", match.Groups["name"].Value, entry.Name );
-                Assertion.AssertEquals( "Revision differs", 
-                    int.Parse(match.Groups["revision"].Value), entry.Revision );
-                Assertion.AssertEquals( "Node kind differs", 
-                    match.Groups["nodekind"].Value.ToLower(), entry.Kind.ToString().ToLower() );
-                Assertion.AssertEquals( "Repository UUID differs", 
-                    match.Groups["reposuuid"].Value, entry.Uuid );
-                Assertion.AssertEquals( "Schedule differs",
-                    match.Groups["schedule"].Value.ToLower(), entry.Schedule.ToString().ToLower() );
-                Assertion.AssertEquals( "Last changed author differs", 
-                    match.Groups["lastchangedauthor"].Value, entry.CommitAuthor );
+                Assert.AreEqual( match.Groups["url"].Value, entry.Url, "Url differs" );
+                Assert.AreEqual( match.Groups["name"].Value, entry.Name, "Name differs" );
+                Assert.AreEqual( int.Parse(match.Groups["revision"].Value), entry.Revision, 
+                    "Revision differs" );
+                Assert.AreEqual( match.Groups["nodekind"].Value.ToLower(), entry.Kind.ToString().ToLower(), 
+                    "Node kind differs" );
+                Assert.AreEqual( match.Groups["reposuuid"].Value, entry.Uuid, 
+                    "Repository UUID differs" );
+                Assert.AreEqual( match.Groups["schedule"].Value.ToLower(), entry.Schedule.ToString().ToLower(),
+                    "Schedule differs" );
+                Assert.AreEqual( match.Groups["lastchangedauthor"].Value, entry.CommitAuthor, 
+                    "Last changed author differs" );
                 Assert.AreEqual( match.Groups["locktoken"].Value, entry.LockToken, "Lock token differs" );
                 Assert.AreEqual( match.Groups["lockowner"].Value, entry.LockOwner, "Lock owner differs" );
             }

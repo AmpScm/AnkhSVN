@@ -38,7 +38,7 @@ namespace NSvn.Core.Tests
 
             this.Client.Resolved( filePath, false );
  
-            Assertion.AssertEquals(" Resolve didn't work!", 'M', this.GetSvnStatus( filePath ) );
+            Assert.AreEqual('M', this.GetSvnStatus( filePath ), "Resolve didn't work!" );
 
         }
    
@@ -50,10 +50,10 @@ namespace NSvn.Core.Tests
         {  
             this.Client.Resolved( this.path, true );
  
-            Assertion.AssertEquals(" Resolve didn't work! Directory still conflicted", 'M', 
-                this.GetSvnStatus( this.path ) );
-            Assertion.AssertEquals( "Resolve didn't work! File still conflicted", 'M', 
-                this.GetSvnStatus( Path.Combine( this.path, "Form.cs" ) ) ); 
+            Assert.AreEqual( 'M', this.GetSvnStatus( this.path ),
+                " Resolve didn't work! Directory still conflicted" );
+            Assert.AreEqual( 'M', this.GetSvnStatus( Path.Combine( this.path, "Form.cs" ) ),
+                "Resolve didn't work! File still conflicted" ); 
 
         }
     

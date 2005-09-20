@@ -32,8 +32,8 @@ namespace NSvn.Core.Tests
            
             CommitInfo info = this.Client.Copy( srcPath, Revision.Head, dstPath ); 
 
-            Assertion.Assert( " File wasn't copied ", File.Exists( dstPath ) );
-            Assertion.Assert( " Source File don't exists ", File.Exists( srcPath ) );
+            Assert.IsTrue( File.Exists( dstPath ), "File wasn't copied" );
+            Assert.IsTrue( File.Exists( srcPath ), "Source File don't exists" );
 
         }
 
@@ -48,8 +48,8 @@ namespace NSvn.Core.Tests
 
             CommitInfo info = this.Client.Copy( srcPath, Revision.Head, dstPath ); 
 
-            Assertion.Assert( "Directory don't exist ", Directory.Exists( dstPath ) );
-            Assertion.AssertEquals( " Status is not 'A'  ", 'A', this.GetSvnStatus( dstPath) );
+            Assert.IsTrue( Directory.Exists( dstPath ), "Directory don't exist " );
+            Assert.AreEqual( 'A', this.GetSvnStatus( dstPath), " Status is not 'A'  " );
         }
 
         /// <summary>
@@ -63,9 +63,9 @@ namespace NSvn.Core.Tests
            
             CommitInfo info = this.Client.Copy( srcPath, Revision.Head, dstPath ); 
 
-            Assertion.Assert( " Directory don't exist ", !Directory.Exists( dstPath ) );
+            Assert.IsTrue( !Directory.Exists( dstPath ), "Directory don't exist" );
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-            Assertion.Assert( " File wasn't copied ", cmd.IndexOf( "copyDebug" ) >= 0 );
+            Assert.IsTrue( cmd.IndexOf( "copyDebug" ) >= 0, "File wasn't copied" );
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace NSvn.Core.Tests
            
             CommitInfo info = this.Client.Copy( srcPath, Revision.Head, dstPath ); 
 
-            Assertion.AssertEquals( " File is not copied  ", 'A', this.GetSvnStatus( dstPath) );
+            Assert.AreEqual( 'A', this.GetSvnStatus( dstPath), " File is not copied  " );
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace NSvn.Core.Tests
             CommitInfo info = this.Client.Copy( srcPath, Revision.Head, dstPath ); 
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-            Assertion.Assert( " File wasn't copied ", cmd.IndexOf( "Form.cs" ) >= 0 );
-            Assertion.Assert( " Copied file doens't exist ", cmd.IndexOf( "copyForm" ) >= 0 );
+            Assert.IsTrue( cmd.IndexOf( "Form.cs" ) >= 0, "File wasn't copied" );
+            Assert.IsTrue( cmd.IndexOf( "copyForm" ) >= 0, "Copied file doens't exist" );
         }
     }
 }

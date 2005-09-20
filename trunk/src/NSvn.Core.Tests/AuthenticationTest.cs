@@ -106,12 +106,12 @@ namespace NSvn.Core.Tests
             {
                 DirectoryEntry[] entries = 
                     this.Client.List( SSLTESTREPOS, Revision.Head, false );
-                Assertion.Fail( "Client.List should have thrown an exception" ); 
+                Assert.Fail( "Client.List should have thrown an exception" ); 
             }
             catch( SvnClientException )
             {}
 
-            Assertion.Assert( "Callback not called", this.callbackCalled );
+            Assert.IsTrue( this.callbackCalled, "Callback not called" );
         }
 
         /// <summary>
@@ -126,8 +126,8 @@ namespace NSvn.Core.Tests
             DirectoryEntry[] entries = 
                 this.Client.List( SSLTESTREPOS, Revision.Head, false );
            
-            Assertion.Assert( "No entries returned", entries.Length > 0 );
-            Assertion.Assert( "Callback not called", this.callbackCalled );
+            Assert.IsTrue( entries.Length > 0, "No entries returned" );
+            Assert.IsTrue( this.callbackCalled, "Callback not called" );
         }
 
         [Test]
@@ -152,7 +152,7 @@ namespace NSvn.Core.Tests
             // now try to get them to take it from the config dir
             DirectoryEntry[] entries = this.Client.List( SSLTESTREPOS,
                 Revision.Head, false );
-            Assertion.Assert( "No entries returned", entries.Length > 0 );        
+            Assert.IsTrue( entries.Length > 0, "No entries returned" );
 
             
         }
@@ -168,10 +168,10 @@ namespace NSvn.Core.Tests
         SslServerTrustCredential SslServerTrustAcceptCallback( string realm,
             SslFailures failures, SslServerCertificateInfo info, bool maySave )
         {
-            Assertion.Assert( "Certificate authority should have been unknown", 
-                (failures & SslFailures.CertificateAuthorityUnknown) != 0 );
-            Assertion.Assert( "There should have been a mismatch.", 
-                (failures & SslFailures.CertificateNameMismatch) != 0 );
+            Assert.IsTrue( (failures & SslFailures.CertificateAuthorityUnknown) != 0,
+                "Certificate authority should have been unknown" );
+            Assert.IsTrue( (failures & SslFailures.CertificateNameMismatch) != 0,
+                "There should have been a mismatch." );
 
             SslServerTrustCredential cred = new SslServerTrustCredential();
             cred.AcceptedFailures = this.acceptedFailures;

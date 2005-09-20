@@ -19,8 +19,8 @@ void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestSingleProvider()
     HandleError( svn_auth_first_credentials( ((void**)&creds), &iterstate, SVN_AUTH_CRED_SIMPLE, 
         "Realm", baton->GetAuthBaton(), pool ) );
 
-    Assertion::AssertEquals( "Username not correct", S"Arild", Utf8ToString( creds->username , pool ) );
-    Assertion::AssertEquals( "Password not correct", S"Fines", Utf8ToString( creds->password , pool ) );
+    Assert::AreEqual( S"Arild", Utf8ToString( creds->username , pool ), "Username not correct" );
+    Assert::AreEqual( S"Fines", Utf8ToString( creds->password , pool ), "Password not correct" );
 
 }
 
@@ -30,7 +30,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestParams()
 
     baton->SetParameter( "Foo", "Bar" );
     
-    Assertion::AssertEquals( "Param not same", S"Bar", baton->GetParameter( "Foo" ) );
+    Assert::AreEqual( S"Bar", baton->GetParameter( "Foo" ), "Param not same" );
 }
 
 void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestDefaultUsernameAndPassword()
@@ -54,16 +54,16 @@ void NSvn::Core::Tests::MCpp::AuthenticationBatonTest::TestDefaultUsernameAndPas
     HandleError( svn_auth_first_credentials( ((void**)&creds), &iterstate, SVN_AUTH_CRED_SIMPLE, 
         "Realm", baton->GetAuthBaton(), pool ) );
 
-    Assertion::AssertEquals( "Username not correct", S"Humpty", Utf8ToString( creds->username, pool ) );
-    Assertion::AssertEquals( "Password not correct", S"Dumpty", Utf8ToString( creds->password, pool ) );
+    Assert::AreEqual( S"Humpty", Utf8ToString( creds->username, pool ), "Username not correct" );
+    Assert::AreEqual( S"Dumpty", Utf8ToString( creds->password, pool ), "Password not correct" );
 
 }
 
 NSvn::Core::SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationBatonTest::SimplePrompt( 
     String* realm, String* username, bool maySave )
 {
-    Assertion::AssertEquals( "Realm string is wrong", S"Realm", realm );
-    Assertion::AssertEquals( "Username is wrong", Environment::UserName, username );
+    Assert::AreEqual( S"Realm", realm, "Realm string is wrong" );
+    Assert::AreEqual( Environment::UserName, username, "Username is wrong" );
 
     return new SimpleCredential( S"Arild", S"Fines", false );
 }

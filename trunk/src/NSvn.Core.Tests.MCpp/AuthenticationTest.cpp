@@ -48,8 +48,8 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
     HandleError( svn_auth_first_credentials( ((void**)&creds), &iterstate, SVN_AUTH_CRED_SIMPLE, 
         "Realm", authBaton, pool ) );
 
-    Assertion::AssertEquals( "Username not correct", S"Arild", Utf8ToString( creds->username, pool ) );
-    Assertion::AssertEquals( "Password not correct", S"Fines", Utf8ToString( creds->password, pool ) );
+    Assert::AreEqual( S"Arild", Utf8ToString( creds->username, pool ), "Username not correct" );
+    Assert::AreEqual( S"Fines", Utf8ToString( creds->password, pool ), "Password not correct" );
 
 
     obj = AuthenticationProvider::GetSimplePromptProvider( 
@@ -59,7 +59,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSimplePromptProvider()
     HandleError( svn_auth_first_credentials( ((void**)&creds), &iterstate, SVN_AUTH_CRED_SIMPLE,
         "Realm", authBaton, pool ) );
 
-    Assertion::Assert( "Creds should be null", creds==0 );
+    Assert::IsTrue( creds==0, "Creds should be 0" );
 }
 
 void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetUsernameProvider()
@@ -90,10 +90,10 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetUsernameProvider()
         "Realm", authBaton, pool ) );
 
     if ( credsUnmanaged && credsUnmanaged )
-        Assertion::AssertEquals( "Usernames different", Utf8ToString(credsUnmanaged->username, pool), 
-            Utf8ToString(credsManaged->username, pool) );  
+        Assert::AreEqual( Utf8ToString(credsUnmanaged->username, pool), 
+            Utf8ToString(credsManaged->username, pool), "Usernames different" );
     else if ( (credsManaged != 0) ^ (credsUnmanaged != 0) )
-        Assertion::Fail( "Credentials are different" );
+        Assert::Fail( "Credentials are different" );
 
 }
 
@@ -148,7 +148,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPromptProv
         SVN_AUTH_CRED_SSL_CLIENT_CERT,
         "Realm", baton, pool ) );
 
-    Assertion::Assert( "Cred is null", cred != 0 );
+    Assert::IsTrue( cred != 0, "Cred is 0" );
 
     // try a null
     provider = AuthenticationProvider::GetSslClientCertPromptProvider(
@@ -159,7 +159,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPromptProv
         SVN_AUTH_CRED_SSL_CLIENT_CERT,
         "Realm", baton, pool ) );
     
-    Assertion::Assert( "cred should be null", cred == 0 );
+    Assert::IsTrue( cred == 0, "cred should be 0" );
 
 }
 
@@ -181,7 +181,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordPr
         SVN_AUTH_CRED_SSL_CLIENT_CERT_PW,
         "Realm", baton, pool ) );
 
-    Assertion::Assert( "Cred is null", cred != 0 );
+    Assert::IsTrue( cred != 0, "Cred is 0" );
 
     // try a null
     provider = AuthenticationProvider::GetSslClientCertPasswordPromptProvider(
@@ -192,7 +192,7 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordPr
         SVN_AUTH_CRED_SSL_CLIENT_CERT_PW,
         "Realm", baton, pool ) );
     
-    Assertion::Assert( "cred should be null", cred == 0 );
+    Assert::IsTrue( cred == 0, "cred should be 0" );
 
 }
 
@@ -200,8 +200,8 @@ void NSvn::Core::Tests::MCpp::AuthenticationTest::TestGetSslClientCertPasswordPr
 SimpleCredential* NSvn::Core::Tests::MCpp::AuthenticationTest::SimplePrompt( 
     String* realm, String* username, bool maySave )
 {
-    Assertion::AssertEquals( "Realm string is wrong", S"Realm", realm );
-    Assertion::AssertEquals( "Username is wrong", Environment::UserName, username );
+    Assert::AreEqual( S"Realm", realm, "Realm string is wrong" );
+    Assert::AreEqual( Environment::UserName, username, "Username is wrong" );
 
     return new SimpleCredential( S"Arild", S"Fines", false );
 }

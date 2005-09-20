@@ -30,7 +30,7 @@ void NSvn::Core::Tests::MCpp::AprFileAdapterTest::TestBasic()
 
     String* from = Encoding::Default->GetString( memStream->ToArray() );
 
-    Assertion::AssertEquals( "Written string is not equal", to, from );
+    Assert::AreEqual( to, from, "Written string is not equal" );
 
 
 }
