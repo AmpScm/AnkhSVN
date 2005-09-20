@@ -4,8 +4,7 @@
 #include <svn_config.h>
 #include "ClientConfigTest.h"
 #include "../NSvn.Core/ClientConfig.h"
-
-
+#include "../NSvn.Core/utils.h"
 
 struct svn_config_t
 {};
@@ -35,7 +34,9 @@ void NSvn::Core::Tests::MCpp::ClientConfigTest::TestGetHash()
     const char* val;
     svn_config_get( cfg, &val, "FooSection", "BarOption", "" );
 
-    Assertion::AssertEquals( S"Not the same", S"Baz", StringHelper(val) );
+    Pool pool;
+
+    Assertion::AssertEquals( S"Not the same", S"Baz", Utf8ToString(val, pool) );
 }
 
 
