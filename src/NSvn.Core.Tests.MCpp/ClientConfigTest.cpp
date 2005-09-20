@@ -15,7 +15,7 @@ void NSvn::Core::Tests::MCpp::ClientConfigTest::TestBasic()
     
     config->Set( S"FooSection", S"BarOption", S"Baz" );
 
-    Assertion::AssertEquals( "Not the same", S"Baz", config->Get( S"FooSection", S"BarOption", "" ) );
+    Assert::AreEqual( S"Baz", config->Get( S"FooSection", S"BarOption", "" ), "Not the same" );
 }
 
 
@@ -36,7 +36,7 @@ void NSvn::Core::Tests::MCpp::ClientConfigTest::TestGetHash()
 
     Pool pool;
 
-    Assertion::AssertEquals( S"Not the same", S"Baz", Utf8ToString(val, pool) );
+    Assert::AreEqual( S"Baz", Utf8ToString(val, pool), S"Not the same" );
 }
 
 
