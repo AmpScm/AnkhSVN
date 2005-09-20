@@ -245,6 +245,9 @@ copy &quot;..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb&quot; &quot;$
 				RelativePath=".\AuthenticationTest.cpp">
 			</File>
 			<File
+				RelativePath=".\ClientConfigTest.cpp">
+			</File>
+			<File
 				RelativePath="ClientContextTest.cpp">
 			</File>
 			<File
@@ -298,6 +301,9 @@ copy &quot;..\NSvn.Common\bin\$(ConfigurationName)\NSvn.Common.pdb&quot; &quot;$
 			</File>
 			<File
 				RelativePath=".\AuthenticationTest.h">
+			</File>
+			<File
+				RelativePath=".\ClientConfigTest.h">
 			</File>
 			<File
 				RelativePath="ClientContextTest.h">
