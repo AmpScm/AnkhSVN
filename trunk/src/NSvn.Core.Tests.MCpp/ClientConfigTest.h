@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#using <nunit.framework.dll>
 
 namespace NSvn
 {
