@@ -30,7 +30,7 @@ namespace NSvn.Core.Tests
             string checkFile = Path.Combine( this.WcPath, "text_r5.txt" );
 
             this.Client.Switch( this.WcPath, switchUrl, Revision.Head, true );
-            Assertion.Assert( " Didn't switch to repos/doc", File.Exists( checkFile ) );
+            Assert.IsTrue( File.Exists( checkFile ), "Didn't switch to repos/doc" );
 
         }
         private string path;

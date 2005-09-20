@@ -38,7 +38,7 @@ namespace NSvn.Core.Tests
             this.Client.Merge( srcPath, Revision.FromNumber(5) , srcPath, Revision.FromNumber(4) ,
                 dstPath, true, true, false, false ); 
 
-            Assertion.AssertEquals( "Wrong status", 'D', this.GetSvnStatus( comparePath ) );
+            Assert.AreEqual( 'D', this.GetSvnStatus( comparePath ), "Wrong status" );
        
         }
 

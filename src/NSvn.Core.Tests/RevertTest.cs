@@ -33,7 +33,7 @@ namespace NSvn.Core.Tests
             this.ModifyFile( out oldContents, out newContents, filePath, filePath, false );
 
 
-            Assertion.AssertEquals( "File not reverted", oldContents, newContents );
+            Assert.AreEqual( oldContents, newContents, "File not reverted" );
 
         }  
  
@@ -48,7 +48,7 @@ namespace NSvn.Core.Tests
             this.ModifyFile( out oldContents, out newContents, Path.Combine( this.WcPath, "Form.cs" ), 
                 this.WcPath, true );
 
-            Assertion.AssertEquals( "File not reverted", oldContents, newContents );
+            Assert.AreEqual( oldContents, newContents, "File not reverted" );
 
         }
 

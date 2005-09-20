@@ -11,7 +11,7 @@ namespace
     void voidFunc( void* ptr )
     {
         String* string = *(static_cast<NSvn::Core::ManagedPointer<String*>* >( ptr ) );
-        Assertion::AssertEquals( string, S"Moo world" );
+        Assert::AreEqual( string, S"Moo world" );
     }
 }
 
@@ -21,7 +21,7 @@ void NSvn::Core::Tests::MCpp::ManagedPointerTest::TestBasic()
     ManagedPointer<String*> ptr( str );
 
     //check that the implicit conversion works
-    Assertion::AssertEquals( ptr, S"Moo world" );
+    Assert::AreEqual( ptr, S"Moo world" );
 
     //implicitly convert to void*
     voidFunc( ptr );
@@ -34,8 +34,8 @@ void NSvn::Core::Tests::MCpp::ManagedPointerTest::TestAssignment()
     ManagedPointer<String*> ptr2( S"Bleh" );
 
     ptr2 = ptr1;
-    Assertion::AssertEquals( ptr1, ptr2 );
-    Assertion::AssertEquals( ptr2, S"Moo world" );
+    Assert::AreEqual( ptr1, ptr2 );
+    Assert::AreEqual( ptr2, S"Moo world" );
 }
 
 void NSvn::Core::Tests::MCpp::ManagedPointerTest::TestCopying()
@@ -44,5 +44,5 @@ void NSvn::Core::Tests::MCpp::ManagedPointerTest::TestCopying()
     ManagedPointer<String*> ptr1( str );
     ManagedPointer<String*> ptr2( ptr1 );
 
-    Assertion::AssertEquals( ptr1, ptr2 );
+    Assert::AreEqual( ptr1, ptr2 );
 }

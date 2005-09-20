@@ -99,11 +99,11 @@ namespace NSvn.Core.Tests
             this.logMessage = "Moo ";
             CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
 
-            Assertion.AssertEquals( "Wrong username", Environment.UserName, info.Author );
+            Assert.AreEqual( Environment.UserName, info.Author, "Wrong username" );
             string output = this.RunCommand( "svn", "log " + this.filepath + " -r HEAD" );
             
-            Assertion.Assert( "Log message not set", 
-                output.IndexOf( this.logMessage ) >= 0 );
+            Assert.IsTrue( output.IndexOf( this.logMessage ) >= 0, 
+                "Log message not set" );
 
         } 
 
@@ -145,10 +145,8 @@ namespace NSvn.Core.Tests
                 "info should be Invalid for a cancelled commit" );
 
             string output = this.RunCommand( "svn", "st " + this.WcPath ).Trim();
-            Assertion.AssertEquals( "File committed even for a cancelled log message", 'M', 
-                output[0] );        
-   
-
+            Assert.AreEqual( 'M', output[0], 
+                "File committed even for a cancelled log message" );
         }
 
         [Test]
@@ -165,11 +163,11 @@ namespace NSvn.Core.Tests
 
         private void LogMessageCallback( object sender, LogMessageEventArgs args )
         {
-            Assertion.AssertEquals( "Wrong number of commit items", 1, args.CommitItems.Length );
-            Assertion.Assert( "Wrong path", args.CommitItems[0].Path.IndexOf( 
-                this.filepath ) >= 0 );
-            Assertion.AssertEquals( "Wrong kind", NodeKind.File, args.CommitItems[0].Kind );
-            Assertion.AssertEquals( "Wrong revision", 6, args.CommitItems[0].Revision );
+            Assert.AreEqual( 1, args.CommitItems.Length, "Wrong number of commit items" );
+            Assert.AreEqual( args.CommitItems[0].Path.IndexOf( this.filepath ) >= 0,
+                "Wrong path");
+            Assert.AreEqual( NodeKind.File, args.CommitItems[0].Kind, "Wrong kind" );
+            Assert.AreEqual( 6, args.CommitItems[0].Revision, "Wrong revision" );
 
             args.Message = this.logMessage;
         }

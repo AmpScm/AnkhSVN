@@ -42,7 +42,7 @@ namespace NSvn.Core.Tests
             CommitInfo info = Client.Import( truePath, trueDstUrl, true );
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-            Assertion.Assert( "File wasn't imported ", cmd.IndexOf( "testfile.txt" ) >= 0 );		   
+            Assert.IsTrue( cmd.IndexOf( "testfile.txt" ) >= 0, "File wasn't imported " );
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace NSvn.Core.Tests
             CommitInfo info = this.Client.Import( dir1, trueDstUrl, false );
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-            Assertion.Assert( "File wasn't imported ", cmd.IndexOf( "newDir2" ) >= 0 );		   
+            Assert.IsTrue( cmd.IndexOf( "newDir2" ) >= 0, "File wasn't imported" );
       
         }
 

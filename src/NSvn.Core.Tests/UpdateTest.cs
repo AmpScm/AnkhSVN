@@ -40,7 +40,7 @@ namespace NSvn.Core.Tests
             File.Delete( filePath );
             this.Client.Update( this.WcPath, Revision.Head, true );
 
-            Assertion.Assert( "File not restored after update", File.Exists( filePath ) );
+            Assert.IsTrue( File.Exists( filePath ), "File not restored after update" );
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace NSvn.Core.Tests
             using( StreamReader r = new StreamReader( Path.Combine( this.WcPath, "Form.cs" ) ) )
                 s = r.ReadToEnd();
 
-            Assertion.AssertEquals( "File not updated", "Moo", s );
+            Assert.AreEqual( "Moo", s, "File not updated" );
         }
 
         [Test]
@@ -81,11 +81,11 @@ namespace NSvn.Core.Tests
             string s;
             using( StreamReader r = new StreamReader( Path.Combine( this.WcPath, "Form.cs" ) ) )
                 s = r.ReadToEnd();
-            Assertion.AssertEquals( "File not updated", "Moo", s );
+            Assert.AreEqual( "Moo", s, "File not updated" );
 
             using( StreamReader r = new StreamReader( Path.Combine( this.WcPath, "AssemblyInfo.cs" ) ) )
                 s = r.ReadToEnd();
-            Assertion.AssertEquals( "File not updated", "Moo", s );
+            Assert.AreEqual( "Moo", s, "File not updated" );
         }
 
         private string wc2;

@@ -16,29 +16,29 @@ namespace NSvn.Core.Tests
         public void TestToString()
         {
             Revision revision = Revision.Base;
-            Assertion.AssertEquals( "Base", revision.ToString() );
+            Assert.AreEqual( "Base", revision.ToString() );
 
             revision = Revision.Committed;
-            Assertion.AssertEquals( "Committed", revision.ToString() );
+            Assert.AreEqual( "Committed", revision.ToString() );
 
             revision = Revision.Head;
-            Assertion.AssertEquals( "Head", revision.ToString() );
+            Assert.AreEqual( "Head", revision.ToString() );
 
             revision = Revision.Previous;
-            Assertion.AssertEquals( "Previous", revision.ToString() );
+            Assert.AreEqual( "Previous", revision.ToString() );
 
             revision = Revision.Unspecified;
-            Assertion.AssertEquals( "Unspecified", revision.ToString() );
+            Assert.AreEqual( "Unspecified", revision.ToString() );
 
             revision = Revision.Working;
-            Assertion.AssertEquals( "Working", revision.ToString() );
+            Assert.AreEqual( "Working", revision.ToString() );
 
             DateTime t = DateTime.Now;
             revision = Revision.FromDate( t );
-            Assertion.AssertEquals( t.ToString(), revision.ToString() );
+            Assert.AreEqual( t.ToString(), revision.ToString() );
 
             revision = Revision.FromNumber( 42 );
-            Assertion.AssertEquals( "42", revision.ToString() );
+            Assert.AreEqual( "42", revision.ToString() );
         }
 
         /// <summary>
@@ -54,16 +54,16 @@ namespace NSvn.Core.Tests
             this.DoTestParse( "base", Revision.Base );
             this.DoTestParse( "previous", Revision.Previous );
 
-            Assertion.AssertEquals( "42", Revision.Parse("42").ToString() );
+            Assert.AreEqual( "42", Revision.Parse("42").ToString() );
 
             DateTime t = DateTime.Now;
-            Assertion.AssertEquals( t.ToString(), Revision.Parse(t.ToString()).ToString() );
+            Assert.AreEqual( t.ToString(), Revision.Parse(t.ToString()).ToString() );
 
             // this should throw
             try
             {
                 DateTime.Parse( "Foo" );
-                Assertion.Fail( "Foo is not a valid revision" );
+                Assert.Fail( "Foo is not a valid revision" );
             }
             catch( FormatException )
             {}
@@ -102,7 +102,7 @@ namespace NSvn.Core.Tests
 
         private void DoTestParse( string s, Revision rev )
         {
-            Assertion.AssertEquals( Revision.Parse(s), rev );
+            Assert.AreEqual( Revision.Parse(s), rev );
         }
 	}
 }

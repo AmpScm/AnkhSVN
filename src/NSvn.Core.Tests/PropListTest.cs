@@ -30,13 +30,14 @@ namespace NSvn.Core.Tests
             PropListItem[] items = this.Client.PropList( this.WcPath, Revision.Working,
                 false );
 
-            Assertion.AssertEquals( "Wrong number of proplist items", 1, items.Length );
-            Assertion.AssertEquals( "Wrong number of properties", 2, 
-                items[0].Properties.Count );
-            Assertion.AssertEquals( "Wrong property", "bar", 
-                items[0].Properties["foo"].ToString() );
-            Assertion.AssertEquals( "Wrong property", "foo", 
-                items[0].Properties["kung"].ToString() );
+            Assert.AreEqual( 1, items.Length, 
+                "Wrong number of proplist items" );
+            Assert.AreEqual( 2, items[0].Properties.Count,
+                "Wrong number of properties" );
+            Assert.AreEqual( "bar", items[0].Properties["foo"].ToString(),
+                "Wrong property" );
+            Assert.AreEqual( "foo", items[0].Properties["kung"].ToString(),
+                "Wrong property" );
         }
     }
 }

@@ -33,8 +33,8 @@ namespace NSvn.Core.Tests
 
             this.Client.Cleanup( this.WcPath );
 
-            Assertion.Assert( "lock file still in place after running Client::Cleanup",
-                !File.Exists( lockPath ) );
+            Assert.IsTrue( !File.Exists( lockPath ),
+                "lock file still in place after running Client::Cleanup" );
         }
 		
     }

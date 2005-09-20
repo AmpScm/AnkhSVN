@@ -34,9 +34,9 @@ namespace NSvn.Core.Tests
             PropertyDictionary dict = this.Client.RevPropList( this.ReposUrl, Revision.Head, 
                 out rev );
 
-            Assertion.AssertEquals( "Revision wrong", headRev, rev );
-            Assertion.AssertEquals( "Wrong property value", "bar", dict["foo"].ToString() );
-            Assertion.AssertEquals( "Wrong property value", "foo", dict["kung"].ToString() );
+            Assert.AreEqual( headRev, rev, "Revision wrong" );
+            Assert.AreEqual( "bar", dict["foo"].ToString(), "Wrong property value" );
+            Assert.AreEqual( "foo", dict["kung"].ToString(), "Wrong property value" );
         }
     }
 }

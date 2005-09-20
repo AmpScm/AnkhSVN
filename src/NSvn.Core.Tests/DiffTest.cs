@@ -41,10 +41,9 @@ namespace NSvn.Core.Tests
 
 
             string err = Encoding.Default.GetString( errstream.ToArray() );
-            Assertion.AssertEquals( "Error in diff: " + err, string.Empty, 
-                err );
+            Assert.AreEqual( string.Empty, err, "Error in diff: " + err );
             string apiDiff = Encoding.Default.GetString( outstream.ToArray() );
-            Assertion.AssertEquals( "Client diff differs", clientDiff, apiDiff );
+            Assert.AreEqual( clientDiff, apiDiff, "Client diff differs" );
         }
 
         [Test]
@@ -60,10 +59,10 @@ namespace NSvn.Core.Tests
                 errstream );
 
             string err = Encoding.Default.GetString( errstream.ToArray() );
-            Assertion.AssertEquals( "Error in diff: " + err, string.Empty, err );
+            Assert.AreEqual( string.Empty, err, "Error in diff: " + err );
 
             string apiDiff = Encoding.Default.GetString( outstream.ToArray() );
-            Assertion.AssertEquals( "Diffs differ", clientDiff, apiDiff );
+            Assert.AreEqual( clientDiff, apiDiff, "Diffs differ" );
         }
 
         [Test]

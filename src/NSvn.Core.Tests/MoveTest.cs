@@ -32,8 +32,8 @@ namespace NSvn.Core.Tests
            
             CommitInfo info = this.Client.Move( srcPath, dstPath, false ); 
 
-            Assertion.Assert( " File wasn't moved ", File.Exists( dstPath ) );
-            Assertion.Assert( " Source File still exists ", !File.Exists( srcPath ) );
+            Assert.IsTrue( File.Exists( dstPath ), "File wasn't moved" );
+            Assert.IsTrue( !File.Exists( srcPath ), "Source File still exists" );
 
         }
 
@@ -48,8 +48,8 @@ namespace NSvn.Core.Tests
            
             CommitInfo info = this.Client.Move( srcPath, dstPath, false ); 
 
-            Assertion.Assert( " Directory wasn't moved ", Directory.Exists( dstPath ) );
-            Assertion.AssertEquals( " Status is not 'D'  ", 'D', this.GetSvnStatus( srcPath) );
+            Assert.IsTrue( Directory.Exists( dstPath ), "Directory wasn't moved" );
+            Assert.AreEqual( 'D', this.GetSvnStatus( srcPath), "Status is not 'D'" );
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace NSvn.Core.Tests
             CommitInfo info = this.Client.Move( srcPath, dstPath, false ); 
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-            Assertion.Assert( " File wasn't moved ", cmd.IndexOf( "Form.cs" ) == -1 );
-            Assertion.Assert( " Moved file doens't exist ", cmd.IndexOf( "renamedForm" ) >= 0 );
+            Assert.IsTrue( cmd.IndexOf( "Form.cs" ) == -1, "File wasn't moved" );
+            Assert.IsTrue( cmd.IndexOf( "renamedForm" ) >= 0, "Moved file doens't exist" );
         }
     }
 }

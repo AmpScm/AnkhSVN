@@ -21,12 +21,12 @@ void NSvn::Core::Tests::MCpp::StreamTest::TestWrite()
 
     apr_size_t len = 1000;
     HandleError( svn_stream_write( svnStream, reinterpret_cast<char*>(buf), &len ) );
-    Assertion::AssertEquals( "Not enough bytes written", 1000, len );
+    Assert::AreEqual( 1000, len, "Not enough bytes written" );
 
     Byte memStreamBuf[] = memStream->ToArray();
-    Assertion::AssertEquals( "Returned buffer wrong size", 1000, memStreamBuf->Length );
+    Assert::AreEqual( 1000, memStreamBuf->Length, "Returned buffer wrong size" );
     for( int i = 0; i < 1000; i++ )
-        Assertion::AssertEquals( "Byte not equal: " + i, buf[i], memStreamBuf[i] );
+        Assert::AreEqual( buf[i], memStreamBuf[i], "Byte not equal: " + i );
 
     delete [] buf;
 }
@@ -48,11 +48,11 @@ void NSvn::Core::Tests::MCpp::StreamTest::TestRead()
     unsigned char buf[ 1000 ];
     HandleError( svn_stream_read( svnStream, reinterpret_cast<char*>(buf), &len ) );
 
-    Assertion::AssertEquals( "Returned buffer wrong size", 1000, len );
+    Assert::AreEqual( 1000, len, "Returned buffer wrong size" );
 
     Byte memStreamBuf[] = memStream->ToArray();
     for( int i = 0; i < 1000; i++ )
-        Assertion::AssertEquals( "Byte not equal", buf[i], memStreamBuf[i] );
+        Assert::AreEqual( buf[i], memStreamBuf[i], "Byte not equal" );
 
 
 }
@@ -65,5 +65,5 @@ void NSvn::Core::Tests::MCpp::StreamTest::TestReadFromNullStream()
     apr_size_t len = 1000;
     HandleError( svn_stream_read( stream, buf, &len ) );
 
-    Assertion::AssertEquals( "Should not be able to read from a null stream", 0, len );
+    Assert::AreEqual( 0, len, "Should not be able to read from a null stream" );
 }

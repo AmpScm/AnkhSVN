@@ -42,12 +42,12 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestNotification()
 
     svnCtx->notify_func2( clientBaton, notify, pool );
 
-    Assertion::AssertEquals( this->notification->Path, S"Moo" );
-    Assertion::AssertEquals( this->notification->Action, NotifyAction::Copy );
-    Assertion::AssertEquals( this->notification->NodeKind, NodeKind::File );
-    Assertion::AssertEquals( this->notification->ContentState, NotifyState::Unchanged );
-    Assertion::AssertEquals( this->notification->PropertyState, NotifyState::Changed );
-    Assertion::AssertEquals( this->notification->RevisionNumber, 42 );    
+    Assert::AreEqual( this->notification->Path, S"Moo" );
+    Assert::AreEqual( this->notification->Action, NotifyAction::Copy );
+    Assert::AreEqual( this->notification->NodeKind, NodeKind::File );
+    Assert::AreEqual( this->notification->ContentState, NotifyState::Unchanged );
+    Assert::AreEqual( this->notification->PropertyState, NotifyState::Changed );
+    Assert::AreEqual( this->notification->RevisionNumber, 42 );    
 
 }
 
@@ -94,13 +94,13 @@ struct svn_auth_iterstate_t
 void NSvn::Core::Tests::MCpp::ClientContextTest::OnLogMessage( LogMessageEventArgs* args )
 {
     CommitItem* items[] = args->CommitItems;
-    Assertion::AssertEquals( "Wrong number of items", 2, items->Length );
-    Assertion::AssertEquals( "Wrong path", S"\\foo\\bar", items[0]->Path );
-    Assertion::AssertEquals( "Wrong node kind", NodeKind::Directory, items[1]->Kind );
-    Assertion::AssertEquals( "Wrong revision", 42, items[0]->Revision );
-    Assertion::AssertEquals( "Wrong copy from url", S"http://copy.from.url", 
-        items[1]->CopyFromUrl );
-    Assertion::AssertEquals( "Wrong url", S"http://www.porn.com", items[0]->Url );
+    Assert::AreEqual( 2, items->Length, "Wrong number of items" );
+    Assert::AreEqual( S"\\foo\\bar", items[0]->Path, "Wrong path" );
+    Assert::AreEqual( NodeKind::Directory, items[1]->Kind, "Wrong node kind" );
+    Assert::AreEqual( 42, items[0]->Revision, "Wrong revision" );
+    Assert::AreEqual( S"http://copy.from.url", items[1]->CopyFromUrl,
+        "Wrong copy from url" );
+    Assert::AreEqual( S"http://www.porn.com", items[0]->Url, "Wrong url" );
 
     args->Message = S"Hello world";
 }
@@ -130,7 +130,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestLogMessage()
     ctx->log_msg_func( &logMsg, &tmpFile, commitItems, ctx->log_msg_baton, pool );
 
     // TODO: check encoding?
-    Assertion::AssertEquals( "Log message wrong", S"Hello world", Utf8ToString( logMsg, pool ) );
+    Assert::AreEqual( S"Hello world", Utf8ToString( logMsg, pool ), "Log message wrong" );
 }
 
 void NSvn::Core::Tests::MCpp::ClientContextTest::OnCancel( CancelEventArgs* args )
@@ -146,7 +146,7 @@ void NSvn::Core::Tests::MCpp::ClientContextTest::TestCancel()
     svn_client_ctx_t* ctx = c->ToSvnContext();
 
     svn_error_t* err = ctx->cancel_func( ctx->cancel_baton );
-    Assertion::Assert( "Not cancelled", err->apr_err == SVN_ERR_CANCELLED );
+    Assert::IsTrue( err->apr_err == SVN_ERR_CANCELLED, "Not cancelled" );
 }
 
 

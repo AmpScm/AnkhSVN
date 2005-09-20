@@ -29,9 +29,9 @@ namespace NSvn.Core.Tests
             string path = Path.Combine( this.WcPath, "foo" );
             CommitInfo info = this.Client.MakeDir( new string[]{ path } );
             
-            Assertion.AssertEquals( "MakeDir should return CommitInfo::Invalid for local operations",
-                CommitInfo.Invalid, info );
-            Assertion.AssertEquals( "Wrong status code", 'A', this.GetSvnStatus( path ) );
+            Assert.AreEqual( CommitInfo.Invalid, info,
+                "MakeDir should return CommitInfo::Invalid for local operations" );
+            Assert.AreEqual( 'A', this.GetSvnStatus( path ), "Wrong status code" );
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace NSvn.Core.Tests
             CommitInfo info = this.Client.MakeDir( new string[]{ url } );
 
             string output = this.RunCommand( "svn", "ls " + this.ReposUrl );
-            Assertion.Assert( "No new dir found: " + output, Regex.IsMatch( output, @"mooNewDirectory/" ) );
+            Assert.IsTrue( Regex.IsMatch( output, @"mooNewDirectory/" ), "No new dir found: " + output );
 
         }
     }

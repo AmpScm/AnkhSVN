@@ -27,12 +27,12 @@ namespace NSvn.Core.Tests
  
             PropertyDictionary mapping = this.Client.PropGet( "foo", path, Revision.Working, 
                 false );
-            Assertion.AssertEquals( "No entries returned", 1, mapping.Count );
+            Assert.AreEqual( 1, mapping.Count, "No entries returned" );
            
             foreach( string key in mapping.Keys )
             {
-                Assertion.AssertEquals( "No entry found", "foo", mapping[key].Name);
-                Assertion.AssertEquals( "No entry found", "bar", mapping[key].GetString() );
+                Assert.AreEqual( "foo", mapping[key].Name, "No entry found" );
+                Assert.AreEqual( "bar", mapping[key].GetString(), "No entry found" );
             }            
         }
     }

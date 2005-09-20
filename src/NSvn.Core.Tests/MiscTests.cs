@@ -29,7 +29,7 @@ namespace NSvn.Core.Tests
             string realUrl = this.GetUrl( this.WcPath );
             string url = this.Client.UrlFromPath( this.WcPath );
 
-            Assertion.AssertEquals( "URL wrong", realUrl, url );
+            Assert.AreEqual( realUrl, url, "URL wrong" );
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace NSvn.Core.Tests
             string realUrl = this.GetUrl( formPath );
             string url = this.Client.UrlFromPath( formPath );
 
-            Assertion.AssertEquals( "URL wrong", realUrl, url );
+            Assert.AreEqual( realUrl, url, "URL wrong" );
             
         }
 
@@ -48,7 +48,7 @@ namespace NSvn.Core.Tests
         public void TestUrlFromUnversionedPath()
         {
             string url = this.Client.UrlFromPath( @"C:\" );
-            Assertion.AssertNull( "Url should be null for an unversioned path", url );
+            Assert.IsNull( url, "Url should be null for an unversioned path" );
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace NSvn.Core.Tests
             string realUuid = this.RunCommand( "svnlook", "uuid " + this.ReposPath ).Trim();
 
             string uuid = this.Client.UuidFromUrl( this.ReposUrl );
-            Assertion.AssertEquals( "UUID wrong", realUuid, uuid );
+            Assert.AreEqual( realUuid, uuid, "UUID wrong" );
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace NSvn.Core.Tests
 
             this.Client.Update( this.WcPath, Revision.Head, true );
             
-            Assertion.Assert( "No cancellation callbacks", this.cancels > 0 );
+            Assert.IsTrue( this.cancels > 0, "No cancellation callbacks" );
 
             this.Client.Cancel -= new CancelDelegate(this.Cancel);
             this.Client.Cancel += new CancelDelegate(this.ReallyCancel);
@@ -87,14 +87,14 @@ namespace NSvn.Core.Tests
             Client.AdminDirectoryName = "__SVN__";
             try
             {
-                Assertion.AssertEquals( "Admin directory name should now be __SVN__",
-                    "__SVN__", Client.AdminDirectoryName );
+                Assert.AreEqual( "__SVN__", Client.AdminDirectoryName,
+                    "Admin directory name should now be __SVN__" );
 
                 string newwc = this.FindDirName( Path.Combine( Path.GetTempPath(), "moo" ) );
                 this.Client.Checkout( this.ReposUrl, newwc, Revision.Head, true );
 
-                Assertion.Assert( "Admin directory with new name not found", 
-                    Directory.Exists( Path.Combine( newwc, "__SVN__" ) ) );
+                Assert.IsTrue( Directory.Exists( Path.Combine( newwc, "__SVN__" ) ), 
+                    "Admin directory with new name not found" );
             }
             finally
             {

@@ -38,8 +38,8 @@ namespace NSvn.Core.Tests
             Property prop = this.Client.RevPropGet( "cow", this.ReposUrl, 
                 Revision.Head, out rev );
 
-            Assertion.AssertEquals( "Revision wrong", headRev, rev );
-            Assertion.AssertEquals( "Wrong property value", "moo", prop.ToString());
+            Assert.AreEqual( headRev, rev, "Revision wrong" );
+            Assert.AreEqual( "moo", prop.ToString(), "Wrong property value" );
         }
     }
 }

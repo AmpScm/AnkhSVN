@@ -45,8 +45,8 @@ namespace NSvn.Core.Tests
             DirectoryEntry[] dirents = this.Client.List( this.ReposUrl, Revision.Head, 
                 false);
 
-            Assertion.AssertEquals( "Wrong number of entries returned", ht.Count, 
-                dirents.Length );
+            Assert.AreEqual( ht.Count, dirents.Length, 
+                "Wrong number of entries returned" );
 
             foreach( DirectoryEntry ent in dirents )
             {
@@ -55,7 +55,7 @@ namespace NSvn.Core.Tests
                     path += "/";
 
                 Entry entry = (Entry)ht[ path ];
-                Assertion.AssertNotNull( "No entry found for " + path, entry );
+                Assert.IsNotNull( entry, "No entry found for " + path );
 
                 entry.Match( ent );               
             }
@@ -109,20 +109,20 @@ namespace NSvn.Core.Tests
 
             public void Match( DirectoryEntry ent )
             {                
-                Assertion.AssertEquals( "CreatedRevision differs", this.createdRevision, 
-                    ent.CreatedRevision );
-                Assertion.AssertEquals( "Size differs", this.size, 
-                    ent.Size );
+                Assert.AreEqual( this.createdRevision, ent.CreatedRevision,
+                    "CreatedRevision differs" );
+                Assert.AreEqual( this.size, ent.Size,
+                    "Size differs" );
 
                 // strip off time portion
                 DateTime entryTime = ent.Time.ToLocalTime();
                 entryTime = entryTime - entryTime.TimeOfDay;
 
                 long delta =  Math.Abs( this.time.Ticks - entryTime.Ticks );
-                Assertion.Assert( "Time differs: " + this.time + " vs " + 
-                    entryTime + " Delta is " + delta, 
-                    delta < TICKS_PER_MINUTE );
-                Assertion.AssertEquals( "Last author differs", this.author, ent.LastAuthor );
+                Assert.IsTrue( delta < TICKS_PER_MINUTE, 
+                    "Time differs: " + this.time + " vs " + 
+                    entryTime + " Delta is " + delta );
+                Assert.AreEqual( this.author, ent.LastAuthor, "Last author differs" );
             }
 
             public string Path

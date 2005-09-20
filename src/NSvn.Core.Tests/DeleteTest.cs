@@ -38,12 +38,12 @@ namespace NSvn.Core.Tests
 
             CommitInfo info = this.Client.Delete( new string[]{ path1, path2 }, false );
 
-            Assertion.Assert( "File not deleted", !File.Exists( path1 ) );
-            Assertion.Assert( "File not deleted", !File.Exists( path2 ) );
+            Assert.IsTrue( !File.Exists( path1 ), "File not deleted" );
+            Assert.IsTrue( !File.Exists( path2 ), "File not deleted" );
 
-            Assertion.AssertEquals( "File not deleted", 'D', this.GetSvnStatus( path1 ) );
-            Assertion.AssertEquals( "File not deleted", 'D', this.GetSvnStatus( path2 ) );
-            Assertion.AssertSame( "CommitInfo should be invalid", CommitInfo.Invalid, info );
+            Assert.AreEqual( 'D', this.GetSvnStatus( path1 ), "File not deleted" );
+            Assert.AreEqual( 'D', this.GetSvnStatus( path2 ), "File not deleted" );
+            Assert.AreSame( CommitInfo.Invalid, info, "CommitInfo should be invalid" );
            
         }
 
@@ -60,10 +60,10 @@ namespace NSvn.Core.Tests
             CommitInfo info = this.Client.Delete( new string[]{path1, path2}, false );
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
-            Assertion.Assert( "Directory wasn't deleted ", cmd.IndexOf( "doc" ) == -1 );
-            Assertion.Assert( "Directory wasn't deleted", cmd.IndexOf( "Form.cs" ) == -1 );
+            Assert.IsTrue( cmd.IndexOf( "doc" ) == -1, "Directory wasn't deleted " );
+            Assert.IsTrue( cmd.IndexOf( "Form.cs" ) == -1, "Directory wasn't deleted" );
 
-            Assertion.Assert( "CommitInfo is invalid", CommitInfo.Invalid != info );
+            Assert.IsTrue( CommitInfo.Invalid != info, "CommitInfo is invalid" );
 
 
         }

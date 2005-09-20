@@ -35,8 +35,8 @@ namespace NSvn.Core.Tests
             this.Client.Cat( stream, path, Revision.Working );
 
             string wrapperOutput = Encoding.ASCII.GetString( stream.ToArray() );
-            Assertion.AssertEquals( "String from wrapper not the same as string from client",
-                clientOutput, wrapperOutput );           
+            Assert.AreEqual( clientOutput, wrapperOutput,
+                "String from wrapper not the same as string from client" );
 
         }
 
@@ -54,8 +54,8 @@ namespace NSvn.Core.Tests
             this.Client.Cat( stream, path, Revision.Head );
 
             string wrapperOutput = Encoding.ASCII.GetString( stream.ToArray() );
-            Assertion.AssertEquals( "String from wrapper not the same as string from client",
-                clientOutput, wrapperOutput );      
+            Assert.AreEqual( clientOutput, wrapperOutput,
+                "String from wrapper not the same as string from client" );
         }        
 
         [Test]
@@ -74,8 +74,8 @@ namespace NSvn.Core.Tests
                 Revision.FromNumber(info.Revision-1) );
 
             string wrapperOutput = Encoding.ASCII.GetString( stream.ToArray() );
-            Assertion.AssertEquals( "String from wrapper not the same as string from client",
-                clientOutput, wrapperOutput ); 
+            Assert.AreEqual( clientOutput, wrapperOutput,
+                "String from wrapper not the same as string from client" ); 
 
         }
     }

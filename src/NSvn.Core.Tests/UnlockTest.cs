@@ -27,11 +27,11 @@ namespace NSvn.Core.Tests
             
             char lockStatus;
             lockStatus = this.RunCommand("svn", "status " + filepath)[5];
-            Assertion.Assert("file not locked", 'K' == lockStatus);
+            Assert.AreEqual( 'K', lockStatus, "file not locked");
             
             this.Client.Unlock( new string[] { filepath }, false );
 
-            Assertion.Assert("file not unlocked", this.RunCommand("svn", "status " + filepath).Length == 0);
+            Assert.IsTrue( this.RunCommand("svn", "status " + filepath).Length == 0, "file not unlocked" );
         }
 	}
 }

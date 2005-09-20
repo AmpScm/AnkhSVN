@@ -34,11 +34,9 @@ namespace NSvn.Core.Tests
             this.Client.Notification += new NotificationDelegate(this.NotifyCallback);
             this.Client.Add( testFile, false );    
        
-            Assertion.Assert( "No notification callbacks received", this.Notifications.Length > 0 );
+			Assert.IsTrue( this.Notifications.Length > 0, "No notification callbacks received" );
 
-            Assertion.AssertEquals( "svn st does not report the file as added", 
-                'A', this.GetSvnStatus( testFile ) );
-                        
+			Assert.AreEqual( 'A', this.GetSvnStatus( testFile ), "svn st does not report the file as added" );
         }        
 
         /// <summary>
@@ -55,16 +53,15 @@ namespace NSvn.Core.Tests
             // do a non-recursive add here
             this.Client.Add( dir1, false );
 
-            Assertion.Assert( "Too many or no notifications received. Added recursively?", 
-                this.Notifications.Length == 1 );
-            Assertion.AssertEquals( "Subdirectory not added", 'A', this.GetSvnStatus( dir1 ) );
+            Assert.IsTrue( this.Notifications.Length == 1, "Too many or no notifications received. Added recursively?" );
+            Assert.AreEqual( 'A', this.GetSvnStatus( dir1 ), "Subdirectory not added");
             try
             {
-                Assertion.Assert( "Recursive add", this.GetSvnStatus( dir2 ) != 'A' );
-                Assertion.Assert( "Recursive add", this.GetSvnStatus( testFile1 ) != 'A' );
-                Assertion.Assert( "Recursive add", this.GetSvnStatus( testFile2 ) != 'A' );
+                Assert.IsTrue(  this.GetSvnStatus( dir2 ) != 'A', "Recursive add" );
+                Assert.IsTrue( this.GetSvnStatus( testFile1 ) != 'A', "Recursive add" );
+                Assert.IsTrue( this.GetSvnStatus( testFile2 ) != 'A', "Recursive add" );
 
-                Assertion.Fail( "Files added recursively. Above assertions should have thrown" );
+                Assert.Fail( "Files added recursively. Above assertions should have thrown" );
             }
             catch( ApplicationException )
             {
@@ -87,12 +84,11 @@ namespace NSvn.Core.Tests
             this.Client.Add( dir1, true );
 
             // enough notifications?
-            Assertion.AssertEquals( "Received wrong number of notifications", 
-                4, this.Notifications.Length );
-            Assertion.AssertEquals( "Subdirectory not added", 'A', this.GetSvnStatus( dir1 ) );
-            Assertion.AssertEquals( "Subsubdirectory not added", 'A', this.GetSvnStatus( dir2 ) );
-            Assertion.AssertEquals( "File in subdirectory not added", 'A', this.GetSvnStatus( testFile1 ) );
-            Assertion.AssertEquals( "File in subsubdirectory not added", 'A', this.GetSvnStatus( testFile2 ) );
+            Assert.AreEqual( 4, this.Notifications.Length, "Received wrong number of notifications" );
+            Assert.AreEqual( 'A', this.GetSvnStatus( dir1 ), "Subdirectory not added" );
+            Assert.AreEqual( 'A', this.GetSvnStatus( dir2 ), "Subsubdirectory not added" );
+            Assert.AreEqual( 'A', this.GetSvnStatus( testFile1 ), "File in subdirectory not added" );
+            Assert.AreEqual( 'A', this.GetSvnStatus( testFile2 ), "File in subsubdirectory not added" );
         }
 
         [Test]

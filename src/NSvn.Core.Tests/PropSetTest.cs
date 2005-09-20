@@ -29,8 +29,8 @@ namespace NSvn.Core.Tests
              
             byte[] propval = Encoding.UTF8.GetBytes ( "baa" );
             this.Client.PropSet( new Property( "moo", propval ), filePath, false );
-            Assertion.AssertEquals( "PropSet didn't work!", 
-                "baa", this.RunCommand( "svn", "propget moo " + filePath ).Trim() );
+            Assert.AreEqual( "baa", this.RunCommand( "svn", "propget moo " + filePath ).Trim(), 
+                "PropSet didn't work!" );
         }
    
         /// <summary>
@@ -44,11 +44,11 @@ namespace NSvn.Core.Tests
             byte[] propval = Encoding.UTF8.GetBytes ( "baa" );
             this.Client.PropSet( new Property("moo", propval), this.WcPath, true );
 
-            Assertion.AssertEquals( "PropSet didn't work on directory!", 
-                "baa", this.RunCommand( "svn", "propget moo " + this.WcPath ).Trim() );
+            Assert.AreEqual( "baa", this.RunCommand( "svn", "propget moo " + this.WcPath ).Trim(), 
+                "PropSet didn't work on directory!" );
 
-            Assertion.AssertEquals( "PropSet didn't work on file!", 
-                "baa", this.RunCommand( "svn", "propget moo " + filePath ).Trim() );
+            Assert.AreEqual( "baa", this.RunCommand( "svn", "propget moo " + filePath ).Trim(), 
+                "PropSet didn't work on file!" );
         }
    
     }
