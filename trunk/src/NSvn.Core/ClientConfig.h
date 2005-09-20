@@ -5,6 +5,7 @@
 #include <apr_hash.h>
 #include "SvnClientException.h"
 #include "GCPool.h"
+#include "utils.h"
 
 namespace NSvn
 {
