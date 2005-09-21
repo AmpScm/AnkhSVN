@@ -3,20 +3,21 @@ import glob
 import shutil
 
 # The URL to build from
-ANKHSVN_ROOT = "http://10.0.0.3/svn/finalproject/trunk"
+ANKHSVN_ROOT = "http://rogue/svn/finalproject/trunk"
 ANKHSVN = "%s/src" % ANKHSVN_ROOT
 
 # version numbers to put in the filename
-MAJOR, MINOR, PATCH, LABEL = 0, 6, 0, "snapshot2"
+MAJOR, MINOR, PATCH, LABEL = 0, 6, 0, "snapshot_20"
 
 # The URL of the Subversion version
-SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.2.0/"
-SUBVERSION_VERSION="1.2.0"
+SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.2.3/"
+SUBVERSION_VERSION="1.2.3"
 subversion_dir=""
 
 # The URL of neon
 NEON = "http://www.webdav.org/neon/neon-0.24.7.tar.gz"
 NEON_VERSION="0.24.7"
+neon_dir=""
 
 # Berkeley DB
 BDB = "ftp://sleepycat1.inetu.net/releases/db-4.2.52.tar.gz"
@@ -29,8 +30,8 @@ OPENSSL_VERSION="0.9.7-d"
 openssl_target_dir = ""
 
 # ZLIB
-ZLIB = "http://www.gzip.org/zlib/zlib122.zip"
-ZLIB_VERSION="1.2.2"
+ZLIB = "http://www.zlib.net/zlib-1.2.3.tar.gz"
+ZLIB_VERSION="1.2.3"
 zlib_target_dir = ""
 
 # Whether to build openssl as a static library
@@ -199,9 +200,11 @@ def download_and_extract(url, dir, targetname):
     pop_location()
 
 def do_neon():
-    download_and_extract( NEON, ".", "neon" )
-    global neon_target_dir
-    neon_target_dir = "neon"
+    global neon_dir
+    if neon_dir:
+        shutil.copytree( neon_dir, "./neon" )
+    else:
+        download_and_extract( NEON, ".", "neon" )
     
 def do_zlib():    
     if ( "zlib_target_dir" in globals() and zlib_target_dir ):
@@ -210,11 +213,11 @@ def do_zlib():
 
     push_location()
     os.chdir("subversion")
-    os.mkdir( "zlib" )
-    os.chdir("zlib")
-    download_and_extract( ZLIB, ".", "" )
+    #os.mkdir( "zlib" )
+    #os.chdir("zlib")
+    download_and_extract( ZLIB, ".", "zlib" )
     global zlib_target_dir
-    zlib_target_dir = os.path.abspath( "." )
+    zlib_target_dir = os.path.abspath( "zlib" )
     pop_location()
 
 def do_openssl():
@@ -463,17 +466,19 @@ using namespace System::Runtime::CompilerServices;
     shutil.copy( "AssemblyInfo.cs", "src\Ankh\AssemblyInfo.cs" )
     shutil.copy( "AssemblyInfo.cs",  "src\Ankh.UI\AssemblyInfo.cs" )
     shutil.copy( "AssemblyInfo.cs", "src\Utils\AssemblyInfo.cs" )
+    shutil.copy( "AssemblyInfo.cs", "src\NSvn.Common\AssemblyInfo.cs" )
     shutil.copy( "AssemblyInfo.cpp", "src\NSvn.Core\AssemblyInfo.cpp" )
     shutil.copy( "AssemblyInfo.cs",  "src\ReposInstaller\AssemblyInfo.cs" )
 
 def checkout_tools():
     checkout ("%s/tools/WiX" % ANKHSVN_ROOT)
-    checkout ("%s/tools/nant" % ANKHSVN_ROOT )
-    curdir=os.getcwd()
-    path = os.environ["PATH"]
-    os.putenv( "PATH", "%s\nant;%s" % (curdir, os.environ["PATH"]) )
+    checkout ("%s/tools/nant" % ANKHSVN_ROOT )    
     global wix_binary_dir
     wix_binary_dir = os.path.abspath( "WiX" )
+    print "Setting wix_binary_dir to %s" % wix_binary_dir
+    global nant_binary
+    nant_binary = os.path.join( os.path.abspath("nant"), "nant.exe")
+    print "Setting nant_binary to %s" % nant_binary
 
 def zip_svn_tree():
     file = open( "zip.build", "w" )
@@ -491,7 +496,7 @@ def zip_svn_tree():
 </project>""" % subversion_dir
     file.close()
     
-    run( "nant /f:zip.build" )
+    run( "%s /f:zip.build" % nant_binary)
 
 def do_ankh():
     # do_subversion
@@ -515,7 +520,7 @@ def do_ankh():
     os.chdir("src")
 
     if USE_NANT:
-        run ( "nant /t:net-1.0 /v wix -D:svndir=%s " "-D:wix-binary.dir=%s" % (subversion_dir, wix_binary_dir) )
+        run ( "%s /t:net-1.0 /v wix -D:svndir=%s " "-D:wix-binary.dir=%s" % (nant_binary, subversion_dir, wix_binary_dir) )
         shutil.copy( "installsource\\Ankh.msi", toname )
     else:
         os.putenv( "svnsrc", subversion_dir )
