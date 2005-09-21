@@ -31,6 +31,7 @@
         <csc target="library" output="${build.dir}/NSvn.Common.dll" verbose="${verbose}" 
             define="${define}" debug="${debug}">
             <references>
+                <include name="..\Utils\${build.dir}\Utils.dll"/>
             </references>
             
             <sources basedir="${src.dir}">
