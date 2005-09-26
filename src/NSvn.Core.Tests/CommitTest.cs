@@ -164,7 +164,7 @@ namespace NSvn.Core.Tests
         private void LogMessageCallback( object sender, LogMessageEventArgs args )
         {
             Assert.AreEqual( 1, args.CommitItems.Length, "Wrong number of commit items" );
-            Assert.AreEqual( args.CommitItems[0].Path.IndexOf( this.filepath ) >= 0,
+            Assert.IsTrue( args.CommitItems[0].Path.IndexOf( this.filepath ) >= 0,
                 "Wrong path");
             Assert.AreEqual( NodeKind.File, args.CommitItems[0].Kind, "Wrong kind" );
             Assert.AreEqual( 6, args.CommitItems[0].Revision, "Wrong revision" );
