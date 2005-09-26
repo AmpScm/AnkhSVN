@@ -109,6 +109,14 @@ namespace NSvn.Core.Tests
             this.Client.Add( file, false, true );
         }
 
+        [Test]
+        public void TestAddFileWithNonAsciiFilename()
+        {
+            string newFile = Path.Combine( this.WcPath, "Æeiaæå.ø");
+            File.Create(newFile).Close();
+            this.Client.Add(newFile, true);
+        }
+
 
 
         private void CreateSubdirectories(out string dir1, out string dir2, out string testFile1, out string testFile2)
