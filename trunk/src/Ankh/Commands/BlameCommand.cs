@@ -65,7 +65,7 @@ namespace Ankh.Commands
 
                 result.Start();
                 BlameRunner runner = new BlameRunner( item.Path, 
-                    Revision.FromNumber(0), Revision.Head, result );
+                    revisionStart, revisionEnd, result );
                 context.UIShell.RunWithProgressDialog( runner, "Figuring out who to blame" );
                 result.End();
                
