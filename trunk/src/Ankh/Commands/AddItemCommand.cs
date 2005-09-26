@@ -95,7 +95,11 @@ namespace Ankh.Commands
                     if ( item.IsVersionable )
                     {
                         // this could be the parent item of some item to come later on
-                        this.paths.Add( NormalizePath(item.Path), null );
+                        string normalizedPath = NormalizePath(item.Path);
+                        if ( !this.paths.ContainsKey(normalizedPath) )
+                        {
+                            this.paths.Add( normalizedPath, null );
+                        }
                         return true;
                     }
                     else
