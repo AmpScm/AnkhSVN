@@ -132,9 +132,7 @@ Byte NSvn::Core::SvnStringToByteArray( svn_string_t* string )[]
 String* NSvn::Core::ToNativePath( const char* path, apr_pool_t* pool )
 {
     // convert to a native path    
-    const char* cstringPath;
-    HandleError( svn_utf_cstring_from_utf8( &cstringPath, path, pool ) );
-    const char* nativePath = svn_path_local_style( cstringPath, pool );
+    const char* nativePath = svn_path_local_style( path, pool );
 	return Utf8ToString( nativePath, pool );
 }
 
