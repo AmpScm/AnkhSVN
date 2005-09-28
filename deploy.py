@@ -47,14 +47,14 @@ VSVARS="I:\\Program Files\\Microsoft Visual Studio .NET\\Common7\\Tools\\vsvars3
 # APR
 APACHE_CVS = ":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
 
-APR = "http://svn.apache.org/repos/asf/apr/apr/branches/0.9.x"
-APR_VERSION="0.9.5"
+APR = "http://svn.apache.org/repos/asf/apr/apr/tags/0.9.6/"
+APR_VERSION="0.9.6"
 
-APR_UTIL = "http://svn.apache.org/repos/asf/apr/apr-util/branches/0.9.x"
-APR_UTIL_VERSION="0.9.5"
+APR_UTIL = "http://svn.apache.org/repos/asf/apr/apr-util/tags/0.9.6/"
+APR_UTIL_VERSION="0.9.6"
 
-APR_ICONV = "http://svn.apache.org/repos/asf/apr/apr-iconv/branches/0.9.x"
-APR_ICONV_VERSION="0.9.5"
+APR_ICONV = "http://svn.apache.org/repos/asf/apr/apr-iconv/tags/0.9.6/"
+APR_ICONV_VERSION="0.9.6"
 
 
 # Whether to use nant to build Ankh
@@ -471,7 +471,7 @@ using namespace System::Runtime::CompilerServices;
     shutil.copy( "AssemblyInfo.cs",  "src\ReposInstaller\AssemblyInfo.cs" )
 
 def checkout_tools():
-    checkout ("%s/tools/WiX" % ANKHSVN_ROOT)
+    checkout ("-r 2158 %s/tools/WiX" % ANKHSVN_ROOT)
     checkout ("%s/tools/nant" % ANKHSVN_ROOT )    
     global wix_binary_dir
     wix_binary_dir = os.path.abspath( "WiX" )
