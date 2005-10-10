@@ -39,6 +39,7 @@ namespace Ankh
         public const int CreatePatch = 123;
         public const int Relocate = 124;
         public const int ResolveConflict = 125;
-
+		public const int Lock = 126;
+		public const int Unlock = 127;
     }
 }

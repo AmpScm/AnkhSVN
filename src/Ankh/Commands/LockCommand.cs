@@ -8,7 +8,7 @@ namespace Ankh.Commands
     /// A command class to support the svn lock command
     /// </summary>
     [VSNetCommand("Lock", Text = "Lock...", Tooltip = "Locks the selected item",
-         Bitmap = ResourceBitmaps.Default),
+         Bitmap = ResourceBitmaps.Lock),
     VSNetProjectItemControl( "Ankh", Position = 1 ),
     VSNetProjectNodeControl( "Ankh", Position = 1 ),
     VSNetControl( "Solution.Ankh", Position = 1)]    
