@@ -41,6 +41,14 @@ namespace Ankh.Solution
                 DteConstants.vsWindowKindSolutionExplorer ).Object; 
             this.solutionNode = null;
 
+            // load the status images image strip
+            Debug.WriteLine("Loading status images", "Ankh");
+            Bitmap statusImages = (Bitmap)Image.FromStream(
+                this.GetType().Assembly.GetManifestResourceStream(STATUS_IMAGES));
+            statusImages.MakeTransparent(statusImages.GetPixel(0, 0));
+
+            CreateOverlayImages();
+
             this.statusImageList = new ImageList();
             this.statusImageList.ImageSize = new Size(7, 16);
             this.statusImageList.Images.AddStrip(statusImages);
@@ -352,15 +360,7 @@ namespace Ankh.Solution
             solutionExplorerWindow.Linkable = linkable;
             solutionExplorerWindow.IsFloating = isFloating;
             if ( solutionExplorerWindow.Linkable )
-                solutionExplorerWindow.AutoHides = hidden;
-
-            // load the status images image strip
-            Debug.WriteLine( "Loading status images", "Ankh" );
-            Bitmap statusImages = (Bitmap)Image.FromStream( 
-                this.GetType().Assembly.GetManifestResourceStream( STATUS_IMAGES ) );
-            statusImages.MakeTransparent( statusImages.GetPixel(0, 0) );
-
-            CreateOverlayImages();         
+                solutionExplorerWindow.AutoHides = hidden;         
         }
 
         /// <summary>
