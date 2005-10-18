@@ -39,7 +39,11 @@ namespace Ankh.Solution
             // get the uihierarchy root
             this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
                 DteConstants.vsWindowKindSolutionExplorer ).Object; 
-            this.solutionNode = null;            
+            this.solutionNode = null;
+
+            this.statusImageList = new ImageList();
+            this.statusImageList.ImageSize = new Size(7, 16);
+            this.statusImageList.Images.AddStrip(statusImages);
         }
 
         /// <summary>
@@ -136,8 +140,9 @@ namespace Ankh.Solution
             this.projectItems.Clear();
             this.projects.Clear();
             
-            // store the original image list
-            this.originalImageList = this.treeview.StatusImageList;
+            // store the original image list (check that we're not storing our own statusImageList
+            if( this.statusImageList.Handle != this.treeview.StatusImageList )
+                this.originalImageList = this.treeview.StatusImageList;
             
             // and assign the status image list to the tree
             this.treeview.StatusImageList = statusImageList.Handle;
@@ -355,11 +360,7 @@ namespace Ankh.Solution
                 this.GetType().Assembly.GetManifestResourceStream( STATUS_IMAGES ) );
             statusImages.MakeTransparent( statusImages.GetPixel(0, 0) );
 
-            CreateOverlayImages();
-
-            this.statusImageList = new ImageList();
-            this.statusImageList.ImageSize = new Size(7, 16);
-            this.statusImageList.Images.AddStrip( statusImages );         
+            CreateOverlayImages();         
         }
 
         /// <summary>
