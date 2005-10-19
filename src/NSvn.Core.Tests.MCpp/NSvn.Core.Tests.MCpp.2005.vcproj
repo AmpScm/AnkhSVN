@@ -6,7 +6,6 @@
 	ProjectGUID="{05E011D8-54B5-4558-80BF-A8AD64DDAC97}"
 	RootNamespace="NSvn.Core.Tests.MCpp"
 	Keyword="ManagedCProj"
-	SignManifests="true"
 	>
 	<Platforms>
 		<Platform
@@ -529,10 +528,6 @@
 				RelativePath="streamtest.cpp"
 				>
 			</File>
-			<File
-				RelativePath="StringHelperTest.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -572,10 +567,6 @@
 			</File>
 			<File
 				RelativePath="streamtest.h"
-				>
-			</File>
-			<File
-				RelativePath="StringHelperTest.h"
 				>
 			</File>
 		</Filter>
