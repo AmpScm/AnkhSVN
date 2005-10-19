@@ -6,6 +6,7 @@
 	ProjectGUID="{05E011D8-54B5-4558-80BF-A8AD64DDAC97}"
 	RootNamespace="NSvn.Core.Tests.MCpp"
 	Keyword="ManagedCProj"
+	SignManifests="true"
 	>
 	<Platforms>
 		<Platform
@@ -439,7 +440,7 @@
 			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
 		/>
 		<AssemblyReference
-			RelativePath="nunit.framework.dll"
+			RelativePath="..\lib\nunit.framework.dll"
 			AssemblyName="nunit.framework, Version=2.2.0.0, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL"
 		/>
 	</References>
