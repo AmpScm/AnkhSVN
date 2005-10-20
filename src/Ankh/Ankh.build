@@ -56,15 +56,17 @@
                 <include name="${lib.dir}\Interop.esproj.dll" />
             </references>
             
+            <resources basedir="${src.dir}" prefix="Ankh" dynamicprefix="true">
+				<include name="status_icons.bmp"/>
+				<include name="lock.ico"/>
+				<include name="lockedreadonly.ico"/>
+				<include name="readonly.ico"/>
+				<include name="Config/Config.xsd"/>
+				<include name="Config/Config.xml"/>
+				<include name="Commands/blame.xsl"/>
+				<include name="Commands/log.xsl"/>
+            </resources>
             
-            <arg value="/resource:status_icons.bmp,Ankh.status_icons.bmp"/>
-            <arg value="/resource:lock.ico,Ankh.lock.ico"/>
-            <arg value="/resource:readonly.ico,Ankh.readonly.ico"/>
-            <arg value="/resource:lockedreadonly.ico,Ankh.lockedreadonly.ico"/>
-            <arg value="/resource:Config/Config.xsd,Ankh.Config.Config.xsd"/>
-            <arg value="/resource:Config/Config.xml,Ankh.Config.Config.xml"/>
-            <arg value="/resource:Commands/blame.xsl,Ankh.Commands.blame.xsl"/>
-            <arg value="/resource:Commands/log.xsl,Ankh.Commands.log.xsl"/>
             <arg value="/debug:pdbonly" unless="${debug}"/>
             
             <sources basedir="${src.dir}">
