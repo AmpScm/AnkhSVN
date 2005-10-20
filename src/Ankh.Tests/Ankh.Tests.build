@@ -51,10 +51,10 @@
                 <include name="${lib.dir}\Office.dll"/>                
             </references>
             <resources basedir="${src.dir}" prefix="Ankh.Tests" dynamicprefix="true">
-				<include name="repos.zip"/>
-				<include name="repos2.zip"/>
-				<include name="unversioned.zip"/>
-				<include name="wc.zip"/>
+                <include name="repos.zip"/>
+                <include name="repos2.zip"/>
+                <include name="unversioned.zip"/>
+                <include name="wc.zip"/>
             </resources>
             <sources basedir="${src.dir}">
                 <include name="**/*.cs"/>
