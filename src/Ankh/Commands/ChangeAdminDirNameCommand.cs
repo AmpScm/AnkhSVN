@@ -1,4 +1,3 @@
-#if (ALT_ADMIN_DIR)
 using System;
 using Ankh.UI;
 using NSvn.Core;
@@ -39,4 +38,3 @@ namespace Ankh.Commands
         }       
     }
 }
-#endif

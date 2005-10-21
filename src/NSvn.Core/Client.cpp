@@ -107,18 +107,17 @@ NSvn::Core::AuthenticationBaton* NSvn::Core::Client::get_AuthBaton()
 // Retrieve the name of the administrative subdirectory.
 String* NSvn::Core::Client::get_AdminDirectoryName()
 {
-	Pool pool;
-	return Utf8ToString( SVN_WC_ADM_DIR_NAME, pool );
+    Pool pool;
+    return Utf8ToString( svn_wc_get_adm_dir(pool), pool );
 }
-#if defined(ALT_ADMIN_DIR)
+
 // Set the name of the administative subdirectory.
-// This functionality depends on a specially compiled Subversion.
 void NSvn::Core::Client::set_AdminDirectoryName( String* name )
 {
-	Pool pool;
-    svn_wc_set_adm_dir_name( StringToUtf8( name, pool ) );
+    Pool pool;
+    svn_wc_set_adm_dir( StringToUtf8( name, pool ), pool );
 }
-#endif
+
 
 // implementation of Client::Add
 void NSvn::Core::Client::Add( String* path, bool recursive )
@@ -129,7 +128,7 @@ void NSvn::Core::Client::Add( String* path, bool recursive )
 // implementation of Client::Add
 void NSvn::Core::Client::Add( String* path, bool recursive, bool force )
 {
-    SubPool pool(*(this->rootPool));;
+    SubPool pool(*(this->rootPool));
 
     const char* truePath = CanonicalizePath( path, pool );
     HandleError( svn_client_add2( truePath, recursive, force, this->context->ToSvnContext(), pool ) );
