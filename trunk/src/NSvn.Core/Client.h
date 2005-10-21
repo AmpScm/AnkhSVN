@@ -64,10 +64,12 @@ namespace NSvn
              /// directory.</summary>
              [System::Diagnostics::DebuggerStepThrough]
              __property static String* get_AdminDirectoryName();
-#if defined(ALT_ADMIN_DIR)    
+
+              /// <summary>The name of the Subversion administrative
+             /// directory.</summary>
              [System::Diagnostics::DebuggerStepThrough]
              __property static void set_AdminDirectoryName( System::String* name );
-#endif
+
             ///<summary>Checkout a working copy.</summary>
             ///<param name="url">Path to the files/directory in the repository to be checked out.</param>
             ///<param name="path">Path to the destination.</param>

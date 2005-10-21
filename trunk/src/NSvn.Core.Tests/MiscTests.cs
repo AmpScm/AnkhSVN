@@ -80,27 +80,26 @@ namespace NSvn.Core.Tests
         private static extern bool SetEnvironmentVariable( string name, string value );
 
         [Test]
-        [System.Diagnostics.Conditional("ALT_ADMIN_DIR")]
         public void TestChangeAdminDirectoryName()
         {
-#if ALT_ADMIN_DIR
-            Client.AdminDirectoryName = "__SVN__";
+            string newAdminDir = "_svn";
+            Client.AdminDirectoryName = newAdminDir;
             try
             {
-                Assert.AreEqual( "__SVN__", Client.AdminDirectoryName,
-                    "Admin directory name should now be __SVN__" );
+                Assert.AreEqual( newAdminDir, Client.AdminDirectoryName,
+                    "Admin directory name should now be " + newAdminDir );
 
                 string newwc = this.FindDirName( Path.Combine( Path.GetTempPath(), "moo" ) );
                 this.Client.Checkout( this.ReposUrl, newwc, Revision.Head, true );
 
-                Assert.IsTrue( Directory.Exists( Path.Combine( newwc, "__SVN__" ) ), 
+                Assert.IsTrue( Directory.Exists( Path.Combine( newwc, newAdminDir ) ), 
                     "Admin directory with new name not found" );
             }
             finally
             {
                 Client.AdminDirectoryName = ".svn";
+                Assert.AreEqual(".svn", Client.AdminDirectoryName = ".svn", "Settings original admin dir failed");
             }
-#endif
         }
 
         [Test]

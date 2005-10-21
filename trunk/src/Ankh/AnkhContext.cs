@@ -430,12 +430,18 @@ namespace Ankh
             else
                 this.client = new SvnClient( this );
 
-#if ALT_ADMIN_DIR
+
             // should we use a custom admin directory for our working copies?
             if ( this.config.Subversion.AdminDirectoryName != null )
+            {
                 NSvn.Core.Client.AdminDirectoryName = 
                     this.config.Subversion.AdminDirectoryName;
-#endif
+            }
+            else if(Environment.GetEnvironmentVariable("SVN_ASP_DOT_NET_HACK") != null)
+            {
+                NSvn.Core.Client.AdminDirectoryName = "_svn";
+            }
+
         }
         
         private bool CheckWhetherAnkhShouldLoad()

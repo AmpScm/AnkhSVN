@@ -285,7 +285,6 @@ namespace NSvn.Core.Tests
         /// Rename the administrative subdirectories if necessary.
         /// </summary>
         /// <param name="path"></param>
-        [Conditional("ALT_ADMIN_DIR")]
         protected void RenameAdminDirs( string path )
         {
             string adminDir = Path.Combine( path, TRAD_WC_ADMIN_DIR );
