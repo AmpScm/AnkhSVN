@@ -707,24 +707,48 @@ namespace Ankh.Solution
         #region class ItemComparer
         private class ItemComparer : IComparer
         {        
-			public int Compare(object x, object y)
-			{
-				if(x is ProjectItem && y is ProjectItem)
-				{
-					string str_a = GetProjectName(x) + "|" + GetFileName(x);
-					string str_b = GetProjectName(y) + "|" + GetFileName(y);
-					return str_a.CompareTo(str_b);
-				}
-				if(x is ProjectItem)
-				{
-					return 1;
-				}
-				if(y is ProjectItem)
-				{
-					return -1;
-				}
-				return x.GetHashCode().CompareTo(y.GetHashCode());
-			}
+            public int Compare(object x, object y)
+            {
+                if (x == null) 
+                {
+                    if (y == null)
+                        return 0;
+                    else
+                        return -1;
+
+                }
+                else if (y == null) 
+                {
+                    return 1;
+                }
+
+                if(x is ProjectItem)
+                {
+                    if(y is ProjectItem)
+                    {
+                        try
+                        {
+                            string str_a = GetProjectName(x) + "|" + GetFileName(x);
+                            string str_b = GetProjectName(y) + "|" + GetFileName(y);
+                            return str_a.CompareTo(str_b);
+                        }
+                        catch( Exception )
+                        {
+                            return -1;
+                        }
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                else if(y is ProjectItem)
+                {
+                    return -1;
+                }
+
+                return x.GetHashCode().CompareTo(y.GetHashCode());
+            }
 
             internal static string GetFileName( object obj )
             {
