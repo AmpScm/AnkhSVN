@@ -81,18 +81,26 @@ namespace Ankh
 
             for( int i = 1; i < path.Length; i++ )
             {
+            
+                // does this command bar already exist?
                 try
                 {
-                    // does this command bar already exist?
                     object ctrl = context.CommandBars.GetBarControl(bar, path[i]);
-                    bar = context.CommandBars.GetPopupCommandBar(ctrl); 
+
+                    if (ctrl != null)
+                        bar = context.CommandBars.GetPopupCommandBar(ctrl);
+                    else
+                        context.CommandBars.AddCommandBar(path[i],
+                            vsCommandBarType.vsCommandBarTypeMenu, bar,
+                            VSCommandBars.AddCommandBarToEnd);
                 }
-                catch( Exception )
+                catch ( Exception )
                 {
-                    context.CommandBars.AddCommandBar( path[i],
-                        vsCommandBarType.vsCommandBarTypeMenu, bar, 
-                        VSCommandBars.AddCommandBarToEnd );
-               }                
+                    context.CommandBars.AddCommandBar(path[i],
+                            vsCommandBarType.vsCommandBarTypeMenu, bar,
+                            VSCommandBars.AddCommandBarToEnd);
+                }
+                            
             }
 
             return bar;
