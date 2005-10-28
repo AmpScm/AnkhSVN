@@ -47,6 +47,7 @@ namespace Ankh.Solution
                 this.GetType().Assembly.GetManifestResourceStream(STATUS_IMAGES));
             statusImages.MakeTransparent(statusImages.GetPixel(0, 0));
 
+            this.SetUpTreeview();
             CreateOverlayImages();
 
             this.statusImageList = new ImageList();
