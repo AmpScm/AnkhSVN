@@ -816,18 +816,18 @@ namespace Ankh.Solution
         #region class ProjectHashCodeProvider
         private class ProjectHashCodeProvider : IHashCodeProvider
         {        
-			public ProjectHashCodeProvider(Explorer explorer)
-			{
-				this.explorer=explorer;
-			}
+            public ProjectHashCodeProvider(Explorer explorer)
+            {
+                this.explorer = explorer;
+            }
 
             public int GetHashCode(object obj)
             {
-                if(obj is Project)
+                Project project = obj as Project;
+                if(project != null)
                 {
-                    Project project=(Project)obj;
-                    string projectFile=explorer.solutionNode.Parser.GetProjectFile(project.Name);
-                    if(projectFile!=null && projectFile!="")
+                    string projectFile = explorer.solutionNode.Parser.GetProjectFile( project.Name );
+                    if(projectFile != null && projectFile.Length > 0)
                     {
                         return projectFile.GetHashCode();
                     }
@@ -841,14 +841,13 @@ namespace Ankh.Solution
                         return obj.GetHashCode();
                     }
                 }
-                else if(obj is ParsedSolutionItem)
+
+                ParsedSolutionItem parsedSolutionItem = obj as ParsedSolutionItem;
+                if(parsedSolutionItem != null)
                 {
-                    return ((ParsedSolutionItem)obj).FileName.GetHashCode();
+                    return parsedSolutionItem.FileName.GetHashCode();
                 }
-                else
-                {
-					return obj.GetHashCode();
-                }
+                return obj.GetHashCode();
             }
 
 			private Explorer explorer;
