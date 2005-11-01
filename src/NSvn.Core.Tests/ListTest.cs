@@ -83,7 +83,6 @@ namespace NSvn.Core.Tests
 
                 // get the month and day
                 string date = match.Groups[4].ToString();
-                Console.WriteLine(date);
                 this.time = DateTime.ParseExact( date, "MMM' 'dd", 
                     format );                
 
