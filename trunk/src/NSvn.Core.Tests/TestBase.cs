@@ -52,6 +52,11 @@ namespace NSvn.Core.Tests
             {
                 // swallow 
             }
+            finally
+            {
+                if(this.client != null)
+                    this.client.LogMessage -= new LogMessageDelegate(LogMessage);
+            }
         }
         /// <summary>
         /// extract our test repository
