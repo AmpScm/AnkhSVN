@@ -87,8 +87,11 @@ namespace NSvn.Core.Tests
             {
                 process.CloseMainWindow();
                 System.Threading.Thread.Sleep( 500 );
-                if ( !process.HasExited )
+                if (!process.HasExited)
+                {
                     process.Kill();
+                    process.WaitForExit();
+                }
             }
         }
 

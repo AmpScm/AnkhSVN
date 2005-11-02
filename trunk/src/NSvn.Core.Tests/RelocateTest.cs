@@ -5,12 +5,12 @@ using System.IO;
 
 namespace NSvn.Core.Tests
 {
-	/// <summary>
-	/// A test for Client.Relocate
-	/// </summary>
-	[TestFixture]
-	public class RelocateTest : TestBase
-	{
+    /// <summary>
+    /// A test for Client.Relocate
+    /// </summary>
+    [TestFixture]
+    public class RelocateTest : TestBase
+    {
         [SetUp]
         public override void SetUp()
         {
@@ -36,10 +36,16 @@ namespace NSvn.Core.Tests
             }
             finally
             {
-                svnserve.Kill();
+                svnserve.CloseMainWindow();
+                System.Threading.Thread.Sleep(500);
+                if(!svnserve.HasExited)
+                {
+                    svnserve.Kill();
+                    svnserve.WaitForExit();
+                }
             }
         }
 
         
-	}
+    }
 }
