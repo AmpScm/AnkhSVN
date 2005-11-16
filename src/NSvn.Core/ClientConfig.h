@@ -64,7 +64,9 @@ namespace NSvn
             {
                 this->pool = new GCPool();
 
-				const char* configDir = StringToUtf8(dir, pool->ToAprPool());
+                svn_config_ensure(NULL, pool->ToAprPool());
+
+                const char* configDir = StringToUtf8(dir, pool->ToAprPool());
 
                 // get the hash containing all the configs
                 apr_hash_t* configs;
