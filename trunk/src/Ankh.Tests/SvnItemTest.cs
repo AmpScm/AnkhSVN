@@ -69,7 +69,7 @@ namespace Ankh.Tests
             // missing
             File.Delete( item1.Path );
             item1.Refresh( this.Client );
-            Assert.IsTrue( item1.IsVersioned );
+            Assert.IsFalse( item1.IsVersioned );
 
             // revert it so we can play some more with it
             this.Client.Revert( new string[]{ item1.Path }, false );
@@ -171,6 +171,13 @@ namespace Ankh.Tests
             SvnItem item1 = this.GetItem();
             Assert.IsFalse( item1.IsModified );
 
+            // missing
+            File.Delete(item1.Path);
+            item1.Refresh(this.Client);
+            Assert.IsFalse(item1.IsModified);
+
+            this.Client.Revert(new string[]{item1.Path}, true);
+
             // modified
             using( StreamWriter writer = new StreamWriter(item1.Path) )
                 writer.WriteLine( "Foo" );
@@ -217,7 +224,7 @@ namespace Ankh.Tests
             SvnItem unversioned = new SvnItem(unversionedFile, this.Client.SingleStatus(unversionedFile));
             Assert.AreEqual( StatusKind.Unversioned, unversioned.Status.TextStatus );
             Assert.IsFalse( unversioned.IsModified );
-
+            
             // none
             string nonePath = Path.GetTempFileName();
             SvnItem none = new SvnItem(nonePath, this.Client.SingleStatus(nonePath));
