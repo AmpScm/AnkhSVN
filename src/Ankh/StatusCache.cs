@@ -128,11 +128,16 @@ namespace Ankh
             string normdir = PathUtils.NormalizePath(dir, this.currentPath);
             if ( this.deletions.ContainsKey( normdir ) )
             {
-                return (IList)this.deletions[normdir];
+                IList deletions = (IList)this.deletions[normdir];
+                deletions = RefreshDeletionsList(deletions);
+                this.deletions[normdir] = deletions;
+                return deletions;
             }
             else
                 return new SvnItem[]{};
         }
+
+      
 
         /// <summary>
         /// Status callback.
@@ -166,41 +171,40 @@ namespace Ankh
                 if ( list == null )
                     list = new ArrayList();
                 SvnItem deletedItem = new SvnItem( path, status );
-                deletedItem.Changed += new StatusChanged(this.DeletedItemChanged);
                 list.Add( deletedItem );
 
                 this.deletions[ containingDir ] = list;
             }
         }
 
-        private void DeletedItemChanged(object sender, EventArgs e)
-        {
-            SvnItem deletedItem = (SvnItem)sender;
-            string parentDir = this.GetNormalizedParentDirectory( deletedItem.Path );
+        //private void DeletedItemChanged(object sender, EventArgs e)
+        //{
+        //    SvnItem deletedItem = (SvnItem)sender;
+        //    string parentDir = this.GetNormalizedParentDirectory( deletedItem.Path );
 
-            // are we tracking this item? we should
-            IList dirDeletions = (IList)this.deletions[ parentDir ];
-            if ( dirDeletions == null )
-            {
-                Debug.WriteLine( "Event raised from deleted item we're not tracking" );
-                return;
-            }
+        //    // are we tracking this item? we should
+        //    IList dirDeletions = (IList)this.deletions[ parentDir ];
+        //    if ( dirDeletions == null )
+        //    {
+        //        Debug.WriteLine( "Event raised from deleted item we're not tracking" );
+        //        return;
+        //    }
 
-            // get rid of the item from the directory
-            dirDeletions.Remove( deletedItem );
+        //    // get rid of the item from the directory
+        //    dirDeletions.Remove( deletedItem );
 
-            // is the list for that directory now empty?
-            if ( dirDeletions.Count == 0 )
-            {
-                dirDeletions.Remove( parentDir );
-            }
+        //    // is the list for that directory now empty?
+        //    if ( dirDeletions.Count == 0 )
+        //    {
+        //        dirDeletions.Remove( parentDir );
+        //    }
 
-            // if it's anything but deleted, put it in the regular table
-            if ( deletedItem.Status.TextStatus != StatusKind.None )
-            {
-                this.table[ deletedItem.Path ] = deletedItem;                
-            }
-        }
+        //    // if it's anything but deleted, put it in the regular table
+        //    if ( deletedItem.Status.TextStatus != StatusKind.None )
+        //    {
+        //        this.table[ deletedItem.Path ] = deletedItem;                
+        //    }
+        //}
 
         private string GetNormalizedParentDirectory(string path)
         {
@@ -218,6 +222,20 @@ namespace Ankh
 
             containingDir = PathUtils.NormalizePath( containingDir, this.currentPath );
             return containingDir;
+        }
+
+        private IList RefreshDeletionsList(IList deletions)
+        {
+            ArrayList newList = new ArrayList();
+
+            foreach (SvnItem item in deletions)
+            {
+                item.Refresh(this.client);
+                if (item.Status.TextStatus == StatusKind.Deleted)
+                    newList.Add(item);
+            }
+
+            return newList;
         }
 
         private int cacheHits = 0;
