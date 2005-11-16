@@ -120,8 +120,7 @@ namespace Ankh.EventSinks
             // we don't want to svn delete files that actually exist on disk -
             // they'll most likely just be "Exclude(d) from project"
             item.Refresh( this.Context.Client );
-            return item.IsVersioned && 
-                (!File.Exists( item.Path ) && !Directory.Exists(item.Path));
+            return item.Status.TextStatus == StatusKind.Missing;
         }
 
         /// <summary>
