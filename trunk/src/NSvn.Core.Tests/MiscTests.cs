@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using System.Text.RegularExpressions;
 using System.IO;
+using Utils;
 
 namespace NSvn.Core.Tests
 {
@@ -140,6 +141,27 @@ namespace NSvn.Core.Tests
 
             Assert.IsTrue( this.Client.IsIgnored( ignored ) );
 
+        }
+
+        [Test]
+        public void TestEnsureConfig()
+        {
+            string configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+                "Subversion");
+            string renamed = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Subversion.sdlkjhdfgljh");
+
+            Directory.Move(configDir, renamed);
+            try
+            {
+                ClientConfig config = new ClientConfig();
+
+                Assert.IsTrue(Directory.Exists(configDir));
+            }
+            finally
+            {
+                PathUtils.RecursiveDelete(configDir);
+                Directory.Move(renamed, configDir);
+            }
         }
 
         private string GetUrl( string path )
