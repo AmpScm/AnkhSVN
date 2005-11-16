@@ -71,8 +71,8 @@ namespace NSvn.Core.Tests
         public static string ExtractRepos( string resourceName, string path, Type type )
         {
             //already exists?
-            if ( Directory.Exists( path ) )
-                Directory.Delete( path, true );
+            if (Directory.Exists(path))
+                PathUtils.RecursiveDelete(path);
 
             Zip.ExtractZipResource(path, type, resourceName );
             string reposUrl = "file://" + 
