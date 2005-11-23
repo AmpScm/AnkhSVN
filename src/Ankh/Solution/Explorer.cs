@@ -436,12 +436,12 @@ namespace Ankh.Solution
             if ( item.Object == null || !this.context.AnkhLoadedForSolution )
                 return null;
 
-            if ( this.projectItems.Contains( item.Object ) )
-                return ((TreeNode)this.projectItems[item.Object]);
-            else if ( this.projects.Contains(item.Object) )
-                return ((TreeNode)this.projects[item.Object]); 
-            else if ( item == this.uiHierarchy.UIHierarchyItems.Item(1) )
+            if ( item == this.uiHierarchy.UIHierarchyItems.Item(1) )
                 return this.solutionNode;
+            else if ( this.projects.Contains(item.Object) )
+                return ((TreeNode)this.projects[item.Object]);
+            else if ( this.projectItems.Contains( item.Object ) )
+                return ((TreeNode)this.projectItems[item.Object]);
             else
                 return null;
         }
@@ -692,9 +692,14 @@ namespace Ankh.Solution
             public int GetHashCode(object obj)
             {
                 try
-                {                    
-                    string str = ItemComparer.GetProjectName(obj) + "|" + 
-                        ItemComparer.GetFileName(obj);
+                {
+                    string projectName = ItemComparer.GetProjectName(obj);
+                    string fileName = ItemComparer.GetFileName(obj);
+                    if ( projectName == null || fileName == null )
+                        return obj.GetHashCode();
+
+                    string str = projectName + "|" + 
+                        fileName;
                     return str.GetHashCode();
                 }
                 catch( Exception )
@@ -729,9 +734,22 @@ namespace Ankh.Solution
                     {
                         try
                         {
-                            string str_a = GetProjectName(x) + "|" + GetFileName(x);
-                            string str_b = GetProjectName(y) + "|" + GetFileName(y);
-                            return str_a.CompareTo(str_b);
+                            string projectName = GetProjectName( x );
+                            string fileName = GetFileName( x );
+                            if ( projectName == null || fileName == null )
+                                return -1;
+
+                            string nameA = projectName + "|" + fileName;
+
+                            projectName = GetProjectName( x );
+                            fileName = GetFileName( x );
+
+                            if ( projectName == null || fileName == null )
+                                return 1;
+
+                            string nameB = projectName + "|" + fileName;
+
+                            return nameA.CompareTo(nameB);
                         }
                         catch( Exception )
                         {
@@ -774,7 +792,7 @@ namespace Ankh.Solution
                 }
                 else
                 {
-                    throw new ApplicationException("Unknown type to get file name from");
+                    return null; 
                 }
 
                 return filename;
@@ -806,7 +824,7 @@ namespace Ankh.Solution
                 }
                 else
                 {
-                    throw new ApplicationException("Unknown type to get project name from");
+                    return null;
                 }
 
                 return projectName;
