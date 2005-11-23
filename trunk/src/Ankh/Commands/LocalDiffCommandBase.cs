@@ -63,7 +63,7 @@ namespace Ankh.Commands
             Revision revisionEnd = Revision.Working;
 
             // should we show the path selector?
-            if ( !CommandBase.Shift )
+            if ( !CommandBase.Shift && resources.Count != 1 )
             {
                 info = context.UIShell.ShowPathSelector( info );
                     
