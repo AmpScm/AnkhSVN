@@ -39,9 +39,11 @@ void NSvn::Core::AprFileAdapter::Read()
     {
         if( status != APR_SUCCESS )
         {
-            String* str = Utf8ToString(apr_strerror(status, unmanagedBuffer, BUFSIZE), pool );
+            // TODO: Consider better mechanism here, but for now, this will do.
+            return;
+           /* String* str = Utf8ToString(apr_strerror(status, unmanagedBuffer, BUFSIZE), pool );
             this->errorMessage = str;
-            throw new IOException( str );
+            throw new IOException( str );*/
         }
         Marshal::Copy( unmanagedBuffer, managedBuffer, 0, noBytes );
         this->stream->Write( managedBuffer, 0, noBytes );

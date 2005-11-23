@@ -685,16 +685,22 @@ void NSvn::Core::Client::Diff( String* diffOptions[], String* path1, Revision* r
     AprFileAdapter* outAdapter = new AprFileAdapter(outfile, pool);
     AprFileAdapter* errAdapter = new AprFileAdapter(errfile, pool);
     apr_file_t* aprOut = outAdapter->Start();
-    apr_file_t* aprErr = errAdapter->Start();    
+    apr_file_t* aprErr = errAdapter->Start();
+
+    try
+    {
 
     HandleError( svn_client_diff2( diffOptArray, truePath1, 
         revision1->ToSvnOptRevision( pool ), truePath2, 
         revision2->ToSvnOptRevision(pool), recurse, ignoreAncestry, noDiffDeleted,
         ignoreContentType,
         aprOut, aprErr, this->context->ToSvnContext(), pool ) );
-
-    apr_file_close( aprOut );
-    apr_file_close( aprErr );
+    }
+    __finally
+    {
+        apr_file_close( aprOut );
+        apr_file_close( aprErr );
+    }
 
     outAdapter->WaitForExit();
     errAdapter->WaitForExit();
