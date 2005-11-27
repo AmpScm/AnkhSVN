@@ -93,6 +93,8 @@ namespace Ankh.Solution
         /// </summary>
         public void RefreshSelectionParents()
         {
+            this.ForcePoll();
+
             foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
             {
                 TreeNode node = this.GetNode( item );
@@ -112,6 +114,8 @@ namespace Ankh.Solution
         /// <param name="project"></param>
         public void Refresh( Project project )
         {
+            this.ForcePoll();
+
             TreeNode node = this.GetNode( project );
             if ( node != null )
                 node.Refresh();
@@ -122,6 +126,8 @@ namespace Ankh.Solution
         /// </summary>
         public void RefreshSelection()
         {
+            this.ForcePoll();
+
             foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
             {
                 TreeNode node = this.GetNode( item );
@@ -136,6 +142,8 @@ namespace Ankh.Solution
         /// <param name="item"></param>
         public void Refresh( ProjectItem item )
         {
+            this.ForcePoll();
+
             TreeNode node = (TreeNode)this.projectItems[item];
             if ( node != null )
                 node.Refresh();
@@ -155,6 +163,9 @@ namespace Ankh.Solution
             
             // and assign the status image list to the tree
             this.treeview.StatusImageList = statusImageList.Handle;
+
+            // make sure everything's up to date.
+            this.ForcePoll();
 
             SolutionLoadStrategy.GetStrategy( dte.Version ).Load( this );     
  
@@ -178,7 +189,9 @@ namespace Ankh.Solution
         /// </summary>         
         /// <param name="visitor"></param>         
         public void VisitSelectedNodes( INodeVisitor visitor )         
-        {         
+        {
+            this.ForcePoll();
+
             //foreach( SelectedItem item in items )         
             object o = this.uiHierarchy.SelectedItems;         
             foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )         
@@ -204,6 +217,8 @@ namespace Ankh.Solution
         public IList GetSelectionResources( bool getChildItems, 
             ResourceFilterCallback filter )
         {
+            this.ForcePoll();
+
             ArrayList list = new ArrayList();
 
             object o = this.uiHierarchy.SelectedItems;         
@@ -228,6 +243,8 @@ namespace Ankh.Solution
 			if ( !context.AnkhLoadedForSolution )
 				return new SvnItem[]{};
 
+            this.ForcePoll();
+
             ArrayList list = new ArrayList();
 
             TreeNode node = solutionNode;     
@@ -245,6 +262,8 @@ namespace Ankh.Solution
         /// <returns></returns>
         public IList GetItemResources( ProjectItem item, bool recursive )
         {
+            this.ForcePoll();
+
             ArrayList list = new ArrayList();
 
             TreeNode node = this.GetNode(item);
@@ -467,6 +486,15 @@ namespace Ankh.Solution
             else
                 return null;
         }
+
+        /// <summary>
+        /// Forces a poll of all project files.
+        /// </summary>
+        private void ForcePoll()
+        {
+            this.context.ProjectFileWatcher.ForcePoll();
+        }
+
 
         /// <summary>
         /// Merges the status icons with the icons for locked and read only.
