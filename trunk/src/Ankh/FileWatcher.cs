@@ -101,6 +101,11 @@ namespace Ankh
             this.dirty = false;
         }
 
+        public void ForcePoll()
+        {
+            this.DoPoll( null );
+        }
+
         /// <summary>
         /// Callback for SVN notifications.
         /// </summary>
