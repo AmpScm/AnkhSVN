@@ -96,10 +96,7 @@ namespace Ankh
             this.commitDialog.LogMessageTemplate = ctx.LogMessageTemplate;
             this.commitDialog.KeepLocks = ctx.KeepLocks;
 
-            if ( ctx.LogMessage != null )
-                this.commitDialog.LogMessage = ctx.LogMessage;
-            else
-                this.commitDialog.LogMessage = "";
+            this.commitDialog.LogMessage = ctx.LogMessage;
 
             // we want to preserve the original state.
             bool originalVisibility = this.commitDialogWindow.Visible;
@@ -132,10 +129,7 @@ namespace Ankh
             ctx.CommitItems = this.commitDialog.CommitItems;
             ctx.KeepLocks = this.commitDialog.KeepLocks;
 
-            if ( this.commitDialog.CommitDialogResult != CommitDialogResult.Cancel )
-            {
-                ctx.Cancelled = false;
-            }
+            ctx.Cancelled = this.commitDialog.CommitDialogResult == CommitDialogResult.Cancel;
 
             // restore the pre-modal state.
             this.commitDialog.ButtonsEnabled = false;
