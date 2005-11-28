@@ -61,7 +61,10 @@ namespace Ankh
                     this.commitContext.LogMessage = this.LogMessage;
             }
 
-            this.commitContext = context.UIShell.ShowCommitDialogModal( this.commitContext );
+            // don't show the dialog if shift is down.
+            if ( ! (Commands.CommandBase.Shift ) )
+                this.commitContext = context.UIShell.ShowCommitDialogModal( this.commitContext );
+
             if ( commitContext.Cancelled )
             {
                 this.logMessage = this.commitContext.RawLogMessage;

@@ -17,6 +17,7 @@ namespace Ankh
             this.CommitItems = commitItems;
             this.urlPaths = urlPaths;
             this.keepLocks = false;
+            this.cancelled = false;
         }
 
         public string LogMessage
@@ -67,8 +68,8 @@ namespace Ankh
         private bool urlPaths;
         private IList commitItems;
         private LogMessageTemplate logMessageTemplate;
-        private string rawLogMessage = null;
-        private string logMessage = null;
+        private string rawLogMessage = "";
+        private string logMessage = "";
         private bool keepLocks;
         
     }
