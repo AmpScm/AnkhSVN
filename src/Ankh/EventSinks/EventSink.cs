@@ -108,7 +108,11 @@ namespace Ankh.EventSinks
         /// <returns></returns>
         private static ProjectsEventSink GetProjectsEvents( string kind, IContext context )
         {
-            string objectName = GetName( kind, "ProjectsEvents", context.DTE );    
+            string objectName = GetName( kind, "ProjectsEvents", context.DTE );
+            if (objectName == null)
+            {
+                objectName = GetName(kind, "WebSiteEvents", context.DTE);
+            }
             if ( objectName != null )
             {
                 object projectsEvents;
@@ -161,8 +165,11 @@ Please report this error.", kind, objectName, projectsEvents.GetType(),
         /// <returns></returns>
         private static ProjectItemsEventSink GetProjectItemsEvents( string kind, IContext context )
         {
-            string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );   
-            
+            string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );
+            if (objectName == null)
+            {
+                objectName = GetName(kind, "WebsiteItemsEvents", context.DTE);
+            }
             if ( objectName != null )
             {
                 object events;
