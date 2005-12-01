@@ -484,13 +484,17 @@ namespace Ankh
             if ( res == DialogResult.Yes )
             {
                 Debug.WriteLine( "Creating Ankh.Load", "Ankh" );
-                File.Create( Path.Combine(solutionDir, "Ankh.Load") ).Close();
+                string ankhLoad = Path.Combine( solutionDir, "Ankh.Load" );
+                File.Create( ankhLoad ).Close();
+                File.SetAttributes( ankhLoad, FileAttributes.Hidden );                
                 return true;
             }
             else if ( res == DialogResult.No )
             {
                 Debug.WriteLine( "Creating Ankh.NoLoad", "Ankh" );
-                File.Create( Path.Combine(solutionDir, "Ankh.NoLoad") ).Close();
+                string ankhNoLoad = Path.Combine( solutionDir, "Ankh.NoLoad" );
+                File.Create( ankhNoLoad ).Close();
+                File.SetAttributes( ankhNoLoad, FileAttributes.Hidden );
             }
 
             return false;
