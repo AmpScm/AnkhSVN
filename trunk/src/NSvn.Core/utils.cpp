@@ -138,12 +138,12 @@ String* NSvn::Core::ToNativePath( const char* path, apr_pool_t* pool )
 
 String* NSvn::Core::Utf8ToString( const char* string, apr_pool_t* pool )
 {
-	const char* cstring;
 	if ( string != 0 )
 	{
-		HandleError( svn_utf_cstring_from_utf8( &cstring, string, pool ) );
-		return Marshal::PtrToStringAnsi(
-			static_cast<IntPtr>(const_cast<char*>(cstring)));
+        int length = strlen(string);
+        Byte bytes[] = new Byte[length];
+        Marshal::Copy(const_cast<char*>(string), bytes, 0, bytes->Length);
+        return System::Text::Encoding::UTF8->GetString(bytes);
 	}
 	else
 		return 0;
@@ -153,11 +153,11 @@ const char* NSvn::Core::StringToUtf8( String* string, apr_pool_t* pool )
 {
 	if ( string != 0 )
 	{
-		char* ansi = static_cast<char*>(Marshal::StringToHGlobalAnsi(string).ToPointer());
-		const char* utf8;
-		HandleError( svn_utf_cstring_to_utf8( &utf8, ansi, pool ) );
-
-		return utf8;
+        Byte bytes[] = System::Text::Encoding::UTF8->GetBytes(string);
+        char* utf8 = Pool::AllocateBytes<char>( pool, bytes->Length + 1);      
+        Marshal::Copy(bytes, 0, utf8, bytes->Length);
+        utf8[bytes->Length] = '\0';
+		return reinterpret_cast<const char*>(utf8);
 	}
 	else
 		return 0;

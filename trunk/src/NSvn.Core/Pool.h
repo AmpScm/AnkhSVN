@@ -85,6 +85,12 @@ namespace NSvn
 
                 return newT;
             }
+
+            template<class T>
+                static T* AllocateBytes( apr_pool_t* pool, int numBytes )
+                {
+                    return static_cast<T*>(apr_palloc( pool, numBytes));
+                }
         protected:
              // uses an existing pool as the parent - 
             Pool( apr_pool_t* parentPool )

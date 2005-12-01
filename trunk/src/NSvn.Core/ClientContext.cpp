@@ -168,7 +168,7 @@ namespace
             svn_string_t* encodedString = svn_string_create( "", pool );
 
             HandleError( svn_subst_translate_string( &encodedString, 
-                logMsgString, NULL, pool ) );
+                logMsgString, "UTF-8", pool ) );
 
             *log_msg = encodedString->data;
         }
