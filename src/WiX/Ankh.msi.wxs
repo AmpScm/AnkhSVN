@@ -117,7 +117,7 @@
             <UnpublishComponents Sequence="1700"/>
             <MsiUnpublishAssemblies Sequence="1750"/>
 
-            <Custom Action="InstallLib_UnInstall" After="MsiUnpublishAssemblies">PREVIOUSVERSIONSINSTALLED AND NOT NEWERVERSIONFOUND</Custom>
+            <Custom Action="InstallLib_UnInstall" After="MsiUnpublishAssemblies">Installed</Custom>
 
             <UnpublishFeatures Sequence="1800"/>
             <StopServices Sequence="1900">VersionNT</StopServices>
