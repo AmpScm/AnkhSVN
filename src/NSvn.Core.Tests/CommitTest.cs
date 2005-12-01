@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using NUnit.Framework;
+using System.Collections;
 
 namespace NSvn.Core.Tests
 {
@@ -114,8 +115,19 @@ namespace NSvn.Core.Tests
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
             this.Client.LogMessage +=new LogMessageDelegate(this.LogMessageCallback);
-            this.logMessage = "� e i a � �. M����! �ber";
+            this.logMessage = " ¥ · £ · € · $ · ¢ · ₡ · ₢ · ₣ · ₤ · ₥ · ₦ · ₧ · ₨ · ₩ · ₪ · ₫ · ₭ · ₮ · ₯";
             CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
+
+            this.Client.Log( new string[] { this.WcPath }, Revision.Head, Revision.Head, true, true,
+                new LogMessageReceiver( this.GetLogMessage ) );
+            Assert.AreEqual( this.logMessage, ( (LogMessage)this.logMessages[0] ).Message );
+
+        }
+
+        private ArrayList logMessages = new ArrayList();
+        private void GetLogMessage( LogMessage msg )
+        {
+            logMessages.Add( msg );
         }
 
         /// <summary>
