@@ -258,10 +258,12 @@
         <nunit2 failonerror="true" haltonfailure="false">
             <formatter type="Plain" />
             <formatter type="Xml" usefile="true" outputdir="${build.dir}" extension=".xml" />
-                <test haltonfailure="false" assemblyname="${build.dir}/NSvn.Core.Tests.dll"/>
-                <test haltonfailure="false" assemblyname="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
-                <test haltonfailure="false" assemblyname="${build.dir}/Ankh.Tests.dll"/>
-                <test haltonfailure="false" assemblyname="${build.dir}/Utils.Tests.dll"/>
+            <test haltonfailure="false" assemblyname="${build.dir}/NSvn.Core.Tests.dll"/>
+            <test haltonfailure="false" assemblyname="${build.dir}/NSvn.Core.Tests.MCpp.dll"/>
+
+            <!-- Ankh.Tests is disabled until we find a way to close VS after each test. -->
+            <!--<test haltonfailure="false" assemblyname="${build.dir}/Ankh.Tests.dll"/>-->
+            <test haltonfailure="false" assemblyname="${build.dir}/Utils.Tests.dll"/>
         </nunit2>
 
         <!-- Use this XmlPeek hack to make sure all tests run even if there are errors in the first test -->
