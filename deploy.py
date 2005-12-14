@@ -25,8 +25,8 @@ BDB_DIR = "db-4.2.52"
 BDB_VERSION="4.2.52"
 
 # OpenSSL
-OPENSSL = "http://www.openssl.org/source/openssl-0.9.7d.tar.gz"
-OPENSSL_VERSION="0.9.7-d"
+OPENSSL = "http://www.openssl.org/source/openssl-0.9.8a.tar.gz"
+OPENSSL_VERSION="0.9.8-a"
 openssl_target_dir = ""
 
 # ZLIB
