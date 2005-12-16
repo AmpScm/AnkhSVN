@@ -406,9 +406,11 @@
     <Compile Include="EventSinks\SolutionEventsSink.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EventSinks\TrackProjectEvents.cs" />
     <Compile Include="EventSinks\VCProjectEventSink.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EventSinks\VSInterfaces.cs" />
     <Compile Include="Extenders\ExtenderProvider.cs">
       <SubType>Code</SubType>
     </Compile>

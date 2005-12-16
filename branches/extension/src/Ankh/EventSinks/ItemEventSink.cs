@@ -6,6 +6,9 @@ using System.IO;
 using NSvn.Core;
 using System.Windows.Forms;
 using System.Collections;
+using System.Diagnostics;
+using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace Ankh.EventSinks
 {
@@ -16,60 +19,38 @@ namespace Ankh.EventSinks
     {
         protected ItemEventSink( IContext context ) : base( context )
         {
-            // empty
+            InitializeTrackProjectDocumentsIfNecessary( context );
+        }
+
+        internal static TrackProjectDocuments TrackProjectDocuments
+        {
+            get { return trackProjectDocuments; }
+        }
+
+        private void InitializeTrackProjectDocumentsIfNecessary( IContext context )
+        {
+            if ( TrackProjectDocuments == null )
+                trackProjectDocuments = new TrackProjectDocuments( context );
         }
 
         protected void ItemAdded( ProjectItem item )
         {
             try
             {
-                // do we want to automatically add it?
-                // no autoadds if another operation is running.
-                if ( this.Context.Config.AutoAddNewFiles && !this.Context.OperationRunning )
+                Trace.WriteLine( "In ItemAdded" );
+                //// do we want to automatically add it?
+                //// no autoadds if another operation is running.
+                for ( short i = 1; i <= item.FileCount; i++ )
                 {
-                    for( short i = 1; i <= item.FileCount; i++ )
+                    string file = item.get_FileNames( i );
+
+                    if ( file.ToLower().StartsWith( "file://" ) )
                     {
-                        string file = item.get_FileNames(i);
-
-                        // we don't want to (automatically) add the .svn(_svn) dir 
-                        // or its contents
-                        if ( Path.GetDirectoryName( file ).IndexOf( 
-                            Client.AdminDirectoryName ) >= 0 )
-                        {
-                            return;
-                        }
-
-                        // is this an URI?
-                        if ( file.ToLower().StartsWith( "file://" ) )
-                        {
-                            Uri uri = new Uri( file );
-                            file = uri.LocalPath;
-                        }
-
-                        // does this file even exist?
-                        if ( !File.Exists( file ) )
-                            return;
-                        try
-                        {
-                            SvnItem svnItem = this.Context.StatusCache[ file ];
-                            
-                            // make sure we have up to date info on this item.
-                            svnItem.Refresh(this.Context.Client);
-                        
-                            if ( !svnItem.IsVersioned && svnItem.IsVersionable &&
-                                !this.Context.Client.IsIgnored( svnItem.Path ) )
-                                this.Context.Client.Add( file, false );
-                        }
-                        catch( SvnClientException ex )
-                        {
-                            // don't propagate this exception
-                            // just tell the user and move on
-                            this.Context.ErrorHandler.Write( "Unable to add file: ", ex, 
-                                this.Context.OutputPane );
-                        }
+                        Uri uri = new Uri( file );
+                        file = uri.LocalPath;
                     }
+                    TrackProjectDocuments.MapFileToProject( file, item.ContainingProject );
                 }
-                this.Context.SolutionExplorer.Refresh( item.ContainingProject );
             }
             catch( Exception ex )
             {
@@ -170,6 +151,8 @@ namespace Ankh.EventSinks
                 this.Context.ErrorHandler.Handle( ex );
             }            
         }
+
+        private static TrackProjectDocuments trackProjectDocuments;
            
         private bool renaming = false;
     }
