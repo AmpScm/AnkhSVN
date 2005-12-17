@@ -124,8 +124,8 @@ namespace Ankh
 
             public override Command AddNamedCommand(string commandName, string text, string tooltip, int bitmapId, int status)
             {
-                ParameterModifier pm = new ParameterModifier( 8 );
-                for ( int i = 0; i < 8; i++ )
+                ParameterModifier pm = new ParameterModifier( 7 );
+                for ( int i = 0; i < 7; i++ )
                     pm[i] = false;
 
                 // the 7th argument is a ref parameter
@@ -138,8 +138,8 @@ namespace Ankh
                                                           commandName, 
                                                           text, 
                                                           tooltip, 
-                                                          true,
-                                                          null,
+                                                          false,
+                                                          bitmapId,
                                                           contextGuids
                                                       }, 
                     new ParameterModifier[]{pm}, null, null);
