@@ -146,7 +146,7 @@ namespace Ankh.EventSinks
 
             public int OnItemAdded( uint itemidParent, uint itemidSiblingPrev, uint itemidAdded )
             {
-                Trace.WriteLine( "Item added for " + this.project.Name + " on thread " + System.Threading.Thread.CurrentThread.ManagedThreadId );
+                Trace.WriteLine( "Item added for " + this.project.Name );
 
                 this.SetUpRefreshCallback();
                 
@@ -158,6 +158,9 @@ namespace Ankh.EventSinks
             public int OnItemDeleted( uint itemid )
             {
                 Trace.WriteLine( "Item deleted for " + this.project.Name );
+                
+                this.SetUpRefreshCallback();
+
                 return VSConstants.S_OK;
             }
 
