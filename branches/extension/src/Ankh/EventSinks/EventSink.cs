@@ -34,43 +34,43 @@ namespace Ankh.EventSinks
 
             Projects projects = context.DTE.Solution.Projects;
             
-            for( int i = 1; i <= projects.Count; i++ )
-            {
-                try
-                {
-                    Project project = projects.Item(i);
-                    // only create one set of sinks for each project type
-                    if ( foundKinds.Contains( project.Kind ) ) 
-                        continue;
-                    foundKinds.Add( project.Kind );
+            //for( int i = 1; i <= projects.Count; i++ )
+            //{
+            //    try
+            //    {
+            //        Project project = projects.Item(i);
+            //        // only create one set of sinks for each project type
+            //        if ( foundKinds.Contains( project.Kind ) ) 
+            //            continue;
+            //        foundKinds.Add( project.Kind );
 
-                    // VC++ projects are a special case
-                    if ( project.Kind == VCPROJECTGUID )
-                    {
-                        object events = 
-                            context.DTE.Events.GetObject( VCPROJECT );
-                        sinks.Add( new VCProjectEventSink( events, context ) );
+            //        // VC++ projects are a special case
+            //        if ( project.Kind == VCPROJECTGUID )
+            //        {
+            //            object events = 
+            //                context.DTE.Events.GetObject( VCPROJECT );
+            //            sinks.Add( new VCProjectEventSink( events, context ) );
 
-                        continue;
-                    }
+            //            continue;
+            //        }
                     
-                    // all other projects should follow the normal model
-                    ProjectsEventSink projectsEvents = GetProjectsEvents( project.Kind, context );
-                    if ( projectsEvents != null )
-                        sinks.Add( projectsEvents );
+            //        // all other projects should follow the normal model
+            //        ProjectsEventSink projectsEvents = GetProjectsEvents( project.Kind, context );
+            //        if ( projectsEvents != null )
+            //            sinks.Add( projectsEvents );
 
-                    ProjectItemsEventSink projectItemsEvents = 
-                        GetProjectItemsEvents( project.Kind, context );
-                    if ( projectItemsEvents != null )
-                        sinks.Add( projectItemsEvents );
-                }
-                catch( Exception ex )
-                {
-                    context.ErrorHandler.Handle( ex );
-                    context.OutputPane.WriteLine( "Error when retrieving events sink for project." + 
-                        "Manual refresh of this project may be necessary." );
-                }
-            }
+            //        ProjectItemsEventSink projectItemsEvents = 
+            //            GetProjectItemsEvents( project.Kind, context );
+            //        if ( projectItemsEvents != null )
+            //            sinks.Add( projectItemsEvents );
+            //    }
+            //    catch( Exception ex )
+            //    {
+            //        context.ErrorHandler.Handle( ex );
+            //        context.OutputPane.WriteLine( "Error when retrieving events sink for project." + 
+            //            "Manual refresh of this project may be necessary." );
+            //    }
+            //}
 
             sinks.Add( new DocumentEventsSink( context ) );
             sinks.Add( new SolutionEventsSink( context ) );
@@ -78,6 +78,8 @@ namespace Ankh.EventSinks
             sinks.Add( new CommandsEventSink( context ) );
 
             sinks.Add( new ProjectFilesEventSink( context ) );
+
+            sinks.Add( new HierarchyEvents( context ) );
 
             return sinks;
         }
@@ -253,7 +255,7 @@ Please report this error.", kind, objectName, events.GetType(),
                 return key.GetValue( "Package" ).ToString();
         }
         
-        protected const int REFRESHDELAY = 200;
+        protected const int REFRESHDELAY = 400;
         private static bool addingProject = false;
         private IContext context;
         private const string PROJECTPATH = @"\Projects\";
