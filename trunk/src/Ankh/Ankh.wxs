@@ -148,7 +148,7 @@
       </Component>
 
       <Directory Id="Ankh_directory1" Name="1033">
-        <Component Id="C_Bitmap.dll" DiskId="1" Guid="7609179F-82F7-4659-A4F8-FF1FB0ABFE53">
+        <Component Id="C_Bitmap.dll" DiskId="1" Guid="B15C29C8-080A-43FA-A258-6D7C66D09BC33">
           <File Id="Ankh_file3" KeyPath="yes" Name="BITMAPDL.DLL" LongName="BitmapDll.dll" Checksum="yes" Vital="yes" src="$(var.builddir)\..\1033\BitmapDll.dll" />
         </Component>
       </Directory>
