@@ -31,10 +31,9 @@ namespace Ankh.Solution
         {
             this.dte = dte;
             this.context = context;
-            this.projectItems = new Hashtable( new ItemHashCodeProvider(), 
+            this.projectItems = new Hashtable( null, 
                 new ItemComparer() );
-            this.projects = new Hashtable( new ProjectHashCodeProvider(this), 
-                new ProjectComparer() );
+            this.projects = new Hashtable( 1, null, new ProjectComparer() );
             
             // get the uihierarchy root
             this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
@@ -713,30 +712,6 @@ namespace Ankh.Solution
             private bool done;
         }
         #endregion
-                
-        #region class ItemHashCodeProvider
-        private class ItemHashCodeProvider : IHashCodeProvider
-        {        
-            public int GetHashCode(object obj)
-            {
-                try
-                {
-                    string projectName = ItemComparer.GetProjectName(obj);
-                    string fileName = ItemComparer.GetFileName(obj);
-                    if ( projectName == null || fileName == null )
-                        return obj.GetHashCode();
-
-                    string str = projectName + "|" + 
-                        fileName;
-                    return str.GetHashCode();
-                }
-                catch( Exception )
-                {
-                    return obj.GetHashCode();
-                }
-            }
-        }
-        #endregion
 
         #region class ItemComparer
         private class ItemComparer : IComparer
@@ -859,47 +834,7 @@ namespace Ankh.Solution
             }
         }
         #endregion
-        #region class ProjectHashCodeProvider
-        private class ProjectHashCodeProvider : IHashCodeProvider
-        {        
-            public ProjectHashCodeProvider(Explorer explorer)
-            {
-                this.explorer = explorer;
-            }
-
-            public int GetHashCode(object obj)
-            {
-                Project project = obj as Project;
-                if(project != null)
-                {
-                    string projectFile = explorer.solutionNode.Parser.GetProjectFile( project.Name );
-                    if(projectFile != null && projectFile.Length > 0)
-                    {
-                        return projectFile.GetHashCode();
-                    }
-
-                    try
-                    {
-                        return project.FullName.GetHashCode();
-                    }
-                    catch( Exception )
-                    {
-                        return obj.GetHashCode();
-                    }
-                }
-
-                ParsedSolutionItem parsedSolutionItem = obj as ParsedSolutionItem;
-                if(parsedSolutionItem != null)
-                {
-                    return parsedSolutionItem.FileName.GetHashCode();
-                }
-                return obj.GetHashCode();
-            }
-
-			private Explorer explorer;
-        }
-        #endregion
-
+       
         #region class ProjectComparer
         private class ProjectComparer : IComparer
         {        
