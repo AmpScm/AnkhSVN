@@ -75,7 +75,7 @@
           Name="Description" Type="string" Value="Subversion addin for Visual Studio .NET" />
         <Registry Root="HKMU" 
           Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
-          Name="FriendlyName" Type="string" Value="AnkhSVN  Addin" />
+          Name="FriendlyName" Type="string" Value="AnkhSvn  Addin" />
         <Registry Root="HKMU" 
           Key="Software\Microsoft\VisualStudio\7.0\AddIns\Ankh" 
           Name="SatelliteDllName" Type="string" Value="BitmapDll.dll" />
@@ -102,7 +102,7 @@
           Name="Description" Type="string" Value="Subversion addin for Visual Studio .NET" />
         <Registry Root="HKMU" 
           Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
-          Name="FriendlyName" Type="string" Value="AnkhSVN Addin" />
+          Name="FriendlyName" Type="string" Value="AnkhSvn Addin" />
         <Registry Root="HKMU" 
           Key="Software\Microsoft\VisualStudio\7.1\AddIns\Ankh" 
           Name="SatelliteDllName" Type="string" Value="BitmapDll.dll" />
@@ -131,7 +131,7 @@
           Name="Description" Type="string" Value="Subversion addin for Visual Studio .NET" />
         <Registry Root="HKMU" 
           Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
-          Name="FriendlyName" Type="string" Value="AnkhSVN Addin" />
+          Name="FriendlyName" Type="string" Value="AnkhSvn Addin" />
         <Registry Root="HKMU" 
           Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
           Name="SatelliteDllName" Type="string" Value="BitmapDll.dll" />
