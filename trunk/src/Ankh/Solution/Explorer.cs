@@ -33,7 +33,7 @@ namespace Ankh.Solution
             this.context = context;
             this.projectItems = new Hashtable( null, 
                 new ItemComparer() );
-            this.projects = new Hashtable( 1, null, new ProjectComparer() );
+            this.projects = new Hashtable( null, new ProjectComparer() );
             
             // get the uihierarchy root
             this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
