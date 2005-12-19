@@ -73,12 +73,13 @@ namespace Ankh.EventSinks
             //}
 
             sinks.Add( new DocumentEventsSink( context ) );
-            sinks.Add( new SolutionEventsSink( context ) );
+//            sinks.Add( new SolutionEventsSink( context ) );
 
             sinks.Add( new CommandsEventSink( context ) );
 
             sinks.Add( new ProjectFilesEventSink( context ) );
 
+            sinks.Add( new TrackProjectDocuments( context ) );
             sinks.Add( new HierarchyEvents( context ) );
 
             return sinks;
@@ -158,63 +159,63 @@ Please report this error.", kind, objectName, projectsEvents.GetType(),
             else
                 return null;
         }
-
-        /// <summary>
-        /// Retrieves a VSProjectItemsEventSink associated with the project 
-        /// </summary>
-        /// <param name="kind"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        private static ProjectItemsEventSink GetProjectItemsEvents( string kind, IContext context )
-        {
-            string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );
-            if (objectName == null)
-            {
-                objectName = GetName(kind, "WebsiteItemsEvents", context.DTE);
-            }
-            if ( objectName != null )
-            {
-                object events;
-                try
-                {
-                    events = context.DTE.Events.GetObject( objectName );
-                }
-                catch( System.Runtime.InteropServices.COMException )
-                {
-                    // all eVB projects just throw "Catastrophic failure" when trying 
-                    // to retrieve the event objects
-                    context.OutputPane.WriteLine( "Unable to retrieve project item events object for " + 
-                        "project of type {0}", objectName );
-                    return null;
-                }
-
-                if ( events is ProjectItemsEvents )
-                {
-                    return new ProjectItemsEventSink( (ProjectItemsEvents)
-                        events,
-                        context );
-                }
-                else if ( events is ICSharpEventsRoot )
-                {
-                    return new ProjectItemsEventSink( (ProjectItemsEvents)
-                        ((ICSharpEventsRoot)events).get_CSharpProjectItemsEvents( null ),
-                        context );
-                }
-                else
-                {
-                    throw new ApplicationException( String.Format(
-                        @"Could not retrieve ProjectItemsEvents.
-kind: {0} 
-objectName: {1}
-type: {2}
-ToString(): {3}
-Please report this error.", kind, objectName, events.GetType(), 
-                        events.ToString() ) );
-                }
-            }
-            else
-                return null;
-        }
+//
+//        /// <summary>
+//        /// Retrieves a VSProjectItemsEventSink associated with the project 
+//        /// </summary>
+//        /// <param name="kind"></param>
+//        /// <param name="context"></param>
+//        /// <returns></returns>
+//        private static ProjectItemsEventSink GetProjectItemsEvents( string kind, IContext context )
+//        {
+//            string objectName = GetName( kind, "ProjectItemsEvents", context.DTE );
+//            if (objectName == null)
+//            {
+//                objectName = GetName(kind, "WebsiteItemsEvents", context.DTE);
+//            }
+//            if ( objectName != null )
+//            {
+//                object events;
+//                try
+//                {
+//                    events = context.DTE.Events.GetObject( objectName );
+//                }
+//                catch( System.Runtime.InteropServices.COMException )
+//                {
+//                    // all eVB projects just throw "Catastrophic failure" when trying 
+//                    // to retrieve the event objects
+//                    context.OutputPane.WriteLine( "Unable to retrieve project item events object for " + 
+//                        "project of type {0}", objectName );
+//                    return null;
+//                }
+//
+//                if ( events is ProjectItemsEvents )
+//                {
+//                    return new ProjectItemsEventSink( (ProjectItemsEvents)
+//                        events,
+//                        context );
+//                }
+//                else if ( events is ICSharpEventsRoot )
+//                {
+//                    return new ProjectItemsEventSink( (ProjectItemsEvents)
+//                        ((ICSharpEventsRoot)events).get_CSharpProjectItemsEvents( null ),
+//                        context );
+//                }
+//                else
+//                {
+//                    throw new ApplicationException( String.Format(
+//                        @"Could not retrieve ProjectItemsEvents.
+//kind: {0} 
+//objectName: {1}
+//type: {2}
+//ToString(): {3}
+//Please report this error.", kind, objectName, events.GetType(), 
+//                        events.ToString() ) );
+//                }
+//            }
+//            else
+//                return null;
+//        }
 
         /// <summary>
         /// Finds a registry value with a name containing the substring.
@@ -255,7 +256,7 @@ Please report this error.", kind, objectName, events.GetType(),
                 return key.GetValue( "Package" ).ToString();
         }
         
-        protected const int REFRESHDELAY = 400;
+        protected const int REFRESHDELAY = 800;
         private static bool addingProject = false;
         private IContext context;
         private const string PROJECTPATH = @"\Projects\";
