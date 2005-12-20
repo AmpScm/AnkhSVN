@@ -32,7 +32,6 @@ namespace Ankh.UI
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-
             this.CreateToolTips();
 
             this.commitItemsTree.GetPathInfo += new GetPathInfoDelegate(commitItemsTree_GetPathInfo);
@@ -185,6 +184,10 @@ namespace Ankh.UI
         
                 
             }
+
+            this.logMessageBox.Focus();
+            this.logMessageBox.SelectionStart = this.logMessageBox.SelectionStart + this.logMessageBox.SelectionLength;
+            this.logMessageBox.SelectionLength = 0;
 
             this.loaded = true;
         }
