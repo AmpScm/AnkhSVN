@@ -391,7 +391,7 @@
     <Compile Include="EventSinks\EventSink.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EventSinks\HierarchyEvents.cs" />
+    <Compile Include="EventSinks\HierarchyEventsSink.cs" />
     <Compile Include="EventSinks\ItemEventSink.cs">
       <SubType>Code</SubType>
     </Compile>

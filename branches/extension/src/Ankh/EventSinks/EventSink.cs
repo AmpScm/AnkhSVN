@@ -80,7 +80,7 @@ namespace Ankh.EventSinks
             sinks.Add( new ProjectFilesEventSink( context ) );
 
             sinks.Add( new TrackProjectDocuments( context ) );
-            sinks.Add( new HierarchyEvents( context ) );
+            sinks.Add( new HierarchyEventsSink( context ) );
 
             return sinks;
         }

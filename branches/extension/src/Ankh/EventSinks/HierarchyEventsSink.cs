@@ -11,9 +11,9 @@ using Utils;
 
 namespace Ankh.EventSinks
 {
-    public class HierarchyEvents : EventSink
+    public class HierarchyEventsSink : EventSink
     {
-        public HierarchyEvents( IContext context ) : base(context)
+        public HierarchyEventsSink( IContext context ) : base(context)
         {
             try
             {
