@@ -15,7 +15,7 @@ using System.Windows.Forms;
 //using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 
-namespace Ankh.EventSinks
+namespace Ankh
 {
     [InterfaceTypeAttribute( 1 )]
     [GuidAttribute( "6D5140C1-7436-11CE-8034-00AA006009FA" )]
