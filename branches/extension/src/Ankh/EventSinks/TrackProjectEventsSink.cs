@@ -19,10 +19,10 @@ namespace Ankh.EventSinks
     /// Provides an implementation of the Visual Studio IVsTrackProjectDocumentsEvents2 interface, 
     /// which can be used to listen for Add, Remove and Rename operations.
     /// </summary>
-    class TrackProjectDocuments : EventSink, IVsTrackProjectDocumentsEvents2
+    class TrackProjectDocumentsEventSink : EventSink, IVsTrackProjectDocumentsEvents2
     {
 
-        public TrackProjectDocuments( IContext context ) : base (context)
+        public TrackProjectDocumentsEventSink( IContext context ) : base (context)
         {
             this.context = context;
             AdviseEvents();
