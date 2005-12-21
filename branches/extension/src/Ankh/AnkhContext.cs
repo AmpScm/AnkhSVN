@@ -254,7 +254,16 @@ namespace Ankh
         public VSCommandBars CommandBars
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.commandBars; }
+            get { return this.commandBars; }
+        }
+
+        public IServiceProvider ServiceProvider
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get 
+            {
+                return this.dte as IServiceProvider;
+            }
         }
 
 
@@ -559,5 +568,11 @@ namespace Ankh
         private Ankh.Config.ConfigLoader configLoader;
 
         private VSCommandBars commandBars;
-    }
+
+        #region IContext Members
+
+        
+
+        #endregion
+}
 }

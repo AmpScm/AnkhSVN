@@ -319,7 +319,7 @@ namespace Ankh.EventSinks
         private void AdviseEvents()
         {
             // The DTE object is also a service provider, the starting point for retrieving any kind of service in the VS env
-            IServiceProvider sp = (IServiceProvider)this.context.DTE;
+            IServiceProvider sp = this.context.ServiceProvider;
             IntPtr svcPtr;
 
             // This is the service and interface we want

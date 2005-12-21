@@ -37,7 +37,7 @@ namespace Ankh.EventSinks
         private void AdviseHierarchyEvents(IContext context)
         {
             // The DTE object is an IServiceProvider (previously undocumented, but they're pretty open about it now)
-            IServiceProvider sp = this.Context.DTE as IServiceProvider;
+            IServiceProvider sp = this.Context.ServiceProvider;
 
             // get hold of the SVsSolution service
             Guid serviceGuid = typeof( SVsSolution ).GUID;
