@@ -43,7 +43,7 @@ HRESULT AddAboutBoxDetails(const TCHAR* RegistryRoot)
 
 HRESULT RemoveCommands (LPCOLESTR vsProgID)
 {
-	CComPtr<EnvDTE::_DTE> m_pDTE;
+    CComPtr<EnvDTE::_DTE> m_pDTE;
     HRESULT hr = S_OK;
 
     CLSID clsid;
@@ -52,9 +52,9 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
 
     if (FAILED (hr))
     {
-		return S_OK;
+        return S_OK;
     }
-		
+
     CComPtr<EnvDTE::Commands> pCommands;
     hr = m_pDTE->get_Commands(&pCommands);
 
@@ -67,10 +67,10 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
     if (FAILED (hr))
         return S_OK;
 
-    CComPtr<EnvDTE::Command> pCommand;
     BSTR bpName; 
     for (long i = 0; i < lCount; i++)
     {
+        CComPtr<EnvDTE::Command> pCommand;
         hr = pCommands->Item(CComVariant(i), -1, &pCommand);
 
         if (FAILED (hr))
@@ -79,10 +79,10 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
         bpName = NULL;
         hr = pCommand->get_Name(&bpName);
 
-        if (FAILED (hr))
+        if (FAILED (hr) || bpName == NULL)
             continue;
 
-        if (CString(bpName).Find(PROGID) == 0)
+        if (StrStrW(bpName, PROGID) != NULL)
             pCommand->Delete ();
     }
 
@@ -110,6 +110,7 @@ bool vsIsRunning(LPCOLESTR lpszProgID)
 
 UINT __stdcall UnInstall ( MSIHANDLE hModule )
 {
+    CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
     while (vsIsRunning(lpszVS70PROGID) || vsIsRunning(lpszVS71PROGID))
     {
         MessageBox(NULL, "One or more instances of VS.NET are running. Please close these before continuing",
@@ -123,6 +124,8 @@ UINT __stdcall UnInstall ( MSIHANDLE hModule )
     RemoveCommands(lpszVS70PROGID);
     RemoveCommands(lpszVS71PROGID);
     RemoveCommands(lpszVS80PROGID);
+
+    CoUninitialize();
 
     return ERROR_SUCCESS;
 }
