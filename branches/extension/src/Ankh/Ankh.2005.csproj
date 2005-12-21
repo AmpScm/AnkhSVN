@@ -407,7 +407,7 @@
     <Compile Include="EventSinks\SolutionEventsSink.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EventSinks\TrackProjectEvents.cs" />
+    <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
     <Compile Include="EventSinks\VCProjectEventSink.cs">
       <SubType>Code</SubType>
     </Compile>
