@@ -83,6 +83,11 @@ namespace Ankh.EventSinks
             }
         }
 
+        public void AddHierarchy( IVsHierarchy pHierarchy )
+        {
+            this.hierarchyEvents.Add( new HierarchyEventsImpl( pHierarchy, this.Context ) );
+        }
+
         private class NoProjectAutomationObjectException : Exception
         {
         }
@@ -280,7 +285,9 @@ namespace Ankh.EventSinks
         }
 
         private ArrayList hierarchyEvents;
-        
 
+
+
+        
     }
 }

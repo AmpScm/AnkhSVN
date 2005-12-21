@@ -12,6 +12,7 @@ using Ankh.Solution;
 using System.Collections;
 using System.IO;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Ankh
 {
@@ -271,12 +272,12 @@ namespace Ankh
         /// Event handler for the SolutionOpened event. Can also be called at
         /// addin load time, or if Ankh is enabled for a solution.
         /// </summary>
-        public void SolutionOpened()
+        public bool SolutionOpened()
         {
             try
             {
                 if ( !this.CheckWhetherAnkhShouldLoad() )
-                    return;
+                    return false;
 
                 System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
 
@@ -286,18 +287,20 @@ namespace Ankh
                 this.statusCache = new StatusCache( this.Client );
 
                 this.solutionExplorer.Load();
-                this.eventSinks = EventSinks.EventSink.CreateEventSinks( this );
 
                 timer.End( "Solution opened", "Ankh" );
                 
                 //MessageBox.Show( timer.ToString() );
 
                 // Add Conflict tasks for all conflicts in solution
-                this.conflictManager.CreateTaskItems(); 
+                this.conflictManager.CreateTaskItems();
+
+                return true;
             }
             catch( Exception ex )
             {
                 ErrorHandler.Handle( ex );
+                return false;
             }
             finally
             {
@@ -314,14 +317,6 @@ namespace Ankh
 
             this.conflictManager.RemoveAllTaskItems();
             this.SolutionExplorer.Unload();
-
-            // unhook events.
-            if ( this.eventSinks != null )
-            {
-                foreach( EventSinks.EventSink sink in this.eventSinks )
-                    sink.Unhook();
-            }
-
         }
 
         /// <summary>
@@ -394,15 +389,21 @@ namespace Ankh
         /// </summary>
         private void SetUpEvents()
         {
-            // apparently necessary to avoid the SolutionEvents object being
-            // gc'd :-/
-            this.solutionEvents = this.DTE.Events.SolutionEvents;
-            this.solutionEvents.Opened += new 
-                _dispSolutionEvents_OpenedEventHandler( this.SolutionOpened );
-            this.solutionEvents.BeforeClosing += new 
-                _dispSolutionEvents_BeforeClosingEventHandler( this.SolutionClosing);
+            this.solutionEvents = new Ankh.EventSinks.SolutionEventsSink( this );
+            this.solutionEvents.SolutionLoaded += new CancelEventHandler( this.HandleSolutionLoaded );
+            this.solutionEvents.SolutionBeforeClosing  += new EventHandler( this.HandleSolutionClosing );
         }
         #endregion        
+
+        private void HandleSolutionLoaded( object sender, System.ComponentModel.CancelEventArgs args )
+        {
+            args.Cancel = ! this.SolutionOpened();
+        }
+
+        private void HandleSolutionClosing( object sender, EventArgs args )
+        {
+            this.SolutionClosing();
+        }
 
         private void HandleSolutionFinishedLoading( object sender, EventArgs args )
         {
@@ -538,14 +539,12 @@ namespace Ankh
         private EnvDTE.AddIn addin;
         private IWin32Window hostWindow;
 
-        private IList eventSinks;
-
         private RepositoryExplorer.Controller repositoryController;
 
         private OutputPaneWriter outputPane;
 
         //required to ensure events will still fire
-        private SolutionEvents solutionEvents;
+        private Ankh.EventSinks.SolutionEventsSink solutionEvents;
         private Explorer solutionExplorer = null;
 
         private Ankh.Config.Config config;
