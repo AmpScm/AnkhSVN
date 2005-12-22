@@ -209,7 +209,6 @@ namespace Ankh.Tests
 
             ctx.DTE.Solution.Open( 
                 Path.Combine( this.WcPath, "WindowsApplication.sln" ) );
-            EventSink.CreateEventSinks( ctx );
 
             ctx.Config.AutoAddNewFiles = true;
             return ctx;
