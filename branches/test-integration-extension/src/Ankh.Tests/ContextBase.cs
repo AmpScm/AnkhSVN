@@ -175,7 +175,7 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual void SolutionOpened()
+        public virtual void EnableAnkhForLoadedSolution()
         {
             // TODO:  Add ContextBase.SolutionOpened implementation
         }
@@ -562,5 +562,19 @@ namespace Ankh.Tests
         private ConfigLoader configLoader;
         private VSCommandBars commandBars;
         private Control control;
-    }
+
+        #region IContext Members
+
+        public IServiceProvider ServiceProvider
+        {
+            get { throw new Exception( "The method or operation is not implemented." ); }
+        }
+
+        bool IContext.EnableAnkhForLoadedSolution()
+        {
+            throw new Exception( "The method or operation is not implemented." );
+        }
+
+        #endregion
+}
 }

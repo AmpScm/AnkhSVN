@@ -153,7 +153,15 @@ namespace Ankh.EventSinks
             {
                 Trace.WriteLine( "Item added for " + this.project.Name );
 
-                this.SetUpRefreshCallback();
+                try
+                {
+                    this.SetUpRefreshCallback();
+                }
+                catch ( Exception ex )
+                {
+                    this.context.ErrorHandler.Handle( ex );
+                    return VSConstants.E_FAIL;
+                }
                 
                 return VSConstants.S_OK;
             }
@@ -163,8 +171,16 @@ namespace Ankh.EventSinks
             public int OnItemDeleted( uint itemid )
             {
                 Trace.WriteLine( "Item deleted for " + this.project.Name );
-                
-                this.SetUpRefreshCallback();
+
+                try
+                {
+                    this.SetUpRefreshCallback();
+                }
+                catch ( Exception ex )
+                {
+                    context.ErrorHandler.Handle( ex );
+                    return VSConstants.E_FAIL;
+                }
 
                 return VSConstants.S_OK;
             }

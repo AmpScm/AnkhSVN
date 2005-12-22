@@ -39,11 +39,13 @@ namespace Ankh.EventSinks
 
         public override void Unhook()
         {
+            this.UnhookEventsForSolution();
             this.solution.UnadviseSolutionEvents( this.cookie );
-            this.hierarchyEvents.Unhook();
+        }
 
-            foreach ( EventSink sink in this.eventSinks )
-                sink.Unhook();
+        public void InitializeForLoadedSolution()
+        {
+            this.SetupEventsForSolution();
         }
 
         #region IVsSolutionEvents Members
@@ -51,8 +53,16 @@ namespace Ankh.EventSinks
         int IVsSolutionEvents.OnAfterOpenProject( IVsHierarchy pHierarchy, int fAdded )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterOpenProject() of {0}", this.ToString() ) );
-            if ( this.Context.AnkhLoadedForSolution )
-                this.hierarchyEvents.AddHierarchy( pHierarchy );
+
+            try
+            {
+                if ( this.Context.AnkhLoadedForSolution )
+                    this.hierarchyEvents.AddHierarchy( pHierarchy );
+            }
+            catch ( Exception ex )
+            {
+                this.Context.ErrorHandler.Handle( ex );
+            }
 
             return VSConstants.S_OK;
         }
@@ -92,11 +102,19 @@ namespace Ankh.EventSinks
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterOpenSolution() of {0}", this.ToString() ) );
             CancelEventArgs args = new CancelEventArgs( true );
 
-            if ( this.SolutionLoaded != null )
-                this.SolutionLoaded( this, args );
-            if ( !args.Cancel )
+            try
             {
-                this.SetupEventsForSolution();
+                if ( this.SolutionLoaded != null )
+                    this.SolutionLoaded( this, args );
+                if ( !args.Cancel )
+                {
+                    this.SetupEventsForSolution();
+                }
+            }
+            catch ( Exception ex )
+            {
+                this.Context.ErrorHandler.Handle( ex );
+                return VSConstants.E_FAIL;
             }
             
             return VSConstants.S_OK;
@@ -114,10 +132,18 @@ namespace Ankh.EventSinks
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnBeforeCloseSolution() of {0}", this.ToString() ) );
 
-            this.UnhookEventsForSolution();
+            try
+            {
+                this.UnhookEventsForSolution();
 
-            if ( this.SolutionBeforeClosing != null )
-                this.SolutionBeforeClosing( this, EventArgs.Empty );
+                if ( this.SolutionBeforeClosing != null )
+                    this.SolutionBeforeClosing( this, EventArgs.Empty );
+            }
+            catch ( Exception ex )
+            {
+                this.Context.ErrorHandler.Handle( ex );
+                return VSConstants.E_FAIL;
+            }
             return VSConstants.S_OK;
         }
 
@@ -162,5 +188,7 @@ namespace Ankh.EventSinks
         private uint cookie;
         private IVsSolution solution;
         private IList eventSinks;
+
+        
     }
 }
