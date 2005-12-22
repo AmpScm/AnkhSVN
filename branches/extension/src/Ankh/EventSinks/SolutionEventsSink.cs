@@ -39,18 +39,13 @@ namespace Ankh.EventSinks
 
         public override void Unhook()
         {
-            try
-            {
-                this.solution.UnadviseSolutionEvents( this.cookie );
-                this.hierarchyEvents.Unhook();
+            this.UnhookEventsForSolution();
+            this.solution.UnadviseSolutionEvents( this.cookie );
+        }
 
-                foreach ( EventSink sink in this.eventSinks )
-                    sink.Unhook();
-            }
-            catch ( Exception ex )
-            {
-                this.Context.ErrorHandler.Handle( ex );
-            }
+        public void InitializeForLoadedSolution()
+        {
+            this.SetupEventsForSolution();
         }
 
         #region IVsSolutionEvents Members
@@ -193,5 +188,7 @@ namespace Ankh.EventSinks
         private uint cookie;
         private IVsSolution solution;
         private IList eventSinks;
+
+        
     }
 }

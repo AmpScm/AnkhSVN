@@ -111,7 +111,7 @@ namespace Ankh
                 // is there already a solution open? 
                 // can happen if we are loaded after startup
                 if ( this.context.DTE.Solution.IsOpen )
-                    this.context.SolutionOpened();
+                    this.context.EnableAnkhForLoadedSolution();
   
                 
             }

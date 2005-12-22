@@ -120,7 +120,7 @@ namespace Ankh
         /// Event handler for the SolutionOpened event. Can also be called at
         /// addin load time, or if Ankh is enabled for a solution.
         /// </summary>
-        bool SolutionOpened();
+        bool EnableAnkhForLoadedSolution();
 
         /// <summary>
         /// Called when a solution is closed.

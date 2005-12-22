@@ -272,39 +272,16 @@ namespace Ankh
         /// Event handler for the SolutionOpened event. Can also be called at
         /// addin load time, or if Ankh is enabled for a solution.
         /// </summary>
-        public bool SolutionOpened()
+        public bool EnableAnkhForLoadedSolution()
         {
-            try
+            if ( this.SolutionLoaded() )
             {
-                if ( !this.CheckWhetherAnkhShouldLoad() )
-                    return false;
-
-                System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
-
-                Utils.DebugTimer timer = DebugTimer.Start();
-                
-
-                this.statusCache = new StatusCache( this.Client );
-
-                this.solutionExplorer.Load();
-
-                timer.End( "Solution opened", "Ankh" );
-                
-                //MessageBox.Show( timer.ToString() );
-
-                // Add Conflict tasks for all conflicts in solution
-                this.conflictManager.CreateTaskItems();
-
+                this.solutionEvents.InitializeForLoadedSolution();
                 return true;
             }
-            catch( Exception ex )
+            else
             {
-                ErrorHandler.Handle( ex );
                 return false;
-            }
-            finally
-            {
-                this.EndOperation();   
             }
         }
 
@@ -315,8 +292,12 @@ namespace Ankh
         {
             this.ankhLoadedForSolution = false;
 
+            this.solutionEvents.Unhook();
+
             this.conflictManager.RemoveAllTaskItems();
             this.SolutionExplorer.Unload();
+
+            
         }
 
         /// <summary>
@@ -397,7 +378,46 @@ namespace Ankh
 
         private void HandleSolutionLoaded( object sender, System.ComponentModel.CancelEventArgs args )
         {
-            args.Cancel = ! this.SolutionOpened();
+            args.Cancel = !SolutionLoaded();
+        }
+
+        private bool SolutionLoaded( )
+        {
+            try
+            {
+                if ( !this.CheckWhetherAnkhShouldLoad() )
+                {
+                    return false;
+                }
+
+
+                System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
+
+                Utils.DebugTimer timer = DebugTimer.Start();
+
+
+                this.statusCache = new StatusCache( this.Client );
+
+                this.solutionExplorer.Load();
+
+                timer.End( "Solution opened", "Ankh" );
+
+                //MessageBox.Show( timer.ToString() );
+
+                // Add Conflict tasks for all conflicts in solution
+                this.conflictManager.CreateTaskItems();
+
+                return true;
+            }
+            catch ( Exception ex )
+            {
+                ErrorHandler.Handle( ex );
+                return false;
+            }
+            finally
+            {
+                this.EndOperation();
+            }
         }
 
         private void HandleSolutionClosing( object sender, EventArgs args )
