@@ -148,7 +148,7 @@
       </Component>
       <Component Id="C_License.rtf" DiskId="1" Guid="199180FF-6EDF-4AD5-98D7-039D4812FAC7">
         <File Id="CF_License.rtf" Name="License.rtf"
-	  Checksum="yes" Keypath="yes" Vital="yes" src="$(var.builddir)\LICENSE.rtf" />
+	  Checksum="yes" KeyPath="yes" Vital="yes" src="$(var.builddir)\LICENSE.rtf" />
       </Component>
 
       <Directory Id="Ankh_directory1" Name="1033">
