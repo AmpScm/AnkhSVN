@@ -148,7 +148,7 @@
       </Component>
       <Component Id="C_VS_SDK_License.rtf" DiskId="1" Guid="1D38A5AB-59FB-4564-8315-BF5799B978ED">
         <File Id="CF_VS_SDK_License.rtf" Name="VSSDKLIC.rtf" LongName="VS SDK License.rtf"
-	  Checksum="yes" KeyPath="yes" Vital="yes" src="$(var.builddir)\VS SDK License.rtf" />
+	  Checksum="yes" KeyPath="yes" Vital="yes" src="$(var.builddir)\..\..\VS SDK License.rtf" />
       </Component>
 
       <Directory Id="Ankh_directory1" Name="1033">
