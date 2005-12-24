@@ -17,29 +17,6 @@ BOOL APIENTRY DllMain( HANDLE hModule,
                        LPVOID lpReserved )
 { return TRUE; }
 
-HRESULT RegRemove(const TCHAR* RegistryRoot)
-{
-    CRegKey rkCurrentUser(HKEY_CURRENT_USER);
-    CRegKey rkLocalMachine(HKEY_LOCAL_MACHINE);
-
-    rkCurrentUser.DeleteSubKey(RegistryRoot);
-    rkLocalMachine.DeleteSubKey(RegistryRoot);
-
-    return S_OK;
-}
-
-HRESULT AddAboutBoxDetails(const TCHAR* RegistryRoot)
-{
-    CRegKey regKey;
-
-    regKey.Create(HKEY_CURRENT_USER, RegistryRoot);
-    regKey.SetStringValue(_T("AboutBoxDetails"), ABOUTBOXDETAILS);
-
-    regKey.Create(HKEY_LOCAL_MACHINE, RegistryRoot);
-    regKey.SetStringValue(_T("AboutBoxDetails"), ABOUTBOXDETAILS);
-
-    return S_OK;
-}
 
 HRESULT RemoveCommands (LPCOLESTR vsProgID)
 {
@@ -117,24 +94,11 @@ UINT __stdcall UnInstall ( MSIHANDLE hModule )
             "VS.NET is running", MB_OK | MB_ICONWARNING);
     }
 
-    RegRemove(VS70REGPATH);
-    RegRemove(VS71REGPATH);
-    RegRemove(VS80REGPATH);
-
     RemoveCommands(lpszVS70PROGID);
     RemoveCommands(lpszVS71PROGID);
     RemoveCommands(lpszVS80PROGID);
 
     CoUninitialize();
-
-    return ERROR_SUCCESS;
-}
-
-UINT __stdcall Install ( MSIHANDLE hModule )
-{
-    AddAboutBoxDetails(VS70REGPATH);
-    AddAboutBoxDetails(VS71REGPATH);
-    AddAboutBoxDetails(VS80REGPATH);
 
     return ERROR_SUCCESS;
 }
