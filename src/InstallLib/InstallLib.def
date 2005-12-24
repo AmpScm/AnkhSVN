@@ -6,4 +6,3 @@ LIBRARY      "InstallLib"
 
 EXPORTS
 	UnInstall
-    Install
