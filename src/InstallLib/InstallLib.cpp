@@ -62,11 +62,13 @@ HRESULT RemoveCommands (MSIHANDLE hModule, LPCOLESTR vsProgID)
         BSTR bpName;
         hr = pCommand->get_Name(&bpName);
 
-        if (FAILED (hr) || bpName == NULL)
+        if (FAILED (hr))
         {
             LogString(hModule, _T("Unable to get command name"));
             continue;
         }
+        if (bpName == NULL)
+            continue;
 
         if (StrStrW(bpName, PROGID) != NULL)
         {
