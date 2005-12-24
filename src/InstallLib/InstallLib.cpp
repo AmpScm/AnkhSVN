@@ -44,7 +44,6 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
     if (FAILED (hr))
         return S_OK;
 
-    BSTR bpName; 
     for (long i = 0; i < lCount; i++)
     {
         CComPtr<EnvDTE::Command> pCommand;
@@ -53,7 +52,7 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
         if (FAILED (hr))
             continue;
 
-        bpName = NULL;
+        BSTR bpName;
         hr = pCommand->get_Name(&bpName);
 
         if (FAILED (hr) || bpName == NULL)
@@ -88,7 +87,7 @@ bool vsIsRunning(LPCOLESTR lpszProgID)
 UINT __stdcall UnInstall ( MSIHANDLE hModule )
 {
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-    while (vsIsRunning(lpszVS70PROGID) || vsIsRunning(lpszVS71PROGID))
+    while (vsIsRunning(lpszVS70PROGID) || vsIsRunning(lpszVS71PROGID) || vsIsRunning(lpszVS80PROGID))
     {
         MessageBox(NULL, "One or more instances of VS.NET are running. Please close these before continuing",
             "VS.NET is running", MB_OK | MB_ICONWARNING);
