@@ -1,5 +1,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
-  <Fragment Id="FR_apr-iconv">
+  <Fragment>
+    <ComponentGroup Id="CG_AprIconv">
+      <ComponentRef Id="apr_iconv" />
+    </ComponentGroup>
     <DirectoryRef Id="TARGETDIR">
       <Directory Id="directory0" Name="iconv" src="$(var.svndir)\apr-iconv\Release\iconv\">
         <Component Id="apr_iconv" DiskId="1" Guid="5D2BC6FB-E6CB-47ec-B8BC-E2A54F56E8BA">
