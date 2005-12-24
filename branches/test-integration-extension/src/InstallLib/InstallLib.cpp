@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "resource.h"
 
-#ifdef CUSTOM_DETAILS
-#include "customdetails.h"
-#endif
-
 #include "InstallLib.h"
 
 // get the DTE libs
@@ -17,29 +13,6 @@ BOOL APIENTRY DllMain( HANDLE hModule,
                        LPVOID lpReserved )
 { return TRUE; }
 
-HRESULT RegRemove(const TCHAR* RegistryRoot)
-{
-    CRegKey rkCurrentUser(HKEY_CURRENT_USER);
-    CRegKey rkLocalMachine(HKEY_LOCAL_MACHINE);
-
-    rkCurrentUser.DeleteSubKey(RegistryRoot);
-    rkLocalMachine.DeleteSubKey(RegistryRoot);
-
-    return S_OK;
-}
-
-HRESULT AddAboutBoxDetails(const TCHAR* RegistryRoot)
-{
-    CRegKey regKey;
-
-    regKey.Create(HKEY_CURRENT_USER, RegistryRoot);
-    regKey.SetStringValue(_T("AboutBoxDetails"), ABOUTBOXDETAILS);
-
-    regKey.Create(HKEY_LOCAL_MACHINE, RegistryRoot);
-    regKey.SetStringValue(_T("AboutBoxDetails"), ABOUTBOXDETAILS);
-
-    return S_OK;
-}
 
 HRESULT RemoveCommands (LPCOLESTR vsProgID)
 {
@@ -67,7 +40,6 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
     if (FAILED (hr))
         return S_OK;
 
-    BSTR bpName; 
     for (long i = 0; i < lCount; i++)
     {
         CComPtr<EnvDTE::Command> pCommand;
@@ -76,7 +48,7 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
         if (FAILED (hr))
             continue;
 
-        bpName = NULL;
+        BSTR bpName;
         hr = pCommand->get_Name(&bpName);
 
         if (FAILED (hr) || bpName == NULL)
@@ -111,30 +83,17 @@ bool vsIsRunning(LPCOLESTR lpszProgID)
 UINT __stdcall UnInstall ( MSIHANDLE hModule )
 {
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-    while (vsIsRunning(lpszVS70PROGID) || vsIsRunning(lpszVS71PROGID))
+    while (vsIsRunning(lpszVS70PROGID) || vsIsRunning(lpszVS71PROGID) || vsIsRunning(lpszVS80PROGID))
     {
         MessageBox(NULL, "One or more instances of VS.NET are running. Please close these before continuing",
             "VS.NET is running", MB_OK | MB_ICONWARNING);
     }
-
-    RegRemove(VS70REGPATH);
-    RegRemove(VS71REGPATH);
-    RegRemove(VS80REGPATH);
 
     RemoveCommands(lpszVS70PROGID);
     RemoveCommands(lpszVS71PROGID);
     RemoveCommands(lpszVS80PROGID);
 
     CoUninitialize();
-
-    return ERROR_SUCCESS;
-}
-
-UINT __stdcall Install ( MSIHANDLE hModule )
-{
-    AddAboutBoxDetails(VS70REGPATH);
-    AddAboutBoxDetails(VS71REGPATH);
-    AddAboutBoxDetails(VS80REGPATH);
 
     return ERROR_SUCCESS;
 }

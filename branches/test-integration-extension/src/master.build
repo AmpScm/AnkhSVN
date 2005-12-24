@@ -369,13 +369,8 @@
                 
                 project.Log(Level.Info, "Detected AboutBoxText: {0}", text);
                 
-                string headerText = "#ifndef CustomDetails_\r\n";
-                headerText += "#define CustomDetails_\r\n";
-                headerText += "const TCHAR* ABOUTBOXDETAILS = _T(\"";
-                headerText += text.Replace("\r\n", "\\r\\n");
-                headerText += "\");\r\n";
-                headerText += "#endif";
-                project.Properties.Add( "AboutBoxDetails", headerText );
+                string aboutBoxDetails = text.Trim();
+                project.Properties.Add("AboutBoxDetails", aboutBoxDetails);
             }
             ]]></code>
         </script>
