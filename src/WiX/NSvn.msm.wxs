@@ -12,8 +12,8 @@
         </Directory>
         
         <!-- Include the Fragments needed for the merge module -->
-        <FragmentRef Id="FR_NSvn.Common" />
-        <FragmentRef Id="FR_NSvn.Core" />
+        <ComponentGroupRef Id="CG_NSvn.Common" />
+        <ComponentGroupRef Id="CG_NSvn.Core" />
 
         <!-- Include the Licence file -->
         <DirectoryRef Id="appDir">

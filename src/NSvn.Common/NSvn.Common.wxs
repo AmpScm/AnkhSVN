@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
-    <Fragment Id="FR_NSvn.Common">
+    <Fragment>
+        <ComponentGroup Id="CG_NSvn.Common">
+            <ComponentRef Id="C_NSvn.Common_0" />
+            <ComponentRef Id="C_NSvn.Common_1" />
+            <ComponentRef Id="C_NSvn.Common_2" />
+        </ComponentGroup>
         <DirectoryRef Id="appDir" src="..\$(var.builddir)\">
             <Component Id="C_NSvn.Common_0" DiskId="1" Guid="AC546574-2B87-6C96-4E75-EAF862314D38">
                 <File Id="NSvn.Common.file0" Name="NSVNCOM.DLL" LongName="NSvn.Common.dll"

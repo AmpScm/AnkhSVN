@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
-    <Fragment Id="FR_NSvn.Core">
+    <Fragment>
+    <ComponentGroup Id="CG_NSvn.Core">
+      <ComponentRef Id="NSvn.Core.component0" />
+      <ComponentRef Id="NSvn.Core.component1" />
+      <ComponentRef Id="NSvn.Core.component2" />
+      <ComponentRef Id="LibApr.component3" />
+      <ComponentRef Id="LibAprUtil.component4" />
+      <ComponentRef Id="LibAprIconv.component5" />
+    </ComponentGroup>
         <DirectoryRef Id="appDir" src="..\$(var.builddir)\">
             <Component Id="NSvn.Core.component0" DiskId="1" Guid="07D7100D-D005-4a9d-A591-8D4EB28D8A4A">
                 <File Id="NSvn.Core.file0" Name="NSVNCORE.DLL" LongName="NSvn.Core.dll" Checksum="yes"
