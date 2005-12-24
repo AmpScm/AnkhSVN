@@ -471,7 +471,7 @@ using namespace System::Runtime::CompilerServices;
     shutil.copy( "AssemblyInfo.cs",  "src\ReposInstaller\AssemblyInfo.cs" )
 
 def checkout_tools():
-    checkout ("-r 2158 %s/tools/WiX" % ANKHSVN_ROOT)
+    checkout ("%s/tools/WiX" % ANKHSVN_ROOT)
     checkout ("%s/tools/nant" % ANKHSVN_ROOT )    
     global wix_binary_dir
     wix_binary_dir = os.path.abspath( "WiX" )
