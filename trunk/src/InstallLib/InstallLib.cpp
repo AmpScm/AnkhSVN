@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "resource.h"
 
-#ifdef CUSTOM_DETAILS
-#include "customdetails.h"
-#endif
-
 #include "InstallLib.h"
 
 // get the DTE libs
