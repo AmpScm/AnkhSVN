@@ -1,5 +1,8 @@
 ﻿<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
-  <Fragment Id="FR_Ankh.UI">
+  <Fragment>
+		<ComponentGroup Id="CG_Ankh.UI">
+			<ComponentRef Id="C_Ankh.UI.dll"/>
+		</ComponentGroup>
     <DirectoryRef Id="TARGETDIR">
       <Component Id="C_Ankh.UI.dll" DiskId="1" Guid="BE3BF683-9D60-444a-923F-3A2891F628B7">
         <File Id="CF_Ankh.UI.dll" Name="ANKHUI.DLL" LongName="Ankh.UI.dll"

@@ -43,15 +43,11 @@
 
 		<Feature Id="DefaultFeature" Title="AnkhSVN" Level="1">
 			<MergeRef Id="MSM_NSvn_msm" />
-            <ComponentRef Id="C_Ankh.dll" />
-            <ComponentRef Id="C_Ankh_RegAsm" />
-            <ComponentRef Id="C_Ankh_RegVS" />
-            <ComponentRef Id="C_Ankh_RegVS2005" />
-            <ComponentRef Id="C_Bitmap.dll" />
-			<ComponentRef Id="C_Ankh.UI.dll" />
-			<ComponentRef Id="C_Utils.dll" />
+			<ComponentGroupRef Id="CG_Ankh" />
+			<ComponentGroupRef Id="CG_Ankh.UI"/>
+			<ComponentGroupRef Id="CG_Utils"/>
 			<FeatureRef Id="F_Libs" />
-            <ComponentRef Id="apr_iconv" />
+			<ComponentGroupRef Id="CG_AprIconv" />
 		</Feature>
 
 		<CustomAction Id="InstallLib_Install" BinaryKey="InstallLib" 
