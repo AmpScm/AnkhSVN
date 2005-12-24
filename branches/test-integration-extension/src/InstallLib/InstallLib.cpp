@@ -2,6 +2,7 @@
 #include "resource.h"
 
 #include "InstallLib.h"
+#include "Logging.h"
 
 // get the DTE libs
 #pragma warning( disable : 4278 )
@@ -14,7 +15,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 { return TRUE; }
 
 
-HRESULT RemoveCommands (LPCOLESTR vsProgID)
+HRESULT RemoveCommands (MSIHANDLE hModule, LPCOLESTR vsProgID)
 {
     CComPtr<EnvDTE::_DTE> m_pDTE;
     HRESULT hr = S_OK;
@@ -25,6 +26,7 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
 
     if (FAILED (hr))
     {
+        LogString(hModule, _T("Unable to create DTE instance"));
         return S_OK;
     }
 
@@ -32,13 +34,19 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
     hr = m_pDTE->get_Commands(&pCommands);
 
     if (FAILED (hr))
+    {
+        LogString(hModule, _T("Unable to get Commands collection"));
         return S_OK;
+    }
 
     long lCount = 0;
     hr = pCommands->get_Count(&lCount);
 
     if (FAILED (hr))
+    {
+        LogString(hModule, _T("Unable to get Commands count"));
         return S_OK;
+    }
 
     for (long i = 0; i < lCount; i++)
     {
@@ -46,16 +54,28 @@ HRESULT RemoveCommands (LPCOLESTR vsProgID)
         hr = pCommands->Item(CComVariant(i), -1, &pCommand);
 
         if (FAILED (hr))
+        {
+            LogString(hModule, _T("Unable to get command"));
             continue;
+        }
 
         BSTR bpName;
         hr = pCommand->get_Name(&bpName);
 
         if (FAILED (hr) || bpName == NULL)
+        {
+            LogString(hModule, _T("Unable to get command name"));
             continue;
+        }
 
         if (StrStrW(bpName, PROGID) != NULL)
-            pCommand->Delete ();
+        {
+            hr = pCommand->Delete ();
+            if(FAILED(hr))
+            {
+                LogString(hModule, _T("Failed to delete command"));
+            }
+        }
     }
 
     return S_OK;
@@ -89,9 +109,9 @@ UINT __stdcall UnInstall ( MSIHANDLE hModule )
             "VS.NET is running", MB_OK | MB_ICONWARNING);
     }
 
-    RemoveCommands(lpszVS70PROGID);
-    RemoveCommands(lpszVS71PROGID);
-    RemoveCommands(lpszVS80PROGID);
+    RemoveCommands(hModule, lpszVS70PROGID);
+    RemoveCommands(hModule, lpszVS71PROGID);
+    RemoveCommands(hModule, lpszVS80PROGID);
 
     CoUninitialize();
 

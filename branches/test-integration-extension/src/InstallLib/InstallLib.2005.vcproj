@@ -320,6 +320,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Logging.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -359,6 +363,10 @@
 			</File>
 			<File
 				RelativePath=".\InstallLib.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Logging.h"
 				>
 			</File>
 			<File
