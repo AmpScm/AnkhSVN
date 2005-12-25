@@ -44,28 +44,28 @@ namespace NSvn.Core.Tests
                 false );
             Assert.AreEqual( this.currentStatus.TextStatus, StatusKind.Unversioned, 
                 "Wrong text status on " + unversioned );
-            Assert.AreEqual( unversioned, this.currentPath );
+            Assert.IsTrue( string.Compare(unversioned, this.currentPath, true) == 0, "Unversioned filenames don't match" );
 
             this.Client.Status( out youngest, added,  Revision.Unspecified, 
                 new StatusCallback( this.StatusFunc ), false, false, false, 
                 false );
             Assert.AreEqual( this.currentStatus.TextStatus, StatusKind.Added, 
                 "Wrong text status on " + added );
-            Assert.AreEqual( added, this.currentPath );
+            Assert.IsTrue( string.Compare(added, this.currentPath, true) == 0, "Added filenames don't match" );
 
             this.Client.Status( out youngest, changed, Revision.Unspecified,
                 new StatusCallback( this.StatusFunc ), false, false, false, 
                 false );
             Assert.AreEqual( this.currentStatus.TextStatus, StatusKind.Modified, 
                 "Wrong text status " + changed );
-            Assert.AreEqual( changed, this.currentPath );
+            Assert.IsTrue( string.Compare(changed, this.currentPath, true) == 0, "Changed filenames don't match" );
 
             this.Client.Status( out youngest, propChange, Revision.Unspecified,
                 new StatusCallback( this.StatusFunc ), false, false, false, 
                 false );
             Assert.AreEqual( this.currentStatus.PropertyStatus, StatusKind.Modified, 
                 "Wrong property status " + propChange );
-            Assert.AreEqual( propChange, this.currentPath );
+            Assert.IsTrue( string.Compare(propChange, this.currentPath, true) == 0, "Propchanged filenames don't match" );
 
             this.Client.Status( out youngest, ignored, Revision.Unspecified, 
                 new StatusCallback( this.StatusFunc ), false, false, false, 
