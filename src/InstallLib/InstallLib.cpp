@@ -79,7 +79,7 @@ HRESULT RemoveCommands (MSIHANDLE hModule, LPCOLESTR vsProgID)
             }
         }
     }
-
+     m_pDTE->Quit();
     return S_OK;
 }
 
