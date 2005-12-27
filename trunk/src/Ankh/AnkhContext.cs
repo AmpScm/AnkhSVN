@@ -376,6 +376,10 @@ namespace Ankh
         {  
             if ( this.Unloading != null )
                 this.Unloading( this, EventArgs.Empty );
+
+            if ( this.solutionEvents != null )
+                this.solutionEvents.Unhook();
+
         }
 
 
