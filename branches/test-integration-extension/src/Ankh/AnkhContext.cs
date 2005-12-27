@@ -292,8 +292,6 @@ namespace Ankh
         {
             this.ankhLoadedForSolution = false;
 
-            this.solutionEvents.Unhook();
-
             this.conflictManager.RemoveAllTaskItems();
             this.SolutionExplorer.Unload();
 
@@ -361,6 +359,10 @@ namespace Ankh
         {  
             if ( this.Unloading != null )
                 this.Unloading( this, EventArgs.Empty );
+
+            if ( this.solutionEvents != null )
+                this.solutionEvents.Unhook();
+
         }
 
 
