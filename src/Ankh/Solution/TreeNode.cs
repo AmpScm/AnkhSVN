@@ -161,6 +161,7 @@ namespace Ankh.Solution
             statusMap[ NodeStatusKind.Normal ]      = 1;
             statusMap[ NodeStatusKind.Added ]       = 2;
             statusMap[ NodeStatusKind.Deleted ]     = 3;
+            statusMap[ NodeStatusKind.Replaced ]    = 4;
             statusMap[ NodeStatusKind.IndividualStatusesConflicting ] = 7;
             statusMap[ NodeStatusKind.Conflicted ]  = 6;
             statusMap[ NodeStatusKind.Unversioned ] = 8;
@@ -527,6 +528,7 @@ namespace Ankh.Solution
             Unversioned = StatusKind.Unversioned,
             Modified = StatusKind.Modified,
             Ignored = StatusKind.Ignored,
+            Replaced = StatusKind.Replaced,
             IndividualStatusesConflicting
         }
 
