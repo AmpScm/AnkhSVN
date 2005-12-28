@@ -46,7 +46,7 @@
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>ISO-1</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -391,6 +391,7 @@
     <Compile Include="EventSinks\EventSink.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EventSinks\HierarchyEventsSink.cs" />
     <Compile Include="EventSinks\ItemEventSink.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -406,9 +407,11 @@
     <Compile Include="EventSinks\SolutionEventsSink.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
     <Compile Include="EventSinks\VCProjectEventSink.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="VSInterfaces.cs" />
     <Compile Include="Extenders\ExtenderProvider.cs">
       <SubType>Code</SubType>
     </Compile>

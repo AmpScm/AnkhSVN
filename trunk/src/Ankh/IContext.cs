@@ -112,10 +112,15 @@ namespace Ankh
         VSCommandBars CommandBars{ get; }
 
         /// <summary>
+        /// The OLE Serviceprovider.
+        /// </summary>
+        IServiceProvider ServiceProvider { get; }
+
+        /// <summary>
         /// Event handler for the SolutionOpened event. Can also be called at
         /// addin load time, or if Ankh is enabled for a solution.
         /// </summary>
-        void SolutionOpened();
+        bool EnableAnkhForLoadedSolution();
 
         /// <summary>
         /// Called when a solution is closed.

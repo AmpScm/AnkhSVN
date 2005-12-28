@@ -95,7 +95,7 @@ namespace Ankh.Commands
                 // delete doesnt throw if the file doesn't exist
                 File.Delete( noLoad );
                 File.Create( load ).Close();
-                context.SolutionOpened();
+                context.EnableAnkhForLoadedSolution();
             }
         }
 

@@ -154,6 +154,10 @@
           Checksum="yes" KeyPath="yes" Vital="yes" src="$(var.builddir)\Ankh.dll" />
         <File Id="CF_Ankh.pdb" Name="Ankh.pdb" Checksum="yes" Vital="yes" src="$(var.builddir)\Ankh.pdb" />
       </Component>
+      <Component Id="C_VS_SDK_License.rtf" DiskId="1" Guid="1D38A5AB-59FB-4564-8315-BF5799B978ED">
+        <File Id="CF_VS_SDK_License.rtf" Name="VSSDKLIC.rtf" LongName="VS SDK License.rtf"
+	  Checksum="yes" KeyPath="yes" Vital="yes" src="$(var.builddir)\..\..\VS SDK License.rtf" />
+      </Component>
 
       <Directory Id="Ankh_directory1" Name="1033">
         <Component Id="C_Bitmap.dll" DiskId="1" Guid="B28F8ED5-4085-43A5-8ABF-FB1E7B8177E0">
