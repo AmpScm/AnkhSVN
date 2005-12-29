@@ -73,9 +73,10 @@ namespace Ankh
         ///          /// </summary>
         public void RemoveAllTaskItems()
         {
+            Window win;
             try
             {
-                Window win = this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+                win = this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
             }
             catch(ArgumentException)
             {
