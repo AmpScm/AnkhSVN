@@ -73,7 +73,16 @@ namespace Ankh
         ///          /// </summary>
         public void RemoveAllTaskItems()
         {
-            Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+            try
+            {
+                Window win = this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+            }
+            catch(ArgumentException)
+            {
+                // Swallow (this occurs on VS2005 RTM shutdown)
+                return;
+            }
+
             TaskList taskList = (TaskList) win.Object;
             foreach(TaskItem item in taskList.TaskItems)
             {
