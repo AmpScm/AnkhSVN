@@ -104,7 +104,6 @@ namespace Ankh.EventSinks
                 // first get the name of this project
                 const uint root = unchecked( (uint)(int)VSITEMID.VSITEMID_ROOT );
 
-                DisplayProperties( hierarchy, root );
                 object var;
                 int hr = this.hierarchy.GetProperty( root, (int)VSHPROPID.VSHPROPID_Name, out var );
                 System.Runtime.InteropServices.Marshal.ThrowExceptionForHR(hr);
@@ -280,25 +279,6 @@ namespace Ankh.EventSinks
         //    }
 
         //}
-
-        private static void DisplayProperties( IVsHierarchy hi, uint item )
-        {
-            object var;
-            int hr;
-
-            foreach ( int propId in Enum.GetValues( typeof( VSHPROPID ) ) )
-            {
-                hr = hi.GetProperty( item, propId, out var );
-                String s = String.Format( "VSHPROPID {0} gives value {1}, of type {2}. hr: {3}",
-                    Enum.GetName( typeof( VSHPROPID ), propId ),
-                    var, var != null ? var.GetType() : null, hr );
-                Trace.WriteLine( s );
-            }
-
-            Trace.WriteLine( "" );
-            Trace.WriteLine( "**************************************************************************************" );
-            Trace.WriteLine( "" );
-        }
 
         private ArrayList hierarchyEvents;
 
