@@ -368,6 +368,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "VSInterfaces.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "VSNetCommandAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -679,7 +684,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "EventSinks\HierarchyEvents.cs"
+                    RelPath = "EventSinks\HierarchyEventsSink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -694,32 +699,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "EventSinks\ProjectItemsEventSink.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "EventSinks\ProjectsEventSink.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "EventSinks\SolutionEventsSink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "EventSinks\TrackProjectEvents.cs"
+                    RelPath = "EventSinks\TrackProjectEventsSink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "EventSinks\VCProjectEventSink.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "EventSinks\VSInterfaces.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
