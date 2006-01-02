@@ -57,7 +57,10 @@ namespace Ankh.EventSinks
             try
             {
                 if ( this.Context.AnkhLoadedForSolution )
+                {
                     this.hierarchyEvents.AddHierarchy( pHierarchy );
+                    this.Context.SolutionExplorer.SyncAll();
+                }
             }
             catch ( Exception ex )
             {
@@ -109,7 +112,9 @@ namespace Ankh.EventSinks
                 if ( !args.Cancel )
                 {
                     this.SetupEventsForSolution();
+
                 }
+
             }
             catch ( Exception ex )
             {
