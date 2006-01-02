@@ -85,7 +85,18 @@ namespace Ankh.EventSinks
 
         public void AddHierarchy( IVsHierarchy pHierarchy )
         {
-            this.hierarchyEvents.Add( new HierarchyEventsImpl( pHierarchy, this.Context ) );
+            try
+            {
+                this.hierarchyEvents.Add( new HierarchyEventsImpl( pHierarchy, this.Context ) );
+            }
+            catch( NotImplementedException )
+            {
+                // Swallow and move on, VS sometimes adds spurious "projects"
+            }
+            catch( NoProjectAutomationObjectException )
+            {
+                // Ditto
+            }
         }
 
         private class NoProjectAutomationObjectException : Exception
