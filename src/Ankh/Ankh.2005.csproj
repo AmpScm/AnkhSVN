@@ -314,9 +314,6 @@
     <Compile Include="Commands\RelocateCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\RenameFileCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\ResolveConflictCommand.cs">
       <SubType>Code</SubType>
     </Compile>
