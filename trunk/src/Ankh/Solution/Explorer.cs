@@ -696,14 +696,13 @@ namespace Ankh.Solution
 
             private bool HasMiscItems()
             {
-                foreach (Project project in this.outer.DTE.Solution.Projects)
+                foreach (Project project in Enumerators.EnumerateProjects(this.outer.Context.DTE))
                 {
                     if (project.Kind == MiscItemsKind)
                         return true;
                 }
                 return false;
             }
-
 
             private const string MiscItemsKind = "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}";
             private readonly static TimeSpan TimeOut = new TimeSpan(0, 0, 10);

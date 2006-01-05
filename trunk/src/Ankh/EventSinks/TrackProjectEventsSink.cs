@@ -42,7 +42,6 @@ namespace Ankh.EventSinks
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterAddDirectoriesEx() of: {0}", this.ToString() ) );
             return this.OnAfterAdd( rgpszMkDocuments );
-            return VSConstants.S_OK;
         }
 
         public int OnAfterAddFilesEx( int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSADDFILEFLAGS[] rgFlags )

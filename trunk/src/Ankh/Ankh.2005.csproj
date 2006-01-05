@@ -376,6 +376,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DteUtils.cs" />
+    <Compile Include="Enumerators.cs" />
     <Compile Include="ErrorHandler.cs">
       <SubType>Code</SubType>
     </Compile>
