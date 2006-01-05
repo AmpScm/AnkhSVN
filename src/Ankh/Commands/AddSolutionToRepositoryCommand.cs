@@ -112,7 +112,7 @@ namespace Ankh.Commands
                 context.Client.Add( context.DTE.Solution.FullName, false );
                 this.paths.Add( context.DTE.Solution.FullName );
 
-                this.AddProjects( context.DTE.Solution.Projects, context, solutionDir );  
+                this.AddProjects( context, solutionDir );  
             }
             catch( Exception )
             {
@@ -184,11 +184,10 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="projects"></param>
         /// <param name="context"></param>
-        private void AddProjects( Projects projects, IContext context, string solutionDir )
+        private void AddProjects( IContext context, string solutionDir )
         {
-            for( int i = 1; i <= projects.Count; i++ )
+            foreach ( Project project in Enumerators.EnumerateProjects( context.DTE ) ) 
             {
-                Project project = projects.Item(i);
                 AddProject(context, solutionDir, project);
             }
             

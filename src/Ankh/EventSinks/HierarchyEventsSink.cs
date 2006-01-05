@@ -209,9 +209,8 @@ namespace Ankh.EventSinks
 
             private Project GetProjectForName( string name )
             {
-                foreach ( Project project in this.context.DTE.Solution.Projects )
+                foreach ( Project project in Enumerators.EnumerateProjects(this.context.DTE) )
                 {
-
                     if ( project.Name == name )
                         return project;
                     else

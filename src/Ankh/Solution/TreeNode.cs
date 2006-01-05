@@ -68,9 +68,8 @@ namespace Ankh.Solution
             }
             else if ( parent is SolutionNode ) //deal with unmodeled projects (database)
             {
-                for(int i=1; i<=item.DTE.Solution.Projects.Count; i++)
+                foreach(Project project in Enumerators.EnumerateProjects(explorer.DTE))
                 {
-                    Project project=item.DTE.Solution.Projects.Item(i);
                     if(project.Name==item.Name)
                     {
                         return new ProjectNode( item, hItem, explorer, parent, project );
