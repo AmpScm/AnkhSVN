@@ -265,7 +265,7 @@ namespace Ankh.Commands
         private void AddProjectItems( ProjectItems items, IContext context, 
             string solutionDir )
         {
-            foreach( ProjectItem item in items )
+            foreach( ProjectItem item in Enumerators.EnumerateProjectItems(items) )
             {
                 // if it's a solution folder, item.Object will be the project
                 if ( item.Object is Project )
