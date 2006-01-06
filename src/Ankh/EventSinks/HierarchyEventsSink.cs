@@ -209,20 +209,54 @@ namespace Ankh.EventSinks
 
             private Project GetProjectForName( string name )
             {
-                foreach ( Project project in Enumerators.EnumerateProjects(this.context.DTE) )
+                foreach ( Project project in Enumerators.EnumerateProjects( this.context.DTE ) )
                 {
-                    if ( project.Name == name )
-                        return project;
-                    else
-                    {
-                        string projectDir = PathUtils.NormalizePath( project.Name );
-                        string projectName = PathUtils.NormalizePath( name );
-                        if ( projectDir == projectName )
-                            return project;
-                    }
+                    Project proj = CheckProjectForName( project, name );
+                    if ( proj != null )
+                        return proj;
+
                 }
                 return null;
             }
+
+            private Project CheckProjectForName( Project project, string name )
+            {
+                if ( project.Name == name )
+                    return project;
+                else
+                {
+                    string projectDir = PathUtils.NormalizePath( project.Name );
+                    string projectName = PathUtils.NormalizePath( name );
+                    if ( projectDir == projectName )
+                        return project;
+                }
+                foreach ( ProjectItem item in Enumerators.EnumerateProjectItems(project.ProjectItems) )
+                {
+                    Project subProject = null;
+
+                    if ( item.SubProject != null )
+                    {
+                        subProject = item.SubProject;
+                    }
+                    else if ( item.Object is Project )
+                    {
+                        subProject = item.Object as Project;
+                    }
+
+                    if ( subProject != null )
+                    {
+                        subProject = this.CheckProjectForName( subProject, name );
+                        if ( subProject != null )
+                        {
+                            return subProject;
+                        }
+                    }                   
+                }
+
+                return null;
+            }
+
+
 
             private System.Threading.Timer timer;
             /// <summary>
