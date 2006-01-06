@@ -309,57 +309,52 @@ namespace Ankh.Solution
             Window solutionExplorerWindow = this.dte.Windows.Item(
                 EnvDTE.Constants.vsWindowKindSolutionExplorer);
 
-            // we need to make sure its not hidden and that it is dockable
-            bool linkable = solutionExplorerWindow.Linkable;
-            bool hidden = solutionExplorerWindow.AutoHides;
-            bool isFloating = solutionExplorerWindow.IsFloating;
-
-            // these two operations need to be done in an exact order, 
-            // depending on whether it is initially hidden
-            if ( hidden )
-            {
-                solutionExplorerWindow.AutoHides = false;
-                solutionExplorerWindow.IsFloating = false;
-                solutionExplorerWindow.Linkable = true;
-            }
-            else
-            {
-                solutionExplorerWindow.IsFloating = false;
-                solutionExplorerWindow.Linkable = true;
-                solutionExplorerWindow.AutoHides = false;
-            }
-            
             // find the solution explorer window
             // Get the caption of the solution explorer            
             string slnExplorerCaption = solutionExplorerWindow.Caption;
             Debug.WriteLine( "Caption of solution explorer window is " + slnExplorerCaption, 
                 "Ankh" );
-            //            string vsnetCaption = this.dte.MainWindow.C
-            IntPtr vsnet = (IntPtr)this.dte.MainWindow.HWnd;//Win32.FindWindow( VSNETWINDOW, null );
+
+            IntPtr vsnet = (IntPtr)this.dte.MainWindow.HWnd;
 
             // first try finding it as a child of the main VS.NET window
             IntPtr slnExplorer = Win32.FindWindowEx( vsnet, IntPtr.Zero, GENERICPANE, 
                 slnExplorerCaption );
 
+            // Search for VsAutohide panes as direct children of the VS main window.
+            if (slnExplorer == IntPtr.Zero)
+            {
+                Debug.WriteLine( "Solution explorer not a child of VS.NET window. " +
+                    "Searching VsAutoHide windows", "Ankh" );
+                IntPtr autoHide = Win32.FindWindowEx(vsnet, IntPtr.Zero, VSAUTOHIDE, null);
+                while ( autoHide != IntPtr.Zero )
+                {
+                    // The solution explorer would be a direct child of VsAutoHide.
+                    slnExplorer = Win32.FindWindowEx( autoHide, IntPtr.Zero, GENERICPANE, slnExplorerCaption );
+                    if ( slnExplorer != IntPtr.Zero )
+                        break;
+                    autoHide = Win32.FindWindowEx( vsnet, autoHide, VSAUTOHIDE, null );
+                }
+            }
+
             // not there? Try looking for a floating palette. These are toplevel windows for 
             // some reason
             if ( slnExplorer == IntPtr.Zero )
             {
-                Debug.WriteLine( "Solution explorer not a child of VS.NET window. " + 
+                Debug.WriteLine( "Solution explorer not a child of VS.NET window. " +
                     "Searching floating windows", "Ankh" );
-                // we need to search for the caption of any of the potentially linked windows
-                IntPtr floatingPalette = IntPtr.Zero;
-                foreach( Window win in solutionExplorerWindow.LinkedWindowFrame.LinkedWindows )
+
+                IntPtr floatingPalette = Win32.FindWindowEx( IntPtr.Zero, IntPtr.Zero, VBFLOATINGPALETTE, null );
+                while ( floatingPalette != IntPtr.Zero )
                 {
-                    floatingPalette = Win32.FindWindow( VBFLOATINGPALETTE, 
-                        win.Caption );
-                    if ( floatingPalette != IntPtr.Zero )
+                    slnExplorer = Win32.FindWindowEx( floatingPalette, IntPtr.Zero, GENERICPANE,
+                        slnExplorerCaption );
+                    if ( slnExplorer != IntPtr.Zero )
                         break;
+
+                    // the solution explorer should be a direct child of the palette
+                    floatingPalette = Win32.FindWindowEx( IntPtr.Zero, floatingPalette, VBFLOATINGPALETTE, null );
                 }
-                
-                // the solution explorer should be a direct child of the palette
-                slnExplorer = Win32.FindWindowEx( floatingPalette, IntPtr.Zero, GENERICPANE,
-                    slnExplorerCaption );
             }
 
             IntPtr uiHierarchy = Win32.FindWindowEx( slnExplorer, IntPtr.Zero, 
@@ -374,12 +369,6 @@ namespace Ankh.Solution
                     "try moving it to the primary during solution loading." );
 
             this.treeview = new TreeView( treeHwnd );
-
-            // reset back to the original hiding-state and dockable state            
-            solutionExplorerWindow.Linkable = linkable;
-            solutionExplorerWindow.IsFloating = isFloating;
-            if ( solutionExplorerWindow.Linkable )
-                solutionExplorerWindow.AutoHides = hidden;         
         }
 
         /// <summary>
@@ -896,6 +885,7 @@ namespace Ankh.Solution
         private UIHierarchy uiHierarchy;
         private const string VSNETWINDOW = "wndclass_desked_gsk";
         private const string GENERICPANE = "GenericPane";
+        private const string VSAUTOHIDE = "VsAutoHide";
         private const string UIHIERARCHY = "VsUIHierarchyBaseWin";
         private const string TREEVIEW = "SysTreeView32";
         private const string VBFLOATINGPALETTE = "VBFloatingPalette";
