@@ -12,6 +12,11 @@ namespace Ankh
             return new Enumerable( new ProjectEnumerator(dte) );
         }
 
+        public static IEnumerable EnumerateProjectItems( ProjectItems items )
+        {
+            return new Enumerable( new ProjectItemEnumerator( items ) );
+        }
+
         private class Enumerable : IEnumerable
         {
             public Enumerable( IEnumerator enumerator )
@@ -61,6 +66,39 @@ namespace Ankh
             private int targetCount;
             private int currentCount;
             private _DTE dte;
+        }
+
+        private class ProjectItemEnumerator : IEnumerator
+        {
+            public ProjectItemEnumerator( ProjectItems items )
+            {
+                this.items = items;
+                this.targetCount = items.Count;
+                this.currentCount = 0; // the first index is 1, so we start at 0
+            }
+
+            #region IEnumerator Members
+            public object Current
+            {
+                get { return this.items.Item( this.currentCount ); }
+            }
+
+            public bool MoveNext()
+            {
+                this.currentCount++;
+                return this.currentCount <= this.targetCount;
+            }
+
+            public void Reset()
+            {
+                this.currentCount = 0;
+            }
+
+            #endregion
+
+            private int targetCount;
+            private int currentCount;
+            private ProjectItems items;
         }
     }
 }

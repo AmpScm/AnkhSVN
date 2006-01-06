@@ -136,9 +136,8 @@ namespace Ankh.Solution
             // some object models might throw when accessing the .ProjectItems property
             try
             {
-                for( int i = 1; i <= item.ProjectItems.Count; i++ )
+                foreach( ProjectItem subItem in Enumerators.EnumerateProjectItems(item.ProjectItems))
                 {
-                    ProjectItem subItem = item.ProjectItems.Item(i);
                     if ( subItem.Name != Client.AdminDirectoryName )
                     {
                         this.AddResourcesFromProjectItem( subItem, del );
