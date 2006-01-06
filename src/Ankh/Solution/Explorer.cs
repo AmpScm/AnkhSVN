@@ -304,12 +304,10 @@ namespace Ankh.Solution
         /// </summary>
         internal void SetUpTreeview()
         {
-            // dragons be here - modify with care
             Debug.WriteLine( "Setting up treeview", "Ankh" );
             Window solutionExplorerWindow = this.dte.Windows.Item(
                 EnvDTE.Constants.vsWindowKindSolutionExplorer);
 
-            // find the solution explorer window
             // Get the caption of the solution explorer            
             string slnExplorerCaption = solutionExplorerWindow.Caption;
             Debug.WriteLine( "Caption of solution explorer window is " + slnExplorerCaption, 
@@ -317,25 +315,8 @@ namespace Ankh.Solution
 
             IntPtr vsnet = (IntPtr)this.dte.MainWindow.HWnd;
 
-            // first try finding it as a child of the main VS.NET window
-            IntPtr slnExplorer = Win32.FindWindowEx( vsnet, IntPtr.Zero, GENERICPANE, 
-                slnExplorerCaption );
-
-            // Search for VsAutohide panes as direct children of the VS main window.
-            if (slnExplorer == IntPtr.Zero)
-            {
-                Debug.WriteLine( "Solution explorer not a child of VS.NET window. " +
-                    "Searching VsAutoHide windows", "Ankh" );
-                IntPtr autoHide = Win32.FindWindowEx(vsnet, IntPtr.Zero, VSAUTOHIDE, null);
-                while ( autoHide != IntPtr.Zero )
-                {
-                    // The solution explorer would be a direct child of VsAutoHide.
-                    slnExplorer = Win32.FindWindowEx( autoHide, IntPtr.Zero, GENERICPANE, slnExplorerCaption );
-                    if ( slnExplorer != IntPtr.Zero )
-                        break;
-                    autoHide = Win32.FindWindowEx( vsnet, autoHide, VSAUTOHIDE, null );
-                }
-            }
+            // Try searching for it among VS' windows.
+            IntPtr slnExplorer = this.SearchForSolutionExplorer( vsnet, slnExplorerCaption );
 
             // not there? Try looking for a floating palette. These are toplevel windows for 
             // some reason
@@ -344,23 +325,13 @@ namespace Ankh.Solution
                 Debug.WriteLine( "Solution explorer not a child of VS.NET window. " +
                     "Searching floating windows", "Ankh" );
 
-                IntPtr floatingPalette = Win32.FindWindowEx( IntPtr.Zero, IntPtr.Zero, VBFLOATINGPALETTE, null );
-                while ( floatingPalette != IntPtr.Zero )
-                {
-                    slnExplorer = Win32.FindWindowEx( floatingPalette, IntPtr.Zero, GENERICPANE,
-                        slnExplorerCaption );
-                    if ( slnExplorer != IntPtr.Zero )
-                        break;
-
-                    // the solution explorer should be a direct child of the palette
-                    floatingPalette = Win32.FindWindowEx( IntPtr.Zero, floatingPalette, VBFLOATINGPALETTE, null );
-                }
+                slnExplorer = this.SearchFloatingPalettes( slnExplorerCaption );
             }
 
             IntPtr uiHierarchy = Win32.FindWindowEx( slnExplorer, IntPtr.Zero, 
                 UIHIERARCHY, null );
             IntPtr treeHwnd = Win32.FindWindowEx( uiHierarchy, IntPtr.Zero, TREEVIEW, 
-                null );         
+                null );
  
             if ( treeHwnd == IntPtr.Zero )
                 throw new ApplicationException( 
@@ -369,6 +340,53 @@ namespace Ankh.Solution
                     "try moving it to the primary during solution loading." );
 
             this.treeview = new TreeView( treeHwnd );
+        }
+
+        /// <summary>
+        /// Searches floating palettes for the solution explorer window.
+        /// </summary>
+        /// <param name="slnExplorerCaption"></param>
+        /// <returns></returns>
+        private IntPtr SearchFloatingPalettes( string slnExplorerCaption )
+        {
+            IntPtr floatingPalette = Win32.FindWindowEx( IntPtr.Zero, IntPtr.Zero, VBFLOATINGPALETTE, null );
+            while ( floatingPalette != IntPtr.Zero )
+            {
+                IntPtr slnExplorer = this.SearchForSolutionExplorer( floatingPalette, slnExplorerCaption );
+                if ( slnExplorer != IntPtr.Zero )
+                {
+                    return slnExplorer;
+                }
+                floatingPalette = Win32.FindWindowEx( IntPtr.Zero, floatingPalette, VBFLOATINGPALETTE, null );
+            }
+            return IntPtr.Zero;
+        }
+
+        /// <summary>
+        /// Searches recursively for the solution explorer window.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="caption"></param>
+        /// <returns></returns>
+        private IntPtr SearchForSolutionExplorer( IntPtr parent, string caption )
+        {
+            // is it directly under the parent?
+            IntPtr solutionExplorer = Win32.FindWindowEx( parent, IntPtr.Zero, GENERICPANE, caption );
+            if ( solutionExplorer != IntPtr.Zero )
+                return solutionExplorer;
+
+            IntPtr win = Win32.FindWindowEx( parent, IntPtr.Zero, null, null );
+            while ( win != IntPtr.Zero )
+            {
+                solutionExplorer = SearchForSolutionExplorer( win, caption );
+                if ( solutionExplorer != IntPtr.Zero )
+                {
+                    return solutionExplorer;
+                }
+                win = Win32.FindWindowEx( parent, win, null, null );
+            }
+
+            return IntPtr.Zero;
         }
 
         /// <summary>
