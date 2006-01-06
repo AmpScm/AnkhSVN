@@ -62,40 +62,44 @@ namespace Ankh.EventSinks
             {
                 IVsHierarchy hi = hierarchies[0];
 
-                try
-                {
-                    // Set us up to listen to all of the hierarchies' events
-                    this.hierarchyEvents.Add( new HierarchyEventsImpl( hi, this.Context ) );
-                }
-                catch ( NoProjectAutomationObjectException )
-                {
-                    // this is annoying, but we can proceed
-                    context.OutputPane.WriteLine( "Cannot find automation object for project. Some manual refresh of project might be necessary." );
-                }
-                 catch ( Exception ex )
-                {
-                    // this is more annoying, but we can still go on with the next project
-                    context.ErrorHandler.Handle( ex );
-                }
+                AddHierarchyEventsImpl( hi );
                 
                 Marshal.ThrowExceptionForHR( enumerator.Next( 1, hierarchies, out fetched ) );
                 
             }
         }
 
+       
+
         public void AddHierarchy( IVsHierarchy pHierarchy )
+        {
+            this.AddHierarchyEventsImpl( pHierarchy );
+        }
+
+        private void AddHierarchyEventsImpl( IVsHierarchy hi )
         {
             try
             {
-                this.hierarchyEvents.Add( new HierarchyEventsImpl( pHierarchy, this.Context ) );
+                // Set us up to listen to all of the hierarchies' events
+                this.hierarchyEvents.Add( new HierarchyEventsImpl( hi, this.Context ) );
             }
-            catch( NotImplementedException )
+            catch ( NoProjectAutomationObjectException )
             {
-                // Swallow and move on, VS sometimes adds spurious "projects"
+                // this is annoying, but we can proceed
+                this.Context.OutputPane.WriteLine( "Cannot find automation object for project. Some manual refresh of project might be necessary." );
             }
-            catch( NoProjectAutomationObjectException )
+            catch ( COMException ex )
             {
-                // Ditto
+                // this is more annoying, but we can still go on with the next project
+                this.Context.OutputPane.WriteLine( "Unable to add hierarchy event sink for project: {0}", ex.Message );
+            }
+            catch ( NotImplementedException ex )
+            {
+                this.Context.OutputPane.WriteLine( "Unable to add hierarchy event sink for project: {0}", ex.Message );
+            }
+            catch ( Exception ex )
+            {
+                this.Context.ErrorHandler.Handle( ex );
             }
         }
 
