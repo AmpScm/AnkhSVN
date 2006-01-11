@@ -36,8 +36,11 @@ namespace Utils
 
 
         [DllImport("Kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool QueryPerformanceCounter(out long lpPerformanceCount);
+        
         [DllImport("Kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool QueryPerformanceFrequency(out long lpFrequency);
 
         private long startTime;
