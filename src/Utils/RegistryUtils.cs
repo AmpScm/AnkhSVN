@@ -7,8 +7,10 @@ namespace Utils
     /// <summary>
     /// A class containing various utilities for registry manipulation.
     /// </summary>
-    public class RegistryUtils
-    {        
+    public sealed class RegistryUtils
+    {
+        private RegistryUtils()
+        { }
         /// <summary>
         /// Adds a new value under the 
         /// HKCU\Software\Microsoft\Internet Explorer\TypedURL registry key.
