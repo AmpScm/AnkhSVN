@@ -61,6 +61,11 @@ namespace Ankh.UI
         /// </summary>
         public event NodeExpandingDelegate NodeExpanding;
 
+        /// <summary>
+        /// Fired whenever the Add Rep button is clicked
+        /// </summary>
+        public event EventHandler AddRepoButtonClicked;
+
         
 
         /// <summary>
@@ -163,6 +168,9 @@ namespace Ankh.UI
             this.toolbarImageList.Images.Add(
                 new Icon( this.GetType().Assembly.GetManifestResourceStream(
                 "Ankh.UI.Graphics.EnableBackgroundListing.ico" ) ) );
+            this.toolbarImageList.Images.Add(
+                new Icon(this.GetType().Assembly.GetManifestResourceStream( 
+                "Ankh.UI.Graphics.AddRepoURL.ico") ) );
         }
 
         
@@ -272,13 +280,19 @@ namespace Ankh.UI
                 this.SelectionChanged( this, EventArgs.Empty );
         }
 
-        private void EnableBackgroundListingClicked(object sender, 
+        private void ToolBarButtonClicked(object sender, 
             System.Windows.Forms.ToolBarButtonClickEventArgs e)
         {
-            Debug.Assert( e.Button == this.enableBackgroundListingButton, 
-                "Need to change this event handler when we get more buttons" );
-            if ( this.EnableBackgroundListingChanged != null )
-                this.EnableBackgroundListingChanged( this, EventArgs.Empty );
+            if (e.Button == this.enableBackgroundListingButton)
+            {
+                if (this.EnableBackgroundListingChanged != null)
+                    this.EnableBackgroundListingChanged(this, EventArgs.Empty);
+            }
+            else if (e.Button == this.addRepoURLButton)
+            {
+                if (this.AddRepoButtonClicked != null)
+                    this.AddRepoButtonClicked(this, EventArgs.Empty);
+            }
         }
 
 
@@ -292,10 +306,11 @@ namespace Ankh.UI
         {
             this.components = new System.ComponentModel.Container();
             this.backgroundListingCheck = new System.Windows.Forms.CheckBox();
-            this.treeView = new Ankh.UI.RepositoryTreeView();
             this.toolBar = new System.Windows.Forms.ToolBar();
             this.enableBackgroundListingButton = new System.Windows.Forms.ToolBarButton();
             this.toolbarImageList = new System.Windows.Forms.ImageList(this.components);
+            this.addRepoURLButton = new System.Windows.Forms.ToolBarButton();
+            this.treeView = new Ankh.UI.RepositoryTreeView();
             this.SuspendLayout();
             // 
             // backgroundListingCheck
@@ -307,26 +322,12 @@ namespace Ankh.UI
             this.backgroundListingCheck.TabIndex = 6;
             this.backgroundListingCheck.Text = "Enable background listing";
             // 
-            // treeView
-            // 
-            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView.ImageIndex = -1;
-            this.treeView.Location = new System.Drawing.Point(0, 28);
-            this.treeView.Name = "treeView";
-            this.treeView.SelectedImageIndex = -1;
-            this.treeView.Size = new System.Drawing.Size(296, 268);
-            this.treeView.TabIndex = 9;
-            this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseDown);
-            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
-            this.treeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeExpand);
-            // 
             // toolBar
             // 
             this.toolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
             this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-                                                                                       this.enableBackgroundListingButton});
+            this.enableBackgroundListingButton,
+            this.addRepoURLButton});
             this.toolBar.ButtonSize = new System.Drawing.Size(16, 16);
             this.toolBar.DropDownArrows = true;
             this.toolBar.ImageList = this.toolbarImageList;
@@ -335,18 +336,38 @@ namespace Ankh.UI
             this.toolBar.ShowToolTips = true;
             this.toolBar.Size = new System.Drawing.Size(296, 28);
             this.toolBar.TabIndex = 10;
-            this.toolBar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.EnableBackgroundListingClicked);
+            this.toolBar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.ToolBarButtonClicked);
             // 
             // enableBackgroundListingButton
             // 
             this.enableBackgroundListingButton.ImageIndex = 0;
+            this.enableBackgroundListingButton.Name = "enableBackgroundListingButton";
             this.enableBackgroundListingButton.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton;
             this.enableBackgroundListingButton.ToolTipText = "Enable background listing";
             // 
             // toolbarImageList
             // 
+            this.toolbarImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.toolbarImageList.ImageSize = new System.Drawing.Size(16, 16);
             this.toolbarImageList.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // addRepoURLButton
+            // 
+            this.addRepoURLButton.ImageIndex = 1;
+            this.addRepoURLButton.Name = "toolBarButton1";
+            // 
+            // treeView
+            // 
+            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeView.Location = new System.Drawing.Point(0, 28);
+            this.treeView.Name = "treeView";
+            this.treeView.Size = new System.Drawing.Size(296, 268);
+            this.treeView.TabIndex = 9;
+            this.treeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeExpand);
+            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
+            this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseDown);
             // 
             // RepositoryExplorerControl
             // 
@@ -367,6 +388,7 @@ namespace Ankh.UI
         private System.Windows.Forms.ToolBar toolBar;
         private System.Windows.Forms.ToolBarButton enableBackgroundListingButton;
         private System.Windows.Forms.ImageList toolbarImageList;
+        private ToolBarButton addRepoURLButton;
 
         private INewDirectoryHandler newDirHandler;
 
