@@ -7,7 +7,7 @@ namespace Utils
     /// An attribute that describes a library
     /// </summary>
     [AttributeUsage( AttributeTargets.Assembly, AllowMultiple=true )]
-    public class VersionAttribute : Attribute
+    public sealed class VersionAttribute : Attribute
     {
         public VersionAttribute() : this( "", 0, 0, 0 )
         {
@@ -25,25 +25,21 @@ namespace Utils
         public string Name
         {
             get{ return this.name; }
-            set{ this.name = value; }
         }
 
         public int Major
         {
             get{ return this.major; }
-            set{ this.major = value; }
         }
 
         public int Minor
         {
             get{ return this.minor; }
-            set{ this.major = value; }
         }
 
         public int PatchLevel
         {
             get{ return this.patchLevel; }
-            set{ this.patchLevel = value; }
         }
 
         public string Tag
