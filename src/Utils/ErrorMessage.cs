@@ -13,7 +13,7 @@ namespace Utils
     /// <summary>
     /// Performs error handling and reporting.
     /// </summary>
-    public class ErrorMessage
+    public sealed class ErrorMessage
     {
         private ErrorMessage()
         {
@@ -57,10 +57,12 @@ namespace Utils
 			string msg = GetMessage( ex ) + Environment.NewLine + Environment.NewLine + 
 				attributes;
 
-            msg += Environment.NewLine + Environment.NewLine + "Version: " + 
-                assembly.GetName().Version.ToString();		
-	
-			msg = HttpUtility.UrlEncode( msg ).Replace("+", "%20");
+            string versionString = assembly == null ? "" : assembly.GetName().Version.ToString();
+
+            msg += Environment.NewLine + Environment.NewLine + "Version: " +
+                versionString;
+
+            msg = HttpUtility.UrlEncode( msg ).Replace("+", "%20");
 
             string command = string.Format( "mailto:{0}?subject={1}&body={2}",
                 recipient, HttpUtility.UrlEncode(subject), 
@@ -88,10 +90,9 @@ namespace Utils
             {
                 string msg = GetMessage( ex );
                 string attributes = GetAttributes( additionalInfo );
+                string assemblyVersion = assembly == null ? "" : HttpUtility.UrlEncode( assembly.GetName().Version.ToString());
                 string command = string.Format( "{0}?message={1}&version={2}&{3}", 
-                    url, HttpUtility.UrlEncode( msg ), 
-                    HttpUtility.UrlEncode( assembly.GetName().Version.ToString() ),
-                    attributes );
+                    url, HttpUtility.UrlEncode( msg ), assemblyVersion, attributes );
 
                 Process p = new Process();
                 p.StartInfo.FileName = command;
@@ -147,6 +148,9 @@ namespace Utils
 
         private static string GetAttributes( StringDictionary additionalInfo )
         {
+            if (additionalInfo == null)
+                return "";
+
             StringBuilder builder = new StringBuilder();
             foreach( DictionaryEntry de in additionalInfo )
             {
