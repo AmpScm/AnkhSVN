@@ -257,30 +257,42 @@ namespace Utils.Win32
             UInt32 milliseconds );
 
         [DllImport("Kernel32.dll")]
-        public static extern int CreateProcess( string appName,
-            string commandLine, IntPtr processAttributes,
-            IntPtr threadAttributes, bool inheritHandles, int creationFlags,
-            IntPtr environment, string currentDir, ref STARTUP_INFO si,
+        public static extern int CreateProcess( 
+            string appName,
+            string commandLine,
+            IntPtr processAttributes,
+            IntPtr threadAttributes, 
+            [MarshalAs(UnmanagedType.Bool)] bool inheritHandles, 
+            int creationFlags,
+            IntPtr environment, 
+            string currentDir, 
+            ref STARTUP_INFO si,
             out PROCESS_INFORMATION pi );
 
         [DllImport("Kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool CloseHandle( IntPtr handle );
 
         [DllImport("Kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetEnvironmentVariable( string name, string value );
 
         [DllImport("User32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetMessage( out Message msg, IntPtr hwnd, 
             uint filterMin, uint filterMax );
 
         [DllImport("User32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool PeekMessage( out Message msg, IntPtr hwnd, 
             uint filterMin, uint filterMax, uint removeMessage );
 
         [DllImport("User32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool TranslateMessage( out Message msg );
 
         [DllImport("User32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DispatchMessage( out Message msg );
 
         [DllImport("comctl32.dll")]
@@ -296,9 +308,11 @@ namespace Utils.Win32
         public static extern int ImageList_AddIcon( IntPtr imageList, IntPtr icon );
 
         [DllImport("comctl32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ImageList_SetOverlayImage( IntPtr imageList, int image, int overlay );
 
         [DllImport("shlwapi.dll", CharSet=CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool PathRelativePathToW( StringBuilder result, string from,
             FileAttribute fromAttr, string to, FileAttribute toAttr );
 
