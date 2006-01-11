@@ -52,10 +52,10 @@ namespace Utils
         public static void SendByMail( string recipient, string subject, Exception ex, 
             Assembly assembly, StringDictionary additionalInfo )
         {
-			string attributes = GetAttributes( additionalInfo );
+            string attributes = GetAttributes( additionalInfo );
 
-			string msg = GetMessage( ex ) + Environment.NewLine + Environment.NewLine + 
-				attributes;
+            string msg = GetMessage( ex ) + Environment.NewLine + Environment.NewLine + 
+                attributes;
 
             string versionString = assembly == null ? "" : assembly.GetName().Version.ToString();
 
@@ -68,7 +68,7 @@ namespace Utils
                 recipient, HttpUtility.UrlEncode(subject), 
                 msg );
 
-			Debug.WriteLine(command);
+            Debug.WriteLine(command);
             Process p = new Process();
             p.StartInfo.FileName = command;
             p.StartInfo.UseShellExecute = true;
