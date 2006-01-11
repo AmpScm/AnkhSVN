@@ -160,7 +160,6 @@ namespace Ankh.EventSinks
                     {
                         Trace.WriteLine( String.Format( "Not renaming {0} to {1}. TextStatus is {2}", 
                             rgszMkOldNames[i], rgszMkNewNames[i], item.Status.TextStatus ) );
-                        System.Diagnostics.Debugger.Break();
                     }
                 }
                 return VSConstants.S_OK;
