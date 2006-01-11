@@ -29,6 +29,7 @@ namespace Ankh.RepositoryExplorer
                 new EventHandler( this.BackgroundListingChanged );
             this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
             this.repositoryExplorer.SelectionChanged +=new EventHandler(SelectionChanged);
+            this.repositoryExplorer.AddRepoButtonClicked += new EventHandler(AddRepoButtonClicked);
 
             this.context.Unloading += new EventHandler(ContextUnloading);
             
@@ -264,6 +265,13 @@ namespace Ankh.RepositoryExplorer
             this.selection[0] = this.repositoryExplorer.SelectedNode;
             if(this.selection[0] != null)
                 this.context.UIShell.SetRepositoryExplorerSelection( selection );
+        }
+
+        private void AddRepoButtonClicked(object sender, EventArgs args)
+        {
+            RepositoryRootInfo info = context.UIShell.ShowAddRepositoryRootDialog();
+            if(info != null)
+                AddRoot(info);
         }
 
         #region class ListRunner

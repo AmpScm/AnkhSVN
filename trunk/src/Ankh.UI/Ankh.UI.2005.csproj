@@ -420,6 +420,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Graphics\EnableBackgroundListing.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\AddRepoURL.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
