@@ -64,7 +64,14 @@ namespace Ankh.Config
 
         public string ConfigPath
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get{ return Path.Combine( this.configDir, CONFIGFILENAME ); }
+        }
+
+        public string ConfigDir
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get { return this.configDir; }
         }
 
         /// <summary>

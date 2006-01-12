@@ -84,15 +84,10 @@ namespace Ankh
                 Debug.AutoFlush = true;
             }
 #endif
-            ErrorHandler handler = new ErrorHandler( ((_DTE)application).Version );
             try
             {
-                
-                
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst,
-                    new UIShell(), handler );
-                
-
+                    new UIShell() );
                 Extenders.ExtenderProvider.Register( this.context );
 
 #if ALWAYSREGISTER

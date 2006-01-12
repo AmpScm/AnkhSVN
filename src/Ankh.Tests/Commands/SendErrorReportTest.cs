@@ -89,7 +89,16 @@ namespace Ankh.Tests.Commands
             }
 
             #endregion
-        }
+
+            #region IErrorHandler Members
+
+            public void LogException( Exception exception, string message, params object[] args )
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            #endregion
+}
 
 
         
