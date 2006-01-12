@@ -82,20 +82,22 @@ namespace Ankh.EventSinks
             {
                 // Set us up to listen to all of the hierarchies' events
                 this.hierarchyEvents.Add( new HierarchyEventsImpl( hi, this.Context ) );
+                throw new NoProjectAutomationObjectException();
             }
-            catch ( NoProjectAutomationObjectException )
+            catch ( NoProjectAutomationObjectException ex )
             {
                 // this is annoying, but we can proceed
-                this.Context.OutputPane.WriteLine( "Cannot find automation object for project. Some manual refresh of project might be necessary." );
+                this.Context.ErrorHandler.LogException( ex, 
+                    "Cannot find automation object for project. Some manual refresh of project might be necessary." );
             }
             catch ( COMException ex )
             {
                 // this is more annoying, but we can still go on with the next project
-                this.Context.OutputPane.WriteLine( "Unable to add hierarchy event sink for project: {0}", ex.Message );
+                this.Context.ErrorHandler.LogException( ex, "Unable to add hierarchy event sink for project: {0}", ex.Message );
             }
             catch ( NotImplementedException ex )
             {
-                this.Context.OutputPane.WriteLine( "Unable to add hierarchy event sink for project: {0}", ex.Message );
+                this.Context.ErrorHandler.LogException( ex, "Unable to add hierarchy event sink for project: {0}", ex.Message );
             }
             catch ( Exception ex )
             {
