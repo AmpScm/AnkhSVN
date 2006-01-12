@@ -341,7 +341,6 @@ namespace Ankh.UI
             // enableBackgroundListingButton
             // 
             this.enableBackgroundListingButton.ImageIndex = 0;
-            this.enableBackgroundListingButton.Name = "enableBackgroundListingButton";
             this.enableBackgroundListingButton.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton;
             this.enableBackgroundListingButton.ToolTipText = "Enable background listing";
             // 
@@ -354,7 +353,6 @@ namespace Ankh.UI
             // addRepoURLButton
             // 
             this.addRepoURLButton.ImageIndex = 1;
-            this.addRepoURLButton.Name = "toolBarButton1";
             // 
             // treeView
             // 
