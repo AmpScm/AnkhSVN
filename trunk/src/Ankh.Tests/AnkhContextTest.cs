@@ -170,7 +170,7 @@ namespace Ankh.Tests
         {
             _DTE dte = this.dteFactory.Create();
             AddIn ankh = TestUtils.GetAddin( "Ankh", dte );
-            return new AnkhContext( dte, ankh, new UIShell(), new ErrorHandler() );
+            return new AnkhContext( dte, ankh, new UIShell() );
         }
 
         private void context_Unloading(object sender, EventArgs e)
@@ -217,7 +217,16 @@ namespace Ankh.Tests
 
             #endregion
 
-        }
+
+            #region IErrorHandler Members
+
+            public void LogException( Exception exception, string message, params object[] args )
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            #endregion
+}
         #endregion
 
 

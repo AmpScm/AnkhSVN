@@ -274,7 +274,16 @@ namespace Ankh.Tests
             }
 
             #endregion
-        }
+
+            #region IErrorHandler Members
+
+            public void LogException( Exception exception, string message, params object[] args )
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            #endregion
+}
 
         /// <summary>
         /// An ISynchronizeInvoke for which InvokeRequired will always return false.
