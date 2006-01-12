@@ -565,6 +565,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Graphics\AddRepoURL.ico"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Graphics\EnableBackgroundListing.ico"
                     BuildAction = "EmbeddedResource"
                 />
