@@ -150,6 +150,8 @@ namespace NSvn.Core.Tests
                 "Subversion");
             string renamed = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Subversion.sdlkjhdfgljh");
 
+            if(Directory.Exists(renamed))
+                PathUtils.RecursiveDelete(renamed);
             Directory.Move(configDir, renamed);
             try
             {
