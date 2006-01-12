@@ -201,6 +201,6 @@ namespace NSvn.Core.Tests
         private SslFailures acceptedFailures = 0;
         private bool maySave = false;
         private bool callbackCalled = false;
-        private const string SSLTESTREPOS=@"https://ankhsvn.com/svn/test";
+        private const string SSLTESTREPOS=@"https://svn.d-90.nl/svn/test";
     }
 }
