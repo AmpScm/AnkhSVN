@@ -110,6 +110,10 @@ namespace Ankh.Solution
             {
                 this.projectFile = SvnItem.Unversionable;
                 this.projectFolder = SvnItem.Unversionable;
+
+                this.Explorer.AddResource(this.project, this, fullname);
+                this.Explorer.AddResource(this.uiItem.Object, this, fullname);
+
             }
         }
 

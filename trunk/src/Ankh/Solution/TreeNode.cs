@@ -45,7 +45,13 @@ namespace Ankh.Solution
 			// what kind of node is this?
 			if ( item.Object is Project )
 			{
-                return new ProjectNode( item, hItem, explorer, parent, (Project)item.Object );
+                switch (project.Kind)
+                {
+                    case DteUtils.SolutionItemsKind:
+                        return new SolutionFolderItem(item, hItem, explorer, parent, project);
+                    default:
+                        return new ProjectNode(item, hItem, explorer, parent, project);
+                }
             }
             else if ( item.Object is ProjectItem )
             {
@@ -126,7 +132,9 @@ namespace Ankh.Solution
             {                  
                 if ( rescan )
                 {
-                    this.explorer.Context.StatusCache.Status( this.Directory );                    
+                    if (this.Directory != null && this.Directory.Length > 0)
+                        this.explorer.Context.StatusCache.Status(this.Directory);
+
                     this.FindChildren( );
                     this.RescanHook();
                 }

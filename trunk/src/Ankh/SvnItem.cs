@@ -173,7 +173,7 @@ namespace Ankh
             {
                 try
                 {
-                    return this.IsFile &&
+                    return this.IsFile && File.Exists( this.Path ) &&
                         (File.GetAttributes( this.Path ) & FileAttributes.ReadOnly) != 0;
                 }
                 catch( IOException )
