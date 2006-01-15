@@ -41,9 +41,9 @@ namespace Ankh.Solution
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
             Explorer explorer, TreeNode parent )
         {
-
+            Project project = item.Object as Project;
 			// what kind of node is this?
-			if ( item.Object is Project )
+			if ( project != null )
 			{
                 switch (project.Kind)
                 {
@@ -74,11 +74,11 @@ namespace Ankh.Solution
             }
             else if ( parent is SolutionNode ) //deal with unmodeled projects (database)
             {
-                foreach(Project project in Enumerators.EnumerateProjects(explorer.DTE))
+                foreach(Project p in Enumerators.EnumerateProjects(explorer.DTE))
                 {
-                    if(project.Name==item.Name)
+                    if(p.Name==item.Name)
                     {
-                        return new ProjectNode( item, hItem, explorer, parent, project );
+                        return new ProjectNode( item, hItem, explorer, parent, p );
                     }
                 }
             }
