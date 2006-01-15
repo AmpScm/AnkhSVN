@@ -57,9 +57,9 @@ namespace Ankh.Solution
             {
 				ProjectItem projectItem = item.Object as ProjectItem;
                 // Check if we have a subproject inside an Enterprise Template project
-                if ( projectItem.Kind == ETPROJITEMKIND && 
+                if ( projectItem.Kind == DteUtils.EnterpriseTemplateProjectItemKind && 
                     parent.uiItem.Object is Project &&
-                    ((Project)parent.uiItem.Object).Kind == ETPROJKIND )
+                    ((Project)parent.uiItem.Object).Kind == DteUtils.EnterpriseTemplateProjectKind )
                 {
                     return new ProjectNode( item, hItem, explorer, parent, projectItem.SubProject );
                 }
@@ -546,7 +546,5 @@ namespace Ankh.Solution
         private Explorer explorer;
         private NodeStatus currentStatus;
         private static readonly IDictionary statusMap = new Hashtable();
-        private const string ETPROJKIND = "{7D353B21-6E36-11D2-B35A-0000F81F0C06}";
-        private const string ETPROJITEMKIND = "{EA6618E8-6E24-4528-94BE-6889FE16485C}";
     }
 }
