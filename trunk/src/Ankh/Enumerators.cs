@@ -73,7 +73,14 @@ namespace Ankh
             public ProjectItemEnumerator( ProjectItems items )
             {
                 this.items = items;
-                this.targetCount = items.Count;
+                if ( items != null )
+                {
+                    this.targetCount = items.Count;
+                }
+                else
+                {
+                    this.targetCount = Int32.MinValue;
+                }
                 this.currentCount = 0; // the first index is 1, so we start at 0
             }
 
