@@ -82,7 +82,6 @@ namespace Ankh.EventSinks
             {
                 // Set us up to listen to all of the hierarchies' events
                 this.hierarchyEvents.Add( new HierarchyEventsImpl( hi, this.Context ) );
-                throw new NoProjectAutomationObjectException();
             }
             catch ( NoProjectAutomationObjectException ex )
             {
