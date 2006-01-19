@@ -47,7 +47,6 @@ namespace Ankh.Solution
             statusImages.MakeTransparent(statusImages.GetPixel(0, 0));
 
             this.SetUpTreeview();
-            CreateOverlayImages();
 
             this.statusImageList = new ImageList();
             this.statusImageList.ImageSize = new Size(7, 16);
@@ -340,6 +339,7 @@ namespace Ankh.Solution
                     "try moving it to the primary during solution loading." );
 
             this.treeview = new TreeView( treeHwnd );
+            this.CreateOverlayImages();
         }
 
         /// <summary>
