@@ -6,6 +6,7 @@
     <ComponentRef Id="C_Ankh_RegVS2005" />
     <ComponentRef Id="C_Ankh.dll" />
     <ComponentRef Id="C_Bitmap.dll" />
+    <ComponentRef Id="C_VS_SDK_License.rtf" />
   </ComponentGroup>
     <DirectoryRef Id="TARGETDIR">
       <!-- RegAsm reg settings -->
