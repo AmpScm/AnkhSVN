@@ -846,38 +846,9 @@ namespace Ankh.Solution
         {        
             public int Compare(object x, object y)
             {
-                string xName=null;
-                if(x is Project)
-                {
-                    try
-                    {
-                        xName=((Project)x).FullName;
-                    }
-                    catch(NotImplementedException)
-                    {
-                    }
-                }
-                else if(x is ParsedSolutionItem)
-                {
-                    xName=((ParsedSolutionItem)x).FileName;
-                }
-
-                string yName=null;
-                if(y is Project)
-                {
-                    try
-                    {
-                        yName=((Project)y).FullName;
-                    }
-                    catch(NotImplementedException)
-                    {
-                    }
-                }
-                else if(y is ParsedSolutionItem)
-                {
-                    yName=((ParsedSolutionItem)y).FileName;
-                }
-
+                string xName = GetUniqueProjectID( x );
+                string yName = GetUniqueProjectID( y );
+                
                 if(xName!=null && yName!=null)
                 {
                     return xName.CompareTo(yName);
@@ -891,6 +862,39 @@ namespace Ankh.Solution
                     return -1;
                 }
                 return x.GetHashCode().CompareTo(y.GetHashCode());
+            }
+
+            private static string GetUniqueProjectID( object project )
+            {
+                if ( project is Project )
+                {
+                    try
+                    {
+                        return ( (Project)project ).UniqueName;
+                    }
+                    catch ( Exception )
+                    {
+                        // Swallow
+                    }
+                    // nope, didn't work
+                    try
+                    {
+                        // not as good, but works in most cases
+                        return ((Project)project).FullName;
+                    }
+                    catch ( Exception )
+                    {
+                        return null;
+                    }
+                }
+                else if ( project is ParsedSolutionItem )
+                {
+                    return ( (ParsedSolutionItem)project ).FileName;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
         #endregion
