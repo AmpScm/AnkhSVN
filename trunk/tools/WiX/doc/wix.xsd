@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
           xmlns:xse="http://schemas.microsoft.com/wix/2005/XmlSchemaExtension"
          xmlns:html="http://www.w3.org/1999/xhtml"
@@ -19,6 +19,8 @@
 			Schema for describing Windows Installer database files (.msi/.msm/.pcp).
 		</xs:documentation>
 	</xs:annotation>
+
+	<xs:import namespace="http://www.w3.org/1999/xhtml" />
 
 	<xs:element name="Wix">
 		<xs:annotation><xs:documentation>
@@ -63,6 +65,7 @@
 				<xs:element ref="CopyFile"/>
 				<xs:element ref="CreateFolder"/>
 				<xs:element ref="CustomAction"/>
+				<xs:element ref="CustomActionRef"/>
 				<xs:element ref="CustomTable"/>
 				<xs:element ref="Directory"/>
 				<xs:element ref="DirectoryRef"/>
@@ -142,6 +145,7 @@
 					<xs:element ref="ComplianceCheck"/>
 					<xs:element ref="Condition"/>
 					<xs:element ref="CustomAction"/>
+					<xs:element ref="CustomActionRef"/>
 					<xs:element ref="CustomTable"/>
 					<xs:element ref="Directory"/>
 					<xs:element ref="DirectoryRef"/>
@@ -241,6 +245,7 @@
 					<xs:element ref="ComponentRef"/>
 					<xs:element ref="Configuration"/>
 					<xs:element ref="CustomAction"/>
+					<xs:element ref="CustomActionRef"/>
 					<xs:element ref="CustomTable"/>
 					<xs:element ref="Dependency"/>
 					<xs:element ref="Directory"/>
@@ -441,6 +446,7 @@
 					<xs:element ref="ComponentGroup"/>
 					<xs:element ref="Condition"/>
 					<xs:element ref="CustomAction"/>
+					<xs:element ref="CustomActionRef"/>
 					<xs:element ref="CustomTable"/>
 					<xs:element ref="Directory"/>
 					<xs:element ref="DirectoryRef"/>
@@ -457,6 +463,7 @@
 					<xs:element ref="SFPCatalog"/>
 					<xs:element ref="SqlDatabase"/>
 					<xs:element ref="UI"/>
+					<xs:element ref="UIRef"/>
 					<xs:element ref="Upgrade"/>
 					<xs:element ref="User"/>
 					<xs:element ref="WebApplication"/>
@@ -509,6 +516,11 @@
 		
 			<xs:attribute name="Id" type="uuid" use="required">
 				<xs:annotation><xs:documentation>Guid for this patch.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="Codepage" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>The codepage for the resulting PCP.</xs:documentation>
+				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="OutputPath" type="xs:string">
 				<xs:annotation><xs:documentation>Output patch for patchwiz.</xs:documentation></xs:annotation>
@@ -567,6 +579,15 @@
 			<xs:attribute name="Comments" type="xs:string">
 				<xs:annotation>
 					<xs:documentation>Optional comments for browsing</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="ReadOnly" type="YesNoDefaultType">
+				<xs:annotation>
+					<xs:documentation>
+						The value of this attribute conveys whether the package should be opened as read-only.
+						A database editing tool should not modify a read-only enforced database and should
+						issue a warning at attempts to modify a read-only recommended database.
+					</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="SummaryCodepage" type="LocalizableInteger">
@@ -704,11 +725,17 @@
 	</xs:element>
 
 	<xs:element name="TargetProductCode">
-		<xs:annotation><xs:documentation>A product code for a product that may receive this patch. (Or '*' for all products.)</xs:documentation></xs:annotation>
+		<xs:annotation>
+			<xs:documentation>
+				A product code for a product that may receive this patch (or '*' for all products).
+			</xs:documentation>
+		</xs:annotation>
 		<xs:complexType>
 			<xs:attribute name="Id" type="xs:string" use="required">
 				<xs:annotation>
-					<xs:documentation>Product code for a product that can receive this patch.</xs:documentation>
+					<xs:documentation>
+						The product code for a product that can receive this patch (or '*' for all products).
+					</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
@@ -802,11 +829,25 @@
 			<xs:attribute name="Id" type="xs:string" use="required">
 				<xs:annotation><xs:documentation>Identifier to connect target images with upgraded image.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="src" type="xs:string" use="required">
+			<xs:attribute name="SourceFile" type="xs:string">
 				<xs:annotation><xs:documentation>Full path to location of msi file for upgraded image.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="srcPatch" type="xs:string">
+			<xs:attribute name="src" type="xs:string">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="SourceFile" />
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="SourcePatch" type="xs:string">
 				<xs:annotation><xs:documentation>Modified copy of the upgraded installation database that contains additional authoring specific to patching.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="srcPatch" type="xs:string">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="SourcePatch" />
+					</xs:appinfo>
+				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -818,12 +859,19 @@
 				<xs:element ref="SymbolPath"/>
 				<xs:element ref="TargetFile"/>
 			</xs:choice>
-			
+
 			<xs:attribute name="Id" type="xs:string" use="required">
 				<xs:annotation><xs:documentation>Identifier for the target image.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="src" type="xs:string" use="required">
+			<xs:attribute name="SourceFile" type="xs:string">
 				<xs:annotation><xs:documentation>Full path to the location of the msi file for the target image.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="src" type="xs:string">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="SourceFile" />
+					</xs:appinfo>
+				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Order" type="xs:int" use="required">
 				<xs:annotation><xs:documentation>Relative order of the target image.</xs:documentation></xs:annotation>
@@ -905,8 +953,15 @@
 			<xs:attribute name="File" type="xs:string" use="required">
 				<xs:annotation><xs:documentation>Foreign key into the File table.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="src" type="xs:string" use="required">
+			<xs:attribute name="Source" type="xs:string">
 				<xs:annotation><xs:documentation>Full path of the external file.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="src" type="xs:string">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="Source" />
+					</xs:appinfo>
+				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Order" type="xs:int" use="required">
 				<xs:annotation><xs:documentation>Specifies the order of the external files to use when creating the patch.</xs:documentation></xs:annotation>
@@ -993,6 +1048,30 @@
 					<xs:documentation>The product full name or description.</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
+			<xs:attribute name="InstallPrivileges">
+				<xs:annotation>
+					<xs:documentation>Use this attribute to specify the priviliges required to install the package on Windows Vista and above.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="limited">
+							<xs:annotation>
+								<xs:documentation>
+									Set this value to declare that the package does not require elevated privileges to install.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="elevated">
+							<xs:annotation>
+								<xs:documentation>
+									Set this value to declare that the package requires elevated privileges to install.
+									This is the default value.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
 			<xs:attribute name="InstallerVersion" type="xs:integer">
 				<xs:annotation>
 					<xs:documentation>The minimum installer version (major*100 + minor).</xs:documentation>
@@ -1016,6 +1095,15 @@
 			<xs:attribute name="Platforms" type="xs:string">
 				<xs:annotation>
 					<xs:documentation>The list of platforms supported in the package.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="ReadOnly" type="YesNoDefaultType">
+				<xs:annotation>
+					<xs:documentation>
+						The value of this attribute conveys whether the package should be opened as read-only.
+						A database editing tool should not modify a read-only enforced database and should
+						issue a warning at attempts to modify a read-only recommended database.
+					</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="ShortNames" type="YesNoType">
@@ -1061,17 +1149,12 @@
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:simpleContent>
-				<xs:extension base="xs:string">
-					<xs:annotation><xs:documentation>Element value can be hex-encoded certificate value</xs:documentation></xs:annotation>
-					<xs:attribute name="Name" type="xs:string">
-						<xs:annotation><xs:documentation>unique name for certificate file</xs:documentation></xs:annotation>
-					</xs:attribute>
-					<xs:attribute name="src" type="xs:string">
-						<xs:annotation><xs:documentation>path to certificate file</xs:documentation></xs:annotation>
-					</xs:attribute>
-				</xs:extension>
-			</xs:simpleContent>
+			<xs:attribute name="Id" type="xs:string" use="required">
+				<xs:annotation><xs:documentation>Identifier for a certificate file.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="SourceFile" type="xs:string" use="required">
+				<xs:annotation><xs:documentation>The path to the certificate file.</xs:documentation></xs:annotation>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 
@@ -1090,8 +1173,8 @@
 				<xs:element ref="DigitalCertificate"/>
 			</xs:choice>
 
-			<xs:attribute name="src" type="xs:string">
-				<xs:annotation><xs:documentation>path to signature's hash file</xs:documentation></xs:annotation>
+			<xs:attribute name="SourceFile" type="xs:string">
+				<xs:annotation><xs:documentation>The path to signature's optional hash file.</xs:documentation></xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -1115,13 +1198,13 @@
 			</xs:choice>
 
 			<xs:attribute name="Name" type="xs:string">
-				<xs:annotation><xs:documentation>filename for catalog file when installed</xs:documentation></xs:annotation>
+				<xs:annotation><xs:documentation>Filename for catalog file when installed.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Dependency" type="xs:string">
-				<xs:annotation><xs:documentation>used to define dependency outside of the package</xs:documentation></xs:annotation>
+				<xs:annotation><xs:documentation>Used to define dependency outside of the package.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="src" type="xs:string">
-				<xs:annotation><xs:documentation>path to catalog file in binary</xs:documentation></xs:annotation>
+			<xs:attribute name="SourceFile" type="xs:string">
+				<xs:annotation><xs:documentation>Path to catalog file in binary.</xs:documentation></xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -1145,10 +1228,11 @@
 	<xs:element name="IniFile">
 		<xs:annotation>
 			<xs:documentation>
-				Adds or removes .ini file entries
+				Adds or removes .ini file entries.
 			</xs:documentation>
 			<xs:appinfo>
 				<xse:msiRef table="IniFile" />
+				<xse:msiRef table="RemoveIniFile" />
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:complexType>
@@ -1160,19 +1244,19 @@
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
 						<xs:enumeration value="addLine">
-							<xs:annotation><xs:documentation>Creates or updates a .ini entry.</xs:documentation></xs:annotation>
+							<xs:annotation><xs:documentation>Creates or updates an .ini entry.</xs:documentation></xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="addTag">
 							<xs:annotation><xs:documentation>Creates a new entry or appends a new comma-separated value to an existing entry.</xs:documentation></xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="createLine">
-							<xs:annotation><xs:documentation>Creates a .ini entry only if the entry does no already exist.</xs:documentation></xs:annotation>
+							<xs:annotation><xs:documentation>Creates an .ini entry only if the entry does no already exist.</xs:documentation></xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="removeLine">
-							<xs:annotation><xs:documentation>Deletes a .ini entry.</xs:documentation></xs:annotation>
+							<xs:annotation><xs:documentation>Removes an .ini entry.</xs:documentation></xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="removeTag">
-							<xs:annotation><xs:documentation>Deletes a tag from a .ini entry.</xs:documentation></xs:annotation>
+							<xs:annotation><xs:documentation>Removes a tag from an .ini entry.</xs:documentation></xs:annotation>
 						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
@@ -1193,7 +1277,12 @@
 				<xs:annotation><xs:documentation>The localizable .ini file section.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Value" type="xs:string">
-				<xs:annotation><xs:documentation>The localizable value to be written.</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						The localizable value to be written or deleted.  This attribute must be set if
+						the Action attribute's value is "addLine", "addTag", or "createLine".
+					</xs:documentation>
+				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -1604,22 +1693,39 @@
 				<xs:annotation><xs:documentation>Registry value name.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Type" use="required">
-				<xs:annotation><xs:documentation>
-					The value must be 'file' if the last child is a FileSearch element and must be 'directory' if last child is a DirectorySearch element.
-					Value of 'directory' will set a directory path from the registry value.
-					Value of 'file' will set a file path from the registry value.
-					Value of 'raw' will set the raw value from the registry value.  Please note that this value will contain a prefix as follows:<html:br/>
-						DWORD: Starts with '#' optionally followed by '+' or '-'.<html:br />
-						REG_BINARY: Starts with '#x' and the installer converts and saves each hexadecimal digit (nibble) as an ASCII character prefixed by '#x'.<html:br/>
-						REG_EXPAND_SZ: Starts with '#%'<html:br/>
-						REG_MULTI_SZ: Starts with '[~]' and ends with '[~]'.<html:br/>
-						REG_SZ: No prefix, but if the first character of the registry value is '#', the installer escapes the character by prefixing it with another '#'.<html:br/>
-				</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						The value must be 'file' if the last child is a FileSearch element and must be 'directory' if last child is a DirectorySearch element.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="directory"/>
-						<xs:enumeration value="file"/>
-						<xs:enumeration value="raw"/>
+						<xs:enumeration value="directory">
+							<xs:annotation>
+								<xs:documentation>
+									Sets a directory path from the registry value.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="file">
+							<xs:annotation>
+								<xs:documentation>
+									Sets a file path from the registry value.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="raw">
+							<xs:annotation>
+								<xs:documentation>
+									Sets the raw value from the registry value.  Please note that this value will contain a prefix as follows:<html:br/>
+									DWORD: Starts with '#' optionally followed by '+' or '-'.<html:br />
+									REG_BINARY: Starts with '#x' and the installer converts and saves each hexadecimal digit (nibble) as an ASCII character prefixed by '#x'.<html:br/>
+									REG_EXPAND_SZ: Starts with '#%'.<html:br/>
+									REG_MULTI_SZ: Starts with '[~]' and ends with '[~]'.<html:br/>
+									REG_SZ: No prefix, but if the first character of the registry value is '#', the installer escapes the character by prefixing it with another '#'.<html:br/>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -1637,7 +1743,7 @@
 			<xs:documentation>References an existing RegistrySearch element.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:attribute name="Id" type="xs:string">
+			<xs:attribute name="Id" type="xs:string" use="required">
 				<xs:annotation><xs:documentation>Specify the Id of the RegistrySearch to reference.</xs:documentation></xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
@@ -1809,6 +1915,56 @@
 				Advertised shortcuts only work for the most recently installed application, and are removed when that application is 
 				removed.</xs:documentation></xs:annotation>
 			</xs:attribute>
+			<xs:attribute name="DisplayResourceDll" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						The Formatted string providing the full path to the language neutral file containing the MUI Manifest.   Generally 
+						authored using [#filekey] form.  When this attribute is specified, the DisplayResourceId attribute must also 
+						be provided.
+
+						This attribute is only used on Windows Vista and above.  If this attribute is not populated and the install 
+						is running on Vista and above, the value in the Name attribute is used.  If this attribute is populated and 
+						the install is running on Vista and above, the value in the Name attribute is ignored.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="DisplayResourceId" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>
+						The display name index for the shortcut. This must be a non-negative number.  When this attribute is specified, the 
+						DisplayResourceDll attribute must also be proviced.
+
+						This attribute is only used on Windows Vista and above.  If this attribute is not specified and the install 
+						is running on Vista and above, the value in the Name attribute is used.  If this attribute is specified and 
+						the install is running on Vista and above, the value in the Name attribute is ignored.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="DescriptionResourceDll" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						The Formatted string providing the full path to the language neutral file containing the MUI Manifest.   Generally 
+						authored using [#filekey] form.  When this attribute is specified, the DescriptionResourceId attribute must also 
+						be provided.
+
+						This attribute is only used on Windows Vista and above.  If this attribute is not specified and the install 
+						is running on Vista and above, the value in the Name attribute is used.  If this attribute is provided and 
+						the install is running on Vista and above, the value in the Name attribute is ignored.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="DescriptionResourceId" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>
+						The description name index for the shortcut. This must be a non-negative number.  When this attribute is specified,
+						the DescriptionResourceDll attribute must also be populated.
+
+						This attribute is only used on Windows Vista and above.  If this attribute is not specified and the install 
+						is running on Vista and above, the value in the Name attribute is used.  If this attribute is populated and the
+						install is running on Vista and above, the value in the Name attribute is ignored.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 
@@ -1828,7 +1984,7 @@
 			</xs:attribute>
 			<xs:attribute name="Extended" use="optional" type="YesNoType">
 				<xs:annotation><xs:documentation>Specifies whether or not to use the LockPermissions table when the Permission element 
-				is nested under a Regsitry, File, or CreateFolder element.  If Extended is set to 'yes' then the WiX SecureObject custom 
+				is nested under a Registry, File, or CreateFolder element.  If Extended is set to 'yes' then the WiX SecureObject custom 
 				action will be used to lock down the resource instead of the "legacy" LockPermissions table.  Specifying 'yes' for this 
 				attribute will require you to link your MSI with the wixca.wixlib.  By using the SecureObject custom action you can apply
 				permissions for many more well known user SIDs as well as for user accounts that are created as part of the install.</xs:documentation></xs:annotation>
@@ -1973,7 +2129,7 @@
 					cannot be specified in conjunction with SourceDirectory.
 				</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="SourceName" type="xs:string"><!-- TODO: Change to WildCardLongFileNameType -->
+			<xs:attribute name="SourceName" type="WildCardLongFileNameType">
 				<xs:annotation><xs:documentation>
 					This attribute cannot be specified if the element is nested under a File element or the FileId attribute is specified.  Set
 					this value to the localizable name of the file(s) to be copied or moved.  All of the files that
@@ -1999,13 +2155,13 @@
 					action, on the command line, etc.  This attribute cannot be specified in conjunction with DestinationDirectory.
 				</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="DestinationName" type="xs:string"><!-- TODO: Change to ShortFileNameType -->
+			<xs:attribute name="DestinationName" type="ShortFileNameType">
 				<xs:annotation><xs:documentation>
 					Set this value to the localizable name to be given to the original file after it is moved or copied.  If this attribute is not
 					specified, then the destination file is given the same name as the source file.
 				</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="DestinationLongName" type="xs:string"><!-- TODO: Change to LongFileNameType -->
+			<xs:attribute name="DestinationLongName" type="LongFileNameType">
 				<xs:annotation><xs:documentation>
 					If the destination name of the file needs to be longer than 8.3 format, then this attribute should be specified
 					with the long file name (in addition to the Name attribute which is always required for target systems that might
@@ -2195,8 +2351,15 @@
 			<xs:attribute name="DiskId" type="xs:string">
 				<xs:annotation><xs:documentation>Specifies the Media this File should be sourced on.  This attribute must be set on this File element or its parent Component.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="src" type="xs:string">
+			<xs:attribute name="Source" type="xs:string">
 				<xs:annotation><xs:documentation>Specifies the path to the File in the build process.  This attribute must be set if no source information can be gathered from parent directories.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="src" type="xs:string">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="Source" />
+					</xs:appinfo>
+				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="PatchGroup" type="xs:integer">
 				<xs:annotation><xs:documentation>
@@ -2274,26 +2437,69 @@
 				</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Action">
-				<xs:annotation><xs:documentation>
-					This is the action that will be taken for this registry key.  Value of 'append' will append the specified value(s) to
-					a multiString registry key.  Value of 'createKey' will create the key, if absent, when the parent component is installed.
-					Value of 'createKeyAndRemoveKeyOnUninstall' will create the key, if absent, when the parent component is installed then
-					remove the key with all its values and subkeys when the parent component is uninstalled.  Value of 'prepend' will prepend
-					the specified value(s) to a multiString registry key.  Value
-					of 'remove' will remove a registry name when the parent component in installed.  Value of 'removeKeyOnInstall' will remove a key with all its
-					values and subkeys when the parent component is installed.  Value of 'removeKeyOnUninstall' will remove a key with all its
-					values and subkeys when the parent component is uninstalled.  Value of 'write' will write a registry key.
-				</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						This is the action that will be taken for this registry key.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="append"/>
-						<xs:enumeration value="createKey"/>
-						<xs:enumeration value="createKeyAndRemoveKeyOnUninstall"/>
-						<xs:enumeration value="prepend"/>
-						<xs:enumeration value="remove"/>
-						<xs:enumeration value="removeKeyOnInstall"/>
-						<xs:enumeration value="removeKeyOnUninstall"/>
-						<xs:enumeration value="write"/>
+						<xs:enumeration value="append">
+							<xs:annotation>
+								<xs:documentation>
+									Appends the specified value(s) to a multiString registry key.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="createKey">
+							<xs:annotation>
+								<xs:documentation>
+									Creates the key, if absent, when the parent component is installed.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="createKeyAndRemoveKeyOnUninstall">
+							<xs:annotation>
+								<xs:documentation>
+									Creates the key, if absent, when the parent component is installed then remove the key with all its values and subkeys when the parent component is uninstalled.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="prepend">
+							<xs:annotation>
+								<xs:documentation>
+									Prepends the specified value(s) to a multiString registry key.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="remove">
+							<xs:annotation>
+								<xs:documentation>
+									Removes a registry name when the parent component in installed.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="removeKeyOnInstall">
+							<xs:annotation>
+								<xs:documentation>
+									Removes a key with all its values and subkeys when the parent component is installed.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="removeKeyOnUninstall">
+							<xs:annotation>
+								<xs:documentation>
+									Removes a key with all its values and subkeys when the parent component is uninstalled.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="write">
+							<xs:annotation>
+								<xs:documentation>
+									Writes a registry value.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -2314,37 +2520,102 @@
 				</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Root">
-				<xs:annotation><xs:documentation>
-					The predefined root key for the registry value.  If the attribute's value is 'HKMU', a per-user installation
-					will write the value under HKCU, a per-machine installation will write the value under HKLM.  Note that it is
-					recommended that registry entries written to the HKCU hive set the KeyPath attribute to 'yes'. This ensures
-					that the installer writes the necessary registry entries when there are multiple users on the same computer.
-				</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						The predefined root key for the registry value.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="HKMU"/>
-						<xs:enumeration value="HKCR"/>
-						<xs:enumeration value="HKCU"/>
-						<xs:enumeration value="HKLM"/>
-						<xs:enumeration value="HKU"/>
+						<xs:enumeration value="HKMU">
+							<xs:annotation>
+								<xs:documentation>
+									A per-user installation will make the operation occur under HKEY_CURRENT_USER.
+									A per-machine installation will make the operation occur under HKEY_LOCAL_MACHINE.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="HKCR">
+							<xs:annotation>
+								<xs:documentation>
+									Operation occurs under HKEY_CLASSES_ROOT.  When using Windows 2000 or later, the installer writes or removes the value 
+									from the HKCU\Software\Classes hive during per-user installations.  When using Windows 2000 or later operating systems,
+									the installer writes or removes the value from the HKLM\Software\Classes hive during per-machine installations.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="HKCU">
+							<xs:annotation>
+								<xs:documentation>
+									Operation occurs under HKEY_CURRENT_USER.  It is recommended to set the KeyPath='yes' attribute when setting this value
+									in order to ensure that the installer writes the necessary registry entries when there are multiple users on the same computer.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="HKLM">
+							<xs:annotation>
+								<xs:documentation>
+									Operation occurs under HKEY_LOCAL_MACHINE.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="HKU">
+							<xs:annotation>
+								<xs:documentation>
+									Operation occurs under HKEY_USERS.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="Type">
-				<xs:annotation><xs:documentation>
-					Set this attribute to the type of the desired registry key.  This attribute must be specified whenever the Value
-					attribute or a child RegistryValue element is specified.  Please note that setting the attribute's value to
-					'multiString' will only result in a multiString value if there is more than one registry value or the Action
-					attribute's value is 'append' or 'prepend'.  Otherwise a string registry value will be created.  This attribute
-					should only be set when the value of the Action attribute does not include the word 'remove'.
-				</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						Set this attribute to the type of the desired registry key.  This attribute must be specified whenever the Value
+						attribute or a child RegistryValue element is specified.    This attribute
+						should only be set when the value of the Action attribute does not include the word 'remove'.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="string"/>
-						<xs:enumeration value="integer"/>
-						<xs:enumeration value="binary"/>
-						<xs:enumeration value="expandable"/>
-						<xs:enumeration value="multiString"/>
+						<xs:enumeration value="string">
+							<xs:annotation>
+								<xs:documentation>
+									The value is interpreted and stored as a string (REG_SZ).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="integer">
+							<xs:annotation>
+								<xs:documentation>
+									The value is interpreted and stored as an integer (REG_DWORD).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="binary">
+							<xs:annotation>
+								<xs:documentation>
+									The value is interpreted and stored as a hexadecimal value (REG_BINARY).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="expandable">
+							<xs:annotation>
+								<xs:documentation>
+									The value is interpreted and stored as an expandable string (REG_EXPAND_SZ).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="multiString">
+							<xs:annotation>
+								<xs:documentation>
+									The value is interpreted and stored as a multiple strings (REG_MULTI_SZ).
+									Please note that this value will only result in a multi-string value if there is more than one registry value
+									or the Action attribute's value is 'append' or 'prepend'.  Otherwise a string value will be created.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -2392,14 +2663,14 @@
 					action, on the command line, etc.  This attribute cannot be specified in conjunction with the Directory attribute.
 				</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="Name" type="xs:string"><!-- TODO: Change to WildCardShortFileNameType -->
+			<xs:attribute name="Name" type="WildCardShortFileNameType">
 				<xs:annotation><xs:documentation>
 					This value should be set to the localizable name of the file(s) to be removed.  All of the files that
 					match the wild card will be removed from the specified directory.  The value is a filename that may also
 					contain the wild card characters "?" for any single character or "*" for zero or more occurrences of any character.
 				</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="LongName" type="xs:string"><!-- TODO: Change to WildCardLongFileNameType -->
+			<xs:attribute name="LongName" type="WildCardLongFileNameType">
 				<xs:annotation><xs:documentation>
 					If the name of the file(s) to be removed need to be longer than 8.3 format, then this attribute should be specified
 					with the long file name (in addition to the Name attribute which is always required for target systems that might
@@ -2409,17 +2680,34 @@
 				</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="On" use="required">
-				<xs:annotation><xs:documentation>
-					This value determines the time at which the file(s) may be removed.  Value of "install" will remove only when the
-					parent component is being installed (msiInstallStateLocal or msiInstallStateSource).  Value of "uninstall" will remove
-					only when the parent component is being removed (msiInstallStateAbsent).  Value of "both" will remove in either of
-					the above cases.
-				</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						This value determines the time at which the file(s) may be removed.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="install"/>
-						<xs:enumeration value="uninstall"/>
-						<xs:enumeration value="both"/>
+						<xs:enumeration value="install">
+							<xs:annotation>
+								<xs:documentation>
+									Removes the file only when the parent component is being installed (msiInstallStateLocal or msiInstallStateSource).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="uninstall">
+							<xs:annotation>
+								<xs:documentation>
+									Removes the file only when the parent component is being removed (msiInstallStateAbsent).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="both">
+							<xs:annotation>
+								<xs:documentation>
+									Removes the file when the parent component is being installed or removed.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -2458,17 +2746,34 @@
 				</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="On" use="required">
-				<xs:annotation><xs:documentation>
-					This value determines the time at which the folder may be removed.  Value of "install" will remove only when the
-					parent component is being installed (msiInstallStateLocal or msiInstallStateSource).  Value of "uninstall" will remove
-					only when the parent component is being removed (msiInstallStateAbsent).  Value of "both" will remove in either of
-					the above cases.
-				</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						This value determines the time at which the folder may be removed.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="install"/>
-						<xs:enumeration value="uninstall"/>
-						<xs:enumeration value="both"/>
+						<xs:enumeration value="install">
+							<xs:annotation>
+								<xs:documentation>
+									Removes the folder only when the parent component is being installed (msiInstallStateLocal or msiInstallStateSource).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="uninstall">
+							<xs:annotation>
+								<xs:documentation>
+									Removes the folder only when the parent component is being removed (msiInstallStateAbsent).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="both">
+							<xs:annotation>
+								<xs:documentation>
+									Removes the folder when the parent component is being installed or removed.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -3171,9 +3476,42 @@
 				<xs:annotation><xs:documentation>The Class identifier (CLSID) of a COM server.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Context" use="required">
-				<xs:annotation><xs:documentation>The server context for this server.</xs:documentation></xs:annotation>
+				<xs:annotation><xs:documentation>The server context(s) for this server.</xs:documentation></xs:annotation>
 				<xs:simpleType>
-					<xs:list itemType="ClassContextType"/>
+					<xs:list>
+						<xs:simpleType>
+							<xs:restriction base="xs:NMTOKEN">
+								<xs:enumeration value="LocalServer">
+									<xs:annotation>
+										<xs:documentation>
+											A 16-bit local server application.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="LocalServer32">
+									<xs:annotation>
+										<xs:documentation>
+											A 32-bit local server application.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="InprocServer">
+									<xs:annotation>
+										<xs:documentation>
+											A 16-bit in-process server DLL.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="InprocServer32">
+									<xs:annotation>
+										<xs:documentation>
+											A 32-bit in-process server DLL.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:list>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="Description" type="xs:string">
@@ -3337,15 +3675,32 @@
 	<xs:element name="ServiceDependency">
 		<xs:annotation>
 			<xs:documentation>
-				Service or group of services that are dependencies for services in ServiceInstall
+				Service or group of services that must start before the parent service.
 			</xs:documentation>
 			<xs:appinfo>
 				<xse:msiRef table="ServiceInstall" />
 			</xs:appinfo>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:attribute name="Id" type="xs:string" use="required"/>
-			<xs:attribute name="Group" type="YesNoType"/>
+			<xs:attribute name="Id" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>
+						The value of this attribute should be one of the following:
+						<html:ol>
+							<html:li>The name (not the display name) of a previously installed service.</html:li>
+							<html:li>A foreign key referring to another ServiceInstall/@Id.</html:li>
+							<html:li>A group of services (in which case the Group attribute should be set to 'yes').</html:li>
+						</html:ol>
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="Group" type="YesNoType">
+				<xs:annotation>
+					<xs:documentation>
+						Set to 'yes' to indicate that the value in the Id attribute is the name of a group of services.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 
@@ -3606,24 +3961,41 @@
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
 						<xs:enumeration value="create">
-							<xs:annotation><xs:documentation>Create the environment variable if it does not exist, then set it during installation. This has no effect on the value of the environment variable if it already exists.</xs:documentation></xs:annotation>
+							<xs:annotation><xs:documentation>Creates the environment variable if it does not exist, then set it during installation. This has no effect on the value of the environment variable if it already exists.</xs:documentation></xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="set">
-							<xs:annotation><xs:documentation>Create the environment variable if it does not exist, and then set it during installation. If the environment variable exists, set it during the installation.</xs:documentation></xs:annotation>
+							<xs:annotation><xs:documentation>Creates the environment variable if it does not exist, and then set it during installation. If the environment variable exists, set it during the installation.</xs:documentation></xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="remove">
-							<xs:annotation><xs:documentation>Remove the environment variable during an installation. The installer only removes an environment variable during an installation if the name and value of the variable match the entries in the Name and Value fields of the Environment table. If you want to remove an environment variable, regardless of its value, use the '!' syntax, and leave the Value field empty.</xs:documentation></xs:annotation>
+							<xs:annotation><xs:documentation>Removes the environment variable during an installation. The installer only removes an environment variable during an installation if the name and value of the variable match the entries in the Name and Value fields of the Environment table. If you want to remove an environment variable, regardless of its value, use the '!' syntax, and leave the Value field empty.</xs:documentation></xs:annotation>
 						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="Part">
-				<xs:annotation><xs:documentation>If 'all', this value is the entire environmental variable. If 'first', this value is prefixed. If 'last', this value is appended.</xs:documentation></xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="all"/>
-						<xs:enumeration value="first"/>
-						<xs:enumeration value="last"/>
+						<xs:enumeration value="all">
+							<xs:annotation>
+								<xs:documentation>
+									This value is the entire environmental variable.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="first">
+							<xs:annotation>
+								<xs:documentation>
+									This value is prefixed.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="last">
+							<xs:annotation>
+								<xs:documentation>
+									This value is appended.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -3879,15 +4251,14 @@
 					</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="Guid" type="uuidorexample">
+			<xs:attribute name="Guid" type="ComponentGuid" use="required">
 				<xs:annotation>
 					<xs:documentation>
-						String GUID (without the '{' and '}' braces) that uniquely identifies a component's language,
-						version, and platform.  If this attribute is present, the GUID will become the identifier used
-						by the Windows Installer to track this component on the user's machine.  If this value is not
-						specified, then the component cannot be removed or repaired by the installer (it is essentially
-						a permanent component).  Therefore, a GUID should always be specified for a component which
-						contains any resources that may need to be patched in the future.
+						This value should be a guid that uniquely identifies this component's contents, language, platform, and version.
+						It's also possible to set the value to an empty string to specify an unmanaged component.
+						Unmanaged components are a security vulnerability because the component cannot be removed or repaired
+						by Windows Installer (it is essentially an unpatchable, permanent component).  Therefore, a guid should
+						always be specified for any component which contains resources that may need to be patched in the future.
 					</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
@@ -3901,20 +4272,29 @@
 				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Location">
-				<xs:annotation>
-					<xs:documentation>
-						Set the value to 'local' to prevent the component from running from the source or the 
-						network (this is the default behavior if this attribute is not set).  Set the value to 
-						'source' to enforce that the component can only be run from the source (it cannot be 
-						run from the user's computer).  Set the value to 'either' to allow the component to run 
-						from source or locally.
-					</xs:documentation>
-				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="local"/>
-						<xs:enumeration value="source"/>
-						<xs:enumeration value="either"/>
+						<xs:enumeration value="local">
+							<xs:annotation>
+								<xs:documentation>
+									Prevents the component from running from the source or the network (this is the default behavior if this attribute is not set).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="source">
+							<xs:annotation>
+								<xs:documentation>
+									Enforces that the component can only be run from the source (it cannot be run from the user's computer).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="either">
+							<xs:annotation>
+								<xs:documentation>
+									Allows the component to run from source or locally.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -4080,9 +4460,6 @@
 			<xs:attribute name="Id" type="xs:string" use="required">
 				<xs:annotation><xs:documentation>The unique identifier for the Merge element in the source code.  Referenced by the MergeRef/@Id.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="Language" type="xs:integer" use="required">
-				<xs:annotation><xs:documentation>Specifies the decimal LCID for the language to merge the Module in as.</xs:documentation></xs:annotation>
-			</xs:attribute>
 			<xs:attribute name="DiskId" type="xs:string" use="required">
 				<xs:annotation><xs:documentation>The value of this attribute should correspond to the Id attribute of a
 					Media element authored elsewhere.  By creating this connection between the Merge Module and Media
@@ -4090,7 +4467,16 @@
 					element (values such as compression level, cab embedding, etc...).</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="FileCompression" type="YesNoType"/>
-			<xs:attribute name="src" type="xs:string" use="required">
+			<xs:attribute name="Language" type="xs:integer" use="required">
+				<xs:annotation><xs:documentation>Specifies the decimal LCID for the language to merge the Module in as.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="SourceFile" type="xs:string"/>
+			<xs:attribute name="src" type="xs:string">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="SourceFile" />
+					</xs:appinfo>
+				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -4142,20 +4528,27 @@
 			<xs:attribute name="Id" type="xs:string" use="required">
 				<xs:annotation><xs:documentation>This value is the unique identifier of the directory entry.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="LongName" type="xs:string">
+			<xs:attribute name="FileSource" type="xs:string">
+				<xs:annotation><xs:documentation>Used to set the file system source for this directory's child elements.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="LongName" type="LongFileNameType">
 				<xs:annotation><xs:documentation>Set this value to the non-8.3 name for the directory.  This attribute cannot be specified unless the Name attribute is used to set the short name for this directory.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="LongSource" type="xs:string">
+			<xs:attribute name="LongSource" type="LongFileNameType">
 				<xs:annotation><xs:documentation>Set this value to the non-8.3 name of the directory on the source media for systems supporting long names.  This attribute cannot be specified unless the SourceName attribute sets the short source name for this directory.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="Name" type="xs:string">
+			<xs:attribute name="Name" type="xs:string"><!-- not always a valid short name because of the special SourceDir value -->
 				<xs:annotation><xs:documentation>The 8.3 name of the directory.  Do not specify this attribute (or the LongName attribute) if this directory represents the same directory as the parent (see the Windows Installer SDK's <html:a href='http://msdn.microsoft.com/library/en-us/msi/setup/directory_table.asp'>Directory table</html:a> topic for more information about the "." operator).</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="SourceName" type="xs:string">
+			<xs:attribute name="SourceName" type="ShortFileNameType">
 				<xs:annotation><xs:documentation>The 8.3 name of the directory on the source media.  If this attribute is note specified, the Windows Installer will default to the Name attribute.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="src" type="xs:string">
-				<xs:annotation><xs:documentation>Used to set the file system source for this directory's child elements.</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="FileSource" />
+					</xs:appinfo>
+				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -4177,8 +4570,15 @@
 			<xs:attribute name="Id" type="xs:string" use="required">
 				<xs:annotation><xs:documentation>The identifier of the Directory element to reference.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="src" type="xs:string">
+			<xs:attribute name="FileSource" type="xs:string">
 				<xs:annotation><xs:documentation>Used to set the file system source for this directory ref's child elements.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="src" type="xs:string">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="FileSource" />
+					</xs:appinfo>
+				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -4211,7 +4611,7 @@
 						<xs:annotation><xs:documentation>Set to "yes" to migrate feature states from upgraded products by enabling the logic in the MigrateFeatureStates action.</xs:documentation></xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="OnlyDetect" type="YesNoType">
-						<xs:annotation><xs:documentation>Set to "yes" to detect products and applications but do not install.</xs:documentation></xs:annotation>
+						<xs:annotation><xs:documentation>Set to "yes" to detect products and applications but do not uninstall.</xs:documentation></xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="IgnoreRemoveFailure" type="YesNoType">
 						<xs:annotation><xs:documentation>Set to "yes" to continue installation upon failure to remove a product or application.</xs:documentation></xs:annotation>
@@ -4290,33 +4690,62 @@
 				<xs:annotation><xs:documentation>Unique identifier of the feature.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Absent">
-				<xs:annotation><xs:documentation>
-					This attribute determines if a user will have the option to set a feature to absent in the user interface.
-					Value of 'allow' will allow the user interface to display an option to change the feature state to Absent.
-					Value of 'disallow' will prevent the user interface from displaying an option to change the feature state
-					to Absent by setting the msidbFeatureAttributesUIDisallowAbsent attribute.  This will force the feature
-					to the installation state, whether or not the feature is visible in the UI.
-				</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						This attribute determines if a user will have the option to set a feature to absent in the user interface.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="allow"/>
-						<xs:enumeration value="disallow"/>
+						<xs:enumeration value="allow">
+							<xs:annotation>
+								<xs:documentation>
+									Allows the user interface to display an option to change the feature state to Absent.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="disallow">
+							<xs:annotation>
+								<xs:documentation>
+									Prevents the user interface from displaying an option to change the feature state
+									to Absent by setting the msidbFeatureAttributesUIDisallowAbsent attribute.  This will force the feature
+									to the installation state, whether or not the feature is visible in the UI.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="AllowAdvertise">
-				<xs:annotation><xs:documentation>
-					This attribute determins the possible advertise states for this feature.
-					Value of 'no' will prevent this feature from being advertised by settting the msidbFeatureAttributesDisallowAdvertise attribute.
-					Value of 'system' will prevent advertising for this feature if the operating system shell does not support Windows Installer
-					descriptors by setting the msidbFeatureAttributesNoUnsupportedAdvertise attribute.
-					Value of 'yes' will allow the feature to be advertised.
-				</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						This attribute determins the possible advertise states for this feature.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="no"/>
-						<xs:enumeration value="system"/>
-						<xs:enumeration value="yes"/>
+						<xs:enumeration value="no">
+							<xs:annotation>
+								<xs:documentation>
+									Prevents this feature from being advertised by settting the msidbFeatureAttributesDisallowAdvertise attribute.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="system">
+							<xs:annotation>
+								<xs:documentation>
+									Prevents advertising for this feature if the operating system shell does not support Windows Installer
+									descriptors by setting the msidbFeatureAttributesNoUnsupportedAdvertise attribute.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="yes">
+							<xs:annotation>
+								<xs:documentation>
+									Allows the feature to be advertised.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -4333,34 +4762,68 @@
 				</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Display">
-				<xs:annotation><xs:documentation>
-					Determines the initial display of this feature in the feature tree.
-					Value of 'collapse' will initially show the feature collapsed.
-					Value of 'expand' will initially show the feature expanded.
-					Value of 'hidden' will prevent the feature from displaying in the user interface.
-				</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						Determines the initial display of this feature in the feature tree.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="collapse"/>
-						<xs:enumeration value="expand"/>
-						<xs:enumeration value="hidden"/>
+						<xs:enumeration value="collapse">
+							<xs:annotation>
+								<xs:documentation>
+									Initially shows the feature collapsed.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="expand">
+							<xs:annotation>
+								<xs:documentation>
+									Initially shows the feature expanded.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="hidden">
+							<xs:annotation>
+								<xs:documentation>
+									Prevents the feature from displaying in the user interface.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="InstallDefault">
-				<xs:annotation><xs:documentation>
-					This attribute determines the default install/run location of a feature.  This attribute cannot be specified
-					if the value of the FollowParent attribute is 'yes' since that would ask the installer to force this feature
-					to follow the parent installation state and simultaneously favor a particular installation state just for this feature.
-					Value of 'followParent' will force the feature to follow the same installation state as its parent feature.
-					Value of 'local' will favor installing this feature locally by setting the msidbFeatureAttributesFavorLocal attribute.
-					Value of 'source' will favor running this feature from source by setting the msidbFeatureAttributesFavorSource attribute.
-				</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						This attribute determines the default install/run location of a feature.  This attribute cannot be specified
+						if the value of the FollowParent attribute is 'yes' since that would ask the installer to force this feature
+						to follow the parent installation state and simultaneously favor a particular installation state just for this feature.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="followParent"/>
-						<xs:enumeration value="local"/>
-						<xs:enumeration value="source"/>
+						<xs:enumeration value="followParent">
+							<xs:annotation>
+								<xs:documentation>
+									Forces the feature to follow the same installation state as its parent feature.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="local">
+							<xs:annotation>
+								<xs:documentation>
+									Favors installing this feature locally by setting the msidbFeatureAttributesFavorLocal attribute.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="source">
+							<xs:annotation>
+								<xs:documentation>
+									Favors running this feature from source by setting the msidbFeatureAttributesFavorSource attribute.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -4378,16 +4841,26 @@
 			</xs:attribute>
 			<xs:attribute name="TypicalDefault">
 				<xs:annotation><xs:documentation>
-					This attribute determines the default advertise state of the feature.  This attribute's value cannot be
-					'advertise' if the value of the AllowAdvertise attribute is 'no' since that would ask the installer to
-					disallow the advertised state for this feature while at the same time favoring it.
-					Value of 'advertise' will set the feature to be advertised by setting the msidbFeatureAttributesFavorAdvertise attribute.
-					Value of 'install' will set the feature to the default non-advertised installation option.
+					This attribute determines the default advertise state of the feature.
 				</xs:documentation></xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="advertise"/>
-						<xs:enumeration value="install"/>
+						<xs:enumeration value="advertise">
+							<xs:annotation>
+								<xs:documentation>
+									Sets the feature to be advertised by setting the msidbFeatureAttributesFavorAdvertise attribute.
+									This value cannot be set if the value of the AllowAdvertise attribute is 'no' since that would ask the installer to
+									disallow the advertised state for this feature while at the same time favoring it.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="install">
+							<xs:annotation>
+								<xs:documentation>
+									Sets the feature to the default non-advertised installation option.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -4482,7 +4955,7 @@
 			<xs:attribute name="EmbedCab" type="YesNoType">
 				<xs:annotation><xs:documentation>Instructs the binder to embed the cabinet in the product if 'yes'.  This attribute can only be specified in conjunction with the Cabinet attribute.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="src" type="xs:string">
+			<xs:attribute name="Layout" type="xs:string">
 				<xs:annotation>
 					<xs:documentation>
 						This attribute specifies the root directory for the uncompressed files that
@@ -4493,6 +4966,13 @@
 						path is provided, that path will be used without modification.  The latter two
 						options are provided to ease the layout of an image onto multiple medias (CDs/DVDs).
 					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="src" type="xs:string">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="Layout" />
+					</xs:appinfo>
 				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="VolumeLabel" type="xs:string">
@@ -4536,6 +5016,7 @@
 		<xs:annotation>
 			<xs:appinfo>
 				<xse:seeAlso ref="Custom"/>
+				<xse:seeAlso ref="CustomActionRef"/>
 				<xse:msiRef table="CustomAction" />
 			</xs:appinfo>
 			<xs:documentation>
@@ -4675,45 +5156,102 @@
 					</xs:attribute>
 					<!-- Other CustomAction type attributes -->
 					<xs:attribute name="Return">
-						<xs:annotation><xs:documentation>
-							Set this attribute to set the return behavior of the custom action.  Value of 'check' is default and
-							indicates that the custom action will run synchronously and the return code will be checked for success.
-							Value of 'ignore' indicates that the custom action will run synchronously and the return code will not be
-							checked.  Value of 'asyncNoWait' indicates that the custom action will run asyncronously and execution may
-							continue after the installer terminates.  Value of 'asyncWait' indicates that the custom action will run
-							asynchronously but the installer will wait for the return code at sequence end.
-						</xs:documentation></xs:annotation>
+						<xs:annotation>
+							<xs:documentation>
+								Set this attribute to set the return behavior of the custom action.
+							</xs:documentation>
+						</xs:annotation>
 						<xs:simpleType>
 							<xs:restriction base="xs:NMTOKEN">
-								<xs:enumeration value="asyncNoWait"/>
-								<xs:enumeration value="asyncWait"/>
-								<xs:enumeration value="check"/>
-								<xs:enumeration value="ignore"/>
+								<xs:enumeration value="asyncNoWait">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that the custom action will run asyncronously and execution may continue after the installer terminates.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="asyncWait">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that the custom action will run asynchronously but the installer will wait for the return code at sequence end.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="check">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that the custom action will run synchronously and the return code will be checked for success.  This is the default.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="ignore">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that the custom action will run synchronously and the return code will not be checked.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
 							</xs:restriction>
 						</xs:simpleType>
 					</xs:attribute>
 					<xs:attribute name="Execute">
-						<xs:annotation><xs:documentation>
-							Set this attribute to indicate the scheduling of the custom action.  Value of 'commit' indicates that the
-							custom action will run after successful completion of the installation script (at the end of the installation).
-							Value of 'deferred' indicates that the custom action runs in-script (possibly with elevated privileges).  Value
-							of 'firstSequence' indicates that the custom action will only run in the first sequence that runs it.  Value of
-							'immediate' means that the custom action will occur during normal processing time with user privileges.  Value
-							of 'oncePerProcess' indicates that the custom action will only run in the first sequence that runs it in the
-							same process.  Value of 'rollback' indicates that a custom action will run in the rollback sequence when a failure
-							occurs during installation, usually to undo changes made by a deferred custom action.  Value of 'secondSequence'
-							indicates that a custom action should be run a second time if it was previously run in an earlier sequence.
-							If this attribute is not specified the value will be defaulted to 'immediate'.
-						</xs:documentation></xs:annotation>
+						<xs:annotation>
+							<xs:documentation>
+								This attribute indicates the scheduling of the custom action.
+							</xs:documentation>
+						</xs:annotation>
 						<xs:simpleType>
 							<xs:restriction base="xs:NMTOKEN">
-								<xs:enumeration value="commit"/>
-								<xs:enumeration value="deferred"/>
-								<xs:enumeration value="firstSequence"/>
-								<xs:enumeration value="immediate"/>
-								<xs:enumeration value="oncePerProcess"/>
-								<xs:enumeration value="rollback"/>
-								<xs:enumeration value="secondSequence"/>
+								<xs:enumeration value="commit">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that the custom action will run after successful completion of the installation script (at the end of the installation).
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="deferred">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that the custom action runs in-script (possibly with elevated privileges).
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="firstSequence">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that the custom action will only run in the first sequence that runs it.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="immediate">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that the custom action will run during normal processing time with user privileges.  This is the default.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="oncePerProcess">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that the custom action will only run in the first sequence that runs it in the same process.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="rollback">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that a custom action will run in the rollback sequence when a failure
+											occurs during installation, usually to undo changes made by a deferred custom action.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="secondSequence">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates that a custom action should be run a second time if it was previously run in an earlier sequence.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
 							</xs:restriction>
 						</xs:simpleType>
 					</xs:attribute>
@@ -4747,6 +5285,29 @@
 					</xs:attribute>
 				</xs:extension>
 			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="CustomActionRef">
+		<xs:annotation>
+			<xs:appinfo>
+				<xse:seeAlso ref="CustomAction"/>
+			</xs:appinfo>
+			<xs:documentation>
+				This will cause the entire contents of the Fragment containing the referenced CustomAction to be 
+				included in the installer database.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="Id" type="xs:string" use="required">
+				<xs:annotation><xs:documentation>The identifier of the CustomAction to reference.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:anyAttribute namespace="##other" processContents="lax">
+				<xs:annotation><xs:documentation>
+					Extensibility point in the WiX XML Schema.  Schema extensions can register additional
+					attributes at this point in the schema.
+				</xs:documentation></xs:annotation>
+			</xs:anyAttribute>
 		</xs:complexType>
 	</xs:element>
 
@@ -5559,8 +6120,15 @@
 			<xs:attribute name="Id" type="xs:string" use="required">
 				<xs:annotation><xs:documentation>The Id cannot by longer than 55 characters.  In order to prevent errors in cases where the Id is modularized, it should not be longer than 18 characters.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="src" type="xs:string" use="required">
+			<xs:attribute name="SourceFile" type="xs:string">
 				<xs:annotation><xs:documentation>Path to the binary file.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="src" type="xs:string">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="SourceFile" />
+					</xs:appinfo>
+				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -5578,8 +6146,15 @@
 			<xs:attribute name="Id" type="xs:string" use="required">
 				<xs:annotation><xs:documentation>The Id cannot by longer than 55 characters.  In order to prevent errors in cases where the Id is modularized, it should not be longer than 18 characters.</xs:documentation></xs:annotation>
 			</xs:attribute>
-			<xs:attribute name="src" type="xs:string" use="required">
+			<xs:attribute name="SourceFile" type="xs:string">
 				<xs:annotation><xs:documentation>Path to the icon file.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="src" type="xs:string">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="SourceFile" />
+					</xs:appinfo>
+				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -5613,15 +6188,32 @@
 		<xs:complexType>
 			<xs:simpleContent>
 				<xs:extension base="xs:string">
-					<xs:annotation><xs:documentation>Element value is the optional Condition expression</xs:documentation></xs:annotation>
+					<xs:annotation><xs:documentation>The element value is the optional Condition expression.</xs:documentation></xs:annotation>
 					<!-- Ordering of these elements is registered in the ControlEvent table -->
 					<xs:attribute name="Event" type="xs:string">
-						<xs:annotation><xs:documentation>must be one of the standard control events'</xs:documentation></xs:annotation>
+						<xs:annotation>
+							<xs:documentation>
+								Set this attribute's value to one of the standard control events to trigger that event.
+								Either this attribute or the Property attribute must be set, but not both at the same time.
+							</xs:documentation>
+						</xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="Property" type="xs:string">
-						<xs:annotation><xs:documentation>mutually exclusive with 'Event'</xs:documentation></xs:annotation>
+						<xs:annotation>
+							<xs:documentation>
+								Set this attribute's value to a property name to set that property.
+								Either this attribute or the Event attribute must be set, but not both at the same time.
+							</xs:documentation>
+						</xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="Value" use="required" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								If the Property attribute is specified, set the value of this attribute to the new value for the property.
+								To set a property to null, do not set this attribute (the ControlEvent Argument column will be set to '{}').
+								Otherwise, this attribute's value should be the argument for the event specified in the Event attribute.
+							</xs:documentation>
+						</xs:annotation>
 					</xs:attribute>
 				</xs:extension>
 			</xs:simpleContent>
@@ -5652,8 +6244,15 @@
 		<xs:complexType>
 			<xs:simpleContent>
 				<xs:extension base="xs:string">
-					<xs:attribute name="src" type="xs:string">
+					<xs:attribute name="SourceFile" type="xs:string">
 						<xs:annotation><xs:documentation>Instructs the text to be imported from a file instead of the element value during the binding process.</xs:documentation></xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="src" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<xse:deprecated ref="SourceFile" />
+							</xs:appinfo>
+						</xs:annotation>
 					</xs:attribute>
 				</xs:extension>
 			</xs:simpleContent>
@@ -6630,7 +7229,7 @@
 			<xs:annotation><xs:documentation>usually a Property that resolves to short file name path</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Extension" type="xs:string">
-				<xs:annotation><xs:documentation>Extension being registered. Do not prefix with a '.' (e.g. you should use "html", not ".html"). To register for all extensions, use Extension="*".</xs:documentation></xs:annotation>
+				<xs:annotation><xs:documentation>Extension being registered. Do not prefix with a '.' (e.g. you should use "html", not ".html").  To register for all extensions, use Extension="*".  To register a wildcard application map (which handles all requests, even those for directories or files with no extension) omit the Extension attribute completely.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Verbs" type="xs:string">
 			</xs:attribute>
@@ -6661,6 +7260,12 @@
 			</xs:attribute>
 			<xs:attribute name="RecycleRequests" type="xs:integer">
 				<xs:annotation><xs:documentation>How often, in requests, you want the AppPool to be recycled.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="VirtualMemory" type="xs:integer">
+				<xs:annotation><xs:documentation>Specifies the amount of virtual memory (in KB) that a worker process can use before the worker process recycles. The maximum value supported for this attribute is 4,294,967 KB.</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="PrivateMemory" type="xs:integer">
+				<xs:annotation><xs:documentation>Specifies the amount of private memory (in KB) that a worker process can use before the worker process recycles. The maximum value supported for this attribute is 4,294,967 KB.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="IdleTimeout" type="xs:integer">
 				<xs:annotation><xs:documentation>Shutdown worker process after being idle for (time in minutes).</xs:documentation></xs:annotation>
@@ -6843,12 +7448,34 @@
 				<xs:annotation><xs:documentation>Sets the name of this application.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Isolation">
-				<xs:annotation><xs:documentation>Sets the application isolation level for this application for pre-IIS 6 applications. Low means the application executes within the IIS process, medium executes pooled in a separate process, and high means execution alone in a separate process.</xs:documentation></xs:annotation>
+				<xs:annotation>
+					<xs:documentation>
+						Sets the application isolation level for this application for pre-IIS 6 applications.
+					</xs:documentation>
+				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="low"/>
-						<xs:enumeration value="medium"/>
-						<xs:enumeration value="high"/>
+						<xs:enumeration value="low">
+							<xs:annotation>
+								<xs:documentation>
+									Means the application executes within the IIS process.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="medium">
+							<xs:annotation>
+								<xs:documentation>
+									Executes pooled in a separate process.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="high">
+							<xs:annotation>
+								<xs:documentation>
+									Means execution alone in a separate process.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -7020,14 +7647,43 @@
 				<xs:annotation><xs:documentation>Identifier for the WebLog.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="Type" use="required">
-				<xs:annotation><xs:documentation>IIS - Microsoft IIS Log File Format, NCSA - NCSA Common Log File Format, ODBC - ODBC Logging, W3C - W3C Extended Log File Format, none - disable logging </xs:documentation></xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="IIS"/>
-						<xs:enumeration value="NCSA"/>
-						<xs:enumeration value="none"/>
-						<xs:enumeration value="ODBC"/>
-						<xs:enumeration value="W3C"/>
+						<xs:enumeration value="IIS">
+							<xs:annotation>
+								<xs:documentation>
+									Microsoft IIS Log File Format
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="NCSA">
+							<xs:annotation>
+								<xs:documentation>
+									NCSA Common Log File Format
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="none">
+							<xs:annotation>
+								<xs:documentation>
+									Disables logging.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="ODBC">
+							<xs:annotation>
+								<xs:documentation>
+									ODBC Logging
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="W3C">
+							<xs:annotation>
+								<xs:documentation>
+									W3C Extended Log File Format
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -7065,6 +7721,13 @@
 			<xs:attribute name="SqlDb" type="xs:string"/>
 			<xs:attribute name="ExecuteOnInstall" type="YesNoType"/>
 			<xs:attribute name="ExecuteOnReInstall" type="YesNoType">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="ExecuteOnReinstall" />
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="ExecuteOnReinstall" type="YesNoType">
 				<xs:annotation><xs:documentation>Specifies whether to execute the script when the associated component is reinstalled.  Setting ExecuteOnInstall to yes does <html:b>not</html:b> imply ExecuteOnReinstall is set to yes.  ExecuteOnReinstall must be set in addition to ExecuteOnInstall for it to be executed during both install and reinstall.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="ExecuteOnUninstall" type="YesNoType"/>
@@ -7094,6 +7757,13 @@
 			<xs:attribute name="ExecuteOnInstall" type="YesNoType">
 			</xs:attribute>
 			<xs:attribute name="ExecuteOnReInstall" type="YesNoType">
+				<xs:annotation>
+					<xs:appinfo>
+						<xse:deprecated ref="ExecuteOnReinstall" />
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="ExecuteOnReinstall" type="YesNoType">
 				<xs:annotation><xs:documentation>Specifies whether to execute the script when the associated component is reinstalled.  Setting ExecuteOnInstall to yes does <html:b>not</html:b> imply ExecuteOnReinstall is set to yes.  ExecuteOnReinstall must be set in addition to ExecuteOnInstall for it to be executed during both install and reinstall.</xs:documentation></xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="ExecuteOnUninstall" type="YesNoType">
@@ -7276,10 +7946,10 @@
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="uuidorexample">
-		<xs:annotation><xs:documentation>Values of this type will look like: "01234567-89AB-CDEF-0123-456789ABCDEF" or "{01234567-89AB-CDEF-0123-456789ABCDEF}", but also allows "PUT-GUID-HERE" for use in examples.</xs:documentation></xs:annotation>
+	<xs:simpleType name="ComponentGuid">
+		<xs:annotation><xs:documentation>Values of this type will look like: "01234567-89AB-CDEF-0123-456789ABCDEF" or "{01234567-89AB-CDEF-0123-456789ABCDEF}", but also allows "PUT-GUID-HERE" for use in examples.  It's also possible to have an empty value "".</xs:documentation></xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:pattern value="[{(]?[0-9A-Fa-f]{8}\-?[0-9A-Fa-f]{4}\-?[0-9A-Fa-f]{4}\-?[0-9A-Fa-f]{4}\-?[0-9A-Fa-f]{12}[})]?|PUT\-GUID\-HERE"/>
+			<xs:pattern value="[{(]?[0-9A-Fa-f]{8}\-?[0-9A-Fa-f]{4}\-?[0-9A-Fa-f]{4}\-?[0-9A-Fa-f]{4}\-?[0-9A-Fa-f]{12}[})]?|PUT\-GUID\-HERE|"/>
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -7353,16 +8023,6 @@
 		<xs:annotation><xs:documentation>Values of this type are any integers between 0 and 100, inclusive.</xs:documentation></xs:annotation>
 		<xs:restriction base="xs:nonNegativeInteger">
 			<xs:maxInclusive value="100"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="ClassContextType">
-		<xs:annotation><xs:documentation>Enum type for the Class element's Context attribute list.</xs:documentation></xs:annotation>
-		<xs:restriction base="xs:NMTOKEN">
-			<xs:enumeration value="LocalServer"/>
-			<xs:enumeration value="LocalServer32"/>
-			<xs:enumeration value="InprocServer"/>
-			<xs:enumeration value="InprocServer32"/>
 		</xs:restriction>
 	</xs:simpleType>
 
