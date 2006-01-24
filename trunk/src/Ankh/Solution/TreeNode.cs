@@ -42,9 +42,9 @@ namespace Ankh.Solution
             Explorer explorer, TreeNode parent )
         {
             Project project = item.Object as Project;
-			// what kind of node is this?
-			if ( project != null )
-			{
+            // what kind of node is this?
+            if ( project != null )
+            {
                 switch (project.Kind)
                 {
                     case DteUtils.SolutionItemsKind:
@@ -55,7 +55,7 @@ namespace Ankh.Solution
             }
             else if ( item.Object is ProjectItem )
             {
-				ProjectItem projectItem = item.Object as ProjectItem;
+                ProjectItem projectItem = item.Object as ProjectItem;
                 // Check if we have a subproject inside an Enterprise Template project
                 if ( projectItem.Kind == DteUtils.EnterpriseTemplateProjectItemKind && 
                     parent.uiItem.Object is Project &&
@@ -91,11 +91,11 @@ namespace Ankh.Solution
             else if ( parent is ProjectItemNode ) //deal with sub items in unmodeled projects
             {
                 ProjectItemNode parentNode=(ProjectItemNode)parent;
-				if(parentNode.ParsedItem!=null)
-				{
-					ParsedSolutionItem parsedItem=parentNode.ParsedItem.GetChild(item.Name);
-					return new ProjectItemNode( item, hItem, explorer, parent, parsedItem );  
-				}
+                if ( parentNode.ParsedItem != null )
+                {
+                    ParsedSolutionItem parsedItem = parentNode.ParsedItem.GetChild( item.Name );
+                    return new ProjectItemNode( item, hItem, explorer, parent, parsedItem );
+                }
             }
 
             return null;
