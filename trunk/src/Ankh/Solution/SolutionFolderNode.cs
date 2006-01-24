@@ -3,9 +3,9 @@ using System;
 
 namespace Ankh.Solution
 {
-    public sealed class SolutionFolderItem : ProjectNode
+    public sealed class SolutionFolderNode : ProjectNode
     {
-        public SolutionFolderItem(EnvDTE.UIHierarchyItem item, IntPtr hItem, Explorer explorer, TreeNode parent, EnvDTE.Project project)
+        public SolutionFolderNode(EnvDTE.UIHierarchyItem item, IntPtr hItem, Explorer explorer, TreeNode parent, EnvDTE.Project project)
             : base(item, hItem, explorer, parent, project)
         {
         }

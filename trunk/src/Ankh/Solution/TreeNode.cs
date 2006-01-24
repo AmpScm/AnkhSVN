@@ -48,7 +48,7 @@ namespace Ankh.Solution
                 switch (project.Kind)
                 {
                     case DteUtils.SolutionItemsKind:
-                        return new SolutionFolderItem(item, hItem, explorer, parent, project);
+                        return new SolutionFolderNode(item, hItem, explorer, parent, project);
                     default:
                         return new ProjectNode(item, hItem, explorer, parent, project);
                 }

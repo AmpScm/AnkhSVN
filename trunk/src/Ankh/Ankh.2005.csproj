@@ -409,7 +409,7 @@
     <Compile Include="EventSinks\VCProjectEventSink.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Solution\SolutionFolderItem.cs" />
+    <Compile Include="Solution\SolutionFolderNode.cs" />
     <Compile Include="VSInterfaces.cs" />
     <Compile Include="Extenders\ExtenderProvider.cs">
       <SubType>Code</SubType>
