@@ -238,8 +238,8 @@ namespace Ankh.Solution
         /// <returns>A list of SvnItem instances.</returns>
         public IList GetAllResources( ResourceFilterCallback filter )
         {
-			if ( !context.AnkhLoadedForSolution )
-				return new SvnItem[]{};
+            if ( !context.AnkhLoadedForSolution )
+                return new SvnItem[]{};
 
             this.ForcePoll();
 
@@ -438,12 +438,12 @@ namespace Ankh.Solution
             }
         }
 
-		/// <summary>
-		/// Adds a new resource to the tree
-		/// </summary>
-		/// <param name="key">The modeled Project or an unmodeled placeholder for it</param>
-		/// <param name="node">Our own representation</param>
-		/// <param name="projectFile">Filename for the project</param>
+        /// <summary>
+        /// Adds a new resource to the tree
+        /// </summary>
+        /// <param name="key">The modeled Project or an unmodeled placeholder for it</param>
+        /// <param name="node">Our own representation</param>
+        /// <param name="projectFile">Filename for the project</param>
         internal void AddResource( object key, ProjectNode node, string projectFile )
         {
             this.projects[key] = node;
@@ -846,51 +846,51 @@ namespace Ankh.Solution
         {        
             public int Compare(object x, object y)
             {
-				string xName=null;
-				if(x is Project)
-				{
-					try
-					{
-						xName=((Project)x).FullName;
-					}
-					catch(NotImplementedException)
-					{
-					}
-				}
-				else if(x is ParsedSolutionItem)
-				{
-					xName=((ParsedSolutionItem)x).FileName;
-				}
+                string xName=null;
+                if(x is Project)
+                {
+                    try
+                    {
+                        xName=((Project)x).FullName;
+                    }
+                    catch(NotImplementedException)
+                    {
+                    }
+                }
+                else if(x is ParsedSolutionItem)
+                {
+                    xName=((ParsedSolutionItem)x).FileName;
+                }
 
-				string yName=null;
-				if(y is Project)
-				{
-					try
-					{
-						yName=((Project)y).FullName;
-					}
-					catch(NotImplementedException)
-					{
-					}
-				}
-				else if(y is ParsedSolutionItem)
-				{
-					yName=((ParsedSolutionItem)y).FileName;
-				}
+                string yName=null;
+                if(y is Project)
+                {
+                    try
+                    {
+                        yName=((Project)y).FullName;
+                    }
+                    catch(NotImplementedException)
+                    {
+                    }
+                }
+                else if(y is ParsedSolutionItem)
+                {
+                    yName=((ParsedSolutionItem)y).FileName;
+                }
 
-				if(xName!=null && yName!=null)
-				{
-					return xName.CompareTo(yName);
-				}
-				if(xName!=null)
-				{
-					return 1;
-				}
-				if(yName!=null)
-				{
-					return -1;
-				}
-				return x.GetHashCode().CompareTo(y.GetHashCode());
+                if(xName!=null && yName!=null)
+                {
+                    return xName.CompareTo(yName);
+                }
+                if(xName!=null)
+                {
+                    return 1;
+                }
+                if(yName!=null)
+                {
+                    return -1;
+                }
+                return x.GetHashCode().CompareTo(y.GetHashCode());
             }
         }
         #endregion
