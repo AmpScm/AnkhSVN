@@ -14,14 +14,14 @@ namespace Ankh.Solution
         /// </summary>
         public ParsedSolution(string solutionFile, IContext context)
         {
-			if(!File.Exists(solutionFile))
-			{
-				throw new ArgumentException("Solution file must exist.");
-			}
+            if(!File.Exists(solutionFile))
+            {
+                throw new ArgumentException("Solution file must exist.");
+            }
 
-			this.context=context;
+            this.context=context;
             this.projects=new Hashtable();
-			this.solutionFile=solutionFile;
+            this.solutionFile=solutionFile;
         }
 
         /// <summary>
@@ -44,27 +44,27 @@ namespace Ankh.Solution
                 }
             }
 
-			try
-			{
-				//get the basic file name
-				int startLocation=solutionContents.IndexOf("\""+projectName+"\",");
-				startLocation+=projectName.Length+5;  //pass quotes, etc
-				if(startLocation<0)
-				{
-					return null; 
-				}
-				int endLocation=this.solutionContents.IndexOf(",", startLocation);
-				endLocation-=1;  //pass quotes
-				string file=this.solutionContents.Substring(startLocation, endLocation-startLocation);
+            try
+            {
+                //get the basic file name
+                int startLocation=solutionContents.IndexOf("\""+projectName+"\",");
+                startLocation+=projectName.Length+5;  //pass quotes, etc
+                if(startLocation<0)
+                {
+                    return null; 
+                }
+                int endLocation=this.solutionContents.IndexOf(",", startLocation);
+                endLocation-=1;  //pass quotes
+                string file=this.solutionContents.Substring(startLocation, endLocation-startLocation);
 
-				//put it all together
-				return Path.Combine(Path.GetDirectoryName(this.solutionFile), file);
-			}
-			catch(Exception)
-			{
-				//behave somewhat nicely on solution files we don't understand
-				return null;
-			}
+                //put it all together
+                return Path.Combine(Path.GetDirectoryName(this.solutionFile), file);
+            }
+            catch(Exception)
+            {
+                //behave somewhat nicely on solution files we don't understand
+                return null;
+            }
         }
 
         /// <summary>
@@ -75,11 +75,11 @@ namespace Ankh.Solution
         /// <returns>the item found</returns>
         public ParsedSolutionItem GetProjectItem(string projectName, string itemName)
         {
-			ParsedSolutionItem project=this.GetProjectItems(projectName);
-			if(project==null)
-			{
-				return null;
-			}
+            ParsedSolutionItem project=this.GetProjectItems(projectName);
+            if(project==null)
+            {
+                return null;
+            }
 
             foreach(ParsedSolutionItem item in project.Children)
             {
@@ -99,49 +99,49 @@ namespace Ankh.Solution
         /// <returns>A tree of items from the project</returns>
         public ParsedSolutionItem GetProjectItems(string projectName)
         {
-			try
-			{
-				ParsedSolutionItem project=(ParsedSolutionItem)projects[projectName];
+            try
+            {
+                ParsedSolutionItem project=(ParsedSolutionItem)projects[projectName];
 
-				if(project==null)
-				{
-					string projectFile=GetProjectFile(projectName);
-					if(projectFile==null)
-					{
-						return null;
-					}
+                if(project==null)
+                {
+                    string projectFile=GetProjectFile(projectName);
+                    if(projectFile==null)
+                    {
+                        return null;
+                    }
 
-					project=new ParsedSolutionItem();
-					project.Name=projectName;
-					project.FileName=projectFile;
+                    project=new ParsedSolutionItem();
+                    project.Name=projectName;
+                    project.FileName=projectFile;
 
-					using(StreamReader reader=new StreamReader(projectFile))
-					{
-						string extension=Path.GetExtension(projectFile);
-						switch(extension)
-						{
-							case ".dbp":
-								this.ParseDatabaseProject(project, reader);
-								break;
+                    using(StreamReader reader=new StreamReader(projectFile))
+                    {
+                        string extension=Path.GetExtension(projectFile);
+                        switch(extension)
+                        {
+                            case ".dbp":
+                                this.ParseDatabaseProject(project, reader);
+                                break;
 
-							default:
-								throw new ApplicationException("Trying to parse unknown project of type "+extension);
-						}
-					}
+                            default:
+                                throw new ApplicationException("Trying to parse unknown project of type "+extension);
+                        }
+                    }
 
-					//don't save the parsed project until correct parsing is complete
-					this.projects[projectName]=project;
-				}
+                    //don't save the parsed project until correct parsing is complete
+                    this.projects[projectName]=project;
+                }
 
-				return project;
-			}
-			catch(Exception e)
-			{
-				context.OutputPane.Write("Parser Error: ");
-				context.OutputPane.WriteLine(e.Message);
-			}
+                return project;
+            }
+            catch(Exception e)
+            {
+                context.OutputPane.Write("Parser Error: ");
+                context.OutputPane.WriteLine(e.Message);
+            }
 
-			return null;
+            return null;
         }
 
         /// <summary>
@@ -181,43 +181,43 @@ namespace Ankh.Solution
                     item.Children.Add(child);
 
                     //slurp db references
-					this.SlurpSection(reader, 1);
+                    this.SlurpSection(reader, 1);
                 }
                 //ignore anything we don't recognize
             }
         }
 
-		/// <summary>
-		/// Slurp in and ignore a section of a file
-		/// </summary>
-		/// <param name="reader">Open file being parsed</param>
-		/// <param name="startIndent">Number of section endings necessary to finish slurping</param>
-		private void SlurpSection(StreamReader reader,int startIndent)
-		{
-			int indent=startIndent;
-			while(indent>0)
-			{
-				string line=reader.ReadLine();
-				if(line==null)
-				{
-					indent=-1;
-				}
-				else if(line.Trim().ToLower()=="end")
-				{
-					indent--;
-				}
-				else if(line.Trim().ToLower().StartsWith("begin "))
-				{
-					indent++;
-				}
-			}
-		}
+        /// <summary>
+        /// Slurp in and ignore a section of a file
+        /// </summary>
+        /// <param name="reader">Open file being parsed</param>
+        /// <param name="startIndent">Number of section endings necessary to finish slurping</param>
+        private void SlurpSection(StreamReader reader,int startIndent)
+        {
+            int indent=startIndent;
+            while(indent>0)
+            {
+                string line=reader.ReadLine();
+                if(line==null)
+                {
+                    indent=-1;
+                }
+                else if(line.Trim().ToLower()=="end")
+                {
+                    indent--;
+                }
+                else if(line.Trim().ToLower().StartsWith("begin "))
+                {
+                    indent++;
+                }
+            }
+        }
 
-		/// <summary>
-		/// Parse a project to read out the items contained
-		/// </summary>
-		/// <param name="project">Project to fill</param>
-		/// <param name="reader">An open reader on the project file</param>
+        /// <summary>
+        /// Parse a project to read out the items contained
+        /// </summary>
+        /// <param name="project">Project to fill</param>
+        /// <param name="reader">An open reader on the project file</param>
         private void ParseDatabaseProject(ParsedSolutionItem project, StreamReader reader)
         {
             //pass the header
@@ -235,9 +235,9 @@ namespace Ankh.Solution
             this.ParseDatabaseItemChildren(project, reader);
         }
 
-		private IContext context;
-		private Hashtable projects;
-		private string solutionContents;
-		private string solutionFile;
+        private IContext context;
+        private Hashtable projects;
+        private string solutionContents;
+        private string solutionFile;
     }
 }
