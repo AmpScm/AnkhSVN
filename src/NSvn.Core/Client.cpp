@@ -7,7 +7,6 @@
 
 
 
-#include "Status.h"
 #include "Revision.h"
 #include "CommitInfo.h"
 #include "DirectoryEntry.h"
