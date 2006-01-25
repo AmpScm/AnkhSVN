@@ -561,11 +561,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Commands\RenameFileCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Commands\ResolveConflictCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
