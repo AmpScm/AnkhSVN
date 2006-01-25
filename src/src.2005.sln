@@ -48,7 +48,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstallLib", "InstallLib\InstallLib.2005.vcproj", "{2A753B40-AB06-4D27-A093-D1D351BC9522}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B093CEC2-73C7-4DF4-B8C2-E144BE37DB19}"
-	ProjectSection(SolutionItems) = postProject
+	ProjectSection(SolutionItems) = preProject
 		WiX\Ankh-UI.wxs = WiX\Ankh-UI.wxs
 		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
 		ankh.reg = ankh.reg
@@ -68,6 +68,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		register.bat = register.bat
 		removeankh.reg = removeankh.reg
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtils.2005", "TestUtils\TestUtils.2005.csproj", "{874C0358-E7DD-42DA-BF07-58198B41FD25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -613,12 +615,57 @@ Global
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Run|Mixed Platforms.Build.0 = Run|Win32
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Run|Win32.ActiveCfg = Run|Win32
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Run|Win32.Build.0 = Run|Win32
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug run|Any CPU.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug run|Any CPU.Build.0 = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug run|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug run|Mixed Platforms.Build.0 = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug run|Win32.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug|Win32.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) NSvn.Tests|Any CPU.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) NSvn.Tests|Any CPU.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) NSvn.Tests|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) NSvn.Tests|Mixed Platforms.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) NSvn.Tests|Win32.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Release|Win32.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug run|Any CPU.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug run|Any CPU.Build.0 = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug run|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug run|Mixed Platforms.Build.0 = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug run|Win32.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.NSvn.Tests|Any CPU.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.NSvn.Tests|Any CPU.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.NSvn.Tests|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.NSvn.Tests|Mixed Platforms.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.NSvn.Tests|Win32.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Release|Win32.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Any CPU.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Any CPU.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Mixed Platforms.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal

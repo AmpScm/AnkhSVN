@@ -116,10 +116,6 @@
       <HintPath>D:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
       <AssemblyFolderKey>hklm\primary interop assemblies</AssemblyFolderKey>
     </Reference>
-    <Reference Include="SharpZipLib">
-      <Name>SharpZipLib</Name>
-      <HintPath>..\lib\SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="stdole">
       <Name>stdole</Name>
       <HintPath>..\lib\stdole.dll</HintPath>
@@ -217,9 +213,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Win32\Win32.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Zip.cs">
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="FolderBrowser.resx">
