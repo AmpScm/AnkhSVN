@@ -159,6 +159,10 @@
       <Project>{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}</Project>
       <Package>{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}</Package>
     </ProjectReference>
+    <ProjectReference Include="..\TestUtils\TestUtils.2005.csproj">
+      <Project>{874C0358-E7DD-42DA-BF07-58198B41FD25}</Project>
+      <Name>TestUtils.2005</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.2005.csproj">
       <Name>Utils.2003</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
