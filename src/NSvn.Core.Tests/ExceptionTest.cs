@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Utils;
 using NUnit.Framework;
+using TestUtils;
 
 namespace NSvn.Core.Tests
 {

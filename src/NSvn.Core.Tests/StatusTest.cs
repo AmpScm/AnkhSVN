@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Utils;
+using TestUtils;
 
 namespace NSvn.Core.Tests
 {

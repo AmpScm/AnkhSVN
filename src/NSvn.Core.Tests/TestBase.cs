@@ -12,6 +12,7 @@ using System.Threading;
 using Utils;
 using Utils.Win32;
 using System.Text;
+using TestUtils;
 
 namespace NSvn.Core.Tests
 {

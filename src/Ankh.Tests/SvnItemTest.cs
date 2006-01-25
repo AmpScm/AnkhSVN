@@ -3,7 +3,7 @@ using System;
 using NUnit.Framework;
 using System.IO;
 using NSvn.Core;
-using Utils;
+using TestUtils;
 using System.Collections;
 
 

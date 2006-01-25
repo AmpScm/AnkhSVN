@@ -92,6 +92,15 @@
         <delete dir="build-Debug" verbose="${verbose}" failonerror="false" />
     </target>
     
+    <target name="build-TestUtils">
+        <nant buildfile="TestUtils/TestUtils.build" inheritall="true" target="build"/>
+        <copy todir="${build.dir}"> 
+            <fileset basedir="TestUtils/${build.dir}">
+                <include name="*.dll"/>
+                <include name="*.pdb"/>
+            </fileset>
+         </copy>
+    </target>
     
      <target name="build-Utils">
         <nant buildfile="Utils/Utils.build" inheritall="true" target="build"/>
@@ -245,7 +254,7 @@
         
     </target>
     
-    <target name="build-tests" depends="build, build-Ankh.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp, build-Utils.Tests"
+    <target name="build-tests" depends="build, build-TestUtils, build-Ankh.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp, build-Utils.Tests"
         description="Build all test assemblies"/>
     
     

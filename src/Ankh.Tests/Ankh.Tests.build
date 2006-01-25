@@ -43,6 +43,7 @@
                 <include name="..\Ankh\${build.dir}\Ankh.dll"/>
                 <include name="..\Ankh.UI\${build.dir}\Ankh.UI.dll"/>
                 <include name="..\Utils\${build.dir}\Utils.dll"/>
+                <include name="..\TestUtils\${build.dir}\TestUtils.dll"/>
                 <include name="${build.dir}/AnkhUserControlHostLib.dll"/>
                 <include name="${lib.dir}\nunit.framework.dll"/>
                 <include name="${lib.dir}\Sharpziplib.dll"/>
