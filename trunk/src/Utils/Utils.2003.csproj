@@ -90,11 +90,6 @@
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
                 />
                 <Reference
-                    Name = "SharpZipLib"
-                    AssemblyName = "SharpZipLib"
-                    HintPath = "..\lib\SharpZipLib.dll"
-                />
-                <Reference
                     Name = "Microsoft.mshtml"
                     AssemblyName = "Microsoft.mshtml"
                     HintPath = "D:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll"
@@ -174,11 +169,6 @@
                 />
                 <File
                     RelPath = "VersionAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Zip.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

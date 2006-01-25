@@ -137,6 +137,11 @@
                     AssemblyName = "nunit.framework"
                     HintPath = "..\lib\nunit.framework.dll"
                 />
+                <Reference
+                    Name = "TestUtils"
+                    Project = "{874C0358-E7DD-42DA-BF07-58198B41FD25}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>

@@ -3,6 +3,7 @@ using System;
 using NUnit.Framework;
 using System.IO;
 using Utils;
+using TestUtils;
 
 namespace NSvn.Core.Tests
 {

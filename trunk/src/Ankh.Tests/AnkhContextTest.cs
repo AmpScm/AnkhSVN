@@ -4,7 +4,7 @@ using NUnit.Framework;
 using EnvDTE;
 using Ankh.UI;
 using System.Windows.Forms;
-using Utils;
+using TestUtils;
 
 namespace Ankh.Tests
 {
