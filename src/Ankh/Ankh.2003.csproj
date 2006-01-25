@@ -242,6 +242,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Enumerators.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ErrorHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -755,6 +760,11 @@
                 />
                 <File
                     RelPath = "Solution\ProjectNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\SolutionFolderNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
