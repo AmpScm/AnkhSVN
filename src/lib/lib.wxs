@@ -36,7 +36,6 @@
         <ComponentRef Id="Libs6" />
         <ComponentRef Id="Libs7" />
         <ComponentRef Id="Libs8" />
-        <ComponentRef Id="Libs9" />
     </Feature>
         <DirectoryRef Id="TARGETDIR" src="..\$(var.builddir)\">
             <!-- Register AnkhUserControlHost -->
@@ -196,10 +195,6 @@
             </Component>
             <Component Id="Libs8" DiskId="1" Guid="6EE2156E-B81E-41E5-9DE9-06DAC7CBD956">
                 <File Id="CF_office.dll" Name="OFFICE.DLL"
-                    Vital="yes" DiskId="1" />
-            </Component>
-            <Component Id="Libs9" DiskId="1" Guid="C6C9A8B7-1DCF-4B11-974D-086CF6303CDD">
-                <File Id="CF_SharpZipLib.dll" Name="SHARPZIP.DLL" LongName="SharpZipLib.dll"
                     Vital="yes" DiskId="1" />
             </Component>
         </DirectoryRef>
