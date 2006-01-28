@@ -1,4 +1,6 @@
+#define UNICODE
 
+#include <windows.h>
 #include <initguid.h>
 #include <unknwn.h>
 
@@ -211,4 +213,54 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvOut)
     {
         return CLASS_E_CLASSNOTAVAILABLE;
     }
+}
+
+
+
+STDAPI DllRegisterServer()
+{
+    
+    WCHAR lpszFileName[MAX_PATH+1];
+    HMODULE hMod = GetModuleHandle(L"ComAggregator");
+    HKEY hKey1, hKey2, hKey3, hKey4, hKey5;
+
+    GetModuleFileName(hMod, lpszFileName, MAX_PATH+1);
+    RegOpenKey(HKEY_CLASSES_ROOT, L"CLSID", &hKey1);
+    RegCreateKey(hKey1, L"{9FD6D94E-2223-4578-AD8C-05A926FCF292}", &hKey2);
+    RegCreateKey(hKey2, L"InProcServer32", &hKey3);
+    RegSetValueEx(hKey3, NULL, 0, REG_SZ, reinterpret_cast<LPBYTE>(lpszFileName), 2 * (lstrlen(lpszFileName) + 1));
+    RegSetValueEx(hKey3, L"ThreadingModel", 0, REG_SZ, reinterpret_cast<LPBYTE>(L"Both"), 20);
+    RegCloseKey(hKey3);
+    RegCloseKey(hKey2);
+    RegCloseKey(hKey1);
+
+    
+
+    RegCreateKey(HKEY_CLASSES_ROOT, L"Ankh.ComAggregator", &hKey4);
+    RegCreateKey(hKey4, L"CLSID", &hKey5);
+    RegSetValueEx(hKey5, NULL, 0, REG_SZ, reinterpret_cast<LPBYTE>(L"{9FD6D94E-2223-4578-AD8C-05A926FCF292}"), 
+        2* (lstrlen(L"{9FD6D94E-2223-4578-AD8C-05A926FCF292}") + 1));
+    RegCloseKey(hKey5);
+    RegCloseKey(hKey4);
+    
+    return S_OK;
+}
+
+STDAPI DllUnregisterServer()
+{
+    HKEY hKey1, hKey2;
+    
+    RegOpenKey(HKEY_CLASSES_ROOT, L"CLSID", &hKey1);
+    RegOpenKey(hKey1, L"{9FD6D94E-2223-4578-AD8C-05A926FCF292}", &hKey2);
+    RegDeleteKey(hKey2, L"InProcServer32");
+    RegCloseKey(hKey2);
+    RegDeleteKey(hKey1, L"{9FD6D94E-2223-4578-AD8C-05A926FCF292}");
+    RegCloseKey(hKey1);
+
+    RegOpenKey(HKEY_CLASSES_ROOT, L"Ankh.ComAggregator", &hKey1);
+    RegDeleteKey(hKey1, L"CLSID");
+    RegCloseKey(hKey1);
+    RegDeleteKey(HKEY_CLASSES_ROOT, L"Ankh.ComAggregator");
+
+    return S_OK;
 }
