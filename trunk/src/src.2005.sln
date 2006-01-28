@@ -48,28 +48,12 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstallLib", "InstallLib\InstallLib.2005.vcproj", "{2A753B40-AB06-4D27-A093-D1D351BC9522}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B093CEC2-73C7-4DF4-B8C2-E144BE37DB19}"
-	ProjectSection(SolutionItems) = preProject
-		WiX\Ankh-UI.wxs = WiX\Ankh-UI.wxs
-		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
-		ankh.reg = ankh.reg
-		WiX\apr-iconv.wxs = WiX\apr-iconv.wxs
-		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
-		CHANGES = CHANGES
-		CONTRIBUTERS = CONTRIBUTERS
-		..\deploy.build = ..\deploy.build
-		lib\lib.build = lib\lib.build
-		lib\lib.wxs = lib\lib.wxs
-		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
-		master.build = master.build
-		WiX\NSvn.msm.build = WiX\NSvn.msm.build
-		WiX\NSvn.msm.wxs = WiX\NSvn.msm.wxs
-		Ankh\AnkhSetup\README.rtf = Ankh\AnkhSetup\README.rtf
-		readme.txt = readme.txt
-		register.bat = register.bat
-		removeankh.reg = removeankh.reg
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtils.2005", "TestUtils\TestUtils.2005.csproj", "{874C0358-E7DD-42DA-BF07-58198B41FD25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B093CEC2-73C7-4DF4-B8C2-E144BE37DB19}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComAggregator", "ComAggregator\ComAggregator.2005.vcproj", "{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -660,12 +644,57 @@ Global
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Mixed Platforms.Build.0 = Release|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Win32.ActiveCfg = Release|Any CPU
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run|Any CPU.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run|Mixed Platforms.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run|Mixed Platforms.Build.0 = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run|Win32.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run|Win32.Build.0 = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug|Win32.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug|Win32.Build.0 = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests|Any CPU.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests|Mixed Platforms.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests|Mixed Platforms.Build.0 = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests|Win32.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests|Win32.Build.0 = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release|Any CPU.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release|Mixed Platforms.Build.0 = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release|Win32.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release|Win32.Build.0 = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run|Any CPU.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run|Mixed Platforms.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run|Mixed Platforms.Build.0 = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run|Win32.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run|Win32.Build.0 = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug|Win32.Build.0 = Debug|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests|Any CPU.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests|Mixed Platforms.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests|Mixed Platforms.Build.0 = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests|Win32.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests|Win32.Build.0 = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release|Any CPU.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release|Win32.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release|Win32.Build.0 = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Run|Any CPU.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Run|Mixed Platforms.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Run|Mixed Platforms.Build.0 = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Run|Win32.ActiveCfg = Release|Win32
+		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Run|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 EndGlobal
