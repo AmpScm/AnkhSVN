@@ -55,12 +55,12 @@ namespace Ankh.EventSinks
             IEnumHierarchies enumerator;
             int hr = solution.GetProjectEnum( (uint)VSENUMPROJFLAGS.EPF_ALLPROJECTS, ref guid, out enumerator );
 
-            IVsHierarchy[] hierarchies = new IVsHierarchy[1];
+            object[] hierarchies = new object[1];
             uint fetched;
             Marshal.ThrowExceptionForHR( enumerator.Next( 1, hierarchies, out fetched ) );
             while ( fetched == 1 )
             {
-                IVsHierarchy hi = hierarchies[0];
+                IVsHierarchy hi =(IVsHierarchy) ComUtils.Wrap(hierarchies[0]);
 
                 AddHierarchyEventsImpl( hi );
                 
@@ -139,7 +139,7 @@ namespace Ankh.EventSinks
                 }
 
                 // and then hook us up as an event sink
-                hr = this.hierarchy.AdviseHierarchyEvents( this, out this.cookie );
+                hr = this.hierarchy.AdviseHierarchyEvents( ComUtils.Wrap(this), out this.cookie );
                 System.Runtime.InteropServices.Marshal.ThrowExceptionForHR( hr );
 
                 

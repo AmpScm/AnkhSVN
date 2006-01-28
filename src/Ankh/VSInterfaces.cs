@@ -416,7 +416,7 @@ namespace Ankh
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         int Unused0();
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        int AdviseHierarchyEvents( [In, MarshalAs( UnmanagedType.Interface )] IVsHierarchyEvents pEventSink, [ComAliasName( "Microsoft.VisualStudio.Shell.Interop.VSCOOKIE" )] out uint pdwCookie );
+        int AdviseHierarchyEvents( [In, MarshalAs( UnmanagedType.Interface )] object pEventSink, [ComAliasName( "Microsoft.VisualStudio.Shell.Interop.VSCOOKIE" )] out uint pdwCookie );
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         int UnadviseHierarchyEvents( [In, ComAliasName( "Microsoft.VisualStudio.Shell.Interop.VSCOOKIE" )] uint dwCookie );
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
@@ -527,7 +527,7 @@ namespace Ankh
     public interface IEnumHierarchies
     {
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        int Next( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt, [Out, MarshalAs( UnmanagedType.LPArray, ArraySubType = UnmanagedType.Interface, SizeParamIndex = 0 )] IVsHierarchy[] rgelt, [ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] out uint pceltFetched );
+        int Next( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt, [Out, MarshalAs( UnmanagedType.LPArray, ArraySubType = UnmanagedType.Interface, SizeParamIndex = 0 )] object[] rgelt, [ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] out uint pceltFetched );
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         int Skip( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt );
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
