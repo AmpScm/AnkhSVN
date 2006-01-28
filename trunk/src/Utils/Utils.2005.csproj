@@ -140,6 +140,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ComUtils.cs" />
     <Compile Include="DebugTimer.cs">
       <SubType>Code</SubType>
     </Compile>
