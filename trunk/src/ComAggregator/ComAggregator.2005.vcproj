@@ -4,6 +4,7 @@
 	Version="8,00"
 	Name="ComAggregator"
 	ProjectGUID="{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}"
+	RootNamespace="ComAggregator"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -92,6 +93,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="regsvr32 /s $(TargetPath)"
 			/>
 		</Configuration>
 		<Configuration
