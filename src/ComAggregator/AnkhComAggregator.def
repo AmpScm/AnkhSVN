@@ -1,0 +1,7 @@
+LIBRARY	ComAggregator
+
+EXPORTS
+    DllCanUnloadNow private
+    DllGetClassObject private
+
+
