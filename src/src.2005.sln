@@ -2,45 +2,42 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.UI.2005", "Ankh.UI\Ankh.UI.2005.csproj", "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
 	ProjectSection(ProjectDependencies) = postProject
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
-		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
 		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A3248E1E-8272-4227-AF02-BB86040FBED9}
+		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.2005", "Ankh\Ankh.2005.csproj", "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
 	ProjectSection(ProjectDependencies) = postProject
-		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE} = {AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
-		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
 		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A3248E1E-8272-4227-AF02-BB86040FBED9}
+		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE} = {AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSvn.Core", "NSvn.Core\NSvn.Core.2005.vcproj", "{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
 	ProjectSection(ProjectDependencies) = postProject
-		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
 		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A3248E1E-8272-4227-AF02-BB86040FBED9}
+		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn.Core.Tests.2005", "NSvn.Core.Tests\NSvn.Core.Tests.2005.csproj", "{1882FE23-6EE3-46AF-82B2-929E371E6218}"
 	ProjectSection(ProjectDependencies) = postProject
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
 		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSvn.Common.2005", "NSvn.Common\NSvn.Common.2005.csproj", "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSvn.Core.Tests.MCpp", "NSvn.Core.Tests.MCpp\NSvn.Core.Tests.MCpp.2005.vcproj", "{05E011D8-54B5-4558-80BF-A8AD64DDAC97}"
 	ProjectSection(ProjectDependencies) = postProject
-		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
 		{3A8DF134-05F1-4357-9682-AB14CDDA48A9} = {3A8DF134-05F1-4357-9682-AB14CDDA48A9}
+		{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E} = {E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.2005", "Utils\Utils.2005.csproj", "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D} = {34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReposInstaller.2005", "ReposInstaller\ReposInstaller.2005.csproj", "{6D2A5456-0DB3-4795-8005-7E591AB2A221}"
 EndProject
@@ -51,12 +48,28 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstallLib", "InstallLib\InstallLib.2005.vcproj", "{2A753B40-AB06-4D27-A093-D1D351BC9522}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B093CEC2-73C7-4DF4-B8C2-E144BE37DB19}"
+	ProjectSection(SolutionItems) = preProject
+		WiX\Ankh-UI.wxs = WiX\Ankh-UI.wxs
+		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
+		ankh.reg = ankh.reg
+		WiX\apr-iconv.wxs = WiX\apr-iconv.wxs
+		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
+		CHANGES = CHANGES
+		CONTRIBUTERS = CONTRIBUTERS
+		..\deploy.build = ..\deploy.build
+		lib\lib.build = lib\lib.build
+		lib\lib.wxs = lib\lib.wxs
+		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
+		master.build = master.build
+		WiX\NSvn.msm.build = WiX\NSvn.msm.build
+		WiX\NSvn.msm.wxs = WiX\NSvn.msm.wxs
+		Ankh\AnkhSetup\README.rtf = Ankh\AnkhSetup\README.rtf
+		readme.txt = readme.txt
+		register.bat = register.bat
+		removeankh.reg = removeankh.reg
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtils.2005", "TestUtils\TestUtils.2005.csproj", "{874C0358-E7DD-42DA-BF07-58198B41FD25}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B093CEC2-73C7-4DF4-B8C2-E144BE37DB19}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComAggregator", "ComAggregator\ComAggregator.2005.vcproj", "{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -647,57 +660,12 @@ Global
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Mixed Platforms.Build.0 = Release|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Win32.ActiveCfg = Release|Any CPU
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run|Any CPU.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run|Mixed Platforms.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run|Mixed Platforms.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run|Win32.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run|Win32.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug|Win32.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug|Win32.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests|Any CPU.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests|Mixed Platforms.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests|Mixed Platforms.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests|Win32.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests|Win32.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release|Any CPU.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release|Mixed Platforms.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release|Win32.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release|Win32.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run|Any CPU.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run|Mixed Platforms.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run|Mixed Platforms.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run|Win32.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run|Win32.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug|Win32.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests|Any CPU.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests|Mixed Platforms.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests|Mixed Platforms.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests|Win32.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests|Win32.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release|Any CPU.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release|Win32.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release|Win32.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Run|Any CPU.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Run|Mixed Platforms.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Run|Mixed Platforms.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Run|Win32.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Run|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal

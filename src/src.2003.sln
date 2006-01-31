@@ -62,10 +62,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstallLib", "InstallLib\In
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComAggregator", "ComAggregator\ComAggregator.2003.vcproj", "{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtils", "TestUtils\TestUtils.csproj", "{874C0358-E7DD-42DA-BF07-58198B41FD25}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -247,22 +243,6 @@ Global
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.NSvn.Tests.Build.0 = Release|Win32
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Release.ActiveCfg = Release|Win32
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Release.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Debug run.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) NSvn.Tests.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.(svnlib) Release.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run.ActiveCfg = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Debug run.Build.0 = Debug|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.NSvn.Tests.Build.0 = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release.ActiveCfg = Release|Win32
-		{34E8661A-CC8D-4D1C-A9DE-CC8E9FDE379D}.Release.Build.0 = Release|Win32
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug.ActiveCfg = Debug|.NET
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug.Build.0 = Debug|.NET
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug run.ActiveCfg = Debug|.NET
