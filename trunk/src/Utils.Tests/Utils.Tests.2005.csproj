@@ -130,7 +130,6 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ComUtilsTests.cs" />
     <Compile Include="PathUtilsTest.cs">
       <SubType>Code</SubType>
     </Compile>
