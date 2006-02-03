@@ -36,6 +36,8 @@
         <ComponentRef Id="Libs6" />
         <ComponentRef Id="Libs7" />
         <ComponentRef Id="Libs8" />
+        <ComponentRef Id="Libs9" />
+        <ComponentRef Id="Libs10" />
     </Feature>
         <DirectoryRef Id="TARGETDIR" src="..\$(var.builddir)\">
             <!-- Register AnkhUserControlHost -->
@@ -195,6 +197,14 @@
             </Component>
             <Component Id="Libs8" DiskId="1" Guid="6EE2156E-B81E-41E5-9DE9-06DAC7CBD956">
                 <File Id="CF_office.dll" Name="OFFICE.DLL"
+                    Vital="yes" DiskId="1" />
+            </Component>
+            <Component Id="Libs9" DiskId="1" Guid="D00CDBB8-820F-4DC5-A23E-1B35EE9160F5">
+                <File Id="CF_Microsoft.VisualStudio.OLE.Interop.dll" Name="MSVSOLEI.DLL" LongName="Microsoft.VisualStudio.OLE.Interop.dll"
+                    Vital="yes" DiskId="1" />
+            </Component>
+            <Component Id="Libs10" DiskId="1" Guid="54BE2DEA-AD40-4429-B5E3-26632141EDC5">
+                <File Id="CF_Microsoft.VisualStudio.Shell.Interop.dll" Name="MSVSSHI.DLL" LongName="Microsoft.VisualStudio.Shell.Interop.dll"
                     Vital="yes" DiskId="1" />
             </Component>
         </DirectoryRef>
