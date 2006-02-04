@@ -14,6 +14,8 @@ using System.IO;
 using System.Diagnostics;
 using System.ComponentModel;
 
+using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
 namespace Ankh
 {
     /// <summary>

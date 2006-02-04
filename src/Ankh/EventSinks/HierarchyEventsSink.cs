@@ -8,6 +8,9 @@ using System.Diagnostics;
 using System.Threading;
 using System.IO;
 using Utils;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh.EventSinks
 {
@@ -53,7 +56,7 @@ namespace Ankh.EventSinks
 
             // Use the SVSolution service to iterate through the projects
             IEnumHierarchies enumerator;
-            int hr = solution.GetProjectEnum( (uint)VSENUMPROJFLAGS.EPF_ALLPROJECTS, ref guid, out enumerator );
+            int hr = solution.GetProjectEnum( (uint)__VSENUMPROJFLAGS.EPF_ALLPROJECTS, ref guid, out enumerator );
 
             IVsHierarchy[] hierarchies = new IVsHierarchy[1];
             uint fetched;
@@ -121,14 +124,14 @@ namespace Ankh.EventSinks
                 const uint root = unchecked( (uint)(int)VSITEMID.VSITEMID_ROOT );
 
                 object var;
-                int hr = this.hierarchy.GetProperty( root, (int)VSHPROPID.VSHPROPID_Name, out var );
+                int hr = this.hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_Name, out var );
                 System.Runtime.InteropServices.Marshal.ThrowExceptionForHR(hr);
 
                 this.project = this.GetProjectForName( (string)var );
                 // VS 2005 web projects use the project dir for their name
                 if ( this.project == null )
                 {
-                    hr = this.hierarchy.GetProperty( root, (int)VSHPROPID.VSHPROPID_ProjectDir, out var );
+                    hr = this.hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_ProjectDir, out var );
                     System.Runtime.InteropServices.Marshal.ThrowExceptionForHR( hr );
                     this.project = GetProjectForName( (string)var );
                 }
