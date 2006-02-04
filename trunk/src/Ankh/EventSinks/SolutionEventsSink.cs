@@ -6,6 +6,9 @@ using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
 using System.ComponentModel;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh.EventSinks
 {

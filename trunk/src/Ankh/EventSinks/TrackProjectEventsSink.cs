@@ -12,6 +12,9 @@ using System.Windows.Forms;
 using Utils;
 using System.Collections.Specialized;
 using System.Collections;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh.EventSinks
 {

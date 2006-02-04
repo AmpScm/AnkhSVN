@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using Ankh.Solution;
 using System;
 
+using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
 namespace Ankh
 {
     public interface IContext
