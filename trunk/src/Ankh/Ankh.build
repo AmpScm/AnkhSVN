@@ -47,6 +47,8 @@
                 <include name="${lib.dir}\EnvDTE.dll"/>
                 <include name="${lib.dir}\extensibility.dll"/>
                 <include name="${lib.dir}\Office.dll"/>
+                <include name="${lib.dir}\Microsoft.VisualStudio.OLE.Interop.dll"/>
+                <include name="${lib.dir}\Microsoft.VisualStudio.Shell.Interop.dll"/>
                 <include name="..\Ankh.UI\${build.dir}\Ankh.UI.dll"/>
                 <include name="..\NSvn.Common\${build.dir}\NSvn.Common.dll"/>
                 <include name="..\NSvn.Core\${build.dir}\NSvn.Core.dll"/>
