@@ -5,7 +5,7 @@
 			Version="$(var.ankhversion)" Id="????????-????-????-????-????????????">
 
 		<Package Description="AnkhSVN" Comments="AnkhSVN Visual Studio plugin" 
-				Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud"
+				Manufacturer="Arild Fines, Sander Rijken, Per Krämer &amp; Kristin Borud"
 				InstallerVersion="200" Platforms="Intel" Languages="1033" 
 				Compressed="yes" SummaryCodepage="1252"
 				Id="????????-????-????-????-????????????" />
@@ -18,7 +18,7 @@
 		</Upgrade>
 
 		<Property Id="ShortProductName">AnkhSvn</Property>
-		<Property Id="ARPCONTACT">Arild Fines, Per Krämer &amp; Kristin Borud</Property>
+		<Property Id="ARPCONTACT">Arild Fines, Sander Rijken, Per Krämer &amp; Kristin Borud</Property>
 		<Property Id="ARPURLINFOABOUT">http://ankhsvn.tigris.org/</Property>
 		<Property Id="ARPHELPLINK">http://ankhsvn.tigris.org/</Property>
 		<Property Id="ARPURLUPDATEINFO">http://ankhsvn.tigris.org/</Property>
