@@ -6,6 +6,8 @@ using System.Collections;
 using System.Windows.Forms;
 using System.IO;
 
+using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
 namespace Ankh.Tests
 {
     /// <summary>
@@ -35,7 +37,14 @@ namespace Ankh.Tests
             }
         }
 
-        
+        public IServiceProvider ServiceProvider
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get
+            {
+                return this.dte as IServiceProvider;
+            }
+        }
 
         public virtual System.Windows.Forms.IWin32Window HostWindow
         {
@@ -574,16 +583,11 @@ namespace Ankh.Tests
 
         #region IContext Members
 
-        public IServiceProvider ServiceProvider
-        {
-            get { throw new Exception( "The method or operation is not implemented." ); }
-        }
-
         bool IContext.EnableAnkhForLoadedSolution()
         {
             throw new Exception( "The method or operation is not implemented." );
         }
 
         #endregion
-}
+    }
 }

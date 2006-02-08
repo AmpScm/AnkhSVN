@@ -49,7 +49,9 @@
                 <include name="${lib.dir}\Sharpziplib.dll"/>
                 <include name="${lib.dir}\EnvDTE.dll"/>
                 <include name="${lib.dir}\extensibility.dll"/>
-                <include name="${lib.dir}\Office.dll"/>                
+                <include name="${lib.dir}\Office.dll"/>
+                <include name="${lib.dir}\Microsoft.VisualStudio.OLE.Interop.dll"/>
+                <include name="${lib.dir}\Microsoft.VisualStudio.Shell.Interop.dll"/>
             </references>
             <resources basedir="${src.dir}" prefix="Ankh.Tests" dynamicprefix="true">
                 <include name="repos.zip"/>
