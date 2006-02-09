@@ -90,7 +90,8 @@ namespace Ankh.EventSinks
             {
                 // this is annoying, but we can proceed
                 this.Context.ErrorHandler.LogException( ex, 
-                    "Cannot find automation object for project. Some manual refresh of project might be necessary." );
+                    String.Format("Cannot find automation object for project {0}.\r\nSome manual refresh of project might be necessary.", 
+                    ex.ProjectName) );
             }
             catch ( COMException ex )
             {
@@ -109,6 +110,17 @@ namespace Ankh.EventSinks
 
         private class NoProjectAutomationObjectException : Exception
         {
+            public NoProjectAutomationObjectException( string name )
+            {
+                this.projectName = name;
+            }
+
+            public string ProjectName
+            {
+                get { return projectName; }
+            }
+
+            private string projectName;
         }
         /// <summary>
         /// The actual event sink for the hierarchy events.
@@ -131,7 +143,10 @@ namespace Ankh.EventSinks
                 }
                 else
                 {
-                    throw new NoProjectAutomationObjectException();
+                    object nameVar;
+                    hr = this.hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_Name, out nameVar );
+                    string name = hr == VSConstants.S_OK ? nameVar as string : string.Empty;
+                    throw new NoProjectAutomationObjectException( name );
                 }
 
                 // and then hook us up as an event sink
