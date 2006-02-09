@@ -447,8 +447,23 @@ namespace Ankh.Solution
         internal void AddResource( object key, ProjectNode node, string projectFile )
         {
             this.projects[key] = node;
-            this.context.ProjectFileWatcher.AddFile( projectFile );
+            if ( projectFile != null && projectFile.Trim() != String.Empty )
+            {
+                this.context.ProjectFileWatcher.AddFile( projectFile );
+            }
         }
+
+        /// <summary>
+        /// Adds a new resource to the tree
+        /// </summary>
+        /// <param name="key">The modeled Project or an unmodeled placeholder for it</param>
+        /// <param name="node">Our own representation</param>
+        /// <param name="projectFile">Filename for the project</param>
+        internal void AddResource( Project key, SolutionFolderNode node )
+        {
+            this.projects[key] = node;
+        }
+
 
         internal void SetSolution( TreeNode node )
         {
@@ -863,41 +878,41 @@ namespace Ankh.Solution
                 }
                 return x.GetHashCode().CompareTo(y.GetHashCode());
             }
+        }
+        #endregion        
 
-            private static string GetUniqueProjectID( object project )
+        private static string GetUniqueProjectID( object project )
+        {
+            if ( project is Project )
             {
-                if ( project is Project )
+                try
                 {
-                    try
-                    {
-                        return ( (Project)project ).UniqueName;
-                    }
-                    catch ( Exception )
-                    {
-                        // Swallow
-                    }
-                    // nope, didn't work
-                    try
-                    {
-                        // not as good, but works in most cases
-                        return ((Project)project).FullName;
-                    }
-                    catch ( Exception )
-                    {
-                        return null;
-                    }
+                    return ( (Project)project ).UniqueName;
                 }
-                else if ( project is ParsedSolutionItem )
+                catch ( Exception )
                 {
-                    return ( (ParsedSolutionItem)project ).FileName;
+                    // Swallow
                 }
-                else
+                // nope, didn't work
+                try
+                {
+                    // not as good, but works in most cases
+                    return ( (Project)project ).FullName;
+                }
+                catch ( Exception )
                 {
                     return null;
                 }
             }
+            else if ( project is ParsedSolutionItem )
+            {
+                return ( (ParsedSolutionItem)project ).FileName;
+            }
+            else
+            {
+                return null;
+            }
         }
-        #endregion
 
 
         internal const int LockOverlay = 15;

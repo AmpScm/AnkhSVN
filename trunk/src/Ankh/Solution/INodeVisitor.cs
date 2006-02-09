@@ -10,6 +10,7 @@ namespace Ankh.Solution
     {
         void VisitProject( ProjectNode node );
         void VisitProjectItem( ProjectItemNode node );
-        void VisitSolutionNode( SolutionNode node );		
+        void VisitSolutionNode( SolutionNode node );
+        void VisitSolutionFolder( SolutionFolderNode node );
     }
 }

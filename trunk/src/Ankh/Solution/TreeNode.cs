@@ -45,13 +45,7 @@ namespace Ankh.Solution
             // what kind of node is this?
             if ( project != null )
             {
-                switch (project.Kind)
-                {
-                    case DteUtils.SolutionItemsKind:
-                        return new SolutionFolderNode(item, hItem, explorer, parent, project);
-                    default:
-                        return new ProjectNode(item, hItem, explorer, parent, project);
-                }
+                return GetTreeNodeForProject( item, hItem, explorer, parent, project );
             }
             else if ( item.Object is ProjectItem )
             {
@@ -65,7 +59,7 @@ namespace Ankh.Solution
                 }
                 else if ( projectItem.Object is Project )
                 {
-                    return new ProjectNode(item, hItem, explorer, parent, projectItem.Object as Project );
+                    return GetTreeNodeForProject( item, hItem, explorer, parent, projectItem.Object as Project );
                 }
                 else  //normal project item
                 {
@@ -99,6 +93,17 @@ namespace Ankh.Solution
             }
 
             return null;
+        }
+
+        private static TreeNode GetTreeNodeForProject( UIHierarchyItem item, IntPtr hItem, Explorer explorer, TreeNode parent, Project project )
+        {
+            switch ( project.Kind )
+            {
+                case DteUtils.SolutionItemsKind:
+                    return new SolutionFolderNode( item, hItem, explorer, parent, project );
+                default:
+                    return new ProjectNode( item, hItem, explorer, parent, project );
+            }
         }
 
         public static TreeNode CreateSolutionNode( UIHierarchyItem item, 

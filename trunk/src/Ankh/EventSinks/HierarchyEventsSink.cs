@@ -123,20 +123,13 @@ namespace Ankh.EventSinks
                 // first get the name of this project
                 const uint root = unchecked( (uint)(int)VSITEMID.VSITEMID_ROOT );
 
-                object var;
-                int hr = this.hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_Name, out var );
-                System.Runtime.InteropServices.Marshal.ThrowExceptionForHR(hr);
-
-                this.project = this.GetProjectForName( (string)var );
-                // VS 2005 web projects use the project dir for their name
-                if ( this.project == null )
+                object projVar;
+                int hr = this.hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_ExtObject, out projVar );
+                if ( hr == VSConstants.S_OK && projVar is EnvDTE.Project )
                 {
-                    hr = this.hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_ProjectDir, out var );
-                    System.Runtime.InteropServices.Marshal.ThrowExceptionForHR( hr );
-                    this.project = GetProjectForName( (string)var );
+                    this.project = (Project)projVar;
                 }
-
-                if ( this.project == null )
+                else
                 {
                     throw new NoProjectAutomationObjectException();
                 }
@@ -214,57 +207,6 @@ namespace Ankh.EventSinks
                 Trace.WriteLine( "Property changed for " + this.project.Name );
                 return VSConstants.S_OK;
             }
-
-            private Project GetProjectForName( string name )
-            {
-                foreach ( Project project in Enumerators.EnumerateProjects( this.context.DTE ) )
-                {
-                    Project proj = CheckProjectForName( project, name );
-                    if ( proj != null )
-                        return proj;
-
-                }
-                return null;
-            }
-
-            private Project CheckProjectForName( Project project, string name )
-            {
-                if ( project.Name == name )
-                    return project;
-                else
-                {
-                    string projectDir = PathUtils.NormalizePath( project.Name );
-                    string projectName = PathUtils.NormalizePath( name );
-                    if ( projectDir == projectName )
-                        return project;
-                }
-                foreach ( ProjectItem item in Enumerators.EnumerateProjectItems(project.ProjectItems) )
-                {
-                    Project subProject = null;
-
-                    if ( item.SubProject != null )
-                    {
-                        subProject = item.SubProject;
-                    }
-                    else if ( item.Object is Project )
-                    {
-                        subProject = item.Object as Project;
-                    }
-
-                    if ( subProject != null )
-                    {
-                        subProject = this.CheckProjectForName( subProject, name );
-                        if ( subProject != null )
-                        {
-                            return subProject;
-                        }
-                    }                   
-                }
-
-                return null;
-            }
-
-
 
             private System.Threading.Timer timer;
             /// <summary>
