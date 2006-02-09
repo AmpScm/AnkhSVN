@@ -55,8 +55,6 @@ namespace NSvn.Core.Tests
         void Client_Progress(object sender, ProgressEventArgs args)
         {
             progressCalled = true;
-            Console.WriteLine("Progress: " + args.Progress);
-            Console.WriteLine("Total: " + args.Total);
         }
 
         private bool progressCalled = false;
