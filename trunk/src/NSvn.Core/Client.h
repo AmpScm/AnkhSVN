@@ -38,6 +38,9 @@ namespace NSvn
             /// on paths.</summary>
             __event NotificationDelegate* Notification;
 
+            ///<summary>This event is fired to alert about transfer progress</summary>
+            __event ProgressDelegate* Progress;
+
             ///<summary>This event is fired during long running operations to give
             /// the user a chance to cancel the operation.</summary>
             __event CancelDelegate* Cancel;
@@ -576,6 +579,9 @@ namespace NSvn
         protected public:
             /// <summary>Invokes the Notification event.</summary>
             virtual void OnNotification( NotificationEventArgs* args );
+
+            /// <summary>Invokes the Progress event.</summary>
+            virtual void OnProgress( ProgressEventArgs* args );
 
             /// <summary>Invokes the LogMessage event.</summary>
             virtual void OnLogMessage( LogMessageEventArgs* args );

@@ -11,6 +11,7 @@
 //#include <svn_client.h>
 //#include <apr_pools.h>
 #include "NotificationEventArgs.h"
+#include "ProgressEventArgs.h"
 #include "LogMessageEventArgs.h"
 #include "CancelEventArgs.h"
 //#include "ManagedPointer.h"
@@ -21,6 +22,9 @@ namespace
     void notify_func( void *baton, const svn_wc_notify_t* notify, 
         apr_pool_t* pool );
     
+    void progress_func( apr_off_t progress, apr_off_t total, 
+        void *baton, apr_pool_t *pool );
+
     svn_error_t* log_msg_func( const char **log_msg, 
         const char **tmp_file, 
         apr_array_header_t *commit_items, 
@@ -55,6 +59,9 @@ namespace NSvn
             // is there an auth baton? (should be)
             if ( this->authBaton != 0 )
                 ctx->auth_baton = this->authBaton->GetAuthBaton();
+
+            ctx->progress_func = progress_func;
+            ctx->progress_baton = clientBaton;
 
             
             ctx->log_msg_func = log_msg_func;
@@ -118,6 +125,28 @@ namespace
             System::Diagnostics::Trace::WriteLine( ex );
         }
     }
+
+    void progress_func( apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool )
+    {
+
+        Client* client = 
+            *(static_cast<ManagedPointer<Client*>* >(baton) );
+
+        ProgressEventArgs* args = new ProgressEventArgs(progress, total);
+
+        try
+        {
+            client->OnProgress( args );
+        }
+        catch( Exception* ex )
+        {
+            // Swallow - we cannot let it propagate back into
+            // Subversion code
+            System::Diagnostics::Trace::WriteLine( ex );
+            Console::WriteLine(ex);
+        }
+    }
+
 
     // delegate the log message callback back into managed space
     svn_error_t* log_msg_func( const char **log_msg, 
