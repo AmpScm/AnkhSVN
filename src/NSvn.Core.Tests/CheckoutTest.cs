@@ -43,6 +43,23 @@ namespace NSvn.Core.Tests
                 "Wrong status" );
         }
 
+        [Test]
+        public void TestProgressEvent()
+        {
+                this.Client.Progress += new ProgressDelegate(Client_Progress);
+                this.Client.Checkout("http://ankhsvn.com/svn/test", this.newWc, Revision.Head, true);
+
+                Assert.IsTrue(progressCalled, "Progress delegate not called");
+        }
+
+        void Client_Progress(object sender, ProgressEventArgs args)
+        {
+            progressCalled = true;
+            Console.WriteLine("Progress: " + args.Progress);
+            Console.WriteLine("Total: " + args.Total);
+        }
+
+        private bool progressCalled = false;
         private string newWc;
 
     }

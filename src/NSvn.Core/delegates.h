@@ -10,6 +10,7 @@ namespace NSvn
     namespace Core
     {
         public __gc class NotificationEventArgs;
+        public __gc class ProgressEventArgs;
         public __gc class CommitItem;
         public __gc class LogMessage;
         public __gc class Status;
@@ -24,6 +25,7 @@ namespace NSvn
         public __delegate void LogMessageDelegate( Object* sender, LogMessageEventArgs* args );
         public __delegate void CancelDelegate( Object* sender, CancelEventArgs* args );
         public __delegate void NotificationDelegate( Object* sender, NotificationEventArgs* args );
+        public __delegate void ProgressDelegate( Object* sender, ProgressEventArgs* args );
         
         public __delegate void LogMessageReceiver( LogMessage* logMessage );  
 

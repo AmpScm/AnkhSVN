@@ -28,6 +28,7 @@
 #include "LogMessageEventArgs.h"
 #include "CancelEventArgs.h"
 #include "NotificationEventArgs.h"
+#include "ProgressEventArgs.h"
 #include "AuthenticationBaton.h"
 #include "ClientContext.h"
 #include <windows.h>
@@ -846,6 +847,12 @@ void NSvn::Core::Client::OnNotification( NotificationEventArgs* args )
 {
     if ( this->Notification != 0 )
         this->Notification->Invoke( this, args );
+}
+
+void NSvn::Core::Client::OnProgress( ProgressEventArgs* args )
+{
+    if ( this->Progress != 0 )
+        this->Progress->Invoke( this, args );
 }
 
 void NSvn::Core::Client::OnCancel( CancelEventArgs* args )

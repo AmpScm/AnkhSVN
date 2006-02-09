@@ -6,7 +6,6 @@
 	ProjectGUID="{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
 	RootNamespace="NSvn.Core"
 	Keyword="ManagedCProj"
-	SignManifests="true"
 	>
 	<Platforms>
 		<Platform
@@ -21,7 +20,7 @@
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="2"
-			InheritedPropertySheets="UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			ManagedExtensions="4"
 			>
@@ -103,7 +102,7 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="2"
-			InheritedPropertySheets="UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			ManagedExtensions="4"
 			>
@@ -182,7 +181,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			ManagedExtensions="4"
 			>
@@ -264,7 +263,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			ManagedExtensions="4"
 			>
@@ -343,7 +342,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			ManagedExtensions="4"
 			>
@@ -424,7 +423,7 @@
 	<References>
 		<AssemblyReference
 			RelativePath="mscorlib.dll"
-			AssemblyName="mscorlib, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, ProcessorArchitecture=IA64"
+			AssemblyName="mscorlib, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=IA64"
 		/>
 		<AssemblyReference
 			RelativePath="System.dll"
@@ -631,6 +630,10 @@
 			</File>
 			<File
 				RelativePath="Pool.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ProgressEventArgs.h"
 				>
 			</File>
 			<File
