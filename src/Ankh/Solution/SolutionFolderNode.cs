@@ -3,11 +3,13 @@ using System;
 
 namespace Ankh.Solution
 {
-    public sealed class SolutionFolderNode : ProjectNode
+    public sealed class SolutionFolderNode : TreeNode
     {
         public SolutionFolderNode(EnvDTE.UIHierarchyItem item, IntPtr hItem, Explorer explorer, TreeNode parent, EnvDTE.Project project)
-            : base(item, hItem, explorer, parent, project)
+            : base(item, hItem, explorer, parent)
         {
+            this.Explorer.AddResource( project, this );
+            this.FindChildren();
         }
 
         public override string Directory
@@ -22,6 +24,17 @@ namespace Ankh.Solution
                 child.Refresh(rescan);
 
             base.Refresh(rescan);
+        }
+
+        public override void Accept( INodeVisitor visitor )
+        {
+            visitor.VisitSolutionFolder( this );            
+        }
+
+        public override void GetResources( System.Collections.IList list, bool getChildItems, ResourceFilterCallback filter )
+        {
+            this.GetChildResources( list, getChildItems, filter );
+
         }
 
     }
