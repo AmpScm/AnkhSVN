@@ -158,8 +158,24 @@ namespace Ankh
         {
             lock( this.projectWatchers )
             {
-                foreach( Watcher w in this.projectWatchers )
-                    w.Poll();
+                ArrayList toRemove = new ArrayList();
+
+                foreach ( Watcher w in this.projectWatchers )
+                {
+                    try
+                    {
+                        w.Poll();
+                    }
+                    catch ( Exception )
+                    {
+                        toRemove.Add( w );
+                    }
+                }
+
+                foreach ( Watcher w in toRemove )
+                {
+                    this.projectWatchers.Remove( w );
+                }
             }
         }
 
