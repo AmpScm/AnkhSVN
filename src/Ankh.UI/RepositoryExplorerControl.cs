@@ -287,6 +287,7 @@ namespace Ankh.UI
             {
                 if (this.EnableBackgroundListingChanged != null)
                     this.EnableBackgroundListingChanged(this, EventArgs.Empty);
+                e.Button.ToolTipText = e.Button.Pushed ? "Disable background listing" : "Enable background listing";
             }
             else if (e.Button == this.addRepoURLButton)
             {
