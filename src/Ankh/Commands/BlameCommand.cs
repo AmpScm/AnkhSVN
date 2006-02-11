@@ -22,7 +22,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.SolutionExplorer.GetSelectionResources( true, 
-                new ResourceFilterCallback( CommandBase.VersionedSingleFileFilter) ).Count == 1 )
+                new ResourceFilterCallback( CommandBase.VersionedSingleFileFilter) ).Count > 0 )
                 return Enabled;
             else
                 return Disabled;
@@ -39,11 +39,12 @@ namespace Ankh.Commands
             // is shift depressed?
             if ( !CommandBase.Shift )
             {
-                PathSelectorInfo info = new PathSelectorInfo( "Blame", resources, resources );
+                PathSelectorInfo info = new PathSelectorInfo( "Blame", resources, new SvnItem[] {} );
                 info.RevisionStart = revisionStart;
                 info.RevisionEnd = revisionEnd;
                 info.EnableRecursive = false;
                 info.Recursive = false;
+                info.SingleSelection = true;
 
                 // show the selector dialog
                 info = context.UIShell.ShowPathSelector( info );
@@ -53,6 +54,10 @@ namespace Ankh.Commands
                 revisionStart = info.RevisionStart;
                 revisionEnd = info.RevisionEnd;
                 resources = info.CheckedItems;
+            }
+            else
+            {
+                resources = new SvnItem[] { (SvnItem)resources[0] };
             }
 
             XslTransform transform = CommandBase.GetTransform( 
