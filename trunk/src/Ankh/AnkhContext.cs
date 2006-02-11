@@ -330,8 +330,15 @@ namespace Ankh
         {
             //TODO: maybe refactor this?
             this.operationRunning = true;
-            this.DTE.StatusBar.Text = description + "...";
-            this.DTE.StatusBar.Animate( true, vsStatusAnimation.vsStatusAnimationSync );
+            try
+            {
+                this.DTE.StatusBar.Text = description + "...";
+                this.DTE.StatusBar.Animate( true, vsStatusAnimation.vsStatusAnimationSync );
+            }
+            catch ( Exception )
+            {
+                // Swallow, not critical
+            }
 
             this.OutputPane.StartActionText( description );
 
@@ -345,8 +352,15 @@ namespace Ankh
         {
             if ( this.operationRunning )
             {
-                this.DTE.StatusBar.Text = "Ready";
-                this.DTE.StatusBar.Animate( false, vsStatusAnimation.vsStatusAnimationSync );
+                try
+                {
+                    this.DTE.StatusBar.Text = "Ready";
+                    this.DTE.StatusBar.Animate( false, vsStatusAnimation.vsStatusAnimationSync );
+                }
+                catch ( Exception )
+                {
+                    // swallow, not critical
+                }
 
                 this.OutputPane.EndActionText();
                 this.operationRunning = false;
