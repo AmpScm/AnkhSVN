@@ -115,6 +115,11 @@ namespace Ankh.EventSinks
                 this.projectName = name;
             }
 
+            public NoProjectAutomationObjectException( string name, Exception innerException ) : base(name, innerException)
+            {
+                this.projectName = name;
+            }
+
             public string ProjectName
             {
                 get { return projectName; }
@@ -143,17 +148,27 @@ namespace Ankh.EventSinks
                 }
                 else
                 {
-                    object nameVar;
-                    hr = this.hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_Name, out nameVar );
-                    string name = hr == VSConstants.S_OK ? nameVar as string : string.Empty;
+                    string name = GetProjectName(root);
                     throw new NoProjectAutomationObjectException( name );
                 }
 
                 // and then hook us up as an event sink
                 hr = this.hierarchy.AdviseHierarchyEvents( this, out this.cookie );
-                System.Runtime.InteropServices.Marshal.ThrowExceptionForHR( hr );
+                if ( hr != VSConstants.S_OK )
+                {
+                    Exception ex = System.Runtime.InteropServices.Marshal.GetExceptionForHR( hr );
+                    throw new NoProjectAutomationObjectException( this.GetProjectName( root ), ex );
+                }
 
                 
+            }
+
+            private string GetProjectName( uint root )
+            {
+                object nameVar;
+                int hr = this.hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_Name, out nameVar );
+                string name = hr == VSConstants.S_OK ? nameVar as string : string.Empty;
+                return name;
             }
 
             public void Unadvise()
