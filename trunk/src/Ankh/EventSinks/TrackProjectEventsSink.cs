@@ -247,11 +247,17 @@ namespace Ankh.EventSinks
                 for ( int i = 0; i < rgszMkOldNames.Length; i++ )
                 {
                     SvnItem item = context.StatusCache[rgszMkOldNames[i]];
-                    if ( !CanRename( item ) )
+                    if ( !IsUnmodifiedOrUnversioned( item ) )
                     {
                         pSummaryResult[0] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
                         this.context.OutputPane.WriteLine( "SVN prohibits renaming modified items. " + 
                             "Please commit the modifications before attempting a rename." );
+                    }
+                    else if ( IsCaseOnlySvnRename( item, rgszMkNewNames[i] ) )
+                    {
+                        pSummaryResult[0] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
+                        this.Context.OutputPane.WriteLine( "Cannot rename {0} to {1}. SVN does not allow case only renames.",
+                            rgszMkOldNames[i], rgszMkNewNames[i] );
                     }
                 }
 
@@ -263,6 +269,8 @@ namespace Ankh.EventSinks
                 return VSConstants.E_FAIL;
             }
         }
+
+       
 
         private int OnQueryRemove( string[] names, VSQUERYREMOVEFILERESULTS[] pSummaryResult )
         {
@@ -287,12 +295,23 @@ namespace Ankh.EventSinks
             }
         }
 
-        private bool CanRename( SvnItem item )
+        private bool IsUnmodifiedOrUnversioned( SvnItem item )
         {
             return (
                 ( item.IsVersioned && !item.IsModified ) ||
                 ( !item.IsVersioned )
             );
+        }
+
+        private bool IsCaseOnlySvnRename( SvnItem item, string newPath )
+        {
+            if ( !item.IsVersioned )
+                return false;
+
+            string oldPath = PathUtils.NormalizePath( item.Path );
+            newPath = PathUtils.NormalizePath( newPath );
+
+            return oldPath == newPath;
         }
 
         private bool CanDelete( SvnItem item )
