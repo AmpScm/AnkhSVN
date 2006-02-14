@@ -119,6 +119,8 @@ namespace Ankh.UI
             // 
             // LockDialog
             // 
+            this.AcceptButton = this.okButton;
+            base.CancelButton = this.cancelButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.Caption = "Lock";
             this.ClientSize = new System.Drawing.Size(370, 416);

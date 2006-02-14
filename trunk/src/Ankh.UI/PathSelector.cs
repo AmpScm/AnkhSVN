@@ -167,7 +167,7 @@ namespace Ankh.UI
             get{ return this.okButton; }
         }
 
-        protected new Button CancelButton
+        protected new Button DoCancelButton
         {
             get{ return this.cancelButton; }
         }

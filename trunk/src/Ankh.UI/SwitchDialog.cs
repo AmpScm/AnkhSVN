@@ -190,6 +190,8 @@ namespace Ankh.UI
             // 
             // SwitchDialog
             // 
+            this.AcceptButton = this.okButton;
+            this.CancelButton = this.cancelButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.Caption = "Switch";
             this.ClientSize = new System.Drawing.Size(362, 455);

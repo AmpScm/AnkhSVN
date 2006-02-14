@@ -279,6 +279,8 @@ namespace Ankh.UI
             // 
             // ExportDialog
             // 
+            this.AcceptButton = this.okButton;
+            this.CancelButton = this.cancelButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(426, 343);
             this.ControlBox = false;
