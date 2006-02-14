@@ -153,10 +153,15 @@ namespace Ankh.EventSinks
                 }
 
                 // and then hook us up as an event sink
-                hr = this.hierarchy.AdviseHierarchyEvents( this, out this.cookie );
-                if ( hr != VSConstants.S_OK )
+                try
                 {
-                    Exception ex = System.Runtime.InteropServices.Marshal.GetExceptionForHR( hr );
+                    hr = this.hierarchy.AdviseHierarchyEvents( this, out this.cookie );
+
+                    // Grrr, 1.x doesn't have GetExceptionForHR
+                    Marshal.ThrowExceptionForHR( hr );
+                }
+                catch( Exception ex )
+                {
                     throw new NoProjectAutomationObjectException( this.GetProjectName( root ), ex );
                 }
 
