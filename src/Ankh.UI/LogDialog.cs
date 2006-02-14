@@ -64,6 +64,8 @@ namespace Ankh.UI
             // 
             // LogDialog
             // 
+            this.AcceptButton = this.okButton;
+            base.CancelButton = this.cancelButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.Caption = "Log";
             this.ClientSize = new System.Drawing.Size(368, 420);

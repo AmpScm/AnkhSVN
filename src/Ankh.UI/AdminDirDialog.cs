@@ -118,6 +118,8 @@ namespace Ankh.UI
             // 
             // AdminDirDialog
             // 
+            this.AcceptButton = this.okButton;
+            this.CancelButton = this.cancelButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(232, 165);
             this.ControlBox = false;
