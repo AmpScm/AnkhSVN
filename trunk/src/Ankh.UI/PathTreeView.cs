@@ -26,6 +26,12 @@ namespace Ankh.UI
             get{ return this.openFolderIndex; }
         }
 
+        protected override void Dispose( bool disposing )
+        {
+            base.Dispose( disposing );
+
+        }
+
 
 
         /// <summary>
@@ -37,7 +43,7 @@ namespace Ankh.UI
         {
             SHFILEINFO fi = new SHFILEINFO();
             Win32.SHGetFileInfo( path, 0, ref fi, (uint)Marshal.SizeOf(fi),
-                Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
+                Constants.SHGFI_SHELLICONSIZE | 
                 Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON |
                 Constants.SHGFI_USEFILEATTRIBUTES );
             node.ImageIndex = fi.iIcon.ToInt32(); 
@@ -82,7 +88,7 @@ namespace Ankh.UI
             // get the system image list
             SHFILEINFO fileinfo = new SHFILEINFO();;
             IntPtr sysImageList = Win32.SHGetFileInfo( "", 0, ref fileinfo, 
-                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
+                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_SHELLICONSIZE | 
                 Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON );
 
             // assign it to this treeview
@@ -91,14 +97,14 @@ namespace Ankh.UI
 
             // get the open folder icon
             Win32.SHGetFileInfo( "", Constants.FILE_ATTRIBUTE_DIRECTORY, ref fileinfo, 
-                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
+                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_SHELLICONSIZE | 
                 Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON | Constants.SHGFI_OPENICON |
                 Constants.SHGFI_USEFILEATTRIBUTES );
             this.openFolderIndex = fileinfo.iIcon.ToInt32();
 
             // get the closed folder icon
             Win32.SHGetFileInfo( "", Constants.FILE_ATTRIBUTE_DIRECTORY, ref fileinfo, 
-                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_ICON | Constants.SHGFI_SHELLICONSIZE | 
+                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_SHELLICONSIZE | 
                 Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON | 
                 Constants.SHGFI_USEFILEATTRIBUTES );
             this.closedFolderIndex = fileinfo.iIcon.ToInt32();
