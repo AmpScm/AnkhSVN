@@ -7,6 +7,7 @@
 
 #include "stdafx.h"
 #include "delegates.h"
+#include "GCPool.h"
 
 
 
@@ -14,6 +15,8 @@ using namespace System;
 using namespace System::IO;
 using namespace NSvn::Common;
 using namespace System::Collections::Specialized;
+
+extern "C" void svn_utf_initialize 	( 	apr_pool_t * 	pool 	 ) ;
 
 namespace NSvn
 {
@@ -53,6 +56,12 @@ namespace NSvn
             Client();
             ~Client();
             void Dispose();
+
+            static Client()
+            {
+                utf8InitializePool = new GCPool();
+                svn_utf_initialize(utf8InitializePool->ToAprPool());
+            }
             
 
             ///<summary>Constructor.</summary>
@@ -607,6 +616,8 @@ namespace NSvn
             void Dispose( bool disposing );
 
             Pool* rootPool;
+
+            static GCPool* utf8InitializePool;
 
         };
     }
