@@ -91,8 +91,8 @@ namespace Ankh
                 this.CreateCommitDialog();
             Debug.Assert( this.commitDialog != null );
 
-            this.commitDialog.CommitItems = ctx.CommitItems;
             this.commitDialog.UrlPaths = ctx.UrlPaths;
+            this.commitDialog.CommitItems = ctx.CommitItems;
             this.commitDialog.LogMessageTemplate = ctx.LogMessageTemplate;
             this.commitDialog.KeepLocks = ctx.KeepLocks;
 
