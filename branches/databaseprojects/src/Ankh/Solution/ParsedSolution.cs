@@ -150,7 +150,7 @@ namespace Ankh.Solution
         /// <param name="reader">Open file being parsed</param>
         private void ParseDatabaseItemChildren(ParsedSolutionItem item, StreamReader reader)
         {
-            for(string line=reader.ReadLine(); !line.EndsWith("end", true, CultureInfo.InvariantCulture); line=reader.ReadLine())
+            for(string line=reader.ReadLine(); string.Compare("end", 0, line, line.Length - 3, 3, true, CultureInfo.InvariantCulture) == 0; line=reader.ReadLine())
             {
                 ParsedSolutionItem child = new ParsedSolutionItem(item);
 
