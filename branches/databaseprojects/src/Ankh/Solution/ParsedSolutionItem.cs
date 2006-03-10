@@ -16,6 +16,15 @@ namespace Ankh.Solution
             this.children=new ArrayList();
         }
 
+        public ParsedSolutionItem(ParsedSolutionItem parent)
+            : this()
+        {
+            if (parent == null)
+                throw new ArgumentNullException("parent");
+
+            this.parent = parent;
+        }
+
         /// <summary>
         /// Find the direct child with the given name
         /// </summary>
@@ -72,8 +81,8 @@ namespace Ankh.Solution
         {
             [System.Diagnostics.DebuggerStepThrough()]
             get{ return this.parent; }
-            [System.Diagnostics.DebuggerStepThrough()]
-            set{ this.parent=value; }
+            //[System.Diagnostics.DebuggerStepThrough()]
+            //set{ this.parent=value; }
         }
         
         private ArrayList children;
