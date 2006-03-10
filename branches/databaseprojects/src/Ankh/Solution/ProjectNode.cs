@@ -53,7 +53,14 @@ namespace Ankh.Solution
                 new StatusChanged(this.ChildOrResourceChanged) );
         }
 
-
+        public override void Refresh(bool rescan)
+        {
+            if (rescan)
+            {
+                ((SolutionNode)this.Parent).Parser.Refresh();
+            }
+            base.Refresh(rescan);
+        }
 
 
         private void FindProjectResources(Explorer explorer)
@@ -126,9 +133,9 @@ namespace Ankh.Solution
             get { return this.projectFolder.Path; }
         }
 
-		/// <summary>
-		/// True if this project is supported via Visual Studio Automation
-		/// </summary>
+        /// <summary>
+        /// True if this project is supported via Visual Studio Automation
+        /// </summary>
         public bool Modeled
         {
             [System.Diagnostics.DebuggerStepThrough()]
@@ -136,17 +143,17 @@ namespace Ankh.Solution
         }
 
         /// <summary>
-		/// Name of the project
-		/// </summary>
+        /// Name of the project
+        /// </summary>
         public string Name
         {
             [System.Diagnostics.DebuggerStepThrough()]
             get{ return this.project.Name; }
         }
 
-		/// <summary>
-		/// The Visual Studio Automation project object
-		/// </summary>
+        /// <summary>
+        /// The Visual Studio Automation project object
+        /// </summary>
         public Project Project
         {
             [System.Diagnostics.DebuggerStepThrough()]

@@ -25,6 +25,12 @@ namespace Ankh.Solution
             this.solutionFile=solutionFile;
         }
 
+        public void Refresh()
+        {
+            this.solutionContents = null;
+            this.projects.Clear();
+        }
+
         /// <summary>
         /// Get the fileName for a given project
         /// </summary>
