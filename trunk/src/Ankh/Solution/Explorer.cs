@@ -36,21 +36,19 @@ namespace Ankh.Solution
             this.projects = new Hashtable( null, new ProjectComparer() );
             
             // get the uihierarchy root
-            this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item( 
-                DteConstants.vsWindowKindSolutionExplorer ).Object; 
             this.solutionNode = null;
 
-            // load the status images image strip
-            Debug.WriteLine("Loading status images", "Ankh");
+            //// load the status images image strip
+            Debug.WriteLine( "Loading status images", "Ankh" );
             Bitmap statusImages = (Bitmap)Image.FromStream(
-                this.GetType().Assembly.GetManifestResourceStream(STATUS_IMAGES));
-            statusImages.MakeTransparent(statusImages.GetPixel(0, 0));
+                this.GetType().Assembly.GetManifestResourceStream( STATUS_IMAGES ) );
+            statusImages.MakeTransparent( statusImages.GetPixel( 0, 0 ) );
 
-            this.SetUpTreeview();
+            //this.SetUpTreeview();
 
             this.statusImageList = new ImageList();
-            this.statusImageList.ImageSize = new Size(7, 16);
-            this.statusImageList.Images.AddStrip(statusImages);
+            this.statusImageList.ImageSize = new Size( 7, 16 );
+            this.statusImageList.Images.AddStrip( statusImages );
         }
 
         /// <summary>
@@ -75,12 +73,17 @@ namespace Ankh.Solution
             Debug.WriteLine( "Unloading existing solution information", "Ankh" );
             this.projectItems.Clear();
             this.projects.Clear();
-            if ( this.treeview != null )
-                this.treeview.ClearStatusImages();
-            if ( this.originalImageList != IntPtr.Zero )
+
+            // make sure to use the field, not the property
+            // the property will always create a TreeView and will never return null
+            if ( this.treeView != null )
             {
-                this.treeview.StatusImageList = originalImageList;
-                originalImageList = IntPtr.Zero;
+                this.treeView.ClearStatusImages();
+                if ( this.originalImageList != IntPtr.Zero )
+                {
+                    this.treeView.StatusImageList = originalImageList;
+                    originalImageList = IntPtr.Zero;
+                }
             }
             this.context.ProjectFileWatcher.Clear();
             this.solutionNode = null;
@@ -93,7 +96,7 @@ namespace Ankh.Solution
         {
             this.ForcePoll();
 
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
+            foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
@@ -126,7 +129,7 @@ namespace Ankh.Solution
         {
             this.ForcePoll();
 
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )
+            foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
@@ -156,11 +159,11 @@ namespace Ankh.Solution
             this.projects.Clear();
             
             // store the original image list (check that we're not storing our own statusImageList
-            if( this.statusImageList.Handle != this.treeview.StatusImageList )
-                this.originalImageList = this.treeview.StatusImageList;
+            if( this.statusImageList.Handle != this.TreeView.StatusImageList )
+                this.originalImageList = this.TreeView.StatusImageList;
             
             // and assign the status image list to the tree
-            this.treeview.StatusImageList = statusImageList.Handle;
+            this.TreeView.StatusImageList = statusImageList.Handle;
 
             // make sure everything's up to date.
             this.ForcePoll();
@@ -191,8 +194,8 @@ namespace Ankh.Solution
             this.ForcePoll();
 
             //foreach( SelectedItem item in items )         
-            object o = this.uiHierarchy.SelectedItems;         
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )         
+            object o = this.UIHierarchy.SelectedItems;         
+            foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )         
             {         
                 TreeNode node = this.GetNode( item );         
                 if ( node != null )         
@@ -219,8 +222,8 @@ namespace Ankh.Solution
 
             ArrayList list = new ArrayList();
 
-            object o = this.uiHierarchy.SelectedItems;         
-            foreach( UIHierarchyItem item in (Array)this.uiHierarchy.SelectedItems )         
+            object o = this.UIHierarchy.SelectedItems;         
+            foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )         
             {         
                 TreeNode node = this.GetNode( item );         
                 if ( node != null )         
@@ -273,7 +276,7 @@ namespace Ankh.Solution
 
         public ProjectItem GetSelectedProjectItem()
         {
-            Array array = (Array)this.uiHierarchy.SelectedItems;
+            Array array = (Array)this.UIHierarchy.SelectedItems;
             UIHierarchyItem uiItem = (UIHierarchyItem)array.GetValue(0);
             return uiItem.Object as ProjectItem;
         }
@@ -282,8 +285,16 @@ namespace Ankh.Solution
 
         internal TreeView TreeView
         {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.treeview; }
+            //[System.Diagnostics.DebuggerStepThrough]
+            get
+            {
+                if ( this.treeView == null )
+                {
+                    SetUpTreeview();
+                }
+
+                return this.treeView; 
+            }
         }
 
         internal IContext Context
@@ -295,6 +306,19 @@ namespace Ankh.Solution
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.dte; }
+        }
+
+        private UIHierarchy UIHierarchy
+        {
+            get
+            {
+                if ( this.uiHierarchy == null )
+                {
+                    this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item(
+                        DteConstants.vsWindowKindSolutionExplorer ).Object; 
+                }
+                return this.uiHierarchy;
+            }
         }
 
         /// <summary>
@@ -338,7 +362,7 @@ namespace Ankh.Solution
                     "window is on a secondary monitor, " +
                     "try moving it to the primary during solution loading." );
 
-            this.treeview = new TreeView( treeHwnd );
+            this.treeView = new TreeView( treeHwnd );
             this.CreateOverlayImages();
         }
 
@@ -476,7 +500,7 @@ namespace Ankh.Solution
             if ( item.Object == null || !this.context.AnkhLoadedForSolution )
                 return null;
 
-            if ( item == this.uiHierarchy.UIHierarchyItems.Item(1) )
+            if ( item == this.UIHierarchy.UIHierarchyItems.Item(1) )
                 return this.solutionNode;
             else if ( this.projects.Contains(item.Object) )
                 return ((TreeNode)this.projects[item.Object]);
@@ -571,12 +595,12 @@ namespace Ankh.Solution
                 outer.context.StartOperation( "Synchronizing with solution explorer");
 
                 // avoid lots of flickering while we walk the tree
-                outer.treeview.LockWindowUpdate(true);
+                outer.TreeView.LockWindowUpdate(true);
                 try
                 {
                     // we assume there is a single root node
                     outer.solutionNode = (SolutionNode)TreeNode.CreateSolutionNode(
-                        outer.uiHierarchy.UIHierarchyItems.Item(1), outer);
+                        outer.UIHierarchy.UIHierarchyItems.Item(1), outer);
 
                     // and we're done
                     outer.context.OutputPane.WriteLine( "Time: {0}", DateTime.Now - startTime );
@@ -586,7 +610,7 @@ namespace Ankh.Solution
                 finally
                 {
                     // done
-                    outer.treeview.LockWindowUpdate(false);
+                    outer.TreeView.LockWindowUpdate(false);
                     outer.context.EndOperation();
                 }
             }
@@ -641,7 +665,7 @@ namespace Ankh.Solution
                     DateTime startTime = DateTime.Now;
 
                     // loop until all the items have been loaded in the solution explorer
-                    UIHierarchyItem item = outer.uiHierarchy.UIHierarchyItems.Item(1);
+                    UIHierarchyItem item = outer.UIHierarchy.UIHierarchyItems.Item(1);
 
                     // if there is a Misc Items project in the solution, 
                     // it doesn't necessarily appear as an UIHierarchyItem
@@ -931,7 +955,7 @@ namespace Ankh.Solution
         private SolutionNode solutionNode;
         private ImageList statusImageList;
         private IContext context;
-        private TreeView treeview;
+        private TreeView treeView;
         private IntPtr originalImageList = IntPtr.Zero;
 
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
