@@ -689,11 +689,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "EventSinks\ItemEventSink.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "EventSinks\ProjectFilesEventSink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -705,11 +700,6 @@
                 />
                 <File
                     RelPath = "EventSinks\TrackProjectEventsSink.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "EventSinks\VCProjectEventSink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
