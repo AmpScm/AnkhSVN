@@ -184,6 +184,16 @@
                     AssemblyName = "stdole"
                     HintPath = "..\lib\stdole.dll"
                 />
+                <Reference
+                    Name = "Microsoft.VisualStudio.Shell.Interop"
+                    AssemblyName = "Microsoft.VisualStudio.Shell.Interop"
+                    HintPath = "..\lib\Microsoft.VisualStudio.Shell.Interop.dll"
+                />
+                <Reference
+                    Name = "Microsoft.VisualStudio.OLE.Interop"
+                    AssemblyName = "Microsoft.VisualStudio.OLE.Interop"
+                    HintPath = "..\lib\Microsoft.VisualStudio.OLE.Interop.dll"
+                />
             </References>
         </Build>
         <Files>

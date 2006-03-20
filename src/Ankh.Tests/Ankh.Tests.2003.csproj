@@ -142,6 +142,11 @@
                     Project = "{874C0358-E7DD-42DA-BF07-58198B41FD25}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Microsoft.VisualStudio.OLE.Interop"
+                    AssemblyName = "Microsoft.VisualStudio.OLE.Interop"
+                    HintPath = "..\lib\Microsoft.VisualStudio.OLE.Interop.dll"
+                />
             </References>
         </Build>
         <Files>
