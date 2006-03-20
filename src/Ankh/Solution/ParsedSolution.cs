@@ -1,13 +1,14 @@
 using System;
 using System.IO;
 using System.Collections;
+using System.Globalization;
 
 namespace Ankh.Solution
 {
     /// <summary>
     /// Parser for Visual Studio Solution & Project files
     /// </summary>
-    public class ParsedSolution
+    public sealed class ParsedSolution
     {
         /// <summary>
         /// Constructor
@@ -22,6 +23,12 @@ namespace Ankh.Solution
             this.context=context;
             this.projects=new Hashtable();
             this.solutionFile=solutionFile;
+        }
+
+        public void Refresh()
+        {
+            this.solutionContents = null;
+            this.projects.Clear();
         }
 
         /// <summary>
@@ -77,9 +84,7 @@ namespace Ankh.Solution
         {
             ParsedSolutionItem project=this.GetProjectItems(projectName);
             if(project==null)
-            {
                 return null;
-            }
 
             foreach(ParsedSolutionItem item in project.Children)
             {
@@ -151,33 +156,33 @@ namespace Ankh.Solution
         /// <param name="reader">Open file being parsed</param>
         private void ParseDatabaseItemChildren(ParsedSolutionItem item, StreamReader reader)
         {
-            for(string line=reader.ReadLine(); line.Trim().ToLower()!="end"; line=reader.ReadLine())
+            for(string line=reader.ReadLine(); string.Compare("end", 0, line, line.Length - 3, 3, true, CultureInfo.InvariantCulture) != 0; line=reader.ReadLine())
             {
-                ParsedSolutionItem child=new ParsedSolutionItem();
-                child.Parent=item;
+                ParsedSolutionItem child = new ParsedSolutionItem(item);
 
-                if(line.Trim().ToLower().StartsWith("begin folder"))
+                if (string.Compare(DbStrings.FolderBegin, 0, line, 3, DbStrings.FolderBegin.Length, true, CultureInfo.InvariantCulture) == 0)
                 {
-                    int startIndex=line.IndexOf("=")+1;
-                    child.Name=line.Substring(startIndex, line.Length-startIndex-1).Replace("\"", "").Trim();
-                    child.FileName=Path.GetDirectoryName(item.FileName)+"\\"+child.Name+"\\";
+                    int startIndex = line.IndexOf("= \"") + 3;
+                    child.Name = line.Substring(startIndex, line.Length-startIndex-1);
+                    child.FileName = Path.Combine(Path.GetDirectoryName(item.FileName), child.Name);
                     item.Children.Add(child);
 
                     this.ParseDatabaseItemChildren(child, reader);
                 }
-                else if(line.Trim().ToLower().StartsWith("script"))
+                else if(string.Compare(DbStrings.Script, 0, line, 6, DbStrings.Script.Length, true, CultureInfo.InvariantCulture) == 0 ||
+                    string.Compare(DbStrings.Query, 0, line, 6, DbStrings.Query.Length, true, CultureInfo.InvariantCulture) == 0)
                 {
-                    int startIndex=line.IndexOf("=")+1;
-                    child.Name=line.Substring(startIndex, line.Length-startIndex-1).Replace("\"", "").Trim();
-                    child.FileName=Path.GetDirectoryName(item.FileName)+"\\"+child.Name;
+                    int startIndex=line.IndexOf("= \"") + 3;
+                    child.Name = line.Substring(startIndex, line.Length-startIndex-1);
+                    child.FileName = Path.Combine(item.FileName, child.Name);
                     item.Children.Add(child);
                 }
-                else if(line.Trim().ToLower().StartsWith("begin dbreffolder"))
+                else if (string.Compare(DbStrings.DbRefFolderBegin, 0, line, 3, DbStrings.DbRefFolderBegin.Length, true, CultureInfo.InvariantCulture) == 0)
                 {
                     //get the folder
-                    int startIndex=line.IndexOf("=")+1;
-                    child.Name=line.Substring(startIndex, line.Length-startIndex-1).Replace("\"", "").Trim();
-                    child.FileName=Path.GetDirectoryName(item.FileName)+"\\"+child.Name;
+                    int startIndex=line.IndexOf("= \"") + 3;
+                    child.Name = line.Substring(startIndex, line.Length-startIndex-1);
+                    child.FileName = Path.Combine(Path.GetDirectoryName(item.FileName), child.Name);
                     item.Children.Add(child);
 
                     //slurp db references
@@ -194,21 +199,26 @@ namespace Ankh.Solution
         /// <param name="startIndent">Number of section endings necessary to finish slurping</param>
         private void SlurpSection(StreamReader reader,int startIndent)
         {
-            int indent=startIndent;
-            while(indent>0)
+            if (startIndent < 0)
+                throw new ArgumentOutOfRangeException("startIndent");
+
+            
+            string begin = "begin ";
+
+            while(startIndent > 0)
             {
                 string line=reader.ReadLine();
-                if(line==null)
+                if(line == null)
                 {
-                    indent=-1;
+                    break;
                 }
-                else if(line.Trim().ToLower()=="end")
+                else if(string.Compare(line.Trim(), "end", true, CultureInfo.InvariantCulture) == 0)
                 {
-                    indent--;
+                    startIndent--;
                 }
-                else if(line.Trim().ToLower().StartsWith("begin "))
+                else if(string.Compare(line.Trim(), 0, begin, 0, begin.Length, true, CultureInfo.InvariantCulture) == 0)
                 {
-                    indent++;
+                    startIndent++;
                 }
             }
         }
@@ -233,6 +243,14 @@ namespace Ankh.Solution
             }
 
             this.ParseDatabaseItemChildren(project, reader);
+        }
+
+        class DbStrings
+        {
+            internal const string FolderBegin  = "begin folder";
+            internal const string Script = "script ";
+            internal const string Query = "query ";
+            internal const string DbRefFolderBegin = "begin dbreffolder";
         }
 
         private IContext context;
