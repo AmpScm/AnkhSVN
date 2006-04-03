@@ -33,5 +33,77 @@ namespace ErrorReportExtractor.Properties {
                 return ((string)(this["ErrorReportsConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("arild.fines@broadpark.no")]
+        public string SenderEmail {
+            get {
+                return ((string)(this["SenderEmail"]));
+            }
+            set {
+                this["SenderEmail"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Arild Fines")]
+        public string SenderName {
+            get {
+                return ((string)(this["SenderName"]));
+            }
+            set {
+                this["SenderName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("error@ankhsvn.tigris.org")]
+        public string ReplyToEmail {
+            get {
+                return ((string)(this["ReplyToEmail"]));
+            }
+            set {
+                this["ReplyToEmail"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Re: [ANKHSVN-ERROR] Exception")]
+        public string Subject {
+            get {
+                return ((string)(this["Subject"]));
+            }
+            set {
+                this["Subject"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("error@ankhsvn.tigris.org")]
+        public string CC {
+            get {
+                return ((string)(this["CC"]));
+            }
+            set {
+                this["CC"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("mail.broadpark.no")]
+        public string MailServer {
+            get {
+                return ((string)(this["MailServer"]));
+            }
+            set {
+                this["MailServer"] = value;
+            }
+        }
     }
 }

@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ErrorReport.GUI.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ReplyFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Lucida Console, 8.25pt</Value>
+    </Setting>
+    <Setting Name="MessageFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Lucida Console, 8.25pt</Value>
+    </Setting>
+    <Setting Name="BaseFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Tahoma, 8.25pt</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

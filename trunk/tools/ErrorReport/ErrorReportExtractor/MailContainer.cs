@@ -6,7 +6,7 @@ using MAPI;
 
 namespace ErrorReportExtractor
 {
-    public class MailContainer
+    public class MailContainer : IReportContainer
     {
         public MailContainer(string folderPath, IProgressCallback callback)
         {
@@ -49,11 +49,13 @@ namespace ErrorReportExtractor
                     this.callback.Verbose("Reached limit of {0} items", limit);
                     break;
                 }
-                MailItem mailItem = this.folder.Items.Item(i) as MailItem;
+                Outlook.MailItem mailItem = this.folder.Items.Item(i) as Outlook.MailItem;
                 Message mapiMessage = this.mapiSession.GetMessage(mailItem.EntryID, this.folder.StoreID) as Message;
 
                 MapiFields fields = new MapiFields (mapiMessage.Fields as Fields);
                 string messageID = fields.AsString(CdoPropTags.CdoPR_INTERNET_MESSAGE_ID);
+                string senderEmail = fields.AsString( CdoPropTags.CdoPR_SENDER_EMAIL_ADDRESS );
+                string senderName = fields.AsString( CdoPropTags.CdoPR_SENDER_NAME );
 
                 // It's not an error report if there's a reply to ID
                 string replyToID = fields.AsString(MapiFields.InReplyTo);
@@ -61,8 +63,8 @@ namespace ErrorReportExtractor
                     continue;
 
                 this.callback.Progress();
-                yield return new ErrorReport(messageID, mailItem.Subject, mailItem.Body, mailItem.SenderName,
-                    mailItem.ReceivedTime);
+                yield return new ErrorReport(messageID, mailItem.Subject, mailItem.Body, senderEmail,
+                    senderName, mailItem.ReceivedTime);
             }
         }
 

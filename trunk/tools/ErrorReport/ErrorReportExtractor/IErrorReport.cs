@@ -1,13 +1,8 @@
 ﻿using System;
 namespace ErrorReportExtractor
 {
-    public interface IErrorReport
-    {
-        string Body { get; set; }
-        string ID { get; set; }
-        DateTime ReceivedTime { get; set; }
-        string SenderName { get; set; }
-        string Subject { get; set; }
+    public interface IErrorReport : IMailItem
+    {        
         int? MajorVersion { get; }
         int? MinorVersion { get; }
         int? PatchVersion { get; }

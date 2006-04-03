@@ -5,49 +5,18 @@ using System.Text.RegularExpressions;
 
 namespace ErrorReportExtractor
 {
-    public class ErrorReport : IErrorReport
+    public class ErrorReport : MailItem, IErrorReport
     {
-        public ErrorReport(string id, string subject, string body, string senderName, DateTime receivedTime)
+        public ErrorReport(string id, string subject, string body, string senderEmail, string senderName,  DateTime receivedTime)
+            : base(id, subject, body, senderEmail, senderName, receivedTime)
         {
-            this.id = id;
-            this.subject = subject;
-            this.body = body;
-            this.senderName = senderName;
-            this.receivedTime = receivedTime;
-
             this.ParseBody();
         }
 
         
-        public string Subject
-        {
-            get { return subject; }
-            set { subject = value; }
-        }
+        
 	
-        public string Body
-        {
-            get { return body; }
-            set { body = value; }
-        }
-	
-        public string SenderName
-        {
-            get { return senderName; }
-            set { senderName = value; }
-        }
-	
-        public DateTime ReceivedTime
-        {
-            get { return receivedTime; }
-            set { receivedTime = value; }
-        }
-	
-        public string ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
+       
 
         public int? MajorVersion
         {
@@ -96,17 +65,17 @@ namespace ErrorReportExtractor
             this.ParseVersion();
             this.ParseExceptionType();
             this.ParseDteVersion();
-            this.stackTrace = new StackTrace(this.body);
+            this.stackTrace = new StackTrace(this.Body);
         }
 
         private void ParseDteVersion()
         {
             Match match;
-            if ((match = DteVersionRegex.Match(this.body)) != Match.Empty)
+            if ((match = DteVersionRegex.Match(this.Body)) != Match.Empty)
             {
                 this.dteVersion = match.Groups["DteVersion"].Value;
             }
-            else if ((match = OldDteVersionRegex.Match(this.body)) != Match.Empty)
+            else if ((match = OldDteVersionRegex.Match(this.Body)) != Match.Empty)
             {
                 this.dteVersion = match.Groups["DteVersion"].Value;
             }
@@ -115,7 +84,7 @@ namespace ErrorReportExtractor
         private void ParseExceptionType()
         {
             Match match;
-            if ((match = ExceptionTypeRegex.Match(this.body)) != Match.Empty)
+            if ((match = ExceptionTypeRegex.Match(this.Body)) != Match.Empty)
             {
                 this.exceptionType = match.Groups["ExceptionType"].Value;
             }
@@ -124,7 +93,7 @@ namespace ErrorReportExtractor
 
         private void ParseVersion()
         {
-            Match match = VersionRegex.Match(this.body);
+            Match match = VersionRegex.Match(this.Body);
             if (match != Match.Empty)
             {
                 this.majorVersion = int.Parse(match.Groups["Major"].Value);
@@ -148,11 +117,6 @@ namespace ErrorReportExtractor
         private static readonly Regex OldDteVersionRegex = new Regex(@"DTE Version:\s*(?<DteVersion>(\d+\.)*(\d))",
                 RegexOptions.IgnoreCase);
 
-        private string id;
-        private DateTime receivedTime;
-        private string senderName;
-        private string body;
-        private string subject;
         private int? minorVersion;
         private int? majorVersion;
         private int? revision;
@@ -161,14 +125,5 @@ namespace ErrorReportExtractor
         private string dteVersion;
         private StackTrace stackTrace;
         private bool repliedTo;
-
-        
-
-        #region IErrorReport Members
-
-
-       
-
-        #endregion
     }
 }
