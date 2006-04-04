@@ -21,7 +21,7 @@ namespace ErrorReport.GUI
             this.Controls.Add( this.MainMenuStrip );
 
 
-            this.ucp = new MainFormUCP( factory, this.progressCallback );
+            this.ucp = new MainFormUCP( factory, this.progressCallback, this );
 
             this.Load += new EventHandler( MainForm_Load );
             HandleListViewSelections();

@@ -11,6 +11,9 @@ namespace ErrorReportExtractor
         DateTime ReceivedTime { get; set; }
         string SenderName { get; set; }
         string SenderEmail { get; set; }
+        string ReceiverName { get; set; }
+        string ReceiverEmail { get; set; }
         string Subject { get; set; }
+        string ReplyToID { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using ErrorReportExtractor;
 
 namespace ErrorReport.GUI
 {
@@ -179,6 +180,33 @@ namespace ErrorReport.GUI
         public override void Execute()
         {
             this.ucp.ShowTemplates();
+        }
+    }
+
+    [MenuItem("MainMenu.Import.Import from Outlook")]
+    internal class ImportFromOutlookCommand : CommandBase
+    {
+        public ImportFromOutlookCommand(MainFormUCP ucp) : base(ucp)
+        {
+
+        }
+
+        public override bool Enabled
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override void Execute()
+        {
+            IStorage storage = this.ucp.Factory.GetStorage( this.ucp.Callback );
+            ImportDialogUCP ucp = new ImportDialogUCP( this.ucp.Callback, storage , this.ucp.Invoker);
+            using ( ImportDialog dialog = new ImportDialog( ucp ) )
+            {
+                dialog.ShowDialog();
+            }
         }
     }
 }

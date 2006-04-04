@@ -6,5 +6,6 @@ namespace ErrorReportExtractor
     public interface IReportContainer
     {
         IEnumerable<IErrorReport> GetAllItems( int? limit );
+        IEnumerable<IMailItem> GetPotentialReplies();
     }
 }

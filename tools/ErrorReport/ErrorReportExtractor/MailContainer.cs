@@ -49,24 +49,56 @@ namespace ErrorReportExtractor
                     this.callback.Verbose("Reached limit of {0} items", limit);
                     break;
                 }
-                Outlook.MailItem mailItem = this.folder.Items.Item(i) as Outlook.MailItem;
-                Message mapiMessage = this.mapiSession.GetMessage(mailItem.EntryID, this.folder.StoreID) as Message;
-
-                MapiFields fields = new MapiFields (mapiMessage.Fields as Fields);
-                string messageID = fields.AsString(CdoPropTags.CdoPR_INTERNET_MESSAGE_ID);
-                string senderEmail = fields.AsString( CdoPropTags.CdoPR_SENDER_EMAIL_ADDRESS );
-                string senderName = fields.AsString( CdoPropTags.CdoPR_SENDER_NAME );
+                ErrorReport report = new ErrorReport();
+                Outlook.MailItem outlookItem = this.folder.Items.Item(i) as Outlook.MailItem;
+                InitializeMailItemFromOutlookMailItem(outlookItem, report);
+                
 
                 // It's not an error report if there's a reply to ID
-                string replyToID = fields.AsString(MapiFields.InReplyTo);
-                if (replyToID != null)
+                if (report.ReplyToID != null)
                     continue;
 
                 this.callback.Progress();
-                yield return new ErrorReport(messageID, mailItem.Subject, mailItem.Body, senderEmail,
-                    senderName, mailItem.ReceivedTime);
+                report.Body = outlookItem.Body;
+                report.ReceivedTime = outlookItem.ReceivedTime;
+                yield return report;
             }
         }
+
+        public IEnumerable<IMailItem> GetPotentialReplies()
+        {
+            for ( int i = 1; i <= this.folder.Items.Count; i++ )
+            {
+                Outlook.MailItem outlookItem = this.folder.Items.Item( i ) as Outlook.MailItem;
+                MailItem mailItem = new MailItem();
+                InitializeMailItemFromOutlookMailItem( outlookItem, mailItem );
+
+                // they have to be replies to be replies
+                if ( mailItem.ReplyToID == null )
+                {
+                    continue;
+                }
+
+                yield return mailItem;
+            }
+        }
+
+        private void InitializeMailItemFromOutlookMailItem( Outlook.MailItem outlookItem, MailItem mailItem )
+        {
+            Message mapiMessage = this.mapiSession.GetMessage( outlookItem.EntryID, this.folder.StoreID ) as Message;
+
+            MapiFields fields = new MapiFields( mapiMessage.Fields as Fields );
+            mailItem.ID = fields.AsString( CdoPropTags.CdoPR_INTERNET_MESSAGE_ID );
+            mailItem.SenderEmail = fields.AsString( CdoPropTags.CdoPR_SENDER_EMAIL_ADDRESS );
+            mailItem.SenderName = fields.AsString( CdoPropTags.CdoPR_SENDER_NAME );
+            mailItem.ReceiverEmail = outlookItem.Recipients.Item( 1 ).Address;
+            mailItem.ReceiverName = outlookItem.Recipients.Item( 1 ).Name;
+            mailItem.ReplyToID = fields.AsString( MapiFields.InReplyTo );
+            mailItem.Subject = outlookItem.Subject;
+            mailItem.Body = outlookItem.Body;
+            mailItem.ReceivedTime = outlookItem.ReceivedTime;
+        }
+
 
         private Application outlook;
         private MAPIFolder folder;

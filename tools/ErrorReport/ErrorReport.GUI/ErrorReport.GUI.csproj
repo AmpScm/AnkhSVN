@@ -40,6 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportDialog.Designer.cs">
+      <DependentUpon>ImportDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ImportDialogUCP.cs" />
     <Compile Include="ToolBarAttribute.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="MenuItemAttribute.cs" />
@@ -60,6 +67,10 @@
       <DependentUpon>ProgressCallbackControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ImportDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ImportDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -38,9 +38,9 @@ namespace ErrorReport.GUI
             this.columnException = new System.Windows.Forms.ColumnHeader();
             this.splitContainerBottom = new System.Windows.Forms.SplitContainer();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.columnDTEVersion = new System.Windows.Forms.ColumnHeader();
             this.messageDetailRichTextBox = new System.Windows.Forms.RichTextBox();
             this.replyTextBox = new System.Windows.Forms.RichTextBox();
-            this.columnDTEVersion = new System.Windows.Forms.ColumnHeader();
             this.progressCallback = new ErrorReport.GUI.ProgressCallbackControl();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -67,6 +67,7 @@ namespace ErrorReport.GUI
             // splitContainer1.Panel1
             // 
             splitContainer1.Panel1.Controls.Add( splitContainer2 );
+            splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding( 10 );
             // 
             // splitContainer1.Panel2
             // 
@@ -150,6 +151,14 @@ namespace ErrorReport.GUI
             this.toolStrip.TabIndex = 0;
             this.toolStrip.Text = "toolStrip1";
             // 
+            // columnVersion
+            // 
+            columnVersion.Text = "Version";
+            // 
+            // columnDTEVersion
+            // 
+            this.columnDTEVersion.Text = "DTE";
+            // 
             // messageDetailRichTextBox
             // 
             this.messageDetailRichTextBox.DataBindings.Add( new System.Windows.Forms.Binding( "Font", global::ErrorReport.GUI.Properties.Settings.Default, "MessageFont", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged ) );
@@ -172,14 +181,6 @@ namespace ErrorReport.GUI
             this.replyTextBox.Size = new System.Drawing.Size( 501, 225 );
             this.replyTextBox.TabIndex = 0;
             this.replyTextBox.Text = "";
-            // 
-            // columnVersion
-            // 
-            columnVersion.Text = "Version";
-            // 
-            // columnDTEVersion
-            // 
-            this.columnDTEVersion.Text = "DTE";
             // 
             // progressCallback
             // 
