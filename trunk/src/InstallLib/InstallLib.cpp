@@ -17,69 +17,54 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
 HRESULT RemoveCommands (MSIHANDLE hModule, LPCOLESTR vsProgID)
 {
-    CComPtr<EnvDTE::_DTE> m_pDTE;
-    HRESULT hr = S_OK;
+    EnvDTE::_DTEPtr pDTE = NULL;
+    pDTE.CreateInstance(vsProgID);
 
-    CLSID clsid;
-    CLSIDFromProgID (vsProgID, &clsid);
-    hr = m_pDTE.CoCreateInstance(clsid);
-
-    if (FAILED (hr))
+    if(pDTE == NULL)
     {
         LogString(hModule, _T("Unable to create DTE instance"));
         return S_OK;
     }
 
-    CComPtr<EnvDTE::Commands> pCommands;
-    hr = m_pDTE->get_Commands(&pCommands);
-
-    if (FAILED (hr))
+    EnvDTE::CommandsPtr pCommands = NULL;
+    if(FAILED(pDTE->get_Commands(&pCommands)))
     {
         LogString(hModule, _T("Unable to get Commands collection"));
         return S_OK;
     }
 
     long lCount = 0;
-    hr = pCommands->get_Count(&lCount);
-
-    if (FAILED (hr))
+    if(FAILED(pCommands->get_Count(&lCount)))
     {
         LogString(hModule, _T("Unable to get Commands count"));
         return S_OK;
     }
-
-    for (long i = 0; i < lCount; i++)
+    for (long i = lCount - 1; i >= 0; i--)
     {
-        CComPtr<EnvDTE::Command> pCommand;
-        hr = pCommands->Item(CComVariant(i), -1, &pCommand);
-
-        if (FAILED (hr))
+        EnvDTE::CommandPtr pCommand = NULL;
+        if(SUCCEEDED(pCommands->Item(CComVariant(i), -1, &pCommand)))
         {
-            LogString(hModule, _T("Unable to get command"));
-            continue;
-        }
-
-        BSTR bpName;
-        hr = pCommand->get_Name(&bpName);
-
-        if (FAILED (hr))
-        {
-            LogString(hModule, _T("Unable to get command name"));
-            continue;
-        }
-        if (bpName == NULL)
-            continue;
-
-        if (StrStrW(bpName, PROGID) != NULL)
-        {
-            hr = pCommand->Delete ();
-            if(FAILED(hr))
+            BSTR bpName = NULL;
+            if(SUCCEEDED(pCommand->get_Name(&bpName)) && bpName != NULL)
             {
-                LogString(hModule, _T("Failed to delete command"));
+                if (StrStrW(bpName, PROGID) != NULL)
+                {
+                    if(FAILED(pCommand->Delete()))
+                    {
+                        LogString(hModule, _T("Failed to delete command"));
+                    }
+                }
             }
         }
+
+        if(pCommand != NULL)
+            pCommand.Release();
     }
-     m_pDTE->Quit();
+
+    pCommands.Release();
+
+    pDTE->Quit();
+    pDTE.Release();
     return S_OK;
 }
 
