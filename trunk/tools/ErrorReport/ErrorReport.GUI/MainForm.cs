@@ -17,6 +17,10 @@ namespace ErrorReport.GUI
         {
             InitializeComponent();
 
+            this.MainMenuStrip = this.menuManager.MainMenu;
+            this.Controls.Add( this.MainMenuStrip );
+
+
             this.ucp = new MainFormUCP( factory, this.progressCallback );
 
             this.Load += new EventHandler( MainForm_Load );
@@ -111,22 +115,30 @@ namespace ErrorReport.GUI
             {
                 this.SetupCommand( cmd );
             }
+
+
         }
         
         private void SetupCommand( ICommand command )
         {
-            object[] attrs = command.GetType().GetCustomAttributes( typeof( CommandAttribute ), false );
-            if ( attrs.Length == 0 )
+            object[] attrs = command.GetType().GetCustomAttributes( typeof( ToolBarAttribute ), false );
+            if ( attrs.Length != 0 )
             {
-                throw new Exception( String.Format( "ICommand {0} does not have a CommandAttribute applied.", command ) ); 
-            }
-            CommandAttribute commandAttribute = attrs[ 0 ] as CommandAttribute;
-            ToolStripButton toolStripButton = new ToolStripButton( commandAttribute.Text );
+                ToolBarAttribute commandAttribute = attrs[ 0 ] as ToolBarAttribute;
+                ToolStripButton toolStripButton = new ToolStripButton( commandAttribute.Text );
 
-            toolStripButton.Click += delegate { command.Execute(); };
-            command.EnabledChanged += delegate { toolStripButton.Enabled = command.Enabled; };
-            toolStripButton.Enabled = command.Enabled;
-            this.toolStrip.Items.Add( toolStripButton );
+                toolStripButton.Click += delegate { command.Execute(); };
+                command.EnabledChanged += delegate { toolStripButton.Enabled = command.Enabled; };
+                toolStripButton.Enabled = command.Enabled;
+                this.toolStrip.Items.Add( toolStripButton );
+            }
+
+            attrs = command.GetType().GetCustomAttributes( typeof( MenuItemAttribute ), false );
+            if ( attrs.Length != 0 )
+            {
+                MenuItemAttribute menuAttribute = attrs[ 0 ] as MenuItemAttribute;
+                menuManager.AddCommand( command, menuAttribute.Path );
+            }
 
             attrs = command.GetType().GetCustomAttributes( typeof(KeyBindingAttribute), false );
             if ( attrs.Length > 0 )
@@ -197,5 +209,6 @@ namespace ErrorReport.GUI
         private MainFormUCP ucp;
         private TemplateList templateList;
         private IDictionary<Keys, ICommand> keyCommandMap = new Dictionary<Keys, ICommand>();
+        private MenuManager menuManager = new MenuManager();
     }
 }

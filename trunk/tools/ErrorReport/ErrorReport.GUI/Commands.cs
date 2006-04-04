@@ -44,7 +44,8 @@ namespace ErrorReport.GUI
     }
 
     [KeyBinding(Keys.R)]
-    [Command("Reply")]
+    [ToolBar("Reply")]
+    [MenuItem("MainMenu.Mail.Reply to current")]
     internal class ReplyCommand : CommandBase
     {
         public ReplyCommand( MainFormUCP ucp )
@@ -65,7 +66,8 @@ namespace ErrorReport.GUI
     }
 
     [KeyBinding( Keys.S )]
-    [Command( "Send" )]
+    [ToolBar( "Send" )]
+    [MenuItem( "MainMenu.Mail.Send current reply" )]
     internal class SendCommand : CommandBase
     {
         public SendCommand( MainFormUCP ucp )
@@ -87,7 +89,8 @@ namespace ErrorReport.GUI
     }
 
     [KeyBinding(Keys.N)]
-    [Command( "Next" )]
+    [ToolBar( "Next" )]
+    [MenuItem("MainMenu.Navigate.Next")]
     internal class NextCommand : CommandBase
     {
         public NextCommand(MainFormUCP ucp) : base(ucp)
@@ -109,7 +112,8 @@ namespace ErrorReport.GUI
     }
 
     [KeyBinding( Keys.P )]
-    [Command( "Previous" )]
+    [ToolBar( "Previous" )]
+    [MenuItem( "MainMenu.Navigate.Previous" )]
     internal class PreviousCommand : CommandBase
     {
         public PreviousCommand( MainFormUCP ucp )
@@ -131,7 +135,8 @@ namespace ErrorReport.GUI
         }
     }
 
-    [Command("Edit Templates")]
+    [ToolBar("Edit Templates")]
+    [MenuItem( "MainMenu.Templates.Edit" )]
     internal class EditTemplatesCommand : CommandBase
     {
         public EditTemplatesCommand(MainFormUCP ucp) : base(ucp)
@@ -154,7 +159,7 @@ namespace ErrorReport.GUI
         }
     }
 
-    [Command( "Show templates" )]
+    [ToolBar( "Show templates" )]
     [KeyBinding(Keys.T)]
     internal class ShowTemplatesCommand : CommandBase
     {
