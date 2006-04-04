@@ -5,6 +5,7 @@ using ErrorReportExtractor;
 using System.Diagnostics;
 using Fines.Utils.Collections;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace ErrorReport.GUI
 {
@@ -16,12 +17,13 @@ namespace ErrorReport.GUI
         public event EventHandler TemplatesWanted;
         public event EventHandler SelectedReportModified;
 
-        public MainFormUCP( IFactory factory, IProgressCallback cb )
+        public MainFormUCP( IFactory factory, IProgressCallback cb, ISynchronizeInvoke invoker )
         {
             this.callback = cb;
             this.storage = factory.GetStorage(cb);
             this.mailer = factory.GetMailer( cb );
             this.factory = factory;
+            this.invoker = invoker;
         }
 
         public IProgressCallback Callback
@@ -123,6 +125,11 @@ namespace ErrorReport.GUI
                 int index = this.SelectedIndex;
                 return this.errorReports != null && index > 0;
             }
+        }
+
+        public ISynchronizeInvoke Invoker
+        {
+            get { return invoker; }
         }
 	
 
@@ -247,7 +254,9 @@ namespace ErrorReport.GUI
         }
 
         private IProgressCallback callback;
+        private ISynchronizeInvoke invoker;
 
+       
         private IEnumerable<IReplyTemplate> templates;
         private IErrorReport selectedReport;
         private bool isReplying = false;

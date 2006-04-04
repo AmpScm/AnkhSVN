@@ -13,8 +13,10 @@ namespace ErrorReportExtractor
             this.ParseBody();
         }
 
-        
-        
+        public ErrorReport()
+        {
+
+        }
 	
        
 
@@ -58,6 +60,16 @@ namespace ErrorReportExtractor
         {
             get { return repliedTo; }
             set { repliedTo = value; }
+        }
+
+        public string ExceptionMessage
+        {
+            get { return ""; }
+        }
+
+        protected override void OnBodyChanged()
+        {
+            this.ParseBody();
         }
 
         private void ParseBody()
@@ -125,5 +137,12 @@ namespace ErrorReportExtractor
         private string dteVersion;
         private StackTrace stackTrace;
         private bool repliedTo;
+
+        #region IErrorReport Members
+
+
+       
+
+        #endregion
     }
 }

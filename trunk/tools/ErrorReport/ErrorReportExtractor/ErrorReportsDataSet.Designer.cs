@@ -2277,7 +2277,7 @@ ORDER BY ReceivedTime";
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new System.Data.IDbCommand[3];
+            this._commandCollection = new System.Data.IDbCommand[4];
             this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
             ((System.Data.SqlClient.SqlCommand)(this._commandCollection[0])).Connection = new System.Data.SqlClient.SqlConnection(global::ErrorReportExtractor.Properties.Settings.Default.ErrorReportsConnectionString);
             ((System.Data.SqlClient.SqlCommand)(this._commandCollection[0])).CommandText = "UPDATE    ErrorReportItems\r\nSET              RepliedTo = 1\r\nWHERE     (ID = @ID)";
@@ -2315,6 +2315,20 @@ ORDER BY ReceivedTime";
             ((System.Data.SqlClient.SqlCommand)(this._commandCollection[2])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@PatchVersion", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 10, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
             ((System.Data.SqlClient.SqlCommand)(this._commandCollection[2])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@Revision", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 10, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
             ((System.Data.SqlClient.SqlCommand)(this._commandCollection[2])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@RepliedTo", System.Data.SqlDbType.Bit, 1, System.Data.ParameterDirection.Input, 1, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3] = new System.Data.SqlClient.SqlCommand();
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Connection = new System.Data.SqlClient.SqlConnection(global::ErrorReportExtractor.Properties.Settings.Default.ErrorReportsConnectionString);
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).CommandText = "dbo.InsertPotentialErrorReply";
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).CommandType = System.Data.CommandType.StoredProcedure;
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@RETURN_VALUE", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.ReturnValue, 10, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@ID", System.Data.SqlDbType.NVarChar, 250, System.Data.ParameterDirection.Input, 0, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@ReceivedTime", System.Data.SqlDbType.DateTime, 8, System.Data.ParameterDirection.Input, 23, 3, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderEmail", System.Data.SqlDbType.NVarChar, 2147483647, System.Data.ParameterDirection.Input, 0, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderName", System.Data.SqlDbType.NVarChar, 2147483647, System.Data.ParameterDirection.Input, 0, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientEmail", System.Data.SqlDbType.NVarChar, 2147483647, System.Data.ParameterDirection.Input, 0, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientName", System.Data.SqlDbType.NVarChar, 2147483647, System.Data.ParameterDirection.Input, 0, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@Body", System.Data.SqlDbType.Text, 2147483647, System.Data.ParameterDirection.Input, 0, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@Subject", System.Data.SqlDbType.NVarChar, 2147483647, System.Data.ParameterDirection.Input, 0, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            ((System.Data.SqlClient.SqlCommand)(this._commandCollection[3])).Parameters.Add(new System.Data.SqlClient.SqlParameter("@ReplyToID", System.Data.SqlDbType.NVarChar, 250, System.Data.ParameterDirection.Input, 0, 0, null, System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2507,6 +2521,87 @@ ORDER BY ReceivedTime";
             }
             else {
                 command.Parameters[14].Value = System.DBNull.Value;
+            }
+            System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            object returnValue;
+            try {
+                returnValue = command.ExecuteScalar();
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            if (((returnValue == null) 
+                        || (returnValue.GetType() == typeof(System.DBNull)))) {
+                return null;
+            }
+            else {
+                return ((object)(returnValue));
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual object InsertPotentialErrorReply(string ID, System.Nullable<System.DateTime> ReceivedTime, string SenderEmail, string SenderName, string RecipientEmail, string RecipientName, string Body, string Subject, string ReplyToID) {
+            System.Data.SqlClient.SqlCommand command = ((System.Data.SqlClient.SqlCommand)(this.CommandCollection[3]));
+            if ((ID == null)) {
+                command.Parameters[1].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[1].Value = ((string)(ID));
+            }
+            if ((ReceivedTime.HasValue == true)) {
+                command.Parameters[2].Value = ((System.DateTime)(ReceivedTime.Value));
+            }
+            else {
+                command.Parameters[2].Value = System.DBNull.Value;
+            }
+            if ((SenderEmail == null)) {
+                command.Parameters[3].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[3].Value = ((string)(SenderEmail));
+            }
+            if ((SenderName == null)) {
+                command.Parameters[4].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[4].Value = ((string)(SenderName));
+            }
+            if ((RecipientEmail == null)) {
+                command.Parameters[5].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[5].Value = ((string)(RecipientEmail));
+            }
+            if ((RecipientName == null)) {
+                command.Parameters[6].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[6].Value = ((string)(RecipientName));
+            }
+            if ((Body == null)) {
+                command.Parameters[7].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[7].Value = ((string)(Body));
+            }
+            if ((Subject == null)) {
+                command.Parameters[8].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[8].Value = ((string)(Subject));
+            }
+            if ((ReplyToID == null)) {
+                command.Parameters[9].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[9].Value = ((string)(ReplyToID));
             }
             System.Data.ConnectionState previousConnectionState = command.Connection.State;
             if (((command.Connection.State & System.Data.ConnectionState.Open) 

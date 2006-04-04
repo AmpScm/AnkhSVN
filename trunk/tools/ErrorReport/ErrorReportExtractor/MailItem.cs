@@ -16,6 +16,11 @@ namespace ErrorReportExtractor
             this.receivedTime = receivedTime;
         }
 
+        public MailItem()
+        {
+
+        }
+
         public string Subject
         {
             get { return subject; }
@@ -25,7 +30,16 @@ namespace ErrorReportExtractor
         public string Body
         {
             get { return body; }
-            set { body = value; }
+            set 
+            { 
+                body = value;
+                OnBodyChanged();
+            }
+        }
+
+        protected virtual void OnBodyChanged()
+        {
+            
         }
 
         public string SenderName
@@ -52,6 +66,26 @@ namespace ErrorReportExtractor
             set { id = value; }
         }
 
+        public string ReplyToID
+        {
+            get { return replyToID; }
+            set { replyToID = value; }
+        }
+
+        public string ReceiverEmail
+        {
+            get { return receiverEmail; }
+            set { receiverEmail = value; }
+        }
+        public string ReceiverName
+        {
+            get { return receiverName; }
+            set { receiverName = value; }
+        }
+
+        private string replyToID;
+        private string receiverEmail;
+        private string receiverName;
         private string id;
         private DateTime receivedTime;
         private string senderName;

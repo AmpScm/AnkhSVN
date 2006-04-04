@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using ErrorReportExtractor;
+using System.Runtime.InteropServices;
 
 namespace ErrorReport.GUI
 {
@@ -40,7 +41,7 @@ namespace ErrorReport.GUI
 
         public void Progress()
         {
-            this.progressBar.PerformStep();
+            //this.progressBar.PerformStep();
         }
 
         public bool VerboseMode
@@ -56,14 +57,47 @@ namespace ErrorReport.GUI
 
         public void Exception( Exception ex )
         {
-            WriteMessage( ex.ToString() );
+            MethodInvoker invoker = delegate
+            {
+                MessageBox.Show(ex.ToString());
+            };
+            this.PerformInvoke( invoker );
+        }
+
+        private void PerformInvoke( MethodInvoker invoker )
+        {
+            if ( this.InvokeRequired )
+            {
+                this.Invoke( invoker );
+            }
+            else
+            {
+                invoker();
+            }
         }
 
         #endregion
 
         private void WriteMessage( string message, params object[] args )
         {
-            this.richTextBox.AppendText( String.Format( message, args ) + Environment.NewLine );
+            MethodInvoker invoker = delegate
+            {
+                this.richTextBox.AppendText( String.Format( message, args ) + Environment.NewLine );
+                this.ScrollToBottom();
+            };
+            this.PerformInvoke( invoker );
+            
         }
+
+        private void ScrollToBottom()
+        {
+            SendMessage( this.richTextBox.Handle, WM_VSCROLL, SB_BOTTOM, 0 );
+        }
+
+        [DllImport( "User32.dll" )]
+        private static extern int SendMessage( IntPtr hWnd, uint msg, int wparam, int lparam );
+
+        private const int WM_VSCROLL = 0x0115;
+        private const int SB_BOTTOM = 7;
     }
 }

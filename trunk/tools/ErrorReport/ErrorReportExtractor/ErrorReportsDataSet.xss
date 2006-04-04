@@ -8,7 +8,7 @@
   <Shapes>
     <Shape ID="DesignTable:ErrorReportItems" ZOrder="4" X="70" Y="70" Height="292" Width="242" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="228" />
     <Shape ID="DesignTable:StackTraceLines" ZOrder="3" X="382" Y="70" Height="173" Width="234" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="126" />
-    <Shape ID="DesignSources:QueriesTableAdapter" ZOrder="1" X="598" Y="400" Height="78" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="74" />
+    <Shape ID="DesignSources:QueriesTableAdapter" ZOrder="1" X="598" Y="400" Height="95" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="91" />
   </Shapes>
   <Connectors>
     <Connector ID="DesignRelation:FK_StackTraceLines_ErrorReportItems" ZOrder="2" LineWidth="11">

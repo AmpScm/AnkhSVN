@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using Fines.Utils.Collections;
 
 namespace ErrorReportExtractor
 {
@@ -15,7 +16,18 @@ namespace ErrorReportExtractor
        
         public string Text
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get 
+            {
+                IList<string> s = ListUtils.Map<IStackTraceItem, string>( this, delegate( IStackTraceItem item )
+                {
+                    return item.ToString();
+                } );
+                return ListUtils.Reduce<string>( s, delegate( string s1, string s2 )
+                {
+                    return s1 + Environment.NewLine + s2;
+                } );
+
+            }
         }
 
         private void ParseBody(string body)
