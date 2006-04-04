@@ -40,8 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandAttribute.cs" />
+    <Compile Include="ToolBarAttribute.cs" />
     <Compile Include="Commands.cs" />
+    <Compile Include="MenuItemAttribute.cs" />
+    <Compile Include="MenuManager.cs" />
     <Compile Include="KeyBindingAttribute.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

@@ -5,9 +5,9 @@ using System.Text;
 namespace ErrorReport.GUI
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=false)]
-    public class CommandAttribute : Attribute
+    public class ToolBarAttribute : Attribute
     {
-        public CommandAttribute( string text )
+        public ToolBarAttribute( string text )
         {
             this.text = text;
         }
