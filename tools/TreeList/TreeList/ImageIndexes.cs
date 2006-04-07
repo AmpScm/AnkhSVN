@@ -1,11 +1,11 @@
 using System;
 using System.Text;
 
-namespace TreeList
+namespace Ankh.Tools
 {
     class ImageIndexes
     {
         public const int Expanded = 0;
-        public const int Contracted = 1;
+        public const int Collapsed = 1;
     }
 }

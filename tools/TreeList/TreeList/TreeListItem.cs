@@ -4,13 +4,14 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Drawing;
 
-namespace TreeList
+namespace Ankh.Tools
 {
     public class TreeListItem : ListViewItem
     {
         public TreeListItem( string text ) : base(text)
         {
-            this.children.Changed += new EventHandler( children_Changed );
+            this.children.ItemInserted += new TreeListItemsChangedEventHandler( children_Changed );
+            this.children.ItemRemoved += new TreeListItemsChangedEventHandler( children_Changed );
         }
 
         
@@ -22,21 +23,25 @@ namespace TreeList
 
         public TreeListItemCollection Children
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get { return this.children; }
         }
 
         private TreeList TreeList
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get { return (TreeList)this.ListView; }
         }
 
 
         public bool Expanded
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get 
             { 
                 return this.expanded; 
             }
+
             set 
             {
                 if ( this.expanded != value )
@@ -47,7 +52,7 @@ namespace TreeList
                     }
                     else
                     {
-                        this.TreeList.ContractItem( this );
+                        this.TreeList.CollapseItem( this );
                     }
 
                 }
@@ -63,6 +68,7 @@ namespace TreeList
 
         public int Level
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get { return this.level; }
             set 
             { 
@@ -93,7 +99,7 @@ namespace TreeList
             return info.flags == Win32.ListViewConstants.LVHT_ONITEMICON;
         }
 
-        void children_Changed( object sender, EventArgs e )
+        void children_Changed( object sender, TreeListItemsChangedEventArgs e )
         {
             UpdateImage();
         }
@@ -102,7 +108,7 @@ namespace TreeList
         {
             if ( this.Children.Count > 0 )
             {
-                this.ImageIndex = this.Expanded ? ImageIndexes.Expanded : ImageIndexes.Contracted;
+                this.ImageIndex = this.Expanded ? ImageIndexes.Expanded : ImageIndexes.Collapsed;
             }
         }
         

@@ -47,6 +47,8 @@
     <Compile Include="TreeListDesigner.cs" />
     <Compile Include="TreeListItem.cs" />
     <Compile Include="TreeListItemCollection.cs" />
+    <Compile Include="TreeListItemEventArgs.cs">
+    </Compile>
     <Compile Include="TreeListRootItemCollection.cs">
     </Compile>
     <Compile Include="Win32.cs" />

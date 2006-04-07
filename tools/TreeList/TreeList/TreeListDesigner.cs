@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Windows.Forms.Design;
 
-namespace TreeList
+namespace Ankh.Tools
 {
     public class TreeListDesigner : ControlDesigner
     {

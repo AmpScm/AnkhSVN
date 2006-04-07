@@ -2,11 +2,12 @@ using System;
 using System.Text;
 using System.Collections;
 
-namespace TreeList
+namespace Ankh.Tools
 {
     public class TreeListItemCollection : CollectionBase
     {
-        public event EventHandler Changed;
+        public event TreeListItemsChangedEventHandler ItemRemoved;
+        public event TreeListItemsChangedEventHandler ItemInserted;
 
         public TreeListItem this[ int index ]
         {
@@ -41,26 +42,23 @@ namespace TreeList
 
         protected override void OnClearComplete()
         {
-            this.OnChanged();
+            //this.OnChanged();
         }
 
         protected override void OnInsertComplete( int index, object value )
         {
-            this.OnChanged();
+            if ( this.ItemInserted != null )
+            {
+                this.ItemInserted( this, new TreeListItemsChangedEventArgs((TreeListItem)value, index) );
+            }
         }
 
         protected override void OnRemoveComplete( int index, object value )
         {
-            this.OnChanged();
-        }
-
-        private void OnChanged()
-        {
-            if ( this.Changed != null )
+            if ( this.ItemRemoved != null )
             {
-                this.Changed( this, EventArgs.Empty );
+                this.ItemRemoved( this, new TreeListItemsChangedEventArgs((TreeListItem)value, index ));
             }
-
         }
     }
 }
