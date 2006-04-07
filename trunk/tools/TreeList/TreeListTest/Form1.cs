@@ -5,8 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using TreeList;
 using System.IO;
+using Ankh.Tools;
 
 namespace TreeListTest
 {
@@ -28,7 +28,7 @@ namespace TreeListTest
         void Form1_Load( object sender, EventArgs e )
         {
             item1 = new TreeListItem( "A" );
-            this.treeList1.TreeListItems.Add( item1 );
+            this.treeList1.Items.Add( item1 );
             item1.SubItems.Add( "Blah" );
 
             item2 = new TreeListItem( "B" );
@@ -67,7 +67,7 @@ namespace TreeListTest
             TreeListItem item = new TreeListItem(this.textBox1.Text);
             this.FillRecursively( item, this.textBox1.Text );
 
-            this.treeList1.TreeListItems.Add( item );
+            this.treeList1.Items.Add( item );
         }
 
         private void FillRecursively( TreeListItem item, string path )
@@ -84,6 +84,15 @@ namespace TreeListTest
                 {
                     FillRecursively( child, childInfo.FullName );
                 }
+            }
+        }
+
+        private void button2_Click( object sender, EventArgs e )
+        {
+            if ( this.treeList1.SelectedItems.Count == 1 )
+            {
+                TreeListItem item = this.treeList1.SelectedItems[ 0 ] as TreeListItem;
+                this.treeList1.Items.Remove(item);
             }
         }
     }

@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace TreeList
+namespace Ankh.Tools
 {
     public class TreeListRootItemCollection : TreeListItemCollection
     {
@@ -12,15 +12,18 @@ namespace TreeList
 
         protected override void OnInsertComplete( int index, object value )
         {
-            this.treeList.Items.Insert( index, (TreeListItem)value );
+            
+            this.treeList.BaseItems.Insert( index, (TreeListItem)value );
         }
 
         protected override void OnRemoveComplete( int index, object value )
         {
-            this.treeList.Items.Remove( (TreeListItem)value );
+            this.treeList.BaseItems.Remove( (TreeListItem)value );
         }
 
         private TreeList treeList;
 	
     }
+    
+
 }

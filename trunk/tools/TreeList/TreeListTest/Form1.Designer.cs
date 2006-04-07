@@ -1,3 +1,4 @@
+using Ankh.Tools;
 namespace TreeListTest
 {
     partial class Form1
@@ -32,9 +33,10 @@ namespace TreeListTest
             this.imageList1 = new System.Windows.Forms.ImageList( this.components );
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.treeList1 = new TreeList.TreeList();
+            this.treeList1 = new TreeList();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // imageList1
@@ -46,21 +48,22 @@ namespace TreeListTest
             // button1
             // 
             this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button1.Location = new System.Drawing.Point( 0, 521 );
+            this.button1.Location = new System.Drawing.Point( 0, 498 );
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size( 871, 23 );
             this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
+            this.button1.Text = "Add";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler( this.button1_Click );
             // 
             // textBox1
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.textBox1.Location = new System.Drawing.Point( 0, 500 );
+            this.textBox1.Location = new System.Drawing.Point( 0, 477 );
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size( 871, 21 );
             this.textBox1.TabIndex = 2;
+            this.textBox1.Text = "D:\\mydocs\\vcsharp\\Ankh\\tools\\TreeList";
             // 
             // treeList1
             // 
@@ -70,7 +73,7 @@ namespace TreeListTest
             this.treeList1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeList1.Location = new System.Drawing.Point( 0, 0 );
             this.treeList1.Name = "treeList1";
-            this.treeList1.Size = new System.Drawing.Size( 871, 544 );
+            this.treeList1.Size = new System.Drawing.Size( 871, 521 );
             this.treeList1.TabIndex = 0;
             this.treeList1.SelectedIndexChanged += new System.EventHandler( this.treeList1_SelectedIndexChanged );
             this.treeList1.Click += new System.EventHandler( this.treeList1_Click );
@@ -85,6 +88,17 @@ namespace TreeListTest
             this.columnHeader2.Text = "Modified";
             this.columnHeader2.Width = 100;
             // 
+            // button2
+            // 
+            this.button2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.button2.Location = new System.Drawing.Point( 0, 521 );
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size( 871, 23 );
+            this.button2.TabIndex = 3;
+            this.button2.Text = "Delete";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler( this.button2_Click );
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF( 6F, 13F );
@@ -93,6 +107,7 @@ namespace TreeListTest
             this.Controls.Add( this.textBox1 );
             this.Controls.Add( this.button1 );
             this.Controls.Add( this.treeList1 );
+            this.Controls.Add( this.button2 );
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout( false );
@@ -103,11 +118,12 @@ namespace TreeListTest
         #endregion
 
         private System.Windows.Forms.ImageList imageList1;
-        private TreeList.TreeList treeList1;
+        private TreeList treeList1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button2;
 
     }
 }

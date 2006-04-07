@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace TreeList.Win32
+namespace Ankh.Tools.Win32
 {
     
     [StructLayout( LayoutKind.Sequential, CharSet = CharSet.Auto, Pack=1 )]

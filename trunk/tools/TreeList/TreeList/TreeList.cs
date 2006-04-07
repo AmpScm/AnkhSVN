@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Drawing;
 
-namespace TreeList
+namespace Ankh.Tools
 {
     [Designer(typeof(TreeListDesigner))]
     public class TreeList : ListView
@@ -13,12 +13,24 @@ namespace TreeList
         {
             this.InitializeComponent();
             this.View = View.Details;
-            this.treeListItems =  new TreeListRootItemCollection(this);
+            this.treeListItems =  new TreeListItemCollection();
+
+            this.treeListItems.ItemInserted += new TreeListItemsChangedEventHandler( treeListItems_ItemInserted );
+            this.treeListItems.ItemRemoved += new TreeListItemsChangedEventHandler( treeListItems_ItemRemoved );
         }
 
-        public TreeListItemCollection TreeListItems
+        
+
+        public new TreeListItemCollection Items
         {
+            [System.Diagnostics.DebuggerStepThrough]
             get { return this.treeListItems; }
+        }
+
+        internal ListViewItemCollection BaseItems
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get { return base.Items; }
         }
 
         
@@ -63,10 +75,7 @@ namespace TreeList
             }
         }
 
-        private ImageList imageList;
-        private IContainer components;
-
-        private TreeListRootItemCollection treeListItems;
+        
 
         internal void ExpandItem( TreeListItem treeListItem )
         {
@@ -78,6 +87,11 @@ namespace TreeList
                 {
                     base.Items.Insert( ++index, child );
                     child.Level = treeListItem.Level + 1;
+
+                    if ( child.Expanded )
+                    {
+                        this.ExpandItem( child );
+                    }
                 }
             }
             finally
@@ -86,14 +100,17 @@ namespace TreeList
             }
         }
 
-        internal void ContractItem( TreeListItem treeListItem )
+        internal void CollapseItem( TreeListItem treeListItem )
         {
             try
             {
                 this.BeginUpdate();
                 foreach ( TreeListItem child in treeListItem.Children )
                 {
-                    child.Expanded = false;
+                    if ( child.Expanded )
+                    {
+                        CollapseItem( child ); 
+                    }
 
                     int index = base.Items.IndexOf( child );
                     base.Items.RemoveAt( index  );
@@ -112,6 +129,52 @@ namespace TreeList
                 this.CreateHandle();
             }
         }
+
+        internal void treeListItems_ItemRemoved( object sender, TreeListItemsChangedEventArgs args )
+        {
+            if ( args.Item.Expanded )
+            {
+                this.CollapseItem( args.Item );
+            }
+            this.BaseItems.Remove( args.Item );
+        }
+
+        internal void treeListItems_ItemInserted( object sender, TreeListItemsChangedEventArgs args )
+        {
+            int index = this.FindIndexForInsertion( args.Index, args.Item );
+            this.BaseItems.Insert( index, args.Item );
+        }
+
+        private int FindIndexForInsertion( int index, TreeListItem treeListItem )
+        {
+            if ( index == 0 )
+            {
+                return 0;
+            }
+
+            int baseItemIndex = this.BaseItems.IndexOf( this.Items[index - 1]) + 1;
+            if ( baseItemIndex == this.BaseItems.Count )
+            {
+                return baseItemIndex;
+            }
+
+            TreeListItem baseItem; 
+            do
+            {
+                baseItem = (TreeListItem)this.BaseItems[baseItemIndex];
+                if ( baseItem.Level == 0 )
+                {
+                    break;
+                }
+                baseItemIndex++;
+            } while (baseItemIndex < this.BaseItems.Count);
+            return baseItemIndex;
+        }
+
+        private ImageList imageList;
+        private IContainer components;
+
+        private TreeListItemCollection treeListItems;
 
     }
 }
