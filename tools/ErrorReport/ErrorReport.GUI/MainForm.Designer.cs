@@ -33,7 +33,7 @@ namespace ErrorReport.GUI
             System.Windows.Forms.ColumnHeader columnDate;
             System.Windows.Forms.ColumnHeader columnVersion;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( MainForm ) );
-            this.reportsListView = new System.Windows.Forms.ListView();
+            this.reportsListView = new Ankh.Tools.TreeList();
             this.columnFrom = new System.Windows.Forms.ColumnHeader();
             this.columnException = new System.Windows.Forms.ColumnHeader();
             this.splitContainerBottom = new System.Windows.Forms.SplitContainer();
@@ -218,7 +218,7 @@ namespace ErrorReport.GUI
 
         #endregion
 
-        private System.Windows.Forms.ListView reportsListView;
+        private Ankh.Tools.TreeList reportsListView;
         private System.Windows.Forms.ColumnHeader columnFrom;
         private System.Windows.Forms.ColumnHeader columnException;
         private ProgressCallbackControl progressCallback;
