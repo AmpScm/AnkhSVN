@@ -14,6 +14,20 @@ namespace Ankh.Tools
             this.children.ItemRemoved += new TreeListItemsChangedEventHandler( children_Changed );
         }
 
+        public TreeListItem( string[] items )
+        {
+            if ( items.Length == 0 )
+            {
+                throw new ArgumentException( "At least one item must be provided", "items" );
+            }
+
+            this.Text = items[ 0 ];
+            for ( int i = 1; i < items.Length; i++ )
+            {
+                this.SubItems.Add( items[ i ] );
+            }
+        }
+
         
 
         public TreeListItem()

@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using ErrorReportExtractor;
 using Fines.Utils.Collections;
 using ErrorReport.GUI.Properties;
+using Ankh.Tools;
+using System.Diagnostics;
 
 namespace ErrorReport.GUI
 {
@@ -170,10 +172,13 @@ namespace ErrorReport.GUI
 
         private void LoadErrorReportsIntoListView()
         {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             this.reportsListView.BeginUpdate();
             foreach ( IErrorReport report in ucp.GetUnansweredReports() )
             {
-                ListViewItem item = new ListViewItem( new string[] { 
+                TreeListItem item = new TreeListItem( new string[] { 
                     report.ReceivedTime.ToString(), 
                     String.Format("{0} <{1}>", report.SenderName, report.SenderEmail), 
                     report.ExceptionType,
@@ -185,6 +190,8 @@ namespace ErrorReport.GUI
                 this.reportsListView.Items.Add( item );
             }
             this.reportsListView.EndUpdate();
+            stopWatch.Stop();
+            Debug.WriteLine( stopWatch.Elapsed.ToString() );
         }
 
         private void MainForm_KeyDown( object sender, KeyEventArgs e )

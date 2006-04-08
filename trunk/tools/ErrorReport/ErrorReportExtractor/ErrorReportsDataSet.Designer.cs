@@ -1623,7 +1623,7 @@ SELECT ID, ReceivedTime, SubmitterEmail, SubmitterName, Body, Subject, Exception
             this._commandCollection[0].CommandType = System.Data.CommandType.Text;
             this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = @"SELECT     ID, ReceivedTime, SubmitterEmail, SubmitterName, Body, Subject, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersion, 
+            this._commandCollection[1].CommandText = @"SELECT ID, ReceivedTime, SubmitterEmail, SubmitterName, Body, Subject, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersion, 
                       PatchVersion, Revision, RepliedTo
 FROM         ErrorReportItems
 ORDER BY ReceivedTime";

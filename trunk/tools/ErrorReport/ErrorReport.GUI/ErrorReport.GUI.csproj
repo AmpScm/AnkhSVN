@@ -124,6 +124,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TreeList\TreeList\TreeList.csproj">
+      <Project>{CCE2A76F-CE85-4F90-BB8B-8D9CC525B200}</Project>
+      <Name>TreeList</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ErrorReportExtractor\ErrorReportExtractor.csproj">
       <Project>{72FB5A42-DC4C-4AE1-94D6-2041773F0CA8}</Project>
       <Name>ErrorReportExtractor</Name>
