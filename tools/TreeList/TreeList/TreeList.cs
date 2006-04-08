@@ -141,7 +141,16 @@ namespace Ankh.Tools
 
         internal void treeListItems_ItemInserted( object sender, TreeListItemsChangedEventArgs args )
         {
-            int index = this.FindIndexForInsertion( args.Index, args.Item );
+            int index;
+            // Optimize for the very common case of inserting at the end.
+            if ( args.Index == (this.Items.Count - 1) )
+            {
+                index = this.BaseItems.Count;
+            }
+            else
+            {
+                index = this.FindIndexForInsertion( args.Index, args.Item ); 
+            }
             this.BaseItems.Insert( index, args.Item );
         }
 
@@ -152,12 +161,21 @@ namespace Ankh.Tools
                 return 0;
             }
 
+            // find the index of the top level treelistitem in the underlying collection
             int baseItemIndex = this.BaseItems.IndexOf( this.Items[index - 1]) + 1;
+
+
             if ( baseItemIndex == this.BaseItems.Count )
             {
                 return baseItemIndex;
             }
 
+            //if ( baseItemIndex == this.Items.Count )
+            //{
+            //    return this.BaseItems.Count;
+            //}
+
+            // go through subitems to find the index *after* the top level node and all its children
             TreeListItem baseItem; 
             do
             {
