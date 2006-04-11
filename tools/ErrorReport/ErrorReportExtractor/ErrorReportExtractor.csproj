@@ -30,7 +30,7 @@
   <ItemGroup>
     <Reference Include="Fines.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ErrorReport.GUI\bin\Debug\Fines.Utils.dll</HintPath>
+      <HintPath>..\lib\Fines.Utils.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SqlServer.Smo, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
@@ -47,9 +47,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorReportsDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Factory.cs" />
+    <Compile Include="IService.cs" />
+    <Compile Include="NullProgressCallback.cs" />
+    <Compile Include="ServiceProvider.cs" />
     <Compile Include="IErrorReport.cs" />
-    <Compile Include="IFactory.cs" />
+    <Compile Include="IServiceProvider.cs" />
     <Compile Include="IMailer.cs" />
     <Compile Include="IMailItem.cs" />
     <Compile Include="IProgressCallback.cs" />

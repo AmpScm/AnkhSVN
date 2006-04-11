@@ -5,11 +5,11 @@ using ErrorReportExtractor.ReplyTemplatesDataSetTableAdapters;
 
 namespace ErrorReportExtractor
 {
-    class TemplateManager : ErrorReportExtractor.ITemplateManager
+    public class TemplateManager : ErrorReportExtractor.ITemplateManager
     {
-        public TemplateManager( IProgressCallback callback )
+        public TemplateManager()
         {
-            this.callback = callback;
+            this.callback = new NullProgressCallback();
         }
 
         public IEnumerable<IReplyTemplate> GetTemplates()
@@ -59,6 +59,11 @@ namespace ErrorReportExtractor
             ReplyTemplate template = new ReplyTemplate( 0, "Fill in template text here" );
             template.State = TemplateState.New;
             return template;
+        }
+
+        public void SetProgressCallback( IProgressCallback callback )
+        {
+            this.callback = callback;
         }
 
         private IProgressCallback callback;

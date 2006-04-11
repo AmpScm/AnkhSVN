@@ -7,6 +7,8 @@ using Fines.Utils.Collections;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
 
+using IServiceProvider = ErrorReportExtractor.IServiceProvider;
+
 namespace ErrorReport.GUI
 {
     class MainFormUCP
@@ -17,12 +19,12 @@ namespace ErrorReport.GUI
         public event EventHandler TemplatesWanted;
         public event EventHandler SelectedReportModified;
 
-        public MainFormUCP( IFactory factory, IProgressCallback cb, ISynchronizeInvoke invoker )
+        public MainFormUCP( IServiceProvider provider, IProgressCallback cb, ISynchronizeInvoke invoker )
         {
             this.callback = cb;
-            this.storage = factory.GetStorage(cb);
-            this.mailer = factory.GetMailer( cb );
-            this.factory = factory;
+            this.storage = provider.GetService<IStorage>();
+            this.mailer = provider.GetService<IMailer>();
+            this.provider = provider;
             this.invoker = invoker;
         }
 
@@ -31,9 +33,9 @@ namespace ErrorReport.GUI
             get { return callback; }
         }
 
-        public IFactory Factory
+        public IServiceProvider ServiceProvider
         {
-            get { return this.factory; }
+            get { return this.provider; }
         }
 
 
@@ -57,6 +59,7 @@ namespace ErrorReport.GUI
                 }
             }
         }
+        
 
         public IEnumerable<IReplyTemplate> Templates
         {
@@ -64,7 +67,7 @@ namespace ErrorReport.GUI
             {
                 if ( this.templates == null )
                 {
-                    this.templates = this.factory.GetTemplateManager( this.callback ).GetTemplates();
+                    this.templates = this.provider.GetService<ITemplateManager>().GetTemplates();
                 }
                 return this.templates;
             }
@@ -186,7 +189,7 @@ namespace ErrorReport.GUI
 
         public void ResetTemplates()
         {
-            this.templates = this.factory.GetTemplateManager( this.callback ).GetTemplates();
+            this.templates = this.provider.GetService<ITemplateManager>().GetTemplates();
         }
 
         private void OnReplyTextChanged()
@@ -261,7 +264,7 @@ namespace ErrorReport.GUI
         private IErrorReport selectedReport;
         private bool isReplying = false;
         private string replyText;
-        private IFactory factory;
+        private IServiceProvider provider;
         private IList<IErrorReport> errorReports;
         private IStorage storage;
         private IMailer mailer;

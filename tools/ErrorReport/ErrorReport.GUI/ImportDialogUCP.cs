@@ -38,20 +38,20 @@ namespace ErrorReport.GUI
 
         public void RunImport()
         {
-            MailContainer container = new MailContainer( this.FolderPath, this.callback );
+            MailContainer container = new MailContainer();
 
             MethodInvoker proc = delegate
             {
                 if ( this.ImportReports )
                 {
                     this.callback.Info( "Starting import of error reports from Outlook folder {0}.", this.FolderPath );
-                    this.storage.Store( container.GetAllItems( null ) );
+                    this.storage.Store( container.GetAllItems( this.FolderPath, null ) );
                 }
 
                 if ( this.ImportReplies )
                 {
                     this.callback.Info( "Starting import of error replies from Outlook folder {0}.", this.FolderPath );
-                    this.storage.StorePotentialReplies( container.GetPotentialReplies() );
+                    this.storage.StorePotentialReplies( container.GetPotentialReplies( this.FolderPath ) );
                 }
             };
 

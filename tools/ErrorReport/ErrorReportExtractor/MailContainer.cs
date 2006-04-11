@@ -8,9 +8,9 @@ namespace ErrorReportExtractor
 {
     public class MailContainer : IReportContainer
     {
-        public MailContainer(string folderPath, IProgressCallback callback)
+        public MailContainer()
         {
-            this.callback = callback;
+            this.callback = new NullProgressCallback();
             this.callback.Verbose("Creating Outlook application object");
 
             this.outlook = new Outlook.Application();
@@ -18,21 +18,13 @@ namespace ErrorReportExtractor
             this.mapiSession = new SessionClass();
             this.mapiSession.Logon(Type.Missing, Type.Missing, false, false, null, Type.Missing, Type.Missing);
 
-            NameSpace ns = outlook.GetNamespace("MAPI");
-
-            this.callback.Verbose("Finding MAPI folder {0}", folderPath);
-
-            string[] pathComponents = folderPath.Split('\\');
-            this.folder = ns.Folders.Item(1);
-            foreach (string component in pathComponents)
-            {
-                this.folder = this.folder.Folders.Item(component);
-            }
-            this.callback.Verbose("MAPI folder {0} found", folderPath);
         }
 
-        public IEnumerable<IErrorReport> GetAllItems(int? limit)
+        
+
+        public IEnumerable<IErrorReport> GetAllItems(string folderPath, int? limit)
         {
+            MAPIFolder folder = this.GetFolder( folderPath );
             if ( limit != null)
             {
                 this.callback.Verbose("Retrieving {0} items from Outlook folder {1}", limit, folder.FullFolderPath);
@@ -42,7 +34,7 @@ namespace ErrorReportExtractor
                 this.callback.Verbose("Retrieving all items from Outlook folder {0}", folder.FullFolderPath);
             }
 
-            for (int i = 1; i < this.folder.Items.Count; i++)
+            for (int i = 1; i < folder.Items.Count; i++)
             {
                 if (limit != null && i >= limit)
                 {
@@ -50,8 +42,8 @@ namespace ErrorReportExtractor
                     break;
                 }
                 ErrorReport report = new ErrorReport();
-                Outlook.MailItem outlookItem = this.folder.Items.Item(i) as Outlook.MailItem;
-                InitializeMailItemFromOutlookMailItem(outlookItem, report);
+                Outlook.MailItem outlookItem = folder.Items.Item(i) as Outlook.MailItem;
+                InitializeMailItemFromOutlookMailItem(folder, outlookItem, report);
                 
 
                 // It's not an error report if there's a reply to ID
@@ -65,13 +57,14 @@ namespace ErrorReportExtractor
             }
         }
 
-        public IEnumerable<IMailItem> GetPotentialReplies()
+        public IEnumerable<IMailItem> GetPotentialReplies(string folderPath)
         {
-            for ( int i = 1; i <= this.folder.Items.Count; i++ )
+            MAPIFolder folder = this.GetFolder( folderPath );
+            for ( int i = 1; i <= folder.Items.Count; i++ )
             {
-                Outlook.MailItem outlookItem = this.folder.Items.Item( i ) as Outlook.MailItem;
+                Outlook.MailItem outlookItem = folder.Items.Item( i ) as Outlook.MailItem;
                 MailItem mailItem = new MailItem();
-                InitializeMailItemFromOutlookMailItem( outlookItem, mailItem );
+                InitializeMailItemFromOutlookMailItem( folder, outlookItem, mailItem );
 
                 // they have to be replies to be replies
                 if ( mailItem.ReplyToID == null )
@@ -83,9 +76,14 @@ namespace ErrorReportExtractor
             }
         }
 
-        private void InitializeMailItemFromOutlookMailItem( Outlook.MailItem outlookItem, MailItem mailItem )
+        public void SetProgressCallback( IProgressCallback callback )
         {
-            Message mapiMessage = this.mapiSession.GetMessage( outlookItem.EntryID, this.folder.StoreID ) as Message;
+            this.callback = callback;
+        }
+
+        private void InitializeMailItemFromOutlookMailItem( MAPIFolder folder, Outlook.MailItem outlookItem, MailItem mailItem )
+        {
+            Message mapiMessage = this.mapiSession.GetMessage( outlookItem.EntryID, folder.StoreID ) as Message;
 
             MapiFields fields = new MapiFields( mapiMessage.Fields as Fields );
             mailItem.ID = fields.AsString( CdoPropTags.CdoPR_INTERNET_MESSAGE_ID );
@@ -99,9 +97,25 @@ namespace ErrorReportExtractor
             mailItem.ReceivedTime = outlookItem.ReceivedTime;
         }
 
+        private MAPIFolder GetFolder( string folderPath )
+        {
+            NameSpace ns = outlook.GetNamespace( "MAPI" );
+
+            this.callback.Verbose( "Finding MAPI folder {0}", folderPath );
+
+            string[] pathComponents = folderPath.Split( '\\' );
+            MAPIFolder folder = ns.Folders.Item( 1 );
+            foreach ( string component in pathComponents )
+            {
+                folder = folder.Folders.Item( component );
+            }
+            this.callback.Verbose( "MAPI folder {0} found", folderPath );
+
+            return folder;
+        }
+
 
         private Application outlook;
-        private MAPIFolder folder;
         private IProgressCallback callback;
         private MAPI.Session mapiSession;
     }

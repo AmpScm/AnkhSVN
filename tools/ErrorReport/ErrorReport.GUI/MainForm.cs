@@ -11,19 +11,22 @@ using ErrorReport.GUI.Properties;
 using Ankh.Tools;
 using System.Diagnostics;
 
+using IServiceProvider = ErrorReportExtractor.IServiceProvider;
+
 namespace ErrorReport.GUI
 {
     public partial class MainForm : Form
     {
-        public MainForm(IFactory factory)
+        public MainForm(IServiceProvider provider)
         {
             InitializeComponent();
 
             this.MainMenuStrip = this.menuManager.MainMenu;
             this.Controls.Add( this.MainMenuStrip );
 
+            provider.SetProgressCallback( this.progressCallback );
 
-            this.ucp = new MainFormUCP( factory, this.progressCallback, this );
+            this.ucp = new MainFormUCP( provider, this.progressCallback, this );
 
             this.Load += new EventHandler( MainForm_Load );
             HandleListViewSelections();

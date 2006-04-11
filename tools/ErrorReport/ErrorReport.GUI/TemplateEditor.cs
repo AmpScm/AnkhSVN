@@ -8,11 +8,13 @@ using System.Windows.Forms;
 using ErrorReportExtractor;
 using ErrorReport.GUI.Properties;
 
+using IServiceProvider = ErrorReportExtractor.IServiceProvider;
+
 namespace ErrorReport.GUI
 {
     public partial class TemplateEditor : Form
     {
-        public TemplateEditor(IProgressCallback callback, IFactory factory)
+        public TemplateEditor(IProgressCallback callback, IServiceProvider factory)
         {
             InitializeComponent();
 

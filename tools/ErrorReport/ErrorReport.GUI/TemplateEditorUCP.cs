@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ErrorReportExtractor;
 using Fines.Utils.Collections;
+using IServiceProvider = ErrorReportExtractor.IServiceProvider;
 
 namespace ErrorReport.GUI
 {
@@ -11,10 +12,10 @@ namespace ErrorReport.GUI
         public event EventHandler SelectedTemplateChanged;
         public event EventHandler TemplatesChanged;
 
-        public TemplateEditorUCP(IProgressCallback callback, IFactory factory)
+        public TemplateEditorUCP(IProgressCallback callback, IServiceProvider provider)
         {
             this.callback = callback;
-            this.templateManager = factory.GetTemplateManager( this.callback );
+            this.templateManager = provider.GetService<ITemplateManager>();
         }
 
         public void LoadTemplates()
