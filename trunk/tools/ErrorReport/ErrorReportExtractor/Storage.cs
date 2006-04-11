@@ -10,11 +10,11 @@ using ErrorReportExtractor.Properties;
 
 namespace ErrorReportExtractor
 {
-    class Storage : ErrorReportExtractor.IStorage
+    public class Storage : ErrorReportExtractor.IStorage
     {
-        public Storage(IProgressCallback callback)
+        public Storage()
         {
-            this.callback = callback;
+            this.callback = new NullProgressCallback();
         }
         //public void Store(MailItem mailItem)
         //{
@@ -139,5 +139,10 @@ namespace ErrorReportExtractor
         }
 
         #endregion
+
+        public void SetProgressCallback( IProgressCallback callback )
+        {
+            this.callback = callback;
+        }
     }
 }

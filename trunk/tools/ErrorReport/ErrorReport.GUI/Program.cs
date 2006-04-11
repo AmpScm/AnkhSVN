@@ -16,9 +16,20 @@ namespace ErrorReport.GUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );
 
-            Factory factory = new Factory();
+            ServiceProvider factory = SetUpServices();
             
             Application.Run( new MainForm(factory) );
+        }
+
+        private static ServiceProvider SetUpServices()
+        {
+            ServiceProvider provider = new ServiceProvider();
+            provider.ProfferService<IMailer>( new ErrorReportExtractor.Mailer());
+            provider.ProfferService<ITemplateManager>( new TemplateManager() );
+            provider.ProfferService<IStorage>( new Storage() );
+            provider.ProfferService<IReportContainer>( new MailContainer() );
+
+            return provider;
         }
     }
 }

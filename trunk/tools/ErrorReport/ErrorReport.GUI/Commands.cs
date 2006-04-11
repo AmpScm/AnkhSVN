@@ -152,7 +152,7 @@ namespace ErrorReport.GUI
 
         public override void Execute()
         {
-            using(TemplateEditor editor = new TemplateEditor(ucp.Callback, ucp.Factory))
+            using(TemplateEditor editor = new TemplateEditor(ucp.Callback, ucp.ServiceProvider))
             {
                 editor.ShowDialog();
                 ucp.ResetTemplates();
@@ -201,7 +201,7 @@ namespace ErrorReport.GUI
 
         public override void Execute()
         {
-            IStorage storage = this.ucp.Factory.GetStorage( this.ucp.Callback );
+            IStorage storage = this.ucp.ServiceProvider.GetService<IStorage>();
             ImportDialogUCP ucp = new ImportDialogUCP( this.ucp.Callback, storage , this.ucp.Invoker);
             using ( ImportDialog dialog = new ImportDialog( ucp ) )
             {

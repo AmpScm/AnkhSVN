@@ -6,11 +6,11 @@ using ErrorReportExtractor.Properties;
 
 namespace ErrorReportExtractor
 {
-    class Mailer : ErrorReportExtractor.IMailer
+    public class Mailer : ErrorReportExtractor.IMailer, IService
     {
-        public Mailer(IProgressCallback cb)
+        public Mailer()
         {
-            this.progressCallback = cb;
+            this.progressCallback = new NullProgressCallback();
         }
 
         public void SendReply( IErrorReport report, string replyText )
@@ -33,6 +33,12 @@ namespace ErrorReportExtractor
             client.Send( message );
         }
 
+        public void SetProgressCallback( IProgressCallback callback )
+        {
+            this.progressCallback = callback;
+        }
+
         private IProgressCallback progressCallback;
+
     }
 }

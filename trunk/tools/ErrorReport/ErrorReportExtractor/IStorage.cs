@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ErrorReportExtractor
 {
-    public interface IStorage
+    public interface IStorage : IService
     {
         void Store( IEnumerable<IErrorReport> items );
 
