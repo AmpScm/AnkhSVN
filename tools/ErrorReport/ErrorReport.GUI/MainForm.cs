@@ -112,6 +112,18 @@ namespace ErrorReport.GUI
             this.splitContainerBottom.Panel2Collapsed = !this.ucp.IsReplying;
 
             this.replyTextBox.DataBindings.Add( "Text", this.ucp, "ReplyText", false, DataSourceUpdateMode.OnPropertyChanged );
+
+            Binding totalBinding = this.totalLabel.DataBindings.Add( "Text", this.ucp, "TotalCount" );
+            totalBinding.Format += delegate( object sender, ConvertEventArgs args )
+            {
+                args.Value = String.Format( "Total number of reports: {0}", args.Value );
+            };
+
+            Binding unansweredBinding = this.unansweredLabel.DataBindings.Add( "Text", this.ucp, "UnansweredCount", true);
+            unansweredBinding.Format +=  delegate( object sender, ConvertEventArgs args )
+            {
+                args.Value = String.Format( "Unanswered reports: {0}", args.Value );
+            };
         }
 
         private void SetupCommands()

@@ -11,13 +11,15 @@ using IServiceProvider = ErrorReportExtractor.IServiceProvider;
 
 namespace ErrorReport.GUI
 {
-    class MainFormUCP
+    class MainFormUCP : INotifyPropertyChanged
     {
         public event EventHandler SelectedReportChanged;
         public event EventHandler IsReplyingChanged;
         public event EventHandler ReplyTextChanged;
         public event EventHandler TemplatesWanted;
         public event EventHandler SelectedReportModified;
+        public event PropertyChangedEventHandler PropertyChanged;
+
 
         public MainFormUCP( IServiceProvider provider, IProgressCallback cb, ISynchronizeInvoke invoker )
         {
@@ -44,6 +46,8 @@ namespace ErrorReport.GUI
             this.errorReports = ListUtils.ConvertTo<IErrorReport, List<IErrorReport>>(
                 this.storage.GetAllReports() );
 
+            this.OnNotifyPropertyChanged( "TotalCount" );
+            this.OnNotifyPropertyChanged( "UnansweredCount" );
             return this.errorReports;
         }
 
@@ -56,6 +60,40 @@ namespace ErrorReport.GUI
                 if ( SelectedReportChanged != null )
                 {
                     SelectedReportChanged( this, EventArgs.Empty );
+                }
+            }
+        }
+
+        public int TotalCount
+        {
+            get
+            {
+                if ( this.errorReports != null )
+                {
+                    return this.errorReports.Count;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        public int UnansweredCount
+        {
+            get
+            {
+                if ( this.errorReports != null )
+                {
+
+                    return ListUtils.Count<IErrorReport>( this.errorReports, delegate( IErrorReport report )
+                    {
+                        return !report.RepliedTo;
+                    } );
+                }
+                else
+                {
+                    return 0;
                 }
             }
         }
@@ -161,6 +199,7 @@ namespace ErrorReport.GUI
             this.IsReplying = false;
             this.ReplyText = String.Empty;
             OnReplyTextChanged();
+            this.OnNotifyPropertyChanged( "UnansweredCount" );
         }
 
         public void NextReport()
@@ -190,6 +229,14 @@ namespace ErrorReport.GUI
         public void ResetTemplates()
         {
             this.templates = this.provider.GetService<ITemplateManager>().GetTemplates();
+        }
+
+        protected void OnNotifyPropertyChanged( string property )
+        {
+            if ( this.PropertyChanged != null )
+            {
+                this.PropertyChanged( this, new PropertyChangedEventArgs( property ) );
+            }
         }
 
         private void OnReplyTextChanged()
@@ -269,9 +316,5 @@ namespace ErrorReport.GUI
         private IStorage storage;
         private IMailer mailer;
         private const int MailWidth = 78;
-
-
-
-        
     }
 }
