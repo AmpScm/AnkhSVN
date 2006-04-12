@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.ComponentModel;
 
 using IServiceProvider = ErrorReportExtractor.IServiceProvider;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace ErrorReport.GUI
 {
@@ -19,6 +21,7 @@ namespace ErrorReport.GUI
         public event EventHandler TemplatesWanted;
         public event EventHandler SelectedReportModified;
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler ReportsLoaded;
 
 
         public MainFormUCP( IServiceProvider provider, IProgressCallback cb, ISynchronizeInvoke invoker )
@@ -41,14 +44,9 @@ namespace ErrorReport.GUI
         }
 
 
-        public IEnumerable<IErrorReport> GetUnansweredReports()
+        public IEnumerable<IErrorReport> Reports
         {
-            this.errorReports = ListUtils.ConvertTo<IErrorReport, List<IErrorReport>>(
-                this.storage.GetAllReports() );
-
-            this.OnNotifyPropertyChanged( "TotalCount" );
-            this.OnNotifyPropertyChanged( "UnansweredCount" );
-            return this.errorReports;
+            get{ return this.errorReports; }
         }
 
         public IErrorReport SelectedReport
@@ -229,6 +227,32 @@ namespace ErrorReport.GUI
         public void ResetTemplates()
         {
             this.templates = this.provider.GetService<ITemplateManager>().GetTemplates();
+        }
+
+        public void LoadReports()
+        {
+            ThreadWorker worker = new ThreadWorker( this.invoker );
+
+            worker.Work += delegate 
+            { 
+                this.errorReports = ListUtils.ConvertTo<IErrorReport, List<IErrorReport>>(
+                    this.storage.GetAllReports() ); 
+            };
+
+            worker.WorkFinished += delegate
+            {
+                if ( this.ReportsLoaded != null )
+                {
+                    this.ReportsLoaded( this, EventArgs.Empty );
+                }
+
+                this.OnNotifyPropertyChanged( "TotalCount" );
+                this.OnNotifyPropertyChanged( "UnansweredCount" );
+            };
+
+            worker.Exception += delegate( object sender, ThreadExceptionEventArgs a ) { this.callback.Exception( a.Exception ); };
+
+            worker.Start();
         }
 
         protected void OnNotifyPropertyChanged( string property )

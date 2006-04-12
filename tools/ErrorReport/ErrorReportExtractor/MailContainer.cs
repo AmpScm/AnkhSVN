@@ -14,10 +14,6 @@ namespace ErrorReportExtractor
             this.callback.Verbose("Creating Outlook application object");
 
             this.outlook = new Outlook.Application();
-
-            this.mapiSession = new SessionClass();
-            this.mapiSession.Logon(Type.Missing, Type.Missing, false, false, null, Type.Missing, Type.Missing);
-
         }
 
         
@@ -83,7 +79,7 @@ namespace ErrorReportExtractor
 
         private void InitializeMailItemFromOutlookMailItem( MAPIFolder folder, Outlook.MailItem outlookItem, MailItem mailItem )
         {
-            Message mapiMessage = this.mapiSession.GetMessage( outlookItem.EntryID, folder.StoreID ) as Message;
+            Message mapiMessage = this.MapiSession.GetMessage( outlookItem.EntryID, folder.StoreID ) as Message;
 
             MapiFields fields = new MapiFields( mapiMessage.Fields as Fields );
             mailItem.ID = fields.AsString( CdoPropTags.CdoPR_INTERNET_MESSAGE_ID );
@@ -114,9 +110,24 @@ namespace ErrorReportExtractor
             return folder;
         }
 
+        private MAPI.Session MapiSession
+        {
+            get 
+            {
+                if ( this.mapiSession == null )
+                {
+                    this.mapiSession = new SessionClass();
+                    this.mapiSession.Logon( Type.Missing, Type.Missing, false, false, null, Type.Missing, Type.Missing );
+                }
+                return mapiSession; 
+            }
+        }
+
 
         private Application outlook;
         private IProgressCallback callback;
         private MAPI.Session mapiSession;
+
+        
     }
 }

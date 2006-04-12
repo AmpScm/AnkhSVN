@@ -86,6 +86,7 @@
     <Compile Include="StackTraceItem.cs" />
     <Compile Include="Storage.cs" />
     <Compile Include="TemplateManager.cs" />
+    <Compile Include="ThreadWorker.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="MAPI">
