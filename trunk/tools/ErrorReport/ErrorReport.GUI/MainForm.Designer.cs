@@ -28,20 +28,23 @@ namespace ErrorReport.GUI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.SplitContainer splitContainer1;
             System.Windows.Forms.SplitContainer splitContainer2;
             System.Windows.Forms.ColumnHeader columnDate;
             System.Windows.Forms.ColumnHeader columnVersion;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( MainForm ) );
+            this.progressCallback = new ErrorReport.GUI.ProgressCallbackControl();
             this.reportsListView = new Ankh.Tools.TreeList();
             this.columnFrom = new System.Windows.Forms.ColumnHeader();
             this.columnException = new System.Windows.Forms.ColumnHeader();
-            this.splitContainerBottom = new System.Windows.Forms.SplitContainer();
-            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.columnDTEVersion = new System.Windows.Forms.ColumnHeader();
+            this.splitContainerBottom = new System.Windows.Forms.SplitContainer();
             this.messageDetailRichTextBox = new System.Windows.Forms.RichTextBox();
             this.replyTextBox = new System.Windows.Forms.RichTextBox();
-            this.progressCallback = new ErrorReport.GUI.ProgressCallbackControl();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.totalLabel = new System.Windows.Forms.Label();
+            this.unansweredLabel = new System.Windows.Forms.Label();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             splitContainer2 = new System.Windows.Forms.SplitContainer();
             columnDate = new System.Windows.Forms.ColumnHeader();
@@ -80,19 +83,30 @@ namespace ErrorReport.GUI
             // splitContainer2
             // 
             splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            splitContainer2.Location = new System.Drawing.Point( 0, 0 );
+            splitContainer2.Location = new System.Drawing.Point( 10, 10 );
             splitContainer2.Name = "splitContainer2";
             // 
             // splitContainer2.Panel1
             // 
             splitContainer2.Panel1.Controls.Add( this.progressCallback );
+            splitContainer2.Panel1.Controls.Add( this.unansweredLabel );
+            splitContainer2.Panel1.Controls.Add( this.totalLabel );
             // 
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.Controls.Add( this.reportsListView );
-            splitContainer2.Size = new System.Drawing.Size( 971, 307 );
-            splitContainer2.SplitterDistance = 323;
+            splitContainer2.Size = new System.Drawing.Size( 951, 287 );
+            splitContainer2.SplitterDistance = 316;
             splitContainer2.TabIndex = 1;
+            // 
+            // progressCallback
+            // 
+            this.progressCallback.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressCallback.Location = new System.Drawing.Point( 0, 66 );
+            this.progressCallback.Name = "progressCallback";
+            this.progressCallback.Size = new System.Drawing.Size( 316, 221 );
+            this.progressCallback.TabIndex = 0;
+            this.progressCallback.VerboseMode = true;
             // 
             // reportsListView
             // 
@@ -106,10 +120,8 @@ namespace ErrorReport.GUI
             this.reportsListView.HideSelection = false;
             this.reportsListView.Location = new System.Drawing.Point( 0, 0 );
             this.reportsListView.Name = "reportsListView";
-            this.reportsListView.Size = new System.Drawing.Size( 644, 307 );
+            this.reportsListView.Size = new System.Drawing.Size( 631, 287 );
             this.reportsListView.TabIndex = 0;
-            this.reportsListView.UseCompatibleStateImageBehavior = false;
-            this.reportsListView.View = System.Windows.Forms.View.Details;
             // 
             // columnDate
             // 
@@ -125,6 +137,14 @@ namespace ErrorReport.GUI
             // 
             this.columnException.Text = "Exception";
             this.columnException.Width = 204;
+            // 
+            // columnVersion
+            // 
+            columnVersion.Text = "Version";
+            // 
+            // columnDTEVersion
+            // 
+            this.columnDTEVersion.Text = "DTE";
             // 
             // splitContainerBottom
             // 
@@ -142,22 +162,6 @@ namespace ErrorReport.GUI
             this.splitContainerBottom.Size = new System.Drawing.Size( 971, 225 );
             this.splitContainerBottom.SplitterDistance = 466;
             this.splitContainerBottom.TabIndex = 2;
-            // 
-            // toolStrip
-            // 
-            this.toolStrip.Location = new System.Drawing.Point( 0, 0 );
-            this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size( 971, 25 );
-            this.toolStrip.TabIndex = 0;
-            this.toolStrip.Text = "toolStrip1";
-            // 
-            // columnVersion
-            // 
-            columnVersion.Text = "Version";
-            // 
-            // columnDTEVersion
-            // 
-            this.columnDTEVersion.Text = "DTE";
             // 
             // messageDetailRichTextBox
             // 
@@ -182,14 +186,35 @@ namespace ErrorReport.GUI
             this.replyTextBox.TabIndex = 0;
             this.replyTextBox.Text = "";
             // 
-            // progressCallback
+            // toolStrip
             // 
-            this.progressCallback.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.progressCallback.Location = new System.Drawing.Point( 0, 0 );
-            this.progressCallback.Name = "progressCallback";
-            this.progressCallback.Size = new System.Drawing.Size( 323, 307 );
-            this.progressCallback.TabIndex = 0;
-            this.progressCallback.VerboseMode = true;
+            this.toolStrip.Location = new System.Drawing.Point( 0, 0 );
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size( 971, 25 );
+            this.toolStrip.TabIndex = 0;
+            this.toolStrip.Text = "toolStrip1";
+            // 
+            // totalLabel
+            // 
+            this.totalLabel.AutoSize = true;
+            this.totalLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.totalLabel.Location = new System.Drawing.Point( 0, 0 );
+            this.totalLabel.Name = "totalLabel";
+            this.totalLabel.Padding = new System.Windows.Forms.Padding( 10 );
+            this.totalLabel.Size = new System.Drawing.Size( 55, 33 );
+            this.totalLabel.TabIndex = 1;
+            this.totalLabel.Text = "label1";
+            // 
+            // unansweredLabel
+            // 
+            this.unansweredLabel.AutoSize = true;
+            this.unansweredLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.unansweredLabel.Location = new System.Drawing.Point( 0, 33 );
+            this.unansweredLabel.Name = "unansweredLabel";
+            this.unansweredLabel.Padding = new System.Windows.Forms.Padding( 10 );
+            this.unansweredLabel.Size = new System.Drawing.Size( 55, 33 );
+            this.unansweredLabel.TabIndex = 2;
+            this.unansweredLabel.Text = "label2";
             // 
             // MainForm
             // 
@@ -207,6 +232,7 @@ namespace ErrorReport.GUI
             splitContainer1.Panel2.PerformLayout();
             splitContainer1.ResumeLayout( false );
             splitContainer2.Panel1.ResumeLayout( false );
+            splitContainer2.Panel1.PerformLayout();
             splitContainer2.Panel2.ResumeLayout( false );
             splitContainer2.ResumeLayout( false );
             this.splitContainerBottom.Panel1.ResumeLayout( false );
@@ -227,5 +253,7 @@ namespace ErrorReport.GUI
         private System.Windows.Forms.SplitContainer splitContainerBottom;
         private System.Windows.Forms.RichTextBox replyTextBox;
         private System.Windows.Forms.ColumnHeader columnDTEVersion;
+        private System.Windows.Forms.Label unansweredLabel;
+        private System.Windows.Forms.Label totalLabel;
     }
 }
