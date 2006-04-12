@@ -182,7 +182,9 @@ namespace ErrorReport.GUI
         }
         void MainForm_Load( object sender, EventArgs e )
         {
-            LoadErrorReportsIntoListView();
+            this.ucp.ReportsLoaded += delegate { LoadErrorReportsIntoListView(); };
+            this.progressCallback.Info( "Loading reports from storage." );
+            this.ucp.LoadReports();
         }
 
         private void LoadErrorReportsIntoListView()
@@ -191,7 +193,7 @@ namespace ErrorReport.GUI
             stopWatch.Start();
 
             this.reportsListView.BeginUpdate();
-            foreach ( IErrorReport report in ucp.GetUnansweredReports() )
+            foreach ( IErrorReport report in ucp.Reports )
             {
                 TreeListItem item = new TreeListItem( new string[] { 
                     report.ReceivedTime.ToString(), 
