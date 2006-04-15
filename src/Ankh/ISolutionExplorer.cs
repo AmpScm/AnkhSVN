@@ -43,5 +43,10 @@ namespace Ankh
         /// Notify the Solution Explorer to unload.
         /// </summary>
         void Unload();
+
+        /// <summary>
+        /// Whether a rename is currently in progress.
+        /// </summary>
+        bool RenameInProgress { get; }
     }
 }

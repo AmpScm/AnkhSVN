@@ -297,6 +297,14 @@ namespace Ankh.Solution
             }
         }
 
+        public bool RenameInProgress
+        {
+            get
+            {
+                return this.TreeView.RenameInProgress;
+            }
+        }
+
         internal IContext Context
         {
             get{ return this.context; }
