@@ -68,6 +68,15 @@ namespace Ankh.Solution
                 Constants.TVGN_NEXT, item );
         }
 
+        public bool RenameInProgress
+        {
+            get
+            {
+                int editControl = Win32.SendMessage( this.hwnd, Msg.TVM_GETEDITCONTROL, IntPtr.Zero, IntPtr.Zero );
+                return editControl != 0;
+            }
+        }
+
 
         /// <summary>
         /// Sets the imagelist to be used for the status images.

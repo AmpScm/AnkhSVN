@@ -48,5 +48,12 @@ namespace Utils.Win32
         /// a specified item. 
         /// </summary>
         public const uint TVM_GETNEXTITEM = 4362;
+
+       
+        /// <summary>
+        /// Retrieves the edit control associated with a label edit (rename).
+        /// </summary>
+        public const uint TVM_GETEDITCONTROL = 0x110f;
+
     }
 }

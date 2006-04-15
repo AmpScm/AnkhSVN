@@ -271,8 +271,10 @@ namespace Ankh.EventSinks
                         new object[] { null } );
                     return;
                 }
-
-                this.context.SolutionExplorer.Refresh( this.project );
+                if ( !this.context.SolutionExplorer.RenameInProgress )
+                {
+                    this.context.SolutionExplorer.Refresh( this.project );
+                }
 
                 lock ( this )
                 {
