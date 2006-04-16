@@ -120,11 +120,16 @@ namespace ErrorReportExtractor
             QueriesTableAdapter adapter = new QueriesTableAdapter();
             foreach ( IMailItem item in items )
             {
-                int count = (int)adapter.InsertPotentialErrorReply( item.ID, item.ReceivedTime, item.SenderEmail, item.SenderName,
+                int code = (int)adapter.InsertPotentialErrorReply( item.ID, item.ReceivedTime, item.SenderEmail, item.SenderName,
                     item.ReceiverEmail, item.ReceiverName, item.Body, item.Subject, item.ReplyToID );
-                if ( count == 0 )
+                if ( code == 0 )
                 {
                     this.callback.Verbose( "Mail from {0} with subject {1} not a reply to any existing report.",
+                        item.ReceivedTime, item.Subject );
+                }
+                else if ( code == 2 )
+                {
+                    this.callback.Verbose( "Mail from {0} with subject {1} already in the database.",
                         item.ReceivedTime, item.Subject );
                 }
                 else

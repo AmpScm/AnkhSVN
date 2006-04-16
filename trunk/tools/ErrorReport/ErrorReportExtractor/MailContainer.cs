@@ -14,6 +14,8 @@ namespace ErrorReportExtractor
             this.callback.Verbose("Creating Outlook application object");
 
             this.outlook = new Outlook.Application();
+
+            this.callback.Verbose( "Getting mapi session: {0}", this.MapiSession );
         }
 
         
@@ -59,6 +61,11 @@ namespace ErrorReportExtractor
             for ( int i = 1; i <= folder.Items.Count; i++ )
             {
                 Outlook.MailItem outlookItem = folder.Items.Item( i ) as Outlook.MailItem;
+                if ( outlookItem == null )
+                {
+                    this.callback.Warning( "Item {0} in folder {1} not a mail item.", i, folderPath );
+                    continue;
+                }
                 MailItem mailItem = new MailItem();
                 InitializeMailItemFromOutlookMailItem( folder, outlookItem, mailItem );
 
@@ -85,8 +92,11 @@ namespace ErrorReportExtractor
             mailItem.ID = fields.AsString( CdoPropTags.CdoPR_INTERNET_MESSAGE_ID );
             mailItem.SenderEmail = fields.AsString( CdoPropTags.CdoPR_SENDER_EMAIL_ADDRESS );
             mailItem.SenderName = fields.AsString( CdoPropTags.CdoPR_SENDER_NAME );
-            mailItem.ReceiverEmail = outlookItem.Recipients.Item( 1 ).Address;
-            mailItem.ReceiverName = outlookItem.Recipients.Item( 1 ).Name;
+            if ( outlookItem.Recipients.Count > 0 )
+            {
+                mailItem.ReceiverEmail = outlookItem.Recipients.Item( 1 ).Address;
+                mailItem.ReceiverName = outlookItem.Recipients.Item( 1 ).Name;
+            }
             mailItem.ReplyToID = fields.AsString( MapiFields.InReplyTo );
             mailItem.Subject = outlookItem.Subject;
             mailItem.Body = outlookItem.Body;
