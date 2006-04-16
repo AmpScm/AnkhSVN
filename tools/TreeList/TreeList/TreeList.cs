@@ -9,6 +9,12 @@ namespace Ankh.Tools
     [Designer(typeof(TreeListDesigner))]
     public class TreeList : ListView
     {
+
+        public event TreeListItemEventHandler BeforeCollapse;
+        public event TreeListItemEventHandler AfterCollapse;
+        public event TreeListItemEventHandler BeforeExpand;
+        public event TreeListItemEventHandler AfterExpand;
+
         public TreeList()
         {
             this.InitializeComponent();
@@ -154,6 +160,39 @@ namespace Ankh.Tools
             this.BaseItems.Insert( index, args.Item );
         }
 
+        internal virtual void OnAfterCollapse( TreeListItem treeListItem )
+        {
+            if ( this.AfterCollapse != null )
+            {
+                this.AfterCollapse( this, new TreeListItemEventArgs(treeListItem) );
+            }
+        }
+
+        internal virtual void OnBeforeCollapse( TreeListItem treeListItem )
+        {
+            if ( this.BeforeCollapse != null )
+            {
+                this.BeforeCollapse( this, new TreeListItemEventArgs(treeListItem) );
+            }
+
+        }
+
+        internal virtual void OnAfterExpand( TreeListItem treeListItem )
+        {
+            if ( this.AfterExpand != null )
+            {
+                this.AfterExpand( this, new TreeListItemEventArgs(treeListItem) );
+            }
+        }
+
+        internal virtual void OnBeforeExpand( TreeListItem treeListItem )
+        {
+            if ( this.BeforeExpand != null )
+            {
+                this.BeforeExpand( this, new TreeListItemEventArgs(treeListItem) );
+            }
+        }
+
         private int FindIndexForInsertion( int index, TreeListItem treeListItem )
         {
             if ( index == 0 )
@@ -194,5 +233,7 @@ namespace Ankh.Tools
 
         private TreeListItemCollection treeListItems;
 
+
+        
     }
 }
