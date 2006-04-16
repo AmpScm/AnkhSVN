@@ -16,6 +16,7 @@ namespace ErrorReport.GUI
     class MainFormUCP : INotifyPropertyChanged
     {
         public event EventHandler SelectedReportChanged;
+        public event EventHandler SelectedMailItemChanged;
         public event EventHandler IsReplyingChanged;
         public event EventHandler ReplyTextChanged;
         public event EventHandler TemplatesWanted;
@@ -58,6 +59,19 @@ namespace ErrorReport.GUI
                 if ( SelectedReportChanged != null )
                 {
                     SelectedReportChanged( this, EventArgs.Empty );
+                }
+            }
+        }
+
+        public IMailItem SelectedMailItem
+        {
+            get { return selectedMailItem; }
+            set
+            {
+                selectedMailItem = value;
+                if ( SelectedMailItemChanged != null )
+                {
+                    SelectedMailItemChanged( this, EventArgs.Empty );
                 }
             }
         }
@@ -200,6 +214,11 @@ namespace ErrorReport.GUI
             this.OnNotifyPropertyChanged( "UnansweredCount" );
         }
 
+        public IEnumerable<IMailItem> GetReplies( IErrorReport report )
+        {
+            return this.storage.GetReplies( report );
+        }
+
         public void NextReport()
         {
             if ( this.CanGoNext )
@@ -330,7 +349,7 @@ namespace ErrorReport.GUI
         private IProgressCallback callback;
         private ISynchronizeInvoke invoker;
 
-       
+        private IMailItem selectedMailItem;
         private IEnumerable<IReplyTemplate> templates;
         private IErrorReport selectedReport;
         private bool isReplying = false;

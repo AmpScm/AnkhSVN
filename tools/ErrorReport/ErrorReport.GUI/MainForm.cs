@@ -78,9 +78,14 @@ namespace ErrorReport.GUI
                     this.reportsListView.EnsureVisible( this.ucp.SelectedIndex );
                     selecting = false;
                 }
-                if ( this.ucp.SelectedReport != null )
+                
+            };
+
+            this.ucp.SelectedMailItemChanged += delegate
+            {
+                if ( this.ucp.SelectedMailItem != null )
                 {
-                    this.messageDetailRichTextBox.Text = this.ucp.SelectedReport.Body;
+                    this.messageDetailRichTextBox.Text = this.ucp.SelectedMailItem.Body;
                 }
             };
 
@@ -92,10 +97,42 @@ namespace ErrorReport.GUI
                     if ( this.reportsListView.SelectedItems.Count > 0 )
                     {
                         this.ucp.SelectedReport = this.reportsListView.SelectedItems[ 0 ].Tag as IErrorReport;
+                        this.ucp.SelectedMailItem = this.reportsListView.SelectedItems[ 0 ].Tag as IMailItem;
                     }
                     selecting = false;
                 }
             };
+
+            this.reportsListView.BeforeExpand += delegate( object sender, TreeListItemEventArgs args )
+            {
+                if ( args.Item.Children.Count > 0 && args.Item.Children[0].Tag == Dummy )
+                {
+                    this.LoadChildren( args.Item );
+                }
+            };
+        }
+
+        private void LoadChildren( TreeListItem treeListItem )
+        {
+            IErrorReport report = treeListItem.Tag as IErrorReport;
+            if ( report != null )
+            {
+                treeListItem.Children.RemoveAt( 0 );
+
+                IEnumerable<IMailItem> items = this.ucp.GetReplies( report );
+                this.reportsListView.BeginUpdate();
+                foreach ( IMailItem item in items )
+                {
+                    TreeListItem child = new TreeListItem( new string[]
+                    {
+                        item.ReceivedTime.ToString(),
+                        String.Format("{0} <{1}>", item.SenderName, item.SenderEmail),
+                    } );
+                    child.Tag = item;
+                    treeListItem.Children.Add( child );
+                }
+                this.reportsListView.EndUpdate();
+            }
         }
 
         private void DataBind()
@@ -191,7 +228,7 @@ namespace ErrorReport.GUI
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-
+            this.progressCallback.Info( "Loading reports into list view." );
             this.reportsListView.BeginUpdate();
             foreach ( IErrorReport report in ucp.Reports )
             {
@@ -204,6 +241,13 @@ namespace ErrorReport.GUI
                 } );
                 item.Tag = report;
                 this.FormatListItem( item, report );
+
+                if ( report.RepliedTo )
+                {
+                    TreeListItem child = new TreeListItem( "Dummy" );
+                    child.Tag = Dummy;
+                    item.Children.Add( child );
+                }
                 this.reportsListView.Items.Add( item );
             }
             this.reportsListView.EndUpdate();
@@ -234,5 +278,6 @@ namespace ErrorReport.GUI
         private TemplateList templateList;
         private IDictionary<Keys, ICommand> keyCommandMap = new Dictionary<Keys, ICommand>();
         private MenuManager menuManager = new MenuManager();
+        private static readonly object Dummy = new object();
     }
 }

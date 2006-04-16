@@ -97,9 +97,6 @@ namespace ErrorReportExtractor
             
         }
 
-        private IProgressCallback callback;
-
-        #region IStorage Members
 
 
         public void AnswerReport( IErrorReport report, string replyText )
@@ -138,11 +135,27 @@ namespace ErrorReportExtractor
             }
         }
 
-        #endregion
+        public IEnumerable<IMailItem> GetReplies( IErrorReport report )
+        {
+            ErrorRepliesTableAdapter adapter = new ErrorRepliesTableAdapter();
+            ErrorReportsDataSet.ErrorRepliesDataTable table = adapter.GetRepliesToReport( report.ID );
+            this.callback.Verbose( "Retrieving replies to message with ID {0}", report.ID );
+            foreach ( ErrorReportsDataSet.ErrorRepliesRow row in table )
+            {
+                MailItem item = new MailItem( "", "", row.ReplyText, row.SenderEmail, row.SenderName, row.ReplyTime );
+                item.ReceiverEmail = row.RecipientEmail;
+                item.ReceiverName = row.RecipientName;
+
+                yield return item;
+            }
+        }
+
 
         public void SetProgressCallback( IProgressCallback callback )
         {
             this.callback = callback;
         }
+        private IProgressCallback callback;
+
     }
 }

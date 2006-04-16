@@ -27,7 +27,11 @@ namespace ErrorReportExtractor {
         
         private StackTraceLinesDataTable tableStackTraceLines;
         
+        private ErrorRepliesDataTable tableErrorReplies;
+        
         private System.Data.DataRelation relationFK_StackTraceLines_ErrorReportItems;
+        
+        private System.Data.DataRelation relationFK_ErrorReplies_ErrorReportItems;
         
         private System.Data.SchemaSerializationMode _schemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
         
@@ -60,6 +64,9 @@ namespace ErrorReportExtractor {
                 }
                 if ((ds.Tables["StackTraceLines"] != null)) {
                     base.Tables.Add(new StackTraceLinesDataTable(ds.Tables["StackTraceLines"]));
+                }
+                if ((ds.Tables["ErrorReplies"] != null)) {
+                    base.Tables.Add(new ErrorRepliesDataTable(ds.Tables["ErrorReplies"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -94,6 +101,15 @@ namespace ErrorReportExtractor {
         public StackTraceLinesDataTable StackTraceLines {
             get {
                 return this.tableStackTraceLines;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Browsable(false)]
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public ErrorRepliesDataTable ErrorReplies {
+            get {
+                return this.tableErrorReplies;
             }
         }
         
@@ -162,6 +178,9 @@ namespace ErrorReportExtractor {
                 if ((ds.Tables["StackTraceLines"] != null)) {
                     base.Tables.Add(new StackTraceLinesDataTable(ds.Tables["StackTraceLines"]));
                 }
+                if ((ds.Tables["ErrorReplies"] != null)) {
+                    base.Tables.Add(new ErrorRepliesDataTable(ds.Tables["ErrorReplies"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -204,7 +223,14 @@ namespace ErrorReportExtractor {
                     this.tableStackTraceLines.InitVars();
                 }
             }
+            this.tableErrorReplies = ((ErrorRepliesDataTable)(base.Tables["ErrorReplies"]));
+            if ((initTable == true)) {
+                if ((this.tableErrorReplies != null)) {
+                    this.tableErrorReplies.InitVars();
+                }
+            }
             this.relationFK_StackTraceLines_ErrorReportItems = this.Relations["FK_StackTraceLines_ErrorReportItems"];
+            this.relationFK_ErrorReplies_ErrorReportItems = this.Relations["FK_ErrorReplies_ErrorReportItems"];
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -218,10 +244,16 @@ namespace ErrorReportExtractor {
             base.Tables.Add(this.tableErrorReportItems);
             this.tableStackTraceLines = new StackTraceLinesDataTable();
             base.Tables.Add(this.tableStackTraceLines);
+            this.tableErrorReplies = new ErrorRepliesDataTable();
+            base.Tables.Add(this.tableErrorReplies);
             this.relationFK_StackTraceLines_ErrorReportItems = new System.Data.DataRelation("FK_StackTraceLines_ErrorReportItems", new System.Data.DataColumn[] {
                         this.tableErrorReportItems.IDColumn}, new System.Data.DataColumn[] {
                         this.tableStackTraceLines.ErrorReportItemColumn}, false);
             this.Relations.Add(this.relationFK_StackTraceLines_ErrorReportItems);
+            this.relationFK_ErrorReplies_ErrorReportItems = new System.Data.DataRelation("FK_ErrorReplies_ErrorReportItems", new System.Data.DataColumn[] {
+                        this.tableErrorReportItems.IDColumn}, new System.Data.DataColumn[] {
+                        this.tableErrorReplies.ErrorReportIDColumn}, false);
+            this.Relations.Add(this.relationFK_ErrorReplies_ErrorReportItems);
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -231,6 +263,11 @@ namespace ErrorReportExtractor {
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private bool ShouldSerializeStackTraceLines() {
+            return false;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private bool ShouldSerializeErrorReplies() {
             return false;
         }
         
@@ -257,6 +294,8 @@ namespace ErrorReportExtractor {
         public delegate void ErrorReportItemsRowChangeEventHandler(object sender, ErrorReportItemsRowChangeEvent e);
         
         public delegate void StackTraceLinesRowChangeEventHandler(object sender, StackTraceLinesRowChangeEvent e);
+        
+        public delegate void ErrorRepliesRowChangeEventHandler(object sender, ErrorRepliesRowChangeEvent e);
         
         [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
         [System.Serializable()]
@@ -900,6 +939,338 @@ namespace ErrorReportExtractor {
         }
         
         [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        [System.Serializable()]
+        [System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class ErrorRepliesDataTable : System.Data.DataTable, System.Collections.IEnumerable {
+            
+            private System.Data.DataColumn columnReplyID;
+            
+            private System.Data.DataColumn columnReplyText;
+            
+            private System.Data.DataColumn columnSenderName;
+            
+            private System.Data.DataColumn columnSenderEmail;
+            
+            private System.Data.DataColumn columnRecipientName;
+            
+            private System.Data.DataColumn columnRecipientEmail;
+            
+            private System.Data.DataColumn columnErrorReportID;
+            
+            private System.Data.DataColumn columnParentReply;
+            
+            private System.Data.DataColumn columnReplyTime;
+            
+            private System.Data.DataColumn columnMailID;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorRepliesDataTable() {
+                this.TableName = "ErrorReplies";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal ErrorRepliesDataTable(System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected ErrorRepliesDataTable(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn ReplyIDColumn {
+                get {
+                    return this.columnReplyID;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn ReplyTextColumn {
+                get {
+                    return this.columnReplyText;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn SenderNameColumn {
+                get {
+                    return this.columnSenderName;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn SenderEmailColumn {
+                get {
+                    return this.columnSenderEmail;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn RecipientNameColumn {
+                get {
+                    return this.columnRecipientName;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn RecipientEmailColumn {
+                get {
+                    return this.columnRecipientEmail;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn ErrorReportIDColumn {
+                get {
+                    return this.columnErrorReportID;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn ParentReplyColumn {
+                get {
+                    return this.columnParentReply;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn ReplyTimeColumn {
+                get {
+                    return this.columnReplyTime;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn MailIDColumn {
+                get {
+                    return this.columnMailID;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorRepliesRow this[int index] {
+                get {
+                    return ((ErrorRepliesRow)(this.Rows[index]));
+                }
+            }
+            
+            public event ErrorRepliesRowChangeEventHandler ErrorRepliesRowChanging;
+            
+            public event ErrorRepliesRowChangeEventHandler ErrorRepliesRowChanged;
+            
+            public event ErrorRepliesRowChangeEventHandler ErrorRepliesRowDeleting;
+            
+            public event ErrorRepliesRowChangeEventHandler ErrorRepliesRowDeleted;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void AddErrorRepliesRow(ErrorRepliesRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorRepliesRow AddErrorRepliesRow(string ReplyText, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, ErrorReportItemsRow parentErrorReportItemsRowByFK_ErrorReplies_ErrorReportItems, int ParentReply, System.DateTime ReplyTime, string MailID) {
+                ErrorRepliesRow rowErrorRepliesRow = ((ErrorRepliesRow)(this.NewRow()));
+                rowErrorRepliesRow.ItemArray = new object[] {
+                        null,
+                        ReplyText,
+                        SenderName,
+                        SenderEmail,
+                        RecipientName,
+                        RecipientEmail,
+                        parentErrorReportItemsRowByFK_ErrorReplies_ErrorReportItems[0],
+                        ParentReply,
+                        ReplyTime,
+                        MailID};
+                this.Rows.Add(rowErrorRepliesRow);
+                return rowErrorRepliesRow;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorRepliesRow FindByReplyID(int ReplyID) {
+                return ((ErrorRepliesRow)(this.Rows.Find(new object[] {
+                            ReplyID})));
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public virtual System.Collections.IEnumerator GetEnumerator() {
+                return this.Rows.GetEnumerator();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public override System.Data.DataTable Clone() {
+                ErrorRepliesDataTable cln = ((ErrorRepliesDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override System.Data.DataTable CreateInstance() {
+                return new ErrorRepliesDataTable();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal void InitVars() {
+                this.columnReplyID = base.Columns["ReplyID"];
+                this.columnReplyText = base.Columns["ReplyText"];
+                this.columnSenderName = base.Columns["SenderName"];
+                this.columnSenderEmail = base.Columns["SenderEmail"];
+                this.columnRecipientName = base.Columns["RecipientName"];
+                this.columnRecipientEmail = base.Columns["RecipientEmail"];
+                this.columnErrorReportID = base.Columns["ErrorReportID"];
+                this.columnParentReply = base.Columns["ParentReply"];
+                this.columnReplyTime = base.Columns["ReplyTime"];
+                this.columnMailID = base.Columns["MailID"];
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            private void InitClass() {
+                this.columnReplyID = new System.Data.DataColumn("ReplyID", typeof(int), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnReplyID);
+                this.columnReplyText = new System.Data.DataColumn("ReplyText", typeof(string), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnReplyText);
+                this.columnSenderName = new System.Data.DataColumn("SenderName", typeof(string), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSenderName);
+                this.columnSenderEmail = new System.Data.DataColumn("SenderEmail", typeof(string), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSenderEmail);
+                this.columnRecipientName = new System.Data.DataColumn("RecipientName", typeof(string), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnRecipientName);
+                this.columnRecipientEmail = new System.Data.DataColumn("RecipientEmail", typeof(string), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnRecipientEmail);
+                this.columnErrorReportID = new System.Data.DataColumn("ErrorReportID", typeof(string), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnErrorReportID);
+                this.columnParentReply = new System.Data.DataColumn("ParentReply", typeof(int), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnParentReply);
+                this.columnReplyTime = new System.Data.DataColumn("ReplyTime", typeof(System.DateTime), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnReplyTime);
+                this.columnMailID = new System.Data.DataColumn("MailID", typeof(string), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMailID);
+                this.Constraints.Add(new System.Data.UniqueConstraint("Constraint1", new System.Data.DataColumn[] {
+                                this.columnReplyID}, true));
+                this.columnReplyID.AutoIncrement = true;
+                this.columnReplyID.AllowDBNull = false;
+                this.columnReplyID.ReadOnly = true;
+                this.columnReplyID.Unique = true;
+                this.columnReplyText.AllowDBNull = false;
+                this.columnReplyText.MaxLength = 2147483647;
+                this.columnSenderName.MaxLength = 2147483647;
+                this.columnSenderEmail.AllowDBNull = false;
+                this.columnSenderEmail.MaxLength = 2147483647;
+                this.columnRecipientName.MaxLength = 2147483647;
+                this.columnRecipientEmail.AllowDBNull = false;
+                this.columnRecipientEmail.MaxLength = 2147483647;
+                this.columnErrorReportID.AllowDBNull = false;
+                this.columnErrorReportID.MaxLength = 250;
+                this.columnReplyTime.AllowDBNull = false;
+                this.columnMailID.MaxLength = 250;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorRepliesRow NewErrorRepliesRow() {
+                return ((ErrorRepliesRow)(this.NewRow()));
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override System.Data.DataRow NewRowFromBuilder(System.Data.DataRowBuilder builder) {
+                return new ErrorRepliesRow(builder);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override System.Type GetRowType() {
+                return typeof(ErrorRepliesRow);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowChanged(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.ErrorRepliesRowChanged != null)) {
+                    this.ErrorRepliesRowChanged(this, new ErrorRepliesRowChangeEvent(((ErrorRepliesRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowChanging(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.ErrorRepliesRowChanging != null)) {
+                    this.ErrorRepliesRowChanging(this, new ErrorRepliesRowChangeEvent(((ErrorRepliesRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowDeleted(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.ErrorRepliesRowDeleted != null)) {
+                    this.ErrorRepliesRowDeleted(this, new ErrorRepliesRowChangeEvent(((ErrorRepliesRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowDeleting(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.ErrorRepliesRowDeleting != null)) {
+                    this.ErrorRepliesRowDeleting(this, new ErrorRepliesRowChangeEvent(((ErrorRepliesRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void RemoveErrorRepliesRow(ErrorRepliesRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public static System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(System.Xml.Schema.XmlSchemaSet xs) {
+                System.Xml.Schema.XmlSchemaComplexType type = new System.Xml.Schema.XmlSchemaComplexType();
+                System.Xml.Schema.XmlSchemaSequence sequence = new System.Xml.Schema.XmlSchemaSequence();
+                ErrorReportsDataSet ds = new ErrorReportsDataSet();
+                xs.Add(ds.GetSchemaSerializable());
+                System.Xml.Schema.XmlSchemaAny any1 = new System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                System.Xml.Schema.XmlSchemaAny any2 = new System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                System.Xml.Schema.XmlSchemaAttribute attribute1 = new System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                System.Xml.Schema.XmlSchemaAttribute attribute2 = new System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "ErrorRepliesDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                return type;
+            }
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
         public partial class ErrorReportItemsRow : System.Data.DataRow {
             
             private ErrorReportItemsDataTable tableErrorReportItems;
@@ -1234,6 +1605,11 @@ namespace ErrorReportExtractor {
             public StackTraceLinesRow[] GetStackTraceLinesRows() {
                 return ((StackTraceLinesRow[])(base.GetChildRows(this.Table.ChildRelations["FK_StackTraceLines_ErrorReportItems"])));
             }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorRepliesRow[] GetErrorRepliesRows() {
+                return ((ErrorRepliesRow[])(base.GetChildRows(this.Table.ChildRelations["FK_ErrorReplies_ErrorReportItems"])));
+            }
         }
         
         [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
@@ -1379,6 +1755,188 @@ namespace ErrorReportExtractor {
         }
         
         [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        public partial class ErrorRepliesRow : System.Data.DataRow {
+            
+            private ErrorRepliesDataTable tableErrorReplies;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal ErrorRepliesRow(System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableErrorReplies = ((ErrorRepliesDataTable)(this.Table));
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public int ReplyID {
+                get {
+                    return ((int)(this[this.tableErrorReplies.ReplyIDColumn]));
+                }
+                set {
+                    this[this.tableErrorReplies.ReplyIDColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string ReplyText {
+                get {
+                    return ((string)(this[this.tableErrorReplies.ReplyTextColumn]));
+                }
+                set {
+                    this[this.tableErrorReplies.ReplyTextColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string SenderName {
+                get {
+                    try {
+                        return ((string)(this[this.tableErrorReplies.SenderNameColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'SenderName\' in table \'ErrorReplies\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableErrorReplies.SenderNameColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string SenderEmail {
+                get {
+                    return ((string)(this[this.tableErrorReplies.SenderEmailColumn]));
+                }
+                set {
+                    this[this.tableErrorReplies.SenderEmailColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string RecipientName {
+                get {
+                    try {
+                        return ((string)(this[this.tableErrorReplies.RecipientNameColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'RecipientName\' in table \'ErrorReplies\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableErrorReplies.RecipientNameColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string RecipientEmail {
+                get {
+                    return ((string)(this[this.tableErrorReplies.RecipientEmailColumn]));
+                }
+                set {
+                    this[this.tableErrorReplies.RecipientEmailColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string ErrorReportID {
+                get {
+                    return ((string)(this[this.tableErrorReplies.ErrorReportIDColumn]));
+                }
+                set {
+                    this[this.tableErrorReplies.ErrorReportIDColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public int ParentReply {
+                get {
+                    try {
+                        return ((int)(this[this.tableErrorReplies.ParentReplyColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'ParentReply\' in table \'ErrorReplies\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableErrorReplies.ParentReplyColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.DateTime ReplyTime {
+                get {
+                    return ((System.DateTime)(this[this.tableErrorReplies.ReplyTimeColumn]));
+                }
+                set {
+                    this[this.tableErrorReplies.ReplyTimeColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string MailID {
+                get {
+                    try {
+                        return ((string)(this[this.tableErrorReplies.MailIDColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'MailID\' in table \'ErrorReplies\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableErrorReplies.MailIDColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorReportItemsRow ErrorReportItemsRow {
+                get {
+                    return ((ErrorReportItemsRow)(this.GetParentRow(this.Table.ParentRelations["FK_ErrorReplies_ErrorReportItems"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_ErrorReplies_ErrorReportItems"]);
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsSenderNameNull() {
+                return this.IsNull(this.tableErrorReplies.SenderNameColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetSenderNameNull() {
+                this[this.tableErrorReplies.SenderNameColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsRecipientNameNull() {
+                return this.IsNull(this.tableErrorReplies.RecipientNameColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetRecipientNameNull() {
+                this[this.tableErrorReplies.RecipientNameColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsParentReplyNull() {
+                return this.IsNull(this.tableErrorReplies.ParentReplyColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetParentReplyNull() {
+                this[this.tableErrorReplies.ParentReplyColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsMailIDNull() {
+                return this.IsNull(this.tableErrorReplies.MailIDColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetMailIDNull() {
+                this[this.tableErrorReplies.MailIDColumn] = System.Convert.DBNull;
+            }
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
         public class ErrorReportItemsRowChangeEvent : System.EventArgs {
             
             private ErrorReportItemsRow eventRow;
@@ -1421,6 +1979,34 @@ namespace ErrorReportExtractor {
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public StackTraceLinesRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        public class ErrorRepliesRowChangeEvent : System.EventArgs {
+            
+            private ErrorRepliesRow eventRow;
+            
+            private System.Data.DataRowAction eventAction;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorRepliesRowChangeEvent(ErrorRepliesRow row, System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorRepliesRow Row {
                 get {
                     return this.eventRow;
                 }
@@ -1623,7 +2209,7 @@ SELECT ID, ReceivedTime, SubmitterEmail, SubmitterName, Body, Subject, Exception
             this._commandCollection[0].CommandType = System.Data.CommandType.Text;
             this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = @"SELECT ID, ReceivedTime, SubmitterEmail, SubmitterName, Body, Subject, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersion, 
+            this._commandCollection[1].CommandText = @"SELECT     ID, ReceivedTime, SubmitterEmail, SubmitterName, Body, Subject, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersion, 
                       PatchVersion, Revision, RepliedTo
 FROM         ErrorReportItems
 ORDER BY ReceivedTime";
@@ -2249,6 +2835,445 @@ ORDER BY ReceivedTime";
             finally {
                 if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
                     this.Adapter.InsertCommand.Connection.Close();
+                }
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.ComponentModel.ToolboxItem(true)]
+    [System.ComponentModel.DataObjectAttribute(true)]
+    [System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
+        ", Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+    public partial class ErrorRepliesTableAdapter : System.ComponentModel.Component {
+        
+        private System.Data.SqlClient.SqlDataAdapter _adapter;
+        
+        private System.Data.SqlClient.SqlConnection _connection;
+        
+        private System.Data.SqlClient.SqlCommand[] _commandCollection;
+        
+        private bool _clearBeforeFill;
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public ErrorRepliesTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private System.Data.SqlClient.SqlDataAdapter Adapter {
+            get {
+                if ((this._adapter == null)) {
+                    this.InitAdapter();
+                }
+                return this._adapter;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        internal System.Data.SqlClient.SqlConnection Connection {
+            get {
+                if ((this._connection == null)) {
+                    this.InitConnection();
+                }
+                return this._connection;
+            }
+            set {
+                this._connection = value;
+                if ((this.Adapter.InsertCommand != null)) {
+                    this.Adapter.InsertCommand.Connection = value;
+                }
+                if ((this.Adapter.DeleteCommand != null)) {
+                    this.Adapter.DeleteCommand.Connection = value;
+                }
+                if ((this.Adapter.UpdateCommand != null)) {
+                    this.Adapter.UpdateCommand.Connection = value;
+                }
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    if ((this.CommandCollection[i] != null)) {
+                        ((System.Data.SqlClient.SqlCommand)(this.CommandCollection[i])).Connection = value;
+                    }
+                }
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        protected System.Data.SqlClient.SqlCommand[] CommandCollection {
+            get {
+                if ((this._commandCollection == null)) {
+                    this.InitCommandCollection();
+                }
+                return this._commandCollection;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public bool ClearBeforeFill {
+            get {
+                return this._clearBeforeFill;
+            }
+            set {
+                this._clearBeforeFill = value;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitAdapter() {
+            this._adapter = new System.Data.SqlClient.SqlDataAdapter();
+            System.Data.Common.DataTableMapping tableMapping = new System.Data.Common.DataTableMapping();
+            tableMapping.SourceTable = "Table";
+            tableMapping.DataSetTable = "ErrorReplies";
+            tableMapping.ColumnMappings.Add("ReplyID", "ReplyID");
+            tableMapping.ColumnMappings.Add("ReplyText", "ReplyText");
+            tableMapping.ColumnMappings.Add("SenderName", "SenderName");
+            tableMapping.ColumnMappings.Add("SenderEmail", "SenderEmail");
+            tableMapping.ColumnMappings.Add("RecipientName", "RecipientName");
+            tableMapping.ColumnMappings.Add("RecipientEmail", "RecipientEmail");
+            tableMapping.ColumnMappings.Add("ErrorReportID", "ErrorReportID");
+            tableMapping.ColumnMappings.Add("ParentReply", "ParentReply");
+            tableMapping.ColumnMappings.Add("ReplyTime", "ReplyTime");
+            tableMapping.ColumnMappings.Add("MailID", "MailID");
+            this._adapter.TableMappings.Add(tableMapping);
+            this._adapter.DeleteCommand = new System.Data.SqlClient.SqlCommand();
+            this._adapter.DeleteCommand.Connection = this.Connection;
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [dbo].[ErrorReplies] WHERE (([ReplyID] = @Original_ReplyID) AND ([ErrorReportID] = @Original_ErrorReportID) AND ((@IsNull_ParentReply = 1 AND [ParentReply] IS NULL) OR ([ParentReply] = @Original_ParentReply)) AND ([ReplyTime] = @Original_ReplyTime) AND ((@IsNull_MailID = 1 AND [MailID] IS NULL) OR ([MailID] = @Original_MailID)))";
+            this._adapter.DeleteCommand.CommandType = System.Data.CommandType.Text;
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ReplyID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ReplyID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ErrorReportID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Original, true, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ReplyTime", System.Data.SqlDbType.DateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "ReplyTime", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_MailID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "MailID", System.Data.DataRowVersion.Original, true, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_MailID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "MailID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.InsertCommand = new System.Data.SqlClient.SqlCommand();
+            this._adapter.InsertCommand.Connection = this.Connection;
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[ErrorReplies] ([ReplyText], [SenderName], [SenderEmail], [RecipientName], [RecipientEmail], [ErrorReportID], [ParentReply], [ReplyTime], [MailID]) VALUES (@ReplyText, @SenderName, @SenderEmail, @RecipientName, @RecipientEmail, @ErrorReportID, @ParentReply, @ReplyTime, @MailID);
+SELECT ReplyID, ReplyText, SenderName, SenderEmail, RecipientName, RecipientEmail, ErrorReportID, ParentReply, ReplyTime, MailID FROM ErrorReplies WHERE (ReplyID = SCOPE_IDENTITY())";
+            this._adapter.InsertCommand.CommandType = System.Data.CommandType.Text;
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ReplyText", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ReplyText", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "SenderName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderEmail", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "SenderEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "RecipientName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientEmail", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "RecipientEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ErrorReportID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ReplyTime", System.Data.SqlDbType.DateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "ReplyTime", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@MailID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "MailID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand = new System.Data.SqlClient.SqlCommand();
+            this._adapter.UpdateCommand.Connection = this.Connection;
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[ErrorReplies] SET [ReplyText] = @ReplyText, [SenderName] = @SenderName, [SenderEmail] = @SenderEmail, [RecipientName] = @RecipientName, [RecipientEmail] = @RecipientEmail, [ErrorReportID] = @ErrorReportID, [ParentReply] = @ParentReply, [ReplyTime] = @ReplyTime, [MailID] = @MailID WHERE (([ReplyID] = @Original_ReplyID) AND ([ErrorReportID] = @Original_ErrorReportID) AND ((@IsNull_ParentReply = 1 AND [ParentReply] IS NULL) OR ([ParentReply] = @Original_ParentReply)) AND ([ReplyTime] = @Original_ReplyTime) AND ((@IsNull_MailID = 1 AND [MailID] IS NULL) OR ([MailID] = @Original_MailID)));
+SELECT ReplyID, ReplyText, SenderName, SenderEmail, RecipientName, RecipientEmail, ErrorReportID, ParentReply, ReplyTime, MailID FROM ErrorReplies WHERE (ReplyID = @ReplyID)";
+            this._adapter.UpdateCommand.CommandType = System.Data.CommandType.Text;
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ReplyText", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ReplyText", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "SenderName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderEmail", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "SenderEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "RecipientName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientEmail", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "RecipientEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ErrorReportID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ReplyTime", System.Data.SqlDbType.DateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "ReplyTime", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@MailID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "MailID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ReplyID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ReplyID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ErrorReportID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Original, true, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ReplyTime", System.Data.SqlDbType.DateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "ReplyTime", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_MailID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "MailID", System.Data.DataRowVersion.Original, true, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_MailID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "MailID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ReplyID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "ReplyID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitConnection() {
+            this._connection = new System.Data.SqlClient.SqlConnection();
+            this._connection.ConnectionString = global::ErrorReportExtractor.Properties.Settings.Default.ErrorReportsConnectionString;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitCommandCollection() {
+            this._commandCollection = new System.Data.SqlClient.SqlCommand[2];
+            this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[0].Connection = this.Connection;
+            this._commandCollection[0].CommandText = "SELECT ReplyID, ReplyText, SenderName, SenderEmail, RecipientName, RecipientEmail" +
+                ", ErrorReportID, ParentReply, ReplyTime, MailID FROM dbo.ErrorReplies";
+            this._commandCollection[0].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "SELECT ReplyID, ReplyText, SenderName, SenderEmail, RecipientName, RecipientEmail" +
+                ", ErrorReportID, ParentReply, ReplyTime, MailID FROM dbo.ErrorReplies WHERE Erro" +
+                "rReportID = @ErrorReportID";
+            this._commandCollection[1].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new System.Data.SqlClient.SqlParameter("@ErrorReportID", System.Data.SqlDbType.NVarChar, 250, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Fill, true)]
+        public virtual int Fill(ErrorReportsDataSet.ErrorRepliesDataTable dataTable) {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, true)]
+        public virtual ErrorReportsDataSet.ErrorRepliesDataTable GetData() {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            ErrorReportsDataSet.ErrorRepliesDataTable dataTable = new ErrorReportsDataSet.ErrorRepliesDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual ErrorReportsDataSet.ErrorRepliesDataTable GetRepliesToReport(string ErrorReportID) {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            if ((ErrorReportID == null)) {
+                throw new System.ArgumentNullException("ErrorReportID");
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[0].Value = ((string)(ErrorReportID));
+            }
+            ErrorReportsDataSet.ErrorRepliesDataTable dataTable = new ErrorReportsDataSet.ErrorRepliesDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(ErrorReportsDataSet.ErrorRepliesDataTable dataTable) {
+            return this.Adapter.Update(dataTable);
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(ErrorReportsDataSet dataSet) {
+            return this.Adapter.Update(dataSet, "ErrorReplies");
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(System.Data.DataRow dataRow) {
+            return this.Adapter.Update(new System.Data.DataRow[] {
+                        dataRow});
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(System.Data.DataRow[] dataRows) {
+            return this.Adapter.Update(dataRows);
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Delete, true)]
+        public virtual int Delete(int Original_ReplyID, string Original_ErrorReportID, System.Nullable<int> Original_ParentReply, System.DateTime Original_ReplyTime, string Original_MailID) {
+            this.Adapter.DeleteCommand.Parameters[0].Value = ((int)(Original_ReplyID));
+            if ((Original_ErrorReportID == null)) {
+                throw new System.ArgumentNullException("Original_ErrorReportID");
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[1].Value = ((string)(Original_ErrorReportID));
+            }
+            if ((Original_ParentReply.HasValue == true)) {
+                this.Adapter.DeleteCommand.Parameters[2].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[3].Value = ((int)(Original_ParentReply.Value));
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[2].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[3].Value = System.DBNull.Value;
+            }
+            this.Adapter.DeleteCommand.Parameters[4].Value = ((System.DateTime)(Original_ReplyTime));
+            if ((Original_MailID == null)) {
+                this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[6].Value = System.DBNull.Value;
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[6].Value = ((string)(Original_MailID));
+            }
+            System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
+            if (((this.Adapter.DeleteCommand.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                this.Adapter.DeleteCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.DeleteCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    this.Adapter.DeleteCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Insert, true)]
+        public virtual int Insert(string ReplyText, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, string ErrorReportID, System.Nullable<int> ParentReply, System.DateTime ReplyTime, string MailID) {
+            if ((ReplyText == null)) {
+                throw new System.ArgumentNullException("ReplyText");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[0].Value = ((string)(ReplyText));
+            }
+            if ((SenderName == null)) {
+                this.Adapter.InsertCommand.Parameters[1].Value = System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(SenderName));
+            }
+            if ((SenderEmail == null)) {
+                throw new System.ArgumentNullException("SenderEmail");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(SenderEmail));
+            }
+            if ((RecipientName == null)) {
+                this.Adapter.InsertCommand.Parameters[3].Value = System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(RecipientName));
+            }
+            if ((RecipientEmail == null)) {
+                throw new System.ArgumentNullException("RecipientEmail");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(RecipientEmail));
+            }
+            if ((ErrorReportID == null)) {
+                throw new System.ArgumentNullException("ErrorReportID");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(ErrorReportID));
+            }
+            if ((ParentReply.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[6].Value = ((int)(ParentReply.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[6].Value = System.DBNull.Value;
+            }
+            this.Adapter.InsertCommand.Parameters[7].Value = ((System.DateTime)(ReplyTime));
+            if ((MailID == null)) {
+                this.Adapter.InsertCommand.Parameters[8].Value = System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[8].Value = ((string)(MailID));
+            }
+            System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
+            if (((this.Adapter.InsertCommand.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                this.Adapter.InsertCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.InsertCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    this.Adapter.InsertCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Update, true)]
+        public virtual int Update(string ReplyText, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, string ErrorReportID, System.Nullable<int> ParentReply, System.DateTime ReplyTime, string MailID, int Original_ReplyID, string Original_ErrorReportID, System.Nullable<int> Original_ParentReply, System.DateTime Original_ReplyTime, string Original_MailID, int ReplyID) {
+            if ((ReplyText == null)) {
+                throw new System.ArgumentNullException("ReplyText");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(ReplyText));
+            }
+            if ((SenderName == null)) {
+                this.Adapter.UpdateCommand.Parameters[1].Value = System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(SenderName));
+            }
+            if ((SenderEmail == null)) {
+                throw new System.ArgumentNullException("SenderEmail");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(SenderEmail));
+            }
+            if ((RecipientName == null)) {
+                this.Adapter.UpdateCommand.Parameters[3].Value = System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(RecipientName));
+            }
+            if ((RecipientEmail == null)) {
+                throw new System.ArgumentNullException("RecipientEmail");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(RecipientEmail));
+            }
+            if ((ErrorReportID == null)) {
+                throw new System.ArgumentNullException("ErrorReportID");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(ErrorReportID));
+            }
+            if ((ParentReply.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[6].Value = ((int)(ParentReply.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[6].Value = System.DBNull.Value;
+            }
+            this.Adapter.UpdateCommand.Parameters[7].Value = ((System.DateTime)(ReplyTime));
+            if ((MailID == null)) {
+                this.Adapter.UpdateCommand.Parameters[8].Value = System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(MailID));
+            }
+            this.Adapter.UpdateCommand.Parameters[9].Value = ((int)(Original_ReplyID));
+            if ((Original_ErrorReportID == null)) {
+                throw new System.ArgumentNullException("Original_ErrorReportID");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[10].Value = ((string)(Original_ErrorReportID));
+            }
+            if ((Original_ParentReply.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[11].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[12].Value = ((int)(Original_ParentReply.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[11].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[12].Value = System.DBNull.Value;
+            }
+            this.Adapter.UpdateCommand.Parameters[13].Value = ((System.DateTime)(Original_ReplyTime));
+            if ((Original_MailID == null)) {
+                this.Adapter.UpdateCommand.Parameters[14].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[15].Value = System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[14].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[15].Value = ((string)(Original_MailID));
+            }
+            this.Adapter.UpdateCommand.Parameters[16].Value = ((int)(ReplyID));
+            System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
+            if (((this.Adapter.UpdateCommand.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                this.Adapter.UpdateCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.UpdateCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    this.Adapter.UpdateCommand.Connection.Close();
                 }
             }
         }
