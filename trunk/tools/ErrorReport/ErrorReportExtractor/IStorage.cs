@@ -12,5 +12,7 @@ namespace ErrorReportExtractor
         void AnswerReport( IErrorReport iErrorReport, string replyText );
 
         void StorePotentialReplies( IEnumerable<IMailItem> items );
+
+        IEnumerable<IMailItem> GetReplies( IErrorReport report );
     }
 }
