@@ -10,10 +10,10 @@ namespace Ankh.Tools
     {
         public TreeListItem( string text ) : base(text)
         {
-            this.children.ItemInserted += new TreeListItemsChangedEventHandler( children_Changed );
-            this.children.ItemRemoved += new TreeListItemsChangedEventHandler( children_Changed );
+            SetUpItemEvents();
         }
 
+        
         public TreeListItem( string[] items )
         {
             if ( items.Length == 0 )
@@ -26,6 +26,14 @@ namespace Ankh.Tools
             {
                 this.SubItems.Add( items[ i ] );
             }
+
+            SetUpItemEvents();
+        }
+
+        private void SetUpItemEvents()
+        {
+            this.children.ItemInserted += new TreeListItemsChangedEventHandler( children_Changed );
+            this.children.ItemRemoved += new TreeListItemsChangedEventHandler( children_Changed );
         }
 
         
@@ -62,11 +70,15 @@ namespace Ankh.Tools
                 {
                     if ( value )
                     {
+                        this.TreeList.OnBeforeExpand( this );
                         this.TreeList.ExpandItem( this );
+                        this.TreeList.OnAfterExpand( this );
                     }
                     else
                     {
+                        this.TreeList.OnBeforeCollapse( this );
                         this.TreeList.CollapseItem( this );
+                        this.TreeList.OnAfterCollapse( this );
                     }
 
                 }
