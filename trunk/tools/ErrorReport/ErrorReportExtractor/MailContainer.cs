@@ -89,7 +89,7 @@ namespace ErrorReportExtractor
             Message mapiMessage = this.MapiSession.GetMessage( outlookItem.EntryID, folder.StoreID ) as Message;
 
             MapiFields fields = new MapiFields( mapiMessage.Fields as Fields );
-            mailItem.ID = fields.AsString( CdoPropTags.CdoPR_INTERNET_MESSAGE_ID );
+            mailItem.InternetMailID = fields.AsString( CdoPropTags.CdoPR_INTERNET_MESSAGE_ID );
             mailItem.SenderEmail = fields.AsString( CdoPropTags.CdoPR_SENDER_EMAIL_ADDRESS );
             mailItem.SenderName = fields.AsString( CdoPropTags.CdoPR_SENDER_NAME );
             if ( outlookItem.Recipients.Count > 0 )

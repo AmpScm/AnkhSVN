@@ -11,5 +11,6 @@ namespace ErrorReportExtractor
         string DteVersion { get; }
         IStackTrace StackTrace { get; }
         bool RepliedTo { get; set; }
+        bool HasReplies { get; set; }
     }
 }

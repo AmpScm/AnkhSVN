@@ -26,8 +26,8 @@ namespace ErrorReportExtractor.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SHERILYN\\SQLEXPRESS;Initial Catalog=ErrorReports;Integrated Security=" +
-            "True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SHERILYN\\SQLEXPRESS;Initial Catalog=ErrorReports-test;Integrated Secu" +
+            "rity=True")]
         public string ErrorReportsConnectionString {
             get {
                 return ((string)(this["ErrorReportsConnectionString"]));

@@ -249,7 +249,7 @@ namespace ErrorReport.GUI
                 item.Tag = report;
                 this.FormatListItem( item, report );
 
-                if ( report.RepliedTo )
+                if ( report.HasReplies )
                 {
                     TreeListItem child = new TreeListItem( "Dummy" );
                     child.Tag = Dummy;

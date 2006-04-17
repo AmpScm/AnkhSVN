@@ -42,6 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ErrorReport.cs" />
+    <Compile Include="ErrorReportsDataSet-old.cs">
+      <DependentUpon>ErrorReportsDataSet-old.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorReportsDataSet-old.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorReportsDataSet-old.xsd</DependentUpon>
+    </Compile>
     <Compile Include="ErrorReportsDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -116,6 +124,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="ErrorReportsDataSet-old.xsc">
+      <DependentUpon>ErrorReportsDataSet-old.xsd</DependentUpon>
+    </None>
+    <None Include="ErrorReportsDataSet-old.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ErrorReportsDataSet-old.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ErrorReportsDataSet-old.xss">
+      <DependentUpon>ErrorReportsDataSet-old.xsd</DependentUpon>
+    </None>
     <None Include="ErrorReportsDataSet.xsc">
       <DependentUpon>ErrorReportsDataSet.xsd</DependentUpon>
     </None>
