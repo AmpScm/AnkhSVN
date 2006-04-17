@@ -7,7 +7,7 @@ namespace ErrorReportExtractor
 {
     public class ErrorReport : MailItem, IErrorReport
     {
-        public ErrorReport(string id, string subject, string body, string senderEmail, string senderName,  DateTime receivedTime)
+        public ErrorReport(int id, string subject, string body, string senderEmail, string senderName,  DateTime receivedTime)
             : base(id, subject, body, senderEmail, senderName, receivedTime)
         {
             this.ParseBody();
@@ -65,6 +65,12 @@ namespace ErrorReportExtractor
         public string ExceptionMessage
         {
             get { return ""; }
+        }
+
+        public bool HasReplies
+        {
+            get { return hasReplies; }
+            set { hasReplies = value; }
         }
 
         protected override void OnBodyChanged()
@@ -137,6 +143,9 @@ namespace ErrorReportExtractor
         private string dteVersion;
         private StackTrace stackTrace;
         private bool repliedTo;
+        private bool hasReplies;
+
+       
 
         #region IErrorReport Members
 

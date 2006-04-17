@@ -43,12 +43,12 @@ namespace ErrorReportExtractor
                     //trans = itemsAdapter.BeginTransaction(conn);
                     //linesAdapter.JoinTransaction(trans);
 
-                    int inserted = (int)
-                    itemsAdapter.ImportErrorItem(item.ID, item.ReceivedTime, item.SenderEmail, item.SenderName, item.Body, item.Subject,
+                    int insertedID = (int)
+                    itemsAdapter.ImportErrorItem(item.InternetMailID, item.ReceivedTime, item.SenderEmail, item.SenderName, item.Body, item.Subject,
                         item.ExceptionType, "", "", item.MajorVersion, item.MinorVersion, item.PatchVersion, 
                         item.Revision, item.RepliedTo);
 
-                    if (inserted == 0)
+                    if (insertedID == 0)
                     {
                         callback.Warning("Item with id {0} already exists in base", item.ID);
                         continue;
@@ -56,7 +56,9 @@ namespace ErrorReportExtractor
 
                     foreach (IStackTraceItem stItem in item.StackTrace)
                     {
-                        linesAdapter.Insert(item.ID, stItem.MethodName, stItem.Parameters, stItem.Filename, stItem.LineNumber, stItem.SequenceNumber);
+                        // TODO: Get rid of first arg here
+                        linesAdapter.Insert("", stItem.MethodName, stItem.Parameters, stItem.Filename, stItem.LineNumber, 
+                            stItem.SequenceNumber, insertedID);
                     }
 
                     //trans.Commit();
@@ -84,15 +86,18 @@ namespace ErrorReportExtractor
             //    "SELECT * FROM ErrorReportItems WHERE RepliedTo = 0 ORDER BY ReceivedTime ASC",
             //    Settings.Default.ErrorReportsConnectionString );
             //adapter.Fill( ds.ErrorReportItems );
+            ErrorReportsDataSet dataset = new ErrorReportsDataSet();
+
             ErrorReportItemsTableAdapter adapter = new ErrorReportItemsTableAdapter();
-            ErrorReportsDataSet.ErrorReportItemsDataTable table = adapter.GetAll();
+            ErrorReportsDataSet.ErrorReportItemsDataTable table = adapter.GetData();
             //ErrorReportItemsTableAdapter adapter = new ErrorReportItemsTableAdapter();
             this.callback.Info( "Got {0} error reports from the database.", table.Count );
             foreach ( ErrorReportsDataSet.ErrorReportItemsRow row in table)
             {
-                ErrorReport report = new ErrorReport( row.ID, row.Subject, row.Body, row.SubmitterEmail, row.SubmitterName,
-                    row.ReceivedTime );
-                report.RepliedTo = row.RepliedTo;
+                ErrorReport report = new ErrorReport( row.ID, "", row.Body, row.SenderEmail, row.SenderName,
+                    row.Time );
+                //report.RepliedTo = row.RepliedTo;
+                report.HasReplies = row.ReplyCount > 0;
                 yield return report;
             }
             
@@ -121,7 +126,7 @@ namespace ErrorReportExtractor
             QueriesTableAdapter adapter = new QueriesTableAdapter();
             foreach ( IMailItem item in items )
             {
-                int code = (int)adapter.InsertPotentialErrorReply( item.ID, item.ReceivedTime, item.SenderEmail, item.SenderName,
+                int code = (int)adapter.InsertPotentialErrorReply( item.InternetMailID, item.ReceivedTime, item.SenderEmail, item.SenderName,
                     item.ReceiverEmail, item.ReceiverName, item.Body, item.Subject, item.ReplyToID );
                 if ( code == 0 )
                 {
@@ -143,23 +148,28 @@ namespace ErrorReportExtractor
 
         public void GetReplies( IErrorReport report )
         {
-            ErrorRepliesTableAdapter adapter = new ErrorRepliesTableAdapter();
+            MailItemsTableAdapter adapter = new MailItemsTableAdapter();
             this.callback.Verbose( "Retrieving replies to message with ID {0}", report.ID );
-            ErrorReportsDataSet.ErrorRepliesDataTable table = adapter.GetRepliesToReport( report.ID );
+            ErrorReportsDataSet.MailItemsDataTable table = adapter.GetRepliesToReport( report.ID );
             this.FillReplies(report, table.Select("ParentReply IS NULL"));
         }
 
         private void FillReplies( IMailItem item, DataRow[] rows )
         {
-            foreach ( ErrorReportsDataSet.ErrorRepliesRow row in rows )
+            foreach ( ErrorReportsDataSet.MailItemsRow row in rows )
             {
-                MailItem reply = new MailItem( "", "", row.ReplyText, row.SenderEmail, row.SenderName, row.ReplyTime );
-                item.ReceiverEmail = row.RecipientEmail;
-                item.ReceiverName = row.RecipientName;
+                MailItem reply = new MailItem( row.ID, "", row.Body, row.SenderEmail, row.SenderName, row.Time );
+                reply.ReceiverEmail = row.RecipientEmail;
+                reply.ReceiverName = row.RecipientName;
+
+                if ( !row.IsMailIDNull() )
+                {
+                    reply.InternetMailID = row.MailID;
+                }
 
                 item.Replies.Add( reply );
 
-                FillReplies( reply, row.Table.Select( "ParentReply = " + row.ReplyID ));
+                FillReplies( reply, row.Table.Select( "ParentReply = " + row.ID));
             }
         }
 

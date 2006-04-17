@@ -6,7 +6,7 @@ namespace ErrorReportExtractor
 {
     public class MailItem : IMailItem
     {
-        public MailItem(string id, string subject, string body, string senderEmail, string senderName, DateTime receivedTime)
+        public MailItem(int id, string subject, string body, string senderEmail, string senderName, DateTime receivedTime)
         {
             this.id = id;
             this.subject = subject;
@@ -60,7 +60,7 @@ namespace ErrorReportExtractor
             set { receivedTime = value; }
         }
 
-        public string ID
+        public int ID
         {
             get { return id; }
             set { id = value; }
@@ -88,10 +88,19 @@ namespace ErrorReportExtractor
             get { return replies; }
         }
 
+
+        public string InternetMailID
+        {
+            get { return internetMailID; }
+            set { internetMailID = value; }
+        }
+
+        private string internetMailID;
+
         private string replyToID;
         private string receiverEmail;
         private string receiverName;
-        private string id;
+        private int id;
         private DateTime receivedTime;
         private string senderName;
         private string senderEmail;

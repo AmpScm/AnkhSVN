@@ -25,7 +25,7 @@ namespace ErrorReportExtractor
 
             message.Body = replyText;
 
-            message.Headers[ "In-reply-to" ] = report.ID;
+            message.Headers[ "In-reply-to" ] = report.InternetMailID;
             message.ReplyTo = new MailAddress(Settings.Default.ReplyToEmail);
 
             SmtpClient client = new SmtpClient(Settings.Default.MailServer);
