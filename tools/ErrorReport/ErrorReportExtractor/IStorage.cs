@@ -13,6 +13,6 @@ namespace ErrorReportExtractor
 
         void StorePotentialReplies( IEnumerable<IMailItem> items );
 
-        IEnumerable<IMailItem> GetReplies( IErrorReport report );
+        void GetReplies( IErrorReport report );
     }
 }

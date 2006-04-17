@@ -214,9 +214,9 @@ namespace ErrorReport.GUI
             this.OnNotifyPropertyChanged( "UnansweredCount" );
         }
 
-        public IEnumerable<IMailItem> GetReplies( IErrorReport report )
+        public void GetReplies( IErrorReport report )
         {
-            return this.storage.GetReplies( report );
+            this.storage.GetReplies( report );
         }
 
         public void NextReport()

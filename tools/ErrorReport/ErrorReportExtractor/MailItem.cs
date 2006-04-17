@@ -83,6 +83,11 @@ namespace ErrorReportExtractor
             set { receiverName = value; }
         }
 
+        public IList<IMailItem> Replies
+        {
+            get { return replies; }
+        }
+
         private string replyToID;
         private string receiverEmail;
         private string receiverName;
@@ -92,5 +97,8 @@ namespace ErrorReportExtractor
         private string senderEmail;
         private string body;
         private string subject;
+        private List<IMailItem> replies = new List<IMailItem>();
+
+       
     }
 }

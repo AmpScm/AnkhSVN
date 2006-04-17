@@ -33,6 +33,8 @@ namespace ErrorReportExtractor {
         
         private System.Data.DataRelation relationFK_ErrorReplies_ErrorReportItems;
         
+        private System.Data.DataRelation relationFK_ErrorReplies_ErrorReplies;
+        
         private System.Data.SchemaSerializationMode _schemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -231,6 +233,7 @@ namespace ErrorReportExtractor {
             }
             this.relationFK_StackTraceLines_ErrorReportItems = this.Relations["FK_StackTraceLines_ErrorReportItems"];
             this.relationFK_ErrorReplies_ErrorReportItems = this.Relations["FK_ErrorReplies_ErrorReportItems"];
+            this.relationFK_ErrorReplies_ErrorReplies = this.Relations["FK_ErrorReplies_ErrorReplies"];
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -254,6 +257,10 @@ namespace ErrorReportExtractor {
                         this.tableErrorReportItems.IDColumn}, new System.Data.DataColumn[] {
                         this.tableErrorReplies.ErrorReportIDColumn}, false);
             this.Relations.Add(this.relationFK_ErrorReplies_ErrorReportItems);
+            this.relationFK_ErrorReplies_ErrorReplies = new System.Data.DataRelation("FK_ErrorReplies_ErrorReplies", new System.Data.DataColumn[] {
+                        this.tableErrorReplies.ReplyIDColumn}, new System.Data.DataColumn[] {
+                        this.tableErrorReplies.ParentReplyColumn}, false);
+            this.Relations.Add(this.relationFK_ErrorReplies_ErrorReplies);
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1092,7 +1099,7 @@ namespace ErrorReportExtractor {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public ErrorRepliesRow AddErrorRepliesRow(string ReplyText, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, ErrorReportItemsRow parentErrorReportItemsRowByFK_ErrorReplies_ErrorReportItems, int ParentReply, System.DateTime ReplyTime, string MailID) {
+            public ErrorRepliesRow AddErrorRepliesRow(string ReplyText, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, ErrorReportItemsRow parentErrorReportItemsRowByFK_ErrorReplies_ErrorReportItems, ErrorRepliesRow parentErrorRepliesRowByFK_ErrorReplies_ErrorReplies, System.DateTime ReplyTime, string MailID) {
                 ErrorRepliesRow rowErrorRepliesRow = ((ErrorRepliesRow)(this.NewRow()));
                 rowErrorRepliesRow.ItemArray = new object[] {
                         null,
@@ -1102,7 +1109,7 @@ namespace ErrorReportExtractor {
                         RecipientName,
                         RecipientEmail,
                         parentErrorReportItemsRowByFK_ErrorReplies_ErrorReportItems[0],
-                        ParentReply,
+                        parentErrorRepliesRowByFK_ErrorReplies_ErrorReplies[0],
                         ReplyTime,
                         MailID};
                 this.Rows.Add(rowErrorRepliesRow);
@@ -1896,6 +1903,16 @@ namespace ErrorReportExtractor {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorRepliesRow ErrorRepliesRowParent {
+                get {
+                    return ((ErrorRepliesRow)(this.GetParentRow(this.Table.ParentRelations["FK_ErrorReplies_ErrorReplies"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_ErrorReplies_ErrorReplies"]);
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public bool IsSenderNameNull() {
                 return this.IsNull(this.tableErrorReplies.SenderNameColumn);
             }
@@ -1933,6 +1950,11 @@ namespace ErrorReportExtractor {
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public void SetMailIDNull() {
                 this[this.tableErrorReplies.MailIDColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorRepliesRow[] GetErrorRepliesRows() {
+                return ((ErrorRepliesRow[])(base.GetChildRows(this.Table.ChildRelations["FK_ErrorReplies_ErrorReplies"])));
             }
         }
         
@@ -3001,9 +3023,9 @@ SELECT ReplyID, ReplyText, SenderName, SenderEmail, RecipientName, RecipientEmai
             this._commandCollection[0].CommandType = System.Data.CommandType.Text;
             this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT ReplyID, ReplyText, SenderName, SenderEmail, RecipientName, RecipientEmail" +
-                ", ErrorReportID, ParentReply, ReplyTime, MailID FROM dbo.ErrorReplies WHERE Erro" +
-                "rReportID = @ErrorReportID";
+            this._commandCollection[1].CommandText = "SELECT ErrorReportID, MailID, ParentReply, RecipientEmail, RecipientName, ReplyID" +
+                ", ReplyText, ReplyTime, SenderEmail, SenderName FROM ErrorReplies WHERE (ErrorRe" +
+                "portID = @ErrorReportID)";
             this._commandCollection[1].CommandType = System.Data.CommandType.Text;
             this._commandCollection[1].Parameters.Add(new System.Data.SqlClient.SqlParameter("@ErrorReportID", System.Data.SqlDbType.NVarChar, 250, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
