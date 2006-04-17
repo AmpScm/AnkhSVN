@@ -15,5 +15,7 @@ namespace ErrorReportExtractor
         string ReceiverEmail { get; set; }
         string Subject { get; set; }
         string ReplyToID { get; set; }
+
+        IList<IMailItem> Replies { get; }
     }
 }

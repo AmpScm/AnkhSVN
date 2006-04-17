@@ -119,19 +119,26 @@ namespace ErrorReport.GUI
             {
                 treeListItem.Children.RemoveAt( 0 );
 
-                IEnumerable<IMailItem> items = this.ucp.GetReplies( report );
+                this.ucp.GetReplies( report );
                 this.reportsListView.BeginUpdate();
-                foreach ( IMailItem item in items )
-                {
-                    TreeListItem child = new TreeListItem( new string[]
-                    {
-                        item.ReceivedTime.ToString(),
-                        String.Format("{0} <{1}>", item.SenderName, item.SenderEmail),
-                    } );
-                    child.Tag = item;
-                    treeListItem.Children.Add( child );
-                }
+                AddRepliesToTreeList( report.Replies, treeListItem );
                 this.reportsListView.EndUpdate();
+            }
+        }
+
+        private static void AddRepliesToTreeList( IEnumerable<IMailItem> replies, TreeListItem treeListItem )
+        {
+            foreach ( IMailItem reply in replies )
+            {
+                TreeListItem child = new TreeListItem( new string[]
+                    {
+                        reply.ReceivedTime.ToString(),
+                        String.Format("{0} <{1}>", reply.SenderName, reply.SenderEmail),
+                    } );
+                child.Tag = reply;
+                treeListItem.Children.Add( child );
+
+                AddRepliesToTreeList( reply.Replies, child );
             }
         }
 

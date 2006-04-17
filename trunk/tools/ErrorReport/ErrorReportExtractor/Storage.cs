@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Transactions;
 using ErrorReportExtractor.Properties;
+using System.Data;
 
 namespace ErrorReportExtractor
 {
@@ -140,18 +141,25 @@ namespace ErrorReportExtractor
             }
         }
 
-        public IEnumerable<IMailItem> GetReplies( IErrorReport report )
+        public void GetReplies( IErrorReport report )
         {
             ErrorRepliesTableAdapter adapter = new ErrorRepliesTableAdapter();
-            ErrorReportsDataSet.ErrorRepliesDataTable table = adapter.GetRepliesToReport( report.ID );
             this.callback.Verbose( "Retrieving replies to message with ID {0}", report.ID );
-            foreach ( ErrorReportsDataSet.ErrorRepliesRow row in table )
+            ErrorReportsDataSet.ErrorRepliesDataTable table = adapter.GetRepliesToReport( report.ID );
+            this.FillReplies(report, table.Select("ParentReply IS NULL"));
+        }
+
+        private void FillReplies( IMailItem item, DataRow[] rows )
+        {
+            foreach ( ErrorReportsDataSet.ErrorRepliesRow row in rows )
             {
-                MailItem item = new MailItem( "", "", row.ReplyText, row.SenderEmail, row.SenderName, row.ReplyTime );
+                MailItem reply = new MailItem( "", "", row.ReplyText, row.SenderEmail, row.SenderName, row.ReplyTime );
                 item.ReceiverEmail = row.RecipientEmail;
                 item.ReceiverName = row.RecipientName;
 
-                yield return item;
+                item.Replies.Add( reply );
+
+                FillReplies( reply, row.Table.Select( "ParentReply = " + row.ReplyID ));
             }
         }
 
