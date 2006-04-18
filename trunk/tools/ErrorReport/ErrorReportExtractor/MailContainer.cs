@@ -20,12 +20,12 @@ namespace ErrorReportExtractor
 
         
 
-        public IEnumerable<IErrorReport> GetAllItems(string folderPath, int? limit)
+        public IEnumerable<IErrorReport> GetItems(string folderPath, DateTime? itemsAfter)
         {
             MAPIFolder folder = this.GetFolder( folderPath );
-            if ( limit != null)
+            if ( itemsAfter != null)
             {
-                this.callback.Verbose("Retrieving {0} items from Outlook folder {1}", limit, folder.FullFolderPath);
+                this.callback.Verbose("Retrieving items after {0} from Outlook folder {1}", itemsAfter, folder.FullFolderPath);
             }
             else
             {
@@ -34,13 +34,19 @@ namespace ErrorReportExtractor
 
             for (int i = 1; i < folder.Items.Count; i++)
             {
-                if (limit != null && i >= limit)
-                {
-                    this.callback.Verbose("Reached limit of {0} items", limit);
-                    break;
-                }
+                
                 ErrorReport report = new ErrorReport();
                 Outlook.MailItem outlookItem = folder.Items.Item(i) as Outlook.MailItem;
+                if ( outlookItem == null)
+                {
+                    this.callback.Verbose("Item {0} not a mail item.", i);
+                    continue;
+                }
+                if (itemsAfter != null && outlookItem.ReceivedTime < itemsAfter)
+                {
+                    this.callback.Verbose( "Skipping item {0} since {1} is before {2}", i, outlookItem.ReceivedTime, itemsAfter );
+                    continue;
+                }
                 InitializeMailItemFromOutlookMailItem(folder, outlookItem, report);
                 
 

@@ -26,6 +26,11 @@ namespace ErrorReport.GUI
                 ).DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
             this.folderTextBox.DataBindings.Add( "Text", this.ucp, "FolderPath" 
                 ).DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+
+            this.enableItemsAfterCheckBox.DataBindings.Add( "Checked", this.ucp, "ItemsAfterEnabled", false, DataSourceUpdateMode.OnPropertyChanged );
+            this.itemsAfterPicker.DataBindings.Add( "Value", this.ucp, "ItemsAfter", false, DataSourceUpdateMode.OnPropertyChanged );
+            this.itemsAfterPicker.DataBindings.Add( "Enabled", this.enableItemsAfterCheckBox, "Checked", false, DataSourceUpdateMode.Never,
+                DateTime.MinValue );
         }
 
         private void importButton_Click( object sender, EventArgs e )

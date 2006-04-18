@@ -35,6 +35,8 @@ namespace ErrorReportExtractor {
         
         private System.Data.DataRelation relationFK_ErrorReports_MailItems;
         
+        private System.Data.DataRelation relationFK_StackTraceLines_ErrorReports;
+        
         private System.Data.SchemaSerializationMode _schemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -254,6 +256,7 @@ namespace ErrorReportExtractor {
             }
             this.relationFK_ErrorReplies_ErrorReplies = this.Relations["FK_ErrorReplies_ErrorReplies"];
             this.relationFK_ErrorReports_MailItems = this.Relations["FK_ErrorReports_MailItems"];
+            this.relationFK_StackTraceLines_ErrorReports = this.Relations["FK_StackTraceLines_ErrorReports"];
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -279,6 +282,10 @@ namespace ErrorReportExtractor {
                         this.tableMailItems.IDColumn}, new System.Data.DataColumn[] {
                         this.tableErrorReports.MailItemIDColumn}, false);
             this.Relations.Add(this.relationFK_ErrorReports_MailItems);
+            this.relationFK_StackTraceLines_ErrorReports = new System.Data.DataRelation("FK_StackTraceLines_ErrorReports", new System.Data.DataColumn[] {
+                        this.tableErrorReports.IDColumn}, new System.Data.DataColumn[] {
+                        this.tableStackTraceLines.ErrorReportItemColumn}, false);
+            this.Relations.Add(this.relationFK_StackTraceLines_ErrorReports);
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -568,7 +575,6 @@ namespace ErrorReportExtractor {
                 this.columnExceptionType.MaxLength = 2147483647;
                 this.columnExceptionMessage.MaxLength = 2147483647;
                 this.columnStackTrace.MaxLength = 2147483647;
-                this.columnErrorReportItemID.AllowDBNull = false;
                 this.columnErrorReportItemID.MaxLength = 250;
             }
             
@@ -1111,7 +1117,7 @@ namespace ErrorReportExtractor {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public StackTraceLinesRow AddStackTraceLinesRow(string OldErrorReportItem, string MethodName, string Parameters, string Filename, int LineNumber, int SequenceNumber, int ErrorReportItem) {
+            public StackTraceLinesRow AddStackTraceLinesRow(string OldErrorReportItem, string MethodName, string Parameters, string Filename, int LineNumber, int SequenceNumber, ErrorReportsRow parentErrorReportsRowByFK_StackTraceLines_ErrorReports) {
                 StackTraceLinesRow rowStackTraceLinesRow = ((StackTraceLinesRow)(this.NewRow()));
                 rowStackTraceLinesRow.ItemArray = new object[] {
                         OldErrorReportItem,
@@ -1120,7 +1126,7 @@ namespace ErrorReportExtractor {
                         Filename,
                         LineNumber,
                         SequenceNumber,
-                        ErrorReportItem};
+                        parentErrorReportsRowByFK_StackTraceLines_ErrorReports[0]};
                 this.Rows.Add(rowStackTraceLinesRow);
                 return rowStackTraceLinesRow;
             }
@@ -1646,7 +1652,6 @@ namespace ErrorReportExtractor {
                 this.columnExceptionType.MaxLength = 2147483647;
                 this.columnExceptionMessage.MaxLength = 2147483647;
                 this.columnStackTrace.MaxLength = 2147483647;
-                this.columnErrorReportItemID.AllowDBNull = false;
                 this.columnErrorReportItemID.MaxLength = 250;
                 this.columnBody.AllowDBNull = false;
                 this.columnBody.MaxLength = 2147483647;
@@ -1873,7 +1878,12 @@ namespace ErrorReportExtractor {
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public string ErrorReportItemID {
                 get {
-                    return ((string)(this[this.tableErrorReports.ErrorReportItemIDColumn]));
+                    try {
+                        return ((string)(this[this.tableErrorReports.ErrorReportItemIDColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'ErrorReportItemID\' in table \'ErrorReports\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tableErrorReports.ErrorReportItemIDColumn] = value;
@@ -1976,6 +1986,16 @@ namespace ErrorReportExtractor {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsErrorReportItemIDNull() {
+                return this.IsNull(this.tableErrorReports.ErrorReportItemIDColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetErrorReportItemIDNull() {
+                this[this.tableErrorReports.ErrorReportItemIDColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public bool IsMailItemIDNull() {
                 return this.IsNull(this.tableErrorReports.MailItemIDColumn);
             }
@@ -1983,6 +2003,11 @@ namespace ErrorReportExtractor {
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public void SetMailItemIDNull() {
                 this[this.tableErrorReports.MailItemIDColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public StackTraceLinesRow[] GetStackTraceLinesRows() {
+                return ((StackTraceLinesRow[])(base.GetChildRows(this.Table.ChildRelations["FK_StackTraceLines_ErrorReports"])));
             }
         }
         
@@ -2300,6 +2325,16 @@ namespace ErrorReportExtractor {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ErrorReportsRow ErrorReportsRow {
+                get {
+                    return ((ErrorReportsRow)(this.GetParentRow(this.Table.ParentRelations["FK_StackTraceLines_ErrorReports"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_StackTraceLines_ErrorReports"]);
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public bool IsMethodNameNull() {
                 return this.IsNull(this.tableStackTraceLines.MethodNameColumn);
             }
@@ -2479,7 +2514,12 @@ namespace ErrorReportExtractor {
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public string ErrorReportItemID {
                 get {
-                    return ((string)(this[this.tableErrorReportItems.ErrorReportItemIDColumn]));
+                    try {
+                        return ((string)(this[this.tableErrorReportItems.ErrorReportItemIDColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'ErrorReportItemID\' in table \'ErrorReportItems\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tableErrorReportItems.ErrorReportItemIDColumn] = value;
@@ -2699,6 +2739,16 @@ namespace ErrorReportExtractor {
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public void SetRevisionNull() {
                 this[this.tableErrorReportItems.RevisionColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsErrorReportItemIDNull() {
+                return this.IsNull(this.tableErrorReportItems.ErrorReportItemIDColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetErrorReportItemIDNull() {
+                this[this.tableErrorReportItems.ErrorReportItemIDColumn] = System.Convert.DBNull;
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2986,7 +3036,7 @@ namespace ErrorReportExtractor.ErrorReportsDataSetTableAdapters {
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [dbo].[ErrorReports] WHERE (([ID] = @Original_ID) AND ((@IsNull_MajorVersion = 1 AND [MajorVersion] IS NULL) OR ([MajorVersion] = @Original_MajorVersion)) AND ((@IsNull_MinorVersion = 1 AND [MinorVersion] IS NULL) OR ([MinorVersion] = @Original_MinorVersion)) AND ((@IsNull_PatchVersion = 1 AND [PatchVersion] IS NULL) OR ([PatchVersion] = @Original_PatchVersion)) AND ((@IsNull_Revision = 1 AND [Revision] IS NULL) OR ([Revision] = @Original_Revision)) AND ([ErrorReportItemID] = @Original_ErrorReportItemID) AND ((@IsNull_MailItemID = 1 AND [MailItemID] IS NULL) OR ([MailItemID] = @Original_MailItemID)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [dbo].[ErrorReports] WHERE (([ID] = @Original_ID) AND ((@IsNull_MajorVersion = 1 AND [MajorVersion] IS NULL) OR ([MajorVersion] = @Original_MajorVersion)) AND ((@IsNull_MinorVersion = 1 AND [MinorVersion] IS NULL) OR ([MinorVersion] = @Original_MinorVersion)) AND ((@IsNull_PatchVersion = 1 AND [PatchVersion] IS NULL) OR ([PatchVersion] = @Original_PatchVersion)) AND ((@IsNull_Revision = 1 AND [Revision] IS NULL) OR ([Revision] = @Original_Revision)) AND ((@IsNull_ErrorReportItemID = 1 AND [ErrorReportItemID] IS NULL) OR ([ErrorReportItemID] = @Original_ErrorReportItemID)) AND ((@IsNull_MailItemID = 1 AND [MailItemID] IS NULL) OR ([MailItemID] = @Original_MailItemID)))";
             this._adapter.DeleteCommand.CommandType = System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_MajorVersion", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "MajorVersion", System.Data.DataRowVersion.Original, true, null, "", "", ""));
@@ -2997,6 +3047,7 @@ namespace ErrorReportExtractor.ErrorReportsDataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_PatchVersion", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "PatchVersion", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_Revision", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "Revision", System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_Revision", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "Revision", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_ErrorReportItemID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportItemID", System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ErrorReportItemID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportItemID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_MailItemID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "MailItemID", System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_MailItemID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "MailItemID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
@@ -3016,7 +3067,7 @@ SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersi
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@MailItemID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "MailItemID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[ErrorReports] SET [ExceptionType] = @ExceptionType, [ExceptionMessage] = @ExceptionMessage, [StackTrace] = @StackTrace, [MajorVersion] = @MajorVersion, [MinorVersion] = @MinorVersion, [PatchVersion] = @PatchVersion, [Revision] = @Revision, [ErrorReportItemID] = @ErrorReportItemID, [MailItemID] = @MailItemID WHERE (([ID] = @Original_ID) AND ((@IsNull_MajorVersion = 1 AND [MajorVersion] IS NULL) OR ([MajorVersion] = @Original_MajorVersion)) AND ((@IsNull_MinorVersion = 1 AND [MinorVersion] IS NULL) OR ([MinorVersion] = @Original_MinorVersion)) AND ((@IsNull_PatchVersion = 1 AND [PatchVersion] IS NULL) OR ([PatchVersion] = @Original_PatchVersion)) AND ((@IsNull_Revision = 1 AND [Revision] IS NULL) OR ([Revision] = @Original_Revision)) AND ([ErrorReportItemID] = @Original_ErrorReportItemID) AND ((@IsNull_MailItemID = 1 AND [MailItemID] IS NULL) OR ([MailItemID] = @Original_MailItemID)));
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[ErrorReports] SET [ExceptionType] = @ExceptionType, [ExceptionMessage] = @ExceptionMessage, [StackTrace] = @StackTrace, [MajorVersion] = @MajorVersion, [MinorVersion] = @MinorVersion, [PatchVersion] = @PatchVersion, [Revision] = @Revision, [ErrorReportItemID] = @ErrorReportItemID, [MailItemID] = @MailItemID WHERE (([ID] = @Original_ID) AND ((@IsNull_MajorVersion = 1 AND [MajorVersion] IS NULL) OR ([MajorVersion] = @Original_MajorVersion)) AND ((@IsNull_MinorVersion = 1 AND [MinorVersion] IS NULL) OR ([MinorVersion] = @Original_MinorVersion)) AND ((@IsNull_PatchVersion = 1 AND [PatchVersion] IS NULL) OR ([PatchVersion] = @Original_PatchVersion)) AND ((@IsNull_Revision = 1 AND [Revision] IS NULL) OR ([Revision] = @Original_Revision)) AND ((@IsNull_ErrorReportItemID = 1 AND [ErrorReportItemID] IS NULL) OR ([ErrorReportItemID] = @Original_ErrorReportItemID)) AND ((@IsNull_MailItemID = 1 AND [MailItemID] IS NULL) OR ([MailItemID] = @Original_MailItemID)));
 SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersion, PatchVersion, Revision, ErrorReportItemID, MailItemID FROM ErrorReports WHERE (ID = @ID)";
             this._adapter.UpdateCommand.CommandType = System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ExceptionType", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ExceptionType", System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -3037,6 +3088,7 @@ SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersi
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_PatchVersion", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "PatchVersion", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_Revision", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "Revision", System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_Revision", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "Revision", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_ErrorReportItemID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportItemID", System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ErrorReportItemID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportItemID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_MailItemID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "MailItemID", System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_MailItemID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "MailItemID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
@@ -3144,18 +3196,20 @@ SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersi
                 this.Adapter.DeleteCommand.Parameters[8].Value = System.DBNull.Value;
             }
             if ((Original_ErrorReportItemID == null)) {
-                throw new System.ArgumentNullException("Original_ErrorReportItemID");
+                this.Adapter.DeleteCommand.Parameters[9].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[10].Value = System.DBNull.Value;
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[9].Value = ((string)(Original_ErrorReportItemID));
+                this.Adapter.DeleteCommand.Parameters[9].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[10].Value = ((string)(Original_ErrorReportItemID));
             }
             if ((Original_MailItemID.HasValue == true)) {
-                this.Adapter.DeleteCommand.Parameters[10].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[11].Value = ((int)(Original_MailItemID.Value));
+                this.Adapter.DeleteCommand.Parameters[11].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[12].Value = ((int)(Original_MailItemID.Value));
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[10].Value = ((object)(1));
-                this.Adapter.DeleteCommand.Parameters[11].Value = System.DBNull.Value;
+                this.Adapter.DeleteCommand.Parameters[11].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[12].Value = System.DBNull.Value;
             }
             System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & System.Data.ConnectionState.Open) 
@@ -3220,7 +3274,7 @@ SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersi
                 this.Adapter.InsertCommand.Parameters[6].Value = System.DBNull.Value;
             }
             if ((ErrorReportItemID == null)) {
-                throw new System.ArgumentNullException("ErrorReportItemID");
+                this.Adapter.InsertCommand.Parameters[7].Value = System.DBNull.Value;
             }
             else {
                 this.Adapter.InsertCommand.Parameters[7].Value = ((string)(ErrorReportItemID));
@@ -3311,7 +3365,7 @@ SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersi
                 this.Adapter.UpdateCommand.Parameters[6].Value = System.DBNull.Value;
             }
             if ((ErrorReportItemID == null)) {
-                throw new System.ArgumentNullException("ErrorReportItemID");
+                this.Adapter.UpdateCommand.Parameters[7].Value = System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(ErrorReportItemID));
@@ -3356,20 +3410,22 @@ SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersi
                 this.Adapter.UpdateCommand.Parameters[17].Value = System.DBNull.Value;
             }
             if ((Original_ErrorReportItemID == null)) {
-                throw new System.ArgumentNullException("Original_ErrorReportItemID");
+                this.Adapter.UpdateCommand.Parameters[18].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[19].Value = System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[18].Value = ((string)(Original_ErrorReportItemID));
+                this.Adapter.UpdateCommand.Parameters[18].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[19].Value = ((string)(Original_ErrorReportItemID));
             }
             if ((Original_MailItemID.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[19].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[20].Value = ((int)(Original_MailItemID.Value));
+                this.Adapter.UpdateCommand.Parameters[20].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[21].Value = ((int)(Original_MailItemID.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[19].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[20].Value = System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[20].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[21].Value = System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[21].Value = ((int)(ID));
+            this.Adapter.UpdateCommand.Parameters[22].Value = ((int)(ID));
             System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & System.Data.ConnectionState.Open) 
                         != System.Data.ConnectionState.Open)) {
@@ -3497,15 +3553,14 @@ SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersi
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ErrorReportID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[MailItems] ([Body], [SenderName], [SenderEmail], [RecipientName], [RecipientEmail], [OldErrorReportID], [ParentReply], [Time], [MailID], [ErrorReportID]) VALUES (@Body, @SenderName, @SenderEmail, @RecipientName, @RecipientEmail, @OldErrorReportID, @ParentReply, @Time, @MailID, @ErrorReportID);
-SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, OldErrorReportID, ParentReply, Time, MailID, ErrorReportID FROM MailItems WHERE (ID = SCOPE_IDENTITY())";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [MailItems] ([Body], [SenderName], [SenderEmail], [RecipientName], [RecipientEmail], [ParentReply], [Time], [MailID], [ErrorReportID]) VALUES (@Body, @SenderName, @SenderEmail, @RecipientName, @RecipientEmail, @ParentReply, @Time, @MailID, @ErrorReportID);
+SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentReply, Time, MailID, ErrorReportID FROM MailItems WHERE (ID = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Body", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "Body", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "SenderName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderEmail", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "SenderEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "RecipientName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientEmail", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "RecipientEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@OldErrorReportID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "OldErrorReportID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Time", System.Data.SqlDbType.DateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "Time", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@MailID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "MailID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -3686,7 +3741,7 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string Body, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, string OldErrorReportID, System.Nullable<int> ParentReply, System.DateTime Time, string MailID, System.Nullable<int> ErrorReportID) {
+        public virtual int Insert(string Body, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, System.Nullable<int> ParentReply, System.DateTime Time, string MailID, System.Nullable<int> ErrorReportID) {
             if ((Body == null)) {
                 throw new System.ArgumentNullException("Body");
             }
@@ -3717,30 +3772,24 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
             else {
                 this.Adapter.InsertCommand.Parameters[4].Value = ((string)(RecipientEmail));
             }
-            if ((OldErrorReportID == null)) {
-                throw new System.ArgumentNullException("OldErrorReportID");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(OldErrorReportID));
-            }
             if ((ParentReply.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[6].Value = ((int)(ParentReply.Value));
+                this.Adapter.InsertCommand.Parameters[5].Value = ((int)(ParentReply.Value));
             }
             else {
-                this.Adapter.InsertCommand.Parameters[6].Value = System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[5].Value = System.DBNull.Value;
             }
-            this.Adapter.InsertCommand.Parameters[7].Value = ((System.DateTime)(Time));
+            this.Adapter.InsertCommand.Parameters[6].Value = ((System.DateTime)(Time));
             if ((MailID == null)) {
-                this.Adapter.InsertCommand.Parameters[8].Value = System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[7].Value = System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[8].Value = ((string)(MailID));
+                this.Adapter.InsertCommand.Parameters[7].Value = ((string)(MailID));
             }
             if ((ErrorReportID.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[9].Value = ((int)(ErrorReportID.Value));
+                this.Adapter.InsertCommand.Parameters[8].Value = ((int)(ErrorReportID.Value));
             }
             else {
-                this.Adapter.InsertCommand.Parameters[9].Value = System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[8].Value = System.DBNull.Value;
             }
             System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & System.Data.ConnectionState.Open) 
