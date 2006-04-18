@@ -33,7 +33,7 @@ namespace ErrorReportExtractor
                 {
                     if (callback.VerboseMode)
                     {
-                        this.callback.Verbose("Inserting item with ID {0}, timestamp {1}", item.ID, item.ReceivedTime);
+                        this.callback.Verbose("Inserting item with ID {0}, timestamp {1}", item.InternetMailID, item.ReceivedTime);
                     }
                     else
                     {
@@ -50,7 +50,13 @@ namespace ErrorReportExtractor
 
                     if (insertedID == 0)
                     {
-                        callback.Warning("Item with id {0} already exists in base", item.ID);
+                        callback.Warning("Item with id {0} already exists in base", item.InternetMailID);
+                        continue;
+                    }
+                    else if ( insertedID == -1 )
+                    {
+                        callback.Error( "Item with id {0}, received {1} from {2} could not be inserted", 
+                            item.InternetMailID, item.ReceivedTime, item.SenderEmail );
                         continue;
                     }
 

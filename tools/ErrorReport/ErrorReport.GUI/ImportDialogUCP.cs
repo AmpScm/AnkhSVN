@@ -36,16 +36,32 @@ namespace ErrorReport.GUI
             set { folderPath = value; }
         }
 
+        public bool ItemsAfterEnabled
+        {
+            get { return itemsAfterEnabled; }
+            set { itemsAfterEnabled = value; }
+        }
+
+        public DateTime ItemsAfter
+        {
+            get { return itemsAfter; }
+            set { itemsAfter = value; }
+        }
+
+
+
         public void RunImport()
         {
             MailContainer container = new MailContainer();
+            container.SetProgressCallback( this.callback );
 
             MethodInvoker proc = delegate
             {
+                DateTime? itemsAfter = this.ItemsAfterEnabled ? (DateTime?)this.ItemsAfter : null;
                 if ( this.ImportReports )
                 {
                     this.callback.Info( "Starting import of error reports from Outlook folder {0}.", this.FolderPath );
-                    this.storage.Store( container.GetAllItems( this.FolderPath, null ) );
+                    this.storage.Store( container.GetItems( this.FolderPath, itemsAfter ) );
                 }
 
                 if ( this.ImportReplies )
@@ -90,6 +106,11 @@ namespace ErrorReport.GUI
             
         }
 
+        private bool itemsAfterEnabled;
+
+        private DateTime itemsAfter = DateTime.Now;
+
+        
         private IStorage storage;
         private string folderPath;
         private IProgressCallback callback;
