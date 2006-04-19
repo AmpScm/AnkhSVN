@@ -173,6 +173,10 @@ namespace Ankh.Solution
 
         private void RecursivelyClearStatusImages( IntPtr item )
         {
+            if ( item == IntPtr.Zero )
+            {
+                return;
+            }
             // status image 0 is reserved for no status image at all
             this.SetStatusImage( item, 0 );
 
