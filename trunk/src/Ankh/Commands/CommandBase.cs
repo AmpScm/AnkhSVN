@@ -161,9 +161,9 @@ namespace Ankh.Commands
             return item.IsLocked;
         }
 
-        protected static bool NotLockedFilter( SvnItem item )
+        protected static bool NotLockedAndLockableFilter( SvnItem item )
         {
-            return item.IsVersioned && !item.IsLocked;
+            return item.IsVersioned && !item.IsLocked && item.IsFile;
         }
 
         protected static void GetPathInfo(object sender, GetPathInfoEventArgs args)

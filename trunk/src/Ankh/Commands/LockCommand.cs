@@ -17,7 +17,7 @@ namespace Ankh.Commands
         public override void Execute(IContext context, string parameters)
         {
             IList resources = context.SolutionExplorer.GetSelectionResources(true, 
-                new ResourceFilterCallback( CommandBase.NotLockedFilter ) );
+                new ResourceFilterCallback( CommandBase.NotLockedAndLockableFilter ) );
 
             this.info = new LockDialogInfo( resources, resources );
             
@@ -45,7 +45,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             IList resources = context.SolutionExplorer.GetSelectionResources( true,
-                new ResourceFilterCallback(CommandBase.NotLockedFilter) );
+                new ResourceFilterCallback(CommandBase.NotLockedAndLockableFilter) );
             return resources.Count > 0 ? Enabled : Disabled;
         }
         
