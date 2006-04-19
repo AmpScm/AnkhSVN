@@ -26,8 +26,8 @@ namespace ErrorReport.GUI
             ServiceProvider provider = new ServiceProvider();
             provider.ProfferService<IMailer>( new ErrorReportExtractor.Mailer());
             provider.ProfferService<ITemplateManager>( new TemplateManager() );
-            provider.ProfferService<IStorage>( new Storage() );
-            provider.ProfferService<IReportContainer>( new MailContainer() );
+            provider.ProfferService<IStorage>( new SqlServerStorage() );
+            provider.ProfferService<IReportContainer>( new OutlookContainer() );
 
             return provider;
         }

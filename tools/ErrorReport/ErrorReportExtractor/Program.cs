@@ -19,7 +19,7 @@ namespace ErrorReportExtractor
                 callback.VerboseMode = true;
 
                 //MailContainer mail = new MailContainer();
-                Storage storage = new Storage();
+                SqlServerStorage storage = new SqlServerStorage();
                 
                 //mail.SetProgressCallback( callback );
                 storage.SetProgressCallback( callback );

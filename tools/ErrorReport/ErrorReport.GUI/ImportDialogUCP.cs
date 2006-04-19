@@ -52,7 +52,7 @@ namespace ErrorReport.GUI
 
         public void RunImport()
         {
-            MailContainer container = new MailContainer();
+            OutlookContainer container = new OutlookContainer();
             container.SetProgressCallback( this.callback );
 
             MethodInvoker proc = delegate

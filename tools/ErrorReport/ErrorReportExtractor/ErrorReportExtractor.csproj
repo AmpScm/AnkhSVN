@@ -69,7 +69,7 @@
     <Compile Include="IStackTraceItem.cs" />
     <Compile Include="IStorage.cs" />
     <Compile Include="ITemplateManager.cs" />
-    <Compile Include="MailContainer.cs" />
+    <Compile Include="OutlookContainer.cs" />
     <Compile Include="Mailer.cs" />
     <Compile Include="MailItem.cs" />
     <Compile Include="MapiFields.cs" />
@@ -92,7 +92,7 @@
     </Compile>
     <Compile Include="StackTrace.cs" />
     <Compile Include="StackTraceItem.cs" />
-    <Compile Include="Storage.cs" />
+    <Compile Include="SqlServerStorage.cs" />
     <Compile Include="TemplateManager.cs" />
     <Compile Include="ThreadWorker.cs" />
   </ItemGroup>
