@@ -64,7 +64,8 @@ namespace ErrorReportExtractor
 
         public string ExceptionMessage
         {
-            get { return ""; }
+            get { return this.exceptionMessage; }
+            set { this.exceptionMessage = value; }
         }
 
         public bool HasReplies
@@ -81,7 +82,7 @@ namespace ErrorReportExtractor
         private void ParseBody()
         {
             this.ParseVersion();
-            this.ParseExceptionType();
+            this.ParseException();
             this.ParseDteVersion();
             this.stackTrace = new StackTrace(this.Body);
         }
@@ -99,12 +100,13 @@ namespace ErrorReportExtractor
             }
         }
 
-        private void ParseExceptionType()
+        private void ParseException()
         {
             Match match;
-            if ((match = ExceptionTypeRegex.Match(this.Body)) != Match.Empty)
+            if ((match = ExceptionRegex.Match(this.Body)) != Match.Empty)
             {
                 this.exceptionType = match.Groups["ExceptionType"].Value;
+                this.exceptionMessage = match.Groups[ "ExceptionMessage" ].Value.Trim();
             }
             
         }
@@ -126,8 +128,11 @@ namespace ErrorReportExtractor
             @"Version:\s+(?<Major>\d{1,2})\.(?<Minor>\d{1,2})\.(?<Patch>\d{1,4})\.(?<Revision>\d{3,10})", 
             RegexOptions.IgnoreCase);
 
-        private static readonly Regex ExceptionTypeRegex = new Regex(@"(?<ExceptionType>(\w+\.)*(\w+)Exception):",
-                RegexOptions.IgnoreCase);
+        private static readonly Regex ExceptionRegex = 
+            new Regex( @"(?<ExceptionType>(\w+\.)*(\w+)Exception):\s+(?<ExceptionMessage>[^\n]+)\n",
+                RegexOptions.ExplicitCapture |
+                RegexOptions.Singleline |
+                RegexOptions.IgnorePatternWhitespace );
 
         private static readonly Regex DteVersionRegex = new Regex(@"dte=(?<DteVersion>(\d+\.)*(\d))",
                 RegexOptions.IgnoreCase);
@@ -140,6 +145,7 @@ namespace ErrorReportExtractor
         private int? revision;
         private int? patchVersion;
         private string exceptionType;
+        private string exceptionMessage;
         private string dteVersion;
         private StackTrace stackTrace;
         private bool repliedTo;

@@ -18,13 +18,14 @@ namespace ErrorReportExtractor
             {
                 callback.VerboseMode = true;
 
-                MailContainer mail = new MailContainer();
+                //MailContainer mail = new MailContainer();
                 Storage storage = new Storage();
                 
-                mail.SetProgressCallback( callback );
+                //mail.SetProgressCallback( callback );
                 storage.SetProgressCallback( callback );
 
-                storage.StorePotentialReplies(mail.GetPotentialReplies(@"Final year project\ankhsvn\Error reports"));
+                //storage.StorePotentialReplies(mail.GetPotentialReplies(@"Final year project\ankhsvn\Error reports"));
+                storage.UpdateErrorReports( storage.GetAllReports() );
                 //IEnumerable<IErrorReport> items = mail.GetAllItems(null);
                 //storage.Store(items);
             }

@@ -12,5 +12,6 @@ namespace ErrorReportExtractor
         IStackTrace StackTrace { get; }
         bool RepliedTo { get; set; }
         bool HasReplies { get; set; }
+        string ExceptionMessage { get; set; }
     }
 }

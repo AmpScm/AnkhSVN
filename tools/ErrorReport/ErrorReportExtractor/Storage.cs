@@ -80,6 +80,30 @@ namespace ErrorReportExtractor
             }
         }
 
+        public void UpdateErrorReports( IEnumerable<IErrorReport> reports )
+        {
+            ErrorReportsTableAdapter adapter = new ErrorReportsTableAdapter();
+            SqlConnection conn = adapter.Connection;
+            IEnumerator<IErrorReport> enumerator = reports.GetEnumerator();
+            enumerator.MoveNext();
+            IErrorReport r = enumerator.Current;
+
+            using ( TransactionScope scope = new TransactionScope() )
+            {
+                conn.Open();
+
+                while(enumerator.MoveNext())
+                {
+                    IErrorReport report = enumerator.Current;
+                    adapter.UpdateErrorReport( report.ExceptionType, report.ExceptionMessage, report.StackTrace.Text, 
+                        report.MajorVersion, report.MinorVersion,
+                        report.PatchVersion, report.Revision, report.DteVersion, report.ID, report.ID );
+                }
+
+                scope.Complete();
+            }
+        }
+
         public DateTime GetLastDate()
         {
             return DateTime.Now;
