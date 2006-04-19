@@ -6,9 +6,9 @@ using MAPI;
 
 namespace ErrorReportExtractor
 {
-    public class MailContainer : IReportContainer
+    public class OutlookContainer : IReportContainer
     {
-        public MailContainer()
+        public OutlookContainer()
         {
             this.callback = new NullProgressCallback();
             this.callback.Verbose("Creating Outlook application object");

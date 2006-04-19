@@ -11,9 +11,9 @@ using System.Data;
 
 namespace ErrorReportExtractor
 {
-    public class Storage : ErrorReportExtractor.IStorage
+    public class SqlServerStorage : ErrorReportExtractor.IStorage
     {
-        public Storage()
+        public SqlServerStorage()
         {
             this.callback = new NullProgressCallback();
         }
