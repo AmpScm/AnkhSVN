@@ -165,6 +165,7 @@ namespace Ankh.Solution
             // and assign the status image list to the tree
             this.TreeView.StatusImageList = statusImageList.Handle;
 
+
             // make sure everything's up to date.
             this.ForcePoll();
 
@@ -371,7 +372,6 @@ namespace Ankh.Solution
                     "try moving it to the primary during solution loading." );
 
             this.treeView = new TreeView( treeHwnd );
-            this.CreateOverlayImages();
         }
 
         /// <summary>
@@ -621,6 +621,8 @@ namespace Ankh.Solution
                     outer.TreeView.LockWindowUpdate(false);
                     outer.context.EndOperation();
                 }
+
+                outer.CreateOverlayImages();
             }
 
             public virtual void CancelLoad()
