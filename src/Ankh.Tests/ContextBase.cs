@@ -377,6 +377,13 @@ namespace Ankh.Tests
                 // TODO:  Add Explorer.Ankh.ISolutionExplorer.Refresh implementation
             }
 
+
+            public bool RenameInProgress
+            {
+                get { return false; }
+            }
+
+
             #endregion
 
             #region ISelectionContainer Members
@@ -425,7 +432,6 @@ namespace Ankh.Tests
             private IContext context;
 
             public IList Selection = new object[]{};
-
         }
 
 
