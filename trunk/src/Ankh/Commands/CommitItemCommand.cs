@@ -27,7 +27,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             if ( context.SolutionExplorer.GetSelectionResources( true, 
-                new ResourceFilterCallback( CommandBase.ModifiedFilter) ).Count > 0 )
+                new ResourceFilterCallback( SvnItem.ModifiedFilter) ).Count > 0 )
                 return Enabled;
             else
                 return Disabled;
@@ -38,7 +38,7 @@ namespace Ankh.Commands
             this.SaveAllDirtyDocuments( context );
 
             IList resources = context.SolutionExplorer.GetSelectionResources( true, 
-                new ResourceFilterCallback(CommandBase.ModifiedFilter) );
+                new ResourceFilterCallback(SvnItem.ModifiedFilter) );
 
             CommitOperation operation = new CommitOperation( new SimpleProgressWorker(
                 new SimpleProgressWorkerCallback(this.DoCommit)), resources, context);

@@ -39,7 +39,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             int count = context.SolutionExplorer.GetSelectionResources(false, 
-                new ResourceFilterCallback(ResolveConflictCommand.ConflictedFilter) ).Count;
+                new ResourceFilterCallback(SvnItem.ConflictedFilter) ).Count;
 
             if ( count > 0 )
                 return Enabled;
@@ -56,7 +56,7 @@ namespace Ankh.Commands
             try
             {
                 IList items = context.SolutionExplorer.GetSelectionResources(false, 
-                     new ResourceFilterCallback(ResolveConflictCommand.ConflictedFilter) );
+                     new ResourceFilterCallback(SvnItem.ConflictedFilter) );
 
                 foreach( SvnItem item in items )
                 {
@@ -148,16 +148,7 @@ namespace Ankh.Commands
             File.Copy( fromPath, toPath,  true );
         }
 
-        /// <summary>
-        /// Filter for conflicted items.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        private static bool ConflictedFilter( SvnItem item )
-        {
-            return item.Status.TextStatus == StatusKind.Conflicted; 
-        }
-       
+      
         private readonly Regex NUMBER = new Regex( @".*\.r(\d+)" );
 
     }

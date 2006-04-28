@@ -111,67 +111,7 @@ namespace Ankh.Commands
         }
 
 
-        /// <summary>
-        /// A ResourceFilterCallback method that filters for modified items.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        protected static bool ModifiedFilter( SvnItem item )
-        {
-            return item.IsModified;
-        }
 
-        /// <summary>
-        /// A ResourceFilterCallback that filters for versioned directories.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        protected static bool DirectoryFilter( SvnItem item )
-        {
-            return item.IsVersioned && item.IsDirectory;
-        }
-
-        protected static bool VersionedFilter( SvnItem item )
-        {
-            return item.IsVersioned;
-        }
-
-        protected static bool UnversionedFilter( SvnItem item )
-        {
-            return !item.IsVersioned;
-        }
-
-        protected static bool UnmodifiedSingleFileFilter( SvnItem item )
-        {
-            return item.IsVersioned && !item.IsModified && item.IsFile;
-        }
-
-        protected static bool UnmodifiedItemFilter( SvnItem item )
-        {
-            return item.IsVersioned && !item.IsModified;
-        }
-
-        protected static bool VersionedSingleFileFilter( SvnItem item )
-        {
-            return item.IsVersioned && item.IsFile;
-        }
-
-        protected static bool LockedFilter( SvnItem item )
-        {
-            return item.IsLocked;
-        }
-
-        protected static bool NotLockedAndLockableFilter( SvnItem item )
-        {
-            return item.IsVersioned && !item.IsLocked && item.IsFile;
-        }
-
-        protected static void GetPathInfo(object sender, GetPathInfoEventArgs args)
-        {
-            SvnItem item = (SvnItem)args.Item;
-            args.IsDirectory = item.IsDirectory;
-            args.Path = item.Path;
-        }
 
         private EnvDTE.Command command;
 

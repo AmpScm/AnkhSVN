@@ -26,7 +26,7 @@ namespace Ankh.Commands
         {
             // all items must be versioned if we are going to run update.
             IList resources = context.SolutionExplorer.GetSelectionResources( true,
-                new ResourceFilterCallback(CommandBase.VersionedFilter) );
+                new ResourceFilterCallback(SvnItem.VersionedFilter) );
             if ( resources.Count > 0 )
                 return Enabled;
             else
@@ -42,7 +42,7 @@ namespace Ankh.Commands
                 context.StartOperation( "Updating" );
 
                 IList resources = context.SolutionExplorer.GetSelectionResources( true,
-                    new ResourceFilterCallback(CommandBase.VersionedFilter) );
+                    new ResourceFilterCallback(SvnItem.VersionedFilter) );
 
 
                 // we assume by now that all items are working copy resources.                
@@ -100,7 +100,7 @@ namespace Ankh.Commands
                 // equivalent to accepting the default in the dialog.
                 using(UpdateDialog d = new UpdateDialog())
                 {
-                    d.GetPathInfo += new GetPathInfoDelegate(CommandBase.GetPathInfo);
+                    d.GetPathInfo += new GetPathInfoDelegate(SvnItem.GetPathInfo);
                     d.Items = this.resources;
                     d.CheckedItems = this.resources;
                     d.Recursive = true;

@@ -17,7 +17,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.SolutionExplorer.GetSelectionResources( false, 
-                new ResourceFilterCallback(CommandBase.DirectoryFilter) ).Count == 1 )
+                new ResourceFilterCallback(SvnItem.DirectoryFilter) ).Count == 1 )
             {
                 return Enabled;
             }
@@ -31,7 +31,7 @@ namespace Ankh.Commands
         {
             // We know now that there is exactly one resource
             SvnItem dir = (SvnItem)context.SolutionExplorer.GetSelectionResources(
-                false, new ResourceFilterCallback(CommandBase.DirectoryFilter) )[0];
+                false, new ResourceFilterCallback(SvnItem.DirectoryFilter) )[0];
 
             context.StartOperation( "Relocating" );
             try
