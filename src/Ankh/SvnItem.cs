@@ -4,6 +4,7 @@ using NSvn.Core;
 using NSvn.Common;
 using System.IO;
 using System.Collections;
+using Ankh.UI;
 
 namespace Ankh
 {
@@ -322,6 +323,79 @@ namespace Ankh
         /// Represents an unversionable item.
         /// </summary>
         public static readonly SvnItem Unversionable = new UnversionableItem();
+
+        /// <summary>
+        /// A ResourceFilterCallback method that filters for modified items.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool ModifiedFilter( SvnItem item )
+        {
+            return item.IsModified;
+        }
+
+        /// <summary>
+        /// A ResourceFilterCallback that filters for versioned directories.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool DirectoryFilter( SvnItem item )
+        {
+            return item.IsVersioned && item.IsDirectory;
+        }
+
+        public static bool VersionedFilter( SvnItem item )
+        {
+            return item.IsVersioned;
+        }
+
+        public static bool UnversionedFilter( SvnItem item )
+        {
+            return !item.IsVersioned;
+        }
+
+        public static bool UnmodifiedSingleFileFilter( SvnItem item )
+        {
+            return item.IsVersioned && !item.IsModified && item.IsFile;
+        }
+
+        public static bool UnmodifiedItemFilter( SvnItem item )
+        {
+            return item.IsVersioned && !item.IsModified;
+        }
+
+        public static bool VersionedSingleFileFilter( SvnItem item )
+        {
+            return item.IsVersioned && item.IsFile;
+        }
+
+        public static bool LockedFilter( SvnItem item )
+        {
+            return item.IsLocked;
+        }
+
+        public static bool NotLockedAndLockableFilter( SvnItem item )
+        {
+            return item.IsVersioned && !item.IsLocked && item.IsFile;
+        }
+
+        public static void GetPathInfo( object sender, GetPathInfoEventArgs args )
+        {
+            SvnItem item = (SvnItem)args.Item;
+            args.IsDirectory = item.IsDirectory;
+            args.Path = item.Path;
+        }
+
+        /// <summary>
+        /// Filter for conflicted items.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool ConflictedFilter( SvnItem item )
+        {
+            return item.Status.TextStatus == StatusKind.Conflicted;
+        }
+ 
 
 
 

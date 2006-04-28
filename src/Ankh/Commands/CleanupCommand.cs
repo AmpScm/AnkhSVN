@@ -27,7 +27,7 @@ namespace Ankh.Commands
             context.StartOperation( "Running cleanup" );
 
             IList resources = context.SolutionExplorer.GetSelectionResources( false,
-                new ResourceFilterCallback(CommandBase.DirectoryFilter) );
+                new ResourceFilterCallback(SvnItem.DirectoryFilter) );
             foreach( SvnItem item in resources )
                 context.Client.Cleanup( item.Path );
 

@@ -23,7 +23,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             IList resources = context.SolutionExplorer.GetSelectionResources(
-                true, new ResourceFilterCallback(ReverseMergeCommand.VersionedFilter) );
+                true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
             if ( resources.Count > 0 )
                 return Enabled;
             else
@@ -35,13 +35,13 @@ namespace Ankh.Commands
             this.SaveAllDirtyDocuments( context );
 
             IList resources = context.SolutionExplorer.GetSelectionResources(
-                true, new ResourceFilterCallback(ReverseMergeCommand.VersionedFilter) );
+                true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
             context.StartOperation( "Merging" );
             try
             {
                 using ( ReverseMergeDialog dlg = new ReverseMergeDialog() )
                 {
-                    dlg.GetPathInfo += new GetPathInfoDelegate(CommandBase.GetPathInfo);
+                    dlg.GetPathInfo += new GetPathInfoDelegate(SvnItem.GetPathInfo);
                     dlg.Items = resources;
                     dlg.CheckedItems = resources;
                     dlg.Recursive = true;

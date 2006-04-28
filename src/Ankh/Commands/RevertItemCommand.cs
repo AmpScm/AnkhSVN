@@ -28,7 +28,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {   
             if ( context.SolutionExplorer.GetSelectionResources( true, 
-                new ResourceFilterCallback( CommandBase.ModifiedFilter ) ).Count > 0 )
+                new ResourceFilterCallback( SvnItem.ModifiedFilter ) ).Count > 0 )
             {
                 return Enabled;
             }
@@ -42,7 +42,7 @@ namespace Ankh.Commands
 
             // get the modified resources
             IList resources = context.SolutionExplorer.GetSelectionResources( true,
-                new ResourceFilterCallback( CommandBase.ModifiedFilter ) );
+                new ResourceFilterCallback( SvnItem.ModifiedFilter ) );
 
             bool recursive = false;
             bool confirmed = false;

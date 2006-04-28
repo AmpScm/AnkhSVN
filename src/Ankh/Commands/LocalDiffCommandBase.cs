@@ -46,7 +46,7 @@ namespace Ankh.Commands
 
             // We use VersionedFilter here to allow diffs between arbitrary revisions
             IList resources = context.SolutionExplorer.GetSelectionResources(
-                true, new ResourceFilterCallback(CommandBase.VersionedFilter) );
+                true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
 
             // are we shifted?
             PathSelectorInfo info = new PathSelectorInfo( "Select items for diffing", 

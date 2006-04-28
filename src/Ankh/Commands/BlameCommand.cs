@@ -22,7 +22,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.SolutionExplorer.GetSelectionResources( true, 
-                new ResourceFilterCallback( CommandBase.VersionedSingleFileFilter) ).Count > 0 )
+                new ResourceFilterCallback( SvnItem.VersionedSingleFileFilter) ).Count > 0 )
                 return Enabled;
             else
                 return Disabled;
@@ -31,7 +31,7 @@ namespace Ankh.Commands
         public override void Execute(IContext context, string parameters)
         {
             IList resources = context.SolutionExplorer.GetSelectionResources( true, 
-                new ResourceFilterCallback( CommandBase.VersionedFilter) );
+                new ResourceFilterCallback( SvnItem.VersionedFilter) );
 
             Revision revisionStart = Revision.FromNumber(0);
             Revision revisionEnd = Revision.Head;
