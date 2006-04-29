@@ -13,7 +13,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             IList resources = context.SolutionExplorer.GetSelectionResources(true, 
-                new ResourceFilterCallback( CommandBase.LockedFilter ) );
+                new ResourceFilterCallback( SvnItem.LockedFilter ) );
             return resources.Count > 0 ? CommandBase.Enabled : CommandBase.Disabled;
         }
 
