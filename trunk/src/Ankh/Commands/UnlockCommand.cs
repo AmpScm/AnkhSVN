@@ -20,7 +20,7 @@ namespace Ankh.Commands
         public override void Execute(IContext context, string parameters)
         {
             IList resources = context.SolutionExplorer.GetSelectionResources(true, 
-                new ResourceFilterCallback( CommandBase.LockedFilter ) );
+                new ResourceFilterCallback( SvnItem.LockedFilter ) );
 
             this.info = new PathSelectorInfo( "Unlock files", resources, resources );
 
