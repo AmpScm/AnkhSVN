@@ -47,6 +47,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <LangVersion>default</LangVersion>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -355,6 +356,7 @@
     <Compile Include="Commands\ToggleAnkhCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\UnlockCommand.cs" />
     <Compile Include="Commands\UpdateItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
