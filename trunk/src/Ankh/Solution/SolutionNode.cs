@@ -19,7 +19,7 @@ namespace Ankh.Solution
         {
             EnvDTE.Solution solution = this.Explorer.DTE.Solution;
             this.solutionFile = this.Explorer.Context.StatusCache[solution.FullName];
-			this.parser=new ParsedSolution(solution.FullName, explorer.Context);
+            this.parser = new ParsedSolution( solution.FullName, explorer.Context );
 
             this.solutionFolder = this.Explorer.Context.StatusCache[
                 Path.GetDirectoryName( solution.FullName )];
@@ -28,8 +28,8 @@ namespace Ankh.Solution
             this.solutionFile.Changed += del;
             this.solutionFolder.Changed += del;
 
-            this.additionalResources = new ArrayList();
-            this.AddDeletions( this.solutionFolder.Path, this.additionalResources, del );
+            this.deletedResources = new ArrayList();
+            this.AddDeletions( this.solutionFolder.Path, this.deletedResources, new StatusChanged(this.DeletedItemStatusChanged) );
 
             explorer.SetSolution( this );
                 
@@ -52,11 +52,12 @@ namespace Ankh.Solution
                 list.Add( this.solutionFile );
 
             // add deleted items.
-            foreach( SvnItem item in this.additionalResources )
+            foreach( SvnItem item in this.deletedResources )
             {
                 if ( filter == null || filter( item ) )
                     list.Add( item );
             }
+
 
             this.GetChildResources(list, getChildItems, filter );
         }
@@ -72,10 +73,25 @@ namespace Ankh.Solution
             else
             {
                 return this.MergeStatuses(
-                    this.MergeStatuses( this.solutionFolder, this.solutionFile ),
-                    this.MergeStatuses( this.additionalResources ) );
+                    this.MergeStatuses( this.solutionFolder, this.solutionFile),
+                        this.MergeStatuses(this.deletedResources));
             }
-        }       
+        }
+
+        protected override void CheckForSvnDeletions()
+        {
+            // if the solution folder is deleted, make sure all the children are as well.
+            if ( this.solutionFolder.IsDeleted )
+            {
+                this.SvnDelete();
+            }
+        }
+
+        protected override bool RemoveTreeNodeIfResourcesDeleted()
+        {
+            // You can't delete a solution from VS.
+            return false;
+        }
 
         /// <summary>
         /// The path to the solution folder.
@@ -92,9 +108,15 @@ namespace Ankh.Solution
 			get{ return this.parser; }
 		}
 
+        protected override IList DeletedItems
+        {
+            [System.Diagnostics.DebuggerStepThrough()]
+            get { return this.deletedResources; }
+        }
+
 		private ParsedSolution parser;
         private SvnItem solutionFile;
         private SvnItem solutionFolder;
-        private ArrayList additionalResources;
+        private ArrayList deletedResources;
     }
 }

@@ -151,17 +151,14 @@ namespace Ankh
             // we need all paths to be on ONE form
             string normPath = PathUtils.NormalizePath( path, this.currentPath );
 
-            
-            if ( status.TextStatus != StatusKind.Deleted )
-            {
-                // is there already an item for this path?
-                SvnItem existingItem = (SvnItem)this.table[normPath];
-                if ( existingItem != null && existingItem != SvnItem.Unversionable )
-                    existingItem.Refresh( status );
-                else
-                    this.table[normPath] = new SvnItem( path, status );
-            }
+            // is there already an item for this path?
+            SvnItem existingItem = (SvnItem)this.table[ normPath ];
+            if ( existingItem != null && existingItem != SvnItem.Unversionable )
+                existingItem.Refresh( status );
             else
+                this.table[ normPath ] = new SvnItem( path, status );
+
+            if ( status.TextStatus == StatusKind.Deleted )
             {
                 string containingDir;
                 containingDir = GetNormalizedParentDirectory(path);
@@ -170,8 +167,11 @@ namespace Ankh
                 IList list = (IList)this.deletions[ containingDir ];
                 if ( list == null )
                     list = new ArrayList();
-                SvnItem deletedItem = new SvnItem( path, status );
-                list.Add( deletedItem );
+                SvnItem deletedItem = (SvnItem)this.table[ normPath ];
+                if ( !list.Contains( deletedItem ) )
+                {
+                    list.Add( deletedItem );
+                }
 
                 this.deletions[ containingDir ] = list;
             }

@@ -197,6 +197,17 @@ namespace Ankh
             }
         }
 
+
+        public virtual bool IsDeleted
+        {
+            get { return this.status.TextStatus == StatusKind.Deleted; }
+        }
+
+        public virtual bool IsDeletedFromDisk
+        {
+            get { return this.status.TextStatus == StatusKind.None && !File.Exists( this.Path ) && !Directory.Exists( this.Path ); }
+        }
+
         public override string ToString()
         {
             return this.path;
@@ -312,11 +323,21 @@ namespace Ankh
                 }
             }
 
+            public override bool IsDeleted
+            {
+                get
+                {
+                    return false;
+                }
+            }
 
-
-
-
-
+            public override bool IsDeletedFromDisk
+            {
+                get
+                {
+                    return false;
+                }
+            }
         }
 
         /// <summary>
@@ -378,6 +399,18 @@ namespace Ankh
         {
             return item.IsVersioned && !item.IsLocked && item.IsFile;
         }
+
+        public static bool ExistingOnDiskFilter( SvnItem item )
+        {
+            return !item.IsDeletedFromDisk;
+        }
+
+        public static bool NotDeletedFilter( SvnItem item )
+        {
+            return !item.IsDeleted;
+        }
+
+
 
         public static void GetPathInfo( object sender, GetPathInfoEventArgs args )
         {

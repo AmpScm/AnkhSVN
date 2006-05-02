@@ -56,14 +56,13 @@ namespace Ankh.EventSinks
         public int OnAfterRemoveDirectories( int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEDIRECTORYFLAGS[] rgFlags )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterRemoveDirectories() of: {0}", this.ToString() ) );
-            return OnAfterRemove( rgpszMkDocuments );
+            return VSConstants.S_OK;
         }
 
         public int OnAfterRemoveFiles( int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEFILEFLAGS[] rgFlags )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterRemoveFiles() of: {0}", this.ToString() ) );
-           
-            return OnAfterRemove( rgpszMkDocuments );
+            return VSConstants.S_OK;
         }
 
         public int OnAfterRenameDirectories( int cProjects, int cDirs, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, VSRENAMEDIRECTORYFLAGS[] rgFlags )
@@ -99,19 +98,32 @@ namespace Ankh.EventSinks
         public int OnQueryRemoveDirectories( IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYFLAGS[] rgFlags, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnQueryRemoveDirectories() of: {0}", this.ToString() ) );
-
-            VSQUERYREMOVEFILERESULTS[] results = new VSQUERYREMOVEFILERESULTS[1];
-            int hr = this.OnQueryRemove( rgpszMkDocuments, results );
-            pSummaryResult[0] = results[0] == VSQUERYREMOVEFILERESULTS.VSQUERYREMOVEFILERESULTS_RemoveOK ? 
-                VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK :
-                VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
-            return hr;
+            return OnRemove( rgpszMkDocuments, rgResults, pSummaryResult );
         }
+
 
         public int OnQueryRemoveFiles( IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYREMOVEFILEFLAGS[] rgFlags, VSQUERYREMOVEFILERESULTS[] pSummaryResult, VSQUERYREMOVEFILERESULTS[] rgResults )
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnQueryRemoveFiles() of: {0}", this.ToString() ) );
-            return this.OnQueryRemove( rgpszMkDocuments, pSummaryResult );
+            VSQUERYREMOVEDIRECTORYRESULTS[] results = new VSQUERYREMOVEDIRECTORYRESULTS[ rgResults.Length ];
+            VSQUERYREMOVEDIRECTORYRESULTS[] summaryResults = new VSQUERYREMOVEDIRECTORYRESULTS[ 1 ];
+
+            int hr = this.OnRemove( rgpszMkDocuments, results, summaryResults );
+
+            // we need to convert to the appropriate enum (even if they have exactly the same flags...)
+            ConvertRemoveFileResults( results, rgResults );
+            ConvertRemoveFileResults( summaryResults, pSummaryResult );
+
+            return hr;
+        }
+
+        private static void ConvertRemoveFileResults( VSQUERYREMOVEDIRECTORYRESULTS[] results, VSQUERYREMOVEFILERESULTS[] rgResults )
+        {
+            for ( int i = 0; i < results.Length; i++ )
+            {
+                rgResults[ i ] = results[ i ] == VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK ?
+                    VSQUERYREMOVEFILERESULTS.VSQUERYREMOVEFILERESULTS_RemoveNotOK :
+                    VSQUERYREMOVEFILERESULTS.VSQUERYREMOVEFILERESULTS_RemoveOK;
+            }
         }
 
         public int OnQueryRenameDirectories( IVsProject pProject, int cDirs, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEDIRECTORYFLAGS[] rgFlags, VSQUERYRENAMEDIRECTORYRESULTS[] pSummaryResult, VSQUERYRENAMEDIRECTORYRESULTS[] rgResults )
@@ -121,6 +133,8 @@ namespace Ankh.EventSinks
             VSQUERYRENAMEFILERESULTS[] fileResults = new VSQUERYRENAMEFILERESULTS[1];
 
             int hr = OnQueryRename( rgszMkOldNames, rgszMkNewNames, fileResults );
+
+            // Convert VSQUERYRENAMEFILERESULTS to VSQUERYRENAMEDIRECTORYRESULTS.
             pSummaryResult[0] = (fileResults[0] == VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK) ? 
                 VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK : 
                 VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameNotOK;
@@ -130,13 +144,19 @@ namespace Ankh.EventSinks
         public int OnQueryRenameFiles( IVsProject pProject, int cFiles, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEFILEFLAGS[] rgFlags, VSQUERYRENAMEFILERESULTS[] pSummaryResult, VSQUERYRENAMEFILERESULTS[] rgResults )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnQueryRenameFiles() of: {0}", this.ToString() ) );
-
             return OnQueryRename( rgszMkOldNames, rgszMkNewNames, pSummaryResult );
         }
 
        
         #endregion
 
+        /// <summary>
+        /// Perform the actual rename here, for both files and directories.
+        /// </summary>
+        /// <param name="rgszMkOldNames"></param>
+        /// <param name="rgszMkNewNames"></param>
+        /// <param name="directory"></param>
+        /// <returns></returns>
         private int OnAfterRename( string[] rgszMkOldNames, string[] rgszMkNewNames, bool directory )
         {
             try
@@ -172,31 +192,13 @@ namespace Ankh.EventSinks
                 this.context.ErrorHandler.Handle( ex );
                 return VSConstants.E_FAIL;
             }
-        }
+        }        
 
-        private int OnAfterRemove( string[] paths )
-        {
-            try
-            {
-                for( int i = 0; i < paths.Length; i++ ) 
-                {
-                    SvnItem item = this.context.StatusCache[ paths[i] ];
-                    item.Refresh( this.context.Client );
-                    if ( item.Status.TextStatus == StatusKind.Missing )
-                    {
-                        this.context.Client.Delete( new string[]{ item.Path }, true );
-                    }
-
-                }
-                return VSConstants.S_OK;
-            }
-            catch( Exception ex )
-            {
-                this.context.ErrorHandler.Handle( ex );
-                return VSConstants.E_FAIL;
-            }
-        }
-
+        /// <summary>
+        /// Perform the actual Add here, for both files and directories.
+        /// </summary>
+        /// <param name="paths"></param>
+        /// <returns></returns>
         private int OnAfterAdd( string[] paths )
         {
             try
@@ -238,6 +240,13 @@ namespace Ankh.EventSinks
             }
         }
 
+        /// <summary>
+        /// Verify renames for both directories and files.
+        /// </summary>
+        /// <param name="rgszMkOldNames"></param>
+        /// <param name="rgszMkNewNames"></param>
+        /// <param name="pSummaryResult"></param>
+        /// <returns></returns>
         private int OnQueryRename( string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEFILERESULTS[] pSummaryResult )
         {
             try
@@ -270,19 +279,35 @@ namespace Ankh.EventSinks
             }
         }
 
-       
-
-        private int OnQueryRemove( string[] names, VSQUERYREMOVEFILERESULTS[] pSummaryResult )
+        /// <summary>
+        /// Perform the actual remove here (called by the OnQuery methods). If we can SVN delete something, 
+        /// delete it now and return RemoveNotOk to prevent VS from removing it as well.
+        /// This is the only way we can prevent directories getting deleted with their metadata.
+        /// </summary>
+        /// <param name="rgpszMkDocuments"></param>
+        /// <param name="rgResults"></param>
+        /// <param name="pSummaryResult"></param>
+        /// <returns></returns>
+        private int OnRemove( string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult )
         {
             try
             {
-                pSummaryResult[0] = VSQUERYREMOVEFILERESULTS.VSQUERYREMOVEFILERESULTS_RemoveOK;
-                for( int i = 0; i < names.Length; i++ )
+                pSummaryResult[0] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
+                for( int i = 0; i < rgpszMkDocuments.Length; i++ )
                 {
-                    SvnItem item = context.StatusCache[ names[i] ];
-                    if ( !CanDelete( item ) )
+                    SvnItem item = context.StatusCache[ rgpszMkDocuments[i] ];
+                    item.Refresh(this.context.Client);
+                    if ( CanSvnDelete( item ) )
                     {
-                        pSummaryResult[0] = VSQUERYREMOVEFILERESULTS.VSQUERYREMOVEFILERESULTS_RemoveNotOK;
+                        pSummaryResult[ 0 ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
+                        rgResults[i] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
+                        context.Client.Delete( new string[] { item.Path }, true );
+
+                        item.Refresh( context.Client );
+                    }
+                    else
+                    {
+                        rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
                     }
                         
                 }
@@ -314,9 +339,14 @@ namespace Ankh.EventSinks
             return oldPath == newPath;
         }
 
-        private bool CanDelete( SvnItem item )
+        /// <summary>
+        /// Is it possible to delete this item?
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private bool CanSvnDelete( SvnItem item )
         {
-            if ( item.IsVersioned )
+            if ( item.IsVersioned && !item.IsDeleted )
             {
                 if ( item.IsModified )
                 {
@@ -330,7 +360,7 @@ namespace Ankh.EventSinks
                     return true;
             }
             else 
-                return true;
+                return false;
         }
 
         /// <summary>
@@ -406,6 +436,8 @@ namespace Ankh.EventSinks
         private uint cookie;
 
         private IVsTrackProjectDocuments2 trackProjectDocuments;
+
+        private readonly string suffix = new Guid().ToString();
 
 
     }
