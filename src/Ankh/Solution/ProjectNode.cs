@@ -32,7 +32,7 @@ namespace Ankh.Solution
                 list.Add( this.projectFile );
 
             // add deleted items.
-            foreach( SvnItem item in this.additionalResources )
+            foreach( SvnItem item in this.deletedResources )
             {
                 if ( filter == null || filter( item ) )
                     list.Add( item );
@@ -48,9 +48,18 @@ namespace Ankh.Solution
 
         protected override void RescanHook()
         {
-            this.additionalResources.Clear();
-            this.AddDeletions( this.projectFolder.Path, this.additionalResources, 
-                new StatusChanged(this.ChildOrResourceChanged) );
+            this.deletedResources.Clear();
+            this.AddDeletions( this.projectFolder.Path, this.deletedResources,
+                new StatusChanged( this.ChildOrResourceChanged ) );
+        }
+
+        protected override void CheckForSvnDeletions()
+        {
+            // if the project folder is deleted, make sure the children are as well.
+            if ( this.projectFolder.IsDeleted )
+            {
+                this.SvnDelete();
+            }
         }
 
         public override void Refresh(bool rescan)
@@ -62,6 +71,11 @@ namespace Ankh.Solution
             base.Refresh(rescan);
         }
 
+        protected override bool RemoveTreeNodeIfResourcesDeleted()
+        {
+            // VS will never delete projects.
+            return false;
+        }
 
         private void FindProjectResources(Explorer explorer)
         {
@@ -77,7 +91,7 @@ namespace Ankh.Solution
                 this.modeled=false;
             }
 
-            this.additionalResources = new ArrayList();
+            this.deletedResources = new ArrayList();
 
             // special treatment for VDs
             if (String.Compare(this.project.Kind, ProjectNode.VDPROJKIND, true) == 0)
@@ -99,8 +113,9 @@ namespace Ankh.Solution
                 this.projectFile.Changed += del;
 
                 // we also want deleted items in this folder
-                this.AddDeletions(this.projectFolder.Path,
-                    this.additionalResources, del);
+                this.AddDeletions( this.projectFolder.Path,
+                    this.deletedResources, new StatusChanged(this.DeletedItemStatusChanged) );
+
             }
             // web projects in VS 2005 have no project files
             else if (System.IO.Directory.Exists(fullname))
@@ -111,7 +126,7 @@ namespace Ankh.Solution
                 this.Explorer.AddResource(this.uiItem.Object, this, fullname);
 
                 this.projectFolder.Changed += del;
-                this.AddDeletions(this.projectFolder.Path, this.additionalResources, del);
+                this.AddDeletions( this.projectFolder.Path, this.deletedResources, new StatusChanged(this.DeletedItemStatusChanged) );
             }
             else
             {
@@ -169,15 +184,19 @@ namespace Ankh.Solution
             // check status on the project folder
             return this.MergeStatuses(
                 this.MergeStatuses(this.projectFolder, this.projectFile),
-                this.MergeStatuses(this.additionalResources));
+                this.MergeStatuses(this.deletedResources));
 
-               
-        }                    
+        }
+
+        protected override IList DeletedItems
+        {
+            get { return this.deletedResources; }
+        }
 
         private bool modeled;
         private SvnItem projectFolder;
         private SvnItem projectFile;
-        private IList additionalResources;
+        private IList deletedResources;
         private Project project;
 
         private const string VDPROJKIND = @"{54435603-DBB4-11D2-8724-00A0C9A8B90C}";

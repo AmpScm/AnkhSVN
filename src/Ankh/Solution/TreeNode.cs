@@ -161,9 +161,36 @@ namespace Ankh.Solution
 
         
 
+        /// <summary>
+        /// Thedirectory represented by this node.
+        /// </summary>
         abstract public string Directory
         {
             get;
+        }
+        
+        /// <summary>
+        /// A list of deleted resources belonging to this node.
+        /// </summary>
+        abstract protected IList DeletedItems
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Handles status change events from deleted items belonging to a node.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        protected void DeletedItemStatusChanged( object sender, EventArgs args )
+        {
+            SvnItem item = sender as SvnItem;
+            if ( item != null && !item.IsDeleted && this.DeletedItems.Contains( item ) )
+            {
+                item.Changed -= new StatusChanged( this.DeletedItemStatusChanged );
+                this.DeletedItems.Remove( item );
+                this.ChildOrResourceChanged(sender, args);
+            }
         }
 
 
@@ -230,9 +257,21 @@ namespace Ankh.Solution
         /// </summary>
         protected virtual void OnChanged()
         {
-            this.SetStatusImage( this.CurrentStatus );
-            if ( this.Changed != null )
-                this.Changed( this, EventArgs.Empty );
+            try
+            {
+                if ( !this.isRefreshing )
+                {
+                    this.isRefreshing = true;
+
+                    this.SetStatusImage( this.CurrentStatus );
+                    if ( this.Changed != null )
+                        this.Changed( this, EventArgs.Empty );
+                }
+            }
+            finally
+            {
+                this.isRefreshing = false;
+            }
         }
 
         /// <summary>
@@ -243,12 +282,124 @@ namespace Ankh.Solution
         /// <param name="args"></param>
         protected virtual void ChildOrResourceChanged( object sender, EventArgs args )
         {
+            if ( !this.isDeleting )
+            {
+                this.CheckForSvnDeletions();
+                if ( CheckForDeletedTreeNode() )
+                {
+                    return;
+                }
+            }
+
             NodeStatus newStatus = this.MergeStatuses( this.ThisNodeStatus(), 
                 this.CheckChildStatuses() );
             if ( newStatus != this.currentStatus )
             {
                 this.currentStatus = newStatus;
                 this.OnChanged();
+            }
+        }
+
+        /// <summary>
+        /// Check if this treenode is deleted.
+        /// </summary>
+        /// <returns></returns>
+        protected bool CheckForDeletedTreeNode()
+        {
+            try
+            {
+                this.isDeleting = true;
+
+                // If the parent is deleted as well, no point in deleting us.
+                if ( this.Parent != null )
+                {
+                    if ( this.Parent.CheckForDeletedTreeNode() )
+                    {
+                        return true;
+                    }
+                }
+
+                return RemoveTreeNodeIfResourcesDeleted();
+            }
+            finally
+            {
+                this.isDeleting = false;
+            }
+        }
+
+        /// <summary>
+        /// Override this to "kill" yourself if all resources belonging to you are deleted.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract bool RemoveTreeNodeIfResourcesDeleted();
+
+        protected abstract void CheckForSvnDeletions();
+
+        /// <summary>
+        /// Deletes all resources belonging to this node and its children.
+        /// </summary>
+        protected void SvnDelete()
+        {
+            try
+            {
+                this.isDeleting = true;
+
+                IList resources = new ArrayList();
+                this.GetResources( resources, true, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
+
+                ArrayList resourcePaths = new ArrayList();
+                foreach ( SvnItem item in resources )
+                {
+                    if ( !item.IsDeleted )
+                    {
+                        resourcePaths.Add( item.Path );
+                    }
+                }
+
+                this.explorer.Context.Client.Delete( (string[])resourcePaths.ToArray( typeof( string ) ), true );
+
+                foreach ( SvnItem item in resources )
+                {
+                    item.Refresh( this.explorer.Context.Client );
+                }
+            }
+            finally
+            {
+                this.isDeleting = false;
+            }
+
+        }
+
+        protected void FilterResources( IList inList, IList outList, ResourceFilterCallback filter )
+        {
+            foreach ( SvnItem item in inList )
+            {
+                if ( filter == null || filter(item) )
+                {
+                    outList.Add( item );
+                }
+            }
+        }
+
+        protected void RemoveSelf()
+        {
+            if ( this.Parent != null )
+            {
+                this.Parent.Remove( this );
+            }
+        }
+
+        private void Remove( TreeNode treeNode )
+        {
+            treeNode.Changed -= new StatusChanged( this.ChildOrResourceChanged );
+            this.Children.Remove( treeNode );
+        }
+
+        protected void UnhookEvents( IList svnItems )
+        {
+            foreach ( SvnItem item in svnItems )
+            {
+                item.Changed -= new StatusChanged( this.ChildOrResourceChanged );
             }
         }
 
@@ -435,6 +586,7 @@ namespace Ankh.Solution
             } 
         }
 
+
         /// <summary>
         /// Called as part of a rescan of the current node.
         /// </summary>
@@ -550,6 +702,8 @@ namespace Ankh.Solution
         private IList children;
         private Explorer explorer;
         private NodeStatus currentStatus;
+        private bool isDeleting = false;
+        private bool isRefreshing = false;
         private static readonly IDictionary statusMap = new Hashtable();
     }
 }

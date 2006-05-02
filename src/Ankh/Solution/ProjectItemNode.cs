@@ -30,11 +30,8 @@ namespace Ankh.Solution
         public override void GetResources(IList list, bool getChildItems, 
             ResourceFilterCallback filter )
         {
-            foreach( SvnItem item in this.resources )
-            {
-                if ( filter == null || filter(item) )
-                    list.Add(item);
-            }
+            this.FilterResources( this.resources, list, filter );
+            this.FilterResources( this.deletedResources, list, filter );
             this.GetChildResources( list, getChildItems, filter );
         }
 
@@ -60,7 +57,103 @@ namespace Ankh.Solution
         /// <returns></returns>
         protected override NodeStatus ThisNodeStatus()
         {
-            return this.MergeStatuses( this.resources );
+            return this.MergeStatuses(this.MergeStatuses( this.resources ),
+                this.MergeStatuses(this.deletedResources));
+        }
+
+        protected override void CheckForSvnDeletions()
+        {
+            // only check *our* resources here, we already know that the deleted resources are, uhm, deleted.
+            foreach(SvnItem item in this.resources)
+            {
+                if ( item.IsDeleted )
+                {
+                    this.SvnDelete();
+                }
+            }
+        }
+
+        protected override bool RemoveTreeNodeIfResourcesDeleted()
+        {
+            if ( !AllResourcesDeleted() )
+            {
+                return false;
+            }
+
+            // we need to be absolutely sure this project item is up to date, since it may have been renamed
+            this.FindResources();
+
+            // If everything's deleted, I have no more reason to live.
+            if ( !AllResourcesDeleted() )
+            {
+                return false;
+            }
+
+            // get us off the hook
+            UnhookEvents( this.resources );
+            this.RemoveSelf();
+
+            bool removed = false;
+            try
+            {   
+                // VC files can only be removed with VCProject.RemoveFile.
+                VCProject vcProject = this.ProjectItem.ContainingProject.Object as VCProject;
+                VCProjectItem vcItem = this.ProjectItem.Object as VCProjectItem;
+                if ( vcProject != null && vcItem != null )
+                {
+                    vcProject.RemoveFile( vcItem );
+                    removed = true;
+                }
+            }
+            catch ( Exception )
+            {
+                // ignore
+            }
+            try
+            {
+                // Try just removing them from the project.
+                if ( !removed )
+                {
+                    this.ProjectItem.Remove();
+                    removed = true; 
+                }
+            }
+            catch(Exception)
+            {
+            }
+            try
+            {
+                // New-style ASP.NET files can only be deleted from projects.
+                if ( !removed )
+                {
+                    this.ProjectItem.Delete();
+                    removed = true; 
+                }
+            }
+            catch ( Exception )
+            {
+            }
+
+            if ( removed )
+            {
+                this.Parent.Refresh();
+            }
+            return removed;
+        }
+
+        private bool AllResourcesDeleted()
+        {
+            IList versionedResources = new ArrayList();
+            this.GetResources( versionedResources, true, new ResourceFilterCallback( SvnItem.NotDeletedFilter ) );
+
+            if ( versionedResources.Count > 0 )
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         /// <summary>
@@ -93,12 +186,18 @@ namespace Ankh.Solution
             }
         }
 
+        protected override IList DeletedItems
+        {
+            get { return this.deletedResources; }
+        }
+
 
         protected void FindResources()
         {
             this.Explorer.AddResource( this.projectItem, this.parsedProjectItem, this ); 
 
             this.resources = new ArrayList();
+            this.deletedResources = new ArrayList();
             try
             {
                 StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
@@ -124,6 +223,18 @@ namespace Ankh.Solution
             }
             finally
             {
+            }
+        }
+
+        protected override void RescanHook()
+        {
+            this.deletedResources = new ArrayList();
+            foreach ( SvnItem item in this.resources )
+            {
+                if ( item.IsDirectory )
+                {
+                    this.AddDeletions( item.Path, this.deletedResources, new StatusChanged( this.DeletedItemStatusChanged ) );
+                }
             }
         }
 
@@ -208,10 +319,11 @@ namespace Ankh.Solution
                     this.resources.Add( svnItem );
                     svnItem.Changed += del;
 
-                    // if its a dir, we want the deleted paths too
+                  
+                   // if its a dir, we want the deleted paths too
                     if ( svnItem.IsDirectory )
                     {
-                        this.AddDeletions( path, this.resources, del );
+                        this.AddDeletions( path, this.deletedResources, new StatusChanged(this.DeletedItemStatusChanged) );
                     }
                 }                    
             }
@@ -231,7 +343,7 @@ namespace Ankh.Solution
                 // if its a dir, we want the deleted paths too
                 if ( svnItem.IsDirectory )
                 {
-                    this.AddDeletions( item.FileName, this.resources, del );
+                    this.AddDeletions( svnItem.Path, this.deletedResources, new StatusChanged(this.DeletedItemStatusChanged) );
                 }
             }  
         }
@@ -255,6 +367,8 @@ namespace Ankh.Solution
         private ParsedSolutionItem parsedProjectItem;
         private object projectItem;
         private IList resources;
+        private IList deletedResources;
+
     }    
 
 }

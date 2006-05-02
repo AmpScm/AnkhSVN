@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 
 namespace Ankh.Solution
@@ -35,6 +36,22 @@ namespace Ankh.Solution
         {
             this.GetChildResources( list, getChildItems, filter );
 
+        }
+
+        protected override void CheckForSvnDeletions()
+        {
+            // nothing, solution folders are virtual only.
+        }
+
+        protected override bool RemoveTreeNodeIfResourcesDeleted()
+        {
+            // It's not our business to remove solution folders, even if they're empty.
+            return false;
+        }
+
+        protected override IList DeletedItems
+        {
+            get { throw new Exception( "The method or operation is not implemented." ); }
         }
 
     }
