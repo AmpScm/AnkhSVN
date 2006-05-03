@@ -66,7 +66,8 @@ namespace Ankh.Solution
         {
             if (rescan)
             {
-                ((SolutionNode)this.Parent).Parser.Refresh();
+                if (this.Solution != null)
+                    this.Solution.Parser.Refresh();
             }
             base.Refresh(rescan);
         }

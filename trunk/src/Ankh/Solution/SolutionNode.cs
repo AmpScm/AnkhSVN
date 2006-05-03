@@ -34,7 +34,13 @@ namespace Ankh.Solution
             explorer.SetSolution( this );
                 
             this.FindChildren();  
-        }   
+        }
+
+        public override SolutionNode Solution
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get { return this; }
+        }
 
         public override void Accept(INodeVisitor visitor)
         {
