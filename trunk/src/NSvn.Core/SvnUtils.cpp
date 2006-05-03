@@ -61,5 +61,9 @@ bool NSvn::Core::SvnUtils::IsWorkingCopyPath( String* path )
         dir = Path::GetDirectoryName( path );
     else 
         dir = path;
+
+    if(dir == 0)
+        return false;
+
     return Directory::Exists( Path::Combine( dir, Client::AdminDirectoryName ) );
 }
