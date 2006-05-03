@@ -36,7 +36,13 @@ namespace Ankh.Solution
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.explorer; }
-        }     
+        }
+
+        public virtual SolutionNode Solution
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get { return this.Parent.Solution; }
+        }
         
         public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
             Explorer explorer, TreeNode parent )
