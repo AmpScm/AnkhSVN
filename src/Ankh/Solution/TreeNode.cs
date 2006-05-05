@@ -741,7 +741,15 @@ namespace Ankh.Solution
 #if DEBUG
         internal bool IsOrphaned()
         {
-            return this.Parent != null && !this.Parent.Children.Contains( this );
+            if ( this.Parent == null )
+            {
+                return this.explorer.SolutionNode != this;
+            }
+            else
+            {
+                return ( !this.Parent.Children.Contains( this ) ) ||
+                    this.Parent.IsOrphaned();
+            }
         }
 #endif
 
