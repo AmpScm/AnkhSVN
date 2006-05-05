@@ -29,19 +29,20 @@ namespace Ankh.Solution
         }
 
         /// <summary>
-        /// Toggles updates of this treeview window.
+        /// Disables updates of this treeview window.
         /// </summary>
         /// <returns></returns>
-        public void LockWindowUpdate( bool enable )
+        public void LockWindowUpdate()
         {
-            if (enable) 
-            {
-                Win32.LockWindowUpdate( this.hwnd );
-            } 
-            else 
-            {
-                Win32.LockWindowUpdate( (IntPtr)null );
-            }
+            Win32.LockWindowUpdate( this.hwnd );
+        }
+
+        /// <summary>
+        /// Reenables updates of this treeview window.
+        /// </summary>
+        public void UnlockWindowUpdate()
+        {
+            Win32.LockWindowUpdate( IntPtr.Zero );
         }
 
         /// <summary>
