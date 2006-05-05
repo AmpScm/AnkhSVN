@@ -323,6 +323,12 @@ namespace Ankh.Solution
             }
         }
 
+        internal SolutionNode SolutionNode
+        {
+            get { return solutionNode; }
+        }
+
+
         public bool RenameInProgress
         {
             get
@@ -988,6 +994,7 @@ namespace Ankh.Solution
         private IDictionary projectItems;
         private IDictionary projects;
         private SolutionNode solutionNode;
+
         private ImageList statusImageList;
         private IContext context;
         private TreeView treeView;
