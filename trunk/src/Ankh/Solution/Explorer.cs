@@ -102,12 +102,18 @@ namespace Ankh.Solution
                 if ( node != null )
                 {
                     if ( node == this.solutionNode )
-                        node.Refresh();
+                    {
+                        this.RefreshNode( node );
+                    }
                     else
-                        node.Parent.Refresh();
+                    {
+                        this.RefreshNode( node.Parent );
+                    }
                 }
             }
         }
+
+        
 
         /// <summary>
         /// Refreshes all subnodes of a specific project.
@@ -119,7 +125,9 @@ namespace Ankh.Solution
 
             TreeNode node = this.GetNode( project );
             if ( node != null )
-                node.Refresh();
+            {
+                this.RefreshNode( node );
+            }
         }
 
         /// <summary>
@@ -133,7 +141,9 @@ namespace Ankh.Solution
             {
                 TreeNode node = this.GetNode( item );
                 if ( node != null )
-                    node.Refresh();
+                {
+                    this.RefreshNode( node );
+                }
             }
         }
 
@@ -147,7 +157,9 @@ namespace Ankh.Solution
 
             TreeNode node = (TreeNode)this.projectItems[item];
             if ( node != null )
-                node.Refresh();
+            {
+                this.RefreshNode( node );
+            }
         }       
 
         public void SyncAll()
@@ -172,6 +184,19 @@ namespace Ankh.Solution
             SolutionLoadStrategy.GetStrategy( dte.Version ).Load( this );     
  
             Debug.WriteLine( "Created solution node", "Ankh" );
+        }
+
+        private void RefreshNode( TreeNode treeNode )
+        {
+            try
+            {
+                this.treeView.LockWindowUpdate();
+                treeNode.Refresh();
+            }
+            finally
+            {
+                this.treeView.UnlockWindowUpdate();
+            }
         }
 
         /// <summary>
@@ -603,7 +628,7 @@ namespace Ankh.Solution
                 outer.context.StartOperation( "Synchronizing with solution explorer");
 
                 // avoid lots of flickering while we walk the tree
-                outer.TreeView.LockWindowUpdate(true);
+                outer.TreeView.LockWindowUpdate();
                 try
                 {
                     // we assume there is a single root node
@@ -618,7 +643,7 @@ namespace Ankh.Solution
                 finally
                 {
                     // done
-                    outer.TreeView.LockWindowUpdate(false);
+                    outer.TreeView.UnlockWindowUpdate();
                     outer.context.EndOperation();
                 }
 
