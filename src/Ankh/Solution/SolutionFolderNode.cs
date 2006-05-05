@@ -54,5 +54,10 @@ namespace Ankh.Solution
             get { throw new Exception( "The method or operation is not implemented." ); }
         }
 
+        protected override void DoDispose()
+        {
+            // nothing
+        }
+
     }
 }

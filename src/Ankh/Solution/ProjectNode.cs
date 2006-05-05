@@ -78,6 +78,12 @@ namespace Ankh.Solution
             return false;
         }
 
+        protected override void DoDispose()
+        {
+            this.UnhookEvents( new SvnItem[] { this.projectFile, this.projectFolder }, new StatusChanged( this.ChildOrResourceChanged ) );
+            this.UnhookEvents( this.deletedResources, new StatusChanged(this.ChildOrResourceChanged) );
+        }
+
         private void FindProjectResources(Explorer explorer)
         {
             // find the directory containing the project

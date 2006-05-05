@@ -90,7 +90,7 @@ namespace Ankh.Solution
             }
 
             // get us off the hook
-            UnhookEvents( this.resources );
+            this.Dispose();
             this.RemoveSelf();
 
             bool removed = false;
@@ -139,6 +139,12 @@ namespace Ankh.Solution
                 this.Parent.Refresh();
             }
             return removed;
+        }
+
+        protected override void DoDispose()
+        {
+            this.UnhookEvents( this.resources, new StatusChanged( this.ChildOrResourceChanged ) );
+            this.UnhookEvents( this.resources, new StatusChanged( this.DeletedItemStatusChanged ) );
         }
 
         private bool AllResourcesDeleted()
