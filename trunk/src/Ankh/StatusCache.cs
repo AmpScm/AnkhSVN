@@ -247,6 +247,18 @@ namespace Ankh
         private Client client;
         private string currentPath;
 
-        
+
+#if DEBUG
+        internal void ScanForOrphanedTreeNodes( TextWriter writer )
+        {
+            int numOrphans = 0;
+            foreach ( SvnItem item in this.table.Values )
+            {
+                numOrphans += item.ScanForOrphanedTreeNodes( writer );
+            }
+
+            writer.WriteLine( "Found {0} orphaned nodes.", numOrphans );
+        }
+#endif
     }
 }
