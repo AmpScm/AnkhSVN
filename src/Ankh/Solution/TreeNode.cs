@@ -711,5 +711,32 @@ namespace Ankh.Solution
         private bool isDeleting = false;
         private bool isRefreshing = false;
         private static readonly IDictionary statusMap = new Hashtable();
+
+#if DEBUG
+        internal bool IsOrphaned()
+        {
+            return this.Parent != null && !this.Parent.Children.Contains( this );
+        }
+#endif
     }
+
+#if DEBUG
+
+    [VSNetCommand("CheckForOrphanedTreeNodes", Text="Check for orphaned tree nodes", 
+        Bitmap=ResourceBitmaps.Default, 
+        Tooltip="Check for orphaned tree nodes")]
+    [VSNetControl( "Tools.AnkhSVN", Position=1 )]
+    public class CheckForOrphanedTreeNodes : Ankh.Commands.CommandBase
+    {
+        public override vsCommandStatus QueryStatus( IContext context )
+        {
+            return Enabled;
+        }
+
+        public override void Execute( IContext context, string parameters )
+        {
+            context.StatusCache.ScanForOrphanedTreeNodes(context.OutputPane);
+        }
+    }
+#endif
 }
