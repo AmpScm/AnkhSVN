@@ -99,6 +99,12 @@ namespace Ankh.Solution
             return false;
         }
 
+        protected override void DoDispose()
+        {
+            this.UnhookEvents( new SvnItem[] { this.solutionFile, this.solutionFolder }, new StatusChanged( this.ChildOrResourceChanged ) );
+            this.UnhookEvents( this.deletedResources, new StatusChanged( this.ChildOrResourceChanged ) );
+        }
+
         /// <summary>
         /// The path to the solution folder.
         /// </summary>

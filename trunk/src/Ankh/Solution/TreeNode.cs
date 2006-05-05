@@ -17,7 +17,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents an item in the treeview.
     /// </summary>
-    public abstract class TreeNode
+    public abstract class TreeNode : IDisposable
     {
 
         public event StatusChanged Changed;
@@ -130,6 +130,31 @@ namespace Ankh.Solution
             }
         }
 
+        /// <summary>
+        /// Make sure we unhook from all events pointing to us.
+        /// </summary>
+        public void Dispose()
+        {
+            this.DoDispose();
+            this.DisposeChildren();
+        }
+
+        /// <summary>
+        /// Calls Dispose on all Children of this node.
+        /// </summary>
+        private void DisposeChildren()
+        {
+            foreach ( TreeNode node in this.Children )
+            {
+                node.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Must be overridden in derived classes to unhook from events and other cleanup.
+        /// </summary>
+        protected abstract void DoDispose();
+
         public abstract void Accept( INodeVisitor visitor );
 
         public void Refresh()
@@ -146,6 +171,7 @@ namespace Ankh.Solution
                     if (this.Directory != null && this.Directory.Length > 0)
                         this.explorer.Context.StatusCache.Status(this.Directory);
 
+                    this.DisposeChildren();
                     this.FindChildren( );
                     this.RescanHook();
                 }
@@ -401,11 +427,11 @@ namespace Ankh.Solution
             this.Children.Remove( treeNode );
         }
 
-        protected void UnhookEvents( IList svnItems )
+        protected void UnhookEvents( IList svnItems, StatusChanged del )
         {
             foreach ( SvnItem item in svnItems )
             {
-                item.Changed -= new StatusChanged( this.ChildOrResourceChanged );
+                item.Changed -= del;
             }
         }
 
@@ -718,6 +744,8 @@ namespace Ankh.Solution
             return this.Parent != null && !this.Parent.Children.Contains( this );
         }
 #endif
+
+       
     }
 
 #if DEBUG
