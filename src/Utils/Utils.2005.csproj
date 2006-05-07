@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50215</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A3248E1E-8272-4227-AF02-BB86040FBED9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -152,6 +152,7 @@
     <Compile Include="FolderBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="HashUtils.cs" />
     <Compile Include="Ole\ICustomDoc.cs">
       <SubType>Code</SubType>
     </Compile>
