@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50215</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -17,10 +17,10 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Ankh.UI</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <StartupObject>Ankh.UI.ErrorDialog</StartupObject>
+    <StartupObject>Ankh.UI.ConfigurationDialog</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -122,6 +122,7 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
@@ -186,6 +187,9 @@
     <Compile Include="CommitDialog.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ConflictDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -243,6 +247,12 @@
     <Compile Include="MimeTypePropertyEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="MultiLineStringEditorWithTemplates.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MultiLineStringTypeEditorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="NewDirectoryDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -257,6 +267,9 @@
     </Compile>
     <Compile Include="PlainPropertyEditor.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PopUpListForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ProgressDialog.cs">
       <SubType>Form</SubType>
@@ -285,12 +298,14 @@
     <Compile Include="SslServerTrustDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TypeConverters.cs" />
     <Compile Include="SwitchDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TestRepositoryExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TypeEditors.cs" />
     <Compile Include="UpdateDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -421,7 +436,23 @@
     <EmbeddedResource Include="Graphics\EnableBackgroundListing.ico" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ConfigurationDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ConfigurationDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\AddRepoURL.ico" />
+    <EmbeddedResource Include="MultiLineStringEditorWithTemplates.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MultiLineStringEditorWithTemplates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MultiLineStringTypeEditorDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MultiLineStringTypeEditorDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PopUpListForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PopUpListForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
