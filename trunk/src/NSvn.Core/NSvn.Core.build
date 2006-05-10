@@ -105,6 +105,7 @@
              options="${cl.options}">
             <sources>
                 <include name="**/*.cpp"/>
+                <exclude name="**/*.mrg.cpp"/>
             </sources>
             
         </cl>
