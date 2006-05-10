@@ -470,10 +470,41 @@ namespace Ankh
                 this.config = this.configLoader.LoadDefaultConfig();
             }
 
+            SetupFromConfig();
+
+            this.ConfigLoader.ConfigFileChanged += new EventHandler( ConfigLoader_ConfigFileChanged );
+
+        }
+        
+        /// <summary>
+        /// Seems someone has updated the config file on disk.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ConfigLoader_ConfigFileChanged( object sender, EventArgs e )
+        {
+            try
+            {
+                this.config = this.ConfigLoader.LoadConfig();
+                SetupFromConfig();
+                this.OutputPane.WriteLine( "Configuration reloaded." );
+            }
+            catch ( Ankh.Config.ConfigException ex )
+            {
+                this.OutputPane.WriteLine( "Configuration file has errors: " + ex.Message );
+            }
+            catch ( Exception ex )
+            {
+                this.ErrorHandler.Handle( ex );
+            }
+        }
+
+        private void SetupFromConfig()
+        {
             // should we use a custom configuration directory?
             if ( this.config.Subversion.ConfigDir != null )
-                this.client = new SvnClient( this, 
-                    Environment.ExpandEnvironmentVariables(this.config.Subversion.ConfigDir) );
+                this.client = new SvnClient( this,
+                    Environment.ExpandEnvironmentVariables( this.config.Subversion.ConfigDir ) );
             else
                 this.client = new SvnClient( this );
 
@@ -481,14 +512,13 @@ namespace Ankh
             // should we use a custom admin directory for our working copies?
             if ( this.config.Subversion.AdminDirectoryName != null )
             {
-                NSvn.Core.Client.AdminDirectoryName = 
+                NSvn.Core.Client.AdminDirectoryName =
                     this.config.Subversion.AdminDirectoryName;
             }
-            else if(Environment.GetEnvironmentVariable("SVN_ASP_DOT_NET_HACK") != null)
+            else if ( Environment.GetEnvironmentVariable( "SVN_ASP_DOT_NET_HACK" ) != null )
             {
                 NSvn.Core.Client.AdminDirectoryName = "_svn";
             }
-
         }
         
         private bool CheckWhetherAnkhShouldLoad()

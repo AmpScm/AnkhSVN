@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Collections;
 using Ankh.RepositoryExplorer;
 using System.Threading;
+using System.Diagnostics;
+using Utils;
 
 namespace Ankh.Config
 {
@@ -28,11 +30,21 @@ namespace Ankh.Config
     /// </summary>
     public sealed class ConfigLoader
     {
+
+        public event EventHandler ConfigFileChanged;
+
         public ConfigLoader( string configDir )
         {
             this.configDir = configDir;
             this.errors = new ArrayList();
+
+            EnsureConfig( this.ConfigPath );
+
+            this.configFileHash = HashUtils.GetMd5HashForFile( this.ConfigPath );
+            this.WatchConfigFile();
         }
+
+        
 
         public ConfigLoader() : this( ConfigLoader.DefaultConfigDir )
         {
@@ -80,11 +92,14 @@ namespace Ankh.Config
         /// <returns>A Config object.</returns>
         public Config LoadConfig()
         {
-            errors.Clear();
+            lock ( this.configFileLock )
+            {
+                // make sure there actually is a config file
+                EnsureConfig( this.ConfigPath );
 
-            // make sure there actually is a config file
-            EnsureConfig( this.ConfigPath );
-            return this.DeserializeConfig( new XmlTextReader( this.ConfigPath ) );
+                errors.Clear();
+                return this.DeserializeConfig( new XmlTextReader( this.ConfigPath ) ); 
+            }
         }
 
         /// <summary>
@@ -94,10 +109,13 @@ namespace Ankh.Config
         /// <returns></returns>
         public Config LoadDefaultConfig()
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            return this.DeserializeConfig( new XmlTextReader(
-                assembly.GetManifestResourceStream( 
-                ConfigLoader.configFileResource )));         
+            lock ( this.configFileLock )
+            {
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                return this.DeserializeConfig( new XmlTextReader(
+                    assembly.GetManifestResourceStream(
+                    ConfigLoader.configFileResource ) ) );
+            }      
         }
        
         /// <summary>
@@ -107,13 +125,16 @@ namespace Ankh.Config
         public void SaveConfig( Config config )
         {
             EnsureConfig( this.ConfigPath );
-
-            using( StreamWriter writer = new StreamWriter( this.ConfigPath  ) )
+            
+            lock ( this.configFileLock )
             {
-                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-                ns.Add( "", ConfigLoader.configNamespace );
-                XmlSerializer serializer = new XmlSerializer( typeof(Config) );
-                serializer.Serialize( writer, config, ns );
+                using ( StreamWriter writer = new StreamWriter( this.ConfigPath ) )
+                {
+                    XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+                    ns.Add( "", ConfigLoader.configNamespace );
+                    XmlSerializer serializer = new XmlSerializer( typeof( Config ) );
+                    serializer.Serialize( writer, config, ns );
+                } 
             }
         }
 
@@ -123,29 +144,32 @@ namespace Ankh.Config
         /// <returns></returns>
         public string[] LoadReposExplorerRoots()
         {
-            string reposRootPath = Path.Combine( this.configDir, REPOSROOTS );
+            lock ( this.configFileLock )
+            {
+                string reposRootPath = Path.Combine( this.configDir, REPOSROOTS );
 
-            if ( !File.Exists(reposRootPath) )
-                return new string[]{};
+                if ( !File.Exists( reposRootPath ) )
+                    return new string[] { };
 
-            XmlTextReader reader = new XmlTextReader( reposRootPath );
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer( typeof(ArrayOfStrings) );
-                // Use a helper object to work around a bug in the runtime caused by a specific hotfix (see issue #188 for details)
-                return ((ArrayOfStrings)serializer.Deserialize( reader )).Strings;
-            }
-            catch( InvalidOperationException ex )
-            {
-                throw new ConfigException( "Xml error: " + ex.InnerException.Message );
-            }
-            catch( XmlException ex )
-            {
-                throw new ConfigException( "Xml error: " + ex.Message );
-            }
-            finally
-            {
-                reader.Close();
+                XmlTextReader reader = new XmlTextReader( reposRootPath );
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer( typeof( ArrayOfStrings ) );
+                    // Use a helper object to work around a bug in the runtime caused by a specific hotfix (see issue #188 for details)
+                    return ( (ArrayOfStrings)serializer.Deserialize( reader ) ).Strings;
+                }
+                catch ( InvalidOperationException ex )
+                {
+                    throw new ConfigException( "Xml error: " + ex.InnerException.Message );
+                }
+                catch ( XmlException ex )
+                {
+                    throw new ConfigException( "Xml error: " + ex.Message );
+                }
+                finally
+                {
+                    reader.Close();
+                } 
             }
 
         }
@@ -206,26 +230,29 @@ namespace Ankh.Config
         /// Checks if the config dir and file exists at the given path and creates them if not.
         /// </summary>
         /// <param name="path">The path to the config file.</param>
-        private static void EnsureConfig( string path )
+        private void EnsureConfig( string path )
         {
-            string dirname = Path.GetDirectoryName( path );
-
-            // Does the config dir already exist?
-            if ( !Directory.Exists( dirname ) )
-                Directory.CreateDirectory( dirname );
-
-            // Now we have a dir - is there a config file there?
-            if ( !File.Exists( path ) )
+            lock ( this.configFileLock )
             {
-                // Create a skeleton config file.
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                string config = "";
-                using( StreamReader reader = new StreamReader( assembly.GetManifestResourceStream( 
-                           ConfigLoader.configFileResource ) ) )
-                    config = reader.ReadToEnd();
+                string dirname = Path.GetDirectoryName( path );
 
-                using( StreamWriter writer = File.CreateText( path ) )
-                    writer.Write( config );
+                // Does the config dir already exist?
+                if ( !Directory.Exists( dirname ) )
+                    Directory.CreateDirectory( dirname );
+
+                // Now we have a dir - is there a config file there?
+                if ( !File.Exists( path ) )
+                {
+                    // Create a skeleton config file.
+                    Assembly assembly = Assembly.GetExecutingAssembly();
+                    string config = "";
+                    using ( StreamReader reader = new StreamReader( assembly.GetManifestResourceStream(
+                               ConfigLoader.configFileResource ) ) )
+                        config = reader.ReadToEnd();
+
+                    using ( StreamWriter writer = File.CreateText( path ) )
+                        writer.Write( config );
+                }
             }
         }
 
@@ -265,8 +292,56 @@ namespace Ankh.Config
                 errors.Add( e.Message );
         }
 
-        private string configDir;
+        private void WatchConfigFile()
+        {
+            Debug.Assert( File.Exists( this.ConfigPath ), "Config file does not exist: " + this.ConfigPath );
 
+            this.configFileWatcher = new FileSystemWatcher( this.ConfigDir, CONFIGFILENAME );
+            this.configFileWatcher.IncludeSubdirectories = false;
+            this.configFileWatcher.NotifyFilter = NotifyFilters.LastWrite;
+            this.configFileWatcher.Changed += new FileSystemEventHandler( configFileWatcher_Changed );
+            this.configFileWatcher.EnableRaisingEvents = true;
+        }
+
+        void configFileWatcher_Changed( object sender, FileSystemEventArgs e )
+        {
+            lock ( this.configFileLock )
+            {
+                try
+                {
+                    if ( !File.Exists( this.ConfigPath ) )
+                    {
+                        return;
+                    }
+
+                    byte[] hash = HashUtils.GetMd5HashForFile( this.ConfigPath );
+                    if ( !HashUtils.HashesAreEqual( this.configFileHash, hash ) )
+                    {
+                        this.configFileHash = hash;
+                        if ( this.ConfigFileChanged != null )
+                        {
+                            this.ConfigFileChanged( this, EventArgs.Empty );
+                        }
+                    }
+                }
+                catch ( Exception 
+#if DEBUG
+                        ex
+#endif
+                    )
+                {
+                    // swallow
+#if DEBUG
+                    Debug.WriteLine( ex );
+#endif
+                }
+            }
+        }
+
+        private object configFileLock = new object();
+        private byte[] configFileHash;
+        private string configDir;
+        private FileSystemWatcher configFileWatcher;
         private const string REPOSROOTS="reposroots.xml";
         private const string CONFIGFILENAME = "ankhsvn.xml";
         private const string CONFIGDIRNAME = "AnkhSVN";
