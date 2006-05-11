@@ -20,9 +20,9 @@ namespace ErrorReport.GUI
         public event EventHandler IsReplyingChanged;
         public event EventHandler ReplyTextChanged;
         public event EventHandler TemplatesWanted;
-        public event EventHandler SelectedReportModified;
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler ReportsLoaded;
+        public event EventHandler ReformatSelection;
 
 
         public MainFormUCP( IServiceProvider provider, IProgressCallback cb, ISynchronizeInvoke invoker )
@@ -56,10 +56,12 @@ namespace ErrorReport.GUI
             set 
             { 
                 selectedReport = value;
-                if ( SelectedReportChanged != null )
+                if ( this.SelectedReportChanged != null )
                 {
-                    SelectedReportChanged( this, EventArgs.Empty );
+                    this.SelectedReportChanged( this, EventArgs.Empty );
                 }
+                
+                this.SelectedMailItem = value;
             }
         }
 
@@ -203,10 +205,11 @@ namespace ErrorReport.GUI
             this.mailer.SendReply( this.SelectedReport, this.ReplyText );
             this.storage.AnswerReport( this.SelectedReport, this.ReplyText );
 
-            if ( this.SelectedReportModified != null )
+            if ( this.ReformatSelection != null )
             {
-                this.SelectedReportModified( this, EventArgs.Empty );
+                this.ReformatSelection( this, EventArgs.Empty );
             }
+
 
             this.IsReplying = false;
             this.ReplyText = String.Empty;
@@ -272,6 +275,19 @@ namespace ErrorReport.GUI
             worker.Exception += delegate( object sender, ThreadExceptionEventArgs a ) { this.callback.Exception( a.Exception ); };
 
             worker.Start();
+        }
+
+        public void MarkSelectedMailItemAsRead()
+        {
+            if ( this.SelectedMailItem != null )
+            {
+                this.SelectedMailItem.Read = true;
+                this.storage.UpdateMailItem( this.SelectedMailItem );
+                if ( this.ReformatSelection != null )
+                {
+                    this.ReformatSelection( this, EventArgs.Empty );
+                }
+            }
         }
 
         protected void OnNotifyPropertyChanged( string property )
@@ -359,5 +375,7 @@ namespace ErrorReport.GUI
         private IStorage storage;
         private IMailer mailer;
         private const int MailWidth = 78;
+
+       
     }
 }

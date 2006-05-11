@@ -29,7 +29,7 @@ namespace ErrorReportExtractor
             message.ReplyTo = new MailAddress(Settings.Default.ReplyToEmail);
 
             SmtpClient client = new SmtpClient(Settings.Default.MailServer);
-            this.progressCallback.Info( "Sending reply to report with message ID {0} to {1}", report.ID, report.SenderName );
+            this.progressCallback.Info( "Sending reply to report with message ID {0} to {1}", report.MailItemID, report.SenderName );
             client.Send( message );
         }
 

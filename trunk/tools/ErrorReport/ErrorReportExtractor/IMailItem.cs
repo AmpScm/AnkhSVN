@@ -7,7 +7,7 @@ namespace ErrorReportExtractor
     public interface IMailItem
     {
         string Body { get; set; }
-        int ID { get; set; }
+        int MailItemID { get; set; }
         string InternetMailID { get; set; }
         DateTime ReceivedTime { get; set; }
         string SenderName { get; set; }
@@ -16,6 +16,7 @@ namespace ErrorReportExtractor
         string ReceiverEmail { get; set; }
         string Subject { get; set; }
         string ReplyToID { get; set; }
+        bool Read { get; set; }
 
         IList<IMailItem> Replies { get; }
     }

@@ -2,7 +2,8 @@
 namespace ErrorReportExtractor
 {
     public interface IErrorReport : IMailItem
-    {        
+    {
+        int ErrorReportID { get; }
         int? MajorVersion { get; }
         int? MinorVersion { get; }
         int? PatchVersion { get; }

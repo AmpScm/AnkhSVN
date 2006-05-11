@@ -20,7 +20,7 @@ namespace ErrorReportExtractor
 
         
 
-        public IEnumerable<IErrorReport> GetItems(string folderPath, DateTime? itemsAfter)
+        public IEnumerable<IErrorReport> GetItems(string folderPath, DateTime? itemsAfter, int? startID)
         {
             MAPIFolder folder = this.GetFolder( folderPath );
             if ( itemsAfter != null)
@@ -32,41 +32,70 @@ namespace ErrorReportExtractor
                 this.callback.Verbose("Retrieving all items from Outlook folder {0}", folder.FullFolderPath);
             }
 
-            for (int i = 1; i < folder.Items.Count; i++)
+            this.callback.Verbose( "Outlook folder has {0} items", folder.Items.Count );
+            int start = startID.HasValue ? startID.Value : 1;
+            for (int i = start; i < folder.Items.Count; i++)
             {
-                
+               
                 ErrorReport report = new ErrorReport();
-                Outlook.MailItem outlookItem = folder.Items.Item(i) as Outlook.MailItem;
-                if ( outlookItem == null)
+                Outlook.MailItem outlookItem = null;
+                try
                 {
-                    this.callback.Verbose("Item {0} not a mail item.", i);
+                    outlookItem = folder.Items.Item( i ) as Outlook.MailItem;
+                }
+                catch ( System.Exception ex )
+                {
+                    this.callback.Exception( ex );
                     continue;
                 }
-                if (itemsAfter != null && outlookItem.ReceivedTime < itemsAfter)
+
+                if ( outlookItem == null )
                 {
-                    this.callback.Verbose( "Skipping item {0} since {1} is before {2}", i, outlookItem.ReceivedTime, itemsAfter );
+                    this.callback.Verbose( "Item {0} not a mail item.", i );
                     continue;
                 }
-                InitializeMailItemFromOutlookMailItem(folder, outlookItem, report);
-                
+                if ( itemsAfter != null && outlookItem.ReceivedTime < itemsAfter )
+                {
+                    if ( i % 50 == 0 )
+                    {
+                        this.callback.Verbose( "Skipping item {0} since {1} is before {2}", i, outlookItem.ReceivedTime, itemsAfter );
+                    }
+                    continue;
+                }
+                this.callback.Verbose( "Returning item #{0}", i );
+                InitializeMailItemFromOutlookMailItem( folder, outlookItem, report );
+
 
                 // It's not an error report if there's a reply to ID
-                if (report.ReplyToID != null)
+                if ( report.ReplyToID != null )
                     continue;
+               
 
                 this.callback.Progress();
                 report.Body = outlookItem.Body;
                 report.ReceivedTime = outlookItem.ReceivedTime;
                 yield return report;
+                //break;             
             }
         }
 
-        public IEnumerable<IMailItem> GetPotentialReplies(string folderPath)
+        public IEnumerable<IMailItem> GetPotentialReplies(string folderPath, int? startIndex)
         {
             MAPIFolder folder = this.GetFolder( folderPath );
-            for ( int i = 1; i <= folder.Items.Count; i++ )
+            int start = startIndex.HasValue ? startIndex.Value : 1;
+            for ( int i = start; i <= folder.Items.Count; i++ )
             {
-                Outlook.MailItem outlookItem = folder.Items.Item( i ) as Outlook.MailItem;
+                Outlook.MailItem outlookItem = null;
+
+                try
+                {
+                    outlookItem = folder.Items.Item( i ) as Outlook.MailItem;
+                }
+                catch ( System.Exception ex )
+                {
+                    this.callback.Exception( ex );
+                    continue;
+                }
                 if ( outlookItem == null )
                 {
                     this.callback.Warning( "Item {0} in folder {1} not a mail item.", i, folderPath );
@@ -80,6 +109,8 @@ namespace ErrorReportExtractor
                 {
                     continue;
                 }
+
+                this.callback.Verbose( "Returning item with index {0}, date {1} from Outlook.", i, mailItem.ReceivedTime );
 
                 yield return mailItem;
             }

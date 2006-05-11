@@ -18,22 +18,27 @@ namespace ErrorReportExtractor
             {
                 callback.VerboseMode = true;
 
-                //MailContainer mail = new MailContainer();
+                ConnectionScope.SetConnectionString( ErrorReportExtractor.Properties.Settings.Default.ErrorReportsConnectionString );
+
+                OutlookContainer mail = new OutlookContainer();
                 SqlServerStorage storage = new SqlServerStorage();
-                
-                //mail.SetProgressCallback( callback );
+
+                mail.SetProgressCallback( callback );
                 storage.SetProgressCallback( callback );
 
-                //storage.StorePotentialReplies(mail.GetPotentialReplies(@"Final year project\ankhsvn\Error reports"));
-                storage.UpdateErrorReports( storage.GetAllReports() );
-                //IEnumerable<IErrorReport> items = mail.GetAllItems(null);
-                //storage.Store(items);
+                storage.StorePotentialReplies( mail.GetPotentialReplies( @"Final year project\ankhsvn\Error reports", 3000 ) );
+                //storage.UpdateErrorReports( storage.GetAllReports() );
+                //IEnumerable<IErrorReport> items = mail.GetItems( @"Final year project\ankhsvn\Error reports", new DateTime( 2006, 4, 18 ), 3150 );
+                //storage.Store( items );
+                callback.Info( "Finished." );
+                Console.ReadLine();
             }
-            catch (System.Exception ex)
+            catch ( System.Exception ex )
             {
-                callback.Exception(ex);
+                callback.Exception( ex );
                 Debug.WriteLine( ex.ToString() );
-                Environment.Exit(1);
+                Console.ReadLine();
+                Environment.Exit( 1 );
             }
             
         }

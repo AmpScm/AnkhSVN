@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionScope.cs" />
     <Compile Include="ErrorReport.cs" />
     <Compile Include="ErrorReportsDataSet-old.cs">
       <DependentUpon>ErrorReportsDataSet-old.xsd</DependentUpon>
@@ -49,6 +50,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorReportsDataSet-old.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorReportsDataSet.cs">
+      <DependentUpon>ErrorReportsDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="ErrorReportsDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
