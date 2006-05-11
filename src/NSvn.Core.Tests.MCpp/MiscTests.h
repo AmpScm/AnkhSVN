@@ -26,6 +26,12 @@ namespace NSvn{
 					[Test]
 					void TestUtf8ToString();
 
+                    [Test]
+                    void TestUrlEscaping();
+
+                    [Test]
+                    void TestUrlEscapingThrowsForBackpathPresent();
+
                 };
             }
         }
