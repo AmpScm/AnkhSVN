@@ -21,11 +21,39 @@ namespace Ankh
         {
             LoadVCFilterType();
         }
+
+        public bool IsUnderSolutionRoot
+        {
+            get
+            {
+                string solutionDir = Path.GetDirectoryName(
+                    this.project.DTE.Solution.FullName );
+                string projectFileName = this.GetProjectFileName();
+
+                // Can't find the project file, guess it's not anywhere
+                if ( projectFileName == null )
+                {
+                    return false;
+                }
+
+                return PathUtils.IsSubPathOf(projectFileName, solutionDir);
+            }
+        }
+
+        public string Name
+        {
+            get { return this.project.Name; }
+        }
+	
         
-        public IList AddProjectToSvn( IContext context, string solutionDir )
+        public IList AddProjectToSvn( IContext context )
         {
             string filename;
             ArrayList paths = new ArrayList();
+            
+            string solutionDir = Path.GetDirectoryName(
+                    context.DTE.Solution.FullName );
+
             try
             {
                 // treat soln items and misc items specially
@@ -38,7 +66,7 @@ namespace Ankh
                 else
                 {
                     // this.project.FileName returns null if the filename can't be retrieved
-                    filename = this.GetProjectFileName( context.DTE.Solution );
+                    filename = this.GetProjectFileName();
                     if ( filename == null )
                     {
                         context.OutputPane.WriteLine( "Unable to add this.project. Cannot determine project file name." );
@@ -55,16 +83,6 @@ namespace Ankh
             string dir = Path.GetDirectoryName( filename );
             try
             {
-                // for now we only support this.projects that are under the solution root
-                if ( !PathUtils.IsSubPathOf( dir, solutionDir ) )
-                {
-                    context.OutputPane.WriteLine(
-                        dir + ": AnkhSVN does not currently support automatically " +
-                        "importing this.projects " +
-                        "that are not under the solution root directory." );
-                    return new string[] { };
-                }
-
                 if ( Directory.Exists( dir ) &&
                     !SvnUtils.IsWorkingCopyPath( dir ) )
                 {
@@ -205,7 +223,7 @@ namespace Ankh
         /// <param name="this.project"></param>
         /// <param name="solution"></param>
         /// <returns></returns>
-        private string GetProjectFileName( EnvDTE.Solution solution )
+        private string GetProjectFileName( )
         {
             // lots of things that can throw here.
             try
@@ -228,7 +246,8 @@ namespace Ankh
             }
             try
             {
-                string solutionDir = Path.GetDirectoryName( solution.FullName );
+
+                string solutionDir = Path.GetDirectoryName( this.project.DTE.Solution.FullName );
                 string filename = Path.Combine( solutionDir, this.project.UniqueName );
                 if ( File.Exists( filename ) )
                     return filename;
