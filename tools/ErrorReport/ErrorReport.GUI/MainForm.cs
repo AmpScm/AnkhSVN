@@ -44,13 +44,14 @@ namespace ErrorReport.GUI
                 }
             };
 
-            this.ucp.SelectedReportModified += delegate
-            {
-                if ( this.reportsListView.SelectedItems.Count > 0 )
-                {
-                    ListViewItem item = this.reportsListView.SelectedItems[ 0 ];
-                    this.FormatListItem( item, item.Tag as IErrorReport );
-                }
+            this.ucp.ReformatSelection += delegate
+            {                
+                if (this.reportsListView.SelectedItems.Count > 0)
+	            {
+                    ListViewItem item = this.reportsListView.SelectedItems[0];
+		            IMailItem mailItem = item.Tag as IMailItem;
+                    this.FormatListItem( item, mailItem );
+	            }
             };
         }
 
@@ -126,7 +127,7 @@ namespace ErrorReport.GUI
             }
         }
 
-        private static void AddRepliesToTreeList( IEnumerable<IMailItem> replies, TreeListItem treeListItem )
+        private void AddRepliesToTreeList( IEnumerable<IMailItem> replies, TreeListItem treeListItem )
         {
             foreach ( IMailItem reply in replies )
             {
@@ -136,6 +137,7 @@ namespace ErrorReport.GUI
                         String.Format("{0} <{1}>", reply.SenderName, reply.SenderEmail),
                     } );
                 child.Tag = reply;
+                this.FormatListItem( child, reply );
                 treeListItem.Children.Add( child );
 
                 AddRepliesToTreeList( reply.Replies, child );
@@ -275,9 +277,9 @@ namespace ErrorReport.GUI
             }
         }
 
-        private void FormatListItem( ListViewItem item, IErrorReport report )
+        private void FormatListItem( ListViewItem item, IMailItem report )
         {
-            item.Font = report.RepliedTo ? Settings.Default.BaseFont : UnreadFont;
+            item.Font = report.Read ? Settings.Default.BaseFont : UnreadFont;
         }
 
         private static readonly Font UnreadFont = new Font( Settings.Default.BaseFont, FontStyle.Bold );

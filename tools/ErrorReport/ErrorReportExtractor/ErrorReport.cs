@@ -7,9 +7,10 @@ namespace ErrorReportExtractor
 {
     public class ErrorReport : MailItem, IErrorReport
     {
-        public ErrorReport(int id, string subject, string body, string senderEmail, string senderName,  DateTime receivedTime)
-            : base(id, subject, body, senderEmail, senderName, receivedTime)
+        public ErrorReport(int errorReportID, int mailItemID, string subject, string body, string senderEmail, string senderName,  DateTime receivedTime)
+            : base(mailItemID, subject, body, senderEmail, senderName, receivedTime)
         {
+            this.errorReportID = errorReportID;
             this.ParseBody();
         }
 
@@ -17,8 +18,11 @@ namespace ErrorReportExtractor
         {
 
         }
-	
-       
+
+        public int ErrorReportID
+        {
+            get { return errorReportID; }
+        }
 
         public int? MajorVersion
         {
@@ -150,6 +154,7 @@ namespace ErrorReportExtractor
         private StackTrace stackTrace;
         private bool repliedTo;
         private bool hasReplies;
+        private int errorReportID;
 
        
 

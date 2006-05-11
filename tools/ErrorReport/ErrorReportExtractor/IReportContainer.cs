@@ -5,7 +5,7 @@ namespace ErrorReportExtractor
 {
     public interface IReportContainer : IService
     {
-        IEnumerable<IErrorReport> GetItems( string folder, DateTime? itemsAfter );
-        IEnumerable<IMailItem> GetPotentialReplies(string folder);
+        IEnumerable<IErrorReport> GetItems( string folder, DateTime? itemsAfter, int? startID );
+        IEnumerable<IMailItem> GetPotentialReplies(string folder, int? startIndex);
     }
 }

@@ -14,5 +14,7 @@ namespace ErrorReportExtractor
         void StorePotentialReplies( IEnumerable<IMailItem> items );
 
         void GetReplies( IErrorReport report );
+
+        void UpdateMailItem( IMailItem item );
     }
 }

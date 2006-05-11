@@ -66,6 +66,30 @@ namespace ErrorReport.GUI
         }
     }
 
+    [KeyBinding(Keys.M)]
+    [ToolBar("Mark as read")]
+    [MenuItem("MainMenu.Mail.Mark as read")]
+    internal class MarkAsReadCommand : CommandBase
+    {
+        public MarkAsReadCommand( MainFormUCP ucp ) : base(ucp)
+        {
+            this.ucp.SelectedMailItemChanged += delegate { this.RaiseEnabledChanged(); };
+        }
+
+        public override bool Enabled
+        {
+            get
+            {
+                return this.ucp.SelectedMailItem != null && !this.ucp.SelectedMailItem.Read;
+            }
+        }
+
+        public override void Execute()
+        {
+            this.ucp.MarkSelectedMailItemAsRead();
+        }
+    }
+
     [KeyBinding( Keys.S )]
     [ToolBar( "Send" )]
     [MenuItem( "MainMenu.Mail.Send current reply" )]
@@ -85,6 +109,7 @@ namespace ErrorReport.GUI
         public override void Execute()
         {
             this.ucp.SendReplyForSelectedReport();
+            this.ucp.MarkSelectedMailItemAsRead();
             this.ucp.NextReport();
         }
     }

@@ -61,13 +61,13 @@ namespace ErrorReport.GUI
                 if ( this.ImportReports )
                 {
                     this.callback.Info( "Starting import of error reports from Outlook folder {0}.", this.FolderPath );
-                    this.storage.Store( container.GetItems( this.FolderPath, itemsAfter ) );
+                    this.storage.Store( container.GetItems( this.FolderPath, itemsAfter, null ) );
                 }
 
                 if ( this.ImportReplies )
                 {
                     this.callback.Info( "Starting import of error replies from Outlook folder {0}.", this.FolderPath );
-                    this.storage.StorePotentialReplies( container.GetPotentialReplies( this.FolderPath ) );
+                    this.storage.StorePotentialReplies( container.GetPotentialReplies( this.FolderPath, null ) );
                 }
             };
 

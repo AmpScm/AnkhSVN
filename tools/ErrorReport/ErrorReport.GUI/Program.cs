@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using ErrorReportExtractor;
+using ErrorReport.GUI.Properties;
 
 namespace ErrorReport.GUI
 {
@@ -16,6 +17,7 @@ namespace ErrorReport.GUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );
 
+            ConnectionScope.SetConnectionString( Settings.Default.ConnectionString );
             ServiceProvider factory = SetUpServices();
             
             Application.Run( new MainForm(factory) );
@@ -27,7 +29,7 @@ namespace ErrorReport.GUI
             provider.ProfferService<IMailer>( new ErrorReportExtractor.Mailer());
             provider.ProfferService<ITemplateManager>( new TemplateManager() );
             provider.ProfferService<IStorage>( new SqlServerStorage() );
-            provider.ProfferService<IReportContainer>( new OutlookContainer() );
+            //provider.ProfferService<IReportContainer>( new OutlookContainer() );
 
             return provider;
         }

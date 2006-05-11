@@ -699,6 +699,8 @@ namespace ErrorReportExtractor {
             
             private System.Data.DataColumn columnErrorReportID;
             
+            private System.Data.DataColumn columnRead;
+            
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public MailItemsDataTable() {
                 this.TableName = "MailItems";
@@ -800,6 +802,13 @@ namespace ErrorReportExtractor {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn ReadColumn {
+                get {
+                    return this.columnRead;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -828,7 +837,7 @@ namespace ErrorReportExtractor {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public MailItemsRow AddMailItemsRow(string Body, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, MailItemsRow parentMailItemsRowByFK_ErrorReplies_ErrorReplies, System.DateTime Time, string MailID, int ErrorReportID) {
+            public MailItemsRow AddMailItemsRow(string Body, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, MailItemsRow parentMailItemsRowByFK_ErrorReplies_ErrorReplies, System.DateTime Time, string MailID, int ErrorReportID, bool Read) {
                 MailItemsRow rowMailItemsRow = ((MailItemsRow)(this.NewRow()));
                 rowMailItemsRow.ItemArray = new object[] {
                         null,
@@ -840,7 +849,8 @@ namespace ErrorReportExtractor {
                         parentMailItemsRowByFK_ErrorReplies_ErrorReplies[0],
                         Time,
                         MailID,
-                        ErrorReportID};
+                        ErrorReportID,
+                        Read};
                 this.Rows.Add(rowMailItemsRow);
                 return rowMailItemsRow;
             }
@@ -880,6 +890,7 @@ namespace ErrorReportExtractor {
                 this.columnTime = base.Columns["Time"];
                 this.columnMailID = base.Columns["MailID"];
                 this.columnErrorReportID = base.Columns["ErrorReportID"];
+                this.columnRead = base.Columns["Read"];
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -904,6 +915,8 @@ namespace ErrorReportExtractor {
                 base.Columns.Add(this.columnMailID);
                 this.columnErrorReportID = new System.Data.DataColumn("ErrorReportID", typeof(int), null, System.Data.MappingType.Element);
                 base.Columns.Add(this.columnErrorReportID);
+                this.columnRead = new System.Data.DataColumn("Read", typeof(bool), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnRead);
                 this.Constraints.Add(new System.Data.UniqueConstraint("Constraint1", new System.Data.DataColumn[] {
                                 this.columnID}, true));
                 this.columnID.AutoIncrement = true;
@@ -916,10 +929,10 @@ namespace ErrorReportExtractor {
                 this.columnSenderEmail.AllowDBNull = false;
                 this.columnSenderEmail.MaxLength = 2147483647;
                 this.columnRecipientName.MaxLength = 2147483647;
-                this.columnRecipientEmail.AllowDBNull = false;
                 this.columnRecipientEmail.MaxLength = 2147483647;
                 this.columnTime.AllowDBNull = false;
                 this.columnMailID.MaxLength = 250;
+                this.columnRead.AllowDBNull = false;
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1324,6 +1337,8 @@ namespace ErrorReportExtractor {
             
             private System.Data.DataColumn columnReplyCount;
             
+            private System.Data.DataColumn columnRead;
+            
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public ErrorReportItemsDataTable() {
                 this.TableName = "ErrorReportItems";
@@ -1495,6 +1510,13 @@ namespace ErrorReportExtractor {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn ReadColumn {
+                get {
+                    return this.columnRead;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1543,7 +1565,8 @@ namespace ErrorReportExtractor {
                         System.DateTime Time, 
                         string MailID, 
                         string Subject, 
-                        int ReplyCount) {
+                        int ReplyCount, 
+                        bool Read) {
                 ErrorReportItemsRow rowErrorReportItemsRow = ((ErrorReportItemsRow)(this.NewRow()));
                 rowErrorReportItemsRow.ItemArray = new object[] {
                         ID,
@@ -1565,7 +1588,8 @@ namespace ErrorReportExtractor {
                         Time,
                         MailID,
                         Subject,
-                        ReplyCount};
+                        ReplyCount,
+                        Read};
                 this.Rows.Add(rowErrorReportItemsRow);
                 return rowErrorReportItemsRow;
             }
@@ -1615,6 +1639,7 @@ namespace ErrorReportExtractor {
                 this.columnMailID = base.Columns["MailID"];
                 this.columnSubject = base.Columns["Subject"];
                 this.columnReplyCount = base.Columns["ReplyCount"];
+                this.columnRead = base.Columns["Read"];
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1659,6 +1684,8 @@ namespace ErrorReportExtractor {
                 base.Columns.Add(this.columnSubject);
                 this.columnReplyCount = new System.Data.DataColumn("ReplyCount", typeof(int), null, System.Data.MappingType.Element);
                 base.Columns.Add(this.columnReplyCount);
+                this.columnRead = new System.Data.DataColumn("Read", typeof(bool), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnRead);
                 this.Constraints.Add(new System.Data.UniqueConstraint("Constraint1", new System.Data.DataColumn[] {
                                 this.columnID}, true));
                 this.columnID.AllowDBNull = false;
@@ -1673,12 +1700,12 @@ namespace ErrorReportExtractor {
                 this.columnSenderEmail.AllowDBNull = false;
                 this.columnSenderEmail.MaxLength = 2147483647;
                 this.columnRecipientName.MaxLength = 2147483647;
-                this.columnRecipientEmail.AllowDBNull = false;
                 this.columnRecipientEmail.MaxLength = 2147483647;
                 this.columnTime.AllowDBNull = false;
                 this.columnMailID.MaxLength = 250;
                 this.columnSubject.MaxLength = 2147483647;
                 this.columnReplyCount.ReadOnly = true;
+                this.columnRead.AllowDBNull = false;
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2124,7 +2151,12 @@ namespace ErrorReportExtractor {
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public string RecipientEmail {
                 get {
-                    return ((string)(this[this.tableMailItems.RecipientEmailColumn]));
+                    try {
+                        return ((string)(this[this.tableMailItems.RecipientEmailColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'RecipientEmail\' in table \'MailItems\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tableMailItems.RecipientEmailColumn] = value;
@@ -2187,6 +2219,16 @@ namespace ErrorReportExtractor {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool Read {
+                get {
+                    return ((bool)(this[this.tableMailItems.ReadColumn]));
+                }
+                set {
+                    this[this.tableMailItems.ReadColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public MailItemsRow MailItemsRowParent {
                 get {
                     return ((MailItemsRow)(this.GetParentRow(this.Table.ParentRelations["FK_ErrorReplies_ErrorReplies"])));
@@ -2214,6 +2256,16 @@ namespace ErrorReportExtractor {
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public void SetRecipientNameNull() {
                 this[this.tableMailItems.RecipientNameColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsRecipientEmailNull() {
+                return this.IsNull(this.tableMailItems.RecipientEmailColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetRecipientEmailNull() {
+                this[this.tableMailItems.RecipientEmailColumn] = System.Convert.DBNull;
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2633,7 +2685,12 @@ namespace ErrorReportExtractor {
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public string RecipientEmail {
                 get {
-                    return ((string)(this[this.tableErrorReportItems.RecipientEmailColumn]));
+                    try {
+                        return ((string)(this[this.tableErrorReportItems.RecipientEmailColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'RecipientEmail\' in table \'ErrorReportItems\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tableErrorReportItems.RecipientEmailColumn] = value;
@@ -2707,6 +2764,16 @@ namespace ErrorReportExtractor {
                 }
                 set {
                     this[this.tableErrorReportItems.ReplyCountColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool Read {
+                get {
+                    return ((bool)(this[this.tableErrorReportItems.ReadColumn]));
+                }
+                set {
+                    this[this.tableErrorReportItems.ReadColumn] = value;
                 }
             }
             
@@ -2818,6 +2885,16 @@ namespace ErrorReportExtractor {
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public void SetRecipientNameNull() {
                 this[this.tableErrorReportItems.RecipientNameColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsRecipientEmailNull() {
+                return this.IsNull(this.tableErrorReportItems.RecipientEmailColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetRecipientEmailNull() {
+                this[this.tableErrorReportItems.RecipientEmailColumn] = System.Convert.DBNull;
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3705,12 +3782,14 @@ SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersi
             tableMapping.ColumnMappings.Add("Time", "Time");
             tableMapping.ColumnMappings.Add("MailID", "MailID");
             tableMapping.ColumnMappings.Add("ErrorReportID", "ErrorReportID");
+            tableMapping.ColumnMappings.Add("Read", "Read");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [MailItems] WHERE (([ID] = @Original_ID) AND ((@IsNull_ParentReply = 1 AND [ParentReply] IS NULL) OR ([ParentReply] = @Original_ParentReply)) AND ([Time] = @Original_Time) AND ((@IsNull_MailID = 1 AND [MailID] IS NULL) OR ([MailID] = @Original_MailID)) AND ((@IsNull_ErrorReportID = 1 AND [ErrorReportID] IS NULL) OR ([ErrorReportID] = @Original_ErrorReportID)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [MailItems] WHERE (([ID] = @Original_ID) AND ([Read] = @Original_Read) AND ((@IsNull_ParentReply = 1 AND [ParentReply] IS NULL) OR ([ParentReply] = @Original_ParentReply)) AND ([Time] = @Original_Time) AND ((@IsNull_MailID = 1 AND [MailID] IS NULL) OR ([MailID] = @Original_MailID)) AND ((@IsNull_ErrorReportID = 1 AND [ErrorReportID] IS NULL) OR ([ErrorReportID] = @Original_ErrorReportID)))";
             this._adapter.DeleteCommand.CommandType = System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_Read", System.Data.SqlDbType.Bit, 0, System.Data.ParameterDirection.Input, 0, 0, "Read", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_Time", System.Data.SqlDbType.DateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "Time", System.Data.DataRowVersion.Original, false, null, "", "", ""));
@@ -3720,33 +3799,36 @@ SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersi
             this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ErrorReportID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [MailItems] ([Body], [SenderName], [SenderEmail], [RecipientName], [RecipientEmail], [ParentReply], [Time], [MailID], [ErrorReportID]) VALUES (@Body, @SenderName, @SenderEmail, @RecipientName, @RecipientEmail, @ParentReply, @Time, @MailID, @ErrorReportID);
-SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentReply, Time, MailID, ErrorReportID FROM MailItems WHERE (ID = SCOPE_IDENTITY())";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [MailItems] ([Body], [SenderName], [SenderEmail], [RecipientName], [RecipientEmail], [Read], [ParentReply], [Time], [MailID], [ErrorReportID]) VALUES (@Body, @SenderName, @SenderEmail, @RecipientName, @RecipientEmail, @Read, @ParentReply, @Time, @MailID, @ErrorReportID);
+SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, [Read], ParentReply, Time, MailID, ErrorReportID FROM MailItems WHERE (ID = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Body", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "Body", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "SenderName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderEmail", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "SenderEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "RecipientName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientEmail", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "RecipientEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Read", System.Data.SqlDbType.Bit, 0, System.Data.ParameterDirection.Input, 0, 0, "Read", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Time", System.Data.SqlDbType.DateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "Time", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@MailID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "MailID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ErrorReportID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [MailItems] SET [Body] = @Body, [SenderName] = @SenderName, [SenderEmail] = @SenderEmail, [RecipientName] = @RecipientName, [RecipientEmail] = @RecipientEmail, [ParentReply] = @ParentReply, [Time] = @Time, [MailID] = @MailID, [ErrorReportID] = @ErrorReportID WHERE (([ID] = @Original_ID) AND ((@IsNull_ParentReply = 1 AND [ParentReply] IS NULL) OR ([ParentReply] = @Original_ParentReply)) AND ([Time] = @Original_Time) AND ((@IsNull_MailID = 1 AND [MailID] IS NULL) OR ([MailID] = @Original_MailID)) AND ((@IsNull_ErrorReportID = 1 AND [ErrorReportID] IS NULL) OR ([ErrorReportID] = @Original_ErrorReportID)));
-SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentReply, Time, MailID, ErrorReportID FROM MailItems WHERE (ID = @ID)";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [MailItems] SET [Body] = @Body, [SenderName] = @SenderName, [SenderEmail] = @SenderEmail, [RecipientName] = @RecipientName, [RecipientEmail] = @RecipientEmail, [Read] = @Read, [ParentReply] = @ParentReply, [Time] = @Time, [MailID] = @MailID, [ErrorReportID] = @ErrorReportID WHERE (([ID] = @Original_ID) AND ([Read] = @Original_Read) AND ((@IsNull_ParentReply = 1 AND [ParentReply] IS NULL) OR ([ParentReply] = @Original_ParentReply)) AND ([Time] = @Original_Time) AND ((@IsNull_MailID = 1 AND [MailID] IS NULL) OR ([MailID] = @Original_MailID)) AND ((@IsNull_ErrorReportID = 1 AND [ErrorReportID] IS NULL) OR ([ErrorReportID] = @Original_ErrorReportID)));
+SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, [Read], ParentReply, Time, MailID, ErrorReportID FROM MailItems WHERE (ID = @ID)";
             this._adapter.UpdateCommand.CommandType = System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Body", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "Body", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "SenderName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderEmail", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "SenderEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "RecipientName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientEmail", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "RecipientEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Read", System.Data.SqlDbType.Bit, 0, System.Data.ParameterDirection.Input, 0, 0, "Read", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Time", System.Data.SqlDbType.DateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "Time", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@MailID", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "MailID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ErrorReportID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_Read", System.Data.SqlDbType.Bit, 0, System.Data.ParameterDirection.Input, 0, 0, "Read", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@IsNull_ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ParentReply", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "ParentReply", System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_Time", System.Data.SqlDbType.DateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "Time", System.Data.DataRowVersion.Original, false, null, "", "", ""));
@@ -3765,17 +3847,31 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new System.Data.SqlClient.SqlCommand[2];
+            this._commandCollection = new System.Data.SqlClient.SqlCommand[3];
             this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentRe" +
-                "ply, Time, MailID, ErrorReportID FROM MailItems";
+            this._commandCollection[0].CommandText = "SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, [Read], " +
+                "ParentReply, Time, MailID, ErrorReportID FROM MailItems";
             this._commandCollection[0].CommandType = System.Data.CommandType.Text;
             this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = @"SELECT Body, ErrorReportID, ID, MailID, ParentReply, RecipientEmail, RecipientName, SenderEmail, SenderName, Time FROM MailItems WHERE (ErrorReportID = @ErrorReportID) AND (NOT EXISTS (SELECT 1 AS Expr1 FROM ErrorReports WHERE (MailItemID = MailItems.ID)))";
+            this._commandCollection[1].CommandText = @"SELECT Body, ErrorReportID, ID, MailID, ParentReply, [Read], RecipientEmail, RecipientName, SenderEmail, SenderName, Time FROM MailItems WHERE (ErrorReportID = @ErrorReportID) AND (NOT EXISTS (SELECT 1 AS Expr1 FROM ErrorReports WHERE (MailItemID = MailItems.ID)))";
             this._commandCollection[1].CommandType = System.Data.CommandType.Text;
             this._commandCollection[1].Parameters.Add(new System.Data.SqlClient.SqlParameter("@ErrorReportID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "ErrorReportID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "UPDATE    MailItems\r\nSET              Body = @Body, SenderName = @SenderName, Sen" +
+                "derEmail = @SenderEmail, RecipientName = @RecipientName, \r\n                     " +
+                " RecipientEmail = @RecipientEmail, [Read] = @Read\r\nWHERE     (ID = @Original_ID)" +
+                "";
+            this._commandCollection[2].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[2].Parameters.Add(new System.Data.SqlClient.SqlParameter("@Body", System.Data.SqlDbType.NVarChar, 2147483647, System.Data.ParameterDirection.Input, 0, 0, "Body", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderName", System.Data.SqlDbType.NVarChar, 2147483647, System.Data.ParameterDirection.Input, 0, 0, "SenderName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new System.Data.SqlClient.SqlParameter("@SenderEmail", System.Data.SqlDbType.NVarChar, 2147483647, System.Data.ParameterDirection.Input, 0, 0, "SenderEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientName", System.Data.SqlDbType.NVarChar, 2147483647, System.Data.ParameterDirection.Input, 0, 0, "RecipientName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new System.Data.SqlClient.SqlParameter("@RecipientEmail", System.Data.SqlDbType.NVarChar, 2147483647, System.Data.ParameterDirection.Input, 0, 0, "RecipientEmail", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new System.Data.SqlClient.SqlParameter("@Read", System.Data.SqlDbType.Bit, 1, System.Data.ParameterDirection.Input, 0, 0, "Read", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_ID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "ID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3862,32 +3958,33 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(int Original_ID, System.Nullable<int> Original_ParentReply, System.DateTime Original_Time, string Original_MailID, System.Nullable<int> Original_ErrorReportID) {
+        public virtual int Delete(int Original_ID, bool Original_Read, System.Nullable<int> Original_ParentReply, System.DateTime Original_Time, string Original_MailID, System.Nullable<int> Original_ErrorReportID) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((int)(Original_ID));
+            this.Adapter.DeleteCommand.Parameters[1].Value = ((bool)(Original_Read));
             if ((Original_ParentReply.HasValue == true)) {
-                this.Adapter.DeleteCommand.Parameters[1].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[2].Value = ((int)(Original_ParentReply.Value));
+                this.Adapter.DeleteCommand.Parameters[2].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[3].Value = ((int)(Original_ParentReply.Value));
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[1].Value = ((object)(1));
-                this.Adapter.DeleteCommand.Parameters[2].Value = System.DBNull.Value;
+                this.Adapter.DeleteCommand.Parameters[2].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[3].Value = System.DBNull.Value;
             }
-            this.Adapter.DeleteCommand.Parameters[3].Value = ((System.DateTime)(Original_Time));
+            this.Adapter.DeleteCommand.Parameters[4].Value = ((System.DateTime)(Original_Time));
             if ((Original_MailID == null)) {
-                this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(1));
-                this.Adapter.DeleteCommand.Parameters[5].Value = System.DBNull.Value;
+                this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[6].Value = System.DBNull.Value;
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[5].Value = ((string)(Original_MailID));
+                this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[6].Value = ((string)(Original_MailID));
             }
             if ((Original_ErrorReportID.HasValue == true)) {
-                this.Adapter.DeleteCommand.Parameters[6].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[7].Value = ((int)(Original_ErrorReportID.Value));
+                this.Adapter.DeleteCommand.Parameters[7].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[8].Value = ((int)(Original_ErrorReportID.Value));
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[6].Value = ((object)(1));
-                this.Adapter.DeleteCommand.Parameters[7].Value = System.DBNull.Value;
+                this.Adapter.DeleteCommand.Parameters[7].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[8].Value = System.DBNull.Value;
             }
             System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & System.Data.ConnectionState.Open) 
@@ -3908,7 +4005,7 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string Body, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, System.Nullable<int> ParentReply, System.DateTime Time, string MailID, System.Nullable<int> ErrorReportID) {
+        public virtual int Insert(string Body, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, bool Read, System.Nullable<int> ParentReply, System.DateTime Time, string MailID, System.Nullable<int> ErrorReportID) {
             if ((Body == null)) {
                 throw new System.ArgumentNullException("Body");
             }
@@ -3934,29 +4031,30 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
                 this.Adapter.InsertCommand.Parameters[3].Value = ((string)(RecipientName));
             }
             if ((RecipientEmail == null)) {
-                throw new System.ArgumentNullException("RecipientEmail");
+                this.Adapter.InsertCommand.Parameters[4].Value = System.DBNull.Value;
             }
             else {
                 this.Adapter.InsertCommand.Parameters[4].Value = ((string)(RecipientEmail));
             }
+            this.Adapter.InsertCommand.Parameters[5].Value = ((bool)(Read));
             if ((ParentReply.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((int)(ParentReply.Value));
+                this.Adapter.InsertCommand.Parameters[6].Value = ((int)(ParentReply.Value));
             }
             else {
-                this.Adapter.InsertCommand.Parameters[5].Value = System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[6].Value = System.DBNull.Value;
             }
-            this.Adapter.InsertCommand.Parameters[6].Value = ((System.DateTime)(Time));
+            this.Adapter.InsertCommand.Parameters[7].Value = ((System.DateTime)(Time));
             if ((MailID == null)) {
-                this.Adapter.InsertCommand.Parameters[7].Value = System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[8].Value = System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[7].Value = ((string)(MailID));
+                this.Adapter.InsertCommand.Parameters[8].Value = ((string)(MailID));
             }
             if ((ErrorReportID.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[8].Value = ((int)(ErrorReportID.Value));
+                this.Adapter.InsertCommand.Parameters[9].Value = ((int)(ErrorReportID.Value));
             }
             else {
-                this.Adapter.InsertCommand.Parameters[8].Value = System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[9].Value = System.DBNull.Value;
             }
             System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & System.Data.ConnectionState.Open) 
@@ -3977,7 +4075,24 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string Body, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, System.Nullable<int> ParentReply, System.DateTime Time, string MailID, System.Nullable<int> ErrorReportID, int Original_ID, System.Nullable<int> Original_ParentReply, System.DateTime Original_Time, string Original_MailID, System.Nullable<int> Original_ErrorReportID, int ID) {
+        public virtual int Update(
+                    string Body, 
+                    string SenderName, 
+                    string SenderEmail, 
+                    string RecipientName, 
+                    string RecipientEmail, 
+                    bool Read, 
+                    System.Nullable<int> ParentReply, 
+                    System.DateTime Time, 
+                    string MailID, 
+                    System.Nullable<int> ErrorReportID, 
+                    int Original_ID, 
+                    bool Original_Read, 
+                    System.Nullable<int> Original_ParentReply, 
+                    System.DateTime Original_Time, 
+                    string Original_MailID, 
+                    System.Nullable<int> Original_ErrorReportID, 
+                    int ID) {
             if ((Body == null)) {
                 throw new System.ArgumentNullException("Body");
             }
@@ -4003,57 +4118,59 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
                 this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(RecipientName));
             }
             if ((RecipientEmail == null)) {
-                throw new System.ArgumentNullException("RecipientEmail");
+                this.Adapter.UpdateCommand.Parameters[4].Value = System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(RecipientEmail));
             }
+            this.Adapter.UpdateCommand.Parameters[5].Value = ((bool)(Read));
             if ((ParentReply.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(ParentReply.Value));
+                this.Adapter.UpdateCommand.Parameters[6].Value = ((int)(ParentReply.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[5].Value = System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[6].Value = System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[6].Value = ((System.DateTime)(Time));
+            this.Adapter.UpdateCommand.Parameters[7].Value = ((System.DateTime)(Time));
             if ((MailID == null)) {
-                this.Adapter.UpdateCommand.Parameters[7].Value = System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(MailID));
-            }
-            if ((ErrorReportID.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((int)(ErrorReportID.Value));
-            }
-            else {
                 this.Adapter.UpdateCommand.Parameters[8].Value = System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[9].Value = ((int)(Original_ID));
+            else {
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(MailID));
+            }
+            if ((ErrorReportID.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((int)(ErrorReportID.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[9].Value = System.DBNull.Value;
+            }
+            this.Adapter.UpdateCommand.Parameters[10].Value = ((int)(Original_ID));
+            this.Adapter.UpdateCommand.Parameters[11].Value = ((bool)(Original_Read));
             if ((Original_ParentReply.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[11].Value = ((int)(Original_ParentReply.Value));
+                this.Adapter.UpdateCommand.Parameters[12].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[13].Value = ((int)(Original_ParentReply.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[11].Value = System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[12].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[13].Value = System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[12].Value = ((System.DateTime)(Original_Time));
+            this.Adapter.UpdateCommand.Parameters[14].Value = ((System.DateTime)(Original_Time));
             if ((Original_MailID == null)) {
-                this.Adapter.UpdateCommand.Parameters[13].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[14].Value = System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[13].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[14].Value = ((string)(Original_MailID));
-            }
-            if ((Original_ErrorReportID.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[15].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[16].Value = ((int)(Original_ErrorReportID.Value));
-            }
-            else {
                 this.Adapter.UpdateCommand.Parameters[15].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[16].Value = System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[17].Value = ((int)(ID));
+            else {
+                this.Adapter.UpdateCommand.Parameters[15].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[16].Value = ((string)(Original_MailID));
+            }
+            if ((Original_ErrorReportID.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[17].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[18].Value = ((int)(Original_ErrorReportID.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[17].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[18].Value = System.DBNull.Value;
+            }
+            this.Adapter.UpdateCommand.Parameters[19].Value = ((int)(ID));
             System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & System.Data.ConnectionState.Open) 
                         != System.Data.ConnectionState.Open)) {
@@ -4068,6 +4185,60 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
                     this.Adapter.UpdateCommand.Connection.Close();
                 }
             }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Update, false)]
+        public virtual int UpdateMailItem(string Body, string SenderName, string SenderEmail, string RecipientName, string RecipientEmail, bool Read, int Original_ID) {
+            System.Data.SqlClient.SqlCommand command = this.CommandCollection[2];
+            if ((Body == null)) {
+                throw new System.ArgumentNullException("Body");
+            }
+            else {
+                command.Parameters[0].Value = ((string)(Body));
+            }
+            if ((SenderName == null)) {
+                command.Parameters[1].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[1].Value = ((string)(SenderName));
+            }
+            if ((SenderEmail == null)) {
+                throw new System.ArgumentNullException("SenderEmail");
+            }
+            else {
+                command.Parameters[2].Value = ((string)(SenderEmail));
+            }
+            if ((RecipientName == null)) {
+                command.Parameters[3].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[3].Value = ((string)(RecipientName));
+            }
+            if ((RecipientEmail == null)) {
+                command.Parameters[4].Value = System.DBNull.Value;
+            }
+            else {
+                command.Parameters[4].Value = ((string)(RecipientEmail));
+            }
+            command.Parameters[5].Value = ((bool)(Read));
+            command.Parameters[6].Value = ((int)(Original_ID));
+            System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
         }
     }
     
@@ -4403,6 +4574,7 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
             tableMapping.ColumnMappings.Add("MailID", "MailID");
             tableMapping.ColumnMappings.Add("Subject", "Subject");
             tableMapping.ColumnMappings.Add("ReplyCount", "ReplyCount");
+            tableMapping.ColumnMappings.Add("Read", "Read");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -4417,7 +4589,7 @@ SELECT ID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentR
             this._commandCollection = new System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersion, PatchVersion, Revision, ErrorReportItemID, MailItemID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentReply, Time, MailID, Subject, (SELECT COUNT(ID) AS Expr1 FROM MailItems WHERE (ErrorReportID = ErrorReportItems.ID) AND (ID <> ErrorReportItems.MailItemID)) AS ReplyCount FROM ErrorReportItems ORDER BY Time";
+            this._commandCollection[0].CommandText = @"SELECT ID, ExceptionType, ExceptionMessage, StackTrace, MajorVersion, MinorVersion, PatchVersion, Revision, ErrorReportItemID, MailItemID, Body, SenderName, SenderEmail, RecipientName, RecipientEmail, ParentReply, Time, MailID, Subject, [Read], (SELECT COUNT(ID) AS Expr1 FROM MailItems WHERE (ErrorReportID = ErrorReportItems.ID) AND (ID <> ErrorReportItems.MailItemID)) AS ReplyCount FROM ErrorReportItems ORDER BY Time";
             this._commandCollection[0].CommandType = System.Data.CommandType.Text;
         }
         
