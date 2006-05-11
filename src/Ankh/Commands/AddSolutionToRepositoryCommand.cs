@@ -45,6 +45,27 @@ namespace Ankh.Commands
             this.SaveAllDirtyDocuments( context );
 
             string url;
+
+            IList vsProjects = this.GetVSProjects( context );
+            ArrayList notUnderSolutionRoot = CheckForProjectsNotUnderTheSolutionRoot(vsProjects);
+            
+            // any projects not under the solution root, allow the user to bail out now
+            if ( notUnderSolutionRoot.Count > 0)
+            {
+                string[] projectNames = (string[])notUnderSolutionRoot.ToArray(typeof(string));
+                string projectNamesString = String.Join(Environment.NewLine, projectNames);
+                if ( context.UIShell.ShowMessageBox("The following project(s) are not under the solution root.\r\n" + 
+                    "They will not be imported into the repository if you choose to continue.\r\n\r\n" + 
+                    "Do you want to abort the import now?\r\n\r\n" + 
+                    projectNamesString, "Project(s) not under the solution root.", MessageBoxButtons.YesNo) ==
+                    DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
+            // user wants to go on anyway.
+
             using( AddSolutionDialog dlg = new AddSolutionDialog() )
             {
                 if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
@@ -99,7 +120,7 @@ namespace Ankh.Commands
                     
                 context.Client.Add( context.DTE.Solution.FullName, false );
                 this.paths.Add( context.DTE.Solution.FullName );
-                this.AddProjects( context, solutionDir );  
+                this.AddProjects( context, vsProjects );  
             }
             catch( Exception )
             {
@@ -166,19 +187,50 @@ namespace Ankh.Commands
             }
         }
 
+        private static ArrayList CheckForProjectsNotUnderTheSolutionRoot( IList vsProjects )
+        {
+            ArrayList notUnderSolutionRoot = new ArrayList();
+            ArrayList toRemove = new ArrayList();
+            foreach ( VSProject vsProject in vsProjects )
+            {
+                if ( !vsProject.IsUnderSolutionRoot )
+                {
+                    notUnderSolutionRoot.Add( vsProject.Name );
+                    toRemove.Add( vsProject );
+                }
+            }
+
+            // we can't import these, no matter what
+            foreach(VSProject vsProject in toRemove)
+            {
+                vsProjects.Remove( vsProject );
+            }
+
+            return notUnderSolutionRoot;
+        }
+
+        private IList GetVSProjects(IContext context)
+        {
+            ArrayList list = new ArrayList();
+            foreach ( Project project in Enumerators.EnumerateProjects( context.DTE ) ) 
+            {
+                VSProject vsProject = VSProject.FromProject( project );
+                list.Add(vsProject);
+            }
+            return list;
+        }
+
         /// <summary>
         /// Adds projects.
         /// </summary>
         /// <param name="projects"></param>
         /// <param name="context"></param>
-        private void AddProjects( IContext context, string solutionDir )
+        private void AddProjects( IContext context, IList vsProjects )
         {
-            foreach ( Project project in Enumerators.EnumerateProjects( context.DTE ) ) 
+            foreach ( VSProject vsProject in vsProjects )
             {
-                VSProject vsProject = VSProject.FromProject( project );
-                this.paths.AddRange(vsProject.AddProjectToSvn( context, solutionDir ));
+                this.paths.AddRange( vsProject.AddProjectToSvn( context ) ); 
             }
-            
         }
 
         
