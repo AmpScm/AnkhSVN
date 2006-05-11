@@ -513,6 +513,7 @@
     <Compile Include="VSNetProjectNodeControlAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="VSProject.cs" />
     <Compile Include="XmlResultBase.cs">
       <SubType>Code</SubType>
     </Compile>
