@@ -85,4 +85,29 @@ void NSvn::Core::Tests::MCpp::MiscTests::TestUtf8ToString()
     Assert::AreEqual( S"Æ e i a æ å, sjø", s );
 }
 
+void NSvn::Core::Tests::MCpp::MiscTests::TestUrlEscaping()
+{
+    String* s = S"http://server.com/file with spaces.txt";
+
+    Pool pool;
+    const char* escaped = CanonicalizePath(s, pool);
+    Assert::IsTrue(strcmp("http://server.com/file%20with%20spaces.txt", escaped) == 0);
+}
+
+void NSvn::Core::Tests::MCpp::MiscTests::TestUrlEscapingThrowsForBackpathPresent()
+{
+    String* s = S"http://server.com/file/../blah.txt";
+
+    Pool pool;
+    try
+    {
+        CanonicalizePath(s, pool);
+        Assert::Fail("Should have thrown an exception");
+    }
+    catch( Exception* )
+    {
+        // ignore
+    }
+}
+
 

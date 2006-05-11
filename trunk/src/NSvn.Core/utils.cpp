@@ -106,6 +106,25 @@ const char* NSvn::Core::CanonicalizePath( String* path, Pool& pool )
 
         HandleError( svn_path_cstring_to_utf8( &utf8path, trueNamedTarget, pool ) );
     }
+    else
+    {
+        utf8path = svn_path_uri_from_iri( utf8path, pool );
+        utf8path = svn_path_uri_autoescape( utf8path, pool );
+
+        if ( !svn_path_is_uri_safe( utf8path ) )
+        {
+            throw SvnClientException::FromSvnError( svn_error_createf(SVN_ERR_BAD_URL, 0,
+                                     "URL '%s' is not properly URI-encoded",
+                                     utf8path ) );
+        }
+
+        if ( svn_path_is_backpath_present( utf8path ) )
+        {
+            throw SvnClientException::FromSvnError( svn_error_createf(SVN_ERR_BAD_URL, 0,
+                                     "URL '%s' contains a '..' element",
+                                     utf8path ));
+        }
+    }
 
     return svn_path_canonicalize( utf8path, pool );
 }
