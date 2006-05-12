@@ -101,6 +101,19 @@ namespace NSvn
             {;}
     };
 
+    public __gc class InvalidUrlException : public SvnClientException 
+    {
+    public:
+        InvalidUrlException( System::String* message, System::String* url ) : SvnClientException( message ), url(url)
+            {;}
+
+        __property System::String* get_Url()
+        { return this->url; }
+
+    private:
+        System::String* url;
+    };
+
 #define HandleError( func ) { svn_error_t* err__ = func; \
         if ( (err__) != 0 ) throw NSvn::Core::SvnClientException::FromSvnError( (err__) ); }
     }

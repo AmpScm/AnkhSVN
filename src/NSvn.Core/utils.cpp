@@ -113,16 +113,14 @@ const char* NSvn::Core::CanonicalizePath( String* path, Pool& pool )
 
         if ( !svn_path_is_uri_safe( utf8path ) )
         {
-            throw SvnClientException::FromSvnError( svn_error_createf(SVN_ERR_BAD_URL, 0,
-                                     "URL '%s' is not properly URI-encoded",
-                                     utf8path ) );
+            System::String* msg = String::Format( "URL '{0}' is not properly URI-encoded", Utf8ToString(utf8path, pool) );
+            throw new InvalidUrlException( msg, utf8path) ;
         }
 
         if ( svn_path_is_backpath_present( utf8path ) )
         {
-            throw SvnClientException::FromSvnError( svn_error_createf(SVN_ERR_BAD_URL, 0,
-                                     "URL '%s' contains a '..' element",
-                                     utf8path ));
+            System::String* msg = String::Format( "URL '{0}' contains a '..' element", Utf8ToString(utf8path, pool) );
+            throw new InvalidUrlException( msg, utf8path) ;
         }
     }
 

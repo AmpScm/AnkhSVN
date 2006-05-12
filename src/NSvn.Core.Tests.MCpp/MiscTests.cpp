@@ -104,7 +104,7 @@ void NSvn::Core::Tests::MCpp::MiscTests::TestUrlEscapingThrowsForBackpathPresent
         CanonicalizePath(s, pool);
         Assert::Fail("Should have thrown an exception");
     }
-    catch( Exception* )
+    catch( InvalidUrlException* )
     {
         // ignore
     }
