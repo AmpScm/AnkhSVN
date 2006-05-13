@@ -7,6 +7,7 @@ using NSvn.Core;
 using System.Collections;
 using System.Reflection;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Diagnostics;
 
 namespace Ankh
 {
@@ -46,6 +47,15 @@ namespace Ankh
                 return PathUtils.IsSubPathOf(projectFileName, solutionDir);
             }
         }
+
+        public bool IsSolutionFolder        
+        {
+            get 
+            {
+                return String.Compare( this.project.Kind, DteUtils.SolutionFolderKind, true ) == 0;
+            }
+        }
+
 
         public string Name
         {
@@ -196,6 +206,42 @@ namespace Ankh
 
             }
             return paths;
+        }
+
+        /// <summary>
+        /// Retrieve the subprojects of this project (usually a solution folder).
+        /// </summary>
+        /// <param name="includeSolutionFolders"></param>
+        /// <returns></returns>
+        public VSProject[] GetSubProjects(bool includeSolutionFolders)
+        {
+            ArrayList subProjects = new ArrayList();
+            this.DoGetSubProjects( this.project.ProjectItems, subProjects, includeSolutionFolders );
+
+            return (VSProject[])subProjects.ToArray( typeof( VSProject ) );
+        }
+
+        private void DoGetSubProjects( ProjectItems projectItems, ArrayList subProjects, bool includeSolutionFolders )
+        {
+            if ( projectItems == null )
+            {
+                return;
+            }
+
+            foreach ( ProjectItem item in Enumerators.EnumerateProjectItems(projectItems) )
+            {
+                if ( item.Object is Project )
+                {
+                    VSProject project = VSProject.FromProject( this.context, item.Object as Project );
+
+                    if ( includeSolutionFolders || !project.IsSolutionFolder )
+                    {
+                        subProjects.Add( project );
+                    }
+
+                    this.DoGetSubProjects( project.project.ProjectItems, subProjects, includeSolutionFolders );
+                }
+            }
         }
 
         /// <summary>
