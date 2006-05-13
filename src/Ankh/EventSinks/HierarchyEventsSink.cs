@@ -201,7 +201,7 @@ namespace Ankh.EventSinks
 
                 try
                 {
-                    this.SetUpRefreshCallback();
+                    this.context.SolutionExplorer.SetUpDelayedProjectRefresh( this.project );
                 }
                 catch ( Exception ex )
                 {
@@ -220,7 +220,7 @@ namespace Ankh.EventSinks
 
                 try
                 {
-                    this.SetUpRefreshCallback();
+                    this.context.SolutionExplorer.SetUpDelayedProjectRefresh( this.project );
                 }
                 catch ( Exception ex )
                 {
@@ -243,53 +243,12 @@ namespace Ankh.EventSinks
                 return VSConstants.S_OK;
             }
 
-            private System.Threading.Timer timer;
-            /// <summary>
-            /// Since the ItemAdded event is fired before IVTDPE.OnAfterAddedFilesEx, we need to set up a 
-            /// refresh after a certain interval.
-            /// </summary>
-            private void SetUpRefreshCallback()
-            {
-                lock ( this )
-                {
-                    // Avoid multiple refreshes if more things are added simultaneously
-                    if ( !this.refreshPending )
-                    {
-                        this.refreshPending = true;
-                        this.timer = new System.Threading.Timer(
-                           new TimerCallback( this.RefreshCallback ), null, REFRESHDELAY ,
-                           Timeout.Infinite );
-                    }
-                }
-            }
-
-            private void RefreshCallback( object state )
-            {
-                if ( this.context.UIShell.SynchronizingObject.InvokeRequired )
-                {
-                    this.context.UIShell.SynchronizingObject.Invoke( new System.Threading.TimerCallback( this.RefreshCallback ),
-                        new object[] { null } );
-                    return;
-                }
-                if ( !this.context.SolutionExplorer.RenameInProgress )
-                {
-                    this.context.SolutionExplorer.Refresh( this.project );
-                }
-
-                lock ( this )
-                {
-                    this.refreshPending = false;
-                }
-            }
-
             #endregion
 
             private IContext context;
             private uint cookie;
             private IVsHierarchy hierarchy;
             private Project project;
-
-            private bool refreshPending;
         }
 
         //private static void DisplayHierarchy( IVsHierarchy hi, uint item )

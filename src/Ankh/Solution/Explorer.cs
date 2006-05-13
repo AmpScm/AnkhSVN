@@ -15,6 +15,7 @@ using System.IO;
 using C = Utils.Win32.Constants;
 using DteConstants = EnvDTE.Constants;
 using System.Windows.Forms;
+using System.Threading;
 
 
 namespace Ankh.Solution
@@ -160,7 +161,40 @@ namespace Ankh.Solution
             {
                 this.RefreshNode( node );
             }
-        }       
+        }
+
+        /// <summary>
+        /// Since the ItemAdded event is fired before IVTDPE.OnAfterAddedFilesEx, we need to set up a 
+        /// refresh after a certain interval.
+        /// </summary>
+        public void SetUpDelayedProjectRefresh(Project project)
+        {
+            this.SetUpRefresh( new TimerCallback( this.ProjectRefreshCallback ), project );
+        }
+
+
+        public void SetUpDelayedSolutionRefresh()
+        {
+            this.SetUpRefresh( new TimerCallback( this.SolutionRefreshCallback ), null );
+        }
+
+        private void SetUpRefresh( TimerCallback callback, object state )
+        {
+            lock ( this )
+            {
+                // Avoid multiple refreshes if more things are added simultaneously
+                if ( !this.refreshPending )
+                {
+                    this.refreshPending = true;
+                    this.timer = new System.Threading.Timer(
+                       new TimerCallback( callback ), state, REFRESHDELAY,
+                       Timeout.Infinite );
+                }
+            }
+        }
+
+        
+
 
         public void SyncAll()
         {
@@ -577,6 +611,68 @@ namespace Ankh.Solution
         private void ForcePoll()
         {
             this.context.ProjectFileWatcher.ForcePoll();
+        }
+
+        private void ProjectRefreshCallback( object state )
+        {
+            try
+            {
+                Project project = state as Project;
+                if ( project == null )
+                {
+                    throw new ArgumentException( "state must be a valid Project object", "state" );
+                }
+
+                // do we need to get back to the main thread?
+                if ( this.context.UIShell.SynchronizingObject.InvokeRequired )
+                {
+                    this.context.UIShell.SynchronizingObject.Invoke( new System.Threading.TimerCallback( this.ProjectRefreshCallback ),
+                        new object[] { project } );
+                    return;
+                }
+
+                if ( !this.RenameInProgress )
+                {
+                    this.Refresh( project );
+                }
+            }
+            catch ( Exception ex )
+            {
+                this.Context.ErrorHandler.Handle( ex );
+            }
+
+            lock ( this )
+            {
+                this.refreshPending = false;
+            }
+        }
+
+        private void SolutionRefreshCallback( object state )
+        {
+            try
+            {
+                // do we need to get back to the main thread?
+                if ( this.context.UIShell.SynchronizingObject.InvokeRequired )
+                {
+                    this.context.UIShell.SynchronizingObject.Invoke( new System.Threading.TimerCallback( this.SolutionRefreshCallback ),
+                        new object[] { null } );
+                    return;
+                }
+
+                if ( !this.RenameInProgress )
+                {
+                    this.SyncAll();
+                }
+            }
+            catch ( Exception ex )
+            {
+                this.context.ErrorHandler.Handle( ex );
+            }
+            
+            lock ( this )
+            {
+                this.refreshPending = false;
+            }
         }
 
 
@@ -1000,9 +1096,15 @@ namespace Ankh.Solution
         private TreeView treeView;
         private IntPtr originalImageList = IntPtr.Zero;
 
+        private bool refreshPending;
+        private System.Threading.Timer timer;
+        protected const int REFRESHDELAY = 800;
+
+
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
         private const string LOCK_ICON = "Ankh.lock.ico";
         private const string READONLY_ICON = "Ankh.readonly.ico";
         private const string LOCKEDREADONLY_ICON = "Ankh.lockedreadonly.ico";
+
     }
 }

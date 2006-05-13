@@ -48,5 +48,16 @@ namespace Ankh
         /// Whether a rename is currently in progress.
         /// </summary>
         bool RenameInProgress { get; }
+
+        /// <summary>
+        /// Set up a refresh for the project after a delay.
+        /// </summary>
+        /// <param name="project"></param>
+        void SetUpDelayedProjectRefresh( Project project );
+
+        /// <summary>
+        /// Set up a refresh for the entire solution after a delay.
+        /// </summary>
+        void SetUpDelayedSolutionRefresh();
     }
 }
