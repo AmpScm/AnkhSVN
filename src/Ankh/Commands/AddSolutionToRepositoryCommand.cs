@@ -227,7 +227,14 @@ namespace Ankh.Commands
             foreach ( Project project in Enumerators.EnumerateProjects( context.DTE ) ) 
             {
                 VSProject vsProject = VSProject.FromProject( context, project );
-                list.Add(vsProject);
+                if ( !vsProject.IsSolutionFolder )
+                {
+                    list.Add( vsProject );
+                }
+                else
+                {
+                    list.AddRange( vsProject.GetSubProjects(false) );
+                }
             }
             return list;
         }
