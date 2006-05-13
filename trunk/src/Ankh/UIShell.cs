@@ -200,6 +200,20 @@ namespace Ankh
                 buttons, icon );
         }
 
+        /// <summary>
+        /// Display a message box.
+        /// </summary>
+        /// <param name="caption"></param>
+        /// <param name="text"></param>
+        /// <param name="buttons"></param>
+        /// <returns></returns>
+        public DialogResult ShowMessageBox( string text, string caption,
+            MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton )
+        {
+            return MessageBox.Show( this.Context.HostWindow, text, caption,
+                buttons, icon, defaultButton );
+        }
+
         public void DisplayHtml( string caption, string html, bool reuse )
         {
             string htmlFile = Path.GetTempFileName();

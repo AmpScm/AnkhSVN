@@ -8,6 +8,7 @@ using System.Collections;
 using NSvn.Core;
 using NSvn.Common;
 using System.Reflection;
+using System.Text;
 
 namespace Ankh.Commands
 {
@@ -53,12 +54,13 @@ namespace Ankh.Commands
             if ( notUnderSolutionRoot.Count > 0)
             {
                 string[] projectNames = (string[])notUnderSolutionRoot.ToArray(typeof(string));
-                string projectNamesString = String.Join(Environment.NewLine, projectNames);
-                if ( context.UIShell.ShowMessageBox("The following project(s) are not under the solution root.\r\n" + 
-                    "They will not be imported into the repository if you choose to continue.\r\n\r\n" + 
-                    "Do you want to abort the import now?\r\n\r\n" + 
-                    projectNamesString, "Project(s) not under the solution root.", MessageBoxButtons.YesNo) ==
-                    DialogResult.Yes)
+                string projectNamesString = this.FormatProjectNames( projectNames );
+                if ( context.UIShell.ShowMessageBox("The following project(s) are not under the solution root and\r\n" + 
+                    "will not be imported into the repository if you choose to continue.\r\n\r\n" + 
+                    projectNamesString + "\r\n" +
+                    "Do you want to continue anyway?\r\n", 
+                    "Project(s) not under the solution root.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) ==
+                    DialogResult.No)
                 {
                     return;
                 }
@@ -185,6 +187,16 @@ namespace Ankh.Commands
                 RegistryUtils.CreateNewTypedUrl( url );
                     
             }
+        }
+
+        private string FormatProjectNames( string[] projectNames )
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach ( string name in projectNames )
+            {
+                builder.AppendFormat( "\u2219 {0}{1}", name, Environment.NewLine );
+            }
+            return builder.ToString();
         }
 
         private static ArrayList CheckForProjectsNotUnderTheSolutionRoot( IList vsProjects )
