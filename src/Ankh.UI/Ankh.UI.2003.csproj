@@ -132,6 +132,11 @@
                     AssemblyName = "Office"
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.1.4322\office.dll"
                 />
+                <Reference
+                    Name = "System.Design"
+                    AssemblyName = "System.Design"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Design.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -217,6 +222,16 @@
                 <File
                     RelPath = "CommitDialog.resx"
                     DependentUpon = "CommitDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ConfigurationDialog.cs"
+                    SubType = "code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConfigurationDialog.resx"
+                    DependentUpon = "ConfigurationDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -385,6 +400,26 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "MultiLineStringEditorWithTemplates.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MultiLineStringEditorWithTemplates.resx"
+                    DependentUpon = "MultiLineStringEditorWithTemplates.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "MultiLineStringTypeEditorDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MultiLineStringTypeEditorDialog.resx"
+                    DependentUpon = "MultiLineStringTypeEditorDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "NewDirectoryDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -432,6 +467,16 @@
                 <File
                     RelPath = "PlainPropertyEditor.resx"
                     DependentUpon = "PlainPropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "PopUpListForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PopUpListForm.resx"
+                    DependentUpon = "PopUpListForm.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -543,6 +588,16 @@
                     RelPath = "TestRepositoryExplorer.resx"
                     DependentUpon = "TestRepositoryExplorer.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TypeConverters.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypeEditors.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "UpdateDialog.cs"
