@@ -59,9 +59,32 @@ namespace Ankh.EventSinks
 
             try
             {
+                // this won't be true until the solution is finally loaded
                 if ( this.Context.AnkhLoadedForSolution )
                 {
                     this.hierarchyEvents.AddHierarchy( pHierarchy );
+
+                    bool shouldAdd = false;
+                    VSProject newProject = null;
+                    try
+                    {
+                        newProject = VSProject.FromVsHierarchy( this.Context, pHierarchy );
+                        shouldAdd = newProject != null && !newProject.IsVersioned && newProject.IsVersionable &&
+                            Context.Config.AutoAddNewFiles;
+                    }
+                    catch ( NoProjectAutomationObjectException ex )
+                    {
+                        this.Context.OutputPane.WriteLine( "Cannot determine automation object from project '{0}'.", ex.ProjectName );
+                        shouldAdd = false;
+                    }
+
+                    if ( shouldAdd && newProject != null )
+                    {
+                        newProject.AddProjectToSvn();
+                    }
+
+                    // make sure we have an updated status for the items in that directory, otherwise they'll be seen as unversionable
+                    this.Context.StatusCache.Status( newProject.ProjectDirectory );
                     this.Context.SolutionExplorer.SyncAll();
                 }
             }

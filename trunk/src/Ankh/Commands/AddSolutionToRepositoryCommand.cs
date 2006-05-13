@@ -214,7 +214,7 @@ namespace Ankh.Commands
             ArrayList list = new ArrayList();
             foreach ( Project project in Enumerators.EnumerateProjects( context.DTE ) ) 
             {
-                VSProject vsProject = VSProject.FromProject( project );
+                VSProject vsProject = VSProject.FromProject( context, project );
                 list.Add(vsProject);
             }
             return list;
@@ -229,7 +229,7 @@ namespace Ankh.Commands
         {
             foreach ( VSProject vsProject in vsProjects )
             {
-                this.paths.AddRange( vsProject.AddProjectToSvn( context ) ); 
+                this.paths.AddRange( vsProject.AddProjectToSvn() ); 
             }
         }
 
