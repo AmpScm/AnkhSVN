@@ -635,9 +635,17 @@ namespace Ankh.Solution
         {
             public void NewStatus( NodeStatus status )
             {
-                if ( this.currentStatus.Kind == NodeStatusKind.None || this.currentStatus.Kind == 0 )
+                if ( status.Kind == 0 )
+                {
+                    // nothing
+                }
+                    // these are always overridden
+                else if ( this.currentStatus.Kind == NodeStatusKind.None || this.currentStatus.Kind == NodeStatusKind.Unversioned
+                    || this.currentStatus.Kind == 0 )
+                {
                     this.currentStatus.Kind = status.Kind;
-                else if ( status.Kind != NodeStatusKind.None && 
+                }
+                else if ( status.Kind != NodeStatusKind.None &&
                     status.Kind != NodeStatusKind.Ignored &&
                     status.Kind != 0 )
                 {
