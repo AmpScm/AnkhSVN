@@ -108,25 +108,6 @@ namespace Ankh.EventSinks
             }
         }
 
-        private class NoProjectAutomationObjectException : Exception
-        {
-            public NoProjectAutomationObjectException( string name )
-            {
-                this.projectName = name;
-            }
-
-            public NoProjectAutomationObjectException( string name, Exception innerException ) : base(name, innerException)
-            {
-                this.projectName = name;
-            }
-
-            public string ProjectName
-            {
-                get { return projectName; }
-            }
-
-            private string projectName;
-        }
         /// <summary>
         /// The actual event sink for the hierarchy events.
         /// </summary>
@@ -148,7 +129,7 @@ namespace Ankh.EventSinks
                 }
                 else
                 {
-                    string name = GetProjectName(root);
+                    string name = VSProject.GetProjectNameFromVsHierarchy( hierarchy );
                     throw new NoProjectAutomationObjectException( name );
                 }
 
@@ -162,18 +143,10 @@ namespace Ankh.EventSinks
                 }
                 catch( Exception ex )
                 {
-                    throw new NoProjectAutomationObjectException( this.GetProjectName( root ), ex );
+                    throw new NoProjectAutomationObjectException( VSProject.GetProjectNameFromVsHierarchy(hierarchy), ex );
                 }
 
                 
-            }
-
-            private string GetProjectName( uint root )
-            {
-                object nameVar;
-                int hr = this.hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_Name, out nameVar );
-                string name = hr == VSConstants.S_OK ? nameVar as string : string.Empty;
-                return name;
             }
 
             public void Unadvise()

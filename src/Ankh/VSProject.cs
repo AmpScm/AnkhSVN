@@ -1,20 +1,27 @@
 using System;
 using System.Text;
 using EnvDTE;
-using Interop.esproj;
 using System.IO;
 using Utils;
 using NSvn.Core;
 using System.Collections;
 using System.Reflection;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh
 {
     public class VSProject
     {
-        private VSProject( Project project )
+        private VSProject( IContext context, Project project )
         {
+            this.context = context;
             this.project = project;
+        }
+
+        private VSProject( IContext context, Project project, IVsHierarchy hierarchy )
+            : this( context, project )
+        {
+            this.vsHierarchy = hierarchy;
         }
 
         static VSProject()
@@ -44,15 +51,99 @@ namespace Ankh
         {
             get { return this.project.Name; }
         }
-	
-        
-        public IList AddProjectToSvn( IContext context )
+
+        /// <summary>
+        /// The project file name.
+        /// </summary>
+        public string ProjectFileName
+        {
+            get { return this.GetProjectFileName(); }
+        }
+
+        /// <summary>
+        /// The project directory.
+        /// </summary>
+        public string ProjectDirectory
+        {
+            get
+            {
+                string filename = this.ProjectFileName;
+                if ( filename != null )
+                {
+                    return Path.GetDirectoryName( filename );
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// An SvnItem for the projectfile.
+        /// </summary>
+        public SvnItem ProjectFileSvnItem
+        {
+            get
+            {
+                if ( this.projectFileSvnItem == null )
+                {
+                    this.projectFileSvnItem = this.context.StatusCache[ this.ProjectFileName ];
+                }
+                return this.projectFileSvnItem;
+            }
+        }
+
+        /// <summary>
+        /// An SvnItem for the project directory.
+        /// </summary>
+        public SvnItem ProjectDirectorySvnItem
+        {
+            get
+            {
+                if ( this.projectDirectorySvnItem == null )
+                {
+                    this.projectDirectorySvnItem = this.context.StatusCache[ this.ProjectDirectory ];
+                }
+                return this.projectDirectorySvnItem;
+            }
+        }
+
+        /// <summary>
+        /// Whether this project is already under version control.
+        /// </summary>
+        public bool IsVersioned
+        {
+            get 
+            {
+                SvnItem projectFileItem = this.ProjectFileSvnItem;
+                projectFileSvnItem.Refresh( this.context.Client );
+                return projectFileSvnItem.IsVersioned;
+            }
+        }
+
+        /// <summary>
+        /// Whether this project can be versioned.
+        /// </summary>
+        public bool IsVersionable
+        {
+            get 
+            {
+                SvnItem projectDirectoryItem = this.ProjectDirectorySvnItem;
+                projectDirectoryItem.Refresh( this.context.Client );
+                return projectDirectoryItem.IsVersionable;
+            }
+        }
+
+
+
+        public IList AddProjectToSvn()
         {
             string filename;
             ArrayList paths = new ArrayList();
             
             string solutionDir = Path.GetDirectoryName(
-                    context.DTE.Solution.FullName );
+                    this.context.DTE.Solution.FullName );
 
             try
             {
@@ -60,7 +151,7 @@ namespace Ankh
                 if ( this.IsSpecialProject() )
                 {
                     if ( this.project.ProjectItems != null )
-                        this.AddProjectItems( this.project.ProjectItems, context, solutionDir, paths );
+                        this.AddProjectItems( this.project.ProjectItems, solutionDir, paths );
                     return new string[] { };
                 }
                 else
@@ -69,14 +160,14 @@ namespace Ankh
                     filename = this.GetProjectFileName();
                     if ( filename == null )
                     {
-                        context.OutputPane.WriteLine( "Unable to add this.project. Cannot determine project file name." );
+                        this.context.OutputPane.WriteLine( "Unable to add this.project. Cannot determine project file name." );
                         return new string[] { };
                     }
                 }
             }
             catch ( ArgumentException )
             {
-                context.OutputPane.WriteLine( "Unable to add this.project" );
+                this.context.OutputPane.WriteLine( "Unable to add this.project" );
                 return new string[] { };
             }
 
@@ -86,22 +177,22 @@ namespace Ankh
                 if ( Directory.Exists( dir ) &&
                     !SvnUtils.IsWorkingCopyPath( dir ) )
                 {
-                    this.Add( dir, solutionDir, context, paths );
+                    this.Add( dir, solutionDir, paths );
                 }
 
                 if ( File.Exists( filename ) )
                 {
-                    this.Add( filename, solutionDir, context, paths );
+                    this.Add( filename, solutionDir, paths );
                 }
 
                 // ProjectItems can be null for some this.project types
                 if ( this.project.ProjectItems != null )
-                    this.AddProjectItems( this.project.ProjectItems, context, solutionDir, paths );
+                    this.AddProjectItems( this.project.ProjectItems, solutionDir, paths );
 
             }
             catch ( SvnClientException ex )
             {
-                context.OutputPane.WriteLine( ex.Message );
+                this.context.OutputPane.WriteLine( ex.Message );
 
             }
             return paths;
@@ -112,7 +203,7 @@ namespace Ankh
         /// </summary>
         /// <param name="items"></param>
         /// <param name="context"></param>
-        private void AddProjectItems( ProjectItems items, IContext context,
+        private void AddProjectItems( ProjectItems items,
             string solutionDir, IList paths )
         {
             foreach ( ProjectItem item in Enumerators.EnumerateProjectItems( items ) )
@@ -120,7 +211,7 @@ namespace Ankh
                 // if it's a solution folder, item.Object will be the project
                 if ( item.Object is Project )
                 {
-                    VSProject vsProject = VSProject.FromProject(item.Object as Project);
+                    VSProject vsProject = VSProject.FromProject(this.context, item.Object as Project);
                     continue;
                 }
 
@@ -133,7 +224,7 @@ namespace Ankh
                     }
                     catch ( Exception )
                     {
-                        context.OutputPane.WriteLine( "Unable to add file" );
+                        this.context.OutputPane.WriteLine( "Unable to add file" );
                         continue;
                     }
                     try
@@ -145,53 +236,53 @@ namespace Ankh
                             // for now we only support files that are under the solution root
                             if ( !PathUtils.IsSubPathOf( file, solutionDir ) )
                             {
-                                context.OutputPane.WriteLine(
+                                this.context.OutputPane.WriteLine(
                                     file + ": AnkhSVN does not currently support automatically " +
                                     "importing files " +
                                     "that are not under the solution root directory." );
                                 continue;
                             }
 
-                            this.Add( item.get_FileNames( i ), solutionDir, context, paths );
+                            this.Add( item.get_FileNames( i ), solutionDir, paths );
                         }
                     }
                     catch ( SvnClientException ex )
                     {
-                        context.OutputPane.WriteLine( ex.Message );
+                        this.context.OutputPane.WriteLine( ex.Message );
                     }
                 }
                 try
                 {
                     // add any subitems
                     if ( item.ProjectItems != null )
-                        this.AddProjectItems( item.ProjectItems, context, solutionDir, paths );
+                        this.AddProjectItems( item.ProjectItems, solutionDir, paths );
                 }
                 catch ( NullReferenceException )
                 {
-                    context.OutputPane.WriteLine( "Unable to add subitems" );
+                    this.context.OutputPane.WriteLine( "Unable to add subitems" );
                 }
                 catch ( InvalidCastException )
                 {
-                    context.OutputPane.WriteLine( "Unable to add subitems" );
+                    this.context.OutputPane.WriteLine( "Unable to add subitems" );
                 }
             }
 
 
         }
 
-        private void Add( string filename, string solutionDir, IContext context, IList paths )
+        private void Add( string filename, string solutionDir, IList paths )
         {
             if ( !SvnUtils.IsWorkingCopyPath( filename ) )
-                this.AddWithIntermediateDirectories( filename, solutionDir, context, paths );
+                this.AddWithIntermediateDirectories( filename, solutionDir, paths );
             else
             {
-                context.Client.Add( filename, false );
+                this.context.Client.Add( filename, false );
                 paths.Add( filename );
             }
         }
 
         private void AddWithIntermediateDirectories( string filename, string solutionDir,
-            IContext context, IList paths )
+            IList paths )
         {
             // we know here that filename is a subpath of solutionDir
             string path;
@@ -208,7 +299,7 @@ namespace Ankh
                 path = Path.Combine( path, dirname );
                 if ( !SvnUtils.IsWorkingCopyPath( path ) || File.Exists( path ) )
                 {
-                    context.Client.Add( path, false );
+                    this.context.Client.Add( path, false );
                     paths.Add( path );
                 }
             }
@@ -292,14 +383,37 @@ namespace Ankh
         }
 
 
-        public static VSProject FromProject( Project project )
+        public static VSProject FromProject( IContext context, Project project )
         {
-            return new VSProject( project );
+            return new VSProject( context, project );
         }
 
-        public static VSProject FromVsHierarchy( IVsHierarchy hierarchy )
+        public static VSProject FromVsHierarchy( IContext context, IVsHierarchy hierarchy )
         {
-            throw new NotImplementedException();
+            const uint root = unchecked( (uint)(int)VSITEMID.VSITEMID_ROOT );
+
+            object projVar;
+            Project project;
+            int hr = hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_ExtObject, out projVar );
+            if ( hr == VSConstants.S_OK && projVar is EnvDTE.Project )
+            {
+                project = (Project)projVar;
+                return new VSProject( context, project, hierarchy );
+            }
+            else
+            {
+
+                throw new NoProjectAutomationObjectException( GetProjectNameFromVsHierarchy(hierarchy));
+            }
+        }
+
+        public static string GetProjectNameFromVsHierarchy( IVsHierarchy hierarchy)
+        {
+            object nameVar;
+            const uint root = unchecked( (uint)(int)VSITEMID.VSITEMID_ROOT );
+            int hr = hierarchy.GetProperty( root, (int)__VSHPROPID.VSHPROPID_Name, out nameVar );
+            string name = hr == VSConstants.S_OK ? nameVar as string : string.Empty;
+            return name;
         }
 
         private static readonly string[] SpecialProjects = new String[]{
@@ -310,5 +424,10 @@ namespace Ankh
 
         private Project project;
         private static Type vcFilterType;
+        private IContext context;
+        private SvnItem projectFileSvnItem;
+        private SvnItem projectDirectorySvnItem;
+        private IVsHierarchy vsHierarchy;
+
     }
 }
