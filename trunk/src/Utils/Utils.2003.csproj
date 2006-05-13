@@ -135,6 +135,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "HashUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "PathUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

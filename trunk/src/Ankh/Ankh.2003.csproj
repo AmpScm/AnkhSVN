@@ -194,6 +194,11 @@
                     AssemblyName = "Microsoft.VisualStudio.OLE.Interop"
                     HintPath = "..\lib\Microsoft.VisualStudio.OLE.Interop.dll"
                 />
+                <Reference
+                    Name = "System.Design"
+                    AssemblyName = "System.Design"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Design.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -320,6 +325,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NoProjectAutomationObjectException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "OutputPaneWriter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -409,6 +419,11 @@
                 />
                 <File
                     RelPath = "VSNetProjectNodeControlAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "VSProject.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -507,7 +522,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Commands\EditConfigFileCommand.cs"
+                    RelPath = "Commands\EditConfigCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
