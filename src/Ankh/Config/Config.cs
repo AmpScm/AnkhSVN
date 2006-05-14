@@ -13,7 +13,7 @@
 // 
 
 
-
+using System;
 using Ankh.UI;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -26,7 +26,7 @@ namespace Ankh.Config
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute( "code" )]
     [System.Xml.Serialization.XmlRootAttribute( Namespace = "http://ankhsvn.com/Config.xsd", IsNullable = false )]
-    public class Config
+    public class Config : ICustomTypeDescriptor	
     {
 
         private ConfigRepositoryExplorer repositoryExplorerField;
@@ -309,6 +309,188 @@ Since Subversion 1.3, there is an environment variable (called SVN_ASP_DOT_NET_H
         // dunno why this is necessary, but it doesn't work to use TypeConverters defined
         // in another assembly inside VS.
         private class NullableStringConverterProxy : NullableStringTypeConverter {}
+        #region ICustomTypeDescriptor Members
+
+        public TypeConverter GetConverter()
+        {
+            return TypeDescriptor.GetConverter(this, true);
+        }
+
+        public EventDescriptorCollection GetEvents(System.Attribute[] attributes)
+        {
+            return TypeDescriptor.GetEvents(this, attributes, true);
+        }
+
+        EventDescriptorCollection System.ComponentModel.ICustomTypeDescriptor.GetEvents()
+        {
+            return TypeDescriptor.GetEvents(this, true);
+        }
+
+        public string GetComponentName()
+        {
+            return TypeDescriptor.GetComponentName(this, true);
+        }
+
+        public object GetPropertyOwner(PropertyDescriptor pd)
+        {
+            return this;
+        }
+
+        public AttributeCollection GetAttributes()
+        {
+            return TypeDescriptor.GetAttributes(this, true);
+        }
+
+        public PropertyDescriptorCollection GetProperties(System.Attribute[] attributes)
+        {
+            PropertyDescriptorCollection originalProps = TypeDescriptor.GetProperties(this, attributes, true);
+            ConfigPropertyDescriptor[] newProps = new ConfigPropertyDescriptor[originalProps.Count];
+
+            for(int i = 0; i < originalProps.Count; i++)
+                newProps[i] = new ConfigPropertyDescriptor(originalProps[i]);
+
+            return new PropertyDescriptorCollection(newProps);  
+        }
+
+        PropertyDescriptorCollection System.ComponentModel.ICustomTypeDescriptor.GetProperties()
+        {
+            return GetProperties(null);
+        }
+
+        public object GetEditor(System.Type editorBaseType)
+        {
+            return null;
+        }
+
+        public PropertyDescriptor GetDefaultProperty()
+        {
+            return null;
+        }
+
+        public EventDescriptor GetDefaultEvent()
+        {
+            return TypeDescriptor.GetDefaultEvent(this, true);
+        }
+
+        public string GetClassName()
+        {
+            return TypeDescriptor.GetClassName(this, true);
+        }
+
+        /// <summary>
+        /// A class to work around the problems with TypeConverters and Editors. Can also be used to localize/customize the property names.
+        /// </summary>
+        private class ConfigPropertyDescriptor : PropertyDescriptor
+        {
+            readonly PropertyDescriptor baseDescriptor ;
+
+            public ConfigPropertyDescriptor(PropertyDescriptor baseDescriptor)
+                :base(baseDescriptor)
+            {
+                this.baseDescriptor = baseDescriptor;
+            }
+
+            public override TypeConverter Converter
+            {
+                get
+                {
+                    foreach(Attribute attr in this.AttributeArray)
+                    {
+                        TypeConverterAttribute typeConvAttr = attr as TypeConverterAttribute;
+                        if(typeConvAttr != null)
+                        {
+                            Type converterType = this.GetTypeFromName(typeConvAttr.ConverterTypeName);
+                            if(converterType != null)
+                                return CreateInstance(converterType) as TypeConverter;
+                        }   
+                    }
+                    return null;
+                }
+            }
+
+
+            public override object GetEditor(System.Type editorBaseType)
+            {
+                object e = base.GetEditor (editorBaseType);
+                if(e == null)
+                {
+                    foreach(Attribute attr in this.AttributeArray)
+                    {
+                        EditorAttribute editorAttr = attr as EditorAttribute;
+                        if(editorAttr != null && this.GetTypeFromName(editorAttr.EditorBaseTypeName) == editorBaseType)
+                        {
+                            Type type = this.GetTypeFromName(editorAttr.EditorTypeName);
+                            if(type != null)
+                            {
+                                e = this.CreateInstance(type);
+                                break;
+                            }
+                        }
+                    }
+                }
+                return e;
+            }
+
+            /// <summary>
+            /// Override the base implementation with this one, which is essentially the same, but fixes the
+            /// Type.GetType search that goes wrong in the base implementation
+            /// </summary>
+            /// <param name="typeName"></param>
+            /// <returns></returns>
+            protected new Type GetTypeFromName(string typeName)
+            {
+                if(typeName == null || typeName.Length == 0)
+                    return null;
+
+                Type t = null;
+                if(typeName.IndexOf(',') == -1)
+                    t = ComponentType.Module.Assembly.GetType(typeName);
+                if(t == null)
+                    t = Type.GetType(typeName);
+                return t;
+            }
+
+            public override bool CanResetValue(object component)
+            {
+                return this.baseDescriptor.CanResetValue(component);
+            }
+
+            public override System.Type ComponentType
+            {
+                get { return typeof(Config); }
+            }
+
+            public override object GetValue(object component)
+            {
+                return this.baseDescriptor.GetValue(component);
+            }
+
+            public override bool IsReadOnly
+            {
+                get { return this.baseDescriptor.IsReadOnly; }
+            }
+
+            public override System.Type PropertyType
+            {
+                get { return this.baseDescriptor.PropertyType; }
+            }
+
+            public override void ResetValue(object component)
+            {
+                this.baseDescriptor.ResetValue(component);
+            }
+
+            public override void SetValue(object component, object value)
+            {
+                this.baseDescriptor.SetValue(component, value);
+            }
+
+            public override bool ShouldSerializeValue(object component)
+            {
+                return this.baseDescriptor.ShouldSerializeValue(component);
+            }
+        }
+        #endregion
     }
 
     /// <remarks/>
