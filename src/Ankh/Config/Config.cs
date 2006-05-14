@@ -94,7 +94,10 @@ namespace Ankh.Config
                         new StringEditorTemplate("%mine", "My version", "My version (%mine)"),
                         new StringEditorTemplate("%base", "The base version", "The base version (%base)"),
                         new StringEditorTemplate("%yours", "The other version", "The other version (%yours)"),
-                        new StringEditorTemplate("%merged", "The output file", "The output file (%merged)")
+                        new StringEditorTemplate("%merged", "The output file", "The output file (%merged)"),
+                        new StringEditorTemplate(@"""C:\Program Files\TortoiseSVN\bin\TortoiseMerge.exe"" " +
+                                                 "/base:\"%base\" /theirs:\"%theirs\" /mine:\"%mine\" /merged:\"%merged\"",
+                                                 "TortoiseMerge", "TortoiseMerge")
                         };
             }
         }
@@ -131,6 +134,9 @@ namespace Ankh.Config
                 return new StringEditorTemplate[]{
                         new StringEditorTemplate("%base", "The base version", "The base version (%base)"),
                         new StringEditorTemplate("%mine", "My version", "My version (%mine)"),
+                        new StringEditorTemplate(@"""C:\Program Files\TortoiseSVN\bin\TortoiseMerge.exe"" " +
+                                                 "/base:\"%base\" /mine:\"%mine\"",
+                                                 "TortoiseMerge", "TortoiseMerge")
                         };
             }
         }
