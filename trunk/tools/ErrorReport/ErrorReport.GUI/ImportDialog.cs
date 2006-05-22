@@ -27,10 +27,12 @@ namespace ErrorReport.GUI
             this.folderTextBox.DataBindings.Add( "Text", this.ucp, "FolderPath" 
                 ).DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
 
-            this.enableItemsAfterCheckBox.DataBindings.Add( "Checked", this.ucp, "ItemsAfterEnabled", false, DataSourceUpdateMode.OnPropertyChanged );
-            this.itemsAfterPicker.DataBindings.Add( "Value", this.ucp, "ItemsAfter", false, DataSourceUpdateMode.OnPropertyChanged );
-            this.itemsAfterPicker.DataBindings.Add( "Enabled", this.enableItemsAfterCheckBox, "Checked", false, DataSourceUpdateMode.Never,
-                DateTime.MinValue );
+            reportsIndexPanel.DataBindings.Add( "Enabled", this.importReportsCheckBox, "Checked" );
+            repliesIndexPanel.DataBindings.Add( "Enabled", this.importRepliesCheckBox, "Checked" );
+
+            reportsStartIndexTextBox.DataBindings.Add( "Text", this.ucp, "ReportsStartIndex" );
+            repliesStartIndexTextBox.DataBindings.Add( "Text", this.ucp, "RepliesStartIndex" );
+
         }
 
         private void importButton_Click( object sender, EventArgs e )
@@ -39,6 +41,12 @@ namespace ErrorReport.GUI
             this.progressBar.Enabled = this.progressBar.Visible = true;
             this.ucp.RunImport();
 
+
+        }
+
+        protected override void OnFormClosed( FormClosedEventArgs e )
+        {
+            this.ucp.StoreSettings();
         }
 
         private ImportDialogUCP ucp;

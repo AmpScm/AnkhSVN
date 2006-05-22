@@ -26,7 +26,7 @@ namespace ErrorReportExtractor.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SHERILYN\\SQLEXPRESS;Initial Catalog=ErrorReports-test;Integrated Secu" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SHERILYN\\SQLEXPRESS;Initial Catalog=ErrorReports-Test;Integrated Secu" +
             "rity=True")]
         public string ErrorReportsConnectionString {
             get {
@@ -103,6 +103,18 @@ namespace ErrorReportExtractor.Properties {
             }
             set {
                 this["MailServer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Final year project\\ankhsvn\\Error Reports")]
+        public string DefaultOutlookFolder {
+            get {
+                return ((string)(this["DefaultOutlookFolder"]));
+            }
+            set {
+                this["DefaultOutlookFolder"] = value;
             }
         }
     }

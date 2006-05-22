@@ -26,11 +26,14 @@ namespace ErrorReportExtractor
                 mail.SetProgressCallback( callback );
                 storage.SetProgressCallback( callback );
 
-                storage.StorePotentialReplies( mail.GetPotentialReplies( @"Final year project\ankhsvn\Error reports", 3000 ) );
+                int lastIndex;
+
+                storage.StorePotentialReplies( mail.GetPotentialReplies( @"Final year project\ankhsvn\Error reports", 3000, out lastIndex ) );
                 //storage.UpdateErrorReports( storage.GetAllReports() );
                 //IEnumerable<IErrorReport> items = mail.GetItems( @"Final year project\ankhsvn\Error reports", new DateTime( 2006, 4, 18 ), 3150 );
                 //storage.Store( items );
                 callback.Info( "Finished." );
+                callback.Info( "Last index retrieved was {0}.", lastIndex );
                 Console.ReadLine();
             }
             catch ( System.Exception ex )

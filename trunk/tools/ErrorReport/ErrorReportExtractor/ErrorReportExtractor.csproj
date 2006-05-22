@@ -59,6 +59,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorReportsDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="IOutlookContainer.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="NullProgressCallback.cs" />
     <Compile Include="ServiceProvider.cs" />
