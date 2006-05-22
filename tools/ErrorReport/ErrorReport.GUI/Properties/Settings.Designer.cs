@@ -69,5 +69,39 @@ namespace ErrorReport.GUI.Properties {
                 return ((string)(this["ConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OutlookFolder {
+            get {
+                return ((string)(this["OutlookFolder"]));
+            }
+            set {
+                this["OutlookFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Data.DataTable LastOutlookReplyIndexChecked {
+            get {
+                return ((global::System.Data.DataTable)(this["LastOutlookReplyIndexChecked"]));
+            }
+            set {
+                this["LastOutlookReplyIndexChecked"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Data.DataTable LastOutlookReportIndexChecked {
+            get {
+                return ((global::System.Data.DataTable)(this["LastOutlookReportIndexChecked"]));
+            }
+            set {
+                this["LastOutlookReportIndexChecked"] = value;
+            }
+        }
     }
 }

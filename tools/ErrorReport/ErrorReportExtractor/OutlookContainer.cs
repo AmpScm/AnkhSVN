@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Outlook;
 using MAPI;
+using ErrorReportExtractor.Properties;
 
 namespace ErrorReportExtractor
 {
-    public class OutlookContainer : IReportContainer
+    public class OutlookContainer : IOutlookContainer
     {
         public OutlookContainer()
         {
@@ -18,25 +19,36 @@ namespace ErrorReportExtractor
             this.callback.Verbose( "Getting mapi session: {0}", this.MapiSession );
         }
 
+        public IEnumerable<IErrorReport> GetItems()
+        {
+            int dummy;
+            return this.GetItems( Settings.Default.DefaultOutlookFolder, null, out dummy);
+        }
+
+        public IEnumerable<IMailItem> GetPotentialReplies()
+        {
+            int dummy;
+            return this.GetPotentialReplies( Settings.Default.DefaultOutlookFolder, null, out dummy );
+        }
         
 
-        public IEnumerable<IErrorReport> GetItems(string folderPath, DateTime? itemsAfter, int? startID)
+        public IEnumerable<IErrorReport> GetItems(string folderPath, int? startID, out int lastIndexRetrieved )
         {
             MAPIFolder folder = this.GetFolder( folderPath );
-            if ( itemsAfter != null)
-            {
-                this.callback.Verbose("Retrieving items after {0} from Outlook folder {1}", itemsAfter, folder.FullFolderPath);
-            }
-            else
-            {
-                this.callback.Verbose("Retrieving all items from Outlook folder {0}", folder.FullFolderPath);
-            }
-
+           
             this.callback.Verbose( "Outlook folder has {0} items", folder.Items.Count );
-            int start = startID.HasValue ? startID.Value : 1;
-            for (int i = start; i < folder.Items.Count; i++)
+            int start = startID.HasValue ? startID.Value : 1;            
+
+            lastIndexRetrieved = folder.Items.Count - 1;
+
+            return this.DoGetItems( folder, start );
+        }
+
+        private IEnumerable<IErrorReport> DoGetItems( MAPIFolder folder, int start )
+        {
+            for ( int i = start; i < folder.Items.Count; i++ )
             {
-               
+
                 ErrorReport report = new ErrorReport();
                 Outlook.MailItem outlookItem = null;
                 try
@@ -54,22 +66,13 @@ namespace ErrorReportExtractor
                     this.callback.Verbose( "Item {0} not a mail item.", i );
                     continue;
                 }
-                if ( itemsAfter != null && outlookItem.ReceivedTime < itemsAfter )
-                {
-                    if ( i % 50 == 0 )
-                    {
-                        this.callback.Verbose( "Skipping item {0} since {1} is before {2}", i, outlookItem.ReceivedTime, itemsAfter );
-                    }
-                    continue;
-                }
+
                 this.callback.Verbose( "Returning item #{0}", i );
                 InitializeMailItemFromOutlookMailItem( folder, outlookItem, report );
-
 
                 // It's not an error report if there's a reply to ID
                 if ( report.ReplyToID != null )
                     continue;
-               
 
                 this.callback.Progress();
                 report.Body = outlookItem.Body;
@@ -79,10 +82,17 @@ namespace ErrorReportExtractor
             }
         }
 
-        public IEnumerable<IMailItem> GetPotentialReplies(string folderPath, int? startIndex)
+        public IEnumerable<IMailItem> GetPotentialReplies(string folderPath, int? startIndex, out int lastIndexRetrieved )
         {
             MAPIFolder folder = this.GetFolder( folderPath );
             int start = startIndex.HasValue ? startIndex.Value : 1;
+            lastIndexRetrieved = folder.Items.Count - 1;
+
+            return this.DoGetPotentialReplies( folder, start );
+        }
+
+        private IEnumerable<IMailItem> DoGetPotentialReplies( MAPIFolder folder, int start )
+        {
             for ( int i = start; i <= folder.Items.Count; i++ )
             {
                 Outlook.MailItem outlookItem = null;
@@ -98,7 +108,7 @@ namespace ErrorReportExtractor
                 }
                 if ( outlookItem == null )
                 {
-                    this.callback.Warning( "Item {0} in folder {1} not a mail item.", i, folderPath );
+                    this.callback.Warning( "Item {0} in folder {1} not a mail item.", i, folder.Name );
                     continue;
                 }
                 MailItem mailItem = new MailItem();

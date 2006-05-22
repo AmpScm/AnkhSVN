@@ -28,5 +28,8 @@
     <Setting Name="MailServer" Type="System.String" Scope="User">
       <Value Profile="(Default)">mail.broadpark.no</Value>
     </Setting>
+    <Setting Name="DefaultOutlookFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Final year project\ankhsvn\Error Reports</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
