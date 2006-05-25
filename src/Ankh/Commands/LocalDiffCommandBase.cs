@@ -102,7 +102,12 @@ namespace Ankh.Commands
                     string path = Utils.Win32.Win32.PathRelativePathTo( slndir, 
                         Utils.Win32.FileAttribute.Directory, item.Path, 
                         Utils.Win32.FileAttribute.Normal );
-                    path = path != null ? path : item.Path;
+
+                    // We can't use a path with more than two .. relative paths as input to svn diff (see svn issue #2448)
+                    if ( path == null || path.Contains( @"..\..\.." ) )
+                    {
+                        path = item.Path;
+                    }
 
                     context.Client.Diff( new string[]{}, path, info.RevisionStart, 
                         path, info.RevisionEnd, info.Recursive, true, false, 
