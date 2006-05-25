@@ -186,13 +186,14 @@ def download_and_extract(url, dir, targetname):
 
     # what type of file?
     if "tar.gz" in basename:
-        print "Unzipping %s using gunzip" % basename
-        run ( "gunzip %s" % basename )
+        print "Unzipping %s" % basename
 
-        basename = basename[:- 2]
-        print "Extracting %s using tar" % basename
-        run( "tar -xf %s" % basename )
-        dirname = basename[0:-4]
+        tar = tarfile.open(target, 'r:gz')
+        for item in tar:
+            tar.extract(item)
+        tar.close()
+
+        dirname = basename[0:-6]
     elif ".zip" in basename:        
         print "Extracting %s using unzip" % basename
         run( "unzip %s" % basename )
