@@ -3,13 +3,14 @@ using System;
 using Utils.Win32;
 
 using ImageList = System.Windows.Forms.ImageList;
+using System.Windows.Forms;
 
 namespace Ankh.Solution
 {
     /// <summary>
     /// Wraps a HWND to a Win32 treeview
     /// </summary>
-    public class TreeView
+    public class TreeView : NativeWindow
     {
         public TreeView( IntPtr hwnd )
         {
@@ -78,6 +79,30 @@ namespace Ankh.Solution
             }
         }
 
+        /// <summary>
+        /// Whether status image list messages should be suppressed.
+        /// </summary>
+        public bool SuppressStatusImageChange
+        {
+            get 
+            {
+                return this.Handle != IntPtr.Zero;
+            }
+            set 
+            {
+                if ( this.Handle != IntPtr.Zero )
+                {
+                    this.ReleaseHandle();
+                }
+
+                if ( value )
+                {                   
+                    this.AssignHandle( this.hwnd ); 
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Sets the imagelist to be used for the status images.
@@ -86,11 +111,13 @@ namespace Ankh.Solution
         {
             get
             {
-                return (IntPtr)Win32.SendMessage( this.hwnd, Msg.TVM_GETIMAGELIST,
+                this.statusImageList = (IntPtr)Win32.SendMessage( this.hwnd, Msg.TVM_GETIMAGELIST,
                     Constants.TVSIL_STATE, IntPtr.Zero );
+                return this.statusImageList;
             }
             set
             {
+                this.statusImageList = value;
                 Win32.SendMessage( this.hwnd, Msg.TVM_SETIMAGELIST, Constants.TVSIL_STATE,
                     value );
             }
@@ -172,6 +199,27 @@ namespace Ankh.Solution
             this.RecursivelyClearStatusImages( item );
         }
 
+        /// <summary>
+        /// Use this to suppress the TVM_SETIMAGELIST message if it is for the
+        /// status image list.
+        /// </summary>
+        /// <param name="m"></param>
+        protected override void WndProc( ref System.Windows.Forms.Message m )
+        {
+            switch ( m.Msg )
+            {
+                case (int)Msg.TVM_SETIMAGELIST:
+                    if ( (uint)m.WParam != Constants.TVSIL_STATE)
+                    {
+                        base.WndProc( ref m );
+                    }
+                    break;
+                default:
+                    base.WndProc( ref m );
+                    break;
+            }
+        }
+
         private void RecursivelyClearStatusImages( IntPtr item )
         {
             if ( item == IntPtr.Zero )
@@ -196,7 +244,10 @@ namespace Ankh.Solution
                 throw new ArgumentNullException( varname, varname + " cannot be null" );
         }
 
-
+        private bool suppressStatusImageChange;
         private IntPtr hwnd;
+        private IntPtr statusImageList;
+
+
     }
 }

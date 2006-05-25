@@ -80,6 +80,10 @@ namespace Ankh.Solution
             if ( this.treeView != null )
             {
                 this.treeView.ClearStatusImages();
+
+                // if someone wants VSS images now, let them.
+                this.treeView.SuppressStatusImageChange = false;
+
                 if ( this.originalImageList != IntPtr.Zero )
                 {
                     this.treeView.StatusImageList = originalImageList;
@@ -210,6 +214,7 @@ namespace Ankh.Solution
             
             // and assign the status image list to the tree
             this.TreeView.StatusImageList = statusImageList.Handle;
+            this.treeView.SuppressStatusImageChange = true;
 
 
             // make sure everything's up to date.
