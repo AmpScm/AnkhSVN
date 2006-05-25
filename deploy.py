@@ -2,6 +2,7 @@ import sys, os, os.path
 import glob
 import shutil
 import urllib
+import tarfile
 
 # The URL to build from
 ANKHSVN_ROOT = "http://rogue/svn/finalproject/trunk"
@@ -162,16 +163,13 @@ def parse_args():
 def download_and_extract(url, dir, targetname):
     push_location()
 
-
-     os.chdir( dir )
-
     # move to the dir where we want it
     if not os.path.exists( dir):
         os.makedirs( dir)
     os.chdir( dir )    
 
     cwd = os.getcwd()
-    print "Downloading %s to %s" % (url,  os.cwd)
+    print "Downloading %s to %s" % (url,  cwd)
 
     basename = os.path.basename(url)
     target = "%s\%s" % (cwd, basename)
