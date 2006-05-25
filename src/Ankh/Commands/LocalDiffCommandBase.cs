@@ -104,7 +104,7 @@ namespace Ankh.Commands
                         Utils.Win32.FileAttribute.Normal );
 
                     // We can't use a path with more than two .. relative paths as input to svn diff (see svn issue #2448)
-                    if ( path == null || path.Contains( @"..\..\.." ) )
+                    if ( path == null || path.IndexOf( @"..\..\.." ) >= 0 )
                     {
                         path = item.Path;
                     }
