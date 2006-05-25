@@ -385,10 +385,6 @@ def do_subversion():
     #showpath
     print "Generating VC++ solution files"
     run ("python %s %s" % (gen_make, opts) )
-
-    # make sure our built subversion lets us set the admin dir
-    print "Patching the Subversion source to allow us to set the admin dir"
-    run ( "patch -p0 --input ..\\src\NSvn.Core\\admindir.patch" )
     
     "Building Subversion"
     if CONFIG == "__ALL__":
