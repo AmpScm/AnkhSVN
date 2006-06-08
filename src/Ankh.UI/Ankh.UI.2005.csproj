@@ -188,7 +188,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ConfigurationDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConflictDialog.cs">
       <SubType>Form</SubType>
