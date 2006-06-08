@@ -432,6 +432,19 @@ namespace Ankh.Tests
             private IContext context;
 
             public IList Selection = new object[]{};
+
+            #region ISolutionExplorer Members
+
+
+            public void SetUpDelayedProjectRefresh(Project project)
+            {
+            }
+
+            public void SetUpDelayedSolutionRefresh()
+            {
+            }
+
+            #endregion
         }
 
 
@@ -542,7 +555,7 @@ namespace Ankh.Tests
             {
                 return null;
             }
-
+            
             public virtual SwitchDialogInfo ShowSwitchDialog( SwitchDialogInfo info )
             {
                 return null;
@@ -559,6 +572,16 @@ namespace Ankh.Tests
             }
 
             private IContext context;
+
+            #endregion
+
+            #region IUIShell Members
+
+
+            public DialogResult ShowMessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+            {
+                return DialogResult.None;
+            }
 
             #endregion
         }
