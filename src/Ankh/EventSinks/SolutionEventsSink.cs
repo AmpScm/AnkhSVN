@@ -78,14 +78,17 @@ namespace Ankh.EventSinks
                         shouldAdd = false;
                     }
 
-                    if ( shouldAdd && newProject != null )
+                    if ( newProject != null )
                     {
-                        newProject.AddProjectToSvn();
-                    }
+                        if ( shouldAdd )
+                        {
+                            newProject.AddProjectToSvn(); 
+                        }
+                        // make sure we have an updated status for the items in that directory, otherwise they'll be seen as unversionable
+                        this.Context.StatusCache.Status( newProject.ProjectDirectory );
 
-                    // make sure we have an updated status for the items in that directory, otherwise they'll be seen as unversionable
-                    this.Context.StatusCache.Status( newProject.ProjectDirectory );
-                    this.Context.SolutionExplorer.SyncAll();
+                        this.Context.SolutionExplorer.SyncAll();
+                    }
                 }
             }
             catch ( Exception ex )
