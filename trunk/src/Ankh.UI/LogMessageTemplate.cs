@@ -47,6 +47,11 @@ namespace Ankh.UI
 
         public virtual string PreProcess( IList paths )        
         {
+            if ( this.Template.Trim() == String.Empty )
+            {
+                return this.Template;
+            }
+
             string text = this.Template;
             // substitute all the patterns.
             if ( LINETEMPLATE.IsMatch( this.template ) )
