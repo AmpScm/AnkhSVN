@@ -4,6 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using System.Collections;
 
+using NSvn.Common;
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -30,7 +31,7 @@ namespace NSvn.Core.Tests
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
 
-            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
+            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, Recurse.Full );
            
             char status = this.GetSvnStatus( filepath );
             Assert.AreEqual( 0, status, "File not committed" );
@@ -48,7 +49,7 @@ namespace NSvn.Core.Tests
 
             this.RunCommand( "svn", "lock " + filepath );
 
-            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, true, true );
+            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, Recurse.Full, true );
             Assert.IsNotNull( info );
             Assert.IsTrue( info != CommitInfo.Invalid );
             char locked = this.RunCommand( "svn", "status " + filepath )[5];
@@ -57,7 +58,7 @@ namespace NSvn.Core.Tests
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Bah" );
             
-            info = this.Client.Commit( new string[]{ this.WcPath }, true, false );
+            info = this.Client.Commit( new string[]{ this.WcPath }, Recurse.Full, false );
             Assert.IsNotNull( info );
             Assert.IsTrue( info != CommitInfo.Invalid );
 
@@ -75,7 +76,7 @@ namespace NSvn.Core.Tests
             using ( StreamWriter w = new StreamWriter( filepath ) )
                 w.Write( "Moo" );
 
-            CommitInfo info = this.Client.Commit( new string[]{ filepath }, true );
+            CommitInfo info = this.Client.Commit( new string[]{ filepath }, Recurse.None);
 
             char status = this.GetSvnStatus( filepath );
             Assert.AreEqual( 0, status, "File not committed" );
@@ -98,7 +99,7 @@ namespace NSvn.Core.Tests
             this.Client.LogMessage += new LogMessageDelegate(this.LogMessageCallback);
 
             this.logMessage = "Moo ";
-            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
+            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, Recurse.Full );
 
             Assert.AreEqual( Environment.UserName, info.Author, "Wrong username" );
             string output = this.RunCommand( "svn", "log " + this.filepath + " -r HEAD" );
@@ -116,7 +117,7 @@ namespace NSvn.Core.Tests
                 w.Write( "Moo" );
             this.Client.LogMessage +=new LogMessageDelegate(this.LogMessageCallback);
             this.logMessage = " ¥ · £ · € · $ · ¢ · ₡ · ₢ · ₣ · ₤ · ₥ · ₦ · ₧ · ₨ · ₩ · ₪ · ₫ · ₭ · ₮ · ₯";
-            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, false );
+            CommitInfo info = this.Client.Commit( new string[]{ this.WcPath }, Recurse.Full );
 
             this.Client.Log( new string[] { this.WcPath }, Revision.Head, Revision.Head, true, true,
                 new LogMessageReceiver( this.GetLogMessage ) );
@@ -137,7 +138,7 @@ namespace NSvn.Core.Tests
         public void TestCommitWithNoModifications()
         {
             this.Client.LogMessage += new LogMessageDelegate(this.LogMessageCallback);
-            CommitInfo ci = this.Client.Commit( new string[]{ this.WcPath }, false );
+            CommitInfo ci = this.Client.Commit( new string[]{ this.WcPath }, Recurse.Full );
             Assert.AreSame( CommitInfo.Invalid, ci );
         }
         
@@ -151,7 +152,7 @@ namespace NSvn.Core.Tests
             using( StreamWriter w = new StreamWriter( path ) )
                 w.Write( "MOO" );
             this.Client.LogMessage += new LogMessageDelegate( this.CancelLogMessage );
-            CommitInfo info = this.Client.Commit( new string[]{ path }, true );
+            CommitInfo info = this.Client.Commit( new string[]{ path }, Recurse.None );
 
             Assert.AreEqual( CommitInfo.Invalid, info,
                 "info should be Invalid for a cancelled commit" );
@@ -169,7 +170,7 @@ namespace NSvn.Core.Tests
                 Path.Combine( this.WcPath, Client.AdminDirectoryName ), "lock" );
             using( File.CreateText( lockPath ) )
             {
-                this.Client.Commit( new string[]{ this.WcPath }, true );            
+                this.Client.Commit( new string[]{ this.WcPath }, Recurse.None );            
             }
         }
 

@@ -257,7 +257,7 @@ namespace Ankh.Commands
         private void DoCommit( IContext context )
         {
             string[] paths = (string[])(new ArrayList(this.paths).ToArray(typeof(string)));
-            context.Client.Commit( paths, true );
+            context.Client.Commit( paths, Recurse.None );
         }
 
         /// <summary>

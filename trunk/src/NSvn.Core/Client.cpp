@@ -363,19 +363,19 @@ Int32 NSvn::Core::Client::Update(String* paths[], Revision* revision,
 }
 
 // implementation of Client::Commit
-NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool nonRecursive )
+NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], Recurse recurse)
 {
-    return this->Commit( targets, !nonRecursive, true );
+    return this->Commit( targets, recurse, true );
 }
 
-NSvn::Core::CommitInfo* NSvn::Core::Client::Commit( String* targets[], bool recurse, 
+NSvn::Core::CommitInfo* NSvn::Core::Client::Commit(String* targets[], Recurse recurse, 
                                                    bool keepLocks )
 {
     SubPool pool(*(this->rootPool));;
     apr_array_header_t* aprArrayTargets = StringArrayToAprArray( targets, true, pool );
     svn_client_commit_info_t* commitInfoPtr = 0;
 
-    HandleError( svn_client_commit2( &commitInfoPtr, aprArrayTargets, recurse, 
+    HandleError( svn_client_commit2( &commitInfoPtr, aprArrayTargets, (recurse == Recurse::Full), 
         keepLocks, this->context->ToSvnContext(), pool ) );
     
     if ( commitInfoPtr && commitInfoPtr->revision != SVN_INVALID_REVNUM )
