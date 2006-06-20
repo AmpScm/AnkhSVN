@@ -64,8 +64,21 @@ namespace NSvn.Core.Tests
             Assert.IsTrue( cmd.IndexOf( "Form.cs" ) == -1, "Directory wasn't deleted" );
 
             Assert.IsTrue( CommitInfo.Invalid != info, "CommitInfo is invalid" );
+        }
 
+        [Test]
+        public void TestForceDelete()
+        {
+            string path = Path.Combine( this.WcPath, "Form.cs" );
 
+            // modify the file
+            using ( StreamWriter writer = new StreamWriter( path, true ) )
+            {
+                writer.WriteLine( "Hi ho" );
+            }
+
+            // this will throw if force doesn't work
+            this.Client.Delete( new string[] { path }, true );
         }
 
     }

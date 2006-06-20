@@ -523,7 +523,7 @@ NSvn::Core::CommitInfo* NSvn::Core::Client::Delete(String* paths[], bool force)
 
     apr_array_header_t* aprPaths = StringArrayToAprArray( paths, true, pool );
 
-    HandleError( svn_client_delete( &commitInfoPtr, aprPaths, false, 
+    HandleError( svn_client_delete( &commitInfoPtr, aprPaths, static_cast<svn_boolean_t>(force), 
         this->context->ToSvnContext(), pool ) );
 
     if ( commitInfoPtr != 0 )
