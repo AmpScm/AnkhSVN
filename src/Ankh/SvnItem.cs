@@ -407,7 +407,7 @@ namespace Ankh
 
         public static bool NotDeletedFilter( SvnItem item )
         {
-            return !item.IsDeleted;
+            return !item.IsDeleted && !item.IsDeletedFromDisk;
         }
 
 
