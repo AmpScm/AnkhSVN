@@ -3,6 +3,7 @@ using System;
 using NUnit.Framework;
 using System.IO;
 using NSvn.Core;
+using NSvn.Common;
 using TestUtils;
 using System.Collections;
 
@@ -97,7 +98,7 @@ namespace Ankh.Tests
             {
                 using( StreamWriter w2 = new StreamWriter( Path.Combine(otherWc, "Form1.cs") ) )
                     w2.WriteLine( "Something else" );
-                this.Client.Commit( new string[]{ otherWc }, false );
+                this.Client.Commit( new string[]{ otherWc }, Recurse.Full );
             }
             finally
             {
@@ -199,7 +200,7 @@ namespace Ankh.Tests
             {
                 using( StreamWriter w2 = new StreamWriter( Path.Combine(otherWc, "Form1.cs") ) )
                     w2.WriteLine( "Something else" );
-                this.Client.Commit( new string[]{ otherWc }, false );
+                this.Client.Commit( new string[]{ otherWc }, Recurse.Full );
             }
             finally
             {
@@ -291,7 +292,7 @@ namespace Ankh.Tests
             {
                 using( StreamWriter w2 = new StreamWriter( Path.Combine(otherWc, "Form1.cs") ) )
                     w2.WriteLine( "Something else" );
-                this.Client.Commit( new string[]{ otherWc }, false );
+                this.Client.Commit( new string[]{ otherWc }, Recurse.Full );
             }
             finally
             {

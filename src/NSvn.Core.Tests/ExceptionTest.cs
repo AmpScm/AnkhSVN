@@ -4,6 +4,8 @@ using Utils;
 using NUnit.Framework;
 using TestUtils;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -68,7 +70,7 @@ namespace NSvn.Core.Tests
                 using (StreamWriter w2 = new StreamWriter( Path.Combine( wc2, "Form.cs" ), true ) )
                     w2.Write( "Moo" );
 
-                this.Client.Commit( new string[]{ wc2 }, false );
+                this.Client.Commit( new string[]{ wc2 }, Recurse.Full );
             }
             finally
             {

@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50215</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3A8DF134-05F1-4357-9682-AB14CDDA48A9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -185,6 +185,7 @@
     <Compile Include="PropListItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SvnEnums.cs" />
     <Compile Include="SvnException.cs">
       <SubType>Code</SubType>
     </Compile>

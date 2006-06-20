@@ -8,6 +8,7 @@ using System.IO;
 using Utils;
 
 using NSvn.Core;
+using NSvn.Common;
 using EnvDTE;
 
 namespace Ankh.Commands
@@ -101,7 +102,7 @@ namespace Ankh.Commands
 
         private void DoCommit( IContext context )
         {
-            this.commitInfo = context.Client.Commit( this.paths, true, this.commitContext.KeepLocks );
+            this.commitInfo = context.Client.Commit( this.paths, Recurse.Full, this.commitContext.KeepLocks );
         }
 
         /// <summary>

@@ -196,21 +196,21 @@ namespace NSvn
             ///<summary>Commit file/directory into repository, authenticating with the 
             ///         authentication baton.</summary>
             ///<param name="targets">Array of paths to commit.</param>
-            ///<param name="nonRecursive">Indicate that subdirectories of directory targets 
-            ///                           should be ignored.</param>
+			///<param name="recurse">The <see cref="Recurse" /> options to apply</param>
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
-            CommitInfo* Commit(String __gc* targets[], bool nonRecursive);
+			CommitInfo* Commit(String __gc* targets[], Recurse recurse);
 
             ///<summary>Commit file/directory into repository, authenticating with the 
             ///         authentication baton.</summary>
             ///<param name="targets">Array of paths to commit.</param>
-            ///<param name="recurse">Indicates that subdirectories of directory targets 
-            ///                           should be descended.</param>
+			///<param name="recurse">The <see cref="Recurse" /> options to apply</param>
             ///<param name="keepLocks">Locked items are unlocked, unless set to true</params>
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns>
-            CommitInfo* Commit(String __gc* targets[], bool recurse, bool keepLocks );
+			CommitInfo* Commit(String __gc* targets[], Recurse recurse, bool keepLocks);
+
+
 
             /// TODO: doc comments
             Status* SingleStatus( String* path );
