@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections;
 using NSvn.Core;
+using NSvn.Common;
 
 namespace Ankh.Commands
 {
@@ -105,7 +106,7 @@ namespace Ankh.Commands
                 if ( selection != item.Path )
                     this.Copy( item.Path, selection );
 
-                context.Client.Resolved( item.Path, false );
+                context.Client.Resolved( item.Path, Recurse.None );
                 context.OutputPane.WriteLine( 
                     "Resolved conflicted state of {0}", item.Path );
                 
@@ -136,7 +137,7 @@ namespace Ankh.Commands
                 if ( MessageBox.Show( "Have all conflicts been resolved?",
                     "Resolve", MessageBoxButtons.YesNo, MessageBoxIcon.Question ) == DialogResult.Yes )
                 {
-                    context.Client.Resolved( item.Path, false );
+                    context.Client.Resolved( item.Path, Recurse.None );
                 }
             }
         }        

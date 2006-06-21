@@ -8,6 +8,8 @@ using SH = SHDocVw;
 using System.IO;
 using Utils.Win32;
 
+using NSvn.Common;
+
 namespace Ankh
 {
 	/// <summary>
@@ -248,7 +250,7 @@ namespace Ankh
                 selector.EnableRecursive = info.EnableRecursive;
                 selector.Items = info.Items;
                 selector.CheckedItems = info.CheckedItems;
-                selector.Recursive = info.Recursive;
+                selector.Recursive = info.Recurse == Recurse.Full;
                 selector.SingleSelection = info.SingleSelection;
                 selector.Caption = info.Caption;
 
@@ -275,7 +277,7 @@ namespace Ankh
                 if ( selector.ShowDialog( this.Context.HostWindow ) == DialogResult.OK )
                 {
                     info.CheckedItems = selector.CheckedItems;
-                    info.Recursive = selector.Recursive;
+                    info.Recurse = selector.Recursive ? Recurse.Full : Recurse.None;
                     info.RevisionStart = selector.RevisionStart;
                     info.RevisionEnd = selector.RevisionEnd;
 
@@ -358,7 +360,7 @@ namespace Ankh
                     return null;
                 
                 info.SwitchToUrl = dialog.ToUrl;
-                info.Recursive = dialog.Recursive;
+                info.Recurse = dialog.Recursive ? Recurse.Full : Recurse.None;
                 info.Path = dialog.SelectedPath;
                 info.RevisionStart = dialog.RevisionStart;
 

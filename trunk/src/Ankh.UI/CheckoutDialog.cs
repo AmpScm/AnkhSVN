@@ -59,9 +59,9 @@ namespace Ankh.UI
         /// <summary>
         /// Whether to perform a non-recursive checkout.
         /// </summary>
-        public bool NonRecursive
+        public bool Recursive
         {
-            get{ return this.nonRecursiveCheckBox.Checked; }
+            get{ return !this.nonRecursiveCheckBox.Checked; }
         }
 
 		/// <summary>

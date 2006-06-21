@@ -44,7 +44,7 @@ namespace Ankh.Commands
             IList resources = context.SolutionExplorer.GetSelectionResources( true,
                 new ResourceFilterCallback( SvnItem.ModifiedFilter ) );
 
-            bool recursive = false;
+            Recurse recurse = Recurse.None;
             bool confirmed = false;
             // is Shift down?
             if ( !CommandBase.Shift )
@@ -55,7 +55,7 @@ namespace Ankh.Commands
                 if ( info == null )
                     return;
                 confirmed = true;
-                recursive = info.Recursive;
+                recurse = info.Recurse;
                 resources = info.CheckedItems;                
             }
 
@@ -80,7 +80,7 @@ namespace Ankh.Commands
             context.ProjectFileWatcher.StartWatchingForChanges(); 
             try
             {
-                context.Client.Revert( paths, recursive );
+                context.Client.Revert( paths, recurse );
             }
             catch( NotVersionControlledException )
             {

@@ -4,6 +4,8 @@ using NUnit.Framework;
 using System.IO;
 using System.Text;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -37,7 +39,7 @@ namespace NSvn.Core.Tests
             MemoryStream outstream = new MemoryStream();
             MemoryStream errstream = new MemoryStream();
             this.Client.Diff( new string[]{}, "Form.cs", Revision.Base, "Form.cs", 
-                Revision.Working, false, true, false, outstream, errstream );
+                Revision.Working, Recurse.None, true, false, outstream, errstream );
 
 
             string err = Encoding.Default.GetString( errstream.ToArray() );
@@ -55,7 +57,7 @@ namespace NSvn.Core.Tests
             MemoryStream errstream = new MemoryStream();
 
             this.Client.Diff( new string[]{}, this.ReposUrl, Revision.FromNumber(1), 
-                this.ReposUrl, Revision.FromNumber(5), true, true, false, outstream,
+                this.ReposUrl, Revision.FromNumber(5), Recurse.Full, true, false, outstream,
                 errstream );
 
             string err = Encoding.Default.GetString( errstream.ToArray() );
@@ -82,7 +84,7 @@ namespace NSvn.Core.Tests
 
             // this should not diff a binary file
             this.Client.Diff( new string[]{}, path, Revision.Base, 
-                path, Revision.Working, true, true, false, outstream,
+                path, Revision.Working, Recurse.Full, true, false, outstream,
                 errstream );
             string diff = Encoding.ASCII.GetString( outstream.ToArray() );
             Assert.IsTrue( diff.IndexOf( "application/octet-stream" ) >= 0 );
@@ -92,7 +94,7 @@ namespace NSvn.Core.Tests
             errstream = new MemoryStream();
 
             this.Client.Diff( new string[]{}, path, Revision.Base, 
-                path, Revision.Working, true, true, false, true, outstream,
+                path, Revision.Working, Recurse.Full, true, false, true, outstream,
                 errstream );
 
             Assert.IsTrue( outstream.Length > 0 );

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Windows.Forms;
 using Ankh.UI;
 using NSvn.Core;
+using NSvn.Common;
 
 namespace Ankh.Commands
 {
@@ -52,7 +53,7 @@ namespace Ankh.Commands
             try
             {
                 SwitchRunner runner = new SwitchRunner(info.Path, info.SwitchToUrl, 
-                    info.RevisionStart, info.Recursive );
+                    info.RevisionStart, info.Recurse );
                 context.UIShell.RunWithProgressDialog( runner, "Switching" );
                 if ( !context.ReloadSolutionIfNecessary() )
                 {
@@ -71,24 +72,24 @@ namespace Ankh.Commands
         private class SwitchRunner : IProgressWorker
         {
             public SwitchRunner( string path, string url, Revision revision,
-                bool recursive )                 
+                Recurse recurse )                 
             {
                 this.path = path;
                 this.url = url;
                 this.revision = revision;
-                this.recursive = recursive;
+                this.recurse = recurse;
             }
 
             public void Work( IContext context )
             {
                 context.Client.Switch( this.path, this.url, 
-                    this.revision, this.recursive );                
+                    this.revision, this.recurse );
             }
 
             private string path;
             private string url;
             private Revision revision;
-            private bool recursive;
+            private Recurse recurse;
         }
     }
 }

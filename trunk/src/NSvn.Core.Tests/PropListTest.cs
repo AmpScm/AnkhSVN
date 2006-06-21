@@ -28,7 +28,7 @@ namespace NSvn.Core.Tests
             this.RunCommand( "svn", "ps kung foo " + this.WcPath );
 
             PropListItem[] items = this.Client.PropList( this.WcPath, Revision.Working,
-                false );
+                Recurse.None );
 
             Assert.AreEqual( 1, items.Length, 
                 "Wrong number of proplist items" );

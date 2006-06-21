@@ -1,6 +1,7 @@
 using System;
 using Ankh.UI;
 using System.Windows.Forms;
+using NSvn.Common;
 
 namespace Ankh.Commands
 {
@@ -46,7 +47,7 @@ namespace Ankh.Commands
                     // contacts the repos to verify 
                     RelocateRunner runner = new RelocateRunner(
                         dir.Path, dlg.FromSegment, dlg.ToSegment, 
-                        dlg.Recursive );
+                        dlg.Recursive ? Recurse.Full : Recurse.None );
 
                     context.UIShell.RunWithProgressDialog( runner, "Relocating" );
 
@@ -65,7 +66,7 @@ namespace Ankh.Commands
         private class RelocateRunner : IProgressWorker
         {
             public RelocateRunner( string path, string from, string to, 
-                bool recurse ) 
+                Recurse recurse ) 
             {
                 this.path = path;
                 this.from = from; 
@@ -81,7 +82,7 @@ namespace Ankh.Commands
 
 
             private string path, from, to;
-            private bool recurse;
+            private Recurse recurse;
         }
     }
 }

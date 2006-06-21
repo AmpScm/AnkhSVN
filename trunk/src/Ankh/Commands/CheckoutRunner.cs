@@ -4,6 +4,7 @@ using EnvDTE;
 using System.IO;
 using System.Collections;
 using NSvn.Core;
+using NSvn.Common;
 using Ankh.RepositoryExplorer;
 
 namespace Ankh.Commands
@@ -14,7 +15,7 @@ namespace Ankh.Commands
     public class CheckoutRunner : IProgressWorker
     {
         public CheckoutRunner( string path, Revision revision, 
-            string url, bool recurse ) 
+            string url, Recurse recurse ) 
         { 
             this.path = path;
             this.url = url;
@@ -23,7 +24,7 @@ namespace Ankh.Commands
         }
 
         public CheckoutRunner( string path, Revision revision, 
-            string url ) : this( path, revision, url, true )
+            string url ) : this( path, revision, url, Recurse.Full )
         {
             // empty
         }
@@ -36,7 +37,7 @@ namespace Ankh.Commands
         private Revision revision;
         private string url;
         private string path;
-        private bool recurse;
+        private Recurse recurse;
 
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using NUnit.Framework;
 using NSvn.Core;
+using NSvn.Common;
 using EnvDTE;
 using Ankh.Commands;
 using System.Collections;
@@ -92,7 +93,7 @@ namespace Ankh.Tests
         {
             string path = Path.Combine( this.WcPath, "NewFile.cs" );
             this.Modify( path );
-            this.ctx.Client.Add( path, false );
+            this.ctx.Client.Add( path, Recurse.None );
 
             SvnItem item = this.ctx.StatusCache[path];
             Assert.AreEqual( StatusKind.Added, item.Status.TextStatus );

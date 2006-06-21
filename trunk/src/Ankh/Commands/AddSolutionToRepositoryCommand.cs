@@ -120,7 +120,7 @@ namespace Ankh.Commands
                 this.paths = new ArrayList();
                 this.paths.Add( solutionDir );
                     
-                context.Client.Add( context.DTE.Solution.FullName, false );
+                context.Client.Add( context.DTE.Solution.FullName, Recurse.None );
                 this.paths.Add( context.DTE.Solution.FullName );
                 this.AddProjects( context, vsProjects );  
             }
@@ -130,7 +130,7 @@ namespace Ankh.Commands
                 context.StartOperation( "Error: Reverting changes" );
                 try
                 {
-                    context.Client.Revert( new string[]{ solutionDir }, true );
+                    context.Client.Revert( new string[]{ solutionDir }, Recurse.Full );
                     PathUtils.RecursiveDelete( 
                         Path.Combine(solutionDir, Client.AdminDirectoryName) );
                 }
@@ -155,7 +155,7 @@ namespace Ankh.Commands
                 context.StartOperation( "Aborted - reverting" );
                 try
                 {
-                    context.Client.Revert( new string[]{ solutionDir }, true );
+                    context.Client.Revert( new string[]{ solutionDir }, Recurse.Full );
                     PathUtils.RecursiveDelete( 
                         Path.Combine(solutionDir, Client.AdminDirectoryName) );
                 }

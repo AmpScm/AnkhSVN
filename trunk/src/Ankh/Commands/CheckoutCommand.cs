@@ -3,7 +3,7 @@ using System;
 using Ankh.UI;
 using System.Windows.Forms;
 using Utils;
-
+using NSvn.Common;
 
 namespace Ankh.Commands
 {
@@ -32,7 +32,7 @@ namespace Ankh.Commands
                 try
                 {
                     CheckoutRunner runner = new CheckoutRunner(
-                        dlg.LocalPath, dlg.Revision, dlg.Url, !dlg.NonRecursive );
+                        dlg.LocalPath, dlg.Revision, dlg.Url, dlg.Recursive ? Recurse.Full : Recurse.None );
                     context.UIShell.RunWithProgressDialog( runner, "Checking out" );
 
                     // make sure it's remembered

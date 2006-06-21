@@ -3,6 +3,7 @@ using Ankh.UI;
 using System.Collections;
 using System.Threading;
 using NSvn.Core;
+using NSvn.Common;
 using System.Diagnostics;
 using EnvDTE;
 using Utils;
@@ -296,7 +297,7 @@ namespace Ankh.RepositoryExplorer
             public void Work( IContext context )
             {
                 this.entries = context.Client.List( this.node.Url, 
-                    this.node.Revision, false );
+                    this.node.Revision, Recurse.None );
             }
 
             private INode node;
@@ -367,7 +368,7 @@ namespace Ankh.RepositoryExplorer
                         "Ankh" );
                     DirectoryEntry[] entries = 
                         this.parent.context.Client.List( 
-                        node.Url, node.Revision, false );
+                        node.Url, node.Revision, Recurse.None );
                     INode[] children = new INode[entries.Length];
                     for( int i=0; i < entries.Length; i++ )
                     {

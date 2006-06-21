@@ -5,6 +5,8 @@ using NSvn.Core;
 using System.IO;
 using System.Collections;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -39,7 +41,7 @@ namespace NSvn.Core.Tests
             string truePath = this.CreateTextFile( "testfile.txt" );
             string trueDstUrl = this.ReposUrl + "/testfile.txt";
 
-            CommitInfo info = Client.Import( truePath, trueDstUrl, true );
+            CommitInfo info = Client.Import( truePath, trueDstUrl, Recurse.None );
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
             Assert.IsTrue( cmd.IndexOf( "testfile.txt" ) >= 0, "File wasn't imported " );
@@ -57,7 +59,7 @@ namespace NSvn.Core.Tests
 
             string trueDstUrl = this.ReposUrl + "/newDir2";
 
-            CommitInfo info = this.Client.Import( dir1, trueDstUrl, false );
+            CommitInfo info = this.Client.Import( dir1, trueDstUrl, Recurse.Full );
 
             String cmd = this.RunCommand( "svn", "list " + this.ReposUrl );
             Assert.IsTrue( cmd.IndexOf( "newDir2" ) >= 0, "File wasn't imported" );

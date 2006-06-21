@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.IO;
 using NSvn.Core;
+using NSvn.Common;
 using System.Windows.Forms;
 using Utils;
 using System.Collections.Specialized;
@@ -217,7 +218,7 @@ namespace Ankh.EventSinks
                             if ( !svnItem.IsVersioned && svnItem.IsVersionable &&
                                 !this.context.Client.IsIgnored( svnItem.Path ) )
                             {
-                                this.context.Client.Add( file, false );
+                                this.context.Client.Add( file, Recurse.None );
                             }
                         }
                         catch ( SvnClientException ex )

@@ -73,7 +73,7 @@ namespace Ankh.Tests
             Assert.IsFalse( item1.IsVersioned );
 
             // revert it so we can play some more with it
-            this.Client.Revert( new string[]{ item1.Path }, false );
+            this.Client.Revert( new string[]{ item1.Path }, Recurse.None );
 
             // modified
             using( StreamWriter writer = new StreamWriter(item1.Path) )
@@ -84,7 +84,7 @@ namespace Ankh.Tests
             // added
             string addedFilePath = Path.Combine( this.WcPath, "added.txt" );
             File.CreateText(addedFilePath).Close();            
-            this.Client.Add( addedFilePath, true );
+            this.Client.Add( addedFilePath, Recurse.Full );
             Status addedFileStatus = this.Client.SingleStatus( addedFilePath );
             SvnItem addedItem = new SvnItem( addedFilePath, addedFileStatus );
             Assert.IsTrue( addedItem.IsVersioned );
@@ -104,14 +104,14 @@ namespace Ankh.Tests
             {
                 Utils.PathUtils.RecursiveDelete( otherWc );
             }
-            this.Client.Update( this.WcPath, Revision.Head, true );
+            this.Client.Update( this.WcPath, Revision.Head, Recurse.Full );
             item1.Refresh( this.Client );
             Assert.AreEqual( StatusKind.Conflicted, item1.Status.TextStatus );
             Assert.IsTrue( item1.IsVersioned );
 
             // deleted
-            this.Client.Resolved( item1.Path, false );
-            this.Client.Revert( new string[]{item1.Path}, false );
+            this.Client.Resolved( item1.Path, Recurse.None );
+            this.Client.Revert( new string[]{item1.Path}, Recurse.None );
             this.Client.Delete( new string[]{ item1.Path }, true );
             item1.Refresh( this.Client );
             Assert.AreEqual( StatusKind.Deleted, item1.Status.TextStatus );
@@ -144,7 +144,7 @@ namespace Ankh.Tests
                 string incompletePath = this.GetTempFile();    
                 try
                 {
-                     this.Client.Checkout( this.ReposUrl, incompletePath, Revision.Head, true );
+                     this.Client.Checkout( this.ReposUrl, incompletePath, Revision.Head, Recurse.Full );
                 }
                 catch( OperationCancelledException )
                 {
@@ -177,7 +177,7 @@ namespace Ankh.Tests
             item1.Refresh(this.Client);
             Assert.IsFalse(item1.IsModified);
 
-            this.Client.Revert(new string[]{item1.Path}, true);
+            this.Client.Revert(new string[]{item1.Path}, Recurse.Full);
 
             // modified
             using( StreamWriter writer = new StreamWriter(item1.Path) )
@@ -188,7 +188,7 @@ namespace Ankh.Tests
             // added
             string addedFilePath = Path.Combine( this.WcPath, "added.txt" );
             File.CreateText(addedFilePath).Close();            
-            this.Client.Add( addedFilePath, true );
+            this.Client.Add( addedFilePath, Recurse.Full );
             Status addedFileStatus = this.Client.SingleStatus( addedFilePath );
             SvnItem addedItem = new SvnItem( addedFilePath, addedFileStatus );
             Assert.IsTrue( addedItem.IsModified );            
@@ -206,14 +206,14 @@ namespace Ankh.Tests
             {
                 Utils.PathUtils.RecursiveDelete( otherWc );
             }
-            this.Client.Update( this.WcPath, Revision.Head, true );
+            this.Client.Update( this.WcPath, Revision.Head, Recurse.Full );
             item1.Refresh( this.Client );
             Assert.AreEqual( StatusKind.Conflicted, item1.Status.TextStatus );
             Assert.IsTrue( item1.IsModified );
 
             // deleted
-            this.Client.Resolved( item1.Path, false );
-            this.Client.Revert( new string[]{item1.Path}, false );
+            this.Client.Resolved( item1.Path, Recurse.None );
+            this.Client.Revert( new string[]{item1.Path}, Recurse.None );
             this.Client.Delete( new string[]{ item1.Path }, true );
             item1.Refresh( this.Client );
             Assert.AreEqual( StatusKind.Deleted, item1.Status.TextStatus );
@@ -269,7 +269,7 @@ namespace Ankh.Tests
             Assert.IsTrue( item1.IsVersionable );
 
             // revert it so we can play some more with it
-            this.Client.Revert( new string[]{ item1.Path }, false );
+            this.Client.Revert( new string[]{ item1.Path }, Recurse.None );
 
             // modified
             using( StreamWriter writer = new StreamWriter(item1.Path) )
@@ -280,7 +280,7 @@ namespace Ankh.Tests
             // added
             string addedFilePath = Path.Combine( this.WcPath, "added.txt" );
             File.CreateText(addedFilePath).Close();            
-            this.Client.Add( addedFilePath, true );
+            this.Client.Add( addedFilePath, Recurse.Full );
             Status addedFileStatus = this.Client.SingleStatus( addedFilePath );
             SvnItem addedItem = new SvnItem( addedFilePath, addedFileStatus );
             Assert.IsTrue( addedItem.IsVersionable );            
@@ -298,14 +298,14 @@ namespace Ankh.Tests
             {
                 Utils.PathUtils.RecursiveDelete( otherWc );
             }
-            this.Client.Update( this.WcPath, Revision.Head, true );
+            this.Client.Update( this.WcPath, Revision.Head, Recurse.Full );
             item1.Refresh( this.Client );
             Assert.AreEqual( StatusKind.Conflicted, item1.Status.TextStatus );
             Assert.IsTrue( item1.IsVersionable );
 
             // deleted
-            this.Client.Resolved( item1.Path, false );
-            this.Client.Revert( new string[]{item1.Path}, false );
+            this.Client.Resolved( item1.Path, Recurse.None );
+            this.Client.Revert( new string[]{item1.Path}, Recurse.None );
             this.Client.Delete( new string[]{ item1.Path }, true );
             item1.Refresh( this.Client );
             Assert.AreEqual( StatusKind.Deleted, item1.Status.TextStatus );

@@ -5,6 +5,8 @@ using System.IO;
 using Utils;
 using TestUtils;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -37,7 +39,7 @@ namespace NSvn.Core.Tests
         {  
             string filePath = Path.Combine( this.path, "Form.cs" );
 
-            this.Client.Resolved( filePath, false );
+            this.Client.Resolved( filePath, Recurse.None );
  
             Assert.AreEqual('M', this.GetSvnStatus( filePath ), "Resolve didn't work!" );
 
@@ -49,7 +51,7 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestResolveDirectory()
         {  
-            this.Client.Resolved( this.path, true );
+            this.Client.Resolved( this.path, Recurse.Full );
  
             Assert.AreEqual( 'M', this.GetSvnStatus( this.path ),
                 " Resolve didn't work! Directory still conflicted" );

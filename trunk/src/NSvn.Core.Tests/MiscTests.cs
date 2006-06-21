@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 using System.IO;
 using Utils;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -68,13 +70,13 @@ namespace NSvn.Core.Tests
             this.Client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
             this.Client.Cancel += new CancelDelegate(this.Cancel);
 
-            this.Client.Update( this.WcPath, Revision.Head, true );
+            this.Client.Update( this.WcPath, Revision.Head, Recurse.Full );
             
             Assert.IsTrue( this.cancels > 0, "No cancellation callbacks" );
 
             this.Client.Cancel -= new CancelDelegate(this.Cancel);
             this.Client.Cancel += new CancelDelegate(this.ReallyCancel);
-            this.Client.Update( this.WcPath, Revision.Head, true );
+            this.Client.Update( this.WcPath, Revision.Head, Recurse.Full );
         }
 
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
@@ -91,7 +93,7 @@ namespace NSvn.Core.Tests
                     "Admin directory name should now be " + newAdminDir );
 
                 string newwc = this.FindDirName( Path.Combine( Path.GetTempPath(), "moo" ) );
-                this.Client.Checkout( this.ReposUrl, newwc, Revision.Head, true );
+                this.Client.Checkout( this.ReposUrl, newwc, Revision.Head, Recurse.Full );
 
                 Assert.IsTrue( Directory.Exists( Path.Combine( newwc, newAdminDir ) ), 
                     "Admin directory with new name not found" );

@@ -30,7 +30,7 @@ namespace NSvn.Core.Tests
         public void TestAddFileInNonVersionedDir()
         {
             string tempFile = Path.GetTempFileName();
-            this.Client.Add( tempFile, true );
+            this.Client.Add( tempFile, Recurse.Full );
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace NSvn.Core.Tests
                 Path.Combine( this.WcPath, Client.AdminDirectoryName ), "lock" );
             File.Create( lockPath ).Close();
 
-            this.Client.Update( this.WcPath, Revision.Head, true );
+            this.Client.Update( this.WcPath, Revision.Head, Recurse.Full );
         }
 
         /// <summary>

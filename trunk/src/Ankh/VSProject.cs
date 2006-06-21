@@ -4,6 +4,7 @@ using EnvDTE;
 using System.IO;
 using Utils;
 using NSvn.Core;
+using NSvn.Common;
 using System.Collections;
 using System.Reflection;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -322,7 +323,7 @@ namespace Ankh
                 this.AddWithIntermediateDirectories( filename, solutionDir, paths );
             else
             {
-                this.context.Client.Add( filename, false );
+                this.context.Client.Add( filename, Recurse.None );
                 paths.Add( filename );
             }
         }
@@ -345,7 +346,7 @@ namespace Ankh
                 path = Path.Combine( path, dirname );
                 if ( !SvnUtils.IsWorkingCopyPath( path ) || File.Exists( path ) )
                 {
-                    this.context.Client.Add( path, false );
+                    this.context.Client.Add( path, Recurse.None );
                     paths.Add( path );
                 }
             }
