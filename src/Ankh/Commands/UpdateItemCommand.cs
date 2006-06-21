@@ -6,6 +6,7 @@ using Ankh.UI;
 using System.Collections;
 using System.Diagnostics;
 using Ankh.Solution;
+using NSvn.Common;
 using NSvn.Core;
 
 namespace Ankh.Commands
@@ -91,7 +92,7 @@ namespace Ankh.Commands
             /// <returns></returns>
             public bool MaybeShowUpdateDialog()
             {
-                this.recursive = false;
+                this.recurse = Recurse.None;
                 this.revision = Revision.Head;
 
                 // We're using the update dialog no matter what to
@@ -111,7 +112,7 @@ namespace Ankh.Commands
                             return false;
                     }
 
-                    recursive = d.Recursive;
+                    recurse = d.Recursive ? Recurse.Full : Recurse.None;
                     this.resources = d.CheckedItems;
                     this.revision = d.Revision;
                 }
@@ -130,7 +131,7 @@ namespace Ankh.Commands
                 try
                 {
                     string[] paths = SvnItem.GetPaths( this.resources );
-                    context.Client.Update( paths, revision, recursive, false );
+                    context.Client.Update( paths, revision, recurse, false );
                 }
                 finally
                 {       
@@ -158,7 +159,7 @@ namespace Ankh.Commands
 
             private IList resources = new ArrayList();
             private Revision revision;
-            private bool recursive;
+            private Recurse recurse;
             private bool conflictsOccurred = false; 
             private IContext context;
         }            

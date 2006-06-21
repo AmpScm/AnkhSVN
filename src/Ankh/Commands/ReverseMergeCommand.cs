@@ -3,6 +3,7 @@ using System.Collections;
 using Ankh.UI;
 using System.Windows.Forms;
 using NSvn.Core;
+using NSvn.Common;
 using System.IO;
 
 namespace Ankh.Commands
@@ -52,7 +53,7 @@ namespace Ankh.Commands
                     context.ProjectFileWatcher.StartWatchingForChanges();
                
                     ReverseMergeRunner runner = new ReverseMergeRunner(
-                        dlg.CheckedItems, dlg.Revision, dlg.Recursive,
+                        dlg.CheckedItems, dlg.Revision, dlg.Recursive ? Recurse.Full : Recurse.None,
                         dlg.DryRun );
                     context.UIShell.RunWithProgressDialog( runner, "Merging" );
 
@@ -77,11 +78,11 @@ namespace Ankh.Commands
         private class ReverseMergeRunner : IProgressWorker
         {
             public ReverseMergeRunner(  IList items, Revision revision,
-                bool recursive, bool dryRun ) 
+                Recurse recurse, bool dryRun ) 
             {
                 this.items = items;
                 this.revision = revision;
-                this.recursive = recursive;
+                this.recurse = recurse;
                 this.dryRun = dryRun;
             }
 
@@ -92,14 +93,14 @@ namespace Ankh.Commands
                     context.Client.Merge( 
                         item.Path, Revision.Working,
                         item.Path, this.revision,
-                        item.Path, this.recursive,
+                        item.Path, this.recurse,
                         false, false, this.dryRun );
                 }
             }
 
             private IList items;
             private Revision revision;
-            private bool recursive;
+            private Recurse recurse;
             private bool dryRun;
         }
     }

@@ -3,6 +3,8 @@ using NUnit.Framework;
 using System.Diagnostics;
 using System.IO;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -30,7 +32,7 @@ namespace NSvn.Core.Tests
                     this.WcPath, 
                     "file:///tmp/repos", 
                     String.Format("svn://localhost:{0}/", PortNumber), 
-                    true );
+                    Recurse.Full );
                 string url = this.Client.SingleStatus( this.WcPath ).Entry.Url;
                 Assert.IsTrue( url.StartsWith( "svn://localhost" ) );
             }

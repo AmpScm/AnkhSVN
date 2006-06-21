@@ -4,6 +4,7 @@ using System.Collections;
 using Ankh.UI;
 using System.Windows.Forms;
 using System.IO;
+using NSvn.Common;
 
 namespace Ankh.Commands
 {
@@ -59,7 +60,7 @@ namespace Ankh.Commands
 
                 foreach( SvnItem item in resources )
                 {
-                    context.Client.Add( item.Path, false );
+                    context.Client.Add( item.Path, Recurse.None );
                 }
                 context.SolutionExplorer.RefreshSelection();
             }

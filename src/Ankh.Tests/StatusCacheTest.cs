@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Ankh;
 using System.IO;
 using NSvn.Core;
+using NSvn.Common;
 using System.Collections;
 
 
@@ -60,7 +61,7 @@ namespace Ankh.Tests
             Assert.AreEqual( 2, deletions.Count );
 
             // undelete one
-            this.Client.Revert(  new string[]{Path.Combine( this.WcPath, "Class1.cs" )}, false );
+            this.Client.Revert(  new string[]{Path.Combine( this.WcPath, "Class1.cs" )}, Recurse.None );
             deletions = cache.GetDeletions( this.WcPath );
             Assert.AreEqual( 1, deletions.Count );
 
@@ -69,7 +70,7 @@ namespace Ankh.Tests
                 ((SvnItem)deletions[0]).Path);  
 
             // undelete all
-            this.Client.Revert( new string[]{this.WcPath}, true );
+            this.Client.Revert( new string[]{this.WcPath}, Recurse.Full );
             deletions = cache.GetDeletions( this.WcPath );
             Assert.AreEqual( 0, deletions.Count );
         }

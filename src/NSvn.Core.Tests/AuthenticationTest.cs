@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using NUnit.Framework;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -50,7 +52,7 @@ namespace NSvn.Core.Tests
                 DirectoryEntry[] entries;
                 // this time we should be prompted
                 entries = client.List( string.Format( "svn://localhost:{0}", PortNumber ), 
-                    Revision.Head, false );
+                    Revision.Head, Recurse.None );
                 Assert.IsTrue( this.prompted );
                 Assert.IsTrue( entries.Length > 0 );
                 this.prompted = false;
@@ -65,7 +67,7 @@ namespace NSvn.Core.Tests
                 try
                 {
                     client.List( string.Format( "svn://localhost:{0}", PortNumber ), 
-                        Revision.Head, false );
+                        Revision.Head, Recurse.None );
                     Assert.Fail( "Should have failed" );
                 }
                 catch( AuthorizationFailedException )
@@ -79,7 +81,7 @@ namespace NSvn.Core.Tests
 
                 // do it once more. This will fail if the provider didn't cache
                 entries = client.List( string.Format( "svn://localhost:{0}", PortNumber ), 
-                    Revision.Head, false );
+                    Revision.Head, Recurse.None );
                 Assert.IsTrue( entries.Length > 0 );
                 Assert.IsFalse( this.prompted );
             }
@@ -108,7 +110,7 @@ namespace NSvn.Core.Tests
             try
             {
                 DirectoryEntry[] entries = 
-                    this.Client.List( SSLTESTREPOS, Revision.Head, false );
+                    this.Client.List( SSLTESTREPOS, Revision.Head, Recurse.None );
                 Assert.Fail( "Client.List should have thrown an exception" ); 
             }
             catch( SvnClientException )
@@ -127,7 +129,7 @@ namespace NSvn.Core.Tests
                 SslServerTrustPromptDelegate( this.SslServerTrustAcceptCallback  ) ) );
                       
             DirectoryEntry[] entries = 
-                this.Client.List( SSLTESTREPOS, Revision.Head, false );
+                this.Client.List( SSLTESTREPOS, Revision.Head, Recurse.None );
            
             Assert.IsTrue( entries.Length > 0, "No entries returned" );
             Assert.IsTrue( this.callbackCalled, "Callback not called" );
@@ -150,11 +152,11 @@ namespace NSvn.Core.Tests
             this.maySave = true;
 
             
-            this.Client.List( SSLTESTREPOS, Revision.Head, false );
+            this.Client.List( SSLTESTREPOS, Revision.Head, Recurse.None );
 
             // now try to get them to take it from the config dir
             DirectoryEntry[] entries = this.Client.List( SSLTESTREPOS,
-                Revision.Head, false );
+                Revision.Head, Recurse.None );
             Assert.IsTrue( entries.Length > 0, "No entries returned" );
 
             

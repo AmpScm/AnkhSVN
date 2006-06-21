@@ -4,6 +4,7 @@ using System.Collections;
 using System.IO;
 using System.Diagnostics;
 using NSvn.Core;
+using NSvn.Common;
 using EnvDTE;
 using Ankh.UI;
 using System.Windows.Forms;
@@ -56,7 +57,7 @@ namespace Ankh.Commands
 
             // "Recursive" doesn't make much sense if using an external diff
             info.EnableRecursive = !useExternalDiff;
-            info.Recursive = !useExternalDiff;
+            info.Recurse = useExternalDiff ? Recurse.None : Recurse.Full;
 
             // default to textbase vs wc diff                
             Revision revisionStart = Revision.Base;
@@ -110,7 +111,7 @@ namespace Ankh.Commands
                     }
 
                     context.Client.Diff( new string[]{}, path, info.RevisionStart, 
-                        path, info.RevisionEnd, info.Recursive, true, false, 
+                        path, info.RevisionEnd, info.Recurse, true, false, 
                         stream, Stream.Null );
                 }
 

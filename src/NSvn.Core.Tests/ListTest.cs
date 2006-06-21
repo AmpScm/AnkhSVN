@@ -4,6 +4,8 @@ using System.Collections;
 using NUnit.Framework;
 using System.Text.RegularExpressions;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -43,7 +45,7 @@ namespace NSvn.Core.Tests
             }
 
             DirectoryEntry[] dirents = this.Client.List( this.ReposUrl, Revision.Head, 
-                false);
+                Recurse.None);
 
             Assert.AreEqual( ht.Count, dirents.Length, 
                 "Wrong number of entries returned" );

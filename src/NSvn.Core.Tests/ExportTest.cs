@@ -3,6 +3,8 @@ using System;
 using System.IO;
 using NUnit.Framework;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -58,7 +60,7 @@ namespace NSvn.Core.Tests
         public void TestExportNonRecursive()
         {
             this.Client.Export( this.WcPath, this.newWc, Revision.Unspecified, Revision.Head,
-                false, false, false, null );
+                false, false, Recurse.None, null );
             Assert.AreEqual( 0, Directory.GetDirectories( this.newWc ).Length );
         }       
 

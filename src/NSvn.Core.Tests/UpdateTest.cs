@@ -4,6 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using Utils;
 using TestUtils;
+using NSvn.Common;
 
 namespace NSvn.Core.Tests
 {
@@ -39,7 +40,7 @@ namespace NSvn.Core.Tests
         {
             string filePath = Path.Combine( this.WcPath, "Form.cs" ); 
             File.Delete( filePath );
-            this.Client.Update( this.WcPath, Revision.Head, true );
+            this.Client.Update( this.WcPath, Revision.Head, Recurse.Full );
 
             Assert.IsTrue( File.Exists( filePath ), "File not restored after update" );
         }
@@ -55,7 +56,7 @@ namespace NSvn.Core.Tests
                 w.Write( "Moo" );
             this.RunCommand( "svn", "ci -m \"\" " + this.wc2 );
 
-            this.Client.Update( this.WcPath, Revision.Head, true );
+            this.Client.Update( this.WcPath, Revision.Head, Recurse.Full );
 
             string s;
             using( StreamReader r = new StreamReader( Path.Combine( this.WcPath, "Form.cs" ) ) )
@@ -76,7 +77,7 @@ namespace NSvn.Core.Tests
             int[] revs = this.Client.Update( new string[]{ 
                                                              Path.Combine( this.WcPath, "Form.cs" ),
                                                              Path.Combine( this.WcPath, "AssemblyInfo.cs" )
-                                                         }, Revision.Head, false, true );
+                                                         }, Revision.Head, Recurse.None, true );
             Assert.AreEqual( 2, revs.Length );
 
             string s;

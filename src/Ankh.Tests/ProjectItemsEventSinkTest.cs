@@ -55,7 +55,7 @@ namespace Ankh.Tests
             string path = Path.Combine( this.WcPath, "File.ignored" );
             File.CreateText( path ).Close();
             ctx.Client.PropSet( new Property( "svn:ignore", "File.ignored" ), 
-                this.WcPath, true );
+                this.WcPath, Recurse.Full );
 
             int youngest;
             ctx.Client.Status( out youngest, path, Revision.Unspecified, 
@@ -87,7 +87,7 @@ namespace Ankh.Tests
             File.CreateText( path ).Close();  
           
             SvnItem item = ctx.StatusCache[path];
-            ctx.Client.Add( path, false );
+            ctx.Client.Add( path, Recurse.None );
 
             // unless the sink refreshes the item, it will be 
             // seen as unversioned and it will try to add it.

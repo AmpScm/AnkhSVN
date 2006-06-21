@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using NSvn.Core;
+using NSvn.Common;
 
 namespace Ankh
 {
@@ -35,10 +36,10 @@ namespace Ankh
             set{ this.enableRecursive = value; }
         }
 
-        public bool Recursive
+        public Recurse Recurse
         {
-            get{ return this.recursive; }
-            set{ this.recursive = value; }
+            get { return this.recurse; }
+            set { this.recurse = value; }
         }
 
         public Revision RevisionStart
@@ -68,7 +69,7 @@ namespace Ankh
         private string caption = "Someone obviously forgot to put a caption here.";
         private bool singleSelection = false;
         private bool enableRecursive = false;
-        private bool recursive = false;
+        private Recurse recurse = Recurse.None;
         private IList items = new object[]{};
         private IList checkedItems = new object[]{};
         private Revision revisionStart, revisionEnd;

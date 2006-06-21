@@ -3,6 +3,8 @@ using System;
 using NUnit.Framework;
 using System.IO;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     ///<summary>
@@ -29,7 +31,7 @@ namespace NSvn.Core.Tests
             string switchUrl = Path.Combine( this.ReposUrl, "doc" );
             string checkFile = Path.Combine( this.WcPath, "text_r5.txt" );
 
-            this.Client.Switch( this.WcPath, switchUrl, Revision.Head, true );
+            this.Client.Switch( this.WcPath, switchUrl, Revision.Head, Recurse.Full );
             Assert.IsTrue( File.Exists( checkFile ), "Didn't switch to repos/doc" );
 
         }

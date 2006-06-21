@@ -5,6 +5,8 @@ using NSvn.Core;
 using System.IO;
 using System.Collections;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -32,7 +34,7 @@ namespace NSvn.Core.Tests
             string testFile = this.CreateTextFile( "testfile.txt" );
 
             this.Client.Notification += new NotificationDelegate(this.NotifyCallback);
-            this.Client.Add( testFile, false );    
+            this.Client.Add( testFile, Recurse.None );    
        
 			Assert.IsTrue( this.Notifications.Length > 0, "No notification callbacks received" );
 
@@ -51,7 +53,7 @@ namespace NSvn.Core.Tests
 
             this.Client.Notification += new NotificationDelegate(this.NotifyCallback);
             // do a non-recursive add here
-            this.Client.Add( dir1, false );
+            this.Client.Add( dir1, Recurse.None );
 
             Assert.IsTrue( this.Notifications.Length == 1, "Too many or no notifications received. Added recursively?" );
             Assert.AreEqual( 'A', this.GetSvnStatus( dir1 ), "Subdirectory not added");
@@ -81,7 +83,7 @@ namespace NSvn.Core.Tests
 
             this.Client.Notification += new NotificationDelegate(this.NotifyCallback);
             // now a recursive add
-            this.Client.Add( dir1, true );
+            this.Client.Add( dir1, Recurse.Full );
 
             // enough notifications?
             Assert.AreEqual( 4, this.Notifications.Length, "Received wrong number of notifications" );
@@ -97,7 +99,7 @@ namespace NSvn.Core.Tests
             string file = Path.Combine( this.WcPath, "AssemblyInfo.cs" );
             try
             {
-                this.Client.Add( file, false, false );
+                this.Client.Add( file, Recurse.None, false );
                 Assert.Fail( "Should have failed" );
             }
             catch( SvnClientException )
@@ -106,7 +108,7 @@ namespace NSvn.Core.Tests
             }
 
             // should not fail
-            this.Client.Add( file, false, true );
+            this.Client.Add( file, Recurse.None, true );
         }
 
         [Test]
@@ -114,7 +116,7 @@ namespace NSvn.Core.Tests
         {
             string newFile = Path.Combine( this.WcPath, "Æeiaæå.ø");
             File.Create(newFile).Close();
-            this.Client.Add(newFile, true);
+            this.Client.Add(newFile, Recurse.Full);
         }
 
 

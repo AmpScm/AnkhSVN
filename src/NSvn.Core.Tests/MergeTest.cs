@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
+using NSvn.Common;
 //TODO: Not possible to do the testing yet as the repository
 //      contains only one revision.
 namespace NSvn.Core.Tests 
@@ -36,7 +37,7 @@ namespace NSvn.Core.Tests
             string comparePath = Path.Combine (this.WcPath, Path.Combine("doc", "text_r5.txt" ) );           
 
             this.Client.Merge( srcPath, Revision.FromNumber(5) , srcPath, Revision.FromNumber(4) ,
-                dstPath, true, true, false, false ); 
+                dstPath, Recurse.Full, true, false, false ); 
 
             Assert.AreEqual( 'D', this.GetSvnStatus( comparePath ), "Wrong status" );
        

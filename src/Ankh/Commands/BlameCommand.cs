@@ -3,6 +3,7 @@ using System.Xml;
 using System.Xml.Xsl;
 using System.Xml.XPath;
 using NSvn.Core;
+using NSvn.Common;
 using System.IO;
 using System.Collections;
 using System.Diagnostics;
@@ -43,7 +44,7 @@ namespace Ankh.Commands
                 info.RevisionStart = revisionStart;
                 info.RevisionEnd = revisionEnd;
                 info.EnableRecursive = false;
-                info.Recursive = false;
+                info.Recurse = Recurse.None;
                 info.SingleSelection = true;
 
                 // show the selector dialog

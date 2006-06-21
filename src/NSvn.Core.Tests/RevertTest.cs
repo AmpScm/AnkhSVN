@@ -3,6 +3,8 @@ using System;
 using NUnit.Framework;
 using System.IO;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -30,7 +32,7 @@ namespace NSvn.Core.Tests
 
             string oldContents ;
             string newContents;
-            this.ModifyFile( out oldContents, out newContents, filePath, filePath, false );
+            this.ModifyFile( out oldContents, out newContents, filePath, filePath, Recurse.None );
 
 
             Assert.AreEqual( oldContents, newContents, "File not reverted" );
@@ -46,14 +48,14 @@ namespace NSvn.Core.Tests
             string oldContents;
             string newContents;
             this.ModifyFile( out oldContents, out newContents, Path.Combine( this.WcPath, "Form.cs" ), 
-                this.WcPath, true );
+                this.WcPath, Recurse.Full );
 
             Assert.AreEqual( oldContents, newContents, "File not reverted" );
 
         }
 
         private void ModifyFile(out string oldContents, out string newContents, string filePath, 
-            string revertPath, bool recursive )
+            string revertPath, Recurse recursive )
         {            
 
             using ( StreamReader reader = new StreamReader( filePath ))

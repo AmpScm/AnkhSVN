@@ -4,6 +4,8 @@ using System.IO;
 using NUnit.Framework;
 using Utils;
 
+using NSvn.Common;
+
 namespace NSvn.Core.Tests
 {
     /// <summary>
@@ -33,7 +35,7 @@ namespace NSvn.Core.Tests
         [Test]
         public void TestBasicCheckout()
         {
-            this.Client.Checkout( this.ReposUrl, this.newWc, Revision.Head, true );
+            this.Client.Checkout( this.ReposUrl, this.newWc, Revision.Head, Recurse.Full );
 
             Assert.IsTrue( File.Exists( Path.Combine( this.newWc, "Form.cs" ) ),
                 "Checked out file not there" );
@@ -47,7 +49,7 @@ namespace NSvn.Core.Tests
         public void TestProgressEvent()
         {
                 this.Client.Progress += new ProgressDelegate(Client_Progress);
-                this.Client.Checkout("http://ankhsvn.com/svn/test", this.newWc, Revision.Head, true);
+                this.Client.Checkout("http://ankhsvn.com/svn/test", this.newWc, Revision.Head, Recurse.Full);
 
                 Assert.IsTrue(progressCalled, "Progress delegate not called");
         }

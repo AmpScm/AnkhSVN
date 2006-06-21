@@ -91,7 +91,7 @@ namespace NSvn
             ///                        all of its contents will be scheduled for addition as well.</param>            
             /// <returns>The revision affected</returns>
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>            
-            int Checkout(String* url, String* path, Revision* revision, bool recurse);
+            int Checkout(String* url, String* path, Revision* revision, Recurse recurse);
 
             ///<summary>Checkout a working copy.</summary>
             ///<param name="url">Path to the files/directory in the repository to be checked out.</param>
@@ -105,7 +105,7 @@ namespace NSvn
             ///                              definitions as part of this operation.</param>
             /// <returns>The revision affected</returns>
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-            int Checkout(String* url, String* path, Revision* pegRevision, Revision* revision, bool recurse, bool ignoreExternals);
+            int Checkout(String* url, String* path, Revision* pegRevision, Revision* revision, Recurse recurse, bool ignoreExternals);
 
             ///<summary>Update working tree path to revision.</summary>
             ///<param name="path">Path to the file/directory.</param>
@@ -115,7 +115,7 @@ namespace NSvn
             ///                        all of its contents will be scheduled for addition as well.</param>            
             /// <returns>The revision affected</returns>
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-            int Update(String* path, Revision* revision, bool recurse );
+            int Update(String* path, Revision* revision, Recurse recurse );
 
             ///<summary>Update working tree path to revision.</summary>
             ///<param name="paths">An array of paths to be updated.</param>
@@ -127,7 +127,7 @@ namespace NSvn
             /// not be processed.</param>                        
             /// <returns>The numbers of the revisions affected</returns>
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-            Int32 Update(String* paths[], Revision* revision, bool recurse, bool ignoreExternals ) __gc [];
+            Int32 Update(String* paths[], Revision* revision, Recurse recurse, bool ignoreExternals ) __gc [];
 
             ///<summary>Switch working tree path to url at revision, authenticating with the 
             ///         authentication baton </summary>
@@ -139,7 +139,7 @@ namespace NSvn
             ///                        all of its contents will be scheduled for addition as well.</param>            
             /// <returns>The revision affected</returns>
             ///<exception cref="NSvn.Core.SvnClientException">Exceptions thrown if an error occurs.</exception>
-            int Switch(String* path, String* url, Revision* revision, bool recurse);
+            int Switch(String* path, String* url, Revision* revision, Recurse recurse);
 
             /// <summary>Receive blame  info for the given path or url at revision end, using start 
             /// as the default source of all blame.</summary>
@@ -154,7 +154,7 @@ namespace NSvn
             ///<param name="path">Path to the file/directory.</param>
             ///<param name="recursive">If recursive is set, assuming path is a directory 
             ///                        all of its contents will be scheduled for addition as well.</param>
-            void Add(String* path, bool recursive);
+            void Add(String* path, Recurse recursive);
 
             ///<summary>Add a file/directory, not already under revision control to a working copy.</summary>
             ///<param name="path">Path to the file/directory.</param>
@@ -162,7 +162,7 @@ namespace NSvn
             ///                        all of its contents will be scheduled for addition as well.</param>
             ///<param name="force">If force is not set and path is already under version control, return the error SVN_ERR_ENTRY_EXISTS. 
             ///If force is set, do not error on already-versioned items. </para>
-            void Add(String* path, bool recursive, bool force);
+            void Add(String* path, Recurse recursive, bool force);
 
             ///<summary>Create a directory, either in a repository or a working copy.</summary>
             ///<param name="path">Path to the directory.</param>
@@ -191,7 +191,7 @@ namespace NSvn
             ///                           should be ignored.</param>
             ///<returns>Commit info object containing information about revision, date and author. 
             ///         <see cref="NSvn.Core.CommitInfo"/> for more information.</returns> 
-            CommitInfo* Import(String* path, String* url, bool nonRecursive);
+            CommitInfo* Import(String* path, String* url, Recurse recurse);
 
             ///<summary>Commit file/directory into repository, authenticating with the 
             ///         authentication baton.</summary>
@@ -323,7 +323,7 @@ namespace NSvn
             ///<param name="outfile">File that contains output of the diff.</param> 
             ///<param name="errFile">File that contains errors of the diff.</param>  
             void Diff(String* diffOptions[], String* path1, Revision* revision1, 
-                String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, 
+                String* path2, Revision* revision2, Recurse recurse, bool ignoreAncestry, 
                 bool noDiffDeleted, 
                 Stream* outfile, Stream* errFile);
 
@@ -351,7 +351,7 @@ namespace NSvn
             ///<param name="outfile">File that contains output of the diff.</param> 
             ///<param name="errFile">File that contains errors of the diff.</param>  
             void Diff(String* diffOptions[], String* path1, Revision* revision1, 
-                String* path2, Revision* revision2, bool recurse, bool ignoreAncestry, 
+                String* path2, Revision* revision2, Recurse recurse, bool ignoreAncestry, 
                 bool noDiffDeleted, bool ignoreContentType,
                 Stream* outfile, Stream* errFile);
 
@@ -380,7 +380,7 @@ namespace NSvn
             ///                     notfication feedback is provided, but the working 
             ///                     copy is not modified.</param> 
             void Merge(String* url1, Revision* revision1, String* url2, Revision* revision2, 
-                String* targetWcPath, bool recurse, bool ignoreAncestry, bool force, bool dryRun);
+                String* targetWcPath, Recurse recurse, bool ignoreAncestry, bool force, bool dryRun);
 
             ///<summary>Cleanup a working copy directory, finishing any incomplete operations, 
             ///         removing lockfiles, etc.</summary>
@@ -391,13 +391,13 @@ namespace NSvn
             ///<param name="path">Paths to the files/directories</param>
             ///<param name="recursive">If recursive is set, assuming path is a directory 
             ///                        all of its contents will be scheduled for revert as well.</param>
-            void Revert(String* paths[], bool recursive);
+            void Revert(String* paths[], Recurse recursive);
 
             ///<summary>Resolve conflict. Remove the 'conflicted' state on a working copy path.</summary>
             ///<param name="path">Path to the file(/directory)</param>
             ///<param name="recursive">If recursive is set, recurse below path, looking for 
             ///                         conflicts to resolve. (To be implemented in the future.)</param>
-            void Resolved(String* path, bool recursive);       
+            void Resolved(String* path, Recurse recursive);       
 
             ///<summary>Copy a file/directory.</summary>
             ///<param name="srcPath">Path to the file/directory to be copied.</param>
@@ -439,7 +439,7 @@ namespace NSvn
             ///<param name="target">Target of property. Which file/directory to set the property.</param>
             ///<param name="recurse">If recurse is true, then propname will be set recursively 
             ///                      on target and all children.</param>  
-            void PropSet(Property* property, String* target, bool recurse);
+            void PropSet(Property* property, String* target, Recurse recurse);
 
             /// <summary>Modify a working copy directory dir, changing any 
             /// repository URLs that begin with from to begin with to instead, 
@@ -448,7 +448,7 @@ namespace NSvn
             /// <param name="from">Original URL.</param>
             /// <param name="to">New URL.</param>
             /// <param name="recurse">Whether to recurse into subdirectories.</a>
-            void Relocate(String* dir, String* from, String* to, bool recurse);
+            void Relocate(String* dir, String* from, String* to, Recurse recurse);
 
             ///<summary>Set a property to a revision in the repository.</summary>
             ///<param name="property">Object that contain a value and a name.
@@ -470,7 +470,7 @@ namespace NSvn
             ///<returns>PropertyDictionary object that contain a list of names and values of properties.
             ///         <see cref="NSvn.Common.PropertyDictionary"/></returns>
             PropertyDictionary* PropGet(String* propName, String* target, Revision* revision, 
-                bool recurse);
+                Recurse recurse);
 
 
 
@@ -493,7 +493,7 @@ namespace NSvn
             ///                        element.</param>   
             ///<returns>PropListItem object that contain a list of names and values of properties.
             ///         <see cref="NSvn.Common.PropListItem"/> </returns>
-            PropListItem* PropList(String* target, Revision* revision, bool recurse)[];
+            PropListItem* PropList(String* target, Revision* revision, Recurse recurse)[];
 
             ///<summary>List the revision properties on an entry in a repository.</summary>
             ///<param name="url">Path to the "revision" in the repository.</param>
@@ -531,7 +531,7 @@ namespace NSvn
             ///either "CR", "LF", "CRLF" or null. null will use the default marker.
             /// <returns>The revision affected</returns>
             int Export(String* from, String* to, Revision* pegRevision, 
-                Revision* revision, bool overwrite, bool ignoreExternals, bool recurse,
+                Revision* revision, bool overwrite, bool ignoreExternals, Recurse recurse,
                 String* nativeEol );
 
             ///<summary>List the contents of an url or path.</summary>
@@ -541,7 +541,7 @@ namespace NSvn
             ///<param name="recurse">If recurse is true, then propname will be received recursively 
             ///                      on target and all children.</param> 
             ///<returns>String table of the paths to be listed.</returns>
-            DirectoryEntry* List(String* path, Revision* revision, bool recurse) [];
+            DirectoryEntry* List(String* path, Revision* revision, Recurse recurse) [];
 
             ///<summary>List the contents of an url or path.</summary>
             ///<param name="path">Path to the files/directory to be listed.</param>  
@@ -553,7 +553,7 @@ namespace NSvn
             ///<param name="recurse">If recurse is true, then propname will be received recursively 
             ///                      on target and all children.</param> 
             ///<returns>String table of the paths to be listed.</returns>
-            DirectoryEntry* List(String* path, Revision* pegRevision, Revision* revision, bool recurse) [];
+            DirectoryEntry* List(String* path, Revision* pegRevision, Revision* revision, Recurse recurse) [];
 
             ///<summary>List the contents of a file.</summary>
             ///<param name="out"></param>  

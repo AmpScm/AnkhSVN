@@ -26,7 +26,7 @@ namespace NSvn.Core.Tests
             this.RunCommand( "svn", "ps foo bar " + path );
  
             PropertyDictionary mapping = this.Client.PropGet( "foo", path, Revision.Working, 
-                false );
+                Recurse.None );
             Assert.AreEqual( 1, mapping.Count, "No entries returned" );
            
             foreach( string key in mapping.Keys )
