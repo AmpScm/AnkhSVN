@@ -9,7 +9,7 @@ namespace NSvn
         /// Contains utility methods for SVN
         /// TODO: rename to SvnUtils
         /// </summary>
-        __gc public class SvnUtils
+        __gc public __sealed class SvnUtils
         {
         public:
             /// <summary>
