@@ -132,7 +132,7 @@ namespace
         Client* client = 
             *(static_cast<ManagedPointer<Client*>* >(baton) );
 
-        ProgressEventArgs* args = new ProgressEventArgs(progress, total);
+        ProgressEventArgs* args = new ProgressEventArgs(static_cast<long>(progress), static_cast<long>(total));
 
         try
         {
