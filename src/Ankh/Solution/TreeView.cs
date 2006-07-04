@@ -244,10 +244,7 @@ namespace Ankh.Solution
                 throw new ArgumentNullException( varname, varname + " cannot be null" );
         }
 
-        private bool suppressStatusImageChange;
         private IntPtr hwnd;
         private IntPtr statusImageList;
-
-
     }
 }
