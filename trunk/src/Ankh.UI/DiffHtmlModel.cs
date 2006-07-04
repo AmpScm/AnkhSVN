@@ -101,7 +101,7 @@ namespace Ankh.UI
         }
 
         /// <summary>
-        /// Retrieve the CSS class for a line, based on it's first chars.
+        /// Retrieve the CSS class for a line, based on its first chars.
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
