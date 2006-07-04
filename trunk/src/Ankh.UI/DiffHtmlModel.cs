@@ -81,8 +81,7 @@ namespace Ankh.UI
             using( StringWriter writer = new StringWriter() )
             {
                 this.WriteProlog( writer );
-                string escapedDiff = this.diff.Replace( "<", "&lt;" ).
-                    Replace( ">", "&gt;" );
+                string escapedDiff = System.Web.HttpUtility.HtmlEncode( this.diff );
 
                 using( StringReader reader = new StringReader( escapedDiff ) )
                 {
