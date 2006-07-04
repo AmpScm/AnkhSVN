@@ -597,6 +597,15 @@ namespace Ankh.Tests
             return config;
         }
 
+        protected virtual void OnUnloading()
+        {
+            if ( this.Unloading != null )
+            {
+                this.Unloading( this, EventArgs.Empty );
+            }
+
+        }
+
         public FileWatcher projectFileWatcher;
         public Config.Config config;
         public _DTE dte;
