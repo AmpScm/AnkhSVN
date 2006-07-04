@@ -44,7 +44,7 @@
     <Optimize>false</Optimize>
     <RegisterForComInterop>true</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <LangVersion>default</LangVersion>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
