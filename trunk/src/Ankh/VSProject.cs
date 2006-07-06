@@ -99,7 +99,15 @@ namespace Ankh
             {
                 if ( this.projectFileSvnItem == null )
                 {
-                    this.projectFileSvnItem = this.context.StatusCache[ this.ProjectFileName ];
+                    if ( this.ProjectFileName != null )
+                    {
+                        this.projectFileSvnItem = this.context.StatusCache[ this.ProjectFileName ];
+
+                    }
+                    else
+                    {
+                        this.projectFileSvnItem = SvnItem.Unversionable;
+                    }
                 }
                 return this.projectFileSvnItem;
             }
@@ -114,7 +122,14 @@ namespace Ankh
             {
                 if ( this.projectDirectorySvnItem == null )
                 {
-                    this.projectDirectorySvnItem = this.context.StatusCache[ this.ProjectDirectory ];
+                    if ( this.ProjectDirectory != null )
+                    {
+                        this.projectDirectorySvnItem = this.context.StatusCache[ this.ProjectDirectory ];
+                    }
+                    else
+                    {
+                        this.projectDirectorySvnItem = SvnItem.Unversionable;
+                    }
                 }
                 return this.projectDirectorySvnItem;
             }

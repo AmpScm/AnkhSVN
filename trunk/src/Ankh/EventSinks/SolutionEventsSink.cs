@@ -82,12 +82,12 @@ namespace Ankh.EventSinks
                     {
                         if ( shouldAdd )
                         {
-                            newProject.AddProjectToSvn(); 
-                        }
-                        // make sure we have an updated status for the items in that directory, otherwise they'll be seen as unversionable
-                        this.Context.StatusCache.Status( newProject.ProjectDirectory );
+                            newProject.AddProjectToSvn();
 
-                        this.Context.SolutionExplorer.SyncAll();
+                            // make sure we have an updated status for the items in that directory, otherwise they'll be seen as unversionable
+                            this.Context.StatusCache.Status( newProject.ProjectDirectory );
+                            this.Context.SolutionExplorer.SyncAll();
+                        }
                     }
                 }
             }
