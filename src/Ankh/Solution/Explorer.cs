@@ -167,6 +167,15 @@ namespace Ankh.Solution
             }
         }
 
+        public void RemoveProject( Project project )
+        {
+            TreeNode node = (TreeNode)this.projects[ project ];
+            if ( node != null )
+            {
+                node.Remove();
+            }
+        }
+
         /// <summary>
         /// Since the ItemAdded event is fired before IVTDPE.OnAfterAddedFilesEx, we need to set up a 
         /// refresh after a certain interval.

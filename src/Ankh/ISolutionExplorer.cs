@@ -20,6 +20,12 @@ namespace Ankh
         void Refresh( ProjectItem item );
 
         /// <summary>
+        /// Removes the project from Ankh's control.
+        /// </summary>
+        /// <param name="project"></param>
+        void RemoveProject( Project project );
+
+        /// <summary>
         /// Retrieves the resources associated with a project item.
         /// </summary>
         /// <param name="item"></param>

@@ -86,9 +86,9 @@ namespace Ankh.EventSinks
 
                             // make sure we have an updated status for the items in that directory, otherwise they'll be seen as unversionable
                             this.Context.StatusCache.Status( newProject.ProjectDirectory );
-                            this.Context.SolutionExplorer.SyncAll();
                         }
                     }
+                    this.Context.SolutionExplorer.SyncAll();
                 }
             }
             catch ( Exception ex )
@@ -108,6 +108,19 @@ namespace Ankh.EventSinks
         int IVsSolutionEvents.OnBeforeCloseProject( IVsHierarchy pHierarchy, int fRemoved )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnBeforeCloseProject() of {0}", this.ToString() ) );
+
+            // get rid of the project from the solution explorer, so it doesn't end up handling events from 
+            // files in the project
+            try
+            {
+                VSProject project = VSProject.FromVsHierarchy( this.Context, pHierarchy );
+                this.Context.SolutionExplorer.RemoveProject( project.Project );
+                this.hierarchyEvents.RemoveHierarchy( pHierarchy );
+            }
+            catch ( NoProjectAutomationObjectException )
+            {
+                // swallow
+            }
             return VSConstants.S_OK;
         }
 
