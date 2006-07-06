@@ -345,26 +345,9 @@
                 string ankhVersion = string.Empty;
                 Assembly ankh = typeof( Ankh.Connect ).Assembly;
 
-                // if there are any VersionAttributes on the assembly, we'll use them
-                object[] attrs = ankh.GetCustomAttributes( typeof(Utils.VersionAttribute), false );
-               
-                if ( attrs.Length > 0 )
-                {
-                    // we'll use the last one
-                    Utils.VersionAttribute version = (Utils.VersionAttribute)attrs[attrs.Length-1];
-                    if ( version.CustomText != null )
-                        ankhVersion = version.CustomText;
-                    else            
-                        // we don't want the name part
-                        ankhVersion = String.Format( "{0}.{1}.{2}{3}", 
-                            version.Major, version.Minor, version.PatchLevel, version.Tag );
-                }
-                else
-                {
-                    // nope, just resort to the regular assembly version
-                    ankhVersion = 
-                        ankh.GetName().Version.ToString();
-                }
+                ankhVersion = 
+                    ankh.GetName().Version.ToString();
+
                 text += String.Format( "AnkhSVN {0}{1}", 
                     ankhVersion, Environment.NewLine );
 
