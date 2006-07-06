@@ -5,15 +5,15 @@ import urllib
 import tarfile
 
 # The URL to build from
-ANKHSVN_ROOT = "http://rogue/svn/finalproject/trunk"
+ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/trunk"
 ANKHSVN = "%s/src" % ANKHSVN_ROOT
 
 # version numbers to put in the filename
 MAJOR, MINOR, PATCH, LABEL = 0, 6, 0, "snapshot_20"
 
 # The URL of the Subversion version
-SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.2.3/"
-SUBVERSION_VERSION="1.2.3"
+SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.3.2/"
+SUBVERSION_VERSION="1.3.2"
 subversion_dir=""
 
 # The URL of neon
