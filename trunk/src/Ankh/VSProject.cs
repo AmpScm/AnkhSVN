@@ -161,7 +161,10 @@ namespace Ankh
             }
         }
 
-
+        public Project Project
+        {
+            get { return this.project; }
+        }
 
         public IList AddProjectToSvn()
         {

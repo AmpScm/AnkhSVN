@@ -79,6 +79,21 @@ namespace Ankh.EventSinks
             this.AddHierarchyEventsImpl( pHierarchy );
         }
 
+        public void RemoveHierarchy( IVsHierarchy pHierarchy )
+        {
+            foreach ( HierarchyEventsImpl hei in this.hierarchyEvents )
+            {
+                if ( hei.Hierarchy == pHierarchy )
+                {
+                    hei.Unadvise();
+                    this.hierarchyEvents.Remove( hei );
+
+                    // modifying an iterated-over collection, we *must* break here.
+                    break;
+                }
+            }
+        }
+
         private void AddHierarchyEventsImpl( IVsHierarchy hi )
         {
             try
@@ -153,6 +168,12 @@ namespace Ankh.EventSinks
             {
                 this.hierarchy.UnadviseHierarchyEvents( this.cookie );
             }
+
+            public IVsHierarchy Hierarchy
+            {
+                get { return this.hierarchy; }
+            }
+
 
             #region IVsHierarchyEvents Members
 

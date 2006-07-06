@@ -139,6 +139,12 @@ namespace Ankh.Solution
             this.DisposeChildren();
         }
 
+        public void Remove()
+        {
+            this.RemoveSelf();
+            this.Dispose();
+        }
+
         /// <summary>
         /// Calls Dispose on all Children of this node.
         /// </summary>
