@@ -54,10 +54,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Tests.2003", "Ankh.Tes
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AnkhSetup", "Ankh\AnkhSetup\AnkhSetup.2003.vdproj", "{58D0A5F8-5173-4422-B5E1-EE89CE567759}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstallLib", "InstallLib\InstallLib.vcproj", "{2A753B40-AB06-4D27-A093-D1D351BC9522}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -220,14 +216,6 @@ Global
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.NSvn.Tests.Build.0 = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.ActiveCfg = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.Build.0 = Release|.NET
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Debug.ActiveCfg = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Debug run.ActiveCfg = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) NSvn.Tests.ActiveCfg = Release
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Release.ActiveCfg = Release
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug.ActiveCfg = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug run.ActiveCfg = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.NSvn.Tests.ActiveCfg = Release
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Release.ActiveCfg = Release
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug.ActiveCfg = Debug|Win32
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug.Build.0 = Debug|Win32
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug run.ActiveCfg = Debug|Win32
@@ -281,8 +269,8 @@ Global
 		removeankh.reg = removeankh.reg
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection

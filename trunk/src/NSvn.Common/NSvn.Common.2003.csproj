@@ -171,6 +171,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SvnEnums.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SvnException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
