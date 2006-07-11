@@ -996,8 +996,8 @@ svn_error_t* svn_blame_func(void *baton, apr_int64_t line_no, svn_revnum_t revis
         if ( date != 0 )
         {
             dt = DateTime::ParseExact( Utf8ToString( date, pool ),
-                "yyyy-MM-dd\\THH:mm:ss.ffffff\\Z",
-                System::Globalization::CultureInfo::CurrentCulture ).ToLocalTime();
+                "yyyy-M-d\\TH:m:s.ffffff\\Z",
+                System::Globalization::CultureInfo::InvariantCulture ).ToLocalTime();
         }
         else
             dt = DateTime::MinValue;
