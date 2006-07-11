@@ -34,13 +34,18 @@ namespace Ankh.Commands
             IList resources = context.SolutionExplorer.GetSelectionResources( true, 
                 new ResourceFilterCallback( SvnItem.VersionedFilter) );
 
+            if ( resources.Count == 0 )
+            {
+                return;
+            }
+
             Revision revisionStart = Revision.FromNumber(0);
             Revision revisionEnd = Revision.Head;
 
             // is shift depressed?
             if ( !CommandBase.Shift )
             {
-                PathSelectorInfo info = new PathSelectorInfo( "Blame", resources, new SvnItem[] {} );
+                PathSelectorInfo info = new PathSelectorInfo( "Blame", resources, new SvnItem[] {(SvnItem)resources[0]} );
                 info.RevisionStart = revisionStart;
                 info.RevisionEnd = revisionEnd;
                 info.EnableRecursive = false;
