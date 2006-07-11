@@ -156,28 +156,30 @@ namespace Ankh.Solution
         /// <param name="reader">Open file being parsed</param>
         private void ParseDatabaseItemChildren(ParsedSolutionItem item, StreamReader reader)
         {
-            for(string line=reader.ReadLine(); string.Compare("end", 0, line, line.Length - 3, 3, true, CultureInfo.InvariantCulture) != 0; line=reader.ReadLine())
+            for(string line=reader.ReadLine().Trim();
+                string.Compare( DbStrings.FolderEnd, 0, line, 0, DbStrings.FolderEnd.Length, true, CultureInfo.InvariantCulture ) != 0; 
+                line=reader.ReadLine().Trim())
             {
                 ParsedSolutionItem child = new ParsedSolutionItem(item);
 
-                if (string.Compare(DbStrings.FolderBegin, 0, line, 3, DbStrings.FolderBegin.Length, true, CultureInfo.InvariantCulture) == 0)
+                if(string.Compare(DbStrings.FolderBegin, 0, line, 0, DbStrings.FolderBegin.Length, true, CultureInfo.InvariantCulture) == 0)
                 {
                     int startIndex = line.IndexOf("= \"") + 3;
                     child.Name = line.Substring(startIndex, line.Length-startIndex-1);
-                    child.FileName = Path.Combine(Path.GetDirectoryName(item.FileName), child.Name);
+                    child.FileName = Path.Combine( Path.GetDirectoryName( item.FileName ), child.Name ) + Path.DirectorySeparatorChar;
                     item.Children.Add(child);
 
                     this.ParseDatabaseItemChildren(child, reader);
                 }
-                else if(string.Compare(DbStrings.Script, 0, line, 6, DbStrings.Script.Length, true, CultureInfo.InvariantCulture) == 0 ||
-                    string.Compare(DbStrings.Query, 0, line, 6, DbStrings.Query.Length, true, CultureInfo.InvariantCulture) == 0)
+                else if(string.Compare(DbStrings.Script, 0, line, 0, DbStrings.Script.Length, true, CultureInfo.InvariantCulture) == 0 ||
+                    string.Compare(DbStrings.Query, 0, line.Trim(), 0, DbStrings.Query.Length, true, CultureInfo.InvariantCulture) == 0)
                 {
                     int startIndex=line.IndexOf("= \"") + 3;
                     child.Name = line.Substring(startIndex, line.Length-startIndex-1);
                     child.FileName = Path.Combine(item.FileName, child.Name);
                     item.Children.Add(child);
                 }
-                else if (string.Compare(DbStrings.DbRefFolderBegin, 0, line, 3, DbStrings.DbRefFolderBegin.Length, true, CultureInfo.InvariantCulture) == 0)
+                else if (string.Compare(DbStrings.DbRefFolderBegin, 0, line, 0, DbStrings.DbRefFolderBegin.Length, true, CultureInfo.InvariantCulture) == 0)
                 {
                     //get the folder
                     int startIndex=line.IndexOf("= \"") + 3;
@@ -251,6 +253,7 @@ namespace Ankh.Solution
             internal const string Script = "script ";
             internal const string Query = "query ";
             internal const string DbRefFolderBegin = "begin dbreffolder";
+            internal const string FolderEnd = "end";
         }
 
         private IContext context;
