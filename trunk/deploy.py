@@ -505,7 +505,7 @@ def zip_svn_tree():
 def do_ankh():
     # do_subversion
     #
-    checkout( ANKHSVN )
+    checkout( ANKHSVN, "src" )
     
     REVISION = get_revision("src").strip()
 
