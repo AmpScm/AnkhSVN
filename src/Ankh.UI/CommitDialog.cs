@@ -36,10 +36,16 @@ namespace Ankh.UI
 
             this.commitItemsTree.GetPathInfo += new GetPathInfoDelegate(commitItemsTree_GetPathInfo);
             this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
+
+            // Support Ctrl-A to select everything.
+            this.logMessageBox.KeyDown += new KeyEventHandler( logMessageBox_KeyDown );
+            this.logMessageBox.KeyPress += new KeyPressEventHandler( logMessageBox_KeyPress );
             
             //this.diffViewVisible = true;
             //this.ToggleDiffView();
         }
+
+        
 
         /// <summary>
         /// The log message to be used for this commit.
@@ -238,6 +244,24 @@ namespace Ankh.UI
                 this.Proceed( this, EventArgs.Empty );
 
             this.loaded = false;
+        }
+
+        void logMessageBox_KeyPress( object sender, KeyPressEventArgs e )
+        {
+            // suppress Ctrl-A, which is ASCII 1 for some reason...
+            if ( e.KeyChar == (char)1 )
+            {
+                e.Handled = true;
+            }
+        }
+
+        void logMessageBox_KeyDown( object sender, KeyEventArgs e )
+        {
+            if ( e.Control && e.KeyCode == Keys.A )
+            {
+                this.logMessageBox.SelectAll();
+                e.Handled = true;
+            }
         }
 
         #region Windows Form Designer generated code
