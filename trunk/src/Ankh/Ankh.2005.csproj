@@ -408,8 +408,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
+    <Compile Include="NodeStatus.cs" />
+    <Compile Include="NodeStatusKind.cs" />
     <Compile Include="NoProjectAutomationObjectException.cs" />
     <Compile Include="Solution\SolutionFolderNode.cs" />
+    <Compile Include="StatusMerger.cs" />
     <Compile Include="VSInterfaces.cs" />
     <Compile Include="Extenders\ExtenderProvider.cs">
       <SubType>Code</SubType>
