@@ -9,9 +9,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("Lock", Text = "Lock...", Tooltip = "Locks the selected item",
          Bitmap = ResourceBitmaps.Lock),
-    VSNetProjectItemControl( "Ankh", Position = 1 ),
-    VSNetProjectNodeControl( "Ankh", Position = 1 ),
-    VSNetControl( "Solution.Ankh", Position = 1)]    
+    VSNetItemControl( "Ankh", Position = 1 )]    
     public class LockCommand : CommandBase
 	{
         public override void Execute(IContext context, string parameters)

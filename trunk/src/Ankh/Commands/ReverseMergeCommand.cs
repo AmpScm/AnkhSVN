@@ -15,10 +15,7 @@ namespace Ankh.Commands
     [VSNetCommand( "ReverseMerge", Text="Revert to revision...", 
          Tooltip="Go back to a previous version of this item.", 
          Bitmap = ResourceBitmaps.Diff),
-    VSNetProjectItemControl( "Ankh", Position=2 ),
-    VSNetProjectNodeControl( "Ankh", Position = 2 ),
-    VSNetControl( "Solution.Ankh", Position = 2 ),
-    VSNetFolderNodeControl( "Ankh", Position = 2)]
+    VSNetItemControl( "Ankh", Position = 1 )]
     public class ReverseMergeCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
