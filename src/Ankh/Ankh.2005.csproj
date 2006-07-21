@@ -510,6 +510,7 @@
     <Compile Include="VSNetFolderNodeControlAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="VSNetItemControlAttribute.cs" />
     <Compile Include="VSNetProjectItemControlAttribute.cs" />
     <Compile Include="VSNetProjectNodeControlAttribute.cs">
       <SubType>Code</SubType>

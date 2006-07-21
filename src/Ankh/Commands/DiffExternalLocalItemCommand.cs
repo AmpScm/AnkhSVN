@@ -12,10 +12,7 @@ namespace Ankh.Commands
     [VSNetCommand( "DiffExternalLocalItem", Text="Diff External", 
          Tooltip="Use External Diff against local text base.", 
          Bitmap = ResourceBitmaps.Diff),
-    VSNetProjectItemControl( "", Position=2 ),
-    VSNetProjectNodeControl( "", Position = 2 ),
-    VSNetControl( "Solution", Position = 2 ),
-    VSNetFolderNodeControl( "", Position = 2)]
+   VSNetItemControl( "", Position = 1 )]
     public class DiffExternalLocalItem : DiffLocalItem
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)

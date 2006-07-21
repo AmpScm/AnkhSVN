@@ -12,10 +12,7 @@ namespace Ankh.Commands
     [VSNetCommand( "DiffLocalItem", Text="Diff...", 
          Tooltip="Diff against local text base.", 
          Bitmap = ResourceBitmaps.Diff),
-    VSNetProjectItemControl( "", Position=2 ),
-    VSNetProjectNodeControl( "", Position = 2 ),
-    VSNetControl( "Solution", Position = 2 ),
-    VSNetFolderNodeControl( "", Position = 2)]
+    VSNetItemControl( "", Position = 1 )]
     public class DiffLocalItem : LocalDiffCommandBase
     {
         public override void Execute(Ankh.IContext context, string parameters)

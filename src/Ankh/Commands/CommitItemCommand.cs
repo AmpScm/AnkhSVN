@@ -18,10 +18,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("CommitItem", Text = "Commit...", Tooltip = "Commits an item",
          Bitmap = ResourceBitmaps.Commit),
-    VSNetProjectItemControl( "", Position = 2 ),
-    VSNetProjectNodeControl( "", Position = 2 ),
-    VSNetFolderNodeControl( "", Position = 2),
-    VSNetControl( "Solution", Position = 2)]
+   VSNetItemControl( "", Position = 1 )]
     public class CommitItemCommand : CommandBase
     {	
         #region Implementation of ICommand

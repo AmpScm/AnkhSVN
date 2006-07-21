@@ -5,9 +5,7 @@ namespace Ankh.Commands
 {
     [VSNetCommand("Unlock", Text = "Unlock...", Tooltip = "Unlocks the selected item(s)",
          Bitmap = ResourceBitmaps.Unlock),
-    VSNetProjectItemControl( "Ankh", Position = 1 ),
-    VSNetProjectNodeControl( "Ankh", Position = 1 ),
-    VSNetControl( "Solution.Ankh", Position = 1)] 
+    VSNetItemControl( "Ankh", Position = 1 )] 
 	public class UnlockCommand : CommandBase
 	{
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
