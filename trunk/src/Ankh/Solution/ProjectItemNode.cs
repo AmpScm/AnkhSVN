@@ -143,8 +143,8 @@ namespace Ankh.Solution
 
         protected override void DoDispose()
         {
-            this.UnhookEvents( this.resources, new StatusChanged( this.ChildOrResourceChanged ) );
-            this.UnhookEvents( this.resources, new StatusChanged( this.DeletedItemStatusChanged ) );
+            this.UnhookEvents( this.resources, new EventHandler( this.ChildOrResourceChanged ) );
+            this.UnhookEvents( this.resources, new EventHandler( this.DeletedItemStatusChanged ) );
         }
 
         private bool AllResourcesDeleted()
@@ -206,7 +206,7 @@ namespace Ankh.Solution
             this.deletedResources = new ArrayList();
             try
             {
-                StatusChanged del = new StatusChanged( this.ChildOrResourceChanged );
+                EventHandler del = new EventHandler( this.ChildOrResourceChanged );
                 this.AddResourcesFromProjectItem( this.ProjectItem, del );
                 this.AddResourcesFromProjectItem( this.parsedProjectItem, del );
 
@@ -239,13 +239,13 @@ namespace Ankh.Solution
             {
                 if ( item.IsDirectory )
                 {
-                    this.AddDeletions( item.Path, this.deletedResources, new StatusChanged( this.DeletedItemStatusChanged ) );
+                    this.AddDeletions( item.Path, this.deletedResources, new EventHandler( this.DeletedItemStatusChanged ) );
                 }
             }
         }
 
         // recursively adds subitems of this projectitem.
-        private void AddSubItems( ProjectItem item, StatusChanged del )
+        private void AddSubItems( ProjectItem item, EventHandler del )
         {
             if ( item==null || item.ProjectItems == null ) 
                 return;
@@ -272,7 +272,7 @@ namespace Ankh.Solution
         }
 
         // recursively adds subitems of this projectitem.
-        private void AddSubItems( ParsedSolutionItem item, StatusChanged del )
+        private void AddSubItems( ParsedSolutionItem item, EventHandler del )
         {
             if ( item==null || item.Children.Count == 0 ) 
                 return;
@@ -287,7 +287,7 @@ namespace Ankh.Solution
             } 
         }
 
-        private void AddResourcesFromProjectItem( ProjectItem item, StatusChanged del )
+        private void AddResourcesFromProjectItem( ProjectItem item, EventHandler del )
         {
             if ( item==null || item.FileCount == 0 )
                 return;
@@ -329,13 +329,13 @@ namespace Ankh.Solution
                    // if its a dir, we want the deleted paths too
                     if ( svnItem.IsDirectory )
                     {
-                        this.AddDeletions( path, this.deletedResources, new StatusChanged(this.DeletedItemStatusChanged) );
+                        this.AddDeletions( path, this.deletedResources, new EventHandler(this.DeletedItemStatusChanged) );
                     }
                 }                    
             }
         }
 
-        private void AddResourcesFromProjectItem( ParsedSolutionItem item, StatusChanged del )
+        private void AddResourcesFromProjectItem( ParsedSolutionItem item, EventHandler del )
         {
             if(item==null)
                 return;
@@ -349,7 +349,7 @@ namespace Ankh.Solution
                 // if its a dir, we want the deleted paths too
                 if ( svnItem.IsDirectory )
                 {
-                    this.AddDeletions( svnItem.Path, this.deletedResources, new StatusChanged(this.DeletedItemStatusChanged) );
+                    this.AddDeletions( svnItem.Path, this.deletedResources, new EventHandler(this.DeletedItemStatusChanged) );
                 }
             }  
         }

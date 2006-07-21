@@ -50,7 +50,7 @@ namespace Ankh.Solution
         {
             this.deletedResources.Clear();
             this.AddDeletions( this.projectFolder.Path, this.deletedResources,
-                new StatusChanged( this.ChildOrResourceChanged ) );
+                new EventHandler( this.ChildOrResourceChanged ) );
         }
 
         protected override void CheckForSvnDeletions()
@@ -80,8 +80,8 @@ namespace Ankh.Solution
 
         protected override void DoDispose()
         {
-            this.UnhookEvents( new SvnItem[] { this.projectFile, this.projectFolder }, new StatusChanged( this.ChildOrResourceChanged ) );
-            this.UnhookEvents( this.deletedResources, new StatusChanged(this.ChildOrResourceChanged) );
+            this.UnhookEvents( new SvnItem[] { this.projectFile, this.projectFolder }, new EventHandler( this.ChildOrResourceChanged ) );
+            this.UnhookEvents( this.deletedResources, new EventHandler(this.ChildOrResourceChanged) );
         }
 
         private void FindProjectResources(Explorer explorer)
@@ -104,7 +104,7 @@ namespace Ankh.Solution
             if (String.Compare(this.project.Kind, ProjectNode.VDPROJKIND, true) == 0)
                 fullname += ".vdproj";
 
-            StatusChanged del = new StatusChanged(this.ChildOrResourceChanged);
+            EventHandler del = new EventHandler(this.ChildOrResourceChanged);
             // the Solution Items project has no path
             if (fullname != string.Empty && File.Exists(fullname))
             {
@@ -121,7 +121,7 @@ namespace Ankh.Solution
 
                 // we also want deleted items in this folder
                 this.AddDeletions( this.projectFolder.Path,
-                    this.deletedResources, new StatusChanged(this.DeletedItemStatusChanged) );
+                    this.deletedResources, new EventHandler(this.DeletedItemStatusChanged) );
 
             }
             // web projects in VS 2005 have no project files
@@ -133,7 +133,7 @@ namespace Ankh.Solution
                 this.Explorer.AddResource(this.uiItem.Object, this, fullname);
 
                 this.projectFolder.Changed += del;
-                this.AddDeletions( this.projectFolder.Path, this.deletedResources, new StatusChanged(this.DeletedItemStatusChanged) );
+                this.AddDeletions( this.projectFolder.Path, this.deletedResources, new EventHandler(this.DeletedItemStatusChanged) );
             }
             else
             {
