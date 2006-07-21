@@ -7,11 +7,7 @@ using System.Collections;
 using Ankh.UI;
 
 namespace Ankh
-{
-
-    public delegate void StatusChanged( object sender, EventArgs e );
-
-    
+{    
     /// <summary>
     /// Used to decide whether this particular SvnItem should be included in a collection.
     /// </summary>
@@ -25,7 +21,7 @@ namespace Ankh
         /// <summary>
         /// Fired when the status of this item changes.
         /// </summary>
-        public event StatusChanged Changed;
+        public event EventHandler Changed;
 
         public SvnItem( string path, Status status )
         {

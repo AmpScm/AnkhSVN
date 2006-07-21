@@ -20,7 +20,7 @@ namespace Ankh.Solution
     public abstract class TreeNode : IDisposable
     {
 
-        public event StatusChanged Changed;
+        public event EventHandler Changed;
 
         protected TreeNode( UIHierarchyItem item, IntPtr hItem, 
             Explorer explorer, TreeNode parent )
@@ -225,7 +225,7 @@ namespace Ankh.Solution
             SvnItem item = sender as SvnItem;
             if ( item != null && !item.IsDeleted && this.DeletedItems.Contains( item ) )
             {
-                item.Changed -= new StatusChanged( this.DeletedItemStatusChanged );
+                item.Changed -= new EventHandler( this.DeletedItemStatusChanged );
                 this.DeletedItems.Remove( item );
                 this.ChildOrResourceChanged(sender, args);
             }
@@ -429,11 +429,11 @@ namespace Ankh.Solution
 
         private void Remove( TreeNode treeNode )
         {
-            treeNode.Changed -= new StatusChanged( this.ChildOrResourceChanged );
+            treeNode.Changed -= new EventHandler( this.ChildOrResourceChanged );
             this.Children.Remove( treeNode );
         }
 
-        protected void UnhookEvents( IList svnItems, StatusChanged del )
+        protected void UnhookEvents( IList svnItems, EventHandler del )
         {
             foreach ( SvnItem item in svnItems )
             {
@@ -558,7 +558,7 @@ namespace Ankh.Solution
                             this );
                         if (childNode != null )
                         {
-                            childNode.Changed += new StatusChanged(this.ChildOrResourceChanged);
+                            childNode.Changed += new EventHandler(this.ChildOrResourceChanged);
                             this.children.Add( childNode );
                             childNode.Refresh( false );
                         }
@@ -613,7 +613,7 @@ namespace Ankh.Solution
         /// <param name="dir"></param>
         /// <param name="list"></param>
         /// <param name="del"></param>
-        protected void AddDeletions( string dir, IList list, StatusChanged del )
+        protected void AddDeletions( string dir, IList list, EventHandler del )
         {
             IList deletions = this.Explorer.Context.StatusCache.GetDeletions( 
                 dir );

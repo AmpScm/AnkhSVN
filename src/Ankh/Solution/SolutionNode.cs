@@ -24,12 +24,12 @@ namespace Ankh.Solution
             this.solutionFolder = this.Explorer.Context.StatusCache[
                 Path.GetDirectoryName( solution.FullName )];
 
-            StatusChanged del  = new StatusChanged( this.ChildOrResourceChanged );
+            EventHandler del  = new EventHandler( this.ChildOrResourceChanged );
             this.solutionFile.Changed += del;
             this.solutionFolder.Changed += del;
 
             this.deletedResources = new ArrayList();
-            this.AddDeletions( this.solutionFolder.Path, this.deletedResources, new StatusChanged(this.DeletedItemStatusChanged) );
+            this.AddDeletions( this.solutionFolder.Path, this.deletedResources, new EventHandler(this.DeletedItemStatusChanged) );
 
             explorer.SetSolution( this );
                 
@@ -101,8 +101,8 @@ namespace Ankh.Solution
 
         protected override void DoDispose()
         {
-            this.UnhookEvents( new SvnItem[] { this.solutionFile, this.solutionFolder }, new StatusChanged( this.ChildOrResourceChanged ) );
-            this.UnhookEvents( this.deletedResources, new StatusChanged( this.ChildOrResourceChanged ) );
+            this.UnhookEvents( new SvnItem[] { this.solutionFile, this.solutionFolder }, new EventHandler( this.ChildOrResourceChanged ) );
+            this.UnhookEvents( this.deletedResources, new EventHandler( this.ChildOrResourceChanged ) );
         }
 
         /// <summary>
