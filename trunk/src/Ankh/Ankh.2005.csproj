@@ -414,6 +414,7 @@
     <Compile Include="Solution\SolutionExplorerTreeNode.cs" />
     <Compile Include="Solution\SolutionFolderNode.cs" />
     <Compile Include="StatusMerger.cs" />
+    <Compile Include="TreeNode.cs" />
     <Compile Include="VSInterfaces.cs" />
     <Compile Include="Extenders\ExtenderProvider.cs">
       <SubType>Code</SubType>
