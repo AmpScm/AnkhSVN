@@ -17,7 +17,7 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents an item in the treeview.
     /// </summary>
-    public abstract class SolutionExplorerTreeNode : IDisposable
+    public abstract class SolutionExplorerTreeNode : TreeNode, IDisposable
     {
 
         public event EventHandler Changed;
