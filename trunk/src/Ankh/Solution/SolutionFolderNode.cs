@@ -4,9 +4,9 @@ using System.Collections;
 
 namespace Ankh.Solution
 {
-    public sealed class SolutionFolderNode : TreeNode
+    public sealed class SolutionFolderNode : SolutionExplorerTreeNode
     {
-        public SolutionFolderNode(EnvDTE.UIHierarchyItem item, IntPtr hItem, Explorer explorer, TreeNode parent, EnvDTE.Project project)
+        public SolutionFolderNode(EnvDTE.UIHierarchyItem item, IntPtr hItem, Explorer explorer, SolutionExplorerTreeNode parent, EnvDTE.Project project)
             : base(item, hItem, explorer, parent)
         {
             this.Explorer.AddResource( project, this );
@@ -21,7 +21,7 @@ namespace Ankh.Solution
 
         public override void Refresh(bool rescan)
         {
-            foreach (TreeNode child in this.Children)
+            foreach (SolutionExplorerTreeNode child in this.Children)
                 child.Refresh(rescan);
 
             base.Refresh(rescan);
