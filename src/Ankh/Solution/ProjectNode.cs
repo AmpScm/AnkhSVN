@@ -9,10 +9,10 @@ using System.Diagnostics;
 
 namespace Ankh.Solution
 {
-    public class ProjectNode : TreeNode
+    public class ProjectNode : SolutionExplorerTreeNode
     {
         public ProjectNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
-            TreeNode parent, Project project ) : 
+            SolutionExplorerTreeNode parent, Project project ) : 
             base( item, hItem, explorer, parent )
         {
             this.project = project;

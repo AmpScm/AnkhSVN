@@ -17,13 +17,13 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents an item in the treeview.
     /// </summary>
-    public abstract class TreeNode : IDisposable
+    public abstract class SolutionExplorerTreeNode : IDisposable
     {
 
         public event EventHandler Changed;
 
-        protected TreeNode( UIHierarchyItem item, IntPtr hItem, 
-            Explorer explorer, TreeNode parent )
+        protected SolutionExplorerTreeNode( UIHierarchyItem item, IntPtr hItem, 
+            Explorer explorer, SolutionExplorerTreeNode parent )
         {     
             this.uiItem = item;
             this.hItem = hItem;
@@ -44,8 +44,8 @@ namespace Ankh.Solution
             get { return this.Parent.Solution; }
         }
         
-        public static TreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
-            Explorer explorer, TreeNode parent )
+        public static SolutionExplorerTreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
+            Explorer explorer, SolutionExplorerTreeNode parent )
         {
             Project project = item.Object as Project;
             // what kind of node is this?
@@ -101,7 +101,7 @@ namespace Ankh.Solution
             return null;
         }
 
-        private static TreeNode GetTreeNodeForProject( UIHierarchyItem item, IntPtr hItem, Explorer explorer, TreeNode parent, Project project )
+        private static SolutionExplorerTreeNode GetTreeNodeForProject( UIHierarchyItem item, IntPtr hItem, Explorer explorer, SolutionExplorerTreeNode parent, Project project )
         {
             switch ( project.Kind )
             {
@@ -112,13 +112,13 @@ namespace Ankh.Solution
             }
         }
 
-        public static TreeNode CreateSolutionNode( UIHierarchyItem item, 
+        public static SolutionExplorerTreeNode CreateSolutionNode( UIHierarchyItem item, 
             Explorer explorer )
         {
             if ( explorer.DTE.Solution.FullName != string.Empty )
             {
                 Debug.WriteLine( "Creating solution node " + item.Name, "Ankh" );
-                TreeNode node = new SolutionNode( item, explorer.TreeView.GetRoot(), 
+                SolutionExplorerTreeNode node = new SolutionNode( item, explorer.TreeView.GetRoot(), 
                     explorer );
                 node.Refresh( false );
                 return node;
@@ -150,7 +150,7 @@ namespace Ankh.Solution
         /// </summary>
         private void DisposeChildren()
         {
-            foreach ( TreeNode node in this.Children )
+            foreach ( SolutionExplorerTreeNode node in this.Children )
             {
                 node.Dispose();
             }
@@ -233,7 +233,7 @@ namespace Ankh.Solution
 
 
 
-        static TreeNode()
+        static SolutionExplorerTreeNode()
         {
             statusMap[ NodeStatusKind.Normal ]      = 1;
             statusMap[ NodeStatusKind.Added ]       = 2;
@@ -259,7 +259,7 @@ namespace Ankh.Solution
         /// <summary>
         /// The parent node of this node.
         /// </summary>
-        public TreeNode Parent
+        public SolutionExplorerTreeNode Parent
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.parent; }
@@ -427,7 +427,7 @@ namespace Ankh.Solution
             }
         }
 
-        private void Remove( TreeNode treeNode )
+        private void Remove( SolutionExplorerTreeNode treeNode )
         {
             treeNode.Changed -= new EventHandler( this.ChildOrResourceChanged );
             this.Children.Remove( treeNode );
@@ -554,7 +554,7 @@ namespace Ankh.Solution
 
                     if ( child.Name != Client.AdminDirectoryName )
                     {                    
-                        TreeNode childNode = TreeNode.CreateNode( child, childItem, this.explorer,
+                        SolutionExplorerTreeNode childNode = SolutionExplorerTreeNode.CreateNode( child, childItem, this.explorer,
                             this );
                         if (childNode != null )
                         {
@@ -590,7 +590,7 @@ namespace Ankh.Solution
         protected NodeStatus CheckChildStatuses()
         {            
             StatusMerger statusMerger = new StatusMerger();
-            foreach( TreeNode node in this.children )
+            foreach( SolutionExplorerTreeNode node in this.children )
             {
                 statusMerger.NewStatus( node.CurrentStatus );                
             }
@@ -602,7 +602,7 @@ namespace Ankh.Solution
         {
             if ( getChildItems )
             {
-                foreach( TreeNode node in this.Children )
+                foreach( SolutionExplorerTreeNode node in this.Children )
                     node.GetResources( list, getChildItems, filter );
             }
         }
@@ -634,7 +634,7 @@ namespace Ankh.Solution
         }
         
         protected UIHierarchyItem uiItem;
-        private TreeNode parent;
+        private SolutionExplorerTreeNode parent;
         private IntPtr hItem;
         private IList children;
         private Explorer explorer;

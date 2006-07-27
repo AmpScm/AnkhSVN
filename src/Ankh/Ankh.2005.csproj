@@ -411,6 +411,7 @@
     <Compile Include="NodeStatus.cs" />
     <Compile Include="NodeStatusKind.cs" />
     <Compile Include="NoProjectAutomationObjectException.cs" />
+    <Compile Include="Solution\SolutionExplorerTreeNode.cs" />
     <Compile Include="Solution\SolutionFolderNode.cs" />
     <Compile Include="StatusMerger.cs" />
     <Compile Include="VSInterfaces.cs" />
@@ -482,9 +483,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Solution\SolutionNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Solution\TreeNode.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Solution\TreeView.cs">

@@ -13,10 +13,10 @@ namespace Ankh.Solution
     /// <summary>
     /// Represents a node containing a project item.
     /// </summary>
-    public class ProjectItemNode : TreeNode
+    public class ProjectItemNode : SolutionExplorerTreeNode
     {
         public ProjectItemNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
-            TreeNode parent, ParsedSolutionItem parsedItem ) :
+            SolutionExplorerTreeNode parent, ParsedSolutionItem parsedItem ) :
             base( item, hItem, explorer, parent )
         {
             this.projectItem = item.Object;
@@ -44,7 +44,7 @@ namespace Ankh.Solution
                 (this.resources.Count == 1 && 
                 ((SvnItem)this.resources[0]).IsDirectory) )
             {
-                foreach( TreeNode node in this.Children )
+                foreach( SolutionExplorerTreeNode node in this.Children )
                     node.Accept( visitor );
             }
         }

@@ -103,7 +103,7 @@ namespace Ankh.Solution
 
             foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )
             {
-                TreeNode node = this.GetNode( item );
+                SolutionExplorerTreeNode node = this.GetNode( item );
                 if ( node != null )
                 {
                     if ( node == this.solutionNode )
@@ -128,7 +128,7 @@ namespace Ankh.Solution
         {
             this.ForcePoll();
 
-            TreeNode node = this.GetNode( project );
+            SolutionExplorerTreeNode node = this.GetNode( project );
             if ( node != null )
             {
                 this.RefreshNode( node );
@@ -144,7 +144,7 @@ namespace Ankh.Solution
 
             foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )
             {
-                TreeNode node = this.GetNode( item );
+                SolutionExplorerTreeNode node = this.GetNode( item );
                 if ( node != null )
                 {
                     this.RefreshNode( node );
@@ -160,7 +160,7 @@ namespace Ankh.Solution
         {
             this.ForcePoll();
 
-            TreeNode node = (TreeNode)this.projectItems[item];
+            SolutionExplorerTreeNode node = (SolutionExplorerTreeNode)this.projectItems[item];
             if ( node != null )
             {
                 this.RefreshNode( node );
@@ -169,7 +169,7 @@ namespace Ankh.Solution
 
         public void RemoveProject( Project project )
         {
-            TreeNode node = (TreeNode)this.projects[ project ];
+            SolutionExplorerTreeNode node = (SolutionExplorerTreeNode)this.projects[ project ];
             if ( node != null )
             {
                 node.Remove();
@@ -234,7 +234,7 @@ namespace Ankh.Solution
             Debug.WriteLine( "Created solution node", "Ankh" );
         }
 
-        private void RefreshNode( TreeNode treeNode )
+        private void RefreshNode( SolutionExplorerTreeNode treeNode )
         {
             try
             {
@@ -271,7 +271,7 @@ namespace Ankh.Solution
             object o = this.UIHierarchy.SelectedItems;         
             foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )         
             {         
-                TreeNode node = this.GetNode( item );         
+                SolutionExplorerTreeNode node = this.GetNode( item );         
                 if ( node != null )         
                     node.Accept( visitor );         
             }         
@@ -299,7 +299,7 @@ namespace Ankh.Solution
             object o = this.UIHierarchy.SelectedItems;         
             foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )         
             {         
-                TreeNode node = this.GetNode( item );         
+                SolutionExplorerTreeNode node = this.GetNode( item );         
                 if ( node != null )         
                     node.GetResources( list, getChildItems, filter );         
             }
@@ -322,7 +322,7 @@ namespace Ankh.Solution
 
             ArrayList list = new ArrayList();
 
-            TreeNode node = solutionNode;     
+            SolutionExplorerTreeNode node = solutionNode;     
             if ( node != null )         
                 node.GetResources( list, true, filter );         
 
@@ -341,7 +341,7 @@ namespace Ankh.Solution
 
             ArrayList list = new ArrayList();
 
-            TreeNode node = this.GetNode(item);
+            SolutionExplorerTreeNode node = this.GetNode(item);
             if ( node != null )
                 node.GetResources( list, recursive, null );
 
@@ -576,13 +576,13 @@ namespace Ankh.Solution
         }
 
 
-        internal void SetSolution( TreeNode node )
+        internal void SetSolution( SolutionExplorerTreeNode node )
         {
             // we assume theres only one of these
             this.solutionNode = (SolutionNode)node;
         }
 
-        private TreeNode GetNode(UIHierarchyItem item)
+        private SolutionExplorerTreeNode GetNode(UIHierarchyItem item)
         {
             if ( item.Object == null || !this.context.AnkhLoadedForSolution )
                 return null;
@@ -590,31 +590,31 @@ namespace Ankh.Solution
             if ( item == this.UIHierarchy.UIHierarchyItems.Item(1) )
                 return this.solutionNode;
             else if ( this.projects.Contains(item.Object) )
-                return ((TreeNode)this.projects[item.Object]);
+                return ((SolutionExplorerTreeNode)this.projects[item.Object]);
             else if ( this.projectItems.Contains( item.Object ) )
-                return ((TreeNode)this.projectItems[item.Object]);
+                return ((SolutionExplorerTreeNode)this.projectItems[item.Object]);
             else
                 return null;
         }
         
-        private TreeNode GetNode( ProjectItem item )
+        private SolutionExplorerTreeNode GetNode( ProjectItem item )
         {
             if ( item == null )
                 return null;
 
             if (this.projectItems.Contains( item ) )
-                return ((TreeNode)this.projectItems[item]);
+                return ((SolutionExplorerTreeNode)this.projectItems[item]);
             else
                 return null;
         }
 
-        private TreeNode GetNode( Project project )
+        private SolutionExplorerTreeNode GetNode( Project project )
         {
             if ( project == null )
                 return null;
 
             if ( this.projects.Contains( project ) )
-                return ((TreeNode)this.projects[project]);
+                return ((SolutionExplorerTreeNode)this.projects[project]);
             else
                 return null;
         }
@@ -748,7 +748,7 @@ namespace Ankh.Solution
                 try
                 {
                     // we assume there is a single root node
-                    outer.solutionNode = (SolutionNode)TreeNode.CreateSolutionNode(
+                    outer.solutionNode = (SolutionNode)SolutionExplorerTreeNode.CreateSolutionNode(
                         outer.UIHierarchy.UIHierarchyItems.Item(1), outer);
 
                     // and we're done

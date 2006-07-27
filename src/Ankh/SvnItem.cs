@@ -443,7 +443,7 @@ namespace Ankh
 
             foreach ( Delegate del in this.Changed.GetInvocationList() )
             {
-                Ankh.Solution.TreeNode treeNode = del.Target as Ankh.Solution.TreeNode;
+                Ankh.Solution.SolutionExplorerTreeNode treeNode = del.Target as Ankh.Solution.SolutionExplorerTreeNode;
                 if ( treeNode == null )
                 {
                     continue;
