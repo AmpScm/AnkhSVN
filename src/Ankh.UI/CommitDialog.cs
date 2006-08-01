@@ -302,7 +302,6 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( CommitDialog ) );
             this.topSplitter = new System.Windows.Forms.Splitter();
             this.logMessagePanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -411,7 +410,6 @@ namespace Ankh.UI
             // commitItemsTree
             // 
             this.commitItemsTree.CheckBoxes = true;
-            this.commitItemsTree.CheckedItems = ( (System.Collections.IList)( resources.GetObject( "commitItemsTree.CheckedItems" ) ) );
             this.commitItemsTree.Dock = System.Windows.Forms.DockStyle.Top;
             this.commitItemsTree.Items = new object[ 0 ];
             this.commitItemsTree.Location = new System.Drawing.Point( 0, 0 );
