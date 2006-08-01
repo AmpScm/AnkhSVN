@@ -7,6 +7,7 @@ namespace Ankh
     /// This attribute is used for commands that just want to grab the resources of the current
     /// selection, regardless of where they are.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class VSNetItemControlAttribute : VSNetControlAttribute
     {
         public VSNetItemControlAttribute( string bar ) : base(bar)
