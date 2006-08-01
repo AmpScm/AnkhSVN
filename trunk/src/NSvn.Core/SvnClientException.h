@@ -24,6 +24,24 @@ namespace NSvn
             NSvn::Common::SvnException( message, innerException )
             {;}
 
+            SvnClientException( System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context ) 
+            {
+                errorCode = info->GetInt32("_errorCode");
+                svnError = info->GetString("_svnError");
+                line = info->GetInt32("_errorCode");
+                file = info->GetString("_file");
+            }
+
+            void GetObjectData(System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context )
+            {
+                __super::GetObjectData(info,context);
+
+                info->AddValue("_errorCode",get_ErrorCode());
+                info->AddValue("_svnError",get_SvnError());
+                info->AddValue("_line",get_Line());
+                info->AddValue("_file",get_File());
+            }
+
             /// <summary>The SVN error code associated with this exception</summary>
             __property int get_ErrorCode()
             { return this->errorCode; }
@@ -57,6 +75,10 @@ namespace NSvn
         AuthorizationFailedException( System::Exception* innerException ) :
           SvnClientException( "Authorization failed", innerException )
           {;}
+          AuthorizationFailedException( System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context ) :
+            SvnClientException( info, context )
+            {;}
+
     };
 
 
@@ -67,6 +89,9 @@ namespace NSvn
         WorkingCopyLockedException( System::Exception* innerException ) :
           SvnClientException( "Working copy locked", innerException )
           {;}
+        WorkingCopyLockedException( System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context ) :
+            SvnClientException( info, context )
+            {;}
     };
 
     public __gc class NotVersionControlledException : public SvnClientException
@@ -75,6 +100,9 @@ namespace NSvn
         NotVersionControlledException( System::Exception* innerException ) :
           SvnClientException( "Path is not version controlled", innerException )
           {;}
+        NotVersionControlledException( System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context ) :
+            SvnClientException( info, context )
+            {;}
     };
 
      public __gc class ResourceOutOfDateException : public SvnClientException
@@ -83,6 +111,9 @@ namespace NSvn
         ResourceOutOfDateException( System::Exception* innerException ) :
           SvnClientException( "The resource is out of date relative to the repository. Run update.", innerException )
           {;}
+        ResourceOutOfDateException( System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context ) :
+            SvnClientException( info, context )
+            {;}
     };
 
     public __gc class IllegalTargetException : public SvnClientException 
@@ -90,6 +121,9 @@ namespace NSvn
     public:
         IllegalTargetException( System::Exception* innerException ) :
             SvnClientException( "The item is not a valid target for this operation", innerException )
+            {;}
+        IllegalTargetException( System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context ) :
+            SvnClientException( info, context )
             {;}
     };
 
@@ -99,6 +133,9 @@ namespace NSvn
         OperationCancelledException( System::Exception* innerException ) :
             SvnClientException( "The operation was cancelled.", innerException )
             {;}
+        OperationCancelledException( System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context ) :
+            SvnClientException( info, context )
+            {;}
     };
 
     public __gc class InvalidUrlException : public SvnClientException 
@@ -106,6 +143,18 @@ namespace NSvn
     public:
         InvalidUrlException( System::String* message, System::String* url ) : SvnClientException( message ), url(url)
             {;}
+        InvalidUrlException( System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context ) :
+            SvnClientException( info, context )
+            {
+                this->url = info->GetString( "_url" );
+            }
+
+            void GetObjectData(System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context )
+            {
+                __super::GetObjectData(info,context);
+                info->AddValue("_url", this->url);
+            }
+
 
         __property System::String* get_Url()
         { return this->url; }
