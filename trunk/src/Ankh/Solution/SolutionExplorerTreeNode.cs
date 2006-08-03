@@ -329,8 +329,7 @@ namespace Ankh.Solution
                 }
             }
 
-            NodeStatus newStatus = this.MergeStatuses( this.ThisNodeStatus(), 
-                this.CheckChildStatuses() );
+            NodeStatus newStatus = this.ThisNodeStatus().Merge( this.CheckChildStatuses() );
             if ( newStatus != this.currentStatus )
             {
                 this.currentStatus = newStatus;
@@ -471,19 +470,22 @@ namespace Ankh.Solution
         protected NodeStatus GenerateStatus(SvnItem item)
         {  
             Status status = item.Status;
-            NodeStatus newStatus = new NodeStatus();
+            NodeStatusKind kind;
             if ( status.TextStatus != StatusKind.Normal )
-                newStatus.Kind = (NodeStatusKind)status.TextStatus;
+            {
+                kind = (NodeStatusKind)status.TextStatus;
+            }
             else if ( status.PropertyStatus != StatusKind.Normal &&
                 status.PropertyStatus != StatusKind.None )
-                newStatus.Kind = (NodeStatusKind)status.PropertyStatus;  
+            {
+                kind = (NodeStatusKind)status.PropertyStatus;
+            }
             else
-                newStatus.Kind = NodeStatusKind.Normal;
+            {
+                kind = NodeStatusKind.Normal;
+            }
 
-            newStatus.ReadOnly = item.IsReadOnly;
-            newStatus.Locked = item.IsLocked;
-
-            return newStatus;
+            return new NodeStatus(kind, item.IsReadOnly, item.IsLocked);
         }
 
         /// <summary>
@@ -503,10 +505,10 @@ namespace Ankh.Solution
         /// <returns></returns>
         protected NodeStatus MergeStatuses( params NodeStatus[] statuses )
         {
-            StatusMerger merger = new StatusMerger();
+            NodeStatus newStatus = new NodeStatus();
             foreach( NodeStatus status in statuses )
-                merger.NewStatus( status );
-            return merger.CurrentStatus;
+                newStatus = newStatus.Merge( status );
+            return newStatus;
         }
 
         /// <summary>
@@ -516,12 +518,12 @@ namespace Ankh.Solution
         /// <param name="items">An IList of SvnItem instances.</param>
         /// <returns></returns>
         protected NodeStatus MergeStatuses( IList items )
-        {   
-            StatusMerger statusMerger = new StatusMerger();
+        {
+            NodeStatus newStatus = new NodeStatus();
             foreach( SvnItem item in items )
-                statusMerger.NewStatus( this.GenerateStatus(item) );
+                newStatus = newStatus.Merge( this.GenerateStatus(item) );
 
-            return statusMerger.CurrentStatus;
+            return newStatus;
         }
 
         /// <summary>
@@ -589,12 +591,12 @@ namespace Ankh.Solution
         /// <returns></returns>
         protected NodeStatus CheckChildStatuses()
         {            
-            StatusMerger statusMerger = new StatusMerger();
+            NodeStatus status = new NodeStatus();
             foreach( SolutionExplorerTreeNode node in this.children )
             {
-                statusMerger.NewStatus( node.CurrentStatus );                
+                status = status.Merge( node.CurrentStatus );                
             }
-            return statusMerger.CurrentStatus;
+            return status;
         }
 
         protected void GetChildResources(System.Collections.IList list, bool getChildItems,
