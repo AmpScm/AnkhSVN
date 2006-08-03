@@ -8,9 +8,9 @@ namespace Ankh
     /// </summary>
     public struct NodeStatus
     {
-        public NodeStatusKind Kind;
-        public bool ReadOnly;
-        public bool Locked;
+        public readonly NodeStatusKind Kind;
+        public readonly bool ReadOnly;
+        public readonly bool Locked;
 
         public NodeStatus( NodeStatusKind kind, bool readOnly, bool locked )
         {
@@ -41,6 +41,45 @@ namespace Ankh
             return base.GetHashCode();
         }
 
+        public NodeStatus Merge( NodeStatus status )
+        {
+            NodeStatusKind newKind = this.Kind;
+            bool readOnly = this.ReadOnly;
+            bool locked = this.Locked;
+
+            if ( status.Kind == 0 )
+            {
+                // nothing
+            }
+            // these are always overridden
+            else if ( this.Kind == NodeStatusKind.None || this.Kind == NodeStatusKind.Unversioned
+                || this.Kind == 0 )
+            {
+                newKind = status.Kind;
+            }
+            else if ( status.Kind != NodeStatusKind.None &&
+                status.Kind != NodeStatusKind.Ignored &&
+                status.Kind != 0 )
+            {
+                if ( this.Kind == NodeStatusKind.Normal )
+                {
+                    newKind = status.Kind;
+                }
+                else if ( status.Kind != NodeStatusKind.Normal &&
+                    this.Kind != status.Kind )
+                {
+                    newKind = NodeStatusKind.IndividualStatusesConflicting;
+                }
+            }
+
+            if ( status.ReadOnly )
+                readOnly = true;
+
+            if ( status.Locked )
+                locked = true;
+
+            return new NodeStatus( newKind, readOnly, locked );
+        }
 
 
         public static readonly NodeStatus None = new NodeStatus( NodeStatusKind.None, false, false );
