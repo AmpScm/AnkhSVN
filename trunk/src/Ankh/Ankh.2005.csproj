@@ -44,7 +44,7 @@
     <Optimize>false</Optimize>
     <RegisterForComInterop>true</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <LangVersion>default</LangVersion>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
@@ -231,6 +231,7 @@
     <None Include="Config\Config.xsx">
       <DependentUpon>Config.xsd</DependentUpon>
     </None>
+    <None Include="WorkingCopyExplorer\WCExplorer.cd" />
     <Compile Include="AnkhContext.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -240,6 +241,7 @@
     <Compile Include="BlameResult.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CommandBarContextMenu.cs" />
     <Compile Include="CommandMap.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -250,6 +252,7 @@
     <Compile Include="Commands\AddSolutionToRepositoryCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\AddWorkingCopyExplorerRootCommand.cs" />
     <Compile Include="Commands\BlameCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -351,6 +354,7 @@
     <Compile Include="Commands\ShowRepositoryExplorerCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\ShowWorkingCopyExplorerCommand.cs" />
     <Compile Include="Commands\SwitchItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -408,6 +412,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
+    <Compile Include="IWorkingCopyExplorer.cs" />
+    <Compile Include="StatusImages.cs" />
+    <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
+    <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />
+    <Compile Include="WorkingCopyExplorer\FileSystemItem.cs" />
     <Compile Include="NodeStatus.cs" />
     <Compile Include="NodeStatusKind.cs" />
     <Compile Include="NoProjectAutomationObjectException.cs" />
@@ -517,6 +526,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VSProject.cs" />
+    <Compile Include="WorkingCopyExplorer\FileSystemRootItem.cs" />
+    <Compile Include="WorkingCopyExplorer\WorkingCopyExplorer.cs" />
     <Compile Include="XmlResultBase.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -37,7 +37,7 @@ namespace Ankh.Commands
 
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            int count = context.SolutionExplorer.GetSelectionResources(false, 
+            int count = context.Selection.GetSelectionResources(false, 
                 new ResourceFilterCallback(SvnItem.ConflictedFilter) ).Count;
 
             if ( count > 0 )
@@ -54,7 +54,7 @@ namespace Ankh.Commands
 
             try
             {
-                IList items = context.SolutionExplorer.GetSelectionResources(false, 
+                IList items = context.Selection.GetSelectionResources(false, 
                      new ResourceFilterCallback(SvnItem.ConflictedFilter) );
 
                 foreach( SvnItem item in items )

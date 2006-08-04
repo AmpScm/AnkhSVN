@@ -21,7 +21,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             AddFilter filter = new AddFilter();
-            if ( context.SolutionExplorer.GetSelectionResources( true, 
+            if ( context.Selection.GetSelectionResources( true, 
                 new ResourceFilterCallback(filter.Filter)).Count > 0 )
             {
                 return Enabled;
@@ -33,7 +33,7 @@ namespace Ankh.Commands
         public override void Execute(IContext context, string parameters )
         {
             AddFilter filter = new AddFilter();
-            IList resources = context.SolutionExplorer.GetSelectionResources( true,
+            IList resources = context.Selection.GetSelectionResources( true,
                 new ResourceFilterCallback(filter.Filter) );
 
             // are we shifted?
@@ -59,7 +59,7 @@ namespace Ankh.Commands
                 {
                     context.Client.Add( item.Path, Recurse.None );
                 }
-                context.SolutionExplorer.RefreshSelection();
+                context.Selection.RefreshSelection();
             }
             finally
             {

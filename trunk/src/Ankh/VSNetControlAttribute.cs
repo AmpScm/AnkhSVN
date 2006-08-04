@@ -71,10 +71,12 @@ namespace Ankh
             object bar;
 
             //TODO: is this really necessary?
-            if ( path[0] == "ReposExplorer" )
+            if ( path[ 0 ] == "ReposExplorer" )
                 bar = context.RepositoryExplorer.CommandBar;
+            else if ( path[ 0 ] == "WorkingCopyExplorer" )
+                bar = ((CommandBarContextMenu)context.WorkingCopyExplorer.ContextMenu).CommandBar;
             else
-                bar = context.CommandBars.GetCommandBar( path[0] );
+                bar = context.CommandBars.GetCommandBar( path[ 0 ] );
 
             if ( bar == null )
                 return null;

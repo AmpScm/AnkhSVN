@@ -34,6 +34,20 @@ namespace Ankh
             }
         }
 
+        public WorkingCopyExplorerControl WorkingCopyExplorer
+        {
+            get
+            {
+                if ( this.workingCopyExplorerControl == null )
+                {
+                    this.CreateWorkingCopyExplorer();
+                }
+                return this.workingCopyExplorerControl;
+            }
+        }
+
+        
+
         public IContext Context
         {
             [System.Diagnostics.DebuggerStepThrough]
@@ -71,6 +85,14 @@ namespace Ankh
                 this.EnsureWindowSize( this.repositoryExplorerWindow );
 
         }
+
+        public void ShowWorkingCopyExplorer( bool show )
+        {
+            this.workingCopyExplorerWindow.Visible = show;
+            if ( show )
+                this.EnsureWindowSize( this.workingCopyExplorerWindow );
+
+        }
     
         public void SetRepositoryExplorerSelection(object[] selection)
         {
@@ -81,6 +103,18 @@ namespace Ankh
         {
             return this.Context.DTE.ActiveWindow == this.repositoryExplorerWindow;
         }
+
+        public bool WorkingCopyExplorerHasFocus()
+        {
+            return this.Context.DTE.ActiveWindow == this.workingCopyExplorerWindow;
+        }
+
+        public bool SolutionExplorerHasFocus()
+        {
+            return this.Context.DTE.ActiveWindow.Type == vsWindowType.vsWindowTypeSolutionExplorer;
+        }
+
+
 
         /// <summary>
         /// Shows the commit dialog, blocking until the user hits cancel or commit.
@@ -390,6 +424,18 @@ namespace Ankh
             }
         }
 
+        public string ShowAddWorkingCopyExplorerRootDialog()
+        {
+            using ( AddWorkingCopyExplorerRootDialog dlg = new AddWorkingCopyExplorerRootDialog() )
+            {
+                if ( dlg.ShowDialog( this.context.HostWindow ) != DialogResult.OK )
+                {
+                    return null;
+                }
+                return dlg.NewRoot;
+            }
+        }
+
         #endregion
 
         private void CreateRepositoryExplorer()
@@ -447,6 +493,28 @@ namespace Ankh
             System.Diagnostics.Debug.Assert( this.commitDialog != null, 
                 "Could not create tool window" );
             
+        }
+
+        private void CreateWorkingCopyExplorer()
+        {
+            Debug.WriteLine( "Creating working copy explorer tool window", "Ankh" );
+            object control = null;
+            this.workingCopyExplorerWindow = this.context.DTE.Windows.CreateToolWindow(
+                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl",
+                "Working Copy Explorer", WorkingCopyExplorerGuid, ref control );
+
+            this.workingCopyExplorerWindow.Visible = true;
+
+            this.workingCopyExplorerWindow.Caption = "Working Copy Explorer";
+
+            AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl
+                objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
+
+            this.workingCopyExplorerControl = new WorkingCopyExplorerControl();
+            objControl.HostUserControl( this.workingCopyExplorerControl );
+
+            System.Diagnostics.Debug.Assert( this.workingCopyExplorerControl != null,
+                "Could not create tool window for WC Explorer" );
         }
 
         private void ProceedCommit( object sender, EventArgs e )
@@ -509,10 +577,12 @@ namespace Ankh
             this.newBrowser = (SH.WebBrowser)ppDisp;
         }
 
-        private RepositoryExplorerControl repositoryExplorerControl;        
+        private RepositoryExplorerControl repositoryExplorerControl;
+        private WorkingCopyExplorerControl workingCopyExplorerControl;
         private Window repositoryExplorerWindow;
         private CommitDialog commitDialog;
         private Window commitDialogWindow;
+        private Window workingCopyExplorerWindow;
         private IContext context;
         private bool commitDialogModal;
         
@@ -520,5 +590,10 @@ namespace Ankh
             "{1C5A739C-448C-4401-9076-5990300B0E1B}";
         private const string CommitDialogGuid = 
             "{08BD45A4-7716-49b0-BB41-CFEBCD098728}";
+        private const string WorkingCopyExplorerGuid = 
+            "{3ABCF4EA-71BB-4e1c-ABD0-39261B19EDA1}";
+
+
+        
     }
 }

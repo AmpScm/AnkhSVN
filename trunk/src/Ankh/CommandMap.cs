@@ -44,7 +44,7 @@ namespace Ankh
                 new CultureInfo( "en-US", false );
             try
             {
-                CreateReposExplorerPopup( context );
+                CreatePopups( context );
                 CreateAnkhSubMenu( context );
 
                 CommandMap commands = new CommandMap();
@@ -167,12 +167,17 @@ namespace Ankh
             }
         }        
 
-        private static void CreateReposExplorerPopup( IContext context )
+        private static void CreatePopups( IContext context )
         {
             context.RepositoryExplorer.CommandBar = 
                 context.CommandBars.AddCommandBar( "ReposExplorer", 
                     vsCommandBarType.vsCommandBarTypePopup, null, 
                     VSCommandBars.AddCommandBarToEnd );
+        
+            context.WorkingCopyExplorer.ContextMenu = new CommandBarContextMenu(
+                context.CommandBars.AddCommandBar( "WorkingCopyExplorer", 
+                    vsCommandBarType.vsCommandBarTypePopup, null, 
+                    VSCommandBars.AddCommandBarToEnd ));
         }
 
         /// <summary>

@@ -118,5 +118,10 @@ namespace Utils
             return path;
         }
 
-	}
+
+        public static bool AreEqual( string path1, string path2 )
+        {
+            return NormalizePath(path1).Equals(NormalizePath(path2));
+        }
+    }
 }

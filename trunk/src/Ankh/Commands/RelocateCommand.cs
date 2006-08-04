@@ -12,12 +12,13 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.Relocate),
     VSNetFolderNodeControl( "Ankh", Position = 1),
     VSNetControl( "Solution.Ankh", Position = 1 ),
+    VSNetControl("WorkingCopyExplorer.Ankh", Position=1),
     VSNetProjectNodeControl( "Ankh", Position = 1 )]
     public class RelocateCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            if ( context.SolutionExplorer.GetSelectionResources( false, 
+            if ( context.Selection.GetSelectionResources( false, 
                 new ResourceFilterCallback(SvnItem.DirectoryFilter) ).Count == 1 )
             {
                 return Enabled;
@@ -31,7 +32,7 @@ namespace Ankh.Commands
         public override void Execute(IContext context, string parameters)
         {
             // We know now that there is exactly one resource
-            SvnItem dir = (SvnItem)context.SolutionExplorer.GetSelectionResources(
+            SvnItem dir = (SvnItem)context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback(SvnItem.DirectoryFilter) )[0];
 
             context.StartOperation( "Relocating" );

@@ -68,9 +68,14 @@ namespace Ankh
             
             this.conflictManager = new ConflictManager(this);
 
+            this.statusCache = new StatusCache( this.client );
+
             this.repositoryController = 
                 new RepositoryExplorer.Controller( this );
+            this.workingCopyExplorer =
+                new Ankh.WorkingCopyExplorer.WorkingCopyExplorer( this );
 
+            this.workingCopyExplorer.AddRoot( @"D:\halftemp\wc\ConsoleApplication1" );
         }
 
         
@@ -268,6 +273,14 @@ namespace Ankh
             }
         }
 
+        public IWorkingCopyExplorer WorkingCopyExplorer
+        {
+            [DebuggerStepThrough]
+            get { return this.workingCopyExplorer; }
+        }
+
+
+
 
         /// <summary>
         /// Event handler for the SolutionOpened event. Can also be called at
@@ -380,6 +393,32 @@ namespace Ankh
 
         }
 
+        public ISelectionContainer Selection
+        {
+            get 
+            {
+                Debug.WriteLine( String.Format( "Active Window: {0}", this.dte.ActiveWindow.Caption ) );
+
+                // Store the current selection so that the selection is still correct when a popup is shown, which 
+                // causes the .ActiveWindow to go to some other tool window.
+                if ( this.UIShell.SolutionExplorerHasFocus() )
+                {
+                    Debug.WriteLine( "SolutionExplorer returned as selection", "AnkhSVN" );
+                    this.selectionContainer = this.SolutionExplorer;
+                }
+                else if ( this.UIShell.WorkingCopyExplorerHasFocus() )
+                {
+                    Debug.WriteLine( "WorkingCopyExplorer returned as selection", "AnkhSVN" );
+                    this.selectionContainer = this.WorkingCopyExplorer;
+                }
+                // if none of those, the previous selection is probably still valid.
+
+                Debug.WriteLine( this.selectionContainer.GetType(), "AnkhSVN" );
+                return this.selectionContainer;
+            }
+        }
+
+
 
         #region SetUpEvents
         /// <summary>
@@ -411,9 +450,6 @@ namespace Ankh
                 System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
 
                 Utils.DebugTimer timer = DebugTimer.Start();
-
-
-                this.statusCache = new StatusCache( this.Client );
 
                 this.solutionExplorer.Load();
 
@@ -600,12 +636,47 @@ namespace Ankh
         }
         #endregion
 
+
+        private class NullSelectionContainer : ISelectionContainer
+        {
+            public void RefreshSelectionParents()
+            {
+            }
+
+            public void RefreshSelection()
+            {
+            }
+
+            public void SyncAll()
+            {
+            }
+
+            public IList GetSelectionResources( bool getChildItems )
+            {
+                return EmptyList;
+            }
+
+            public IList GetSelectionResources( bool getChildItems, ResourceFilterCallback filter )
+            {
+                return EmptyList;
+            }
+
+            public IList GetAllResources( ResourceFilterCallback filter )
+            {
+                return EmptyList;
+            }
+            public static readonly NullSelectionContainer Instance = new NullSelectionContainer();
+            private SvnItem[] EmptyList = new SvnItem[]{};
+        }
         
 
         private EnvDTE._DTE dte;
         private EnvDTE.AddIn addin;
         private IWin32Window hostWindow;
 
+        private ISelectionContainer selectionContainer = NullSelectionContainer.Instance;
+
+        private WorkingCopyExplorer.WorkingCopyExplorer workingCopyExplorer;
         private RepositoryExplorer.Controller repositoryController;
 
         private OutputPaneWriter outputPane;
@@ -640,5 +711,5 @@ namespace Ankh
         
 
         #endregion
-}
+    }
 }

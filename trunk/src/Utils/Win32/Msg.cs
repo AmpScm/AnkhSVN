@@ -55,5 +55,10 @@ namespace Utils.Win32
         /// </summary>
         public const uint TVM_GETEDITCONTROL = 0x110f;
 
+        /// <summary>
+        /// Sets an imagelist for a listview.
+        /// </summary>
+        public const uint LVM_SETIMAGELIST = 0x1003;
+
     }
 }

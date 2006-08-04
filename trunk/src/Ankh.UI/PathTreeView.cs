@@ -35,7 +35,7 @@ namespace Ankh.UI
 
 
         /// <summary>
-        /// Set the icon for a given node based on it's path.
+        /// Set the icon for a given node based on its path.
         /// </summary>
         /// <param name="node"></param>
         /// <param name="path"></param>

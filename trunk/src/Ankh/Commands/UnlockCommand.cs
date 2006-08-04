@@ -10,14 +10,14 @@ namespace Ankh.Commands
 	{
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            IList resources = context.SolutionExplorer.GetSelectionResources(true, 
+            IList resources = context.Selection.GetSelectionResources(true, 
                 new ResourceFilterCallback( SvnItem.LockedFilter ) );
             return resources.Count > 0 ? CommandBase.Enabled : CommandBase.Disabled;
         }
 
         public override void Execute(IContext context, string parameters)
         {
-            IList resources = context.SolutionExplorer.GetSelectionResources(true, 
+            IList resources = context.Selection.GetSelectionResources(true, 
                 new ResourceFilterCallback( SvnItem.LockedFilter ) );
 
             this.info = new PathSelectorInfo( "Unlock files", resources, resources );

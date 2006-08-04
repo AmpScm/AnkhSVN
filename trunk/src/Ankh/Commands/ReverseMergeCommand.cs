@@ -20,7 +20,7 @@ namespace Ankh.Commands
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            IList resources = context.SolutionExplorer.GetSelectionResources(
+            IList resources = context.Selection.GetSelectionResources(
                 true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
             if ( resources.Count > 0 )
                 return Enabled;
@@ -32,7 +32,7 @@ namespace Ankh.Commands
         {
             this.SaveAllDirtyDocuments( context );
 
-            IList resources = context.SolutionExplorer.GetSelectionResources(
+            IList resources = context.Selection.GetSelectionResources(
                 true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
             context.StartOperation( "Merging" );
             try

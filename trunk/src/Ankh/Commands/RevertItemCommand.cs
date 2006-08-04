@@ -24,7 +24,7 @@ namespace Ankh.Commands
 
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {   
-            if ( context.SolutionExplorer.GetSelectionResources( true, 
+            if ( context.Selection.GetSelectionResources( true, 
                 new ResourceFilterCallback( SvnItem.ModifiedFilter ) ).Count > 0 )
             {
                 return Enabled;
@@ -38,7 +38,7 @@ namespace Ankh.Commands
             this.SaveAllDirtyDocuments( context );
 
             // get the modified resources
-            IList resources = context.SolutionExplorer.GetSelectionResources( true,
+            IList resources = context.Selection.GetSelectionResources( true,
                 new ResourceFilterCallback( SvnItem.ModifiedFilter ) );
 
             Recurse recurse = Recurse.None;

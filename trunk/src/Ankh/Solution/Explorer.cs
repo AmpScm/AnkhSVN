@@ -112,7 +112,7 @@ namespace Ankh.Solution
                     }
                     else
                     {
-                        this.RefreshNode( node.Parent );
+                        this.RefreshNode( node.SolutionExplorerParent );
                     }
                 }
             }
