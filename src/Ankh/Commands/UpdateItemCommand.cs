@@ -23,7 +23,7 @@ namespace Ankh.Commands
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // all items must be versioned if we are going to run update.
-            IList resources = context.SolutionExplorer.GetSelectionResources( true,
+            IList resources = context.Selection.GetSelectionResources( true,
                 new ResourceFilterCallback(SvnItem.VersionedFilter) );
             if ( resources.Count > 0 )
                 return Enabled;
@@ -39,7 +39,7 @@ namespace Ankh.Commands
                 this.SaveAllDirtyDocuments( context );
                 context.StartOperation( "Updating" );
 
-                IList resources = context.SolutionExplorer.GetSelectionResources( true,
+                IList resources = context.Selection.GetSelectionResources( true,
                     new ResourceFilterCallback(SvnItem.VersionedFilter) );
 
 

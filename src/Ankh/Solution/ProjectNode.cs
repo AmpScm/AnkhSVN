@@ -80,8 +80,8 @@ namespace Ankh.Solution
 
         protected override void DoDispose()
         {
-            this.UnhookEvents( new SvnItem[] { this.projectFile, this.projectFolder }, new EventHandler( this.ChildOrResourceChanged ) );
-            this.UnhookEvents( this.deletedResources, new EventHandler(this.ChildOrResourceChanged) );
+            UnhookEvents( new SvnItem[] { this.projectFile, this.projectFolder }, new EventHandler( this.ChildOrResourceChanged ) );
+            UnhookEvents( this.deletedResources, new EventHandler(this.ChildOrResourceChanged) );
         }
 
         private void FindProjectResources(Explorer explorer)
@@ -189,9 +189,9 @@ namespace Ankh.Solution
         protected override NodeStatus ThisNodeStatus()
         {
             // check status on the project folder
-            return this.MergeStatuses(
-                this.MergeStatuses(this.projectFolder, this.projectFile),
-                this.MergeStatuses(this.deletedResources));
+            return MergeStatuses(
+                MergeStatuses(this.projectFolder, this.projectFile),
+                MergeStatuses(this.deletedResources));
 
         }
 

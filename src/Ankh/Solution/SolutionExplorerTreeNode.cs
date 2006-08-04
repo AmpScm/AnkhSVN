@@ -20,15 +20,13 @@ namespace Ankh.Solution
     public abstract class SolutionExplorerTreeNode : TreeNode, IDisposable
     {
 
-        public event EventHandler Changed;
 
         protected SolutionExplorerTreeNode( UIHierarchyItem item, IntPtr hItem, 
-            Explorer explorer, SolutionExplorerTreeNode parent )
+            Explorer explorer, SolutionExplorerTreeNode parent ) : base(parent)
         {     
             this.uiItem = item;
             this.hItem = hItem;
             this.explorer = explorer;
-            this.parent = parent;
         }
 
 
@@ -38,10 +36,15 @@ namespace Ankh.Solution
             get{ return this.explorer; }
         }
 
+        public SolutionExplorerTreeNode SolutionExplorerParent
+        {
+            get { return this.Parent as SolutionExplorerTreeNode; }
+        }
+
         public virtual SolutionNode Solution
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this.Parent.Solution; }
+            get { return this.SolutionExplorerParent != null ? this.SolutionExplorerParent.Solution : null; }
         }
         
         public static SolutionExplorerTreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
@@ -85,7 +88,7 @@ namespace Ankh.Solution
             else if ( parent is ProjectNode && !((ProjectNode)parent).Modeled ) //deal with items in unmodeled projects
             {
                 ProjectNode projectNode=(ProjectNode)parent;
-                ParsedSolutionItem parsedItem=((SolutionNode)projectNode.parent).Parser.GetProjectItem(projectNode.Name, item.Name);
+                ParsedSolutionItem parsedItem=((SolutionNode)projectNode.Parent).Parser.GetProjectItem(projectNode.Name, item.Name);
                 return new ProjectItemNode( item, hItem, explorer, parent, parsedItem );  
             }
             else if ( parent is ProjectItemNode ) //deal with sub items in unmodeled projects
@@ -130,45 +133,13 @@ namespace Ankh.Solution
             }
         }
 
-        /// <summary>
-        /// Make sure we unhook from all events pointing to us.
-        /// </summary>
-        public void Dispose()
-        {
-            this.DoDispose();
-            this.DisposeChildren();
-        }
-
-        public void Remove()
-        {
-            this.RemoveSelf();
-            this.Dispose();
-        }
-
-        /// <summary>
-        /// Calls Dispose on all Children of this node.
-        /// </summary>
-        private void DisposeChildren()
-        {
-            foreach ( SolutionExplorerTreeNode node in this.Children )
-            {
-                node.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// Must be overridden in derived classes to unhook from events and other cleanup.
-        /// </summary>
-        protected abstract void DoDispose();
+       
 
         public abstract void Accept( INodeVisitor visitor );
 
-        public void Refresh()
-        {
-            this.Refresh( true );
-        }
+        
 
-        public virtual void Refresh( bool rescan )
+        public override void Refresh( bool rescan )
         {
             try
             {                  
@@ -181,17 +152,17 @@ namespace Ankh.Solution
                     this.FindChildren( );
                     this.RescanHook();
                 }
-                this.currentStatus = this.MergeStatuses( this.ThisNodeStatus(), 
+                this.CurrentStatus = MergeStatuses( this.ThisNodeStatus(), 
                     this.CheckChildStatuses() );
 
-                this.SetStatusImage( this.currentStatus );
+                this.SetStatusImage( this.CurrentStatus );
 
             }
             catch( SvnException )
             {
                 // try refreshing the parent
-                if ( this.parent != null )
-                    parent.Refresh();
+                if ( this.Parent != null )
+                    this.Parent.Refresh();
                 else
                     throw;
             }
@@ -231,155 +202,14 @@ namespace Ankh.Solution
             }
         }
 
-
-
-        static SolutionExplorerTreeNode()
-        {
-            statusMap[ NodeStatusKind.Normal ]      = 1;
-            statusMap[ NodeStatusKind.Added ]       = 2;
-            statusMap[ NodeStatusKind.Deleted ]     = 3;
-            statusMap[ NodeStatusKind.Replaced ]    = 4;
-            statusMap[ NodeStatusKind.IndividualStatusesConflicting ] = 7;
-            statusMap[ NodeStatusKind.Conflicted ]  = 6;
-            statusMap[ NodeStatusKind.Unversioned ] = 8;
-            statusMap[ NodeStatusKind.Modified ]    = 9;
-            
-        }
-        
-
-        /// <summary>
-        /// Child nodes of this node
-        /// </summary>
-        public IList Children
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.children;  }
-        }
-
-        /// <summary>
-        /// The parent node of this node.
-        /// </summary>
-        public SolutionExplorerTreeNode Parent
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.parent; }
-        }
-
-        protected NodeStatus CurrentStatus
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.currentStatus; }
-        }
-
-        /// <summary>
-        /// Derived classes implement this method to append their resources
-        /// to the list.
-        /// </summary>
-        /// <param name="list"></param>
-        public abstract void GetResources( IList list, bool getChildItems, 
-            ResourceFilterCallback filter );
-        
-
-       /// <summary>
-        /// Gets the status of the resources belonging to one specific node, 
-        /// not including children.
-        /// </summary>
-        /// <returns></returns>
-        protected virtual NodeStatus ThisNodeStatus()
-        {
-            return NodeStatus.None;
-        }
-
-        /// <summary>
-        /// Dispatches the Changed event.
-        /// </summary>
-        protected virtual void OnChanged()
-        {
-            try
-            {
-                if ( !this.isRefreshing )
-                {
-                    this.isRefreshing = true;
-
-                    this.SetStatusImage( this.CurrentStatus );
-                    if ( this.Changed != null )
-                        this.Changed( this, EventArgs.Empty );
-                }
-            }
-            finally
-            {
-                this.isRefreshing = false;
-            }
-        }
-
-        /// <summary>
-        /// Event handler for change events in child nodes or resources belonging
-        /// to this node.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        protected virtual void ChildOrResourceChanged( object sender, EventArgs args )
-        {
-            if ( !this.isDeleting )
-            {
-                this.CheckForSvnDeletions();
-                if ( CheckForDeletedTreeNode() )
-                {
-                    return;
-                }
-            }
-
-            NodeStatus newStatus = this.ThisNodeStatus().Merge( this.CheckChildStatuses() );
-            if ( newStatus != this.currentStatus )
-            {
-                this.currentStatus = newStatus;
-                this.OnChanged();
-            }
-        }
-
-        /// <summary>
-        /// Check if this treenode is deleted.
-        /// </summary>
-        /// <returns></returns>
-        protected bool CheckForDeletedTreeNode()
-        {
-            try
-            {
-                this.isDeleting = true;
-
-                // If the parent is deleted as well, no point in deleting us.
-                if ( this.Parent != null )
-                {
-                    if ( this.Parent.CheckForDeletedTreeNode() )
-                    {
-                        return true;
-                    }
-                }
-
-                return RemoveTreeNodeIfResourcesDeleted();
-            }
-            finally
-            {
-                this.isDeleting = false;
-            }
-        }
-
-        /// <summary>
-        /// Override this to "kill" yourself if all resources belonging to you are deleted.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract bool RemoveTreeNodeIfResourcesDeleted();
-
-        protected abstract void CheckForSvnDeletions();
-
         /// <summary>
         /// Deletes all resources belonging to this node and its children.
         /// </summary>
-        protected void SvnDelete()
+        protected override void SvnDelete()
         {
             try
             {
-                this.isDeleting = true;
+                this.IsDeleting = true;
 
                 IList resources = new ArrayList();
                 this.GetResources( resources, true, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
@@ -402,43 +232,14 @@ namespace Ankh.Solution
             }
             finally
             {
-                this.isDeleting = false;
+                this.IsDeleting = false;
             }
 
         }
 
-        protected void FilterResources( IList inList, IList outList, ResourceFilterCallback filter )
-        {
-            foreach ( SvnItem item in inList )
-            {
-                if ( filter == null || filter(item) )
-                {
-                    outList.Add( item );
-                }
-            }
-        }
+       
 
-        protected void RemoveSelf()
-        {
-            if ( this.Parent != null )
-            {
-                this.Parent.Remove( this );
-            }
-        }
 
-        private void Remove( SolutionExplorerTreeNode treeNode )
-        {
-            treeNode.Changed -= new EventHandler( this.ChildOrResourceChanged );
-            this.Children.Remove( treeNode );
-        }
-
-        protected void UnhookEvents( IList svnItems, EventHandler del )
-        {
-            foreach ( SvnItem item in svnItems )
-            {
-                item.Changed -= del;
-            }
-        }
 
         /// <summary>
         /// Sets the status image on this node.
@@ -448,8 +249,7 @@ namespace Ankh.Solution
         {
             int statusImage = 0;
             int overlay = 0;
-            if ( statusMap.Contains(status.Kind) )
-                statusImage = (int)statusMap[status.Kind];
+            statusImage = StatusImages.GetStatusImageForNodeStatus ( status );
 
             if ( status.ReadOnly && status.Locked )
                 overlay = Explorer.LockReadonlyOverlay;
@@ -461,70 +261,7 @@ namespace Ankh.Solution
             this.explorer.TreeView.SetStateAndOverlayImage( this.hItem, overlay, statusImage );                
         }
 
-        /// <summary>
-        /// Returns a NodeStatus from a Status, taking into account both text status and 
-        /// property status.
-        /// </summary>
-        /// <param name="resource"></param>
-        /// <returns></returns>
-        protected NodeStatus GenerateStatus(SvnItem item)
-        {  
-            Status status = item.Status;
-            NodeStatusKind kind;
-            if ( status.TextStatus != StatusKind.Normal )
-            {
-                kind = (NodeStatusKind)status.TextStatus;
-            }
-            else if ( status.PropertyStatus != StatusKind.Normal &&
-                status.PropertyStatus != StatusKind.None )
-            {
-                kind = (NodeStatusKind)status.PropertyStatus;
-            }
-            else
-            {
-                kind = NodeStatusKind.Normal;
-            }
-
-            return new NodeStatus(kind, item.IsReadOnly, item.IsLocked);
-        }
-
-        /// <summary>
-        /// Merges the statuses of the passed items into a single NodeStatus.
-        /// </summary>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        protected NodeStatus MergeStatuses( params SvnItem[] items )
-        {
-            return this.MergeStatuses( ((IList)items) );
-        }
-
-        /// <summary>
-        /// Merges the passed NodeStatuses into a single NodeStatus.
-        /// </summary>
-        /// <param name="statuses"></param>
-        /// <returns></returns>
-        protected NodeStatus MergeStatuses( params NodeStatus[] statuses )
-        {
-            NodeStatus newStatus = new NodeStatus();
-            foreach( NodeStatus status in statuses )
-                newStatus = newStatus.Merge( status );
-            return newStatus;
-        }
-
-        /// <summary>
-        /// Merges the statuses of the passed SvnItems into
-        /// a single NodeStatus.
-        /// </summary>
-        /// <param name="items">An IList of SvnItem instances.</param>
-        /// <returns></returns>
-        protected NodeStatus MergeStatuses( IList items )
-        {
-            NodeStatus newStatus = new NodeStatus();
-            foreach( SvnItem item in items )
-                newStatus = newStatus.Merge( this.GenerateStatus(item) );
-
-            return newStatus;
-        }
+        
 
         /// <summary>
         /// Finds the child nodes of this node.
@@ -532,8 +269,8 @@ namespace Ankh.Solution
         protected void FindChildren()
         {
             try
-            {                
-                this.children = new ArrayList();
+            {
+                this.Children.Clear();
 
                 // retain the original expansion state
                 bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
@@ -561,7 +298,7 @@ namespace Ankh.Solution
                         if (childNode != null )
                         {
                             childNode.Changed += new EventHandler(this.ChildOrResourceChanged);
-                            this.children.Add( childNode );
+                            this.Children.Add( childNode );
                             childNode.Refresh( false );
                         }
                     }
@@ -585,29 +322,9 @@ namespace Ankh.Solution
             }
         }
 
-        /// <summary>
-        /// Gets the merged NodeStatus from the child nodes.
-        /// </summary>
-        /// <returns></returns>
-        protected NodeStatus CheckChildStatuses()
-        {            
-            NodeStatus status = new NodeStatus();
-            foreach( SolutionExplorerTreeNode node in this.children )
-            {
-                status = status.Merge( node.CurrentStatus );                
-            }
-            return status;
-        }
+        
 
-        protected void GetChildResources(System.Collections.IList list, bool getChildItems,
-            ResourceFilterCallback filter )
-        {
-            if ( getChildItems )
-            {
-                foreach( SolutionExplorerTreeNode node in this.Children )
-                    node.GetResources( list, getChildItems, filter );
-            }
-        }
+
 
         /// <summary>
         /// Add the deleted items from "dir" to "list".
@@ -626,6 +343,13 @@ namespace Ankh.Solution
             } 
         }
 
+        protected override void OnChanged()
+        {
+            base.OnChanged();
+
+            this.SetStatusImage( this.CurrentStatus );
+        }
+
 
         /// <summary>
         /// Called as part of a rescan of the current node.
@@ -636,26 +360,20 @@ namespace Ankh.Solution
         }
         
         protected UIHierarchyItem uiItem;
-        private SolutionExplorerTreeNode parent;
         private IntPtr hItem;
-        private IList children;
         private Explorer explorer;
-        private NodeStatus currentStatus;
-        private bool isDeleting = false;
-        private bool isRefreshing = false;
-        private static readonly IDictionary statusMap = new Hashtable();
 
 #if DEBUG
         internal bool IsOrphaned()
         {
-            if ( this.Parent == null )
+            if ( this.SolutionExplorerParent == null )
             {
                 return this.explorer.SolutionNode != this;
             }
             else
             {
-                return ( !this.Parent.Children.Contains( this ) ) ||
-                    this.Parent.IsOrphaned();
+                return ( !this.SolutionExplorerParent.Children.Contains( this ) ) ||
+                    this.SolutionExplorerParent.IsOrphaned();
             }
         }
 #endif

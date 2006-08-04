@@ -78,9 +78,9 @@ namespace Ankh.Solution
                 return NodeStatus.None;               
             else
             {
-                return this.MergeStatuses(
-                    this.MergeStatuses( this.solutionFolder, this.solutionFile),
-                        this.MergeStatuses(this.deletedResources));
+                return MergeStatuses(
+                    MergeStatuses( this.solutionFolder, this.solutionFile),
+                        MergeStatuses(this.deletedResources));
             }
         }
 
@@ -101,8 +101,8 @@ namespace Ankh.Solution
 
         protected override void DoDispose()
         {
-            this.UnhookEvents( new SvnItem[] { this.solutionFile, this.solutionFolder }, new EventHandler( this.ChildOrResourceChanged ) );
-            this.UnhookEvents( this.deletedResources, new EventHandler( this.ChildOrResourceChanged ) );
+            UnhookEvents( new SvnItem[] { this.solutionFile, this.solutionFolder }, new EventHandler( this.ChildOrResourceChanged ) );
+            UnhookEvents( this.deletedResources, new EventHandler( this.ChildOrResourceChanged ) );
         }
 
         /// <summary>

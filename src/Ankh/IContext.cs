@@ -143,5 +143,15 @@ namespace Ankh
         /// Miscellaneous cleanup stuff goes here.
         /// </summary>
         void Shutdown();
+
+        IWorkingCopyExplorer WorkingCopyExplorer
+        {
+            get;
+        }
+
+        ISelectionContainer Selection
+        {
+            get;
+        }
     }
 }

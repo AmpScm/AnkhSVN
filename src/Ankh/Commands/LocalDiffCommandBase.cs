@@ -46,7 +46,7 @@ namespace Ankh.Commands
             bool useExternalDiff = GetExe( context ) != null;
 
             // We use VersionedFilter here to allow diffs between arbitrary revisions
-            IList resources = context.SolutionExplorer.GetSelectionResources(
+            IList resources = context.Selection.GetSelectionResources(
                 true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
 
             // are we shifted?

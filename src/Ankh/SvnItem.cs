@@ -7,7 +7,7 @@ using System.Collections;
 using Ankh.UI;
 
 namespace Ankh
-{    
+{
     /// <summary>
     /// Used to decide whether this particular SvnItem should be included in a collection.
     /// </summary>
@@ -44,6 +44,22 @@ namespace Ankh
         {
             get{ return this.path; }
         }
+
+        public string Name
+        {
+            get 
+            {
+                if ( this.Path.EndsWith("/") )
+                {
+                    return System.IO.Path.GetFileName( this.Path.Substring( 0, this.Path.Length - 1 ) );
+                }
+                else
+                {
+                    return System.IO.Path.GetFileName( this.Path );
+                }
+            }
+        }
+
 
 
         /// <summary>
@@ -406,6 +422,10 @@ namespace Ankh
             return !item.IsDeleted && !item.IsDeletedFromDisk;
         }
 
+        public static bool NoFilter( SvnItem item )
+        {
+            return true;
+        }
 
 
         public static void GetPathInfo( object sender, GetPathInfoEventArgs args )

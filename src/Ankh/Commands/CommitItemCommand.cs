@@ -24,7 +24,7 @@ namespace Ankh.Commands
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
-            if ( context.SolutionExplorer.GetSelectionResources( true, 
+            if ( context.Selection.GetSelectionResources( true, 
                 new ResourceFilterCallback( SvnItem.ModifiedFilter) ).Count > 0 )
                 return Enabled;
             else
@@ -35,7 +35,7 @@ namespace Ankh.Commands
             // make sure all files are saved
             this.SaveAllDirtyDocuments( context );
 
-            IList resources = context.SolutionExplorer.GetSelectionResources( true, 
+            IList resources = context.Selection.GetSelectionResources( true, 
                 new ResourceFilterCallback(SvnItem.ModifiedFilter) );
 
             CommitOperation operation = new CommitOperation( new SimpleProgressWorker(

@@ -36,6 +36,11 @@ namespace Ankh
             set;
         }
 
+        Ankh.UI.WorkingCopyExplorerControl WorkingCopyExplorer
+        {
+            get;
+        }
+
         /// <summary>
         /// Ask the user whether Ankh should load for a given solution.
         /// </summary>
@@ -84,6 +89,20 @@ namespace Ankh
         /// </summary>
         /// <returns></returns>
         bool RepositoryExplorerHasFocus();
+
+        /// <summary>
+        /// Whether the Repository Explorer window has focus
+        /// </summary>
+        /// <returns></returns>
+        bool WorkingCopyExplorerHasFocus();
+
+        /// <summary>
+        /// Whether the Repository Explorer window has focus
+        /// </summary>
+        /// <returns></returns>
+        bool SolutionExplorerHasFocus();
+
+
 
         /// <summary>
         /// Executes the worker.Work method while displaying a progress dialog.
@@ -163,5 +182,9 @@ namespace Ankh
         /// </summary>
         /// <returns></returns>
         RepositoryRootInfo ShowAddRepositoryRootDialog();
-	}
+
+        string ShowAddWorkingCopyExplorerRootDialog();
+
+        void ShowWorkingCopyExplorer( bool p );
+    }
 }

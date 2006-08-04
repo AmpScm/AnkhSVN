@@ -86,6 +86,10 @@ namespace Utils.Win32
         public const uint TVSIL_STATE = 0x2;
 
 
+        public const uint LVSIL_NORMAL = 0x0;
+        public const uint LVSIL_SMALL = 0x1;
+        public const uint LVSIL_STATE = 0x2;
+
         // file attribute constants
         /// <summary>
         /// The file is a directory.

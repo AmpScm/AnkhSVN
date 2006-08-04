@@ -57,8 +57,8 @@ namespace Ankh.Solution
         /// <returns></returns>
         protected override NodeStatus ThisNodeStatus()
         {
-            return this.MergeStatuses(this.MergeStatuses( this.resources ),
-                this.MergeStatuses(this.deletedResources));
+            return MergeStatuses(MergeStatuses( this.resources ),
+                MergeStatuses(this.deletedResources));
         }
 
         protected override void CheckForSvnDeletions()
@@ -143,8 +143,8 @@ namespace Ankh.Solution
 
         protected override void DoDispose()
         {
-            this.UnhookEvents( this.resources, new EventHandler( this.ChildOrResourceChanged ) );
-            this.UnhookEvents( this.resources, new EventHandler( this.DeletedItemStatusChanged ) );
+            UnhookEvents( this.resources, new EventHandler( this.ChildOrResourceChanged ) );
+            UnhookEvents( this.resources, new EventHandler( this.DeletedItemStatusChanged ) );
         }
 
         private bool AllResourcesDeleted()
@@ -183,8 +183,8 @@ namespace Ankh.Solution
                 else
                 {
                     // oops, get the direectory from the parent then?
-                    if ( this.Parent != null )
-                        return this.Parent.Directory;
+                    if ( this.SolutionExplorerParent != null )
+                        return this.SolutionExplorerParent.Directory;
                     else
                         throw new ApplicationException( 
                             "Could not determine directory for item. Should not happen" );
