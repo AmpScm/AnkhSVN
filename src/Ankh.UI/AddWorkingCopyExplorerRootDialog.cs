@@ -44,7 +44,6 @@ namespace Ankh.UI
             this.okButton.Size = new System.Drawing.Size( 75, 23 );
             this.okButton.TabIndex = 0;
             this.okButton.Text = "OK";
-            this.okButton.UseVisualStyleBackColor = true;
             // 
             // cancelButton
             // 
@@ -55,7 +54,6 @@ namespace Ankh.UI
             this.cancelButton.Size = new System.Drawing.Size( 75, 23 );
             this.cancelButton.TabIndex = 1;
             this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // workingCopyRootTextBox
             // 
@@ -73,7 +71,6 @@ namespace Ankh.UI
             this.browseFolderButton.Size = new System.Drawing.Size( 31, 23 );
             this.browseFolderButton.TabIndex = 3;
             this.browseFolderButton.Text = "...";
-            this.browseFolderButton.UseVisualStyleBackColor = true;
             this.browseFolderButton.Click += new System.EventHandler( this.browseFolderButton_Click );
             // 
             // AddWorkingCopyExplorerRootDialog

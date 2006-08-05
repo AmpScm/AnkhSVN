@@ -151,7 +151,7 @@ namespace Ankh.UI
 
         private void InitializeColumns()
         {
-            this.Columns.Add("Name", this.characterWidth * NameColumnNumberOfCharacters );
+            this.Columns.Add("Name", this.characterWidth * NameColumnNumberOfCharacters, HorizontalAlignment.Left );
 
             foreach ( PropertyDescriptor pd in this.textPropertyDescriptors )
             {
@@ -161,7 +161,7 @@ namespace Ankh.UI
                     continue;
                 }
 
-                this.Columns.Add( attr.Text, attr.TextWidth * this.characterWidth );
+                this.Columns.Add( attr.Text, attr.TextWidth * this.characterWidth, HorizontalAlignment.Right );
             }
         }
 
