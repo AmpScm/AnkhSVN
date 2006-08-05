@@ -97,15 +97,8 @@ namespace Ankh.UI
                 ListViewItem item = this.GetItemAt( e.X, e.Y );
                 item.Selected = true;
             }
-            base.OnMouseDown( e );
-        }
-
-        protected override void OnMouseDoubleClick( MouseEventArgs e )
-        {
-            base.OnMouseDoubleClick( e );
-
-            // if double clicked on a directory, go to that directory
-            if ( e.Button == MouseButtons.Left )
+            // Double clicks either opens a folder or the item
+            else if ( e.Clicks == 2 && e.Button == MouseButtons.Left )
             {
                 ListViewItem lvi = this.GetItemAt( e.X, e.Y );
                 IFileSystemItem item = lvi.Tag as IFileSystemItem;
@@ -114,7 +107,7 @@ namespace Ankh.UI
                     if ( item.IsContainer )
                     {
                         this.SetDirectory( item );
-                        this.OnCurrentDirectoryChanged(); 
+                        this.OnCurrentDirectoryChanged();
                     }
                     else
                     {
@@ -122,6 +115,7 @@ namespace Ankh.UI
                     }
                 }
             }
+            base.OnMouseDown( e );
         }
 
         protected virtual void OnCurrentDirectoryChanged()
