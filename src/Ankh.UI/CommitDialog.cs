@@ -193,6 +193,8 @@ namespace Ankh.UI
             this.logMessageBox.SelectionStart = this.logMessageBox.SelectionStart + this.logMessageBox.SelectionLength;
             this.logMessageBox.SelectionLength = 0;
 
+            this.dialogResult = CommitDialogResult.Cancel;
+
             this.loaded = true;
         }
 
