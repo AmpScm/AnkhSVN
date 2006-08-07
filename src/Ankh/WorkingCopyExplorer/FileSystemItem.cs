@@ -4,6 +4,7 @@ using Ankh.UI;
 using System.IO;
 using NSvn.Core;
 using Utils;
+using System.Collections;
 
 namespace Ankh.WorkingCopyExplorer
 {
@@ -41,7 +42,7 @@ namespace Ankh.WorkingCopyExplorer
             get { return this.explorer; }
         }
 
-        public override void GetResources( System.Collections.IList list, bool getChildItems, ResourceFilterCallback filter )
+        public override void GetResources( IList list, bool getChildItems, ResourceFilterCallback filter )
         {
             if ( filter( this.svnItem ) )
             {
@@ -64,7 +65,14 @@ namespace Ankh.WorkingCopyExplorer
 
         public void Open()
         {
-            this.explorer.OpenItem( this.SvnItem.Path );
+            try
+            {
+                this.explorer.OpenItem( this.SvnItem.Path );
+            }
+            catch ( Exception ex )
+            {
+                this.Explorer.Context.ErrorHandler.Handle( ex );
+            }
         }
        
         [TextProperty( "TextStatus", Order = 0, TextWidth = 18 )]
@@ -102,24 +110,48 @@ namespace Ankh.WorkingCopyExplorer
         {
             get
             {
-                return StatusImages.GetStatusImageForNodeStatus( this.CurrentStatus );
+                try
+                {
+                    return StatusImages.GetStatusImageForNodeStatus( this.CurrentStatus );
+                }
+                catch ( Exception ex )
+                {
+                    this.explorer.Context.ErrorHandler.Handle( ex );
+                    return 0;
+                }
             }
         }
 
 
         public override bool Equals( object obj )
         {
-            FileSystemItem other = obj as FileSystemItem;
-            if ( other == null )
+            try
             {
+                FileSystemItem other = obj as FileSystemItem;
+                if ( other == null )
+                {
+                    return false;
+                }
+                return PathUtils.AreEqual( this.SvnItem.Path, other.SvnItem.Path );
+            }
+            catch ( Exception ex )
+            {
+                this.explorer.Context.ErrorHandler.Handle( ex );
                 return false;
             }
-            return PathUtils.AreEqual( this.SvnItem.Path, other.SvnItem.Path );
         }
 
         public override int GetHashCode()
         {
-            return this.svnItem.Path.GetHashCode();
+            try
+            {
+                return this.svnItem.Path.GetHashCode();
+            }
+            catch ( Exception ex )
+            {
+                this.explorer.Context.ErrorHandler.Handle( ex );
+                return 0;
+            }
         }
 
         internal void Refresh(SvnClient client)
