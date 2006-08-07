@@ -104,18 +104,38 @@ namespace Ankh.UI
                 IFileSystemItem item = lvi.Tag as IFileSystemItem;
                 if ( item != null )
                 {
-                    if ( item.IsContainer )
-                    {
-                        this.SetDirectory( item );
-                        this.OnCurrentDirectoryChanged();
-                    }
-                    else
-                    {
-                        item.Open();
-                    }
+                    OpenItem( item );
                 }
             }
             base.OnMouseDown( e );
+        }
+
+        protected override void OnKeyDown( KeyEventArgs e )
+        {
+            base.OnKeyDown( e );
+
+            // Enter means open if there's only one selected item
+            if ( e.KeyCode == Keys.Enter && this.SelectedItems.Count == 1)
+            {
+                IFileSystemItem item = this.SelectedItems[ 0 ].Tag as IFileSystemItem;
+                if ( item != null )
+                {
+                    this.OpenItem( item );
+                }
+            }
+        }
+
+        private void OpenItem( IFileSystemItem item )
+        {
+            if ( item.IsContainer )
+            {
+                this.SetDirectory( item );
+                this.OnCurrentDirectoryChanged();
+            }
+            else
+            {
+                item.Open();
+            }
         }
 
         protected virtual void OnCurrentDirectoryChanged()
