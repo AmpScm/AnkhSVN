@@ -20,9 +20,17 @@ namespace Ankh.WorkingCopyExplorer
 
         public override Ankh.UI.IFileSystemItem[] GetChildren()
         {
-            IFileSystemItem[] children = new IFileSystemItem[ this.Children.Count ];
-            this.Children.CopyTo( children, 0 );
-            return children;
+            try
+            {
+                IFileSystemItem[] children = new IFileSystemItem[ this.Children.Count ];
+                this.Children.CopyTo( children, 0 );
+                return children;
+            }
+            catch ( Exception ex )
+            {
+                this.Explorer.Context.ErrorHandler.Handle( ex );
+                return new IFileSystemItem[] { };
+            }
         }
 
         private void FindChildren()

@@ -138,7 +138,14 @@ namespace Ankh.WorkingCopyExplorer
         {
             if ( File.Exists( path ) )
             {
-                this.context.DTE.ItemOperations.OpenFile( path, EnvDTE.Constants.vsViewKindPrimary );
+                if ( path.ToLower().EndsWith( "proj" ) || path.ToLower().EndsWith( ".sln" ) )
+                {
+                    this.Context.DTE.Solution.Open( path );
+                }
+                else
+                {
+                    this.context.DTE.ItemOperations.OpenFile( path, EnvDTE.Constants.vsViewKindPrimary );
+                }
             }
         }
 
