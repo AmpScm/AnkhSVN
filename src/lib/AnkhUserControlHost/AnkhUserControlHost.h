@@ -5,7 +5,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0347 */
-/* at Tue Oct 14 20:33:13 2003
+/* at Mon Aug 07 22:52:23 2006
  */
 /* Compiler settings for AnkhUserControlHost.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)

@@ -168,6 +168,7 @@ public:
 			case VK_RIGHT:
 			case VK_DOWN:
 			case VK_EXECUTE:
+			case VK_RETURN:
 			case VK_ESCAPE:
 			case VK_CANCEL:
 			case VK_F3:
