@@ -23,7 +23,7 @@ namespace NSvn
         {
         public:
             // ctor creates a new top level apr pool
-            Pool()
+            Pool() : ownsPool(true)
             {
                 this->pool = svn_pool_create( 0 );
             }          
@@ -93,7 +93,7 @@ namespace NSvn
                 }
         protected:
              // uses an existing pool as the parent - 
-            Pool( apr_pool_t* parentPool )
+            Pool( apr_pool_t* parentPool ) : ownsPool(true)
             {
                 this->pool = svn_pool_create( parentPool );
             }
@@ -101,8 +101,8 @@ namespace NSvn
         private:
 
             // don't allow copying or assignment
-            Pool( Pool& other ){;}
-            Pool& operator=( Pool& other){ return *this; }        
+            Pool( const Pool& other );// not implemented to not allow accidental use
+            Pool& operator=( const Pool& other);
 
             bool ownsPool;
 
@@ -119,6 +119,12 @@ namespace NSvn
             {
                 this->Clear();
             }
+
+        private:
+
+            // don't allow copying or assignment
+            SubPool( const SubPool& other );
+            SubPool& operator=( const SubPool& other);
         };
     }
 }
