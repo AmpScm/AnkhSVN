@@ -144,35 +144,9 @@ namespace Ankh.Config
         /// <returns></returns>
         public string[] LoadReposExplorerRoots()
         {
-            lock ( this.configFileLock )
-            {
-                string reposRootPath = Path.Combine( this.configDir, REPOSROOTS );
-
-                if ( !File.Exists( reposRootPath ) )
-                    return new string[] { };
-
-                XmlTextReader reader = new XmlTextReader( reposRootPath );
-                try
-                {
-                    XmlSerializer serializer = new XmlSerializer( typeof( ArrayOfStrings ) );
-                    // Use a helper object to work around a bug in the runtime caused by a specific hotfix (see issue #188 for details)
-                    return ( (ArrayOfStrings)serializer.Deserialize( reader ) ).Strings;
-                }
-                catch ( InvalidOperationException ex )
-                {
-                    throw new ConfigException( "Xml error: " + ex.InnerException.Message );
-                }
-                catch ( XmlException ex )
-                {
-                    throw new ConfigException( "Xml error: " + ex.Message );
-                }
-                finally
-                {
-                    reader.Close();
-                } 
-            }
-
+            return LoadStrings(REPOSROOTS);
         }
+
 
         /// <summary>
         /// Store the repository explorer roots in a file in the config dir.
@@ -180,42 +154,20 @@ namespace Ankh.Config
         /// <param name="roots"></param>
         public void SaveReposExplorerRoots( string[] roots  )
         {
-            // Make sure only one process tries to write to this.
-            Mutex mutex = new Mutex( false, "Ankh.Config.ConfigLoader.reposroots.xml" );
-            bool ownsMutex = false;
-            for( int i = 0; i < 3 && !ownsMutex; i++ )
-            {
-                ownsMutex = mutex.WaitOne( 1000, false );
-            }
-            // If we didn't get it by now, give up
-            if ( !ownsMutex )
-                return;
-
-            // Use a helper object to work around a bug in the runtime caused by a specific hotfix (see issue #188 for details)
-            ArrayOfStrings helperArray = new ArrayOfStrings();
-            helperArray.Strings = roots;
-
-            string reposRootPath = null;
-            try
-            {
-                reposRootPath = Path.Combine( this.configDir, REPOSROOTS );
-                using( StreamWriter writer = new StreamWriter( reposRootPath ) )
-                {
-                    XmlSerializer serializer = new XmlSerializer( typeof(ArrayOfStrings) );
-                    serializer.Serialize( writer, helperArray );
-                }
-            }
-            catch( Exception )
-            {                
-                if ( reposRootPath != null )
-                    File.Delete( reposRootPath );
-                throw;
-            }
-            finally
-            {
-                mutex.ReleaseMutex();
-            }
+            SaveStrings(roots, REPOSROOTS, ReposExplorerMutex);
         }
+
+
+        public void SaveWorkingCopyExplorerRoots( string[] roots )
+        {
+            SaveStrings(roots, WorkingCopyExplorerRoots, WorkingCopyExplorerMutex);
+        }
+
+        public string[] LoadWorkingCopyExplorerRoots()
+        {
+            return LoadStrings(WorkingCopyExplorerRoots);
+        }
+        
 
         /// <summary>
         /// Returns the errors from the last attempt to load a configuration file.
@@ -292,6 +244,95 @@ namespace Ankh.Config
                 errors.Add( e.Message );
         }
 
+        private static bool WaitForNamedMutex( string mutexName, out Mutex mutex )
+        {
+            // Make sure only one process tries to write to this.
+            mutex = new Mutex( false, mutexName );
+            bool ownsMutex = false;
+            for ( int i = 0; i < 3 && !ownsMutex; i++ )
+            {
+                ownsMutex = mutex.WaitOne( 1000, false );
+            }
+            return ownsMutex;
+        }
+
+        /// <summary>
+        /// Saves a bunch of strings to the specified file.
+        /// </summary>
+        /// <param name="roots"></param>
+        /// <param name="fileName"></param>
+        /// <param name="mutex"></param>
+        private void SaveStrings(string[] roots, string fileName, string mutexName)
+        {
+            Mutex mutex;
+            if ( !WaitForNamedMutex( mutexName, out mutex ) )
+            {
+                return;
+            }
+
+            // Use a helper object to work around a bug in the runtime caused by a specific hotfix (see issue #188 for details)
+            ArrayOfStrings helperArray = new ArrayOfStrings();
+            helperArray.Strings = roots;
+
+            string path = null;
+            try
+            {
+                path = Path.Combine( this.configDir, fileName );
+                using ( StreamWriter writer = new StreamWriter( path ) )
+                {
+                    XmlSerializer serializer = new XmlSerializer( typeof( ArrayOfStrings ) );
+                    serializer.Serialize( writer, helperArray );
+                }
+            }
+            catch ( Exception )
+            {
+                if ( path != null && File.Exists(path) )
+                    File.Delete( path );
+                throw;
+            }
+            finally
+            {
+                mutex.ReleaseMutex();
+            }
+        }
+
+        /// <summary>
+        /// Loads an array of strings from the specified file.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private string[] LoadStrings( string file )
+        {
+            lock ( this.configFileLock )
+            {
+                string path = Path.Combine( this.configDir, file );
+
+                if ( !File.Exists( path ) )
+                    return new string[] { };
+
+                XmlTextReader reader = new XmlTextReader( path );
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer( typeof( ArrayOfStrings ) );
+                    // Use a helper object to work around a bug in the runtime caused by a specific hotfix (see issue #188 for details)
+                    return ( (ArrayOfStrings)serializer.Deserialize( reader ) ).Strings;
+                }
+                catch ( InvalidOperationException ex )
+                {
+                    throw new ConfigException( "Xml error: " + ex.InnerException.Message );
+                }
+                catch ( XmlException ex )
+                {
+                    throw new ConfigException( "Xml error: " + ex.Message );
+                }
+                finally
+                {
+                    reader.Close();
+                }
+            }
+        }
+
+
         private void WatchConfigFile()
         {
             Debug.Assert( File.Exists( this.ConfigPath ), "Config file does not exist: " + this.ConfigPath );
@@ -343,6 +384,7 @@ namespace Ankh.Config
         private string configDir;
         private FileSystemWatcher configFileWatcher;
         private const string REPOSROOTS="reposroots.xml";
+        private const string WorkingCopyExplorerRoots = "wcroots.xml";
         private const string CONFIGFILENAME = "ankhsvn.xml";
         private const string CONFIGDIRNAME = "AnkhSVN";
         private System.Collections.ArrayList errors;
@@ -350,7 +392,11 @@ namespace Ankh.Config
         private const string configNamespace = "http://ankhsvn.com/Config.xsd";
         private const string configFileResource = "Ankh.Config.Config.xml";
         private const string configSchemaResource = "Ankh.Config.Config.xsd";
+        private const string ReposExplorerMutex = "Ankh.Config.ConfigLoader.reposroots.xml";
+        private const string WorkingCopyExplorerMutex = "Ankh.Config.ConfigLoader.reposroots.xml";
 
+
+        
     }
 
     
