@@ -95,7 +95,10 @@ namespace Ankh.UI
             if ( e.Button == MouseButtons.Right )
             {
                 ListViewItem item = this.GetItemAt( e.X, e.Y );
-                item.Selected = true;
+                if ( item != null )
+                {
+                    item.Selected = true; 
+                }
             }
             // Double clicks either opens a folder or the item
             else if ( e.Clicks == 2 && e.Button == MouseButtons.Left )
