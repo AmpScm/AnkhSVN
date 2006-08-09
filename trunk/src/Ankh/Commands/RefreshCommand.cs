@@ -15,16 +15,16 @@ namespace Ankh.Commands
     {
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
-            return context.AnkhLoadedForSolution ? Enabled : Disabled;
+            return Enabled;
         }
 
         public override void Execute(Ankh.IContext context, string parameters)
         {
             try
             {
-                context.StartOperation( "Refreshing solution explorer" );
+                context.StartOperation( "Refreshing" );
 
-                context.SolutionExplorer.RefreshSelection();
+                context.Selection.RefreshSelection();
             }
             finally
             {
