@@ -30,6 +30,13 @@ namespace Ankh.WorkingCopyExplorer
             }
         }
 
-
+        public override void Refresh( bool rescan )
+        {
+            if ( rescan )
+            {
+                this.SvnItem.Refresh( this.Explorer.Context.Client );
+            }
+            this.CurrentStatus = MergeStatuses( this.CheckChildStatuses(), this.ThisNodeStatus() );
+        }
     }
 }

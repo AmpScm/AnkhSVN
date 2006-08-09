@@ -94,8 +94,8 @@ namespace Ankh.UI
 
         private void FillNode( TreeNode treeNode )
         {
-            // get rid of the dummy node
-            treeNode.Nodes.RemoveAt( 0 );
+            // get rid of the dummy node or existing nodes
+            treeNode.Nodes.Clear();
 
             IFileSystemItem item = treeNode.Tag as IFileSystemItem;
 
@@ -110,6 +110,7 @@ namespace Ankh.UI
 
         private void AddNode( TreeNodeCollection nodes, IFileSystemItem child )
         {
+            child.ItemChanged += new ItemChangedEventHandler( child_ItemChanged );
             TreeNode node = nodes.Add( child.Text );
             node.Tag = child;
 
@@ -118,6 +119,56 @@ namespace Ankh.UI
 
             TreeNode dummy = node.Nodes.Add( "DUMMY" );
             dummy.Tag = DummyTag;
+        }
+
+        void child_ItemChanged( object sender, ItemChangedEventArgs e )
+        {
+            IFileSystemItem item = sender as IFileSystemItem;
+            if ( e.ItemChangedType == ItemChangedType.ChildrenInvalidated && item != null )
+            {
+                this.HandleItemChanged( item );
+            }
+        }
+
+        private void HandleItemChanged( IFileSystemItem item )
+        {
+            TreeNode node = this.SearchForNodeRecursivelyByTag( this.Nodes, item );
+            if ( node != null)
+            {
+                this.RecursivelyUnhookFromEvents( node.Nodes );
+                this.FillNode( node );
+            }
+        }
+
+        private void RecursivelyUnhookFromEvents( TreeNodeCollection nodes )
+        {
+            foreach ( TreeNode node in nodes )
+            {
+                IFileSystemItem item = node.Tag as IFileSystemItem;
+                if ( item != null )
+                {
+                    item.ItemChanged -= new ItemChangedEventHandler( this.child_ItemChanged );
+                }
+
+                RecursivelyUnhookFromEvents( node.Nodes );
+            }
+        }
+
+        private TreeNode SearchForNodeRecursivelyByTag( TreeNodeCollection coll, object tag )
+        {
+            foreach ( TreeNode node in coll )
+            {
+                if ( node.Tag == tag )
+                {
+                    return node;
+                }
+                TreeNode foundNode = SearchForNodeRecursivelyByTag( node.Nodes, tag );
+                if ( foundNode != null )
+                {
+                    return foundNode;
+                }
+            }
+            return null;
         }
 
         private static readonly object DummyTag = new object();

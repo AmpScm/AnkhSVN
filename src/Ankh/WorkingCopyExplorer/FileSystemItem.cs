@@ -10,6 +10,8 @@ namespace Ankh.WorkingCopyExplorer
 {
     internal abstract class FileSystemItem : TreeNode, Ankh.UI.IFileSystemItem
     {
+        public event ItemChangedEventHandler ItemChanged;
+
         public FileSystemItem( FileSystemItem parent, WorkingCopyExplorer explorer, SvnItem svnItem ) : base(parent)
         {
             this.explorer = explorer;
@@ -54,11 +56,7 @@ namespace Ankh.WorkingCopyExplorer
             }
         }
 
-        public override void Refresh( bool rescan )
-        {
-            
-        }
-
+        
 
 
         public abstract IFileSystemItem[] GetChildren();
@@ -196,13 +194,26 @@ namespace Ankh.WorkingCopyExplorer
         {
             return MergeStatuses( this.svnItem );
         }
+
+        protected virtual void OnItemChanged( ItemChangedType changeType )
+        {
+            if ( this.ItemChanged != null )
+            {
+                this.ItemChanged( this, new ItemChangedEventArgs(changeType) );
+            }
+        }
+
+        protected override void OnChanged()
+        {
+            base.OnChanged();
+
+            this.OnItemChanged( ItemChangedType.StatusChanged );
+        }
         
 
 
         private WorkingCopyExplorer explorer;
         protected SvnItem svnItem;
-
-
 
         
 

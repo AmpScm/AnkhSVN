@@ -32,37 +32,12 @@ namespace Ankh.UI
                 this.InitializePropertyDescriptors( directory );
                 this.InitializeCharacterWidth();
                 this.InitializeColumns();
-
             }
 
-            this.UnhookEvents();
-
-            this.currentDirectory = directory;
-
-            this.BeginUpdate();
-            try
-            {
-                this.Items.Clear();
-
-                foreach ( IFileSystemItem item in directory.GetChildren() )
-                {
-                    ListViewItem lvi = this.Items.Add( item.Text );
-
-                    FormatListViewItem( item, lvi );
-
-                    lvi.Tag = item;
-
-                    // we need to know when this item changes
-                    item.Changed += new EventHandler( item_Changed );
-                }
-
-                this.Sort();
-            }
-            finally
-            {
-                this.EndUpdate();
-            }
+            AddChildren( directory );
         }
+
+        
 
         public IFileSystemItem CurrentDirectory
         {
@@ -150,7 +125,38 @@ namespace Ankh.UI
         }
 
 
-        
+        private void AddChildren( IFileSystemItem directory )
+        {
+            this.UnhookEvents();
+
+            this.currentDirectory = directory;
+
+            this.currentDirectory.ItemChanged += new ItemChangedEventHandler( this.item_Changed );
+
+            this.BeginUpdate();
+            try
+            {
+                this.Items.Clear();
+
+                foreach ( IFileSystemItem item in directory.GetChildren() )
+                {
+                    ListViewItem lvi = this.Items.Add( item.Text );
+
+                    FormatListViewItem( item, lvi );
+
+                    lvi.Tag = item;
+
+                    // we need to know when this item changes
+                    item.ItemChanged += new ItemChangedEventHandler( item_Changed );
+                }
+
+                this.Sort();
+            }
+            finally
+            {
+                this.EndUpdate();
+            }
+        }
 
         private void InitializePropertyDescriptors( IFileSystemItem directory )
         {
@@ -204,15 +210,32 @@ namespace Ankh.UI
                 IFileSystemItem fileSystemItem = lvi.Tag as IFileSystemItem;
                 if ( fileSystemItem != null )
                 {
-                    fileSystemItem.Changed -= new EventHandler( this.item_Changed );
+                    fileSystemItem.ItemChanged -= new ItemChangedEventHandler( this.item_Changed );
                 }
+            }
+
+            if ( this.currentDirectory != null )
+            {
+                this.currentDirectory.ItemChanged -= new ItemChangedEventHandler( this.item_Changed );
             }
         }
 
-        void item_Changed( object sender, EventArgs e )
+        void item_Changed( object sender, ItemChangedEventArgs e )
         {
             IFileSystemItem fileSystemItem = sender as IFileSystemItem;
             if ( fileSystemItem != null )
+            {
+                HandleItemChange( fileSystemItem, e.ItemChangedType );
+            }
+        }
+
+        private void HandleItemChange( IFileSystemItem fileSystemItem, ItemChangedType changeType )
+        {
+            if ( fileSystemItem == this.currentDirectory && changeType == ItemChangedType.ChildrenInvalidated )
+            {
+                this.InvalidateChildren();
+            }
+            else
             {
                 ListViewItem lvi = this.FindListViewItemWithTag( fileSystemItem );
                 if ( lvi != null )
@@ -223,6 +246,11 @@ namespace Ankh.UI
                     this.FormatListViewItem( fileSystemItem, lvi );
                 }
             }
+        }
+
+        private void InvalidateChildren()
+        {
+            this.AddChildren( this.currentDirectory );
         }
 
         private ListViewItem FindListViewItemWithTag( IFileSystemItem fileSystemItem )

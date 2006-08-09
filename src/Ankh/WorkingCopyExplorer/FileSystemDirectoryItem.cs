@@ -11,6 +11,7 @@ namespace Ankh.WorkingCopyExplorer
             : base( null, explorer, item )
         {
             this.FindChildren();
+            this.Refresh( false );
         }
 
         public override bool IsContainer
@@ -32,6 +33,19 @@ namespace Ankh.WorkingCopyExplorer
                 return new IFileSystemItem[] { };
             }
         }
+
+        public override void Refresh( bool rescan )
+        {
+            if ( rescan )
+            {
+                this.Explorer.Context.StatusCache.Status( this.svnItem.Path );
+                this.FindChildren();
+
+                this.OnItemChanged( ItemChangedType.ChildrenInvalidated );
+            }
+            this.CurrentStatus = MergeStatuses( this.CheckChildStatuses(), this.ThisNodeStatus() );
+        }
+
 
         private void FindChildren()
         {
