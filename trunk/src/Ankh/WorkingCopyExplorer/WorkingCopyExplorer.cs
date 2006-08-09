@@ -66,7 +66,7 @@ namespace Ankh.WorkingCopyExplorer
                 FileSystemItem item = selectedItem as FileSystemItem;
                 if ( item != null )
                 {
-                    item.Refresh(false);
+                    item.Refresh();
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace Ankh.WorkingCopyExplorer
         {
             foreach ( FileSystemItem item in this.roots )
             {
-                item.Refresh( true );
+                item.Refresh();
             }
         }
 

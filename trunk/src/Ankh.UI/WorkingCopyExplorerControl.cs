@@ -278,6 +278,12 @@ namespace Ankh.UI
             }
 
             #endregion
+
+            #region IFileSystemItem Members
+
+            public event ItemChangedEventHandler ItemChanged;
+
+            #endregion
         }
 
         private class FileSystemDirectoryMock : FileSystemMockBase, IFileSystemItem
@@ -344,6 +350,12 @@ namespace Ankh.UI
             {
                 throw new Exception( "The method or operation is not implemented." );
             }
+
+            #endregion
+
+            #region IFileSystemItem Members
+
+            public event ItemChangedEventHandler ItemChanged;
 
             #endregion
         }
