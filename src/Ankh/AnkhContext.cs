@@ -74,8 +74,6 @@ namespace Ankh
                 new RepositoryExplorer.Controller( this );
             this.workingCopyExplorer =
                 new Ankh.WorkingCopyExplorer.WorkingCopyExplorer( this );
-
-            this.workingCopyExplorer.AddRoot( @"D:\halftemp\wc\ConsoleApplication1" );
         }
 
         
