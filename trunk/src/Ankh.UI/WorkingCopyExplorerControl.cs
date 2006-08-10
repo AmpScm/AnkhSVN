@@ -5,11 +5,17 @@ using System.Collections;
 using System.IO;
 using System.Drawing;
 using System.Diagnostics;
+using Utils.Win32;
+using System.ComponentModel;
 
 namespace Ankh.UI
 {
     public class WorkingCopyExplorerControl : UserControl
     {
+        public event CancelEventHandler ValidatingNewRoot;
+
+        public event EventHandler WantNewRoot;
+
         public WorkingCopyExplorerControl()
         {
             this.InitializeComponent();
@@ -19,8 +25,11 @@ namespace Ankh.UI
 
             this.treeView.MouseDown += new MouseEventHandler( HandleMouseDown );
             this.listView.MouseDown += new MouseEventHandler( HandleMouseDown );
-        }
 
+            this.newRootTextBox.TextChanged += new EventHandler( newRootTextBox_TextChanged );
+
+            Win32.SHAutoComplete( this.newRootTextBox.Handle, Shacf.FileSysDirs );
+        }
 
         public IContextMenu CustomContextMenu
         {
@@ -33,6 +42,12 @@ namespace Ankh.UI
                 this.customContextMenu = value;
             }
         }
+
+        public string NewRootPath
+        {
+            get { return this.newRootTextBox.Text; }
+        }
+
 
         public ImageList StateImages
         {
@@ -74,6 +89,17 @@ namespace Ankh.UI
             return this.selection;
         }
 
+        void newRootTextBox_TextChanged( object sender, EventArgs e )
+        {
+            if ( this.ValidatingNewRoot != null )
+            {
+                CancelEventArgs args = new CancelEventArgs( true );
+                this.ValidatingNewRoot( this, args );
+
+                this.addButton.Enabled = ! args.Cancel;
+            }
+        }
+
         void treeView_SelectedItemChanged( object sender, EventArgs e )
         {
             IFileSystemItem item = this.treeView.SelectedItem;
@@ -108,15 +134,50 @@ namespace Ankh.UI
             }
         }
 
+        private void newRootTextBox_KeyDown( object sender, KeyEventArgs e )
+        {
+            if ( e.KeyCode == Keys.Enter && this.addButton.Enabled )
+            {
+                this.AddNewRoot();
+            }
+        }
+
+        private void addButton_Click( object sender, EventArgs e )
+        {
+            AddNewRoot();
+        }
+
+        private void AddNewRoot()
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                if ( this.WantNewRoot != null )
+                {
+                    this.WantNewRoot( this, EventArgs.Empty );
+                }
+
+                this.newRootTextBox.Text = "";
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
         #region InitializeComponent
         private void InitializeComponent()
         {
             this.explorerPanel = new System.Windows.Forms.Panel();
-            this.listView = new Ankh.UI.FileSystemDetailsView();
             this.splitter = new System.Windows.Forms.Splitter();
-            this.treeView = new Ankh.UI.FileSystemTreeView();
             this.topPanel = new System.Windows.Forms.Panel();
+            this.addWorkingCopyLabel = new System.Windows.Forms.Label();
+            this.addButton = new System.Windows.Forms.Button();
+            this.newRootTextBox = new System.Windows.Forms.TextBox();
+            this.listView = new Ankh.UI.FileSystemDetailsView();
+            this.treeView = new Ankh.UI.FileSystemTreeView();
             this.explorerPanel.SuspendLayout();
+            this.topPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // explorerPanel
@@ -128,16 +189,7 @@ namespace Ankh.UI
             this.explorerPanel.Location = new System.Drawing.Point( 0, 29 );
             this.explorerPanel.Name = "explorerPanel";
             this.explorerPanel.Size = new System.Drawing.Size( 902, 604 );
-            this.explorerPanel.TabIndex = 0;
-            // 
-            // listView
-            // 
-            this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView.Location = new System.Drawing.Point( 210, 0 );
-            this.listView.Name = "listView";
-            this.listView.Size = new System.Drawing.Size( 692, 604 );
-            this.listView.TabIndex = 2;
-            this.listView.View = System.Windows.Forms.View.Details;
+            this.explorerPanel.TabIndex = 1;
             // 
             // splitter
             // 
@@ -147,21 +199,64 @@ namespace Ankh.UI
             this.splitter.TabIndex = 1;
             this.splitter.TabStop = false;
             // 
-            // treeView
-            // 
-            this.treeView.Dock = System.Windows.Forms.DockStyle.Left;
-            this.treeView.Location = new System.Drawing.Point( 0, 0 );
-            this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size( 207, 604 );
-            this.treeView.TabIndex = 0;
-            // 
             // topPanel
             // 
+            this.topPanel.Controls.Add( this.addWorkingCopyLabel );
+            this.topPanel.Controls.Add( this.addButton );
+            this.topPanel.Controls.Add( this.newRootTextBox );
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.topPanel.Location = new System.Drawing.Point( 0, 0 );
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size( 902, 29 );
-            this.topPanel.TabIndex = 1;
+            this.topPanel.TabIndex = 0;
+            // 
+            // addWorkingCopyLabel
+            // 
+            this.addWorkingCopyLabel.AutoSize = true;
+            this.addWorkingCopyLabel.Location = new System.Drawing.Point( 3, 8 );
+            this.addWorkingCopyLabel.Name = "addWorkingCopyLabel";
+            this.addWorkingCopyLabel.Size = new System.Drawing.Size( 96, 13 );
+            this.addWorkingCopyLabel.TabIndex = 2;
+            this.addWorkingCopyLabel.Text = "Add working copy:";
+            // 
+            // addButton
+            // 
+            this.addButton.Enabled = false;
+            this.addButton.Location = new System.Drawing.Point( 351, 2 );
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size( 65, 23 );
+            this.addButton.TabIndex = 1;
+            this.addButton.Text = "Add";
+            this.addButton.Click += new System.EventHandler( this.addButton_Click );
+            // 
+            // newRootTextBox
+            // 
+            this.newRootTextBox.Location = new System.Drawing.Point( 105, 5 );
+            this.newRootTextBox.Name = "newRootTextBox";
+            this.newRootTextBox.Size = new System.Drawing.Size( 240, 21 );
+            this.newRootTextBox.TabIndex = 0;
+            this.newRootTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler( this.newRootTextBox_KeyDown );
+            // 
+            // listView
+            // 
+            this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView.HideSelection = false;
+            this.listView.Location = new System.Drawing.Point( 210, 0 );
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size( 692, 604 );
+            this.listView.TabIndex = 2;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
+            // 
+            // treeView
+            // 
+            this.treeView.Dock = System.Windows.Forms.DockStyle.Left;
+            this.treeView.HideSelection = false;
+            this.treeView.Location = new System.Drawing.Point( 0, 0 );
+            this.treeView.Name = "treeView";
+            this.treeView.SelectedItem = null;
+            this.treeView.Size = new System.Drawing.Size( 207, 604 );
+            this.treeView.TabIndex = 0;
             // 
             // WorkingCopyExplorerControl
             // 
@@ -170,6 +265,8 @@ namespace Ankh.UI
             this.Name = "WorkingCopyExplorerControl";
             this.Size = new System.Drawing.Size( 902, 633 );
             this.explorerPanel.ResumeLayout( false );
+            this.topPanel.ResumeLayout( false );
+            this.topPanel.PerformLayout();
             this.ResumeLayout( false );
 
         }
@@ -183,7 +280,14 @@ namespace Ankh.UI
         private IFileSystemItem[] selection = new IFileSystemItem[] { };
         private ArrayList roots;
         private Panel topPanel;
+        private Label addWorkingCopyLabel;
+        private Button addButton;
+        private TextBox newRootTextBox;
 
         private IContextMenu customContextMenu;
+
+        
+
+       
     }
 }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Collections;
 using System.Threading;
 using System.Reflection;
+using NSvn.Core;
 
 namespace Ankh.WorkingCopyExplorer
 {
@@ -24,7 +25,12 @@ namespace Ankh.WorkingCopyExplorer
             this.LoadRoots();
 
             this.Context.Unloading += new EventHandler( Context_Unloading );
+
+            this.control.WantNewRoot += new EventHandler( control_WantNewRoot );
+            this.control.ValidatingNewRoot += new System.ComponentModel.CancelEventHandler( control_ValidatingNewRoot );
         }
+
+        
 
         
 
@@ -164,6 +170,24 @@ namespace Ankh.WorkingCopyExplorer
         void Context_Unloading( object sender, EventArgs e )
         {
             this.SaveRoots();
+        }
+
+        void control_ValidatingNewRoot( object sender, System.ComponentModel.CancelEventArgs e )
+        {
+            e.Cancel = ! IsRootValid( this.control.NewRootPath );
+        }
+
+        private bool IsRootValid( string path )
+        {
+            return Directory.Exists( path ) && SvnUtils.IsWorkingCopyPath( path );
+        }
+
+        void control_WantNewRoot( object sender, EventArgs e )
+        {
+            if ( this.IsRootValid( this.control.NewRootPath ) )
+            {
+                this.AddRoot(this.control.NewRootPath);
+            }
         }
 
         private void SaveRoots()
