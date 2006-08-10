@@ -49,9 +49,19 @@ namespace Ankh.Commands
             IList resources = context.Selection.GetSelectionResources(
                 true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
 
+            // filter out directories
+            ArrayList checkedResources = new ArrayList();
+            foreach ( SvnItem item in resources )
+            {
+                if ( item.IsFile )
+                {
+                    checkedResources.Add( item );
+                }
+            }
+
             // are we shifted?
             PathSelectorInfo info = new PathSelectorInfo( "Select items for diffing", 
-                resources, resources );
+                resources, checkedResources );
             info.RevisionStart = Revision.Base;
             info.RevisionEnd = Revision.Working;
 
