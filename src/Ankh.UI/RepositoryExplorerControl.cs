@@ -77,7 +77,7 @@ namespace Ankh.UI
             { 
                 return 
                     this.treeView.SelectedNode != null ? 
-                    (IRepositoryTreeNode)this.treeView.SelectedNode.Tag :
+                    this.treeView.SelectedNode.Tag as IRepositoryTreeNode :
                     null;
             }
         }
