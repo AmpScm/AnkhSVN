@@ -245,7 +245,6 @@ namespace Ankh.UI
             this.listView.Name = "listView";
             this.listView.Size = new System.Drawing.Size( 692, 604 );
             this.listView.TabIndex = 2;
-            this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
             // 
             // treeView
