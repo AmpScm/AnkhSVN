@@ -147,8 +147,8 @@
                 <include name="apr-util\Release\libaprutil.dll" unless="${debug}" />
                 <include name="apr-iconv\Debug\libapriconv.dll" if="${debug}" />
                 <include name="apr-iconv\Release\libapriconv.dll" unless="${debug}" />
-                <include name="db4-win32\bin\libdb42d.dll" if="${debug}" />
-                <include name="db4-win32\bin\libdb42.dll" unless="${debug}" />
+                <include name="db4-win32\bin\libdb44d.dll" if="${debug}" />
+                <include name="db4-win32\bin\libdb44.dll" unless="${debug}" />
             </fileset>
         </copy>
          
