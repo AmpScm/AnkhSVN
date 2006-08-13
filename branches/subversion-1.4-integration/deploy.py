@@ -22,8 +22,8 @@ SUBVERSION_VERSION="1.3.2"
 subversion_dir=""
 
 # The URL of neon
-NEON = "http://www.webdav.org/neon/neon-0.24.7.tar.gz"
-NEON_VERSION="0.24.7"
+NEON = "http://www.webdav.org/neon/neon-0.25.5.tar.gz"
+NEON_VERSION="0.25.5"
 neon_dir=""
 
 # Berkeley DB
@@ -54,11 +54,11 @@ VSVARS="I:\\Program Files\\Microsoft Visual Studio .NET\\Common7\\Tools\\vsvars3
 # APR
 APACHE_CVS = ":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
 
-APR = "http://svn.apache.org/repos/asf/apr/apr/tags/0.9.7/"
-APR_VERSION="0.9.7"
+APR = "http://svn.apache.org/repos/asf/apr/apr/tags/0.9.12/"
+APR_VERSION="0.9.12"
 
-APR_UTIL = "http://svn.apache.org/repos/asf/apr/apr-util/tags/0.9.7/"
-APR_UTIL_VERSION="0.9.7"
+APR_UTIL = "http://svn.apache.org/repos/asf/apr/apr-util/tags/0.9.12/"
+APR_UTIL_VERSION="0.9.12"
 
 APR_ICONV = "http://svn.apache.org/repos/asf/apr/apr-iconv/tags/0.9.7/"
 APR_ICONV_VERSION="0.9.7"
