@@ -215,6 +215,7 @@ def do_neon():
         download_and_extract( NEON, ".", "neon" )
     
 def do_zlib():    
+    global zlib_target_dir
     if ( "zlib_target_dir" in globals() and zlib_target_dir ):
         print "Already have zlib. Not doing it"
         return
@@ -224,11 +225,13 @@ def do_zlib():
     #os.mkdir( "zlib" )
     #os.chdir("zlib")
     download_and_extract( ZLIB, ".", "zlib" )
-    global zlib_target_dir
+    
     zlib_target_dir = os.path.abspath( "zlib" )
     pop_location()
 
 def do_openssl():
+    global openssl_target_dir
+
     if  "openssl_target_dir" in globals() and openssl_target_dir:
         print "Already have OpenSSL. Not doing it"
         return
@@ -244,7 +247,6 @@ def do_openssl():
     """
 
     # now build it
-    global openssl_target_dir
     openssl_target_dir = os.path.abspath( "openssl" )
 
     os.chdir(openssl_target_dir)
@@ -357,6 +359,7 @@ def do_subversion():
 
     push_location()
 
+    global subversion_dir
     if "subversion_dir" in globals() and subversion_dir:
         print "Already have a subversion directory. Not doing it."
         return
@@ -404,7 +407,7 @@ def do_subversion():
     pop_location()
 
     # so that the Ankh  build will pick up on it.
-    global subversion_dir
+    
     subversion_dir = os.path.abspath("subversion")
      
 def get_revision(dir):
