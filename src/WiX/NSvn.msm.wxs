@@ -30,8 +30,8 @@
                     KeyPath="yes" Vital="yes" src="..\lib\msvcr70.dll" />
             </Component>
             <Component Id="C_LIBDB" Guid="5A40F2B8-3F14-474a-B863-7526D87BF515">
-                <File Id="CF_libdb.dll" Name="LibDB42.dll"
-                    KeyPath="yes" Vital="yes" src="$(var.svn.dir)\db4-win32\bin\libdb42.dll" />
+                <File Id="CF_libdb.dll" Name="LibDB44.dll"
+                    KeyPath="yes" Vital="yes" src="$(var.svn.dir)\db4-win32\bin\libdb44.dll" />
             </Component>
 
         </DirectoryRef>
