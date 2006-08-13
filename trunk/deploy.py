@@ -1,30 +1,35 @@
+import win32com.client
+
 import sys, os, os.path
 import glob
 import shutil
 import urllib
 import tarfile
 
+
+vcprojectengine = "VisualStudio.VCProjectEngine.7"
+
 # The URL to build from
-ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/trunk"
+ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/branches/subversion-1.4-integration"
 ANKHSVN = "%s/src" % ANKHSVN_ROOT
 
 # version numbers to put in the filename
 MAJOR, MINOR, PATCH, LABEL = 0, 6, 0, "snapshot_20"
 
 # The URL of the Subversion version
-SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.3.2/"
+SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.4.0-rc4/"
 SUBVERSION_VERSION="1.3.2"
 subversion_dir=""
 
 # The URL of neon
-NEON = "http://www.webdav.org/neon/neon-0.24.7.tar.gz"
-NEON_VERSION="0.24.7"
+NEON = "http://www.webdav.org/neon/neon-0.25.5.tar.gz"
+NEON_VERSION="0.25.5"
 neon_dir=""
 
 # Berkeley DB
-BDB = "ftp://sleepycat1.inetu.net/releases/db-4.2.52.tar.gz"
-BDB_DIR = "db-4.2.52"
-BDB_VERSION="4.2.52"
+BDB = "ftp://ftp.sleepycat.com/releases/db-4.4.20.tar.gz"
+BDB_DIR = "db-4.4.20"
+BDB_VERSION="4.4.20"
 
 # OpenSSL
 OPENSSL = "http://www.openssl.org/source/openssl-0.9.8a.tar.gz"
@@ -49,21 +54,21 @@ VSVARS="I:\\Program Files\\Microsoft Visual Studio .NET\\Common7\\Tools\\vsvars3
 # APR
 APACHE_CVS = ":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
 
-APR = "http://svn.apache.org/repos/asf/apr/apr/tags/0.9.6/"
-APR_VERSION="0.9.6"
+APR = "http://svn.apache.org/repos/asf/apr/apr/tags/0.9.12/"
+APR_VERSION="0.9.12"
 
-APR_UTIL = "http://svn.apache.org/repos/asf/apr/apr-util/tags/0.9.6/"
-APR_UTIL_VERSION="0.9.6"
+APR_UTIL = "http://svn.apache.org/repos/asf/apr/apr-util/tags/0.9.12/"
+APR_UTIL_VERSION="0.9.12"
 
-APR_ICONV = "http://svn.apache.org/repos/asf/apr/apr-iconv/tags/0.9.6/"
-APR_ICONV_VERSION="0.9.6"
+APR_ICONV = "http://svn.apache.org/repos/asf/apr/apr-iconv/tags/0.9.7/"
+APR_ICONV_VERSION="0.9.7"
 
 
 # Whether to use nant to build Ankh
 USE_NANT = 1
 
 
-TMP = "T:\\"
+TMP = "D:\\tmp\\"
 
 # setting CONFIG to the special value "__ALL__" will cause both Debug and Release to be built
 CONFIG = "Release"
@@ -115,7 +120,19 @@ def copy_glob( srcpattern, targetdir ):
     for file in files:
         shutil.copy( file, targetdir )
     
-    
+def convertToVcProj( dspFiles ):
+    vcproj = win32com.client.Dispatch(vcprojectengine)
+    for dsp in dspFiles:
+        dspFile = os.path.abspath( dsp )
+        root, ext = os.path.splitext(dspFile)
+        vcprojFile = root + ".vcproj"
+        
+        print "Converting %s to %s" % (dspFile, vcprojFile)
+        project = vcproj.LoadProject( dspFile )
+        
+
+        project.ProjectFile = vcprojFile
+        project.Save()    
 
 
 
@@ -144,6 +161,8 @@ def create_build_directory():
 
     #~ remove-item run_bat
 #~ }
+
+
 
 def parse_args():
     # go through any var=val args on the command line
@@ -225,13 +244,11 @@ def do_zlib():
     #os.mkdir( "zlib" )
     #os.chdir("zlib")
     download_and_extract( ZLIB, ".", "zlib" )
-    
     zlib_target_dir = os.path.abspath( "zlib" )
     pop_location()
 
 def do_openssl():
     global openssl_target_dir
-
     if  "openssl_target_dir" in globals() and openssl_target_dir:
         print "Already have OpenSSL. Not doing it"
         return
@@ -358,6 +375,8 @@ def do_apr():
 def do_subversion():
 
     push_location()
+    
+    global subversion_dir
 
     global subversion_dir
     if "subversion_dir" in globals() and subversion_dir:
@@ -373,10 +392,21 @@ def do_subversion():
     do_zlib()
     
     checkout( SUBVERSION, "subversion" )
-
     os.chdir( "subversion" )
-
+    
     do_apr()
+
+    
+    print "Generating APR .vcproj files"
+    convertToVcProj( ( \
+        "apr\\libapr.dsp", \
+        "apr-iconv\\libapriconv.dsp", \
+        "apr-iconv\\ccs\libapriconv_ccs_modules.dsp", \
+        "apr-iconv\\ces\libapriconv_ces_modules.dsp", \
+        "apr-util\\libaprutil.dsp", \
+        "apr-util\\uri\\gen_uri_delims.dsp", \
+        "apr-util\\xml\\expat\\lib\\xml.dsp") )
+
     do_berkeley()
 
     print """
@@ -396,6 +426,8 @@ def do_subversion():
     #showpath
     print "Generating VC++ solution files"
     run ("python %s %s" % (gen_make, opts) )
+	
+
     
     "Building Subversion"
     if CONFIG == "__ALL__":
@@ -407,7 +439,6 @@ def do_subversion():
     pop_location()
 
     # so that the Ankh  build will pick up on it.
-    
     subversion_dir = os.path.abspath("subversion")
      
 def get_revision(dir):
@@ -508,11 +539,13 @@ def zip_svn_tree():
 def do_ankh():
     # do_subversion
     #
+
+
+    do_subversion()
+    
     checkout( ANKHSVN, "src" )
     
     REVISION = get_revision("src").strip()
-
-    do_subversion()
 
     toname = "..\\AnkhSetup-%s.%s.%s.%s-%s.msi" %  (MAJOR, MINOR, PATCH, REVISION, LABEL)
 
