@@ -56,7 +56,7 @@ namespace Ankh.Commands
                 if ( completed )
                 {
                     if ( !context.ReloadSolutionIfNecessary() )
-                        context.SolutionExplorer.RefreshSelection();
+                        context.Selection.RefreshSelection();
                 }
             }
             finally
