@@ -17,10 +17,11 @@ namespace NSvn
         {
         private public:
             Status( svn_wc_status2_t* status, apr_pool_t* pool ) :
-        textStatus( static_cast<StatusKind>(status->text_status) ),
+            textStatus( static_cast<StatusKind>(status->text_status) ),
             propertyStatus( static_cast<StatusKind>(status->prop_status) ),
             locked( status->locked != 0 ),
             copied( status->copied != 0 ),
+            switched( status->switched != 0 ),
             repositoryTextStatus( 
             static_cast<StatusKind>(status->repos_text_status) ),
             repositoryPropertyStatus(
