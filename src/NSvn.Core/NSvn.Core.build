@@ -17,7 +17,7 @@
         /I "${svndir}\apr-iconv\include" /I "${svndir}\apr-util\include" 
         /I "${svndir}\subversion\include" 
         /AI "..\Utils\${build.dir}"
-        /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /FD /EHsc /MDd /GS /W3 
+        /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /D "SVN_NEON_0_25=1" /FD /EHsc /MDd /GS /W3 
         /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\' 
         if="${debug}"/>
     
@@ -25,7 +25,7 @@
         /I "${svndir}\apr-iconv\include" /I "${svndir}\apr-util\include" 
         /I "${svndir}\subversion\include" /AI "..\NSvn.Common\bin\Release" 
         /AI "..\Utils\${build.dir}"
-        /D "WIN32" /D "_MBCS" /D "_WINDLL" /FD /EHsc /MD /GS  /W3 
+        /D "WIN32" /D "_MBCS" /D "_WINDLL" /D "SVN_NEON_0_25=1" /FD /EHsc /MD /GS  /W3 
         /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\'
         unless="${debug}"/>
 
@@ -42,6 +42,7 @@
         ${svndir}\Debug\subversion\libsvn_ra\libsvn_ra-1.lib 
         ${svndir}\Debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib 
         ${svndir}\neon\libneonD.lib 
+        ${svndir}\zlib\zlibstatD.lib
         ${svndir}\Debug\subversion\libsvn_wc\libsvn_wc-1.lib 
         ${svndir}\Debug\subversion\libsvn_subr\libsvn_subr-1.lib 
         ${svndir}\Debug\subversion\libsvn_client\libsvn_client-1.lib 
@@ -66,6 +67,7 @@
         ${svndir}\Release\subversion\libsvn_ra\libsvn_ra-1.lib 
         ${svndir}\Release\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib 
         ${svndir}\neon\libneon.lib 
+        ${svndir}\zlib\zlibstat.lib
         ${svndir}\Release\subversion\libsvn_wc\libsvn_wc-1.lib 
         ${svndir}\Release\subversion\libsvn_subr\libsvn_subr-1.lib 
         ${svndir}\Release\subversion\libsvn_client\libsvn_client-1.lib 
