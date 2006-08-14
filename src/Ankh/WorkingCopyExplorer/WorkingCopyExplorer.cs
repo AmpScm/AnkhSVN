@@ -149,6 +149,11 @@ namespace Ankh.WorkingCopyExplorer
                 }
             }
 
+            foreach ( SvnItem item in this.statusCache.GetDeletions( directoryItem.Path ) )
+            {
+                items.Add( FileSystemItem.Create( this, item ) );
+            }
+
             return (IFileSystemItem[])items.ToArray( typeof( IFileSystemItem ) );
         }
 
