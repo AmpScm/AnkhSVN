@@ -66,23 +66,24 @@ namespace Ankh.UI
 
         protected override void OnMouseDown( MouseEventArgs e )
         {
+            ListViewItem lvi = this.GetItemAt( e.X, e.Y );
+            if ( lvi == null )
+            {
+                return;
+            }
+
             // ensure right mouse clicks cause a selection
             if ( e.Button == MouseButtons.Right )
             {
-                ListViewItem item = this.GetItemAt( e.X, e.Y );
-                if ( item != null )
-                {
-                    item.Selected = true; 
-                }
+                lvi.Selected = true; 
             }
             // Double clicks either opens a folder or the item
             else if ( e.Clicks == 2 && e.Button == MouseButtons.Left )
             {
-                ListViewItem lvi = this.GetItemAt( e.X, e.Y );
-                IFileSystemItem item = lvi.Tag as IFileSystemItem;
-                if ( item != null )
+                IFileSystemItem fileSystemItem = lvi.Tag as IFileSystemItem;
+                if ( fileSystemItem != null )
                 {
-                    OpenItem( item );
+                    OpenItem( fileSystemItem );
                 }
             }
             base.OnMouseDown( e );
