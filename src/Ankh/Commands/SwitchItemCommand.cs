@@ -54,7 +54,7 @@ namespace Ankh.Commands
                 context.UIShell.RunWithProgressDialog( runner, "Switching" );
                 if ( !context.ReloadSolutionIfNecessary() )
                 {
-                    context.SolutionExplorer.RefreshSelection();
+                    context.Selection.RefreshSelection();
                 }
             }
             finally
