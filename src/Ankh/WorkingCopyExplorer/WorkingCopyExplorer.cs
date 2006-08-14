@@ -7,6 +7,7 @@ using System.Collections;
 using System.Threading;
 using System.Reflection;
 using NSvn.Core;
+using Utils;
 
 namespace Ankh.WorkingCopyExplorer
 {
@@ -142,7 +143,10 @@ namespace Ankh.WorkingCopyExplorer
             foreach ( string path in Directory.GetFileSystemEntries( directoryItem.Path ) )
             {
                 SvnItem item = this.statusCache[ path ];
-                items.Add( FileSystemItem.Create(this, item) );
+                if ( PathUtils.GetName( item.Path ) != Client.AdminDirectoryName )
+                {
+                    items.Add( FileSystemItem.Create( this, item ) );
+                }
             }
 
             return (IFileSystemItem[])items.ToArray( typeof( IFileSystemItem ) );
