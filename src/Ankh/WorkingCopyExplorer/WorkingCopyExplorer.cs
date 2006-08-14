@@ -174,7 +174,14 @@ namespace Ankh.WorkingCopyExplorer
 
         void control_ValidatingNewRoot( object sender, System.ComponentModel.CancelEventArgs e )
         {
-            e.Cancel = ! IsRootValid( this.control.NewRootPath );
+            try
+            {
+                e.Cancel = !IsRootValid( this.control.NewRootPath );
+            }
+            catch ( Exception ex )
+            {
+                this.Context.ErrorHandler.Handle( ex );
+            }
         }
 
         private bool IsRootValid( string path )
@@ -184,9 +191,16 @@ namespace Ankh.WorkingCopyExplorer
 
         void control_WantNewRoot( object sender, EventArgs e )
         {
-            if ( this.IsRootValid( this.control.NewRootPath ) )
+            try
             {
-                this.AddRoot(this.control.NewRootPath);
+                if ( this.IsRootValid( this.control.NewRootPath ) )
+                {
+                    this.AddRoot( this.control.NewRootPath );
+                }
+            }
+            catch ( Exception ex )
+            {
+                this.Context.ErrorHandler.Handle( ex );
             }
         }
 
