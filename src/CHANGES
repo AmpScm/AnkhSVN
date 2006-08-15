@@ -2,6 +2,35 @@ Version 0.7.0 (released ??.09.2004)
 This release was built against Subversion 1.4.0, Neon 0.25.5, 
 openssl 0.9.8a and Berkeley DB 4.4.20
 
+* Internal diff no longer shows duplicates
+* Fix a memory leak in the NSvn.Core.Pool class
+* Clicking the X in the commit dialog now performs a cancel, regardless of whether the most recent action
+  was a cancel or not
+* NSvn exceptions are now serializable
+* Commit dialog now supports Ctrl-Enter for proceeding with a commit
+* Commit dialog text control now supports Ctrl-A to select the whole text
+* NSvn.Core.Client.Delete now supports the 'force' parameter... :-/
+* Status icons in the solution explorer are no longer overwritten by VSS ones
+* Configuration dialog has templates for the most common diff and merge tools
+* Individual project items can now be refreshed with the Ankh->Refresh command
+* The '?' status no longer propagates up the solution explorer treeview
+* New projects are now automatically SVN-added if they are versionable
+* Add Solution To Subversion Repository now warns the user if some projects are not under the solution root
+* New configuration dialog
+* Config file changes are picked up without having to restart VS
+* Fix for a memory leak in the solution explorer
+* Redesigned delete support
+* Support for the VS refresh button
+* Fix for a problem in which a premature solution explorer refresh after a folder add terminates the rename
+  of the newly added folder and forces it to be named "NewFolder1".
+* We now call svn_utf_initialize so that iconv SOs don't have to be loaded for every SVN
+  error message.  
+* Workaround for Windows Workflow Foundations beta 2 bug
+* GDI handle leak plugged
+* All dialogs now invariably support standard Enter/Esc for OK/Cancel
+* Blame now works correctly on compound items
+* Use Visual Studio SDK for better VS integration
+* The commit dialog can now be suppressed with the Shift key, like other dialogs
 * Support for alternative names for the SVN administrative directory now uses
    the functionality offered by SVN itself
 * New "Working Copy Explorer" tool window
