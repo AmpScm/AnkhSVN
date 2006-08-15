@@ -175,7 +175,7 @@ namespace Ankh.UI
                 }
             }
 
-            this.textPropertyDescriptors.Sort( PropertyOrderComparer.Instance );
+            this.textPropertyDescriptors = this.textPropertyDescriptors.Sort( PropertyOrderComparer.Instance );
             
         }
 
