@@ -51,11 +51,36 @@ namespace Ankh.WorkingCopyExplorer
             DoAddRoot(root);
         }
 
-
-
-        public void RemoveRoot( string directory )
+        public bool IsRootSelected
         {
-            throw new Exception( "The method or operation is not implemented." );
+            get
+            {
+                return GetSelectedRoot() != null;
+            }
+        }
+
+        public void RemoveSelectedRoot()
+        {
+            FileSystemRootItem root = GetSelectedRoot();
+            if ( root != null )
+            {
+                this.roots.Remove( root );
+                this.control.RemoveRoot( root );
+
+                root.Dispose();
+            }        
+        }
+
+        private FileSystemRootItem GetSelectedRoot()
+        {
+            IFileSystemItem[] items = this.control.GetSelectedItems();
+
+            if ( items.Length != 1 )
+            {
+                return null;
+            }
+
+            return items[ 0 ] as FileSystemRootItem;
         }
 
         #endregion

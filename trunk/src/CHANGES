@@ -1,7 +1,15 @@
-Version 0.6.0 (released ??.09.2004)
-This release was built against Subversion 1.0.6, Neon 0.24.7, 
-openssl 0.9.7 and Berkeley DB 4.2.52
+Version 0.7.0 (released ??.09.2004)
+This release was built against Subversion 1.4.0, Neon 0.25.5, 
+openssl 0.9.8a and Berkeley DB 4.4.20
 
+* Support for alternative names for the SVN administrative directory now uses
+   the functionality offered by SVN itself
+* New "Working Copy Explorer" tool window
+* Better support for renames and moves
+* Redesigned VS integration to take advantage of the Visual Studio SDK
+* Better unicode support for log messages
+* Support for VS 2005 solution folders
+* Dialog tab order fixes
 * New installer using WiX instead of the VS.NET setup projects
 * Fix bug in which Ankh would refuse to load if VC++ wasn't installed
 * Prevent .svn dir from being autoadded 
@@ -25,11 +33,10 @@ openssl 0.9.7 and Berkeley DB 4.2.52
 * Better support for file deletions
 * More intelligent status cache, improving performance (especially in 
   pathological cases)
-* Support for VS 2005 beta 2
+* Support for VS 2005
 * Error reports contains the DTE version (and thus implicitly the version of 
    VS)
 * Support for lock/unlock
-* NSvn now supports svn 1.2 functions
 * New design for the repository explorer
 * Support for Enterprise Template projects
 * Support for database projects
