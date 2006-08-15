@@ -60,6 +60,24 @@ namespace Ankh.UI
                 return new IFileSystemItem[] { };
             }
         }
+
+        internal void RemoveRoot( IFileSystemItem root )
+        {
+            TreeNode nodeToRemove = null;
+            foreach ( TreeNode node in this.Nodes )
+            {
+                if ( node.Tag == root )
+                {
+                    nodeToRemove = node;
+                    break;
+                }
+            }
+
+            if ( nodeToRemove != null )
+            {
+                nodeToRemove.Remove();
+            }
+        }
  
 
         protected override void OnMouseDown( MouseEventArgs e )
@@ -173,5 +191,7 @@ namespace Ankh.UI
 
         private static readonly object DummyTag = new object();
 
-   }
+
+        
+    }
 }
