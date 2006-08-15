@@ -35,7 +35,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        private string GetExe( Ankh.IContext context )
+        protected override string GetExe( Ankh.IContext context )
         {
             return context.Config.MergeExePath;
         }
