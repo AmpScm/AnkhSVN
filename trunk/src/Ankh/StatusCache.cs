@@ -26,7 +26,7 @@ namespace Ankh
         /// <param name="dir"></param>
         public void Status( string dir )
         {
-            this.Status( dir, true );
+            this.Status( dir, false );
         }
 
         /// <summary>
@@ -84,8 +84,12 @@ namespace Ankh
                     if ( Directory.Exists( directory ) )
                         this.Status( directory, false );
 
-                    Status status = this.client.SingleStatus( normPath );
-                    this.table[normPath] = item = new SvnItem( path, status );
+                    item = (SvnItem)this.table[ normPath ];
+                    if ( item == null )
+                    {
+                        Status status = this.client.SingleStatus( normPath );
+                        this.table[ normPath ] = item = new SvnItem( path, status );
+                    }
                 }
                 else
                 {
