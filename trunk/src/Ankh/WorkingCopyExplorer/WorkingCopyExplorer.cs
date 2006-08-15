@@ -167,9 +167,9 @@ namespace Ankh.WorkingCopyExplorer
             ArrayList items = new ArrayList();
             foreach ( string path in Directory.GetFileSystemEntries( directoryItem.Path ) )
             {
-                SvnItem item = this.statusCache[ path ];
-                if ( PathUtils.GetName( item.Path ) != Client.AdminDirectoryName )
+                if ( PathUtils.GetName( path ) != Client.AdminDirectoryName )
                 {
+                    SvnItem item = this.statusCache[ path ];
                     items.Add( FileSystemItem.Create( this, item ) );
                 }
             }
