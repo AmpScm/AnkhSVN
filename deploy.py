@@ -11,7 +11,6 @@ vcprojectengine = "VisualStudio.VCProjectEngine.7"
 
 # The URL to build from
 ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/branches/subversion-1.4-integration"
-ANKHSVN = "%s/src" % ANKHSVN_ROOT
 
 # version numbers to put in the filename
 MAJOR, MINOR, PATCH, LABEL = 0, 6, 0, "snapshot_20"
@@ -543,7 +542,8 @@ def do_ankh():
 
     do_subversion()
     
-    checkout( ANKHSVN, "src" )
+    ankhsvn_src = "%s/src" % ANKHSVN_ROOT
+    checkout( ankhsvn_src, "src" )
     
     REVISION = get_revision("src").strip()
 
