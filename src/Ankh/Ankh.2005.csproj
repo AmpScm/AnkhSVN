@@ -327,8 +327,6 @@
     <Compile Include="Commands\RelocateCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\RemoveRepositoryRootCommand.cs" />
-    <Compile Include="Commands\RemoveWorkingCopyExplorerRootCommand.cs" />
     <Compile Include="Commands\ResolveConflictCommand.cs">
       <SubType>Code</SubType>
     </Compile>

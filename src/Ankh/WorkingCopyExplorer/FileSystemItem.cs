@@ -94,7 +94,7 @@ namespace Ankh.WorkingCopyExplorer
             }
         }
 
-        [TextProperty( "Read-only", Order = 3, TextWidth = 13 )]
+        [TextProperty( "Read-only", Order = 3, TextWidth = 10 )]
         public string ReadOnly
         {
             get

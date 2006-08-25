@@ -65,7 +65,7 @@ namespace Ankh.UI
 
         public void RemoveRoot( IFileSystemItem root )
         {
-            this.treeView.RemoveRoot( root );
+            throw new System.NotImplementedException();
         }
 
         public void RefreshItem( IFileSystemItem item )

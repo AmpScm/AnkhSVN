@@ -37,24 +37,15 @@ namespace Ankh
             {
                 string solutionDir = Path.GetDirectoryName(
                     this.project.DTE.Solution.FullName );
-                string path;
-                if ( this.IsWebSiteProject )
-                {
-                    path = this.project.FullName;
-                }
-                else
-                {
-                    path = this.GetProjectFileName();
-                }
+                string projectFileName = this.GetProjectFileName();
 
                 // Can't find the project file, guess it's not anywhere
-                if ( path == null )
+                if ( projectFileName == null )
                 {
-                    
                     return false;
                 }
 
-                return PathUtils.IsSubPathOf(path, solutionDir);
+                return PathUtils.IsSubPathOf(projectFileName, solutionDir);
             }
         }
 
@@ -170,12 +161,6 @@ namespace Ankh
             }
         }
 
-        public bool IsWebSiteProject
-        {
-            get { return this.project.Kind == DteUtils.WebProjects2005Kind; }
-        }
-
-
         public Project Project
         {
             get { return this.project; }
@@ -196,7 +181,7 @@ namespace Ankh
                 {
                     if ( this.project.ProjectItems != null )
                         this.AddProjectItems( this.project.ProjectItems, solutionDir, paths );
-                    return paths;
+                    return new string[] { };
                 }
                 else
                 {
@@ -435,10 +420,6 @@ namespace Ankh
 
         private bool IsSpecialProject()
         {
-            if ( this.IsWebSiteProject )
-            {
-                return true;
-            }
             foreach ( string guid in SpecialProjects )
             {
                 if ( String.Compare( this.project.Kind, guid, true ) == 0 )

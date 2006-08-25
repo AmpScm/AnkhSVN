@@ -7,7 +7,6 @@ using System.Collections;
 using System.Threading;
 using System.Reflection;
 using NSvn.Core;
-using Utils;
 
 namespace Ankh.WorkingCopyExplorer
 {
@@ -51,36 +50,11 @@ namespace Ankh.WorkingCopyExplorer
             DoAddRoot(root);
         }
 
-        public bool IsRootSelected
+
+
+        public void RemoveRoot( string directory )
         {
-            get
-            {
-                return GetSelectedRoot() != null;
-            }
-        }
-
-        public void RemoveSelectedRoot()
-        {
-            FileSystemRootItem root = GetSelectedRoot();
-            if ( root != null )
-            {
-                this.roots.Remove( root );
-                this.control.RemoveRoot( root );
-
-                root.Dispose();
-            }        
-        }
-
-        private FileSystemRootItem GetSelectedRoot()
-        {
-            IFileSystemItem[] items = this.control.GetSelectedItems();
-
-            if ( items.Length != 1 )
-            {
-                return null;
-            }
-
-            return items[ 0 ] as FileSystemRootItem;
+            throw new Exception( "The method or operation is not implemented." );
         }
 
         #endregion
@@ -167,16 +141,8 @@ namespace Ankh.WorkingCopyExplorer
             ArrayList items = new ArrayList();
             foreach ( string path in Directory.GetFileSystemEntries( directoryItem.Path ) )
             {
-                if ( PathUtils.GetName( path ) != Client.AdminDirectoryName )
-                {
-                    SvnItem item = this.statusCache[ path ];
-                    items.Add( FileSystemItem.Create( this, item ) );
-                }
-            }
-
-            foreach ( SvnItem item in this.statusCache.GetDeletions( directoryItem.Path ) )
-            {
-                items.Add( FileSystemItem.Create( this, item ) );
+                SvnItem item = this.statusCache[ path ];
+                items.Add( FileSystemItem.Create(this, item) );
             }
 
             return (IFileSystemItem[])items.ToArray( typeof( IFileSystemItem ) );
@@ -208,14 +174,7 @@ namespace Ankh.WorkingCopyExplorer
 
         void control_ValidatingNewRoot( object sender, System.ComponentModel.CancelEventArgs e )
         {
-            try
-            {
-                e.Cancel = !IsRootValid( this.control.NewRootPath );
-            }
-            catch ( Exception ex )
-            {
-                this.Context.ErrorHandler.Handle( ex );
-            }
+            e.Cancel = ! IsRootValid( this.control.NewRootPath );
         }
 
         private bool IsRootValid( string path )
@@ -225,16 +184,9 @@ namespace Ankh.WorkingCopyExplorer
 
         void control_WantNewRoot( object sender, EventArgs e )
         {
-            try
+            if ( this.IsRootValid( this.control.NewRootPath ) )
             {
-                if ( this.IsRootValid( this.control.NewRootPath ) )
-                {
-                    this.AddRoot( this.control.NewRootPath );
-                }
-            }
-            catch ( Exception ex )
-            {
-                this.Context.ErrorHandler.Handle( ex );
+                this.AddRoot(this.control.NewRootPath);
             }
         }
 
