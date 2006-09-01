@@ -341,7 +341,8 @@
             <code><![CDATA[
             public static void ScriptMain( Project project )
             {
-                string text = string.Empty;
+                string text = "Please visit http://ankhsvn.tigris.org for more information" + Environment.NewLine;
+                text += Environment.NewLine + "Below is the version information for the various AnkhSVN components" + Environment.NewLine;
                 string ankhVersion = string.Empty;
                 Assembly ankh = typeof( Ankh.Connect ).Assembly;
 
