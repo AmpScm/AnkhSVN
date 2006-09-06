@@ -27,7 +27,7 @@
 
     <nant>
         <buildfiles>
-            <include name="Tasks\*.build" />
+            <include name="NantIncludes\*.build" />
         </buildfiles>
     </nant>
     <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
