@@ -92,8 +92,6 @@
         <nant buildfile="Utils.Tests/Utils.Tests.build" target="clean" inheritall="true" />
         
         <delete dir="${installsource.dir}" failonerror="false"/>
-        
-        <regasm assembly="${build.dir}\Ankh.dll" verbose="${verbose}" codebase="true" unregister="true" failonerror="false"/>
     
         <delete dir="build-Release" verbose="${verbose}" failonerror="false" />
         <delete dir="build-Debug" verbose="${verbose}" failonerror="false" />
@@ -138,14 +136,6 @@
             </fileset>
         </copy>
 
-        <!-- unfortunately necessary to get regasm to work -->
-        <copy todir="${build.dir}">
-            <fileset basedir="${lib.dir}">
-                <include name="envdte.dll"/>
-                <include name="extensibility.dll"/>
-            </fileset>
-        </copy>        
-        
         <copy todir="${build.dir}" flatten="true">
             <fileset basedir="${svndir}">
                 <include name="apr\Debug\libapr.dll" if="${debug}" />
@@ -158,16 +148,7 @@
                 <include name="db4-win32\bin\libdb44.dll" unless="${debug}" />
             </fileset>
         </copy>
-         
-        <regasm assembly="${build.dir}\Ankh.dll" typelib="${build.dir}\Ankh.tlb" failonerror="false"  codebase="true" exporttypelib="true" verbose="${verbose}"/>
 
-        <!-- and now to get rid of them again -->
-        <delete>
-            <fileset basedir="${build.dir}">
-                <include name="envdte.dll"/>
-                <include name="extensibility.dll"/>
-            </fileset>
-        </delete>
     </target>
     
     <target name="build-Ankh.UI" depends="build-NSvn.Core, build-Utils">
