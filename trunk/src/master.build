@@ -15,6 +15,8 @@
     <property name="alt.admin.dir" value="true"/>
     <property name="wix-binary.dir" value="${path::get-full-path('../tools/WiX')}"/>
 
+    <property name="IndexSource" value="false" />
+
     <ifnot test="${property::exists('svndir')}">
         <sysinfo />
         <ifnot test="${property::exists('sys.env.SVNSRC')}">
@@ -23,6 +25,11 @@
         <property name="svndir" value="${sys.env.SVNSRC}" />
     </ifnot>
 
+    <nant>
+        <buildfiles>
+            <include name="Tasks\*.build" />
+        </buildfiles>
+    </nant>
     <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
     <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>-->
 
@@ -251,7 +258,7 @@
     
     <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn.Core, build-ReposInstaller"
         description="Build all necessary assemblies">
-        
+        <SsIndex srcDir="." type="SVN" if="${IndexSource}" />
     </target>
     
     <target name="build-tests" depends="build, build-TestUtils, build-Ankh.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp, build-Utils.Tests"
