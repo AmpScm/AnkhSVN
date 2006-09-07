@@ -96,7 +96,7 @@ namespace Ankh.Config
                         new StringEditorTemplate("%yours", "The other version", "The other version (%yours)"),
                         new StringEditorTemplate("%merged", "The output file", "The output file (%merged)"),
                         new StringEditorTemplate(@"""C:\Program Files\TortoiseSVN\bin\TortoiseMerge.exe"" " +
-                                                 "/base:\"%base\" /theirs:\"%theirs\" /mine:\"%mine\" /merged:\"%merged\"",
+                                                 "/base:%base /theirs:%theirs /mine:%mine /merged:%merged",
                                                  "TortoiseMerge", "TortoiseMerge"),
                         new StringEditorTemplate(@"D:\bin\kdiff3.exe " + 
                             "\"%base\" --fname \"Base version\" \"%theirs\" --fname \"Repository version\" " + 
@@ -138,7 +138,7 @@ namespace Ankh.Config
                         new StringEditorTemplate("%base", "The base version", "The base version (%base)"),
                         new StringEditorTemplate("%mine", "My version", "My version (%mine)"),
                         new StringEditorTemplate(@"""C:\Program Files\TortoiseSVN\bin\TortoiseMerge.exe"" " +
-                                                 "/base:\"%base\" /mine:\"%mine\"",
+                                                 "/base:%base /mine:%mine",
                                                  "TortoiseMerge", "TortoiseMerge"),
                         new StringEditorTemplate(@"D:\bin\KDiff3 " + 
                             "\"%base\" --fname \"Base version\" \"%mine\" --fname \"My version\"", 
