@@ -32,9 +32,9 @@ namespace Ankh.Solution
         {
             this.dte = dte;
             this.context = context;
-            this.projectItems = new Hashtable( null, 
+            this.projectItems = new Hashtable( new ItemHashCodeProvider( context ), 
                 new ItemComparer() );
-            this.projects = new Hashtable( null, new ProjectComparer() );
+            this.projects = new Hashtable( new ProjectHashCodeProvider(this), new ProjectComparer() );
             
             // get the uihierarchy root
             this.solutionNode = null;
@@ -908,6 +908,89 @@ namespace Ankh.Solution
             private bool done;
         }
         #endregion
+
+        #region class ItemHashCodeProvider
+        private class ItemHashCodeProvider : IHashCodeProvider
+        {
+            public ItemHashCodeProvider( IContext context )
+            {
+                this.context = context;
+            }
+
+            public int GetHashCode(object obj)
+            {
+                try
+                {
+                    string projectName = ItemComparer.GetProjectName(obj);
+                    string fileName = ItemComparer.GetFileName(obj);
+                    if ( projectName == null || fileName == null )
+                        return obj.GetHashCode();
+
+                    string str = projectName + "|" + 
+                        fileName;
+                    return str.GetHashCode();
+                }
+                catch( Exception ex )
+                {
+                    this.context.ErrorHandler.LogException( ex, "Exception in ItemHashCodeProvider" );
+                }
+                return obj.GetHashCode();
+
+            }
+
+            private IContext context;
+        }
+        #endregion
+
+        #region class ProjectHashCodeProvider
+        private class ProjectHashCodeProvider : IHashCodeProvider
+        {        
+            public ProjectHashCodeProvider(Explorer explorer)
+            {
+                this.explorer = explorer;
+            }
+
+            public int GetHashCode(object obj)
+            {
+                try
+                {
+                    Project project = obj as Project;
+                    if ( project != null )
+                    {
+                        string projectFile = explorer.solutionNode.Parser.GetProjectFile( project.Name );
+                        if ( projectFile != null && projectFile.Length > 0 )
+                        {
+                            return projectFile.GetHashCode();
+                        }
+
+                        try
+                        {
+                            return project.FullName.GetHashCode();
+                        }
+                        catch ( Exception )
+                        {
+                            return obj.GetHashCode();
+                        }
+                    }
+
+                    ParsedSolutionItem parsedSolutionItem = obj as ParsedSolutionItem;
+                    if ( parsedSolutionItem != null )
+                    {
+                        return parsedSolutionItem.FileName.GetHashCode();
+                    }
+                }
+                catch ( Exception ex )
+                {
+                    this.explorer.Context.ErrorHandler.LogException( ex, "Exception in ProjectHashCodeProvider" );
+                }
+                return obj.GetHashCode();
+            }
+
+			private Explorer explorer;
+        }
+        #endregion
+
+
 
         #region class ItemComparer
         private class ItemComparer : IComparer
