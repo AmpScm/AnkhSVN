@@ -49,7 +49,7 @@ namespace Ankh
         /// <summary>
         /// The ID of the bitmap associated with this command.
         /// </summary>
-        public int Bitmap
+        public ResourceBitmaps Bitmap
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.bitmap; }
@@ -61,6 +61,6 @@ namespace Ankh
         private string name;
         private string text = "This should have been replaced...";
         private string tooltip = "This is a tooltip.";
-        private int bitmap = ResourceBitmaps.Default;
+        private ResourceBitmaps bitmap = ResourceBitmaps.Default;
     }
 }

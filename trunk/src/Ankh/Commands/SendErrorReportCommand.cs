@@ -7,7 +7,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("SendErrorReport", Text = "Send suggestion/error report", 
          Tooltip = "Show the repository explorer window",
-         Bitmap = ResourceBitmaps.Default),
+         Bitmap = ResourceBitmaps.SendSuggest),
     VSNetControl( "Tools.AnkhSVN", Position = 1 )]
     public class SendErrorReportCommand : CommandBase
     {
