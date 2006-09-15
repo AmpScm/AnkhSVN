@@ -19,10 +19,10 @@ namespace Ankh
         public const int AddCommandBarToEnd = -1;
 
         public virtual Command AddNamedCommand( string commandName, 
-            string text, string tooltip, int bitmapId, int status )
+            string text, string tooltip, ResourceBitmaps bitmapId, int status )
         {
             return context.DTE.Commands.AddNamedCommand( context.AddIn, 
-                commandName, text, tooltip, false, bitmapId, 
+                commandName, text, tooltip, false, (int) bitmapId, 
                 ref this.contextGuids, status );
         }
 
@@ -122,7 +122,7 @@ namespace Ankh
                 this.commandBarsType = this.commandBars.GetType();
             }
 
-            public override Command AddNamedCommand(string commandName, string text, string tooltip, int bitmapId, int status)
+            public override Command AddNamedCommand(string commandName, string text, string tooltip, ResourceBitmaps bitmapId, int status)
             {
                 ParameterModifier pm = new ParameterModifier( 7 );
                 for ( int i = 0; i < 7; i++ )
