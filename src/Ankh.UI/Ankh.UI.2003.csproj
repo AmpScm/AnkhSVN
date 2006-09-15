@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
     >
@@ -167,6 +167,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "AddWorkingCopyExplorerRootDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AddWorkingCopyExplorerRootDialog.resx"
+                    DependentUpon = "AddWorkingCopyExplorerRootDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "AdminDirDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -318,6 +328,31 @@
                     RelPath = "ExternalsPropertyEditor.resx"
                     DependentUpon = "ExternalsPropertyEditor.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "FileSystemDetailsView.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FileSystemItemAttributes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FileSystemTreeView.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IContextMenu.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IFileSystemItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "IgnorePropertyEditor.cs"
@@ -565,6 +600,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "spinning_ankh.gif"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "SslServerTrustDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -622,6 +661,20 @@
                 <File
                     RelPath = "ViewLogDialog.resx"
                     DependentUpon = "ViewLogDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "WCExplorer.cd"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "WorkingCopyExplorerControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkingCopyExplorerControl.resx"
+                    DependentUpon = "WorkingCopyExplorerControl.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
