@@ -902,7 +902,7 @@ namespace Ankh.Solution
             }
 
             private const string MiscItemsKind = "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}";
-            private readonly static TimeSpan TimeOut = new TimeSpan(0, 0, 10);
+            private readonly static TimeSpan TimeOut = new TimeSpan(0, 15, 0);
             private delegate void LoadDelegate( );
             private Explorer outer;
             private bool done;
