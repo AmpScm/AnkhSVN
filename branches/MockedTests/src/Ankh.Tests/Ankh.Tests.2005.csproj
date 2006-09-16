@@ -46,7 +46,7 @@
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>ISO-1</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -110,6 +110,14 @@
     <RunFxCop>false</RunFxCop>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetMock-Generic, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\DotNetMock-Generic.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetMock.Framework, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\DotNetMock.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="envdte, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\envdte.dll</HintPath>
@@ -208,6 +216,15 @@
     <Compile Include="LogResultTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MockObjects\AddinMock.cs" />
+    <Compile Include="MockObjects\DTEMock.cs" />
+    <Compile Include="MockObjects\ProjectItemMock.cs" />
+    <Compile Include="MockObjects\ProjectItemsMock.cs" />
+    <Compile Include="MockObjects\SolutionMock.cs" />
+    <Compile Include="MockObjects\UIHierarchyItemMock.cs" />
+    <Compile Include="MockObjects\UIHierarchyItemsMock.cs" />
+    <Compile Include="MockObjects\WrappedEnumerator.cs" />
+    <Compile Include="MockTest.cs" />
     <Compile Include="OutputPaneWriterTest.cs">
       <SubType>Code</SubType>
     </Compile>
