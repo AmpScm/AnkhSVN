@@ -954,30 +954,8 @@ namespace Ankh.Solution
             {
                 try
                 {
-                    Project project = obj as Project;
-                    if ( project != null )
-                    {
-                        string projectFile = explorer.solutionNode.Parser.GetProjectFile( project.Name );
-                        if ( projectFile != null && projectFile.Length > 0 )
-                        {
-                            return projectFile.GetHashCode();
-                        }
-
-                        try
-                        {
-                            return project.FullName.GetHashCode();
-                        }
-                        catch ( Exception )
-                        {
-                            return obj.GetHashCode();
-                        }
-                    }
-
-                    ParsedSolutionItem parsedSolutionItem = obj as ParsedSolutionItem;
-                    if ( parsedSolutionItem != null )
-                    {
-                        return parsedSolutionItem.FileName.GetHashCode();
-                    }
+                    string id = Explorer.GetUniqueProjectID( obj );
+                    return id != null ? id.GetHashCode() : obj.GetHashCode();
                 }
                 catch ( Exception ex )
                 {
