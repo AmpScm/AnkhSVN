@@ -6,8 +6,14 @@ using System.Diagnostics;
 
 namespace Ankh
 {
+    /// <summary>
+    /// Helper class to load services
+    /// </summary>
     public sealed class ServiceLoader
     {
+        /// <summary>
+        /// Initializes a new <see cref="ServiceLoader"/>
+        /// </summary>
         public ServiceLoader()
         {
             serviceContainer = new ServiceContainer();

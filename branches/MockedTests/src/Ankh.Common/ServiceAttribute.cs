@@ -2,6 +2,11 @@ using System;
 
 namespace Ankh
 {
+    /// <summary>
+    /// Attribute used to have a class registered as service. The class should implement a public constructor
+    /// that takes an System.IServiceProvider. Services are loaded in undetermined order, move initialization that
+    /// depends on other services being created to void Init() and set the CallMyInit property to true
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class ServiceAttribute : Attribute
     {
