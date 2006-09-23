@@ -71,6 +71,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtils.2005", "TestUtils\TestUtils.2005.csproj", "{874C0358-E7DD-42DA-BF07-58198B41FD25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Common", "Ankh.Common\Ankh.Common.csproj", "{25791F68-A2A2-4EA5-B416-304B78247092}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		(svnlib) Debug run|Any CPU = (svnlib) Debug run|Any CPU
@@ -660,12 +662,57 @@ Global
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Mixed Platforms.Build.0 = Release|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Run|Win32.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Debug run|Any CPU.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Debug run|Any CPU.Build.0 = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Debug run|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Debug run|Mixed Platforms.Build.0 = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Debug run|Win32.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Debug|Win32.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) NSvn.Tests|Any CPU.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) NSvn.Tests|Any CPU.Build.0 = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) NSvn.Tests|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) NSvn.Tests|Mixed Platforms.Build.0 = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) NSvn.Tests|Win32.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.(svnlib) Release|Win32.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Debug run|Any CPU.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Debug run|Any CPU.Build.0 = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Debug run|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Debug run|Mixed Platforms.Build.0 = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Debug run|Win32.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.NSvn.Tests|Any CPU.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.NSvn.Tests|Any CPU.Build.0 = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.NSvn.Tests|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.NSvn.Tests|Mixed Platforms.Build.0 = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.NSvn.Tests|Win32.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Release|Win32.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Run|Any CPU.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Run|Any CPU.Build.0 = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Run|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Run|Mixed Platforms.Build.0 = Release|Any CPU
+		{25791F68-A2A2-4EA5-B416-304B78247092}.Run|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 EndGlobal

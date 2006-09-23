@@ -86,6 +86,15 @@ namespace Ankh
 #endif
             try
             {
+                ServiceLoader loader = new ServiceLoader();
+                loader.AddService(typeof(_DTE), (_DTE)application);
+                loader.AddService(typeof(AddIn), (AddIn)addInInst);
+                Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp =
+                    application as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+                if (sp != null)
+                    loader.AddService(typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider), sp);
+
+
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst,
                     new UIShell() );
                 Extenders.ExtenderProvider.Register( this.context );
