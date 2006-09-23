@@ -1,6 +1,8 @@
 using System;
 using System.Reflection;
 using System.ComponentModel.Design;
+using System.Collections;
+using System.Diagnostics;
 
 namespace Ankh
 {
