@@ -7,7 +7,7 @@
     <ProjectGuid>{25791F68-A2A2-4EA5-B416-304B78247092}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ankh.Common</RootNamespace>
+    <RootNamespace>Ankh</RootNamespace>
     <AssemblyName>Ankh.Common</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
