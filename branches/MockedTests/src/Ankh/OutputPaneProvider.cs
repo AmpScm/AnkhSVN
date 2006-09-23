@@ -14,11 +14,11 @@ namespace Ankh
             this.writer = new OutputPaneWriter(dte, "AnkhSVN");
         }
 
-        public TextWriter OutputPaneWriter
+        public OutputPaneTextWriter OutputPaneWriter
         {
             get { return this.writer; }
         }
 
-        private TextWriter writer;
+        private OutputPaneTextWriter writer;
     }
 }

@@ -8,7 +8,7 @@ namespace Ankh
     /// <summary>
     /// A TextWriter backed by the VS.NET output window.
     /// </summary>
-    public class OutputPaneWriter : TextWriter
+    public class OutputPaneWriter : OutputPaneTextWriter
     {
         public OutputPaneWriter( _DTE dte, string caption )
         {
@@ -64,7 +64,7 @@ namespace Ankh
         /// Writes Start text to outputpane.
         /// </summary>
         /// <param name="action">Action.</param>
-        public void StartActionText( string action )
+        public override  void StartActionText( string action )
         {
             
             this.Activate();
@@ -75,7 +75,7 @@ namespace Ankh
         /// <summary>
         /// Writes end text to outputpane.
         /// </summary>
-        public void EndActionText()
+        public override void EndActionText()
         {
             this.outputPane.OutputString( this.FormatMessage( "Done" ) + Environment.NewLine + 
                 Environment.NewLine );
