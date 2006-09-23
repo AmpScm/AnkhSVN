@@ -33,6 +33,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOutputPaneProvider.cs" />
     <Compile Include="ServiceAttribute.cs" />
     <Compile Include="ServiceLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
