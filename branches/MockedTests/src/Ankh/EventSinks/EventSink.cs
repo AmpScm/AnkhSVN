@@ -15,9 +15,10 @@ namespace Ankh.EventSinks
     /// </summary>
     public abstract class EventSink
     {
-        protected EventSink( IContext context )
+        protected EventSink( IContext context, System.IServiceProvider serviceProvider )
         {
             this.context = context;
+            this.serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -42,10 +43,9 @@ namespace Ankh.EventSinks
         {
             get{ return addingProject; }
             set{ addingProject = value; }
-        }        
-      
-       
-        
+        }
+
+        protected System.IServiceProvider serviceProvider;
         protected const int REFRESHDELAY = 800;
         private static bool addingProject = false;
         private IContext context;

@@ -20,10 +20,10 @@ namespace Ankh.EventSinks
         public event CancelEventHandler SolutionLoaded;
         public event EventHandler SolutionBeforeClosing;
 
-        public SolutionEventsSink( IContext context )
-            : base( context )
+        public SolutionEventsSink( IContext context, System.IServiceProvider serviceProvider)
+            : base( context, serviceProvider )
         {
-            this.hierarchyEvents = new HierarchyEventsSink( this.Context );
+            this.hierarchyEvents = new HierarchyEventsSink( this.Context, serviceProvider );
             this.AdviseSolutionEvents();
 
         }
@@ -207,14 +207,14 @@ namespace Ankh.EventSinks
 
         private void SetupEventsForSolution()
         {
-            this.hierarchyEvents = new HierarchyEventsSink( this.Context );
+            this.hierarchyEvents = new HierarchyEventsSink( this.Context, this.serviceProvider );
 
             this.eventSinks = new ArrayList();
 
-            this.eventSinks.Add( new TrackProjectDocumentsEventSink( this.Context ) );
-            this.eventSinks.Add( new ProjectFilesEventSink( this.Context ) );
-            this.eventSinks.Add( new DocumentEventsSink( this.Context ) );
-            this.eventSinks.Add( new CommandsEventSink( this.Context ) );
+            this.eventSinks.Add(new TrackProjectDocumentsEventSink(this.Context, this.serviceProvider));
+            this.eventSinks.Add(new ProjectFilesEventSink(this.Context, this.serviceProvider));
+            this.eventSinks.Add(new DocumentEventsSink(this.Context, this.serviceProvider));
+            this.eventSinks.Add(new CommandsEventSink(this.Context, this.serviceProvider));
         }
 
         private void UnhookEventsForSolution()

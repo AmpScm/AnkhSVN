@@ -16,7 +16,8 @@ namespace Ankh.EventSinks
 {
     public class HierarchyEventsSink : EventSink
     {
-        public HierarchyEventsSink( IContext context ) : base(context)
+        public HierarchyEventsSink( IContext context, System.IServiceProvider serviceProvider ) 
+            : base(context, serviceProvider)
         {
             try
             {

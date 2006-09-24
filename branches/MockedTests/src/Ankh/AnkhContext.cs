@@ -30,7 +30,7 @@ namespace Ankh
         public event EventHandler Unloading;
 
 
-        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell )
+        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell, System.IServiceProvider serviceProvider )
         {
             this.dte = dte;
             this.addin = addin;
@@ -48,7 +48,7 @@ namespace Ankh
             this.projectFileWatcher = new FileWatcher(this.client);
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
-            this.solutionExplorer = new Solution.Explorer( this.dte, this);
+            this.solutionExplorer = new Solution.Explorer( serviceProvider, this.dte, this);
             this.solutionExplorer.SolutionFinishedLoading += 
                 new EventHandler(this.HandleSolutionFinishedLoading);
 
@@ -424,7 +424,7 @@ namespace Ankh
         /// </summary>
         private void SetUpEvents()
         {
-            this.solutionEvents = new Ankh.EventSinks.SolutionEventsSink( this );
+            this.solutionEvents = new Ankh.EventSinks.SolutionEventsSink(this, this.serviceProvider);
             this.solutionEvents.SolutionLoaded += new CancelEventHandler( this.HandleSolutionLoaded );
             this.solutionEvents.SolutionBeforeClosing  += new EventHandler( this.HandleSolutionClosing );
         }

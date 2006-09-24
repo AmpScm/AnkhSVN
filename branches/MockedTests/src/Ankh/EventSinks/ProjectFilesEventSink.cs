@@ -8,7 +8,7 @@ namespace Ankh.EventSinks
     /// </summary>
     public class ProjectFilesEventSink : EventSink
     {
-        public ProjectFilesEventSink( IContext context ) : base( context )
+        public ProjectFilesEventSink( IContext context, IServiceProvider serviceProvider ) : base( context, serviceProvider)
         {
             this.Context.ProjectFileWatcher.FileModified += 
                 new FileModifiedDelegate(this.ProjectFileModified);

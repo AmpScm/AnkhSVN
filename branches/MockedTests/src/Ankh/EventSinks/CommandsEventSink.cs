@@ -8,7 +8,8 @@ namespace Ankh.EventSinks
     /// </summary>
     public class CommandsEventSink : EventSink
     {
-        public CommandsEventSink( IContext context ) : base( context )
+        public CommandsEventSink( IContext context, IServiceProvider serviceProvider) 
+            : base( context, serviceProvider)
         {
             
             this.RegisterCommandEvents( );

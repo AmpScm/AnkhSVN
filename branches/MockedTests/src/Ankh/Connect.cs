@@ -96,7 +96,7 @@ namespace Ankh
 
 
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst,
-                    new UIShell() );
+                    new UIShell(), loader.ServiceProvider );
                 Extenders.ExtenderProvider.Register( this.context );
 
 #if ALWAYSREGISTER

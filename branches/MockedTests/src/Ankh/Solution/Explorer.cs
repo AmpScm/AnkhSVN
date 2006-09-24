@@ -28,9 +28,10 @@ namespace Ankh.Solution
     {
         public event EventHandler SolutionFinishedLoading;
 
-        public Explorer( _DTE dte, IContext context )
+        public Explorer( IServiceProvider serviceProvider, _DTE dte, IContext context )
         {
             this.dte = dte;
+            this.serviceProvider = serviceProvider;
             this.context = context;
             this.projectItems = new Hashtable( new ItemHashCodeProvider( context ), 
                 new ItemComparer() );
@@ -1177,6 +1178,7 @@ namespace Ankh.Solution
         internal const int ReadonlyOverlay = 14;
         internal const int LockReadonlyOverlay = 13;
         private _DTE dte;
+        private IServiceProvider serviceProvider;
         private UIHierarchy uiHierarchy;
         private const string VSNETWINDOW = "wndclass_desked_gsk";
         private const string GENERICPANE = "GenericPane";

@@ -26,7 +26,8 @@ namespace Ankh.EventSinks
     class TrackProjectDocumentsEventSink : EventSink, IVsTrackProjectDocumentsEvents2
     {
 
-        public TrackProjectDocumentsEventSink( IContext context ) : base (context)
+        public TrackProjectDocumentsEventSink( IContext context, System.IServiceProvider serviceProvider ) 
+            : base (context, serviceProvider)
         {
             this.context = context;
             AdviseEvents();
