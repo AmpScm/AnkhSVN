@@ -94,6 +94,7 @@ namespace Ankh
                 if (sp != null)
                     loader.AddService(typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider), sp);
 
+                loader.LoadServicesFrom(typeof(Connect).Assembly);
 
                 this.context = new AnkhContext( (_DTE)application, (AddIn)addInInst,
                     new UIShell(), loader.ServiceProvider );
