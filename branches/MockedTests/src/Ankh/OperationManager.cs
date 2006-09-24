@@ -8,6 +8,7 @@ using System.IO;
 
 namespace Ankh
 {
+    [Service(typeof(IOperationManager))]
     public sealed class OperationManager : IOperationManager
     {
         public OperationManager(IServiceProvider serviceProvider)
@@ -48,11 +49,11 @@ namespace Ankh
 
         private void OperationFinished(Operation operation)
         {
-
+            Debug.Assert(this.operations.Count > 0, "Unneeded OperationFinished call");
             Debug.Assert((Operation)this.operations.Peek() == operation, "Use using pattern on OperationManager.RunOperation");
             
             this.operations.Pop();
-            Operation o = (Operation)this.operations.Peek();
+            Operation o = this.operations.Count > 0? (Operation)this.operations.Peek() : null;
 
             this.SetCaptions(o);
         }
