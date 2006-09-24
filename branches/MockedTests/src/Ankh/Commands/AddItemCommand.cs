@@ -5,6 +5,7 @@ using Ankh.UI;
 using System.Windows.Forms;
 using System.IO;
 using NSvn.Common;
+using System;
 
 namespace Ankh.Commands
 {
@@ -16,6 +17,10 @@ namespace Ankh.Commands
     VSNetItemControl("Ankh", Position = 1)]    
     public class AddItemCommand : CommandBase
     {
+        public AddItemCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         #region Implementation of ICommand
 
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)

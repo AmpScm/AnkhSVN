@@ -5,6 +5,7 @@ using System.IO;
 using System.Collections;
 using NSvn.Core;
 using Ankh.RepositoryExplorer;
+using System;
 
 namespace Ankh.Commands
 {
@@ -15,6 +16,10 @@ namespace Ankh.Commands
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
     public abstract class ViewRepositoryFileCommand : CommandBase
     {
+        public ViewRepositoryFileCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {

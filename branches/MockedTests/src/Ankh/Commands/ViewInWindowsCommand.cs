@@ -14,6 +14,10 @@ namespace Ankh.Commands
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
     public class ViewInWindowsCommand : ViewRepositoryFileCommand
     {
+        public ViewInWindowsCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override void Execute(IContext context, string parameters)
         {
             try

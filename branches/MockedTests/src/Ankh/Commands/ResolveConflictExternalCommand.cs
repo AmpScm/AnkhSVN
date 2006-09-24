@@ -20,7 +20,11 @@ namespace Ankh.Commands
          Tooltip = "Resolve conflicted file using external editor"),
      VSNetItemControl("Ankh", Position=1)]
     public class ResolveConflictExternalCommand : ResolveConflictCommand
-    {    
+    {
+        public ResolveConflictExternalCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // Allow external merge if enabled in config file

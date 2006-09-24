@@ -21,7 +21,11 @@ namespace Ankh.Commands
          Tooltip = "Resolve conflicted file"),
     VSNetItemControl( "Ankh", Position = 1 )]
     public class ResolveConflictCommand : CommandBase
-    {    
+    {
+        public ResolveConflictCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.
         /// </summary>

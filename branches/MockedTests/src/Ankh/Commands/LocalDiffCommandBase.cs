@@ -17,6 +17,11 @@ namespace Ankh.Commands
     /// </summary>
     public abstract class LocalDiffCommandBase : CommandBase
     {
+        protected LocalDiffCommandBase(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        {
+        }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // always allow diff - worst case you get an empty diff            

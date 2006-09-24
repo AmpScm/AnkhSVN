@@ -13,7 +13,10 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.Cleanup ),
    VSNetItemControl( "Ankh", Position = 1 )]
     public class Cleanup : CommandBase
-    {  
+    {
+        public Cleanup(IServiceProvider serviceProvider)
+            :base(serviceProvider)
+        { }
     
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {

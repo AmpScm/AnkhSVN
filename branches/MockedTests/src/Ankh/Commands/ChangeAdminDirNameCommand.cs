@@ -17,6 +17,10 @@ namespace Ankh.Commands
     VSNetControl( "Tools.AnkhSVN", Position=1 ),]
     public class ChangeAdminDirNameCommand : CommandBase
     {
+        public ChangeAdminDirNameCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // we don't want to allow this while a solution is already open

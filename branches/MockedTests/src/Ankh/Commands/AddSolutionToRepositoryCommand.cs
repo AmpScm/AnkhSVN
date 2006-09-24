@@ -25,7 +25,8 @@ namespace Ankh.Commands
     VSNetControl( "File", Position=14 )]
     public class AddSolutionToRepositoryCommand : CommandBase
     {
-        public AddSolutionToRepositoryCommand()
+        public AddSolutionToRepositoryCommand(IServiceProvider serviceProvider)
+            :base(serviceProvider)
         {
                         
         }

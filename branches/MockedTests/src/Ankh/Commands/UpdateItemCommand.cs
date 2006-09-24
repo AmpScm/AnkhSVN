@@ -18,7 +18,11 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.Update),
    VSNetItemControl( "", Position = 1 )]
     public class UpdateItem : CommandBase
-    {		
+    {
+        public UpdateItem(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {

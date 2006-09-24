@@ -18,6 +18,10 @@ namespace Ankh.Commands
     VSNetItemControl("Ankh", Position=1)]    
 	public class BlameCommand : CommandBase
 	{
+        public BlameCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.Selection.GetSelectionResources( true, 

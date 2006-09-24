@@ -8,6 +8,10 @@ namespace Ankh.Commands
     VSNetItemControl( "Ankh", Position = 1 )] 
 	public class UnlockCommand : CommandBase
 	{
+        public UnlockCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             IList resources = context.Selection.GetSelectionResources(true, 

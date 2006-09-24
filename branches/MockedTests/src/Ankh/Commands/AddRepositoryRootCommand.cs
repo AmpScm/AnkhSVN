@@ -14,7 +14,11 @@ namespace Ankh.Commands
          Text="Add Repository URL", Bitmap = ResourceBitmaps.Default )]
     [VSNetControl( "ReposExplorer", Position = 1 )]
     public class AddRepositoryRootCommand : CommandBase
-    {		
+    {
+        public AddRepositoryRootCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {           
             return Enabled;           

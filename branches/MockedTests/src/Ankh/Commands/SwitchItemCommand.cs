@@ -17,6 +17,11 @@ namespace Ankh.Commands
    VSNetItemControl( "Ankh", Position = 1 )]
     public class SwitchItemCommand : CommandBase
     {
+        public SwitchItemCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        {
+        }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             IList resources = context.Selection.GetSelectionResources(

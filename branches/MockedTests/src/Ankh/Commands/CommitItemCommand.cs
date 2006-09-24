@@ -20,7 +20,11 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.Commit),
    VSNetItemControl( "", Position = 1 )]
     public class CommitItemCommand : CommandBase
-    {	
+    {
+        public CommitItemCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        {
+        }
         #region Implementation of ICommand
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {

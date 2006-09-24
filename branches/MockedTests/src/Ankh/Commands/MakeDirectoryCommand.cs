@@ -17,6 +17,10 @@ namespace Ankh.Commands
     VSNetControl( "ReposExplorer", Position = 1 ) ]
     public class MakeDirectoryCommand : CommandBase
     {
+        public MakeDirectoryCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // we only want directories

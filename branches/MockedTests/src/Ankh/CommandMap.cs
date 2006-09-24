@@ -35,7 +35,7 @@ namespace Ankh
         /// Registers all commands present in this DLL.
         /// </summary>
         /// <param name="dte">TODO: what to do, what to do?</param>
-        public static CommandMap LoadCommands( IContext context, bool register )
+        public static CommandMap LoadCommands( IServiceProvider serviceProvider, IContext context, bool register )
         {
             // change the culture, so we don't have to deal with localized names
             // for command bars
@@ -62,7 +62,14 @@ namespace Ankh
                         if ( vsattrs.Length > 0 )
                         {
                             // put it in the dict
-                            ICommand cmd = (ICommand)Activator.CreateInstance( type );
+                            ConstructorInfo ci = type.GetConstructor(new Type[] { typeof(IServiceProvider) });
+                            if (ci == null)
+                            {
+                                Debug.WriteLine("Command doesn't have a constructor that takes an IServiceProvider: " + type.ToString());
+                                continue;
+                            }
+
+                            ICommand cmd = (ICommand)ci.Invoke(new object[] { serviceProvider });
                             commands.Dictionary[ context.AddIn.ProgID + "." + vsattrs[0].Name ] = cmd;
 
                             // do we want to register it?

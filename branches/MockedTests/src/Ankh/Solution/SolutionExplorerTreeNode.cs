@@ -389,6 +389,10 @@ namespace Ankh.Solution
     [VSNetControl( "Tools.AnkhSVN", Position=1 )]
     public class CheckForOrphanedTreeNodes : Ankh.Commands.CommandBase
     {
+        public CheckForOrphanedTreeNodes(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override vsCommandStatus QueryStatus( IContext context )
         {
             return Enabled;

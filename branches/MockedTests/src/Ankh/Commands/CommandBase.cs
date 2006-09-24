@@ -15,6 +15,11 @@ namespace Ankh.Commands
     /// </summary>
     public abstract class CommandBase : ICommand
     {
+        protected CommandBase(IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
+        }
+
         /// <summary>
         /// Get the status of the command
         /// </summary>
@@ -54,9 +59,9 @@ namespace Ankh.Commands
             }
         }
 
-        protected void SaveAllDirtyDocuments( IContext context )
+        protected void SaveAllDirtyDocuments(IContext context)
         {
-            context.DTE.ExecuteCommand( "File.SaveAll", "" );
+            context.DTE.ExecuteCommand("File.SaveAll", "");
         }
 
         protected const vsCommandStatus Enabled = 
@@ -114,7 +119,7 @@ namespace Ankh.Commands
 
 
         private EnvDTE.Command command;
-
+        private IServiceProvider serviceProvider;
         
     }
 }

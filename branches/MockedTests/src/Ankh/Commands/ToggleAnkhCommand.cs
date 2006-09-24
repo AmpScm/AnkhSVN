@@ -14,6 +14,10 @@ namespace Ankh.Commands
     VSNetControl( "Solution.Ankh", Position=1 )]
     public class ToggleAnkhCommand : CommandBase
     {
+        public ToggleAnkhCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // QueryStatus gets called when we set the Caption

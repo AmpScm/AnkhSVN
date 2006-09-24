@@ -16,6 +16,10 @@ namespace Ankh.Commands
     VSNetProjectNodeControl( "Ankh", Position = 1 )]
     public class RelocateCommand : CommandBase
     {
+        public RelocateCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.Selection.GetSelectionResources( false, 

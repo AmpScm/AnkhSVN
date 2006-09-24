@@ -3,6 +3,7 @@ using System.IO;
 using Ankh.UI;
 using EnvDTE;
 using SHDocVw;
+using System;
 
 namespace Ankh.Commands
 {
@@ -15,6 +16,10 @@ namespace Ankh.Commands
    VSNetItemControl( "", Position = 1 )]
     public class DiffExternalLocalItem : DiffLocalItem
     {
+        public DiffExternalLocalItem(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // Allow external diff if enabled in config file

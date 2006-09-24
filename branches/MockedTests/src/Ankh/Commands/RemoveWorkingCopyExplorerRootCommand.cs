@@ -11,6 +11,10 @@ namespace Ankh.Commands
     VSNetControl( "WorkingCopyExplorer", Position = 1 )]
     public class RemoveWorkingCopyExplorerRootCommand : CommandBase
     {
+        public RemoveWorkingCopyExplorerRootCommand(IServiceProvider serviceProvider)
+            :base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus( IContext context )
         {
             return context.WorkingCopyExplorer.IsRootSelected ? Enabled : EnvDTE.vsCommandStatus.vsCommandStatusInvisible;

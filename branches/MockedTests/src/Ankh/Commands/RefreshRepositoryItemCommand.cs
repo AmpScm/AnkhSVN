@@ -13,6 +13,10 @@ namespace Ankh.Commands
     VSNetControl( "ReposExplorer", Position = 1 ) ]
     public class RefreshRepositoryItemCommand : CommandBase
     {
+        public RefreshRepositoryItemCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // we only want directories

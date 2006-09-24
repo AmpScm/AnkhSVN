@@ -17,6 +17,10 @@ namespace Ankh.Commands
 	public class CheckoutSolutionCommand : 
         CommandBase
 	{
+        public CheckoutSolutionCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {

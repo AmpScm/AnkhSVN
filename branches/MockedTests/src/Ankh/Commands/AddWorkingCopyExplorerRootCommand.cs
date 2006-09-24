@@ -10,6 +10,10 @@ namespace Ankh.Commands
     VSNetControl( "WorkingCopyExplorer", Position = 1 )]
     class AddWorkingCopyExplorerRootCommand : CommandBase
     {
+        public AddWorkingCopyExplorerRootCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus( IContext context )
         {
             return Enabled;

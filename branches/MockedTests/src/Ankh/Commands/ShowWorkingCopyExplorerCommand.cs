@@ -13,6 +13,10 @@ namespace Ankh.Commands
     VSNetControl( "Tools.AnkhSVN", Position = 1 )]
     public class ShowWorkingCopyExplorerCommand : CommandBase
     {
+        public ShowWorkingCopyExplorerCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus( Ankh.IContext context )
         {
             return Enabled;

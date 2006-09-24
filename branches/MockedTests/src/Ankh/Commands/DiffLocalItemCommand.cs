@@ -3,6 +3,7 @@ using System.IO;
 using Ankh.UI;
 using EnvDTE;
 using SHDocVw;
+using System;
 
 namespace Ankh.Commands
 {
@@ -15,6 +16,10 @@ namespace Ankh.Commands
     VSNetItemControl( "", Position = 1 )]
     public class DiffLocalItem : LocalDiffCommandBase
     {
+        public DiffLocalItem(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override void Execute(Ankh.IContext context, string parameters)
         {
             try

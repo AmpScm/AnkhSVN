@@ -20,6 +20,10 @@ namespace Ankh.Commands
     VSNetItemControl( "Ankh", Position = 1 )]
     public class RevertItemCommand : CommandBase
     {
+        public RevertItemCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         #region Implementation of ICommand
 
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)

@@ -12,6 +12,11 @@ namespace Ankh.Commands
     VSNetControl( "Tools.AnkhSVN", Position = 1 )]
 	public class ShowRepositoryExplorerCommand : CommandBase
 	{
+        public ShowRepositoryExplorerCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        {
+        }
+
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             return Enabled;

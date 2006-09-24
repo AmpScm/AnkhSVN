@@ -18,6 +18,10 @@ namespace Ankh.Commands
      VSNetControl( "ReposExplorer", Position=1 )]
 	public class CopyReposExplorerUrl : CommandBase
 	{
+        public CopyReposExplorerUrl(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // all we need is a selection in the repos explorer

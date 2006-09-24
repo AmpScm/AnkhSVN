@@ -11,6 +11,11 @@ namespace Ankh.Commands
     VSNetControl( "Tools.AnkhSVN", Position = 1 )]
     public class SendErrorReportCommand : CommandBase
     {
+        public SendErrorReportCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        {
+        }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // always enabled.

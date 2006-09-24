@@ -16,6 +16,11 @@ namespace Ankh.Commands
     VSNetControl( "Tools.AnkhSVN", Position = 1 ) ]
     public class CheckoutCommand : CommandBase
     {
+        public CheckoutCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        {
+        }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             return Enabled;

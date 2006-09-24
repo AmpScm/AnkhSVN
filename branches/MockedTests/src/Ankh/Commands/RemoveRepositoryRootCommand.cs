@@ -11,6 +11,10 @@ namespace Ankh.Commands
     [VSNetControl( "ReposExplorer", Position = 1 )]
     public class RemoveRepositoryRootCommand : CommandBase
     {
+        public RemoveRepositoryRootCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.RepositoryExplorer.IsRootNode( context.RepositoryExplorer.SelectedNode ) )

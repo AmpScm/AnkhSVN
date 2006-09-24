@@ -13,6 +13,11 @@ namespace Ankh.Commands
     VSNetItemControl( "Ankh", Position = 1 )]
     public class RefreshCommand : CommandBase
     {
+        public RefreshCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        {
+        }
+
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             return Enabled;

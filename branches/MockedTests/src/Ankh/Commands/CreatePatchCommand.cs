@@ -13,8 +13,11 @@ namespace Ankh.Commands
          Bitmap = ResourceBitmaps.CreatePatch),
     VSNetItemControl( "", Position = 1 )]
     public class CreatePatchCommand : LocalDiffCommandBase
-    {    
-    
+    {
+        public CreatePatchCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         public override void Execute(IContext context, string parameters)
         {
             this.SaveAllDirtyDocuments( context );

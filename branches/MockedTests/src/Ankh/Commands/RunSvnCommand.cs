@@ -17,7 +17,8 @@ namespace Ankh.Commands
     [VSNetCommand("RunSvn")]
     public class RunSvnCommand : CommandBase
     {
-        public RunSvnCommand()
+        public RunSvnCommand(IServiceProvider serviceProvider)
+            :base(serviceProvider)
         {
             this.workingDirectory = Environment.CurrentDirectory;
         }

@@ -16,6 +16,10 @@ namespace Ankh.Commands
     public class ExportFolderCommand : 
         CommandBase
     {
+        public ExportFolderCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        { }
+
         #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
