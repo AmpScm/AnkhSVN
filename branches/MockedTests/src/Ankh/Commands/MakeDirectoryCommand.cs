@@ -54,17 +54,11 @@ namespace Ankh.Commands
             if ( !operation.ShowLogMessageDialog() )
                 return;
 
-            context.StartOperation( "Creating directory " + url );
-            try
+            using(OperationManager.RunOperation( "Creating directory " + url ))
             {
                 operation.Run( "Creating directory" );
                 context.RepositoryExplorer.Refresh( context.RepositoryExplorer.SelectedNode );
             }
-            finally
-            {
-                context.EndOperation();
-            }           
-
         }
 
         private void DoCreateDir( IContext context )

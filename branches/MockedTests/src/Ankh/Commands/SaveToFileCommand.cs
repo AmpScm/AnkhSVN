@@ -20,8 +20,7 @@ namespace Ankh.Commands
 
         public override void Execute(IContext context, string parameters)
         {
-            context.StartOperation( "Saving" );
-            try
+            using(OperationManager.RunOperation( "Saving" ))
             {
                 INode node = context.RepositoryExplorer.SelectedNode;
                 string filename = null;
@@ -38,10 +37,6 @@ namespace Ankh.Commands
                 CatRunner runner = new CatRunner( node.Revision, node.Url, 
                     filename );
                 context.UIShell.RunWithProgressDialog( runner, "Retrieving file" );
-            }
-            finally
-            {
-                context.EndOperation();
             }
         } 
     }

@@ -42,20 +42,13 @@ namespace Ankh.Commands
             if ( browser.ShowDialog() != DialogResult.OK) 
                 return;
 
-            try
+            using(OperationManager.RunOperation( "Checking out" ))
             {
-                context.StartOperation( "Checking out" );
-
                 INode node = context.RepositoryExplorer.SelectedNode;
 
                 CheckoutRunner runner = new CheckoutRunner( 
                     browser.DirectoryPath, node.Revision, node.Url);
                 context.UIShell.RunWithProgressDialog( runner, "Checking out folder" );
-
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }  
 	}

@@ -22,8 +22,7 @@ namespace Ankh.Commands
         {
             this.SaveAllDirtyDocuments( context );
 
-            context.StartOperation( "Creating patch" );
-            try
+            using(OperationManager.RunOperation( "Creating patch" ))
             {
                 string diff = this.GetDiff( context );
                 
@@ -45,10 +44,6 @@ namespace Ankh.Commands
                             w.Write( diff );
                     }
                 }
-            }
-            finally
-            {
-                context.EndOperation();
             }
         } // Execute
     } 

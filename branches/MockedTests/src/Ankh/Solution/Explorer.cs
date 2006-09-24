@@ -690,6 +690,10 @@ namespace Ankh.Solution
             }
         }
 
+        IOperationManager OperationManager
+        {
+            get { return (IOperationManager)this.serviceProvider.GetService(typeof(IOperationManager)); }
+        }
 
         /// <summary>
         /// Merges the status icons with the icons for locked and read only.
@@ -742,26 +746,26 @@ namespace Ankh.Solution
             public virtual void Load( Explorer outer )
             {
                 DateTime startTime = DateTime.Now;
-                outer.context.StartOperation( "Synchronizing with solution explorer");
-
-                // avoid lots of flickering while we walk the tree
-                outer.TreeView.LockWindowUpdate();
-                try
+                using (outer.OperationManager.RunOperation("Synchronizing with solution explorer"))
                 {
-                    // we assume there is a single root node
-                    outer.solutionNode = (SolutionNode)SolutionExplorerTreeNode.CreateSolutionNode(
-                        outer.UIHierarchy.UIHierarchyItems.Item(1), outer);
+                    // avoid lots of flickering while we walk the tree
+                    outer.TreeView.LockWindowUpdate();
+                    try
+                    {
+                        // we assume there is a single root node
+                        outer.solutionNode = (SolutionNode)SolutionExplorerTreeNode.CreateSolutionNode(
+                            outer.UIHierarchy.UIHierarchyItems.Item(1), outer);
 
-                    // and we're done
-                    outer.context.OutputPane.WriteLine( "Time: {0}", DateTime.Now - startTime );
-                    if ( outer.SolutionFinishedLoading != null )
-                        outer.SolutionFinishedLoading( outer, EventArgs.Empty );
-                }
-                finally
-                {
-                    // done
-                    outer.TreeView.UnlockWindowUpdate();
-                    outer.context.EndOperation();
+                        // and we're done
+                        outer.context.OutputPane.WriteLine("Time: {0}", DateTime.Now - startTime);
+                        if (outer.SolutionFinishedLoading != null)
+                            outer.SolutionFinishedLoading(outer, EventArgs.Empty);
+                    }
+                    finally
+                    {
+                        // done
+                        outer.TreeView.UnlockWindowUpdate();
+                    }
                 }
 
                 outer.CreateOverlayImages();

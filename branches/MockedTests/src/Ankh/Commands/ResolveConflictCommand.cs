@@ -54,9 +54,7 @@ namespace Ankh.Commands
         {
             this.SaveAllDirtyDocuments( context );
 
-            context.StartOperation( "Resolving" );
-
-            try
+            using(OperationManager.RunOperation( "Resolving" ))
             {
                 IList items = context.Selection.GetSelectionResources(false, 
                      new ResourceFilterCallback(SvnItem.ConflictedFilter) );
@@ -66,10 +64,6 @@ namespace Ankh.Commands
                     this.Resolve( context, item );
                     item.Refresh( context.Client );
                 }
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }
 

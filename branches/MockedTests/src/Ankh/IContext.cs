@@ -89,11 +89,6 @@ namespace Ankh
         StatusCache StatusCache { get; }
 
         /// <summary>
-        /// Whether an operation is currently running.
-        /// </summary>
-        bool OperationRunning { get; }
-
-        /// <summary>
         /// An IWin32Window to be used for parenting dialogs.
         /// </summary>
         IWin32Window HostWindow { get; }
@@ -128,16 +123,6 @@ namespace Ankh
         /// Called when a solution is closed.
         /// </summary>
         void SolutionClosing();
-
-        /// <summary>
-        /// Should be called before starting any lengthy operation
-        /// </summary>
-        void StartOperation( string description );
-
-        /// <summary>
-        ///  called at the end of any lengthy operation
-        /// </summary>
-        void EndOperation();
 
         /// <summary>
         /// Miscellaneous cleanup stuff goes here.

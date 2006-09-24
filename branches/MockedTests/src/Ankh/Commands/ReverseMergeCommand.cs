@@ -38,38 +38,33 @@ namespace Ankh.Commands
 
             IList resources = context.Selection.GetSelectionResources(
                 true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
-            context.StartOperation( "Merging" );
-            try
+            using (OperationManager.RunOperation("Merging"))
             {
-                using ( ReverseMergeDialog dlg = new ReverseMergeDialog() )
+                using (ReverseMergeDialog dlg = new ReverseMergeDialog())
                 {
                     dlg.GetPathInfo += new GetPathInfoDelegate(SvnItem.GetPathInfo);
                     dlg.Items = resources;
                     dlg.CheckedItems = resources;
                     dlg.Recursive = true;
 
-                    if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                    if (dlg.ShowDialog(context.HostWindow) != DialogResult.OK)
                         return;
 
                     context.ProjectFileWatcher.StartWatchingForChanges();
-               
+
                     ReverseMergeRunner runner = new ReverseMergeRunner(
                         dlg.CheckedItems, dlg.Revision, dlg.Recursive ? Recurse.Full : Recurse.None,
-                        dlg.DryRun );
-                    context.UIShell.RunWithProgressDialog( runner, "Merging" );
+                        dlg.DryRun);
+                    context.UIShell.RunWithProgressDialog(runner, "Merging");
 
                     // we need to refresh every item, not just those selected since 
                     // the operation might be recursive
-                    if ( !context.ReloadSolutionIfNecessary() )
+                    if (!context.ReloadSolutionIfNecessary())
                     {
-                        foreach( SvnItem item in resources )
-                            item.Refresh( context.Client);
+                        foreach (SvnItem item in resources)
+                            item.Refresh(context.Client);
                     }
                 }
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }
         

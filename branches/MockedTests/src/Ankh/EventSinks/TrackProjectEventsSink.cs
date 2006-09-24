@@ -205,7 +205,7 @@ namespace Ankh.EventSinks
         {
             try
             {
-                if ( this.context.Config.AutoAddNewFiles && !this.context.OperationRunning )
+                if ( this.context.Config.AutoAddNewFiles && !this.OperationManager.OperationRunning )
                 {
                     foreach ( string file in paths )
                     {

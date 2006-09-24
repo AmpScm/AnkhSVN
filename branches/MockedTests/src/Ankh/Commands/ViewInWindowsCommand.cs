@@ -20,10 +20,8 @@ namespace Ankh.Commands
 
         public override void Execute(IContext context, string parameters)
         {
-            try
+            using(OperationManager.RunOperation( "Opening" ))
             {
-                context.StartOperation( "Opening" );
-
                 // make the catrunner get it on a separate thread.
                 INode node = context.RepositoryExplorer.SelectedNode;
                 CatRunner runner = new CatRunner( node.Name, 
@@ -49,10 +47,6 @@ namespace Ankh.Commands
                     else
                         throw;
                 }
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }        
 

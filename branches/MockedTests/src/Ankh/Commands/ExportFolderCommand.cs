@@ -42,19 +42,12 @@ namespace Ankh.Commands
             if ( browser.ShowDialog() != DialogResult.OK) 
                 return;
 
-            try
+            using (OperationManager.RunOperation("Exporting"))
             {
-                context.StartOperation( "Exporting" );
-
                 INode node = context.RepositoryExplorer.SelectedNode;
 
-                ExportRunner runner = new ExportRunner( browser.DirectoryPath, node.Revision, node.Url);
-                context.UIShell.RunWithProgressDialog( runner, "Exporting folder" );
-
-            }
-            finally
-            {
-                context.EndOperation();
+                ExportRunner runner = new ExportRunner(browser.DirectoryPath, node.Revision, node.Url);
+                context.UIShell.RunWithProgressDialog(runner, "Exporting folder");
             }
         }  
     }

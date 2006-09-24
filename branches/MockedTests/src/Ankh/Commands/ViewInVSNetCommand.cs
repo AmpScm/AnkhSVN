@@ -18,10 +18,8 @@ namespace Ankh.Commands
 
         public override void Execute(IContext context, string parameters)
         {
-            try
+            using(OperationManager.RunOperation( "Opening" ))
             {
-                context.StartOperation( "Opening" );
-
                 INode node = context.RepositoryExplorer.SelectedNode;
 
                 CatRunner runner = new CatRunner(node.Name, node.Revision, node.Url);
@@ -29,11 +27,6 @@ namespace Ankh.Commands
 
                 context.DTE.ItemOperations.OpenFile( runner.Path, 
                     Constants.vsViewKindPrimary );
-
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }        
 	}

@@ -64,6 +64,11 @@ namespace Ankh.Commands
             context.DTE.ExecuteCommand("File.SaveAll", "");
         }
 
+        protected IOperationManager OperationManager
+        {
+            get { return (IOperationManager)this.serviceProvider.GetService(typeof(IOperationManager)); }
+        }
+
         protected const vsCommandStatus Enabled = 
             vsCommandStatus.vsCommandStatusEnabled |
             vsCommandStatus.vsCommandStatusSupported;

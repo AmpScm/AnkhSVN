@@ -37,11 +37,11 @@ namespace Ankh.Commands
 
         public override void Execute(IContext context, string parameters)
         {
-            try
+            using(OperationManager.RunOperation( "Updating" ))
             {
                 // save all files
                 this.SaveAllDirtyDocuments( context );
-                context.StartOperation( "Updating" );
+                
 
                 IList resources = context.Selection.GetSelectionResources( true,
                     new ResourceFilterCallback(SvnItem.VersionedFilter) );
@@ -63,13 +63,7 @@ namespace Ankh.Commands
                         context.Selection.RefreshSelection();
                 }
             }
-            finally
-            {
-                context.EndOperation();
-
-            }
-
-        }    
+        }
 
         #endregion
 

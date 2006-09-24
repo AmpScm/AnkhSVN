@@ -79,71 +79,55 @@ namespace Ankh.Commands
                 // do we need to create a new repository directory?
                 if ( dlg.CreateSubDirectory )
                 {
-                    context.StartOperation( "Creating repository directory" );
-                    try
+                    using (OperationManager.RunOperation("Creating repository directory"))
                     {
-                        url = UriUtils.Combine( url, dlg.SubDirectoryName );
-                        using( MakeDirWorker makeDirWorker = new MakeDirWorker( url, 
-                                   dlg.LogMessage, context ) )
+                        url = UriUtils.Combine(url, dlg.SubDirectoryName);
+                        using (MakeDirWorker makeDirWorker = new MakeDirWorker(url,
+                                   dlg.LogMessage, context))
                         {
-                            context.UIShell.RunWithProgressDialog( makeDirWorker, 
-                                "Creating directory" ); 
+                            context.UIShell.RunWithProgressDialog(makeDirWorker,
+                                "Creating directory");
                         }
-                    }
-                    finally
-                    {
-                        context.EndOperation();
                     }
                 }
             }
 
+            string solutionDir = null;
             // now check out the repository directory into the solution dir
-            context.StartOperation( "Checking out repository directory" );
-            string solutionDir = Path.GetDirectoryName( 
-                context.DTE.Solution.FullName );
-            try
+            using (OperationManager.RunOperation("Checking out repository directory"))
             {
+                solutionDir = Path.GetDirectoryName(
+                    context.DTE.Solution.FullName);
                 // check out the repository directory specified               
-                CheckoutRunner checkoutRunner = new CheckoutRunner(  
-                    solutionDir, Revision.Head, url );
-                context.UIShell.RunWithProgressDialog( checkoutRunner, "Checking out" );
-            }
-            finally
-            {
-                context.EndOperation();
+                CheckoutRunner checkoutRunner = new CheckoutRunner(
+                    solutionDir, Revision.Head, url);
+                context.UIShell.RunWithProgressDialog(checkoutRunner, "Checking out");
             }
 
             // walk the tree and add all the files
-            context.StartOperation( "Adding files" );
             try
             {
-                // the solution dir is already a wc                
-                this.paths = new ArrayList();
-                this.paths.Add( solutionDir );
-                    
-                context.Client.Add( context.DTE.Solution.FullName, Recurse.None );
-                this.paths.Add( context.DTE.Solution.FullName );
-                this.AddProjects( context, vsProjects );  
+                using (OperationManager.RunOperation("Adding files"))
+                {
+                    // the solution dir is already a wc                
+                    this.paths = new ArrayList();
+                    this.paths.Add(solutionDir);
+
+                    context.Client.Add(context.DTE.Solution.FullName, Recurse.None);
+                    this.paths.Add(context.DTE.Solution.FullName);
+                    this.AddProjects(context, vsProjects);
+                }
             }
-            catch( Exception )
+            catch (Exception)
             {
                 // oops, bad stuff happened
-                context.StartOperation( "Error: Reverting changes" );
-                try
+                using(OperationManager.RunOperation("Error: Reverting changes"))
                 {
-                    context.Client.Revert( new string[]{ solutionDir }, Recurse.Full );
-                    PathUtils.RecursiveDelete( 
-                        Path.Combine(solutionDir, Client.AdminDirectoryName) );
+                    context.Client.Revert(new string[] { solutionDir }, Recurse.Full);
+                    PathUtils.RecursiveDelete(
+                        Path.Combine(solutionDir, Client.AdminDirectoryName));
                 }
-                finally
-                {
-                    context.EndOperation();
-                }
-                throw;                
-            }
-            finally
-            {
-                context.EndOperation();
+                throw;
             }
 
             // now commit the added files
@@ -153,32 +137,22 @@ namespace Ankh.Commands
             if ( !operation.ShowLogMessageDialog( ) )
             {
                 // oops - after all this work, the user cancelled
-                context.StartOperation( "Aborted - reverting" );
-                try
+                using (OperationManager.RunOperation("Aborted - reverting"))
                 {
-                    context.Client.Revert( new string[]{ solutionDir }, Recurse.Full );
-                    PathUtils.RecursiveDelete( 
-                        Path.Combine(solutionDir, Client.AdminDirectoryName) );
-                }
-                finally
-                {
-                    context.EndOperation();
+                    context.Client.Revert(new string[] { solutionDir }, Recurse.Full);
+                    PathUtils.RecursiveDelete(
+                        Path.Combine(solutionDir, Client.AdminDirectoryName));
                 }
             }
             else
             {  
                 // go ahead with the commit
-                context.StartOperation( "Committing added files" );
-                try
+                using(OperationManager.RunOperation("Committing added files" ))
                 {
                     bool completed = operation.Run( "Committing" ); 
 
                     if ( !completed )
                         return;
-                }
-                finally
-                {
-                    context.EndOperation();
                 }
                         
                 // we want ankh to get enabled right away

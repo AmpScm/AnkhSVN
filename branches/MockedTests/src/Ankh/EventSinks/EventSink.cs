@@ -32,7 +32,12 @@ namespace Ankh.EventSinks
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.context; }
-        }  
+        }
+
+        protected IOperationManager OperationManager
+        {
+            get { return (IOperationManager)this.serviceProvider.GetService(typeof(IOperationManager)); }
+        }
 
         /// <summary>
         /// Whether a VC++ project is currently being added. This property is

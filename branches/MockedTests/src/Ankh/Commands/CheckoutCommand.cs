@@ -33,8 +33,7 @@ namespace Ankh.Commands
                 if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
                     return;
 
-                context.StartOperation( "Checking out" );
-                try
+                using(OperationManager.RunOperation( "Checking out" ))
                 {
                     CheckoutRunner runner = new CheckoutRunner(
                         dlg.LocalPath, dlg.Revision, dlg.Url, dlg.Recursive ? Recurse.Full : Recurse.None );
@@ -42,10 +41,6 @@ namespace Ankh.Commands
 
                     // make sure it's remembered
                     RegistryUtils.CreateNewTypedUrl( dlg.Url );
-                }
-                finally
-                {
-                    context.EndOperation();
                 }
             }
         }

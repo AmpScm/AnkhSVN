@@ -25,17 +25,10 @@ namespace Ankh.Commands
 
         public override void Execute(Ankh.IContext context, string parameters)
         {
-            try
+            using(OperationManager.RunOperation( "Refreshing" ))
             {
-                context.StartOperation( "Refreshing" );
-
                 context.Selection.RefreshSelection();
             }
-            finally
-            {
-                context.EndOperation();
-            }
-
         }
     }
 }

@@ -36,6 +36,7 @@ namespace Ankh
             this.addin = addin;
             this.uiShell = uiShell;
             this.uiShell.Context = this;
+            this.serviceProvider = serviceProvider;
 
             this.errorHandler = new ErrorHandler( dte.Version, this );
 
@@ -203,12 +204,6 @@ namespace Ankh
             get{ return this.statusCache; }
         }
 
-        public bool OperationRunning
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.operationRunning; }
-        }
-
         public string SolutionDirectory
         {
             get
@@ -335,50 +330,6 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Should be called before starting any lengthy operation
-        /// </summary>
-        public void StartOperation( string description )
-        {
-            //TODO: maybe refactor this?
-            this.operationRunning = true;
-            try
-            {
-                this.DTE.StatusBar.Text = description + "...";
-                this.DTE.StatusBar.Animate( true, vsStatusAnimation.vsStatusAnimationSync );
-            }
-            catch ( Exception )
-            {
-                // Swallow, not critical
-            }
-
-            this.OutputPane.StartActionText( description );
-
-            this.progressDialog.Caption = description;
-        }
-
-        /// <summary>
-        ///  called at the end of any lengthy operation
-        /// </summary>
-        public void EndOperation()
-        {
-            if ( this.operationRunning )
-            {
-                try
-                {
-                    this.DTE.StatusBar.Text = "Ready";
-                    this.DTE.StatusBar.Animate( false, vsStatusAnimation.vsStatusAnimationSync );
-                }
-                catch ( Exception )
-                {
-                    // swallow, not critical
-                }
-
-                this.OutputPane.EndActionText();
-                this.operationRunning = false;
-            }
-        }
-
-        /// <summary>
         /// Miscellaneous cleanup stuff goes here.
         /// </summary>
         public void Shutdown()
@@ -464,10 +415,6 @@ namespace Ankh
             {
                 ErrorHandler.Handle( ex );
                 return false;
-            }
-            finally
-            {
-                this.EndOperation();
             }
         }
 
@@ -688,8 +635,6 @@ namespace Ankh
         private bool ankhLoadedForSolution;
         private StatusCache statusCache;
 
-        private bool operationRunning;
-
         private ConflictManager conflictManager; 
         private IErrorHandler errorHandler;
 
@@ -704,6 +649,7 @@ namespace Ankh
 
         private VSCommandBars commandBars;
 
+        private System.IServiceProvider serviceProvider;
         #region IContext Members
 
         

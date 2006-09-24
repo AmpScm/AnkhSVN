@@ -50,21 +50,16 @@ namespace Ankh.Commands
             if ( info == null ) 
                 return;
 
-            context.StartOperation( "Switching" );
-            context.ProjectFileWatcher.StartWatchingForChanges();
-            try
+            using (OperationManager.RunOperation("Switching"))
             {
-                SwitchRunner runner = new SwitchRunner(info.Path, info.SwitchToUrl, 
-                    info.RevisionStart, info.Recurse );
-                context.UIShell.RunWithProgressDialog( runner, "Switching" );
-                if ( !context.ReloadSolutionIfNecessary() )
+                context.ProjectFileWatcher.StartWatchingForChanges();
+                SwitchRunner runner = new SwitchRunner(info.Path, info.SwitchToUrl,
+                    info.RevisionStart, info.Recurse);
+                context.UIShell.RunWithProgressDialog(runner, "Switching");
+                if (!context.ReloadSolutionIfNecessary())
                 {
                     context.Selection.RefreshSelection();
                 }
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }
 

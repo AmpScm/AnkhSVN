@@ -25,14 +25,13 @@ namespace Ankh.Commands
     
         public override void Execute(IContext context, string parameters)
         {
-            context.StartOperation( "Running cleanup" );
-
-            IList resources = context.Selection.GetSelectionResources( false,
-                new ResourceFilterCallback(SvnItem.DirectoryFilter) );
-            foreach( SvnItem item in resources )
-                context.Client.Cleanup( item.Path );
-
-            context.EndOperation();
+            using (OperationManager.RunOperation("Running cleanup"))
+            {
+                IList resources = context.Selection.GetSelectionResources(false,
+                    new ResourceFilterCallback(SvnItem.DirectoryFilter));
+                foreach (SvnItem item in resources)
+                    context.Client.Cleanup(item.Path);
+            }
         }
     }
 }

@@ -44,21 +44,15 @@ namespace Ankh.Commands
             if ( browser.ShowDialog() != DialogResult.OK) 
                 return;
 
-            try
+            using (OperationManager.RunOperation("Checking out"))
             {
-                context.StartOperation( "Checking out" );
-
                 INode node = context.RepositoryExplorer.SelectedNode;
                 INode parent = node.Parent;
 
-                CheckoutRunner runner = new CheckoutRunner( browser.DirectoryPath, parent.Revision, parent.Url);
-                context.UIShell.RunWithProgressDialog( runner, "Checking out solution" );
+                CheckoutRunner runner = new CheckoutRunner(browser.DirectoryPath, parent.Revision, parent.Url);
+                context.UIShell.RunWithProgressDialog(runner, "Checking out solution");
 
-                context.DTE.Solution.Open( System.IO.Path.Combine( browser.DirectoryPath, node.Name ) );
-            }
-            finally
-            {
-                context.EndOperation();
+                context.DTE.Solution.Open(System.IO.Path.Combine(browser.DirectoryPath, node.Name));
             }
         }  
 	}

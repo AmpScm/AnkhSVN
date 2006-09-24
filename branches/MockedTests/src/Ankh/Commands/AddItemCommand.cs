@@ -56,19 +56,13 @@ namespace Ankh.Commands
                 resources = info.CheckedItems;
             }
 
-            context.StartOperation( "Adding" );
-            try
+            using(OperationManager.RunOperation( "Adding" ))
             {
-
                 foreach( SvnItem item in resources )
                 {
                     context.Client.Add( item.Path, Recurse.None );
                 }
                 context.Selection.RefreshSelection();
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }
         #endregion

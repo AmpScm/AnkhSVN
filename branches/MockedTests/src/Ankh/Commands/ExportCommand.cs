@@ -27,24 +27,19 @@ namespace Ankh.Commands
 
         public override void Execute(IContext context, string parameters)
         {
-            using(ExportDialog dlg = new ExportDialog())
+            using (ExportDialog dlg = new ExportDialog())
             {
-                if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                if (dlg.ShowDialog(context.HostWindow) != DialogResult.OK)
                     return;
 
-                context.StartOperation( "Exporting" );
-                try
+                using (OperationManager.RunOperation("Exporting"))
                 {
-                    ExportRunner runner = new ExportRunner( 
-                        dlg.LocalPath, dlg.Revision, dlg.Source, !dlg.NonRecursive );
-                    context.UIShell.RunWithProgressDialog( runner, "Exporting" );
+                    ExportRunner runner = new ExportRunner(
+                        dlg.LocalPath, dlg.Revision, dlg.Source, !dlg.NonRecursive);
+                    context.UIShell.RunWithProgressDialog(runner, "Exporting");
 
                     // make sure it's remembered
-                    RegistryUtils.CreateNewTypedUrl( dlg.Source);
-                }
-                finally
-                {
-                    context.EndOperation();
+                    RegistryUtils.CreateNewTypedUrl(dlg.Source);
                 }
             }
         }

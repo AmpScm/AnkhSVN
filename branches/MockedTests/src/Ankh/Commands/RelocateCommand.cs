@@ -39,8 +39,7 @@ namespace Ankh.Commands
             SvnItem dir = (SvnItem)context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback(SvnItem.DirectoryFilter) )[0];
 
-            context.StartOperation( "Relocating" );
-            try
+            using(OperationManager.RunOperation( "Relocating" ))
             {
                 using( RelocateDialog dlg = new RelocateDialog() )
                 {
@@ -58,10 +57,6 @@ namespace Ankh.Commands
 
                     dir.Refresh( context.Client );
                 }
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }
 
