@@ -66,7 +66,14 @@ namespace Ankh.Commands
 
         protected IOperationManager OperationManager
         {
-            get { return (IOperationManager)this.serviceProvider.GetService(typeof(IOperationManager)); }
+            get 
+            {
+                if (CommandBase.operationManager == null)
+                {
+                    CommandBase.operationManager = (IOperationManager)this.serviceProvider.GetService(typeof(IOperationManager));
+                }
+                return CommandBase.operationManager;
+            }
         }
 
         protected const vsCommandStatus Enabled = 
@@ -121,8 +128,7 @@ namespace Ankh.Commands
         }
 
 
-
-
+        private static IOperationManager operationManager;
         private EnvDTE.Command command;
         private IServiceProvider serviceProvider;
         
