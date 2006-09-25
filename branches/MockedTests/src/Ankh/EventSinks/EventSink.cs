@@ -36,7 +36,12 @@ namespace Ankh.EventSinks
 
         protected IOperationManager OperationManager
         {
-            get { return (IOperationManager)this.serviceProvider.GetService(typeof(IOperationManager)); }
+            get 
+            {
+                if(EventSink.operationManager == null)
+                    EventSink.operationManager = (IOperationManager)this.serviceProvider.GetService(typeof(IOperationManager));
+                return EventSink.operationManager;
+            }
         }
 
         /// <summary>
@@ -50,6 +55,7 @@ namespace Ankh.EventSinks
             set{ addingProject = value; }
         }
 
+        private static IOperationManager operationManager;
         protected System.IServiceProvider serviceProvider;
         protected const int REFRESHDELAY = 800;
         private static bool addingProject = false;
