@@ -77,7 +77,7 @@ namespace Ankh.Commands
             }
                
             // perform the actual revert 
-            context.OutputPane.StartActionText("Reverting");  
+            OutputPaneProvider.OutputPaneWriter.StartActionText("Reverting");  
             context.ProjectFileWatcher.StartWatchingForChanges(); 
             try
             {
@@ -94,7 +94,7 @@ namespace Ankh.Commands
                     item.Refresh( context.Client );
             }
 
-            context.OutputPane.EndActionText();
+            OutputPaneProvider.OutputPaneWriter.EndActionText();
         }               
         #endregion       
     }

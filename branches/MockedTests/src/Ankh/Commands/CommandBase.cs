@@ -76,6 +76,16 @@ namespace Ankh.Commands
             }
         }
 
+        protected IOutputPaneProvider OutputPaneProvider
+        {
+            get
+            {
+                if (CommandBase.outputPaneProvider == null)
+                    CommandBase.outputPaneProvider = (IOutputPaneProvider)this.serviceProvider.GetService(typeof(IOutputPaneProvider));
+                return CommandBase.outputPaneProvider;
+            }
+        }
+
         protected const vsCommandStatus Enabled = 
             vsCommandStatus.vsCommandStatusEnabled |
             vsCommandStatus.vsCommandStatusSupported;
@@ -127,7 +137,7 @@ namespace Ankh.Commands
             }
         }
 
-
+        private static IOutputPaneProvider outputPaneProvider;
         private static IOperationManager operationManager;
         private EnvDTE.Command command;
         private IServiceProvider serviceProvider;
