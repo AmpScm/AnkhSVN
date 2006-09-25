@@ -418,6 +418,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
+    <Compile Include="HostWindowService.cs" />
     <Compile Include="IWorkingCopyExplorer.cs" />
     <Compile Include="OperationManager.cs" />
     <Compile Include="OutputPaneProvider.cs" />
