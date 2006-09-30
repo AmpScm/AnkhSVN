@@ -99,7 +99,7 @@ namespace Ankh.Solution
             return false;
         }
 
-        protected override void DoDispose()
+        protected override void UnhookEvents()
         {
             UnhookEvents( new SvnItem[] { this.solutionFile, this.solutionFolder }, new EventHandler( this.ChildOrResourceChanged ) );
             UnhookEvents( this.deletedResources, new EventHandler( this.ChildOrResourceChanged ) );

@@ -141,7 +141,7 @@ namespace Ankh.Solution
             return removed;
         }
 
-        protected override void DoDispose()
+        protected override void UnhookEvents()
         {
             UnhookEvents( this.resources, new EventHandler( this.ChildOrResourceChanged ) );
             UnhookEvents( this.resources, new EventHandler( this.DeletedItemStatusChanged ) );
@@ -200,8 +200,6 @@ namespace Ankh.Solution
 
         protected void FindResources()
         {
-            this.Explorer.AddResource( this.projectItem, this.parsedProjectItem, this ); 
-
             this.resources = new ArrayList();
             this.deletedResources = new ArrayList();
             try
