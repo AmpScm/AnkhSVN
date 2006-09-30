@@ -237,8 +237,14 @@ namespace Ankh.Solution
 
         }
 
-       
+        protected override void DoDispose()
+        {
+            this.UnhookEvents();
 
+            this.Explorer.RemoveUIHierarchyResource( this.uiItem );
+        }
+
+        protected abstract void UnhookEvents();
 
 
         /// <summary>
@@ -300,6 +306,9 @@ namespace Ankh.Solution
                             childNode.Changed += new EventHandler(this.ChildOrResourceChanged);
                             this.Children.Add( childNode );
                             childNode.Refresh( false );
+
+                            this.explorer.AddUIHierarchyItemResource( child, childNode );
+
                         }
                     }
 

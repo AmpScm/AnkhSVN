@@ -9,7 +9,6 @@ namespace Ankh.Solution
         public SolutionFolderNode(EnvDTE.UIHierarchyItem item, IntPtr hItem, Explorer explorer, SolutionExplorerTreeNode parent, EnvDTE.Project project)
             : base(item, hItem, explorer, parent)
         {
-            this.Explorer.AddResource( project, this );
             this.FindChildren();
         }
 
@@ -54,7 +53,7 @@ namespace Ankh.Solution
             get { throw new Exception( "The method or operation is not implemented." ); }
         }
 
-        protected override void DoDispose()
+        protected override void UnhookEvents()
         {
             // nothing
         }
