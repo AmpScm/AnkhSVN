@@ -53,15 +53,6 @@ namespace Ankh.Solution
                 new EventHandler( this.ChildOrResourceChanged ) );
         }
 
-        protected override void CheckForSvnDeletions()
-        {
-            // if the project folder is deleted, make sure the children are as well.
-            if ( this.projectFolder.IsDeleted )
-            {
-                this.SvnDelete();
-            }
-        }
-
         public override void Refresh(bool rescan)
         {
             if (rescan)

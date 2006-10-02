@@ -84,15 +84,6 @@ namespace Ankh.Solution
             }
         }
 
-        protected override void CheckForSvnDeletions()
-        {
-            // if the solution folder is deleted, make sure all the children are as well.
-            if ( this.solutionFolder.IsDeleted )
-            {
-                this.SvnDelete();
-            }
-        }
-
         protected override bool RemoveTreeNodeIfResourcesDeleted()
         {
             // You can't delete a solution from VS.
