@@ -7,6 +7,7 @@ using NSvn.Common;
 using EnvDTE;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Ankh.Solution
 {
@@ -61,105 +62,26 @@ namespace Ankh.Solution
                 MergeStatuses(this.deletedResources));
         }
 
-        protected override void CheckForSvnDeletions()
-        {
-            // only check *our* resources here, we already know that the deleted resources are, uhm, deleted.
-            foreach(SvnItem item in this.resources)
-            {
-                if ( item.IsDeleted )
-                {
-                    this.SvnDelete();
-                }
-            }
-        }
-
         protected override bool RemoveTreeNodeIfResourcesDeleted()
         {
-            if ( !AllResourcesDeleted() )
-            {
-                return false;
-            }
-
-            // we need to be absolutely sure this project item is up to date, since it may have been renamed
-            this.FindResources();
-
-            // If everything's deleted, I have no more reason to live.
-            if ( !AllResourcesDeleted() )
-            {
-                return false;
-            }
-
-            // get us off the hook
-            this.Dispose();
-            this.RemoveSelf();
-
-            bool removed = false;
-            try
-            {   
-                // VC files can only be removed with VCProject.RemoveFile.
-                VCProject vcProject = this.ProjectItem.ContainingProject.Object as VCProject;
-                VCProjectItem vcItem = this.ProjectItem.Object as VCProjectItem;
-                if ( vcProject != null && vcItem != null )
-                {
-                    vcProject.RemoveFile( vcItem );
-                    removed = true;
-                }
-            }
-            catch ( Exception )
-            {
-                // ignore
-            }
             try
             {
-                // Try just removing them from the project.
-                if ( !removed )
-                {
-                    this.ProjectItem.Remove();
-                    removed = true; 
-                }
+                // this will throw if the project item is invalid.
+                int fileCount = this.ProjectItem.FileCount;
+                return fileCount < 0;
             }
-            catch(Exception)
+            catch ( COMException )
             {
-            }
-            try
-            {
-                // New-style ASP.NET files can only be deleted from projects.
-                if ( !removed )
-                {
-                    this.ProjectItem.Delete();
-                    removed = true; 
-                }
-            }
-            catch ( Exception )
-            {
+                this.RemoveSelf();
+                return true;
             }
 
-            if ( removed )
-            {
-                this.Parent.Refresh();
-            }
-            return removed;
         }
 
         protected override void UnhookEvents()
         {
             UnhookEvents( this.resources, new EventHandler( this.ChildOrResourceChanged ) );
             UnhookEvents( this.resources, new EventHandler( this.DeletedItemStatusChanged ) );
-        }
-
-        private bool AllResourcesDeleted()
-        {
-            IList versionedResources = new ArrayList();
-            this.GetResources( versionedResources, true, new ResourceFilterCallback( SvnItem.NotDeletedFilter ) );
-
-            if ( versionedResources.Count > 0 )
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
         }
 
         /// <summary>

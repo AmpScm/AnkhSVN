@@ -37,11 +37,6 @@ namespace Ankh.Solution
 
         }
 
-        protected override void CheckForSvnDeletions()
-        {
-            // nothing, solution folders are virtual only.
-        }
-
         protected override bool RemoveTreeNodeIfResourcesDeleted()
         {
             // It's not our business to remove solution folders, even if they're empty.
