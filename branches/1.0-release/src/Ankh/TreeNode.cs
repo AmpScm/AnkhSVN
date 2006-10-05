@@ -85,10 +85,6 @@ namespace Ankh
         /// <returns></returns>
         protected abstract bool RemoveTreeNodeIfResourcesDeleted();
 
-        protected abstract void CheckForSvnDeletions();
-
-        protected abstract void SvnDelete();
-
         protected NodeStatus CurrentStatus
         {
             [System.Diagnostics.DebuggerStepThrough]
@@ -237,7 +233,6 @@ namespace Ankh
         {
             if ( !this.IsDeleting )
             {
-                this.CheckForSvnDeletions();
                 if ( CheckForDeletedTreeNode() )
                 {
                     return;
@@ -312,6 +307,8 @@ namespace Ankh
         {
             treeNode.Changed -= new EventHandler( this.ChildOrResourceChanged );
             this.Children.Remove( treeNode );
+
+            treeNode.Dispose();
         }
 
         private bool isDeleting;

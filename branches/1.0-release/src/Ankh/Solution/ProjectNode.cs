@@ -53,15 +53,6 @@ namespace Ankh.Solution
                 new EventHandler( this.ChildOrResourceChanged ) );
         }
 
-        protected override void CheckForSvnDeletions()
-        {
-            // if the project folder is deleted, make sure the children are as well.
-            if ( this.projectFolder.IsDeleted )
-            {
-                this.SvnDelete();
-            }
-        }
-
         public override void Refresh(bool rescan)
         {
             if (rescan)
@@ -78,11 +69,12 @@ namespace Ankh.Solution
             return false;
         }
 
-        protected override void DoDispose()
+        protected override void UnhookEvents()
         {
             UnhookEvents( new SvnItem[] { this.projectFile, this.projectFolder }, new EventHandler( this.ChildOrResourceChanged ) );
             UnhookEvents( this.deletedResources, new EventHandler(this.ChildOrResourceChanged) );
         }
+
 
         private void FindProjectResources(Explorer explorer)
         {
@@ -112,9 +104,6 @@ namespace Ankh.Solution
                 this.projectFolder = this.Explorer.Context.StatusCache[parentPath];
                 this.projectFile = this.Explorer.Context.StatusCache[fullname];
 
-                this.Explorer.AddResource(this.project, this, fullname);
-                this.Explorer.AddResource(this.uiItem.Object, this, fullname);
-
                 // attach event handlers                
                 this.projectFolder.Changed += del;
                 this.projectFile.Changed += del;
@@ -129,8 +118,6 @@ namespace Ankh.Solution
             {
                 this.projectFolder = this.Explorer.Context.StatusCache[fullname];
                 this.projectFile = SvnItem.Unversionable;
-                this.Explorer.AddResource(project, this, fullname);
-                this.Explorer.AddResource(this.uiItem.Object, this, fullname);
 
                 this.projectFolder.Changed += del;
                 this.AddDeletions( this.projectFolder.Path, this.deletedResources, new EventHandler(this.DeletedItemStatusChanged) );
@@ -139,10 +126,6 @@ namespace Ankh.Solution
             {
                 this.projectFile = SvnItem.Unversionable;
                 this.projectFolder = SvnItem.Unversionable;
-
-                this.Explorer.AddResource(this.project, this, fullname);
-                this.Explorer.AddResource(this.uiItem.Object, this, fullname);
-
             }
         }
 
