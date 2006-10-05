@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
     >
@@ -227,6 +227,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CommandBarContextMenu.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CommandMap.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -302,6 +307,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IWorkingCopyExplorer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "lock.ico"
                     BuildAction = "EmbeddedResource"
                 />
@@ -321,6 +331,16 @@
                 />
                 <File
                     RelPath = "LogResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NodeStatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NodeStatusKind.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -368,6 +388,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "StatusImages.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SvnClient.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -379,6 +404,11 @@
                 />
                 <File
                     RelPath = "SwitchDialogInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TreeNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -409,6 +439,11 @@
                 />
                 <File
                     RelPath = "VSNetFolderNodeControlAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "VSNetItemControlAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -444,6 +479,11 @@
                 />
                 <File
                     RelPath = "Commands\AddSolutionToRepositoryCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\AddWorkingCopyExplorerRootCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -591,6 +631,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\RemoveWorkingCopyExplorerRootCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\ResolveConflictCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -632,6 +677,11 @@
                 />
                 <File
                     RelPath = "Commands\ShowRepositoryExplorerCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\ShowWorkingCopyExplorerCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -779,6 +829,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Solution\SolutionExplorerTreeNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Solution\SolutionFolderNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -789,12 +844,36 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Solution\TreeNode.cs"
+                    RelPath = "Solution\TreeView.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Solution\TreeView.cs"
+                    RelPath = "WorkingCopyExplorer\FileSystemDirectoryItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkingCopyExplorer\FileSystemFileItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkingCopyExplorer\FileSystemItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkingCopyExplorer\FileSystemRootItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkingCopyExplorer\WCExplorer.cd"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "WorkingCopyExplorer\WorkingCopyExplorer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

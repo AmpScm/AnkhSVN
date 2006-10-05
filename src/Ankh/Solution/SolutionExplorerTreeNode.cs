@@ -202,43 +202,14 @@ namespace Ankh.Solution
             }
         }
 
-        /// <summary>
-        /// Deletes all resources belonging to this node and its children.
-        /// </summary>
-        protected override void SvnDelete()
+        protected override void DoDispose()
         {
-            try
-            {
-                this.IsDeleting = true;
+            this.UnhookEvents();
 
-                IList resources = new ArrayList();
-                this.GetResources( resources, true, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
-
-                ArrayList resourcePaths = new ArrayList();
-                foreach ( SvnItem item in resources )
-                {
-                    if ( !item.IsDeleted )
-                    {
-                        resourcePaths.Add( item.Path );
-                    }
-                }
-
-                this.explorer.Context.Client.Delete( (string[])resourcePaths.ToArray( typeof( string ) ), true );
-
-                foreach ( SvnItem item in resources )
-                {
-                    item.Refresh( this.explorer.Context.Client );
-                }
-            }
-            finally
-            {
-                this.IsDeleting = false;
-            }
-
+            this.Explorer.RemoveUIHierarchyResource( this.uiItem );
         }
 
-       
-
+        protected abstract void UnhookEvents();
 
 
         /// <summary>
@@ -300,6 +271,9 @@ namespace Ankh.Solution
                             childNode.Changed += new EventHandler(this.ChildOrResourceChanged);
                             this.Children.Add( childNode );
                             childNode.Refresh( false );
+
+                            this.explorer.AddUIHierarchyItemResource( child, childNode );
+
                         }
                     }
 
