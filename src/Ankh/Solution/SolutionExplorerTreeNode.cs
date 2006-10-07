@@ -60,15 +60,18 @@ namespace Ankh.Solution
             {
                 ProjectItem projectItem = item.Object as ProjectItem;
                 // Check if we have a subproject inside an Enterprise Template project
+
+                object projectItemObject = DteUtils.GetProjectItemObject( projectItem );
+
                 if ( projectItem.Kind == DteUtils.EnterpriseTemplateProjectItemKind && 
                     parent.uiItem.Object is Project &&
                     ((Project)parent.uiItem.Object).Kind == DteUtils.EnterpriseTemplateProjectKind )
                 {
                     return new ProjectNode( item, hItem, explorer, parent, projectItem.SubProject );
                 }
-                else if ( projectItem.Object is Project )
+                else if ( projectItemObject is Project )
                 {
-                    return GetTreeNodeForProject( item, hItem, explorer, parent, projectItem.Object as Project );
+                    return GetTreeNodeForProject( item, hItem, explorer, parent, projectItemObject as Project );
                 }
                 else  //normal project item
                 {
@@ -246,15 +249,17 @@ namespace Ankh.Solution
                 // retain the original expansion state
                 bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
 
+                this.uiItem.UIHierarchyItems.Expanded = true;
+
                 // get the treeview child
                 IntPtr childItem = this.explorer.TreeView.GetChild( this.hItem );
 
-                // a node needs to be expanded at least once in order to have child nodes
-                if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
-                {
-                    this.uiItem.UIHierarchyItems.Expanded = true;
-                    childItem = this.explorer.TreeView.GetChild( this.hItem );
-                }
+                //// a node needs to be expanded at least once in order to have child nodes
+                //if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
+                //{
+                //    this.uiItem.UIHierarchyItems.Expanded = true;
+                //    childItem = this.explorer.TreeView.GetChild( this.hItem );
+                //}
                 
                 // iterate over the ui items and the treeview items in parallell
                 foreach( UIHierarchyItem child in this.uiItem.UIHierarchyItems )
