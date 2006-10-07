@@ -588,9 +588,16 @@ namespace Ankh.Solution
 
         private Project GetParentProject( Project project )
         {
-            return project.ParentProjectItem != null
-                ? project.ParentProjectItem.ContainingProject
-                : null;
+            try
+            {
+                return project.ParentProjectItem != null
+                        ? project.ParentProjectItem.ContainingProject
+                        : null;
+            }
+            catch ( Exception )
+            {
+                return null;
+            }
         }
 
         private SolutionExplorerTreeNode GetNode(UIHierarchyItem item)
