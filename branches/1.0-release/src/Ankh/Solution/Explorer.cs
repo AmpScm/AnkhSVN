@@ -553,7 +553,72 @@ namespace Ankh.Solution
             }
             catch ( Exception )
             {
-                this.DumpHierarchy( hierarchy );
+                
+                SolutionExplorerTreeNode node = SearchForProject( project, hierarchy.UIHierarchyItems.Item(1).UIHierarchyItems );
+                if ( node == null )
+                {
+                    DumpHierarchy( hierarchy );
+                }
+                return node;
+            }
+        }
+
+        private SolutionExplorerTreeNode SearchForProject( Project project, UIHierarchyItems hierarchyItems )
+        {
+            try
+            {
+                foreach ( UIHierarchyItem item in hierarchyItems )
+                {
+                    SolutionExplorerTreeNode treeNode = null;
+                    if ( item.Object == project )
+                    {
+                        treeNode = GetNode( item ); ;
+                    }
+                    else if ( item.Object is Project )
+                    {
+                        treeNode = SearchPossibleSolutionFolder( project, item.Object as Project, item );
+                    }
+                    else if ( item.Object is ProjectItem )
+                    {
+                        // Children of a solution folder are ProjectItem objects. Their .Object are the actual children
+                        ProjectItem projectItem = item.Object as ProjectItem;
+                        Project childProject = DteUtils.GetProjectItemObject(projectItem) as Project;
+                        if ( childProject != null )
+                        {
+                            if ( childProject == project )
+                            {
+                                treeNode = GetNode( item );
+                            }
+                            else
+                            {
+                                treeNode = SearchPossibleSolutionFolder( project, childProject, item );
+                            }
+                            
+                        }
+                    }
+
+                    if ( treeNode != null )
+                    {
+                        return treeNode;
+                    }
+                }
+                return null;
+            }
+            catch ( Exception )
+            {
+                return null;
+            }
+        }
+
+        private SolutionExplorerTreeNode SearchPossibleSolutionFolder( Project project, Project possibleSolutionFolder, UIHierarchyItem item )
+        {
+            // is this a solution folder?
+            if ( possibleSolutionFolder != null && possibleSolutionFolder.Kind == DteUtils.SolutionFolderKind )
+            {
+                return SearchForProject( project, item.UIHierarchyItems );
+            }
+            else
+            {
                 return null;
             }
         }
@@ -595,7 +660,7 @@ namespace Ankh.Solution
 
         private SolutionExplorerTreeNode GetNode(UIHierarchyItem item)
         {
-            if ( item.Object == null || !this.context.AnkhLoadedForSolution )
+            if ( !this.context.AnkhLoadedForSolution )
                 return null;
 
             if ( item == this.UIHierarchy.UIHierarchyItems.Item( 1 ) )
