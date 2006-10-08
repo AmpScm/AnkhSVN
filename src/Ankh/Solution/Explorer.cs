@@ -667,7 +667,7 @@ namespace Ankh.Solution
 
         private SolutionExplorerTreeNode GetNode(UIHierarchyItem item)
         {
-            if ( item.Object == null || !this.context.AnkhLoadedForSolution )
+            if ( !this.context.AnkhLoadedForSolution )
                 return null;
 
             if ( item == this.UIHierarchy.UIHierarchyItems.Item( 1 ) )
