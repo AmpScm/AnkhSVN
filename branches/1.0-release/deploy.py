@@ -16,7 +16,7 @@ ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/branches/1.0-release"
 MAJOR, MINOR, PATCH, LABEL = 1, 0, 0, "RC3"
 
 # The URL of the Subversion version
-SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.4.0-rc5/"
+SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.4.0/"
 SUBVERSION_VERSION="1.4.0"
 subversion_dir=""
 
