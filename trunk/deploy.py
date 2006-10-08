@@ -10,14 +10,14 @@ import tarfile
 vcprojectengine = "VisualStudio.VCProjectEngine.7"
 
 # The URL to build from
-ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/branches/subversion-1.4-integration"
+ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/branches/1.0-release"
 
 # version numbers to put in the filename
-MAJOR, MINOR, PATCH, LABEL = 0, 6, 0, "snapshot_20"
+MAJOR, MINOR, PATCH, LABEL = 1, 0, 0, "RC2"
 
 # The URL of the Subversion version
-SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.4.0-rc4/"
-SUBVERSION_VERSION="1.3.2"
+SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.4.0/"
+SUBVERSION_VERSION="1.4.0"
 subversion_dir=""
 
 # The URL of neon
