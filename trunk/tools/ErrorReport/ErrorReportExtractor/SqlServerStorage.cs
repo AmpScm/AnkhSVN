@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Transactions;
 using ErrorReportExtractor.Properties;
 using System.Data;
+using System.Diagnostics;
 
 namespace ErrorReportExtractor
 {
@@ -122,23 +123,40 @@ namespace ErrorReportExtractor
             
         }
 
+        public IEnumerable<IMailItem> GetAllItems()
+        {
+            using ( ConnectionScope scope = new ConnectionScope() )
+            {
+                MailItemsTableAdapter adapter = MailItemsTableAdapter.Create();
+                this.callback.Verbose( "Retrieving all mail items from database" );
+                ErrorReportsDataSet.MailItemsDataTable table = adapter.GetMailItemsWithThreadCount();
+
+                this.callback.Verbose( "Mail items table has {0} items.", table.Count );
+
+                foreach ( ErrorReportsDataSet.MailItemsRow row in table )
+                {
+                    yield return CreateMailItem( row );
+                }
+            }
+        }
 
 
-        public void AnswerReport( IErrorReport report, string replyText )
+
+        public void AnswerReport( IMailItem mailItem, string replyText )
         {
             using ( ConnectionScope scope = new ConnectionScope() )
             {
                 QueriesTableAdapter adapter = QueriesTableAdapter.Create();
-                int count = (int)adapter.ReplyToReport( report.ErrorReportID, replyText, Settings.Default.SenderEmail, report.SenderEmail,
-                    Settings.Default.SenderName, report.SenderName, null, null );
+                int count = (int)adapter.ReplyToReport( mailItem.ErrorReportID, replyText, Settings.Default.SenderEmail, mailItem.SenderEmail,
+                    Settings.Default.SenderName, mailItem.SenderName, null, null );
                 if ( count != 1 )
                 {
                     callback.Error( "Attempting to mark message {0} as replied to, but {1} records in the database matched that ID",
-                        report.MailItemID, count );
+                        mailItem.MailItemID, count );
                 }
                 else
                 {
-                    report.RepliedTo = true;
+                    mailItem.RepliedTo = true;
                 }
             }
         }
@@ -180,7 +198,11 @@ namespace ErrorReportExtractor
                 MailItemsTableAdapter adapter = MailItemsTableAdapter.Create();
                 this.callback.Verbose( "Retrieving replies to report with ID {0}", report.ErrorReportID );
                 ErrorReportsDataSet.MailItemsDataTable table = adapter.GetRepliesToReport( report.ErrorReportID );
-                this.FillReplies( report, table.Select( "ParentReply IS NULL" ) );
+                if ( table.Count > 0 )
+                {
+                    // Table should be ordered by date, so the first reply should be first
+                    this.FillReplies( report, table.Select("ParentReply IS NULL OR ParentReply = " + report.MailItemID));
+                }
             }
         }
 
@@ -206,20 +228,28 @@ namespace ErrorReportExtractor
         {
             foreach ( ErrorReportsDataSet.MailItemsRow row in rows )
             {
-                MailItem reply = new MailItem( row.ID, "", row.Body, row.SenderEmail, row.SenderName, row.Time );
-                reply.ReceiverEmail = row.RecipientEmail;
-                reply.ReceiverName = row.RecipientName;
-                reply.Read = row.Read;
-
-                if ( !row.IsMailIDNull() )
-                {
-                    reply.InternetMailID = row.MailID;
-                }
+                MailItem reply = CreateMailItem( row );
 
                 item.Replies.Add( reply );
 
                 FillReplies( reply, row.Table.Select( "ParentReply = " + row.ID));
             }
+        }
+
+        private static MailItem CreateMailItem( ErrorReportsDataSet.MailItemsRow row )
+        {
+            MailItem reply = new MailItem( row.ErrorReportID, row.ID, "", row.Body, row.SenderEmail, row.SenderName, row.Time );
+            reply.ReceiverEmail = row.IsRecipientEmailNull() ? string.Empty : row.RecipientEmail;
+            reply.ReceiverName = row.IsRecipientNameNull() ? String.Empty : row.RecipientName;
+            reply.Read = row.Read;
+            reply.RepliedTo = row.IsNumItemsInThreadNull() ? true : row.NumItemsInThread > 1;
+
+            
+            if ( !row.IsMailIDNull() )
+            {
+                reply.InternetMailID = row.MailID;
+            }
+            return reply;
         }
 
 

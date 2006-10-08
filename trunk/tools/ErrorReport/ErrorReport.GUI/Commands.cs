@@ -57,7 +57,7 @@ namespace ErrorReport.GUI
 
         public override bool Enabled
         {
-            get { return this.ucp.SelectedReport != null; }
+            get { return this.ucp.SelectedMailItem != null; }
         }
 
         public override void Execute()
@@ -108,7 +108,7 @@ namespace ErrorReport.GUI
 
         public override void Execute()
         {
-            this.ucp.SendReplyForSelectedReport();
+            this.ucp.SendReplyForSelectedItem();
             this.ucp.MarkSelectedMailItemAsRead();
             this.ucp.NextReport();
         }
@@ -232,6 +232,28 @@ namespace ErrorReport.GUI
             {
                 dialog.ShowDialog();
             }
+        }
+    }
+
+    [MenuItem("MainMenu.View.Toggle flat or threaded")]
+    internal class ToggleFlatOrThreadedCommand : CommandBase
+    {
+        public ToggleFlatOrThreadedCommand( MainFormUCP ucp ) : base(ucp)
+        {
+            
+        }
+
+        public override bool Enabled
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override void Execute()
+        {
+            this.ucp.ToggleFlatOrThreaded();
         }
     }
 }

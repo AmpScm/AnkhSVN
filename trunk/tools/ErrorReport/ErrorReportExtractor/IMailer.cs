@@ -3,6 +3,6 @@ namespace ErrorReportExtractor
 {
     public interface IMailer : IService
     {
-        void SendReply( IErrorReport report, string replyText );
+        void SendReply( IMailItem report, string replyText );
     }
 }
