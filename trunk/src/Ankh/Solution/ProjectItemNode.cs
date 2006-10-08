@@ -66,9 +66,11 @@ namespace Ankh.Solution
         {
             try
             {
-                // this will throw if the project item is invalid.
-                int fileCount = this.ProjectItem.FileCount;
-                return fileCount < 0;
+                if ( this.ProjectItem != null )
+                {
+                    int fileCount = this.ProjectItem.FileCount;
+                    return fileCount < 0;
+                }
             }
             catch ( COMException )
             {
