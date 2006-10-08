@@ -12,6 +12,7 @@ using Ankh.Tools;
 using System.Diagnostics;
 
 using IServiceProvider = ErrorReportExtractor.IServiceProvider;
+using Fines.Utils.Debugging;
 
 namespace ErrorReport.GUI
 {
@@ -33,6 +34,8 @@ namespace ErrorReport.GUI
 
             this.SetupCommands();
             this.DataBind();
+
+            DebugUtils.DebugEvents(this.reportsListView, "$TIMESTAMP: $EVENT raised, e.InvalidRect is {e.Invalidrect}", "Invalidated");//\r\n\tCalling method: $CALLER\r\n\tStack trace: $STACKTRACE");
 
             this.ucp.TemplatesWanted += delegate { this.ShowTemplates(); };
             this.templateList = new TemplateList();
@@ -69,7 +72,7 @@ namespace ErrorReport.GUI
         {
             bool selecting = false;
 
-            this.ucp.SelectedReportChanged += delegate
+            this.ucp.SelectedMailItemChanged += delegate
             {
                 if ( !selecting && this.ucp.SelectedIndex >= 0)
                 {
@@ -238,25 +241,42 @@ namespace ErrorReport.GUI
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             this.progressCallback.Info( "Loading reports into list view." );
+            this.reportsListView.Items.Clear();
             this.reportsListView.BeginUpdate();
-            foreach ( IErrorReport report in ucp.Reports )
+            foreach ( IMailItem mailItem in ucp.MailItems )
             {
-                TreeListItem item = new TreeListItem( new string[] { 
-                    report.ReceivedTime.ToString(), 
-                    String.Format("{0} <{1}>", report.SenderName, report.SenderEmail), 
-                    report.ExceptionType,
-                    String.Format("{0}.{1}.{2}.{3}", report.MajorVersion, report.MinorVersion, report.PatchVersion, report.Revision),
-                    report.DteVersion != null ? report.DteVersion : string.Empty
-                } );
-                item.Tag = report;
-                this.FormatListItem( item, report );
-
-                if ( report.HasReplies )
+                TreeListItem item;
+                
+                if ( mailItem is IErrorReport )
                 {
-                    TreeListItem child = new TreeListItem( "Dummy" );
-                    child.Tag = Dummy;
-                    item.Children.Add( child );
+                    IErrorReport report = mailItem as IErrorReport;
+                    item = new TreeListItem( new string[] { 
+                        report.ReceivedTime.ToString(), 
+                        String.Format("{0} <{1}>", report.SenderName, report.SenderEmail), 
+                        report.ExceptionType,
+                        String.Format("{0}.{1}.{2}.{3}", report.MajorVersion, report.MinorVersion, report.PatchVersion, report.Revision),
+                        report.DteVersion != null ? report.DteVersion : string.Empty
+                    } );
+
+                    if ( report.HasReplies )
+                    {
+                        TreeListItem child = new TreeListItem( "Dummy" );
+                        child.Tag = Dummy;
+                        item.Children.Add( child );
+                    }
                 }
+                else
+                {
+                    item = new TreeListItem( new string[]
+                    {
+                        mailItem.ReceivedTime.ToString(),
+                        String.Format("{0} <{1}>", mailItem.SenderName, mailItem.SenderEmail),
+                    } );
+                }
+
+                item.Tag = mailItem;
+                this.FormatListItem( item, mailItem );
+                
                 this.reportsListView.Items.Add( item );
             }
             this.reportsListView.EndUpdate();
@@ -279,7 +299,13 @@ namespace ErrorReport.GUI
 
         private void FormatListItem( ListViewItem item, IMailItem report )
         {
+            //if ( report.ReceivedTime.Date == ( new DateTime( 2006, 4, 25 ).Date ) )
+            //{
+            //    Debugger.Break();
+            //}
+
             item.Font = report.Read ? Settings.Default.BaseFont : UnreadFont;
+            item.ForeColor = report.RepliedTo ? this.reportsListView.ForeColor : Color.Red;
         }
 
         private static readonly Font UnreadFont = new Font( Settings.Default.BaseFont, FontStyle.Bold );

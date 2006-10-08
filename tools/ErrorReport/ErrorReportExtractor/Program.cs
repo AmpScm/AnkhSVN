@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Outlook;
 using Microsoft.SqlServer.Management.Smo;
 using System.Configuration;
 using System.Diagnostics;
+using System.Transactions;
 
 namespace ErrorReportExtractor
 {
@@ -20,20 +20,39 @@ namespace ErrorReportExtractor
 
                 ConnectionScope.SetConnectionString( ErrorReportExtractor.Properties.Settings.Default.ErrorReportsConnectionString );
 
-                OutlookContainer mail = new OutlookContainer();
-                SqlServerStorage storage = new SqlServerStorage();
+                using ( ConnectionScope cscope = new ConnectionScope() )
+                using ( TransactionScope tscope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.Zero) )
+                {
 
-                mail.SetProgressCallback( callback );
-                storage.SetProgressCallback( callback );
+                    Pop3Importer importer = new Pop3Importer( "mail.broadpark.no", 110, "ankhsvn", "grynte" );
+                    importer.SetProgressCallback( callback );
+                    SqlServerStorage storage = new SqlServerStorage();
+                    storage.SetProgressCallback( callback );
 
-                int lastIndex;
+                    IEnumerable<IErrorReport> reports = importer.GetItems();
+                    storage.Store( reports );
 
-                storage.StorePotentialReplies( mail.GetPotentialReplies( @"Final year project\ankhsvn\Error reports", 3000, out lastIndex ) );
-                //storage.UpdateErrorReports( storage.GetAllReports() );
-                //IEnumerable<IErrorReport> items = mail.GetItems( @"Final year project\ankhsvn\Error reports", new DateTime( 2006, 4, 18 ), 3150 );
-                //storage.Store( items );
-                callback.Info( "Finished." );
-                callback.Info( "Last index retrieved was {0}.", lastIndex );
+                    IEnumerable<IMailItem> items = importer.GetPotentialReplies();
+                    storage.StorePotentialReplies( items );
+
+                    tscope.Complete(); // Nope
+                }
+
+                //OutlookContainer mail = new OutlookContainer();
+                //SqlServerStorage storage = new SqlServerStorage();
+
+                //mail.SetProgressCallback( callback );
+                //storage.SetProgressCallback( callback );
+
+                //int lastIndex;
+
+                //storage.StorePotentialReplies( mail.GetPotentialReplies( @"Final year project\ankhsvn\Error reports", 3000, out lastIndex ) );
+                ////storage.UpdateErrorReports( storage.GetAllReports() );
+                ////IEnumerable<IErrorReport> items = mail.GetItems( @"Final year project\ankhsvn\Error reports", new DateTime( 2006, 4, 18 ), 3150 );
+                ////storage.Store( items );
+                //callback.Info( "Finished." );
+                //callback.Info( "Last index retrieved was {0}.", lastIndex );
+                Console.WriteLine("Done.");
                 Console.ReadLine();
             }
             catch ( System.Exception ex )

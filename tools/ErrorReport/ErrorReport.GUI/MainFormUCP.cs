@@ -24,6 +24,13 @@ namespace ErrorReport.GUI
         public event EventHandler ReportsLoaded;
         public event EventHandler ReformatSelection;
 
+        public enum Mode
+        {
+            Threaded, 
+            Flat
+        }
+
+        
 
         public MainFormUCP( IServiceProvider provider, IProgressCallback cb, ISynchronizeInvoke invoker )
         {
@@ -45,9 +52,9 @@ namespace ErrorReport.GUI
         }
 
 
-        public IEnumerable<IErrorReport> Reports
+        public IEnumerable<IMailItem> MailItems
         {
-            get{ return this.errorReports; }
+            get{ return this.mailItems; }
         }
 
         public IErrorReport SelectedReport
@@ -82,9 +89,9 @@ namespace ErrorReport.GUI
         {
             get
             {
-                if ( this.errorReports != null )
+                if ( this.mailItems != null )
                 {
-                    return this.errorReports.Count;
+                    return this.mailItems.Count;
                 }
                 else
                 {
@@ -97,10 +104,10 @@ namespace ErrorReport.GUI
         {
             get
             {
-                if ( this.errorReports != null )
+                if ( this.mailItems != null )
                 {
 
-                    return ListUtils.Count<IErrorReport>( this.errorReports, delegate( IErrorReport report )
+                    return ListUtils.Count<IMailItem>( this.mailItems, delegate( IMailItem report )
                     {
                         return !report.RepliedTo;
                     } );
@@ -129,9 +136,9 @@ namespace ErrorReport.GUI
         {
             get
             {
-                if ( this.SelectedReport != null )
+                if ( this.SelectedMailItem != null )
                 {
-                    return this.errorReports.IndexOf( this.SelectedReport );
+                    return this.mailItems.IndexOf( this.SelectedMailItem );
                 }
                 else
                 {
@@ -169,7 +176,7 @@ namespace ErrorReport.GUI
             get 
             {
                 int index = this.SelectedIndex;
-                return this.errorReports != null && index < this.errorReports.Count - 1; 
+                return this.mailItems != null && index < this.mailItems.Count - 1; 
             }
         }
 
@@ -178,7 +185,7 @@ namespace ErrorReport.GUI
             get
             {
                 int index = this.SelectedIndex;
-                return this.errorReports != null && index > 0;
+                return this.mailItems != null && index > 0;
             }
         }
 
@@ -190,20 +197,20 @@ namespace ErrorReport.GUI
 
         public void InitiateReplyForSelectedReport()
         {
-            Debug.Assert( this.SelectedReport != null );
+            Debug.Assert( this.SelectedMailItem != null );
 
-            this.ReplyText = Quotify( this.SelectedReport.Body ) + Environment.NewLine + Environment.NewLine;
+            this.ReplyText = Quotify( this.SelectedMailItem.Body ) + Environment.NewLine + Environment.NewLine;
             OnReplyTextChanged();
             this.IsReplying = true;
         }
 
        
 
-        public void SendReplyForSelectedReport()
+        public void SendReplyForSelectedItem()
         {
-            Debug.Assert(this.SelectedReport != null);
-            this.mailer.SendReply( this.SelectedReport, this.ReplyText );
-            this.storage.AnswerReport( this.SelectedReport, this.ReplyText );
+            Debug.Assert(this.SelectedMailItem != null);
+            this.mailer.SendReply( this.SelectedMailItem, this.ReplyText );
+            this.storage.AnswerReport( this.SelectedMailItem, this.ReplyText );
 
             if ( this.ReformatSelection != null )
             {
@@ -226,7 +233,7 @@ namespace ErrorReport.GUI
         {
             if ( this.CanGoNext )
             {
-                this.SelectedReport = this.errorReports[ this.SelectedIndex + 1 ];
+                this.SelectedMailItem = this.mailItems[ this.SelectedIndex + 1 ];
             }
         }
 
@@ -234,7 +241,7 @@ namespace ErrorReport.GUI
         {
             if ( this.CanGoPrevious )
             {
-                this.SelectedReport = this.errorReports[ this.SelectedIndex - 1 ];
+                this.SelectedMailItem = this.mailItems[ this.SelectedIndex - 1 ];
             }
         }
 
@@ -255,11 +262,22 @@ namespace ErrorReport.GUI
         {
             ThreadWorker worker = new ThreadWorker( this.invoker );
 
-            worker.Work += delegate 
-            { 
-                this.errorReports = ListUtils.ConvertTo<IErrorReport, List<IErrorReport>>(
-                    this.storage.GetAllReports() ); 
-            };
+            if ( this.currentMode == Mode.Threaded )
+            {
+                worker.Work += delegate
+                {
+                    this.mailItems = ListUtils.ConvertTo<IErrorReport, List<IMailItem>, IMailItem>(
+                           this.storage.GetAllReports() );
+                };
+            }
+            else
+            {
+                worker.Work += delegate
+                {
+                    this.mailItems = ListUtils.ConvertTo<IMailItem, List<IMailItem>>(
+                        this.storage.GetAllItems() );
+                };
+            }
 
             worker.WorkFinished += delegate
             {
@@ -289,6 +307,13 @@ namespace ErrorReport.GUI
                 }
             }
         }
+
+        public void ToggleFlatOrThreaded()
+        {
+            this.currentMode = this.currentMode == Mode.Threaded ? Mode.Flat : Mode.Threaded;
+            this.LoadReports();
+        }
+
 
         protected void OnNotifyPropertyChanged( string property )
         {
@@ -370,12 +395,14 @@ namespace ErrorReport.GUI
         private IErrorReport selectedReport;
         private bool isReplying = false;
         private string replyText;
+        private Mode currentMode = Mode.Flat;
         private IServiceProvider provider;
-        private IList<IErrorReport> errorReports;
+        private IList<IMailItem> mailItems;
         private IStorage storage;
         private IMailer mailer;
         private const int MailWidth = 78;
 
-       
+
+
     }
 }
