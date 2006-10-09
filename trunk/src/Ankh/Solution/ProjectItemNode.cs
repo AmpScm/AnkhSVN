@@ -71,6 +71,10 @@ namespace Ankh.Solution
                     int fileCount = this.ProjectItem.FileCount;
                     return fileCount < 0;
                 }
+                else
+                {
+                    return false;
+                }
             }
             catch ( COMException )
             {
