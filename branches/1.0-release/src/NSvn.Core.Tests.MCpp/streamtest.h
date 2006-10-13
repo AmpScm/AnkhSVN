@@ -25,6 +25,9 @@ namespace NSvn
                     [Test]
                     void TestReadFromNullStream();
 
+                    [Test]
+                    void TestWriteNullBuffer();
+
                 };
             }
         }

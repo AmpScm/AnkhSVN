@@ -358,13 +358,26 @@ namespace Ankh.EventSinks
                 {
                     SvnItem item = context.StatusCache[ rgpszMkDocuments[i] ];
                     item.Refresh(this.context.Client, EventBehavior.DontRaise );
-                    if ( item.Status.TextStatus == StatusKind.Missing || item.IsDeleted )
+
+                    // VC++ projects don't delete the files until *after* OnAfterRemoveFiles has fired
+                    bool wasUnmodified = item.Status.TextStatus == StatusKind.Normal &&
+                        ( item.Status.PropertyStatus == StatusKind.None || item.Status.PropertyStatus == StatusKind.Normal );
+
+                    if ( item.Status.TextStatus == StatusKind.Missing || item.IsDeleted || 
+                        item.Status.TextStatus == StatusKind.Normal )
                     {
                         if ( item.IsDirectory )
                         {
                             this.RestoreBackupDirectory( item.Path );
                         }
                         context.Client.Delete( new string[] { item.Path }, true );
+
+                        // VC++ gets annoyed if the file doesn't exist when trying to delete it.
+                        if ( wasUnmodified )
+                        {
+                            File.Create( rgpszMkDocuments[ i ] ).Close();
+                        }
+
                         item.Refresh( context.Client, EventBehavior.Raise );
                     }
                 }
