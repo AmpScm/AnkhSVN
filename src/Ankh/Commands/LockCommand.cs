@@ -56,12 +56,13 @@ namespace Ankh.Commands
             sb.AppendFormat("The following file{0} {1} out of date and could not be locked:", 
                 onlyOne ? "" : "s", 
                 onlyOne ? "was" : "were");
-            sb.AppendLine();
-            sb.AppendLine();
+            sb.Append( Environment.NewLine );
+            sb.Append( Environment.NewLine );
 
             foreach ( string path in this.lockFailedFiles )
             {
-                sb.AppendLine( path );
+                sb.Append( path );
+                sb.Append( Environment.NewLine );
             }
 
             context.UIShell.ShowMessageBox( sb.ToString(), "Lock failed", System.Windows.Forms.MessageBoxButtons.OK );
