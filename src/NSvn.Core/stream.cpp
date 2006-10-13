@@ -43,11 +43,14 @@ namespace
     {
         try
         {
-            Stream* stream = *(static_cast<ManagedPointer<Stream*>* >(baton));
-            Byte managedBuffer __gc[] = new Byte[ *len ];
-            Marshal::Copy( const_cast<char*>(buffer), managedBuffer, 0, *len );
+            if ( buffer != 0 && len > 0 )
+            {
+                Stream* stream = *(static_cast<ManagedPointer<Stream*>* >(baton));
+                Byte managedBuffer __gc[] = new Byte[ *len ];
+                Marshal::Copy( const_cast<char*>(buffer), managedBuffer, 0, *len );
 
-            stream->Write( managedBuffer, 0, *len );
+                stream->Write( managedBuffer, 0, *len );
+            }
 
             return SVN_NO_ERROR;
         }

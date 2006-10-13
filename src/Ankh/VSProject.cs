@@ -9,6 +9,7 @@ using System.Collections;
 using System.Reflection;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
+using Ankh.Solution;
 
 namespace Ankh
 {
@@ -77,7 +78,14 @@ namespace Ankh
         /// </summary>
         public string ProjectFileName
         {
-            get { return this.GetProjectFileName(); }
+            get 
+            {
+                if ( this.projectFileName == null )
+                {
+                    this.projectFileName = this.GetProjectFileName();
+                }
+                return this.projectFileName ; 
+            }
         }
 
         /// <summary>
@@ -427,6 +435,15 @@ namespace Ankh
             }
             catch ( Exception )
             {
+                // swallow
+            }
+            try
+            {
+                ParsedSolution solution = new ParsedSolution( this.project.DTE.Solution.FullName, this.context );
+                return solution.GetProjectFile( this.project.Name );
+            }
+            catch ( Exception )
+            {
                 return null;
             }
         }
@@ -512,6 +529,6 @@ namespace Ankh
         private SvnItem projectFileSvnItem;
         private SvnItem projectDirectorySvnItem;
         private IVsHierarchy vsHierarchy;
-
+        private string projectFileName;
     }
 }
