@@ -99,20 +99,28 @@ namespace Ankh.Commands
             // we go to the solution directory so that the diff paths will be relative 
             // to that directory
             string slndir = context.SolutionDirectory;
-            Debug.Assert( slndir != null, "Solution directory should not be null" );
 
             try
             {
                 // switch to the solution dir, so we can get relative paths.
-                Environment.CurrentDirectory = slndir;
+                // if a solution isn't open, don't bother
+                if ( slndir != null )
+                {
+                    Environment.CurrentDirectory = slndir;
+                }
 
                 MemoryStream stream = new MemoryStream();
                 foreach( SvnItem item in info.CheckedItems )
                 {
                     // try to get a relative path to the item from the solution directory
-                    string path = Utils.Win32.Win32.PathRelativePathTo( slndir, 
-                        Utils.Win32.FileAttribute.Directory, item.Path, 
-                        Utils.Win32.FileAttribute.Normal );
+                    string path = null;
+
+                    if ( slndir != null )
+                    {
+                        path = Utils.Win32.Win32.PathRelativePathTo( slndir,
+                                        Utils.Win32.FileAttribute.Directory, item.Path,
+                                        Utils.Win32.FileAttribute.Normal ); 
+                    }
 
                     // We can't use a path with more than two .. relative paths as input to svn diff (see svn issue #2448)
                     if ( path == null || path.IndexOf( @"..\..\.." ) >= 0 )
