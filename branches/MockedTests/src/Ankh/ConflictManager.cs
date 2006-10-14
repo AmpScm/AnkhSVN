@@ -6,21 +6,25 @@ using System.IO;
 
 namespace Ankh
 {
-    public class ConflictManager
+    [Service(typeof(IConflictManager), CallMyInit=true)]
+    public class ConflictManager : IConflictManager
     {           
         
         /// <summary>
         /// ConflictManager
         /// Class to handle issues related to conflicts
         /// </summary>
-        public ConflictManager (IContext context)
-        {                         
-            this.context = context;
+        public ConflictManager (IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
+        }
 
+        void Init()
+        {
             // Get the task event list and add an event for this task list item to it.
             // This needs to be kept around so that there is a reference to it and
             // won't get garbage collected because it's in unmanaged code
-            this.taskListEvents = (TaskListEvents)  this.context.DTE.Events.get_TaskListEvents(
+            this.taskListEvents = (TaskListEvents)  this.DTE.Events.get_TaskListEvents(
                 ConflictTaskItemCategory);
 
             // add an event for this task list item to the taskEventList.
@@ -39,7 +43,7 @@ namespace Ankh
             ArrayList conflictLines = this.GetConflictLines(path);
             
 
-            Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+            Window win =  this.DTE.Windows.Item(Constants.vsWindowKindTaskList);
             TaskList taskList = (TaskList) win.Object;
 
             // add a task item for every conflict in the file
@@ -59,7 +63,7 @@ namespace Ankh
         /// </summary>
         public void CreateTaskItems()
         {
-            IList conflictItems =  this.context.SolutionExplorer.GetAllResources(new ResourceFilterCallback(ConflictedFilter)); 
+            IList conflictItems =  this.SolutionExplorer.GetAllResources(new ResourceFilterCallback(ConflictedFilter)); 
             foreach(SvnItem item in conflictItems)
             {
                 this.AddTask(item.Path);
@@ -76,7 +80,7 @@ namespace Ankh
             Window win;
             try
             {
-                win = this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+                win = this.DTE.Windows.Item(Constants.vsWindowKindTaskList);
             }
             catch(ArgumentException)
             {
@@ -99,7 +103,7 @@ namespace Ankh
         /// <returns>void</returns>   
         public void RemoveTaskItem(string path)   
         {   
-            Window win =  this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+            Window win =  this.DTE.Windows.Item(Constants.vsWindowKindTaskList);
             TaskList taskList = (TaskList) win.Object;
 
             foreach(TaskItem item in taskList.TaskItems)   
@@ -120,7 +124,7 @@ namespace Ankh
         public void  NavigateTaskList()
         {
             //object o = null;
-            Window win = this.context.DTE.Windows.Item(Constants.vsWindowKindTaskList);
+            Window win = this.DTE.Windows.Item(Constants.vsWindowKindTaskList);
             win.Activate();
         }
 
@@ -204,9 +208,17 @@ namespace Ankh
             return exists;
         }
 
+        _DTE DTE
+        {
+            get { return (_DTE)this.serviceProvider.GetService(typeof(_DTE)); }
+        }
 
+        ISolutionExplorer SolutionExplorer
+        {
+            get { return (ISolutionExplorer)this.serviceProvider.GetService(typeof(ISolutionExplorer)); }
+        }
 
-        private IContext context; 
+        private IServiceProvider serviceProvider; 
         private const string ConflictTaskItemCategory = "Conflict"; 
         private const string SvnConflictString = "<<<<<<< .mine"; 
         private const int NotFound = -1;

@@ -19,25 +19,55 @@ namespace Ankh
     /// </summary>
     public class SvnClient : Client
     {
-        public SvnClient( IContext ankhContext, string configDir ) :  base( configDir )
+        public SvnClient( IServiceProvider serviceProvider, string configDir ) :  base( configDir )
         {
-            this.Init( ankhContext );
+            this.Init(serviceProvider);
         }
 
-        public SvnClient( IContext ankhContext ) 
+        public SvnClient(IServiceProvider serviceProvider) 
         {
-            this.Init( ankhContext );
-        }       
+            this.Init(serviceProvider);
+        }
+
+        IUIShell UIShell
+        {
+            get { return (IUIShell)this.serviceProvider.GetService(typeof(IUIShell)); }
+        }
+
+        IOutputPaneProvider OutputPaneProvider
+        {
+            get { return (IOutputPaneProvider)this.serviceProvider.GetService(typeof(IOutputPaneProvider)); }
+        }
+
+        IWin32Window HostWindow
+        {
+            get { return ((IHostWindowService)this.serviceProvider.GetService(typeof(IHostWindowService))).HostWindow; }
+        }
+
+        Ankh.Config.Config Config
+        {
+            get { return ((IConfigurationProvider)this.serviceProvider.GetService(typeof(IConfigurationProvider))).Configuration; }
+        }
+
+        Ankh.Config.ConfigLoader ConfigLoader
+        {
+            get { return ((IConfigurationProvider)this.serviceProvider.GetService(typeof(IConfigurationProvider))).ConfigLoader; }
+        }
+
+        IErrorHandler ErrorHandler
+        {
+            get { return (IErrorHandler)this.serviceProvider.GetService(typeof(IErrorHandler)); }
+        }
 
         private delegate void OnNotificationDelegate(NotificationEventArgs notification);
 
         protected override void OnNotification(NotificationEventArgs notification)
         {  
-            if ( this.ankhContext.UIShell.SynchronizingObject.InvokeRequired )
+            if ( this.UIShell.SynchronizingObject.InvokeRequired )
             {
                 Debug.WriteLine( "OnNotification: Invoking back to main GUI thread", 
                     "Ankh" );
-                this.ankhContext.UIShell.SynchronizingObject.Invoke(
+                this.UIShell.SynchronizingObject.Invoke(
                     new OnNotificationDelegate(this.OnNotification),
                     new object[]{notification} );
                 return;
@@ -53,17 +83,17 @@ namespace Ankh
                 else if ( notification.NodeKind == NodeKind.Directory )
                     nodeKind = " directory";
 
-                this.ankhContext.OutputPane.WriteLine( "{0}{1}: {2}",
+                this.OutputPaneProvider.OutputPaneWriter.WriteLine( "{0}{1}: {2}",
                     actionStatus[notification.Action],
                     nodeKind, 
                     notification.Path );
             }
 
             if (notification.Action == NotifyAction.CommitPostfixTxDelta)
-                this.ankhContext.OutputPane.Write( '.' );
+                this.OutputPaneProvider.OutputPaneWriter.Write( '.' );
 
             if (notification.Action == NotifyAction.UpdateCompleted)
-                this.ankhContext.OutputPane.WriteLine( "{0}Updated {1} to revision {2}.", 
+                this.OutputPaneProvider.OutputPaneWriter.WriteLine( "{0}Updated {1} to revision {2}.", 
                     Environment.NewLine, 
                     notification.Path, 
                     notification.RevisionNumber);
@@ -94,7 +124,7 @@ namespace Ankh
 
                 dialog.MaySave = maySave;
 
-                if ( dialog.ShowDialog( this.ankhContext.HostWindow ) != DialogResult.OK )
+                if ( dialog.ShowDialog( this.HostWindow ) != DialogResult.OK )
                     return null;
 
                 return new SimpleCredential( dialog.Username, dialog.Password, dialog.ShallSave );
@@ -116,7 +146,7 @@ namespace Ankh
                 dialog.Failures = failures;
                 dialog.CertificateInfo = info;
                 dialog.MaySave = maySave;
-                DialogResult result = dialog.ShowDialog( this.ankhContext.HostWindow );
+                DialogResult result = dialog.ShowDialog( this.HostWindow );
 
                 // Cancel means reject.
                 if ( result == DialogResult.Cancel )
@@ -144,7 +174,7 @@ namespace Ankh
                 dialog.MaySave = maySave;
                 dialog.Realm = realm;
 
-                if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
+                if ( dialog.ShowDialog( this.HostWindow ) == DialogResult.OK )
                 {
                     SslClientCertificatePasswordCredential cred = new 
                         SslClientCertificatePasswordCredential();
@@ -168,7 +198,7 @@ namespace Ankh
                 dialog.Realm = realm;
                 dialog.MaySave = maySave;
 
-                if ( dialog.ShowDialog( this.ankhContext.HostWindow ) == DialogResult.OK )
+                if ( dialog.ShowDialog( this.HostWindow ) == DialogResult.OK )
                 {
                     SslClientCertificateCredential cred = new 
                         SslClientCertificateCredential();
@@ -181,9 +211,12 @@ namespace Ankh
             }
         }     
    
-        private void Init(IContext ankhContext)
+        private void Init(IServiceProvider serviceProvider)
         {
-            this.ankhContext = ankhContext;
+            this.serviceProvider = serviceProvider;
+            SetUpFromConfig();
+            this.ConfigLoader.ConfigFileChanged += new EventHandler(ConfigLoader_ConfigFileChanged);
+
             this.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
             this.AuthBaton.Add( AuthenticationProvider.GetSimpleProvider() );           
             this.AuthBaton.Add( AuthenticationProvider.GetSimplePromptProvider(
@@ -202,6 +235,38 @@ namespace Ankh
             this.AuthBaton.Add( 
                 AuthenticationProvider.GetSslClientCertPromptProvider( 
                 new SslClientCertPromptDelegate( this.ClientCertificatePrompt ), 3 ) );
+
+        }
+
+        private void SetUpFromConfig()
+        {
+            // should we use a custom admin directory for our working copies?
+            if (this.Config.Subversion.AdminDirectoryName != null)
+            {
+                NSvn.Core.Client.AdminDirectoryName =
+                    this.Config.Subversion.AdminDirectoryName;
+            }
+            else if (Environment.GetEnvironmentVariable("SVN_ASP_DOT_NET_HACK") != null)
+            {
+                NSvn.Core.Client.AdminDirectoryName = "_svn";
+            }
+        }
+
+        void ConfigLoader_ConfigFileChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                SetUpFromConfig();
+                this.OutputPaneProvider.OutputPaneWriter.WriteLine("Configuration reloaded.");
+            }
+            catch (Ankh.Config.ConfigException ex)
+            {
+                this.OutputPaneProvider.OutputPaneWriter.WriteLine("Configuration file has errors: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                this.ErrorHandler.Handle(ex);
+            }
 
         }
 
@@ -235,7 +300,7 @@ namespace Ankh
         }
         
         static readonly Hashtable actionStatus = new Hashtable();
-        private IContext ankhContext;
+        private IServiceProvider serviceProvider;
         private static IDictionary map = new Hashtable();
     }
 }

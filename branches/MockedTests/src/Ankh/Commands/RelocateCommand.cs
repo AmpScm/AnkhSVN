@@ -2,6 +2,7 @@ using System;
 using Ankh.UI;
 using System.Windows.Forms;
 using NSvn.Common;
+using NSvn.Core;
 
 namespace Ankh.Commands
 {
@@ -74,9 +75,10 @@ namespace Ankh.Commands
                 this.recurse = recurse;
             }
 
-            public void Work( IContext context )
+            public void Work( IServiceProvider serviceProvider )
             {
-                context.Client.Relocate( this.path, this.from, this.to,
+                Client client = ((IClientProvider)serviceProvider.GetService(typeof(IClientProvider))).Client;
+                client.Relocate( this.path, this.from, this.to,
                     this.recurse );
             }
 

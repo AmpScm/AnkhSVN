@@ -38,11 +38,11 @@ namespace Ankh.Commands
                 item.Refresh( context.Client );
         }
 
-        private void ProgressCallback( IContext context )
+        private void ProgressCallback( IServiceProvider serviceProvider )
         {
             string[] paths = SvnItem.GetPaths( info.CheckedItems );
             
-            context.Client.Lock( paths, this.info.Message, this.info.StealLocks );
+            this.ClientProvider.Client.Lock( paths, this.info.Message, this.info.StealLocks );
         }
 
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)

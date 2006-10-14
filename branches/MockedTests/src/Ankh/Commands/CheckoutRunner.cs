@@ -6,6 +6,7 @@ using System.Collections;
 using NSvn.Core;
 using NSvn.Common;
 using Ankh.RepositoryExplorer;
+using System;
 
 namespace Ankh.Commands
 {
@@ -29,9 +30,10 @@ namespace Ankh.Commands
             // empty
         }
 
-        public void Work( IContext context )
+        public void Work( IServiceProvider serviceProvider )
         {
-            context.Client.Checkout( this.url, this.path, this.revision, this.recurse );
+            Client client = ((IClientProvider)serviceProvider.GetService(typeof(IClientProvider))).Client;
+            client.Checkout( this.url, this.path, this.revision, this.recurse );
         }
 
         private Revision revision;

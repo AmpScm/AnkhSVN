@@ -48,8 +48,8 @@ namespace Ankh.Commands
 
 
                 // we assume by now that all items are working copy resources.                
-                UpdateRunner runner = new UpdateRunner( context, resources );
-                if ( !runner.MaybeShowUpdateDialog() )
+                UpdateRunner runner = new UpdateRunner( this.ClientProvider.Client, resources );
+                if ( !runner.MaybeShowUpdateDialog(this.ServiceProvider) )
                     return;
 
                 // run the actual update on another thread
@@ -70,22 +70,17 @@ namespace Ankh.Commands
         #region UpdateVisitor
         private class UpdateRunner : IProgressWorker
         {
-            public UpdateRunner( IContext context, IList resources ) 
+            public UpdateRunner( Client client, IList resources ) 
             {
-                this.context = context;
+                this.client = client;
                 this.resources = resources;
-            }
-
-            public IContext Context
-            {
-                get{ return this.context; }
             }
 
             /// <summary>
             /// Show the update dialog if wanted.
             /// </summary>
             /// <returns></returns>
-            public bool MaybeShowUpdateDialog()
+            public bool MaybeShowUpdateDialog(IServiceProvider serviceProvider)
             {
                 this.recurse = Recurse.None;
                 this.revision = Revision.Head;
@@ -103,7 +98,8 @@ namespace Ankh.Commands
 
                     if ( !CommandBase.Shift )
                     {
-                        if ( d.ShowDialog( this.Context.HostWindow ) != DialogResult.OK )
+                        IWin32Window hostWindow = ((IHostWindowService)serviceProvider.GetService(typeof(IHostWindowService))).HostWindow;
+                        if ( d.ShowDialog( hostWindow ) != DialogResult.OK )
                             return false;
                     }
 
@@ -119,22 +115,26 @@ namespace Ankh.Commands
             /// <summary>
             /// The actual updating happens here.
             /// </summary>
-            public void Work( IContext context )
-            {   
-                context.Client.Notification +=new NotificationDelegate(this.OnNotificationEventHandler );
+            public void Work( IServiceProvider serviceProvider )
+            {
+                this.conflictManager = (IConflictManager)serviceProvider.GetService(typeof(IConflictManager));
+                this.client.Notification +=new NotificationDelegate(this.OnNotificationEventHandler );
+
 
                 try
                 {
                     string[] paths = SvnItem.GetPaths( this.resources );
-                    context.Client.Update( paths, revision, recurse, false );
+                    this.client.Update(paths, revision, recurse, false);
                 }
                 finally
-                {       
-                    context.Client.Notification  -= new NotificationDelegate(this.OnNotificationEventHandler );
+                {
+                    this.client.Notification -= new NotificationDelegate(this.OnNotificationEventHandler);
                 }
-              
-                if (this.conflictsOccurred) 
-                    context.ConflictManager.NavigateTaskList();
+
+                if (this.conflictsOccurred)
+                {
+                    this.conflictManager.NavigateTaskList();
+                }
 
             }
             
@@ -147,16 +147,17 @@ namespace Ankh.Commands
             {
                 if ( args.ContentState == NSvn.Core.NotifyState.Conflicted)
                 {
-                    this.Context.ConflictManager.AddTask(args.Path);
+                    this.conflictManager.AddTask(args.Path);
                     this.conflictsOccurred = true;
                 }
             }
 
+            private IConflictManager conflictManager;
             private IList resources = new ArrayList();
             private Revision revision;
             private Recurse recurse;
             private bool conflictsOccurred = false; 
-            private IContext context;
+            private Client client;
         }            
         #endregion
 

@@ -96,7 +96,7 @@ namespace Ankh
         /// <summary>
         /// Manage issues related to conflicts.
         /// </summary>
-        ConflictManager ConflictManager { get; }
+        IConflictManager ConflictManager { get; }
 
         /// <summary>
         /// Watches the project files.

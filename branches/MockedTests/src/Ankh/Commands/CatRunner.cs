@@ -40,12 +40,13 @@ namespace Ankh.Commands
             get{ return this.path; }
         }
 
-        public void Work( IContext context )
+        public void Work( IServiceProvider serviceProvider )
         {
+            Client client = ((IClientProvider)serviceProvider.GetService(typeof(IClientProvider))).Client;
             using( FileStream fs = new FileStream( this.path, FileMode.Create, 
                        FileAccess.Write ) )
             {
-                context.Client.Cat( fs, this.url, this.revision );
+                client.Cat( fs, this.url, this.revision );
             }
         }
 

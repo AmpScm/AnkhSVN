@@ -83,7 +83,7 @@ namespace Ankh.Commands
                     {
                         url = UriUtils.Combine(url, dlg.SubDirectoryName);
                         using (MakeDirWorker makeDirWorker = new MakeDirWorker(url,
-                                   dlg.LogMessage, context))
+                                   dlg.LogMessage, this.ClientProvider.Client))
                         {
                             context.UIShell.RunWithProgressDialog(makeDirWorker,
                                 "Creating directory");
@@ -229,10 +229,10 @@ namespace Ankh.Commands
 
         
 
-        private void DoCommit( IContext context )
+        private void DoCommit( IServiceProvider serviceProvider )
         {
             string[] paths = (string[])(new ArrayList(this.paths).ToArray(typeof(string)));
-            context.Client.Commit( paths, Recurse.None );
+            this.ClientProvider.Client.Commit( paths, Recurse.None );
         }
 
         /// <summary>
@@ -240,12 +240,12 @@ namespace Ankh.Commands
         /// </summary>
         private class MakeDirWorker : IProgressWorker, IDisposable
         {
-            public MakeDirWorker( string url, string logMessage, IContext context ) 
+            public MakeDirWorker( string url, string logMessage, Client client ) 
             {
                 this.url = url;
                 this.logMessage = logMessage;
-                this.context = context;
-                this.context.Client.LogMessage += 
+                this.client = client;
+                this.client.LogMessage += 
                     new NSvn.Core.LogMessageDelegate(this.LogMessage);
             }
 
@@ -254,9 +254,9 @@ namespace Ankh.Commands
                 this.Dispose(false);
             }
 
-            public void Work( IContext context )
+            public void Work( IServiceProvider serviceProvider )
             {
-                context.Client.MakeDir( new string[]{ this.url } );
+                this.client.MakeDir( new string[]{ this.url } );
             }
 
             public void Dispose()
@@ -266,7 +266,7 @@ namespace Ankh.Commands
 
             private void Dispose( bool disposing )
             {
-                this.context.Client.LogMessage -=
+                this.client.LogMessage -=
                     new NSvn.Core.LogMessageDelegate(this.LogMessage);
                 if ( disposing )
                     GC.SuppressFinalize(this);
@@ -279,7 +279,7 @@ namespace Ankh.Commands
 
             
 
-            private IContext context;
+            private Client client;
             private string url;
             private string logMessage;            
             #region IDisposable Members

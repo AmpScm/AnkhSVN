@@ -61,10 +61,10 @@ namespace Ankh.Commands
             }
         }
 
-        private void DoCreateDir( IContext context )
+        private void DoCreateDir( IServiceProvider serviceProvider )
         {
             // create the dir.
-            context.Client.MakeDir( new string[]{this.url} );
+            this.ClientProvider.Client.MakeDir( new string[]{this.url} );
         }
 
         private string url;        

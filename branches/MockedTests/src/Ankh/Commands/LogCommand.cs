@@ -61,13 +61,13 @@ namespace Ankh.Commands
 
         }
 
-        private void ProgressCallback( IContext context )
+        private void ProgressCallback( IServiceProvider serviceProvider )
         {
             this.result = new LogResult();
             this.result.Start();
 
             string[] paths = SvnItem.GetPaths( info.CheckedItems );
-            context.Client.Log( paths, info.RevisionStart, info.RevisionEnd, true, 
+            this.ClientProvider.Client.Log( paths, info.RevisionStart, info.RevisionEnd, true, 
                 info.StopOnCopy, new LogMessageReceiver(result.Receive) );
 
             this.result.End();

@@ -30,12 +30,11 @@ namespace Ankh
         public event EventHandler Unloading;
 
 
-        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell, System.IServiceProvider serviceProvider )
+        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin, System.IServiceProvider serviceProvider )
         {
             this.dte = dte;
             this.addin = addin;
-            this.uiShell = uiShell;
-            this.uiShell.Context = this;
+//            this.uiShell.Context = this;
             this.serviceProvider = serviceProvider;
 
             this.errorHandler = new ErrorHandler( dte.Version, this );
@@ -67,7 +66,7 @@ namespace Ankh
 
             this.SetUpEvents();    
             
-            this.conflictManager = new ConflictManager(this);
+//            this.conflictManager = new ConflictManager(this);
 
             this.statusCache = new StatusCache( this.client );
 
@@ -105,7 +104,7 @@ namespace Ankh
         public IUIShell UIShell
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.uiShell; }
+            get{ return (IUIShell)this.serviceProvider.GetService(typeof(IUIShell)); }
         }
 
         /// <summary>
@@ -191,8 +190,7 @@ namespace Ankh
         /// </summary>
         public Ankh.Config.ConfigLoader ConfigLoader
         {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.configLoader; }
+            get { return ((IConfigurationProvider)this.serviceProvider.GetService(typeof(IConfigurationProvider))).ConfigLoader; }
         }
 
         /// <summary>
@@ -236,10 +234,10 @@ namespace Ankh
         /// <summary>
         /// Manage issues related to conflicts.
         /// </summary>
-        public ConflictManager ConflictManager
+        public IConflictManager ConflictManager
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get {  return this.conflictManager;  }
+            get { return (IConflictManager)this.serviceProvider.GetService(typeof(IConflictManager)); }
         }
 
         /// <summary>
@@ -299,7 +297,7 @@ namespace Ankh
         {
             this.ankhLoadedForSolution = false;
 
-            this.conflictManager.RemoveAllTaskItems();
+            this.ConflictManager.RemoveAllTaskItems();
             this.SolutionExplorer.Unload();
 
             
@@ -407,7 +405,7 @@ namespace Ankh
                 //MessageBox.Show( timer.ToString() );
 
                 // Add Conflict tasks for all conflicts in solution
-                this.conflictManager.CreateTaskItems();
+                this.ConflictManager.CreateTaskItems();
 
                 return true;
             }
@@ -453,7 +451,7 @@ namespace Ankh
 
             SetupFromConfig();
 
-            this.ConfigLoader.ConfigFileChanged += new EventHandler( ConfigLoader_ConfigFileChanged );
+            //this.ConfigLoader.ConfigFileChanged += new EventHandler( ConfigLoader_ConfigFileChanged );
 
         }
         
@@ -482,24 +480,9 @@ namespace Ankh
 
         private void SetupFromConfig()
         {
-            // should we use a custom configuration directory?
-            if ( this.config.Subversion.ConfigDir != null )
-                this.client = new SvnClient( this,
-                    Environment.ExpandEnvironmentVariables( this.config.Subversion.ConfigDir ) );
-            else
-                this.client = new SvnClient( this );
 
 
-            // should we use a custom admin directory for our working copies?
-            if ( this.config.Subversion.AdminDirectoryName != null )
-            {
-                NSvn.Core.Client.AdminDirectoryName =
-                    this.config.Subversion.AdminDirectoryName;
-            }
-            else if ( Environment.GetEnvironmentVariable( "SVN_ASP_DOT_NET_HACK" ) != null )
-            {
-                NSvn.Core.Client.AdminDirectoryName = "_svn";
-            }
+
         }
         
         private bool CheckWhetherAnkhShouldLoad()
@@ -537,7 +520,7 @@ namespace Ankh
 
         private bool QueryWhetherAnkhShouldLoad( string solutionDir )
         {
-            DialogResult res = this.uiShell.QueryWhetherAnkhShouldLoad();
+            DialogResult res = this.UIShell.QueryWhetherAnkhShouldLoad();
 
             if ( res == DialogResult.Yes )
             {
@@ -635,7 +618,6 @@ namespace Ankh
         private bool ankhLoadedForSolution;
         private StatusCache statusCache;
 
-        private ConflictManager conflictManager; 
         private IErrorHandler errorHandler;
 
         private FileWatcher projectFileWatcher;
@@ -643,7 +625,6 @@ namespace Ankh
         private ProgressDialog progressDialog;
         private SvnClient client;
 
-        private IUIShell uiShell;
         
         private Ankh.Config.ConfigLoader configLoader;
 

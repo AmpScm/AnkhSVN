@@ -245,6 +245,7 @@
     <Compile Include="BlameResult.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClientProvider.cs" />
     <Compile Include="CommandBarContextMenu.cs" />
     <Compile Include="CommandMap.cs">
       <SubType>Code</SubType>
@@ -390,6 +391,7 @@
     <Compile Include="Config\ConfigLoader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Config\IConfigurationProvider.cs" />
     <Compile Include="ConflictManager.cs">
       <SubType>Code</SubType>
     </Compile>

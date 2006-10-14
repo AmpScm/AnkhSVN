@@ -181,6 +181,9 @@ namespace Ankh.RepositoryExplorer
         }        
 
         
+        //{
+        //    get { return ((IConfigurationProvider)this.serviceProvider.GetService(typeof(IConfigurationProvider))).ConfigLoader; }
+        //}
 
         /// <summary>
         /// Load the stored roots in the config dir.
@@ -294,9 +297,10 @@ namespace Ankh.RepositoryExplorer
                 get{ return this.entries; }
             }
 
-            public void Work( IContext context )
+            public void Work( IServiceProvider serviceProvider )
             {
-                this.entries = context.Client.List( this.node.Url, 
+                Client client = ((IClientProvider)serviceProvider.GetService(typeof(IClientProvider))).Client;
+                this.entries = client.List( this.node.Url, 
                     this.node.Revision, Recurse.None );
             }
 

@@ -86,6 +86,21 @@ namespace Ankh.Commands
             }
         }
 
+        protected IClientProvider ClientProvider
+        {
+            get
+            {
+                if (CommandBase.clientProvider == null)
+                    CommandBase.clientProvider = (IClientProvider)this.serviceProvider.GetService(typeof(IClientProvider));
+                return CommandBase.clientProvider;
+            }
+        }
+
+        protected IServiceProvider ServiceProvider
+        {
+            get { return this.serviceProvider; }
+        }
+
         protected const vsCommandStatus Enabled = 
             vsCommandStatus.vsCommandStatusEnabled |
             vsCommandStatus.vsCommandStatusSupported;
@@ -137,6 +152,7 @@ namespace Ankh.Commands
             }
         }
 
+        private static IClientProvider clientProvider;
         private static IOutputPaneProvider outputPaneProvider;
         private static IOperationManager operationManager;
         private EnvDTE.Command command;

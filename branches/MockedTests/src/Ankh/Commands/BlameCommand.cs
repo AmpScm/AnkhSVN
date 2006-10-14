@@ -105,9 +105,10 @@ namespace Ankh.Commands
                 this.result = result;
             }
 
-            public void Work(IContext context)
+            public void Work(IServiceProvider serviceProvider)
             {
-                context.Client.Blame( this.path, this.start, this.end,
+                Client client = ((IClientProvider)serviceProvider.GetService(typeof(IClientProvider))).Client;
+                client.Blame( this.path, this.start, this.end,
                     new BlameReceiver( this.result.Receive ) );
             }
 

@@ -77,9 +77,10 @@ namespace Ankh.Commands
                 this.recurse = recurse;
             }
 
-            public void Work( IContext context )
+            public void Work( IServiceProvider serviceProvider )
             {
-                context.Client.Switch( this.path, this.url, 
+                Client client = ((IClientProvider)serviceProvider.GetService(typeof(IClientProvider))).Client;
+                client.Switch( this.path, this.url, 
                     this.revision, this.recurse );
             }
 

@@ -82,11 +82,12 @@ namespace Ankh.Commands
                 this.dryRun = dryRun;
             }
 
-            public void Work( IContext context )
+            public void Work( IServiceProvider serviceProvider )
             {
+                Client client = ((IClientProvider)serviceProvider.GetService(typeof(IClientProvider))).Client;
                 foreach( SvnItem item in this.items )
                 {
-                    context.Client.Merge( 
+                    client.Merge( 
                         item.Path, Revision.Working,
                         item.Path, this.revision,
                         item.Path, this.recurse,

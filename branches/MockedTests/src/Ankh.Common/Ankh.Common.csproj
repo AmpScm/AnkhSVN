@@ -36,6 +36,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IClientProvider.cs" />
+    <Compile Include="IConflictManager.cs" />
     <Compile Include="IHostWindowService.cs" />
     <Compile Include="IOperationManager.cs" />
     <Compile Include="IOutputPaneProvider.cs" />
@@ -43,6 +45,12 @@
     <Compile Include="ServiceAttribute.cs" />
     <Compile Include="ServiceLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NSvn.Core\NSvn.Core.2005.vcproj">
+      <Project>{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}</Project>
+      <Name>NSvn.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

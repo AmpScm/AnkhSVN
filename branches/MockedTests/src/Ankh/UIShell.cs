@@ -12,16 +12,18 @@ using NSvn.Common;
 
 namespace Ankh
 {
-	/// <summary>
-	/// Summary description for UIShell.
-	/// </summary>
-	public class UIShell : IUIShell
-	{
-		public UIShell()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
+    /// <summary>
+    /// Summary description for UIShell.
+    /// </summary>
+    [Service(typeof(IUIShell))]
+    public class UIShell : IUIShell
+    {
+        public UIShell(IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
+            //
+            // TODO: Add constructor logic here
+            //
         }
         #region IUIShell Members
         public RepositoryExplorerControl RepositoryExplorer
@@ -46,17 +48,6 @@ namespace Ankh
             }
         }
 
-        
-
-        public IContext Context
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.context; }
-
-            [System.Diagnostics.DebuggerStepThrough]
-            set{ this.context = value; }
-        }
-
         public System.ComponentModel.ISynchronizeInvoke SynchronizingObject
         {
             get{ return this.RepositoryExplorer; }
@@ -74,7 +65,7 @@ namespace Ankh
 
             //TODO: The UIShell should be responsible for maintaining the hostwindow
             return MessageBox.Show( 
-                this.context.HostWindow, msg, "Ankh", 
+                this.HostWindow, msg, "Ankh", 
                 MessageBoxButtons.YesNoCancel );
         }
 
@@ -101,17 +92,17 @@ namespace Ankh
 
         public bool RepositoryExplorerHasFocus()
         {
-            return this.Context.DTE.ActiveWindow == this.repositoryExplorerWindow;
+            return this.DTE.ActiveWindow == this.repositoryExplorerWindow;
         }
 
         public bool WorkingCopyExplorerHasFocus()
         {
-            return this.Context.DTE.ActiveWindow == this.workingCopyExplorerWindow;
+            return this.DTE.ActiveWindow == this.workingCopyExplorerWindow;
         }
 
         public bool SolutionExplorerHasFocus()
         {
-            return this.Context.DTE.ActiveWindow.Type == vsWindowType.vsWindowTypeSolutionExplorer;
+            return this.DTE.ActiveWindow.Type == vsWindowType.vsWindowTypeSolutionExplorer;
         }
 
 
@@ -202,10 +193,10 @@ namespace Ankh
         /// <param name="worker"></param>
         public bool RunWithProgressDialog( IProgressWorker worker, string caption )
         {
-            ProgressRunner runner = new ProgressRunner( this.Context, worker );
-            runner.Start( caption );     
+			ProgressRunner runner = new ProgressRunner( this.serviceProvider, worker );
+			runner.Start( caption );     
        
-            return !runner.Cancelled;
+			return !runner.Cancelled;
         }
 
         /// <summary>
@@ -218,7 +209,7 @@ namespace Ankh
         public DialogResult ShowMessageBox( string text, string caption, 
             MessageBoxButtons buttons )
         {
-            return MessageBox.Show( this.Context.HostWindow, text, caption,
+            return MessageBox.Show( this.HostWindow, text, caption,
                 buttons );
         }
 
@@ -232,7 +223,7 @@ namespace Ankh
         public DialogResult ShowMessageBox( string text, string caption, 
             MessageBoxButtons buttons, MessageBoxIcon icon )
         {
-            return MessageBox.Show( this.Context.HostWindow, text, caption,
+            return MessageBox.Show( this.HostWindow, text, caption,
                 buttons, icon );
         }
 
@@ -246,7 +237,7 @@ namespace Ankh
         public DialogResult ShowMessageBox( string text, string caption,
             MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton )
         {
-            return MessageBox.Show( this.Context.HostWindow, text, caption,
+            return MessageBox.Show( this.HostWindow, text, caption,
                 buttons, icon, defaultButton );
         }
 
@@ -257,7 +248,7 @@ namespace Ankh
                 w.Write( html );
 
             // the Start Page window is a web browser
-            Window browserWindow = context.DTE.Windows.Item( 
+            Window browserWindow = this.DTE.Windows.Item( 
                 EnvDTE.Constants.vsWindowKindWebBrowser );
             SH.WebBrowser browser = (SH.WebBrowser)browserWindow.Object;
 
@@ -308,7 +299,7 @@ namespace Ankh
                 
 
                 // show it
-                if ( selector.ShowDialog( this.Context.HostWindow ) == DialogResult.OK )
+                if ( selector.ShowDialog( this.HostWindow ) == DialogResult.OK )
                 {
                     info.CheckedItems = selector.CheckedItems;
                     info.Recurse = selector.Recursive ? Recurse.Full : Recurse.None;
@@ -339,7 +330,7 @@ namespace Ankh
                 dlg.CheckedItems = info.CheckedItems;
                 dlg.Message = info.Message;
                 dlg.StealLocks = info.StealLocks;
-                if ( dlg.ShowDialog( this.Context.HostWindow ) != DialogResult.OK )
+                if ( dlg.ShowDialog( this.HostWindow ) != DialogResult.OK )
                     return null;
 
                 info.CheckedItems = dlg.CheckedItems;
@@ -367,7 +358,7 @@ namespace Ankh
                 dlg.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
                 dlg.StopOnCopy = info.StopOnCopy;
 
-                if ( dlg.ShowDialog( this.Context.HostWindow ) != DialogResult.OK )
+                if ( dlg.ShowDialog( this.HostWindow ) != DialogResult.OK )
                     return null;
 
                 info.CheckedItems = dlg.CheckedItems;
@@ -390,7 +381,7 @@ namespace Ankh
                 dialog.Options = PathSelectorOptions.DisplaySingleRevision;
                 dialog.Recursive = true;
 
-                if ( dialog.ShowDialog(this.Context.HostWindow) != DialogResult.OK )
+                if ( dialog.ShowDialog(this.HostWindow) != DialogResult.OK )
                     return null;
                 
                 info.SwitchToUrl = dialog.ToUrl;
@@ -406,7 +397,7 @@ namespace Ankh
         {
             using( NewDirectoryDialog dlg = new NewDirectoryDialog() )
             {
-                if ( dlg.ShowDialog(this.Context.HostWindow) != DialogResult.OK )
+                if ( dlg.ShowDialog(this.HostWindow) != DialogResult.OK )
                     return null;
                 
                 return dlg.DirectoryName;
@@ -417,7 +408,7 @@ namespace Ankh
         {
             using( AddRepositoryRootDialog dlg = new AddRepositoryRootDialog() )
             {
-                if ( dlg.ShowDialog(this.Context.HostWindow) != DialogResult.OK )
+                if ( dlg.ShowDialog(this.HostWindow) != DialogResult.OK )
                     return null;
 
                 return new RepositoryRootInfo( dlg.Url, dlg.Revision );
@@ -428,7 +419,7 @@ namespace Ankh
         {
             using ( AddWorkingCopyExplorerRootDialog dlg = new AddWorkingCopyExplorerRootDialog() )
             {
-                if ( dlg.ShowDialog( this.context.HostWindow ) != DialogResult.OK )
+                if ( dlg.ShowDialog( this.HostWindow ) != DialogResult.OK )
                 {
                     return null;
                 }
@@ -442,8 +433,8 @@ namespace Ankh
         {   
             Debug.WriteLine( "Creating repository explorer", "Ankh" );
             object control = null;
-            this.repositoryExplorerWindow = this.context.DTE.Windows.CreateToolWindow( 
-                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl", 
+            this.repositoryExplorerWindow = this.DTE.Windows.CreateToolWindow( 
+                this.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl", 
                 "Repository Explorer", REPOSEXPLORERGUID, ref control );
             
             this.repositoryExplorerWindow.Visible = true;
@@ -475,8 +466,8 @@ namespace Ankh
         {
             Debug.WriteLine( "Creating commit dialog user control", "Ankh" );
             object control = null;
-            this.commitDialogWindow = this.context.DTE.Windows.CreateToolWindow( 
-                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl", 
+            this.commitDialogWindow = this.DTE.Windows.CreateToolWindow( 
+                this.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl", 
                 "Commit", CommitDialogGuid, ref control );
             
             this.commitDialogWindow.Visible = true;
@@ -499,8 +490,8 @@ namespace Ankh
         {
             Debug.WriteLine( "Creating working copy explorer tool window", "Ankh" );
             object control = null;
-            this.workingCopyExplorerWindow = this.context.DTE.Windows.CreateToolWindow(
-                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl",
+            this.workingCopyExplorerWindow = this.DTE.Windows.CreateToolWindow(
+                this.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl",
                 "Working Copy Explorer", WorkingCopyExplorerGuid, ref control );
 
             this.workingCopyExplorerWindow.Visible = true;
@@ -570,6 +561,36 @@ namespace Ankh
             }
         }
 
+        _DTE DTE
+        {
+            get 
+            {
+                if(this.dte == null)
+                    this.dte = (_DTE)this.serviceProvider.GetService(typeof(_DTE));
+                return dte;
+            }
+        }
+
+        AddIn AddIn
+        {
+            get
+            {
+                if (this.addin == null)
+                    this.addin = (AddIn)this.serviceProvider.GetService(typeof(AddIn));
+                return this.addin;
+            }
+        }
+
+        IWin32Window HostWindow
+        {
+            get
+            {
+                if (this.hostWindowService == null)
+                    this.hostWindowService = (IHostWindowService)this.serviceProvider.GetService(typeof(IHostWindowService));
+
+                return this.hostWindowService.HostWindow;
+            }
+        }
 
         private SH.WebBrowser newBrowser;
         private void NewWindow2(ref object ppDisp, ref bool Cancel)
@@ -583,7 +604,6 @@ namespace Ankh
         private CommitDialog commitDialog;
         private Window commitDialogWindow;
         private Window workingCopyExplorerWindow;
-        private IContext context;
         private bool commitDialogModal;
         
         public const string REPOSEXPLORERGUID = 
@@ -593,7 +613,9 @@ namespace Ankh
         private const string WorkingCopyExplorerGuid = 
             "{3ABCF4EA-71BB-4e1c-ABD0-39261B19EDA1}";
 
-
-        
+        private IServiceProvider serviceProvider;
+        private _DTE dte;
+        private AddIn addin;
+        private IHostWindowService hostWindowService;
     }
 }

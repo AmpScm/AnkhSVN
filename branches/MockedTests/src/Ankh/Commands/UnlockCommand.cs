@@ -41,10 +41,10 @@ namespace Ankh.Commands
                 item.Refresh( context.Client );
         }
 
-        private void DoUnlock( IContext context )
+        private void DoUnlock( IServiceProvider serviceProvider )
         {
             string[] paths = SvnItem.GetPaths( this.info.CheckedItems );
-            context.Client.Unlock( paths, false );
+            this.ClientProvider.Client.Unlock( paths, false );
         }
 
         private PathSelectorInfo info;

@@ -27,14 +27,6 @@ namespace Ankh
             get;
         }
 
-        /// <summary>
-        /// An IContext.
-        /// </summary>
-        IContext Context
-        {
-            get;
-            set;
-        }
 
         Ankh.UI.WorkingCopyExplorerControl WorkingCopyExplorer
         {

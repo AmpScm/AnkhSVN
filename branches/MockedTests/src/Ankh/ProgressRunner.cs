@@ -2,15 +2,16 @@ using System;
 using System.Threading;
 using Ankh.UI;
 using NSvn.Core;
+using System.Windows.Forms;
 
 namespace Ankh
 {
     public interface IProgressWorker
     {        
-        void Work( IContext context );
+        void Work( IServiceProvider serviceProvider );
     }
 
-    public delegate void SimpleProgressWorkerCallback( IContext context );
+    public delegate void SimpleProgressWorkerCallback(IServiceProvider serviceProvider);
 
 
     public class SimpleProgressWorker : IProgressWorker
@@ -19,9 +20,9 @@ namespace Ankh
         {
             this.callback = cb;
         }
-        public void Work(IContext context)
+        public void Work(IServiceProvider serviceProvider)
         {
-            this.callback( context );
+            this.callback(serviceProvider);
         }
 
         private SimpleProgressWorkerCallback callback;
@@ -39,13 +40,14 @@ namespace Ankh
         /// <param name="context"></param>
         /// <param name="callback">The callback which performs 
         /// the actual operation.</param>
-        public ProgressRunner( IContext context, IProgressWorker worker )
+        public ProgressRunner( IServiceProvider serviceProvider, IProgressWorker worker )
         {
-            this.context = context;
+            this.serviceProvider = serviceProvider;
             this.worker = worker;
         }
 
-        public ProgressRunner( IContext context ) : this( context, null )
+        public ProgressRunner( IServiceProvider serviceProvider ) 
+            : this( serviceProvider, null )
         {}
 
         /// <summary>
@@ -72,27 +74,22 @@ namespace Ankh
 
                 thread.Start();
 
-                dialog.ShowDialog( this.Context.HostWindow );
+                dialog.ShowDialog( this.HostWindow );
             }
             if ( this.cancelled )
             {
-                this.Context.OutputPane.WriteLine( "Cancelled" );
+                this.OutputPane.WriteLine( "Cancelled" );
             }
             else if ( this.exception != null )
                 throw new ProgressRunnerException(this.exception);
-        }  
-      
-        private IContext Context
-        {
-            get{ return this.context; }
         }
 
         private void Run()
         {
             try
             {
-                this.Context.Client.Cancel += new NSvn.Core.CancelDelegate(this.Cancel);
-                this.worker.Work( this.Context );
+                this.Client.Cancel += new NSvn.Core.CancelDelegate(this.Cancel);
+                this.worker.Work( this.serviceProvider );
             }
             catch( OperationCancelledException )
             {
@@ -105,7 +102,7 @@ namespace Ankh
             finally
             {
                 this.done = true;
-                this.Context.Client.Cancel -= new CancelDelegate(this.Cancel);
+                this.Client.Cancel -= new CancelDelegate(this.Cancel);
             }
         }
 
@@ -119,6 +116,21 @@ namespace Ankh
         private void Cancel(object sender, CancelEventArgs args)
         {
             args.Cancel = this.cancel;
+        }
+
+        IWin32Window HostWindow
+        {
+            get { return ((IHostWindowService)this.serviceProvider.GetService(typeof(IHostWindowService))).HostWindow; }
+        }
+
+        Client Client
+        {
+            get { return ((IClientProvider)this.serviceProvider.GetService(typeof(IClientProvider))).Client; }
+        }
+
+        OutputPaneTextWriter OutputPane
+        {
+            get { return ((IOutputPaneProvider)this.serviceProvider.GetService(typeof(IOutputPaneProvider))).OutputPaneWriter; }
         }
 
         /// <summary>
@@ -135,7 +147,7 @@ namespace Ankh
         private bool cancel = false;
         private bool cancelled = false;
         private Exception exception;
-        private IContext context;
+        private IServiceProvider serviceProvider;
         private IProgressWorker worker;
     }
 }

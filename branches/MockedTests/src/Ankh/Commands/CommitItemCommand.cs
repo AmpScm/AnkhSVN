@@ -100,9 +100,9 @@ namespace Ankh.Commands
         }        
         #endregion
 
-        private void DoCommit( IContext context )
+        private void DoCommit( IServiceProvider serviceProvider )
         {
-            this.commitInfo = context.Client.Commit( this.paths, Recurse.Full, this.commitContext.KeepLocks );
+            this.commitInfo = this.ClientProvider.Client.Commit( this.paths, Recurse.Full, this.commitContext.KeepLocks );
         }
 
         /// <summary>
