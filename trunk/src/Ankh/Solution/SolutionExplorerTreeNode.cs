@@ -255,11 +255,11 @@ namespace Ankh.Solution
                 IntPtr childItem = this.explorer.TreeView.GetChild( this.hItem );
 
                 //// a node needs to be expanded at least once in order to have child nodes
-                //if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
-                //{
-                //    this.uiItem.UIHierarchyItems.Expanded = true;
-                //    childItem = this.explorer.TreeView.GetChild( this.hItem );
-                //}
+                if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
+                {
+                    this.uiItem.UIHierarchyItems.Expanded = true;
+                    childItem = this.explorer.TreeView.GetChild( this.hItem );
+                }
                 
                 // iterate over the ui items and the treeview items in parallell
                 foreach( UIHierarchyItem child in this.uiItem.UIHierarchyItems )
