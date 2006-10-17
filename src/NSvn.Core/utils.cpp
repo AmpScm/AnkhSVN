@@ -101,8 +101,12 @@ const char* NSvn::Core::CanonicalizePath( String* path, Pool& pool )
 
         // ENOENT means the file doesnt exist - we don't care
         if( err && !APR_STATUS_IS_ENOENT(err) )
+        {
             // TODO: fix this
-            throw new SvnClientException( path );
+            System::String* msg = String::Format("Bad path: '{0}'. APR error code is {1}.", 
+                path, __box(err) );
+            throw new SvnClientException( msg );
+        }
 
         HandleError( svn_path_cstring_to_utf8( &utf8path, trueNamedTarget, pool ) );
     }

@@ -5,6 +5,7 @@ using NSvn.Common;
 using System.IO;
 using System.Collections;
 using Ankh.UI;
+using System.Diagnostics;
 
 namespace Ankh
 {
@@ -265,8 +266,15 @@ namespace Ankh
         {
             string[] paths = new string[items.Count];
             int i = 0;
-            foreach( SvnItem item in items )
-                paths[i++] = item.Path;
+            foreach ( SvnItem item in items )
+            {
+                Debug.Assert( item != null, "SvnItem should not be null" );
+
+                if ( item != null )
+                {
+                    paths[ i++ ] = item.Path; 
+                }
+            }
 
             return paths;
         }

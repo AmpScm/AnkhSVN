@@ -249,7 +249,7 @@ namespace Ankh.Solution
                 // get the treeview child
                 IntPtr childItem = this.explorer.TreeView.GetChild( this.hItem );
 
-                // a node needs to be expanded at least once in order to have child nodes
+                //// a node needs to be expanded at least once in order to have child nodes
                 if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
                 {
                     this.uiItem.UIHierarchyItems.Expanded = true;

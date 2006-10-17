@@ -284,6 +284,7 @@ namespace Ankh.RepositoryExplorer
             public ListRunner( INode node ) 
             {
                 this.node = node;
+                this.entries = new DirectoryEntry[] { };
             }
 
             /// <summary>
