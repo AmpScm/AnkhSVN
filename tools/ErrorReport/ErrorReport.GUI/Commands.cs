@@ -137,6 +137,37 @@ namespace ErrorReport.GUI
         }
     }
 
+    [ToolBar( "Edit signature" )]
+    internal class EditSignatureCommand : CommandBase
+    {
+        public EditSignatureCommand( MainFormUCP ucp )
+            : base( ucp )
+        {
+
+        }
+
+        public override void Execute()
+        {
+            using ( SignatureDialog dialog = new SignatureDialog() )
+            {
+                dialog.Signature = ucp.Signature;
+
+                if ( dialog.ShowDialog() == DialogResult.OK )
+                {
+                    ucp.Signature = dialog.Signature;
+                }
+            }
+        }
+
+        public override bool Enabled
+        {
+            get
+            {
+                return true;
+            }
+        }
+    }
+
     [KeyBinding( Keys.P )]
     [ToolBar( "Previous" )]
     [MenuItem( "MainMenu.Navigate.Previous" )]
