@@ -43,7 +43,8 @@ namespace ErrorReport.GUI
             {
                 if ( this.templateList.SelectedTemplate != null )
                 {
-                    this.replyTextBox.AppendText( this.templateList.SelectedTemplate.TemplateText );
+                    this.replyTextBox.SelectedText = this.templateList.SelectedTemplate.TemplateText;
+                    this.replyTextBox.ScrollToCaret();
                 }
             };
 
