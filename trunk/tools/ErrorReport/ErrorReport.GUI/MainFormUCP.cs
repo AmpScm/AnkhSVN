@@ -10,6 +10,7 @@ using System.ComponentModel;
 using IServiceProvider = ErrorReportExtractor.IServiceProvider;
 using System.Windows.Forms;
 using System.Threading;
+using ErrorReport.GUI.Properties;
 
 namespace ErrorReport.GUI
 {
@@ -23,6 +24,7 @@ namespace ErrorReport.GUI
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler ReportsLoaded;
         public event EventHandler ReformatSelection;
+        public event EventHandler InsertionPointChanged;
 
         public enum Mode
         {
@@ -161,6 +163,19 @@ namespace ErrorReport.GUI
             }
         }
 
+        public int InsertionPoint
+        {
+            get { return this.insertionPoint; }
+            set
+            {
+                this.insertionPoint = value;
+                if ( this.InsertionPointChanged != null )
+                {
+                    this.InsertionPointChanged( this, EventArgs.Empty );
+                }
+            }
+        }
+
         public string ReplyText
         {
             get { return replyText; }
@@ -168,6 +183,20 @@ namespace ErrorReport.GUI
             { 
                 replyText = value;
                
+            }
+        }
+
+        public string Signature
+        {
+            get
+            {
+                return Settings.Default.Signature ?? String.Empty;
+            }
+
+            set
+            {
+                Settings.Default.Signature = value;
+                Settings.Default.Save();
             }
         }
 
@@ -200,7 +229,15 @@ namespace ErrorReport.GUI
             Debug.Assert( this.SelectedMailItem != null );
 
             this.ReplyText = Quotify( this.SelectedMailItem.Body ) + Environment.NewLine + Environment.NewLine;
+
+
+            int insertionPoint = this.replyText.Length - this.ReplyText.Split( new string[] { Environment.NewLine }, 
+                StringSplitOptions.None ).Length;
+            this.ReplyText += "--" + Environment.NewLine + this.Signature;
             OnReplyTextChanged();
+
+            this.InsertionPoint = insertionPoint;
+            
             this.IsReplying = true;
         }
 
@@ -390,6 +427,7 @@ namespace ErrorReport.GUI
         private IProgressCallback callback;
         private ISynchronizeInvoke invoker;
 
+        private int insertionPoint;
         private IMailItem selectedMailItem;
         private IEnumerable<IReplyTemplate> templates;
         private IErrorReport selectedReport;

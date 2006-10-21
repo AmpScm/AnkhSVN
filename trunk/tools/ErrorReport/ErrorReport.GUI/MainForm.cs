@@ -35,7 +35,7 @@ namespace ErrorReport.GUI
             this.SetupCommands();
             this.DataBind();
 
-            DebugUtils.DebugEvents(this.reportsListView, "$TIMESTAMP: $EVENT raised, e.InvalidRect is {e.Invalidrect}", "Invalidated");//\r\n\tCalling method: $CALLER\r\n\tStack trace: $STACKTRACE");
+            DebugUtils.DebugEvents( this.replyTextBox );
 
             this.ucp.TemplatesWanted += delegate { this.ShowTemplates(); };
             this.templateList = new TemplateList();
@@ -56,6 +56,11 @@ namespace ErrorReport.GUI
 		            IMailItem mailItem = item.Tag as IMailItem;
                     this.FormatListItem( item, mailItem );
 	            }
+            };
+
+            this.ucp.InsertionPointChanged += delegate
+            {
+                this.replyTextBox.SelectionStart = this.ucp.InsertionPoint;
             };
         }
 
@@ -155,7 +160,7 @@ namespace ErrorReport.GUI
                 this.splitContainerBottom.Panel2Collapsed = !this.ucp.IsReplying;
                 if ( ucp.IsReplying )
                 {
-                    this.replyTextBox.SelectionStart = this.replyTextBox.Text.Length;
+                    this.replyTextBox.SelectionStart = this.ucp.InsertionPoint;
                     this.replyTextBox.Focus();
                 }
             };
