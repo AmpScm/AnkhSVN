@@ -197,6 +197,11 @@ namespace Ankh
             string solutionDir = Path.GetDirectoryName(
                     this.context.DTE.Solution.FullName );
 
+            if ( !Directory.Exists(solutionDir) )
+            {
+                
+            }
+
             try
             {
                 // treat soln items and misc items specially
@@ -380,6 +385,12 @@ namespace Ankh
                 path = solutionDir;
             else
                 path = solutionDir + "\\";
+
+            // yet we check anyway
+            if ( !PathUtils.IsSubPathOf(filename, path) )
+            {
+                return;
+            }
 
             string[] intermediate = filename.Substring( path.Length,
                 filename.Length - path.Length ).Split( '\\' );
