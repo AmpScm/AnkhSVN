@@ -56,6 +56,11 @@ namespace Utils
             if ( !Path.IsPathRooted( directory ) )
                 directory = Path.GetFullPath( directory );
 
+            if ( !directory.EndsWith(Path.DirectorySeparatorChar.ToString()) )
+            {
+                directory += Path.DirectorySeparatorChar;
+            }
+
             path = path.ToLower();
             directory = directory.ToLower();
 
