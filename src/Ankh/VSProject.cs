@@ -277,9 +277,10 @@ namespace Ankh
 
             foreach ( ProjectItem item in Enumerators.EnumerateProjectItems(projectItems) )
             {
-                if ( item.Object is Project )
+                Project projectItemObject = DteUtils.GetProjectItemObject( item ) as Project;
+                if ( projectItemObject != null )
                 {
-                    VSProject project = VSProject.FromProject( this.context, item.Object as Project );
+                    VSProject project = VSProject.FromProject( this.context, projectItemObject );
 
                     if ( includeSolutionFolders || !project.IsSolutionFolder )
                     {
@@ -301,10 +302,12 @@ namespace Ankh
         {
             foreach ( ProjectItem item in Enumerators.EnumerateProjectItems( items ) )
             {
+                object projectItemObject = DteUtils.GetProjectItemObject( item );
+
                 // if it's a solution folder, item.Object will be the project
-                if ( item.Object is Project )
+                if ( projectItemObject is Project )
                 {
-                    VSProject vsProject = VSProject.FromProject(this.context, item.Object as Project);
+                    VSProject vsProject = VSProject.FromProject(this.context, projectItemObject as Project);
                     continue;
                 }
 
@@ -321,9 +324,9 @@ namespace Ankh
                         continue;
                     }
                     try
-                    {
+                    {   
                         if ( ( File.Exists( file ) || Directory.Exists( file ) ) &&
-                            ( vcFilterType != null &&
+                            ( vcFilterType != null && projectItemObject != null &&
                              !vcFilterType.IsInstanceOfType( item.Object ) ) )
                         {
                             // for now we only support files that are under the solution root
