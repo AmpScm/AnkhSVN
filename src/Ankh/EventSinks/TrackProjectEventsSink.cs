@@ -101,6 +101,12 @@ namespace Ankh.EventSinks
         public int OnQueryRemoveDirectories( IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYFLAGS[] rgFlags, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnQueryRemoveDirectories() of: {0}", this.ToString() ) );
+
+            // OnQueryRemove expects this to be non-null.
+            if ( rgResults == null )
+            {
+                rgResults = new VSQUERYREMOVEDIRECTORYRESULTS[ rgpszMkDocuments.Length ];
+            }
             return OnQueryRemove( rgpszMkDocuments, pSummaryResult, rgResults );
         }
 
@@ -121,11 +127,12 @@ namespace Ankh.EventSinks
                             {
                                 this.BackupDirectory( path );
                             }
+
                             rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
                         }
                         else
                         {
-                            rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
+                            rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK; 
                             pSummaryResult[ 0 ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
                         }
                     }
@@ -168,13 +175,17 @@ namespace Ankh.EventSinks
 
         public int OnQueryRemoveFiles( IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYREMOVEFILEFLAGS[] rgFlags, VSQUERYREMOVEFILERESULTS[] pSummaryResult, VSQUERYREMOVEFILERESULTS[] rgResults )
         {
-            VSQUERYREMOVEDIRECTORYRESULTS[] results = new VSQUERYREMOVEDIRECTORYRESULTS[ rgResults.Length ];
+            VSQUERYREMOVEDIRECTORYRESULTS[] results = new VSQUERYREMOVEDIRECTORYRESULTS[ rgpszMkDocuments.Length ];
+
             VSQUERYREMOVEDIRECTORYRESULTS[] summaryResults = new VSQUERYREMOVEDIRECTORYRESULTS[ 1 ];
 
             int hr = this.OnQueryRemove( rgpszMkDocuments, results, summaryResults );
 
             // we need to convert to the appropriate enum (even if they have exactly the same flags...)
-            ConvertRemoveFileResults( results, rgResults );
+            if ( rgResults != null )
+            {
+                ConvertRemoveFileResults( results, rgResults ); 
+            }
             ConvertRemoveFileResults( summaryResults, pSummaryResult );
 
             return hr;
