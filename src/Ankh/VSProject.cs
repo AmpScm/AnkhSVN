@@ -277,9 +277,10 @@ namespace Ankh
 
             foreach ( ProjectItem item in Enumerators.EnumerateProjectItems(projectItems) )
             {
-                if ( item.Object is Project )
+                Project projectItemObject = DteUtils.GetProjectItemObject( item ) as Project;
+                if ( projectItemObject != null )
                 {
-                    VSProject project = VSProject.FromProject( this.context, item.Object as Project );
+                    VSProject project = VSProject.FromProject( this.context, projectItemObject );
 
                     if ( includeSolutionFolders || !project.IsSolutionFolder )
                     {
