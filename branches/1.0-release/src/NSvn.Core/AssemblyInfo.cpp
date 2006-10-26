@@ -2,7 +2,7 @@
 
 using namespace System::Reflection;
 using namespace System::Runtime::CompilerServices;
-[assembly:AssemblyVersionAttribute("1.0.0.2663")];
+[assembly:AssemblyVersionAttribute("1.0.0.2664")];
         [assembly:Utils::VersionAttribute( "Subversion", 1, 4, 0, Tag="" )];
 [assembly:Utils::VersionAttribute( "Neon", 0, 25, 5, Tag="" )];
 [assembly:Utils::VersionAttribute( "Berkeley DB", 4, 4, 20, Tag="" )];
