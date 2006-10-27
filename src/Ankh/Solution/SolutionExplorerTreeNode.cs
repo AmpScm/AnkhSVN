@@ -249,8 +249,6 @@ namespace Ankh.Solution
                 // retain the original expansion state
                 bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
 
-                this.uiItem.UIHierarchyItems.Expanded = true;
-
                 // get the treeview child
                 IntPtr childItem = this.explorer.TreeView.GetChild( this.hItem );
 
