@@ -4,6 +4,7 @@ using System.Text;
 using Lesnikowski.Client;
 using Lesnikowski.Mail;
 using Fines.Utils.Collections;
+using ErrorReportExtractor.Properties;
 
 namespace ErrorReportExtractor
 {
@@ -26,13 +27,14 @@ namespace ErrorReportExtractor
         #endregion
 
         #region IReportContainer Members
-
         public IEnumerable<IErrorReport> GetItems()
         {
             Pop3 pop3 = LoginAndStat();
-            for ( int i = 1; i <= pop3.MessageCount; i++ )
+            Pop3ReadItemsCache cache = this.CreateReadItemsCache();
+            string uidlList = this.GetUidlList( pop3 );
+            foreach (Pop3ReadItemsCache.Pop3Entry entry in cache.GetUnreadItems( uidlList ) )
             {
-                string headerString = pop3.GetMessageHeader( i );
+                string headerString = pop3.GetMessageHeader( entry.MessageId );
                 string inReplyTo = this.GetHeader( headerString, "In-reply-to" );
                 if ( inReplyTo != null )
                 {
@@ -41,24 +43,41 @@ namespace ErrorReportExtractor
                 }
 
                 ErrorReport report = new ErrorReport();
-                InitializeMailItemFromPop3Message(report, pop3, i, headerString);
+                InitializeMailItemFromPop3Message(report, pop3, entry.MessageId, headerString);
 
-                callback.Verbose( "Retrieved POP3 mail from {0} with subject '{1}'", report.ReceivedTime, report.Subject );                
+                callback.Verbose( "Retrieved POP3 mail from {0} with subject '{1}'", report.ReceivedTime, report.Subject );
+
+                callback.Verbose( "Marking UIDL '{0}' as read", entry.uidl );
+                cache.MarkAsRead( entry );
 
                 //this.callback.Info( "{0}: '{1}'", header.Date, messageID != null ? messageID : "<NULL>");
                 //yield break;
                 yield return report;
 
             }
+            cache.Save();
             yield break;
+        }
+
+        private string GetUidlList( Pop3 pop3 )
+        {
+            Pop3MultiLineResponse response = pop3.SendMultiLineCommnad( "UIDL" );
+            return response.Message;
+        }
+
+        private Pop3ReadItemsCache CreateReadItemsCache()
+        {
+            return Pop3ReadItemsCache.LoadFromFile( Settings.Default.Pop3ReadItemsCache);
         }
 
         public IEnumerable<IMailItem> GetPotentialReplies()
         {
             Pop3 pop3 = LoginAndStat();
-            for ( int i = 1; i <= pop3.MessageCount; i++ )
+            Pop3ReadItemsCache cache = this.CreateReadItemsCache();
+            string uidlList = this.GetUidlList( pop3 );
+            foreach ( Pop3ReadItemsCache.Pop3Entry entry in cache.GetUnreadItems( uidlList ) )
             {
-                string headerString = pop3.GetMessageHeader( i );
+                string headerString = pop3.GetMessageHeader( entry.MessageId );
                 string inReplyTo = this.GetHeader( headerString, "In-reply-to" );
                 if ( inReplyTo == null )
                 {
@@ -67,12 +86,15 @@ namespace ErrorReportExtractor
                 }
 
                 MailItem mailItem = new MailItem();
-                InitializeMailItemFromPop3Message( mailItem, pop3, i, headerString );
+                InitializeMailItemFromPop3Message( mailItem, pop3, entry.MessageId, headerString );
 
                 callback.Verbose( "Retrieved POP3 mail from {0} with subject '{1}' as potential reply.", mailItem.ReceivedTime, mailItem.Subject );
+                callback.Verbose( "Marking UIDL '{0}' as read", entry.uidl );
+                cache.MarkAsRead( entry );
 
                 yield return mailItem;
             }
+            cache.Save();
         }
 
         private void InitializeMailItemFromPop3Message( IMailItem mailItem, Pop3 pop3, int i, string headerString )
