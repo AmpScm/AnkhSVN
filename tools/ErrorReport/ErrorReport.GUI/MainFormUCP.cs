@@ -10,7 +10,6 @@ using System.ComponentModel;
 using IServiceProvider = ErrorReportExtractor.IServiceProvider;
 using System.Windows.Forms;
 using System.Threading;
-using ErrorReport.GUI.Properties;
 
 namespace ErrorReport.GUI
 {
@@ -24,15 +23,7 @@ namespace ErrorReport.GUI
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler ReportsLoaded;
         public event EventHandler ReformatSelection;
-        public event EventHandler InsertionPointChanged;
 
-        public enum Mode
-        {
-            Threaded, 
-            Flat
-        }
-
-        
 
         public MainFormUCP( IServiceProvider provider, IProgressCallback cb, ISynchronizeInvoke invoker )
         {
@@ -54,9 +45,9 @@ namespace ErrorReport.GUI
         }
 
 
-        public IEnumerable<IMailItem> MailItems
+        public IEnumerable<IErrorReport> Reports
         {
-            get{ return this.mailItems; }
+            get{ return this.errorReports; }
         }
 
         public IErrorReport SelectedReport
@@ -91,9 +82,9 @@ namespace ErrorReport.GUI
         {
             get
             {
-                if ( this.mailItems != null )
+                if ( this.errorReports != null )
                 {
-                    return this.mailItems.Count;
+                    return this.errorReports.Count;
                 }
                 else
                 {
@@ -106,10 +97,10 @@ namespace ErrorReport.GUI
         {
             get
             {
-                if ( this.mailItems != null )
+                if ( this.errorReports != null )
                 {
 
-                    return ListUtils.Count<IMailItem>( this.mailItems, delegate( IMailItem report )
+                    return ListUtils.Count<IErrorReport>( this.errorReports, delegate( IErrorReport report )
                     {
                         return !report.RepliedTo;
                     } );
@@ -138,9 +129,9 @@ namespace ErrorReport.GUI
         {
             get
             {
-                if ( this.SelectedMailItem != null )
+                if ( this.SelectedReport != null )
                 {
-                    return this.mailItems.IndexOf( this.SelectedMailItem );
+                    return this.errorReports.IndexOf( this.SelectedReport );
                 }
                 else
                 {
@@ -163,19 +154,6 @@ namespace ErrorReport.GUI
             }
         }
 
-        public int InsertionPoint
-        {
-            get { return this.insertionPoint; }
-            set
-            {
-                this.insertionPoint = value;
-                if ( this.InsertionPointChanged != null )
-                {
-                    this.InsertionPointChanged( this, EventArgs.Empty );
-                }
-            }
-        }
-
         public string ReplyText
         {
             get { return replyText; }
@@ -186,26 +164,12 @@ namespace ErrorReport.GUI
             }
         }
 
-        public string Signature
-        {
-            get
-            {
-                return Settings.Default.Signature ?? String.Empty;
-            }
-
-            set
-            {
-                Settings.Default.Signature = value;
-                Settings.Default.Save();
-            }
-        }
-
         public bool CanGoNext
         {
             get 
             {
                 int index = this.SelectedIndex;
-                return this.mailItems != null && index < this.mailItems.Count - 1; 
+                return this.errorReports != null && index < this.errorReports.Count - 1; 
             }
         }
 
@@ -214,7 +178,7 @@ namespace ErrorReport.GUI
             get
             {
                 int index = this.SelectedIndex;
-                return this.mailItems != null && index > 0;
+                return this.errorReports != null && index > 0;
             }
         }
 
@@ -226,28 +190,20 @@ namespace ErrorReport.GUI
 
         public void InitiateReplyForSelectedReport()
         {
-            Debug.Assert( this.SelectedMailItem != null );
+            Debug.Assert( this.SelectedReport != null );
 
-            this.ReplyText = Quotify( this.SelectedMailItem.Body ) + Environment.NewLine + Environment.NewLine;
-
-
-            int insertionPoint = this.replyText.Length - this.ReplyText.Split( new string[] { Environment.NewLine }, 
-                StringSplitOptions.None ).Length;
-            this.ReplyText += "--" + Environment.NewLine + this.Signature;
+            this.ReplyText = Quotify( this.SelectedReport.Body ) + Environment.NewLine + Environment.NewLine;
             OnReplyTextChanged();
-
-            this.InsertionPoint = insertionPoint;
-            
             this.IsReplying = true;
         }
 
        
 
-        public void SendReplyForSelectedItem()
+        public void SendReplyForSelectedReport()
         {
-            Debug.Assert(this.SelectedMailItem != null);
-            this.mailer.SendReply( this.SelectedMailItem, this.ReplyText );
-            this.storage.AnswerReport( this.SelectedMailItem, this.ReplyText );
+            Debug.Assert(this.SelectedReport != null);
+            this.mailer.SendReply( this.SelectedReport, this.ReplyText );
+            this.storage.AnswerReport( this.SelectedReport, this.ReplyText );
 
             if ( this.ReformatSelection != null )
             {
@@ -270,7 +226,7 @@ namespace ErrorReport.GUI
         {
             if ( this.CanGoNext )
             {
-                this.SelectedMailItem = this.mailItems[ this.SelectedIndex + 1 ];
+                this.SelectedReport = this.errorReports[ this.SelectedIndex + 1 ];
             }
         }
 
@@ -278,7 +234,7 @@ namespace ErrorReport.GUI
         {
             if ( this.CanGoPrevious )
             {
-                this.SelectedMailItem = this.mailItems[ this.SelectedIndex - 1 ];
+                this.SelectedReport = this.errorReports[ this.SelectedIndex - 1 ];
             }
         }
 
@@ -299,22 +255,11 @@ namespace ErrorReport.GUI
         {
             ThreadWorker worker = new ThreadWorker( this.invoker );
 
-            if ( this.currentMode == Mode.Threaded )
-            {
-                worker.Work += delegate
-                {
-                    this.mailItems = ListUtils.ConvertTo<IErrorReport, List<IMailItem>, IMailItem>(
-                           this.storage.GetAllReports() );
-                };
-            }
-            else
-            {
-                worker.Work += delegate
-                {
-                    this.mailItems = ListUtils.ConvertTo<IMailItem, List<IMailItem>>(
-                        this.storage.GetAllItems() );
-                };
-            }
+            worker.Work += delegate 
+            { 
+                this.errorReports = ListUtils.ConvertTo<IErrorReport, List<IErrorReport>>(
+                    this.storage.GetAllReports() ); 
+            };
 
             worker.WorkFinished += delegate
             {
@@ -344,13 +289,6 @@ namespace ErrorReport.GUI
                 }
             }
         }
-
-        public void ToggleFlatOrThreaded()
-        {
-            this.currentMode = this.currentMode == Mode.Threaded ? Mode.Flat : Mode.Threaded;
-            this.LoadReports();
-        }
-
 
         protected void OnNotifyPropertyChanged( string property )
         {
@@ -427,20 +365,17 @@ namespace ErrorReport.GUI
         private IProgressCallback callback;
         private ISynchronizeInvoke invoker;
 
-        private int insertionPoint;
         private IMailItem selectedMailItem;
         private IEnumerable<IReplyTemplate> templates;
         private IErrorReport selectedReport;
         private bool isReplying = false;
         private string replyText;
-        private Mode currentMode = Mode.Flat;
         private IServiceProvider provider;
-        private IList<IMailItem> mailItems;
+        private IList<IErrorReport> errorReports;
         private IStorage storage;
         private IMailer mailer;
         private const int MailWidth = 78;
 
-
-
+       
     }
 }

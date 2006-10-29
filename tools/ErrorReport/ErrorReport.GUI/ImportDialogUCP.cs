@@ -104,46 +104,46 @@ namespace ErrorReport.GUI
 
         public void RunImport()
         {
-            ////OutlookContainer container = new OutlookContainer();
-            //container.SetProgressCallback( this.callback );
+            OutlookContainer container = new OutlookContainer();
+            container.SetProgressCallback( this.callback );
 
-            //ThreadWorker worker = new ThreadWorker(this.invoker);
-            //worker.Work += delegate
-            //{
-            //    if ( this.ImportReplies )
-            //    {
-            //        this.callback.Info( "Starting import of error replies from Outlook folder {0}.", this.FolderPath );
-            //        int lastIndex;
-            //        IEnumerable<IMailItem> items = container.GetPotentialReplies( this.folderPath, this.RepliesStartIndex, out lastIndex );
-            //        this.storage.StorePotentialReplies( items );
-            //        this.StoreStartIndex( this.settings.LastOutlookReplyIndexChecked, lastIndex );
-            //    }
+            ThreadWorker worker = new ThreadWorker(this.invoker);
+            worker.Work += delegate
+            {
+                if ( this.ImportReplies )
+                {
+                    this.callback.Info( "Starting import of error replies from Outlook folder {0}.", this.FolderPath );
+                    int lastIndex;
+                    IEnumerable<IMailItem> items = container.GetPotentialReplies( this.folderPath, this.RepliesStartIndex, out lastIndex );
+                    this.storage.StorePotentialReplies( items );
+                    this.StoreStartIndex( this.settings.LastOutlookReplyIndexChecked, lastIndex );
+                }
 
-            //    if ( this.ImportReports )
-            //    {
-            //        this.callback.Info( "Starting import of error reports from Outlook folder {0}.", this.FolderPath );
-            //        int lastIndex;
-            //        IEnumerable<IErrorReport> items = container.GetItems( this.FolderPath, this.ReportsStartIndex, out lastIndex );
-            //        this.storage.Store( items );
-            //        this.StoreStartIndex( this.settings.LastOutlookReportIndexChecked, lastIndex );
-            //    }
-            //};
+                if ( this.ImportReports )
+                {
+                    this.callback.Info( "Starting import of error reports from Outlook folder {0}.", this.FolderPath );
+                    int lastIndex;
+                    IEnumerable<IErrorReport> items = container.GetItems( this.FolderPath, this.ReportsStartIndex, out lastIndex );
+                    this.storage.Store( items );
+                    this.StoreStartIndex( this.settings.LastOutlookReportIndexChecked, lastIndex );
+                }
+            };
 
-            //worker.WorkFinished += delegate 
-            //{ 
-            //    this.callback.Info( "Import finished." );
-            //    if ( this.ImportFinished != null )
-            //    {
-            //        this.ImportFinished( this, EventArgs.Empty );
-            //    }
-            //};
+            worker.WorkFinished += delegate 
+            { 
+                this.callback.Info( "Import finished." );
+                if ( this.ImportFinished != null )
+                {
+                    this.ImportFinished( this, EventArgs.Empty );
+                }
+            };
 
-            //worker.Exception += delegate( object sender, ThreadExceptionEventArgs args )
-            //{
-            //    this.callback.Exception( args.Exception );
-            //};
+            worker.Exception += delegate( object sender, ThreadExceptionEventArgs args )
+            {
+                this.callback.Exception( args.Exception );
+            };
 
-            //worker.Start();
+            worker.Start();
             
         }
 

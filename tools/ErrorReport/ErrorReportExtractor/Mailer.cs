@@ -13,7 +13,7 @@ namespace ErrorReportExtractor
             this.progressCallback = new NullProgressCallback();
         }
 
-        public void SendReply( IMailItem report, string replyText )
+        public void SendReply( IErrorReport report, string replyText )
         {
             MailMessage message = new MailMessage();
             message.Subject = Settings.Default.Subject;
