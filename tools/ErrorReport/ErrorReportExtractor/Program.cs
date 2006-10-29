@@ -26,6 +26,7 @@ namespace ErrorReportExtractor
 
                     Pop3Importer importer = new Pop3Importer( "mail.broadpark.no", 110, "ankhsvn", "grynte" );
                     importer.SetProgressCallback( callback );
+                    //importer.GetUidl();
                     SqlServerStorage storage = new SqlServerStorage();
                     storage.SetProgressCallback( callback );
 
