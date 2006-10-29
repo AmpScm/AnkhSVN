@@ -68,6 +68,7 @@
     <Compile Include="IService.cs" />
     <Compile Include="NullProgressCallback.cs" />
     <Compile Include="Pop3Importer.cs" />
+    <Compile Include="Pop3ReadItemsCache.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="IErrorReport.cs" />
     <Compile Include="IServiceProvider.cs" />
