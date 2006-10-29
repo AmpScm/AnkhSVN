@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{3A8DF134-05F1-4357-9682-AB14CDDA48A9}"
     >
@@ -167,11 +167,6 @@
                 />
                 <File
                     RelPath = "PropListItem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SubversionVersionAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

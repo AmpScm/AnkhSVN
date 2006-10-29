@@ -19,19 +19,6 @@ namespace Ankh
                 String.Compare(proj.Kind, MiscItemsKind) == 0);
         }
 
-        public static object GetProjectItemObject( ProjectItem item )
-        {
-            try
-            {
-                return item.Object;
-            }
-
-            catch ( Exception )
-            {
-                return null;
-            }
-        }
-
         public const string SolutionItemsKind = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
         public const string MiscItemsKind = "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}";
         public const string WebProjects2005Kind = "{E24C65DC-7377-472b-9ABA-BC803B73C61A}";
@@ -39,7 +26,5 @@ namespace Ankh
         public const string EnterpriseTemplateProjectItemKind = "{EA6618E8-6E24-4528-94BE-6889FE16485C}";
         public const string SolutionFolderKind = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
 
-
-       
     }
 }

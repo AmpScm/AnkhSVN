@@ -21,7 +21,7 @@ namespace Ankh.UI
         {
             get
             {
-                return String.Join( Environment.NewLine, this.textBox.Lines );
+                return this.textBox.Text;
             }
             set
             {

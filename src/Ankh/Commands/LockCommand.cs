@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using NSvn.Core;
-using System.Text;
 
 namespace Ankh.Commands
 {
@@ -28,52 +27,10 @@ namespace Ankh.Commands
                     return;
             }
 
-            this.lockFailedFiles = new ArrayList();
-            context.Client.Notification += new NotificationDelegate( OnClientNotification );
-            try
-            {
-                context.UIShell.RunWithProgressDialog( new SimpleProgressWorker(
-                    new SimpleProgressWorkerCallback( this.ProgressCallback ) ), "Locking files" );
-                foreach ( SvnItem item in info.CheckedItems )
-                    item.Refresh( context.Client );
-            }
-            finally
-            {
-                context.Client.Notification -= new NotificationDelegate( OnClientNotification );
-            }
-
-            if ( this.lockFailedFiles.Count > 0 )
-            {
-                this.ShowLockFailedMessage( context );
-            }
-        }
-
-        private void ShowLockFailedMessage( IContext context )
-        {
-            StringBuilder sb = new StringBuilder();
-            bool onlyOne = this.lockFailedFiles.Count == 1;
-
-            sb.AppendFormat("The following file{0} {1} out of date and could not be locked:", 
-                onlyOne ? "" : "s", 
-                onlyOne ? "was" : "were");
-            sb.Append( Environment.NewLine );
-            sb.Append( Environment.NewLine );
-
-            foreach ( string path in this.lockFailedFiles )
-            {
-                sb.Append( path );
-                sb.Append( Environment.NewLine );
-            }
-
-            context.UIShell.ShowMessageBox( sb.ToString(), "Lock failed", System.Windows.Forms.MessageBoxButtons.OK );
-        }
-
-        void OnClientNotification( object sender, NotificationEventArgs args )
-        {
-            if ( args.Action == NotifyAction.FailedLock )
-            {
-                this.lockFailedFiles.Add( args.Path );
-            }
+            context.UIShell.RunWithProgressDialog( new SimpleProgressWorker( 
+                new SimpleProgressWorkerCallback( this.ProgressCallback ) ), "Locking files" );
+            foreach( SvnItem item in info.CheckedItems )
+                item.Refresh( context.Client );
         }
 
         private void ProgressCallback( IContext context )
@@ -91,6 +48,5 @@ namespace Ankh.Commands
         }
         
         private LockDialogInfo info;
-        private ArrayList lockFailedFiles;
 	}
 }

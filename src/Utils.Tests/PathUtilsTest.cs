@@ -48,17 +48,5 @@ namespace Utils.Tests
             path = @"C:\parent\foo";
             Assert.AreEqual( @"C:\parent\foo", PathUtils.StripTrailingSlash(path) );
         }
-
-        [Test]
-        public void IsSubPathOf()
-        {
-            Assert.IsTrue(PathUtils.IsSubPathOf(@"C:\foo\bar", @"C:\foo"));
-        }
-
-        [Test]
-        public void IsSubPathOfBarbara()
-        {
-            Assert.IsFalse( PathUtils.IsSubPathOf( @"C:\foo\barbara\foo.txt", @"C:\foo\bar" ) );
-        }
     }
 }

@@ -57,7 +57,7 @@ namespace ErrorReport.GUI
 
         public override bool Enabled
         {
-            get { return this.ucp.SelectedMailItem != null; }
+            get { return this.ucp.SelectedReport != null; }
         }
 
         public override void Execute()
@@ -108,7 +108,7 @@ namespace ErrorReport.GUI
 
         public override void Execute()
         {
-            this.ucp.SendReplyForSelectedItem();
+            this.ucp.SendReplyForSelectedReport();
             this.ucp.MarkSelectedMailItemAsRead();
             this.ucp.NextReport();
         }
@@ -134,37 +134,6 @@ namespace ErrorReport.GUI
         public override void Execute()
         {
             this.ucp.NextReport();
-        }
-    }
-
-    [ToolBar( "Edit signature" )]
-    internal class EditSignatureCommand : CommandBase
-    {
-        public EditSignatureCommand( MainFormUCP ucp )
-            : base( ucp )
-        {
-
-        }
-
-        public override void Execute()
-        {
-            using ( SignatureDialog dialog = new SignatureDialog() )
-            {
-                dialog.Signature = ucp.Signature;
-
-                if ( dialog.ShowDialog() == DialogResult.OK )
-                {
-                    ucp.Signature = dialog.Signature;
-                }
-            }
-        }
-
-        public override bool Enabled
-        {
-            get
-            {
-                return true;
-            }
         }
     }
 
@@ -263,28 +232,6 @@ namespace ErrorReport.GUI
             {
                 dialog.ShowDialog();
             }
-        }
-    }
-
-    [MenuItem("MainMenu.View.Toggle flat or threaded")]
-    internal class ToggleFlatOrThreadedCommand : CommandBase
-    {
-        public ToggleFlatOrThreadedCommand( MainFormUCP ucp ) : base(ucp)
-        {
-            
-        }
-
-        public override bool Enabled
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public override void Execute()
-        {
-            this.ucp.ToggleFlatOrThreaded();
         }
     }
 }

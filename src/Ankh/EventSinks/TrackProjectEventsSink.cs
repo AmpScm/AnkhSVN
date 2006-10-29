@@ -57,14 +57,12 @@ namespace Ankh.EventSinks
         public int OnAfterRemoveDirectories( int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEDIRECTORYFLAGS[] rgFlags )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterRemoveDirectories() of: {0}", this.ToString() ) );
-            this.OnRemove( rgpszMkDocuments );
             return VSConstants.S_OK;
         }
 
         public int OnAfterRemoveFiles( int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEFILEFLAGS[] rgFlags )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterRemoveFiles() of: {0}", this.ToString() ) );
-            this.OnRemove( rgpszMkDocuments );
             return VSConstants.S_OK;
         }
 
@@ -101,91 +99,19 @@ namespace Ankh.EventSinks
         public int OnQueryRemoveDirectories( IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYFLAGS[] rgFlags, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnQueryRemoveDirectories() of: {0}", this.ToString() ) );
-
-            // OnQueryRemove expects this to be non-null.
-            if ( rgResults == null )
-            {
-                rgResults = new VSQUERYREMOVEDIRECTORYRESULTS[ rgpszMkDocuments.Length ];
-            }
-            return OnQueryRemove( rgpszMkDocuments, pSummaryResult, rgResults );
-        }
-
-        private int OnQueryRemove( string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults )
-        {
-            try
-            {
-                int i = 0;
-                pSummaryResult[ 0 ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
-                foreach ( string path in rgpszMkDocuments )
-                {
-                    SvnItem item = this.Context.StatusCache[ path ];
-                    if ( item.IsVersioned )
-                    {
-                        if ( this.CanSvnDelete( item ) )
-                        {
-                            if ( item.IsDirectory )
-                            {
-                                this.BackupDirectory( path );
-                            }
-
-                            rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
-                        }
-                        else
-                        {
-                            rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK; 
-                            pSummaryResult[ 0 ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
-                        }
-                    }
-                    else
-                    {
-                        rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
-                    }
-                }
-
-                return VSConstants.S_OK;
-            }
-            catch ( Exception ex )
-            {
-                this.Context.ErrorHandler.Handle( ex );
-                return VSConstants.E_FAIL;
-            }
-        }
-
-        private void BackupDirectory( string directory )
-        {
-            string backupDirectory = GetBackupDirectoryName(directory);
-            FileUtils.CopyDirectory( directory, backupDirectory );
-        }
-
-        private void RestoreBackupDirectory( string directory )
-        {
-            string backupDirectory = GetBackupDirectoryName( directory );
-            Directory.Move( backupDirectory, directory );
-            //FileUtils.CopyDirectory( backupDirectory, directory );
-        }
-
-        private string GetBackupDirectoryName( string directory )
-        {
-            string parentDir = PathUtils.GetParent( directory );
-            string dirName = PathUtils.GetName( directory );
-
-            return Path.Combine( parentDir, dirName + BackupSuffix );
+            return OnRemove( rgpszMkDocuments, rgResults, pSummaryResult );
         }
 
 
         public int OnQueryRemoveFiles( IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYREMOVEFILEFLAGS[] rgFlags, VSQUERYREMOVEFILERESULTS[] pSummaryResult, VSQUERYREMOVEFILERESULTS[] rgResults )
         {
-            VSQUERYREMOVEDIRECTORYRESULTS[] results = new VSQUERYREMOVEDIRECTORYRESULTS[ rgpszMkDocuments.Length ];
-
+            VSQUERYREMOVEDIRECTORYRESULTS[] results = new VSQUERYREMOVEDIRECTORYRESULTS[ rgResults.Length ];
             VSQUERYREMOVEDIRECTORYRESULTS[] summaryResults = new VSQUERYREMOVEDIRECTORYRESULTS[ 1 ];
 
-            int hr = this.OnQueryRemove( rgpszMkDocuments, results, summaryResults );
+            int hr = this.OnRemove( rgpszMkDocuments, results, summaryResults );
 
             // we need to convert to the appropriate enum (even if they have exactly the same flags...)
-            if ( rgResults != null )
-            {
-                ConvertRemoveFileResults( results, rgResults ); 
-            }
+            ConvertRemoveFileResults( results, rgResults );
             ConvertRemoveFileResults( summaryResults, pSummaryResult );
 
             return hr;
@@ -355,42 +281,36 @@ namespace Ankh.EventSinks
         }
 
         /// <summary>
-        /// Perform the actual remove here (called by the OnAfterRemove methods). 
+        /// Perform the actual remove here (called by the OnQuery methods). If we can SVN delete something, 
+        /// delete it now and return RemoveNotOk to prevent VS from removing it as well.
+        /// This is the only way we can prevent directories getting deleted with their metadata.
         /// </summary>
         /// <param name="rgpszMkDocuments"></param>
         /// <param name="rgResults"></param>
         /// <param name="pSummaryResult"></param>
         /// <returns></returns>
-        private int OnRemove( string[] rgpszMkDocuments )
+        private int OnRemove( string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult )
         {
             try
             {
+                pSummaryResult[0] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
                 for( int i = 0; i < rgpszMkDocuments.Length; i++ )
                 {
                     SvnItem item = context.StatusCache[ rgpszMkDocuments[i] ];
-                    item.Refresh(this.context.Client, EventBehavior.DontRaise );
-
-                    // VC++ projects don't delete the files until *after* OnAfterRemoveFiles has fired
-                    bool wasUnmodified = item.Status.TextStatus == StatusKind.Normal &&
-                        ( item.Status.PropertyStatus == StatusKind.None || item.Status.PropertyStatus == StatusKind.Normal );
-
-                    if ( item.Status.TextStatus == StatusKind.Missing || item.IsDeleted || 
-                        item.Status.TextStatus == StatusKind.Normal )
+                    item.Refresh(this.context.Client);
+                    if ( CanSvnDelete( item ) )
                     {
-                        if ( item.IsDirectory )
-                        {
-                            this.RestoreBackupDirectory( item.Path );
-                        }
+                        pSummaryResult[ 0 ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
+                        rgResults[i] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
                         context.Client.Delete( new string[] { item.Path }, true );
 
-                        // VC++ gets annoyed if the file doesn't exist when trying to delete it.
-                        if ( wasUnmodified )
-                        {
-                            File.Create( rgpszMkDocuments[ i ] ).Close();
-                        }
-
-                        item.Refresh( context.Client, EventBehavior.Raise );
+                        item.Refresh( context.Client );
                     }
+                    else
+                    {
+                        rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
+                    }
+                        
                 }
                 return VSConstants.S_OK;
             }
@@ -418,12 +338,6 @@ namespace Ankh.EventSinks
             newPath = PathUtils.NormalizePath( newPath );
 
             return oldPath == newPath;
-        }
-
-        private bool CanDeletePath(string path)
-        {
-            SvnItem item = this.context.StatusCache[path];
-            return !item.IsVersioned || CanSvnDelete(item);
         }
 
         /// <summary>
@@ -524,8 +438,7 @@ namespace Ankh.EventSinks
 
         private IVsTrackProjectDocuments2 trackProjectDocuments;
 
-        private readonly string BackupSuffix = Guid.NewGuid().ToString();
-        
+        private readonly string suffix = new Guid().ToString();
 
 
     }

@@ -59,10 +59,7 @@ namespace Ankh
 
         public System.ComponentModel.ISynchronizeInvoke SynchronizingObject
         {
-            get
-            {
-                return this.RepositoryExplorer; 
-            }
+            get{ return this.RepositoryExplorer; }
         }
 
         public DialogResult QueryWhetherAnkhShouldLoad()
@@ -469,12 +466,9 @@ namespace Ankh
             
             this.repositoryExplorerControl = new RepositoryExplorerControl();
             objControl.HostUserControl( this.repositoryExplorerControl );
-
-            // force the handle to be created
-            if ( this.RepositoryExplorer.Handle == IntPtr.Zero )
-            {
-                throw new InvalidOperationException( "Handle should never be zero" );
-            }
+            
+            System.Diagnostics.Debug.Assert( this.repositoryExplorerControl != null, 
+                "Could not create tool window" );
         }
 
         private void CreateCommitDialog()

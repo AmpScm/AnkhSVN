@@ -178,13 +178,6 @@ namespace Ankh.EventSinks
         int IVsSolutionEvents.OnBeforeCloseSolution( object pUnkReserved )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnBeforeCloseSolution() of {0}", this.ToString() ) );
-            
-            return VSConstants.S_OK;
-        }
-
-        int IVsSolutionEvents.OnAfterCloseSolution( object pUnkReserved )
-        {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterCloseSolution() of {0}", this.ToString() ) );
 
             try
             {
@@ -198,6 +191,12 @@ namespace Ankh.EventSinks
                 this.Context.ErrorHandler.Handle( ex );
                 return VSConstants.E_FAIL;
             }
+            return VSConstants.S_OK;
+        }
+
+        int IVsSolutionEvents.OnAfterCloseSolution( object pUnkReserved )
+        {
+            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterCloseSolution() of {0}", this.ToString() ) );
 
             return VSConstants.S_OK;
         }

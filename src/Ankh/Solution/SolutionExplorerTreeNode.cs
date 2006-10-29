@@ -60,18 +60,15 @@ namespace Ankh.Solution
             {
                 ProjectItem projectItem = item.Object as ProjectItem;
                 // Check if we have a subproject inside an Enterprise Template project
-
-                object projectItemObject = DteUtils.GetProjectItemObject( projectItem );
-
                 if ( projectItem.Kind == DteUtils.EnterpriseTemplateProjectItemKind && 
                     parent.uiItem.Object is Project &&
                     ((Project)parent.uiItem.Object).Kind == DteUtils.EnterpriseTemplateProjectKind )
                 {
                     return new ProjectNode( item, hItem, explorer, parent, projectItem.SubProject );
                 }
-                else if ( projectItemObject is Project )
+                else if ( projectItem.Object is Project )
                 {
-                    return GetTreeNodeForProject( item, hItem, explorer, parent, projectItemObject as Project );
+                    return GetTreeNodeForProject( item, hItem, explorer, parent, projectItem.Object as Project );
                 }
                 else  //normal project item
                 {
@@ -205,14 +202,43 @@ namespace Ankh.Solution
             }
         }
 
-        protected override void DoDispose()
+        /// <summary>
+        /// Deletes all resources belonging to this node and its children.
+        /// </summary>
+        protected override void SvnDelete()
         {
-            this.UnhookEvents();
+            try
+            {
+                this.IsDeleting = true;
 
-            this.Explorer.RemoveUIHierarchyResource( this.uiItem );
+                IList resources = new ArrayList();
+                this.GetResources( resources, true, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
+
+                ArrayList resourcePaths = new ArrayList();
+                foreach ( SvnItem item in resources )
+                {
+                    if ( !item.IsDeleted )
+                    {
+                        resourcePaths.Add( item.Path );
+                    }
+                }
+
+                this.explorer.Context.Client.Delete( (string[])resourcePaths.ToArray( typeof( string ) ), true );
+
+                foreach ( SvnItem item in resources )
+                {
+                    item.Refresh( this.explorer.Context.Client );
+                }
+            }
+            finally
+            {
+                this.IsDeleting = false;
+            }
+
         }
 
-        protected abstract void UnhookEvents();
+       
+
 
 
         /// <summary>
@@ -252,7 +278,7 @@ namespace Ankh.Solution
                 // get the treeview child
                 IntPtr childItem = this.explorer.TreeView.GetChild( this.hItem );
 
-                //// a node needs to be expanded at least once in order to have child nodes
+                // a node needs to be expanded at least once in order to have child nodes
                 if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
                 {
                     this.uiItem.UIHierarchyItems.Expanded = true;
@@ -274,9 +300,6 @@ namespace Ankh.Solution
                             childNode.Changed += new EventHandler(this.ChildOrResourceChanged);
                             this.Children.Add( childNode );
                             childNode.Refresh( false );
-
-                            this.explorer.AddUIHierarchyItemResource( child, childNode );
-
                         }
                     }
 

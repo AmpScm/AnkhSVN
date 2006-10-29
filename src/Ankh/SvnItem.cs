@@ -5,7 +5,6 @@ using NSvn.Common;
 using System.IO;
 using System.Collections;
 using Ankh.UI;
-using System.Diagnostics;
 
 namespace Ankh
 {
@@ -13,12 +12,6 @@ namespace Ankh
     /// Used to decide whether this particular SvnItem should be included in a collection.
     /// </summary>
     public delegate bool ResourceFilterCallback( SvnItem item );
-
-    public enum EventBehavior
-    {
-        Raise,
-        DontRaise,
-    }
 
     /// <summary>
     /// Represents a version controlled path on disk, caching it's status.
@@ -67,30 +60,19 @@ namespace Ankh
             }
         }
 
+
+
         /// <summary>
         /// Set the status of this item to the passed in status.
         /// </summary>
         /// <param name="status"></param>
         public virtual void Refresh( Status status )
         {
-            this.Refresh( status, EventBehavior.Raise );
-        }
-
-
-        /// <summary>
-        /// Set the status of this item to the passed in status.
-        /// </summary>
-        /// <param name="status"></param>
-        public virtual void Refresh( Status status, EventBehavior eventBehavior )
-        {
             Status oldStatus = this.status;
             this.status = status;
 
-            if ( eventBehavior == EventBehavior.Raise )
-            {
-                if ( !oldStatus.Equals( this.status ) )
-                    this.OnChanged(); 
-            }
+            if ( !oldStatus.Equals( this.status ) )
+                this.OnChanged();
         }
 
         /// <summary>
@@ -99,24 +81,11 @@ namespace Ankh
         /// <param name="client"></param>
         public virtual void Refresh( Client client )
         {
-            this.Refresh( client, EventBehavior.Raise );
-        }
-
-        /// <summary>
-        /// Refresh the existing status of the item, using client.
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="eventBehavior">Whether to raise events.</param>
-        public virtual void Refresh( Client client, EventBehavior eventBehavior )
-        {
             Status oldStatus = this.status;
             this.status = client.SingleStatus( this.path );
 
-            if ( eventBehavior == EventBehavior.Raise )
-            {
-                if ( !oldStatus.Equals( this.status ) )
-                    this.OnChanged(); 
-            }
+            if ( !oldStatus.Equals( this.status ) )
+                this.OnChanged();
         }
 
         /// <summary>
@@ -266,15 +235,8 @@ namespace Ankh
         {
             string[] paths = new string[items.Count];
             int i = 0;
-            foreach ( SvnItem item in items )
-            {
-                Debug.Assert( item != null, "SvnItem should not be null" );
-
-                if ( item != null )
-                {
-                    paths[ i++ ] = item.Path; 
-                }
-            }
+            foreach( SvnItem item in items )
+                paths[i++] = item.Path;
 
             return paths;
         }

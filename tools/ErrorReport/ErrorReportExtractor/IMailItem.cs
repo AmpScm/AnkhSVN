@@ -6,7 +6,6 @@ namespace ErrorReportExtractor
 {
     public interface IMailItem
     {
-        int ErrorReportID { get; }
         string Body { get; set; }
         int MailItemID { get; set; }
         string InternetMailID { get; set; }
@@ -18,7 +17,6 @@ namespace ErrorReportExtractor
         string Subject { get; set; }
         string ReplyToID { get; set; }
         bool Read { get; set; }
-        bool RepliedTo { get; set; }
 
         IList<IMailItem> Replies { get; }
     }

@@ -32,7 +32,9 @@ namespace Ankh.Solution
         {
             this.dte = dte;
             this.context = context;
-            this.nodes = new Hashtable();
+            this.projectItems = new Hashtable( null, 
+                new ItemComparer() );
+            this.projects = new Hashtable( null, new ProjectComparer() );
             
             // get the uihierarchy root
             this.solutionNode = null;
@@ -70,7 +72,8 @@ namespace Ankh.Solution
         public void Unload()
         {
             Debug.WriteLine( "Unloading existing solution information", "Ankh" );
-            this.nodes.Clear();
+            this.projectItems.Clear();
+            this.projects.Clear();
 
             // make sure to use the field, not the property
             // the property will always create a TreeView and will never return null
@@ -125,15 +128,13 @@ namespace Ankh.Solution
         {
             this.ForcePoll();
 
-            SolutionExplorerTreeNode node = this.GetNodeForProject( project );
+            SolutionExplorerTreeNode node = this.GetNode( project );
             if ( node != null )
             {
                 this.RefreshNode( node );
             }
         }
 
-        
-       
         /// <summary>
         /// Refreshes the current selection.
         /// </summary>
@@ -149,15 +150,26 @@ namespace Ankh.Solution
                     this.RefreshNode( node );
                 }
             }
-
-            CountResources();
         }
 
-       
+        /// <summary>
+        /// Updates the status of the given item.
+        /// </summary>
+        /// <param name="item"></param>
+        public void Refresh( ProjectItem item )
+        {
+            this.ForcePoll();
+
+            SolutionExplorerTreeNode node = (SolutionExplorerTreeNode)this.projectItems[item];
+            if ( node != null )
+            {
+                this.RefreshNode( node );
+            }
+        }
 
         public void RemoveProject( Project project )
         {
-            SolutionExplorerTreeNode node = this.GetNodeForProject( project );
+            SolutionExplorerTreeNode node = (SolutionExplorerTreeNode)this.projects[ project ];
             if ( node != null )
             {
                 node.Remove();
@@ -202,7 +214,8 @@ namespace Ankh.Solution
             // build the whole tree anew
             Debug.WriteLine( "Synchronizing with treeview", "Ankh" );
 
-            this.nodes.Clear();
+            this.projectItems.Clear();
+            this.projects.Clear();
             
             // store the original image list (check that we're not storing our own statusImageList
             if( this.statusImageList.Handle != this.TreeView.StatusImageList )
@@ -316,6 +329,33 @@ namespace Ankh.Solution
             return list;
         }
 
+        /// <summary>
+        /// Retrieves the resources associated with a project item.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="recursive"></param>
+        /// <returns></returns>
+        public IList GetItemResources( ProjectItem item, bool recursive )
+        {
+            this.ForcePoll();
+
+            ArrayList list = new ArrayList();
+
+            SolutionExplorerTreeNode node = this.GetNode(item);
+            if ( node != null )
+                node.GetResources( list, recursive, null );
+
+            return list;
+        }
+
+        public ProjectItem GetSelectedProjectItem()
+        {
+            Array array = (Array)this.UIHierarchy.SelectedItems;
+            UIHierarchyItem uiItem = (UIHierarchyItem)array.GetValue(0);
+            return uiItem.Object as ProjectItem;
+        }
+
+       
 
         internal TreeView TreeView
         {
@@ -489,7 +529,7 @@ namespace Ankh.Solution
                 Trace.WriteLine( "Could not set overlay image for the lockreadonly icon" );
 
         }
-
+        
 
         /// <summary>
         /// Adds a new resource to the tree.
@@ -497,43 +537,44 @@ namespace Ankh.Solution
         /// <param name="projectKey">The modeled ProjectItem or an unmodeled placeholder for it</param>
         /// <param name="parsedKey">A parsed item for unmodeled projects</param>
         /// <param name="node">Our own representation</param>
-        internal void AddUIHierarchyItemResource( UIHierarchyItem item, SolutionExplorerTreeNode node )
+        internal void AddResource( object projectKey, ParsedSolutionItem parsedKey, ProjectItemNode node )
         {
-            this.nodes[ item ] = node;
-        }
-
-        internal void RemoveUIHierarchyResource( UIHierarchyItem uIHierarchyItem )
-        {
-            this.nodes.Remove( uIHierarchyItem );
-        }
-
-
-        [Conditional( "DEBUG" )]
-        private void CountResources()
-        {
-            this.CountUIHierarchy();
-            Debug.WriteLine( "Number of nodes in nodes hash: " + this.nodes.Count );
-        }
-
-        private void CountUIHierarchy()
-        {
-            EnvDTE.UIHierarchy hierarchy = this.dte.Windows.Item( EnvDTE.Constants.vsWindowKindSolutionExplorer ).Object as EnvDTE.UIHierarchy;
-
-            int count = CountUIHierarchyItems( hierarchy.UIHierarchyItems );
-
-            Debug.WriteLine( "UIHiearchyItems.Count: " + count );
-        }
-
-        private int CountUIHierarchyItems( UIHierarchyItems items )
-        {
-            int count = items.Count;
-            foreach ( UIHierarchyItem item in items )
+            if(projectKey!=null)
             {
-                count += CountUIHierarchyItems( item.UIHierarchyItems );
+                this.projectItems[projectKey] = node;
             }
-
-            return count;
+            if(parsedKey!=null)
+            {
+                this.projectItems[parsedKey] = node;
+            }
         }
+
+        /// <summary>
+        /// Adds a new resource to the tree
+        /// </summary>
+        /// <param name="key">The modeled Project or an unmodeled placeholder for it</param>
+        /// <param name="node">Our own representation</param>
+        /// <param name="projectFile">Filename for the project</param>
+        internal void AddResource( object key, ProjectNode node, string projectFile )
+        {
+            this.projects[key] = node;
+            if ( projectFile != null && projectFile.Trim() != String.Empty )
+            {
+                this.context.ProjectFileWatcher.AddFile( projectFile );
+            }
+        }
+
+        /// <summary>
+        /// Adds a new resource to the tree
+        /// </summary>
+        /// <param name="key">The modeled Project or an unmodeled placeholder for it</param>
+        /// <param name="node">Our own representation</param>
+        /// <param name="projectFile">Filename for the project</param>
+        internal void AddResource( Project key, SolutionFolderNode node )
+        {
+            this.projects[key] = node;
+        }
+
 
         internal void SetSolution( SolutionExplorerTreeNode node )
         {
@@ -541,139 +582,41 @@ namespace Ankh.Solution
             this.solutionNode = (SolutionNode)node;
         }
 
-        private SolutionExplorerTreeNode GetNodeForProject( Project project )
-        {
-            EnvDTE.UIHierarchy hierarchy = this.dte.Windows.Item( EnvDTE.Constants.vsWindowKindSolutionExplorer ).Object as EnvDTE.UIHierarchy;
-            string hierarchyPath = hierarchy.UIHierarchyItems.Item(1).Name + "\\" + this.BuildHierarchyPathForProject( project );
-
-            try
-            {
-                UIHierarchyItem item = hierarchy.GetItem( hierarchyPath );
-                return this.GetNode( item );
-            }
-            catch ( Exception )
-            {
-                
-                SolutionExplorerTreeNode node = SearchForProject( project, hierarchy.UIHierarchyItems.Item(1).UIHierarchyItems );
-                if ( node == null )
-                {
-                    DumpHierarchy( hierarchy );
-                }
-                return node;
-            }
-        }
-
-        private SolutionExplorerTreeNode SearchForProject( Project project, UIHierarchyItems hierarchyItems )
-        {
-            try
-            {
-                foreach ( UIHierarchyItem item in hierarchyItems )
-                {
-                    SolutionExplorerTreeNode treeNode = null;
-                    if ( item.Object == project )
-                    {
-                        treeNode = GetNode( item ); ;
-                    }
-                    else if ( item.Object is Project )
-                    {
-                        treeNode = SearchPossibleSolutionFolder( project, item.Object as Project, item );
-                    }
-                    else if ( item.Object is ProjectItem )
-                    {
-                        // Children of a solution folder are ProjectItem objects. Their .Object are the actual children
-                        ProjectItem projectItem = item.Object as ProjectItem;
-                        Project childProject = DteUtils.GetProjectItemObject(projectItem) as Project;
-                        if ( childProject != null )
-                        {
-                            if ( childProject == project )
-                            {
-                                treeNode = GetNode( item );
-                            }
-                            else
-                            {
-                                treeNode = SearchPossibleSolutionFolder( project, childProject, item );
-                            }
-                            
-                        }
-                    }
-
-                    if ( treeNode != null )
-                    {
-                        return treeNode;
-                    }
-                }
-                return null;
-            }
-            catch ( Exception )
-            {
-                return null;
-            }
-        }
-
-        private SolutionExplorerTreeNode SearchPossibleSolutionFolder( Project project, Project possibleSolutionFolder, UIHierarchyItem item )
-        {
-            // is this a solution folder?
-            if ( possibleSolutionFolder != null && possibleSolutionFolder.Kind == DteUtils.SolutionFolderKind )
-            {
-                return SearchForProject( project, item.UIHierarchyItems );
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        private void DumpHierarchy( UIHierarchy hierarchy )
-        {
-            DumpHierarchyItems( hierarchy.UIHierarchyItems, 0 );
-        }
-
-        private void DumpHierarchyItems( UIHierarchyItems uIHierarchyItems, int indent )
-        {
-            string indentString = new String( ' ', indent * 4 );
-            foreach ( UIHierarchyItem item in uIHierarchyItems )
-            {
-                Debug.WriteLine( indentString + item.Name );
-                DumpHierarchyItems( item.UIHierarchyItems, indent + 1 );
-            }
-        }
-
-        private string BuildHierarchyPathForProject( Project project )
-        {
-            Project current = GetParentProject( project );
-            string path = project.Name;
-            while ( current != null )
-            {
-                path = current.Name + "\\" + path;
-                current = GetParentProject( current );
-            }
-
-            return path;
-        }
-
-        private Project GetParentProject( Project project )
-        {
-            try
-            {
-                return project.ParentProjectItem != null
-                        ? project.ParentProjectItem.ContainingProject
-                        : null;
-            }
-            catch ( Exception )
-            {
-                return null;
-            }
-        }
-
         private SolutionExplorerTreeNode GetNode(UIHierarchyItem item)
         {
-            if ( !this.context.AnkhLoadedForSolution )
+            if ( item.Object == null || !this.context.AnkhLoadedForSolution )
                 return null;
 
-            if ( item == this.UIHierarchy.UIHierarchyItems.Item( 1 ) )
+            if ( item == this.UIHierarchy.UIHierarchyItems.Item(1) )
                 return this.solutionNode;
+            else if ( this.projects.Contains(item.Object) )
+                return ((SolutionExplorerTreeNode)this.projects[item.Object]);
+            else if ( this.projectItems.Contains( item.Object ) )
+                return ((SolutionExplorerTreeNode)this.projectItems[item.Object]);
             else
-                return this.nodes[ item ] as SolutionExplorerTreeNode;
+                return null;
+        }
+        
+        private SolutionExplorerTreeNode GetNode( ProjectItem item )
+        {
+            if ( item == null )
+                return null;
+
+            if (this.projectItems.Contains( item ) )
+                return ((SolutionExplorerTreeNode)this.projectItems[item]);
+            else
+                return null;
+        }
+
+        private SolutionExplorerTreeNode GetNode( Project project )
+        {
+            if ( project == null )
+                return null;
+
+            if ( this.projects.Contains( project ) )
+                return ((SolutionExplorerTreeNode)this.projects[project]);
+            else
+                return null;
         }
 
         /// <summary>
@@ -959,12 +902,192 @@ namespace Ankh.Solution
             }
 
             private const string MiscItemsKind = "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}";
-            private readonly static TimeSpan TimeOut = new TimeSpan(0, 15, 0);
+            private readonly static TimeSpan TimeOut = new TimeSpan(0, 0, 10);
             private delegate void LoadDelegate( );
             private Explorer outer;
             private bool done;
         }
         #endregion
+
+        #region class ItemComparer
+        private class ItemComparer : IComparer
+        {        
+            public int Compare(object x, object y)
+            {
+                if (x == null) 
+                {
+                    if (y == null)
+                        return 0;
+                    else
+                        return -1;
+
+                }
+                else if (y == null) 
+                {
+                    return 1;
+                }
+
+                if(x is ProjectItem)
+                {
+                    if(y is ProjectItem)
+                    {
+                        try
+                        {
+                            string projectName = GetProjectName( x );
+                            string fileName = GetFileName( x );
+                            if ( projectName == null || fileName == null )
+                                return -1;
+
+                            string nameA = projectName + "|" + fileName;
+
+                            projectName = GetProjectName( x );
+                            fileName = GetFileName( x );
+
+                            if ( projectName == null || fileName == null )
+                                return 1;
+
+                            string nameB = projectName + "|" + fileName;
+
+                            return nameA.CompareTo(nameB);
+                        }
+                        catch( Exception )
+                        {
+                            return -1;
+                        }
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                else if(y is ProjectItem)
+                {
+                    return -1;
+                }
+
+                return x.GetHashCode().CompareTo(y.GetHashCode());
+            }
+
+            internal static string GetFileName( object obj )
+            {
+                string filename = null;
+
+                if(obj is ParsedSolutionItem)
+                {
+                    filename=((ParsedSolutionItem)obj).FileName;
+                }
+                else if(obj is ProjectItem)
+                {
+                    try
+                    {
+                        filename = ((ProjectItem)obj).get_FileNames(1);
+                    }
+                    catch( Exception )
+                    {
+                        // hack for those project types which use a 0-based index
+                        // (GRRRR)
+                        filename = ((ProjectItem)obj).get_FileNames(0);
+                    }
+                }
+                else
+                {
+                    return null; 
+                }
+
+                return filename;
+            }
+
+            internal static string GetProjectName( object obj )
+            {
+                string projectName = null;
+
+                if(obj is ParsedSolutionItem)
+                {
+                    ParsedSolutionItem item=(ParsedSolutionItem)obj;
+                    while(item.Parent!=null)
+                    {
+                        item=item.Parent;
+                    }
+                    projectName=item.FileName;
+                }
+                else if(obj is ProjectItem)
+                {
+                    try
+                    {
+                        projectName = ((ProjectItem)obj).ContainingProject.FullName;
+                    }
+                    catch ( Exception )
+                    {
+                        projectName = "";
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+
+                return projectName;
+            }
+        }
+        #endregion
+       
+        #region class ProjectComparer
+        private class ProjectComparer : IComparer
+        {        
+            public int Compare(object x, object y)
+            {
+                string xName = GetUniqueProjectID( x );
+                string yName = GetUniqueProjectID( y );
+                
+                if(xName!=null && yName!=null)
+                {
+                    return xName.CompareTo(yName);
+                }
+                if(xName!=null)
+                {
+                    return 1;
+                }
+                if(yName!=null)
+                {
+                    return -1;
+                }
+                return x.GetHashCode().CompareTo(y.GetHashCode());
+            }
+        }
+        #endregion        
+
+        private static string GetUniqueProjectID( object project )
+        {
+            if ( project is Project )
+            {
+                try
+                {
+                    return ( (Project)project ).UniqueName;
+                }
+                catch ( Exception )
+                {
+                    // Swallow
+                }
+                // nope, didn't work
+                try
+                {
+                    // not as good, but works in most cases
+                    return ( (Project)project ).FullName;
+                }
+                catch ( Exception )
+                {
+                    return null;
+                }
+            }
+            else if ( project is ParsedSolutionItem )
+            {
+                return ( (ParsedSolutionItem)project ).FileName;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
 
         internal const int LockOverlay = 15;
@@ -978,7 +1101,8 @@ namespace Ankh.Solution
         private const string UIHIERARCHY = "VsUIHierarchyBaseWin";
         private const string TREEVIEW = "SysTreeView32";
         private const string VBFLOATINGPALETTE = "VBFloatingPalette";
-        private Hashtable nodes;
+        private IDictionary projectItems;
+        private IDictionary projects;
         private SolutionNode solutionNode;
 
         private ImageList statusImageList;
@@ -996,7 +1120,5 @@ namespace Ankh.Solution
         private const string READONLY_ICON = "Ankh.readonly.ico";
         private const string LOCKEDREADONLY_ICON = "Ankh.lockedreadonly.ico";
 
-
-        
     }
 }

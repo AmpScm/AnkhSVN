@@ -180,6 +180,16 @@ namespace Ankh.WorkingCopyExplorer
             return false;
         }
 
+        protected override void CheckForSvnDeletions()
+        {
+            // TODO: Implement
+        }
+
+        protected override void SvnDelete()
+        {
+            // TODO: Implement
+        }
+
         protected override NodeStatus ThisNodeStatus()
         {
             return MergeStatuses( this.svnItem );

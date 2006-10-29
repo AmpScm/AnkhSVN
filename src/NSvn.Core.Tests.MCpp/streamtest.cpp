@@ -67,16 +67,3 @@ void NSvn::Core::Tests::MCpp::StreamTest::TestReadFromNullStream()
 
     Assert::AreEqual( 0, len, "Should not be able to read from a null stream" );
 }
-
-void NSvn::Core::Tests::MCpp::StreamTest::TestWriteNullBuffer()
-{
-    Pool pool;
-    svn_stream_t* stream = CreateSvnStream( Stream::Null, pool );
-
-    char* buf = 0;
-    apr_size_t len = 1;
-    HandleError( svn_stream_write( stream, buf, &len ) );
-
-    // won't get here if the test fails.
-
-}

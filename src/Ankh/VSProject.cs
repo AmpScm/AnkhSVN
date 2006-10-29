@@ -9,7 +9,6 @@ using System.Collections;
 using System.Reflection;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
-using Ankh.Solution;
 
 namespace Ankh
 {
@@ -78,14 +77,7 @@ namespace Ankh
         /// </summary>
         public string ProjectFileName
         {
-            get 
-            {
-                if ( this.projectFileName == null )
-                {
-                    this.projectFileName = this.GetProjectFileName();
-                }
-                return this.projectFileName ; 
-            }
+            get { return this.GetProjectFileName(); }
         }
 
         /// <summary>
@@ -197,11 +189,6 @@ namespace Ankh
             string solutionDir = Path.GetDirectoryName(
                     this.context.DTE.Solution.FullName );
 
-            if ( !Directory.Exists(solutionDir) )
-            {
-                
-            }
-
             try
             {
                 // treat soln items and misc items specially
@@ -277,10 +264,9 @@ namespace Ankh
 
             foreach ( ProjectItem item in Enumerators.EnumerateProjectItems(projectItems) )
             {
-                Project projectItemObject = DteUtils.GetProjectItemObject( item ) as Project;
-                if ( projectItemObject != null )
+                if ( item.Object is Project )
                 {
-                    VSProject project = VSProject.FromProject( this.context, projectItemObject );
+                    VSProject project = VSProject.FromProject( this.context, item.Object as Project );
 
                     if ( includeSolutionFolders || !project.IsSolutionFolder )
                     {
@@ -302,12 +288,10 @@ namespace Ankh
         {
             foreach ( ProjectItem item in Enumerators.EnumerateProjectItems( items ) )
             {
-                object projectItemObject = DteUtils.GetProjectItemObject( item );
-
                 // if it's a solution folder, item.Object will be the project
-                if ( projectItemObject is Project )
+                if ( item.Object is Project )
                 {
-                    VSProject vsProject = VSProject.FromProject(this.context, projectItemObject as Project);
+                    VSProject vsProject = VSProject.FromProject(this.context, item.Object as Project);
                     continue;
                 }
 
@@ -324,9 +308,9 @@ namespace Ankh
                         continue;
                     }
                     try
-                    {   
+                    {
                         if ( ( File.Exists( file ) || Directory.Exists( file ) ) &&
-                            ( vcFilterType != null && projectItemObject != null &&
+                            ( vcFilterType != null &&
                              !vcFilterType.IsInstanceOfType( item.Object ) ) )
                         {
                             // for now we only support files that are under the solution root
@@ -387,12 +371,6 @@ namespace Ankh
             else
                 path = solutionDir + "\\";
 
-            // yet we check anyway
-            if ( !PathUtils.IsSubPathOf(filename, path) )
-            {
-                return;
-            }
-
             string[] intermediate = filename.Substring( path.Length,
                 filename.Length - path.Length ).Split( '\\' );
 
@@ -446,15 +424,6 @@ namespace Ankh
                     return filename;
                 else
                     return null;
-            }
-            catch ( Exception )
-            {
-                // swallow
-            }
-            try
-            {
-                ParsedSolution solution = new ParsedSolution( this.project.DTE.Solution.FullName, this.context );
-                return solution.GetProjectFile( this.project.Name );
             }
             catch ( Exception )
             {
@@ -543,6 +512,6 @@ namespace Ankh
         private SvnItem projectFileSvnItem;
         private SvnItem projectDirectorySvnItem;
         private IVsHierarchy vsHierarchy;
-        private string projectFileName;
+
     }
 }

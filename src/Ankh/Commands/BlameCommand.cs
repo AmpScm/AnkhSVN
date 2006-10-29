@@ -14,7 +14,7 @@ namespace Ankh.Commands
 	/// A command class to support the svn blame command.
 	/// </summary>
     [VSNetCommand("Blame", Text = "Blame...", Tooltip = "Runs Blame on the selected item",
-         Bitmap = ResourceBitmaps.Blame),
+         Bitmap = ResourceBitmaps.Default),
     VSNetItemControl("Ankh", Position=1)]    
 	public class BlameCommand : CommandBase
 	{
