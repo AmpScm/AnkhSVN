@@ -331,6 +331,8 @@ namespace Ankh.EventSinks
                 for ( int i = 0; i < rgszMkOldNames.Length; i++ )
                 {
                     SvnItem item = context.StatusCache[rgszMkOldNames[i]];
+                    item.Refresh( this.Context.Client, EventBehavior.DontRaise );
+
                     if ( !IsUnmodifiedOrUnversioned( item ) )
                     {
                         pSummaryResult[0] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
