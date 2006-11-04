@@ -14,6 +14,11 @@ namespace
     {
         switch( err->apr_err )
         {
+        case SVN_ERR_REPOS_HOOK_FAILURE:
+            if(err->message)
+                return new RepositoryHookFailedException(Utf8ToString(err->message, err->pool), child);
+            else
+                return new RepositoryHookFailedException(S"", child);
         case SVN_ERR_RA_NOT_AUTHORIZED:
             return new AuthorizationFailedException( child );
             break;

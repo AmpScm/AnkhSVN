@@ -81,7 +81,18 @@ namespace NSvn
 
     };
 
+    public __gc class RepositoryHookFailedException : public SvnClientException
+    {
+    public:
+        RepositoryHookFailedException(System::String *message, System::Exception *innerException):
+          SvnClientException( message, innerException)
+          {;}
+    protected:
+        RepositoryHookFailedException( System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context ) :
+             SvnClientException( info, context )
+             {;}
 
+    };
 
     public __gc class WorkingCopyLockedException : public SvnClientException
     {
