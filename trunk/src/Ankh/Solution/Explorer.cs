@@ -629,6 +629,7 @@ namespace Ankh.Solution
             }
         }
 
+        [Conditional("DEBUG")]
         private void DumpHierarchy( UIHierarchy hierarchy )
         {
             DumpHierarchyItems( hierarchy.UIHierarchyItems, 0 );
