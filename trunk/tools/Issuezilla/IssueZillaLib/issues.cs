@@ -34,6 +34,11 @@ namespace Fines.IssueZillaLib
                 return true;
             }
 
+            if ( ContainsText(this.issue_id.ToString(), searchText) )
+            {
+                return true;
+            }
+
             foreach(long_desc desc in this.long_desc)
             {
                 if ( ContainsText( desc.who, searchText ) || ContainsText( desc.thetext, searchText ) )
