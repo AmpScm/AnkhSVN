@@ -159,9 +159,20 @@ namespace Ankh.EventSinks
 
         private void RestoreBackupDirectory( string directory )
         {
-            string backupDirectory = GetBackupDirectoryName( directory );
-            Directory.Move( backupDirectory, directory );
-            //FileUtils.CopyDirectory( backupDirectory, directory );
+            try
+            {
+                string backupDirectory = GetBackupDirectoryName( directory );
+                Directory.Move( backupDirectory, directory );
+            }
+            finally
+            {
+                this.CreateNewBackupSuffix();
+            }
+        }
+
+        private void CreateNewBackupSuffix()
+        {
+            this.BackupSuffix = Guid.NewGuid().ToString();
         }
 
         private string GetBackupDirectoryName( string directory )
@@ -526,7 +537,7 @@ namespace Ankh.EventSinks
 
         private IVsTrackProjectDocuments2 trackProjectDocuments;
 
-        private readonly string BackupSuffix = Guid.NewGuid().ToString();
+        private string BackupSuffix = Guid.NewGuid().ToString();
         
 
 
