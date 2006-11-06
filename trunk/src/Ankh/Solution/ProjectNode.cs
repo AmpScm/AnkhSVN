@@ -104,6 +104,8 @@ namespace Ankh.Solution
                 this.projectFolder = this.Explorer.Context.StatusCache[parentPath];
                 this.projectFile = this.Explorer.Context.StatusCache[fullname];
 
+                this.Explorer.AddProjectFile( fullname );
+
                 // attach event handlers                
                 this.projectFolder.Changed += del;
                 this.projectFile.Changed += del;
