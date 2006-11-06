@@ -507,6 +507,15 @@ namespace Ankh.Solution
             this.nodes.Remove( uIHierarchyItem );
         }
 
+        internal void AddProjectFile( string projectFile )
+        {
+            if ( projectFile != null && projectFile.Trim() != String.Empty )
+            {
+                this.context.ProjectFileWatcher.AddFile( projectFile );
+            }
+        }
+
+
 
         [Conditional( "DEBUG" )]
         private void CountResources()
@@ -1017,6 +1026,7 @@ namespace Ankh.Solution
         private const string LOCKEDREADONLY_ICON = "Ankh.lockedreadonly.ico";
 
 
-        
+
+
     }
 }
