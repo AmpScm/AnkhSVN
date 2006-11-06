@@ -570,10 +570,10 @@ namespace Ankh.Solution
             {
                 
                 SolutionExplorerTreeNode node = SearchForProject( project, hierarchy.UIHierarchyItems.Item(1).UIHierarchyItems );
-                if ( node == null )
-                {
-                    DumpHierarchy( hierarchy );
-                }
+                //if ( node == null )
+                //{
+                //    DumpHierarchy( hierarchy );  // DumpHierarchy expands all tree nodes, don't enable in non-debug builds
+                //}
                 return node;
             }
         }
