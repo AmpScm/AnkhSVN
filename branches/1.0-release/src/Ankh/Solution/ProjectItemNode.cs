@@ -87,7 +87,7 @@ namespace Ankh.Solution
         protected override void UnhookEvents()
         {
             UnhookEvents( this.resources, new EventHandler( this.ChildOrResourceChanged ) );
-            UnhookEvents( this.resources, new EventHandler( this.DeletedItemStatusChanged ) );
+            UnhookEvents( this.deletedResources, new EventHandler( this.DeletedItemStatusChanged ) );
         }
 
         /// <summary>
@@ -160,7 +160,9 @@ namespace Ankh.Solution
 
         protected override void RescanHook()
         {
+            UnhookEvents( this.deletedResources, new EventHandler( this.DeletedItemStatusChanged ) );
             this.deletedResources = new ArrayList();
+
             foreach ( SvnItem item in this.resources )
             {
                 if ( item.IsDirectory )
