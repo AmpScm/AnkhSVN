@@ -26,7 +26,7 @@ namespace Ankh
         /// <param name="dir"></param>
         public void Status( string dir )
         {
-            this.Status( dir, false );
+            this.Status( dir, true );
         }
 
         /// <summary>
