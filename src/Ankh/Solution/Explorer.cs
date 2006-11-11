@@ -686,6 +686,11 @@ namespace Ankh.Solution
             if ( !this.context.AnkhLoadedForSolution )
                 return null;
 
+            if ( this.uiHierarchy.UIHierarchyItems.Count == 0)
+            {
+                return null;
+            }
+
             if ( item == this.UIHierarchy.UIHierarchyItems.Item( 1 ) )
                 return this.solutionNode;
             else
