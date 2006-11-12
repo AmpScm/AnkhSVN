@@ -168,7 +168,7 @@ namespace Ankh.Solution
         /// Since the ItemAdded event is fired before IVTDPE.OnAfterAddedFilesEx, we need to set up a 
         /// refresh after a certain interval.
         /// </summary>
-        public void SetUpDelayedProjectRefresh(Project project)
+        public void SetUpDelayedProjectRefresh(IRefreshableProject project)
         {
             this.SetUpRefresh( new TimerCallback( this.ProjectRefreshCallback ), project );
         }
@@ -709,11 +709,13 @@ namespace Ankh.Solution
         {
             try
             {
-                Project project = state as Project;
+                IRefreshableProject project = state as IRefreshableProject;
                 if ( project == null )
                 {
                     throw new ArgumentException( "state must be a valid Project object", "state" );
                 }
+
+                
 
                 // do we need to get back to the main thread?
                 if ( this.context.UIShell.SynchronizingObject.InvokeRequired )
@@ -722,10 +724,12 @@ namespace Ankh.Solution
                         new object[] { project } );
                     return;
                 }
-
-                if ( !this.RenameInProgress )
+                              
+                // must make sure the project is still valid, since it may have been unloaded since the delayed refresh
+                // was set up.
+                if ( !this.RenameInProgress && project.IsValid )
                 {
-                    this.Refresh( project );
+                    this.Refresh( project.Project );
                 }
             }
             catch ( Exception ex )
