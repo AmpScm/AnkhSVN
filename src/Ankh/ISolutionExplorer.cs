@@ -40,7 +40,7 @@ namespace Ankh
         /// Set up a refresh for the project after a delay.
         /// </summary>
         /// <param name="project"></param>
-        void SetUpDelayedProjectRefresh( Project project );
+        void SetUpDelayedProjectRefresh( IRefreshableProject project );
 
         /// <summary>
         /// Set up a refresh for the entire solution after a delay.

@@ -140,11 +140,14 @@ namespace Ankh
         ///       
         private void  TaskNavigated(TaskItem taskItem, ref bool navigateHandled)
         {
-            Window win = taskItem.DTE.ItemOperations.OpenFile( taskItem.FileName, Constants.vsViewKindTextView);
-            TextSelection sel = (TextSelection) win.DTE.ActiveDocument.Selection; 
-            sel.GotoLine(taskItem.Line, true);
+            if ( taskItem.Category == ConflictTaskItemCategory )
+            {
+                Window win = taskItem.DTE.ItemOperations.OpenFile( taskItem.FileName, Constants.vsViewKindTextView );
+                TextSelection sel = (TextSelection)win.DTE.ActiveDocument.Selection;
+                sel.GotoLine( taskItem.Line, true );
 
-            navigateHandled = true;
+                navigateHandled = true; 
+            }
         }
 
         /// <summary>

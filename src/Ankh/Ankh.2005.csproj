@@ -415,6 +415,7 @@
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
     <Compile Include="IWorkingCopyExplorer.cs" />
+    <Compile Include="Solution\IRefreshableProject.cs" />
     <Compile Include="StatusImages.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />

@@ -11,6 +11,7 @@ using Utils;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using Ankh.Solution;
 
 namespace Ankh.EventSinks
 {
@@ -126,7 +127,7 @@ namespace Ankh.EventSinks
         /// <summary>
         /// The actual event sink for the hierarchy events.
         /// </summary>
-        private class HierarchyEventsImpl : IVsHierarchyEvents
+        private class HierarchyEventsImpl : IVsHierarchyEvents, IRefreshableProject
         {
             public HierarchyEventsImpl( IVsHierarchy hierarchy, IContext context )
             {
@@ -167,6 +168,9 @@ namespace Ankh.EventSinks
             public void Unadvise()
             {
                 this.hierarchy.UnadviseHierarchyEvents( this.cookie );
+
+                // setting this to null causes .IsValid to return false
+                this.project = null;
             }
 
             public IVsHierarchy Hierarchy
@@ -195,7 +199,7 @@ namespace Ankh.EventSinks
 
                 try
                 {
-                    this.context.SolutionExplorer.SetUpDelayedProjectRefresh( this.project );
+                    this.context.SolutionExplorer.SetUpDelayedProjectRefresh( this );
                 }
                 catch ( Exception ex )
                 {
@@ -214,7 +218,7 @@ namespace Ankh.EventSinks
 
                 try
                 {
-                    this.context.SolutionExplorer.SetUpDelayedProjectRefresh( this.project );
+                    this.context.SolutionExplorer.SetUpDelayedProjectRefresh( this );
                 }
                 catch ( Exception ex )
                 {
@@ -235,6 +239,16 @@ namespace Ankh.EventSinks
             {
                 Trace.WriteLine( "Property changed for " + this.project.Name );
                 return VSConstants.S_OK;
+            }
+
+            Project IRefreshableProject.Project
+            {
+                get { return this.project; }
+            }
+
+            bool IRefreshableProject.IsValid
+            {
+                get { return this.project != null; }
             }
 
             #endregion
