@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
     >
@@ -805,6 +805,11 @@
                 />
                 <File
                     RelPath = "Solution\INodeVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Solution\IRefreshableProject.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
