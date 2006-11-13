@@ -385,8 +385,9 @@ namespace Ankh.EventSinks
                     bool wasUnmodified = item.Status.TextStatus == StatusKind.Normal &&
                         ( item.Status.PropertyStatus == StatusKind.None || item.Status.PropertyStatus == StatusKind.Normal );
 
-                    if ( item.Status.TextStatus == StatusKind.Missing || item.IsDeleted || 
-                        item.Status.TextStatus == StatusKind.Normal )
+                    if ( (item.Status.TextStatus == StatusKind.Missing || item.IsDeleted ||
+                        item.Status.TextStatus == StatusKind.Normal) && 
+                        this.PromptDelete( item ) )
                     {
                         if ( item.IsDirectory )
                         {
@@ -410,6 +411,14 @@ namespace Ankh.EventSinks
                 this.context.ErrorHandler.Handle( ex );
                 return VSConstants.E_FAIL;
             }
+        }
+
+        private bool PromptDelete( SvnItem item )
+        {
+            String message = String.Format("Do you want to delete {0} from your Subversion working copy?", 
+                item.Path);
+            return this.context.UIShell.ShowMessageBox( message, "Delete from working copy", MessageBoxButtons.YesNo ) ==
+                DialogResult.Yes;
         }
 
         private bool IsUnmodifiedOrUnversioned( SvnItem item )
