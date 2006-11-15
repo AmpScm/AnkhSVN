@@ -38,6 +38,9 @@ namespace
         case SVN_ERR_CANCELLED:
             return new OperationCancelledException( child );
             break;
+        case SVN_ERR_BAD_FILENAME:
+            return new BadPathException( Utf8ToString(err->message, err->pool), child );
+            break;
         default:
             if ( err->message )
                 return new SvnClientException( Utf8ToString(err->message, err->pool), child );
