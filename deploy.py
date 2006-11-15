@@ -13,11 +13,11 @@ vcprojectengine = "VisualStudio.VCProjectEngine.7"
 ANKHSVN_ROOT = "http://ankhsvn.com/svn/finalproject/branches/1.0-release"
 
 # version numbers to put in the filename
-MAJOR, MINOR, PATCH, LABEL = 1, 0, 0, "RC4"
+MAJOR, MINOR, PATCH, LABEL = 1, 0, 0, "Final"
 
 # The URL of the Subversion version
-SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.4.0/"
-SUBVERSION_VERSION="1.4.0"
+SUBVERSION = "http://svn.collab.net/repos/svn/tags/1.4.2/"
+SUBVERSION_VERSION="1.4.2"
 subversion_dir=""
 
 # The URL of neon
