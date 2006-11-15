@@ -385,6 +385,9 @@ namespace Ankh.EventSinks
                     bool wasUnmodified = item.Status.TextStatus == StatusKind.Normal &&
                         ( item.Status.PropertyStatus == StatusKind.None || item.Status.PropertyStatus == StatusKind.Normal );
 
+                    // SVN since 1.4 gives an error if deleting an added-but-missing file.
+                    bool wasAddedOrMissing = item.Status.TextStatus == StatusKind.Added || item.Status.TextStatus == StatusKind.Missing;
+
                     if ( (item.Status.TextStatus == StatusKind.Missing || item.IsDeleted ||
                         item.Status.TextStatus == StatusKind.Normal) && 
                         this.PromptDelete( item ) )
@@ -393,7 +396,19 @@ namespace Ankh.EventSinks
                         {
                             this.RestoreBackupDirectory( item.Path );
                         }
-                        context.Client.Delete( new string[] { item.Path }, true );
+
+                        try
+                        {
+                            context.Client.Delete( new string[] { item.Path }, true );
+                        }
+                        catch ( BadPathException )
+                        {
+                            // see comment above.
+                            if ( !wasAddedOrMissing )
+                            {
+                                throw;
+                            }
+                        }
 
                         // VC++ gets annoyed if the file doesn't exist when trying to delete it.
                         if ( wasUnmodified )

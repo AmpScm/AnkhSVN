@@ -138,6 +138,17 @@ namespace NSvn
             {;}
     };
 
+    public __gc class BadPathException : public SvnClientException 
+    {
+    public:
+        BadPathException( System::String* message, System::Exception* innerException ) :
+          SvnClientException(  message, innerException )
+            {;}
+        BadPathException( System::Runtime::Serialization::SerializationInfo* info, System::Runtime::Serialization::StreamingContext context ) :
+            SvnClientException( info, context )
+            {;}
+    };
+
     public __gc class InvalidUrlException : public SvnClientException 
     {
     public:
