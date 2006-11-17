@@ -40,6 +40,10 @@ namespace Ankh
         WorkExplorer,
         Log,
         SendSuggest,
-        ShowCommit
+        ShowCommit,
+        AddFolder,
+        RemoveFolder,
+        AddURL,
+        RemoveURL
     }
 }

@@ -8,7 +8,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("ShowCommitDialog", Text = "Show the commit log dialog", 
          Tooltip = "Show the commit log dialog",
-         Bitmap = ResourceBitmaps.Default),
+         Bitmap = ResourceBitmaps.ShowCommit),
     VSNetControl( "Tools.AnkhSVN", Position = 1 )]
     public class ShowCommitDialogCommand : CommandBase
     {

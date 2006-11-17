@@ -7,7 +7,7 @@ namespace Ankh.Commands
     [VSNetCommand( "RemoveWorkingCopyExplorerRoot",
          Text = "Remove root",
          Tooltip = "Remove this root.",
-         Bitmap = ResourceBitmaps.Default ),
+         Bitmap = ResourceBitmaps.RemoveFolder ),
     VSNetControl( "WorkingCopyExplorer", Position = 1 )]
     public class RemoveWorkingCopyExplorerRootCommand : CommandBase
     {
