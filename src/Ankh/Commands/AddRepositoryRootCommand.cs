@@ -11,7 +11,7 @@ namespace Ankh.Commands
     /// Summary description for AddRepositoryRootCommand.
     /// </summary>
     [VSNetCommand("AddRepositoryRootCommand", Tooltip = "Add a new URL to the repository explorer",
-         Text="Add Repository URL", Bitmap = ResourceBitmaps.Default )]
+         Text="Add Repository URL", Bitmap = ResourceBitmaps.AddURL )]
     [VSNetControl( "ReposExplorer", Position = 1 )]
     public class AddRepositoryRootCommand : CommandBase
     {		
