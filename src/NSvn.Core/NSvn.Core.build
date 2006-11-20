@@ -10,8 +10,8 @@
     <property name="bdb.lib" value="${svndir}\db4-win32\lib\libdb44.lib" 
         unless="${debug}" />
 
-    <property name="bdb.dll" value="libdb42d.dll" if="${debug}" />
-    <property name="bdb.dll" value="libdb42.dll" unless="${debug}" />
+    <property name="bdb.dll" value="libdb44d.dll" if="${debug}" />
+    <property name="bdb.dll" value="libdb44.dll" unless="${debug}" />
 
     <property name="cl.options" value='/Od /I "${svndir}\apr\include" 
         /I "${svndir}\apr-iconv\include" /I "${svndir}\apr-util\include" 
