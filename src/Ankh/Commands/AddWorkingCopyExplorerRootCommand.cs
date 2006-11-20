@@ -6,7 +6,7 @@ namespace Ankh.Commands
     [VSNetCommand( "AddWorkingCopyExplorerRoot",
          Text = "Add new root...",
          Tooltip = "Add new working copy explorer root.",
-         Bitmap = ResourceBitmaps.Default ),
+         Bitmap = ResourceBitmaps.AddFolder ),
     VSNetControl( "WorkingCopyExplorer", Position = 1 )]
     class AddWorkingCopyExplorerRootCommand : CommandBase
     {
