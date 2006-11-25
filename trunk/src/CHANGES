@@ -1,4 +1,39 @@
-Version 0.7.0 (released ??.09.2004)
+Version 1.0.0 Final (released *.11.2006)
+This release was built against Subversion 1.4.2, Neon 0.25.5, 
+openssl 0.9.8a and Berkeley DB 4.4.20
+
+* Work around a couple of AccessViolations that would be thrown from the VS object
+  model in certain cases.
+* Fix refreshing of projects and projectitems statuses after certain operations.
+* Fix some spurious expansions of the solution explorer in certain cases.
+* More icons from DamienG
+* Workaround for the error SVN throws when deleting a missing-but-added file.
+
+Version 1.0.0 RC4 (released 28.10.2006)
+This release was built against Subversion 1.4.2, Neon 0.25.5, 
+openssl 0.9.8a and Berkeley DB 4.4.20
+
+* The very common "ProjectItem not available" error. 
+* Templates for performing merge and diff using TortoiseMerge no longer has quotes. 
+* Reporting Services (and other Business Intelligence projects) now work. 
+* New icons (from DamienG). 
+* Solution load timeout in VS 2005 is increased from ten seconds to fifteen minutes. 
+* Various embarrassing NullReferenceExceptions. 
+* New lines entered for the log message in the configuration dialog are now treated properly. 
+* Handle an edge-case which prevented deletes from working with F# projects. 
+* Work around a NotImplementedException thrown in certain cases by certain third party project types. 
+* Various bug fixes in the support for database projects. 
+* Message box now shown if one or more items could not be Locked (previously this information was shown only in the output pane, and easily missed). 
+* Avoid a weird race condition in the repository explorer which might throw an exception in certain edge cases.
+
+Version 1.0.0 RC3 (released 16.08.2006)
+This release was built against Subversion 1.4.0, Neon 0.25.5, 
+openssl 0.9.8a and Berkeley DB 4.4.20
+
+* Fix a bug with the Add Solution To Repository command that would make it fail on VS 2005 web site 
+  projects.
+
+Version 1.0.0 RC1 (released 15.08.2006)
 This release was built against Subversion 1.4.0, Neon 0.25.5, 
 openssl 0.9.8a and Berkeley DB 4.4.20
 
