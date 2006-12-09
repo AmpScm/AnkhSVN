@@ -40,7 +40,7 @@ namespace Ankh.Config
 
             EnsureConfig( this.ConfigPath );
 
-            this.configFileHash = HashUtils.GetMd5HashForFile( this.ConfigPath );
+            this.configFileHash = HashUtils.GetSha1HashForFile( this.ConfigPath );
             this.WatchConfigFile();
         }
 
@@ -355,7 +355,7 @@ namespace Ankh.Config
                         return;
                     }
 
-                    byte[] hash = HashUtils.GetMd5HashForFile( this.ConfigPath );
+                    byte[] hash = HashUtils.GetSha1HashForFile( this.ConfigPath );
                     if ( !HashUtils.HashesAreEqual( this.configFileHash, hash ) )
                     {
                         this.configFileHash = hash;
