@@ -81,6 +81,34 @@ namespace Utils.Tests
             Assert.IsFalse( HashUtils.FileMatchesMd5Hash( hash1, file2 ) );
         }
 
+        [Test]
+        public void GetSh1Hash()
+        {
+            byte[] hash = HashUtils.GetSha1HashForFile( this.file );
+            Assert.IsNotNull( hash );
+            Assert.IsTrue( hash.Length > 0 );
+        }
+
+        [Test]
+        public void FileMatchesSha1Hash()
+        {
+            byte[] hash1 = HashUtils.GetSha1HashForFile( this.file );
+            Assert.IsTrue( HashUtils.FileMatchesSha1Hash( hash1, this.file ) );
+        }
+
+        [Test]
+        public void FileDoesNotMatchSha1Hash()
+        {
+            byte[] hash1 = HashUtils.GetSha1HashForFile( this.file );
+            string file2 = Path.GetTempFileName();
+            using ( StreamWriter writer = new StreamWriter( file2 ) )
+            {
+                writer.WriteLine( "Blah" );
+            }
+
+            Assert.IsFalse( HashUtils.FileMatchesMd5Hash( hash1, file2 ) );
+        }
+
 
         private string file;
     }
