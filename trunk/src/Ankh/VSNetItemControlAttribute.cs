@@ -24,6 +24,6 @@ namespace Ankh
             "Item", "Web Item", 
             "Project Node", "Cab Project Node", "Project", "Web Project Folder", 
             "Database Project", "Folder", "Web Reference Folder", "Web Folder", "DB Project Folder",
-            "Script", "Solution", "WorkingCopyExplorer" };
+            "Script", "Solution", "WorkingCopyExplorer", "Cross Project Multi Project" };
     }
 }
