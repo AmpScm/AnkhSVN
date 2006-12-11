@@ -87,7 +87,7 @@ namespace Ankh
             TaskList taskList = (TaskList) win.Object;
             foreach(TaskItem item in taskList.TaskItems)
             {
-                if(item.Category == ConflictTaskItemCategory) 
+                if(item != null && item.Category == ConflictTaskItemCategory) 
                     item.Delete(); 
             }
         }
