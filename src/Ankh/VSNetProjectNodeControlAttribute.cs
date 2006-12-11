@@ -22,7 +22,8 @@ namespace Ankh
 
         private static readonly string[] Bars = new string[]{ 
             "Project Node", "Cab Project Node", "Project", "Web Project Folder", 
-            "Database Project" };
+            "Database Project", "Cross Project Multi Project", 
+            "Cross Project Solution Project"};
 
     }
 }
