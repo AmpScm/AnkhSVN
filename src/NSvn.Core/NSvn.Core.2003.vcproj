@@ -376,9 +376,6 @@
 				RelativePath="Status.h">
 			</File>
 			<File
-				RelativePath="StatusDictionary.h">
-			</File>
-			<File
 				RelativePath="Stdafx.h">
 			</File>
 			<File
