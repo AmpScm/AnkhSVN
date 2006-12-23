@@ -12,6 +12,10 @@ namespace NSvn
     {
     public __gc class ChangedPathDictionary : public System::Collections::DictionaryBase
     {
+    private:
+        ChangedPathDictionary()
+        {
+        }
     public:
 
         /* __property virtual void set_Item( String* path, Status* status )

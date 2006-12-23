@@ -9,7 +9,7 @@ namespace NSvn
         using namespace System;
         public __gc class LockToken
         {
-        public:
+        private public:
             LockToken( svn_lock_t* lock, apr_pool_t* pool ) :
                 path( Utf8ToString(lock->path, pool) ),
                 token( Utf8ToString(lock->token, pool) ),
@@ -22,7 +22,7 @@ namespace NSvn
                     // empty 
                 }
 
-
+        public:
             [System::Diagnostics::DebuggerStepThrough]
             __property String* get_Path()
             { return this->path; }

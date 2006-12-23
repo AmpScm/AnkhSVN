@@ -10,7 +10,7 @@ namespace NSvn
 
         public __gc class CommitInfo
         {
-        public:
+        private public:
             CommitInfo( svn_client_commit_info_t* info, apr_pool_t* pool ) 
             {
                 this->author = Utf8ToString( info->author, pool );
@@ -32,6 +32,7 @@ namespace NSvn
                 this->revision = info->revision;
             }
 
+        public:
             ///<summary>Server side date of the commit</summary>
             [System::Diagnostics::DebuggerStepThrough]
             __property DateTime get_Date()

@@ -12,7 +12,7 @@ namespace NSvn
         /// <summary>Represents a commit candidate structure</summary>
         public __gc class CommitItem
         {
-        public:
+        private public:
             CommitItem( svn_client_commit_item_t* item, apr_pool_t* pool ) :                 
               kind( static_cast<NodeKind>(item->kind) ),
                   url( Utf8ToString( item->url, pool ) ),
@@ -27,6 +27,7 @@ namespace NSvn
                       this->path = 0;
               }
 
+        public:
               ///<summary>The working copy path to this item</summary>
               [System::Diagnostics::DebuggerStepThrough]
               __property String* get_Path()

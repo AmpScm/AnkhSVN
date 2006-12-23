@@ -10,10 +10,11 @@ namespace NSvn
     {
         private __gc class AprFileAdapter
         {
-        public:
+        private public:
             AprFileAdapter( System::IO::Stream* stream, apr_pool_t* pool  ) :
               stream(stream), errorMessage( 0 ), pool(pool)
               {;}
+        public:
               apr_file_t* Start();
               void WaitForExit();            
         private:
@@ -23,7 +24,7 @@ namespace NSvn
             apr_file_t __nogc* outfile;
             static const int BUFSIZE = 500;
             System::String* errorMessage;
-			apr_pool_t* pool;
+            apr_pool_t* pool;
         };
     }
 }

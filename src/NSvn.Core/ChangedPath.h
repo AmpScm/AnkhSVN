@@ -9,7 +9,7 @@ namespace NSvn
     {
         public __gc class ChangedPath
         {
-        public:
+        private public:
             ChangedPath( svn_log_changed_path_t* changedPath, apr_pool_t* pool ) :
               copyFromPath( Utf8ToString( changedPath->copyfrom_path, pool ) ),
                   copyFromRevision( changedPath->copyfrom_rev )
@@ -23,6 +23,7 @@ namespace NSvn
                   }
               }
 
+        public:
               /// <summary>Source path of copy(if any)</summary>
               [System::Diagnostics::DebuggerStepThrough]
               __property String* get_CopyFromPath()
