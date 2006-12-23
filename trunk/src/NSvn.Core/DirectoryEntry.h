@@ -11,7 +11,7 @@ namespace NSvn
         /// <summary>Represents a directory entry</summary>
         public __gc class DirectoryEntry
         {
-        public:
+        private public:
             DirectoryEntry( const char* path, svn_dirent_t* dirent, apr_pool_t* pool ) : 
               path( Utf8ToString( path , pool )),
                   nodeKind( static_cast<NSvn::Core::NodeKind>(dirent->kind) ),
@@ -22,7 +22,7 @@ namespace NSvn
               {
                   this->time = AprTimeToDateTime( dirent->time );
               }
-
+        public:
               ///<summary>The path to this entry</summary>
               [System::Diagnostics::DebuggerStepThrough]
               __property String* get_Path()
