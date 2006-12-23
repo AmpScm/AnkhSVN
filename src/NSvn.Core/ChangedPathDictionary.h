@@ -46,7 +46,7 @@ namespace NSvn
         { return this->Dictionary->Values; }
 
     public private:
-        /// <summary>Creates a StatusDictionary from an apr_hash_t</summary>
+        /// <summary>Creates a ChangedPathDictionary from an apr_hash_t</summary>
         static ChangedPathDictionary* FromChangedPathsHash( apr_hash_t* changedPaths, 
             apr_pool_t* pool )
         {
