@@ -86,7 +86,7 @@
 
 			<RemoveExistingProducts After="InstallInitialize">NEWERVERSIONFOUND</RemoveExistingProducts>
 
-			<Custom Action="InstallLib_UnInstall" After="RemoveFiles"></Custom>
+			<Custom Action="InstallLib_UnInstall" After="RemoveFiles">Installed OR PREVIOUSVERSIONSINSTALLED</Custom>
 		</InstallExecuteSequence>
 		<Binary Id="InstallLib" src="$(var.builddir)\InstallLib.dll" />
 		<UI>
