@@ -80,7 +80,7 @@
 			</AdminUISequence>
 		</UI>
 		<InstallExecuteSequence>
-			<Custom Action="ERRCA_CANCELNEWERVERSION" After="AppSearch">NEWERVERSIONINSTALLED AND NOT Installed</Custom>
+			<Custom Action="ERRCA_CANCELNEWERVERSION" After="AppSearch">NEWERVERSIONFOUND AND NOT Installed</Custom>
 
 			<Custom Action="DIRCA_TARGETDIR" Before="CostInitialize">TARGETDIR=""</Custom>
 
