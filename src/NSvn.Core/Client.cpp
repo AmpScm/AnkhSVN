@@ -11,7 +11,6 @@
 #include "CommitInfo.h"
 #include "DirectoryEntry.h"
 #include "Status.h"
-#include "StatusDictionary.h"
 #include <svn_client.h>
 #include <svn_wc.h>
 #include <svn_path.h>
