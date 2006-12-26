@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NAFData.FarmaPro.Utilities;
+using Fines.Utils.Collections;
 
 namespace Fines.IssueZillaLib
 {
