@@ -37,17 +37,7 @@ namespace Ankh.Solution
             // get the uihierarchy root
             this.solutionNode = null;
 
-            //// load the status images image strip
-            Debug.WriteLine( "Loading status images", "Ankh" );
-            Bitmap statusImages = (Bitmap)Image.FromStream(
-                this.GetType().Assembly.GetManifestResourceStream( STATUS_IMAGES ) );
-            statusImages.MakeTransparent( statusImages.GetPixel( 0, 0 ) );
-
             //this.SetUpTreeview();
-
-            this.statusImageList = new ImageList();
-            this.statusImageList.ImageSize = new Size( 7, 16 );
-            this.statusImageList.Images.AddStrip( statusImages );
         }
 
         /// <summary>
@@ -205,11 +195,11 @@ namespace Ankh.Solution
             this.nodes.Clear();
             
             // store the original image list (check that we're not storing our own statusImageList
-            if( this.statusImageList.Handle != this.TreeView.StatusImageList )
+            if( StatusImages.StatusImageList.Handle != this.TreeView.StatusImageList )
                 this.originalImageList = this.TreeView.StatusImageList;
             
             // and assign the status image list to the tree
-            this.TreeView.StatusImageList = statusImageList.Handle;
+            this.TreeView.StatusImageList = StatusImages.StatusImageList.Handle;
             this.treeView.SuppressStatusImageChange = true;
 
 
@@ -1019,7 +1009,6 @@ namespace Ankh.Solution
         private Hashtable nodes;
         private SolutionNode solutionNode;
 
-        private ImageList statusImageList;
         private IContext context;
         private TreeView treeView;
         private IntPtr originalImageList = IntPtr.Zero;
@@ -1028,14 +1017,8 @@ namespace Ankh.Solution
         private System.Threading.Timer timer;
         protected const int REFRESHDELAY = 800;
 
-
-        private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
         private const string LOCK_ICON = "Ankh.lock.ico";
         private const string READONLY_ICON = "Ankh.readonly.ico";
         private const string LOCKEDREADONLY_ICON = "Ankh.lockedreadonly.ico";
-
-
-
-
     }
 }
