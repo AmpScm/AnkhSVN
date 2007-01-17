@@ -19,7 +19,7 @@ namespace Ankh
                     statusImages.MakeTransparent( statusImages.GetPixel( 0, 0 ) );
 
                     statusImageList = new ImageList();
-                    statusImageList.ImageSize = new Size( 7, 16 );
+					statusImageList.ImageSize = new Size(statusImages.Width / STATUS_IMAGE_COUNT, statusImages.Height);
                     statusImageList.Images.AddStrip( statusImages );
                 }
                 return statusImageList;
@@ -49,9 +49,9 @@ namespace Ankh
             statusMap[ NodeStatusKind.Conflicted ]  = 6;
             statusMap[ NodeStatusKind.Unversioned ] = 8;
             statusMap[ NodeStatusKind.Modified ]    = 9;
-            
         }
 
+		internal const int STATUS_IMAGE_COUNT = 10;
         private const string STATUS_IMAGES = "Ankh.status_icons.bmp";
         private static ImageList statusImageList = null;
         private static readonly IDictionary statusMap = new Hashtable();
