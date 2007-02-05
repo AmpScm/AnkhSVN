@@ -72,6 +72,7 @@ namespace Ankh.Solution
         protected override void UnhookEvents()
         {
             UnhookEvents( new SvnItem[] { this.projectFile, this.projectFolder }, new EventHandler( this.ChildOrResourceChanged ) );
+            UnhookEvents( new SvnItem[] { this.projectFile, this.projectFolder }, new EventHandler( this.ChildrenChanged ) );
             UnhookEvents( this.deletedResources, new EventHandler(this.ChildOrResourceChanged) );
         }
 
@@ -96,7 +97,8 @@ namespace Ankh.Solution
             if (String.Compare(this.project.Kind, ProjectNode.VDPROJKIND, true) == 0)
                 fullname += ".vdproj";
 
-            EventHandler del = new EventHandler(this.ChildOrResourceChanged);
+            EventHandler modifiedHandler = new EventHandler(this.ChildOrResourceChanged);
+            EventHandler childrenChangedHandler = new EventHandler( this.ChildrenChanged );
             // the Solution Items project has no path
             if (fullname != string.Empty && File.Exists(fullname))
             {
@@ -107,8 +109,11 @@ namespace Ankh.Solution
                 this.Explorer.AddProjectFile( fullname );
 
                 // attach event handlers                
-                this.projectFolder.Changed += del;
-                this.projectFile.Changed += del;
+                this.projectFolder.Changed += modifiedHandler;
+                this.projectFolder.ChildrenChanged += childrenChangedHandler;
+
+                this.projectFile.ChildrenChanged += childrenChangedHandler;
+                this.projectFile.Changed += modifiedHandler;
 
                 // we also want deleted items in this folder
                 this.AddDeletions( this.projectFolder.Path,
@@ -121,7 +126,8 @@ namespace Ankh.Solution
                 this.projectFolder = this.Explorer.Context.StatusCache[fullname];
                 this.projectFile = SvnItem.Unversionable;
 
-                this.projectFolder.Changed += del;
+                this.projectFolder.Changed += modifiedHandler;
+                this.projectFolder.ChildrenChanged += childrenChangedHandler;
                 this.AddDeletions( this.projectFolder.Path, this.deletedResources, new EventHandler(this.DeletedItemStatusChanged) );
             }
             else

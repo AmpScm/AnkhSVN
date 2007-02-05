@@ -247,11 +247,17 @@ namespace Ankh
             }
         }
 
+        protected virtual void ChildrenChanged( object sender, EventArgs args )
+        {
+            this.Refresh( true );
+        }
+
         protected static void UnhookEvents( IList svnItems, EventHandler del )
         {
             foreach ( SvnItem item in svnItems )
             {
                 item.Changed -= del;
+                item.ChildrenChanged -= del;
             }
         }
 
