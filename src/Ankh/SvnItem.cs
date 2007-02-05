@@ -30,6 +30,8 @@ namespace Ankh
         /// </summary>
         public event EventHandler Changed;
 
+        public event EventHandler ChildrenChanged;
+
         public SvnItem( string path, Status status )
         {
             this.path = path;
@@ -254,6 +256,14 @@ namespace Ankh
         public override string ToString()
         {
             return this.path;
+        }
+
+        public void NotifyChildrenChanged()
+        {
+            if ( this.ChildrenChanged != null )
+            {
+                this.ChildrenChanged( this, EventArgs.Empty );
+            }
         }
 
 
