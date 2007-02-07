@@ -34,7 +34,7 @@
 #include <stdlib.h>
 
 #ifndef POST_DOTNET11
-#include <_vcclrit.h>
+#include "_vcclrit.h"
 #endif
 //TODO: clean up includes in general(not just here)
 
