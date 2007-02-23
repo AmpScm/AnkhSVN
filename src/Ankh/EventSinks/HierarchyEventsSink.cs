@@ -220,7 +220,12 @@ namespace Ankh.EventSinks
 
                 try
                 {
-                    this.context.SolutionExplorer.SetUpDelayedProjectRefresh( this );
+                    object retval;
+                    int hr = this.Hierarchy.GetProperty( itemid, (int)__VSHPROPID.VSHPROPID_Parent, out retval );
+                    if ( hr == VSConstants.S_OK && retval != null )
+                    {
+                        this.RefreshParent( (uint)(int)retval );
+                    }
                 }
                 catch ( Exception ex )
                 {
