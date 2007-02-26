@@ -323,7 +323,7 @@ namespace Ankh.EventSinks
                     }
 
                     SvnItem item = state as SvnItem;
-                    if ( item != null )
+                    if ( item != null && !this.context.SolutionExplorer.RenameInProgress )
                     {
                         item.NotifyChildrenChanged();
                     }
