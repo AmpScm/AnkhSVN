@@ -15,7 +15,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Allows the user to resolve a conflicted file.
     /// </summary>
-    [VSNetCommand( "ResolveConflictExternalCommand", Text="Resolve conflicted file using external editor...",  
+    [VSNetCommand( "ResolveConflictExternalCommand", Text="Resolve conflicted file using e&xternal editor...",  
          Bitmap = ResourceBitmaps.ResolveConflict, 
          Tooltip = "Resolve conflicted file using external editor"),
      VSNetItemControl("Ankh", Position=1)]

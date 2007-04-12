@@ -8,7 +8,7 @@ namespace Ankh.Commands
     /// <summary>
     /// A command to do the equivalent of svn switch --relocate
     /// </summary>
-    [VSNetCommand("Relocate", Text = "Relocate...", Tooltip = "Rename this file...", 
+    [VSNetCommand("Relocate", Text = "Relo&cate...", Tooltip = "Rename this file...", 
          Bitmap = ResourceBitmaps.Relocate),
     VSNetFolderNodeControl( "Ankh", Position = 1),
     VSNetControl( "Solution.Ankh", Position = 1 ),

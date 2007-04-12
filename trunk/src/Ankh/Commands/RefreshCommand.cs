@@ -8,7 +8,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command that refreshes the tree view
     /// </summary>
-    [VSNetCommand("Refresh", Text = "Refresh", Tooltip = "Refresh this view.", 
+    [VSNetCommand("Refresh", Text = "Refres&h", Tooltip = "Refresh this view.", 
          Bitmap = ResourceBitmaps.Refresh),
     VSNetItemControl( "Ankh", Position = 1 )]
     public class RefreshCommand : CommandBase

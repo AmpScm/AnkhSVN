@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Ankh.Commands
 {
-    [VSNetCommand("Unlock", Text = "Unlock...", Tooltip = "Unlocks the selected item(s)",
+    [VSNetCommand("Unlock", Text = "U&nlock...", Tooltip = "Unlocks the selected item(s)",
          Bitmap = ResourceBitmaps.Unlock),
     VSNetItemControl( "Ankh", Position = 1 )] 
 	public class UnlockCommand : CommandBase

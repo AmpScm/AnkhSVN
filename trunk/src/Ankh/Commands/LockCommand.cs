@@ -8,7 +8,7 @@ namespace Ankh.Commands
     /// <summary>
     /// A command class to support the svn lock command
     /// </summary>
-    [VSNetCommand("Lock", Text = "Lock...", Tooltip = "Locks the selected item",
+    [VSNetCommand("Lock", Text = "Loc&k...", Tooltip = "Locks the selected item",
          Bitmap = ResourceBitmaps.Lock),
     VSNetItemControl( "Ankh", Position = 1 )]    
     public class LockCommand : CommandBase

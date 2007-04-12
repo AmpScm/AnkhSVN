@@ -8,7 +8,7 @@ namespace Ankh.Commands
     /// <summary>
     /// A command that lets you create a patch.
     /// </summary>
-    [VSNetCommand( "CreatePatch", Text="Create patch...", 
+    [VSNetCommand( "CreatePatch", Text="Create &patch...", 
          Tooltip="Create a patch file.", 
          Bitmap = ResourceBitmaps.CreatePatch),
     VSNetItemControl( "", Position = 1 )]
