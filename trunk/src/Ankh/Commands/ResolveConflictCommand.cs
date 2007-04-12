@@ -19,7 +19,7 @@ namespace Ankh.Commands
     [VSNetCommand( "ResolveConflict", Text="Res&olve conflicted file...",  
          Bitmap = ResourceBitmaps.ResolveConflict, 
          Tooltip = "Resolve conflicted file"),
-    VSNetItemControl( "Ankh", Position = 1 )]
+    VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
     public class ResolveConflictCommand : CommandBase
     {    
         /// <summary>

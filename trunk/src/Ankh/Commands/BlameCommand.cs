@@ -15,7 +15,7 @@ namespace Ankh.Commands
 	/// </summary>
     [VSNetCommand("Blame", Text = "&Blame...", Tooltip = "Runs Blame on the selected item",
          Bitmap = ResourceBitmaps.Blame),
-    VSNetItemControl("Ankh", Position=1)]    
+    VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position=1)]    
 	public class BlameCommand : CommandBase
 	{
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
