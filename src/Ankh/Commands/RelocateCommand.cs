@@ -10,10 +10,10 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("Relocate", Text = "Relo&cate...", Tooltip = "Rename this file...", 
          Bitmap = ResourceBitmaps.Relocate),
-    VSNetFolderNodeControl( "Ankh", Position = 1),
+    VSNetFolderNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 1),
     VSNetControl( "Solution.Ankh", Position = 1 ),
     VSNetControl("WorkingCopyExplorer.Ankh", Position=1),
-    VSNetProjectNodeControl( "Ankh", Position = 1 )]
+    VSNetProjectNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
     public class RelocateCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)

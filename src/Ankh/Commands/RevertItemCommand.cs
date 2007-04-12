@@ -17,7 +17,7 @@ namespace Ankh.Commands
 
     [VSNetCommand("RevertItem", Text = "&Revert...", Tooltip = "Reverts selected item",
          Bitmap = ResourceBitmaps.Revert),
-    VSNetItemControl( "Ankh", Position = 1 )]
+    VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
     public class RevertItemCommand : CommandBase
     {
         #region Implementation of ICommand

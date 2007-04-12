@@ -10,7 +10,7 @@ namespace Ankh.Commands
     /// </summary>
     [VSNetCommand("Refresh", Text = "Refres&h", Tooltip = "Refresh this view.", 
          Bitmap = ResourceBitmaps.Refresh),
-    VSNetItemControl( "Ankh", Position = 1 )]
+    VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
     public class RefreshCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)

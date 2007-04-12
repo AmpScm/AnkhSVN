@@ -18,7 +18,7 @@ namespace Ankh.Commands
     [VSNetCommand( "ResolveConflictExternalCommand", Text="Resolve conflicted file using e&xternal editor...",  
          Bitmap = ResourceBitmaps.ResolveConflict, 
          Tooltip = "Resolve conflicted file using external editor"),
-     VSNetItemControl("Ankh", Position=1)]
+     VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position=1)]
     public class ResolveConflictExternalCommand : ResolveConflictCommand
     {    
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)

@@ -12,6 +12,7 @@ namespace Ankh
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class VSNetControlAttribute : Attribute
     {
+        public const string AnkhSubMenu = "An&kh";
         /// <summary>
         /// Constructor
         /// </summary>

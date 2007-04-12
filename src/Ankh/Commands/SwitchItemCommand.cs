@@ -14,7 +14,7 @@ namespace Ankh.Commands
     [VSNetCommand("SwitchItem", Text="&Switch...", 
          Tooltip= "Switch this item to a different URL", 
          Bitmap=ResourceBitmaps.Switch ),
-   VSNetItemControl( "Ankh", Position = 1 )]
+   VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
     public class SwitchItemCommand : CommandBase
     {
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)

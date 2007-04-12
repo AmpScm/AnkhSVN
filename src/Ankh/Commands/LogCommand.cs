@@ -11,7 +11,7 @@ namespace Ankh.Commands
 {
     [VSNetCommand("Log", Text = "&Log...", Tooltip = "Runs Log on the selected item",
          Bitmap = ResourceBitmaps.Log),
-    VSNetItemControl( "Ankh", Position = 1 )]  
+    VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]  
 	public class LogCommand : CommandBase
 	{
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
