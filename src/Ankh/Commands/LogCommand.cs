@@ -9,7 +9,7 @@ using System.Collections;
 
 namespace Ankh.Commands
 {
-    [VSNetCommand("Log", Text = "Log...", Tooltip = "Runs Log on the selected item",
+    [VSNetCommand("Log", Text = "&Log...", Tooltip = "Runs Log on the selected item",
          Bitmap = ResourceBitmaps.Log),
     VSNetItemControl( "Ankh", Position = 1 )]  
 	public class LogCommand : CommandBase

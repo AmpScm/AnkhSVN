@@ -9,7 +9,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Summary description for DiffLocalItem.
     /// </summary>
-    [VSNetCommand( "DiffExternalLocalItem", Text="Diff External", 
+    [VSNetCommand( "DiffExternalLocalItem", Text="Diff E&xternal", 
          Tooltip="Use External Diff against local text base.", 
          Bitmap = ResourceBitmaps.Diff),
    VSNetItemControl( "", Position = 1 )]

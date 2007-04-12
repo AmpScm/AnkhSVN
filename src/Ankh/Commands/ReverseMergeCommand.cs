@@ -12,7 +12,7 @@ namespace Ankh.Commands
     /// A command that performs a reverse merge on an item/items, allowing
     /// the user to go back to a previous version.
     /// </summary>
-    [VSNetCommand( "ReverseMerge", Text="Revert to revision...", 
+    [VSNetCommand( "ReverseMerge", Text="Re&vert to revision...", 
          Tooltip="Go back to a previous version of this item.", 
          Bitmap = ResourceBitmaps.RevertToVersion),
     VSNetItemControl( "Ankh", Position = 1 )]

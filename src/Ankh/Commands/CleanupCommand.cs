@@ -9,7 +9,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Cleans up a working copy directory.
     /// </summary>
-    [VSNetCommand( "Cleanup", Text="Cleanup", Tooltip = "Cleans up the working copy", 
+    [VSNetCommand( "Cleanup", Text="Cle&anup", Tooltip = "Cleans up the working copy", 
          Bitmap = ResourceBitmaps.Cleanup ),
    VSNetItemControl( "Ankh", Position = 1 )]
     public class Cleanup : CommandBase

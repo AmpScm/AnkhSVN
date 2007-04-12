@@ -11,7 +11,7 @@ namespace Ankh.Commands
     /// <summary>
     /// A command that allows the user to switch an item to a different URL.
     /// </summary>
-    [VSNetCommand("SwitchItem", Text="Switch...", 
+    [VSNetCommand("SwitchItem", Text="&Switch...", 
          Tooltip= "Switch this item to a different URL", 
          Bitmap=ResourceBitmaps.Switch ),
    VSNetItemControl( "Ankh", Position = 1 )]

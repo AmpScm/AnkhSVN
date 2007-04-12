@@ -16,7 +16,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Allows the user to resolve a conflicted file.
     /// </summary>
-    [VSNetCommand( "ResolveConflict", Text="Resolve conflicted file...",  
+    [VSNetCommand( "ResolveConflict", Text="Res&olve conflicted file...",  
          Bitmap = ResourceBitmaps.ResolveConflict, 
          Tooltip = "Resolve conflicted file"),
     VSNetItemControl( "Ankh", Position = 1 )]
