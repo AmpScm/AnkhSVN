@@ -21,7 +21,7 @@ namespace Ankh.Commands
          Text="Add solution to Subversion repository...", 
          Tooltip= "Add this solution to Subversion repository", 
          Bitmap=ResourceBitmaps.AddSolutionToRepository ),
-    VSNetControl( "Solution.Ankh", Position=1 ),
+    VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position=1 ),
     VSNetControl( "File", Position=14 )]
     public class AddSolutionToRepositoryCommand : CommandBase
     {
