@@ -5,7 +5,7 @@ using System.Collections;
 namespace Ankh.Commands
 {
     [VSNetCommand( "RemoveWorkingCopyExplorerRoot",
-         Text = "Remove root",
+         Text = "&Remove root",
          Tooltip = "Remove this root.",
          Bitmap = ResourceBitmaps.RemoveFolder ),
     VSNetControl( "WorkingCopyExplorer", Position = 1 )]
