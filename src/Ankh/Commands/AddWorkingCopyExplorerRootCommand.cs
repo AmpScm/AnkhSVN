@@ -4,7 +4,7 @@ using System.Text;
 namespace Ankh.Commands
 {
     [VSNetCommand( "AddWorkingCopyExplorerRoot",
-         Text = "Add new root...",
+         Text = "A&dd new root...",
          Tooltip = "Add new working copy explorer root.",
          Bitmap = ResourceBitmaps.AddFolder ),
     VSNetControl( "WorkingCopyExplorer", Position = 1 )]
