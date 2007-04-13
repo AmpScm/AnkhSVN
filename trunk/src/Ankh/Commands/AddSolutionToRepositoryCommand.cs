@@ -18,7 +18,7 @@ namespace Ankh.Commands
     /// recursively adding all solution items
     /// </summary>
     [VSNetCommand("AddSolutionToRepository", 
-         Text="Add solution to Subversion repository...", 
+         Text="Add sol&ution to Subversion repository...", 
          Tooltip= "Add this solution to Subversion repository", 
          Bitmap=ResourceBitmaps.AddSolutionToRepository ),
     VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position=1 ),
