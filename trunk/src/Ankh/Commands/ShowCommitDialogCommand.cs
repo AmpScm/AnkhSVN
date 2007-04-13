@@ -6,7 +6,7 @@ namespace Ankh.Commands
     /// <summary>
     /// A command that displays the log window.
     /// </summary>
-    [VSNetCommand("ShowCommitDialog", Text = "Show the commit log dialog", 
+    [VSNetCommand("ShowCommitDialog", Text = "Show the commit &log dialog", 
          Tooltip = "Show the commit log dialog",
          Bitmap = ResourceBitmaps.ShowCommit),
     VSNetControl( "Tools.AnkhSVN", Position = 1 )]

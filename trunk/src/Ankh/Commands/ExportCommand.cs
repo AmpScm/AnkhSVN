@@ -11,7 +11,7 @@ namespace Ankh.Commands
     /// A command that lets you export a repository directory.
     /// </summary>
     [VSNetCommand("Export", Tooltip="Export a repository directory", 
-         Text = "Export a repository or local directory...", 
+         Text = "E&xport a repository or local directory...", 
          Bitmap = ResourceBitmaps.Export),
     VSNetControl( "Tools.AnkhSVN", Position = 1 ) ]
     public class ExportCommand : CommandBase
