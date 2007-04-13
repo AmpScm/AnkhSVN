@@ -192,7 +192,7 @@ namespace Ankh
             object ankhMenu = context.CommandBars.GetBarControl( toolMenu, "AnkhSVN" );
             if ( ankhMenu == null )
             {
-                context.CommandBars.AddCommandBar( "AnkhSVN", 
+                context.CommandBars.AddCommandBar( "An&khSVN", 
                     vsCommandBarType.vsCommandBarTypeMenu, toolMenu, 1 );
             }
         }
