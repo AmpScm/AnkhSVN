@@ -5,7 +5,7 @@ namespace Ankh.Commands
     /// <summary>
     /// A command that lets the user send a generic error report.
     /// </summary>
-    [VSNetCommand("SendErrorReport", Text = "Send suggestion/error report", 
+    [VSNetCommand("SendErrorReport", Text = "Send suggestion/error re&port", 
          Tooltip = "Show the repository explorer window",
          Bitmap = ResourceBitmaps.SendSuggest),
     VSNetControl( "Tools.AnkhSVN", Position = 1 )]
