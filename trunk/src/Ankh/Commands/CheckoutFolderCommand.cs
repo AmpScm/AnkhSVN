@@ -11,7 +11,7 @@ namespace Ankh.Commands
 	/// Command for checking out a folder
 	/// </summary>
     [VSNetCommand("CheckoutFolder", Tooltip="Checkout this folder", 
-         Text = "Checkout Folder...", Bitmap = ResourceBitmaps.CheckoutDirectory ),
+         Text = "Chec&kout Folder...", Bitmap = ResourceBitmaps.CheckoutDirectory ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
 	public class CheckoutFolderCommand : 
         CommandBase

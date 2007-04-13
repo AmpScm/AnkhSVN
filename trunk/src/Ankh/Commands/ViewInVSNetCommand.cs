@@ -8,7 +8,7 @@ namespace Ankh.Commands
 	/// A command that opens a file from the server in VS.NET
 	/// </summary>
     [VSNetCommand("ViewInVsNet", Tooltip="View this file in VS.NET", 
-         Text = "In VS.NET", Bitmap = ResourceBitmaps.ViewInVSNet ),
+         Text = "In &VS.NET", Bitmap = ResourceBitmaps.ViewInVSNet ),
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
 	public class ViewInVSNetCommand : ViewRepositoryFileCommand
 	{

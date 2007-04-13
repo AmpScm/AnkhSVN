@@ -12,7 +12,7 @@ namespace Ankh.Commands
 	/// Summary description for ViewInVSNetCommand.
 	/// </summary>
     [VSNetCommand("CheckoutSolution", Tooltip="Checkout this solution", 
-         Bitmap = ResourceBitmaps.CheckoutSolution, Text = "Checkout Solution..." ),
+         Bitmap = ResourceBitmaps.CheckoutSolution, Text = "Checkout &Solution..." ),
     VSNetControl( "ReposExplorer", Position = 2 ) ]
 	public class CheckoutSolutionCommand : 
         CommandBase

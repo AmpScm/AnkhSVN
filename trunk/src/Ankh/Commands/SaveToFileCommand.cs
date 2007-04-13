@@ -10,7 +10,7 @@ namespace Ankh.Commands
     /// Lets the user cat a file from a repos and have Windows open it.
     /// </summary>
     [VSNetCommand("SaveToFile", Tooltip="Save the file to disk.", 
-         Text = "Save to file", Bitmap = ResourceBitmaps.SaveToFile ),
+         Text = "Save to &file", Bitmap = ResourceBitmaps.SaveToFile ),
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
     public class SaveToFileCommand : ViewRepositoryFileCommand
     {
