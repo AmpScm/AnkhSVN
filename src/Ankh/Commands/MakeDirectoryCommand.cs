@@ -12,7 +12,7 @@ namespace Ankh.Commands
     /// A command for creating a new remote directory (in the repos explorer).
     /// </summary>
     [VSNetCommand("MakeDirectoryCommand", 
-         Tooltip="Create new directory here", Text = "New directory...",
+         Tooltip="Create new directory here", Text = "Ne&w directory...",
          Bitmap = ResourceBitmaps.MakeDirectory ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
     public class MakeDirectoryCommand : CommandBase

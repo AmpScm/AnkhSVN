@@ -8,7 +8,7 @@ namespace Ankh.Commands
     /// A command that refreshes an item in the repository explorer.
     /// </summary>
     [VSNetCommand("RefreshRepositoryItem", 
-         Tooltip="Refresh this item", Text = "Refresh",
+         Tooltip="Refresh this item", Text = "Refres&h",
          Bitmap = ResourceBitmaps.Refresh ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
     public class RefreshRepositoryItemCommand : CommandBase

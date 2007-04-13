@@ -7,7 +7,7 @@ namespace Ankh.Commands
     /// Summary description for RemoveRepositoryRootCommand.
     /// </summary>
     [VSNetCommand("RemoveRepositoryRootCommand", Tooltip = "Remove an URL from the repository explorer",
-         Text="Remove Repository URL", Bitmap = ResourceBitmaps.RemoveURL )]
+         Text="&Remove Repository URL", Bitmap = ResourceBitmaps.RemoveURL )]
     [VSNetControl( "ReposExplorer", Position = 1 )]
     public class RemoveRepositoryRootCommand : CommandBase
     {

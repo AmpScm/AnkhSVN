@@ -11,7 +11,7 @@ namespace Ankh.Commands
     /// Command for exporting a folder
     /// </summary>
     [VSNetCommand("ExportFolder", Tooltip="Export this folder", 
-         Text = "Export Folder...", Bitmap = ResourceBitmaps.Export ),
+         Text = "E&xport Folder...", Bitmap = ResourceBitmaps.Export ),
     VSNetControl( "ReposExplorer", Position = 1 ) ]
     public class ExportFolderCommand : 
         CommandBase
