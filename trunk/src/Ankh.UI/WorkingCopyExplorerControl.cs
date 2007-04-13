@@ -10,6 +10,11 @@ using System.ComponentModel;
 
 namespace Ankh.UI
 {
+    public interface IWorkingCopyExplorerSubControl
+    {
+        Point GetSelectionPoint();
+    }
+
     public class WorkingCopyExplorerControl : UserControl
     {
         public event CancelEventHandler ValidatingNewRoot;
@@ -26,10 +31,15 @@ namespace Ankh.UI
             this.treeView.MouseDown += new MouseEventHandler( HandleMouseDown );
             this.listView.MouseDown += new MouseEventHandler( HandleMouseDown );
 
+            this.treeView.KeyUp += new KeyEventHandler( HandleKeyUp );
+            this.listView.KeyUp += new KeyEventHandler( HandleKeyUp );
+
             this.newRootTextBox.TextChanged += new EventHandler( newRootTextBox_TextChanged );
 
             Win32.SHAutoComplete( this.newRootTextBox.Handle, Shacf.FileSysDirs );
         }
+
+        
 
         public IContextMenu CustomContextMenu
         {
@@ -121,18 +131,42 @@ namespace Ankh.UI
 
         void HandleMouseDown( object sender, MouseEventArgs e )
         {
-            if ( e.Button == MouseButtons.Right && this.CustomContextMenu != null )
+            if ( e.Button == MouseButtons.Right )
             {
                 Control c = sender as Control;
                 if ( c == null )
                 {
                     return;
                 }
+                Point screen = c.PointToScreen( new Point( e.X, e.Y ) );
 
-                Point screen = c.PointToScreen( new Point(e.X, e.Y) );
-                this.CustomContextMenu.Show( screen.X, screen.Y );
+                ShowContextMenu( screen );
+                return;
             }
         }
+
+        void HandleKeyUp( object sender, KeyEventArgs e )
+        {
+            if ( e.KeyCode == Keys.Apps )
+            {
+                IWorkingCopyExplorerSubControl control = sender as IWorkingCopyExplorerSubControl;
+
+                if ( control != null )
+                {
+                    ShowContextMenu( control.GetSelectionPoint() ); 
+                }
+            }
+        }
+
+        private void ShowContextMenu( Point point)
+        {
+            if (this.CustomContextMenu != null )
+            {
+                this.CustomContextMenu.Show( point.X, point.Y );
+            }
+        }
+
+        
 
         private void newRootTextBox_KeyDown( object sender, KeyEventArgs e )
         {
@@ -277,7 +311,6 @@ namespace Ankh.UI
         private Splitter splitter;
 
         private IFileSystemItem[] selection = new IFileSystemItem[] { };
-        private ArrayList roots;
         private Panel topPanel;
         private Label addWorkingCopyLabel;
         private Button addButton;

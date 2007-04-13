@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.UI
 {
-    public class FileSystemDetailsView : ListView
+    public class FileSystemDetailsView : ListView, IWorkingCopyExplorerSubControl
     {
         public event EventHandler CurrentDirectoryChanged;
         
@@ -42,6 +42,21 @@ namespace Ankh.UI
         public IFileSystemItem CurrentDirectory
         {
             get { return this.currentDirectory; }
+        }
+
+        public System.Drawing.Point GetSelectionPoint()
+        {
+            if ( this.SelectedItems.Count > 0 )
+            {
+                ListViewItem item = this.SelectedItems[ 0 ];
+                int offset = item.Bounds.Height / 3;
+                return this.PointToScreen(new Point( item.Bounds.X + offset + this.StateImageList.ImageSize.Width, 
+                    item.Bounds.Y + offset ));
+            }
+            else
+            {
+                return Point.Empty;
+            }
         }
 
 

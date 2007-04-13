@@ -1,10 +1,11 @@
 using System;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Ankh.UI
 {
-    class FileSystemTreeView : PathTreeView
+    class FileSystemTreeView : PathTreeView, IWorkingCopyExplorerSubControl
     {
         public event EventHandler SelectedItemChanged;
 
@@ -46,6 +47,20 @@ namespace Ankh.UI
             if ( this.Nodes.Count == 1 )
             {
                 this.SelectedNode = this.Nodes[0];
+            }
+        }
+
+        public System.Drawing.Point GetSelectionPoint()
+        {
+            if ( this.SelectedNode != null )
+            {
+                int offset = this.SelectedNode.Bounds.Height / 3;
+                return this.PointToScreen(new Point( this.SelectedNode.Bounds.X + offset, 
+                    this.SelectedNode.Bounds.Y + offset ));
+            }
+            else
+            {
+                return Point.Empty;
             }
         }
 
@@ -192,6 +207,6 @@ namespace Ankh.UI
         private static readonly object DummyTag = new object();
 
 
-        
+
     }
 }
