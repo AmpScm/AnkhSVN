@@ -182,7 +182,7 @@ namespace Ankh.UI
 
         private void ShowContextMenu( Point point)
         {
-            if ( this.CustomContextMenu != null )
+            if ( this.CustomContextMenu != null && point != Point.Empty )
             {
                 this.CustomContextMenu.Show( point.X, point.Y );
             }
