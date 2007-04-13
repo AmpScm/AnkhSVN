@@ -60,7 +60,7 @@ namespace Ankh.UI
         }
 
 
-        internal IFileSystemItem[] GetSelectedItems()
+        public IFileSystemItem[] GetSelectedItems()
         {
             if ( this.SelectedItems.Count == 1 )
             {

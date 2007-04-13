@@ -13,6 +13,7 @@ namespace Ankh.UI
     public interface IWorkingCopyExplorerSubControl
     {
         Point GetSelectionPoint();
+        IFileSystemItem[] GetSelectedItems();
     }
 
     public class WorkingCopyExplorerControl : UserControl
@@ -30,9 +31,6 @@ namespace Ankh.UI
 
             this.treeView.MouseDown += new MouseEventHandler( HandleMouseDown );
             this.listView.MouseDown += new MouseEventHandler( HandleMouseDown );
-
-            this.treeView.KeyUp += new KeyEventHandler( HandleKeyUp );
-            this.listView.KeyUp += new KeyEventHandler( HandleKeyUp );
 
             this.newRootTextBox.TextChanged += new EventHandler( newRootTextBox_TextChanged );
 
@@ -85,18 +83,54 @@ namespace Ankh.UI
 
         public IFileSystemItem[] GetSelectedItems()
         {
-            if ( this.treeView.Focused )
+            if ( this.SelectedControl != null )
             {
-                this.selection = this.treeView.GetSelectedItems();
-            }
-            else if (this.listView.Focused )
-            {
-                this.selection = this.listView.GetSelectedItems();
+                this.selection = this.SelectedControl.GetSelectedItems();
             }
 
             // if none are focused, whatever selection was there before is probably still valid
 
             return this.selection;
+        }
+
+        protected IWorkingCopyExplorerSubControl SelectedControl
+        {
+            get
+            {
+                if ( this.treeView.Focused )
+                {
+                    return this.treeView;
+                }
+                else if ( this.listView.Focused )
+                {
+                    return this.listView;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handle the key combinations for "right click menu" here.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="keyData"></param>
+        /// <returns></returns>
+        protected override bool ProcessCmdKey( ref System.Windows.Forms.Message msg, Keys keyData )
+        {
+            if ( keyData == (Keys)( Keys.F10 | Keys.Shift ) || keyData == Keys.Apps )
+            {
+                if ( this.SelectedControl != null )
+                {
+                    Point point = this.SelectedControl.GetSelectionPoint();
+                    this.ShowContextMenu( point );
+                    return true;
+                }
+            }
+
+            return base.ProcessCmdKey( ref msg, keyData );
         }
 
         void newRootTextBox_TextChanged( object sender, EventArgs e )
@@ -145,22 +179,10 @@ namespace Ankh.UI
             }
         }
 
-        void HandleKeyUp( object sender, KeyEventArgs e )
-        {
-            if ( e.KeyCode == Keys.Apps )
-            {
-                IWorkingCopyExplorerSubControl control = sender as IWorkingCopyExplorerSubControl;
-
-                if ( control != null )
-                {
-                    ShowContextMenu( control.GetSelectionPoint() ); 
-                }
-            }
-        }
 
         private void ShowContextMenu( Point point)
         {
-            if (this.CustomContextMenu != null )
+            if ( this.CustomContextMenu != null )
             {
                 this.CustomContextMenu.Show( point.X, point.Y );
             }
