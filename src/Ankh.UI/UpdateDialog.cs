@@ -15,10 +15,10 @@ namespace Ankh.UI
         /// <summary>
         /// Used to retrieve information about a path.
         /// </summary>
-        public event GetPathInfoDelegate GetPathInfo
+        public event ResolvingPathInfoHandler GetPathInfo
         {
-            add{ this.pathSelectionTreeView.GetPathInfo += value; }
-            remove{ this.pathSelectionTreeView.GetPathInfo -= value; }
+            add{ this.pathSelectionTreeView.ResolvingPathInfo += value; }
+            remove{ this.pathSelectionTreeView.ResolvingPathInfo -= value; }
         }
         
 

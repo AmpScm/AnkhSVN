@@ -20,16 +20,16 @@ namespace Ankh.UI
         /// <summary>
         /// Invoked when the treeview needs more information about a node.
         /// </summary>
-        public event GetPathInfoDelegate GetPathInfo
+        public event ResolvingPathInfoHandler GetPathInfo
         {
             add
             { 
                 this.getPathInfo += value;
-                this.pathSelectionTreeView.GetPathInfo += value; 
+                this.pathSelectionTreeView.ResolvingPathInfo += value; 
             }
             remove
             { 
-                this.pathSelectionTreeView.GetPathInfo -= value; 
+                this.pathSelectionTreeView.ResolvingPathInfo -= value; 
                 this.getPathInfo -= value;
             }
         }
@@ -156,7 +156,7 @@ namespace Ankh.UI
             get{ return this.pathSelectionTreeView; }
         }
 
-        protected void RaiseGetPathInfo( GetPathInfoEventArgs args )
+        protected void RaiseGetPathInfo( ResolvingPathEventArgs args )
         {
             if ( this.getPathInfo != null )
                 this.getPathInfo( this, args );
@@ -377,7 +377,7 @@ namespace Ankh.UI
         private PathSelectorOptions options;
         protected System.Windows.Forms.Label suppressLabel;
         protected System.Windows.Forms.GroupBox suppressGroupBox;
-        private GetPathInfoDelegate getPathInfo;
+        private ResolvingPathInfoHandler getPathInfo;
 
 
         public static void Main()

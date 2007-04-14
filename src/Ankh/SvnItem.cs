@@ -476,7 +476,7 @@ namespace Ankh
         }
 
 
-        public static void GetPathInfo( object sender, GetPathInfoEventArgs args )
+        public static void GetPathInfo( object sender, ResolvingPathEventArgs args )
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;
