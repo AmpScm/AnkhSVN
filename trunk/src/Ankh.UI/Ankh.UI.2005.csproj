@@ -193,7 +193,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ConfigurationDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConflictDialog.cs">
       <SubType>Form</SubType>
@@ -326,26 +325,33 @@
     <Compile Include="ViewLogDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Win32TreeView.cs" />
     <Compile Include="WorkingCopyExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <EmbeddedResource Include="AddRepositoryRootDialog.resx">
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AddSolutionDialog.resx">
       <DependentUpon>AddSolutionDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AdminDirDialog.resx">
       <DependentUpon>AdminDirDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="CheckoutDialog.resx">
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ClientCertDialog.resx">
       <DependentUpon>ClientCertDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ClientCertPassphraseDialog.resx">
       <DependentUpon>ClientCertPassphraseDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="CommitDialog.resx">
       <DependentUpon>CommitDialog.cs</DependentUpon>
@@ -353,6 +359,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConflictDialog.resx">
       <DependentUpon>ConflictDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DiffView.resx">
       <DependentUpon>DiffView.cs</DependentUpon>
@@ -362,12 +369,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ErrorDialog.resx">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ExecutablePropertyEditor.resx">
       <DependentUpon>ExecutablePropertyEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ExportDialog.resx">
       <DependentUpon>ExportDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ExternalsPropertyEditor.resx">
       <DependentUpon>ExternalsPropertyEditor.cs</DependentUpon>
@@ -380,21 +389,26 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LockDialog.resx">
       <DependentUpon>LockDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LogDialog.resx">
       <DependentUpon>LogDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginDialog.resx">
       <DependentUpon>LoginDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LogMessageControl.resx">
       <DependentUpon>LogMessageControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MimeTypePropertyEditor.resx">
       <DependentUpon>MimeTypePropertyEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NewDirectoryDialog.resx">
       <DependentUpon>NewDirectoryDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelectionTreeView.resx">
       <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
@@ -410,42 +424,51 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressDialog.resx">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PropertyEditorDialog.resx">
       <DependentUpon>PropertyEditorDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RelocateDialog.resx">
       <DependentUpon>RelocateDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RenameDialog.resx">
       <DependentUpon>RenameDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RepositoryExplorerControl.resx">
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RepositoryTreeView.resx">
       <DependentUpon>RepositoryTreeView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ReverseMergeDialog.resx">
       <DependentUpon>ReverseMergeDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RevisionPicker.resx">
       <DependentUpon>RevisionPicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SslServerTrustDialog.resx">
       <DependentUpon>SslServerTrustDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SwitchDialog.resx">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TestRepositoryExplorer.resx">
       <DependentUpon>TestRepositoryExplorer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UpdateDialog.resx">
       <DependentUpon>UpdateDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewLogDialog.resx">
       <DependentUpon>ViewLogDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Ankh.UI.build" />
     <None Include="Ankh.UI.wxs" />
