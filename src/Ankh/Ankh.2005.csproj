@@ -497,9 +497,6 @@
     <Compile Include="Solution\SolutionNode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Solution\TreeView.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="StatusCache.cs">
       <SubType>Code</SubType>
     </Compile>

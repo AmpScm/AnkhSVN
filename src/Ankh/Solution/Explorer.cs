@@ -16,6 +16,7 @@ using C = Utils.Win32.Constants;
 using DteConstants = EnvDTE.Constants;
 using System.Windows.Forms;
 using System.Threading;
+using Ankh.UI;
 
 
 namespace Ankh.Solution
@@ -307,7 +308,7 @@ namespace Ankh.Solution
         }
 
 
-        internal TreeView TreeView
+        internal Win32TreeView TreeView
         {
             //[System.Diagnostics.DebuggerStepThrough]
             get
@@ -400,7 +401,7 @@ namespace Ankh.Solution
                     "window is on a secondary monitor, " +
                     "try moving it to the primary during solution loading." );
 
-            this.treeView = new TreeView( treeHwnd );
+            this.treeView = new Win32TreeView( treeHwnd );
         }
 
         /// <summary>
@@ -1010,7 +1011,7 @@ namespace Ankh.Solution
         private SolutionNode solutionNode;
 
         private IContext context;
-        private TreeView treeView;
+        private Win32TreeView treeView;
         private IntPtr originalImageList = IntPtr.Zero;
 
         private bool refreshPending;

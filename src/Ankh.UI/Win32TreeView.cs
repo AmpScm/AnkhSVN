@@ -5,14 +5,14 @@ using Utils.Win32;
 using ImageList = System.Windows.Forms.ImageList;
 using System.Windows.Forms;
 
-namespace Ankh.Solution
+namespace Ankh.UI
 {
     /// <summary>
     /// Wraps a HWND to a Win32 treeview
     /// </summary>
-    public class TreeView : NativeWindow
+    public class Win32TreeView : NativeWindow
     {
-        public TreeView( IntPtr hwnd )
+        public Win32TreeView( IntPtr hwnd )
         {
             this.CheckForZero( hwnd, "hwnd" );
             this.hwnd = hwnd;
