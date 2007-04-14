@@ -282,7 +282,7 @@ namespace Ankh
             using( PathSelector selector = new PathSelector() )
             {
                 // to provide information about the paths
-                selector.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
+                selector.GetPathInfo += new ResolvingPathInfoHandler(GetPathInfo);
 
                 selector.EnableRecursive = info.EnableRecursive;
                 selector.Items = info.Items;
@@ -336,7 +336,7 @@ namespace Ankh
         {
             using( LockDialog dlg = new LockDialog() )
             {
-                dlg.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
+                dlg.GetPathInfo += new ResolvingPathInfoHandler(GetPathInfo);
 
                 dlg.Items = info.Items;
                 dlg.CheckedItems = info.CheckedItems;
@@ -367,7 +367,7 @@ namespace Ankh
                 dlg.Options = PathSelectorOptions.DisplayRevisionRange;
                 dlg.RevisionStart = info.RevisionStart;
                 dlg.RevisionEnd = info.RevisionEnd;
-                dlg.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
+                dlg.GetPathInfo += new ResolvingPathInfoHandler(GetPathInfo);
                 dlg.StopOnCopy = info.StopOnCopy;
 
                 if ( dlg.ShowDialog( this.Context.HostWindow ) != DialogResult.OK )
@@ -386,7 +386,7 @@ namespace Ankh
         {
             using( SwitchDialog dialog = new SwitchDialog() )
             {
-                dialog.GetPathInfo += new GetPathInfoDelegate(GetUrlPathinfo);
+                dialog.GetPathInfo += new ResolvingPathInfoHandler(GetUrlPathinfo);
                 dialog.Items = info.Items;
                 dialog.SingleSelection = true;
                 dialog.CheckedItems = info.Items;
@@ -546,14 +546,14 @@ namespace Ankh
             return this.newBrowser;                
         }
 
-        protected static void GetPathInfo(object sender, GetPathInfoEventArgs args)
+        protected static void GetPathInfo(object sender, ResolvingPathEventArgs args)
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;
             args.Path = item.Path;
         }
 
-        protected static void GetUrlPathinfo(object sender, GetPathInfoEventArgs args)
+        protected static void GetUrlPathinfo(object sender, ResolvingPathEventArgs args)
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;

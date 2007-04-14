@@ -98,7 +98,7 @@ namespace Ankh.Commands
                 // equivalent to accepting the default in the dialog.
                 using(UpdateDialog d = new UpdateDialog())
                 {
-                    d.GetPathInfo += new GetPathInfoDelegate(SvnItem.GetPathInfo);
+                    d.GetPathInfo += new ResolvingPathInfoHandler(SvnItem.GetPathInfo);
                     d.Items = this.resources;
                     d.CheckedItems = this.resources;
                     d.Recursive = true;

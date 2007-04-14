@@ -11,10 +11,10 @@ namespace Ankh.UI
 	/// </summary>
 	public class ReverseMergeDialog : System.Windows.Forms.Form
 	{
-        public event GetPathInfoDelegate GetPathInfo
+        public event ResolvingPathInfoHandler GetPathInfo
         {
-            add{ this.treeView.GetPathInfo += value; }
-            remove{ this.treeView.GetPathInfo -= value; }
+            add{ this.treeView.ResolvingPathInfo += value; }
+            remove{ this.treeView.ResolvingPathInfo -= value; }
         }
         
 

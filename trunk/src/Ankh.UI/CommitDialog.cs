@@ -34,7 +34,7 @@ namespace Ankh.UI
             InitializeComponent();
             this.CreateToolTips();
 
-            this.commitItemsTree.GetPathInfo += new GetPathInfoDelegate(commitItemsTree_GetPathInfo);
+            this.commitItemsTree.ResolvingPathInfo += new ResolvingPathInfoHandler(commitItemsTree_GetPathInfo);
             this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
 
             // Support Ctrl-A to select everything.
@@ -228,7 +228,7 @@ namespace Ankh.UI
             }        
         }
 
-        private void commitItemsTree_GetPathInfo(object sender, GetPathInfoEventArgs args)
+        private void commitItemsTree_GetPathInfo(object sender, ResolvingPathEventArgs args)
         {
             args.Path = args.Item.ToString();
         }
