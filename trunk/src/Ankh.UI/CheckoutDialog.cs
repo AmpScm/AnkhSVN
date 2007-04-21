@@ -200,7 +200,9 @@ namespace Ankh.UI
             // 
             // CheckoutDialog
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size( 5, 13 );
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size( 432, 317 );
             this.ControlBox = false;
             this.Controls.Add( this.cancelButton );
