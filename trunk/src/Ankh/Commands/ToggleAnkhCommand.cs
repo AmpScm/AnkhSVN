@@ -27,7 +27,7 @@ namespace Ankh.Commands
 
             try
             {
-                 object cntl = this.GetControl( context, "Solution.Ankh", 
+                 object cntl = this.GetControl( context, "Solution." + VSNetControlAttribute.AnkhSubMenu, 
                     "ToggleAnkh" );
 
                 string solutionPath = context.DTE.Solution.FullName;
