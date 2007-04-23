@@ -1,216 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+****************************************************************************************************
+wix.targets
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+This file defines the steps in the standard build process for WiX projects (.wixproj).
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+****************************************************************************************************
+-->
 <Project InitialTargets="CheckRequiredProperties" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-    <!-- Some properties must be set in the main project file, before using this .TARGETS file -->
-    <Target 
-        Name="CheckRequiredProperties">
+  <!-- Some properties must be set in the main project file, before using this .TARGETS file -->
+  <Target Name="CheckRequiredProperties">
+    <Error  Condition=" '$(OutputName)' == '' "
+      Text="The &quot;OutputName&quot; property is not set in project &quot;$(MSBuildProjectFile)&quot;.  The OutputName defines the name of the output without a file extension. Please set this in the project file before the &lt;Import&gt; of the .targets file."/>
+    <Error  Condition=" '$(OutputType)' == '' "
+      Text="The &quot;OutputType&quot; property is not set in project &quot;$(MSBuildProjectFile)&quot;.  The OutputType defines whether an msi, merge module, or wix library is being built. Please set this in the project file before the &lt;Import&gt; of the .targets file. Possible values are 'package', 'module', 'library', and 'object'."/>
+  </Target>
 
-        <Error  Condition="'$(OutputName)'==''"
-                Text="The &quot;OutputName&quot; property is not set in project &quot;$(MSBuildProjectFile)&quot;.  The OutputName defines the name of the output without a file extension. Please set this in the project file before the &lt;Import&gt; of the .Targets file."/>
-        <Error  Condition="'$(OutputType)'==''"
-                Text="The &quot;OutputType&quot; property is not set in project &quot;$(MSBuildProjectFile)&quot;.  The OutputType defines whether an msi, merge module, or wix library is being built. Please set this in the project file before the &lt;Import&gt; of the .Targets file. Possible values are 'package', 'module', 'library', and 'object'."/>
-    </Target>
+  <UsingTask TaskName="Candle" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\wixtasks.dll" />
+  <UsingTask TaskName="Lit" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\wixtasks.dll" />
+  <UsingTask TaskName="Light" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\wixtasks.dll" />
 
-            
-    <UsingTask TaskName="Candle" AssemblyFile="wixtasks.dll" />
-    <UsingTask TaskName="Lit" AssemblyFile="wixtasks.dll" />
-    <UsingTask TaskName="Light" AssemblyFile="wixtasks.dll" />
+  <!-- This makes the project files a dependency of all targets so that things rebuild if they change -->
+  <PropertyGroup>
+    <WixTargetsPath>$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
+    <MSBuildAllProjects Condition="Exists('$(WixTargetsPath)')">$(MSBuildAllProjects);$(WixTargetsPath)</MSBuildAllProjects>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildBinPath)\Wix.targets</MSBuildAllProjects>
-    </PropertyGroup>
+  <!-- Define the default file extensions -->
+  <PropertyGroup>
+    <TargetExt Condition=" '$(OutputType)'=='package'">.msi</TargetExt>
+    <TargetExt Condition=" '$(OutputType)'=='module'">.msm</TargetExt>
+    <TargetExt Condition=" '$(OutputType)'=='library'">.wixlib</TargetExt>
+    <IntermediateExt Condition=" '$(IntermediateExt)' == '' ">.wixobj</IntermediateExt>
+  </PropertyGroup>
 
-    <!-- Define the default file extensions -->
-    <PropertyGroup>
-        <TargetExt Condition="'$(OutputType)'=='package'">.msi</TargetExt>
-        <TargetExt Condition="'$(OutputType)'=='module'">.msm</TargetExt>
-        <TargetExt Condition="'$(OutputType)'=='library'">.wixlib</TargetExt>
-        <IntermediateExt Condition="'$(IntermediateExt)'==''">.wixobj</IntermediateExt>
-    </PropertyGroup>
+  <!-- Default output type and path properties -->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <OutputPath Condition=" '$(OutputPath)' == '' ">bin\$(Configuration)\</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>                                                                    <!-- Example, bin\Debug\ -->
+    <TargetName Condition=" '$(TargetName)' == '' ">$(OutputName)</TargetName>                        <!-- Example, MySetup -->
+    <TargetFileName Condition=" '$(TargetFileName)' == '' ">$(TargetName)$(TargetExt)</TargetFileName><!-- Example, MySetup.msi -->
+    <TargetPath Condition=" '$(TargetPath)' == '' ">$(OutDir)$(TargetFileName)</TargetPath>           <!-- Example, bin\Debug\MySetup.msi -->
 
-    <!-- Default output type and path properties -->
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <OutputPath Condition=" '$(OutputPath)' == '' ">bin\$(Configuration)\</OutputPath>
-        <OutDir>$(OutputPath)</OutDir>                                                                    <!-- Example, bin\Debug\ -->
-        <TargetName Condition=" '$(TargetName)' == '' ">$(OutputName)</TargetName>                        <!-- Example, MySetup -->
-        <TargetFileName Condition=" '$(TargetFileName)' == '' ">$(TargetName)$(TargetExt)</TargetFileName><!-- Example, MySetup.msi -->
-        <TargetPath Condition=" '$(TargetPath)' == '' ">$(OutDir)$(TargetFileName)</TargetPath>           <!-- Example, bin\Debug\MySetup.msi -->
+    <!-- Properties for the intermediate object output -->
+    <BaseOutputPath Condition=" '$(BaseOutputPath)' == '' ">obj\</BaseOutputPath>                                                      <!-- Example, obj\ -->
+    <IntermediateOutputPath Condition=" '$(IntermediateOutputPath)' == '' ">$(BaseOutputPath)$(Configuration)\</IntermediateOutputPath><!-- Example, obj\Debug\ -->
+    <CompileObjOutput Condition="$(CompileObjOutput) == ''">@(Compile->'$(IntermediateOutputPath)%(Filename)$(IntermediateExt)')</CompileObjOutput> <!-- Example, obj\Debug\MySetup.wixobj -->
+  </PropertyGroup>
 
-        <!-- Properties for the intermediate object output -->
-        <BaseOutputPath Condition=" '$(BaseOutputPath)' == '' ">obj\</BaseOutputPath>                                                      <!-- Example, obj\ -->
-        <IntermediateOutputPath Condition=" '$(IntermediateOutputPath)' == '' ">$(BaseOutputPath)$(Configuration)\</IntermediateOutputPath><!-- Example, obj\Debug\ -->
-        
-        <!-- Specify the Candle .wixobj if it isn't defined. If there is not supposed to be object output (ie. Only linking), don't set the object output. -->
-        <CompileObjOutput Condition=" '$(CompileObjOutput)' == '' And '$(NoObjOutputDefault)' != 'true' ">$(IntermediateOutputPath)$(OutputName)$(IntermediateExt)</CompileObjOutput><!-- Example, obj\Debug\MySetup.wixobj -->
-    </PropertyGroup>
+  <!-- Default Lib properties copied from the Compile properties. -->
+  <PropertyGroup>
+    <LibNoLogo Condition=" '$(LibNoLogo)' == '' ">$(NoLogo)</LibNoLogo>
+    <LibBindFiles Condition=" '$(LibBindFiles)' == '' ">$(BindFiles)</LibBindFiles>
+    <LibSuppressSchemaValidation Condition=" '$(LibSuppressSchemaValidation)' == '' ">$(SuppressSchemaValidation)</LibSuppressSchemaValidation>
+    <LibSuppressIntermediateFileVersionMatching Condition=" '$(LibSuppressIntermediateFileVersionMatching)' == '' ">$(SuppressIntermediateFileVersionMatching)</LibSuppressIntermediateFileVersionMatching>
+    <LibTreatWarningsAsErrors Condition=" '$(LibTreatWarningsAsErrors)' == '' ">$(TreatWarningsAsErrors)</LibTreatWarningsAsErrors>
+    <LibVerboseOutput Condition=" '$(LibVerboseOutput)' == '' ">$(VerboseOutput)</LibVerboseOutput>
+  </PropertyGroup>
 
-    <!-- Default Lib properties copied from the Compile properties. -->
-    <PropertyGroup>
-        <LibNoLogo Condition="'$(LibNoLogo)'==''">$(NoLogo)</LibNoLogo>
-        <LibExtension Condition="'$(LibExtension)'==''">@(Extension)</LibExtension>
-        <LibSuppressSchemaValidation Condition="'$(LibSuppressSchemaValidation)'==''">$(SuppressSchemaValidation)</LibSuppressSchemaValidation>
-        <LibSuppressIntermediateFileVersionMatching Condition="'$(LibSuppressIntermediateFileVersionMatching)'==''">$(SuppressIntermediateFileVersionMatching)</LibSuppressIntermediateFileVersionMatching>
-        <LibSuppressAllWarnings Condition="'$(LibSuppressAllWarnings)'==''">$(SuppressAllWarnings)</LibSuppressAllWarnings>
-        <LibUseSmallTableDefinitions Condition="'$(LibUseSmallTableDefinitions)'==''">$(UseSmallTableDefinitions)</LibUseSmallTableDefinitions>
-        <LibTreatWarningsAsErrors Condition="'$(LibTreatWarningsAsErrors)'==''">$(TreatWarningsAsErrors)</LibTreatWarningsAsErrors>
-        <LibWarningLevel Condition="'$(LibWarningLevel)'==''">$(WarningLevel)</LibWarningLevel>
-        <LibVerboseOutput Condition="'$(LibVerboseOutput)'==''">$(VerboseOutput)</LibVerboseOutput>
-        <LibVerboseOutputLevel Condition="'$(LibVerboseOutputLevel)'==''">$(VerboseOutputLevel)</LibVerboseOutputLevel>
-    </PropertyGroup>
-    
-    <!-- Default Linker properties copied from the Compile properties. -->
-    <PropertyGroup>
-        <LinkerNoLogo Condition="'$(LinkerNoLogo)'==''">$(NoLogo)</LinkerNoLogo>
-        <LinkerExtension Condition="'$(LinkerExtension)'==''">@(Extension)</LinkerExtension>
-        <LinkerSuppressSchemaValidation Condition="'$(LinkerSuppressSchemaValidation)'==''">$(SuppressSchemaValidation)</LinkerSuppressSchemaValidation>
-        <LinkerSuppressIntermediateFileVersionMatching Condition="'$(LinkerSuppressIntermediateFileVersionMatching)'==''">$(SuppressIntermediateFileVersionMatching)</LinkerSuppressIntermediateFileVersionMatching>
-        <LinkerSuppressAllWarnings Condition="'$(LinkerSuppressAllWarnings)'==''">$(SuppressAllWarnings)</LinkerSuppressAllWarnings>
-        <LinkerUseSmallTableDefinitions Condition="'$(LinkerUseSmallTableDefinitions)'==''">$(UseSmallTableDefinitions)</LinkerUseSmallTableDefinitions>
-        <LinkerTreatWarningsAsErrors Condition="'$(LinkerTreatWarningsAsErrors)'==''">$(TreatWarningsAsErrors)</LinkerTreatWarningsAsErrors>
-        <LinkerWarningLevel Condition="'$(LinkerWarningLevel)'==''">$(WarningLevel)</LinkerWarningLevel>
-        <LinkerVerboseOutput Condition="'$(LinkerVerboseOutput)'==''">$(VerboseOutput)</LinkerVerboseOutput>
-        <LinkerVerboseOutputLevel Condition="'$(LinkerVerboseOutputLevel)'==''">$(VerboseOutputLevel)</LinkerVerboseOutputLevel>
-    </PropertyGroup>
+  <!-- Default Linker properties copied from the Compile properties. -->
+  <PropertyGroup>
+    <LinkerNoLogo Condition=" '$(LinkerNoLogo)' == '' ">$(NoLogo)</LinkerNoLogo>
+    <LinkerBaseInputPaths Condition=" '$(LinkerBaseInputPaths)' == '' ">$(BaseInputPaths)</LinkerBaseInputPaths>
+    <LinkerBindFiles Condition=" '$(LinkerBindFiles)' == '' ">$(BindFiles)</LinkerBindFiles>
+    <LinkerPedantic Condition=" '$(LinkerPedantic)' == '' ">$(Pedantic)</LinkerPedantic>
+    <LinkerSuppressSchemaValidation Condition=" '$(LinkerSuppressSchemaValidation)' == '' ">$(SuppressSchemaValidation)</LinkerSuppressSchemaValidation>
+    <LinkerSuppressIntermediateFileVersionMatching Condition=" '$(LinkerSuppressIntermediateFileVersionMatching)' == '' ">$(SuppressIntermediateFileVersionMatching)</LinkerSuppressIntermediateFileVersionMatching>
+    <LinkerTreatWarningsAsErrors Condition=" '$(LinkerTreatWarningsAsErrors)' == '' ">$(TreatWarningsAsErrors)</LinkerTreatWarningsAsErrors>
+    <LinkerVerboseOutput Condition=" '$(LinkerVerboseOutput)' == '' ">$(VerboseOutput)</LinkerVerboseOutput>
+  </PropertyGroup>
 
-    <!-- Compile the wxs source. -->
-    <PropertyGroup>
-        <CompileDependsOn>PrepareForBuild</CompileDependsOn>
-    </PropertyGroup>
-    <Target
-        Name="Compile"
-        Inputs="@(Compile);$(MSBuildAllProjects)"
-        Outputs="$(CompileObjOutput)"
-        DependsOnTargets="$(CompileDependsOn)">
+  <!--
+  ================================================================================================
+  Compile
 
-        <Candle
-            SourceFiles="@(Compile)"
-            DefineConstants="$(DefineConstants)"
-            PreprocessToStdOut="$(PreprocessToStdOut)" 
-            PreprocessToFile="$(PreprocessToFile)" 
-            IncludeSearchPaths="@(IncludeSearchPath)"    
-            NoLogo="$(NoLogo)"
-            OutputFile="$(CompileObjOutput)"
-            SuppressSchemaValidation="$(SuppressSchemaValidation)"
-            UseSmallTableDefinitions="$(UseSmallTableDefinitions)" 
-            ShowSourceTrace="$(ShowSourceTrace)" 
-            Extensions="@(CompileExtension)" 
-            SuppressAllWarnings="$(SuppressAllWarnings)" 
-            TreatWarningsAsErrors="$(TreatWarningsAsErrors)" 
-            WarningLevel="$(WarningLevel)" 
-            VerboseOutput="$(VerboseOutput)" 
-            VerboseOutputLevel="$(VerboseOutputLevel)" 
-            ToolPath="$(ToolPath)"
-        />
-    </Target>
+    Compiles the wxs files into a wixobj file using candle.exe.
 
-    <PropertyGroup>
-        <!-- Don't depend on the Compile task because Lib can be run from a different project than the compile. -->
-        <LibDependsOn>PrepareForBuild</LibDependsOn>
-    </PropertyGroup>
-    <Target
-        Name="Lib"
-        Inputs="$(CompileObjOutput);
-                @(WixObject);
-                $(MSBuildAllProjects)"
-        Outputs="$(OutDir)$(TargetFileName)"
-        DependsOnTargets="$(LibDependsOn)"
-        Condition=" '$(OutputType)' == 'library' ">
+    [IN]
+    @(Compile) - The list of wxs files to compile.
+    @(Content) - Files that the project uses in the installer.
+    @(WixExtension) - The list of wixlib or wix dll extensions.
 
-        <Lit
-            ObjectFiles="@(WixObject);@(WixLibrary);$(CompileObjOutput)"
-            NoLogo="$(LibNoLogo)"
-            OutputFile="$(OutDir)$(TargetFileName)"
-            Extensions="@(LibExtension)" 
-            SuppressSchemaValidation="$(LibSuppressSchemaValidation)"
-            SuppressIntermediateFileVersionMatching="$(LibSuppressIntermediateFileVersionMatching)" 
-            SuppressAllWarnings="$(LibSuppressAllWarnings)" 
-            UseSmallTableDefinitions="$(LibUseSmallTableDefinitions)" 
-            TreatWarningsAsErrors="$(LibTreatWarningsAsErrors)" 
-            WarningLevel="$(LibWarningLevel)" 
-            VerboseOutput="$(LibVerboseOutput)" 
-            VerboseOutputLevel="$(LibVerboseOutputLevel)" 
-            ToolPath="$(ToolPath)"
-        />
-    </Target>
+    [OUT]
+    $(CompileObjOutput) - The compiled .wixobj file.
+  ================================================================================================
+  -->
 
-    <PropertyGroup>
-        <!-- Don't depend on the Compile task because Link can be run from a different project than the compile. -->
-        <LinkDependsOn>PrepareForBuild</LinkDependsOn>
-    </PropertyGroup>
-    <Target
-        Name="Link"
-        Inputs="$(CompileObjOutput);
-                @(WixObject);
-                @(WixLibrary);
-                $(MSBuildAllProjects)"
-        Outputs="$(OutDir)$(TargetFileName)"
-        DependsOnTargets="$(LinkDependsOn)"
-        Condition=" '$(OutputType)'=='package' Or '$(OutputType)'=='module' ">
+  <PropertyGroup>
+    <CompileDependsOn>PrepareForBuild</CompileDependsOn>
+  </PropertyGroup>
+  <Target
+    Name="Compile"
+    Inputs="@(Compile);
+            @(Content);
+            @(WixExtension);
+            $(MSBuildAllProjects)"
+    Outputs="$(IntermediateOutputPath)%(Compile.Filename)$(IntermediateExt)"
+    DependsOnTargets="$(CompileDependsOn)"
+    Condition="@(Compile) != ''">
 
-        <Light
-            ObjectFiles="$(CompileObjOutput);@(WixObject);@(WixLibrary)"
-            BaseInputPath="$(BaseInputPath)"
-            CabinetCache="$(CabinetCache)"
-            Extensions="@(LinkExtension)" 
-            BaseUncompressedImagesOutputPath="$(BaseUncompressedImagesOutputPath)"
-            LocalizedStringFile="$(LocalizedStringFile)" 
-            NoLogo="$(LinkerNoLogo)"
-            LeaveTemporaryFiles="$(LeaveTemporaryFiles)" 
-            ReuseCabinetCache="$(ReuseCabinetCache)" 
-            OutputFile="$(OutDir)$(TargetFileName)"
-            OutputAsXml="$(OutputAsXml)" 
-            SuppressDefaultAdminSequenceActions="$(SuppressDefaultAdminSequenceActions)"
-            SuppressDefaultAdvSequenceActions="$(SuppressDefaultAdvSequenceActions)"
-            SuppressAssemblies="$(SuppressAssemblies)"
-            SuppressFiles="$(SuppressFiles)"
-            SuppressLayout="$(SuppressLayout)"
-            SuppressSchemaValidation="$(LinkerSuppressSchemaValidation)"
-            SuppressDefaultUISequenceActions="$(SuppressDefaultUISequenceActions)"
-            SuppressIntermediateFileVersionMatching="$(LinkerSuppressIntermediateFileVersionMatching)" 
-            SuppressAllWarnings="$(LinkerSuppressAllWarnings)" 
-            UseSmallTableDefinitions="$(LinkerUseSmallTableDefinitions)" 
-            TreatWarningsAsErrors="$(LinkerTreatWarningsAsErrors)" 
-            WarningLevel="$(LinkerWarningLevel)" 
-            VerboseOutput="$(LinkerVerboseOutput)" 
-            VerboseOutputLevel="$(LinkerVerboseOutputLevel)" 
-            ToolPath="$(ToolPath)"
-        />
+    <Candle
+      SourceFiles="@(Compile)"
+      DefineConstants="$(DefineConstants)"
+      PreprocessToStdOut="$(PreprocessToStdOut)"
+      PreprocessToFile="$(PreprocessToFile)"
+      IncludeSearchPaths="$(IncludeSearchPaths)"
+      NoLogo="$(NoLogo)"
+      OutputFile="$(CompileObjOutput)"
+      Pedantic="$(Pedantic)"
+      SuppressSchemaValidation="$(SuppressSchemaValidation)"
+      ShowSourceTrace="$(ShowSourceTrace)"
+      Extensions="@(WixExtension)"
+      SuppressSpecificWarnings="$(SuppressSpecificWarnings)"
+      TreatWarningsAsErrors="$(TreatWarningsAsErrors)"
+      VerboseOutput="$(VerboseOutput)"
+      ToolPath="$(WixToolPath)"
+    />
+  </Target>
 
-    </Target>
+  <!--
+  ================================================================================================
+  Lib
 
-    <!-- Make the build directories. -->
-    <Target
-        Name="PrepareForBuild">
+    Links the .wixobj, .wxl, .wixlib, wix extensions into a .wixlib file using lit.exe.
 
-        <MakeDir Directories="$(IntermediateOutputPath);$(OutDir)"/>
-    </Target>
+    [IN]
+    $(CompileObjOutput) - The compiled .wixobj file.
+    @(EmbeddedResource) - The list of wxl files to use for localization.
+    @(WixObject) - The list of .wixobj files.
+    @(WixLibrary) - The list of .wixlib files.
+    @(WixExtension) - The list of wix dll extension files.
 
-    <PropertyGroup>
-        <BuildDependsOn>PrepareForBuild;Compile;Link</BuildDependsOn>
-    </PropertyGroup>
-    <Target
-        Name="Build"
-        DependsOnTargets="$(BuildDependsOn)">
-    </Target>
+    [OUT]
+    $(LibOutputFile) - The compiled .wixlib file.
+  ================================================================================================
+  -->
 
-    <PropertyGroup>
-        <RebuildDependsOn>Clean;Build</RebuildDependsOn>
-    </PropertyGroup>
-    <Target 
-        Name="Rebuild"
-        DependsOnTargets="$(RebuildDependsOn)">
-    </Target>
+  <PropertyGroup>
+    <LibOutputFile>$(OutDir)$(TargetFileName)</LibOutputFile>
+    <!-- Don't depend on the Compile task because Lib can be run from a different project than the compile. -->
+    <LibDependsOn>PrepareForBuild</LibDependsOn>
+  </PropertyGroup>
+  <Target
+    Name="Lib"
+    Inputs="$(CompileObjOutput);
+            @(EmbeddedResource);
+            @(WixObject);
+            @(WixLibrary);
+            @(WixExtension);
+            $(MSBuildAllProjects)"
+    Outputs="$(LibOutputFile)"
+    DependsOnTargets="$(LibDependsOn)"
+    Condition=" '$(OutputType)' == 'library' ">
 
-    <!-- Clean task -->
-    <PropertyGroup>
-        <CleanDependsOn></CleanDependsOn>
-    </PropertyGroup>
-    <Target
-        Name="Clean"
-        DependsOnTargets="$(CleanDependsOn)">
+    <Lit
+      ObjectFiles="@(WixObject);@(WixLibrary);$(CompileObjOutput)"
+      BindFiles="$(LibBindFiles)"
+      Extensions="@(WixExtension)"
+      LocalizationFiles="@(EmbeddedResource)"
+      NoLogo="$(LibNoLogo)"
+      OutputFile="$(LibOutputFile)"
+      SuppressIntermediateFileVersionMatching="$(LibSuppressIntermediateFileVersionMatching)"
+      SuppressSchemaValidation="$(LibSuppressSchemaValidation)"
+      SuppressSpecificWarnings="$(LibSuppressSpecificWarnings)"
+      TreatWarningsAsErrors="$(LibTreatWarningsAsErrors)"
+      VerboseOutput="$(LibVerboseOutput)"
+      ToolPath="$(WixToolPath)"
+    />
+  </Target>
 
-        <Delete Files=
-            "$(OutDir)$(TargetFileName);
-             $(CompileObjOutput)"/>
-        </Target>
+  <!--
+  ================================================================================================
+  Link
+
+    Links the .wixobj, .wxl, .wixlib, wix extensions into an .msi or .msm file using light.exe.
+
+    [IN]
+    $(CompileObjOutput) - The compiled .wixobj file.
+    @(EmbeddedResource) - The list of wxl files to use for localization.
+    @(WixObject) - The list of .wixobj files.
+    @(WixLibrary) - The list of .wixlib files.
+    @(WixExtension) - The list of wix dll extension files.
+
+    [OUT]
+    $(LinkOutputFile) - The compiled .msi or .msm file.
+  ================================================================================================
+  -->
+
+  <PropertyGroup>
+    <LinkOutputFile>$(OutDir)$(TargetFileName)</LinkOutputFile>
+    <!-- Don't depend on the Compile task because Link can be run from a different project than the compile. -->
+    <LinkDependsOn>PrepareForBuild</LinkDependsOn>
+  </PropertyGroup>
+  <Target
+    Name="Link"
+    Inputs="$(CompileObjOutput);
+            @(EmbeddedResource);
+            @(WixObject);
+            @(WixLibrary);
+            @(WixExtension);
+            $(MSBuildAllProjects)"
+    Outputs="$(LinkOutputFile)"
+    DependsOnTargets="$(LinkDependsOn)"
+    Condition=" '$(OutputType)'=='package' Or '$(OutputType)'=='module' ">
+
+    <Light
+      ObjectFiles="$(CompileObjOutput);@(WixObject);@(WixLibrary)"
+      AllowIdenticalRows="$(AllowIdenticalRows)"
+      AllowUnresolvedReferences="$(AllowUnresolvedReferences)"
+      BaseInputPaths="$(LinkerBaseInputPaths)"
+      BindFiles="$(LinkerBindFiles)"
+      CabinetCachePath="$(CabinetCachePath)"
+      CabinetCreationThreadCount="$(CabinetCreationThreadCount)"
+      Cultures="$(Cultures)"
+      Extensions="@(WixExtension)"
+      LeaveTemporaryFiles="$(LeaveTemporaryFiles)"
+      LocalizationFiles="@(EmbeddedResource)"
+      NoLogo="$(LinkerNoLogo)"
+      OutputAsXml="$(OutputAsXml)"
+      OutputFile="$(LinkOutputFile)"
+      Pedantic="$(LinkerPedantic)"
+      ReuseCabinetCache="$(ReuseCabinetCache)"
+      SetMsiAssemblyNameFileVersion="$(SetMsiAssemblyNameFileVersion)"
+      SuppressAclReset="$(SuppressAclReset)"
+      SuppressAssemblies="$(SuppressAssemblies)"
+      SuppressDefaultAdminSequenceActions="$(SuppressDefaultAdminSequenceActions)"
+      SuppressDefaultAdvSequenceActions="$(SuppressDefaultAdvSequenceActions)"
+      SuppressDefaultUISequenceActions="$(SuppressDefaultUISequenceActions)"
+      SuppressDroppingUnrealTables="$(SuppressDroppingUnrealTables)"
+      SuppressFileHashAndInfo="$(SuppressFileHashAndInfo)"
+      SuppressFiles="$(SuppressFiles)"
+      SuppressIntermediateFileVersionMatching="$(LinkerSuppressIntermediateFileVersionMatching)"
+      SuppressIces="$(SuppressIces)"
+      SuppressLayout="$(SuppressLayout)"
+      SuppressMsiAssemblyTableProcessing="$(SuppressMsiAssemblyTableProcessing)"
+      SuppressSchemaValidation="$(LinkerSuppressSchemaValidation)"
+      SuppressValidation="$(SuppressValidation)"
+      SuppressSpecificWarnings="$(LinkerSuppressSpecificWarnings)"
+      TagSectionIdAttributeOnTuples="$(TagSectionIdAttributeOnTuples)"
+      TreatWarningsAsErrors="$(LinkerTreatWarningsAsErrors)"
+      UnreferencedSymbolsFile="$(UnreferencedSymbolsFile)" 
+      VerboseOutput="$(LinkerVerboseOutput)"
+      WixVariables="$(WixVariables)"
+      ToolPath="$(WixToolPath)"
+    />
+  </Target>
+
+  <!--
+  ================================================================================================
+  ResolveWixLibraryReferences
+
+    Resolve the library references by copying them to the local build directory. Used in Votive
+    when CopyLocal = true on a wixlib or wix extension reference node.
+
+    [IN]
+    @(WixLibrary) - The list of .wixlib files.
+    @(WixExtension) - The list of wix dll extension files.
+
+    [OUT]
+    $(LinkOutputFile) - The compiled .msi or .msm file.
+  ================================================================================================
+  -->
+
+  <!-- Resolve the library references by copying them to the local build directory. Used in Votive when CopyLocal = true on a wixlib reference node. -->
+  <PropertyGroup>
+    <ResolveWixLibraryReferencesDependsOn>PrepareForBuild</ResolveWixLibraryReferencesDependsOn>
+  </PropertyGroup>
+  <Target
+    Name="ResolveWixLibraryReferences"
+    Inputs="@(WixLibrary);
+            @(WixExtension);
+            $(MSBuildAllProjects)"
+    Outputs="@(WixLibrary->'$(OutDir)%(Filename)%(Extension)');
+             @(WixExtension->'$(OutDir)%(Filename)%(Extension)')"
+    DependsOnTargets="$(ResolveWixLibraryReferencesDependsOn)"
+    Condition=" '@(WixLibrary)@(WixExtension)' != ''">
+
+    <Copy SourceFiles="@(WixLibrary);@(WixExtension)" DestinationFolder="$(OutDir)" />
+  </Target>
+
+  <!-- Make the build directories. -->
+  <Target
+    Name="PrepareForBuild">
+    <MakeDir Directories="$(IntermediateOutputPath);$(OutDir)"/>
+  </Target>
+
+  <PropertyGroup>
+    <BuildDependsOn>PrepareForBuild;Compile;Link;Lib</BuildDependsOn>
+  </PropertyGroup>
+  <Target
+    Name="Build"
+    DependsOnTargets="$(BuildDependsOn)">
+  </Target>
+
+  <PropertyGroup>
+    <RebuildDependsOn>Clean;Build</RebuildDependsOn>
+  </PropertyGroup>
+  <Target 
+    Name="Rebuild"
+    DependsOnTargets="$(RebuildDependsOn)">
+  </Target>
+
+  <!-- Clean task -->
+  <PropertyGroup>
+    <CleanDependsOn></CleanDependsOn>
+  </PropertyGroup>
+  <Target
+    Name="Clean"
+    DependsOnTargets="$(CleanDependsOn)">
+
+    <Delete Files="$(CompileObjOutput);
+                   $(LibOutputFile);
+                   $(LinkOutputFile);" />
+  </Target>
 </Project>
