@@ -186,7 +186,6 @@ namespace Ankh.UI
             this.pathsLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.pathsLabel.Location = new System.Drawing.Point( 0, 0 );
             this.pathsLabel.Name = "pathsLabel";
-            this.pathsLabel.Padding = new System.Windows.Forms.Padding( 0, 3, 0, 3 );
             this.pathsLabel.Size = new System.Drawing.Size( 34, 19 );
             this.pathsLabel.TabIndex = 0;
             this.pathsLabel.Text = "&Paths";
