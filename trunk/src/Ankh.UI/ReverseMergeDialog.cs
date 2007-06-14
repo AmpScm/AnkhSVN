@@ -98,7 +98,6 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( ReverseMergeDialog ) );
             this.revisionPicker = new Ankh.UI.RevisionPicker();
             this.treeView = new Ankh.UI.PathSelectionTreeView();
             this.okButton = new System.Windows.Forms.Button();
@@ -120,7 +119,6 @@ namespace Ankh.UI
             // treeView
             // 
             this.treeView.CheckBoxes = true;
-            this.treeView.CheckedItems = ( (System.Collections.IList)( resources.GetObject( "treeView.CheckedItems" ) ) );
             this.treeView.Dock = System.Windows.Forms.DockStyle.Top;
             this.treeView.Items = new object[ 0 ];
             this.treeView.Location = new System.Drawing.Point( 0, 19 );
