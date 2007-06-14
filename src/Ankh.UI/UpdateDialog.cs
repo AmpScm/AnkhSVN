@@ -111,7 +111,6 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( UpdateDialog ) );
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.pathSelectionTreeView = new Ankh.UI.PathSelectionTreeView();
@@ -149,7 +148,6 @@ namespace Ankh.UI
                         | System.Windows.Forms.AnchorStyles.Left )
                         | System.Windows.Forms.AnchorStyles.Right ) ) );
             this.pathSelectionTreeView.CheckBoxes = true;
-            this.pathSelectionTreeView.CheckedItems = ( (System.Collections.IList)( resources.GetObject( "pathSelectionTreeView.CheckedItems" ) ) );
             this.pathSelectionTreeView.Items = new object[ 0 ];
             this.pathSelectionTreeView.Location = new System.Drawing.Point( 0, 28 );
             this.pathSelectionTreeView.Name = "pathSelectionTreeView";
