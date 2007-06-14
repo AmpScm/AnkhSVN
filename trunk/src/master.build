@@ -35,7 +35,7 @@
 
 
     <!-- Creates the NSvn.msm merge module -->
-    <target name="build-NSvn.msm" depends="build">
+    <target name="build-NSvn.msm" depends="build, version">
         <delete dir="${installsource.dir}" verbose="${verbose}" failonerror="false" />
         <mkdir dir="${installsource.dir}" />
         
