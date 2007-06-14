@@ -4,6 +4,7 @@
     <ComponentRef Id="C_Ankh_RegAsm" />
     <ComponentRef Id="C_Ankh_RegVS" />
     <ComponentRef Id="C_Ankh_RegVS2005" />
+    <ComponentRef Id="C_Ankh_RegVSOrcas"/>
     <ComponentRef Id="C_Ankh.dll" />
     <ComponentRef Id="C_Bitmap.dll" />
     <ComponentRef Id="C_VS_SDK_License.rtf" />
@@ -148,7 +149,35 @@
           Key="Software\Microsoft\VisualStudio\8.0\AddIns\Ankh" 
           Name="AboutBoxDetails" Type="string" Value="$(var.aboutboxdetails)" />
       </Component>
-
+	  <Component Id="C_Ankh_RegVSOrcas" DiskId="1" Guid="A3D06486-719A-4CB2-981D-C58CB56C14FE">
+		  <RegistryValue Root="HKMU" KeyPath="yes"
+          Key="Software\Microsoft\VisualStudio\9.0\AddIns\Ankh" 
+          Name="SatelliteDllPath" Type="string" Value="[TARGETDIR]" />
+		  <RegistryValue Root="HKMU"
+          Key="Software\Microsoft\VisualStudio\9.0\AddIns\Ankh"
+          Name="LoadBehavior" Type="integer" Value="1" />
+		  <RegistryValue Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\9.0\AddIns\Ankh" 
+          Name="CommandPreload" Type="integer" Value="1" />
+		  <RegistryValue Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\9.0\AddIns\Ankh" 
+          Name="AboutBoxIcon" Type="string" Value="[TARGETDIR]\1033\BitmapDll.dll,101" />
+		  <RegistryValue Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\9.0\AddIns\Ankh" 
+          Name="CommandLineSafe" Type="integer" Value="0" />
+		  <RegistryValue Root="HKMU"
+          Key="Software\Microsoft\VisualStudio\9.0\AddIns\Ankh"
+          Name="Description" Type="string" Value="Subversion addin for Visual Studio .NET Orcas" />
+		  <RegistryValue Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\9.0\AddIns\Ankh" 
+          Name="FriendlyName" Type="string" Value="AnkhSVN" />
+		  <RegistryValue Root="HKMU"
+          Key="Software\Microsoft\VisualStudio\9.0\AddIns\Ankh"
+          Name="SatelliteDllName" Type="string" Value="BitmapDll.dll" />
+		  <RegistryValue Root="HKMU" 
+          Key="Software\Microsoft\VisualStudio\9.0\AddIns\Ankh" 
+          Name="AboutBoxDetails" Type="string" Value="$(var.aboutboxdetails)" />
+      </Component>
       
 
       <Component Id="C_Ankh.dll" DiskId="1" Guid="02BBB6F8-8035-421f-83EC-7CA51E05B981">
