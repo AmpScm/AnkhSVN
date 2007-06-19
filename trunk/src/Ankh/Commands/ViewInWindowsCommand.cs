@@ -9,9 +9,11 @@ namespace Ankh.Commands
 	/// <summary>
 	/// Lets the user cat a file from a repos and have Windows open it.
 	/// </summary>
-    [VSNetCommand("ViewInWindows", Tooltip="Have Windows launch the associated application.", 
-         Text = "In Wi&ndows", Bitmap = ResourceBitmaps.ViewInWindows ),
-    VSNetControl( "ReposExplorer.View", Position = 1 ) ]
+    [VSNetCommand("ViewInWindows",
+         Text = "In Wi&ndows",
+         Tooltip="Have Windows launch the associated application.", 
+         Bitmap = ResourceBitmaps.ViewInWindows ),
+         VSNetControl( "ReposExplorer.View", Position = 1 )]
     public class ViewInWindowsCommand : ViewRepositoryFileCommand
     {
         public override void Execute(IContext context, string parameters)

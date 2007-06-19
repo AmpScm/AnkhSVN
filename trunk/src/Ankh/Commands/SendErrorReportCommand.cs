@@ -3,17 +3,19 @@ using System;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// A command that lets the user send a generic error report.
+    /// Command to send the AnkhSVN team comments and suggestions.
     /// </summary>
-    [VSNetCommand("SendErrorReport", Text = "Send suggestion/error re&port", 
-         Tooltip = "Show the repository explorer window",
+    [VSNetCommand("SendErrorReport",
+         Text = "Send Feedback", 
+         Tooltip = "Send the AnkhSVN team comments and suggestions.",
          Bitmap = ResourceBitmaps.SendSuggest),
-    VSNetControl( "Tools.AnkhSVN", Position = 1 )]
+         VSNetControl( "Tools.AnkhSVN", Position = 1 )]
     public class SendErrorReportCommand : CommandBase
     {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            // always enabled.
             return Enabled;
         }
 
@@ -22,6 +24,6 @@ namespace Ankh.Commands
             context.ErrorHandler.SendReport();
         }
 
-
+        #endregion
     }
 }

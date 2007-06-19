@@ -14,12 +14,13 @@ using NSvn.Common;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Allows the user to resolve a conflicted file.
+    /// Command to resolve conflict between changes.
     /// </summary>
-    [VSNetCommand( "ResolveConflict", Text="Res&olve conflicted file...",  
+    [VSNetCommand( "ResolveConflict",
+         Text = "Res&olve Conflict...",  
          Bitmap = ResourceBitmaps.ResolveConflict, 
-         Tooltip = "Resolve conflicted file"),
-    VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         Tooltip = "Resolve conflict between changes."),
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
     public class ResolveConflictCommand : CommandBase
     {    
         /// <summary>
@@ -34,6 +35,8 @@ namespace Ankh.Commands
             else
                 return null;
         }
+
+        #region Implementation of ICommand
 
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
@@ -68,6 +71,8 @@ namespace Ankh.Commands
                 context.EndOperation();
             }
         }
+
+        #endregion
 
         /// <summary>
         /// Resolve an item.

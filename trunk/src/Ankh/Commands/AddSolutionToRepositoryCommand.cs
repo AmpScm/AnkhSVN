@@ -13,22 +13,19 @@ using System.Text;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// A command that allows the user to add a solution to a repository
+    /// Command to add a solution to a Subversion repository
     /// by checking out the repository directory to the solution directory, then
-    /// recursively adding all solution items
+    /// recursively adding all solution items.
     /// </summary>
-    [VSNetCommand("AddSolutionToRepository", 
-         Text="Add sol&ution to Subversion repository...", 
-         Tooltip= "Add this solution to Subversion repository", 
-         Bitmap=ResourceBitmaps.AddSolutionToRepository ),
-    VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position=1 ),
-    VSNetControl( "File", Position=14 )]
+    [VSNetCommand("AddSolutionToRepository",
+         Text = "Add Sol&ution to Subversion repository...",
+         Tooltip = "Add this solution to a Subversion repository.",
+         Bitmap = ResourceBitmaps.AddSolutionToRepository),
+         VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position = 1 ),
+         VSNetControl( "File", Position = 14 )]
     public class AddSolutionToRepositoryCommand : CommandBase
     {
-        public AddSolutionToRepositoryCommand()
-        {
-                        
-        }
+        #region Implementation of ICommand
 
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
@@ -189,6 +186,8 @@ namespace Ankh.Commands
             }
         }
 
+        #endregion
+
         private string FormatProjectNames( string[] projectNames )
         {
             StringBuilder builder = new StringBuilder();
@@ -302,18 +301,14 @@ namespace Ankh.Commands
                 args.Message = this.logMessage;
             }
 
-            
-
             private IContext context;
             private string url;
-            private string logMessage;            
+            private string logMessage;
             #region IDisposable Members
 
             
             #endregion
         }
-
-       
 
         private ArrayList paths;
     }

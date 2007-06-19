@@ -9,14 +9,17 @@ using NSvn.Common;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// A command that allows the user to switch an item to a different URL.
+    /// Command to switch current item to a different URL.
     /// </summary>
-    [VSNetCommand("SwitchItem", Text="&Switch...", 
-         Tooltip= "Switch this item to a different URL", 
-         Bitmap=ResourceBitmaps.Switch ),
-   VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+    [VSNetCommand("SwitchItem",
+         Text = "&Switch...", 
+         Tooltip = "Switch this item to a different URL.", 
+         Bitmap = ResourceBitmaps.Switch ),
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
     public class SwitchItemCommand : CommandBase
     {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             IList resources = context.Selection.GetSelectionResources(
@@ -63,6 +66,8 @@ namespace Ankh.Commands
             }
         }
 
+        #endregion
+
         /// <summary>
         /// A progress runner that runs the switch operation.
         /// </summary>
@@ -90,6 +95,3 @@ namespace Ankh.Commands
         }
     }
 }
-
-
-

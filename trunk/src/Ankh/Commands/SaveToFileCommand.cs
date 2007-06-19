@@ -7,13 +7,17 @@ using Ankh.RepositoryExplorer;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Lets the user cat a file from a repos and have Windows open it.
+    /// Command to save currnet file to disk from Repository Explorer.
     /// </summary>
-    [VSNetCommand("SaveToFile", Tooltip="Save the file to disk.", 
-         Text = "Save to &file", Bitmap = ResourceBitmaps.SaveToFile ),
-    VSNetControl( "ReposExplorer.View", Position = 1 ) ]
+    [VSNetCommand("SaveToFile",
+        Text = "Save to &File",
+        Tooltip="Save the file to disk.", 
+        Bitmap = ResourceBitmaps.SaveToFile ),
+        VSNetControl( "ReposExplorer.View", Position = 1 ) ]
     public class SaveToFileCommand : ViewRepositoryFileCommand
     {
+        #region Implementation of ICommand
+
         public override void Execute(IContext context, string parameters)
         {
             context.StartOperation( "Saving" );
@@ -39,6 +43,8 @@ namespace Ankh.Commands
             {
                 context.EndOperation();
             }
-        } 
+        }
+
+        #endregion
     }
 }

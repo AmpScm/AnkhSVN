@@ -8,16 +8,20 @@ using System.Windows.Forms;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Summary description for AddRepositoryRootCommand.
+    /// Command to add a new URL to the Repository Explorer.
     /// </summary>
-    [VSNetCommand("AddRepositoryRootCommand", Tooltip = "Add a new URL to the repository explorer",
-         Text="A&dd Repository URL", Bitmap = ResourceBitmaps.AddURL )]
-    [VSNetControl( "ReposExplorer", Position = 1 )]
+    [VSNetCommand("AddRepositoryRootCommand",
+       Text = "A&dd Repository URL",
+        Tooltip = "Add a new URL to the Repository Explorer.",
+        Bitmap = ResourceBitmaps.AddURL)]
+        [VSNetControl( "ReposExplorer", Position = 1 )]
     public class AddRepositoryRootCommand : CommandBase
-    {		
+    {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
-        {           
-            return Enabled;           
+        {
+            return Enabled;
         }
 
         public override void Execute(IContext context, string parameters)
@@ -29,5 +33,6 @@ namespace Ankh.Commands
             context.RepositoryExplorer.AddRoot( info );
         }
 
+        #endregion
     }
 }

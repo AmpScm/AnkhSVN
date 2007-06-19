@@ -4,18 +4,20 @@ using Ankh.UI;
 using System.Windows.Forms;
 using Utils;
 
-
 namespace Ankh.Commands
 {
     /// <summary>
-    /// A command that lets you export a repository directory.
+    /// Command to export a Subversion repository or local folder.
     /// </summary>
-    [VSNetCommand("Export", Tooltip="Export a repository directory", 
-         Text = "E&xport a repository or local directory...", 
+    [VSNetCommand("Export",
+         Text = "E&xport a Repository or Local Folder...", 
+         Tooltip = "Export a Subversion repository or local folder.", 
          Bitmap = ResourceBitmaps.Export),
-    VSNetControl( "Tools.AnkhSVN", Position = 1 ) ]
+         VSNetControl( "Tools.AnkhSVN", Position = 3 )]
     public class ExportCommand : CommandBase
     {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             return Enabled;
@@ -44,5 +46,7 @@ namespace Ankh.Commands
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -13,14 +13,17 @@ using NSvn.Core;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Allows the user to resolve a conflicted file.
+    /// Command to resolve conflict between changes using external tool.
     /// </summary>
-    [VSNetCommand( "ResolveConflictExternalCommand", Text="Resolve conflicted file using e&xternal editor...",  
+    [VSNetCommand( "ResolveConflictExternalCommand",
+         Text = "Resolve Conflict E&xternal...",
          Bitmap = ResourceBitmaps.ResolveConflict, 
-         Tooltip = "Resolve conflicted file using external editor"),
-     VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position=1)]
+         Tooltip = "Resolve conflict between changes using external tool."),
+         VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 1)]
     public class ResolveConflictExternalCommand : ResolveConflictCommand
-    {    
+    {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // Allow external merge if enabled in config file
@@ -39,9 +42,7 @@ namespace Ankh.Commands
         {
             return context.Config.MergeExePath;
         }
+
+        #endregion
     }
 }
-
-
-
-

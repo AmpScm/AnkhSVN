@@ -6,16 +6,20 @@ using NSvn.Common;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// A command to do the equivalent of svn switch --relocate
+    /// Command to relocate this file.
     /// </summary>
-    [VSNetCommand("Relocate", Text = "Relo&cate...", Tooltip = "Rename this file...", 
+    [VSNetCommand("Relocate",
+         Text = "Relo&cate...",
+         Tooltip = "Relocate this file.", 
          Bitmap = ResourceBitmaps.Relocate),
-    VSNetFolderNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 1),
-    VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position = 1 ),
-    VSNetControl("WorkingCopyExplorer." + VSNetControlAttribute.AnkhSubMenu, Position=1),
-    VSNetProjectNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetFolderNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 1),
+         VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position = 1 ),
+         VSNetControl("WorkingCopyExplorer." + VSNetControlAttribute.AnkhSubMenu, Position = 1),
+         VSNetProjectNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
     public class RelocateCommand : CommandBase
     {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.Selection.GetSelectionResources( false, 
@@ -60,6 +64,8 @@ namespace Ankh.Commands
                 context.EndOperation();
             }
         }
+
+        #endregion
 
         /// <summary>
         /// Progress runner for the relocate operation.

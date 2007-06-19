@@ -5,14 +5,17 @@ using Ankh.RepositoryExplorer;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// A command that refreshes an item in the repository explorer.
+    /// Command to refresh the current item in the Repository Explorer.
     /// </summary>
-    [VSNetCommand("RefreshRepositoryItem", 
-         Tooltip="Refresh this item", Text = "Refres&h",
+    [VSNetCommand("RefreshRepositoryItem",
+         Text = "Refres&h",
+         Tooltip = "Refresh this item.",
          Bitmap = ResourceBitmaps.Refresh ),
-    VSNetControl( "ReposExplorer", Position = 1 ) ]
+         VSNetControl( "ReposExplorer", Position = 1 )]
     public class RefreshRepositoryItemCommand : CommandBase
     {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // we only want directories
@@ -29,5 +32,7 @@ namespace Ankh.Commands
         {
             context.RepositoryExplorer.Refresh( context.RepositoryExplorer.SelectedNode );
         }
+
+        #endregion
     }
 }

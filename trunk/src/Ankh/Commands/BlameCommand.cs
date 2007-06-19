@@ -11,13 +11,17 @@ using System.Diagnostics;
 namespace Ankh.Commands
 {
 	/// <summary>
-	/// A command class to support the svn blame command.
+    /// Command to identify which users to blame for which lines.
 	/// </summary>
-    [VSNetCommand("Blame", Text = "&Blame...", Tooltip = "Runs Blame on the selected item",
-         Bitmap = ResourceBitmaps.Blame),
-    VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position=1)]    
+    [VSNetCommand("Blame",
+        Text = "&Blame...",
+        Tooltip = "Identify which users to blame for which lines.",
+        Bitmap = ResourceBitmaps.Blame),
+    VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 1)]
 	public class BlameCommand : CommandBase
-	{
+    {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.Selection.GetSelectionResources( true, 
@@ -88,7 +92,7 @@ namespace Ankh.Commands
             }
         }
 
-        
+        #endregion
 
         private class BlameRunner : IProgressWorker
         {
