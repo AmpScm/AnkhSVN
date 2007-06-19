@@ -6,13 +6,17 @@ using Ankh.UI;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command that refreshes the tree view
+    /// Command to refresh this view.
     /// </summary>
-    [VSNetCommand("Refresh", Text = "Refres&h", Tooltip = "Refresh this view.", 
+    [VSNetCommand("Refresh",
+         Text = "Refres&h",
+         Tooltip = "Refresh this view.", 
          Bitmap = ResourceBitmaps.Refresh),
-    VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
     public class RefreshCommand : CommandBase
     {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             return Enabled;
@@ -23,14 +27,14 @@ namespace Ankh.Commands
             try
             {
                 context.StartOperation( "Refreshing" );
-
                 context.Selection.RefreshSelection();
             }
             finally
             {
                 context.EndOperation();
             }
-
         }
+
+        #endregion
     }
 }

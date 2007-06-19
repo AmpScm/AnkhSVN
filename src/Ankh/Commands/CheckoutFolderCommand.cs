@@ -8,15 +8,17 @@ using Ankh.RepositoryExplorer;
 namespace Ankh.Commands
 {
 	/// <summary>
-	/// Command for checking out a folder
+	/// Command to check out current folder in the Repository Explorer.
 	/// </summary>
-    [VSNetCommand("CheckoutFolder", Tooltip="Checkout this folder", 
-         Text = "Chec&kout Folder...", Bitmap = ResourceBitmaps.CheckoutDirectory ),
-    VSNetControl( "ReposExplorer", Position = 1 ) ]
-	public class CheckoutFolderCommand : 
-        CommandBase
-	{
-        #region ICommand Members
+    [VSNetCommand("CheckoutFolder",
+         Text = "Chec&kout Folder...",
+         Tooltip = "Checkout this folder.", 
+         Bitmap = ResourceBitmaps.CheckoutDirectory ),
+         VSNetControl( "ReposExplorer", Position = 1 )]
+	public class CheckoutFolderCommand : CommandBase
+    {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.RepositoryExplorer.SelectedNode != null &&
@@ -27,7 +29,6 @@ namespace Ankh.Commands
             else
                 return Disabled;
         }
-        #endregion
 
         public override void Execute(IContext context, string parameters)
         {
@@ -53,6 +54,8 @@ namespace Ankh.Commands
             {
                 context.EndOperation();
             }
-        }  
-	}
+        }
+
+        #endregion
+    }
 }

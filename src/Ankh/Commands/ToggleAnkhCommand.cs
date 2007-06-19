@@ -8,12 +8,15 @@ namespace Ankh.Commands
     /// <summary>
     /// Enables or disables Ankh for a solution.
     /// </summary>
-    [VSNetCommand("ToggleAnkh", Text="Enable Ankh for this solution", 
-         Tooltip= "Enable Ankh for this solution", 
-         Bitmap=ResourceBitmaps.ToggleAnkh ),
-    VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position=1 )]
+    [VSNetCommand("ToggleAnkh",
+         Text = "Enable AnkhSVN for this solution", 
+         Tooltip = "Enable Ankh for this solution.", 
+         Bitmap = ResourceBitmaps.ToggleAnkh ),
+         VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
     public class ToggleAnkhCommand : CommandBase
     {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // QueryStatus gets called when we set the Caption
@@ -42,7 +45,7 @@ namespace Ankh.Commands
                 {
                     // we want it to show "Enable" if we're not in a wc
                     this.SetToolTipAndCaption( context, cntl, 
-                        "Enable Ankh for this solution" );
+                        "Enable AnkhSVN for this solution" );
                     return Disabled;
                 }
 
@@ -50,7 +53,7 @@ namespace Ankh.Commands
                 if ( File.Exists( Path.Combine( solutionDir, "Ankh.Load" ) ) ) 
                 {
                     this.SetToolTipAndCaption( context, cntl, 
-                        "Disable Ankh for this solution" );
+                        "Disable AnkhSVN for this solution" );
                 }
                 else 
                 {
@@ -60,12 +63,12 @@ namespace Ankh.Commands
                         solutionDir))
                     {
                         this.SetToolTipAndCaption( context, cntl, 
-                            "Force Ankh to load for this solution" );
+                            "Force AnkhSVN to load for this solution" );
                     }
                     else
                     { 
                         this.SetToolTipAndCaption( context, cntl, 
-                            "Enable Ankh for this solution" );
+                            "Enable AnkhSVN for this solution" );
                     }
                 }               
 
@@ -99,14 +102,14 @@ namespace Ankh.Commands
             }
         }
 
+        #endregion
+
         private void SetToolTipAndCaption( IContext context, object ctrl, string text )
         {
             context.CommandBars.SetControlCaption( ctrl, text );
-            context.CommandBars.SetControlToolTip( ctrl, text );
+            context.CommandBars.SetControlToolTip( ctrl, text + ".");
         }
 
         private bool updating = false;
-
-
     }
 }

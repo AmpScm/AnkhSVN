@@ -14,14 +14,17 @@ using EnvDTE;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Commits an item. 
+    /// Command to commit selected items to the Subversion repository.
     /// </summary>
-    [VSNetCommand("CommitItem", Text = "&Commit...", Tooltip = "Commits an item",
+    [VSNetCommand("CommitItem",
+         Text = "&Commit...",
+         Tooltip = "Commit selected items to the Subversion repository.",
          Bitmap = ResourceBitmaps.Commit),
-   VSNetItemControl( "", Position = 1 )]
+         VSNetItemControl( "", Position = 1 )]
     public class CommitItemCommand : CommandBase
-    {	
+    {
         #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             if ( context.Selection.GetSelectionResources( true, 
@@ -30,6 +33,7 @@ namespace Ankh.Commands
             else
                 return Disabled;
         }
+
         public override void Execute(Ankh.IContext context, string parameters)
         {
             // make sure all files are saved
@@ -94,7 +98,8 @@ namespace Ankh.Commands
             // not in the finally, because we want to preserve the message for a 
             // non-successful commit
             this.storedLogMessage = null;
-        }        
+        }
+
         #endregion
 
         private void DoCommit( IContext context )
@@ -150,7 +155,6 @@ namespace Ankh.Commands
                 }                    
             }
             return uuid;
-
         }
 
         private string[] paths;
@@ -159,9 +163,5 @@ namespace Ankh.Commands
         private string storedLogMessage = null;
 
         private static readonly string DefaultUuid = Guid.NewGuid().ToString();
-        
     }
 }
-
-
-

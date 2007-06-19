@@ -7,13 +7,17 @@ using System.Windows.Forms;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// A command that lets you edit the AnkhSVN config file.
+    /// Command to show the AnkhSVN configuration dialog.
     /// </summary>
-    [VSNetCommand( "EditConfigFile", Tooltip = "Edit the AnkhSVN configuration",
-         Text = "Edit the AnkhSVN &configuration", Bitmap = ResourceBitmaps.EditConfigFile ),
-    VSNetControl( "Tools.AnkhSVN", Position = 1 )]
+    [VSNetCommand( "EditConfigFile",
+         Text = "&Configuration...",
+         Tooltip = "Configure AnkhSVN.",
+         Bitmap = ResourceBitmaps.EditConfigFile ),
+         VSNetControl( "Tools.AnkhSVN", Position = 6 )]
     public class EditConfigFileCommand : CommandBase
     {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus( IContext context )
         {
             return Enabled;
@@ -30,5 +34,7 @@ namespace Ankh.Commands
                 }
             }
         }
+
+        #endregion
     }
 }

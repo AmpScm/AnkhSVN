@@ -5,18 +5,18 @@ using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
-    
     /// <summary>
-    /// A command that allows you to temporarily change the name of 
-    /// Subversion's admin directory.
+    /// Command to temporarily change the Subversion administrative folder.
     /// </summary>
     [VSNetCommand("ChangeAdminDirName", 
-         Text="Tempor&arily change the Subversion admin directory...", 
-         Tooltip= "Temporarily change the name of the Subversion administrative directory", 
-         Bitmap=ResourceBitmaps.ChangeAdminDirName ),
-    VSNetControl( "Tools.AnkhSVN", Position=1 ),]
+         Text = "Tempor&arily Change Subversion Admin Folder...", 
+         Tooltip = "Temporarily change the Subversion administrative folder.", 
+         Bitmap = ResourceBitmaps.ChangeAdminDirName ),
+         VSNetControl( "Tools.AnkhSVN", Position = 8 )]
     public class ChangeAdminDirNameCommand : CommandBase
     {
+        #region Implementation of ICommand
+
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // we don't want to allow this while a solution is already open
@@ -33,8 +33,9 @@ namespace Ankh.Commands
                     return;
 
                 Client.AdminDirectoryName = dlg.AdminDirName;
-
             }
-        }       
+        }
+
+        #endregion
     }
 }
