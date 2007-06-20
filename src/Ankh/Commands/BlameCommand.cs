@@ -17,7 +17,7 @@ namespace Ankh.Commands
         Text = "&Blame...",
         Tooltip = "Identify which users to blame for which lines.",
         Bitmap = ResourceBitmaps.Blame),
-    VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 1)]
+    VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 10)]
 	public class BlameCommand : CommandBase
     {
         #region Implementation of ICommand

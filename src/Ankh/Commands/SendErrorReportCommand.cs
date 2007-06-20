@@ -6,10 +6,10 @@ namespace Ankh.Commands
     /// Command to send the AnkhSVN team comments and suggestions.
     /// </summary>
     [VSNetCommand("SendErrorReport",
-         Text = "Send Feedback", 
+         Text = "Send Feedback...", 
          Tooltip = "Send the AnkhSVN team comments and suggestions.",
          Bitmap = ResourceBitmaps.SendSuggest),
-         VSNetControl( "Tools.AnkhSVN", Position = 1 )]
+         VSNetControl( "Tools.AnkhSVN", Position = 7 )]
     public class SendErrorReportCommand : CommandBase
     {
         #region Implementation of ICommand

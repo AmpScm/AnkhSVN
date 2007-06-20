@@ -20,7 +20,7 @@ namespace Ankh.Commands
          Text = "&Commit...",
          Tooltip = "Commit selected items to the Subversion repository.",
          Bitmap = ResourceBitmaps.Commit),
-         VSNetItemControl( "", Position = 1 )]
+         VSNetItemControl( "", Position = 2 )]
     public class CommitItemCommand : CommandBase
     {
         #region Implementation of ICommand

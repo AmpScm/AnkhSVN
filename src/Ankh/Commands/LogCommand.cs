@@ -16,7 +16,7 @@ namespace Ankh.Commands
          Text = "&Log...",
          Tooltip = "Show the change log for the selected item.",
          Bitmap = ResourceBitmaps.Log),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 6 )]
 	public class LogCommand : CommandBase
     {
         #region Implementation of ICommand

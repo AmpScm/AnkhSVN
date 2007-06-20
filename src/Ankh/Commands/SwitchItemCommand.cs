@@ -15,7 +15,7 @@ namespace Ankh.Commands
          Text = "&Switch...", 
          Tooltip = "Switch this item to a different URL.", 
          Bitmap = ResourceBitmaps.Switch ),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 7 )]
     public class SwitchItemCommand : CommandBase
     {
         #region Implementation of ICommand

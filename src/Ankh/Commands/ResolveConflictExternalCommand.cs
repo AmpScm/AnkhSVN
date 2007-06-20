@@ -19,7 +19,7 @@ namespace Ankh.Commands
          Text = "Resolve Conflict E&xternal...",
          Bitmap = ResourceBitmaps.ResolveConflict, 
          Tooltip = "Resolve conflict between changes using external tool."),
-         VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 1)]
+         VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 6)]
     public class ResolveConflictExternalCommand : ResolveConflictCommand
     {
         #region Implementation of ICommand

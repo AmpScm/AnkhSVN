@@ -10,7 +10,7 @@ namespace Ankh.Commands
          Text = "U&nlock...",
          Tooltip = "Unlock the selected items.",
          Bitmap = ResourceBitmaps.Unlock),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )] 
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 8 )] 
 	public class UnlockCommand : CommandBase
     {
         #region Implementation of ICommand

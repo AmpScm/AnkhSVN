@@ -12,10 +12,10 @@ namespace Ankh.Commands
          Text = "Relo&cate...",
          Tooltip = "Relocate this file.", 
          Bitmap = ResourceBitmaps.Relocate),
-         VSNetFolderNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 1),
+         VSNetFolderNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 7),
          VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position = 1 ),
          VSNetControl("WorkingCopyExplorer." + VSNetControlAttribute.AnkhSubMenu, Position = 1),
-         VSNetProjectNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetProjectNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 7 )]
     public class RelocateCommand : CommandBase
     {
         #region Implementation of ICommand
