@@ -12,7 +12,7 @@ namespace Ankh.Commands
          Text="Cle&anup",
          Tooltip = "Cleanup the working copy.", 
          Bitmap = ResourceBitmaps.Cleanup ),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 11)]
     public class Cleanup : CommandBase
     {
         #region Implementation of ICommand

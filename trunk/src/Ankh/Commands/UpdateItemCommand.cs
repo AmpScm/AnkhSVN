@@ -18,7 +18,7 @@ namespace Ankh.Commands
          Text = "&Update...",
          Tooltip = "Updates local items with changes from the Subversion repository.",
          Bitmap = ResourceBitmaps.Update),
-         VSNetItemControl( "", Position = 1 )]
+         VSNetItemControl( "", Position = 3 )]
     public class UpdateItem : CommandBase
     {
         #region Implementation of ICommand

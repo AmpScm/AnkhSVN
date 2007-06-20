@@ -12,7 +12,7 @@ namespace Ankh.Commands
          Text = "Loc&k...",
          Tooltip = "Lock the selected item.",
          Bitmap = ResourceBitmaps.Lock),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 8 )]
     public class LockCommand : CommandBase
     {
         #region Implementation of ICommand

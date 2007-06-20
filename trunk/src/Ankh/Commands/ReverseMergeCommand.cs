@@ -15,7 +15,7 @@ namespace Ankh.Commands
          Text = "Re&vert to Revision...", 
          Tooltip = "Revert this item to a specific revision.", 
          Bitmap = ResourceBitmaps.RevertToVersion),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 4 )]
     public class ReverseMergeCommand : CommandBase
     {
         #region Implementation of ICommand

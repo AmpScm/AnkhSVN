@@ -12,7 +12,7 @@ namespace Ankh.Commands
          Text = "Create &Patch...", 
          Tooltip = "Create a patch file of changes.", 
          Bitmap = ResourceBitmaps.CreatePatch),
-         VSNetItemControl( "", Position = 1)]
+        VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 9)]
     public class CreatePatchCommand : LocalDiffCommandBase
     {
         #region Implementation of ICommand

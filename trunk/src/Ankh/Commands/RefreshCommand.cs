@@ -12,7 +12,7 @@ namespace Ankh.Commands
          Text = "Refres&h",
          Tooltip = "Refresh this view.", 
          Bitmap = ResourceBitmaps.Refresh),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 2 )]
     public class RefreshCommand : CommandBase
     {
         #region Implementation of ICommand

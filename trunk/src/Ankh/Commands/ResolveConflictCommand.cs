@@ -20,7 +20,7 @@ namespace Ankh.Commands
          Text = "Res&olve Conflict...",  
          Bitmap = ResourceBitmaps.ResolveConflict, 
          Tooltip = "Resolve conflict between changes."),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 6 )]
     public class ResolveConflictCommand : CommandBase
     {    
         /// <summary>

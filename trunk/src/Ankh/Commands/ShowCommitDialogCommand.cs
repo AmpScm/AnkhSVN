@@ -10,7 +10,7 @@ namespace Ankh.Commands
          Text = "Show Commit &Log Dialog", 
          Tooltip = "Show the commit log dialog.",
          Bitmap = ResourceBitmaps.ShowCommit),
-         VSNetControl( "Tools.AnkhSVN", Position = 1 )]
+         VSNetControl( "Tools.AnkhSVN", Position = 2 )]
     public class ShowCommitDialogCommand : CommandBase
     {
         #region Implementation of ICommand

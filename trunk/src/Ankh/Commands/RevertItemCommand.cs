@@ -17,7 +17,7 @@ namespace Ankh.Commands
          Text = "&Revert...",
          Tooltip = "Revert this item to last updated revision.",
          Bitmap = ResourceBitmaps.Revert),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 1 )]
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 4 )]
     public class RevertItemCommand : CommandBase
     {
         #region Implementation of ICommand
