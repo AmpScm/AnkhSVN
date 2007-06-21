@@ -54,7 +54,7 @@ namespace Ankh
             object bar = GetCommandBar( this.commandBar, context );
             if ( bar != null )
             {
-                object cntrl = context.CommandBars.AddControl(cmd.Command, bar, this.position);
+                object cntrl = context.CommandBars.AddControl(cmd.Command, bar, 1);
                 context.CommandBars.SetControlTag(cntrl, tag);
             }
             
@@ -135,7 +135,7 @@ namespace Ankh
                 if ( bar != null )
                 {
                     object cntrl = context.CommandBars.AddControl( cmd.Command, bar, 
-                        this.position );
+                        1 );
                     context.CommandBars.SetControlTag( cntrl, tag );
                 }
             }
