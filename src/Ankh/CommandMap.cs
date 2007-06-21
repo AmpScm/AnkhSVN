@@ -1,6 +1,7 @@
 // $Id$
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using EnvDTE;
 using System.Diagnostics;
@@ -19,7 +20,7 @@ namespace Ankh
         /// Private constructor to avoid instantiation.
         /// </summary>
         private  CommandMap()
-        {			
+        {
         }
 
         /// <summary>
@@ -30,7 +31,6 @@ namespace Ankh
             get{ return (ICommand)this.Dictionary[name]; }
         }
 
-
         /// <summary>
         /// Registers all commands present in this DLL.
         /// </summary>
@@ -40,44 +40,65 @@ namespace Ankh
             // change the culture, so we don't have to deal with localized names
             // for command bars
             CultureInfo currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
-            System.Threading.Thread.CurrentThread.CurrentCulture = 
-                new CultureInfo( "en-US", false );
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo( "en-US", false );
             try
             {
                 CreatePopups( context );
                 CreateAnkhSubMenu( context );
 
-                CommandMap commands = new CommandMap();
-
-                // find all the ICommand subclasses in all modules
-                foreach( Module module in 
-                    typeof( CommandMap ).Assembly.GetModules( false ) )
-                {
-                    foreach( Type type in module.FindTypes( 
-                        new TypeFilter( CommandMap.CommandTypeFilter ), null ) )
-                    {  
-                        // is this a VS.NET command?
-                        VSNetCommandAttribute[] vsattrs = (VSNetCommandAttribute[])(
-                            type.GetCustomAttributes(typeof(VSNetCommandAttribute), false) );
-                        if ( vsattrs.Length > 0 )
-                        {
-                            // put it in the dict
-                            ICommand cmd = (ICommand)Activator.CreateInstance( type );
-                            commands.Dictionary[ context.AddIn.ProgID + "." + vsattrs[0].Name ] = cmd;
-
-                            // do we want to register it?
-                            if ( register )
-                                RegisterVSNetCommand( vsattrs[0], cmd,  context );
-                        }
-                    }
-                }
-
-                return commands; 
+                return AddCommands(context, register); 
             }
             finally
             {
                 // restore the old culture
                 System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            }
+        }
+
+        private static CommandMap AddCommands(IContext context, bool register)
+        {
+            CommandMap commandMap = new CommandMap();
+            List<CommandControl> commandControlList = new List<CommandControl>();
+
+            foreach (Module module in typeof(CommandMap).Assembly.GetModules(false)) {
+                foreach (Type type in module.FindTypes(new TypeFilter(CommandMap.CommandTypeFilter), null)) {
+                    VSNetCommandAttribute[] vsattrs =
+                        (VSNetCommandAttribute[])(type.GetCustomAttributes(typeof(VSNetCommandAttribute), false));
+                    if (vsattrs.Length > 0) {
+                        ICommand cmd = (ICommand)Activator.CreateInstance(type);
+                        commandMap.Dictionary[context.AddIn.ProgID + "." + vsattrs[0].Name] = cmd;
+
+                        if (register) {
+                            RegisterVSNetCommand(vsattrs[0], cmd, context);
+                            foreach( VSNetControlAttribute control in cmd.GetType().GetCustomAttributes( 
+                                typeof(VSNetControlAttribute), false) )
+                            {
+                                commandControlList.Add(new CommandControl(cmd, control));
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (register) {
+                commandControlList.Sort(delegate(CommandControl a, CommandControl b)
+                    { return b.Control.Position.CompareTo(a.Control.Position); });
+                foreach (CommandControl commandControl in commandControlList)
+                    RegisterControl(commandControl.Command, commandControl.Control, context);
+            }
+
+            return commandMap;
+        }
+
+        private class CommandControl
+        {
+            public ICommand Command;
+            public VSNetControlAttribute Control;
+
+            public CommandControl(ICommand command, VSNetControlAttribute control)
+            {
+                Command = command;
+                Control = control;
             }
         }
 
@@ -144,8 +165,6 @@ namespace Ankh
         {
             cmd.Command = context.CommandBars.AddNamedCommand(
                 attr.Name, attr.Text, attr.Tooltip, attr.Bitmap, 0 );
-
-            RegisterControl( cmd, context );     
         }
 
         /// <summary>
@@ -153,19 +172,14 @@ namespace Ankh
         /// </summary>
         /// <param name="command">The ICommand to attach the command bar to.</param>
         /// <param name="type">The type that handles the command.</param>
-        private static void RegisterControl( ICommand cmd, IContext context )
+        private static void RegisterControl( ICommand cmd, VSNetControlAttribute control, IContext context )
         {
-            // register the command bars
-            foreach( VSNetControlAttribute control in cmd.GetType().GetCustomAttributes( 
-                typeof(VSNetControlAttribute), false) ) 
-            {
-                // get the actual name of the command
-                string name = ((VSNetCommandAttribute)cmd.GetType().GetCustomAttributes(
-                    typeof(VSNetCommandAttribute), false )[0]).Name;
+            // get the actual name of the command
+            string name = ((VSNetCommandAttribute)cmd.GetType().GetCustomAttributes(
+                typeof(VSNetCommandAttribute), false )[0]).Name;
 
-                control.AddControl( cmd, context, control.CommandBar + "." + name );
-            }
-        }        
+            control.AddControl( cmd, context, control.CommandBar + "." + name );
+        }
 
         private static void CreatePopups( IContext context )
         {
