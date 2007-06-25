@@ -445,6 +445,21 @@ namespace Ankh.Tests
             }
 
             #endregion
+
+            #region ISolutionExplorer Members
+
+
+            public void RemoveProject( Project project )
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            public void SetUpDelayedProjectRefresh( Ankh.Solution.IRefreshableProject project )
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            #endregion
         }
 
 
@@ -584,6 +599,36 @@ namespace Ankh.Tests
             }
 
             #endregion
+
+            #region IUIShell Members
+
+
+            public Ankh.UI.WorkingCopyExplorerControl WorkingCopyExplorer
+            {
+                get { throw new Exception( "The method or operation is not implemented." ); }
+            }
+
+            public bool WorkingCopyExplorerHasFocus()
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            public bool SolutionExplorerHasFocus()
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            public string ShowAddWorkingCopyExplorerRootDialog()
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            public void ShowWorkingCopyExplorer( bool p )
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            #endregion
         }
 
 
@@ -624,6 +669,21 @@ namespace Ankh.Tests
         bool IContext.EnableAnkhForLoadedSolution()
         {
             throw new Exception( "The method or operation is not implemented." );
+        }
+
+        #endregion
+
+        #region IContext Members
+
+
+        public IWorkingCopyExplorer WorkingCopyExplorer
+        {
+            get { throw new Exception( "The method or operation is not implemented." ); }
+        }
+
+        public ISelectionContainer Selection
+        {
+            get { throw new Exception( "The method or operation is not implemented." ); }
         }
 
         #endregion

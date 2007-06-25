@@ -176,31 +176,6 @@ namespace Ankh.Tests
         }
 
 
-        [Test]
-        public void TestRefreshProjectItem()
-        {
-            Explorer expl = this.LoadExplorer();
-
-            this.UIHierarchy.UIHierarchyItems.Item(1).UIHierarchyItems.Item(1).
-                UIHierarchyItems.Item(6).Select( vsUISelectionType.vsUISelectionTypeSelect );
-
-            using( StreamWriter writer = new StreamWriter( 
-                       Path.Combine(this.WcPath, "Class3.cs") ) )
-                writer.WriteLine( "Foo" );
-            IList list = expl.GetSelectionResources( true, this.Modified );
-            Assert.AreEqual( 0, list.Count );
-
-            ProjectItem item = 
-                this.Dte.Solution.Projects.Item(1).ProjectItems.Item( "Class3.cs" );
-            expl.Refresh( item );
-
-            list = expl.GetSelectionResources( true, this.Modified );
-            Assert.AreEqual( 1, list.Count );
-            Assert.IsTrue( this.FindPathComponent( "Class3.cs", list ) );
-                
-        }
-
-
         /// <summary>
         /// Test the SyncAll method.
         /// </summary>
@@ -223,45 +198,6 @@ namespace Ankh.Tests
             list = expl.GetAllResources( this.Modified );
             Assert.AreEqual( 1, list.Count );
             Assert.IsTrue( this.FindPathComponent( "Class3.cs", list ) );
-        }
-
-        [Test]
-        public void TestGetItemResources()
-        {
-            Explorer expl = this.LoadExplorer();
-
-            ProjectItem item = this.Dte.Solution.Projects.Item(1).ProjectItems.Item( "Form1.cs" );
-            IList list = expl.GetItemResources( item, false );
-
-            Assert.AreEqual( 2, list.Count );
-            Assert.IsTrue( this.FindPathComponent( "Form1.cs", list ));
-            Assert.IsTrue( this.FindPathComponent( "Form1.resx", list ));
-        }
-
-
-        /// <summary>
-        /// Tests the GetSelectedProjectItem method.
-        /// </summary>
-        [Test]
-        public void TestGetSelectedProjectItem()
-        {
-            Explorer expl = this.LoadExplorer();
-
-            // no project item selected
-            this.UIHierarchy.UIHierarchyItems.Item(1).Select(
-                vsUISelectionType.vsUISelectionTypeSelect);
-            ProjectItem prjItem = expl.GetSelectedProjectItem();
-            Assert.IsNull( prjItem );
-
-            // select one
-            this.UIHierarchy.UIHierarchyItems.Item(1).
-                UIHierarchyItems.Item(1).UIHierarchyItems.Item(2).Select(
-                vsUISelectionType.vsUISelectionTypeSelect);
-            prjItem = expl.GetSelectedProjectItem();
-            
-            ProjectItem prjItem2 = this.Dte.Solution.Projects.Item(1).ProjectItems.Item( 
-                "App.ico" );
-            Assert.AreEqual( prjItem.Name, prjItem2.Name );
         }
 
         #region private stuff
