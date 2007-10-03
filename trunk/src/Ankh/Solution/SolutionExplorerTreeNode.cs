@@ -63,9 +63,18 @@ namespace Ankh.Solution
 
                 object projectItemObject = DteUtils.GetProjectItemObject( projectItem );
 
-                if ( projectItem.Kind == DteUtils.EnterpriseTemplateProjectItemKind && 
-                    parent.uiItem.Object is Project &&
-                    ((Project)parent.uiItem.Object).Kind == DteUtils.EnterpriseTemplateProjectKind )
+
+                string projectItemKind = string.Empty;
+                try 
+                { 
+                    projectItemKind = projectItem.Kind; 
+                }
+                catch 
+                { 
+                }
+                if ( DteUtils.GetProjectItemKind(projectItem) == DteUtils.EnterpriseTemplateProjectItemKind &&
+                   parent.uiItem.Object is Project &&
+                   ( (Project)parent.uiItem.Object ).Kind == DteUtils.EnterpriseTemplateProjectKind )
                 {
                     return new ProjectNode( item, hItem, explorer, parent, projectItem.SubProject );
                 }

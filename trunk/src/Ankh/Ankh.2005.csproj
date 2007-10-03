@@ -182,8 +182,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="Office">
-      <Name>office</Name>
+    <Reference Include="office, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\office.dll</HintPath>
     </Reference>
     <Reference Include="stdole">
       <Name>stdole</Name>
