@@ -32,6 +32,21 @@ namespace Ankh
             }
         }
 
+        public static string GetProjectItemKind( ProjectItem projectItem )
+        {
+            string kind = String.Empty;
+            try
+            {
+                kind = projectItem.Kind;
+            }
+            catch ( Exception )
+            {
+                // nothing
+            }
+
+            return kind;
+        }
+
         public const string SolutionItemsKind = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
         public const string MiscItemsKind = "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}";
         public const string WebProjects2005Kind = "{E24C65DC-7377-472b-9ABA-BC803B73C61A}";
@@ -40,6 +55,8 @@ namespace Ankh
         public const string SolutionFolderKind = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
 
 
-       
+
+
+        
     }
 }
