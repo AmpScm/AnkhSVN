@@ -292,8 +292,17 @@ namespace Ankh.Solution
                     // and the next child
                     childItem = this.explorer.TreeView.GetNextSibling( childItem );               
                 }
-                
+
                 this.uiItem.UIHierarchyItems.Expanded = isExpanded;
+                
+                // TO workaround VS bug...
+                if ( this.uiItem.UIHierarchyItems.Expanded != isExpanded )
+                {
+                    UIHierarchyItem originalSelection = (UIHierarchyItem)( (Object[])this.explorer.UIHierarchy.SelectedItems )[ 0 ];
+                    this.uiItem.Select( vsUISelectionType.vsUISelectionTypeSelect );
+                    this.explorer.UIHierarchy.DoDefaultAction();
+                    originalSelection.Select( vsUISelectionType.vsUISelectionTypeSelect );
+                }
             }
             catch( ArgumentException )
             {
