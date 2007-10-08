@@ -347,7 +347,7 @@ namespace Ankh.Solution
             get{ return this.dte; }
         }
 
-        private UIHierarchy UIHierarchy
+        internal UIHierarchy UIHierarchy
         {
             get
             {
@@ -511,7 +511,7 @@ namespace Ankh.Solution
         [Conditional( "DEBUG" )]
         private void CountResources()
         {
-            this.CountUIHierarchy();
+            //this.CountUIHierarchy();
             Debug.WriteLine( "Number of nodes in nodes hash: " + this.nodes.Count );
         }
 
