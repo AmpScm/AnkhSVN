@@ -1,0 +1,17 @@
+﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+		<ComponentGroup Id="CG_Ankh.UI">
+			<ComponentRef Id="C_Ankh.UI.dll"/>
+		</ComponentGroup>
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="C_Ankh.UI.dll" DiskId="1" Guid="BE3BF683-9D60-444a-923F-3A2891F628B7">
+        <File Id="CF_Ankh.UI.dll" Name="Ankh.UI.dll"
+            Checksum="yes" Vital="yes" KeyPath="yes"
+            Source="$(var.builddir)\Ankh.UI.dll" />
+        <File Id="CF_Ankh.UI.pdb" Name="Ankh.UI.pdb"
+            Checksum="yes" Vital="yes"
+            Source="$(var.builddir)\Ankh.UI.pdb" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
