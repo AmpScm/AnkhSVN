@@ -8,6 +8,7 @@ using EnvDTE;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Solution
 {
@@ -16,14 +17,12 @@ namespace Ankh.Solution
     /// </summary>
     public class ProjectItemNode : SolutionExplorerTreeNode
     {
-        public ProjectItemNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
+        public ProjectItemNode( ProjectItem projectItem, uint itemID, Explorer explorer,
             SolutionExplorerTreeNode parent, ParsedSolutionItem parsedItem ) :
-            base( item, hItem, explorer, parent )
+            base( itemID, explorer, parent )
         {
-            this.projectItem = item.Object;
+            this.projectItem = projectItem;
             this.parsedProjectItem=parsedItem;
-                
-            this.FindChildren();  
             
             this.FindResources();                      
         }
@@ -311,6 +310,11 @@ namespace Ankh.Solution
         private IList resources;
         private IList deletedResources;
 
+
+        public override IVsHierarchy Hierarchy
+        {
+            get { return this.SolutionExplorerParent.Hierarchy; }
+        }
     }    
 
 }

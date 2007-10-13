@@ -46,13 +46,13 @@ namespace Ankh.Solution
         /// </summary>
         public void Load()
         {           
-            this.Unload();
-            this.context.ProjectFileWatcher.AddFile( this.DTE.Solution.FullName );
+            //this.Unload();
+            //this.context.ProjectFileWatcher.AddFile( this.DTE.Solution.FullName );
             this.SetUpTreeview();
-            this.SyncAll();
+            //this.SyncAll();
 
-            Trace.WriteLine( String.Format( "Cache hit rate: {0}%", 
-                this.context.StatusCache.CacheHitSuccess ), "Ankh" );
+            //Trace.WriteLine( String.Format( "Cache hit rate: {0}%", 
+            //    this.context.StatusCache.CacheHitSuccess ), "Ankh" );
         }
 
         /// <summary>

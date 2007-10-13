@@ -6,16 +6,18 @@ using EnvDTE;
 using System.IO;
 using System.Collections;
 using System.Diagnostics;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Solution
 {
     public class ProjectNode : SolutionExplorerTreeNode
     {
-        public ProjectNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer,
-            SolutionExplorerTreeNode parent, Project project ) : 
-            base( item, hItem, explorer, parent )
+        public ProjectNode( uint itemID, Explorer explorer,
+            SolutionExplorerTreeNode parent, Project project, IVsHierarchy hierarchy ) : 
+            base( itemID, explorer, parent )
         {
             this.project = project;
+            this.hierarchy = hierarchy;
             this.modeled=true;
 
             this.FindProjectResources(explorer);
@@ -191,6 +193,12 @@ namespace Ankh.Solution
             get { return this.deletedResources; }
         }
 
+        public override IVsHierarchy Hierarchy
+        {
+            get { return this.hierarchy; }
+        }
+
+        private IVsHierarchy hierarchy;
         private bool modeled;
         private SvnItem projectFolder;
         private SvnItem projectFile;
@@ -199,6 +207,8 @@ namespace Ankh.Solution
 
         private const string VDPROJKIND = @"{54435603-DBB4-11D2-8724-00A0C9A8B90C}";
 
+
+       
     }  
 
 }

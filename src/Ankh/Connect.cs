@@ -13,6 +13,7 @@ namespace Ankh
     using System.IO;
 
     using Ankh.Commands;
+    using Microsoft.VisualStudio.Shell.Interop;
 
     #region Read me for Add-in installation and setup information.
     // When run, the Add-in wizard prepared the registry for the Add-in.
@@ -90,6 +91,7 @@ namespace Ankh
                     new UIShell() );
                 Extenders.ExtenderProvider.Register( this.context );
 
+                this.RegisterSccProvider();
 #if ALWAYSREGISTER
                 bool register = true;
 #else
@@ -118,6 +120,41 @@ namespace Ankh
                     "(Press Ctrl-C to copy this message to the clipboard)" );
                 throw;
             }
+        }
+
+        private void RegisterSccProvider()
+        {
+            Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = this.context.ServiceProvider;
+            Guid guidUnknown = typeof(stdole.IUnknown).GUID;
+            Guid interfaceGuid = typeof( IVsRegisterScciProvider ).GUID;
+
+            IntPtr ptr;
+            int hr = sp.QueryService( ref interfaceGuid, ref guidUnknown, out ptr ); 
+            Marshal.ThrowExceptionForHR( hr );
+
+            IVsRegisterScciProvider registrator = (IVsRegisterScciProvider)Marshal.GetObjectForIUnknown( ptr );
+
+            interfaceGuid = typeof( IProfferService ).GUID;
+            Guid serviceGuid = typeof( SProfferService ).GUID;
+
+            hr = sp.QueryService( ref serviceGuid, ref interfaceGuid, out ptr );
+            Marshal.ThrowExceptionForHR( hr );
+
+            ScciProvider provider = new ScciProvider();
+
+            IProfferService profferService = (IProfferService)
+                Marshal.GetObjectForIUnknown( ptr );
+
+            uint cookie;
+            Guid providerGuid = typeof( ScciProvider ).GUID;
+
+            hr = profferService.ProfferService( ref providerGuid, provider, out cookie );
+            Marshal.ThrowExceptionForHR( hr );
+
+            hr = registrator.RegisterSourceControlProvider(typeof(ScciProvider).GUID);
+            Marshal.ThrowExceptionForHR( hr );
+
+            Console.WriteLine(registrator);
         }
 
         /// <summary>
