@@ -9,6 +9,7 @@ using System.ComponentModel;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using Ankh.Solution;
 
 namespace Ankh.EventSinks
 {
@@ -31,11 +32,11 @@ namespace Ankh.EventSinks
         private void AdviseSolutionEvents()
         {
             IServiceProvider sp = this.Context.ServiceProvider;
-            Guid serviceGuid = typeof(SVsSolution).GUID;
-            Guid interfaceGuid = typeof(IVsSolution).GUID;
+            Guid serviceGuid = typeof( SVsSolution ).GUID;
+            Guid interfaceGuid = typeof( IVsSolution ).GUID;
 
             IntPtr ptr;
-            Marshal.ThrowExceptionForHR(sp.QueryService( ref serviceGuid, ref interfaceGuid, out ptr ));
+            Marshal.ThrowExceptionForHR( sp.QueryService( ref serviceGuid, ref interfaceGuid, out ptr ) );
             this.solution = (IVsSolution)Marshal.GetObjectForIUnknown( ptr );
             Marshal.ThrowExceptionForHR( this.solution.AdviseSolutionEvents( this, out this.cookie ) );
         }
@@ -60,7 +61,7 @@ namespace Ankh.EventSinks
             try
             {
                 // this won't be true until the solution is finally loaded
-                if ( this.Context.AnkhLoadedForSolution )
+                if ( true )
                 {
                     this.hierarchyEvents.AddHierarchy( pHierarchy );
 
@@ -80,15 +81,18 @@ namespace Ankh.EventSinks
 
                     if ( newProject != null )
                     {
-                        if ( shouldAdd )
+                        if ( shouldAdd == shouldAdd )
                         {
-                            newProject.AddProjectToSvn();
+                            AddHierarchy( pHierarchy );
 
                             // make sure we have an updated status for the items in that directory, otherwise they'll be seen as unversionable
-                            this.Context.StatusCache.Status( newProject.ProjectDirectory );
+                            if ( newProject.ProjectDirectory != null )
+                            {
+                                this.Context.StatusCache.Status( newProject.ProjectDirectory ); 
+                            }
                         }
                     }
-                    this.Context.SolutionExplorer.SyncAll();
+                    //this.Context.SolutionExplorer.SyncAll();
                 }
             }
             catch ( Exception ex )
@@ -97,6 +101,15 @@ namespace Ankh.EventSinks
             }
 
             return VSConstants.S_OK;
+        }
+
+        private void AddHierarchy( IVsHierarchy pHierarchy )
+        {
+            HierarchyWalker walker = new HierarchyWalker( pHierarchy );
+            ProjectHierarchyVisitor visitor = new ProjectHierarchyVisitor( this.Context );
+            walker.Walk( visitor );
+
+            visitor.Refresh();
         }
 
         int IVsSolutionEvents.OnQueryCloseProject( IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel )
@@ -163,11 +176,11 @@ namespace Ankh.EventSinks
                 this.Context.ErrorHandler.Handle( ex );
                 return VSConstants.E_FAIL;
             }
-            
+
             return VSConstants.S_OK;
         }
 
-       
+
 
         int IVsSolutionEvents.OnQueryCloseSolution( object pUnkReserved, ref int pfCancel )
         {
@@ -178,7 +191,7 @@ namespace Ankh.EventSinks
         int IVsSolutionEvents.OnBeforeCloseSolution( object pUnkReserved )
         {
             Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnBeforeCloseSolution() of {0}", this.ToString() ) );
-            
+
             return VSConstants.S_OK;
         }
 
@@ -202,7 +215,7 @@ namespace Ankh.EventSinks
             return VSConstants.S_OK;
         }
 
-       
+
 
         #endregion
 
@@ -237,6 +250,6 @@ namespace Ankh.EventSinks
         private IVsSolution solution;
         private IList eventSinks;
 
-        
+
     }
 }

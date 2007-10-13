@@ -363,9 +363,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DiffView.resx">
       <DependentUpon>DiffView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="EolStylePropertyEditor.resx">
       <DependentUpon>EolStylePropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ErrorDialog.resx">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
@@ -373,6 +375,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExecutablePropertyEditor.resx">
       <DependentUpon>ExecutablePropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ExportDialog.resx">
       <DependentUpon>ExportDialog.cs</DependentUpon>
@@ -380,12 +383,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExternalsPropertyEditor.resx">
       <DependentUpon>ExternalsPropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="IgnorePropertyEditor.resx">
       <DependentUpon>IgnorePropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="KeywordsPropertyEditor.resx">
       <DependentUpon>KeywordsPropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LockDialog.resx">
       <DependentUpon>LockDialog.cs</DependentUpon>
@@ -405,6 +411,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MimeTypePropertyEditor.resx">
       <DependentUpon>MimeTypePropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="NewDirectoryDialog.resx">
       <DependentUpon>NewDirectoryDialog.cs</DependentUpon>
@@ -412,15 +419,19 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelectionTreeView.resx">
       <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelector.resx">
       <DependentUpon>PathSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PathTreeView.resx">
       <DependentUpon>PathTreeView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PlainPropertyEditor.resx">
       <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressDialog.resx">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
@@ -428,6 +439,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PropertyEditorDialog.resx">
       <DependentUpon>PropertyEditorDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RelocateDialog.resx">
       <DependentUpon>RelocateDialog.cs</DependentUpon>
@@ -443,6 +455,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RepositoryTreeView.resx">
       <DependentUpon>RepositoryTreeView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ReverseMergeDialog.resx">
       <DependentUpon>ReverseMergeDialog.cs</DependentUpon>
@@ -450,6 +463,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RevisionPicker.resx">
       <DependentUpon>RevisionPicker.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SslServerTrustDialog.resx">
       <DependentUpon>SslServerTrustDialog.cs</DependentUpon>
@@ -461,6 +475,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TestRepositoryExplorer.resx">
       <DependentUpon>TestRepositoryExplorer.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UpdateDialog.resx">
       <DependentUpon>UpdateDialog.cs</DependentUpon>

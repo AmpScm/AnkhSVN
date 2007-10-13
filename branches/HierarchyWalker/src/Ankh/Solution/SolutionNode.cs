@@ -6,6 +6,7 @@ using EnvDTE;
 using NSvn.Core;
 using System.Collections;
 using System.Diagnostics;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Solution
 {
@@ -14,8 +15,8 @@ namespace Ankh.Solution
     /// </summary>
     public class SolutionNode : SolutionExplorerTreeNode
     {
-        public SolutionNode( UIHierarchyItem item, IntPtr hItem, Explorer explorer )
-            : base( item, hItem, explorer, null )
+        public SolutionNode( uint itemID, Explorer explorer )
+            : base( itemID, explorer, null )
         {
             EnvDTE.Solution solution = this.Explorer.DTE.Solution;
             this.solutionFile = this.Explorer.Context.StatusCache[solution.FullName];
@@ -117,9 +118,16 @@ namespace Ankh.Solution
             get { return this.deletedResources; }
         }
 
+        public override IVsHierarchy Hierarchy
+        {
+            get { throw new Exception( "The method or operation is not implemented." ); }
+        }
+
 		private ParsedSolution parser;
         private SvnItem solutionFile;
         private SvnItem solutionFolder;
         private ArrayList deletedResources;
+
+        
     }
 }

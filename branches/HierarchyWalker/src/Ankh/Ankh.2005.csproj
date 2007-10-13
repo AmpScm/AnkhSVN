@@ -182,6 +182,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="office, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\office.dll</HintPath>
@@ -411,11 +412,16 @@
     <Compile Include="EventSinks\ProjectFilesEventSink.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EventSinks\ProjectHierarchyVisitor.cs" />
     <Compile Include="EventSinks\SolutionEventsSink.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
     <Compile Include="IWorkingCopyExplorer.cs" />
+    <Compile Include="ScciProvider.cs" />
+    <Compile Include="Solution\HierarchyItem.cs" />
+    <Compile Include="Solution\HierarchyWalker.cs" />
+    <Compile Include="Solution\IHierarchyVisitor.cs" />
     <Compile Include="Solution\IRefreshableProject.cs" />
     <Compile Include="StatusImages.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />

@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
+using Microsoft.VisualStudio.Shell.Interop;
 
 
 namespace Ankh.Solution
 {
     public sealed class SolutionFolderNode : SolutionExplorerTreeNode
     {
-        public SolutionFolderNode(EnvDTE.UIHierarchyItem item, IntPtr hItem, Explorer explorer, SolutionExplorerTreeNode parent, EnvDTE.Project project)
-            : base(item, hItem, explorer, parent)
+        public SolutionFolderNode(uint itemID, Explorer explorer, SolutionExplorerTreeNode parent, EnvDTE.Project project)
+            : base(itemID, explorer, parent)
         {
             this.FindChildren();
         }
@@ -53,5 +54,10 @@ namespace Ankh.Solution
             // nothing
         }
 
+
+        public override IVsHierarchy Hierarchy
+        {
+            get { throw new Exception( "The method or operation is not implemented." ); }
+        }
     }
 }

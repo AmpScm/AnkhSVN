@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 
 using C = Utils.Win32.Constants;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Solution
 {
@@ -21,11 +22,10 @@ namespace Ankh.Solution
     {
 
 
-        protected SolutionExplorerTreeNode( UIHierarchyItem item, IntPtr hItem, 
+        protected SolutionExplorerTreeNode( uint itemID, 
             Explorer explorer, SolutionExplorerTreeNode parent ) : base(parent)
-        {     
-            this.uiItem = item;
-            this.hItem = hItem;
+        {
+            this.itemID = itemID;
             this.explorer = explorer;
         }
 
@@ -46,103 +46,11 @@ namespace Ankh.Solution
             [System.Diagnostics.DebuggerStepThrough]
             get { return this.SolutionExplorerParent != null ? this.SolutionExplorerParent.Solution : null; }
         }
-        
-        public static SolutionExplorerTreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
-            Explorer explorer, SolutionExplorerTreeNode parent )
-        {
-            Project project = item.Object as Project;
-            // what kind of node is this?
-            if ( project != null )
-            {
-                return GetTreeNodeForProject( item, hItem, explorer, parent, project );
-            }
-            else if ( item.Object is ProjectItem )
-            {
-                ProjectItem projectItem = item.Object as ProjectItem;
-                // Check if we have a subproject inside an Enterprise Template project
-
-                object projectItemObject = DteUtils.GetProjectItemObject( projectItem );
-
-
-                string projectItemKind = string.Empty;
-                try 
-                { 
-                    projectItemKind = projectItem.Kind; 
-                }
-                catch 
-                { 
-                }
-                if ( DteUtils.GetProjectItemKind(projectItem) == DteUtils.EnterpriseTemplateProjectItemKind &&
-                   parent.uiItem.Object is Project &&
-                   ( (Project)parent.uiItem.Object ).Kind == DteUtils.EnterpriseTemplateProjectKind )
-                {
-                    return new ProjectNode( item, hItem, explorer, parent, projectItem.SubProject );
-                }
-                else if ( projectItemObject is Project )
-                {
-                    return GetTreeNodeForProject( item, hItem, explorer, parent, projectItemObject as Project );
-                }
-                else  //normal project item
-                {
-                    return new ProjectItemNode(item, hItem, explorer, parent, null);
-                }
-            }
-            else if ( parent is SolutionNode ) //deal with unmodeled projects (database)
-            {
-                foreach(Project p in Enumerators.EnumerateProjects(explorer.DTE))
-                {
-                    if(p.Name==item.Name)
-                    {
-                        return new ProjectNode( item, hItem, explorer, parent, p );
-                    }
-                }
-            }
-            else if ( parent is ProjectNode && !((ProjectNode)parent).Modeled ) //deal with items in unmodeled projects
-            {
-                ProjectNode projectNode=(ProjectNode)parent;
-                ParsedSolutionItem parsedItem=((SolutionNode)projectNode.Parent).Parser.GetProjectItem(projectNode.Name, item.Name);
-                return new ProjectItemNode( item, hItem, explorer, parent, parsedItem );  
-            }
-            else if ( parent is ProjectItemNode ) //deal with sub items in unmodeled projects
-            {
-                ProjectItemNode parentNode=(ProjectItemNode)parent;
-                if ( parentNode.ParsedItem != null )
-                {
-                    ParsedSolutionItem parsedItem = parentNode.ParsedItem.GetChild( item.Name );
-                    return new ProjectItemNode( item, hItem, explorer, parent, parsedItem );
-                }
-            }
-
-            return null;
-        }
-
-        private static SolutionExplorerTreeNode GetTreeNodeForProject( UIHierarchyItem item, IntPtr hItem, Explorer explorer, SolutionExplorerTreeNode parent, Project project )
-        {
-            switch ( project.Kind )
-            {
-                case DteUtils.SolutionItemsKind:
-                    return new SolutionFolderNode( item, hItem, explorer, parent, project );
-                default:
-                    return new ProjectNode( item, hItem, explorer, parent, project );
-            }
-        }
 
         public static SolutionExplorerTreeNode CreateSolutionNode( UIHierarchyItem item, 
             Explorer explorer )
         {
-            if ( explorer.DTE.Solution.FullName != string.Empty )
-            {
-                Debug.WriteLine( "Creating solution node " + item.Name, "Ankh" );
-                SolutionExplorerTreeNode node = new SolutionNode( item, explorer.TreeView.GetRoot(), 
-                    explorer );
-                node.Refresh( false );
-                return node;
-            }
-            else
-            {
-                Debug.WriteLine( "No solution found", "Ankh" );
-                return null;
-            }
+            return null;
         }
 
        
@@ -167,7 +75,9 @@ namespace Ankh.Solution
                 this.CurrentStatus = MergeStatuses( this.ThisNodeStatus(), 
                     this.CheckChildStatuses() );
 
-                this.SetStatusImage( this.CurrentStatus );
+                this.SetStatusImage( this.Hierarchy, this.CurrentStatus );
+
+                RefreshChildren();
 
             }
             catch( SvnException )
@@ -178,6 +88,19 @@ namespace Ankh.Solution
                 else
                     throw;
             }
+        }
+
+        private void RefreshChildren()
+        {
+            foreach ( SolutionExplorerTreeNode node in this.Children )
+            {
+                node.Refresh( false );
+            }
+        }
+
+        public void AddChild( SolutionExplorerTreeNode node )
+        {
+            this.Children.Add( node );
         }
 
         
@@ -194,6 +117,11 @@ namespace Ankh.Solution
         /// A list of deleted resources belonging to this node.
         /// </summary>
         abstract protected IList DeletedItems
+        {
+            get;
+        }
+
+        abstract public IVsHierarchy Hierarchy
         {
             get;
         }
@@ -228,7 +156,7 @@ namespace Ankh.Solution
         /// Sets the status image on this node.
         /// </summary>
         /// <param name="status">The status on this node.</param>
-        protected void SetStatusImage( NodeStatus status )
+        protected void SetStatusImage( IVsHierarchy hierarchy, NodeStatus status )
         {
             int statusImage = 0;
             int overlay = 0;
@@ -241,7 +169,17 @@ namespace Ankh.Solution
             else if ( status.Locked )
                overlay = Explorer.LockOverlay;
 
-            this.explorer.TreeView.SetStateAndOverlayImage( this.hItem, overlay, statusImage );                
+
+           try
+           {
+               Marshal.ThrowExceptionForHR(
+                     hierarchy.SetProperty( this.itemID, (int)__VSHPROPID.VSHPROPID_StateIconIndex, statusImage ) );
+           }
+           catch ( Exception )
+           {
+               Console.WriteLine("HI");
+           }
+            //this.explorer.TreeView.SetStateAndOverlayImage( this.hItem, overlay, statusImage );                
         }
 
         
@@ -251,70 +189,7 @@ namespace Ankh.Solution
         /// </summary>
         protected void FindChildren()
         {
-            try
-            {
-                this.Children.Clear();
 
-                // retain the original expansion state
-                bool isExpanded = this.uiItem.UIHierarchyItems.Expanded;
-
-                // get the treeview child
-                IntPtr childItem = this.explorer.TreeView.GetChild( this.hItem );
-
-                //// a node needs to be expanded at least once in order to have child nodes
-                if ( childItem == IntPtr.Zero && this.uiItem.UIHierarchyItems.Count > 0 )
-                {
-                    this.uiItem.UIHierarchyItems.Expanded = true;
-                    childItem = this.explorer.TreeView.GetChild( this.hItem );
-                }
-                
-                // iterate over the ui items and the treeview items in parallell
-                foreach( UIHierarchyItem child in this.uiItem.UIHierarchyItems )
-                {
-                    Debug.Assert( childItem != IntPtr.Zero, 
-                        "Could not get treeview item" );
-
-                    if ( child.Name != Client.AdminDirectoryName )
-                    {                    
-                        SolutionExplorerTreeNode childNode = SolutionExplorerTreeNode.CreateNode( child, childItem, this.explorer,
-                            this );
-                        if (childNode != null )
-                        {
-                            childNode.Changed += new EventHandler(this.ChildOrResourceChanged);
-                            this.Children.Add( childNode );
-                            childNode.Refresh( false );
-
-                            this.explorer.AddUIHierarchyItemResource( child, childNode );
-
-                        }
-                    }
-
-                    // and the next child
-                    childItem = this.explorer.TreeView.GetNextSibling( childItem );               
-                }
-
-                this.uiItem.UIHierarchyItems.Expanded = isExpanded;
-                
-                // TO workaround VS bug...
-                if ( this.uiItem.UIHierarchyItems.Expanded != isExpanded )
-                {
-                    UIHierarchyItem originalSelection = (UIHierarchyItem)( (Object[])this.explorer.UIHierarchy.SelectedItems )[ 0 ];
-                    this.uiItem.Select( vsUISelectionType.vsUISelectionTypeSelect );
-                    this.explorer.UIHierarchy.DoDefaultAction();
-                    originalSelection.Select( vsUISelectionType.vsUISelectionTypeSelect );
-                }
-            }
-            catch( ArgumentException )
-            {
-                // thrown some times if the uiitem is invalid for some reason
-                this.explorer.Context.OutputPane.StartActionText( "ERROR" );
-                this.explorer.Context.OutputPane.WriteLine( 
-                    "ERROR: ArgumentException thrown by automation object. " + 
-                    "This project may not function correctly." );
-                this.explorer.Context.OutputPane.WriteLine(
-                    "(Is this a third party project type?)" );
-                this.explorer.Context.OutputPane.EndActionText();
-            }
         }
 
         
@@ -342,7 +217,7 @@ namespace Ankh.Solution
         {
             base.OnChanged();
 
-            this.SetStatusImage( this.CurrentStatus );
+            this.SetStatusImage( this.Hierarchy, this.CurrentStatus );
         }
 
 
@@ -355,7 +230,7 @@ namespace Ankh.Solution
         }
         
         protected UIHierarchyItem uiItem;
-        private IntPtr hItem;
+        private uint itemID;
         private Explorer explorer;
 
 #if DEBUG
