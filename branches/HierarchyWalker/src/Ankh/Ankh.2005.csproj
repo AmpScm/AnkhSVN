@@ -417,6 +417,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
+    <Compile Include="Guids.cs" />
+    <Compile Include="IAnkhVSService.cs" />
     <Compile Include="IWorkingCopyExplorer.cs" />
     <Compile Include="ScciProvider.cs" />
     <Compile Include="Solution\HierarchyItem.cs" />

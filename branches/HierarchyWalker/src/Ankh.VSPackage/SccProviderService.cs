@@ -6,11 +6,24 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Diagnostics;
 
+
 namespace Ankh.VSPackage
 {
+    using VSConstants = Microsoft.VisualStudio.VSConstants;
+    using NSvn.Core;
+
+
     [Guid(GuidList.guidAnkhSccProviderServiceString)]
-    public class SccProviderService : IVsSccProvider, IVsSccManager2
+    public class SccProviderService : IVsSccProvider, IVsSccManager2, IVsSccGlyphs
     {
+
+
+        public IContext Context
+        {
+            get { return context; }
+            set { context = value; }
+        }
+
 
         public int AnyItemsUnderSourceControl( out int pfResult )
         {
@@ -50,10 +63,19 @@ namespace Ankh.VSPackage
             return VSConstants.E_NOTIMPL;
         }
 
+        private int image;
+
         public int GetSccGlyph( int cFiles, string[] rgpszFullPaths, VsStateIcon[] rgsiGlyphs, uint[] rgdwSccStatus )
         {
-            rgsiGlyphs[ 0 ] = VsStateIcon.STATEICON_CHECKEDIN;
-            rgdwSccStatus[ 0 ] = 23;
+            for ( int i = 0; i < cFiles; i++ )
+            {
+                SvnItem item = this.context.StatusCache[ rgpszFullPaths[ i ] ];
+                NodeStatus nodeStatus = GenerateStatus( item );
+                rgsiGlyphs[ i ] = (VsStateIcon)
+                    StatusImages.GetStatusImageForNodeStatus( nodeStatus );
+                rgdwSccStatus[ i ] = 21;
+            }
+           
             return VSConstants.S_OK;
         }
 
@@ -83,5 +105,44 @@ namespace Ankh.VSPackage
         }
 
         #endregion
+
+        protected static NodeStatus GenerateStatus( SvnItem item )
+        {
+            Status status = item.Status;
+            NodeStatusKind kind;
+            if ( status.TextStatus != StatusKind.Normal )
+            {
+                kind = (NodeStatusKind)status.TextStatus;
+            }
+            else if ( status.PropertyStatus != StatusKind.Normal &&
+                status.PropertyStatus != StatusKind.None )
+            {
+                kind = (NodeStatusKind)status.PropertyStatus;
+            }
+            else
+            {
+                kind = NodeStatusKind.Normal;
+            }
+
+            return new NodeStatus( kind, item.IsReadOnly, item.IsLocked );
+        }
+
+        private IContext context;
+
+
+        #region IVsSccGlyphs Members
+
+        public int GetCustomGlyphList( uint BaseIndex, out uint pdwImageListHandle )
+        {
+            pdwImageListHandle = (uint)StatusImages.StatusImageList.Handle.ToInt32();
+
+            this.baseIndex = BaseIndex;
+
+            return VSConstants.S_OK;
+        }
+
+        #endregion
+
+        private uint baseIndex;
     }
 }

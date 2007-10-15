@@ -49,7 +49,7 @@ namespace Ankh.Solution
             //this.Unload();
             //this.context.ProjectFileWatcher.AddFile( this.DTE.Solution.FullName );
             this.SetUpTreeview();
-            //this.SyncAll();
+            this.SyncAll();
 
             //Trace.WriteLine( String.Format( "Cache hit rate: {0}%", 
             //    this.context.StatusCache.CacheHitSuccess ), "Ankh" );
@@ -193,7 +193,7 @@ namespace Ankh.Solution
             // build the whole tree anew
             Debug.WriteLine( "Synchronizing with treeview", "Ankh" );
 
-            this.nodes.Clear();
+            //this.nodes.Clear();
             
             // store the original image list (check that we're not storing our own statusImageList
             if( StatusImages.StatusImageList.Handle != this.TreeView.StatusImageList )
@@ -205,9 +205,9 @@ namespace Ankh.Solution
 
 
             // make sure everything's up to date.
-            this.ForcePoll();
+            //this.ForcePoll();
 
-            SolutionLoadStrategy.GetStrategy( dte.Version ).Load( this );     
+            //SolutionLoadStrategy.GetStrategy( dte.Version ).Load( this );     
  
             Debug.WriteLine( "Created solution node", "Ankh" );
         }

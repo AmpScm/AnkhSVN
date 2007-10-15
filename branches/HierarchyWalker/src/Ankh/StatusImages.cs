@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace Ankh
 {
-    class StatusImages
+    public class StatusImages
     {
         public static ImageList StatusImageList
         {

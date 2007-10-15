@@ -172,8 +172,8 @@ namespace Ankh.Solution
 
            try
            {
-               Marshal.ThrowExceptionForHR(
-                     hierarchy.SetProperty( this.itemID, (int)__VSHPROPID.VSHPROPID_StateIconIndex, statusImage ) );
+               //Marshal.ThrowExceptionForHR(
+               //      hierarchy.SetProperty( this.itemID, (int)__VSHPROPID.VSHPROPID_StateIconIndex, statusImage ) );
            }
            catch ( Exception )
            {
