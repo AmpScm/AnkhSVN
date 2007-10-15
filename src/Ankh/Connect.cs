@@ -126,35 +126,17 @@ namespace Ankh
         {
             Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = this.context.ServiceProvider;
             Guid guidUnknown = typeof(stdole.IUnknown).GUID;
-            Guid interfaceGuid = typeof( IVsRegisterScciProvider ).GUID;
+            Guid serviceGuid = typeof( IAnkhVSService ).GUID;
 
             IntPtr ptr;
-            int hr = sp.QueryService( ref interfaceGuid, ref guidUnknown, out ptr ); 
+            int hr = sp.QueryService( ref serviceGuid, ref guidUnknown, out ptr );
             Marshal.ThrowExceptionForHR( hr );
 
-            IVsRegisterScciProvider registrator = (IVsRegisterScciProvider)Marshal.GetObjectForIUnknown( ptr );
+            IAnkhVSService service = (IAnkhVSService)Marshal.GetObjectForIUnknown( ptr );
 
-            interfaceGuid = typeof( IProfferService ).GUID;
-            Guid serviceGuid = typeof( SProfferService ).GUID;
+            service.SetContext( this.context );
 
-            hr = sp.QueryService( ref serviceGuid, ref interfaceGuid, out ptr );
-            Marshal.ThrowExceptionForHR( hr );
 
-            ScciProvider provider = new ScciProvider();
-
-            IProfferService profferService = (IProfferService)
-                Marshal.GetObjectForIUnknown( ptr );
-
-            uint cookie;
-            Guid providerGuid = typeof( ScciProvider ).GUID;
-
-            hr = profferService.ProfferService( ref providerGuid, provider, out cookie );
-            Marshal.ThrowExceptionForHR( hr );
-
-            hr = registrator.RegisterSourceControlProvider(typeof(ScciProvider).GUID);
-            Marshal.ThrowExceptionForHR( hr );
-
-            Console.WriteLine(registrator);
         }
 
         /// <summary>

@@ -44,8 +44,8 @@ namespace Ankh.VSPackage
     [Guid(GuidList.guidAnkh_VSPackagePkgString)]
     [ProvideSourceControlProvider( "Ankh Source Control Provider", "#100" )]
     [ProvideService( typeof( SccProviderService ), ServiceName = "Ankh Source Control Provider Service" )]
-   
-    public sealed class Ankh_VSPackage : Package
+    [ProvideService(typeof(AnkhVSService))]
+    public sealed class Ankh_VSPackage : Package, IVsSccGlyphs
     {
 
         /// <summary>
@@ -60,11 +60,16 @@ namespace Ankh.VSPackage
             Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
         }
 
+        //public IContext Context
+        //{
+        //    get { return this.context; }
+        //    set { this.context = context; }
+        //}
+
 
 
         /////////////////////////////////////////////////////////////////////////////
         // Overriden Package Implementation
-        #region Package Members
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -78,11 +83,19 @@ namespace Ankh.VSPackage
             SccProviderService service = new SccProviderService();
             ( (IServiceContainer)this ).AddService( typeof( SccProviderService ), service, true );
 
+            AnkhVSService ankhService = new AnkhVSService(this, service);
+            ((IServiceContainer)this).AddService(typeof(AnkhVSService), ankhService, true);
+
             IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)GetService( typeof( IVsRegisterScciProvider ) );
             rscp.RegisterSourceControlProvider( GuidList.guidAnkhSccProviderService );
 
         }
-        #endregion
 
+        public int GetCustomGlyphList( uint BaseIndex, out uint pdwImageListHandle )
+        {
+            pdwImageListHandle = (uint)StatusImages.StatusImageList.Handle.ToInt32();
+
+            return VSConstants.S_OK;
+        }
     }
 }
