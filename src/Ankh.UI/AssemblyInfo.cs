@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 [assembly:AssemblyVersion("0.6.0.2522")]
         [assembly:Utils.VersionAttribute( "Subversion", 1, 3, 2, Tag="" )]
@@ -11,3 +12,5 @@ using System.Runtime.CompilerServices;
 [assembly:Utils.VersionAttribute( "apr-util", 0, 9, 6, Tag="" )]
 [assembly:Utils.VersionAttribute( "apr-iconv", 0, 9, 6, Tag="" )]
 [assembly:Utils.VersionAttribute( "Ankh", 0, 6, 0, Tag="Daily_01082006_18.11" )]
+
+[assembly:ComVisible(false)]

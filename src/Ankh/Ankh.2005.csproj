@@ -236,6 +236,7 @@
     <Compile Include="AnkhContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AnkhUserControlHostToolWindowStrategy.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -393,6 +394,8 @@
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CreateToolWindow2ToolWindowStrategy.cs" />
+    <Compile Include="DteStrategyFactory.cs" />
     <Compile Include="DteUtils.cs" />
     <Compile Include="Enumerators.cs" />
     <Compile Include="ErrorHandler.cs">
@@ -415,6 +418,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
+    <Compile Include="IDteStrategyFactory.cs" />
+    <Compile Include="IToolWindowStrategy.cs" />
     <Compile Include="IWorkingCopyExplorer.cs" />
     <Compile Include="Solution\IRefreshableProject.cs" />
     <Compile Include="StatusImages.cs" />

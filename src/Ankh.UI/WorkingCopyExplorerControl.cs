@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Diagnostics;
 using Utils.Win32;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 namespace Ankh.UI
 {
@@ -16,6 +17,7 @@ namespace Ankh.UI
         IFileSystemItem[] GetSelectedItems();
     }
 
+    [ComVisible(true)]
     public class WorkingCopyExplorerControl : UserControl
     {
         public event CancelEventHandler ValidatingNewRoot;
