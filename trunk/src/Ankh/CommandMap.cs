@@ -58,7 +58,7 @@ namespace Ankh
         private static CommandMap AddCommands(IContext context, bool register)
         {
             CommandMap commandMap = new CommandMap();
-            List<CommandControl> commandControlList = new List<CommandControl>();
+            ArrayList commandControlList = new ArrayList();
 
             foreach (Module module in typeof(CommandMap).Assembly.GetModules(false)) {
                 foreach (Type type in module.FindTypes(new TypeFilter(CommandMap.CommandTypeFilter), null)) {
@@ -80,9 +80,10 @@ namespace Ankh
                 }
             }
 
-            if (register) {
-                commandControlList.Sort(delegate(CommandControl a, CommandControl b)
-                    { return b.Control.Position.CompareTo(a.Control.Position); });
+            if (register) 
+            {
+                commandControlList.Sort();
+
                 foreach (CommandControl commandControl in commandControlList)
                     RegisterControl(commandControl.Command, commandControl.Control, context);
             }
@@ -90,7 +91,8 @@ namespace Ankh
             return commandMap;
         }
 
-        private class CommandControl
+
+        private class CommandControl : IComparable
         {
             public ICommand Command;
             public VSNetControlAttribute Control;
@@ -99,6 +101,17 @@ namespace Ankh
             {
                 Command = command;
                 Control = control;
+            }
+
+            public int CompareTo( object obj )
+            {
+                CommandControl other = obj as CommandControl;
+                if ( other == null )
+                {
+                    return -1;
+                }
+
+                return Comparer.Default.Compare( this.Control.Position, other.Control.Position );
             }
         }
 
