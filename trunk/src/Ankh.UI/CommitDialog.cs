@@ -8,6 +8,7 @@ using NSvn.Core;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Ankh.UI
 {
@@ -20,6 +21,7 @@ namespace Ankh.UI
     /// <summary>
     /// Dialog that lets a user enter a log message for a commit.
     /// </summary>
+    [ComVisible(true)]
     public class CommitDialog : UserControl
     {
         public event EventHandler Proceed;

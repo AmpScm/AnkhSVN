@@ -444,10 +444,12 @@ namespace Ankh
         private void CreateRepositoryExplorer()
         {   
             Debug.WriteLine( "Creating repository explorer", "Ankh" );
-            object control = null;
-            this.repositoryExplorerWindow = this.context.DTE.Windows.CreateToolWindow( 
-                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl", 
-                "Repository Explorer", REPOSEXPLORERGUID, ref control );
+            ToolWindowResult result = this.context.DteStrategyFactory.GetToolWindowStrategy().
+                CreateToolWindow(typeof(RepositoryExplorerControl),
+                "Repository Explorer", REPOSEXPLORERGUID);
+
+            this.repositoryExplorerWindow = result.Window;
+
             
             this.repositoryExplorerWindow.Visible = true;
             this.repositoryExplorerWindow.Caption = "Repository Explorer";
@@ -464,11 +466,7 @@ namespace Ankh
                 // swallow
             }
             
-            AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl 
-                objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
-            
-            this.repositoryExplorerControl = new RepositoryExplorerControl();
-            objControl.HostUserControl( this.repositoryExplorerControl );
+            this.repositoryExplorerControl = result.Control as RepositoryExplorerControl;
 
             // force the handle to be created
             if ( this.RepositoryExplorer.Handle == IntPtr.Zero )
@@ -480,22 +478,20 @@ namespace Ankh
         private void CreateCommitDialog()
         {
             Debug.WriteLine( "Creating commit dialog user control", "Ankh" );
-            object control = null;
-            this.commitDialogWindow = this.context.DTE.Windows.CreateToolWindow( 
-                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl", 
-                "Commit", CommitDialogGuid, ref control );
+
+            ToolWindowResult result = this.context.DteStrategyFactory.GetToolWindowStrategy().
+                CreateToolWindow( typeof(CommitDialog), 
+                "Commit", CommitDialogGuid );
             
+            this.commitDialogWindow = result.Window;
+
             this.commitDialogWindow.Visible = true;
             this.commitDialogWindow.Visible = false;
 
             this.commitDialogWindow.Caption = "Commit";
-            
-            AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl 
-                objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
-            
-            this.commitDialog = new CommitDialog();
-            objControl.HostUserControl( this.commitDialog );
-            
+
+            this.commitDialog = result.Control as CommitDialog;
+
             System.Diagnostics.Debug.Assert( this.commitDialog != null, 
                 "Could not create tool window" );
             
@@ -504,21 +500,17 @@ namespace Ankh
         private void CreateWorkingCopyExplorer()
         {
             Debug.WriteLine( "Creating working copy explorer tool window", "Ankh" );
-            object control = null;
-            this.workingCopyExplorerWindow = this.context.DTE.Windows.CreateToolWindow(
-                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl",
-                "Working Copy Explorer", WorkingCopyExplorerGuid, ref control );
+            ToolWindowResult result = this.context.DteStrategyFactory.GetToolWindowStrategy().
+                CreateToolWindow(typeof(WorkingCopyExplorerControl),
+                "Working Copy Explorer", WorkingCopyExplorerGuid );
+
+            this.workingCopyExplorerWindow = result.Window;
 
             this.workingCopyExplorerWindow.Visible = true;
 
             this.workingCopyExplorerWindow.Caption = "Working Copy Explorer";
 
-            AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl
-                objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
-
-            this.workingCopyExplorerControl = new WorkingCopyExplorerControl();
-            objControl.HostUserControl( this.workingCopyExplorerControl );
-
+            this.workingCopyExplorerControl = result.Control as WorkingCopyExplorerControl;
             System.Diagnostics.Debug.Assert( this.workingCopyExplorerControl != null,
                 "Could not create tool window for WC Explorer" );
         }
