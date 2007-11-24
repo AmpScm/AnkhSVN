@@ -1,7 +1,7 @@
 ﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
     <ComponentGroup Id="CG_Ankh.UI">
-      <ComponentRef Id="C_Ankh.UI.dll"/
+      <ComponentRef Id="C_Ankh.UI.dll"/>
       <ComponentRef Id ="C_Ankh.UI_Regasm"/>
     </ComponentGroup>
     <DirectoryRef Id="TARGETDIR">
