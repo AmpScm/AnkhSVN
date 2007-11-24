@@ -306,7 +306,6 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommitDialog));
             this.splitter = new System.Windows.Forms.Splitter();
             this.logMessagePanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -406,15 +405,13 @@ namespace Ankh.UI
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Padding = new System.Windows.Forms.Padding(3);
             this.mainPanel.Size = new System.Drawing.Size(697, 349);
             this.mainPanel.TabIndex = 0;
             // 
             // commitItemsTree
             // 
             this.commitItemsTree.CheckBoxes = true;
-            this.commitItemsTree.CheckedItems = ((System.Collections.IList)(resources.GetObject("commitItemsTree.CheckedItems")));
-            this.commitItemsTree.Dock = System.Windows.Forms.DockStyle.Left;
+           this.commitItemsTree.Dock = System.Windows.Forms.DockStyle.Left;
             this.commitItemsTree.Items = new object[0];
             this.commitItemsTree.Location = new System.Drawing.Point(3, 3);
             this.commitItemsTree.Name = "commitItemsTree";
