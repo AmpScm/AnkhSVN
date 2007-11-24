@@ -71,7 +71,7 @@ namespace Ankh.Commands
             this.result.Start();
 
             string[] paths = SvnItem.GetPaths( info.CheckedItems );
-            context.Client.Log( paths, info.RevisionStart, info.RevisionEnd, true, 
+            context.Client.Log( paths, info.RevisionEnd, info.RevisionStart, true, 
                 info.StopOnCopy, new LogMessageReceiver(result.Receive) );
 
             this.result.End();
