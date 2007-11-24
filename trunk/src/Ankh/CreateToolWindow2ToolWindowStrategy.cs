@@ -22,7 +22,7 @@ namespace Ankh
         {
             Windows2 windows2 = this.context.DTE.Windows as Windows2;
 
-            string assembly = controlType.Assembly.ManifestModule.FullyQualifiedName;
+            string assembly = controlType.Assembly.GetModules(false)[0].FullyQualifiedName;
             string typeName = controlType.FullName;
 
             object control = null;
