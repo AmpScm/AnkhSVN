@@ -216,24 +216,24 @@ namespace Ankh
     {
         [return: MarshalAs( UnmanagedType.Interface )]
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), DispId( 0 )]
-        Window Item( [In, MarshalAs( UnmanagedType.Struct )] object index );
+        new Window Item( [In, MarshalAs( UnmanagedType.Struct )] object index );
         [DispId( 0xc9 )]
-        int Count { [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), DispId( 0xc9 )] get; }
+        new int Count { [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), DispId( 0xc9 )] get; }
         [return: MarshalAs( UnmanagedType.CustomMarshaler, MarshalType = "", MarshalCookie = "" )]
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), TypeLibFunc( (short)1 ), DispId( -4 )]
-        IEnumerator GetEnumerator();
+        new IEnumerator GetEnumerator();
         [return: MarshalAs( UnmanagedType.Interface )]
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), DispId( 300 )]
-        Window CreateToolWindow( [In, MarshalAs( UnmanagedType.Interface )] AddIn AddInInst,
+        new Window CreateToolWindow( [In, MarshalAs( UnmanagedType.Interface )] AddIn AddInInst,
             [In, MarshalAs( UnmanagedType.BStr )] string ProgID,
             [In, MarshalAs( UnmanagedType.BStr )] string Caption, [In, MarshalAs( UnmanagedType.BStr )] string GuidPosition, [In, Out, MarshalAs( UnmanagedType.IDispatch )] ref object DocObj );
         [DispId( 0x12d )]
-        DTE DTE { [return: MarshalAs( UnmanagedType.Interface )] [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), DispId( 0x12d )] get; }
+        new DTE DTE { [return: MarshalAs( UnmanagedType.Interface )] [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), DispId( 0x12d )] get; }
         [DispId( 0x12e )]
-        DTE Parent { [return: MarshalAs( UnmanagedType.Interface )] [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), DispId( 0x12e )] get; }
+        new DTE Parent { [return: MarshalAs( UnmanagedType.Interface )] [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), DispId( 0x12e )] get; }
         [return: MarshalAs( UnmanagedType.Interface )]
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), DispId( 0x12f )]
-        Window CreateLinkedWindowFrame( [In, MarshalAs( UnmanagedType.Interface )] Window Window1, [In, MarshalAs( UnmanagedType.Interface )] Window Window2, [In] vsLinkedWindowType Link );
+        new Window CreateLinkedWindowFrame( [In, MarshalAs( UnmanagedType.Interface )] Window Window1, [In, MarshalAs( UnmanagedType.Interface )] Window Window2, [In] vsLinkedWindowType Link );
         [return: MarshalAs( UnmanagedType.Interface )]
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime ), DispId( 400 )]
         Window CreateToolWindow2( [MarshalAs( UnmanagedType.Interface )] AddIn Addin, [MarshalAs( UnmanagedType.BStr )] string Assembly, [MarshalAs( UnmanagedType.BStr )] string Class, [MarshalAs( UnmanagedType.BStr )] string Caption, [MarshalAs( UnmanagedType.BStr )] string GuidPosition, [In, Out, MarshalAs( UnmanagedType.IDispatch )] ref object ControlObject );
