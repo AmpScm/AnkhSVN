@@ -212,7 +212,7 @@ namespace Ankh
         /// <param name="context"></param>
         private static void CreateAnkhSubMenu( IContext context )
         {
-            object toolMenu = context.CommandBars.GetCommandBar( "Tools" );
+            object toolMenu = context.CommandBars.GetCommandBar( CommandBarPredicate.Create("Tools") );
 
             // check that the menu isn't already there (only necessary in 2005)
             object ankhMenu = context.CommandBars.GetBarControl( toolMenu, "AnkhSVN" );

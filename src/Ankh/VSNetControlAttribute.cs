@@ -77,7 +77,7 @@ namespace Ankh
             else if ( path[ 0 ] == "WorkingCopyExplorer" )
                 bar = ((CommandBarContextMenu)context.WorkingCopyExplorer.ContextMenu).CommandBar;
             else
-                bar = context.CommandBars.GetCommandBar( path[ 0 ] );
+                bar = context.CommandBars.GetCommandBar( CommandBarPredicate.Create(path[ 0 ]) );
 
             if ( bar == null )
                 return null;
