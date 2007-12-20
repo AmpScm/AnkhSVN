@@ -205,6 +205,8 @@ namespace Ankh
                     // find the containing dir
                     dir = System.IO.Path.GetDirectoryName( this.path );
 
+                if( dir == null )
+                    return false;
                 return Directory.Exists( 
                     System.IO.Path.Combine( dir, Client.AdminDirectoryName ));
             }
