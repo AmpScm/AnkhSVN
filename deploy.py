@@ -122,6 +122,7 @@ def copy_glob( srcpattern, targetdir ):
 def convertToVcProj( dspFiles ):
     vcproj = win32com.client.Dispatch(vcprojectengine)
     for dsp in dspFiles:
+        push_location()
         dspFile = os.path.abspath( dsp )
         root, ext = os.path.splitext(dspFile)
         vcprojFile = root + ".vcproj"
@@ -131,7 +132,8 @@ def convertToVcProj( dspFiles ):
         
 
         project.ProjectFile = vcprojFile
-        project.Save()    
+        project.Save()
+        pop_location()
 
 
 
