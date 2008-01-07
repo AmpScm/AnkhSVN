@@ -47,9 +47,6 @@ os.environ[ "OPENSSL_STATIC" ] = "1"
 # The build directory
 BUILDDIR = "build"
 
-# The location of the vsvars file
-VSVARS="I:\\Program Files\\Microsoft Visual Studio .NET\\Common7\\Tools\\vsvars32.bat"
-
 # APR
 APACHE_CVS = ":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
 
