@@ -418,7 +418,7 @@ namespace Ankh.EventSinks
                         }
 
                         // VC++ gets annoyed if the file doesn't exist when trying to delete it.
-                        if ( wasUnmodified )
+                        if ( wasUnmodified && !item.IsDirectory )
                         {
                             File.Create( rgpszMkDocuments[ i ] ).Close();
                         }
