@@ -162,7 +162,12 @@ namespace Ankh.EventSinks
             try
             {
                 string backupDirectory = GetBackupDirectoryName( directory );
-                Directory.Move( backupDirectory, directory );
+                // OnRemove can be called without OnQueryRemove*
+                // in that case backupDirectory doesn't exist
+                if ( Directory.Exists( backupDirectory ) ) 
+                {
+                    Directory.Move( backupDirectory, directory );
+                }
             }
             finally
             {
