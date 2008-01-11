@@ -394,10 +394,8 @@ namespace Ankh.EventSinks
                         item.Status.TextStatus == StatusKind.Normal) && 
                         this.PromptDelete( item ) )
                     {
-                        if ( item.IsDirectory && Directory.Exists( item.Path ) )
+                        if ( item.IsDirectory )
                         {
-                            // check wether the source directory exists before moving it back
-                            // because excluding in VS2005 calls OnAfterRemove without calling OnQueryRemove
                             this.RestoreBackupDirectory( item.Path );
                         }
 
