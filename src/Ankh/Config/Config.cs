@@ -115,7 +115,17 @@ namespace Ankh.Config
                         new StringEditorTemplate(@"C:\Program Files\WinMerge\WinMergeU.exe -e -x -ub " +
                                                  "-dl \"Base version\" -dr \"My version\" " +
                                                  "\"%base\" \"%mine\" \"%theirs\"", "WinMerge", "WinMerge"),
-                        };
+
+                       
+
+                        // Araxis merge
+                        new StringEditorTemplate( @"C:\Program Files\Araxis\Araxis Merge\Compare.exe " +
+                            "/wait /swap /a3 /3 /title1:Base /title2:Theirs /title3:Merged " +
+                            "\"%base\" \"%theirs\" \"%mine\" \"%merged\"", "Araxis", "Araxis" ),
+
+                 };
+
+
             }
         }
 
@@ -171,6 +181,9 @@ namespace Ankh.Config
                         new StringEditorTemplate(@"C:\Program Files\WinMerge\WinMergeU.exe -e -x -ub " +
                                                  "-dl \"Base version\" -dr \"My version\" " +
                                                  "\"%base\" \"%mine\"", "WinMerge", "WinMerge"),
+
+                        new StringEditorTemplate(@"C:\Program Files\Araxis\Araxis Merge\Compare.exe " +
+                                                "/wait /2 \"%base\" \"%mine\"", "Araxis", "Araxis"),
                         };
             }
         }
