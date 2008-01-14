@@ -63,6 +63,7 @@ namespace Ankh.UI
         /// <summary>
         /// The items to put in the treeview.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IList Items
         {
             get{ return this.pathSelectionTreeView.Items; }
@@ -72,6 +73,7 @@ namespace Ankh.UI
         /// <summary>
         /// The items checked in the treeview.
         /// </summary>
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
         public IList CheckedItems
         {
             get{ return this.pathSelectionTreeView.CheckedItems; }
