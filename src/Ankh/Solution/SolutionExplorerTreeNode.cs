@@ -91,7 +91,17 @@ namespace Ankh.Solution
             {
                 foreach(Project p in Enumerators.EnumerateProjects(explorer.DTE))
                 {
-                    if(p.Name==item.Name)
+                    bool namesEqual = false;
+                    try
+                    {
+                        namesEqual = p.Name == item.Name;
+                    }
+                    catch 
+                    {
+                        continue; // Some projects (script debugging in VS2008) breaks on .Name, handle gracefully
+                    }
+
+                    if(namesEqual)
                     {
                         return new ProjectNode( item, hItem, explorer, parent, p );
                     }
