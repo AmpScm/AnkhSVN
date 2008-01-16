@@ -13,8 +13,8 @@
 		<Upgrade Id="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
 			<UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" Minimum="0.5.0" 
 					Maximum="$(var.ankhversion)" MigrateFeatures="yes" />
-			<UpgradeVersion Property="NEWERVERSIONFOUND" Minimum="$(var.ankhversion)" 
-					Maximum="99.0.0"/>
+			<UpgradeVersion Property="NEWERVERSIONFOUND" Minimum="$(var.ankhversion)" IncludeMinimum="no"
+					Maximum="99.0.0" OnlyDetect="yes"/>
 		</Upgrade>
 
 		<Property Id="ShortProductName">AnkhSvn</Property>
