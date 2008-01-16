@@ -47,7 +47,6 @@ namespace Ankh.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( LockDialog ) );
             this.messageTextBox = new System.Windows.Forms.TextBox();
             this.stealLocksCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
