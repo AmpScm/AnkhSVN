@@ -79,6 +79,12 @@ namespace Ankh.Solution
 
         private void FindProjectResources(Explorer explorer)
         {
+            if (project.Kind == DteUtils.ScriptDebugging2008Kind)
+            {
+                this.projectFile = SvnItem.Unversionable;
+                this.projectFolder = SvnItem.Unversionable;
+                return;
+            }
             // find the directory containing the project
             string fullname = null;
             try
