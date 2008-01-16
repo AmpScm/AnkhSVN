@@ -53,7 +53,7 @@ namespace Ankh
         public const string EnterpriseTemplateProjectKind = "{7D353B21-6E36-11D2-B35A-0000F81F0C06}";
         public const string EnterpriseTemplateProjectItemKind = "{EA6618E8-6E24-4528-94BE-6889FE16485C}";
         public const string SolutionFolderKind = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
-
+        public const string ScriptDebugging2008Kind = "{67294A52-A4F0-11D2-AA88-00C04F688DDE}";
 
 
 
