@@ -172,8 +172,11 @@ namespace Ankh
         protected static NodeStatus MergeStatuses( IList items )
         {
             NodeStatus newStatus = new NodeStatus();
-            foreach ( SvnItem item in items )
-                newStatus = newStatus.Merge( GenerateStatus( item ) );
+            if (items != null)
+            {
+                foreach (SvnItem item in items)
+                    newStatus = newStatus.Merge(GenerateStatus(item));
+            }
 
             return newStatus;
         }
