@@ -17,6 +17,7 @@ namespace Ankh.Solution
         {
             this.project = project;
             this.modeled=true;
+            this.deletedResources = new ArrayList();
 
             this.FindProjectResources(explorer);
                 
@@ -96,8 +97,6 @@ namespace Ankh.Solution
                 fullname=((SolutionNode)this.Parent).Parser.GetProjectFile(project.Name);
                 this.modeled=false;
             }
-
-            this.deletedResources = new ArrayList();
 
             // special treatment for VDs
             if (String.Compare(this.project.Kind, ProjectNode.VDPROJKIND, true) == 0)
@@ -200,7 +199,7 @@ namespace Ankh.Solution
         private bool modeled;
         private SvnItem projectFolder;
         private SvnItem projectFile;
-        private IList deletedResources;
+        private readonly IList deletedResources;
         private Project project;
 
         private const string VDPROJKIND = @"{54435603-DBB4-11D2-8724-00A0C9A8B90C}";
