@@ -63,18 +63,9 @@ namespace Ankh.Solution
 
                 object projectItemObject = DteUtils.GetProjectItemObject( projectItem );
 
-
-                string projectItemKind = string.Empty;
-                try 
-                { 
-                    projectItemKind = projectItem.Kind; 
-                }
-                catch 
-                { 
-                }
-                if ( DteUtils.GetProjectItemKind(projectItem) == DteUtils.EnterpriseTemplateProjectItemKind &&
-                   parent.uiItem.Object is Project &&
-                   ( (Project)parent.uiItem.Object ).Kind == DteUtils.EnterpriseTemplateProjectKind )
+                if ( projectItem.Kind == DteUtils.EnterpriseTemplateProjectItemKind && 
+                    parent.uiItem.Object is Project &&
+                    ((Project)parent.uiItem.Object).Kind == DteUtils.EnterpriseTemplateProjectKind )
                 {
                     return new ProjectNode( item, hItem, explorer, parent, projectItem.SubProject );
                 }
@@ -91,17 +82,7 @@ namespace Ankh.Solution
             {
                 foreach(Project p in Enumerators.EnumerateProjects(explorer.DTE))
                 {
-                    bool namesEqual = false;
-                    try
-                    {
-                        namesEqual = p.Name == item.Name;
-                    }
-                    catch 
-                    {
-                        continue; // Some projects (script debugging in VS2008) breaks on .Name, handle gracefully
-                    }
-
-                    if(namesEqual)
+                    if(p.Name==item.Name)
                     {
                         return new ProjectNode( item, hItem, explorer, parent, p );
                     }
@@ -302,17 +283,8 @@ namespace Ankh.Solution
                     // and the next child
                     childItem = this.explorer.TreeView.GetNextSibling( childItem );               
                 }
-
-                this.uiItem.UIHierarchyItems.Expanded = isExpanded;
                 
-                // TO workaround VS bug...
-                if ( this.uiItem.UIHierarchyItems.Expanded != isExpanded )
-                {
-                    UIHierarchyItem originalSelection = (UIHierarchyItem)( (Object[])this.explorer.UIHierarchy.SelectedItems )[ 0 ];
-                    this.uiItem.Select( vsUISelectionType.vsUISelectionTypeSelect );
-                    this.explorer.UIHierarchy.DoDefaultAction();
-                    originalSelection.Select( vsUISelectionType.vsUISelectionTypeSelect );
-                }
+                this.uiItem.UIHierarchyItems.Expanded = isExpanded;
             }
             catch( ArgumentException )
             {

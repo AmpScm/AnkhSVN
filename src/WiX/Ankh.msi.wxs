@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
 	<Product UpgradeCode="FFE67D45-DC1F-45C6-BF0D-ABC579868168" Name="AnkhSvn" 
 			Manufacturer="Arild Fines, Per Krämer &amp; Kristin Borud" Language="1033"
-			Version="$(var.ankhversion)" Id="*">
+			Version="$(var.ankhversion)" Id="????????-????-????-????-????????????">
 
 		<Package Description="AnkhSVN" Comments="AnkhSVN Visual Studio plugin" 
 				Manufacturer="Arild Fines, Sander Rijken, Per Krämer &amp; Kristin Borud"
 				InstallerVersion="200" Platforms="Intel" Languages="1033" 
 				Compressed="yes" SummaryCodepage="1252"
-				 />
+				Id="????????-????-????-????-????????????" />
 
 		<Upgrade Id="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
 			<UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" Minimum="0.5.0" 
 					Maximum="$(var.ankhversion)" MigrateFeatures="yes" />
-			<UpgradeVersion Property="NEWERVERSIONFOUND" Minimum="$(var.ankhversion)" IncludeMinimum="no"
-					Maximum="99.0.0" OnlyDetect="yes"/>
+			<UpgradeVersion Property="NEWERVERSIONFOUND" Minimum="$(var.ankhversion)" 
+					Maximum="99.0.0"/>
 		</Upgrade>
 
 		<Property Id="ShortProductName">AnkhSvn</Property>
@@ -38,7 +38,7 @@
 				Execute="firstSequence" />
 
 		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Merge Id="MSM_NSvn_msm" SourceFile="$(var.installdir)\NSvn.msm" Language="1033" DiskId="2" />
+			<Merge Id="MSM_NSvn_msm" src="$(var.installdir)\NSvn.msm" Language="1033" DiskId="2" />
 		</Directory>
 
 		<Feature Id="DefaultFeature" Title="AnkhSVN" Level="1">
@@ -80,15 +80,15 @@
 			</AdminUISequence>
 		</UI>
 		<InstallExecuteSequence>
-			<Custom Action="ERRCA_CANCELNEWERVERSION" After="AppSearch">NEWERVERSIONFOUND AND NOT Installed</Custom>
+			<Custom Action="ERRCA_CANCELNEWERVERSION" After="AppSearch">NEWERVERSIONINSTALLED AND NOT Installed</Custom>
 
 			<Custom Action="DIRCA_TARGETDIR" Before="CostInitialize">TARGETDIR=""</Custom>
 
 			<RemoveExistingProducts After="InstallInitialize">NEWERVERSIONFOUND</RemoveExistingProducts>
 
-			<Custom Action="InstallLib_UnInstall" After="RemoveFiles">Installed OR PREVIOUSVERSIONSINSTALLED</Custom>
+			<Custom Action="InstallLib_UnInstall" After="RemoveFiles"></Custom>
 		</InstallExecuteSequence>
-		<Binary Id="InstallLib" SourceFile="$(var.builddir)\InstallLib.dll" />
+		<Binary Id="InstallLib" src="$(var.builddir)\InstallLib.dll" />
 		<UI>
 			<!-- English -->
 			<ProgressText Action="Advertise">Advertising application</ProgressText>

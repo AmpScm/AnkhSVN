@@ -12,7 +12,6 @@ namespace Ankh
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class VSNetControlAttribute : Attribute
     {
-        public const string AnkhSubMenu = "An&kh";
         /// <summary>
         /// Constructor
         /// </summary>
@@ -54,7 +53,7 @@ namespace Ankh
             object bar = GetCommandBar( this.commandBar, context );
             if ( bar != null )
             {
-                object cntrl = context.CommandBars.AddControl(cmd.Command, bar, 1);
+                object cntrl = context.CommandBars.AddControl(cmd.Command, bar, this.position);
                 context.CommandBars.SetControlTag(cntrl, tag);
             }
             
@@ -77,7 +76,7 @@ namespace Ankh
             else if ( path[ 0 ] == "WorkingCopyExplorer" )
                 bar = ((CommandBarContextMenu)context.WorkingCopyExplorer.ContextMenu).CommandBar;
             else
-                bar = context.CommandBars.GetCommandBar( CommandBarPredicate.Create(path[ 0 ]) );
+                bar = context.CommandBars.GetCommandBar( path[ 0 ] );
 
             if ( bar == null )
                 return null;
@@ -135,7 +134,7 @@ namespace Ankh
                 if ( bar != null )
                 {
                     object cntrl = context.CommandBars.AddControl( cmd.Command, bar, 
-                        1 );
+                        this.position );
                     context.CommandBars.SetControlTag( cntrl, tag );
                 }
             }

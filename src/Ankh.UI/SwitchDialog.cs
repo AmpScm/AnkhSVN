@@ -63,7 +63,7 @@ namespace Ankh.UI
             IList items = this.TreeView.CheckedItems;
             if ( items.Count > 0 )
             {
-                ResolvingPathEventArgs args = new ResolvingPathEventArgs( items[0] );
+                GetPathInfoEventArgs args = new GetPathInfoEventArgs( items[0] );
                 this.RaiseGetPathInfo( args );
                 this.currentUrl = args.Path;
                 this.urlTextBox.Text = this.currentUrl;

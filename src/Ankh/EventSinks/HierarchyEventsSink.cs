@@ -199,7 +199,7 @@ namespace Ankh.EventSinks
 
                 try
                 {
-                    this.RefreshParent( itemidParent );
+                    this.context.SolutionExplorer.SetUpDelayedProjectRefresh( this );
                 }
                 catch ( Exception ex )
                 {
@@ -212,20 +212,13 @@ namespace Ankh.EventSinks
 
             
 
-            
-
             public int OnItemDeleted( uint itemid )
             {
                 Trace.WriteLine( "Item deleted for " + this.project.Name );
 
                 try
                 {
-                    object retval;
-                    int hr = this.Hierarchy.GetProperty( itemid, (int)__VSHPROPID.VSHPROPID_Parent, out retval );
-                    if ( hr == VSConstants.S_OK && retval != null )
-                    {
-                        this.RefreshParent( (uint)(int)retval );
-                    }
+                    this.context.SolutionExplorer.SetUpDelayedProjectRefresh( this );
                 }
                 catch ( Exception ex )
                 {
@@ -248,19 +241,6 @@ namespace Ankh.EventSinks
                 return VSConstants.S_OK;
             }
 
-            private IVsProject2 VSProjectForHierarchy
-            {
-                get
-                {
-                    IVsProject2 proj = this.Hierarchy as IVsProject2;
-                    if ( proj == null )
-                    {
-                        throw new InvalidCastException( "Hierarchy could not be converted to IVSProject2" );
-                    }
-                    return proj;
-                }
-            }
-
             Project IRefreshableProject.Project
             {
                 get { return this.project; }
@@ -271,74 +251,8 @@ namespace Ankh.EventSinks
                 get { return this.project != null; }
             }
 
-            private void RefreshParent( uint itemidParent )
-            {
-                if ( !this.context.AnkhLoadedForSolution )
-                {
-                    return;
-                }
-                // first try to get the path to the parent
-                string path;
-                int hr = this.VSProjectForHierarchy.GetMkDocument( itemidParent, out path );
-                if ( hr == VSConstants.S_OK && path != null )
-                {
-                    SvnItem item = this.context.StatusCache[ path ];
-                    if ( item != null && item != SvnItem.Unversionable )
-                    {
-                        SetUpDelayedNotifyChildrenChanged( item );
-                        return;                        
-                    }
-                }
-
-                // fall back to this
-                this.context.SolutionExplorer.SetUpDelayedProjectRefresh( this );
-            }
-
-            private void SetUpDelayedNotifyChildrenChanged( SvnItem item )
-            {
-                if ( !this.refreshIsPending )
-                {
-                    this.refreshIsPending = true;
-
-                    this.timer = new System.Threading.Timer( 
-                        new TimerCallback( this.NotifyChildrenChangedCallback ), item, 800, Timeout.Infinite );
-
-                }
-            }
-
-            private void NotifyChildrenChangedCallback( object state )
-            {
-                try
-                {
-                    if ( !( (IRefreshableProject)this ).IsValid )
-                    {
-                        return;
-                    }
-                    if ( this.context.UIShell.SynchronizingObject.InvokeRequired )
-                    {
-                        this.context.UIShell.SynchronizingObject.Invoke(
-                            new TimerCallback( this.NotifyChildrenChangedCallback ),
-                            new object[] { state } );
-                        return;
-                    }
-
-                    SvnItem item = state as SvnItem;
-                    if ( item != null && !this.context.SolutionExplorer.RenameInProgress )
-                    {
-                        item.NotifyChildrenChanged();
-                    }
-                }
-                finally
-                {
-                    this.refreshIsPending = false;
-                }
-
-            }
-
             #endregion
 
-            private System.Threading.Timer timer;
-            private bool refreshIsPending;
             private IContext context;
             private uint cookie;
             private IVsHierarchy hierarchy;

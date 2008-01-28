@@ -32,7 +32,7 @@ namespace Ankh.Tests
         {  
             SvnItem item = this.GetItem();
 
-            item.Changed += new EventHandler(ItemChanged);
+            item.Changed += new StatusChanged(ItemChanged);
 
             using( StreamWriter writer = new StreamWriter(item.Path) )
                 writer.WriteLine( "Foo" );

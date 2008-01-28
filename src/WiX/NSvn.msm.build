@@ -29,7 +29,7 @@
     
     <target name="compile" depends="precompile">
         <exec workingdir="${src.dir}" program="${wix-binary.dir}\candle.exe"
-            commandline="-nologo NSvn.msm.wxs -dankhversion=${ankh.version} -dsvn.dir=${path::get-full-path(svndir)} -out ${installsource.dir}\NSvn.wixobj" />
+            commandline="-nologo NSvn.msm.wxs -dsvn.dir=${path::get-full-path(svndir)} -out ${installsource.dir}\NSvn.wixobj" />
     </target>
     
     <target name="link" depends="precompile, compile">

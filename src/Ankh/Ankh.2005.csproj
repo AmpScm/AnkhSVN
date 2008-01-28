@@ -182,9 +182,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="office, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\office.dll</HintPath>
+    <Reference Include="Office">
+      <Name>office</Name>
     </Reference>
     <Reference Include="stdole">
       <Name>stdole</Name>
@@ -236,7 +235,6 @@
     <Compile Include="AnkhContext.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AnkhUserControlHostToolWindowStrategy.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -394,8 +392,6 @@
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CreateToolWindow2ToolWindowStrategy.cs" />
-    <Compile Include="DteStrategyFactory.cs" />
     <Compile Include="DteUtils.cs" />
     <Compile Include="Enumerators.cs" />
     <Compile Include="ErrorHandler.cs">
@@ -418,8 +414,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
-    <Compile Include="IDteStrategyFactory.cs" />
-    <Compile Include="IToolWindowStrategy.cs" />
     <Compile Include="IWorkingCopyExplorer.cs" />
     <Compile Include="Solution\IRefreshableProject.cs" />
     <Compile Include="StatusImages.cs" />
@@ -501,6 +495,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Solution\SolutionNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Solution\TreeView.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StatusCache.cs">

@@ -8,17 +8,14 @@ using NSvn.Common;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command to checkout a Subversion repository.
+    /// A command that lets you check out a repository directory.
     /// </summary>
-    [VSNetCommand("Checkout",
-         Text = "Chec&kout a Repository...",
-         Tooltip="Checkout a Subversion repository.", 
+    [VSNetCommand("Checkout", Tooltip="Checkout a repository directory", 
+         Text = "Checkout a repository directory...", 
          Bitmap = ResourceBitmaps.CheckoutDirectory),
-         VSNetControl( "Tools.AnkhSVN", Position = 1 )]
+    VSNetControl( "Tools.AnkhSVN", Position = 1 ) ]
     public class CheckoutCommand : CommandBase
     {
-        #region Implementation of ICommand
-
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             return Enabled;
@@ -47,7 +44,5 @@ namespace Ankh.Commands
                 }
             }
         }
-
-        #endregion
     }
 }

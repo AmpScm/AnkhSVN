@@ -95,40 +95,41 @@ namespace Ankh.UI
             // 
             // locationGroupBox
             // 
-            this.locationGroupBox.Controls.Add( this.urlTextBox );
-            this.locationGroupBox.Controls.Add( this.label1 );
-            this.locationGroupBox.Location = new System.Drawing.Point( 16, 24 );
+            this.locationGroupBox.Controls.Add(this.urlTextBox);
+            this.locationGroupBox.Controls.Add(this.label1);
+            this.locationGroupBox.Location = new System.Drawing.Point(16, 24);
             this.locationGroupBox.Name = "locationGroupBox";
-            this.locationGroupBox.Size = new System.Drawing.Size( 264, 72 );
+            this.locationGroupBox.Size = new System.Drawing.Size(264, 72);
             this.locationGroupBox.TabIndex = 0;
             this.locationGroupBox.TabStop = false;
             this.locationGroupBox.Text = "Location";
             // 
             // urlTextBox
             // 
-            this.urlTextBox.Location = new System.Drawing.Point( 38, 32 );
+            this.urlTextBox.Location = new System.Drawing.Point(38, 32);
             this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size( 208, 20 );
+            this.urlTextBox.Size = new System.Drawing.Size(208, 20);
             this.urlTextBox.TabIndex = 1;
+            this.urlTextBox.Text = "";
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point( 5, 35 );
+            this.label1.Location = new System.Drawing.Point(5, 35);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size( 32, 16 );
+            this.label1.Size = new System.Drawing.Size(32, 16);
             this.label1.TabIndex = 0;
-            this.label1.Text = "&URL:";
+            this.label1.Text = "URL:";
             // 
             // subDirGroupBox
             // 
-            this.subDirGroupBox.Controls.Add( this.logMessageTextBox );
-            this.subDirGroupBox.Controls.Add( this.label3 );
-            this.subDirGroupBox.Controls.Add( this.subDirNameTextBox );
-            this.subDirGroupBox.Controls.Add( this.label2 );
-            this.subDirGroupBox.Controls.Add( this.createSubDirCheckBox );
-            this.subDirGroupBox.Location = new System.Drawing.Point( 16, 104 );
+            this.subDirGroupBox.Controls.Add(this.logMessageTextBox);
+            this.subDirGroupBox.Controls.Add(this.label3);
+            this.subDirGroupBox.Controls.Add(this.subDirNameTextBox);
+            this.subDirGroupBox.Controls.Add(this.label2);
+            this.subDirGroupBox.Controls.Add(this.createSubDirCheckBox);
+            this.subDirGroupBox.Location = new System.Drawing.Point(16, 104);
             this.subDirGroupBox.Name = "subDirGroupBox";
-            this.subDirGroupBox.Size = new System.Drawing.Size( 264, 200 );
+            this.subDirGroupBox.Size = new System.Drawing.Size(264, 200);
             this.subDirGroupBox.TabIndex = 1;
             this.subDirGroupBox.TabStop = false;
             this.subDirGroupBox.Text = "Subdirectory";
@@ -138,85 +139,82 @@ namespace Ankh.UI
             this.logMessageTextBox.AcceptsReturn = true;
             this.logMessageTextBox.AcceptsTab = true;
             this.logMessageTextBox.Enabled = false;
-            this.logMessageTextBox.Location = new System.Drawing.Point( 8, 104 );
+            this.logMessageTextBox.Location = new System.Drawing.Point(8, 104);
             this.logMessageTextBox.Multiline = true;
             this.logMessageTextBox.Name = "logMessageTextBox";
             this.logMessageTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logMessageTextBox.Size = new System.Drawing.Size( 248, 88 );
+            this.logMessageTextBox.Size = new System.Drawing.Size(248, 88);
             this.logMessageTextBox.TabIndex = 4;
+            this.logMessageTextBox.Text = "";
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point( 8, 84 );
+            this.label3.Location = new System.Drawing.Point(8, 84);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size( 100, 23 );
             this.label3.TabIndex = 3;
-            this.label3.Text = "Log &message:";
+            this.label3.Text = "Log message:";
             // 
             // subDirNameTextBox
             // 
             this.subDirNameTextBox.Enabled = false;
-            this.subDirNameTextBox.Location = new System.Drawing.Point( 48, 56 );
+            this.subDirNameTextBox.Location = new System.Drawing.Point(48, 56);
             this.subDirNameTextBox.Name = "subDirNameTextBox";
-            this.subDirNameTextBox.Size = new System.Drawing.Size( 200, 20 );
+            this.subDirNameTextBox.Size = new System.Drawing.Size(200, 20);
             this.subDirNameTextBox.TabIndex = 2;
+            this.subDirNameTextBox.Text = "";
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point( 8, 56 );
+            this.label2.Location = new System.Drawing.Point(8, 56);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size( 40, 23 );
+            this.label2.Size = new System.Drawing.Size(40, 23);
             this.label2.TabIndex = 1;
-            this.label2.Text = "&Name:";
+            this.label2.Text = "Name:";
             // 
             // createSubDirCheckBox
             // 
-            this.createSubDirCheckBox.Location = new System.Drawing.Point( 8, 24 );
+            this.createSubDirCheckBox.Location = new System.Drawing.Point(8, 24);
             this.createSubDirCheckBox.Name = "createSubDirCheckBox";
-            this.createSubDirCheckBox.Size = new System.Drawing.Size( 160, 24 );
+            this.createSubDirCheckBox.Size = new System.Drawing.Size(160, 24);
             this.createSubDirCheckBox.TabIndex = 0;
-            this.createSubDirCheckBox.Text = "&Create subdirectory";
-            this.createSubDirCheckBox.CheckedChanged += new System.EventHandler( this.createSubDirCheckBox_CheckedChanged );
+            this.createSubDirCheckBox.Text = "Create subdirectory";
+            this.createSubDirCheckBox.CheckedChanged += new System.EventHandler(this.createSubDirCheckBox_CheckedChanged);
             // 
             // okButton
             // 
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point( 128, 312 );
+            this.okButton.Location = new System.Drawing.Point(128, 312);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size( 75, 23 );
             this.okButton.TabIndex = 2;
-            this.okButton.Text = "&Add";
+            this.okButton.Text = "OK";
             // 
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point( 216, 312 );
+            this.button2.Location = new System.Drawing.Point(216, 312);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size( 75, 23 );
             this.button2.TabIndex = 3;
             this.button2.Text = "Cancel";
             // 
             // AddSolutionDialog
             // 
             this.AcceptButton = this.okButton;
-            this.AutoScaleBaseSize = new System.Drawing.Size( 5, 13 );
             this.CancelButton = this.CancelButton;
-            this.ClientSize = new System.Drawing.Size( 296, 341 );
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.ClientSize = new System.Drawing.Size(296, 341);
             this.ControlBox = false;
-            this.Controls.Add( this.button2 );
-            this.Controls.Add( this.okButton );
-            this.Controls.Add( this.subDirGroupBox );
-            this.Controls.Add( this.locationGroupBox );
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.subDirGroupBox);
+            this.Controls.Add(this.locationGroupBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AddSolutionDialog";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add solution to repository";
-            this.locationGroupBox.ResumeLayout( false );
-            this.locationGroupBox.PerformLayout();
-            this.subDirGroupBox.ResumeLayout( false );
-            this.subDirGroupBox.PerformLayout();
-            this.ResumeLayout( false );
+            this.locationGroupBox.ResumeLayout(false);
+            this.subDirGroupBox.ResumeLayout(false);
+            this.ResumeLayout(false);
 
         }
 		#endregion

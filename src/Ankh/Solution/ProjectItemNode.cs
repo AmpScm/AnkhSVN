@@ -87,7 +87,6 @@ namespace Ankh.Solution
         protected override void UnhookEvents()
         {
             UnhookEvents( this.resources, new EventHandler( this.ChildOrResourceChanged ) );
-            UnhookEvents( this.resources, new EventHandler( this.ChildrenChanged ) );
             UnhookEvents( this.deletedResources, new EventHandler( this.DeletedItemStatusChanged ) );
         }
 
@@ -134,15 +133,14 @@ namespace Ankh.Solution
             try
             {
                 EventHandler del = new EventHandler( this.ChildOrResourceChanged );
-                EventHandler childrenChangedHandler = new EventHandler( this.ChildrenChanged );
-                this.AddResourcesFromProjectItem( this.ProjectItem, del, childrenChangedHandler );
-                this.AddResourcesFromProjectItem( this.parsedProjectItem, del, childrenChangedHandler );
+                this.AddResourcesFromProjectItem( this.ProjectItem, del );
+                this.AddResourcesFromProjectItem( this.parsedProjectItem, del );
 
                 // is this a childless tree node? it might have hidden children after all
                 if ( this.Children.Count == 0 )
                 {
-                    this.AddSubItems( this.ProjectItem, del, childrenChangedHandler );
-                    this.AddSubItems( this.parsedProjectItem, del, childrenChangedHandler );
+                    this.AddSubItems( this.ProjectItem, del );
+                    this.AddSubItems( this.parsedProjectItem, del );
                 }
                
             }
@@ -175,8 +173,7 @@ namespace Ankh.Solution
         }
 
         // recursively adds subitems of this projectitem.
-        private void AddSubItems( ProjectItem item, EventHandler del, 
-            EventHandler childrenChangedHandler )
+        private void AddSubItems( ProjectItem item, EventHandler del )
         {
             if ( item==null || item.ProjectItems == null ) 
                 return;
@@ -188,8 +185,8 @@ namespace Ankh.Solution
                 {
                     if ( subItem.Name != Client.AdminDirectoryName )
                     {
-                        this.AddResourcesFromProjectItem( subItem, del, childrenChangedHandler );
-                        this.AddSubItems( subItem, del, childrenChangedHandler );
+                        this.AddResourcesFromProjectItem( subItem, del );
+                        this.AddSubItems( subItem, del );
                     }
                 }               
             }
@@ -203,8 +200,7 @@ namespace Ankh.Solution
         }
 
         // recursively adds subitems of this projectitem.
-        private void AddSubItems( ParsedSolutionItem item, EventHandler modifiedHandler, 
-            EventHandler childrenChangedHandler )
+        private void AddSubItems( ParsedSolutionItem item, EventHandler del )
         {
             if ( item==null || item.Children.Count == 0 ) 
                 return;
@@ -213,14 +209,13 @@ namespace Ankh.Solution
             {
                 if ( subItem.Name != Client.AdminDirectoryName )
                 {
-                    this.AddResourcesFromProjectItem( subItem, modifiedHandler, childrenChangedHandler );
-                    this.AddSubItems( subItem, modifiedHandler, childrenChangedHandler );
+                    this.AddResourcesFromProjectItem( subItem, del );
+                    this.AddSubItems( subItem, del );
                 }
             } 
         }
 
-        private void AddResourcesFromProjectItem( ProjectItem item, EventHandler modifiedHandler, 
-            EventHandler childrenChangedHandler )
+        private void AddResourcesFromProjectItem( ProjectItem item, EventHandler del )
         {
             if ( item==null || item.FileCount == 0 )
                 return;
@@ -256,8 +251,7 @@ namespace Ankh.Solution
                 if ( svnItem.IsFile || svnItem.IsDirectory )
                 {
                     this.resources.Add( svnItem );
-                    svnItem.Changed += modifiedHandler;
-                    svnItem.ChildrenChanged += childrenChangedHandler;
+                    svnItem.Changed += del;
 
                   
                    // if its a dir, we want the deleted paths too
@@ -269,8 +263,7 @@ namespace Ankh.Solution
             }
         }
 
-        private void AddResourcesFromProjectItem( ParsedSolutionItem item, 
-            EventHandler modifiedHandler, EventHandler childrenChangedHandler )
+        private void AddResourcesFromProjectItem( ParsedSolutionItem item, EventHandler del )
         {
             if(item==null)
                 return;
@@ -279,8 +272,7 @@ namespace Ankh.Solution
             if ( svnItem.IsFile || svnItem.IsDirectory )
             {
                 this.resources.Add( svnItem );
-                svnItem.Changed += modifiedHandler;
-                svnItem.ChildrenChanged += childrenChangedHandler;
+                svnItem.Changed += del;
 
                 // if its a dir, we want the deleted paths too
                 if ( svnItem.IsDirectory )

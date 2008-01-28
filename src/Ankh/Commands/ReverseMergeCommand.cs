@@ -9,17 +9,15 @@ using System.IO;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command to revert current item to a specific revision.
+    /// A command that performs a reverse merge on an item/items, allowing
+    /// the user to go back to a previous version.
     /// </summary>
-    [VSNetCommand( "ReverseMerge",
-         Text = "Re&vert to Revision...", 
-         Tooltip = "Revert this item to a specific revision.", 
+    [VSNetCommand( "ReverseMerge", Text="Revert to revision...", 
+         Tooltip="Go back to a previous version of this item.", 
          Bitmap = ResourceBitmaps.RevertToVersion),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 4 )]
+    VSNetItemControl( "Ankh", Position = 1 )]
     public class ReverseMergeCommand : CommandBase
     {
-        #region Implementation of ICommand
-
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             IList resources = context.Selection.GetSelectionResources(
@@ -41,7 +39,7 @@ namespace Ankh.Commands
             {
                 using ( ReverseMergeDialog dlg = new ReverseMergeDialog() )
                 {
-                    dlg.GetPathInfo += new ResolvingPathInfoHandler(SvnItem.GetPathInfo);
+                    dlg.GetPathInfo += new GetPathInfoDelegate(SvnItem.GetPathInfo);
                     dlg.Items = resources;
                     dlg.CheckedItems = resources;
                     dlg.Recursive = true;
@@ -70,9 +68,7 @@ namespace Ankh.Commands
                 context.EndOperation();
             }
         }
-
-        #endregion
-
+        
         /// <summary>
         /// A progressrunner for reverse merges.
         /// </summary>

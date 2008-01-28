@@ -219,7 +219,6 @@
     </Compile>
     <EmbeddedResource Include="FolderBrowser.resx">
       <DependentUpon>FolderBrowser.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Utils.build" />
     <None Include="Utils.wxs" />

@@ -70,18 +70,6 @@ namespace Ankh
             Handle( ex.InnerException );
         }
 
-        private void DoHandle(RepositoryHookFailedException e)
-        {
-            string message;
-            if (e.InnerException != null)
-                message = string.Format("{1}{0}{0}{2}{0}", Environment.NewLine, e.Message, e.InnerException.Message);
-            else
-                message = e.Message;
-
-            MessageBox.Show(message, "Repository hook failed", MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
-        }
-
 
         private void DoHandle( WorkingCopyLockedException ex )
         {

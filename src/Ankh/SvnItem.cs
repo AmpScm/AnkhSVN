@@ -30,8 +30,6 @@ namespace Ankh
         /// </summary>
         public event EventHandler Changed;
 
-        public event EventHandler ChildrenChanged;
-
         public SvnItem( string path, Status status )
         {
             this.path = path;
@@ -205,8 +203,6 @@ namespace Ankh
                     // find the containing dir
                     dir = System.IO.Path.GetDirectoryName( this.path );
 
-                if( dir == null )
-                    return false;
                 return Directory.Exists( 
                     System.IO.Path.Combine( dir, Client.AdminDirectoryName ));
             }
@@ -258,14 +254,6 @@ namespace Ankh
         public override string ToString()
         {
             return this.path;
-        }
-
-        public void NotifyChildrenChanged()
-        {
-            if ( this.ChildrenChanged != null )
-            {
-                this.ChildrenChanged( this, EventArgs.Empty );
-            }
         }
 
 
@@ -478,7 +466,7 @@ namespace Ankh
         }
 
 
-        public static void GetPathInfo( object sender, ResolvingPathEventArgs args )
+        public static void GetPathInfo( object sender, GetPathInfoEventArgs args )
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;

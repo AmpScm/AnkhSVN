@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Revision.h"
 
-using namespace System;
-
 
 /// <summary>Creates a revision from a revision number</summary>
 NSvn::Core::Revision* NSvn::Core::Revision::FromNumber( int revision )

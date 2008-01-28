@@ -8,18 +8,16 @@ using Ankh.UI;
 
 namespace Ankh.Commands
 {
-    /// <summary>
-    /// Command to checkout current solution in Repository Explorer.
-    /// </summary>
-    [VSNetCommand("CheckoutSolution",
-         Text = "Checkout &Solution...",
-         Tooltip = "Checkout this solution.", 
-         Bitmap = ResourceBitmaps.CheckoutSolution),
-         VSNetControl( "ReposExplorer", Position = 2 )]
-	public class CheckoutSolutionCommand : CommandBase
-    {
-        #region Implementation of ICommand
-
+	/// <summary>
+	/// Summary description for ViewInVSNetCommand.
+	/// </summary>
+    [VSNetCommand("CheckoutSolution", Tooltip="Checkout this solution", 
+         Bitmap = ResourceBitmaps.CheckoutSolution, Text = "Checkout Solution..." ),
+    VSNetControl( "ReposExplorer", Position = 2 ) ]
+	public class CheckoutSolutionCommand : 
+        CommandBase
+	{
+        #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             IRepositoryTreeNode node = context.RepositoryExplorer.SelectedNode;
@@ -31,6 +29,7 @@ namespace Ankh.Commands
             else
                 return Disabled;
         }
+        #endregion
 
         public override void Execute(IContext context, string parameters)
         {
@@ -57,8 +56,6 @@ namespace Ankh.Commands
             {
                 context.EndOperation();
             }
-        }
-
-        #endregion
-    }
+        }  
+	}
 }

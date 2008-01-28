@@ -14,15 +14,12 @@ namespace Ankh.Commands
     /// <summary>
     /// A command that updates an item.
     /// </summary>
-    [VSNetCommand("UpdateItem",
-         Text = "&Update...",
-         Tooltip = "Updates local items with changes from the Subversion repository.",
+    [VSNetCommand("UpdateItem", Text = "Update...", Tooltip = "Updates the local item",
          Bitmap = ResourceBitmaps.Update),
-         VSNetItemControl( "", Position = 3 )]
+   VSNetItemControl( "", Position = 1 )]
     public class UpdateItem : CommandBase
-    {
+    {		
         #region Implementation of ICommand
-
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // all items must be versioned if we are going to run update.
@@ -45,6 +42,7 @@ namespace Ankh.Commands
                 IList resources = context.Selection.GetSelectionResources( true,
                     new ResourceFilterCallback(SvnItem.VersionedFilter) );
 
+
                 // we assume by now that all items are working copy resources.                
                 UpdateRunner runner = new UpdateRunner( context, resources );
                 if ( !runner.MaybeShowUpdateDialog() )
@@ -64,8 +62,10 @@ namespace Ankh.Commands
             finally
             {
                 context.EndOperation();
+
             }
-        }
+
+        }    
 
         #endregion
 
@@ -98,7 +98,7 @@ namespace Ankh.Commands
                 // equivalent to accepting the default in the dialog.
                 using(UpdateDialog d = new UpdateDialog())
                 {
-                    d.GetPathInfo += new ResolvingPathInfoHandler(SvnItem.GetPathInfo);
+                    d.GetPathInfo += new GetPathInfoDelegate(SvnItem.GetPathInfo);
                     d.Items = this.resources;
                     d.CheckedItems = this.resources;
                     d.Recursive = true;
@@ -161,5 +161,9 @@ namespace Ankh.Commands
             private IContext context;
         }            
         #endregion
+
     }
 }
+
+
+

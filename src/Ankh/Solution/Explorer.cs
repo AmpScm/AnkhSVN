@@ -16,7 +16,6 @@ using C = Utils.Win32.Constants;
 using DteConstants = EnvDTE.Constants;
 using System.Windows.Forms;
 using System.Threading;
-using Ankh.UI;
 
 
 namespace Ankh.Solution
@@ -308,7 +307,7 @@ namespace Ankh.Solution
         }
 
 
-        internal Win32TreeView TreeView
+        internal TreeView TreeView
         {
             //[System.Diagnostics.DebuggerStepThrough]
             get
@@ -347,7 +346,7 @@ namespace Ankh.Solution
             get{ return this.dte; }
         }
 
-        internal UIHierarchy UIHierarchy
+        private UIHierarchy UIHierarchy
         {
             get
             {
@@ -401,7 +400,7 @@ namespace Ankh.Solution
                     "window is on a secondary monitor, " +
                     "try moving it to the primary during solution loading." );
 
-            this.treeView = new Win32TreeView( treeHwnd );
+            this.treeView = new TreeView( treeHwnd );
         }
 
         /// <summary>
@@ -511,7 +510,7 @@ namespace Ankh.Solution
         [Conditional( "DEBUG" )]
         private void CountResources()
         {
-            //this.CountUIHierarchy();
+            this.CountUIHierarchy();
             Debug.WriteLine( "Number of nodes in nodes hash: " + this.nodes.Count );
         }
 
@@ -544,12 +543,6 @@ namespace Ankh.Solution
         private SolutionExplorerTreeNode GetNodeForProject( Project project )
         {
             EnvDTE.UIHierarchy hierarchy = this.dte.Windows.Item( EnvDTE.Constants.vsWindowKindSolutionExplorer ).Object as EnvDTE.UIHierarchy;
-
-            if ( hierarchy.UIHierarchyItems.Count < 1 )
-            {
-                return null;
-            }
-
             string hierarchyPath = hierarchy.UIHierarchyItems.Item(1).Name + "\\" + this.BuildHierarchyPathForProject( project );
 
             try
@@ -629,7 +622,6 @@ namespace Ankh.Solution
             }
         }
 
-        [Conditional("DEBUG")]
         private void DumpHierarchy( UIHierarchy hierarchy )
         {
             DumpHierarchyItems( hierarchy.UIHierarchyItems, 0 );
@@ -816,12 +808,6 @@ namespace Ankh.Solution
                 DateTime startTime = DateTime.Now;
                 outer.context.StartOperation( "Synchronizing with solution explorer");
 
-                Debug.Assert( outer.UIHierarchy.UIHierarchyItems.Count > 0 );
-                if ( outer.UIHierarchy.UIHierarchyItems.Count < 1 )
-                {
-                    return;
-                }
-
                 // avoid lots of flickering while we walk the tree
                 outer.TreeView.LockWindowUpdate();
                 try
@@ -894,15 +880,8 @@ namespace Ankh.Solution
                     this.done = false;
                     DateTime startTime = DateTime.Now;
 
-                    // this really shouldn't happen
-                    Debug.Assert( outer.UIHierarchy.UIHierarchyItems.Count > 0 );
-                    if ( outer.UIHierarchy.UIHierarchyItems.Count < 1 )
-                    {
-                        return;
-                    }
-
                     // loop until all the items have been loaded in the solution explorer
-                    UIHierarchyItem item = outer.UIHierarchy.UIHierarchyItems.Item( 1 );
+                    UIHierarchyItem item = outer.UIHierarchy.UIHierarchyItems.Item(1);
 
                     // if there is a Misc Items project in the solution, 
                     // it doesn't necessarily appear as an UIHierarchyItem
@@ -1011,7 +990,7 @@ namespace Ankh.Solution
         private SolutionNode solutionNode;
 
         private IContext context;
-        private Win32TreeView treeView;
+        private TreeView treeView;
         private IntPtr originalImageList = IntPtr.Zero;
 
         private bool refreshPending;

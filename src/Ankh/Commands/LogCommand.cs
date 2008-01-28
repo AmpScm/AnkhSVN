@@ -9,18 +9,11 @@ using System.Collections;
 
 namespace Ankh.Commands
 {
-    /// <summary>
-    /// Command to show the change log for the selected item.
-    /// </summary>
-    [VSNetCommand("Log",
-         Text = "&Log...",
-         Tooltip = "Show the change log for the selected item.",
+    [VSNetCommand("Log", Text = "Log...", Tooltip = "Runs Log on the selected item",
          Bitmap = ResourceBitmaps.Log),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 6 )]
+    VSNetItemControl( "Ankh", Position = 1 )]  
 	public class LogCommand : CommandBase
-    {
-        #region Implementation of ICommand
-
+	{
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.Selection.GetSelectionResources( false, 
@@ -61,9 +54,8 @@ namespace Ankh.Commands
 
             // display the HTML with the filename as caption
             context.UIShell.DisplayHtml( "Log", writer.ToString(), false );
-        }
 
-        #endregion
+        }
 
         private void ProgressCallback( IContext context )
         {
@@ -71,7 +63,7 @@ namespace Ankh.Commands
             this.result.Start();
 
             string[] paths = SvnItem.GetPaths( info.CheckedItems );
-            context.Client.Log( paths, info.RevisionEnd, info.RevisionStart, true, 
+            context.Client.Log( paths, info.RevisionStart, info.RevisionEnd, true, 
                 info.StopOnCopy, new LogMessageReceiver(result.Receive) );
 
             this.result.End();

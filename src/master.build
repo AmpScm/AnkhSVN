@@ -15,8 +15,6 @@
     <property name="alt.admin.dir" value="true"/>
     <property name="wix-binary.dir" value="${path::get-full-path('../tools/WiX')}"/>
 
-    <property name="IndexSource" value="false" />
-
     <ifnot test="${property::exists('svndir')}">
         <sysinfo />
         <ifnot test="${property::exists('sys.env.SVNSRC')}">
@@ -25,17 +23,12 @@
         <property name="svndir" value="${sys.env.SVNSRC}" />
     </ifnot>
 
-    <nant>
-        <buildfiles>
-            <include name="NantIncludes\*.build" />
-        </buildfiles>
-    </nant>
     <!--<property name="nant.default.framework" value="net-1.0" unless="${vs.2003}"/>
     <property name="nant.default.framework" value="net-1.1" unless="${vs.2003}"/>-->
 
 
     <!-- Creates the NSvn.msm merge module -->
-    <target name="build-NSvn.msm" depends="build, version">
+    <target name="build-NSvn.msm" depends="build">
         <delete dir="${installsource.dir}" verbose="${verbose}" failonerror="false" />
         <mkdir dir="${installsource.dir}" />
         
@@ -92,6 +85,8 @@
         <nant buildfile="Utils.Tests/Utils.Tests.build" target="clean" inheritall="true" />
         
         <delete dir="${installsource.dir}" failonerror="false"/>
+        
+        <regasm assembly="${build.dir}\Ankh.dll" verbose="${verbose}" codebase="true" unregister="true" failonerror="false"/>
     
         <delete dir="build-Release" verbose="${verbose}" failonerror="false" />
         <delete dir="build-Debug" verbose="${verbose}" failonerror="false" />
@@ -136,6 +131,14 @@
             </fileset>
         </copy>
 
+        <!-- unfortunately necessary to get regasm to work -->
+        <copy todir="${build.dir}">
+            <fileset basedir="${lib.dir}">
+                <include name="envdte.dll"/>
+                <include name="extensibility.dll"/>
+            </fileset>
+        </copy>        
+        
         <copy todir="${build.dir}" flatten="true">
             <fileset basedir="${svndir}">
                 <include name="apr\Debug\libapr.dll" if="${debug}" />
@@ -148,7 +151,16 @@
                 <include name="db4-win32\bin\libdb44.dll" unless="${debug}" />
             </fileset>
         </copy>
+         
+        <regasm assembly="${build.dir}\Ankh.dll" typelib="${build.dir}\Ankh.tlb" failonerror="false"  codebase="true" exporttypelib="true" verbose="${verbose}"/>
 
+        <!-- and now to get rid of them again -->
+        <delete>
+            <fileset basedir="${build.dir}">
+                <include name="envdte.dll"/>
+                <include name="extensibility.dll"/>
+            </fileset>
+        </delete>
     </target>
     
     <target name="build-Ankh.UI" depends="build-NSvn.Core, build-Utils">
@@ -239,7 +251,7 @@
     
     <target name="build" depends="build-Ankh, build-Ankh.UI, build-Utils,build-NSvn.Common, build-NSvn.Core, build-ReposInstaller"
         description="Build all necessary assemblies">
-        <SsIndex srcDir="." type="SVN" if="${IndexSource}" />
+        
     </target>
     
     <target name="build-tests" depends="build, build-TestUtils, build-Ankh.Tests, build-NSvn.Core.Tests, build-NSvn.Core.Tests.MCpp, build-Utils.Tests"
