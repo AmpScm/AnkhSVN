@@ -1,0 +1,15 @@
+<UseCase>
+    <Preface>
+        <Name></Name>
+        <ID></ID>
+        <Actors></Actors>
+        <Summary></Summary>
+    </Preface>
+    
+    <MainFlow>
+        <Preconditions></Preconditions>
+        <FlowElements></FlowElements>
+        <Postconditions></Postconditions>
+    </MainFlow>
+</UseCase>
+        
