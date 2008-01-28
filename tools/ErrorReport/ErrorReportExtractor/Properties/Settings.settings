@@ -31,8 +31,5 @@
     <Setting Name="DefaultOutlookFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">Final year project\ankhsvn\Error Reports</Value>
     </Setting>
-    <Setting Name="Pop3ReadItemsCache" Type="System.String" Scope="User">
-      <Value Profile="(Default)">D:\halftemp\ErrorReportReadItemsCache.xml</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

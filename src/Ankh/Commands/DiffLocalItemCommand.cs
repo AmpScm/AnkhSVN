@@ -7,17 +7,14 @@ using SHDocVw;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Shows differences compared to local text base.
+    /// Summary description for DiffLocalItem.
     /// </summary>
-    [VSNetCommand( "DiffLocalItem",
-         Text = "Di&ff...", 
-         Tooltip = "Show differences compared to local text base.", 
+    [VSNetCommand( "DiffLocalItem", Text="Diff...", 
+         Tooltip="Diff against local text base.", 
          Bitmap = ResourceBitmaps.Diff),
-         VSNetItemControl( "", Position = 1 )]
+    VSNetItemControl( "", Position = 1 )]
     public class DiffLocalItem : LocalDiffCommandBase
     {
-        #region Implementation of ICommand
-
         public override void Execute(Ankh.IContext context, string parameters)
         {
             try
@@ -46,14 +43,17 @@ namespace Ankh.Commands
                     object nullObject = null;
                     browser.Navigate2( ref url, ref nullObject, ref nullObject,
                         ref nullObject, ref nullObject );
-                    browserWindow.Activate();
+                    browserWindow.Activate();            
                 }
             }
             finally
             {
                 context.EndOperation();
             }
-        }
-        #endregion
+
+        } 
     }
 }
+
+
+

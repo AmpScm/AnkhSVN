@@ -3,18 +3,11 @@ using System.Collections;
 
 namespace Ankh.Commands
 {
-    /// <summary>
-    /// Command to unlock the selected items.
-    /// </summary>
-    [VSNetCommand("Unlock",
-         Text = "U&nlock...",
-         Tooltip = "Unlock the selected items.",
+    [VSNetCommand("Unlock", Text = "Unlock...", Tooltip = "Unlocks the selected item(s)",
          Bitmap = ResourceBitmaps.Unlock),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 8 )] 
+    VSNetItemControl( "Ankh", Position = 1 )] 
 	public class UnlockCommand : CommandBase
-    {
-        #region Implementation of ICommand
-
+	{
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             IList resources = context.Selection.GetSelectionResources(true, 
@@ -44,8 +37,6 @@ namespace Ankh.Commands
                 item.Refresh( context.Client );
         }
 
-        #endregion
-
         private void DoUnlock( IContext context )
         {
             string[] paths = SvnItem.GetPaths( this.info.CheckedItems );
@@ -53,5 +44,6 @@ namespace Ankh.Commands
         }
 
         private PathSelectorInfo info;
+
 	}
 }

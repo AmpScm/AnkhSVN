@@ -86,12 +86,12 @@ namespace NSvn
 
         public __gc class Notification
         {
-        private public:
+        public:
             Notification( const char *path, svn_wc_notify_action_t action, 
                 svn_node_kind_t kind, const char *mime_type, 
                 svn_wc_notify_state_t content_state, 
                 svn_wc_notify_state_t prop_state, svn_revnum_t revision,
-                apr_pool_t* pool )
+				apr_pool_t* pool )
             {
                 this->path = Utf8ToString( path, pool );
                 this->action = static_cast<NSvn::Core::NotifyAction>(action);
@@ -104,7 +104,7 @@ namespace NSvn
 
             //TODO: doc comments
 
-        public:
+
             ///<summary>The path affected in this notification</summary>
             [System::Diagnostics::DebuggerStepThrough]
             __property String* get_Path()

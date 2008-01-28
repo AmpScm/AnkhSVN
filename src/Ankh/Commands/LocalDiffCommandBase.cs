@@ -17,15 +17,11 @@ namespace Ankh.Commands
     /// </summary>
     public abstract class LocalDiffCommandBase : CommandBase
     {
-        #region Implementation of ICommand
-
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // always allow diff - worst case you get an empty diff            
             return Enabled;
         }
-
-        #endregion
 
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.

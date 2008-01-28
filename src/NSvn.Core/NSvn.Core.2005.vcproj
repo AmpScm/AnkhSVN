@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="NSvn.Core"
 	ProjectGUID="{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}"
 	RootNamespace="NSvn.Core"
@@ -20,7 +20,7 @@
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="2"
-			InheritedPropertySheets="C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			ManagedExtensions="4"
 			>
@@ -44,7 +44,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SVNSRC)\apr\include&quot;;&quot;$(SVNSRC)\apr-iconv\include&quot;;&quot;$(SVNSRC)\apr-util\include&quot;;&quot;$(SVNSRC)\subversion\include&quot;"
 				AdditionalUsingDirectories="&quot;..\NSvn.Common\bin\$(ConfigurationName)&quot;;&quot;..\Utils\bin\$(ConfigurationName)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;ALT_ADMIN_DIR;POST_DOTNET11"
+				PreprocessorDefinitions="WIN32;_DEBUG;ALT_ADMIN_DIR"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -64,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Mswsock.lib rpcrt4.lib ws2_32.lib shlwapi.lib $(SVNSRC)\zlib\zlibstatD.lib $(SVNSRC)\debug\subversion\libsvn_repos\libsvn_repos-1.lib $(SVNSRC)\debug\subversion\libsvn_fs\libsvn_fs-1.lib $(SVNSRC)\debug\subversion\libsvn_fs_fs\libsvn_fs_fs-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_local\libsvn_ra_local-1.lib $(SVNSRC)\debug\subversion\libsvn_ra\libsvn_ra-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib $(SVNSRC)\debug\subversion\libsvn_wc\libsvn_wc-1.lib $(SVNSRC)\debug\subversion\libsvn_subr\libsvn_subr-1.lib $(SVNSRC)\debug\subversion\libsvn_client\libsvn_client-1.lib $(SVNSRC)\debug\subversion\libsvn_delta\libsvn_delta-1.lib $(SVNSRC)\debug\subversion\libsvn_diff\libsvn_diff-1.lib $(SVNSRC)\db4-win32\lib\libdb44d.lib $(SVNSRC)\neon\libneonD.lib $(SVNSRC)\apr\Debug\libapr.lib $(SVNSRC)\apr-util\Debug\libaprutil.lib $(SVNSRC)\apr-iconv\Debug\libapriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibD\xml.lib"
+				AdditionalDependencies="Mswsock.lib rpcrt4.lib ws2_32.lib shlwapi.lib $(SVNSRC)\zlib\zlibstatD.lib $(SVNSRC)\debug\subversion\libsvn_repos\libsvn_repos-1.lib $(SVNSRC)\debug\subversion\libsvn_fs\libsvn_fs-1.lib $(SVNSRC)\debug\subversion\libsvn_fs_base\libsvn_fs_base-1.lib $(SVNSRC)\debug\subversion\libsvn_fs_fs\libsvn_fs_fs-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_dav\libsvn_ra_dav-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_local\libsvn_ra_local-1.lib $(SVNSRC)\debug\subversion\libsvn_ra\libsvn_ra-1.lib $(SVNSRC)\debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib $(SVNSRC)\debug\subversion\libsvn_wc\libsvn_wc-1.lib $(SVNSRC)\debug\subversion\libsvn_subr\libsvn_subr-1.lib $(SVNSRC)\debug\subversion\libsvn_client\libsvn_client-1.lib $(SVNSRC)\debug\subversion\libsvn_delta\libsvn_delta-1.lib $(SVNSRC)\debug\subversion\libsvn_diff\libsvn_diff-1.lib $(SVNSRC)\db4-win32\lib\libdb44d.lib $(SVNSRC)\neon\libneonD.lib $(SVNSRC)\apr\Debug\libapr.lib $(SVNSRC)\apr-util\Debug\libaprutil.lib $(SVNSRC)\apr-iconv\Debug\libapriconv.lib $(SVNSRC)\apr-util\xml\expat\lib\LibD\xml.lib"
 				OutputFile="$(OutDir)/NSvn.Core.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SVNSRC)\debug"
@@ -102,7 +102,7 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="2"
-			InheritedPropertySheets="C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			ManagedExtensions="4"
 			>
@@ -127,7 +127,7 @@
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;$(SVNSRC)\apr\include&quot;;&quot;$(SVNSRC)\apr-iconv\include&quot;;&quot;$(SVNSRC)\apr-util\include&quot;;&quot;$(SVNSRC)\subversion\include&quot;"
 				AdditionalUsingDirectories="&quot;..\NSvn.Common\bin\$(ConfigurationName)&quot;;&quot;..\Utils\bin\$(ConfigurationName)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;ALT_ADMIN_DIR;POST_DOTNET11"
+				PreprocessorDefinitions="WIN32;NDEBUG;ALT_ADMIN_DIR"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -181,7 +181,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			ManagedExtensions="4"
 			>
@@ -205,7 +205,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SVNSRC)\apr\include&quot;;&quot;$(SVNSRC)\apr-iconv\include&quot;;&quot;$(SVNSRC)\apr-util\include&quot;;&quot;$(SVNSRC)\subversion\include&quot;"
 				AdditionalUsingDirectories="&quot;..\NSvn.Common\bin\$(ConfigurationName)&quot;;&quot;..\Utils\bin\$(ConfigurationName)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;POST_DOTNET11"
+				PreprocessorDefinitions="WIN32;_DEBUG"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -263,7 +263,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			ManagedExtensions="4"
 			>
@@ -288,7 +288,7 @@
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;$(SVNSRC)\apr\include&quot;;&quot;$(SVNSRC)\apr-iconv\include&quot;;&quot;$(SVNSRC)\apr-util\include&quot;;&quot;$(SVNSRC)\subversion\include&quot;"
 				AdditionalUsingDirectories="&quot;..\NSvn.Common\bin\$(ConfigurationName)&quot;;&quot;..\Utils\bin\$(ConfigurationName)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;POST_DOTNET11"
+				PreprocessorDefinitions="WIN32;NDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -342,7 +342,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			ManagedExtensions="4"
 			>
@@ -366,7 +366,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SVNSRC)\apr\include&quot;;&quot;$(SVNSRC)\apr-iconv\include&quot;;&quot;$(SVNSRC)\apr-util\include&quot;;&quot;$(SVNSRC)\subversion\include&quot;"
 				AdditionalUsingDirectories="&quot;..\NSvn.Common\bin\$(ConfigurationName)&quot;;&quot;..\Utils\bin\$(ConfigurationName)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;ALT_ADMIN_DIR;POST_DOTNET11"
+				PreprocessorDefinitions="WIN32;_DEBUG;ALT_ADMIN_DIR"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -642,6 +642,10 @@
 			</File>
 			<File
 				RelativePath="Status.h"
+				>
+			</File>
+			<File
+				RelativePath="StatusDictionary.h"
 				>
 			</File>
 			<File

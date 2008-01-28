@@ -24,7 +24,7 @@ namespace NSvn
         // .NET representation of the svn_client_ctx_t structure
         public __gc class ClientContext
         {
-        private public:
+        public:
 
             ClientContext( Client* client ) : client(client), context(0)
             {;}
@@ -34,7 +34,7 @@ namespace NSvn
                                          context(0)
             {;}
             
-        public:
+
             // An authentication baton
             [System::Diagnostics::DebuggerStepThrough]
             __property NSvn::Core::AuthenticationBaton* get_AuthBaton()

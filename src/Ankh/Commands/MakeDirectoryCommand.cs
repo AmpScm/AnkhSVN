@@ -9,17 +9,14 @@ using Utils;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command to creates a new directory here in the Repository Explorer.
+    /// A command for creating a new remote directory (in the repos explorer).
     /// </summary>
-    [VSNetCommand("MakeDirectoryCommand",
-         Text = "Ne&w Directory...",
-         Tooltip = "Create a new directory here.",
+    [VSNetCommand("MakeDirectoryCommand", 
+         Tooltip="Create new directory here", Text = "New directory...",
          Bitmap = ResourceBitmaps.MakeDirectory ),
-         VSNetControl( "ReposExplorer", Position = 1 )]
+    VSNetControl( "ReposExplorer", Position = 1 ) ]
     public class MakeDirectoryCommand : CommandBase
     {
-        #region Implementation of ICommand
-
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // we only want directories
@@ -62,10 +59,9 @@ namespace Ankh.Commands
             finally
             {
                 context.EndOperation();
-            }
-        }
+            }           
 
-        #endregion
+        }
 
         private void DoCreateDir( IContext context )
         {

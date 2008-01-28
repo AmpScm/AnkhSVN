@@ -6,17 +6,13 @@ using System.Text;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command to lock the selected item.
+    /// A command class to support the svn lock command
     /// </summary>
-    [VSNetCommand("Lock",
-         Text = "Loc&k...",
-         Tooltip = "Lock the selected item.",
+    [VSNetCommand("Lock", Text = "Lock...", Tooltip = "Locks the selected item",
          Bitmap = ResourceBitmaps.Lock),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 8 )]
+    VSNetItemControl( "Ankh", Position = 1 )]    
     public class LockCommand : CommandBase
-    {
-        #region Implementation of ICommand
-
+	{
         public override void Execute(IContext context, string parameters)
         {
             IList resources = context.Selection.GetSelectionResources(true, 
@@ -51,8 +47,6 @@ namespace Ankh.Commands
                 this.ShowLockFailedMessage( context );
             }
         }
-
-        #endregion
 
         private void ShowLockFailedMessage( IContext context )
         {
@@ -98,5 +92,5 @@ namespace Ankh.Commands
         
         private LockDialogInfo info;
         private ArrayList lockFailedFiles;
-    }
+	}
 }

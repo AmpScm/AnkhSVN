@@ -13,19 +13,22 @@ using System.Text;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command to add a solution to a Subversion repository
+    /// A command that allows the user to add a solution to a repository
     /// by checking out the repository directory to the solution directory, then
-    /// recursively adding all solution items.
+    /// recursively adding all solution items
     /// </summary>
-    [VSNetCommand("AddSolutionToRepository",
-         Text = "Add Sol&ution to Subversion repository...",
-         Tooltip = "Add this solution to a Subversion repository.",
-         Bitmap = ResourceBitmaps.AddSolutionToRepository),
-         VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position = 1 ),
-         VSNetControl( "File", Position = 14 )]
+    [VSNetCommand("AddSolutionToRepository", 
+         Text="Add solution to Subversion repository...", 
+         Tooltip= "Add this solution to Subversion repository", 
+         Bitmap=ResourceBitmaps.AddSolutionToRepository ),
+    VSNetControl( "Solution.Ankh", Position=1 ),
+    VSNetControl( "File", Position=14 )]
     public class AddSolutionToRepositoryCommand : CommandBase
     {
-        #region Implementation of ICommand
+        public AddSolutionToRepositoryCommand()
+        {
+                        
+        }
 
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
@@ -186,8 +189,6 @@ namespace Ankh.Commands
             }
         }
 
-        #endregion
-
         private string FormatProjectNames( string[] projectNames )
         {
             StringBuilder builder = new StringBuilder();
@@ -301,14 +302,18 @@ namespace Ankh.Commands
                 args.Message = this.logMessage;
             }
 
+            
+
             private IContext context;
             private string url;
-            private string logMessage;
+            private string logMessage;            
             #region IDisposable Members
 
             
             #endregion
         }
+
+       
 
         private ArrayList paths;
     }

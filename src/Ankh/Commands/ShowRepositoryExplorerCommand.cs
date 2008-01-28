@@ -5,27 +5,22 @@ using EnvDTE;
 namespace Ankh.Commands
 {
 	/// <summary>
-    /// Command to show the Repository Explorer window.
+	/// Displays the Repository Explorer tool window.
 	/// </summary>
-    [VSNetCommand("ShowRepositoryExplorer",
-         Text = "&Repository Explorer",
-         Tooltip = "Show the Repository Explorer window.",
+    [VSNetCommand("ShowRepositoryExplorer", Text = "Repository Explorer", Tooltip = "Show the repository explorer window",
          Bitmap = ResourceBitmaps.ReposExplorer),
-    VSNetControl( "Tools.AnkhSVN", Position = 4 )]
+    VSNetControl( "Tools.AnkhSVN", Position = 1 )]
 	public class ShowRepositoryExplorerCommand : CommandBase
-    {
-        #region Implementation of ICommand
-
+	{
         public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
             return Enabled;
         }
-
+		
         public override void Execute(Ankh.IContext context, string parameters)
         {
             context.UIShell.ShowRepositoryExplorer( true );
-        }
-
-        #endregion
-    }
+        }        
+   
+	}
 }

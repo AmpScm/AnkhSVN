@@ -17,7 +17,6 @@ namespace Ankh.Solution
         {
             this.project = project;
             this.modeled=true;
-            this.deletedResources = new ArrayList();
 
             this.FindProjectResources(explorer);
                 
@@ -73,19 +72,12 @@ namespace Ankh.Solution
         protected override void UnhookEvents()
         {
             UnhookEvents( new SvnItem[] { this.projectFile, this.projectFolder }, new EventHandler( this.ChildOrResourceChanged ) );
-            UnhookEvents( new SvnItem[] { this.projectFile, this.projectFolder }, new EventHandler( this.ChildrenChanged ) );
             UnhookEvents( this.deletedResources, new EventHandler(this.ChildOrResourceChanged) );
         }
 
 
         private void FindProjectResources(Explorer explorer)
         {
-            if (project.Kind == DteUtils.ScriptDebugging2008Kind)
-            {
-                this.projectFile = SvnItem.Unversionable;
-                this.projectFolder = SvnItem.Unversionable;
-                return;
-            }
             // find the directory containing the project
             string fullname = null;
             try
@@ -98,12 +90,13 @@ namespace Ankh.Solution
                 this.modeled=false;
             }
 
+            this.deletedResources = new ArrayList();
+
             // special treatment for VDs
             if (String.Compare(this.project.Kind, ProjectNode.VDPROJKIND, true) == 0)
                 fullname += ".vdproj";
 
-            EventHandler modifiedHandler = new EventHandler(this.ChildOrResourceChanged);
-            EventHandler childrenChangedHandler = new EventHandler( this.ChildrenChanged );
+            EventHandler del = new EventHandler(this.ChildOrResourceChanged);
             // the Solution Items project has no path
             if (fullname != string.Empty && File.Exists(fullname))
             {
@@ -114,11 +107,8 @@ namespace Ankh.Solution
                 this.Explorer.AddProjectFile( fullname );
 
                 // attach event handlers                
-                this.projectFolder.Changed += modifiedHandler;
-                this.projectFolder.ChildrenChanged += childrenChangedHandler;
-
-                this.projectFile.ChildrenChanged += childrenChangedHandler;
-                this.projectFile.Changed += modifiedHandler;
+                this.projectFolder.Changed += del;
+                this.projectFile.Changed += del;
 
                 // we also want deleted items in this folder
                 this.AddDeletions( this.projectFolder.Path,
@@ -131,8 +121,7 @@ namespace Ankh.Solution
                 this.projectFolder = this.Explorer.Context.StatusCache[fullname];
                 this.projectFile = SvnItem.Unversionable;
 
-                this.projectFolder.Changed += modifiedHandler;
-                this.projectFolder.ChildrenChanged += childrenChangedHandler;
+                this.projectFolder.Changed += del;
                 this.AddDeletions( this.projectFolder.Path, this.deletedResources, new EventHandler(this.DeletedItemStatusChanged) );
             }
             else
@@ -199,7 +188,7 @@ namespace Ankh.Solution
         private bool modeled;
         private SvnItem projectFolder;
         private SvnItem projectFile;
-        private readonly IList deletedResources;
+        private IList deletedResources;
         private Project project;
 
         private const string VDPROJKIND = @"{54435603-DBB4-11D2-8724-00A0C9A8B90C}";

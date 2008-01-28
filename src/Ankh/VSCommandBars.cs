@@ -2,30 +2,9 @@ using System;
 using System.Reflection;
 using EnvDTE;
 using Microsoft.Office.Core;
-using System.Collections;
-using System.Diagnostics;
 
 namespace Ankh
 {
-    /// <summary>
-    /// Provides a common interface to VS command bars.
-    /// </summary>
-    public interface ICommandBar
-    {
-        string Name { get; }
-        int ControlCount { get; }
-    }
-
-    /// <summary>
-    /// A predicate to find a specific command bar.
-    /// </summary>
-    public interface ICommandBarPredicate
-    {
-        string Name { get; }
-        bool IsMatch( ICommandBar bar );
-    }
-
-
     /// <summary>
     /// A class that wraps operations on the VS command bar model, enabling us
     /// to load in both VS200[23] and VS2005
@@ -35,8 +14,6 @@ namespace Ankh
         public VSCommandBars( IContext context )
         {
             this.context = context;
-
-            this.commandBarCache = new Hashtable();
         }
 
         public const int AddCommandBarToEnd = -1;
@@ -49,43 +26,16 @@ namespace Ankh
                 ref this.contextGuids, status );
         }
 
-        public object GetCommandBar( ICommandBarPredicate pred)
+        public virtual object GetCommandBar( string name )
         {
             try
             {
-                object bar = this.FindCommandBarInCache( pred );
-                if ( bar != null )
-                {
-                    return bar;
-                }
-
-                bar = SearchForCommandBar( pred );
-
-                if ( bar != null )
-                {
-                    EncacheCommandBar( pred, bar );
-                }
-                return bar;
+                return this.context.DTE.CommandBars[name];
             }
             catch( Exception )
             {
-                // nothing to see here, move along
+                return null;
             }
-
-            return null;
-        }
-
-        protected virtual object SearchForCommandBar( ICommandBarPredicate pred )
-        {
-            foreach ( CommandBar bar in this.context.DTE.CommandBars )
-            {
-                if ( pred.IsMatch( new CommandBarAdapter( bar ) ) )
-                {
-                    return bar;
-                }
-            }
-
-            return this.context.DTE.CommandBars[ pred.Name ];
         }
 
         public virtual object AddCommandBar( string name, vsCommandBarType type, object parent,
@@ -153,41 +103,6 @@ namespace Ankh
 
         }
 
-        private object FindCommandBarInCache( ICommandBarPredicate pred )
-        {
-            object bar = this.commandBarCache[ pred ];
-            return bar;
-        }
-
-        private void EncacheCommandBar( ICommandBarPredicate pred, object commandBar )
-        {
-            this.commandBarCache[ pred ] = commandBar;
-        }
-
-        private class CommandBarAdapter : ICommandBar
-        {
-            public CommandBarAdapter( CommandBar bar )
-            {
-                this.bar = bar;
-            }
-
-            #region ICommandBar Members
-
-            public string Name
-            {
-                get { return this.bar.Name; }
-            }
-
-            public int ControlCount
-            {
-                get { return this.bar.Controls.Count; }
-            }
-
-            #endregion
-
-            private CommandBar bar;
-        }
-
         /// <summary>
         /// This overrides all of the methods to work on VS2005
         /// </summary>
@@ -233,23 +148,13 @@ namespace Ankh
                     new ParameterModifier[]{pm}, null, null);
             }
 
-            protected override object SearchForCommandBar(ICommandBarPredicate pred)
+            public override object GetCommandBar(string name)
             {
                 try
                 {
-                    IEnumerable enumerable = this.commandBars as IEnumerable;
-                    foreach ( object bar in enumerable )
-                    {
-                        if ( pred.IsMatch( new CommandBarAdapter2005( bar ) ) )
-                        {
-                            return bar;
-                        }
-                    }
-
-                    // fall back to the "old" way
                     return this.commandBarsType.InvokeMember(
-                       "Item", BindingFlags.GetProperty, null,
-                       this.commandBars, new object[] { pred.Name } );     
+                        "Item", BindingFlags.GetProperty, null, 
+                        this.commandBars, new object[]{name} );                
                 }
                 catch( TargetInvocationException ex )
                 {
@@ -352,117 +257,12 @@ namespace Ankh
 
             private object commandBars;
             private Type commandBarsType;
-
-            private class CommandBarAdapter2005 : ICommandBar
-            {
-                public CommandBarAdapter2005( object bar )
-                {
-                    this.bar = bar;
-                }
-
-                #region ICommandBar Members
-
-                public string Name
-                {
-                    get 
-                    {
-
-                        return this.bar.GetType().InvokeMember( "Name",
-                            BindingFlags.GetProperty, null, this.bar,
-                            new object[] { } ) as string;
-                    }
-                }
-
-                public int ControlCount
-                {
-                    get 
-                    {
-                        object controls = this.bar.GetType().InvokeMember( "Controls",
-                            BindingFlags.GetProperty, null, this.bar, new object[] { } );
-                        return (int)controls.GetType().InvokeMember( "Count",
-                            BindingFlags.GetProperty, null, controls, new object[] { } );
-                    }
-                }
-
-                #endregion
-
-                private object bar;
-            }
-
-
             
 
         }
 
         protected object[] contextGuids = new object[] { };
         private IContext context;
-        private Hashtable commandBarCache;
-
-    }
-
-    
-    internal abstract class CommandBarPredicate
-    {
-        public static ICommandBarPredicate Create( string name )
-        {
-            if ( name == "Project" )
-            {
-                return new ProjectPredicate();
-            }
-            else
-            {
-                return new NormalPredicate( name );
-            }
-        }
-
-        public override int GetHashCode()
-        {
-            return this.Name.GetHashCode();
-        }
-
-        public override bool Equals( object obj )
-        {
-            CommandBarPredicate other = obj as CommandBarPredicate;
-            return this.Name.Equals( other.Name );
-        }
-
-        public abstract string Name { get; }
-
-        private class NormalPredicate : CommandBarPredicate, ICommandBarPredicate
-        {
-            public NormalPredicate( string name )
-            {
-                this.name = name;
-            }
-
-            public override string Name
-            {
-                get { return this.name; }
-            }
-
-            public bool IsMatch( ICommandBar bar )
-            {
-                return bar.Name == this.name;
-            }
-
-            private string name; 
-        }
-
-        private class ProjectPredicate : CommandBarPredicate, ICommandBarPredicate
-        {
-            public override string Name
-            {
-                get { return "Project"; }
-            }
-
-            public bool IsMatch( ICommandBar bar )
-            {
-                // the real one has about 70, the "fake" one around 10. 42 seems like a safe bet
-                return bar.Name == "Project" && bar.ControlCount > 42;
-            }
-        }
-
-
     }
 
     

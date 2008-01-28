@@ -17,7 +17,7 @@ namespace Ankh.UI
         /// <summary>
         /// Fired when the treeview needs information about a path.
         /// </summary>
-        public event ResolvingPathInfoHandler ResolvingPathInfo;
+        public event GetPathInfoDelegate GetPathInfo;
 
         public PathSelectionTreeView()
         {
@@ -129,12 +129,12 @@ namespace Ankh.UI
             e.Cancel = e.Node.ForeColor == DisabledColor;
         }
 
-        protected void OnResolvingPathInfo( TreeNode node )
+        protected void OnGetPathInfo( TreeNode node )
         {
-            if ( this.ResolvingPathInfo != null )
+            if ( this.GetPathInfo != null )
             {
-                ResolvingPathEventArgs args = new ResolvingPathEventArgs( node.Tag );
-                this.ResolvingPathInfo( this, args );
+                GetPathInfoEventArgs args = new GetPathInfoEventArgs( node.Tag );
+                this.GetPathInfo( this, args );
                 if ( args.IsDirectory )
                 {
                     node.SelectedImageIndex = this.ClosedFolderIndex;
@@ -288,7 +288,7 @@ namespace Ankh.UI
             {
                 node.ForeColor = EnabledColor;
                 node.Tag = item;
-                this.OnResolvingPathInfo( node );
+                this.OnGetPathInfo( node );
             }
         }
 
@@ -381,9 +381,9 @@ namespace Ankh.UI
         }
     }
 
-    public class ResolvingPathEventArgs
+    public class GetPathInfoEventArgs
     {
-        public ResolvingPathEventArgs( object item )
+        public GetPathInfoEventArgs( object item )
         {
             this.item = item;
         }
@@ -409,7 +409,8 @@ namespace Ankh.UI
         private object item;
     }
 
-    public delegate void ResolvingPathInfoHandler( object sender, ResolvingPathEventArgs args );
+    public delegate void GetPathInfoDelegate( 
+    object sender, GetPathInfoEventArgs args );
 
    
 }

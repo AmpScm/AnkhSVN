@@ -4,18 +4,13 @@ using System.Collections;
 
 namespace Ankh.Commands
 {
-    /// <summary>
-    /// Command to remove current root from the Working Copy Explorer.
-    /// </summary>
     [VSNetCommand( "RemoveWorkingCopyExplorerRoot",
-         Text = "&Remove Root",
-         Tooltip = "Remove this root from the Working Copy Explorer.",
+         Text = "Remove root",
+         Tooltip = "Remove this root.",
          Bitmap = ResourceBitmaps.RemoveFolder ),
-         VSNetControl( "WorkingCopyExplorer", Position = 1 )]
+    VSNetControl( "WorkingCopyExplorer", Position = 1 )]
     public class RemoveWorkingCopyExplorerRootCommand : CommandBase
     {
-        #region Implementation of ICommand
-
         public override EnvDTE.vsCommandStatus QueryStatus( IContext context )
         {
             return context.WorkingCopyExplorer.IsRootSelected ? Enabled : EnvDTE.vsCommandStatus.vsCommandStatusInvisible;
@@ -25,7 +20,5 @@ namespace Ankh.Commands
         {
             context.WorkingCopyExplorer.RemoveSelectedRoot();
         }
-
-        #endregion
     }
 }

@@ -11,6 +11,7 @@
 #include "CommitInfo.h"
 #include "DirectoryEntry.h"
 #include "Status.h"
+#include "StatusDictionary.h"
 #include <svn_client.h>
 #include <svn_wc.h>
 #include <svn_path.h>
@@ -33,9 +34,6 @@
 #include <windows.h>
 #include <stdlib.h>
 
-#ifndef POST_DOTNET11
-#include "_vcclrit.h"
-#endif
 //TODO: clean up includes in general(not just here)
 
 using namespace System::Collections;
@@ -62,33 +60,8 @@ svn_error_t* svn_blame_func( void *baton, apr_int64_t line_no, svn_revnum_t revi
                             const char *author, const char *date, 
                             const char *line, apr_pool_t *pool );
 
-
-// Initialize Native C++ runtime outside the dll loader lock
-void NSvn::Core::Client::InitializeCrt()
-{
-    System::Threading::Monitor::Enter(_lock);
-    __try
-    {
-        if(!_initialized)
-        {
-#ifndef POST_DOTNET11
-            __crt_dll_initialize();
-#endif
-
-            utf8InitializePool = new GCPool();
-            svn_utf_initialize(utf8InitializePool->ToAprPool());
-            _initialized = true;
-        }
-    }
-    __finally
-    {
-        System::Threading::Monitor::Exit(_lock);
-    }
-}
-
 NSvn::Core::Client::Client()
 {
-    InitializeCrt();
     this->rootPool = new Pool();
     this->context = new ClientContext( this,
         new AuthenticationBaton(), 
@@ -97,7 +70,6 @@ NSvn::Core::Client::Client()
 
 NSvn::Core::Client::Client( String* configDir )
 {
-    InitializeCrt();
     this->rootPool = new Pool();
     this->context = new ClientContext( this,
         new AuthenticationBaton(),
@@ -1053,5 +1025,4 @@ svn_error_t* svn_blame_func(void *baton, apr_int64_t line_no, svn_revnum_t revis
     }  
     return SVN_NO_ERROR;
 }
-
 

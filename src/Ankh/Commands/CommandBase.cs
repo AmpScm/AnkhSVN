@@ -110,6 +110,11 @@ namespace Ankh.Commands
             }
         }
 
+
+
+
         private EnvDTE.Command command;
+
+        
     }
 }

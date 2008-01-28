@@ -1,19 +1,15 @@
 using System;
+using System.Text;
 
 namespace Ankh.Commands
 {
-    /// <summary>
-    /// Command to add a new root to the Working Copy Explorer.
-    /// </summary>
     [VSNetCommand( "AddWorkingCopyExplorerRoot",
-         Text = "A&dd New Root...",
-         Tooltip = "Add a new root to the Working Copy Explorer.",
+         Text = "Add new root...",
+         Tooltip = "Add new working copy explorer root.",
          Bitmap = ResourceBitmaps.AddFolder ),
-         VSNetControl( "WorkingCopyExplorer", Position = 1 )]
-    public class AddWorkingCopyExplorerRootCommand : CommandBase
+    VSNetControl( "WorkingCopyExplorer", Position = 1 )]
+    class AddWorkingCopyExplorerRootCommand : CommandBase
     {
-        #region Implementation of ICommand
-
         public override EnvDTE.vsCommandStatus QueryStatus( IContext context )
         {
             return Enabled;
@@ -27,7 +23,5 @@ namespace Ankh.Commands
                 context.WorkingCopyExplorer.AddRoot( newRoot );
             }
         }
-
-        #endregion
     }
 }

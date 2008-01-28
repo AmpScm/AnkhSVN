@@ -1,5 +1,6 @@
 // $Id$
 using System;
+
 using NSvn.Core;
 using NSvn.Common;
 using EnvDTE;
@@ -11,13 +12,12 @@ using System.Collections;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command to revert current item to last updated revision.
+    /// Summary description for RevertItem.
     /// </summary>
-    [VSNetCommand("RevertItem",
-         Text = "&Revert...",
-         Tooltip = "Revert this item to last updated revision.",
+
+    [VSNetCommand("RevertItem", Text = "Revert...", Tooltip = "Reverts selected item",
          Bitmap = ResourceBitmaps.Revert),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 4 )]
+    VSNetItemControl( "Ankh", Position = 1 )]
     public class RevertItemCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -91,8 +91,10 @@ namespace Ankh.Commands
             }
 
             context.OutputPane.EndActionText();
-        }
-
-        #endregion
+        }               
+        #endregion       
     }
 }
+
+
+

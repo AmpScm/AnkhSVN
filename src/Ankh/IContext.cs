@@ -114,12 +114,6 @@ namespace Ankh
         VSCommandBars CommandBars{ get; }
 
         /// <summary>
-        /// Gets the DTE strategy factory.
-        /// </summary>
-        /// <value>The DTE strategy factory.</value>
-        IDteStrategyFactory DteStrategyFactory { get; }
-
-        /// <summary>
         /// The OLE Serviceprovider.
         /// </summary>
         IServiceProvider ServiceProvider { get; }

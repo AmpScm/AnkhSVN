@@ -8,15 +8,13 @@ namespace Ankh.Commands
     /// <summary>
     /// A command that lets you create a patch.
     /// </summary>
-    [VSNetCommand( "CreatePatch",
-         Text = "Create &Patch...", 
-         Tooltip = "Create a patch file of changes.", 
+    [VSNetCommand( "CreatePatch", Text="Create patch...", 
+         Tooltip="Create a patch file.", 
          Bitmap = ResourceBitmaps.CreatePatch),
-        VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 9)]
+    VSNetItemControl( "", Position = 1 )]
     public class CreatePatchCommand : LocalDiffCommandBase
-    {
-        #region Implementation of ICommand
-
+    {    
+    
         public override void Execute(IContext context, string parameters)
         {
             this.SaveAllDirtyDocuments( context );
@@ -50,7 +48,5 @@ namespace Ankh.Commands
                 context.EndOperation();
             }
         } // Execute
-
-        #endregion
     } 
 }

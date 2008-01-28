@@ -3,20 +3,18 @@ using System;
 using EnvDTE;
 using System.Collections;
 
+
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command to cleanup the working copy.
+    /// Cleans up a working copy directory.
     /// </summary>
-    [VSNetCommand( "Cleanup",
-         Text="Cle&anup",
-         Tooltip = "Cleanup the working copy.", 
+    [VSNetCommand( "Cleanup", Text="Cleanup", Tooltip = "Cleans up the working copy", 
          Bitmap = ResourceBitmaps.Cleanup ),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 11)]
+   VSNetItemControl( "Ankh", Position = 1 )]
     public class Cleanup : CommandBase
-    {
-        #region Implementation of ICommand
-
+    {  
+    
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             return Enabled;
@@ -33,8 +31,6 @@ namespace Ankh.Commands
 
             context.EndOperation();
         }
-
-        #endregion
     }
 }
 
