@@ -7,17 +7,14 @@ using SHDocVw;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command to diff against local text base using external tool.
+    /// Summary description for DiffLocalItem.
     /// </summary>
-    [VSNetCommand( "DiffExternalLocalItem",
-         Text = "Diff E&xternal", 
-         Tooltip = "Diff against local text base using external tool.", 
+    [VSNetCommand( "DiffExternalLocalItem", Text="Diff External", 
+         Tooltip="Use External Diff against local text base.", 
          Bitmap = ResourceBitmaps.Diff),
-         VSNetItemControl( "", Position = 1 )]
+   VSNetItemControl( "", Position = 1 )]
     public class DiffExternalLocalItem : DiffLocalItem
     {
-        #region Implementation of ICommand
-
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             // Allow external diff if enabled in config file
@@ -26,8 +23,6 @@ namespace Ankh.Commands
             else 
                 return vsCommandStatus.vsCommandStatusInvisible;
         }
-
-        #endregion
 
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.

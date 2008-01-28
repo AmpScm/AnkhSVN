@@ -41,7 +41,6 @@
 				AdditionalLibraryDirectories="$(SVNSRC)\debug"
 				DelayLoadDLLs="libdb44d.dll;"
 				GenerateDebugInformation="TRUE"
-				ResourceOnlyDLL="TRUE"
 				ImportLibrary="$(TargetDir)\$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -91,8 +90,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SVNSRC)\release"
 				DelayLoadDLLs="libdb42.dll;"
-				GenerateDebugInformation="TRUE"
-				ResourceOnlyDLL="TRUE"/>
+				GenerateDebugInformation="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -144,7 +142,6 @@
 				AdditionalLibraryDirectories="$(SVNSRC)\debug"
 				DelayLoadDLLs="libdb42d.dll;"
 				GenerateDebugInformation="TRUE"
-				ResourceOnlyDLL="TRUE"
 				ImportLibrary="$(TargetDir)\$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -194,8 +191,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SVNSRC)\release"
 				DelayLoadDLLs="libdb42.dll;"
-				GenerateDebugInformation="TRUE"
-				ResourceOnlyDLL="TRUE"/>
+				GenerateDebugInformation="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -376,10 +372,16 @@
 				RelativePath="Status.h">
 			</File>
 			<File
+				RelativePath="StatusDictionary.h">
+			</File>
+			<File
 				RelativePath="Stdafx.h">
 			</File>
 			<File
 				RelativePath="stream.h">
+			</File>
+			<File
+				RelativePath="StringHelper.h">
 			</File>
 			<File
 				RelativePath="SvnClientException.h">

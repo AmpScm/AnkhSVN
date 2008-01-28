@@ -9,13 +9,11 @@ using NSvn.Common;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command to add selected items to the working copy.
+    /// Adds an unversioned item to a working copy
     /// </summary>
-    [VSNetCommand("AddItem",
-        Text = "A&dd...",
-        Tooltip = "Add selected items to the working copy.",
-        Bitmap = ResourceBitmaps.Add),
-    VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 1)]
+    [VSNetCommand("AddItem", Text = "Add...", Tooltip = "Adds selected item to a working copy",
+         Bitmap = ResourceBitmaps.Add),
+    VSNetItemControl("Ankh", Position = 1)]    
     public class AddItemCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -129,3 +127,6 @@ namespace Ankh.Commands
         }
     }
 }
+
+
+

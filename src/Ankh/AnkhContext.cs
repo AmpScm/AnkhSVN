@@ -37,9 +37,6 @@ namespace Ankh
             this.uiShell = uiShell;
             this.uiShell.Context = this;
 
-
-            this.dteStrategyFactory = Ankh.DteStrategyFactory.CreateDteStrategyFactory( this );
-
             this.errorHandler = new ErrorHandler( dte.Version, this );
 
             this.hostWindow = new Win32Window( new IntPtr(dte.MainWindow.HWnd) );
@@ -77,7 +74,6 @@ namespace Ankh
                 new RepositoryExplorer.Controller( this );
             this.workingCopyExplorer =
                 new Ankh.WorkingCopyExplorer.WorkingCopyExplorer( this );
-
         }
 
         
@@ -279,11 +275,6 @@ namespace Ankh
         {
             [DebuggerStepThrough]
             get { return this.workingCopyExplorer; }
-        }
-
-        public IDteStrategyFactory DteStrategyFactory
-        {
-            get { return this.dteStrategyFactory; }
         }
 
 
@@ -713,6 +704,10 @@ namespace Ankh
 
         private VSCommandBars commandBars;
 
-        private IDteStrategyFactory dteStrategyFactory;
+        #region IContext Members
+
+        
+
+        #endregion
     }
 }

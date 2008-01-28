@@ -4,17 +4,14 @@ using System;
 namespace Ankh.Commands
 {
     /// <summary>
-    /// Command to show the commit log dialog.
+    /// A command that displays the log window.
     /// </summary>
-    [VSNetCommand("ShowCommitDialog",
-         Text = "Show Commit &Log Dialog", 
-         Tooltip = "Show the commit log dialog.",
+    [VSNetCommand("ShowCommitDialog", Text = "Show the commit log dialog", 
+         Tooltip = "Show the commit log dialog",
          Bitmap = ResourceBitmaps.ShowCommit),
-         VSNetControl( "Tools.AnkhSVN", Position = 2 )]
+    VSNetControl( "Tools.AnkhSVN", Position = 1 )]
     public class ShowCommitDialogCommand : CommandBase
     {
-        #region Implementation of ICommand
-
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             return Enabled;
@@ -24,7 +21,5 @@ namespace Ankh.Commands
         {
             context.UIShell.ToggleCommitDialog( true );
         }
-
-        #endregion
     }
 }

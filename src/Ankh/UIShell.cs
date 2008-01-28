@@ -282,7 +282,7 @@ namespace Ankh
             using( PathSelector selector = new PathSelector() )
             {
                 // to provide information about the paths
-                selector.GetPathInfo += new ResolvingPathInfoHandler(GetPathInfo);
+                selector.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
 
                 selector.EnableRecursive = info.EnableRecursive;
                 selector.Items = info.Items;
@@ -336,7 +336,7 @@ namespace Ankh
         {
             using( LockDialog dlg = new LockDialog() )
             {
-                dlg.GetPathInfo += new ResolvingPathInfoHandler(GetPathInfo);
+                dlg.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
 
                 dlg.Items = info.Items;
                 dlg.CheckedItems = info.CheckedItems;
@@ -367,7 +367,7 @@ namespace Ankh
                 dlg.Options = PathSelectorOptions.DisplayRevisionRange;
                 dlg.RevisionStart = info.RevisionStart;
                 dlg.RevisionEnd = info.RevisionEnd;
-                dlg.GetPathInfo += new ResolvingPathInfoHandler(GetPathInfo);
+                dlg.GetPathInfo += new GetPathInfoDelegate(GetPathInfo);
                 dlg.StopOnCopy = info.StopOnCopy;
 
                 if ( dlg.ShowDialog( this.Context.HostWindow ) != DialogResult.OK )
@@ -386,7 +386,7 @@ namespace Ankh
         {
             using( SwitchDialog dialog = new SwitchDialog() )
             {
-                dialog.GetPathInfo += new ResolvingPathInfoHandler(GetUrlPathinfo);
+                dialog.GetPathInfo += new GetPathInfoDelegate(GetUrlPathinfo);
                 dialog.Items = info.Items;
                 dialog.SingleSelection = true;
                 dialog.CheckedItems = info.Items;
@@ -444,12 +444,10 @@ namespace Ankh
         private void CreateRepositoryExplorer()
         {   
             Debug.WriteLine( "Creating repository explorer", "Ankh" );
-            ToolWindowResult result = this.context.DteStrategyFactory.GetToolWindowStrategy().
-                CreateToolWindow(typeof(RepositoryExplorerControl),
-                "Repository Explorer", REPOSEXPLORERGUID);
-
-            this.repositoryExplorerWindow = result.Window;
-
+            object control = null;
+            this.repositoryExplorerWindow = this.context.DTE.Windows.CreateToolWindow( 
+                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl", 
+                "Repository Explorer", REPOSEXPLORERGUID, ref control );
             
             this.repositoryExplorerWindow.Visible = true;
             this.repositoryExplorerWindow.Caption = "Repository Explorer";
@@ -466,7 +464,11 @@ namespace Ankh
                 // swallow
             }
             
-            this.repositoryExplorerControl = result.Control as RepositoryExplorerControl;
+            AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl 
+                objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
+            
+            this.repositoryExplorerControl = new RepositoryExplorerControl();
+            objControl.HostUserControl( this.repositoryExplorerControl );
 
             // force the handle to be created
             if ( this.RepositoryExplorer.Handle == IntPtr.Zero )
@@ -478,20 +480,22 @@ namespace Ankh
         private void CreateCommitDialog()
         {
             Debug.WriteLine( "Creating commit dialog user control", "Ankh" );
-
-            ToolWindowResult result = this.context.DteStrategyFactory.GetToolWindowStrategy().
-                CreateToolWindow( typeof(CommitDialog), 
-                "Commit", CommitDialogGuid );
+            object control = null;
+            this.commitDialogWindow = this.context.DTE.Windows.CreateToolWindow( 
+                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl", 
+                "Commit", CommitDialogGuid, ref control );
             
-            this.commitDialogWindow = result.Window;
-
             this.commitDialogWindow.Visible = true;
             this.commitDialogWindow.Visible = false;
 
             this.commitDialogWindow.Caption = "Commit";
-
-            this.commitDialog = result.Control as CommitDialog;
-
+            
+            AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl 
+                objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
+            
+            this.commitDialog = new CommitDialog();
+            objControl.HostUserControl( this.commitDialog );
+            
             System.Diagnostics.Debug.Assert( this.commitDialog != null, 
                 "Could not create tool window" );
             
@@ -500,17 +504,21 @@ namespace Ankh
         private void CreateWorkingCopyExplorer()
         {
             Debug.WriteLine( "Creating working copy explorer tool window", "Ankh" );
-            ToolWindowResult result = this.context.DteStrategyFactory.GetToolWindowStrategy().
-                CreateToolWindow(typeof(WorkingCopyExplorerControl),
-                "Working Copy Explorer", WorkingCopyExplorerGuid );
-
-            this.workingCopyExplorerWindow = result.Window;
+            object control = null;
+            this.workingCopyExplorerWindow = this.context.DTE.Windows.CreateToolWindow(
+                this.context.AddIn, "AnkhUserControlHost.AnkhUserControlHostCtl",
+                "Working Copy Explorer", WorkingCopyExplorerGuid, ref control );
 
             this.workingCopyExplorerWindow.Visible = true;
 
             this.workingCopyExplorerWindow.Caption = "Working Copy Explorer";
 
-            this.workingCopyExplorerControl = result.Control as WorkingCopyExplorerControl;
+            AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl
+                objControl = (AnkhUserControlHostLib.IAnkhUserControlHostCtlCtl)control;
+
+            this.workingCopyExplorerControl = new WorkingCopyExplorerControl();
+            objControl.HostUserControl( this.workingCopyExplorerControl );
+
             System.Diagnostics.Debug.Assert( this.workingCopyExplorerControl != null,
                 "Could not create tool window for WC Explorer" );
         }
@@ -538,14 +546,14 @@ namespace Ankh
             return this.newBrowser;                
         }
 
-        protected static void GetPathInfo(object sender, ResolvingPathEventArgs args)
+        protected static void GetPathInfo(object sender, GetPathInfoEventArgs args)
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;
             args.Path = item.Path;
         }
 
-        protected static void GetUrlPathinfo(object sender, ResolvingPathEventArgs args)
+        protected static void GetUrlPathinfo(object sender, GetPathInfoEventArgs args)
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;

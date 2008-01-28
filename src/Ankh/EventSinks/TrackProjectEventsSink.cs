@@ -162,12 +162,7 @@ namespace Ankh.EventSinks
             try
             {
                 string backupDirectory = GetBackupDirectoryName( directory );
-                // OnRemove can be called without OnQueryRemove*
-                // in that case backupDirectory doesn't exist
-                if ( Directory.Exists( backupDirectory ) ) 
-                {
-                    Directory.Move( backupDirectory, directory );
-                }
+                Directory.Move( backupDirectory, directory );
             }
             finally
             {
@@ -347,8 +342,6 @@ namespace Ankh.EventSinks
                 for ( int i = 0; i < rgszMkOldNames.Length; i++ )
                 {
                     SvnItem item = context.StatusCache[rgszMkOldNames[i]];
-                    item.Refresh( this.Context.Client, EventBehavior.DontRaise );
-
                     if ( !IsUnmodifiedOrUnversioned( item ) )
                     {
                         pSummaryResult[0] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
@@ -418,7 +411,7 @@ namespace Ankh.EventSinks
                         }
 
                         // VC++ gets annoyed if the file doesn't exist when trying to delete it.
-                        if ( wasUnmodified && !item.IsDirectory )
+                        if ( wasUnmodified )
                         {
                             File.Create( rgpszMkDocuments[ i ] ).Close();
                         }

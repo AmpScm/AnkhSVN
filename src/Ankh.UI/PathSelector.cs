@@ -20,16 +20,16 @@ namespace Ankh.UI
         /// <summary>
         /// Invoked when the treeview needs more information about a node.
         /// </summary>
-        public event ResolvingPathInfoHandler GetPathInfo
+        public event GetPathInfoDelegate GetPathInfo
         {
             add
             { 
                 this.getPathInfo += value;
-                this.pathSelectionTreeView.ResolvingPathInfo += value; 
+                this.pathSelectionTreeView.GetPathInfo += value; 
             }
             remove
             { 
-                this.pathSelectionTreeView.ResolvingPathInfo -= value; 
+                this.pathSelectionTreeView.GetPathInfo -= value; 
                 this.getPathInfo -= value;
             }
         }
@@ -63,7 +63,6 @@ namespace Ankh.UI
         /// <summary>
         /// The items to put in the treeview.
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IList Items
         {
             get{ return this.pathSelectionTreeView.Items; }
@@ -73,7 +72,6 @@ namespace Ankh.UI
         /// <summary>
         /// The items checked in the treeview.
         /// </summary>
-        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
         public IList CheckedItems
         {
             get{ return this.pathSelectionTreeView.CheckedItems; }
@@ -158,7 +156,7 @@ namespace Ankh.UI
             get{ return this.pathSelectionTreeView; }
         }
 
-        protected void RaiseGetPathInfo( ResolvingPathEventArgs args )
+        protected void RaiseGetPathInfo( GetPathInfoEventArgs args )
         {
             if ( this.getPathInfo != null )
                 this.getPathInfo( this, args );
@@ -379,7 +377,7 @@ namespace Ankh.UI
         private PathSelectorOptions options;
         protected System.Windows.Forms.Label suppressLabel;
         protected System.Windows.Forms.GroupBox suppressGroupBox;
-        private ResolvingPathInfoHandler getPathInfo;
+        private GetPathInfoDelegate getPathInfo;
 
 
         public static void Main()

@@ -1,5 +1,4 @@
 // $Id$
-#pragma once
 #using <mscorlib.dll>
 #using <NSvn.Common.dll>
 #using <System.dll>
@@ -55,15 +54,16 @@ namespace NSvn
 
             ///<summary>Constructor.</summary>
             Client();
+            ~Client();
             void Dispose();
 
-        private:
-            ~Client();
-            static Object* _lock = new Object();
-            static bool _initialized = false;
-            static void InitializeCrt();
+            static Client()
+            {
+                utf8InitializePool = new GCPool();
+                svn_utf_initialize(utf8InitializePool->ToAprPool());
+            }
+            
 
-        public:
             ///<summary>Constructor.</summary>
             ///<param name="url">The Subversion configuration directory to use.</param>
             Client( String* configDir );

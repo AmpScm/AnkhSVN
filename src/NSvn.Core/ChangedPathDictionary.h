@@ -12,10 +12,6 @@ namespace NSvn
     {
     public __gc class ChangedPathDictionary : public System::Collections::DictionaryBase
     {
-    private:
-        ChangedPathDictionary()
-        {
-        }
     public:
 
         /* __property virtual void set_Item( String* path, Status* status )
@@ -46,7 +42,7 @@ namespace NSvn
         { return this->Dictionary->Values; }
 
     public private:
-        /// <summary>Creates a ChangedPathDictionary from an apr_hash_t</summary>
+        /// <summary>Creates a StatusDictionary from an apr_hash_t</summary>
         static ChangedPathDictionary* FromChangedPathsHash( apr_hash_t* changedPaths, 
             apr_pool_t* pool )
         {

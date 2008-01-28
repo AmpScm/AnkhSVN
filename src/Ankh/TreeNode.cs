@@ -172,11 +172,8 @@ namespace Ankh
         protected static NodeStatus MergeStatuses( IList items )
         {
             NodeStatus newStatus = new NodeStatus();
-            if (items != null)
-            {
-                foreach (SvnItem item in items)
-                    newStatus = newStatus.Merge(GenerateStatus(item));
-            }
+            foreach ( SvnItem item in items )
+                newStatus = newStatus.Merge( GenerateStatus( item ) );
 
             return newStatus;
         }
@@ -250,17 +247,11 @@ namespace Ankh
             }
         }
 
-        protected virtual void ChildrenChanged( object sender, EventArgs args )
-        {
-            this.Refresh( true );
-        }
-
         protected static void UnhookEvents( IList svnItems, EventHandler del )
         {
             foreach ( SvnItem item in svnItems )
             {
                 item.Changed -= del;
-                item.ChildrenChanged -= del;
             }
         }
 

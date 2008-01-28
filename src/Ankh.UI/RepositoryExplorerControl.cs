@@ -11,7 +11,6 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using Utils.Win32;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace Ankh.UI
 {
@@ -19,8 +18,6 @@ namespace Ankh.UI
     /// <summary>
     /// Gives a tree view of the repository based on revision.
     /// </summary>
-    [ComVisible(true)]
-    [Guid("23CBDF36-E528-4581-A59A-EA212A783D4E")]
     public class RepositoryExplorerControl : System.Windows.Forms.UserControl
     {
         public RepositoryExplorerControl()

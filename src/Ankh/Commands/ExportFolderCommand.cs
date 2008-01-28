@@ -10,15 +10,13 @@ namespace Ankh.Commands
     /// <summary>
     /// Command for exporting a folder
     /// </summary>
-    [VSNetCommand("ExportFolder",
-         Tooltip="Export this folder.", 
-         Text = "E&xport Folder...",
-         Bitmap = ResourceBitmaps.Export ),
-         VSNetControl( "ReposExplorer", Position = 1 ) ]
-    public class ExportFolderCommand : CommandBase
+    [VSNetCommand("ExportFolder", Tooltip="Export this folder", 
+         Text = "Export Folder...", Bitmap = ResourceBitmaps.Export ),
+    VSNetControl( "ReposExplorer", Position = 1 ) ]
+    public class ExportFolderCommand : 
+        CommandBase
     {
-        #region Implementation of ICommand
-
+        #region ICommand Members
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
             if ( context.RepositoryExplorer.SelectedNode != null &&
@@ -29,6 +27,7 @@ namespace Ankh.Commands
             else
                 return Disabled;
         }
+        #endregion
 
         public override void Execute(IContext context, string parameters)
         {
@@ -53,8 +52,6 @@ namespace Ankh.Commands
             {
                 context.EndOperation();
             }
-        }
-
-        #endregion
+        }  
     }
 }
