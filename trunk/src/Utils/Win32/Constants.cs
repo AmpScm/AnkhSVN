@@ -231,5 +231,9 @@ namespace Utils.Win32
 
         public const int MAX_PATH = 260;
 
+        public const int TVIS_EXPANDED = 0x20;
+ 
+
+
     }
 }

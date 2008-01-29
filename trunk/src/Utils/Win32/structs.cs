@@ -50,6 +50,44 @@ namespace Utils.Win32
         public int iIntegral;
     }
 
+    [StructLayout( LayoutKind.Sequential, CharSet = CharSet.Auto )]
+    public struct TV_ITEM
+    {
+        public int mask;
+        public IntPtr hItem;
+        public int state;
+        public int stateMask;
+        public IntPtr pszText;
+        public int cchTextMax;
+        public int iImage;
+        public int iSelectedImage;
+        public int cChildren;
+        public IntPtr lParam;
+    }
+
+
+    [StructLayout( LayoutKind.Sequential )]
+    public struct NMHDR
+    {
+        public IntPtr hwndFrom;
+        public IntPtr idFrom;
+        public int code;
+    }
+
+    [StructLayout( LayoutKind.Sequential )]
+    public struct NMTREEVIEW
+    {
+        public NMHDR nmhdr;
+        public int action;
+        public TV_ITEM itemOld;
+        public TV_ITEM itemNew;
+        public int ptDrag_X;
+        public int ptDrag_Y;
+    }
+
+ 
+
+
     /// <summary>
     /// Represents a Win32 IMAGEINFO struct.
     /// </summary>
