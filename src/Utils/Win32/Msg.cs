@@ -60,5 +60,18 @@ namespace Utils.Win32
         /// </summary>
         public const uint LVM_SETIMAGELIST = 0x1003;
 
+        public const uint TVN_ITEMEXPANDEDA = 0xfffffe6a;
+
+
+        public const uint TVN_ITEMEXPANDEDW = 0xfffffe39;
+
+        public const int WM_REFLECT = 0x00002000;
+        public const int WM_NOTIFY = 0x0000004e;
+
+        public const int TVM_ENSUREVISIBLE = 0x1114;
+ 
+
+
+
     }
 }

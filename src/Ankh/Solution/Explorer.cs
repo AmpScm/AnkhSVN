@@ -402,7 +402,47 @@ namespace Ankh.Solution
                     "try moving it to the primary during solution loading." );
 
             this.treeView = new Win32TreeView( treeHwnd );
+            this.treeViewHoster = new Win32TreeViewHost( Win32.GetParent( treeHwnd ) );
+
+            // we need to keep track of this 
+            this.treeViewHoster.ItemExpanded += new ItemExpandedEventHandler( treeViewHoster_ItemExpanded );
         }
+
+        void treeViewHoster_ItemExpanded( object sender, ItemExpandedEventArgs e )
+        {
+            try
+            {
+                if ( this.Context.AnkhLoadedForSolution && !SuspendItemExpandedScope.Suspended )
+                {
+                    MaybeRefreshNode( (IntPtr)e.HItem );
+                }
+            }
+            catch ( Exception ex )
+            {
+                this.Context.ErrorHandler.Handle( ex );
+            }
+        }
+
+        private void MaybeRefreshNode( IntPtr hItem )
+        {
+            using ( new SuspendItemExpandedScope() )
+            {
+                SearchHItemVisitor visitor = new SearchHItemVisitor( hItem );
+
+                this.solutionNode.Accept( visitor );
+
+                if ( visitor.FoundNode != null && visitor.FoundNode.Children.Count == 0 )
+                {
+                    this.RefreshNode( visitor.FoundNode );
+
+                    // Refreshing has a tendency to leave the scroll bar so it shows the 
+                    // last item in the project, we don't want that.
+                    this.treeView.EnsureVisible( hItem );
+                }
+            }
+        }
+
+       
 
         /// <summary>
         /// Searches floating palettes for the solution explorer window.
@@ -993,7 +1033,71 @@ namespace Ankh.Solution
             private Explorer outer;
             private bool done;
         }
+
+        
         #endregion
+
+        private class SearchHItemVisitor : INodeVisitor
+        {
+            public SolutionExplorerTreeNode FoundNode;
+
+            public SearchHItemVisitor( IntPtr hItem )
+            {
+                this.hItem = hItem;
+            }
+
+            public void VisitProject( ProjectNode node )
+            {
+                this.Visit( node );
+            }
+
+            public void VisitProjectItem( ProjectItemNode node )
+            {
+                this.Visit( node );
+            }
+
+            public void VisitSolutionNode( SolutionNode node )
+            {
+                this.Visit( node );
+            }
+
+            public void VisitSolutionFolder( SolutionFolderNode node )
+            {
+                this.Visit( node );
+            }
+
+            private void Visit( SolutionExplorerTreeNode node )
+            {
+                if ( node.HItem == this.hItem )
+                {
+                    this.FoundNode = node;
+                }
+                else
+                {
+                    foreach ( SolutionExplorerTreeNode child in node.Children )
+                    {
+                        child.Accept( this );
+                    }
+                }
+            }
+
+            private IntPtr hItem;
+        }
+
+        private class SuspendItemExpandedScope : IDisposable
+        {
+            public static bool Suspended = false;
+
+            public SuspendItemExpandedScope()
+            {
+                Suspended = true;
+            }
+
+            public void Dispose()
+            {
+                Suspended = false;
+            }
+        }
 
 
         internal const int LockOverlay = 15;
@@ -1012,6 +1116,7 @@ namespace Ankh.Solution
 
         private IContext context;
         private Win32TreeView treeView;
+        private Win32TreeViewHost treeViewHoster;
         private IntPtr originalImageList = IntPtr.Zero;
 
         private bool refreshPending;

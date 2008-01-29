@@ -46,6 +46,11 @@ namespace Ankh.Solution
             [System.Diagnostics.DebuggerStepThrough]
             get { return this.SolutionExplorerParent != null ? this.SolutionExplorerParent.Solution : null; }
         }
+
+        public IntPtr HItem
+        {
+            get { return this.hItem; }
+        }
         
         public static SolutionExplorerTreeNode CreateNode( UIHierarchyItem item, IntPtr hItem,
             Explorer explorer, SolutionExplorerTreeNode parent )

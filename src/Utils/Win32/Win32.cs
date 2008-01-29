@@ -331,5 +331,8 @@ namespace Utils.Win32
             else
                 return builder.ToString();
         }
+
+        [DllImport( "User32.DLL" )]
+        public static extern IntPtr GetParent( IntPtr treeHwnd );
     }
 }

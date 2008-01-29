@@ -7,11 +7,13 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
+   
     /// <summary>
     /// Wraps a HWND to a Win32 treeview
     /// </summary>
     public class Win32TreeView : NativeWindow
     {
+        
         public Win32TreeView( IntPtr hwnd )
         {
             this.CheckForZero( hwnd, "hwnd" );
@@ -68,6 +70,11 @@ namespace Ankh.UI
             this.CheckForZero( item, "item" );
             return (IntPtr)Win32.SendMessage( this.hwnd, Msg.TVM_GETNEXTITEM, 
                 Constants.TVGN_NEXT, item );
+        }
+
+        public void EnsureVisible( IntPtr item )
+        {
+            Win32.SendMessage( this.hwnd, Msg.TVM_ENSUREVISIBLE, IntPtr.Zero, item );
         }
 
         public bool RenameInProgress
@@ -214,11 +221,15 @@ namespace Ankh.UI
                         base.WndProc( ref m );
                     }
                     break;
+
+              
                 default:
                     base.WndProc( ref m );
                     break;
             }
         }
+
+       
 
         private void RecursivelyClearStatusImages( IntPtr item )
         {
@@ -247,4 +258,6 @@ namespace Ankh.UI
         private IntPtr hwnd;
         private IntPtr statusImageList;
     }
+
+    
 }

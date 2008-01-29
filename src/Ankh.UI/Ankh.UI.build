@@ -32,7 +32,7 @@
         
         
         <csc target="library" output="${build.dir}/Ankh.UI.dll" 
-            verbose="${verbose}" define="${define}" debug="${debug}">
+            verbose="${verbose}" define="${define}" debug="${debug}" >
             <references>
                 <include name="${lib.dir}\Office.dll"/>
                 <include name="..\NSvn\${build.dir}\NSvn.dll"/>
@@ -56,6 +56,7 @@
             
             <arg value="/debug:pdbonly" unless="${debug}"/>
             <arg value="${warninglevel}"/>
+            <arg value="/unsafe+"/>
         </csc>
         
                 
