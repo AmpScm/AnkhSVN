@@ -84,7 +84,7 @@
 
 			<Custom Action="DIRCA_TARGETDIR" Before="CostInitialize">TARGETDIR=""</Custom>
 
-			<RemoveExistingProducts After="InstallInitialize">NEWERVERSIONFOUND</RemoveExistingProducts>
+			<RemoveExistingProducts After="InstallInitialize">PREVIOUSVERSIONSINSTALLED</RemoveExistingProducts>
 
 			<Custom Action="InstallLib_UnInstall" After="RemoveFiles">Installed OR PREVIOUSVERSIONSINSTALLED</Custom>
 		</InstallExecuteSequence>
