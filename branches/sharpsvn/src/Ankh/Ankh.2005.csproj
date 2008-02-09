@@ -186,6 +186,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\office.dll</HintPath>
     </Reference>
+    <Reference Include="SharpSvn, Version=1.4999.231.4, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn.UI, Version=1.5.0.2, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\SharpSvn.UI.dll</HintPath>
+    </Reference>
     <Reference Include="stdole">
       <Name>stdole</Name>
       <HintPath>..\lib\stdole.dll</HintPath>
@@ -209,16 +217,6 @@
     <ProjectReference Include="..\Ankh.UI\Ankh.UI.2005.csproj">
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Name>Ankh.UI.2005</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NSvn.Common\NSvn.Common.2005.csproj">
-      <Project>{3A8DF134-05F1-4357-9682-AB14CDDA48A9}</Project>
-      <Name>NSvn.Common.2005</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NSvn.Core\NSvn.Core.2005.vcproj">
-      <Name>NSvn.Core</Name>
-      <Project>{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}</Project>
-      <Package>{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}</Package>
-      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.2005.csproj">
       <Name>Utils</Name>
@@ -534,6 +532,7 @@
     <Compile Include="VSProject.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemRootItem.cs" />
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorer.cs" />
+    <Compile Include="WorkingCopyOperations.cs" />
     <Compile Include="XmlResultBase.cs">
       <SubType>Code</SubType>
     </Compile>
