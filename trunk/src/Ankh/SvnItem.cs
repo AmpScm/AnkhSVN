@@ -91,7 +91,10 @@ namespace Ankh
             if ( eventBehavior == EventBehavior.Raise )
             {
                 if ( !oldStatus.Equals( this.status ) )
+                {
+                    this.status = status;
                     this.OnChanged(); 
+                }
             }
         }
 
