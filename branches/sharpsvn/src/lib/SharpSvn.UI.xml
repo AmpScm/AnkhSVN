@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SharpSvn.UI</name>
+    </assembly>
+    <members>
+        <member name="T:SharpSvn.UI.Authentication.ServerCertificateInfo">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:SharpSvn.UI.Authentication.ServerCertificateInfo.Hostname">
+            <summary>
+            Gets or sets the hostname.
+            </summary>
+            <value>The hostname.</value>
+        </member>
+        <member name="P:SharpSvn.UI.Authentication.ServerCertificateInfo.Fingerprint">
+            <summary>
+            Gets or sets the fingerprint.
+            </summary>
+            <value>The fingerprint.</value>
+        </member>
+        <member name="P:SharpSvn.UI.Authentication.ServerCertificateInfo.ValidFrom">
+            <summary>
+            Gets or sets the valid from.
+            </summary>
+            <value>The valid from.</value>
+        </member>
+        <member name="P:SharpSvn.UI.Authentication.ServerCertificateInfo.ValidTo">
+            <summary>
+            Gets or sets the valid to.
+            </summary>
+            <value>The valid to.</value>
+        </member>
+        <member name="P:SharpSvn.UI.Authentication.ServerCertificateInfo.Issuer">
+            <summary>
+            Gets or sets the issuer.
+            </summary>
+            <value>The issuer.</value>
+        </member>
+        <member name="P:SharpSvn.UI.Authentication.ServerCertificateInfo.Certificate">
+            <summary>
+            Gets or sets the certificate.
+            </summary>
+            <value>The certificate.</value>
+        </member>
+        <member name="P:SharpSvn.UI.Authentication.ServerCertificateInfo.NoTrustedIssuer">
+            <summary>
+            Gets or sets a value indicating whether [no trusted issuer].
+            </summary>
+            <value><c>true</c> if [no trusted issuer]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:SharpSvn.UI.Authentication.ServerCertificateInfo.TimeError">
+            <summary>
+            Gets or sets a value indicating whether [time error].
+            </summary>
+            <value><c>true</c> if [time error]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:SharpSvn.UI.Authentication.ServerCertificateInfo.InvalidCommonName">
+            <summary>
+            Gets or sets a value indicating whether [invalid common name].
+            </summary>
+            <value><c>true</c> if [invalid common name]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="T:SharpSvn.UI.Authentication.SslClientCertificatePassPhraseDialog">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SslClientCertificatePassPhraseDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpSvn.UI.Authentication.SslClientCertificatePassPhraseDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:SharpSvn.UI.Authentication.SslClientCertificatePassPhraseDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SslClientCertificatePassPhraseDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SslClientCertificatePassPhraseDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:SharpSvn.UI.Authentication.SslServerCertificateTrustDialog">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SslServerCertificateTrustDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpSvn.UI.Authentication.SslServerCertificateTrustDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:SharpSvn.UI.Authentication.SslServerCertificateTrustDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SslServerCertificateTrustDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SslServerCertificateTrustDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:SharpSvn.UI.Authentication.SharpSvnGui">
+            <summary>
+            Former public api used for binding to SharpSvn
+            </summary>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SharpSvnGui.MakeDescription(System.String,System.String)">
+            <summary>
+            Makes the description.
+            </summary>
+            <param name="realm">The realm.</param>
+            <param name="format">The format.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SharpSvnGui.AskUsername(System.IntPtr,System.String,System.String,System.Boolean,System.String@,System.Boolean@)">
+            <summary>
+            Asks the username.
+            </summary>
+            <param name="parentHandle">The parent handle.</param>
+            <param name="title">The title.</param>
+            <param name="realm">The realm.</param>
+            <param name="maySave">if set to <c>true</c> [may save].</param>
+            <param name="username">The username.</param>
+            <param name="save">if set to <c>true</c> [save].</param>
+            <returns></returns>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SharpSvnGui.AskUsernamePassword(System.IntPtr,System.String,System.String,System.String,System.Boolean,System.String@,System.String@,System.Boolean@)">
+            <summary>
+            Asks the username password.
+            </summary>
+            <param name="parentHandle">The parent handle.</param>
+            <param name="title">The title.</param>
+            <param name="realm">The realm.</param>
+            <param name="initialUsername">The initial username.</param>
+            <param name="maySave">if set to <c>true</c> [may save].</param>
+            <param name="username">The username.</param>
+            <param name="password">The password.</param>
+            <param name="save">if set to <c>true</c> [save].</param>
+            <returns></returns>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SharpSvnGui.AskServerCertificateTrust(System.IntPtr,System.String,System.String,SharpSvn.UI.Authentication.ServerCertificateInfo,System.Boolean,System.Boolean@,System.Boolean@)">
+            <summary>
+            Asks the server certificate trust.
+            </summary>
+            <param name="parentHandle">The parent handle.</param>
+            <param name="title">The title.</param>
+            <param name="realm">The realm.</param>
+            <param name="info">The info.</param>
+            <param name="maySave">if set to <c>true</c> [may save].</param>
+            <param name="accept">if set to <c>true</c> [accept].</param>
+            <param name="save">if set to <c>true</c> [save].</param>
+            <returns></returns>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SharpSvnGui.AskClientCertificateFile(System.IntPtr,System.String,System.String,System.Boolean,System.String@,System.Boolean@)">
+            <summary>
+            Asks the client certificate file.
+            </summary>
+            <param name="parentHandle">The parent handle.</param>
+            <param name="title">The title.</param>
+            <param name="realm">The realm.</param>
+            <param name="maySave">if set to <c>true</c> [may save].</param>
+            <param name="filename">The filename.</param>
+            <param name="save">if set to <c>true</c> [save].</param>
+            <returns></returns>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SharpSvnGui.AskClientCertificatePassPhrase(System.IntPtr,System.String,System.String,System.Boolean,System.String@,System.Boolean@)">
+            <summary>
+            Asks the client certificate pass phrase.
+            </summary>
+            <param name="parentHandle">The parent handle.</param>
+            <param name="title">The title.</param>
+            <param name="realm">The realm.</param>
+            <param name="maySave">if set to <c>true</c> [may save].</param>
+            <param name="passPhrase">The pass phrase.</param>
+            <param name="save">if set to <c>true</c> [save].</param>
+            <returns></returns>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SharpSvnGui.HasWin32Handle(System.Object)">
+            <summary>
+            Determines whether [has win32 handle] [the specified owner].
+            </summary>
+            <param name="owner">The owner.</param>
+            <returns>
+            	<c>true</c> if [has win32 handle] [the specified owner]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.SharpSvnGui.GetWin32Handle(System.Object)">
+            <summary>
+            Gets the win32 handle.
+            </summary>
+            <param name="owner">The owner.</param>
+            <returns></returns>
+        </member>
+        <member name="T:SharpSvn.UI.Authentication.UsernameDialog">
+             <summary>
+            
+             </summary>
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.UsernameDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpSvn.UI.Authentication.UsernameDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:SharpSvn.UI.Authentication.UsernameDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.UsernameDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.UsernameDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:SharpSvn.UI.Authentication.UsernamePasswordDialog">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.UsernamePasswordDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpSvn.UI.Authentication.UsernamePasswordDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:SharpSvn.UI.Authentication.UsernamePasswordDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.UsernamePasswordDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SharpSvn.UI.Authentication.UsernamePasswordDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:SharpSvn.UI.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:SharpSvn.UI.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:SharpSvn.UI.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:SharpSvn.UI.SharpSvnUI">
+            <summary>
+            Helper methods to bind a user interface to an <see cref="T:SharpSvn.SvnClient"/>
+            </summary>
+        </member>
+        <member name="M:SharpSvn.UI.SharpSvnUI.Bind(SharpSvn.SvnClient,System.Windows.Forms.IWin32Window)">
+            <summary>
+            Binds the default userinterface to the <see cref="T:SharpSvn.SvnClient"/> using <paramref name="parentWindow"/> as parent for the popup windows
+            </summary>
+            <param name="svnClient"></param>
+            <param name="parentWindow"></param>
+        </member>
+        <member name="M:SharpSvn.UI.SharpSvnUI.Bind(SharpSvn.SvnClient,System.Windows.Forms.IWin32Window,System.Drawing.Image)">
+            <summary>
+            Binds the default userinterface to the <see cref="T:SharpSvn.SvnClient"/> using <paramref name="parentWindow"/> as parent for the popup windows
+            </summary>
+            <param name="svnClient"></param>
+            <param name="parentWindow"></param>
+            <param name="headerImage"></param>
+        </member>
+        <member name="T:SharpSvn.UI.Strings">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:SharpSvn.UI.Strings.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:SharpSvn.UI.Strings.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:SharpSvn.UI.Strings.ConnectToSubversion">
+            <summary>
+              Looks up a localized string similar to Connect to Subversion.
+            </summary>
+        </member>
+        <member name="P:SharpSvn.UI.Strings.ThePassPhraseForTheClientCertificateForXIsRequired">
+            <summary>
+              Looks up a localized string similar to The certificate for server {0} at {1} requires a passphrase..
+            </summary>
+        </member>
+        <member name="P:SharpSvn.UI.Strings.TheServerXatYRequiresAUsername">
+            <summary>
+              Looks up a localized string similar to The server {0} at {1} requires a username..
+            </summary>
+        </member>
+        <member name="P:SharpSvn.UI.Strings.TheServerXatYRequiresAUsernameAndPassword">
+            <summary>
+              Looks up a localized string similar to The server {0} at {1} requires a username and password..
+            </summary>
+        </member>
+    </members>
+</doc>
