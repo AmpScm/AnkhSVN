@@ -1755,7 +1755,7 @@ Provide a callback function, @a warning, that @a fs should use to
  * By default, this is set to a function that will crash the process.
  * Dumping to @c stderr or <tt>/dev/tty</tt> is not acceptable default
  * behavior for server processes, since those may both be equivalent to
- * <tt>/dev/NULL</tt>.
+ * <tt>/dev/null</tt>.
 
 </member>
         <member name="D:svn_fs_warning_callback_t">
