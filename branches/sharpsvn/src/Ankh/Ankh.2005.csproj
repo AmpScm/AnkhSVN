@@ -422,6 +422,7 @@
     <Compile Include="IDteStrategyFactory.cs" />
     <Compile Include="IToolWindowStrategy.cs" />
     <Compile Include="IWorkingCopyExplorer.cs" />
+    <Compile Include="NotificationHandler.cs" />
     <Compile Include="Solution\IRefreshableProject.cs" />
     <Compile Include="StatusImages.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
