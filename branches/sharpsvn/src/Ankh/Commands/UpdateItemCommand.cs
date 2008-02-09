@@ -6,8 +6,8 @@ using Ankh.UI;
 using System.Collections;
 using System.Diagnostics;
 using Ankh.Solution;
-using NSvn.Common;
-using NSvn.Core;
+
+
 using SharpSvn;
 
 namespace Ankh.Commands

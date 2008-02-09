@@ -3,8 +3,8 @@ using EnvDTE;
 
 using System.IO;
 using System.Collections;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using Ankh.RepositoryExplorer;
 using SharpSvn;
 using System;

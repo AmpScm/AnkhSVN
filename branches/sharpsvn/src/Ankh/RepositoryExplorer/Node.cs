@@ -1,6 +1,6 @@
 using System;
 using Ankh.UI;
-using NSvn.Core;
+
 using System.IO;
 using System.ComponentModel;
 using Utils;

@@ -7,8 +7,8 @@ using System.Threading;
 using System.IO;
 using Utils;
 
-using NSvn.Core;
-using NSvn.Common;
+
+
 using EnvDTE;
 using SharpSvn;
 

@@ -3,8 +3,8 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Diagnostics;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using EnvDTE;
 using Ankh.UI;
 using System.Windows.Forms;

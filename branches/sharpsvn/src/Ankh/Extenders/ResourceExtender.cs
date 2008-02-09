@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
-using NSvn.Core;
+
 using SharpSvn;
 
 

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
-using NSvn.Core;
+
 using System.Text.RegularExpressions;
 using SharpSvn;
 

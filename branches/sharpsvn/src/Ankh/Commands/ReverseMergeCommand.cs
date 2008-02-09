@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using Ankh.UI;
 using System.Windows.Forms;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.IO;
 using SharpSvn;
 

@@ -7,8 +7,8 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.IO;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.Windows.Forms;
 using Utils;
 using System.Collections.Specialized;

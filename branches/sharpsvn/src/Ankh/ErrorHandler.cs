@@ -1,5 +1,5 @@
 using System;
-using NSvn.Core;
+
 using System.Windows.Forms;
 using Utils;
 using System.Reflection;

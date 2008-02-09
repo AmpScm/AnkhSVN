@@ -1,8 +1,8 @@
 // $Id$
 using System;
 using System.Collections;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using SharpSvn;
 
 namespace Ankh

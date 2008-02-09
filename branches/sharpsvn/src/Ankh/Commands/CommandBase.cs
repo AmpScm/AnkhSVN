@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using EnvDTE;
-using NSvn.Core;
+
 using Ankh.UI;
 using System.Xml.Xsl;
 using System.Xml.XPath;

@@ -3,8 +3,8 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Ankh.UI;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using SharpSvn;
 
 namespace Ankh.Commands

@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using Ankh.UI;
 using System.IO;
-using NSvn.Core;
+
 using Utils;
 using System.Collections;
 using SharpSvn;

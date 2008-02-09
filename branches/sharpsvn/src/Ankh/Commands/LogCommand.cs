@@ -1,6 +1,6 @@
 // $Id$
 using System;
-using NSvn.Core;
+
 using System.Diagnostics;
 using System.Xml;
 using System.Xml.Xsl;

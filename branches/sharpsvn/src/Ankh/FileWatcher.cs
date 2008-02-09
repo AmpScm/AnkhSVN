@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 using System.IO;
-using NSvn.Core;
+
 using Utils;
 using EnvDTE;
 using System.Threading;

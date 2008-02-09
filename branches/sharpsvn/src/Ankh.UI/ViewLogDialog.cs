@@ -5,7 +5,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using NSvn.Core;
+
 using SharpSvn;
 
 namespace Ankh.UI

@@ -1,6 +1,6 @@
 // $Id$
 using System;
-using NSvn.Core;
+
 using Ankh.UI;
 using System.IO;
 using System.Text;

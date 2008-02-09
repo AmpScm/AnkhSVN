@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 using System.Collections;
-using NSvn.Core;
+
 using SharpSvn;
 
 namespace Ankh

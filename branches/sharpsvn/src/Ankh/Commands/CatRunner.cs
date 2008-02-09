@@ -1,5 +1,5 @@
 using System;
-using NSvn.Core;
+
 using System.IO;
 using SharpSvn;
 

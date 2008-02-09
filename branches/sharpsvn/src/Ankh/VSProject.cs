@@ -3,8 +3,8 @@ using System.Text;
 using EnvDTE;
 using System.IO;
 using Utils;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.Collections;
 using System.Reflection;
 using Microsoft.VisualStudio.Shell.Interop;

@@ -6,7 +6,7 @@ using System.IO;
 using System.Collections;
 using System.Threading;
 using System.Reflection;
-using NSvn.Core;
+
 using Utils;
 using SharpSvn;
 using Utils.Services;

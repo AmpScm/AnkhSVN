@@ -5,8 +5,8 @@ using Utils;
 using EnvDTE;
 using System.IO;
 using System.Collections;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.Reflection;
 using System.Text;
 using SharpSvn;

@@ -2,8 +2,8 @@ using System;
 using System.Xml;
 using System.Xml.Xsl;
 using System.Xml.XPath;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.IO;
 using System.Collections;
 using System.Diagnostics;

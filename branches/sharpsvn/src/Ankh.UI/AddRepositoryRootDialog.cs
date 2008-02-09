@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using NSvn.Core;
+
 using Utils.Win32;
 using Utils;
 using SharpSvn;

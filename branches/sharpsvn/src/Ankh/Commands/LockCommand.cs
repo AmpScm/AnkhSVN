@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using NSvn.Core;
+
 using System.Text;
 using SharpSvn;
 

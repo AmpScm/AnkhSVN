@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using EnvDTE;
-using NSvn.Core;
+
 using Utils.Services;
 
 namespace Ankh.Commands

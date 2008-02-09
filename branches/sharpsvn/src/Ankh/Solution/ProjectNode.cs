@@ -1,7 +1,7 @@
 // $Id$
 using System;
 
-using NSvn.Core;
+
 using EnvDTE;
 using System.IO;
 using System.Collections;

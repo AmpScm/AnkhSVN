@@ -8,7 +8,7 @@ using SH = SHDocVw;
 using System.IO;
 using Utils.Win32;
 
-using NSvn.Common;
+
 using SharpSvn;
 
 namespace Ankh

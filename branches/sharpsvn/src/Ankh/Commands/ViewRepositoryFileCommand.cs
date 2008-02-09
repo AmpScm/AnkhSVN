@@ -3,7 +3,7 @@ using EnvDTE;
 
 using System.IO;
 using System.Collections;
-using NSvn.Core;
+
 using Ankh.RepositoryExplorer;
 
 namespace Ankh.Commands

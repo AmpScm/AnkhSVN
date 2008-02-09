@@ -2,8 +2,8 @@
 using System;
 using EnvDTE;
 
-using NSvn.Common;
-using NSvn.Core;
+
+
 using System.Collections;
 using Utils.Win32;
 using System.Diagnostics;

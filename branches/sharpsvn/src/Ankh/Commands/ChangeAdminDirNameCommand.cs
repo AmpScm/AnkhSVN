@@ -1,6 +1,6 @@
 using System;
 using Ankh.UI;
-using NSvn.Core;
+
 using System.Windows.Forms;
 using SharpSvn;
 #if Q

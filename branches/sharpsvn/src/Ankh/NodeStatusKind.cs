@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using NSvn.Core;
+
 using SharpSvn;
 
 namespace Ankh
@@ -21,7 +21,6 @@ namespace Ankh
         Merged = SvnStatus.Merged,
         Missing = SvnStatus.Missing,
         Obstructed = SvnStatus.Obstructed,
-        Replaced =SvnStatus.Replaced,
         IndividualStatusesConflicting
     }
 

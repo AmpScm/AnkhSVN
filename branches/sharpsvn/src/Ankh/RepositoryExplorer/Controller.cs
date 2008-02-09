@@ -2,8 +2,8 @@ using System;
 using Ankh.UI;
 using System.Collections;
 using System.Threading;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.Diagnostics;
 using EnvDTE;
 using Utils;

@@ -8,8 +8,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using SharpSvn;
 
 namespace Ankh.Commands

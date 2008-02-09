@@ -2,8 +2,8 @@
 using System;
 using EnvDTE;
 
-using NSvn.Common;
-using NSvn.Core;
+
+
 using Ankh.UI;
 using Utils;
 using System.Windows.Forms;

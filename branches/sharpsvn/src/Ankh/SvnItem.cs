@@ -1,7 +1,7 @@
 // $Id$
 using System;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.IO;
 using System.Collections;
 using Ankh.UI;
