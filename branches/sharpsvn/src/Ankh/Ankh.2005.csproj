@@ -234,6 +234,9 @@
     <Compile Include="AnkhContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AnkhStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="AnkhUserControlHostToolWindowStrategy.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
