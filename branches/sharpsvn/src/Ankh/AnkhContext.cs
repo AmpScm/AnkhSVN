@@ -81,6 +81,7 @@ namespace Ankh
                 new Ankh.WorkingCopyExplorer.WorkingCopyExplorer( this );
 
             AnkhServices.AddService(typeof(IWorkingCopyOperations), new WorkingCopyOperations(client));
+            NotificationHandler.GetHandler(this);
         }
 
         
