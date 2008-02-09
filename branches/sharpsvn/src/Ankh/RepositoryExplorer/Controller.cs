@@ -325,12 +325,12 @@ namespace Ankh.RepositoryExplorer
                 get{ return this.entries; }
             }
 
-            public void Work( IContext context )
+            public void Work(IContext context)
             {
-				SvnListArgs args = new SvnListArgs();
-				args.Depth = SvnDepth.Empty;
-				args.Revision = this.node.Revision;
-				context.Client.GetList(this.node.Url, args, out entries);
+                SvnListArgs args = new SvnListArgs();
+                args.Depth = SvnDepth.Children;
+                args.Revision = this.node.Revision;
+                context.Client.GetList(this.node.Url, args, out entries);
             }
 
             private INode node;
