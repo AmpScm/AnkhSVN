@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using NSvn.Core;
 using Utils.Win32;
 using Utils;
+using SharpSvn;
 
 namespace Ankh.UI
 {
@@ -38,7 +39,7 @@ namespace Ankh.UI
         /// The revision selected by the user.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Revision Revision
+        public SvnRevision Revision
         {
             get{ return this.revisionPicker.Revision; }
         }

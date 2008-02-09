@@ -12,6 +12,7 @@ using System.Diagnostics;
 using Utils.Win32;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using SharpSvn;
 
 namespace Ankh.UI
 {
@@ -238,7 +239,7 @@ namespace Ankh.UI
                     this.NodeExpanding( this, args );
                 this.treeView.AddChildren( node, args.Children );
             }
-            catch( SvnClientException )
+            catch( SvnException )
             {
                 // don't open it - the user can click on the plus to try again
                 e.Cancel = true;
