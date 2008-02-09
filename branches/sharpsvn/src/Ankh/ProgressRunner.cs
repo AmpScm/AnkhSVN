@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using Ankh.UI;
-using NSvn.Core;
+using SharpSvn;
 
 namespace Ankh
 {
@@ -91,21 +91,21 @@ namespace Ankh
         {
             try
             {
-                this.Context.Client.Cancel += new NSvn.Core.CancelDelegate(this.Cancel);
-                this.worker.Work( this.Context );
+                this.Context.Client.Cancel += new EventHandler<SvnCancelEventArgs>(this.Cancel);
+                this.worker.Work(this.Context);
             }
-            catch( OperationCancelledException )
+            catch (SvnOperationCanceledException)
             {
                 this.cancelled = true;
             }
-            catch( Exception ex )
+            catch (Exception ex)
             {
                 this.exception = ex;
             }
             finally
             {
                 this.done = true;
-                this.Context.Client.Cancel -= new CancelDelegate(this.Cancel);
+                this.Context.Client.Cancel -= new EventHandler<SvnCancelEventArgs>(this.Cancel);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Ankh
             this.cancel = args.Cancelled;
         }
 
-        private void Cancel(object sender, CancelEventArgs args)
+        private void Cancel(object sender, SvnCancelEventArgs args)
         {
             args.Cancel = this.cancel;
         }

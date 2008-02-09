@@ -1,3 +1,4 @@
+#if Q
 // $Id$
 using System;
 
@@ -239,3 +240,4 @@ namespace Ankh
         private static IDictionary map = new Hashtable();
     }
 }
+#endif

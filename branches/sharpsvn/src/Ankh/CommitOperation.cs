@@ -2,21 +2,21 @@ using System;
 using Ankh.UI;
 using System.Collections;
 using System.Windows.Forms;
-
+using SharpSvn;
 
 namespace Ankh
 {
-	/// <summary>
-	/// Encapsulates the details of an operation requiring a log message
-	/// </summary>
-	public class CommitOperation  
-	{
-		public CommitOperation( IProgressWorker worker, IList items, IContext context )
-		{
-			this.worker = worker;
+    /// <summary>
+    /// Encapsulates the details of an operation requiring a log message
+    /// </summary>
+    public class CommitOperation  
+    {
+        public CommitOperation(IProgressWorker worker, IList items, IContext context)
+        {
+            this.worker = worker;
             this.context = context;
             this.items = items;
-		}
+        }
 
         public CommitContext CommitContext
         {
@@ -83,15 +83,7 @@ namespace Ankh
         /// </summary>
         public bool Run( string caption )
         {
-            try
-            {
-                this.context.Client.LogMessage += new NSvn.Core.LogMessageDelegate(this.LogMessageWanted);
-                return this.context.UIShell.RunWithProgressDialog( this.worker, caption );
-            }
-            finally
-            {
-                this.context.Client.LogMessage -= new NSvn.Core.LogMessageDelegate(this.LogMessageWanted);
-            }
+            return this.context.UIShell.RunWithProgressDialog( this.worker, caption );
         } 
 
         private IProgressWorker worker;
@@ -100,10 +92,5 @@ namespace Ankh
         private bool urlPaths;
         private IList items;
         private string logMessage;
-
-        private void LogMessageWanted(object sender, NSvn.Core.LogMessageEventArgs args)
-        {
-            args.Message = this.LogMessage;
-        }
     }
 }

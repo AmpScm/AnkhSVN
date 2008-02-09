@@ -2,7 +2,8 @@ using System;
 using EnvDTE;
 using System.Diagnostics;
 using System.Collections;
-using System.IO; 
+using System.IO;
+using SharpSvn; 
 
 namespace Ankh
 {
@@ -131,7 +132,7 @@ namespace Ankh
         /// <returns></returns>
         private  bool ConflictedFilter( SvnItem item )
         {
-            return (item.Status.TextStatus == NSvn.Core.StatusKind.Conflicted);
+            return (item.Status.LocalContentStatus == SvnStatus.Conflicted);
         }
 
 

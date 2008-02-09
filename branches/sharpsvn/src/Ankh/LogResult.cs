@@ -1,35 +1,34 @@
 // $Id$
 using System;
 using System.Xml;
-using NSvn.Core;
+using SharpSvn;
 
 namespace Ankh
 {
-	/// <summary>
-	/// Summary description for LogResult.
-	/// </summary>
-	public class LogResult : XmlResultBase
-	{
-		public LogResult() : base( "LogResult" )
-		{
-		}
+    /// <summary>
+    /// Summary description for LogResult.
+    /// </summary>
+    public class LogResult : XmlResultBase
+    {
+        public LogResult()
+            : base("LogResult")
+        {
+        }
 
-        public void Receive( LogMessage msg )
+            public void Receive(object sender, SvnLogEventArgs args)
         {
             this.Writer.WriteStartElement( "LogItem" );
 
-            this.Writer.WriteElementString( "Author", msg.Author );
-            this.Writer.WriteElementString( "Revision", msg.Revision.ToString() );
-            this.Writer.WriteElementString( "Date", msg.Date.ToString( "s" ) );
-            this.Writer.WriteElementString( "Message", msg.Message );
+            this.Writer.WriteElementString( "Author", args.Author );
+            this.Writer.WriteElementString("Revision", args.Revision.ToString());
+            this.Writer.WriteElementString( "Date", args.Time.ToLocalTime().ToString( "s" ) );
+            this.Writer.WriteElementString( "Message", args.LogMessage );
 
             this.Writer.WriteStartElement( "ChangedPaths" );
-            foreach( string path in msg.ChangedPaths.Keys )
+            foreach( SvnChangeItem cp in args.ChangedPaths )
             {
                 this.Writer.WriteStartElement( "ChangedPath" );
-                this.Writer.WriteElementString( "Path", path );
-
-                ChangedPath cp = msg.ChangedPaths.Get( path );
+                this.Writer.WriteElementString( "Path", cp.Path );
                 this.Writer.WriteElementString( "Action", cp.Action.ToString() );
 
                 if ( cp.CopyFromPath != null )
