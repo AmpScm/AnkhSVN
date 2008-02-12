@@ -16,7 +16,7 @@
     <!--<MergeExePath>"C:\Program Files\TortoiseSVN\bin\TortoiseMerge.exe" "/base:%base" "/theirs:%theirs" "/mine:%mine" "/merged:%merged"</MergeExePath>-->
         
     <LogMessageTemplate><![CDATA[# All lines starting with a # will be ignored
-# This template can be modified by editing the Ankh config file, located in %APPDATA%\AnkhSVN
+# This template can be modified in Tools->AnkhSVN->Configuration.
 *** # %path%]]>
     </LogMessageTemplate>
     
