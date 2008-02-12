@@ -75,13 +75,11 @@ namespace Ankh.Commands
             string[] paths = SvnItem.GetPaths(info.CheckedItems);
 
             SvnLogArgs args = new SvnLogArgs();
-            args.IncludeMergedRevisions = !info.StopOnCopy;
+            args.StrictNodeHistory = info.StopOnCopy;
             args.Log += new EventHandler<SvnLogEventArgs>(result.Receive);
 
             Collection<SvnLogEventArgs> logItems;
             context.Client.GetLog(paths[0], args, out logItems);
-            //context.Client.Log( paths, info.RevisionEnd, info.RevisionStart, true, 
-            //    info.StopOnCopy, new LogMessageReceiver(result.Receive) );
 
             this.result.End();
         }
