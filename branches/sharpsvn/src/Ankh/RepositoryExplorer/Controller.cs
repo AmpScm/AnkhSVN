@@ -325,12 +325,26 @@ namespace Ankh.RepositoryExplorer
                 get{ return this.entries; }
             }
 
-            public void Work(IContext context)
+            public void Work(
+                
+                IContext context)
             {
-                SvnListArgs args = new SvnListArgs();
+                ReposListArgs args = new ReposListArgs();
                 args.Depth = SvnDepth.Children;
                 args.Revision = this.node.Revision;
                 context.Client.GetList(this.node.Url, args, out entries);
+                
+            }
+
+            class ReposListArgs : SvnListArgs
+            {
+                protected override void OnList(SvnListEventArgs e)
+                {
+                    if (e.Entry != null && e.Entry.NodeKind == SvnNodeKind.Directory && string.IsNullOrEmpty(e.Path))
+                        return;
+
+                    base.OnList(e);
+                }
             }
 
             private INode node;
