@@ -18,7 +18,7 @@
         /I "${svndir}\subversion\include" 
         /AI "..\Utils\${build.dir}"
         /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /D "SVN_NEON_0_25=1" /FD /MDd /GS /W3 
-        /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\' 
+        /nologo /c /Zi /clr:oldSyntax /TP /AI ..\NSvn.Common\${build.dir}\' 
         if="${debug}"/>
     
     <property name="cl.options" value='/Od /I "${svndir}\apr\include" 
@@ -26,7 +26,7 @@
         /I "${svndir}\subversion\include" /AI "..\NSvn.Common\bin\Release" 
         /AI "..\Utils\${build.dir}"
         /D "WIN32" /D "_MBCS" /D "_WINDLL" /D "SVN_NEON_0_25=1" /FD /MD /GS  /W3 
-        /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\'
+        /nologo /c /Zi /clr:oldSyntax /TP /AI ..\NSvn.Common\${build.dir}\'
         unless="${debug}"/>
 
     <property name="link.options" value='/NOLOGO /DLL /DEBUG 
