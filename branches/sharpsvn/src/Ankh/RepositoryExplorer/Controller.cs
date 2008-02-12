@@ -325,13 +325,12 @@ namespace Ankh.RepositoryExplorer
                 get{ return this.entries; }
             }
 
-            public void Work(
-                
-                IContext context)
+            public void Work(IContext context)
             {
                 ReposListArgs args = new ReposListArgs();
                 args.Depth = SvnDepth.Children;
                 args.Revision = this.node.Revision;
+                args.EntryItems = SvnDirEntryItems.AllFieldsV15;
                 context.Client.GetList(this.node.Url, args, out entries);
                 
             }
@@ -343,6 +342,7 @@ namespace Ankh.RepositoryExplorer
                     if (e.Entry != null && e.Entry.NodeKind == SvnNodeKind.Directory && string.IsNullOrEmpty(e.Path))
                         return;
 
+                    e.Detach(true);
                     base.OnList(e);
                 }
             }
