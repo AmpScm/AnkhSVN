@@ -70,7 +70,7 @@ namespace Ankh.RepositoryExplorer
         [Category("Subversion")]
         public string Url
         {
-            get{ return UriUtils.Combine( this.entry.BasePath, this.entry.Path );}
+            get{ return UriUtils.Combine( this.Parent.Url, this.entry.Path );}
         }
 
         [Category("Subversion")]
