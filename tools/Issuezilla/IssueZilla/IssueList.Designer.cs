@@ -128,7 +128,7 @@ namespace IssueZilla
             creation_tsLabel.AutoSize = true;
             creation_tsLabel.Location = new System.Drawing.Point( 35, 256 );
             creation_tsLabel.Name = "creation_tsLabel";
-            creation_tsLabel.Size = new System.Drawing.Size( 62, 13 );
+            creation_tsLabel.Size = new System.Drawing.Size( 59, 13 );
             creation_tsLabel.TabIndex = 12;
             creation_tsLabel.Text = "creation ts:";
             // 
@@ -137,7 +137,7 @@ namespace IssueZilla
             delta_tsLabel.AutoSize = true;
             delta_tsLabel.Location = new System.Drawing.Point( 50, 285 );
             delta_tsLabel.Name = "delta_tsLabel";
-            delta_tsLabel.Size = new System.Drawing.Size( 47, 13 );
+            delta_tsLabel.Size = new System.Drawing.Size( 44, 13 );
             delta_tsLabel.TabIndex = 13;
             delta_tsLabel.Text = "delta ts:";
             // 
@@ -146,7 +146,7 @@ namespace IssueZilla
             op_sysLabel.AutoSize = true;
             op_sysLabel.Location = new System.Drawing.Point( 55, 344 );
             op_sysLabel.Name = "op_sysLabel";
-            op_sysLabel.Size = new System.Drawing.Size( 42, 13 );
+            op_sysLabel.Size = new System.Drawing.Size( 40, 13 );
             op_sysLabel.TabIndex = 15;
             op_sysLabel.Text = "op sys:";
             // 
@@ -155,7 +155,7 @@ namespace IssueZilla
             qa_contactLabel.AutoSize = true;
             qa_contactLabel.Location = new System.Drawing.Point( 35, 372 );
             qa_contactLabel.Name = "qa_contactLabel";
-            qa_contactLabel.Size = new System.Drawing.Size( 62, 13 );
+            qa_contactLabel.Size = new System.Drawing.Size( 61, 13 );
             qa_contactLabel.TabIndex = 16;
             qa_contactLabel.Text = "qa contact:";
             // 
@@ -164,7 +164,7 @@ namespace IssueZilla
             resolutionLabel.AutoSize = true;
             resolutionLabel.Location = new System.Drawing.Point( 39, 404 );
             resolutionLabel.Name = "resolutionLabel";
-            resolutionLabel.Size = new System.Drawing.Size( 58, 13 );
+            resolutionLabel.Size = new System.Drawing.Size( 55, 13 );
             resolutionLabel.TabIndex = 17;
             resolutionLabel.Text = "resolution:";
             // 
@@ -173,7 +173,7 @@ namespace IssueZilla
             status_codeLabel.AutoSize = true;
             status_codeLabel.Location = new System.Drawing.Point( 30, 436 );
             status_codeLabel.Name = "status_codeLabel";
-            status_codeLabel.Size = new System.Drawing.Size( 67, 13 );
+            status_codeLabel.Size = new System.Drawing.Size( 65, 13 );
             status_codeLabel.TabIndex = 18;
             status_codeLabel.Text = "status code:";
             // 
@@ -182,7 +182,7 @@ namespace IssueZilla
             componentLabel.AutoSize = true;
             componentLabel.Location = new System.Drawing.Point( 33, 466 );
             componentLabel.Name = "componentLabel";
-            componentLabel.Size = new System.Drawing.Size( 64, 13 );
+            componentLabel.Size = new System.Drawing.Size( 63, 13 );
             componentLabel.TabIndex = 19;
             componentLabel.Text = "component:";
             // 
@@ -191,7 +191,7 @@ namespace IssueZilla
             subcomponentLabel.AutoSize = true;
             subcomponentLabel.Location = new System.Drawing.Point( 16, 492 );
             subcomponentLabel.Name = "subcomponentLabel";
-            subcomponentLabel.Size = new System.Drawing.Size( 81, 13 );
+            subcomponentLabel.Size = new System.Drawing.Size( 80, 13 );
             subcomponentLabel.TabIndex = 20;
             subcomponentLabel.Text = "subcomponent:";
             // 
@@ -200,7 +200,7 @@ namespace IssueZilla
             target_milestoneLabel.AutoSize = true;
             target_milestoneLabel.Location = new System.Drawing.Point( 255, 256 );
             target_milestoneLabel.Name = "target_milestoneLabel";
-            target_milestoneLabel.Size = new System.Drawing.Size( 89, 13 );
+            target_milestoneLabel.Size = new System.Drawing.Size( 84, 13 );
             target_milestoneLabel.TabIndex = 22;
             target_milestoneLabel.Text = "target milestone:";
             // 
@@ -209,7 +209,7 @@ namespace IssueZilla
             versionLabel.AutoSize = true;
             versionLabel.Location = new System.Drawing.Point( 298, 285 );
             versionLabel.Name = "versionLabel";
-            versionLabel.Size = new System.Drawing.Size( 46, 13 );
+            versionLabel.Size = new System.Drawing.Size( 44, 13 );
             versionLabel.TabIndex = 24;
             versionLabel.Text = "version:";
             // 
@@ -218,7 +218,7 @@ namespace IssueZilla
             votesLabel.AutoSize = true;
             votesLabel.Location = new System.Drawing.Point( 306, 313 );
             votesLabel.Name = "votesLabel";
-            votesLabel.Size = new System.Drawing.Size( 38, 13 );
+            votesLabel.Size = new System.Drawing.Size( 36, 13 );
             votesLabel.TabIndex = 26;
             votesLabel.Text = "votes:";
             // 
@@ -227,7 +227,7 @@ namespace IssueZilla
             rep_platformLabel.AutoSize = true;
             rep_platformLabel.Location = new System.Drawing.Point( 274, 344 );
             rep_platformLabel.Name = "rep_platformLabel";
-            rep_platformLabel.Size = new System.Drawing.Size( 70, 13 );
+            rep_platformLabel.Size = new System.Drawing.Size( 65, 13 );
             rep_platformLabel.TabIndex = 28;
             rep_platformLabel.Text = "rep platform:";
             // 
@@ -236,7 +236,7 @@ namespace IssueZilla
             priorityLabel.AutoSize = true;
             priorityLabel.Location = new System.Drawing.Point( 52, 313 );
             priorityLabel.Name = "priorityLabel";
-            priorityLabel.Size = new System.Drawing.Size( 45, 13 );
+            priorityLabel.Size = new System.Drawing.Size( 40, 13 );
             priorityLabel.TabIndex = 29;
             priorityLabel.Text = "priority:";
             // 
@@ -254,13 +254,14 @@ namespace IssueZilla
             this.issuestatusDataGridViewTextBoxColumn} );
             this.issuesGrid.DataSource = this.issueBindingSource;
             this.issuesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.issuesGrid.Location = new System.Drawing.Point( 3, 17 );
+            this.issuesGrid.Location = new System.Drawing.Point( 3, 16 );
             this.issuesGrid.Name = "issuesGrid";
             this.issuesGrid.ReadOnly = true;
             this.issuesGrid.RowTemplate.Height = 23;
             this.issuesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.issuesGrid.Size = new System.Drawing.Size( 1109, 230 );
+            this.issuesGrid.Size = new System.Drawing.Size( 1109, 231 );
             this.issuesGrid.TabIndex = 0;
+            this.issuesGrid.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler( this.issuesGrid_CellFormatting );
             // 
             // issue_type
             // 
@@ -317,7 +318,7 @@ namespace IssueZilla
             this.long_descDataGridView.ReadOnly = true;
             this.long_descDataGridView.RowTemplate.Height = 23;
             this.long_descDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.long_descDataGridView.Size = new System.Drawing.Size( 292, 232 );
+            this.long_descDataGridView.Size = new System.Drawing.Size( 292, 233 );
             this.long_descDataGridView.TabIndex = 1;
             // 
             // dataGridViewTextBoxColumn2
@@ -350,7 +351,7 @@ namespace IssueZilla
             this.thetextTextBox.Name = "thetextTextBox";
             this.thetextTextBox.ReadOnly = true;
             this.thetextTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.thetextTextBox.Size = new System.Drawing.Size( 357, 232 );
+            this.thetextTextBox.Size = new System.Drawing.Size( 357, 233 );
             this.thetextTextBox.TabIndex = 5;
             // 
             // activityDataGridView
@@ -367,12 +368,12 @@ namespace IssueZilla
             this.dataGridViewTextBoxColumn8} );
             this.activityDataGridView.DataSource = this.activityBindingSource;
             this.activityDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.activityDataGridView.Location = new System.Drawing.Point( 3, 17 );
+            this.activityDataGridView.Location = new System.Drawing.Point( 3, 16 );
             this.activityDataGridView.Name = "activityDataGridView";
             this.activityDataGridView.ReadOnly = true;
             this.activityDataGridView.RowTemplate.Height = 23;
             this.activityDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.activityDataGridView.Size = new System.Drawing.Size( 686, 165 );
+            this.activityDataGridView.Size = new System.Drawing.Size( 686, 166 );
             this.activityDataGridView.TabIndex = 8;
             // 
             // dataGridViewTextBoxColumn1
@@ -433,11 +434,11 @@ namespace IssueZilla
             this.dataGridViewTextBoxColumn11} );
             this.has_duplicatesDataGridView.DataSource = this.has_duplicatesBindingSource;
             this.has_duplicatesDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.has_duplicatesDataGridView.Location = new System.Drawing.Point( 3, 17 );
+            this.has_duplicatesDataGridView.Location = new System.Drawing.Point( 3, 16 );
             this.has_duplicatesDataGridView.Name = "has_duplicatesDataGridView";
             this.has_duplicatesDataGridView.RowTemplate.Height = 23;
             this.has_duplicatesDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.has_duplicatesDataGridView.Size = new System.Drawing.Size( 397, 165 );
+            this.has_duplicatesDataGridView.Size = new System.Drawing.Size( 397, 166 );
             this.has_duplicatesDataGridView.TabIndex = 8;
             // 
             // dataGridViewTextBoxColumn9
@@ -480,7 +481,7 @@ namespace IssueZilla
             // 
             this.splitContainerComments.DataBindings.Add( new System.Windows.Forms.Binding( "SplitterDistance", global::IssueZilla.Properties.Settings.Default, "CommentsSplitterDistance", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged ) );
             this.splitContainerComments.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerComments.Location = new System.Drawing.Point( 3, 17 );
+            this.splitContainerComments.Location = new System.Drawing.Point( 3, 16 );
             this.splitContainerComments.Name = "splitContainerComments";
             // 
             // splitContainerComments.Panel1
@@ -490,7 +491,7 @@ namespace IssueZilla
             // splitContainerComments.Panel2
             // 
             this.splitContainerComments.Panel2.Controls.Add( this.thetextTextBox );
-            this.splitContainerComments.Size = new System.Drawing.Size( 653, 232 );
+            this.splitContainerComments.Size = new System.Drawing.Size( 653, 233 );
             this.splitContainerComments.SplitterDistance = global::IssueZilla.Properties.Settings.Default.CommentsSplitterDistance;
             this.splitContainerComments.TabIndex = 6;
             // 
@@ -533,7 +534,7 @@ namespace IssueZilla
             this.creation_tsTextBox.Location = new System.Drawing.Point( 103, 253 );
             this.creation_tsTextBox.Name = "creation_tsTextBox";
             this.creation_tsTextBox.ReadOnly = true;
-            this.creation_tsTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.creation_tsTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.creation_tsTextBox.TabIndex = 13;
             // 
             // delta_tsTextBox
@@ -542,7 +543,7 @@ namespace IssueZilla
             this.delta_tsTextBox.Location = new System.Drawing.Point( 103, 282 );
             this.delta_tsTextBox.Name = "delta_tsTextBox";
             this.delta_tsTextBox.ReadOnly = true;
-            this.delta_tsTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.delta_tsTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.delta_tsTextBox.TabIndex = 14;
             // 
             // op_sysTextBox
@@ -551,7 +552,7 @@ namespace IssueZilla
             this.op_sysTextBox.Location = new System.Drawing.Point( 103, 341 );
             this.op_sysTextBox.Name = "op_sysTextBox";
             this.op_sysTextBox.ReadOnly = true;
-            this.op_sysTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.op_sysTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.op_sysTextBox.TabIndex = 16;
             // 
             // qa_contactTextBox
@@ -560,7 +561,7 @@ namespace IssueZilla
             this.qa_contactTextBox.Location = new System.Drawing.Point( 103, 369 );
             this.qa_contactTextBox.Name = "qa_contactTextBox";
             this.qa_contactTextBox.ReadOnly = true;
-            this.qa_contactTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.qa_contactTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.qa_contactTextBox.TabIndex = 17;
             // 
             // resolutionTextBox
@@ -569,7 +570,7 @@ namespace IssueZilla
             this.resolutionTextBox.Location = new System.Drawing.Point( 103, 401 );
             this.resolutionTextBox.Name = "resolutionTextBox";
             this.resolutionTextBox.ReadOnly = true;
-            this.resolutionTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.resolutionTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.resolutionTextBox.TabIndex = 18;
             // 
             // status_codeTextBox
@@ -578,7 +579,7 @@ namespace IssueZilla
             this.status_codeTextBox.Location = new System.Drawing.Point( 103, 433 );
             this.status_codeTextBox.Name = "status_codeTextBox";
             this.status_codeTextBox.ReadOnly = true;
-            this.status_codeTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.status_codeTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.status_codeTextBox.TabIndex = 19;
             // 
             // componentTextBox
@@ -587,7 +588,7 @@ namespace IssueZilla
             this.componentTextBox.Location = new System.Drawing.Point( 103, 463 );
             this.componentTextBox.Name = "componentTextBox";
             this.componentTextBox.ReadOnly = true;
-            this.componentTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.componentTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.componentTextBox.TabIndex = 20;
             // 
             // subcomponentTextBox
@@ -596,7 +597,7 @@ namespace IssueZilla
             this.subcomponentTextBox.Location = new System.Drawing.Point( 103, 489 );
             this.subcomponentTextBox.Name = "subcomponentTextBox";
             this.subcomponentTextBox.ReadOnly = true;
-            this.subcomponentTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.subcomponentTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.subcomponentTextBox.TabIndex = 21;
             // 
             // target_milestoneTextBox
@@ -605,7 +606,7 @@ namespace IssueZilla
             this.target_milestoneTextBox.Location = new System.Drawing.Point( 350, 253 );
             this.target_milestoneTextBox.Name = "target_milestoneTextBox";
             this.target_milestoneTextBox.ReadOnly = true;
-            this.target_milestoneTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.target_milestoneTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.target_milestoneTextBox.TabIndex = 23;
             // 
             // versionTextBox
@@ -614,7 +615,7 @@ namespace IssueZilla
             this.versionTextBox.Location = new System.Drawing.Point( 350, 282 );
             this.versionTextBox.Name = "versionTextBox";
             this.versionTextBox.ReadOnly = true;
-            this.versionTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.versionTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.versionTextBox.TabIndex = 25;
             // 
             // votesTextBox
@@ -623,7 +624,7 @@ namespace IssueZilla
             this.votesTextBox.Location = new System.Drawing.Point( 350, 310 );
             this.votesTextBox.Name = "votesTextBox";
             this.votesTextBox.ReadOnly = true;
-            this.votesTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.votesTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.votesTextBox.TabIndex = 27;
             // 
             // rep_platformTextBox
@@ -632,7 +633,7 @@ namespace IssueZilla
             this.rep_platformTextBox.Location = new System.Drawing.Point( 350, 341 );
             this.rep_platformTextBox.Name = "rep_platformTextBox";
             this.rep_platformTextBox.ReadOnly = true;
-            this.rep_platformTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.rep_platformTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.rep_platformTextBox.TabIndex = 29;
             // 
             // priorityTextBox
@@ -641,7 +642,7 @@ namespace IssueZilla
             this.priorityTextBox.Location = new System.Drawing.Point( 103, 310 );
             this.priorityTextBox.Name = "priorityTextBox";
             this.priorityTextBox.ReadOnly = true;
-            this.priorityTextBox.Size = new System.Drawing.Size( 100, 21 );
+            this.priorityTextBox.Size = new System.Drawing.Size( 100, 20 );
             this.priorityTextBox.TabIndex = 30;
             // 
             // blocksBindingSource
@@ -662,7 +663,7 @@ namespace IssueZilla
             this.urlLinkLabel.DataBindings.Add( new System.Windows.Forms.Binding( "Text", this.issueBindingSource, "issue_id", true ) );
             this.urlLinkLabel.Location = new System.Drawing.Point( 3, 702 );
             this.urlLinkLabel.Name = "urlLinkLabel";
-            this.urlLinkLabel.Size = new System.Drawing.Size( 25, 13 );
+            this.urlLinkLabel.Size = new System.Drawing.Size( 27, 13 );
             this.urlLinkLabel.TabIndex = 31;
             this.urlLinkLabel.TabStop = true;
             this.urlLinkLabel.Text = "Link";

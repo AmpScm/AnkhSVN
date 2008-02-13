@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using Fines.IssueZillaLib;
 using System.Diagnostics;
+using Fines.Utils.Collections;
 
 namespace IssueZilla
 {
@@ -18,6 +19,26 @@ namespace IssueZilla
 
             Binding binding = this.urlLinkLabel.DataBindings[ "Text" ];
             binding.Format += new ConvertEventHandler( urlBinding_Format );
+
+            this.modifiedFont = new Font( this.issuesGrid.DefaultCellStyle.Font, FontStyle.Bold );
+            this.newFont = new Font( this.issuesGrid.DefaultCellStyle.Font, FontStyle.Italic );
+
+            this.issuesGrid.CellDoubleClick += new DataGridViewCellEventHandler( issuesGrid_CellDoubleClick );
+        }
+
+        public CommandBase RowClickCommand
+        {
+            get { return this.rowClickCommand; }
+            set { this.rowClickCommand = value; }
+        }
+
+        void issuesGrid_CellDoubleClick( object sender, DataGridViewCellEventArgs e )
+        {
+            issue issue = issuesGrid.Rows[ e.RowIndex ].DataBoundItem as issue;
+            if ( issue != null && this.rowClickCommand != null )
+            {
+                this.rowClickCommand.Execute();
+            }
         }
 
         void urlBinding_Format( object sender, ConvertEventArgs e )
@@ -45,6 +66,12 @@ namespace IssueZilla
             }
         }
 
+        public issue CurrentIssue
+        {
+            get { return this.issueBindingSource.Current as issue; }
+            set { this.issueBindingSource.Position = this.issueBindingSource.IndexOf( value ); }
+        }
+
         public string UrlFormat
         {
             get { return this.baseUrl; }
@@ -65,5 +92,26 @@ namespace IssueZilla
         {
             Clipboard.SetText( this.urlLinkLabel.Text );
         }
+
+        private void issuesGrid_CellFormatting( object sender, DataGridViewCellFormattingEventArgs e )
+        {
+            issue issue = this.issuesGrid.Rows[ e.RowIndex ].DataBoundItem as issue;
+            if ( issue != null )
+            {
+                if ( issue.State == IssueState.New )
+                {
+                    e.CellStyle.Font = this.newFont;
+                }
+                else if( issue.State == IssueState.Modified )
+                {
+                    e.CellStyle.Font = this.modifiedFont;
+                }
+            }
+           
+        }
+
+        private CommandBase rowClickCommand;
+        private Font newFont;
+        private Font modifiedFont;
     }
 }

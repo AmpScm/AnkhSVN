@@ -4,11 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8B130EC0-CF4D-48EC-9636-9D5B1BCD16C3}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{BDA39450-2ED4-406A-8005-D149ECFE663D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Fines.IssueZillaLib</RootNamespace>
-    <AssemblyName>IssueZillaLib</AssemblyName>
+    <RootNamespace>Test</RootNamespace>
+    <AssemblyName>Test</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,34 +28,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Fines.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Fines.Utils.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileIssueSource.cs" />
-    <Compile Include="Filter.cs" />
-    <Compile Include="FilterCriteria.cs" />
-    <Compile Include="IIssuePoster.cs" />
-    <Compile Include="IIssueSink.cs" />
-    <Compile Include="IIssueSource.cs" />
-    <Compile Include="IMetadataSource.cs" />
-    <Compile Include="IServiceProvider.cs" />
-    <Compile Include="issues.cs" />
-    <Compile Include="issues.generated.cs">
-      <DependentUpon>issues.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IssueSourceBase.cs" />
-    <Compile Include="IssueState.cs" />
-    <Compile Include="MetadataItem.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query.cs" />
-    <Compile Include="WebIssueSource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IssueZillaLib\IssueZillaLib.csproj">
+      <Project>{8B130EC0-CF4D-48EC-9636-9D5B1BCD16C3}</Project>
+      <Name>IssueZillaLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

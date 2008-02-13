@@ -4,6 +4,10 @@ using System.Text;
 using Fines.IssueZillaLib;
 using System.ComponentModel;
 using System.Threading;
+using System.Windows.Forms;
+
+using IServiceProvider = Fines.IssueZillaLib.IServiceProvider;
+using Fines.Utils.Collections;
 
 namespace IssueZilla
 {
@@ -11,7 +15,7 @@ namespace IssueZilla
     {
         void ShowError( Exception exception );
     }
-    public class MainFormUCP
+    public class MainFormUCP : IServiceProvider
     {
         public MainFormUCP( MainForm form )
         {
@@ -20,19 +24,63 @@ namespace IssueZilla
             this.form.FilterControl.FilterChanged += new EventHandler( FilterControl_FilterChanged );
             this.form.FilterControl.SearchTextChanged += new EventHandler( FilterControl_SearchTextChanged );
 
+            this.form.IssueList.RowClickCommand = new RowClickCommand( this );
+
+            this.services = new Dictionary<Type, object>();
+            this.services.Add( typeof( IServiceProvider ), this.WindowHandle );
+            this.services.Add( typeof( IBackgroundWorkerService ), new BackgroundWorkerService( this.WindowHandle ) );
+
         }
 
-        
+        internal IWin32Window WindowHandle
+        {
+            get { return this.form; }
+        }
+
+        internal ISynchronizeInvoke Invoker
+        {
+            get { return this.form; }
+        }
+
+        internal IIssuePoster IssuePoster
+        {
+            get { return this.source as IIssuePoster; }
+        }
+
+        internal issue SelectedIssue
+        {
+            get { return this.form.CurrentIssue; }
+            set { this.form.CurrentIssue = value; }
+        }
+
         internal void LoadIssues(IIssueSource source)
         {
             this.source = source;
-            new LoadIssuesWorker( this ).Run();
+            this.services.Add( typeof( IMetadataSource ), this.source as IMetadataSource );
+            this.services.Add( typeof( IIssuePoster ), this.source as IIssuePoster );
+
+            this.GetService<IBackgroundWorkerService>().DoWork( "Loading metadata",
+                delegate
+                {
+                    this.GetService<IMetadataSource>().LoadMetaData();
+                } );
+
+            this.GetService<IBackgroundWorkerService>().DoWork( "Loading issues",
+               new LoadIssuesWorker(this)
+            );
+
+
         }
 
         internal void SetIssues( issuezilla issueZilla )
         {
             this.issueZilla = issueZilla;
-            this.allIssues = this.issueZilla.issue;
+            ResetIssues( this.issueZilla.issue );
+        }
+
+        private void ResetIssues(IList<issue> issues)
+        {
+            this.allIssues = new List<issue>( issues );
             this.filteredIssues = new List<issue>( this.allIssues );
             this.searchFilteredIssues = new List<issue>( this.allIssues );
 
@@ -45,7 +93,7 @@ namespace IssueZilla
 
         internal void StoreIssues( FileIssueSource source )
         {
-            this.issueZilla.issue = this.allIssues;
+            this.issueZilla.issue = ListUtils.ToArray( this.allIssues ); ;
             source.StoreIssues( this.issueZilla );
         }
 
@@ -76,54 +124,55 @@ namespace IssueZilla
             }
         }
 
+        public T GetService<T>() where T : class
+        {
+            if ( services.ContainsKey(typeof(T)) )
+            {
+                return services[ typeof( T ) ] as T;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
+        public void AddNewIssue( issue issue )
+        {
+            this.allIssues.Add( issue );
+            this.ResetIssues( allIssues );            
+        }
+
+        private Dictionary<Type, object> services;
         private IIssueSource source;
         private MainForm form;
         private issuezilla issueZilla;
-        private issue[] allIssues;
+        private IList<issue> allIssues;
         private IList<issue> filteredIssues;
         private IList<issue> searchFilteredIssues;
         private SearchIssuesWorker searchIssuesWorker;
 
-        private class LoadIssuesWorker : BackgroundWorker
+        private class LoadIssuesWorker : IBackgroundOperation
         {
             public LoadIssuesWorker( MainFormUCP ucp)
             {
                 this.ucp = ucp;
             }
            
-            protected override void OnDoWork( DoWorkEventArgs e )
+            public void Work( )
             {
-                base.OnDoWork( e );
 
                 this.issueZilla = ucp.source.GetAllIssues();
             }
 
-            protected override void OnRunWorkerCompleted( RunWorkerCompletedEventArgs e )
+            public void WorkCompleted( RunWorkerCompletedEventArgs e )
             {
-                base.OnRunWorkerCompleted( e );
-
-                if ( e.Error != null )
-                {
-                    this.dialog.ShowError( e.Error );
-                }
-
-                this.dialog.Dispose();
-
                 if ( this.issueZilla != null )
                 {
                     this.ucp.SetIssues( this.issueZilla ); 
                 }
             }
 
-            internal void Run()
-            {
-                this.dialog = ucp.form.StartOperation();
-                this.RunWorkerAsync();
-            }
-
             private MainFormUCP ucp;
-            private IProgressDialog dialog;
             private issuezilla issueZilla;
         }
 
@@ -180,6 +229,14 @@ namespace IssueZilla
             private IList<issue> searchFilteredIssues;
             private string searchString;
         }
+
+
+
+        #region IServiceProvider Members
+
+        
+
+        #endregion
 
         
     }

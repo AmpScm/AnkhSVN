@@ -32,6 +32,7 @@ namespace IssueZilla
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.issueList = new IssueZilla.IssueList();
             this.filterControl = new IssueZilla.FilterControl();
             this.menuStrip1.SuspendLayout();
@@ -50,7 +51,8 @@ namespace IssueZilla
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange( new System.Windows.Forms.ToolStripItem[] {
-            this.saveToolStripMenuItem} );
+            this.saveToolStripMenuItem,
+            this.newToolStripMenuItem} );
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size( 35, 20 );
             this.fileToolStripMenuItem.Text = "File";
@@ -58,9 +60,16 @@ namespace IssueZilla
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size( 109, 22 );
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size( 152, 22 );
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler( this.ExecuteClick );
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size( 152, 22 );
+            this.newToolStripMenuItem.Text = "New";
+            this.newToolStripMenuItem.Click += new System.EventHandler( this.ExecuteClick );
             // 
             // issueList
             // 
@@ -113,5 +122,6 @@ namespace IssueZilla
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
     }
 }

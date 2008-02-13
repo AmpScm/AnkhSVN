@@ -6,7 +6,7 @@ namespace Fines.IssueZillaLib
 {
     public class FilterCriteria
     {
-        public FilterCriteria( issue[] issues )
+        public FilterCriteria( IList<issue> issues )
         {
             this.issues = issues;
             this.BuildCollections();
@@ -22,7 +22,10 @@ namespace Fines.IssueZillaLib
             Dictionary<string, string> dict = new Dictionary<string, string>();
             foreach ( issue i in issues )
             {
-                dict[ i.issue_status ] = i.issue_status;
+                if ( !String.IsNullOrEmpty(i.issue_status) )
+                {
+                    dict[ i.issue_status ] = i.issue_status; 
+                }
             }
 
             this.availableStatuses = new List<string>();
@@ -32,6 +35,6 @@ namespace Fines.IssueZillaLib
         }
 
         private List<string> availableStatuses;
-        private issue[] issues;
+        private IList<issue> issues;
     }
 }
