@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections.Specialized;
+using System.Reflection;
+using System.Collections;
 
 namespace Fines.IssueZillaLib
 {
@@ -17,6 +20,34 @@ namespace Fines.IssueZillaLib
 
     public partial class issue
     {
+        private IssueState state = IssueState.New;
+
+        public IssueState State
+        {
+            get { return this.state; }
+            set { this.state = value; }
+        }
+
+        private string knobField;
+
+        /// <remarks/>
+        public string knob
+        {
+            get
+            {
+                return this.knobField;
+            }
+            set
+            {
+                if ( ( this.knobField != value ) )
+                {
+                    this.knobField = value;
+                    this.RaisePropertyChanged( "knob" );
+                }
+            }
+        }
+
+
         public bool ContainsText( string searchText )
         {
             if ( ContainsText(this.short_desc, searchText ))
@@ -54,5 +85,21 @@ namespace Fines.IssueZillaLib
             return text.IndexOf( textToSearchFor, StringComparison.OrdinalIgnoreCase ) >= 0;
         }
 
+
+        public NameValueCollection GetNameValues()
+        {
+            PropertyInfo[] properties = this.GetType().GetProperties( BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance );
+            NameValueCollection collection = new NameValueCollection();
+            foreach ( PropertyInfo prop in properties )
+            {
+                object value = prop.GetValue( this, null );
+                if ( value != null && !(value is ICollection) )
+                {
+                    collection.Add( prop.Name, value.ToString() );
+                }
+            }
+
+            return collection;
+        }
     }
 }

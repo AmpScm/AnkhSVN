@@ -22,6 +22,17 @@ namespace IssueZilla
             get { return this.filterControl; }
         }
 
+        public IssueList IssueList
+        {
+            get { return this.issueList; }
+        }
+
+        public issue CurrentIssue
+        {
+            get { return this.issueList.CurrentIssue; }
+            set { this.issueList.CurrentIssue = value; }
+        }
+
         private void MainForm_Load( object sender, EventArgs e )
         {
             this.ucp = new MainFormUCP( this );
@@ -30,6 +41,7 @@ namespace IssueZilla
             command.Execute();
 
             this.saveToolStripMenuItem.Tag = new SaveCommand( this.ucp );
+            this.newToolStripMenuItem.Tag = new NewIssueCommand( this.ucp );
         }
 
         internal IProgressDialog StartOperation()

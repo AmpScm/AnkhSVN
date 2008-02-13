@@ -28,6 +28,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Fines.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Fines.Utils.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -36,18 +40,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackgroundWorkerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BackgroundWorkerForm.Designer.cs">
+      <DependentUpon>BackgroundWorkerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BackgroundWorkerService.cs" />
     <Compile Include="Commands.cs" />
+    <Compile Include="CredentialService.cs" />
+    <Compile Include="EditIssueForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditIssueForm.Designer.cs">
+      <DependentUpon>EditIssueForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditIssueFormUCP.cs" />
+    <Compile Include="EditIssueUserControls\ResolveIssueUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EditIssueUserControls\ResolveIssueUserControl.Designer.cs">
+      <DependentUpon>ResolveIssueUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="FilterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FilterControl.Designer.cs">
       <DependentUpon>FilterControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="IBackgroundOperation.cs" />
+    <Compile Include="IEditIssueAction.cs" />
     <Compile Include="IssueList.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="IssueList.Designer.cs">
       <DependentUpon>IssueList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoginDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginDialog.Designer.cs">
+      <DependentUpon>LoginDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -57,6 +90,13 @@
     </Compile>
     <Compile Include="MainFormUCP.cs">
     </Compile>
+    <Compile Include="NewIssueForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewIssueForm.Designer.cs">
+      <DependentUpon>NewIssueForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewIssueFormUCP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgressDialog.cs">
       <SubType>Form</SubType>
@@ -65,6 +105,18 @@
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="BackgroundWorkerForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>BackgroundWorkerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditIssueForm.resx">
+      <DependentUpon>EditIssueForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditIssueUserControls\ResolveIssueUserControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ResolveIssueUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FilterControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FilterControl.cs</DependentUpon>
@@ -73,9 +125,17 @@
       <SubType>Designer</SubType>
       <DependentUpon>IssueList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LoginDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>LoginDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewIssueForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>NewIssueForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressDialog.resx">
       <SubType>Designer</SubType>
@@ -93,6 +153,7 @@
     </Compile>
     <None Include="app.config" />
     <None Include="Properties\DataSources\Fines.IssueZillaLib.Filter.datasource" />
+    <None Include="Properties\DataSources\Fines.IssueZillaLib.IMetadataSource.datasource" />
     <None Include="Properties\DataSources\Fines.IssueZillaLib.issue.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

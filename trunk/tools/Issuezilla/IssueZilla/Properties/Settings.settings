@@ -14,5 +14,11 @@
     <Setting Name="CommentsSplitterDistance" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">292</Value>
     </Setting>
+    <Setting Name="Username" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Password" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
