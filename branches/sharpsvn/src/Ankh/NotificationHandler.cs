@@ -59,7 +59,7 @@ namespace Ankh
             }
 
             string actionValue;
-            if ( actionStatus.TryGetValue(e.Action, out actionValue))
+            if ( actionStatus.TryGetValue(e.Action, out actionValue) && actionValue != null)
             {
                 string nodeKind = "";
                 if ( e.NodeKind == SvnNodeKind.File )
@@ -73,7 +73,7 @@ namespace Ankh
                     e.Path );
             }
 
-            if (e.Action == SvnNotifyAction.CommitSendData)
+			if (e.Action == SvnNotifyAction.CommitSendData)
                 this.ankhContext.OutputPane.Write( '.' );
 
             if (e.Action == SvnNotifyAction.UpdateCompleted)
