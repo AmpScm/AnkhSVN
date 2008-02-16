@@ -33,9 +33,6 @@
 #include <windows.h>
 #include <stdlib.h>
 
-#ifndef POST_DOTNET11
-#include "_vcclrit.h"
-#endif
 //TODO: clean up includes in general(not just here)
 
 using namespace System::Collections;
@@ -71,10 +68,6 @@ void NSvn::Core::Client::InitializeCrt()
     {
         if(!_initialized)
         {
-#ifndef POST_DOTNET11
-            __crt_dll_initialize();
-#endif
-
             utf8InitializePool = new GCPool();
             svn_utf_initialize(utf8InitializePool->ToAprPool());
             _initialized = true;
