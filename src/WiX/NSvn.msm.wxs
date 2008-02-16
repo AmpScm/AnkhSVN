@@ -21,6 +21,7 @@
                 <File Id="CF_LICENSE.rtf" Name="LICENSE.rtf"
                     Vital="yes" KeyPath="yes" Source="..\LICENSE.rtf"/>
 			</Component>
+<?if $(var.vs_version) = vs2002 ?>
 			<Component Id="C_MSVCP70" Guid="B6939999-C136-43CF-906D-C06E66A6F33A">
 				<File Id="CF_MSVCP70.dll" Name="msvcp70.dll"
                     KeyPath="yes" Vital="yes" Source="..\lib\msvcp70.dll" />
@@ -29,6 +30,20 @@
                 <File Id="CF_MSVCR70.dll" Name="msvcr70.dll"
                     KeyPath="yes" Vital="yes" Source="..\lib\msvcr70.dll" />
 			</Component>
+<?elseif $(var.vs_version) = vs2005 ?>
+            <Component Id="C_MSVCP80" Guid="ACA81388-2AD4-4B4C-AC63-EDD2DA13A743">
+                <File Id="CF_MSVCP80.dll" Name="msvcp80.dll"
+                    KeyPath="yes" Vital="yes" Source="..\lib\msvcp80.dll" />
+            </Component>
+            <Component Id="C_MSVCR80" Guid="2DCD064A-C16A-46EB-940D-64BB03265E71">
+                <File Id="CF_MSVCR80.dll" Name="msvcr80.dll"
+                    KeyPath="yes" Vital="yes" Source="..\lib\msvcr80.dll" />
+            </Component>
+            <Component Id="C_MSVCM80" Guid="E40B41BD-6C4C-4936-8D40-7AC92E384322">
+                <File Id="CF_MSVCM80.dll" Name="msvcm80.dll"
+                    KeyPath="yes" Vital="yes" Source="..\lib\msvcm80.dll" />
+            </Component>
+<?endif?>
 			<Component Id="C_LIBDB" Guid="5A40F2B8-3F14-474a-B863-7526D87BF515">
 				<File Id="CF_libdb.dll" Name="LibDB44.dll"
                     KeyPath="yes" Vital="yes" Source="$(var.svn.dir)\db4-win32\bin\libdb44.dll" />

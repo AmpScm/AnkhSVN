@@ -14,7 +14,7 @@
     <property name="deploy.dir" value="Deploy"/>
     <property name="alt.admin.dir" value="true"/>
     <property name="wix-binary.dir" value="${path::get-full-path('../tools/WiX')}"/>
-
+    <property name="vs_version" value="vs2002" />
     <property name="IndexSource" value="false" />
 
     <ifnot test="${property::exists('svndir')}">
@@ -314,10 +314,13 @@
     
     </target>
     <target name="AboutBoxDetails">
+        <copy todir="${build.dir}">
+            <fileset>
+                <include name="${lib.dir}\ms*80.dll" />
+            </fileset>
+        </copy>
         <script language="C#">
             <references>
-                <include name="${build.dir}\Ankh.dll"/>
-                <include name="${build.dir}\NSvn.Core.dll"/>
                 <include name="${build.dir}\Utils.dll"/>
                 <include name="${lib.dir}\Extensibility.dll"/>
                 <include name="${lib.dir}\envdte.dll"/>
@@ -332,7 +335,7 @@
                 string text = "Please visit http://ankhsvn.tigris.org for more information" + Environment.NewLine;
                 text += Environment.NewLine + "Below is the version information for the various AnkhSVN components" + Environment.NewLine;
                 string ankhVersion = string.Empty;
-                Assembly ankh = typeof( Ankh.Connect ).Assembly;
+                Assembly ankh = typeof( Utils.PathUtils ).Assembly;
 
                 ankhVersion = 
                     ankh.GetName().Version.ToString();

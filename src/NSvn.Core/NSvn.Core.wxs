@@ -18,10 +18,17 @@
                 <File Id="NSvn.Core.file1" Name="NSvn.Core.pdb" Checksum="yes"
                     Vital="yes" KeyPath="yes" />
             </Component>
+<?if $(var.vs_version) = vs2002 ?>
             <Component Id="NSvn.Core.component2" DiskId="1" Guid="E6C66130-D754-46c3-B6F7-0072BDF1058A">
                 <File Id="NSvn.Core.file2" Name="VC70.PDB" Checksum="yes"
                     Vital="yes" KeyPath="yes" />
             </Component>
+<?elseif $(var.vs_version) = vs2005 ?>
+            <Component Id="NSvn.Core.component2" DiskId="1" Guid="8B662175-BBFB-49C2-A39E-E1FD777507FD">
+                <File Id="NSvn.Core.file2" Name="VC80.PDB" Checksum="yes"
+                    Vital="yes" KeyPath="yes" />
+            </Component>
+<?endif?>
             <Component Id="LibApr.component3" DiskId="1" Guid="F8A86574-96D2-4505-B524-9A1758B50CA7">
                 <File Id="LibApr.file3" Name="LIBAPR.DLL" Checksum="yes"
                     Vital="yes" KeyPath="yes" />
