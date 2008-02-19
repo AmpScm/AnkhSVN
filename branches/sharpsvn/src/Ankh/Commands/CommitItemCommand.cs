@@ -163,7 +163,7 @@ namespace Ankh.Commands
         }
 
         private string[] paths;
-        private SvnCommitInfo commitInfo;
+        private SvnCommitResult commitInfo;
         private CommitContext commitContext;
         private string storedLogMessage = null;
 

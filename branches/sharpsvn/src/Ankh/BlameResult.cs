@@ -35,7 +35,7 @@ namespace Ankh
             this.Writer.WriteEndElement();
 
             this.Writer.WriteStartElement( "Date" );
-            this.Writer.WriteString( e.Date.ToLocalTime().ToString( "s" ) );
+            this.Writer.WriteString( e.Time.ToLocalTime().ToString( "s" ) );
             this.Writer.WriteEndElement();
 
             this.Writer.WriteStartElement( "Line" );

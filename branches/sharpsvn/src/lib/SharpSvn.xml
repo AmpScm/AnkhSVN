@@ -4,6 +4,391 @@
         "SharpSvn"
     </assembly>
     <members>
+        <member name="F:SharpSvn.Implementation.SvnPropertyNames.TortoiseSvnDirectoryProperties">
+            <summary>Gets a list of TortoiseSvn defined directory properties, which are applied recursively on all directories below the set root</summary>
+        </member>
+        <member name="F:SharpSvn.Implementation.SvnPropertyNames.SvnBooleanValue">
+            <summary>
+Properties whose values are interpreted as booleans (such as
+svn:executable, svn:needs_lock, and svn:special) always fold their
+value to this.
+</summary>
+        </member>
+        <member name="F:SharpSvn.Implementation.SvnPropertyNames.SvnPropertyPrefix">
+            <summary>All Subversion property names start with this</summary>
+        </member>
+        <member name="M:svn_config_write_auth_data(apr_hash_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,apr_pool_t*)">
+Use @a cred_kind and @a realmstring to create or overwrite a file
+ * within the ~/.subversion/auth/ area.  Write the contents of @a hash into
+ * the file.  If @a config_dir is not NULL it specifies a directory to read
+ * the config overriding all other sources.
+ *
+ * Also, add @a realmstring to the file, with key @c
+ * SVN_CONFIG_REALMSTRING_KEY.  This allows programs (or users) to
+ * verify exactly which set credentials live within the file.
+ *
+ * The hashtable must contain <tt>const char *</tt> keys and
+ * <tt>svn_string_t *</tt> values.
+
+</member>
+        <member name="M:svn_config_read_auth_data(apr_hash_t**,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,apr_pool_t*)">
+Accessing cached authentication data in the user config area.
+ *
+ * @defgroup cached_authentication_data Cached authentication data
+ * @{
+
+A hash-key pointing to a realmstring.  Every file containing
+ * authentication data should have this key.
+
+Use @a cred_kind and @a realmstring to locate a file within the
+ * ~/.subversion/auth/ area.  If the file exists, initialize @a *hash
+ * and load the file contents into the hash, using @a pool.  If the
+ * file doesn't exist, set @a *hash to NULL.
+ *
+ * If @a config_dir is not NULL it specifies a directory from which to
+ * read the config overriding all other sources.
+ *
+ * Besides containing the original credential fields, the hash will
+ * also contain @c SVN_CONFIG_REALMSTRING_KEY.  The caller can examine
+ * this value as a sanity-check that the correct file was loaded.
+ *
+ * The hashtable will contain <tt>const char *</tt> keys and
+ * <tt>svn_string_t *</tt> values.
+
+</member>
+        <member name="M:svn_config_ensure(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,apr_pool_t*)">
+Try to ensure that the user's ~/.subversion/ area exists, and create
+ * no-op template files for any absent config files.  Use @a pool for any
+ * temporary allocation.  If @a config_dir is not @c NULL it specifies a
+ * directory from which to read the config overriding all other sources.
+ *
+ * Don't error if something exists but is the wrong kind (for example,
+ * ~/.subversion exists but is a file, or ~/.subversion/servers exists
+ * but is a directory).
+ *
+ * Also don't error if trying to create something and failing -- it's
+ * okay for the config area or its contents not to be created.
+ * However, if creating a config template file succeeds, return an
+ * error if unable to initialize its contents.
+
+</member>
+        <member name="M:svn_config_get_server_setting_int(svn_config_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.Int64,System.Int64*,apr_pool_t*)">
+Retrieve value into @a result_value corresponding to @a option_name for a
+ *  given @a server_group in @a cfg, or return @a default_value if none is
+ *  found.
+ *
+ *  The config will first be checked for a default, then will be checked for
+ *  an override in a server group. If the value found is not a valid integer,
+ *  a @c svn_error_t* will be returned.
+
+</member>
+        <member name="M:svn_config_get_server_setting(svn_config_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
+Retrieve value corresponding to @a option_name for a given
+ *  @a server_group in @a cfg , or return @a default_value if none is found.
+ *
+ *  The config will first be checked for a default, then will be checked for
+ *  an override in a server group.
+
+</member>
+        <member name="M:svn_config_find_group(svn_config_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,apr_pool_t*)">
+Enumerate the group @a master_section in @a cfg.  Each variable
+ * value is interpreted as a list of glob patterns (separated by comma
+ * and optional whitespace).  Return the name of the first variable
+ * whose value matches @a key, or @c NULL if no variable matches.
+
+</member>
+        <member name="M:svn_config_has_section(svn_config_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
+ Return @c TRUE if @a section exists in @a cfg, @c FALSE otherwise.
+
+ @since New in 1.4.
+
+</member>
+        <member name="M:svn_config_enumerate2(svn_config_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,=FUNC:System.Int32(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.Void*,apr_pool_t*),System.Void*,apr_pool_t*)">
+Enumerate the options in @a section, passing @a baton and the current
+ * option's name and value to @a callback.  Continue the enumeration if
+ * @a callback returns @c TRUE.  Return the number of times @a callback
+ * was called.
+ *
+ * ### kff asks: A more usual interface is to continue enumerating
+ *     while @a callback does not return error, and if @a callback does
+ *     return error, to return the same error (or a wrapping of it)
+ *     from svn_config_enumerate().  What's the use case for
+ *     svn_config_enumerate()?  Is it more likely to need to break out
+ *     of an enumeration early, with no error, than an invocation of
+ *     @a callback is likely to need to return an error? ###
+ *
+ * @a callback's @a name and @a value parameters are only valid for the
+ * duration of the call.
+ *
+ * @since New in 1.3.
+
+</member>
+        <member name="D:svn_config_enumerator2_t">
+A callback function used in enumerating config options.
+ *
+ * See svn_config_enumerate2() for the details of this type.
+ *
+ * @since New in 1.3.
+
+</member>
+        <member name="M:svn_config_enumerate(svn_config_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,=FUNC:System.Int32(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.Void*),System.Void*)">
+Similar to svn_config_enumerate2(), but uses a memory pool of
+ * @a cfg instead of one that is explicitely provided.
+ *
+ * @deprecated Provided for backwards compatibility with the 1.2 API.
+
+</member>
+        <member name="D:svn_config_enumerator_t">
+Similar to @c svn_config_enumerator2_t, but is not
+ * provided with a memory pool argument.
+ * See svn_config_enumerate() for the details of this type.
+ *
+ * @deprecated Provided for backwards compatibility with the 1.2 API.
+
+</member>
+        <member name="M:svn_config_enumerate_sections2(svn_config_t*,=FUNC:System.Int32(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.Void*,apr_pool_t*),System.Void*,apr_pool_t*)">
+Enumerate the sections, passing @a baton and the current section's name
+ * to @a callback.  Continue the enumeration if @a callback returns @c TRUE.
+ * Return the number of times @a callback was called.
+ *
+ * ### See kff's comment to svn_config_enumerate2().  It applies to this
+ * function, too. ###
+ *
+ * @a callback's @a name parameter is only valid for the duration of the call.
+ *
+ * @since New in 1.3.
+
+</member>
+        <member name="D:svn_config_section_enumerator2_t">
+A callback function used in enumerating config sections.
+ *
+ * See svn_config_enumerate_sections2() for the details of this type.
+ *
+ * @since New in 1.3.
+
+</member>
+        <member name="M:svn_config_enumerate_sections(svn_config_t*,=FUNC:System.Int32(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.Void*),System.Void*)">
+Similar to svn_config_enumerate_sections2(), but uses a memory pool of
+ * @a cfg instead of one that is explicitely provided.
+ *
+ * @deprecated Provided for backwards compatibility with the 1.2 API.
+
+</member>
+        <member name="D:svn_config_section_enumerator_t">
+Similar to @c svn_config_section_enumerator2_t, but is not
+ * provided with a memory pool argument.
+ *
+ * See svn_config_enumerate_sections() for the details of this type.
+ *
+ * @deprecated Provided for backwards compatibility with the 1.2 API.
+
+</member>
+        <member name="M:svn_config_set_bool(svn_config_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.Int32)">
+Like svn_config_set(), but for boolean values.
+ *
+ * Sets the option to 'TRUE'/'FALSE', depending on @a value.
+
+</member>
+        <member name="M:svn_config_get_bool(svn_config_t*,System.Int32*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.Int32)">
+Like svn_config_get(), but for boolean values.
+ *
+ * Parses the option as a boolean value. The recognized representations
+ * are 'TRUE'/'FALSE', 'yes'/'no', 'on'/'off', '1'/'0'; case does not
+ * matter. Returns an error if the option doesn't contain a known string.
+
+</member>
+        <member name="M:svn_config_set(svn_config_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
+Add or replace the value of a (@a section, @a option) pair in @a cfg with
+ * @a value.
+ *
+ * This function invalidates all value expansions in @a cfg.
+ *
+ * To remove an option, pass NULL for the @c value.
+
+</member>
+        <member name="M:svn_config_get(svn_config_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst**,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
+Find the value of a (@a section, @a option) pair in @a cfg, set @a
+ * *valuep to the value.
+ *
+ * If @a cfg is @c NULL, just sets @a *valuep to @a default_value. If
+ * the value does not exist, expand and return @a default_value. @a
+ * default_value can be NULL.
+ *
+ * The returned value will be valid at least until the next call to
+ * svn_config_get(), or for the lifetime of @a default_value. It is
+ * safest to consume the returned value immediately.
+ *
+ * This function may change @a cfg by expanding option values.
+
+</member>
+        <member name="M:svn_config_merge(svn_config_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.Int32)">
+Like svn_config_read(), but merges the configuration data from @a file
+ * (a file or registry path) into @a *cfg, which was previously returned
+ * from svn_config_read().  This function invalidates all value
+ * expansions in @a cfg, so that the next svn_config_get() takes the
+ * modifications into account.
+
+</member>
+        <member name="M:svn_config_read(svn_config_t**,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.Int32,apr_pool_t*)">
+Read configuration data from @a file (a file or registry path) into
+ * @a *cfgp, allocated in @a pool.
+ *
+ * If @a file does not exist, then if @a must_exist, return an error,
+ * otherwise return an empty @c svn_config_t.
+
+</member>
+        <member name="M:svn_config_get_config(apr_hash_t**,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,apr_pool_t*)">
+@name Client configuration files strings
+Strings for the names of files, sections, and options in the
+client configuration files.
+@{
+
+@} 
+@name Repository conf directory configuration files strings
+ * Strings for the names of sections and options in the
+ * repository conf directory configuration files.
+ * @{
+
+@} 
+Read configuration information from the standard sources and merge it
+ * into the hash @a *cfg_hash.  If @a config_dir is not NULL it specifies a
+ * directory from which to read the configuration files, overriding all
+ * other sources.  Otherwise, first read any system-wide configurations
+ * (from a file or from the registry), then merge in personal
+ * configurations (again from file or registry).  The hash and all its data
+ * are allocated in @a pool.
+ *
+ * @a *cfg_hash is a hash whose keys are @c const char * configuration
+ * categories (@c SVN_CONFIG_CATEGORY_SERVERS,
+ * @c SVN_CONFIG_CATEGORY_CONFIG, etc.) and whose values are the @c
+ * svn_config_t * items representing the configuration values for that
+ * category.
+
+</member>
+        <member name="T:svn_config_t">
+ @copyright
+ ====================================================================
+ Copyright (c) 2000-2004 CollabNet.  All rights reserved.
+
+ This software is licensed as described in the file COPYING, which
+ you should have received as part of this distribution.  The terms
+ are also available at http://subversion.tigris.org/license-1.html.
+ If newer versions of this license are posted there, you may use a
+ newer version instead, at your option.
+
+ This software consists of voluntary contributions made by many
+ individuals.  For exact contribution history, see the revision
+ history and logs, available at http://subversion.tigris.org/.
+ ====================================================================
+ @endcopyright
+
+ @file svn_props.h
+ @brief Subversion properties
+
+ @copyright
+ ====================================================================
+ Copyright (c) 2000-2007 CollabNet.  All rights reserved.
+
+ This software is licensed as described in the file COPYING, which
+ you should have received as part of this distribution.  The terms
+ are also available at http://subversion.tigris.org/license-1.html.
+ If newer versions of this license are posted there, you may use a
+ newer version instead, at your option.
+
+ This software consists of voluntary contributions made by many
+ individuals.  For exact contribution history, see the revision
+ history and logs, available at http://subversion.tigris.org/.
+ ====================================================================
+ @endcopyright
+
+ @file svn_config.h
+ @brief Accessing SVN configuration files.
+
+ @copyright
+ ====================================================================
+ Copyright (c) 2000-2008 CollabNet.  All rights reserved.
+
+ This software is licensed as described in the file COPYING, which
+ you should have received as part of this distribution.  The terms
+ are also available at http://subversion.tigris.org/license-1.html.
+ If newer versions of this license are posted there, you may use a
+ newer version instead, at your option.
+
+ This software consists of voluntary contributions made by many
+ individuals.  For exact contribution history, see the revision
+ history and logs, available at http://subversion.tigris.org/.
+ ====================================================================
+ @endcopyright
+
+ @file svn_types.h
+ @brief Subversion's data types
+
+ @copyright
+ ====================================================================
+ Copyright (c) 2000-2004 CollabNet.  All rights reserved.
+
+ This software is licensed as described in the file COPYING, which
+ you should have received as part of this distribution.  The terms
+ are also available at http://subversion.tigris.org/license-1.html.
+ If newer versions of this license are posted there, you may use a
+ newer version instead, at your option.
+
+ This software consists of voluntary contributions made by many
+ individuals.  For exact contribution history, see the revision
+ history and logs, available at http://subversion.tigris.org/.
+ ====================================================================
+ @endcopyright
+
+ @file svn_error.h
+ @brief Common exception handling for Subversion.
+
+Opaque structure describing a set of configuration options. 
+</member>
+        <member name="T:SharpSvn.SvnUnlockArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Unlock(System.String,SharpSvn.SvnUnlockArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnResolvedArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Resolved(System.String,SharpSvn.SvnResolvedArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnReintegrationMergeArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.ReintegrationMerge(System.String,SharpSvn.SvnTarget,SharpSvn.SvnReintegrationMergeArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnImportArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnImportArgs)" /> and <see cref="M:SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnImportArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnRecoverRepositoryArgs">
+            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnRepositoryClient" />'s RecoverRepository method</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnDeleteRepositoryArgs">
+            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnRepositoryClient" />'s DeleteRepository method</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnCreateRepositoryArgs">
+            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnRepositoryClient" />'s CreateRepository method</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnGetSuggestedMergeSourcesArgs">
+            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetSuggestedMergeSources method</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnAddArgs.AddParents">
+            <summary />
+        </member>
+        <member name="P:SharpSvn.SvnAddArgs.Force">
+            <summary>If force is not set and path is already under version control, return the error
+SVN_ERR_ENTRY_EXISTS. If force is set, do not error on already-versioned items. When used
+on a directory in conjunction with the recursive flag, this has the effect of scheduling
+for addition unversioned files and directories scattered deep within a versioned tree.</summary>
+        </member>
+        <member name="T:SharpSvn.SvnAddArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Add(System.String,SharpSvn.SvnAddArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
         <member name="M:svn_utf_cstring_from_utf8_string(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst**,svn_string_t!System.Runtime.CompilerServices.IsConst*,apr_pool_t*)">
 Set @a *dest to a natively-encoded C string from utf8 string @a src;
  * allocate @a *dest in @a pool.
@@ -178,6 +563,138 @@ Set @a *dest to a utf8-encoded stringbuf from native stringbuf @a src;
  @brief DSO loading routines
 
 </member>
+        <member name="P:SharpSvn.SvnListChangeListArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="T:SharpSvn.SvnListChangeListArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.ListChangeList(System.String,SharpSvn.SvnListChangeListArgs,System.EventHandler`1{SharpSvn.SvnListChangeListEventArgs^})" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnCleanUpArgs">
+            <summary>Extended parameter container for <see cref="T:SharpSvn.SvnClient" />Cleanup</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="M:serf_bucket_headers_do(serf_bucket_t*,=FUNC:System.Int32(System.Void*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*),System.Void*)">
+@param headers_bucket headers to iterate over
+@param func callback routine to invoke for every header in the bucket
+@param baton baton to pass on each invocation to func
+
+</member>
+        <member name="D:serf_bucket_headers_do_callback_fn_t">
+@param baton opaque baton as passed to @see serf_bucket_headers_do
+@param key The header key from this iteration through the table
+@param value The header value from this iteration through the table
+
+</member>
+        <member name="M:serf_bucket_headers_setx(serf_bucket_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.UInt32,System.Int32,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.UInt32,System.Int32)">
+ Set, extended: fine grained copy control of header and value.
+
+ Set the specified @a header, with length @a header_size with the
+ @a value, and length @a value_size, into the bucket. The header will
+ be copied if @a header_copy is set, and the value is copied if
+ @a value_copy is set. If the values are not copied, then they should
+ remain in scope at least as long as the bucket.
+
+ If @a headers_bucket already contains a header with the same name
+ as @a header, then append @a value to the existing value,
+ separating with a comma (as per RFC 2616, section 4.2).  In this
+ case, the new value must be allocated and the header re-used, so
+ behave as if @a value_copy were true and @a header_copy false.
+
+</member>
+        <member name="M:serf_bucket_headers_setn(serf_bucket_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
+ Set, no copies.
+
+ Set the specified @a header and @a value into the bucket, without
+ copying either attribute. Both attributes should remain in scope at
+ least as long as the bucket.
+
+ @note In the case where a header already exists this will result
+       in a reallocation and copy, @see serf_bucket_headers_setn.
+
+</member>
+        <member name="M:serf_bucket_headers_setc(serf_bucket_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
+ Set, copies: header and value copied.
+
+ Copy the specified @a header and @a value into the bucket, using space
+ from this bucket's allocator.
+
+</member>
+        <member name="M:serf_bucket_headers_set(serf_bucket_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
+ Set, default: value copied.
+
+ Set the specified @a header within the bucket, copying the @a value
+ into space from this bucket's allocator. The header is NOT copied,
+ so it should remain in scope at least as long as the bucket.
+
+</member>
+        <member name="M:serf_bucket_simple_copy_create(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.UInt32,serf_bucket_alloc_t*)">
+Equivalent to serf_bucket_simple_create, except that the bucket takes
+ownership of a private copy of the data.
+
+</member>
+        <member name="M:serf_bucket_aggregate_become(serf_bucket_t*)">
+Transform @a bucket in-place into an aggregate bucket. 
+</member>
+        <member name="M:serf_bucket_response_set_head(serf_bucket_t*)">
+Advise the response @a bucket that this was from a HEAD request and
+that it should not expect to see a response body.
+
+</member>
+        <member name="M:serf_bucket_response_get_headers(serf_bucket_t*)">
+Get the headers bucket for @a response.
+
+</member>
+        <member name="M:serf_bucket_response_wait_for_headers(serf_bucket_t*)">
+ Wait for the HTTP headers to be processed for a @a response.
+
+ If the headers are available, APR_SUCCESS is returned.
+ If the headers aren't available, APR_EAGAIN is returned.
+
+</member>
+        <member name="M:serf_bucket_response_status(serf_bucket_t*,serf_status_line*)">
+Return the Status-Line information, if available. This function
+works like other bucket read functions: it may return APR_EAGAIN or
+APR_EOF to signal the state of the bucket for reading. A return
+value of APR_SUCCESS will always indicate that status line
+information was returned; for other return values the caller must
+check the version field in @a sline. A value of 0 means that the
+data is not (yet) present.
+
+</member>
+        <member name="M:serf_bucket_request_set_root(serf_bucket_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
+Sets the root url of the remote host. If this request contains a relative
+url, it will be prefixed with the root url to form an absolute url.
+@a bucket is the request bucket. @a root_url is the absolute url of the
+root of the remote host.
+
+</member>
+        <member name="F:serf_bucket_type_request">
+@file serf_bucket_types.h
+@brief serf-supported bucket types
+
+</member>
+        <member name="M:apu_version(apr_version_t*)">
+@defgroup APR_Util APR Utility Functions
+@{
+
+ APU_DECLARE_EXPORT is defined when building the APR-UTIL dynamic library,
+ so that all public symbols are exported.
+
+ APU_DECLARE_STATIC is defined when including the APR-UTIL public headers,
+ to provide static linkage when the dynamic library may be unavailable.
+
+ APU_DECLARE_STATIC and APU_DECLARE_EXPORT are left undefined when
+ including the APR-UTIL public headers, to import and link the symbols from 
+ the dynamic APR-UTIL library and assure appropriate indirection and calling
+ conventions at compile time.
+
+@} 
+</member>
+        <member name="T:SharpSvn.SvnLockArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Lock(System.String,SharpSvn.SvnLockArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
         <member name="P:SharpSvnStrings.VerifyEnumFailed">
             <summary>
   Looks up a localized string similar to The value {0} is not a valid {1}.
@@ -368,6 +885,11 @@ Set @a *dest to a utf8-encoded stringbuf from native stringbuf @a src;
   Looks up a localized string similar to {This line does not contain non-Utf8 characters}.
 </summary>
         </member>
+        <member name="P:SharpSvnStrings.LoadingMimeTypesMapFileFailed">
+            <summary>
+  Looks up a localized string similar to The loading of the subversion mime mapping file failed.
+</summary>
+        </member>
         <member name="P:SharpSvnStrings.ItemInListIsNull">
             <summary>
   Looks up a localized string similar to One or more items in the list are null.
@@ -403,6 +925,11 @@ Set @a *dest to a utf8-encoded stringbuf from native stringbuf @a src;
   Looks up a localized string similar to Depth must be Empty, Files or Infinity in 1.4 compatible compilation.
 </summary>
         </member>
+        <member name="P:SharpSvnStrings.CollectionMustContainAtLeastOneItem">
+            <summary>
+  Looks up a localized string similar to The collection must at least contain one item.
+</summary>
+        </member>
         <member name="P:SharpSvnStrings.ArgumentMustBeAValidRepositoryUri">
             <summary>
   Looks up a localized string similar to The argument must be a valid absolute repository Uri.
@@ -411,6 +938,11 @@ Set @a *dest to a utf8-encoded stringbuf from native stringbuf @a src;
         <member name="P:SharpSvnStrings.ArgumentMustBeAPathNotAUri">
             <summary>
   Looks up a localized string similar to This argument is not a valid path. A Uri was specified.
+</summary>
+        </member>
+        <member name="P:SharpSvnStrings.AllUrisMustBeOnTheSameServer">
+            <summary>
+  Looks up a localized string similar to All provided Uri's must be on the same server.
 </summary>
         </member>
         <member name="P:SharpSvnStrings.AllTargetsMustBeUriOrPath">
@@ -1694,6 +2226,19 @@ Perform any necessary non-catastrophic recovery on the Subversion
  it might matter.
 
  @since New in 1.3.
+
+</member>
+        <member name="M:svn_fs_upgrade(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,apr_pool_t*)">
+ Upgrade the Subversion filesystem located in the directory @a path
+ to the latest version supported by this library.  Return @c
+ SVN_ERR_FS_UNSUPPORTED_UPGRADE and make no changes to the
+ filesystem if the requested upgrade is not supported.  Use @a pool
+ for necessary allocations.
+
+ @note You probably don't want to use this directly.  Take a look at
+ svn_repos_upgrade() instead.
+
+ @since New in 1.5.
 
 </member>
         <member name="M:svn_fs_open(svn_fs_t**,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,apr_hash_t*,apr_pool_t*)">
@@ -3683,12 +4228,18 @@ Similar to svn_wc_process_committed4(), but with @a
  if any); if @c svn_depth_infinity, resolve @a path and every
  conflicted file or directory anywhere beneath it.
 
- If @a conflict_choice is svn_wc_conflict_choose_base, resolve the
+ If @a conflict_choice is @c svn_wc_conflict_choose_base, resolve the
  conflict with the old file contents; if
- svn_wc_conflict_choose_mine, use the original working contents;
- if svn_wc_conflict_choose_theirs, the new contents; and if
- svn_wc_conflict_choose_merged, don't change the contents at all,
- just remove the conflict status (i.e. pre-1.5 behavior).
+ @c svn_wc_conflict_choose_mine_full, use the original working contents;
+ if @c svn_wc_conflict_choose_theirs_full, the new contents; and if
+ @c svn_wc_conflict_choose_merged, don't change the contents at all,
+ just remove the conflict status, which is the pre-1.5 behavior.
+
+ (@c svn_wc_conflict_choose_theirs and @c svn_wc_conflict_choose_mine
+ are not yet implemented; the effect of passing one of those values
+ as @a conflict_choice is currently undefined, which may or may not
+ be an underhanded way of allowing real behaviors to be added for
+ them later without revving this interface.)
 
  @a adm_access is an access baton, with a write lock, for @a path.
 
@@ -6051,7 +6602,7 @@ The proper name of the RA library, (like "ra_neon" or "ra_local")
  @a capability (one of the capabilities beginning with
  @c "SVN_RA_CAPABILITY_"), else set @a *has to FALSE.
 
- If @a capability isn't recognized, throw @c SVN_ERR_RA_UNKNOWN_CAPABILITY,
+ If @a capability isn't recognized, throw @c SVN_ERR_UNKNOWN_CAPABILITY,
  with the effect on @a *has undefined.
 
  Use @a pool for all allocation.
@@ -8388,6 +8939,14 @@ doing any UTF-8 conversion.  Allocate @a *args_p and its values in @a pool.
 
 </member>
         <member name="M:svn_opt_args_to_target_array2(apr_array_header_t**,apr_getopt_t*,apr_array_header_t*,apr_pool_t*)">
+ This is the same as svn_opt_args_to_target_array3() except that it
+ silently ignores paths that have the same name as a working copy
+ administrative directory.
+
+ @since New in 1.2.
+
+</member>
+        <member name="M:svn_opt_args_to_target_array3(apr_array_header_t**,apr_getopt_t*,apr_array_header_t*,apr_pool_t*)">
  Pull remaining target arguments from @a os into @a *targets_p,
  converting them to UTF-8, followed by targets from @a known_targets
  (which might come from, for example, the "--targets" command line
@@ -8395,12 +8954,19 @@ doing any UTF-8 conversion.  Allocate @a *args_p and its values in @a pool.
 
  On each URL target, do some IRI-to-URI encoding and some
  auto-escaping.  On each local path, canonicalize case and path
- separators, and silently skip it if it has the same name as a
- Subversion working copy administrative directory.
+ separators.
 
  Allocate @a *targets_p and its elements in @a pool.
 
- @since New in 1.2.
+ If a path has the same name as a Subversion working copy
+ administrative directory, return SVN_ERR_RESERVED_FILENAME_SPECIFIED;
+ if multiple reserved paths are encountered, return a chain of
+ errors, all of which are SVN_ERR_RESERVED_FILENAME_SPECIFIED.  Do
+ not return this type of error in a chain with any other type of
+ error, and if this is the only type of error encountered, complete
+ the operation before returning the error(s).
+
+ @since New in 1.5.
 
 </member>
         <member name="M:svn_opt_resolve_revisions(svn_opt_revision_t*,svn_opt_revision_t*,System.Int32,System.Int32,apr_pool_t*)">
@@ -13237,6 +13803,91 @@ Return a human readable string describing the specified error.
 Type for specifying an error or status code.
 
 </member>
+        <member name="T:SharpSvn.SvnGetRevisionPropertyArgs">
+            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetRevisionProperty</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnAddToChangeListArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="T:SharpSvn.SvnAddToChangeListArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.AddToChangeList(System.String,System.String,SharpSvn.SvnAddToChangeListArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnDiffArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="T:SharpSvn.SvnDiffArgs">
+            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s Diff command</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnSwitchArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Switch(System.String,SharpSvn.SvnUriTarget,SharpSvn.SvnSwitchArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnRevertArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="T:SharpSvn.SvnRevertArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Revert(System.String,SharpSvn.SvnRevertArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnMoveArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Move(System.String,System.String,SharpSvn.SvnMoveArgs)" /> and
+<see cref="M:SharpSvn.SvnClient.RemoteMove(System.Uri,System.Uri,SharpSvn.SvnMoveArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnCommitArgs.ChangeLists">
+            <summary>Gets the list of changelist-names to commit</summary>
+        </member>
+        <member name="T:SharpSvn.SvnCommitArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Commit(System.String,SharpSvn.SvnCommitArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnCheckOutArgs.AllowObstructions">
+            <summary>Gets or sets the AllowObsstructions value</summary>
+            <remarks>
+                <para> If AllowObstructions is TRUE then the update tolerates
+existing unversioned items that obstruct added paths from @a URL.  Only
+obstructions of the same type (file or dir) as the added item are
+tolerated.  The text of obstructing files is left as-is, effectively
+treating it as a user modification after the update.  Working
+properties of obstructing items are set equal to the base properties.</para>
+                <para>If AllowObstructions is FALSE then the update will abort
+if there are any unversioned obstructing items
+</para>
+            </remarks>
+        </member>
+        <member name="T:SharpSvn.SvnCheckOutArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.CheckOut(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnCheckOutArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnBlameArgs.Range">
+            <summary>Gets or sets the blame range as <see cref="T:SharpSvn.SvnRevisionRange" /></summary>
+        </member>
+        <member name="T:SharpSvn.SvnBlameArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Blame(SharpSvn.SvnTarget,SharpSvn.SvnBlameArgs,System.EventHandler`1{SharpSvn.SvnBlameEventArgs^})" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnWriteArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Write(SharpSvn.SvnTarget,System.IO.Stream,SharpSvn.SvnWriteArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnRelocateArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Relocate(System.String,System.Uri,System.Uri,SharpSvn.SvnRelocateArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnSetRevisionPropertyArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.SetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnSetRevisionPropertyArgs,System.String)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnInfoArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="T:SharpSvn.SvnInfoArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Info(SharpSvn.SvnTarget,SharpSvn.SvnInfoArgs,System.EventHandler`1{SharpSvn.SvnInfoEventArgs^})" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
         <member name="M:SharpSvn.SvnClientReporter.WriteLine(System.String)">
             <summary>Writes the specified message to the result writer and appends a <see cref="P:System.Environment.NewLine" /></summary>
         </member>
@@ -13251,123 +13902,211 @@ Type for specifying an error or status code.
             <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
             <threadsafety static="true" instance="false" />
         </member>
-        <member name="M:serf_bucket_headers_do(serf_bucket_t*,=FUNC:System.Int32(System.Void*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*),System.Void*)">
-@param headers_bucket headers to iterate over
-@param func callback routine to invoke for every header in the bucket
-@param baton baton to pass on each invocation to func
-
-</member>
-        <member name="D:serf_bucket_headers_do_callback_fn_t">
-@param baton opaque baton as passed to @see serf_bucket_headers_do
-@param key The header key from this iteration through the table
-@param value The header value from this iteration through the table
-
-</member>
-        <member name="M:serf_bucket_headers_setx(serf_bucket_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.UInt32,System.Int32,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.UInt32,System.Int32)">
- Set, extended: fine grained copy control of header and value.
-
- Set the specified @a header, with length @a header_size with the
- @a value, and length @a value_size, into the bucket. The header will
- be copied if @a header_copy is set, and the value is copied if
- @a value_copy is set. If the values are not copied, then they should
- remain in scope at least as long as the bucket.
-
- If @a headers_bucket already contains a header with the same name
- as @a header, then append @a value to the existing value,
- separating with a comma (as per RFC 2616, section 4.2).  In this
- case, the new value must be allocated and the header re-used, so
- behave as if @a value_copy were true and @a header_copy false.
-
-</member>
-        <member name="M:serf_bucket_headers_setn(serf_bucket_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
- Set, no copies.
-
- Set the specified @a header and @a value into the bucket, without
- copying either attribute. Both attributes should remain in scope at
- least as long as the bucket.
-
- @note In the case where a header already exists this will result
-       in a reallocation and copy, @see serf_bucket_headers_setn.
-
-</member>
-        <member name="M:serf_bucket_headers_setc(serf_bucket_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
- Set, copies: header and value copied.
-
- Copy the specified @a header and @a value into the bucket, using space
- from this bucket's allocator.
-
-</member>
-        <member name="M:serf_bucket_headers_set(serf_bucket_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
- Set, default: value copied.
-
- Set the specified @a header within the bucket, copying the @a value
- into space from this bucket's allocator. The header is NOT copied,
- so it should remain in scope at least as long as the bucket.
-
-</member>
-        <member name="M:serf_bucket_simple_copy_create(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.UInt32,serf_bucket_alloc_t*)">
-Equivalent to serf_bucket_simple_create, except that the bucket takes
-ownership of a private copy of the data.
-
-</member>
-        <member name="M:serf_bucket_aggregate_become(serf_bucket_t*)">
-Transform @a bucket in-place into an aggregate bucket. 
-</member>
-        <member name="M:serf_bucket_response_set_head(serf_bucket_t*)">
-Advise the response @a bucket that this was from a HEAD request and
-that it should not expect to see a response body.
-
-</member>
-        <member name="M:serf_bucket_response_get_headers(serf_bucket_t*)">
-Get the headers bucket for @a response.
-
-</member>
-        <member name="M:serf_bucket_response_wait_for_headers(serf_bucket_t*)">
- Wait for the HTTP headers to be processed for a @a response.
-
- If the headers are available, APR_SUCCESS is returned.
- If the headers aren't available, APR_EAGAIN is returned.
-
-</member>
-        <member name="M:serf_bucket_response_status(serf_bucket_t*,serf_status_line*)">
-Return the Status-Line information, if available. This function
-works like other bucket read functions: it may return APR_EAGAIN or
-APR_EOF to signal the state of the bucket for reading. A return
-value of APR_SUCCESS will always indicate that status line
-information was returned; for other return values the caller must
-check the version field in @a sline. A value of 0 means that the
-data is not (yet) present.
-
-</member>
-        <member name="M:serf_bucket_request_set_root(serf_bucket_t*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)">
-Sets the root url of the remote host. If this request contains a relative
-url, it will be prefixed with the root url to form an absolute url.
-@a bucket is the request bucket. @a root_url is the absolute url of the
-root of the remote host.
-
-</member>
-        <member name="F:serf_bucket_type_request">
-@file serf_bucket_types.h
-@brief serf-supported bucket types
-
-</member>
-        <member name="M:apu_version(apr_version_t*)">
-@defgroup APR_Util APR Utility Functions
-@{
-
- APU_DECLARE_EXPORT is defined when building the APR-UTIL dynamic library,
- so that all public symbols are exported.
-
- APU_DECLARE_STATIC is defined when including the APR-UTIL public headers,
- to provide static linkage when the dynamic library may be unavailable.
-
- APU_DECLARE_STATIC and APU_DECLARE_EXPORT are left undefined when
- including the APR-UTIL public headers, to import and link the symbols from 
- the dynamic APR-UTIL library and assure appropriate indirection and calling
- conventions at compile time.
-
-@} 
-</member>
+        <member name="P:SharpSvn.SvnRemoveFromChangeListArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="T:SharpSvn.SvnRemoveFromChangeListArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.RemoveFromChangeList(System.String,SharpSvn.SvnRemoveFromChangeListArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnCopyArgs.AlwaysCopyAsChild">
+            <summary>Always copies the result to below the target (this behaviour is always used if multiple targets are provided)</summary>
+        </member>
+        <member name="T:SharpSvn.SvnCopyArgs">
+            <summary>Extended Parameter container of SvnClient.Copy(SvnTarget^,String^,SvnCopyArgs^)" /&gt; and
+<see cref="M:SharpSvn.SvnClient.RemoteCopy(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnCopyArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnSetPropertyArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="T:SharpSvn.SvnSetPropertyArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.SetProperty(System.String,System.String,System.String,SharpSvn.SvnSetPropertyArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnDiffMergeArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.DiffMerge(System.String,SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffMergeArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnLogArgs.RetrieveProperties">
+            <summary>Gets the list of properties to retrieve. Only SVN 1.5+ repositories allow adding custom properties to this list</summary>
+        </member>
+        <member name="P:SharpSvn.SvnLogArgs.BaseUri">
+            <summary>Gets or sets the base uri to which relative Uri's are relative</summary>
+        </member>
+        <member name="P:SharpSvn.SvnLogArgs.OmitMessages">
+            <summary>Gets or sets a boolean indicating whether the logmessage should be fetched</summary>
+        </member>
+        <member name="P:SharpSvn.SvnLogArgs.IncludeMergedRevisions">
+            <summary>Gets or sets a boolean indicating whether the merged revisions should be fetched instead of the node changes</summary>
+        </member>
+        <member name="P:SharpSvn.SvnLogArgs.StrictNodeHistory">
+            <summary>Gets or sets a boolean indicating whether only the history of this exact node should be fetched (Aka stop on copying)</summary>
+            <remarks>If @a StrictNodeHistory is set, copy history (if any exists) will
+not be traversed while harvesting revision logs for each target. </remarks>
+        </member>
+        <member name="P:SharpSvn.SvnLogArgs.LogChangedPaths">
+            <summary>Gets or sets a boolean indicating whether the paths changed in the revision should be provided</summary>
+        </member>
+        <member name="P:SharpSvn.SvnLogArgs.Limit">
+            <summary>Gets or sets the limit on the number of log items fetched</summary>
+        </member>
+        <member name="P:SharpSvn.SvnLogArgs.Range">
+            <summary>Gets or sets the log range as <see cref="T:SharpSvn.SvnRevisionRange" /></summary>
+        </member>
+        <member name="P:SharpSvn.SvnLogArgs.OriginRevision">
+            <summary>Gets the revision in which the Url's are evaluated (Aka peg revision)</summary>
+        </member>
+        <member name="M:SharpSvn.SvnLogArgs.#ctor(SharpSvn.SvnRevisionRange)">
+            <summary>Initializes a new <see cref="T:SharpSvn.SvnLogArgs" /> instance with the specified range</summary>
+        </member>
+        <member name="M:SharpSvn.SvnLogArgs.#ctor">
+            <summary>Initializes a new <see cref="T:SharpSvn.SvnLogArgs" /> instance with default properties</summary>
+        </member>
+        <member name="T:SharpSvn.SvnLogArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Log(System.Uri,SharpSvn.SvnLogArgs,System.EventHandler`1{SharpSvn.SvnLogEventArgs^})" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnListArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.List(SharpSvn.SvnTarget,SharpSvn.SvnListArgs,System.EventHandler`1{SharpSvn.SvnListEventArgs^})" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnGetAppliedMergeInfoArgs">
+            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetAppliedMergeInfo method</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnPropertyListArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="T:SharpSvn.SvnPropertyListArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.PropertyList(SharpSvn.SvnTarget,SharpSvn.SvnPropertyListArgs,System.EventHandler`1{SharpSvn.SvnPropertyListEventArgs^})" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnGetPropertyArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="T:SharpSvn.SvnGetPropertyArgs">
+            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetProperty</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnStatusArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="P:SharpSvn.SvnStatusArgs.IgnoreExternals">
+            <summary>Gets or sets a boolean indicating whether externals should be ignored</summary>
+            <remarks>
+If IgnoreExternals is not set, then recurse into externals
+definitions (if any exist) after handling the main target.  This
+calls the client notification function (in @a ctx) with the @c
+svn_wc_notify_status_external action before handling each externals
+definition, and with @c svn_wc_notify_status_completed
+after each.
+</remarks>
+        </member>
+        <member name="P:SharpSvn.SvnStatusArgs.ContactRepository">
+            <summary>Gets or sets a boolean indicating whether the repository should be contacted to retrieve aut of date information</summary>
+            <remarks>
+If Update is set, contact the repository and augment the
+status structures with information about out-of-dateness (with
+respect to @a revision).  Also, if @a result_rev is not @c NULL,
+set @a *result_rev to the actual revision against which the
+working copy was compared (result_rev is not meaningful unless
+update is set
+</remarks>
+        </member>
+        <member name="P:SharpSvn.SvnStatusArgs.GetAll">
+            <summary>Gets or sets a boolean indicating whether all status properties should be retrieved</summary>
+            <remarks>
+If @a get_all is set, retrieve all entries; otherwise,
+retrieve only "interesting" entries (local mods and/or
+out of date
+</remarks>
+        </member>
+        <member name="T:SharpSvn.SvnStatusArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Status(System.String,SharpSvn.SvnStatusArgs,System.EventHandler`1{SharpSvn.SvnStatusEventArgs^})" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnDeleteArgs.Force">
+            <summary>If Force is not set then this operation will fail if any path contains locally modified
+and/or unversioned items. If Force is set such items will be deleted.</summary>
+        </member>
+        <member name="T:SharpSvn.SvnDeleteArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Delete(System.String,SharpSvn.SvnDeleteArgs)" /> and <see cref="M:SharpSvn.SvnClient.RemoteDelete(System.Uri,SharpSvn.SvnDeleteArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnMergeArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Merge(System.String,SharpSvn.SvnTarget,SharpSvn.SvnRevisionRange,SharpSvn.SvnMergeArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnExportArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Export(SharpSvn.SvnTarget,System.String,SharpSvn.SvnExportArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnUpdateArgs.AllowObstructions">
+            <summary>If @a allow_unver_obstructions is <c>true</c> then the update tolerates
+existing unversioned items that obstruct added paths from @a URL</summary>
+            <remarks>
+Only obstructions of the same type (file or dir) as the added item are
+tolerated.  The text of obstructing files is left as-is, effectively
+treating it as a user modification after the update.  Working
+properties of obstructing items are set equal to the base properties.
+If AllowUnversionedObstructions is <c>false</c> then the update will abort
+if there are any unversioned obstructing items.
+</remarks>
+        </member>
+        <member name="P:SharpSvn.SvnUpdateArgs.Revision">
+            <summary>The revision to update to; None by default</summary>
+            <remarks>
+Revision must be of kind Number, Head or Date. If Revision
+does not meet these requirements, Updated returns the error
+SVN_ERR_CLIENT_BAD_REVISION.
+</remarks>
+        </member>
+        <member name="P:SharpSvn.SvnUpdateArgs.IgnoreExternals">
+            <summary>Gets or sets a value indicating whether to ignore externals
+definitions as part of this operation.</summary>
+        </member>
+        <member name="P:SharpSvn.SvnUpdateArgs.KeepDepth">
+            <summary>
+Gets or sets whether in addition to updating paths also the
+sticky ambient depth value must be set to depth
+</summary>
+        </member>
+        <member name="P:SharpSvn.SvnUpdateArgs.Depth">
+            <summary>Gets or sets the depth of the update</summary>
+            <remarks>
+                <para>If Depth is Infinity, update fully recursively. Else if it
+is Immediates or Files, update each target and its file
+entries, but not its subdirectories.  Else if Empty, update
+exactly each target, nonrecursively (essentially, update the
+target's properties).</para>
+                <para>If Depth is Unknown, take the working depth from the specified paths
+</para>
+            </remarks>
+        </member>
+        <member name="T:SharpSvn.SvnUpdateArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Update(System.String,SharpSvn.SvnUpdateArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnCreateDirectoryArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.CreateDirectory(System.String,SharpSvn.SvnCreateDirectoryArgs)" /> and <see cref="M:SharpSvn.SvnClient.RemoteCreateDirectory(System.Uri,SharpSvn.SvnCreateDirectoryArgs)" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnGetAvailableMergeInfoArgs">
+            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetAvailableMergeInfo method</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="P:SharpSvn.SvnDiffSummaryArgs.ChangeLists">
+            <summary>Gets the list of changelist-names</summary>
+        </member>
+        <member name="T:SharpSvn.SvnDiffSummaryArgs">
+            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.DiffSummary(SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffSummaryArgs,System.EventHandler`1{SharpSvn.SvnDiffSummaryEventArgs^})" /></summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="T:SharpSvn.SvnRevisionPropertyListArgs">
+            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetRevisionPropertyList</summary>
+            <threadsafety static="true" instance="false" />
+        </member>
         <member name="P:SharpSvn.Security.SvnAuthentication.ConsoleSslClientCertificatePasswordHandler">
             <summary>Console based SslClientCertificatePassword implementation</summary>
         </member>
@@ -13404,6 +14143,11 @@ root of the remote host.
         </member>
         <member name="P:SharpSvn.Security.SvnAuthentication.SubversionFileUserNameHandler">
             <summary>Subversion UserNameHandler file backend (managed representation)</summary>
+        </member>
+        <member name="P:SharpSvn.Security.SvnAuthentication.DefaultCredentials">
+            <summary>Simple credential handler to provide a static credential</summary>
+            <remarks>When set implements a <see cref="E:SharpSvn.Security.SvnAuthentication.UserNameHandlers" /> and <see cref="E:SharpSvn.Security.SvnAuthentication.UserNamePasswordHandlers" /> 
+instance over the specified credential instance</remarks>
         </member>
         <member name="M:SharpSvn.Security.SvnAuthentication.AddConsoleHandlers">
             <summary>Adds all default console handlers</summary>
@@ -13454,15 +14198,21 @@ root of the remote host.
         <member name="P:SharpSvn.Security.SvnUserNamePasswordEventArgs.InitialUserName">
             <summary>Default username; can be NULL</summary>
         </member>
-        <member name="P:SharpSvn.Security.SvnAuthorizationEventArgs.Realm">
+        <member name="P:SharpSvn.Security.SvnAuthenticationEventArgs.Realm">
             <summary>If realm is non-null, maybe use it in the prompt string</summary>
         </member>
-        <member name="P:SharpSvn.Security.SvnAuthorizationEventArgs.MaySave">
+        <member name="P:SharpSvn.Security.SvnAuthenticationEventArgs.MaySave">
             <summary>If MaySave is false, the auth system does not allow the credentials
 to be saved (to disk). A prompt function shall not ask the user if the
 credentials shall be saved if may_save is FALSE. For example, a GUI client
 with a remember password checkbox would grey out the checkbox if may_save
 is false</summary>
+        </member>
+        <member name="T:SharpSvn.SvnClientConfigurationException">
+            <summary>SharpSvn configuration loader exception</summary>
+        </member>
+        <member name="T:SharpSvn.SvnClientException">
+            <summary>SharpSvn SvnClient exception</summary>
         </member>
         <member name="P:SharpSvn.SvnException.RootCause">
             <summary>Gets the root cause of the exception; commonly the most <see cref="P:System.Exception.InnerException" /></summary>
@@ -13514,6 +14264,15 @@ is false</summary>
 
 Collection of Subversion error code values, located within the
  * APR user error space. 
+</member>
+        <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_UNKNOWN_CAPABILITY">
+@since New in 1.5. 
+</member>
+        <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_RESERVED_FILENAME_SPECIFIED">
+@since New in 1.5. 
+</member>
+        <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_UNKNOWN_CHANGELIST">
+@since New in 1.5. 
 </member>
         <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_ITER_BREAK">
 @since New in 1.5. 
@@ -13572,17 +14331,23 @@ Collection of Subversion error code values, located within the
         <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_RA_DAV_MALFORMED_DATA">
 @since New in 1.2. 
 </member>
-        <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_RA_UNKNOWN_CAPABILITY">
+        <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_RA_PARTIAL_REPLAY_NOT_SUPPORTED">
 @since New in 1.5. 
 </member>
         <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_RA_NOT_LOCKED">
 @since New in 1.2. 
+</member>
+        <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_REPOS_UNSUPPORTED_UPGRADE">
+@since New in 1.5. 
 </member>
         <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_REPOS_POST_UNLOCK_HOOK_FAILED">
 @since New in 1.2. 
 </member>
         <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_REPOS_POST_LOCK_HOOK_FAILED">
 @since New in 1.2. 
+</member>
+        <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_FS_UNSUPPORTED_UPGRADE">
+@since New in 1.5. 
 </member>
         <member name="F:SharpSvn.Implementation.SvnErrorCode.SVN_ERR_FS_NO_SUCH_NODE_ORIGIN">
 @since New in 1.5. 
@@ -13698,7 +14463,7 @@ Collection of Subversion error code values, located within the
         <member name="M:SharpSvn.SvnRepositoryClient.CreateRepository(System.String)">
             <summary>Creates a default repository at the specified local path</summary>
         </member>
-        <member name="M:SharpSvn.SvnRepositoryClient.FindRepositoryRoot(System.String)">
+        <member name="M:SharpSvn.SvnRepositoryClient.FindRepositoryRoot(System.Uri)">
             <summary>Helper which allows splitting file:/// uri's in the repository root and the file within</summary>
         </member>
         <member name="M:SharpSvn.SvnRepositoryClient.#ctor">
@@ -13713,325 +14478,13 @@ At this time this class is just included to enable a standalone test framework
 over the SvnClient api; without depending on external tools)
 </remarks>
         </member>
-        <member name="T:SharpSvn.SvnRecoverRepositoryArgs">
-            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnRepositoryClient" />'s RecoverRepository method</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnDeleteRepositoryArgs">
-            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnRepositoryClient" />'s DeleteRepository method</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnCreateRepositoryArgs">
-            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnRepositoryClient" />'s CreateRepository method</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnGetAvailableMergeInfoArgs">
-            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetAvailableMergeInfo method</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnGetAppliedMergeInfoArgs">
-            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetAppliedMergeInfo method</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnGetSuggestedMergeSourcesArgs">
-            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetSuggestedMergeSources method</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnBlameArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Blame(SharpSvn.SvnTarget,SharpSvn.SvnBlameArgs,System.EventHandler`1{SharpSvn.SvnBlameEventArgs^})" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnDiffSummaryArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="T:SharpSvn.SvnDiffSummaryArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.DiffSummary(SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffSummaryArgs,System.EventHandler`1{SharpSvn.SvnDiffSummaryEventArgs^})" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnDiffArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="T:SharpSvn.SvnDiffArgs">
-            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s Diff command</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnInfoArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="T:SharpSvn.SvnInfoArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Info(SharpSvn.SvnTarget,SharpSvn.SvnInfoArgs,System.EventHandler`1{SharpSvn.SvnInfoEventArgs^})" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnLogArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Log(SharpSvn.SvnTarget,SharpSvn.SvnLogArgs,System.EventHandler`1{SharpSvn.SvnLogEventArgs^})" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnListArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.List(SharpSvn.SvnTarget,SharpSvn.SvnListArgs,System.EventHandler`1{SharpSvn.SvnListEventArgs^})" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnStatusArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="P:SharpSvn.SvnStatusArgs.IgnoreExternals">
-            <summary>Gets or sets a boolean indicating whether externals should be ignored</summary>
-            <remarks>
-If IgnoreExternals is not set, then recurse into externals
-definitions (if any exist) after handling the main target.  This
-calls the client notification function (in @a ctx) with the @c
-svn_wc_notify_status_external action before handling each externals
-definition, and with @c svn_wc_notify_status_completed
-after each.
-</remarks>
-        </member>
-        <member name="P:SharpSvn.SvnStatusArgs.ContactRepository">
-            <summary>Gets or sets a boolean indicating whether the repository should be contacted to retrieve aut of date information</summary>
-            <remarks>
-If Update is set, contact the repository and augment the
-status structures with information about out-of-dateness (with
-respect to @a revision).  Also, if @a result_rev is not @c NULL,
-set @a *result_rev to the actual revision against which the
-working copy was compared (result_rev is not meaningful unless
-update is set
-</remarks>
-        </member>
-        <member name="P:SharpSvn.SvnStatusArgs.GetAll">
-            <summary>Gets or sets a boolean indicating whether all status properties should be retrieved</summary>
-            <remarks>
-If @a get_all is set, retrieve all entries; otherwise,
-retrieve only "interesting" entries (local mods and/or
-out of date
-</remarks>
-        </member>
-        <member name="T:SharpSvn.SvnStatusArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Status(System.String,SharpSvn.SvnStatusArgs,System.EventHandler`1{SharpSvn.SvnStatusEventArgs^})" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnGetRevisionPropertiesArgs">
-            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetRevisionPropertyList</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnGetRevisionPropertyArgs">
-            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetRevisionProperty</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnSetRevisionPropertyArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.SetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnSetRevisionPropertyArgs,System.String)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnPropertyListArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="T:SharpSvn.SvnPropertyListArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.PropertyList(SharpSvn.SvnTarget,SharpSvn.SvnPropertyListArgs,System.EventHandler`1{SharpSvn.SvnPropertyListEventArgs^})" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnGetPropertyArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="T:SharpSvn.SvnGetPropertyArgs">
-            <summary>Extended Parameter container of <see cref="T:SharpSvn.SvnClient" />'s GetProperty</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnSetPropertyArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="T:SharpSvn.SvnSetPropertyArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.SetProperty(System.String,System.String,System.String,SharpSvn.SvnSetPropertyArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnDeleteArgs.Force">
-            <summary>If Force is not set then this operation will fail if any path contains locally modified
-and/or unversioned items. If Force is set such items will be deleted.</summary>
-        </member>
-        <member name="T:SharpSvn.SvnDeleteArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Delete(System.String,SharpSvn.SvnDeleteArgs)" /> and <see cref="M:SharpSvn.SvnClient.RemoteDelete(System.Uri,SharpSvn.SvnDeleteArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnCreateDirectoryArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.CreateDirectory(System.String,SharpSvn.SvnCreateDirectoryArgs)" /> and <see cref="M:SharpSvn.SvnClient.RemoteCreateDirectory(System.Uri,SharpSvn.SvnCreateDirectoryArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnMoveArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Move(System.String,System.String,SharpSvn.SvnMoveArgs)" /> and 
-<see cref="M:SharpSvn.SvnClient.RemoteMove(System.Uri,System.Uri,SharpSvn.SvnMoveArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnCopyArgs.AlwaysCopyAsChild">
-            <summary>Always copies the result to below the target (this behaviour is always used if multiple targets are provided)</summary>
-        </member>
-        <member name="T:SharpSvn.SvnCopyArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Copy(SharpSvn.SvnTarget,System.String,SharpSvn.SvnCopyArgs)" /> and 
-<see cref="M:SharpSvn.SvnClient.RemoteCopy(SharpSvn.SvnUriTarget,System.Uri,SharpSvn.SvnCopyArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnUnlockArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Unlock(System.String,SharpSvn.SvnUnlockArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnLockArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Lock(System.String,SharpSvn.SvnLockArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnListChangeListArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="T:SharpSvn.SvnListChangeListArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.ListChangeList(System.String,SharpSvn.SvnListChangeListArgs,System.EventHandler`1{SharpSvn.SvnListChangeListEventArgs^})" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnRemoveFromChangeListArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="T:SharpSvn.SvnRemoveFromChangeListArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.RemoveFromChangeList(System.String,SharpSvn.SvnRemoveFromChangeListArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnAddToChangeListArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="T:SharpSvn.SvnAddToChangeListArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.AddToChangeList(System.String,System.String,SharpSvn.SvnAddToChangeListArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnExportArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Export(SharpSvn.SvnTarget,System.String,SharpSvn.SvnExportArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnResolvedArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Resolved(System.String,SharpSvn.SvnResolvedArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnRevertArgs.ChangeLists">
-            <summary>Gets the list of changelist-names</summary>
-        </member>
-        <member name="T:SharpSvn.SvnRevertArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Revert(System.String,SharpSvn.SvnRevertArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnRelocateArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Relocate(System.String,System.Uri,System.Uri,SharpSvn.SvnRelocateArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnAddArgs.AddParents">
-            <summary />
-        </member>
-        <member name="P:SharpSvn.SvnAddArgs.Force">
-            <summary>If force is not set and path is already under version control, return the error
-SVN_ERR_ENTRY_EXISTS. If force is set, do not error on already-versioned items. When used
-on a directory in conjunction with the recursive flag, this has the effect of scheduling
-for addition unversioned files and directories scattered deep within a versioned tree.</summary>
-        </member>
-        <member name="T:SharpSvn.SvnAddArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Add(System.String,SharpSvn.SvnAddArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnCleanUpArgs">
-            <summary>Extended parameter container for <see cref="T:SharpSvn.SvnClient" />Cleanup</summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnReintegrationMergeArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.ReintegrationMerge(System.String,SharpSvn.SvnTarget,SharpSvn.SvnReintegrationMergeArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnMergeArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Merge(System.String,SharpSvn.SvnTarget,SharpSvn.SvnRevisionRange,SharpSvn.SvnMergeArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnDiffMergeArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.DiffMerge(System.String,SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffMergeArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnSwitchArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Switch(System.String,SharpSvn.SvnUriTarget,SharpSvn.SvnSwitchArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnUpdateArgs.AllowObstructions">
-            <summary>If @a allow_unver_obstructions is <c>true</c> then the update tolerates
-existing unversioned items that obstruct added paths from @a URL</summary>
-            <remarks>
-Only obstructions of the same type (file or dir) as the added item are
-tolerated.  The text of obstructing files is left as-is, effectively
-treating it as a user modification after the update.  Working
-properties of obstructing items are set equal to the base properties.
-If AllowUnversionedObstructions is <c>false</c> then the update will abort
-if there are any unversioned obstructing items.
-</remarks>
-        </member>
-        <member name="P:SharpSvn.SvnUpdateArgs.Revision">
-            <summary>The revision to update to; None by default</summary>
-            <remarks>
-Revision must be of kind Number, Head or Date. If Revision
-does not meet these requirements, Updated returns the error
-SVN_ERR_CLIENT_BAD_REVISION.
-</remarks>
-        </member>
-        <member name="P:SharpSvn.SvnUpdateArgs.IgnoreExternals">
-            <summary>Gets or sets a value indicating whether to ignore externals 
-definitions as part of this operation.</summary>
-        </member>
-        <member name="P:SharpSvn.SvnUpdateArgs.KeepDepth">
-            <summary>
-Gets or sets whether in addition to updating paths also the
-sticky ambient depth value must be set to depth
-</summary>
-        </member>
-        <member name="P:SharpSvn.SvnUpdateArgs.Depth">
-            <summary>Gets or sets the depth of the update</summary>
-            <remarks>
-                <para>If Depth is Infinity, update fully recursively. Else if it 
-is Immediates or Files, update each target and its file 
-entries, but not its subdirectories.  Else if Empty, update 
-exactly each target, nonrecursively (essentially, update the 
-target's properties).</para>
-                <para>If Depth is Unknown, take the working depth from the specified paths
-</para>
-            </remarks>
-        </member>
-        <member name="T:SharpSvn.SvnUpdateArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Update(System.String,SharpSvn.SvnUpdateArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnCheckOutArgs.AllowObstructions">
-            <summary>Gets or sets the AllowObsstructions value</summary>
-            <remarks>
-                <para> If AllowObstructions is TRUE then the update tolerates
-existing unversioned items that obstruct added paths from @a URL.  Only
-obstructions of the same type (file or dir) as the added item are
-tolerated.  The text of obstructing files is left as-is, effectively
-treating it as a user modification after the update.  Working
-properties of obstructing items are set equal to the base properties.</para>
-                <para>If AllowObstructions is FALSE then the update will abort
-if there are any unversioned obstructing items
-</para>
-            </remarks>
-        </member>
-        <member name="T:SharpSvn.SvnCheckOutArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.CheckOut(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnCheckOutArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnImportArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnImportArgs)" /> and <see cref="M:SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnImportArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="P:SharpSvn.SvnCommitArgs.ChangeLists">
-            <summary>Gets the list of changelist-names to commit</summary>
-        </member>
-        <member name="T:SharpSvn.SvnCommitArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Commit(System.String,SharpSvn.SvnCommitArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
-        <member name="T:SharpSvn.SvnWriteArgs">
-            <summary>Extended Parameter container of <see cref="M:SharpSvn.SvnClient.Write(SharpSvn.SvnTarget,System.IO.Stream,SharpSvn.SvnWriteArgs)" /></summary>
-            <threadsafety static="true" instance="false" />
-        </member>
         <member name="M:SharpSvn.SvnClientArgsWithConflict.OnConflict(SharpSvn.SvnConflictEventArgs)">
             <summary>Invokes the <see cref="E:SharpSvn.SvnClientArgsWithConflict.Conflict" /> event</summary>
         </member>
         <member name="E:SharpSvn.SvnClientArgsWithConflict.Conflict">
             <summary>
-Raised on conflict. The event is first 
-raised on the <see cref="T:SharpSvn.SvnClientArgsWithConflict" /> object and 
+Raised on conflict. The event is first
+raised on the <see cref="T:SharpSvn.SvnClientArgsWithConflict" /> object and
 then on the <see cref="T:SharpSvn.SvnClient" /></summary>
         </member>
         <member name="T:SharpSvn.SvnClientArgsWithConflict">
@@ -14051,15 +14504,22 @@ then on the <see cref="T:SharpSvn.SvnClient" /></summary>
             <summary>Base class of all <see cref="T:SharpSvn.SvnClient" /> arguments which allow committing</summary>
             <threadsafety static="true" instance="false" />
         </member>
-        <member name="P:SharpSvn.SvnClientArgs.Exception">
+        <member name="P:SharpSvn.SvnClientArgs.LastException">
             <summary>
 Gets the last exception thrown by a Subversion api command to which this argument was provided
+</summary>
+        </member>
+        <member name="P:SharpSvn.SvnClientArgs.ThrowOnCancel">
+            <summary>
+Gets or sets a boolean indicating whether the call must throw an error if an exception occurs.
+If an exception would occur, the method returns false and the <see cref="T:System.Exception" /> property
+is set to the exception which would have been throw.
 </summary>
         </member>
         <member name="P:SharpSvn.SvnClientArgs.ThrowOnError">
             <summary>
 Gets or sets a boolean indicating whether the call must throw an error if an exception occurs.
-If an exception would occur, the method returns false and the <see cref="P:SharpSvn.SvnClientArgs.Exception" /> property
+If an exception would occur, the method returns false and the <see cref="T:System.Exception" /> property
 is set to the exception which would have been throw.
 </summary>
         </member>
@@ -14115,7 +14575,7 @@ is set to the exception which would have been throw.
         <member name="M:SharpSvn.SvnClient.Blame(SharpSvn.SvnTarget,System.EventHandler`1{SharpSvn.SvnBlameEventArgs^})">
             <overloads>Streamingly retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</overloads>
         </member>
-        <member name="M:SharpSvn.SvnClient.GetAvailableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnGetSuggestedMergeSourcesArgs,SharpSvn.SvnAvailableMergeInfo@)">
+        <member name="M:SharpSvn.SvnClient.GetAvailableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnGetAvailableMergeInfoArgs,SharpSvn.SvnAvailableMergeInfo@)">
             <summary>Gets a list of merges which can be applied on target</summary>
         </member>
         <member name="M:SharpSvn.SvnClient.GetAvailableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnAvailableMergeInfo@)">
@@ -14174,7 +14634,7 @@ Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo
             <summary>
 Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" /></summary>
         </member>
-        <member name="M:SharpSvn.SvnClient.GetRevisionProperties(SharpSvn.SvnUriTarget,SharpSvn.SvnPropertyCollection@)">
+        <member name="M:SharpSvn.SvnClient.GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnPropertyCollection@)">
             <overloads>Gets all revision properties on a a specific revision (<c>svn proplist --revision</c>)</overloads>
         </member>
         <member name="M:SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,System.String@)">
@@ -14249,7 +14709,7 @@ Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo
         <member name="M:SharpSvn.SvnClient.Move(System.String,System.String)">
             <overloads>Move and/or rename something in working copy, remembering history (<c>svn move</c>)</overloads>
         </member>
-        <member name="M:SharpSvn.SvnClient.RemoteCopy(SharpSvn.SvnUriTarget,System.Uri)">
+        <member name="M:SharpSvn.SvnClient.RemoteCopy(SharpSvn.SvnTarget,System.Uri)">
             <overloads>Duplicate something in repository, remembering history (<c>svn copy</c>)</overloads>
         </member>
         <member name="M:SharpSvn.SvnClient.Copy(SharpSvn.SvnTarget,System.String)">
@@ -14282,20 +14742,20 @@ Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo
         <member name="M:SharpSvn.SvnClient.Commit(System.String)">
             <overloads>Send changes from your working copy to the repository (<c>svn commit</c>)</overloads>
         </member>
-        <member name="M:SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitInfo@)">
+        <member name="M:SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitResult@)">
             <summary>Importing as the subversion api does; without creating a working directory</summary>
         </member>
         <member name="M:SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnImportArgs)">
             <summary>Importing as the subversion api does; without creating a working directory</summary>
         </member>
-        <member name="M:SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnCommitInfo@)">
+        <member name="M:SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnCommitResult@)">
             <summary>Importing as the subversion api does; without creating a working directory</summary>
         </member>
         <member name="M:SharpSvn.SvnClient.RemoteImport(System.String,System.Uri)">
             <overloads>Commit an unversioned file or tree into the repository (<c>svn import</c>)</overloads>
             <summary>Importing as the subversion api does; without creating a working directory</summary>
         </member>
-        <member name="M:SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitInfo@)">
+        <member name="M:SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitResult@)">
             <summary>Performs a working copy import to the specified Uri,
 by importing the root remotely, checking that out and then adding the files locally</summary>
             <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
@@ -14305,7 +14765,7 @@ by importing the root remotely, checking that out and then adding the files loca
 by importing the root remotely, checking that out and then adding the files locally</summary>
             <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
         </member>
-        <member name="M:SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnCommitInfo@)">
+        <member name="M:SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnCommitResult@)">
             <summary>Performs a working copy import to the specified Uri,
 by importing the root remotely, checking that out and then adding the files locally</summary>
             <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
@@ -14350,27 +14810,35 @@ by importing the root remotely, checking that out and then adding the files loca
         <member name="M:SharpSvn.SvnClient.Write(SharpSvn.SvnTarget,System.IO.Stream)">
             <overloads>Writes the content of specified files or URLs to a stream. (<c>svn cat</c>)</overloads>
         </member>
-        <member name="M:SharpSvn.SvnClient.GetLog(SharpSvn.SvnUriTarget,System.Collections.Generic.ICollection`1{System.Uri^},SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1{SharpSvn.SvnLogEventArgs^}@)">
+        <member name="M:SharpSvn.SvnClient.GetLog(System.Collections.Generic.ICollection`1{System.String^},SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1{SharpSvn.SvnLogEventArgs^}@)">
             <summary>Gets log messages of the specified target</summary>
         </member>
-        <member name="M:SharpSvn.SvnClient.GetLog(SharpSvn.SvnUriTarget,System.Collections.Generic.ICollection`1{System.Uri^},System.Collections.ObjectModel.Collection`1{SharpSvn.SvnLogEventArgs^}@)">
+        <member name="M:SharpSvn.SvnClient.GetLog(System.Collections.Generic.ICollection`1{System.Uri^},SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1{SharpSvn.SvnLogEventArgs^}@)">
             <summary>Gets log messages of the specified target</summary>
         </member>
-        <member name="M:SharpSvn.SvnClient.GetLog(SharpSvn.SvnTarget,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1{SharpSvn.SvnLogEventArgs^}@)">
+        <member name="M:SharpSvn.SvnClient.GetLog(System.String,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1{SharpSvn.SvnLogEventArgs^}@)">
+            <summary>Gets log messages of the specified target</summary>
+        </member>
+        <member name="M:SharpSvn.SvnClient.GetLog(System.Uri,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1{SharpSvn.SvnLogEventArgs^}@)">
             <summary>Gets log messages of the specified target</summary>
         </member>
         <member name="M:SharpSvn.SvnClient.GetLog(SharpSvn.SvnTarget,System.Collections.ObjectModel.Collection`1{SharpSvn.SvnLogEventArgs^}@)">
             <overloads>Retrieve the log messages for a set of revision(s) and/or file(s). (<c>svn log</c>)</overloads>
             <summary>Gets log messages of the specified target</summary>
         </member>
-        <member name="M:SharpSvn.SvnClient.Log(SharpSvn.SvnUriTarget,System.Collections.Generic.ICollection`1{System.Uri^},SharpSvn.SvnLogArgs,System.EventHandler`1{SharpSvn.SvnLogEventArgs^})">
-            <summary>Gets log messages of the specified target</summary>
+        <member name="M:SharpSvn.SvnClient.Log(System.Collections.Generic.ICollection`1{System.String^},SharpSvn.SvnLogArgs,System.EventHandler`1{SharpSvn.SvnLogEventArgs^})">
+            <summary>Gets log messages of the specified target path</summary>
         </member>
-        <member name="M:SharpSvn.SvnClient.Log(SharpSvn.SvnUriTarget,System.Collections.Generic.ICollection`1{System.Uri^},System.EventHandler`1{SharpSvn.SvnLogEventArgs^})">
-            <summary>Gets log messages of the specified target</summary>
+        <member name="M:SharpSvn.SvnClient.Log(System.Collections.Generic.ICollection`1{System.Uri^},SharpSvn.SvnLogArgs,System.EventHandler`1{SharpSvn.SvnLogEventArgs^})">
+            <summary>Gets log messages of the specified target path</summary>
         </member>
-        <member name="M:SharpSvn.SvnClient.Log(SharpSvn.SvnTarget,SharpSvn.SvnLogArgs,System.EventHandler`1{SharpSvn.SvnLogEventArgs^})">
+        <member name="M:SharpSvn.SvnClient.Log(System.String,SharpSvn.SvnLogArgs,System.EventHandler`1{SharpSvn.SvnLogEventArgs^})">
             <summary>Gets log messages of the specified target</summary>
+            <remarks>A pegrevision applied on the target overrides one set on the args object</remarks>
+        </member>
+        <member name="M:SharpSvn.SvnClient.Log(System.Uri,SharpSvn.SvnLogArgs,System.EventHandler`1{SharpSvn.SvnLogEventArgs^})">
+            <summary>Gets log messages of the specified target</summary>
+            <remarks>A pegrevision applied on the target overrides one set on the args object</remarks>
         </member>
         <member name="M:SharpSvn.SvnClient.Log(SharpSvn.SvnTarget,System.EventHandler`1{SharpSvn.SvnLogEventArgs^})">
             <overloads>Streamingly retrieve the log messages for a set of revision(s) and/or file(s). (<c>svn log</c>)</overloads>
@@ -14545,38 +15013,38 @@ object MUST BE threated as read only. Handling this command allows
         <member name="E:SharpSvn.SvnClient.SvnError">
             <summary>
 Raised when a subversion exception occurs.
-Set <see cref="P:SharpSvn.SvnCancelEventArgs.Cancel" /> to true to cancel 
+Set <see cref="P:SharpSvn.SvnCancelEventArgs.Cancel" /> to true to cancel
 throwing the exception
 </summary>
         </member>
         <member name="E:SharpSvn.SvnClient.Conflict">
             <summary>
-Raised on conflict. The event is first 
-raised on the <see cref="T:SharpSvn.SvnClientArgsWithConflict" /> object and 
+Raised on conflict. The event is first
+raised on the <see cref="T:SharpSvn.SvnClientArgsWithConflict" /> object and
 then on the <see cref="T:SharpSvn.SvnClient" /></summary>
         </member>
         <member name="E:SharpSvn.SvnClient.Committing">
             <summary>
-Raised on progress. The event is first 
-raised on the <see cref="T:SharpSvn.SvnClientArgsWithCommit" /> object and 
+Raised on progress. The event is first
+raised on the <see cref="T:SharpSvn.SvnClientArgsWithCommit" /> object and
 then on the <see cref="T:SharpSvn.SvnClient" /></summary>
         </member>
         <member name="E:SharpSvn.SvnClient.Notify">
             <summary>
-Raised on notifications. The event is first 
-raised on the <see cref="T:SharpSvn.SvnClientArgs" /> object and 
+Raised on notifications. The event is first
+raised on the <see cref="T:SharpSvn.SvnClientArgs" /> object and
 then on the <see cref="T:SharpSvn.SvnClient" /></summary>
         </member>
         <member name="E:SharpSvn.SvnClient.Progress">
             <summary>
-Raised on progress. The event is first 
-raised on the <see cref="T:SharpSvn.SvnClientArgs" /> object and 
+Raised on progress. The event is first
+raised on the <see cref="T:SharpSvn.SvnClientArgs" /> object and
 then on the <see cref="T:SharpSvn.SvnClient" /></summary>
         </member>
         <member name="E:SharpSvn.SvnClient.Cancel">
             <summary>
-Raised to allow canceling operations. The event is first 
-raised on the <see cref="T:SharpSvn.SvnClientArgs" /> object and 
+Raised to allow canceling operations. The event is first
+raised on the <see cref="T:SharpSvn.SvnClientArgs" /> object and
 then on the <see cref="T:SharpSvn.SvnClient" /></summary>
         </member>
         <member name="P:SharpSvn.SvnClient.Configuration">
@@ -14587,8 +15055,8 @@ then on the <see cref="T:SharpSvn.SvnClient" /></summary>
 Gets the name of the subversion administrative directories. Most commonly ".svn"
 </summary>
             <remarks>
-An internal implementation of a setter is available on this property. Users should read 
-the subversion implementation of svn_wc_set_adm_dir before invoking the setter of this property 
+An internal implementation of a setter is available on this property. Users should read
+the subversion implementation of svn_wc_set_adm_dir before invoking the setter of this property
 via reflection
 </remarks>
         </member>
@@ -14610,8 +15078,19 @@ via reflection
             <threadsafety static="true" instance="false" />
         </member>
         <member name="P:SharpSvn.SvnPropertyValue.Target">
-            <summary>Gets the <see cref="T:SharpSvn.SvnTarget" /> the <see cref="T:SharpSvn.SvnPropertyValue" /> applies to; 
+            <summary>Gets the <see cref="T:SharpSvn.SvnTarget" /> the <see cref="T:SharpSvn.SvnPropertyValue" /> applies to;
 <c>null</c> if it applies to a revision property</summary>
+        </member>
+        <member name="P:SharpSvn.SvnClientConfiguration.EnableSharpPlink">
+            <summary>Gets or sets a boolean indicating whether to enable the SharpPlink handler when no other valid 
+handler for svn+ssh:// is registered</summary>
+            <remarks>The default value of this property is true; this matches the behaviour of TortoiseSvn</remarks>
+            <value>true if enabling SharpPlink on the first repository request, otherwise false</value>
+        </member>
+        <member name="P:SharpSvn.SvnClientConfiguration.LoadSvnMimeTypes">
+            <summary>Gets or sets a boolean indicating whether to load the svn mimetypes file when calling Add or Import the first time</summary>
+            <remarks>The default value of this property is true; this matches the behaviour of the svn commandline client</remarks>
+            <value>true if loading the mimetypes file on the initial import, otherwise false</value>
         </member>
         <member name="P:SharpSvn.SvnClientConfiguration.LogMessageRequired">
             <summary>Gets or sets a boolean indicating whether commits will fail if no log message is provided</summary>
@@ -14622,56 +15101,6 @@ via reflection
         </member>
         <member name="P:SharpSvn.SvnAppliedMergeInfo.AppliedMerges">
             <summary>Gets a boolean indicating whether MergeInfo is available for the specified target</summary>
-        </member>
-        <member name="P:SharpSvn.SvnListEventArgs.BasePath">
-            <summary>Gets the origin path of the item</summary>
-        </member>
-        <member name="P:SharpSvn.SvnListEventArgs.Path">
-            <summary>Gets the path of the item</summary>
-        </member>
-        <member name="P:SharpSvn.SvnDirEntry.Author">
-            <summary>Gets the author of the last revision of this file</summary>
-        </member>
-        <member name="P:SharpSvn.SvnDirEntry.Time">
-            <summary>Gets the time of the last change</summary>
-        </member>
-        <member name="P:SharpSvn.SvnDirEntry.Revision">
-            <summary>Gets the last revision in which this node changed</summary>
-        </member>
-        <member name="P:SharpSvn.SvnDirEntry.HasProperties">
-            <summary>Gets a boolean indicating whether this node has svn properties</summary>
-        </member>
-        <member name="P:SharpSvn.SvnDirEntry.FileSize">
-            <summary>Gets the length of the file text or 0 for directories</summary>
-        </member>
-        <member name="P:SharpSvn.SvnInfoEventArgs.RepositoryRoot">
-            <summary>Gets the repository root Uri; ending in a '/' at the end</summary>
-            <remarks>The unmanaged api does not add the '/' at the end, but this makes using <see cref="T:System.Uri" /> hard</remarks>
-        </member>
-        <member name="P:SharpSvn.SvnInfoEventArgs.FullPath">
-            <summary>The path the notification is about, translated via <see cref="M:System.IO.Path.GetFullPath(System.String)" /></summary>
-            <remarks>The <see cref="P:SharpSvn.SvnInfoEventArgs.FullPath" /> property contains the path in normalized format; while <see cref="P:SharpSvn.SvnInfoEventArgs.Path" /> returns the exact path from the subversion api</remarks>
-        </member>
-        <member name="P:SharpSvn.SvnLogEventArgs.MergeLogNestingLevel">
-            <summary>Gets the nesting level of the logs via merges</summary>
-        </member>
-        <member name="P:SharpSvn.SvnLogEventArgs.HasChildren">
-            <summary>Set to true when the following items are merged-child items of this item.</summary>
-        </member>
-        <member name="M:SharpSvn.SvnNotifyEventArgs.Detach(System.Boolean)">
-            <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
-            <description>After this method is called all properties are either stored managed, or are no longer readable</description>
-        </member>
-        <member name="P:SharpSvn.SvnNotifyEventArgs.PathIsUri">
-            <summary>Gets a boolean indicating whether the path is a Uri</summary>
-        </member>
-        <member name="P:SharpSvn.SvnNotifyEventArgs.FullPath">
-            <summary>The path the notification is about, translated via <see cref="M:System.IO.Path.GetFullPath(System.String)" /></summary>
-            <remarks>The <see cref="P:SharpSvn.SvnNotifyEventArgs.FullPath" /> property contains the path in normalized format; while <see cref="P:SharpSvn.SvnNotifyEventArgs.Path" /> returns the exact path from the subversion api</remarks>
-        </member>
-        <member name="P:SharpSvn.SvnNotifyEventArgs.Path">
-            <summary>The path the notification is about</summary>
-            <remarks>The <see cref="P:SharpSvn.SvnNotifyEventArgs.FullPath" /> property contains the path in normalized format; while <see cref="P:SharpSvn.SvnNotifyEventArgs.Path" /> returns the exact path from the subversion api</remarks>
         </member>
         <member name="P:SharpSvn.SvnStatusEventArgs.RemoteUpdateNodeKind">
             <summary>Out of Date: Gets the node kind of the OutOfDate commit</summary>
@@ -14708,6 +15137,63 @@ via reflection
         <member name="P:SharpSvn.SvnStatusEventArgs.FullPath">
             <summary>The path the notification is about, translated via <see cref="M:System.IO.Path.GetFullPath(System.String)" /></summary>
             <remarks>The <see cref="P:SharpSvn.SvnStatusEventArgs.FullPath" /> property contains the path in normalized format; while <see cref="P:SharpSvn.SvnStatusEventArgs.Path" /> returns the exact path from the subversion api</remarks>
+        </member>
+        <member name="P:SharpSvn.SvnLogEventArgs.LogOrigin">
+            <summary>Gets the log origin SharpSvn used for retrieving the logfile</summary>
+        </member>
+        <member name="P:SharpSvn.SvnLogEventArgs.MergeLogNestingLevel">
+            <summary>Gets the nesting level of the logs via merges</summary>
+        </member>
+        <member name="P:SharpSvn.SvnLogEventArgs.HasChildren">
+            <summary>Set to true when the following items are merged-child items of this item.</summary>
+        </member>
+        <member name="P:SharpSvn.SvnLogEventArgs.CustomProperties">
+            <summary>Gets the list of custom properties retrieved with the log</summary>
+            <remarks>Properties must be listed in SvnLogArgs.RetrieveProperties to be available here</remarks>
+        </member>
+        <member name="P:SharpSvn.SvnListEventArgs.BasePath">
+            <summary>Gets the origin path of the item</summary>
+        </member>
+        <member name="P:SharpSvn.SvnListEventArgs.Path">
+            <summary>Gets the path of the item</summary>
+        </member>
+        <member name="P:SharpSvn.SvnDirEntry.Author">
+            <summary>Gets the author of the last revision of this file</summary>
+        </member>
+        <member name="P:SharpSvn.SvnDirEntry.Time">
+            <summary>Gets the time of the last change</summary>
+        </member>
+        <member name="P:SharpSvn.SvnDirEntry.Revision">
+            <summary>Gets the last revision in which this node changed</summary>
+        </member>
+        <member name="P:SharpSvn.SvnDirEntry.HasProperties">
+            <summary>Gets a boolean indicating whether this node has svn properties</summary>
+        </member>
+        <member name="P:SharpSvn.SvnDirEntry.FileSize">
+            <summary>Gets the length of the file text or 0 for directories</summary>
+        </member>
+        <member name="P:SharpSvn.SvnInfoEventArgs.RepositoryRoot">
+            <summary>Gets the repository root Uri; ending in a '/' at the end</summary>
+            <remarks>The unmanaged api does not add the '/' at the end, but this makes using <see cref="T:System.Uri" /> hard</remarks>
+        </member>
+        <member name="P:SharpSvn.SvnInfoEventArgs.FullPath">
+            <summary>The path the notification is about, translated via <see cref="M:System.IO.Path.GetFullPath(System.String)" /></summary>
+            <remarks>The <see cref="P:SharpSvn.SvnInfoEventArgs.FullPath" /> property contains the path in normalized format; while <see cref="P:SharpSvn.SvnInfoEventArgs.Path" /> returns the exact path from the subversion api</remarks>
+        </member>
+        <member name="M:SharpSvn.SvnNotifyEventArgs.Detach(System.Boolean)">
+            <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
+            <description>After this method is called all properties are either stored managed, or are no longer readable</description>
+        </member>
+        <member name="P:SharpSvn.SvnNotifyEventArgs.PathIsUri">
+            <summary>Gets a boolean indicating whether the path is a Uri</summary>
+        </member>
+        <member name="P:SharpSvn.SvnNotifyEventArgs.FullPath">
+            <summary>The path the notification is about, translated via <see cref="M:System.IO.Path.GetFullPath(System.String)" /></summary>
+            <remarks>The <see cref="P:SharpSvn.SvnNotifyEventArgs.FullPath" /> property contains the path in normalized format; while <see cref="P:SharpSvn.SvnNotifyEventArgs.Path" /> returns the exact path from the subversion api</remarks>
+        </member>
+        <member name="P:SharpSvn.SvnNotifyEventArgs.Path">
+            <summary>The path the notification is about</summary>
+            <remarks>The <see cref="P:SharpSvn.SvnNotifyEventArgs.FullPath" /> property contains the path in normalized format; while <see cref="P:SharpSvn.SvnNotifyEventArgs.Path" /> returns the exact path from the subversion api</remarks>
         </member>
         <member name="P:SharpSvn.SvnLockInfo.IsRawNetworkComment">
             <summary>Gets a boolean indicating whether the Comment was generated by a Generic WebDav client</summary>
@@ -14804,7 +15290,7 @@ Return, in @a *callback2 and @a *callback2_baton a function/baton that
  * @since New in 1.4.
 
 </member>
-        <member name="P:SharpSvn.SvnCommitInfo.PostCommitError">
+        <member name="P:SharpSvn.SvnCommitResult.PostCommitError">
             <summary>error message from post-commit hook, or NULL</summary>
         </member>
         <member name="F:SharpSvn.SvnConflictAction.Delete">
@@ -14838,16 +15324,22 @@ Return, in @a *callback2 and @a *callback2_baton a function/baton that
             <summary>textual conflict (on a file)</summary>
         </member>
         <member name="F:SharpSvn.SvnConflictChoice.Merged">
-            <summary>user chooses the merged-file</summary>
+            <summary>Choose the 'merged file'. The result file of the automatic merging; possibly with local edits</summary>
         </member>
         <member name="F:SharpSvn.SvnConflictChoice.Mine">
-            <summary>user chooses own version of file</summary>
+            <summary>Choose local version on all conflicts; further use auto-merged</summary>
         </member>
         <member name="F:SharpSvn.SvnConflictChoice.Theirs">
-            <summary>user chooses their file</summary>
+            <summary>Choose their on all conflicts; further use auto-merged</summary>
+        </member>
+        <member name="F:SharpSvn.SvnConflictChoice.MineFull">
+            <summary>Choose the local file</summary>
+        </member>
+        <member name="F:SharpSvn.SvnConflictChoice.TheirsFull">
+            <summary>Choose the incoming file</summary>
         </member>
         <member name="F:SharpSvn.SvnConflictChoice.Base">
-            <summary>user chooses the base file</summary>
+            <summary>Choose the base file</summary>
         </member>
         <member name="F:SharpSvn.SvnConflictChoice.Postpone">
             <summary>Don't resolve the conflict now.  Let subversion mark the path
@@ -14976,6 +15468,9 @@ files or subdirectories not already present
         <member name="F:SharpSvn.SvnDepth.Unknown">
             <summary>Depth undetermined or ignored</summary>
         </member>
+        <member name="P:SharpSvn.SvnClientContext.PlinkPath">
+            <summary>Gets the path to SharpSvn's plink. The path is encoded to be safe for subversion configuration settings</summary>
+        </member>
         <member name="M:SharpSvn.SvnClientContext.MergeConfiguration(System.String)">
             <summary>Merges configuration from the specified path into the existing configuration</summary>
         </member>
@@ -15029,7 +15524,6 @@ files or subdirectories not already present
             <summary>Main class of Subversion api. This class is responsible for loading the unmanaged api</summary>
             <threadsafety static="true" instance="false" />
         </member>
-        <!-- Discarding badly formed XML document comment for member 'T:apr_mmap_t'. -->
         <!-- Discarding badly formed XML document comment for member 'T:apr_pool_t'. -->
         <!-- Discarding badly formed XML document comment for member 'T:apr_allocator_t'. -->
         <!-- Discarding badly formed XML document comment for member 'M:apr_strnatcmp(System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*,System.SByte!System.Runtime.CompilerServices.IsSignUnspecifiedByte!System.Runtime.CompilerServices.IsConst*)'. -->
@@ -15047,5 +15541,6 @@ files or subdirectories not already present
         <!-- Discarding badly formed XML document comment for member 'M:svn_inheritance_to_word(svn_mergeinfo_inheritance_t)'. -->
         <!-- Discarding badly formed XML document comment for member 'F:svn_ra_reporter3_t.abort_report'. -->
         <!-- Discarding badly formed XML document comment for member 'F:svn_diff_fns_t.token_compare'. -->
+        <!-- Discarding badly formed XML document comment for member 'T:apr_mmap_t'. -->
     </members>
 </doc>

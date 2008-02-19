@@ -77,8 +77,8 @@ namespace Ankh.UI
                         this.revisionTypeBox.SelectedItem = null;
                         this.revisionTypeBox.Text = value.Revision.ToString();
                         break;
-                    case SvnRevisionType.Date:
-                        this.datePicker.Value = value.Date;
+                    case SvnRevisionType.Time:
+                        this.datePicker.Value = value.Time;
                         this.revisionTypeBox.SelectedItem = this.dateRevisionChoice;
                         this.datePicker.Enabled = true;
                         break;

@@ -78,7 +78,7 @@ namespace Ankh
 
                 return Compare(a.Name, b.Name) &&
                     a.Revision == b.Revision &&
-                    Compare(a.CheckSum, b.CheckSum) &&
+                    Compare(a.Checksum, b.Checksum) &&
                     Compare(a.Uri, b.Uri) &&
                     Compare(a.RepositoryId, b.RepositoryId) &&
                     Compare(a.RepositoryUri, b.RepositoryUri) &&

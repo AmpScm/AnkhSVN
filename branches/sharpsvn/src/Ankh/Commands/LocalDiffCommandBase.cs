@@ -137,7 +137,7 @@ namespace Ankh.Commands
                     args.IgnoreAncestry = true;
                     args.NoDeleted = false;
                     args.Depth = info.Depth;
-                    context.Client.Diff(path, info.RevisionStart, info.RevisionEnd, args, stream);
+                    context.Client.Diff(path, new SvnRevisionRange(info.RevisionStart, info.RevisionEnd), args, stream);
                 }
 
                 return System.Text.Encoding.Default.GetString( stream.ToArray() );
