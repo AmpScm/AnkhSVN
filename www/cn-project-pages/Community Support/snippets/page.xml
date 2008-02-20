@@ -13,6 +13,10 @@
       <title localize="false">Frequently Asked Questions</title>
       <filename>HtmlSnippet2.html</filename>
     </component>
+    <component visibility="1" type="Html" order="4">
+      <title localize="false">Project Wiki</title>
+      <filename>HtmlSnippet3.html</filename>
+    </component>
   </component_list>
 </page>
 
