@@ -9,7 +9,7 @@
 		<QQnTurtleTasksFolder>..\tools\TurtleTasks\</QQnTurtleTasksFolder>
 		
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(QQnTurtleTasksFolder)QQn.TurtleTasks.targets</MSBuildAllProjects>
-		<ResolveAssemblyReferencesDependsOn>$(ResolveAssemblyReferencesDependsOn);DownloadDependencies</ResolveAssemblyReferencesDependsOn>
+		<CoreCompileDependsOn>$(CoreCompileDependsOn);DownloadDependencies</CoreCompileDependsOn>
 	</PropertyGroup>
 
 	<Target Name="DownloadDependencies">
