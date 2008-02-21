@@ -14,7 +14,7 @@
 
 	<Target Name="DownloadDependencies">
 			<CachedDownloadAndExtract
-			Uris="@(DependencyDownload)"
+			Uris="@(DependencyDownload->'%(Url)')"
 			DownloadDir="$(CachedDownloadDir)"
 			TargetDir="@(DependencyDownload->'%(TargetDir)')"
 			Prefix="@(DependencyDownload->'%(Version)')">

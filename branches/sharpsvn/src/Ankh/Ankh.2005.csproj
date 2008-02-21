@@ -558,9 +558,11 @@
     <EmbeddedResource Include="readonly.ico" />
   </ItemGroup>
   <ItemGroup>
-    <DependencyDownload Include="http://qqn.nl/~bert/builds/sharpsvn/SharpSvn-1.4999.333.29477.zip">
+    <DependencyDownload Include="SharpSvn">
+      <Url>http://qqn.nl/~bert/builds/sharpsvn/SharpSvn-1.4999.333.29477.zip</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
+      <Visible>false</Visible>
     </DependencyDownload>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
