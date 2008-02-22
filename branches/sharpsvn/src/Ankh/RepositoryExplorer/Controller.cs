@@ -342,7 +342,7 @@ namespace Ankh.RepositoryExplorer
                     if (e.Entry != null && e.Entry.NodeKind == SvnNodeKind.Directory && string.IsNullOrEmpty(e.Path))
                         return;
 
-                    e.Detach(true);
+                    e.Detach();
                     base.OnList(e);
                 }
             }

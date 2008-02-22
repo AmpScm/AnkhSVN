@@ -92,7 +92,7 @@ namespace Ankh
                     Compare(a.ConflictOldFile, b.ConflictOldFile) &&
                     Compare(a.ConflictWorkFile, b.ConflictWorkFile) &&
                     Compare(a.PropertyRejectFile, b.PropertyRejectFile) &&
-                    Compare(a.TextChangeTime, b.TextChangeTime) &&
+                    Compare(a.ContentChangeTime, b.ContentChangeTime) &&
                     Compare(a.PropertyChangeTime, b.PropertyChangeTime) &&
                     a.LastChangeRevision == b.LastChangeRevision &&
                     Compare(a.LastChangeTime, b.LastChangeTime) &&
