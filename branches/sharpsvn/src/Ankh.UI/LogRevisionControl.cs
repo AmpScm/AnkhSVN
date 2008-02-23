@@ -76,6 +76,7 @@ namespace Ankh.UI
         public LogRevisionControl(IContainer container)
             :this()
         {
+            container.Add(this);
             // Avoid fetching in design mode
             if(Site == null || Site.DesignMode == false)
                 FetchNextEntriesAsync();

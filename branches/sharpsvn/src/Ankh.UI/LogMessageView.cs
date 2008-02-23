@@ -21,6 +21,7 @@ namespace Ankh.UI
         public LogMessageView(IContainer container)
             : this()
         {
+            container.Add(this);
         }
 
         public ICurrentItemSource<SvnLogEventArgs> ItemSource

@@ -19,6 +19,7 @@ namespace Ankh.UI
         public LogChangedPaths(IContainer container)
             : this()
         {
+            container.Add(this);
         }
 
         #region ICurrentItemDestination<SvnLogEventArgs> Members
