@@ -117,13 +117,13 @@
     <Reference Include="Office">
       <Name>office</Name>
     </Reference>
-    <Reference Include="SharpSvn, Version=1.4999.231.4, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+    <Reference Include="SharpSvn, Version=1.4999.349.29523, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\SharpSvn.dll</HintPath>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
-    <Reference Include="SharpSvn.UI, Version=1.5.0.2, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
+    <Reference Include="SharpSvn.UI, Version=1.4999.0.34878, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\SharpSvn.UI.dll</HintPath>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.UI.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -191,6 +191,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ConfigurationDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConflictDialog.cs">
       <SubType>Form</SubType>
@@ -227,6 +228,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IContextMenu.cs" />
+    <Compile Include="ICurrentItemSource.cs" />
     <Compile Include="IFileSystemItem.cs" />
     <Compile Include="IgnorePropertyEditor.cs">
       <SubType>UserControl</SubType>
@@ -518,8 +520,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-      <DependencyDownload Include="SharpSvn">
-      <Url>http://qqn.nl/~bert/builds/sharpsvn/SharpSvn-1.4999.349.29523.zip</Url>
+    <DependencyDownload Include="SharpSvn">
+      <Url>http://qqn.nl/~bert/builds/sharpsvn/SharpSvn-1.4999.350.29541.zip</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
       <Visible>false</Visible>
