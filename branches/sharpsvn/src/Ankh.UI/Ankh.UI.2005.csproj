@@ -245,8 +245,20 @@
     <Compile Include="LockDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="LogChangedPaths.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogChangedPaths.Designer.cs">
+      <DependentUpon>LogChangedPaths.cs</DependentUpon>
+    </Compile>
     <Compile Include="LogDialog.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogDialogTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogDialogTest.Designer.cs">
+      <DependentUpon>LogDialogTest.cs</DependentUpon>
     </Compile>
     <Compile Include="LoginDialog.cs">
       <SubType>Form</SubType>
@@ -256,6 +268,18 @@
     </Compile>
     <Compile Include="LogMessageTemplate.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogMessageView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogMessageView.Designer.cs">
+      <DependentUpon>LogMessageView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogRevisionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogRevisionControl.Designer.cs">
+      <DependentUpon>LogRevisionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="MimeTypePropertyEditor.cs">
       <SubType>UserControl</SubType>
@@ -502,6 +526,22 @@
       <DependentUpon>ConfigurationDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Graphics\AddRepoURL.ico" />
+    <EmbeddedResource Include="LogChangedPaths.resx">
+      <DependentUpon>LogChangedPaths.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogDialogTest.resx">
+      <DependentUpon>LogDialogTest.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogMessageView.resx">
+      <DependentUpon>LogMessageView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogRevisionControl.resx">
+      <DependentUpon>LogRevisionControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="MultiLineStringEditorWithTemplates.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MultiLineStringEditorWithTemplates.cs</DependentUpon>
