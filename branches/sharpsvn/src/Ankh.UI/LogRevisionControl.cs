@@ -15,7 +15,7 @@ namespace Ankh.UI
     {
         int scrollPosition = 0;
         const int LogBatchSize = 10;
-        const int ExtraBuffer = 8 * LogBatchSize;
+        const int ExtraBuffer = 5 * LogBatchSize;
         List<SvnLogEventArgs> logItems = new List<SvnLogEventArgs>();
         Queue<SvnLogEventArgs> logQueue = new Queue<SvnLogEventArgs>(LogBatchSize);
         SvnLogArgs args = new SvnLogArgs();
@@ -25,7 +25,7 @@ namespace Ankh.UI
         bool operationStarted;
         Uri remoteTarget;
         string localTarget;
-           
+       
         [ThreadStatic]
         static SvnClient client;
         SvnClient Client
@@ -70,13 +70,14 @@ namespace Ankh.UI
         {
             InitializeComponent();
 
-             processLogHandler = new ProcessLogHandler(ProcessLog);
+            processLogHandler = new ProcessLogHandler(ProcessLog);
         }
 
         public LogRevisionControl(IContainer container)
             :this()
         {
             container.Add(this);
+
             // Avoid fetching in design mode
             if(Site == null || Site.DesignMode == false)
                 FetchNextEntriesAsync();
@@ -105,11 +106,29 @@ namespace Ankh.UI
                 return; // Avoid looping
 
             FetchEntries fetcher = new FetchEntries(DoFetch);
-            AsyncCallback c = new AsyncCallback(LogFetched);
+            AsyncCallback c = new AsyncCallback(BatchDone);
             fetcher.BeginInvoke(args, c, null);
         }
 
-        void LogFetched(IAsyncResult rslt)
+        void BatchDone(IAsyncResult rslt)
+        {
+            ProcessLogHandler batchDone = new ProcessLogHandler(
+                delegate()
+                {
+                    if (logItems.Count < ExtraBuffer + scrollPosition)
+                        FetchNextEntriesAsync();
+                    else
+                        operationStarted = false; // allow scroll to fire new events
+                });
+            if (InvokeRequired)
+                Invoke(batchDone);
+            else
+                batchDone();
+            
+        }
+
+
+        void OnLogFetched()
         {
             if (InvokeRequired)
                 Invoke(processLogHandler);
@@ -128,39 +147,33 @@ namespace Ankh.UI
             }
 
             dataGridView1.RowCount = logItems.Count;
-
-            if (logItems.Count < ExtraBuffer + scrollPosition)
-                FetchNextEntriesAsync();
-            else
-                operationStarted = false; // allow scroll to fire new events
         }
-        
+
         void DoFetch(SvnLogArgs args)
         {
             if (logItems.Count > 0)
-                args.Start = logItems[logItems.Count - 1].Revision;
+                args.Start = logItems[logItems.Count - 1].Revision - 1;
             else
                 args.Start = SvnRevision.None;
             args.Limit = LogBatchSize;
 
-            lock (logQueue)
+            EventHandler<SvnLogEventArgs> logEvent = 
+                delegate(object sender, SvnLogEventArgs e)
+                {
+                    e.Detach();
+                    lock (logQueue)
+                    {
+                        logQueue.Enqueue(e);
+                    }
+                    OnLogFetched();
+                };
+            if (LocalTarget != null)
             {
-                if (LocalTarget != null)
-                {
-                    Client.Log(LocalTarget, args, delegate(object sender, SvnLogEventArgs e)
-                    {
-                        e.Detach();
-                        logQueue.Enqueue(e);
-                    });
-                }
-                else if (RemoteTarget != null)
-                {
-                    Client.Log(RemoteTarget, args, delegate(object sender, SvnLogEventArgs e)
-                    {
-                        e.Detach();
-                        logQueue.Enqueue(e);
-                    });
-                }
+                Client.Log(LocalTarget, args, logEvent);
+            }
+            else if (RemoteTarget != null)
+            {
+                Client.Log(RemoteTarget, args, logEvent);
             }
         }
 
