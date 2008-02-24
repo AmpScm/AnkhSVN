@@ -28,13 +28,19 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogChangedPaths));
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.CopyFromRevision = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CopyFromPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Path = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.blameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.compareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -42,73 +48,82 @@ namespace Ankh.UI
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            resources.ApplyResources(this.dataGridView1, "dataGridView1");
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CopyFromRevision,
             this.CopyFromPath,
             this.Action,
             this.Path});
-            this.dataGridView1.Location = new System.Drawing.Point(0, 16);
+            this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(534, 275);
-            this.dataGridView1.TabIndex = 0;
             // 
             // CopyFromRevision
             // 
+            this.CopyFromRevision.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.CopyFromRevision.DataPropertyName = "CopyFromRevision";
-            this.CopyFromRevision.HeaderText = "Copy from revision";
+            resources.ApplyResources(this.CopyFromRevision, "CopyFromRevision");
             this.CopyFromRevision.Name = "CopyFromRevision";
             this.CopyFromRevision.ReadOnly = true;
-            this.CopyFromRevision.Width = 108;
             // 
             // CopyFromPath
             // 
+            this.CopyFromPath.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.CopyFromPath.DataPropertyName = "CopyFromPath";
-            this.CopyFromPath.HeaderText = "Copy from path";
+            resources.ApplyResources(this.CopyFromPath, "CopyFromPath");
             this.CopyFromPath.Name = "CopyFromPath";
             this.CopyFromPath.ReadOnly = true;
-            this.CopyFromPath.Width = 76;
             // 
             // Action
             // 
+            this.Action.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Action.DataPropertyName = "Action";
-            this.Action.HeaderText = "Action";
+            resources.ApplyResources(this.Action, "Action");
             this.Action.Name = "Action";
             this.Action.ReadOnly = true;
-            this.Action.Width = 62;
             // 
             // Path
             // 
-            this.Path.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Path.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Path.DataPropertyName = "Path";
-            this.Path.HeaderText = "Path";
+            resources.ApplyResources(this.Path, "Path");
             this.Path.Name = "Path";
             this.Path.ReadOnly = true;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Changed paths";
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.blameToolStripMenuItem,
+            this.compareToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
+            // 
+            // blameToolStripMenuItem
+            // 
+            this.blameToolStripMenuItem.Name = "blameToolStripMenuItem";
+            resources.ApplyResources(this.blameToolStripMenuItem, "blameToolStripMenuItem");
+            // 
+            // compareToolStripMenuItem
+            // 
+            resources.ApplyResources(this.compareToolStripMenuItem, "compareToolStripMenuItem");
+            this.compareToolStripMenuItem.Name = "compareToolStripMenuItem";
             // 
             // LogChangedPaths
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
             this.Name = "LogChangedPaths";
-            this.Size = new System.Drawing.Size(537, 294);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -122,5 +137,8 @@ namespace Ankh.UI
         private System.Windows.Forms.DataGridViewTextBoxColumn CopyFromPath;
         private System.Windows.Forms.DataGridViewTextBoxColumn Action;
         private System.Windows.Forms.DataGridViewTextBoxColumn Path;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem blameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem compareToolStripMenuItem;
     }
 }
