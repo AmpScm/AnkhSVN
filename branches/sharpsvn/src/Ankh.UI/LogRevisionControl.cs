@@ -25,6 +25,8 @@ namespace Ankh.UI
         bool operationStarted;
         Uri remoteTarget;
         string localTarget;
+
+        EventHandler<SvnLogEventArgs> logEventHandler;
        
         [ThreadStatic]
         static SvnClient client;
@@ -70,7 +72,8 @@ namespace Ankh.UI
         {
             InitializeComponent();
 
-            processLogHandler = new ProcessLogHandler(ProcessLog);
+            processLogHandler = new ProcessLogHandler(LogItemFetchedHandler);
+            logEventHandler = new EventHandler<SvnLogEventArgs>(LogItemReceived);
         }
 
         public LogRevisionControl(IContainer container)
@@ -100,43 +103,43 @@ namespace Ankh.UI
             }
         }
         
+
         private void FetchNextEntriesAsync()
         {
             if (LocalTarget == null && RemoteTarget == null)
                 return; // Avoid looping
 
             FetchEntries fetcher = new FetchEntries(DoFetch);
-            AsyncCallback c = new AsyncCallback(BatchDone);
+            AsyncCallback c = new AsyncCallback(FetchCompleted);
             fetcher.BeginInvoke(args, c, null);
         }
 
-        void BatchDone(IAsyncResult rslt)
+        void FetchCompleted(IAsyncResult rslt)
         {
-            ProcessLogHandler batchDone = new ProcessLogHandler(
-                delegate()
-                {
-                    if (logItems.Count < ExtraBuffer + scrollPosition)
-                        FetchNextEntriesAsync();
-                    else
-                        operationStarted = false; // allow scroll to fire new events
-                });
             if (InvokeRequired)
-                Invoke(batchDone);
+                Invoke(new ProcessLogHandler(FetchCompletedHandler));
             else
-                batchDone();
-            
+                FetchCompletedHandler();
+        }
+
+        void FetchCompletedHandler()
+        {
+            if (logItems.Count < ExtraBuffer + scrollPosition)
+                FetchNextEntriesAsync();
+            else
+                operationStarted = false; // allow scroll to fire new events
         }
 
 
-        void OnLogFetched()
+        void OnLogItemFetched()
         {
             if (InvokeRequired)
                 Invoke(processLogHandler);
             else
-                processLogHandler();
+                LogItemFetchedHandler();
         }
 
-        void ProcessLog()
+        void LogItemFetchedHandler()
         {
             lock (logQueue)
             {
@@ -155,26 +158,29 @@ namespace Ankh.UI
                 args.Start = logItems[logItems.Count - 1].Revision - 1;
             else
                 args.Start = SvnRevision.None;
+
             args.Limit = LogBatchSize;
 
-            EventHandler<SvnLogEventArgs> logEvent = 
-                delegate(object sender, SvnLogEventArgs e)
-                {
-                    e.Detach();
-                    lock (logQueue)
-                    {
-                        logQueue.Enqueue(e);
-                    }
-                    OnLogFetched();
-                };
             if (LocalTarget != null)
             {
-                Client.Log(LocalTarget, args, logEvent);
+                Client.Log(LocalTarget, args, logEventHandler);
             }
             else if (RemoteTarget != null)
             {
-                Client.Log(RemoteTarget, args, logEvent);
+                Client.Log(RemoteTarget, args, logEventHandler);
             }
+        }
+
+        void LogItemReceived(object sender, SvnLogEventArgs e)
+        {
+            e.Detach();
+            lock (logQueue)
+            {
+                logQueue.Enqueue(e);
+            }
+
+            // Notify UI thread
+            OnLogItemFetched();
         }
 
         private object CellValueForIndex(int columIndex, SvnLogEventArgs value)
