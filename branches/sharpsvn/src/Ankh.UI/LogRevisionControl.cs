@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using SharpSvn;
 using System.Globalization;
 using System.Collections.ObjectModel;
+using Ankh.UI.Helpers;
 
 namespace Ankh.UI
 {
@@ -35,10 +36,7 @@ namespace Ankh.UI
             get
             {
                 if (client == null)
-                {
-                    client = new SvnClient();
-                    //SharpSvn.UI.SharpSvnUI.Bind(client);
-                }
+                    client = SvnClientFactory.NewClient();
                 return client;
             }
         }
@@ -264,6 +262,57 @@ namespace Ankh.UI
         {
             if (SelectionChanged != null)
                 SelectionChanged(this, SelectedItems);
+
+            if (SelectedItems == null || SelectedItems.Count == 0)
+                dataGridView1.ContextMenuStrip = null;
+            else if (SelectedItems.Count == 1)
+            {
+                dataGridView1.ContextMenuStrip = singleItemContextMenu;
+                long currentRev = SelectedItems[0].Revision;
+
+                revertSingleToolStripMenuItem.Text = string.Format(
+                    CultureInfo.CurrentCulture,
+                    Resources.RevertChangesFromRevisionX,
+                    currentRev);
+
+                createBranchTagToolStripMenuItem.Text = string.Format(
+                    CultureInfo.CurrentCulture,
+                    Resources.CreateBranchTagFromRevisionX,
+                    currentRev);
+
+                switchToRevisionToolStripMenuItem.Text = string.Format(
+                    CultureInfo.CurrentCulture,
+                    Resources.SwitchToRevisionX,
+                    currentRev);
+            }
+            else
+            {
+                dataGridView1.ContextMenuStrip = multipleItemContextMenu;
+                long firstRev = SelectedItems[SelectedItems.Count - 1].Revision;
+                long lastRev = SelectedItems[0].Revision;
+
+                revertChangesToolStripMenuItem.Text = string.Format(
+                    CultureInfo.CurrentCulture,
+                    Resources.RevertChangesFromRevisionXToY,
+                    firstRev,
+                    lastRev);
+
+
+                // Diff only works when 2 revisions are selected
+                if (SelectedItems.Count == 2)
+                {
+                    compareToolStripMenuItem.Text = string.Format(
+                        CultureInfo.CurrentCulture,
+                        Resources.CompareRevisionXToY,
+                        firstRev,
+                        lastRev);
+                    compareToolStripMenuItem.Visible = true;
+                }
+                else
+                {
+                    compareToolStripMenuItem.Visible = false;
+                }
+            }
         }
 
 
@@ -301,6 +350,16 @@ namespace Ankh.UI
         {
             if (FocusChanged != null)
                 FocusChanged(this, FocusedItem);
+        }
+
+        private void singleRefreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Reset();
+        }
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Reset();
         }
     }
 }
