@@ -552,6 +552,7 @@
     <Compile Include="VSProject.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemRootItem.cs" />
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorer.cs" />
+    <Compile Include="WorkingCopyOperations.cs" />
     <Compile Include="XmlResultBase.cs">
       <SubType>Code</SubType>
     </Compile>
