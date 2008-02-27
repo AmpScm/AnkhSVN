@@ -202,6 +202,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\office.dll</HintPath>
     </Reference>
+    <Reference Include="SharpSvn, Version=1.4999.350.29541, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn.UI, Version=1.4999.0.861, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.UI.dll</HintPath>
+    </Reference>
     <Reference Include="stdole">
       <Name>stdole</Name>
       <HintPath>..\lib\stdole.dll</HintPath>
@@ -226,14 +234,6 @@
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Name>Ankh.UI.2005</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NSvn.Common\NSvn.Common.2005.csproj">
-      <Project>{3A8DF134-05F1-4357-9682-AB14CDDA48A9}</Project>
-      <Name>NSvn.Common.2005</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NSvn.Core\NSvn.Core.2008.vcproj">
-      <Project>{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}</Project>
-      <Name>NSvn.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.2005.csproj">
       <Name>Utils</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
@@ -248,6 +248,9 @@
     </None>
     <None Include="WorkingCopyExplorer\WCExplorer.cd" />
     <Compile Include="AnkhContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AnkhStatus.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AnkhUserControlHostToolWindowStrategy.cs" />
@@ -435,6 +438,7 @@
     <Compile Include="IDteStrategyFactory.cs" />
     <Compile Include="IToolWindowStrategy.cs" />
     <Compile Include="IWorkingCopyExplorer.cs" />
+    <Compile Include="NotificationHandler.cs" />
     <Compile Include="Solution\IRefreshableProject.cs" />
     <Compile Include="StatusImages.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />

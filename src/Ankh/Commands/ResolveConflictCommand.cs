@@ -8,8 +8,9 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections;
-using NSvn.Core;
-using NSvn.Common;
+
+
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -83,19 +84,22 @@ namespace Ankh.Commands
         {
 
             string mergeExe = GetExe( context );
-            Entry entry = item.Status.Entry;
-            bool binary = context.Client.HasBinaryProp(item.Path);
+            SvnWorkingCopyInfo entry = item.Status.WorkingCopyInfo;
+            SvnWorkingCopyState state;
+            bool binary = false;
+            if (context.Client.GetWorkingCopyState(item.Path, out state))
+                binary = !state.IsTextFile;
             if ( binary || mergeExe == null )
             {
                 string selection;
 
                 using( ConflictDialog dialog = new ConflictDialog(  ) )
                 {
-                    entry = item.Status.Entry;
+                    entry = item.Status.WorkingCopyInfo;
                     dialog.Filenames = new string[]{
-                                                       entry.ConflictWorking,
-                                                       entry.ConflictNew,
-                                                       entry.ConflictOld,
+                                                       entry.ConflictWorkFile,
+                                                       entry.ConflictNewFile,
+                                                       entry.ConflictOldFile,
                                                        item.Path
                                                    };
                     dialog.Binary = binary;
@@ -109,7 +113,9 @@ namespace Ankh.Commands
                 if ( selection != item.Path )
                     this.Copy( item.Path, selection );
 
-                context.Client.Resolved( item.Path, Recurse.None );
+                SvnResolvedArgs args = new SvnResolvedArgs();
+                args.Depth = SvnDepth.Empty;
+                context.Client.Resolved( item.Path, args);
                 context.OutputPane.WriteLine( 
                     "Resolved conflicted state of {0}", item.Path );
                 
@@ -120,9 +126,9 @@ namespace Ankh.Commands
             else
             {
                 string itemPath = Path.GetDirectoryName( item.Path );
-                string oldPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictOld ));
-                string newPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictNew ));
-                string workingPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictWorking ));
+                string oldPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.WorkingCopyInfo.ConflictOldFile ));
+                string newPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.WorkingCopyInfo.ConflictNewFile ));
+                string workingPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.WorkingCopyInfo.ConflictWorkFile ));
                 string mergedPath = String.Format("\"{0}\"", item.Path);
 
                 string mergeString = mergeExe;
@@ -140,7 +146,9 @@ namespace Ankh.Commands
                 if ( MessageBox.Show( "Have all conflicts been resolved?",
                     "Resolve", MessageBoxButtons.YesNo, MessageBoxIcon.Question ) == DialogResult.Yes )
                 {
-                    context.Client.Resolved( item.Path, Recurse.None );
+                    SvnResolvedArgs args = new SvnResolvedArgs();
+                    args.Depth = SvnDepth.Empty;
+                    context.Client.Resolved( item.Path, args );
                 }
             }
         }        

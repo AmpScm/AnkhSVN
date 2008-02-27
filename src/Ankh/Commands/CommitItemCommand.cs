@@ -7,9 +7,10 @@ using System.Threading;
 using System.IO;
 using Utils;
 
-using NSvn.Core;
-using NSvn.Common;
+
+
 using EnvDTE;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -64,7 +65,7 @@ namespace Ankh.Commands
             {
                 string startText = "Committing ";
                 if ( repositories.Count > 1 && items.Count > 0 )
-                    startText += "to repository " + ((SvnItem)items[0]).Status.Entry.Uuid;
+                    startText += "to repository " + ((SvnItem)items[0]).Status.WorkingCopyInfo.RepositoryUri;
                 context.StartOperation( startText );
 
                 try
@@ -80,7 +81,7 @@ namespace Ankh.Commands
                     }
                 }
            
-                catch( NSvn.Common.SvnException )
+                catch( SvnException )
                 {
                     context.OutputPane.WriteLine( "Commit aborted" );
                     throw;
@@ -102,9 +103,13 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void DoCommit( IContext context )
+        private void DoCommit(IContext context)
         {
-            this.commitInfo = context.Client.Commit( this.paths, Recurse.Full, this.commitContext.KeepLocks );
+            SvnCommitArgs args = new SvnCommitArgs();
+            args.LogMessage = storedLogMessage;
+            args.Depth = SvnDepth.Infinity;
+            args.KeepLocks = commitContext.KeepLocks;
+            context.Client.Commit(this.paths, args, out commitInfo);
         }
 
         /// <summary>
@@ -135,7 +140,7 @@ namespace Ankh.Commands
 
         private string GetUuid( IContext context, SvnItem item )
         {
-            string uuid = item.Status.Entry != null ? item.Status.Entry.Uuid : null;
+            string uuid = item.Status.WorkingCopyInfo != null ? item.Status.WorkingCopyInfo.RepositoryId.ToString() : null;
             // freshly added items have no uuid
             if ( uuid == null )
             {
@@ -143,7 +148,7 @@ namespace Ankh.Commands
                 if ( Directory.Exists( parentDir ) )
                 {
                     SvnItem parentItem = context.StatusCache[parentDir];
-                    uuid = parentItem.Status.Entry != null ? parentItem.Status.Entry.Uuid : null;
+                    uuid = parentItem.Status.WorkingCopyInfo != null ? parentItem.Status.WorkingCopyInfo.RepositoryId.ToString() : null;
 
                     // still nothing? try the parent item
                     if ( uuid == null )
@@ -158,7 +163,7 @@ namespace Ankh.Commands
         }
 
         private string[] paths;
-        private CommitInfo commitInfo;
+        private SvnCommitResult commitInfo;
         private CommitContext commitContext;
         private string storedLogMessage = null;
 

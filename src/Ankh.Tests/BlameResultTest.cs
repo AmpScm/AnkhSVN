@@ -6,6 +6,7 @@ using NSvn.Core;
 using System.IO;
 using System.Xml.Xsl;
 using System.Xml.XPath;
+using SharpSvn;
 
 
 namespace Ankh.Tests
@@ -28,8 +29,8 @@ namespace Ankh.Tests
             BlameResult br = new BlameResult();
             br.Start();
             DateTime now = DateTime.Now;
-            br.Receive( 0, 42, "Arild", 
-                now, "printf(\"Hello world\");" );
+            /*br.Receive( 0, 42, "Arild", 
+                now, "printf(\"Hello world\");" );*/
             br.End();
 
             Assert.AreEqual( 1, br.XmlDocument.SelectNodes( "/BlameResult/Blame" ).Count );
@@ -53,8 +54,7 @@ namespace Ankh.Tests
             BlameResult br = new BlameResult();
             br.Start();
 
-            this.Client.Blame( path, Revision.Head, Revision.Head, 
-                new BlameReceiver( br.Receive ) );
+            this.Client.Blame( path, new EventHandler<SvnBlameEventArgs>( br.Receive ) );
 
             br.End();
 
@@ -70,8 +70,8 @@ namespace Ankh.Tests
             BlameResult br = new BlameResult();
             br.Start();
             DateTime now = DateTime.Now;
-            br.Receive( 0, 42, "Arild", 
-                now, "printf(\"Hello world\");" );
+            /*br.Receive( 0, 42, "Arild", 
+                now, "printf(\"Hello world\");" );*/
             br.End();
 
             XPathDocument doc = new XPathDocument( new StringReader( 

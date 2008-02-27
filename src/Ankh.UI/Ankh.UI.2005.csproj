@@ -67,7 +67,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
@@ -101,7 +101,7 @@
     </LangVersion>
     <ErrorReport>
     </ErrorReport>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
@@ -133,6 +133,14 @@
     <Reference Include="Office">
       <Name>office</Name>
     </Reference>
+    <Reference Include="SharpSvn, Version=1.4999.349.29523, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn.UI, Version=1.4999.0.34878, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.UI.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -150,14 +158,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\NSvn.Common\NSvn.Common.2005.csproj">
-      <Project>{3A8DF134-05F1-4357-9682-AB14CDDA48A9}</Project>
-      <Name>NSvn.Common.2005</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NSvn.Core\NSvn.Core.2008.vcproj">
-      <Project>{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}</Project>
-      <Name>NSvn.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.2005.csproj">
       <Name>Utils</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
@@ -242,7 +242,9 @@
     <Compile Include="FileSystemTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Helpers\SvnClientFactory.cs" />
     <Compile Include="IContextMenu.cs" />
+    <Compile Include="ICurrentItemSource.cs" />
     <Compile Include="IFileSystemItem.cs" />
     <Compile Include="IgnorePropertyEditor.cs">
       <SubType>UserControl</SubType>
@@ -259,8 +261,20 @@
     <Compile Include="LockDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="LogChangedPaths.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogChangedPaths.Designer.cs">
+      <DependentUpon>LogChangedPaths.cs</DependentUpon>
+    </Compile>
     <Compile Include="LogDialog.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogDialogTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogDialogTest.Designer.cs">
+      <DependentUpon>LogDialogTest.cs</DependentUpon>
     </Compile>
     <Compile Include="LoginDialog.cs">
       <SubType>Form</SubType>
@@ -270,6 +284,18 @@
     </Compile>
     <Compile Include="LogMessageTemplate.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogMessageView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogMessageView.Designer.cs">
+      <DependentUpon>LogMessageView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogRevisionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogRevisionControl.Designer.cs">
+      <DependentUpon>LogRevisionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="MimeTypePropertyEditor.cs">
       <SubType>UserControl</SubType>
@@ -315,6 +341,11 @@
     </Compile>
     <Compile Include="RepositoryTreeView.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ReverseMergeDialog.cs">
       <SubType>Form</SubType>
@@ -517,6 +548,22 @@
       <DependentUpon>ConfigurationDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Graphics\AddRepoURL.ico" />
+    <EmbeddedResource Include="LogChangedPaths.resx">
+      <DependentUpon>LogChangedPaths.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogDialogTest.resx">
+      <DependentUpon>LogDialogTest.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogMessageView.resx">
+      <DependentUpon>LogMessageView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogRevisionControl.resx">
+      <DependentUpon>LogRevisionControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="MultiLineStringEditorWithTemplates.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MultiLineStringEditorWithTemplates.cs</DependentUpon>
@@ -529,10 +576,23 @@
       <SubType>Designer</SubType>
       <DependentUpon>PopUpListForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="WorkingCopyExplorerControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WorkingCopyExplorerControl.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <DependencyDownload Include="SharpSvn">
+      <Url>http://qqn.nl/~bert/builds/sharpsvn/SSvn-1.4999.370.zip</Url>
+      <TargetDir>..\autolib</TargetDir>
+      <Version>1</Version>
+      <Visible>false</Visible>
+    </DependencyDownload>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -552,6 +612,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\tools\TurtleTasks\QQn.TurtleTasks.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>

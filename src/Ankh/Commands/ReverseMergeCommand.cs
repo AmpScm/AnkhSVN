@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using Ankh.UI;
 using System.Windows.Forms;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.IO;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -52,7 +53,7 @@ namespace Ankh.Commands
                     context.ProjectFileWatcher.StartWatchingForChanges();
                
                     ReverseMergeRunner runner = new ReverseMergeRunner(
-                        dlg.CheckedItems, dlg.Revision, dlg.Recursive ? Recurse.Full : Recurse.None,
+                        dlg.CheckedItems, dlg.Revision, dlg.Recursive ? SvnDepth.Infinity : SvnDepth.Empty,
                         dlg.DryRun );
                     context.UIShell.RunWithProgressDialog( runner, "Merging" );
 
@@ -78,30 +79,31 @@ namespace Ankh.Commands
         /// </summary>
         private class ReverseMergeRunner : IProgressWorker
         {
-            public ReverseMergeRunner(  IList items, Revision revision,
-                Recurse recurse, bool dryRun ) 
+            public ReverseMergeRunner(IList items, SvnRevision revision,
+                SvnDepth depth, bool dryRun)
             {
                 this.items = items;
                 this.revision = revision;
-                this.recurse = recurse;
+                this.depth = depth;
                 this.dryRun = dryRun;
             }
 
-            public void Work( IContext context )
+            public void Work(IContext context)
             {
-                foreach( SvnItem item in this.items )
+                SvnMergeArgs args = new SvnMergeArgs();
+                args.Depth = depth;
+                args.DryRun = dryRun;
+                args.IgnoreAncestry = false;
+                args.Force = false;
+                foreach (SvnItem item in this.items)
                 {
-                    context.Client.Merge( 
-                        item.Path, Revision.Working,
-                        item.Path, this.revision,
-                        item.Path, this.recurse,
-                        false, false, this.dryRun );
+                    context.Client.Merge(item.Path, item.Path, new SvnRevisionRange(SvnRevision.Working, revision), args);
                 }
             }
 
             private IList items;
-            private Revision revision;
-            private Recurse recurse;
+            private SvnRevision revision;
+            private SvnDepth depth;
             private bool dryRun;
         }
     }

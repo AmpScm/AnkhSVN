@@ -8,20 +8,21 @@ using SH = SHDocVw;
 using System.IO;
 using Utils.Win32;
 
-using NSvn.Common;
+
+using SharpSvn;
 
 namespace Ankh
 {
-	/// <summary>
-	/// Summary description for UIShell.
-	/// </summary>
-	public class UIShell : IUIShell
-	{
-		public UIShell()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
+    /// <summary>
+    /// Summary description for UIShell.
+    /// </summary>
+    public class UIShell : IUIShell
+    {
+        public UIShell()
+        {
+            //
+            // TODO: Add constructor logic here
+            //
         }
         #region IUIShell Members
         public RepositoryExplorerControl RepositoryExplorer
@@ -287,7 +288,7 @@ namespace Ankh
                 selector.EnableRecursive = info.EnableRecursive;
                 selector.Items = info.Items;
                 selector.CheckedItems = info.CheckedItems;
-                selector.Recursive = info.Recurse == Recurse.Full;
+                selector.Recursive = info.Depth == SvnDepth.Infinity;
                 selector.SingleSelection = info.SingleSelection;
                 selector.Caption = info.Caption;
 
@@ -314,7 +315,7 @@ namespace Ankh
                 if ( selector.ShowDialog( this.Context.HostWindow ) == DialogResult.OK )
                 {
                     info.CheckedItems = selector.CheckedItems;
-                    info.Recurse = selector.Recursive ? Recurse.Full : Recurse.None;
+                    info.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
                     info.RevisionStart = selector.RevisionStart;
                     info.RevisionEnd = selector.RevisionEnd;
 
@@ -375,8 +376,8 @@ namespace Ankh
 
                 info.CheckedItems = dlg.CheckedItems;
                 info.StopOnCopy = dlg.StopOnCopy;
-				info.RevisionStart = dlg.RevisionStart;
-				info.RevisionEnd = dlg.RevisionEnd;
+                info.RevisionStart = dlg.RevisionStart;
+                info.RevisionEnd = dlg.RevisionEnd;
                 
                 return info;
             }
@@ -397,7 +398,7 @@ namespace Ankh
                     return null;
                 
                 info.SwitchToUrl = dialog.ToUrl;
-                info.Recurse = dialog.Recursive ? Recurse.Full : Recurse.None;
+                info.Depth = dialog.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
                 info.Path = dialog.SelectedPath;
                 info.RevisionStart = dialog.RevisionStart;
 
@@ -549,7 +550,7 @@ namespace Ankh
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;
-            args.Path = item.Status.Entry.Url;
+            args.Path = item.Status.Path;
         }
 
         private void EnsureWindowSize( Window window )

@@ -6,8 +6,10 @@ using System.IO;
 using System.Collections;
 using System.Threading;
 using System.Reflection;
-using NSvn.Core;
+
 using Utils;
+using SharpSvn;
+using Utils.Services;
 
 namespace Ankh.WorkingCopyExplorer
 {
@@ -167,7 +169,7 @@ namespace Ankh.WorkingCopyExplorer
             ArrayList items = new ArrayList();
             foreach ( string path in Directory.GetFileSystemEntries( directoryItem.Path ) )
             {
-                if ( PathUtils.GetName( path ) != Client.AdminDirectoryName )
+                if ( PathUtils.GetName( path ) != SvnClient.AdministrativeDirectoryName )
                 {
                     SvnItem item = this.statusCache[ path ];
                     items.Add( FileSystemItem.Create( this, item ) );
@@ -220,7 +222,7 @@ namespace Ankh.WorkingCopyExplorer
 
         private bool IsRootValid( string path )
         {
-            return Directory.Exists( path ) && SvnUtils.IsWorkingCopyPath( path );
+            return Directory.Exists( path ) && AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath( path );
         }
 
         void control_WantNewRoot( object sender, EventArgs e )

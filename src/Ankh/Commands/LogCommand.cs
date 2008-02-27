@@ -1,11 +1,13 @@
 // $Id$
 using System;
-using NSvn.Core;
+
 using System.Diagnostics;
 using System.Xml;
 using System.Xml.Xsl;
 using System.IO;
 using System.Collections;
+using SharpSvn;
+using System.Collections.ObjectModel;
 
 namespace Ankh.Commands
 {
@@ -36,8 +38,8 @@ namespace Ankh.Commands
                 false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
 
             this.info = new LogDialogInfo( resources, resources );
-            this.info.RevisionStart = Revision.FromNumber( 0 );
-            this.info.RevisionEnd = Revision.Head;
+            this.info.RevisionStart = SvnRevision.Zero;
+            this.info.RevisionEnd = SvnRevision.Head;
 
             // is Shift down?
             if ( !CommandBase.Shift )
@@ -65,14 +67,19 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void ProgressCallback( IContext context )
+        private void ProgressCallback(IContext context)
         {
             this.result = new LogResult();
             this.result.Start();
 
-            string[] paths = SvnItem.GetPaths( info.CheckedItems );
-            context.Client.Log( paths, info.RevisionEnd, info.RevisionStart, true, 
-                info.StopOnCopy, new LogMessageReceiver(result.Receive) );
+            string[] paths = SvnItem.GetPaths(info.CheckedItems);
+
+            SvnLogArgs args = new SvnLogArgs();
+            args.StrictNodeHistory = info.StopOnCopy;
+            args.Log += new EventHandler<SvnLogEventArgs>(result.Receive);
+
+            Collection<SvnLogEventArgs> logItems;
+            context.Client.GetLog(paths[0], args, out logItems);
 
             this.result.End();
         }
@@ -80,6 +87,5 @@ namespace Ankh.Commands
 
         private LogDialogInfo info;
         private LogResult result;
-      
-	}
+    }
 }

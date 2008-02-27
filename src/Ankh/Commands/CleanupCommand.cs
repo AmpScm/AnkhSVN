@@ -29,7 +29,7 @@ namespace Ankh.Commands
             IList resources = context.Selection.GetSelectionResources( false,
                 new ResourceFilterCallback(SvnItem.DirectoryFilter) );
             foreach( SvnItem item in resources )
-                context.Client.Cleanup( item.Path );
+                context.Client.CleanUp( item.Path );
 
             context.EndOperation();
         }

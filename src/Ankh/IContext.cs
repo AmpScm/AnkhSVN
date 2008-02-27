@@ -4,6 +4,7 @@ using Ankh.Solution;
 using System;
 
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using SharpSvn;
 
 namespace Ankh
 {

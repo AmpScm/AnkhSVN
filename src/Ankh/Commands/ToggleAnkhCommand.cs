@@ -1,7 +1,8 @@
 using System;
 using System.IO;
 using EnvDTE;
-using NSvn.Core;
+
+using Utils.Services;
 
 namespace Ankh.Commands
 {
@@ -59,7 +60,7 @@ namespace Ankh.Commands
                 {
                     // we will allow the user to load for a solution where the 
                     // solution dir is not versioned
-                    if (!SvnUtils.IsWorkingCopyPath(
+                    if (!AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath(
                         solutionDir))
                     {
                         this.SetToolTipAndCaption( context, cntl, 

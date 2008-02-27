@@ -5,8 +5,9 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
-using NSvn.Core;
+
 using System.Text.RegularExpressions;
+using SharpSvn;
 
 namespace Ankh.UI
 {
@@ -52,14 +53,14 @@ namespace Ankh.UI
         /// The revision selected by the user.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Revision Revision
+        public SvnRevision Revision
         {
             get
             {
                 if ( this.Valid )
                 {
                     if ( this.revisionTypeBox.SelectedItem == null )
-                        return Revision.FromNumber( 
+                        return new SvnRevision(
                             int.Parse( this.revisionTypeBox.Text ) );
                     else
                         return ((RevisionChoice)
@@ -70,34 +71,34 @@ namespace Ankh.UI
             }
             set
             {
-                switch( value.Type )
+                switch( value.RevisionType )
                 {
-                    case RevisionType.Number:
+                    case SvnRevisionType.Number:
                         this.revisionTypeBox.SelectedItem = null;
-                        this.revisionTypeBox.Text = value.Number.ToString();
+                        this.revisionTypeBox.Text = value.Revision.ToString();
                         break;
-                    case RevisionType.Date:
-                        this.datePicker.Value = value.Date;
+                    case SvnRevisionType.Time:
+                        this.datePicker.Value = value.Time;
                         this.revisionTypeBox.SelectedItem = this.dateRevisionChoice;
                         this.datePicker.Enabled = true;
                         break;
-                    case RevisionType.Base:
+                    case SvnRevisionType.Base:
                         this.revisionTypeBox.SelectedItem = RevisionChoice.Base;
                         break;
 
-                    case RevisionType.Working:
+                    case SvnRevisionType.Working:
                         this.revisionTypeBox.SelectedItem = RevisionChoice.Working;
                         break;
 
-                    case RevisionType.Commmitted:
+                    case SvnRevisionType.Committed:
                         this.revisionTypeBox.SelectedItem = RevisionChoice.Committed;
                         break;
 
-                    case RevisionType.Head:
+                    case SvnRevisionType.Head:
                         this.revisionTypeBox.SelectedItem = RevisionChoice.Head;
                         break;
 
-                    case RevisionType.Previous:
+                    case SvnRevisionType.Previous:
                         this.revisionTypeBox.SelectedItem = RevisionChoice.Previous;
                         break;
                     default:
@@ -231,7 +232,7 @@ namespace Ankh.UI
         /// </summary>
         private class RevisionChoice
         {
-            public RevisionChoice( string name, Revision revision )
+            public RevisionChoice( string name, SvnRevision revision )
             {
                 this.name = name;
                 this.revision = revision;
@@ -242,24 +243,24 @@ namespace Ankh.UI
                 return this.name;
             }
 
-            public virtual Revision Revision
+            public virtual SvnRevision Revision
             {
                 get{ return this.revision; }
             }
 
             public static readonly RevisionChoice Head = 
-                new RevisionChoice( "Head", Revision.Head );
-            public static readonly RevisionChoice Committed = 
-                new RevisionChoice( "Committed", Revision.Committed );
-            public static readonly RevisionChoice Base = 
-                new RevisionChoice( "Base", Revision.Base );
-            public static readonly RevisionChoice Working = 
-                new RevisionChoice( "Working", Revision.Working );
-            public static readonly RevisionChoice Previous = 
-                new RevisionChoice( "Previous", Revision.Previous );
+                new RevisionChoice( "Head", SvnRevision.Head );
+            public static readonly RevisionChoice Committed =
+                new RevisionChoice("Committed", SvnRevision.Committed);
+            public static readonly RevisionChoice Base =
+                new RevisionChoice("Base", SvnRevision.Base);
+            public static readonly RevisionChoice Working =
+                new RevisionChoice("Working", SvnRevision.Working);
+            public static readonly RevisionChoice Previous =
+                new RevisionChoice("Previous", SvnRevision.Previous);
 
 
-            private Revision revision;
+            private SvnRevision revision;
             private string name;
         }
 
@@ -275,9 +276,9 @@ namespace Ankh.UI
             }
 
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public override Revision Revision
+            public override SvnRevision Revision
             {
-                get{ return Revision.FromDate( this.picker.Value ); }
+                get{ return new SvnRevision(this.picker.Value ); }
             }
 
             private DateTimePicker picker;

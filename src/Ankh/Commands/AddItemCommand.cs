@@ -4,7 +4,8 @@ using System.Collections;
 using Ankh.UI;
 using System.Windows.Forms;
 using System.IO;
-using NSvn.Common;
+
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -56,10 +57,12 @@ namespace Ankh.Commands
             context.StartOperation( "Adding" );
             try
             {
-
-                foreach( SvnItem item in resources )
+                SvnAddArgs args = new SvnAddArgs();
+                args.ThrowOnError = false;
+                args.Depth = SvnDepth.Empty;
+                foreach (SvnItem item in resources)
                 {
-                    context.Client.Add( item.Path, Recurse.None );
+                    context.Client.Add(item.Path, args);
                 }
                 context.Selection.RefreshSelection();
             }

@@ -2,8 +2,8 @@
 using System;
 using EnvDTE;
 
-using NSvn.Common;
-using NSvn.Core;
+
+
 using System.Collections;
 using Utils.Win32;
 using System.Diagnostics;
@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 
 using C = Utils.Win32.Constants;
+using SharpSvn;
 
 namespace Ankh.Solution
 {
@@ -289,7 +290,7 @@ namespace Ankh.Solution
                     Debug.Assert( childItem != IntPtr.Zero, 
                         "Could not get treeview item" );
 
-                    if ( child.Name != Client.AdminDirectoryName )
+                    if ( child.Name != SvnClient.AdministrativeDirectoryName )
                     {                    
                         SolutionExplorerTreeNode childNode = SolutionExplorerTreeNode.CreateNode( child, childItem, this.explorer,
                             this );

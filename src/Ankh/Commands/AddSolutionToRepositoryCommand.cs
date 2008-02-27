@@ -5,10 +5,11 @@ using Utils;
 using EnvDTE;
 using System.IO;
 using System.Collections;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.Reflection;
 using System.Text;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -78,12 +79,12 @@ namespace Ankh.Commands
                     context.StartOperation( "Creating repository directory" );
                     try
                     {
-                        url = UriUtils.Combine( url, dlg.SubDirectoryName );
-                        using( MakeDirWorker makeDirWorker = new MakeDirWorker( url, 
-                                   dlg.LogMessage, context ) )
+                        url = UriUtils.Combine(url, dlg.SubDirectoryName);
+                        MakeDirWorker makeDirWorker = new MakeDirWorker(url,
+                                   dlg.LogMessage, context);
                         {
-                            context.UIShell.RunWithProgressDialog( makeDirWorker, 
-                                "Creating directory" ); 
+                            context.UIShell.RunWithProgressDialog(makeDirWorker,
+                                "Creating directory");
                         }
                     }
                     finally
@@ -101,7 +102,7 @@ namespace Ankh.Commands
             {
                 // check out the repository directory specified               
                 CheckoutRunner checkoutRunner = new CheckoutRunner(  
-                    solutionDir, Revision.Head, url );
+                    solutionDir, SvnRevision.Head, new Uri(url) );
                 context.UIShell.RunWithProgressDialog( checkoutRunner, "Checking out" );
             }
             finally
@@ -117,7 +118,7 @@ namespace Ankh.Commands
                 this.paths = new ArrayList();
                 this.paths.Add( solutionDir );
                     
-                context.Client.Add( context.DTE.Solution.FullName, Recurse.None );
+                context.Client.Add( context.DTE.Solution.FullName, SvnDepth.Empty );
                 this.paths.Add( context.DTE.Solution.FullName );
                 this.AddProjects( context, vsProjects );  
             }
@@ -127,9 +128,11 @@ namespace Ankh.Commands
                 context.StartOperation( "Error: Reverting changes" );
                 try
                 {
-                    context.Client.Revert( new string[]{ solutionDir }, Recurse.Full );
-                    PathUtils.RecursiveDelete( 
-                        Path.Combine(solutionDir, Client.AdminDirectoryName) );
+                    SvnRevertArgs args = new SvnRevertArgs();
+                    args.Depth = SvnDepth.Infinity;
+                    context.Client.Revert(new string[] { solutionDir }, args);
+                    PathUtils.RecursiveDelete(
+                        Path.Combine(solutionDir, SvnClient.AdministrativeDirectoryName));
                 }
                 finally
                 {
@@ -152,9 +155,11 @@ namespace Ankh.Commands
                 context.StartOperation( "Aborted - reverting" );
                 try
                 {
-                    context.Client.Revert( new string[]{ solutionDir }, Recurse.Full );
-                    PathUtils.RecursiveDelete( 
-                        Path.Combine(solutionDir, Client.AdminDirectoryName) );
+                    SvnRevertArgs args = new SvnRevertArgs();
+                    args.Depth = SvnDepth.Infinity;
+                    context.Client.Revert(new string[] { solutionDir }, args);
+                    PathUtils.RecursiveDelete(
+                        Path.Combine(solutionDir, SvnClient.AdministrativeDirectoryName));
                 }
                 finally
                 {
@@ -251,54 +256,34 @@ namespace Ankh.Commands
             }
         }
 
-        
 
-        private void DoCommit( IContext context )
+
+        private void DoCommit(IContext context)
         {
             string[] paths = (string[])(new ArrayList(this.paths).ToArray(typeof(string)));
-            context.Client.Commit( paths, Recurse.None );
+            SvnCommitArgs args = new SvnCommitArgs();
+            args.Depth = SvnDepth.Empty;
+            context.Client.Commit(paths, args);
         }
 
         /// <summary>
         /// A progress runner for creating repository directories.
         /// </summary>
-        private class MakeDirWorker : IProgressWorker, IDisposable
+        private class MakeDirWorker : IProgressWorker
         {
             public MakeDirWorker( string url, string logMessage, IContext context ) 
             {
                 this.url = url;
                 this.logMessage = logMessage;
                 this.context = context;
-                this.context.Client.LogMessage += 
-                    new NSvn.Core.LogMessageDelegate(this.LogMessage);
             }
 
-            ~MakeDirWorker()
+            public void Work(IContext context)
             {
-                this.Dispose(false);
-            }
-
-            public void Work( IContext context )
-            {
-                context.Client.MakeDir( new string[]{ this.url } );
-            }
-
-            public void Dispose()
-            {
-                this.Dispose(true);
-            }
-
-            private void Dispose( bool disposing )
-            {
-                this.context.Client.LogMessage -=
-                    new NSvn.Core.LogMessageDelegate(this.LogMessage);
-                if ( disposing )
-                    GC.SuppressFinalize(this);
-            }
-
-            private void LogMessage(object sender, NSvn.Core.LogMessageEventArgs args)
-            {
-                args.Message = this.logMessage;
+                SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
+                args.LogMessage = this.logMessage;
+                args.MakeParents = true;
+                context.Client.RemoteCreateDirectory(new Uri(this.url), args);
             }
 
             private IContext context;

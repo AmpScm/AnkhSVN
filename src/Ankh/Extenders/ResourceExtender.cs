@@ -2,7 +2,8 @@ using System;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
-using NSvn.Core;
+
+using SharpSvn;
 
 
 namespace Ankh.Extenders
@@ -27,7 +28,7 @@ namespace Ankh.Extenders
             get;
         }
 
-        int Revision
+        long Revision
         {
             get;
         }
@@ -49,7 +50,7 @@ namespace Ankh.Extenders
             get;
         }
 
-        int LastCommittedRevision
+        long LastCommittedRevision
         {
             get;
         }
@@ -72,21 +73,21 @@ namespace Ankh.Extenders
             // empty
         }
 
-        public override bool Equals( object o )
+        public override bool Equals(object o)
         {
-            if ( o == (object)this )
+            if (o == (object)this)
                 return true;
 
             ResourceExtender other = o as ResourceExtender;
-            if ( other == null )
+            if (other == null)
                 return false;
 
-            return other.status.Entry.Url == this.status.Entry.Url;
+            return other.status.Uri == this.status.Uri;
         }
 
         public override int GetHashCode()
         {
-            return this.status.Entry.Url.GetHashCode();
+            return this.status.Uri.GetHashCode();
         }
 
 
@@ -94,70 +95,72 @@ namespace Ankh.Extenders
          Description("URL" )]
         public string Url
         {
-            get{ return this.status.Entry.Url; }
+            get{ return this.status.Uri.ToString(); }
         }
 
         [Category( "Subversion" ),
          Description( "Repository UUID" )]
         public string RepositoryUuid
         {
-            get  {  return this.status.Entry.Uuid; }
+            get  {  return this.status.WorkingCopyInfo.RepositoryId.ToString(); }
         }
 
         [Category( "Subversion" ),
          Description( "Last committed author" )]
         public string LastCommittedAuthor
         {
-            get{ return this.status.Entry.CommitAuthor; }
+            get{ return this.status.WorkingCopyInfo.LastChangeAuthor; }
         }
 
         [Category("Subversion"),
          Description( "Revision" )]                
-        public int Revision
+        public long Revision
         {
-            get{ return this.status.Entry.Revision; }
+            get{ return this.status.WorkingCopyInfo.Revision; }
         }
 
         [Category("Subversion"),
          Description( "Last committed date" )]
         public DateTime LastCommittedDate
         {
-            get{ return this.status.Entry.CommitDate; }
+            get{ return this.status.WorkingCopyInfo.LastChangeTime.ToLocalTime(); }
         }
 
         [Category("Subversion"),
          Description( "Last committed revision" )]
-        public int LastCommittedRevision
+        public long LastCommittedRevision
         {
-            get{ return this.status.Entry.CommitRevision; }
+            get{ return this.status.WorkingCopyInfo.LastChangeRevision; }
         }
 
         [Category("Subversion"),
          Description( "Text status" )]
         public string TextStatus
         {
-            get{ return this.status.TextStatus.ToString(); }
+            get{ return this.status.LocalContentStatus.ToString(); }
         }
 
         [Category("Subversion"),
          Description( "Property status" )]
         public string PropertyStatus
         {
-            get{ return this.status.PropertyStatus.ToString(); }
+            get{ return this.status.LocalPropertyStatus.ToString(); }
         }
 
         [Category("Subversion"),
         Description( "Locked" )]
         public bool Locked
         {
-            get{ return this.status.Entry != null && this.status.Entry.LockToken != null; }
+            get{ return this.status.LocalLocked; }
         }
 
-        public void SetStatus( Status status )
+        public void SetStatus(AnkhStatus status)
         {
-            this.status = status;                            
+            if (status == null)
+                throw new ArgumentNullException("status");
+            this.status = status;
         }
 
-        private Status status;
+		private AnkhStatus status;
     }
 }

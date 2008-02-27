@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -46,10 +47,12 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void DoUnlock( IContext context )
+        private void DoUnlock(IContext context)
         {
-            string[] paths = SvnItem.GetPaths( this.info.CheckedItems );
-            context.Client.Unlock( paths, false );
+            string[] paths = SvnItem.GetPaths(this.info.CheckedItems);
+            SvnUnlockArgs args = new SvnUnlockArgs();
+            args.BreakLock = false;
+            context.Client.Unlock(paths, args);
         }
 
         private PathSelectorInfo info;

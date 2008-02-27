@@ -3,7 +3,7 @@ using System;
 using System.IO;
 
 using EnvDTE;
-using NSvn.Core;
+
 using System.Collections;
 using System.Diagnostics;
 

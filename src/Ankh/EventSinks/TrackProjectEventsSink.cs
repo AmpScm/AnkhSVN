@@ -7,8 +7,8 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.IO;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.Windows.Forms;
 using Utils;
 using System.Collections.Specialized;
@@ -16,6 +16,7 @@ using System.Collections;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using SharpSvn;
 
 namespace Ankh.EventSinks
 {
@@ -256,7 +257,7 @@ namespace Ankh.EventSinks
                 {
                     SvnItem item = this.context.StatusCache[rgszMkOldNames[i]];
                     item.Refresh( this.context.Client );
-                    if ( item.IsVersioned || item.Status.TextStatus == StatusKind.Missing )
+                    if ( item.IsVersioned || item.Status.LocalContentStatus == SvnStatus.Missing )
                     {
                         Trace.WriteLine( String.Format( "Renaming {0} to {1}", rgszMkOldNames[i], rgszMkNewNames[i] ) );
                         // We need to rename back first for svn move to work
@@ -268,12 +269,14 @@ namespace Ankh.EventSinks
                         {
                             File.Move( rgszMkNewNames[i], rgszMkOldNames[i] );
                         }
-                        this.context.Client.Move( rgszMkOldNames[i], rgszMkNewNames[i], true );
+                        SvnMoveArgs args = new SvnMoveArgs();
+                        args.Force = true;
+                        this.context.Client.Move( rgszMkOldNames[i], rgszMkNewNames[i], args );
                     }
                     else
                     {
                         Trace.WriteLine( String.Format( "Not renaming {0} to {1}. TextStatus is {2}", 
-                            rgszMkOldNames[i], rgszMkNewNames[i], item.Status.TextStatus ) );
+                            rgszMkOldNames[i], rgszMkNewNames[i], item.Status.LocalContentStatus ) );
                     }
                 }
                 return VSConstants.S_OK;
@@ -306,12 +309,12 @@ namespace Ankh.EventSinks
                             svnItem.Refresh( this.context.Client );
 
                             if ( !svnItem.IsVersioned && svnItem.IsVersionable &&
-                                !this.context.Client.IsIgnored( svnItem.Path ) )
+                                svnItem.Status.LocalContentStatus != SvnStatus.Ignored )
                             {
-                                this.context.Client.Add( file, Recurse.None );
+                                this.context.Client.Add( file, SvnDepth.Empty );
                             }
                         }
-                        catch ( SvnClientException ex )
+                        catch ( SvnException ex )
                         {
                             // don't propagate this exception
                             // just tell the user and move on
@@ -389,14 +392,14 @@ namespace Ankh.EventSinks
                     item.Refresh(this.context.Client, EventBehavior.DontRaise );
 
                     // VC++ projects don't delete the files until *after* OnAfterRemoveFiles has fired
-                    bool wasUnmodified = item.Status.TextStatus == StatusKind.Normal &&
-                        ( item.Status.PropertyStatus == StatusKind.None || item.Status.PropertyStatus == StatusKind.Normal );
+                    bool wasUnmodified = item.Status.LocalContentStatus == SvnStatus.Normal &&
+                        (item.Status.LocalPropertyStatus == SvnStatus.None || item.Status.LocalPropertyStatus == SvnStatus.Normal);
 
                     // SVN since 1.4 gives an error if deleting an added-but-missing file.
-                    bool wasAddedOrMissing = item.Status.TextStatus == StatusKind.Added || item.Status.TextStatus == StatusKind.Missing;
+                    bool wasAddedOrMissing = item.Status.LocalContentStatus == SvnStatus.Added || item.Status.LocalContentStatus == SvnStatus.Missing;
 
-                    if ( (item.Status.TextStatus == StatusKind.Missing || item.IsDeleted ||
-                        item.Status.TextStatus == StatusKind.Normal) && 
+                    if ((item.Status.LocalContentStatus == SvnStatus.Missing || item.IsDeleted ||
+                        item.Status.LocalContentStatus == SvnStatus.Normal) && 
                         this.PromptDelete( item ) )
                     {
                         if ( item.IsDirectory )
@@ -406,12 +409,14 @@ namespace Ankh.EventSinks
 
                         try
                         {
-                            context.Client.Delete( new string[] { item.Path }, true );
+                            SvnDeleteArgs args = new SvnDeleteArgs();
+                            args.Force = true;
+                            context.Client.Delete(new string[] { item.Path }, args);
                         }
-                        catch ( BadPathException )
+                        catch (SvnFormatException)
                         {
                             // see comment above.
-                            if ( !wasAddedOrMissing )
+                            if (!wasAddedOrMissing)
                             {
                                 throw;
                             }

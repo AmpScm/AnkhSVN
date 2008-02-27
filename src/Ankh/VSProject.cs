@@ -3,13 +3,15 @@ using System.Text;
 using EnvDTE;
 using System.IO;
 using Utils;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.Collections;
 using System.Reflection;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
 using Ankh.Solution;
+using Utils.Services;
+using SharpSvn;
 
 namespace Ankh
 {
@@ -232,7 +234,7 @@ namespace Ankh
             try
             {
                 if ( Directory.Exists( dir ) &&
-                    !SvnUtils.IsWorkingCopyPath( dir ) )
+                    !AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath( dir ) )
                 {
                     this.Add( dir, solutionDir, paths );
                 }
@@ -247,7 +249,7 @@ namespace Ankh
                     this.AddProjectItems( this.project.ProjectItems, solutionDir, paths );
 
             }
-            catch ( SvnClientException ex )
+            catch ( SvnException ex )
             {
                 this.context.OutputPane.WriteLine( ex.Message );
 
@@ -342,7 +344,7 @@ namespace Ankh
                             this.Add( item.get_FileNames( i ), solutionDir, paths );
                         }
                     }
-                    catch ( SvnClientException ex )
+                    catch ( SvnException ex )
                     {
                         this.context.OutputPane.WriteLine( ex.Message );
                     }
@@ -368,11 +370,13 @@ namespace Ankh
 
         private void Add( string filename, string solutionDir, IList paths )
         {
-            if ( !SvnUtils.IsWorkingCopyPath( filename ) )
+            if ( !AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath( filename ) )
                 this.AddWithIntermediateDirectories( filename, solutionDir, paths );
             else
             {
-                this.context.Client.Add( filename, Recurse.None );
+                SvnAddArgs args = new SvnAddArgs();
+                args.Depth = SvnDepth.Empty;
+                this.context.Client.Add( filename, args );
                 paths.Add( filename );
             }
         }
@@ -399,9 +403,9 @@ namespace Ankh
             foreach ( string dirname in intermediate )
             {
                 path = Path.Combine( path, dirname );
-                if ( !SvnUtils.IsWorkingCopyPath( path ) || File.Exists( path ) )
+                if ( !AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath( path ) || File.Exists( path ) )
                 {
-                    this.context.Client.Add( path, Recurse.None );
+                    this.context.Client.Add( path, SvnDepth.Empty );
                     paths.Add( path );
                 }
             }

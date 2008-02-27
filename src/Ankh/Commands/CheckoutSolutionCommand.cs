@@ -16,7 +16,7 @@ namespace Ankh.Commands
          Tooltip = "Checkout this solution.", 
          Bitmap = ResourceBitmaps.CheckoutSolution),
          VSNetControl( "ReposExplorer", Position = 2 )]
-	public class CheckoutSolutionCommand : CommandBase
+    public class CheckoutSolutionCommand : CommandBase
     {
         #region Implementation of ICommand
 
@@ -48,10 +48,10 @@ namespace Ankh.Commands
                 INode node = context.RepositoryExplorer.SelectedNode;
                 INode parent = node.Parent;
 
-                CheckoutRunner runner = new CheckoutRunner( browser.DirectoryPath, parent.Revision, parent.Url);
+                CheckoutRunner runner = new CheckoutRunner( browser.DirectoryPath, parent.Revision, new Uri(parent.Url));
                 context.UIShell.RunWithProgressDialog( runner, "Checking out solution" );
 
-                context.DTE.Solution.Open( System.IO.Path.Combine( browser.DirectoryPath, node.Name ) );
+                context.DTE.Solution.Open( Path.Combine( browser.DirectoryPath, node.Name ) );
             }
             finally
             {

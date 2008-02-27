@@ -3,9 +3,11 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using NSvn.Core;
+
 using Utils;
 using Utils.Win32;
+using SharpSvn;
+using Utils.Services;
 
 namespace Ankh.UI
 {
@@ -59,7 +61,7 @@ namespace Ankh.UI
         /// The revision to check out.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Revision Revision
+        public SvnRevision Revision
         {
             get{ return this.revisionPicker.Revision; }
         }
@@ -323,12 +325,13 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void ControlsChanged(object sender, System.EventArgs e)
         {
+            IWorkingCopyOperations wcOps = AnkhServices.GetService<IWorkingCopyOperations>();
             if( this.revisionPicker.Valid && this.localDirTextBox.Text.Length > 0)
             {
                 if(this.radioButtonFromURL.Checked)
                     this.okButton.Enabled = UriUtils.ValidUrl.IsMatch( this.urlTextBox.Text ) ;
                 else 
-                    this.okButton.Enabled=SvnUtils.IsWorkingCopyPath(this.exportFromDirTextBox.Text);
+                    this.okButton.Enabled= wcOps.IsWorkingCopyPath(this.exportFromDirTextBox.Text);
             }
         }
 

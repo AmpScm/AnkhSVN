@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using SharpSvn;
 
 namespace Ankh.UI
 {
@@ -112,14 +113,14 @@ namespace Ankh.UI
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public NSvn.Core.Revision RevisionStart
+        public SvnRevision RevisionStart
         {
             get{ return this.revisionPickerStart.Revision; }
             set{ this.revisionPickerStart.Revision = value; }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public NSvn.Core.Revision RevisionEnd
+        public SvnRevision RevisionEnd
         {
             get{ return this.revisionPickerEnd.Revision; }
             set{ this.revisionPickerEnd.Revision = value; }

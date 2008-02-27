@@ -1,7 +1,8 @@
 using System;
 using Ankh.UI;
 using System.Windows.Forms;
-using NSvn.Common;
+
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -44,15 +45,15 @@ namespace Ankh.Commands
             {
                 using( RelocateDialog dlg = new RelocateDialog() )
                 {
-                    dlg.CurrentUrl = dir.Status.Entry.Url;
+                    dlg.CurrentUrl = dir.Status.Uri.ToString();
                     if ( dlg.ShowDialog() != DialogResult.OK )
                         return;
 
                     // we need it on another thread because it actually
                     // contacts the repos to verify 
                     RelocateRunner runner = new RelocateRunner(
-                        dir.Path, dlg.FromSegment, dlg.ToSegment, 
-                        dlg.Recursive ? Recurse.Full : Recurse.None );
+                        dir.Path, new Uri(dlg.FromSegment), new Uri(dlg.ToSegment), 
+                        dlg.Recursive );
 
                     context.UIShell.RunWithProgressDialog( runner, "Relocating" );
 
@@ -72,24 +73,26 @@ namespace Ankh.Commands
         /// </summary>
         private class RelocateRunner : IProgressWorker
         {
-            public RelocateRunner( string path, string from, string to, 
-                Recurse recurse ) 
+            public RelocateRunner(string path, Uri from, Uri to,
+                bool recursive)
             {
                 this.path = path;
-                this.from = from; 
+                this.from = from;
                 this.to = to;
-                this.recurse = recurse;
+                this.recursive = recursive;
             }
 
-            public void Work( IContext context )
+            public void Work(IContext context)
             {
-                context.Client.Relocate( this.path, this.from, this.to,
-                    this.recurse );
+                SvnRelocateArgs args = new SvnRelocateArgs();
+                args.NonRecursive = !recursive;
+                context.Client.Relocate(this.path, this.from, this.to);
             }
 
 
-            private string path, from, to;
-            private Recurse recurse;
+            private string path;
+            private Uri from, to;
+            private bool recursive;
         }
     }
 }

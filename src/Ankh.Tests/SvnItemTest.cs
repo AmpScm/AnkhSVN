@@ -2,8 +2,6 @@
 using System;
 using NUnit.Framework;
 using System.IO;
-using NSvn.Core;
-using NSvn.Common;
 using TestUtils;
 using System.Collections;
 
