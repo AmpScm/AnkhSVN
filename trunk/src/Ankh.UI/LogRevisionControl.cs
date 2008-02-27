@@ -245,12 +245,12 @@ namespace Ankh.UI
         /// </summary>
         public bool IncludeMergedRevisions
         {
-            get { return args.IncludeMergedRevisions; }
+            get { return args.RetrieveMergedRevisions; }
             set
             {
-                if (args.IncludeMergedRevisions != value)
+                if (args.RetrieveMergedRevisions != value)
                 {
-                    args.IncludeMergedRevisions = value;
+                    args.RetrieveMergedRevisions = value;
                     Reset();
                 }
             }

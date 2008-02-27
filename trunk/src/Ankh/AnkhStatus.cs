@@ -151,7 +151,7 @@ namespace Ankh
             if (args == null)
                 throw new ArgumentNullException("args");
 
-            args.Detach(true);
+            args.Detach();
             return new AnkhStatus(args);
         }
 
