@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.IO;
 
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using SharpSvn;
 
 namespace Ankh.Tests
 {
@@ -194,7 +195,7 @@ namespace Ankh.Tests
             get
             {
                 if ( this.client == null )
-                    this.client = new SvnClient( this );
+                    this.client = new SvnClient();
                 return this.client;
             }
         }
@@ -346,7 +347,18 @@ namespace Ankh.Tests
                 for( short i = 1; i <= item.FileCount; i++ )
                 {
                     string path = item.get_FileNames(i);
-                    list.Add( new SvnItem( path, this.context.Client.SingleStatus(path) ) );
+
+					SvnStatusArgs sa = new SvnStatusArgs();
+					SvnStatusEventArgs ea = null;
+
+					this.context.Client.Status(path, sa,
+						delegate(object sender, SvnStatusEventArgs e)
+						{
+							e.Detach();
+							ea = e;
+						});
+
+                    list.Add( new SvnItem( path, ea ) );
                 }
                 return list;
             }
@@ -687,5 +699,15 @@ namespace Ankh.Tests
         }
 
         #endregion
-    }
+
+		#region IContext Members
+
+
+		public IDteStrategyFactory DteStrategyFactory
+		{
+			get { throw new Exception("The method or operation is not implemented."); }
+		}
+
+		#endregion
+	}
 }
