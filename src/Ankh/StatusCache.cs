@@ -64,7 +64,7 @@ namespace Ankh
                 SvnStatusArgs args = new SvnStatusArgs();
                 args.Depth = depth;
                 args.Revision = SvnRevision.None;
-                args.GetAll = true;
+                args.RetrieveAllEntries = true;
                 args.ContactRepository = false;
                 args.NoIgnore = true;
                 this.client.Status(dir, args, new EventHandler<SvnStatusEventArgs>(Callback));
@@ -98,7 +98,7 @@ namespace Ankh
                         Collection<SvnStatusEventArgs> statuses;
                         SvnStatusArgs args = new SvnStatusArgs();
                         args.ThrowOnError = false;
-                        args.GetAll = true;
+                        args.RetrieveAllEntries = true;
                         if (this.client.GetStatus(normPath, args, out statuses) && statuses.Count > 0)
                         {
                             this.table[normPath] = item = new SvnItem(path, statuses[0]);

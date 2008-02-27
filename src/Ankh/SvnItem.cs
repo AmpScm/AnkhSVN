@@ -117,7 +117,7 @@ namespace Ankh
             Collection<SvnStatusEventArgs> statuses;
             SvnStatusArgs args = new SvnStatusArgs();
             args.Depth = SvnDepth.Empty;
-            args.GetAll = true;
+            args.RetrieveAllEntries = true;
             args.ThrowOnError = false;
             if (client.GetStatus(path, args, out statuses))
                 this.status = statuses.Count > 0 ? statuses[0] : AnkhStatus.None;
