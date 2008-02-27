@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<HSProject ProjectType="0" Version="2.0.28" SaveDateTime="27/02/2008 14:01:31" DXPFileName="" TemplateName="HelpStudio Lite 2005 Style" SpellLastCheckDateTime="12:00:00 AM" Title="Ankh" SCCActivated="False" SCCProject="" HelpContextIDHeaderFile="" OutputDirectory="" AutoGenerateIndexEntries="True" AutoGenerateCategoryIndex="False" BuildDXProject="True" DefaultTopic="" Lite="True">
+    <SpellIgnoreAllWordList/>
+    <cat Name="Getting Started" Key="C1" AutoIndex="True"/>
+    <cat Name="Tutorials" Key="C2" AutoIndex="True"/>
+    <cat Name="Reference" Key="C3" AutoIndex="True"/>
+    <cat Name="Support" Key="C4" AutoIndex="True"/>
+    <cat Name="Microsoft Help 2.x Error Pages" Key="C5" AutoIndex="True"/>
+    <file FileName="stopwordlist.txt" CaptureInfo="" IncludeInOutput="True"/>
+    <Topic Key="{95CA4353-34B0-4493-B8AB-FF7BF1C9352E}" Name="_index_entry_not_found" Title="Empty Index Entry" ContentsTitle="Empty Index Entry" Status="In Progress" CreatedOn="23-09-2005 00:00:00" ModifiedOn="23-09-2005 00:00:00" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="False" IncludeInHelpFile="True" HelpContextIDs="" Category="C5">
+        <Notes/>
+        <K Value="@_vsipsample_index_entry_not_found"/>
+        <s k="BodyText"><![CDATA[<H1>Empty Index Entry</H1>
+<P>The index entry you selected has no target topics associated with it.</P>
+<P>If you have chosen a parent entry, please select a child entry.</P>
+<xml><MSHelp:NoSearch/></xml>]]></s>
+    </Topic>
+    <Topic Key="{11A66232-56ED-4B86-A42C-835E93506F4A}" Name="_topic_not_found" Title="Topic Not Found" ContentsTitle="Topic Not Found" Status="In Progress" CreatedOn="23-09-2005 00:00:00" ModifiedOn="23-09-2005 00:00:00" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="False" IncludeInHelpFile="True" HelpContextIDs="" Category="C5">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<script type="text/javascript">
+// ****************************************************************************
+// *                       NavFailPage Parameter Insertion                    *
+// ****************************************************************************
+
+function navfailpageparam() {
+        var keyString = "keywords=";
+        var idxString = "index=";
+        var urlString = "url=";
+        var query = window.location.search;
+        var j = 0;
+        var delim;
+        var i = query.indexOf(keyString);
+
+        if (i >= 0) {
+                i += keyString.length;
+                delim = query.charAt(i);
+                j = query.indexOf(delim, i+1);
+                if (j > 0) document.getElementById("keywordsSpan").innerText = query.substring(i, j+1);
+        }
+
+        i = query.indexOf(idxString);
+        if (i >= 0) {
+                i += idxString.length;
+                delim = query.charAt(i);
+                j = query.indexOf(delim, i+1);
+                if (j > 0) document.getElementById("indexSpan").innerText = query.substring(i, j+1);
+        }
+
+        i = query.indexOf(urlString);
+        if (i >= 0) {
+                i += urlString.length;
+                delim = query.charAt(i);
+                j = query.indexOf(delim, i+1);
+                if (j > 0) document.getElementById("urlSpan").innerText = query.substring(i, j+1);
+        }
+}
+</script>
+
+<h1>Topic Not Found</h1>
+
+<p>The link you just clicked was not able to connect to the target page.</p>
+
+<p>Some possible reasons and remedies are as follows:</p>
+
+<table class="msdn" cellspacing="0">
+    <tbody>
+        <tr valign="top">
+            <th width="47%">Reason</th>
+
+            <th width="53%">Remedy</th>
+        </tr>
+
+        <tr valign="top">
+            <td width="47%">Destination topic is not part of the area you specified in the <b>Filtered by</b>
+            field.</td>
+
+            <td width="53%">Either select another filter or select <b>(no filter)</b>.</td>
+        </tr>
+
+        <tr valign="top">
+            <td width="47%">The URL of the destination topic is incorrect or has changed.</td>
+
+            <td width="53%">Use the index or the search function instead.</td>
+        </tr>
+
+        <tr valign="top">
+            <td width="47%">Problems with the help installation.</td>
+
+            <td width="53%">Rerun Setup for the product this help is related to and select the 'Repair'
+            option.</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>Additional help is available for filters, search, and the index.</p>
+
+<p>Click <a href="javascript:history.back(-1)">Back</a> to return to the page you were on.</p>
+<hr>
+
+<p>The target parameters are:</p>
+<p>Keyword: <span id="keywordsSpan"></span><br>
+Index Moniker: <span id="indexSpan"></span><br>
+URL: <span id="urlSpan"></span></p>
+<script type="text/javascript">
+    navfailpageparam()
+</script>
+<xml><MSHelp:NoSearch/></xml>]]></s>
+    </Topic>
+    <GlossaryItems/>
+    <Nodes/>
+    <Tasks/>
+    <BuildProfiles>
+        <BuildProfile ID="{F871A8B0-4355-4BF9-BA7F-61AED67BF431}" Name="Default" OutputDirectory="Build\Default\" CompileHelpFile="True" HTMLHelpVersion="1" H2Namespace="" H2FileID="" H2PlugIn="" HelpFileName="Build\Ankh.chm" UseBuildFlags="False" ProjectTitle="" RemoveOutputFiles="False" BuildFlags="" IncludeInBuild="True" DefaultTopicID="" LocaleID="0"/>
+    </BuildProfiles>
+    <ProjectProperties/>
+</HSProject>
