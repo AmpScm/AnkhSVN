@@ -1,12 +1,13 @@
 // $Id$
 using System;
-using NSvn.Core;
+
 using Ankh.UI;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
-using System.Collections;  
+using System.Collections;
+using Utils.Services;  
 
 namespace Ankh.UI
 {
@@ -112,8 +113,9 @@ namespace Ankh.UI
 
         private string LineForPath( string path )
         {
+            IWorkingCopyOperations wcOp = AnkhServices.GetService<IWorkingCopyOperations>();
             string rootedPath = this.urlPaths ? path : 
-                NSvn.Core.SvnUtils.GetWorkingCopyRootedPath( path );
+                wcOp.GetWorkingCopyRootedPath( path );
             string linePattern = LINETEMPLATE.Match( this.template ).Groups[ 
                 "linepattern" ].Value.Trim();
             return linePattern.Replace( "%path%", rootedPath );

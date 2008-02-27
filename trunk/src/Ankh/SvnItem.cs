@@ -1,11 +1,13 @@
 // $Id$
 using System;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.IO;
 using System.Collections;
 using Ankh.UI;
 using System.Diagnostics;
+using SharpSvn;
+using System.Collections.ObjectModel;
 
 namespace Ankh
 {
@@ -32,7 +34,7 @@ namespace Ankh
 
         public event EventHandler ChildrenChanged;
 
-        public SvnItem( string path, Status status )
+        public SvnItem(string path, AnkhStatus status)
         {
             this.path = path;
             this.status = status;
@@ -41,7 +43,7 @@ namespace Ankh
         /// <summary>
         /// The status of this item.
         /// </summary>
-        public Status Status
+        public AnkhStatus Status
         {
             get{ return this.status; }
         }
@@ -73,7 +75,7 @@ namespace Ankh
         /// Set the status of this item to the passed in status.
         /// </summary>
         /// <param name="status"></param>
-        public virtual void Refresh( Status status )
+        public virtual void Refresh( AnkhStatus status )
         {
             this.Refresh( status, EventBehavior.Raise );
         }
@@ -83,15 +85,15 @@ namespace Ankh
         /// Set the status of this item to the passed in status.
         /// </summary>
         /// <param name="status"></param>
-        public virtual void Refresh( Status status, EventBehavior eventBehavior )
+        public virtual void Refresh(AnkhStatus status, EventBehavior eventBehavior)
         {
-            Status oldStatus = this.status;
+            AnkhStatus oldStatus = this.status;
             this.status = status;
 
-            if ( eventBehavior == EventBehavior.Raise )
+            if (eventBehavior == EventBehavior.Raise)
             {
-                if ( !oldStatus.Equals( this.status ) )
-                    this.OnChanged(); 
+                if (!oldStatus.Equals(status))
+                    this.OnChanged();
             }
         }
 
@@ -99,7 +101,7 @@ namespace Ankh
         /// Refresh the existing status of the item, using client.
         /// </summary>
         /// <param name="client"></param>
-        public virtual void Refresh( Client client )
+        public virtual void Refresh( SvnClient client )
         {
             this.Refresh( client, EventBehavior.Raise );
         }
@@ -109,15 +111,23 @@ namespace Ankh
         /// </summary>
         /// <param name="client"></param>
         /// <param name="eventBehavior">Whether to raise events.</param>
-        public virtual void Refresh( Client client, EventBehavior eventBehavior )
+        public virtual void Refresh(SvnClient client, EventBehavior eventBehavior)
         {
-            Status oldStatus = this.status;
-            this.status = client.SingleStatus( this.path );
+            AnkhStatus oldStatus = this.status;
+            Collection<SvnStatusEventArgs> statuses;
+            SvnStatusArgs args = new SvnStatusArgs();
+            args.Depth = SvnDepth.Empty;
+            args.GetAll = true;
+            args.ThrowOnError = false;
+            if (client.GetStatus(path, args, out statuses))
+                this.status = statuses.Count > 0 ? statuses[0] : AnkhStatus.None;
+            else
+                this.status = AnkhStatus.None;
 
-            if ( eventBehavior == EventBehavior.Raise )
+            if (eventBehavior == EventBehavior.Raise)
             {
-                if ( !oldStatus.Equals( this.status ) )
-                    this.OnChanged(); 
+                if (!oldStatus.Equals(this.status))
+                    this.OnChanged();
             }
         }
 
@@ -127,17 +137,17 @@ namespace Ankh
         public virtual bool IsVersioned
         {
             get
-            { 
-                StatusKind s = this.status.TextStatus;
-                return s == StatusKind.Added ||
-                       s == StatusKind.Conflicted ||
-                       s == StatusKind.Merged ||
-                       s == StatusKind.Modified ||
-                       s == StatusKind.Normal ||
-                       s == StatusKind.Replaced ||
-                       s == StatusKind.Deleted ||
-                       //s == StatusKind.Missing ||
-                       s == StatusKind.Incomplete;
+            {
+                SvnStatus s = this.status.LocalContentStatus;
+                return s == SvnStatus.Added ||
+                       s == SvnStatus.Conflicted ||
+                       s == SvnStatus.Merged ||
+                       s == SvnStatus.Modified ||
+                       s == SvnStatus.Normal ||
+                       s == SvnStatus.Replaced ||
+                       s == SvnStatus.Deleted ||
+                    //s == StatusKind.Missing ||
+                       s == SvnStatus.Incomplete;
             }
         }
 
@@ -148,11 +158,11 @@ namespace Ankh
         {
             get
             {
-                StatusKind t = this.status.TextStatus;
-                StatusKind p = this.status.PropertyStatus;
+                SvnStatus t = this.status.LocalContentStatus;
+                SvnStatus p = this.status.LocalPropertyStatus;
                 return this.IsVersioned &&
-                    ( t != StatusKind.Normal ||
-                      (p != StatusKind.None && p != StatusKind.Normal));
+                    (t != SvnStatus.Normal ||
+                      (p != SvnStatus.None && p != SvnStatus.Normal));
             }
         }
 
@@ -163,8 +173,8 @@ namespace Ankh
         {
             get
             { 
-                if ( this.status.Entry != null )
-                    return this.status.Entry.Kind == NodeKind.Directory;
+                if ( this.status.WorkingCopyInfo != null )
+                    return this.status.WorkingCopyInfo.NodeKind == SvnNodeKind.Directory;
                 else
                     return Directory.Exists( this.path );
             }
@@ -177,10 +187,10 @@ namespace Ankh
         {
             get
             {
-                if ( this.status.Entry != null )
-                    return this.status.Entry.Kind == NodeKind.File;
-                else 
-                    return File.Exists( this.path );
+                if (this.status.WorkingCopyInfo != null)
+                    return this.status.WorkingCopyInfo.NodeKind == SvnNodeKind.File;
+                else
+                    return File.Exists(this.path);
             }
         }
 
@@ -208,7 +218,7 @@ namespace Ankh
                 if( dir == null )
                     return false;
                 return Directory.Exists( 
-                    System.IO.Path.Combine( dir, Client.AdminDirectoryName ));
+                    System.IO.Path.Combine( dir, SvnClient.AdministrativeDirectoryName));
             }
         }
 
@@ -239,20 +249,19 @@ namespace Ankh
         {
             get
             {
-                return this.Status.Entry != null &&
-                    this.Status.Entry.LockToken != null;
+                return this.Status.LocalLocked;
             }
         }
 
 
         public virtual bool IsDeleted
         {
-            get { return this.status.TextStatus == StatusKind.Deleted; }
+            get { return this.status.LocalContentStatus == SvnStatus.Deleted; }
         }
 
         public virtual bool IsDeletedFromDisk
         {
-            get { return this.status.TextStatus == StatusKind.None && !File.Exists( this.Path ) && !Directory.Exists( this.Path ); }
+            get { return this.status.LocalContentStatus == SvnStatus.None && !File.Exists(this.Path) && !Directory.Exists(this.Path); }
         }
 
         public override string ToString()
@@ -319,7 +328,7 @@ namespace Ankh
 
         private class UnversionableItem : SvnItem
         {
-            public UnversionableItem() : base( "", Status.None )
+            public UnversionableItem() : base( "", AnkhStatus.Unversioned )
             {}
 
             protected override void OnChanged()
@@ -327,12 +336,12 @@ namespace Ankh
                 // empty
             }
 
-            public override void Refresh(Client client)
+            public override void Refresh(SvnClient client)
             {
                 // empty
             }
 
-            public override void Refresh(Status status)
+            public override void Refresh(AnkhStatus status)
             {
                 // empty
             }
@@ -492,13 +501,13 @@ namespace Ankh
         /// <returns></returns>
         public static bool ConflictedFilter( SvnItem item )
         {
-            return item.Status.TextStatus == StatusKind.Conflicted;
+            return item.Status.LocalContentStatus == SvnStatus.Conflicted;
         }
- 
 
 
 
-        private Status status;
+
+        private AnkhStatus status;
         private string path;
 
 #if DEBUG

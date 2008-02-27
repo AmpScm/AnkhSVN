@@ -8,7 +8,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections;
-using NSvn.Core;
+
 
 namespace Ankh.Commands
 {

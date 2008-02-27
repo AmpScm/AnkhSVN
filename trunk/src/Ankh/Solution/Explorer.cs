@@ -3,8 +3,8 @@ using System;
 using EnvDTE;
 using Utils;
 
-using NSvn.Core;
-using NSvn.Common;
+
+
 using Utils.Win32;
 using System.Collections;
 using System.Drawing;

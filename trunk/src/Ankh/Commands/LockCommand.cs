@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
-using NSvn.Core;
+
 using System.Text;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -33,7 +34,7 @@ namespace Ankh.Commands
             }
 
             this.lockFailedFiles = new ArrayList();
-            context.Client.Notification += new NotificationDelegate( OnClientNotification );
+            context.Client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotification);
             try
             {
                 context.UIShell.RunWithProgressDialog( new SimpleProgressWorker(
@@ -43,7 +44,7 @@ namespace Ankh.Commands
             }
             finally
             {
-                context.Client.Notification -= new NotificationDelegate( OnClientNotification );
+                context.Client.Notify -= new EventHandler<SvnNotifyEventArgs>( OnClientNotification );
             }
 
             if ( this.lockFailedFiles.Count > 0 )
@@ -74,19 +75,21 @@ namespace Ankh.Commands
             context.UIShell.ShowMessageBox( sb.ToString(), "Lock failed", System.Windows.Forms.MessageBoxButtons.OK );
         }
 
-        void OnClientNotification( object sender, NotificationEventArgs args )
+        void OnClientNotification( object sender, SvnNotifyEventArgs args )
         {
-            if ( args.Action == NotifyAction.FailedLock )
+            if ( args.Action == SvnNotifyAction.LockFailedLock )
             {
                 this.lockFailedFiles.Add( args.Path );
             }
         }
 
-        private void ProgressCallback( IContext context )
+        private void ProgressCallback(IContext context)
         {
-            string[] paths = SvnItem.GetPaths( info.CheckedItems );
-            
-            context.Client.Lock( paths, this.info.Message, this.info.StealLocks );
+            string[] paths = SvnItem.GetPaths(info.CheckedItems);
+            SvnLockArgs args = new SvnLockArgs();
+            args.StealLock = info.StealLocks;
+            args.Comment = info.Message;
+            context.Client.Lock(paths, args);
         }
 
         public override EnvDTE.vsCommandStatus QueryStatus(IContext context)

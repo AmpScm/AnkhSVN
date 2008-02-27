@@ -1,8 +1,9 @@
 using System;
 using Ankh.UI;
-using NSvn.Core;
-using System.Windows.Forms;
 
+using System.Windows.Forms;
+using SharpSvn;
+#if Q
 namespace Ankh.Commands
 {
     /// <summary>
@@ -28,7 +29,7 @@ namespace Ankh.Commands
         {
             using( AdminDirDialog dlg = new AdminDirDialog() )
             {
-                dlg.AdminDirName = Client.AdminDirectoryName;
+                dlg.AdminDirName = SvnClient.AdministrativeDirectoryName;
                 if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
                     return;
 
@@ -39,3 +40,4 @@ namespace Ankh.Commands
         #endregion
     }
 }
+#endif

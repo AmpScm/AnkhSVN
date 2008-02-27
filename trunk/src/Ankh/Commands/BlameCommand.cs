@@ -2,23 +2,24 @@ using System;
 using System.Xml;
 using System.Xml.Xsl;
 using System.Xml.XPath;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.IO;
 using System.Collections;
 using System.Diagnostics;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
-	/// <summary>
+    /// <summary>
     /// Command to identify which users to blame for which lines.
-	/// </summary>
+    /// </summary>
     [VSNetCommand("Blame",
         Text = "&Blame...",
         Tooltip = "Identify which users to blame for which lines.",
         Bitmap = ResourceBitmaps.Blame),
     VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 10)]
-	public class BlameCommand : CommandBase
+    public class BlameCommand : CommandBase
     {
         #region Implementation of ICommand
 
@@ -41,8 +42,8 @@ namespace Ankh.Commands
                 return;
             }
 
-            Revision revisionStart = Revision.FromNumber(0);
-            Revision revisionEnd = Revision.Head;
+            SvnRevision revisionStart = SvnRevision.Zero;
+            SvnRevision revisionEnd = SvnRevision.Head;
 
             // is shift depressed?
             if ( !CommandBase.Shift )
@@ -51,7 +52,7 @@ namespace Ankh.Commands
                 info.RevisionStart = revisionStart;
                 info.RevisionEnd = revisionEnd;
                 info.EnableRecursive = false;
-                info.Recurse = Recurse.None;
+                info.Depth = SvnDepth.Empty;
                 info.SingleSelection = true;
 
                 // show the selector dialog
@@ -96,7 +97,7 @@ namespace Ankh.Commands
 
         private class BlameRunner : IProgressWorker
         {
-            public BlameRunner( string path, Revision start, Revision end, 
+            public BlameRunner( string path, SvnRevision start, SvnRevision end, 
                 BlameResult result )
             {
                 this.path = path; 
@@ -107,13 +108,19 @@ namespace Ankh.Commands
 
             public void Work(IContext context)
             {
-                context.Client.Blame( this.path, this.start, this.end,
-                    new BlameReceiver( this.result.Receive ) );
+                SvnBlameArgs args = new SvnBlameArgs();
+                args.Start = start;
+                args.End = end;
+                //args.IgnoreLineEndings
+                //args.IgnoreMimeType
+                //args.IgnoreSpacing
+                //args.IncludeMergedRevisions
+                context.Client.Blame(this.path, args, new EventHandler<SvnBlameEventArgs>(this.result.Receive));
             }
 
             private string path;
-            private Revision start;
-            private Revision end;
+            private SvnRevision start;
+            private SvnRevision end;
             private BlameResult result;
         }
 
@@ -122,5 +129,5 @@ namespace Ankh.Commands
         private const string BlameTransform = "blame.xsl";
 
 
-	}
+    }
 }

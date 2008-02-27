@@ -3,14 +3,15 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using SharpSvn;
 
 namespace Ankh.UI
 {
-	/// <summary>
-	/// A dialog for performing SVN updates.
-	/// </summary>
-	public class UpdateDialog : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// A dialog for performing SVN updates.
+    /// </summary>
+    public class UpdateDialog : System.Windows.Forms.Form
+    {
 
         /// <summary>
         /// Used to retrieve information about a path.
@@ -20,26 +21,26 @@ namespace Ankh.UI
             add{ this.pathSelectionTreeView.ResolvingPathInfo += value; }
             remove{ this.pathSelectionTreeView.ResolvingPathInfo -= value; }
         }
-        
 
-		public UpdateDialog()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+
+        public UpdateDialog()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
             this.revisionPicker.WorkingEnabled = false;
 
-            this.revisionPicker.Changed +=new EventHandler(RevisionPickerChanged);
+            this.revisionPicker.Changed += new EventHandler(RevisionPickerChanged);
             this.RevisionPickerChanged(this, EventArgs.Empty);
-		}
+        }
 
         /// <summary>
         /// The chosen revision
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public NSvn.Core.Revision Revision
+        public SvnRevision Revision
         {
             get{ return this.revisionPicker.Revision; }
         }
@@ -84,20 +85,20 @@ namespace Ankh.UI
             }
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
         private void RevisionPickerChanged( object sender, EventArgs e )
         {

@@ -3,7 +3,8 @@ using System;
 using Ankh.UI;
 using System.Windows.Forms;
 using Utils;
-using NSvn.Common;
+
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -35,7 +36,7 @@ namespace Ankh.Commands
                 try
                 {
                     CheckoutRunner runner = new CheckoutRunner(
-                        dlg.LocalPath, dlg.Revision, dlg.Url, dlg.Recursive ? Recurse.Full : Recurse.None );
+                        dlg.LocalPath, dlg.Revision, new Uri(dlg.Url), dlg.Recursive ? SvnDepth.Infinity : SvnDepth.Empty );
                     context.UIShell.RunWithProgressDialog( runner, "Checking out" );
 
                     // make sure it's remembered

@@ -2,12 +2,13 @@
 using System;
 using System.Collections;
 
-using NSvn.Core;
-using NSvn.Common;
+
+
 using EnvDTE;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using SharpSvn;
 
 namespace Ankh.Solution
 {
@@ -186,7 +187,7 @@ namespace Ankh.Solution
             {
                 foreach( ProjectItem subItem in Enumerators.EnumerateProjectItems(item.ProjectItems))
                 {
-                    if ( subItem.Name != Client.AdminDirectoryName )
+                    if ( subItem.Name != SvnClient.AdministrativeDirectoryName )
                     {
                         this.AddResourcesFromProjectItem( subItem, del, childrenChangedHandler );
                         this.AddSubItems( subItem, del, childrenChangedHandler );
@@ -211,7 +212,7 @@ namespace Ankh.Solution
 
             foreach( ParsedSolutionItem subItem in item.Children )
             {
-                if ( subItem.Name != Client.AdminDirectoryName )
+                if ( subItem.Name != SvnClient.AdministrativeDirectoryName )
                 {
                     this.AddResourcesFromProjectItem( subItem, modifiedHandler, childrenChangedHandler );
                     this.AddSubItems( subItem, modifiedHandler, childrenChangedHandler );
@@ -290,21 +291,21 @@ namespace Ankh.Solution
             }  
         }
 
-		/// <summary>
-		/// The item for an unmodeled project
-		/// </summary>
+        /// <summary>
+        /// The item for an unmodeled project
+        /// </summary>
         public ParsedSolutionItem ParsedItem
         {
             get{ return this.parsedProjectItem; }
         }
 
-		/// <summary>
-		/// The modeled Project Item
-		/// </summary>
-		public ProjectItem ProjectItem
-		{
-			get{ return projectItem as ProjectItem; }
-		}
+        /// <summary>
+        /// The modeled Project Item
+        /// </summary>
+        public ProjectItem ProjectItem
+        {
+            get { return projectItem as ProjectItem; }
+        }
 
         private ParsedSolutionItem parsedProjectItem;
         private object projectItem;

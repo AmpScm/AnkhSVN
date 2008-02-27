@@ -3,12 +3,13 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Diagnostics;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using EnvDTE;
 using Ankh.UI;
 using System.Windows.Forms;
 using Utils;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -66,16 +67,16 @@ namespace Ankh.Commands
             // are we shifted?
             PathSelectorInfo info = new PathSelectorInfo( "Select items for diffing", 
                 resources, checkedResources );
-            info.RevisionStart = Revision.Base;
-            info.RevisionEnd = Revision.Working;
+            info.RevisionStart = SvnRevision.Base;
+            info.RevisionEnd = SvnRevision.Working;
 
             // "Recursive" doesn't make much sense if using an external diff
             info.EnableRecursive = !useExternalDiff;
-            info.Recurse = useExternalDiff ? Recurse.None : Recurse.Full;
+            info.Depth = useExternalDiff ? SvnDepth.Empty : SvnDepth.Infinity;
 
             // default to textbase vs wc diff                
-            Revision revisionStart = Revision.Base;
-            Revision revisionEnd = Revision.Working;
+            SvnRevision revisionStart = SvnRevision.Base;
+            SvnRevision revisionEnd = SvnRevision.Working;
 
             // should we show the path selector?
             if ( !CommandBase.Shift && resources.Count != 1 )
@@ -132,9 +133,11 @@ namespace Ankh.Commands
                         path = item.Path;
                     }
 
-                    context.Client.Diff( new string[]{}, path, info.RevisionStart, 
-                        path, info.RevisionEnd, info.Recurse, true, false, 
-                        stream, Stream.Null );
+                    SvnDiffArgs args = new SvnDiffArgs();
+                    args.IgnoreAncestry = true;
+                    args.NoDeleted = false;
+                    args.Depth = info.Depth;
+                    context.Client.Diff(path, new SvnRevisionRange(info.RevisionStart, info.RevisionEnd), args, stream);
                 }
 
                 return System.Text.Encoding.Default.GetString( stream.ToArray() );
@@ -151,8 +154,8 @@ namespace Ankh.Commands
             foreach ( SvnItem item in info.CheckedItems )
             {
                 // skip unmodified for a diff against the textbase
-                if ( info.RevisionStart == Revision.Base && 
-                    info.RevisionEnd == Revision.Working && !item.IsModified )
+                if ( info.RevisionStart == SvnRevision.Base && 
+                    info.RevisionEnd == SvnRevision.Working && !item.IsModified )
                     continue;
 
                 string quotedLeftPath = GetPath( info.RevisionStart, item, context );
@@ -170,27 +173,31 @@ namespace Ankh.Commands
             return null;
         }
 
-        private string GetPath( Revision revision, SvnItem item, IContext context )
+        private string GetPath( SvnRevision revision, SvnItem item, IContext context )
         {
             // is it local?
-            if ( revision == Revision.Base )
+            if (revision == SvnRevision.Base)
             {
-                if ( item.Status.TextStatus == StatusKind.Added )
+                if (item.Status.LocalContentStatus == SvnStatus.Added)
                 {
                     string empty = Path.GetTempFileName();
                     File.Create(empty).Close();
                     return empty;
                 }
                 else
-                    return context.Client.GetPristinePath( item.Path );
+                {
+                    SvnWorkingCopyState result;
+                    context.Client.GetWorkingCopyState(item.Path, out result);
+                    return result.WorkingCopyBasePath;
+                }
             }
-            else if ( revision == Revision.Working )
+            else if (revision == SvnRevision.Working)
             {
                 return item.Path;
             }
 
             // we need to get it from the repos
-            CatRunner runner = new CatRunner( revision, item.Status.Entry.Url );
+            CatRunner runner = new CatRunner( revision, item.Status.Uri );
             context.UIShell.RunWithProgressDialog( runner, "Retrieving file for diffing" );
             //			runner.Work( context );
             return runner.Path;

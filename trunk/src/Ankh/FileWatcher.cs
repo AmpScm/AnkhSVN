@@ -2,12 +2,13 @@
 using System;
 using System.Collections;
 using System.IO;
-using NSvn.Core;
+
 using Utils;
 using EnvDTE;
 using System.Threading;
 
 using Timer = System.Threading.Timer;
+using SharpSvn;
 
 namespace Ankh
 {
@@ -41,14 +42,14 @@ namespace Ankh
         /// </summary>
         public event FileModifiedDelegate FileModified;
 
-        public FileWatcher( Client client )
+        public FileWatcher(SvnClient client)
         {
-            client.Notification += new NotificationDelegate(this.OnNotification);
+            client.Notify += new EventHandler<SvnNotifyEventArgs>(OnNotification);
             this.projectWatchers = new ArrayList();
 
             // set up the polling
-            this.timer = new Timer( new TimerCallback( this.DoPoll ), null, 
-                0, PollingInterval );
+            this.timer = new Timer(new TimerCallback(this.DoPoll), null,
+                0, PollingInterval);
         }
 
         public void StartWatchingForChanges()
@@ -111,9 +112,9 @@ namespace Ankh
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void OnNotification( object sender, NotificationEventArgs args )
+        private void OnNotification( object sender, SvnNotifyEventArgs args )
         {
-            if ( IsChanged( args.ContentState ) || args.Action == NotifyAction.Revert )
+            if ( IsChanged( args.ContentState ) || args.Action == SvnNotifyAction.Revert )
             {
                 if ( this.IsWatchee( args.Path ) )
                     this.dirty = true;
@@ -125,11 +126,11 @@ namespace Ankh
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        private static bool IsChanged( NotifyState state )
+        private static bool IsChanged(SvnNotifyState state)
         {
-            return  state == NotifyState.Changed || 
-                state == NotifyState.Conflicted ||
-                state == NotifyState.Merged;
+            return state == SvnNotifyState.Changed ||
+                state == SvnNotifyState.Conflicted ||
+                state == SvnNotifyState.Merged;
         }
 
         /// <summary>

@@ -2,8 +2,8 @@
 using System;
 using EnvDTE;
 
-using NSvn.Common;
-using NSvn.Core;
+
+
 using Ankh.UI;
 using Utils;
 using System.Windows.Forms;
@@ -15,6 +15,8 @@ using System.Diagnostics;
 using System.ComponentModel;
 
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using SharpSvn;
+using Utils.Services;
 
 namespace Ankh
 {
@@ -78,6 +80,8 @@ namespace Ankh
             this.workingCopyExplorer =
                 new Ankh.WorkingCopyExplorer.WorkingCopyExplorer( this );
 
+            AnkhServices.AddService(typeof(IWorkingCopyOperations), new WorkingCopyOperations(client));
+            NotificationHandler.GetHandler(this);
         }
 
         
@@ -544,24 +548,16 @@ namespace Ankh
 
         private void SetupFromConfig()
         {
-            // should we use a custom configuration directory?
-            if ( this.config.Subversion.ConfigDir != null )
-                this.client = new SvnClient( this,
-                    Environment.ExpandEnvironmentVariables( this.config.Subversion.ConfigDir ) );
+            this.client = new SvnClient();
+            //// should we use a custom configuration directory?
+            if (this.config.Subversion.ConfigDir != null)
+                this.client.LoadConfiguration(
+                    Environment.ExpandEnvironmentVariables(this.config.Subversion.ConfigDir));
             else
-                this.client = new SvnClient( this );
+                this.client.LoadConfigurationDefault();
 
-
-            // should we use a custom admin directory for our working copies?
-            if ( this.config.Subversion.AdminDirectoryName != null )
-            {
-                NSvn.Core.Client.AdminDirectoryName =
-                    this.config.Subversion.AdminDirectoryName;
-            }
-            else if ( Environment.GetEnvironmentVariable( "SVN_ASP_DOT_NET_HACK" ) != null )
-            {
-                NSvn.Core.Client.AdminDirectoryName = "_svn";
-            }
+            // Let SharpSvnUI handle login and SSL dialogs
+            SharpSvn.UI.SharpSvnUI.Bind(client, this.HostWindow);
         }
         
         private bool CheckWhetherAnkhShouldLoad()
@@ -590,7 +586,7 @@ namespace Ankh
 
                 // is this a wc?
                 // the user must manually enable Ankh if soln dir is not vc
-                if ( SvnUtils.IsWorkingCopyPath( solutionDir ) )
+                if ( AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath( solutionDir ) )
                     return this.QueryWhetherAnkhShouldLoad( solutionDir );
                 else 
                     return false;

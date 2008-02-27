@@ -3,6 +3,7 @@ using System;
 using Ankh.UI;
 using System.Windows.Forms;
 using Utils;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -34,7 +35,7 @@ namespace Ankh.Commands
                 try
                 {
                     ExportRunner runner = new ExportRunner( 
-                        dlg.LocalPath, dlg.Revision, dlg.Source, !dlg.NonRecursive );
+                        dlg.LocalPath, dlg.Revision, dlg.Source, dlg.NonRecursive ? SvnDepth.Infinity:SvnDepth.Empty );
                     context.UIShell.RunWithProgressDialog( runner, "Exporting" );
 
                     // make sure it's remembered

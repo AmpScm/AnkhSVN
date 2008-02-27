@@ -1,8 +1,9 @@
+#if Q
 // $Id$
 using System;
 
-using NSvn.Common;
-using NSvn.Core;
+
+
 using Ankh.UI;
 using System.Windows.Forms;
 using System.Collections;
@@ -239,3 +240,4 @@ namespace Ankh
         private static IDictionary map = new Hashtable();
     }
 }
+#endif

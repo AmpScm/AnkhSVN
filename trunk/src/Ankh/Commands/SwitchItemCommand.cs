@@ -3,8 +3,9 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Ankh.UI;
-using NSvn.Core;
-using NSvn.Common;
+
+
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -52,8 +53,8 @@ namespace Ankh.Commands
             context.ProjectFileWatcher.StartWatchingForChanges();
             try
             {
-                SwitchRunner runner = new SwitchRunner(info.Path, info.SwitchToUrl, 
-                    info.RevisionStart, info.Recurse );
+                SwitchRunner runner = new SwitchRunner(info.Path, new Uri(info.SwitchToUrl), 
+                    info.RevisionStart, info.Depth );
                 context.UIShell.RunWithProgressDialog( runner, "Switching" );
                 if ( !context.ReloadSolutionIfNecessary() )
                 {
@@ -73,25 +74,27 @@ namespace Ankh.Commands
         /// </summary>
         private class SwitchRunner : IProgressWorker
         {
-            public SwitchRunner( string path, string url, Revision revision,
-                Recurse recurse )                 
+            public SwitchRunner(string path, Uri url, SvnRevision revision,
+                SvnDepth depth)
             {
                 this.path = path;
                 this.url = url;
                 this.revision = revision;
-                this.recurse = recurse;
+                this.depth = depth;
             }
 
-            public void Work( IContext context )
+            public void Work(IContext context)
             {
-                context.Client.Switch( this.path, this.url, 
-                    this.revision, this.recurse );
+                SvnSwitchArgs args = new SvnSwitchArgs();
+                args.Revision = revision;
+                args.Depth = depth;
+                context.Client.Switch(this.path, this.url, args);
             }
 
             private string path;
-            private string url;
-            private Revision revision;
-            private Recurse recurse;
+            private Uri url;
+            private SvnRevision revision;
+            private SvnDepth depth;
         }
     }
 }

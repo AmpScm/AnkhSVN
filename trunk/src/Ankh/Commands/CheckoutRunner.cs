@@ -3,9 +3,11 @@ using EnvDTE;
 
 using System.IO;
 using System.Collections;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using Ankh.RepositoryExplorer;
+using SharpSvn;
+using System;
 
 namespace Ankh.Commands
 {
@@ -14,30 +16,34 @@ namespace Ankh.Commands
     /// </summary>
     public class CheckoutRunner : IProgressWorker
     {
-        public CheckoutRunner( string path, Revision revision, 
-            string url, Recurse recurse ) 
-        { 
+        public CheckoutRunner(string path, SvnRevision revision,
+            Uri url, SvnDepth depth)
+        {
             this.path = path;
             this.url = url;
             this.revision = revision;
-            this.recurse = recurse;
+            this.depth = depth;
         }
 
-        public CheckoutRunner( string path, Revision revision, 
-            string url ) : this( path, revision, url, Recurse.Full )
+        public CheckoutRunner( string path, SvnRevision revision, 
+            Uri url ) : this( path, revision, url, SvnDepth.Infinity )
         {
             // empty
         }
 
-        public void Work( IContext context )
+        public void Work(IContext context)
         {
-            context.Client.Checkout( this.url, this.path, this.revision, this.recurse );
+            SvnUpdateResult result;
+            SvnCheckOutArgs args = new SvnCheckOutArgs();
+            args.Revision = revision;
+            args.Depth = depth;
+            context.Client.CheckOut(this.url, this.path, args, out result);
         }
 
-        private Revision revision;
-        private string url;
+        private SvnRevision revision;
+        private Uri url;
         private string path;
-        private Recurse recurse;
+        private SvnDepth depth;
 
     }
 }

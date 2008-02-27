@@ -15,7 +15,7 @@ namespace Ankh.Commands
          Tooltip = "Checkout this folder.", 
          Bitmap = ResourceBitmaps.CheckoutDirectory ),
          VSNetControl( "ReposExplorer", Position = 1 )]
-	public class CheckoutFolderCommand : CommandBase
+    public class CheckoutFolderCommand : CommandBase
     {
         #region Implementation of ICommand
 
@@ -46,7 +46,7 @@ namespace Ankh.Commands
                 INode node = context.RepositoryExplorer.SelectedNode;
 
                 CheckoutRunner runner = new CheckoutRunner( 
-                    browser.DirectoryPath, node.Revision, node.Url);
+                    browser.DirectoryPath, node.Revision, new Uri(node.Url));
                 context.UIShell.RunWithProgressDialog( runner, "Checking out folder" );
 
             }

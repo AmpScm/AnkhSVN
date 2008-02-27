@@ -1,12 +1,13 @@
 // $Id$
 using System;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using EnvDTE;
 using Ankh.UI;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -41,7 +42,7 @@ namespace Ankh.Commands
             IList resources = context.Selection.GetSelectionResources( true,
                 new ResourceFilterCallback( SvnItem.ModifiedFilter ) );
 
-            Recurse recurse = Recurse.None;
+            SvnDepth depth = SvnDepth.Empty;
             bool confirmed = false;
             // is Shift down?
             if ( !CommandBase.Shift )
@@ -52,7 +53,7 @@ namespace Ankh.Commands
                 if ( info == null )
                     return;
                 confirmed = true;
-                recurse = info.Recurse;
+                depth = info.Depth;
                 resources = info.CheckedItems;                
             }
 
@@ -74,12 +75,14 @@ namespace Ankh.Commands
                
             // perform the actual revert 
             context.OutputPane.StartActionText("Reverting");  
-            context.ProjectFileWatcher.StartWatchingForChanges(); 
+            context.ProjectFileWatcher.StartWatchingForChanges();
             try
             {
-                context.Client.Revert( paths, recurse );
+                SvnRevertArgs args = new SvnRevertArgs();
+                args.Depth = depth;
+                context.Client.Revert(paths, args);
             }
-            catch( NotVersionControlledException )
+            catch //( NotVersionControlledException )
             {
                 // empty
             }

@@ -1,8 +1,9 @@
 // $Id$
 using System;
 using System.Collections;
-using NSvn.Core;
-using NSvn.Common;
+
+
+using SharpSvn;
 
 namespace Ankh
 {
@@ -36,19 +37,19 @@ namespace Ankh
             set{ this.enableRecursive = value; }
         }
 
-        public Recurse Recurse
+        public SvnDepth Depth
         {
-            get { return this.recurse; }
-            set { this.recurse = value; }
+            get { return this.depth; }
+            set { this.depth = value; }
         }
 
-        public Revision RevisionStart
+        public SvnRevision RevisionStart
         {
             get{ return this.revisionStart; }
             set{ this.revisionStart = value; }
         }
 
-        public Revision RevisionEnd
+        public SvnRevision RevisionEnd
         {
             get{ return this.revisionEnd; }
             set{ this.revisionEnd = value; }
@@ -69,9 +70,9 @@ namespace Ankh
         private string caption = "Someone obviously forgot to put a caption here.";
         private bool singleSelection = false;
         private bool enableRecursive = false;
-        private Recurse recurse = Recurse.None;
+        private SvnDepth depth = SvnDepth.Empty;
         private IList items = new object[]{};
         private IList checkedItems = new object[]{};
-        private Revision revisionStart, revisionEnd;
+        private SvnRevision revisionStart, revisionEnd;
     }
 }

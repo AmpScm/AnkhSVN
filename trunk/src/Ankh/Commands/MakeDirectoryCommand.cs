@@ -70,7 +70,7 @@ namespace Ankh.Commands
         private void DoCreateDir( IContext context )
         {
             // create the dir.
-            context.Client.MakeDir( new string[]{this.url} );
+            context.Client.CreateDirectory( this.url );
         }
 
         private string url;        

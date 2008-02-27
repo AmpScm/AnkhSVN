@@ -3,7 +3,10 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using NSvn.Core;
+
+using SharpSvn;
+
+
 
 namespace Ankh.UI
 {
@@ -94,7 +97,7 @@ namespace Ankh.UI
             bool hasUrl = this.currentUrl != null;
             bool userEnteredUrl = (this.currentUrl != this.urlTextBox.Text &&
                         this.urlTextBox.Text != String.Empty);
-            bool hasNewRevision = this.RevisionPickerStart.Revision != Revision.Head; 
+            bool hasNewRevision = this.RevisionPickerStart.Revision != SvnRevision.Head; 
             if ( hasUrl && (userEnteredUrl || hasNewRevision) )
             {
                 this.OkButton.Enabled = true;

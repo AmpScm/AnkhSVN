@@ -4,9 +4,9 @@ using Ankh.RepositoryExplorer;
 
 namespace Ankh.Commands
 {
-	/// <summary>
-	/// A command that opens a file from the server in VS.NET
-	/// </summary>
+    /// <summary>
+    /// A command that opens a file from the server in VS.NET
+    /// </summary>
     [VSNetCommand("ViewInVsNet",
          Text = "In &Visual Studio",
          Tooltip = "View this file in Visual Studio.", 
@@ -24,7 +24,7 @@ namespace Ankh.Commands
 
                 INode node = context.RepositoryExplorer.SelectedNode;
 
-                CatRunner runner = new CatRunner(node.Name, node.Revision, node.Url);
+                CatRunner runner = new CatRunner(node.Name, node.Revision, new Uri(node.Url));
                 context.UIShell.RunWithProgressDialog( runner, "Retrieving file" );
 
                 context.DTE.ItemOperations.OpenFile( runner.Path, 

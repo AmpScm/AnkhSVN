@@ -6,8 +6,9 @@ using Ankh.UI;
 using System.Collections;
 using System.Diagnostics;
 using Ankh.Solution;
-using NSvn.Common;
-using NSvn.Core;
+
+
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -89,8 +90,8 @@ namespace Ankh.Commands
             /// <returns></returns>
             public bool MaybeShowUpdateDialog()
             {
-                this.recurse = Recurse.None;
-                this.revision = Revision.Head;
+                this.depth = SvnDepth.Empty;
+                this.revision = SvnRevision.Head;
 
                 // We're using the update dialog no matter what to
                 // take advantage of it's path processing capabilities.
@@ -109,7 +110,7 @@ namespace Ankh.Commands
                             return false;
                     }
 
-                    recurse = d.Recursive ? Recurse.Full : Recurse.None;
+                    depth = d.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
                     this.resources = d.CheckedItems;
                     this.revision = d.Revision;
                 }
@@ -121,23 +122,18 @@ namespace Ankh.Commands
             /// <summary>
             /// The actual updating happens here.
             /// </summary>
-            public void Work( IContext context )
-            {   
-                context.Client.Notification +=new NotificationDelegate(this.OnNotificationEventHandler );
+            public void Work(IContext context)
+            {
+                string[] paths = SvnItem.GetPaths(this.resources);
+                SvnUpdateArgs args = new SvnUpdateArgs();
+                args.Notify += new EventHandler<SvnNotifyEventArgs>(OnNotificationEventHandler);
+                args.Revision = revision;
+                args.Depth = depth;
+                args.IgnoreExternals = false;
+                context.Client.Update(paths, args);
 
-                try
-                {
-                    string[] paths = SvnItem.GetPaths( this.resources );
-                    context.Client.Update( paths, revision, recurse, false );
-                }
-                finally
-                {       
-                    context.Client.Notification  -= new NotificationDelegate(this.OnNotificationEventHandler );
-                }
-              
-                if (this.conflictsOccurred) 
+                if (this.conflictsOccurred)
                     context.ConflictManager.NavigateTaskList();
-
             }
             
             /// <summary>
@@ -145,9 +141,9 @@ namespace Ankh.Commands
             /// </summary>
             /// <param name="taskItem"></param>
             /// <param name="navigateHandled"></param>
-            private void  OnNotificationEventHandler(Object sender, NotificationEventArgs args)
+            private void  OnNotificationEventHandler(Object sender, SvnNotifyEventArgs args)
             {
-                if ( args.ContentState == NSvn.Core.NotifyState.Conflicted)
+                if ( args.ContentState == SvnNotifyState.Conflicted)
                 {
                     this.Context.ConflictManager.AddTask(args.Path);
                     this.conflictsOccurred = true;
@@ -155,8 +151,8 @@ namespace Ankh.Commands
             }
 
             private IList resources = new ArrayList();
-            private Revision revision;
-            private Recurse recurse;
+            private SvnRevision revision;
+            private SvnDepth depth;
             private bool conflictsOccurred = false; 
             private IContext context;
         }            

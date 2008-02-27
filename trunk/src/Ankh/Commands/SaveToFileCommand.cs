@@ -35,7 +35,7 @@ namespace Ankh.Commands
                 }
 
                 
-                CatRunner runner = new CatRunner( node.Revision, node.Url, 
+                CatRunner runner = new CatRunner( node.Revision, new Uri(node.Url), 
                     filename );
                 context.UIShell.RunWithProgressDialog( runner, "Retrieving file" );
             }

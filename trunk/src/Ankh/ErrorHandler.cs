@@ -1,5 +1,5 @@
 using System;
-using NSvn.Core;
+
 using System.Windows.Forms;
 using Utils;
 using System.Reflection;
@@ -9,7 +9,7 @@ using System.IO;
 using System.Collections;
 using Ankh.Config;
 using System.Xml.Serialization;
-
+using SharpSvn;
 
 
 namespace Ankh
@@ -52,8 +52,8 @@ namespace Ankh
             System.Collections.Specialized.StringDictionary dict = new
                 System.Collections.Specialized.StringDictionary();
 
-            Utils.ErrorMessage.SendByMail( ErrorReportMailAddress, ErrrorReportSubject, null, 
-				typeof(Connect).Assembly, dict );
+            Utils.ErrorMessage.SendByMail(ErrorReportMailAddress, ErrrorReportSubject, null,
+                typeof(Connect).Assembly, dict);
         }
 
         public void Write( string message, Exception ex, TextWriter writer )
@@ -70,7 +70,7 @@ namespace Ankh
             Handle( ex.InnerException );
         }
 
-        private void DoHandle(RepositoryHookFailedException e)
+        private void DoHandle(SvnRepositoryHookException e)
         {
             string message;
             if (e.InnerException != null)
@@ -83,7 +83,7 @@ namespace Ankh
         }
 
 
-        private void DoHandle( WorkingCopyLockedException ex )
+        private void DoHandle( SvnWorkingCopyLockException ex )
         {
             MessageBox.Show( "Your working copy appear to be locked. " + NL + 
                 "Run Cleanup to amend the situation.", 
@@ -91,37 +91,45 @@ namespace Ankh
                 MessageBoxIcon.Warning );
         }
 
-        private void DoHandle( AuthorizationFailedException ex )
+        private void DoHandle( SvnAuthorizationException ex )
         {
             MessageBox.Show( 
                 "You failed to authorize against the remote repository. ",
                 "Authorization failed", MessageBoxButtons.OK,
                 MessageBoxIcon.Warning );
         }
-        
-        private void DoHandle( ResourceOutOfDateException ex )
+
+        private void DoHandle(SvnAuthenticationException ex)
         {
             MessageBox.Show(
-                "One or more of your local resources are out of date. " + 
-                "You need to run Update before you can proceed with the operation",
-                "Resource(s) out of date", MessageBoxButtons.OK,
-                MessageBoxIcon.Warning );
+                "You failed to authenticate against the remote repository. ",
+                "Authorization failed", MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
         }
 
-        private void DoHandle( IllegalTargetException ex )
+        private void DoHandle(SvnFileSystemOutOfDateException ex)
         {
-            MessageBox.Show(  
-                "One or more of the resources selected are not valid targets for this operation" + 
-                Environment.NewLine + 
+            MessageBox.Show(
+                "One or more of your local resources are out of date. " +
+                "You need to run Update before you can proceed with the operation",
+                "Resource(s) out of date", MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+        }
+
+        private void DoHandle(SvnInvalidNodeKindException ex)
+        {
+            MessageBox.Show(
+                "One or more of the resources selected are not valid targets for this operation" +
+                Environment.NewLine +
                 "(Are you trying to commit a child of a newly added, but not committed resource?)",
                 "Illegal target for this operation",
                 MessageBoxButtons.OK,
-                MessageBoxIcon.Warning );
+                MessageBoxIcon.Warning);
         }
 
-        private void DoHandle( SvnClientException ex )
+        private void DoHandle( SvnException ex )
         {
-            if ( ex.ErrorCode == LockedFileErrorCode )
+            if ( ex.SubversionErrorCode == LockedFileErrorCode )
             {
                 MessageBox.Show(
                     ex.Message + NL + NL +
@@ -220,10 +228,10 @@ namespace Ankh
                 dlg.ShowStackTrace = showStackTrace;
                 dlg.StackTrace = stackTrace;
                 dlg.InternalError = internalError;
-                if ( dlg.ShowDialog() == DialogResult.Retry )
+                if (dlg.ShowDialog() == DialogResult.Retry)
                 {
-                    Utils.ErrorMessage.SendByMail( ErrorReportMailAddress, 
-						ErrrorReportSubject, ex, typeof(Connect).Assembly, additionalInfo ); 
+                    Utils.ErrorMessage.SendByMail(ErrorReportMailAddress,
+                        ErrrorReportSubject, ex, typeof(Connect).Assembly, additionalInfo);
                 }
             }
         }
@@ -322,8 +330,8 @@ namespace Ankh
         private static readonly string NL = Environment.NewLine;
         private const int LockedFileErrorCode = 720032;
         private const string ErrorReportUrl = "http://ankhsvn.com/error/report.aspx";
-		private const string ErrorReportMailAddress = "error@ankhsvn.tigris.org";
-		private const string ErrrorReportSubject = "Exception";
+        private const string ErrorReportMailAddress = "error@ankhsvn.tigris.org";
+        private const string ErrrorReportSubject = "Exception";
         private const string ErrorLogFile = "errors.xml";
         private IContext context;
     }

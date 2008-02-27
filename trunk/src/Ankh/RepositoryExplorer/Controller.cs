@@ -2,14 +2,18 @@ using System;
 using Ankh.UI;
 using System.Collections;
 using System.Threading;
-using NSvn.Core;
-using NSvn.Common;
+
+
 using System.Diagnostics;
 using EnvDTE;
 using Utils;
 using System.Windows.Forms;
 
 using Thread = System.Threading.Thread;
+using SharpSvn;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace Ankh.RepositoryExplorer
 {
@@ -159,10 +163,10 @@ namespace Ankh.RepositoryExplorer
                         "Retrieving directory info." );
                     if ( completed )
                     {
-                        DirectoryEntry[] entries = runner.Entries;
-                        children = new INode[entries.Length];
+                        ICollection<SvnListEventArgs> entries = runner.Entries;
+                        children = new INode[entries.Count];
                         int i = 0;
-                        foreach( DirectoryEntry entry in entries )
+                        foreach (SvnListEventArgs entry in entries)
                             children[i++] = new Node( parent, entry );
                     }
 
@@ -220,15 +224,42 @@ namespace Ankh.RepositoryExplorer
                 // silently ignore invalid entries
                 INode node;
                 if ( components.Length == 2 )
-                    node = new RootNode( components[0], Revision.Parse(components[1]) );
+                    node = new RootNode( components[0], Parse(components[1]) );
                 else if ( components.Length == 1 )
-                    node = new RootNode( components[0], Revision.Head );
+                    node = new RootNode(components[0], SvnRevision.Head);
                 else
                     continue;
 
                 string label = String.Format( "{0} [{1}]", node.Url, node.Revision );
                 this.repositoryExplorer.AddRoot( label, node );
             }
+        }
+
+        static SvnRevision Parse(string s)
+        {
+            if (s.Equals("head", StringComparison.OrdinalIgnoreCase))
+                return SvnRevision.Head;
+            if (s.Equals("base", StringComparison.OrdinalIgnoreCase))
+                return SvnRevision.Base;
+            if (s.Equals("committed", StringComparison.OrdinalIgnoreCase))
+                return SvnRevision.Committed;
+            if (s.Equals("working", StringComparison.OrdinalIgnoreCase))
+                return SvnRevision.Working;
+            if (s.Equals("none", StringComparison.OrdinalIgnoreCase) ||
+                s.Equals("unspecified", StringComparison.OrdinalIgnoreCase))
+                return SvnRevision.None;
+            if (s.Equals("previous", StringComparison.OrdinalIgnoreCase))
+                return SvnRevision.Previous;
+
+            long revision;
+            if (long.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out revision))
+                return new SvnRevision(revision);
+
+            DateTime dt;
+            if (DateTime.TryParse(s, out dt))
+                return new SvnRevision(dt);
+
+            throw new FormatException("Cannot parse string to valid revision object");
         }
 
         /// <summary>
@@ -284,25 +315,40 @@ namespace Ankh.RepositoryExplorer
             public ListRunner( INode node ) 
             {
                 this.node = node;
-                this.entries = new DirectoryEntry[] { };
             }
 
             /// <summary>
             /// The entries returned.
             /// </summary>
-            public DirectoryEntry[] Entries
+            public ICollection<SvnListEventArgs> Entries
             {
                 get{ return this.entries; }
             }
 
-            public void Work( IContext context )
+            public void Work(IContext context)
             {
-                this.entries = context.Client.List( this.node.Url, 
-                    this.node.Revision, Recurse.None );
+                ReposListArgs args = new ReposListArgs();
+                args.Depth = SvnDepth.Children;
+                args.Revision = this.node.Revision;
+                args.EntryItems = SvnDirEntryItems.AllFieldsV15;
+                context.Client.GetList(this.node.Url, args, out entries);
+                
+            }
+
+            class ReposListArgs : SvnListArgs
+            {
+                protected override void OnList(SvnListEventArgs e)
+                {
+                    if (e.Entry != null && e.Entry.NodeKind == SvnNodeKind.Directory && string.IsNullOrEmpty(e.Path))
+                        return;
+
+                    e.Detach();
+                    base.OnList(e);
+                }
             }
 
             private INode node;
-            private DirectoryEntry[] entries;
+			private Collection<SvnListEventArgs> entries;
         }
         #endregion
 
@@ -367,30 +413,37 @@ namespace Ankh.RepositoryExplorer
                     INode node = (INode)queue.Dequeue();
                     Debug.WriteLine( Thread.CurrentThread.Name + " listing " + node.Url, 
                         "Ankh" );
-                    DirectoryEntry[] entries = 
-                        this.parent.context.Client.List( 
-                        node.Url, node.Revision, Recurse.None );
-                    INode[] children = new INode[entries.Length];
-                    for( int i=0; i < entries.Length; i++ )
-                    {
-                        children[i] = new Node( node, entries[i] );
 
-                        // we put the directories on the queue
-                        lock( this.parent.directories )
-                        {
-                            if ( children[i].IsDirectory &&
-                                !this.parent.directories.Contains(
-                                children[i].Url )                                 
-                                )
-                            {
-                                this.queue.Enqueue( children[i] );
-                            }
-                        }
-                    }
+					SvnListArgs args = new SvnListArgs();
+					args.Revision = node.Revision;
+					args.Depth = SvnDepth.Empty;
+					Collection<SvnListEventArgs> list;
+					if (this.parent.context.Client.GetList(node.Url, args, out list))
+					{
+						int i = 0;
+						INode[] children = new INode[list.Count];
+						foreach (SvnListEventArgs e in list)
+						{
+							children[i] = new Node(node, e);
 
-                    // store the list in the hashtable
-                    lock( this.parent.directories )
-                        this.parent.directories[ node.Url ] = children;
+							// we put the directories on the queue
+							lock (this.parent.directories)
+							{
+								if (children[i].IsDirectory &&
+									!this.parent.directories.Contains(
+									children[i].Url)
+									)
+								{
+									this.queue.Enqueue(children[i]);
+								}
+							}
+						}
+
+
+						// store the list in the hashtable
+						lock (this.parent.directories)
+							this.parent.directories[node.Url] = children;
+					}
                 }
             }
 

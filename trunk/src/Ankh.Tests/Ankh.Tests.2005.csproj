@@ -130,6 +130,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\envdte.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\tools\turtletasks\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
@@ -141,6 +145,10 @@
     <Reference Include="nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn, Version=1.4999.370.29608, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -167,20 +175,6 @@
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\NSvn.Common\NSvn.Common.2005.csproj">
-      <Name>NSvn.Common.2003</Name>
-      <Project>{3A8DF134-05F1-4357-9682-AB14CDDA48A9}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\NSvn.Core.Tests\NSvn.Core.Tests.2005.csproj">
-      <Name>NSvn.Core.Tests.2003</Name>
-      <Project>{1882FE23-6EE3-46AF-82B2-929E371E6218}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\NSvn.Core\NSvn.Core.2008.vcproj">
-      <Project>{E31A3F36-D1C5-4FC2-8530-D24B9E01B09E}</Project>
-      <Name>NSvn.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TestUtils\TestUtils.2005.csproj">
       <Project>{874C0358-E7DD-42DA-BF07-58198B41FD25}</Project>
       <Name>TestUtils.2005</Name>
@@ -205,9 +199,9 @@
     <Compile Include="Commands\BlameCommandTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\CommitItemTest.cs">
+    <Content Include="Commands\CommitItemTest.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </Content>
     <Compile Include="Commands\LogCommandTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -220,24 +214,25 @@
     <Compile Include="DteFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LogResultTest.cs">
+    <Content Include="LogResultTest.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </Content>
     <Compile Include="OutputPaneWriterTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ProjectItemsEventSinkTest.cs">
+    <Content Include="ProjectItemsEventSinkTest.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </Content>
     <Compile Include="SolutionExplorerTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StatusCacheTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SvnItemTest.cs">
+    <Content Include="SvnItemTest.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </Content>
+    <Compile Include="TestBase.cs" />
     <Compile Include="TestUtils.cs">
       <SubType>Code</SubType>
     </Compile>

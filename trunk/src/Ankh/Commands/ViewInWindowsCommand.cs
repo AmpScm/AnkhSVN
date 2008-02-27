@@ -6,9 +6,9 @@ using Ankh.RepositoryExplorer;
 
 namespace Ankh.Commands
 {
-	/// <summary>
-	/// Lets the user cat a file from a repos and have Windows open it.
-	/// </summary>
+    /// <summary>
+    /// Lets the user cat a file from a repos and have Windows open it.
+    /// </summary>
     [VSNetCommand("ViewInWindows",
          Text = "In Wi&ndows",
          Tooltip="Have Windows launch the associated application.", 
@@ -25,7 +25,7 @@ namespace Ankh.Commands
                 // make the catrunner get it on a separate thread.
                 INode node = context.RepositoryExplorer.SelectedNode;
                 CatRunner runner = new CatRunner( node.Name, 
-                    node.Revision, node.Url );
+                    node.Revision, new Uri(node.Url) );
 
                 context.UIShell.RunWithProgressDialog( runner, "Retrieving" );
                  

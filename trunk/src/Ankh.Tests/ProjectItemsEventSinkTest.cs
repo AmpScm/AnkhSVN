@@ -4,11 +4,7 @@ using EnvDTE;
 using Ankh.Config;
 using Ankh.EventSinks;
 using System.IO;
-using NSvn.Core;
 using System.Windows.Forms;
-using NSvn.Common;
-
-using Property = NSvn.Common.Property;
 
 namespace Ankh.Tests
 {

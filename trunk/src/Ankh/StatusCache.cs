@@ -1,10 +1,13 @@
 // $Id$
 using System;
-using NSvn.Core;
+
 using System.Collections;
 using System.IO;
 using System.Diagnostics;
 using Utils;
+using SharpSvn;
+using Utils.Services;
+using System.Collections.ObjectModel;
 
 namespace Ankh
 {
@@ -13,7 +16,7 @@ namespace Ankh
     /// </summary>
     public class StatusCache
     {
-        public StatusCache( Client client )
+        public StatusCache( SvnClient client )
         {
             this.client = client;
             this.table = new Hashtable();
@@ -24,9 +27,10 @@ namespace Ankh
         /// Fill the cache by running status recursively on this directory.
         /// </summary>
         /// <param name="dir"></param>
-        public void Status( string dir )
+	    [Obsolete("Assumes SvnDepth.Children")]
+	    public void Status( string dir )
         {
-            this.Status( dir, true );
+            this.Status( dir, SvnDepth.Children );
         }
 
         /// <summary>
@@ -34,22 +38,22 @@ namespace Ankh
         /// </summary>
         /// <param name="dir"></param>
         /// <param name="recurse">Whether to recurse to subdirectories.</param>
-        public void Status( string dir, bool recurse )
+        public void Status( string dir, SvnDepth depth )
         {
             lock(this)
             {
                 Debug.WriteLine( 
                     String.Format("Generating {0} status cache for {1}",
-                    recurse ? "recursive" : "nonrecursive", dir), 
+                    depth, dir), 
                     "Ankh" );
-                if ( !SvnUtils.IsWorkingCopyPath(dir) )
+                if ( !AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath(dir) )
                 {
                     foreach (string file in Directory.GetFiles( dir ) )
                     {
                         string normPath = PathUtils.NormalizePath(file);
                         SvnItem existingItem = (SvnItem)this.table[normPath];
                         if ( existingItem != null )
-                            existingItem.Refresh( SvnItem.Unversionable.Status );
+                            existingItem.Refresh( AnkhStatus.None );
                         else
                             this.table[normPath] = SvnItem.Unversionable;
                     }
@@ -57,9 +61,13 @@ namespace Ankh
                 }
 
                 this.currentPath = dir;
-                int youngest;
-                this.client.Status( out youngest, dir, Revision.Unspecified, 
-                    new StatusCallback( this.Callback ), recurse, true, false, true );
+                SvnStatusArgs args = new SvnStatusArgs();
+                args.Depth = depth;
+                args.Revision = SvnRevision.None;
+                args.GetAll = true;
+                args.ContactRepository = false;
+                args.NoIgnore = true;
+                this.client.Status(dir, args, new EventHandler<SvnStatusEventArgs>(Callback));
             }
         }
 
@@ -82,13 +90,21 @@ namespace Ankh
                         directory = Path.GetDirectoryName( directory );
 
                     if ( Directory.Exists( directory ) )
-                        this.Status( directory, false );
+                        this.Status( directory, SvnDepth.Children );
 
                     item = (SvnItem)this.table[ normPath ];
-                    if ( item == null )
+                    if (item == null)
                     {
-                        Status status = this.client.SingleStatus( normPath );
-                        this.table[ normPath ] = item = new SvnItem( path, status );
+                        Collection<SvnStatusEventArgs> statuses;
+                        SvnStatusArgs args = new SvnStatusArgs();
+                        args.ThrowOnError = false;
+                        args.GetAll = true;
+                        if (this.client.GetStatus(normPath, args, out statuses) && statuses.Count > 0)
+                        {
+                            this.table[normPath] = item = new SvnItem(path, statuses[0]);
+                        }
+                        else
+                            this.table[normPath] = item = new SvnItem(path, AnkhStatus.None);
                     }
                 }
                 else
@@ -148,24 +164,24 @@ namespace Ankh
         /// </summary>
         /// <param name="path"></param>
         /// <param name="status"></param>
-        private void Callback( string path, Status status )
+        private void Callback(object sender, SvnStatusEventArgs e)
         {
-            Debug.WriteLine( "Received status for " + path + ": " + status.TextStatus, 
+            Debug.WriteLine( "Received status for " + e.Path + ": " + e.LocalContentStatus, 
                 "Ankh" );
             // we need all paths to be on ONE form
-            string normPath = PathUtils.NormalizePath( path, this.currentPath );
+            string normPath = PathUtils.NormalizePath( e.Path, this.currentPath );
 
             // is there already an item for this path?
             SvnItem existingItem = (SvnItem)this.table[ normPath ];
             if ( existingItem != null && existingItem != SvnItem.Unversionable )
-                existingItem.Refresh( status );
+                existingItem.Refresh( e );
             else
-                this.table[ normPath ] = new SvnItem( path, status );
+                this.table[ normPath ] = new SvnItem( e.Path, e );
 
-            if ( status.TextStatus == StatusKind.Deleted )
+            if ( e.LocalContentStatus == SvnStatus.Deleted )
             {
                 string containingDir;
-                containingDir = GetNormalizedParentDirectory(path);
+                containingDir = GetNormalizedParentDirectory(e.Path);
 
                 // store the deletions keyed on the parent directory
                 IList list = (IList)this.deletions[ containingDir ];
@@ -235,7 +251,7 @@ namespace Ankh
             foreach (SvnItem item in deletions)
             {
                 item.Refresh(this.client);
-                if (item.Status.TextStatus == StatusKind.Deleted)
+                if (item.Status.LocalContentStatus == SvnStatus.Deleted)
                     newList.Add(item);
             }
 
@@ -248,7 +264,7 @@ namespace Ankh
 
         private Hashtable deletions;
         private Hashtable table;
-        private Client client;
+        private SvnClient client;
         private string currentPath;
 
 

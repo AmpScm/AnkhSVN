@@ -2,9 +2,10 @@ using System;
 using System.Text;
 using Ankh.UI;
 using System.IO;
-using NSvn.Core;
+
 using Utils;
 using System.Collections;
+using SharpSvn;
 
 namespace Ankh.WorkingCopyExplorer
 {
@@ -74,15 +75,15 @@ namespace Ankh.WorkingCopyExplorer
         }
        
         [TextProperty( "TextStatus", Order = 0, TextWidth = 18 )]
-        public StatusKind TextStatus
+        public SvnStatus TextStatus
         {
-            get { return this.svnItem.Status.TextStatus; }
+            get { return this.svnItem.Status.LocalContentStatus; }
         }
 
         [TextProperty( "PropertyStatus", Order = 1, TextWidth = 18 )]
-        public StatusKind PropertyStatus
+        public SvnStatus PropertyStatus
         {
-            get { return this.svnItem.Status.PropertyStatus; }
+            get { return this.svnItem.Status.LocalPropertyStatus; }
         }
 
         [TextProperty("Locked", Order=2, TextWidth=10)]

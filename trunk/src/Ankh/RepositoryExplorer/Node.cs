@@ -1,10 +1,11 @@
 using System;
 using Ankh.UI;
-using NSvn.Core;
+
 using System.IO;
 using System.ComponentModel;
 using Utils;
 using System.Collections;
+using SharpSvn;
 
 namespace Ankh.RepositoryExplorer
 {
@@ -23,7 +24,7 @@ namespace Ankh.RepositoryExplorer
             get;
         }
 
-        Revision Revision
+        SvnRevision Revision
         {
             get;
         }
@@ -33,7 +34,7 @@ namespace Ankh.RepositoryExplorer
     /// </summary>
     public class Node : INode
     {  
-        public Node( INode parent, DirectoryEntry entry )
+        public Node( INode parent, SvnListEventArgs entry )
         {
             this.parent = parent;
             this.entry = entry;
@@ -56,7 +57,7 @@ namespace Ankh.RepositoryExplorer
         [Category("Subversion")]
         public bool IsDirectory
         {
-            get{ return this.entry.NodeKind == NodeKind.Directory; }
+            get{ return this.entry.Entry.NodeKind == SvnNodeKind.Directory; }
         }
 
         [Category("Subversion")]
@@ -75,31 +76,31 @@ namespace Ankh.RepositoryExplorer
         [Category("Subversion")]
         public string LastAuthor
         {
-            get{ return this.entry.LastAuthor;}
+            get{ return this.entry.Entry.Author;}
         }
 
         [Category("Subversion")]
         public bool HasProperties
         {
-            get{ ;return this.entry.HasProperties; }
+            get{ ;return this.entry.Entry.HasProperties; }
         }
 
         [Category("Subversion")]
-        public int CreatedRevision
+        public long CreatedRevision
         {
-            get{ return this.entry.CreatedRevision; }
+            get{ return this.entry.Entry.Revision; }
         }
 
         [Category("Subversion")]
         public long Size
         {
-            get{ return this.entry.Size; }
+            get{ return this.entry.Entry.FileSize; }
         }
 
         [Category("Subversion")]
         public DateTime Time
         {
-            get{ return this.entry.Time; }
+            get{ return this.entry.Entry.Time; }
         }
 
         [Browsable(false)]
@@ -109,7 +110,7 @@ namespace Ankh.RepositoryExplorer
         }
 
         [Category("Subversion")]
-        public Revision Revision
+        public SvnRevision Revision
         {
             get{ return this.Parent.Revision; }
         }
@@ -117,7 +118,7 @@ namespace Ankh.RepositoryExplorer
         
 
         private object tag;
-        private DirectoryEntry entry;
+        private SvnListEventArgs entry;
         private INode parent;
     }
 
@@ -127,7 +128,7 @@ namespace Ankh.RepositoryExplorer
     /// </summary>
     public class RootNode : INode
     {
-        public RootNode( string url, Revision revision )
+        public RootNode( string url, SvnRevision revision )
         {
             this.url = url;
             this.revision = revision;
@@ -169,13 +170,13 @@ namespace Ankh.RepositoryExplorer
         }
 
         [Category("Subversion")]
-        public Revision Revision
+        public SvnRevision Revision
         {
             get{ return this.revision; }
         }
 
         private object tag;
         private string url;
-        private Revision revision;
+        private SvnRevision revision;
     }
 }

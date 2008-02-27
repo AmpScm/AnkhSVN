@@ -1,14 +1,15 @@
 using System;
-using NSvn.Core;
+
+using SharpSvn;
 
 namespace Ankh
 {
-	/// <summary>
-	/// Summary description for RepositoryRootInfo.
-	/// </summary>
+    /// <summary>
+    /// Summary description for RepositoryRootInfo.
+    /// </summary>
     public class RepositoryRootInfo
     {
-        public RepositoryRootInfo( string url, Revision revision )
+        public RepositoryRootInfo( string url, SvnRevision revision )
         {
             this.url = url;
             this.revision = revision;
@@ -19,12 +20,12 @@ namespace Ankh
             get{ return this.url; }
 
         }
-        public Revision Revision
+        public SvnRevision Revision
         {
-            get{ return this.revision; }
+            get { return this.revision; }
         }
 
         private string url;
-        private Revision revision;
+        private SvnRevision revision;
     }
 }

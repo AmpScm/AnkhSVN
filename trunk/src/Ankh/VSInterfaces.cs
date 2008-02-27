@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.IO;
-using NSvn.Core;
+
 using System.Windows.Forms;
 using System.Collections;
 using System.Reflection;

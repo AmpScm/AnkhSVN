@@ -5,7 +5,8 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using NSvn.Core;
+
+using SharpSvn;
 
 namespace Ankh.UI
 {
@@ -314,7 +315,7 @@ namespace Ankh.UI
 
         private void fromRevision_Changed(object sender, System.EventArgs e)
         {
-            if ( fromRevision.Revision == Revision.Head )
+            if ( fromRevision.Revision == SvnRevision.Head )
                 this.singleRevisionCheckBox.Checked = true;            
         }                                     
  

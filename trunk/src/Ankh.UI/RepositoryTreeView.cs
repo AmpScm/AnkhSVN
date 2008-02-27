@@ -5,8 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
-using NSvn;
-using NSvn.Core;
+
 using Utils.Win32;
 using System.Runtime.InteropServices;
 

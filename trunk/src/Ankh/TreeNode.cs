@@ -1,7 +1,8 @@
 using System;
 using System.Text;
 using System.Collections;
-using NSvn.Core;
+
+using SharpSvn;
 
 namespace Ankh
 {
@@ -121,16 +122,15 @@ namespace Ankh
         /// <returns></returns>
         protected static NodeStatus GenerateStatus( SvnItem item )
         {
-            Status status = item.Status;
             NodeStatusKind kind;
-            if ( status.TextStatus != StatusKind.Normal )
+            if ( item.Status.LocalContentStatus != SvnStatus.Normal )
             {
-                kind = (NodeStatusKind)status.TextStatus;
+                kind = (NodeStatusKind)item.Status.LocalContentStatus;
             }
-            else if ( status.PropertyStatus != StatusKind.Normal &&
-                status.PropertyStatus != StatusKind.None )
+            else if ( item.Status.LocalPropertyStatus != SvnStatus.Normal &&
+                item.Status.LocalPropertyStatus != SvnStatus.None)
             {
-                kind = (NodeStatusKind)status.PropertyStatus;
+                kind = (NodeStatusKind)item.Status.LocalPropertyStatus;
             }
             else
             {

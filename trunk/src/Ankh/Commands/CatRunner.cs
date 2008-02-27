@@ -1,6 +1,7 @@
 using System;
-using NSvn.Core;
+
 using System.IO;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -9,7 +10,7 @@ namespace Ankh.Commands
     /// </summary>
     public class CatRunner : IProgressWorker
     {
-        public CatRunner( string name, Revision revision, string url ) 
+        public CatRunner(string name, SvnRevision revision, Uri url) 
         { 
             this.path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), 
                 name );
@@ -17,7 +18,7 @@ namespace Ankh.Commands
             this.revision = revision;
         }
 
-        public CatRunner( Revision revision, string url,  
+        public CatRunner(SvnRevision revision, Uri url,  
             string path ) 
         {
             this.path = path;
@@ -25,7 +26,7 @@ namespace Ankh.Commands
             this.revision = revision;
         }
 
-        public CatRunner( Revision revision, string url )
+        public CatRunner(SvnRevision revision, Uri url)
         {
             this.revision = revision;
             this.url = url;
@@ -42,15 +43,17 @@ namespace Ankh.Commands
 
         public void Work( IContext context )
         {
-            using( FileStream fs = new FileStream( this.path, FileMode.Create, 
-                       FileAccess.Write ) )
+            using (FileStream fs = new FileStream(this.path, FileMode.Create,
+                       FileAccess.Write))
             {
-                context.Client.Cat( fs, this.url, this.revision );
+                SvnWriteArgs args = new SvnWriteArgs();
+                args.Revision = this.revision;
+                context.Client.Write(this.url, fs, args);
             }
         }
 
-        private Revision revision;
-        private string url;
+        private SvnRevision revision;
+        private Uri url;
         private string path;
 
     }
