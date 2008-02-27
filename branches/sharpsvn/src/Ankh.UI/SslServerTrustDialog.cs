@@ -1,10 +1,10 @@
-#if Q
 using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-
+using SharpSvn;
+using SharpSvn.Security;
 
 namespace Ankh.UI
 {
@@ -32,7 +32,7 @@ namespace Ankh.UI
         /// <summary>
         /// Information about the certificate.
         /// </summary>
-        public SslServerCertificateInfo CertificateInfo
+		public SvnSslServerTrustEventArgs CertificateInfo
         {
             get{ return this.info; }
             set
@@ -45,7 +45,7 @@ namespace Ankh.UI
         /// <summary>
         /// The problems with the certificate.
         /// </summary>
-        public SslFailures Failures
+		public SvnCertificateTrustFailures Failures
         {
             get{ return this.failures; }
             set
@@ -358,18 +358,18 @@ namespace Ankh.UI
 
         private void RefreshCertificateInfo()
         {
-            this.hostnameLabel.Text = this.info.HostName;
+            this.hostnameLabel.Text = this.info.CommonName;
             this.validFromLabel.Text = this.info.ValidFrom;
             this.validToLabel.Text = this.info.ValidUntil;
-            this.certificateTextBox.Text = this.info.AsciiCertificate;
-            this.fingerprintLabel.Text = this.info.FingerPrint;
+            this.certificateTextBox.Text = this.info.CertificateValue;
+            this.fingerprintLabel.Text = this.info.Fingerprint;
             this.issuerLabel.Text = this.info.Issuer;
         }
 
         #region RefreshFailures
         private void RefreshFailures()
         {
-            if ( (this.failures & SslFailures.CertificateAuthorityUnknown) != 0 )
+            if ( (this.failures & SvnCertificateTrustFailures.UnknownCertificateAuthority) != 0 )
             {
                 this.caUnknownLabel.Text = "The issuing certificate authority(CA) is not trusted.";
                 this.caUnknownImage.Image = this.icons.Images[FAILUREIMAGE];
@@ -381,7 +381,7 @@ namespace Ankh.UI
                 this.caUnknownImage.Image = this.icons.Images[OKIMAGE];
             }
 
-            if ( (this.failures & SslFailures.CertificateNameMismatch) != 0 )
+			if ((this.failures & SvnCertificateTrustFailures.CommonNameMismatch) != 0)
             {
                 this.serverMismatchLabel.Text = "The certificate's hostname does not match the " + 
                     "hostname of the server.";
@@ -394,12 +394,12 @@ namespace Ankh.UI
                 this.serverMismatchImage.Image = this.icons.Images[OKIMAGE];
             }
 
-            if ( (this.failures & SslFailures.Expired) != 0 )
+			if ((this.failures & SvnCertificateTrustFailures.CertificateExpired) != 0)
             {
                 this.invalidDateLabel.Text = "The server certificate has expired.";
                 this.invalidDateImage.Image = this.icons.Images[FAILUREIMAGE];
             }
-            else if ( (this.failures & SslFailures.NotYetValid) != 0 )
+			else if ((this.failures & SvnCertificateTrustFailures.CertificateNotValidYet) != 0)
             {
                 this.invalidDateLabel.Text = "The server certificate is not yet valid.";
                 this.invalidDateImage.Image = this.icons.Images[FAILUREIMAGE];
@@ -432,8 +432,8 @@ namespace Ankh.UI
         private System.Windows.Forms.Label hostnameLabel;
         private System.ComponentModel.IContainer components;
 
-        private SslServerCertificateInfo info;
-        private SslFailures failures;
+		private SvnSslServerTrustEventArgs info;
+		private SvnCertificateTrustFailures failures;
 
         private const int FAILUREIMAGE = 0;
         private System.Windows.Forms.Label invalidDateLabel;
@@ -448,4 +448,3 @@ namespace Ankh.UI
         #endregion
     }
 }
-#endif
