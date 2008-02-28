@@ -22,10 +22,13 @@ namespace Ankh.Solution
     {
 
 
-        protected SolutionExplorerTreeNode( uint itemID, 
+        protected SolutionExplorerTreeNode( VSITEMSELECTION selection, 
             Explorer explorer, SolutionExplorerTreeNode parent ) : base(parent)
         {
-            this.itemID = itemID;
+
+            explorer.AddHierarchyItemResource( selection, this );
+
+            this.itemSelection = selection;
             this.explorer = explorer;
         }
 
@@ -146,7 +149,7 @@ namespace Ankh.Solution
         {
             this.UnhookEvents();
 
-            this.Explorer.RemoveUIHierarchyResource( this.uiItem );
+            this.Explorer.RemoveHierarchyResource( this.itemSelection );
         }
 
         protected abstract void UnhookEvents();
@@ -228,9 +231,8 @@ namespace Ankh.Solution
         {
             // empty
         }
-        
-        protected UIHierarchyItem uiItem;
-        private uint itemID;
+
+        private VSITEMSELECTION itemSelection;
         private Explorer explorer;
 
 #if DEBUG

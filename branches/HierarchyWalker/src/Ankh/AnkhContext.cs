@@ -74,6 +74,8 @@ namespace Ankh
                 new RepositoryExplorer.Controller( this );
             this.workingCopyExplorer =
                 new Ankh.WorkingCopyExplorer.WorkingCopyExplorer( this );
+
+            this.ankhLoadedForSolution = true;
         }
 
         
@@ -164,6 +166,13 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.ankhLoadedForSolution; }
+        }
+
+        public IAnkhVSService AnkhVSService
+        {
+            [DebuggerStepThrough]
+            get { return this.ankhVSService; }
+            set { this.ankhVSService = value; }
         }
 
 
@@ -701,6 +710,7 @@ namespace Ankh
         private IUIShell uiShell;
         
         private Ankh.Config.ConfigLoader configLoader;
+        private IAnkhVSService ankhVSService;
 
         private VSCommandBars commandBars;
 

@@ -135,8 +135,7 @@ namespace Ankh
             IAnkhVSService service = (IAnkhVSService)Marshal.GetObjectForIUnknown( ptr );
 
             service.SetContext( this.context );
-
-
+            this.context.AnkhVSService = service;
         }
 
         /// <summary>

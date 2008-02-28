@@ -12,13 +12,14 @@ namespace Ankh.Solution
 {
     public class ProjectNode : SolutionExplorerTreeNode
     {
-        public ProjectNode( uint itemID, Explorer explorer,
-            SolutionExplorerTreeNode parent, Project project, IVsHierarchy hierarchy ) : 
-            base( itemID, explorer, parent )
+        public ProjectNode( VSITEMSELECTION selection, Explorer explorer,
+            SolutionExplorerTreeNode parent, Project project ) : 
+            base( selection, explorer, parent )
         {
             this.project = project;
-            this.hierarchy = hierarchy;
             this.modeled=true;
+
+            this.hierarchy = selection.pHier;
 
             this.FindProjectResources(explorer);
                 

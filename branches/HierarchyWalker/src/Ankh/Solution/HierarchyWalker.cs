@@ -76,7 +76,7 @@ namespace Ankh.Solution
 
         private HierarchyProjectItem GetHierarchyProjectItem( uint itemID )
         {
-            string path;
+
             IVsHierarchy hierarchy = this.project as IVsHierarchy;
 
             object retval;

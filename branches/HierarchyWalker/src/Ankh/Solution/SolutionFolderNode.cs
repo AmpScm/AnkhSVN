@@ -7,8 +7,8 @@ namespace Ankh.Solution
 {
     public sealed class SolutionFolderNode : SolutionExplorerTreeNode
     {
-        public SolutionFolderNode(uint itemID, Explorer explorer, SolutionExplorerTreeNode parent, EnvDTE.Project project)
-            : base(itemID, explorer, parent)
+        public SolutionFolderNode(VSITEMSELECTION selection, Explorer explorer, SolutionExplorerTreeNode parent, EnvDTE.Project project)
+            : base(selection, explorer, parent)
         {
             this.FindChildren();
         }

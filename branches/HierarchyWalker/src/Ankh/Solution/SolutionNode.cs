@@ -15,8 +15,8 @@ namespace Ankh.Solution
     /// </summary>
     public class SolutionNode : SolutionExplorerTreeNode
     {
-        public SolutionNode( uint itemID, Explorer explorer )
-            : base( itemID, explorer, null )
+        public SolutionNode( VSITEMSELECTION selection, Explorer explorer )
+            : base( selection, explorer, null )
         {
             EnvDTE.Solution solution = this.Explorer.DTE.Solution;
             this.solutionFile = this.Explorer.Context.StatusCache[solution.FullName];
