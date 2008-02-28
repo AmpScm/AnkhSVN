@@ -86,46 +86,6 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Run|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Run\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <NoWarn>1701;1702</NoWarn>
-    <FxCopLogFile>obj\Debug\CodeAnalysisLog.xml</FxCopLogFile>
-    <FxCopRuleAssemblies>DesignRules.dll;GlobalizationRules.dll;InteroperabilityRules.dll;MaintainabilityRules.dll;NamingRules.dll;PerformanceRules.dll;ReliabilityRules.dll;SecurityRules.dll;UsageRules.dll</FxCopRuleAssemblies>
-    <FxCopInputAssembly>bin\Debug\Ankh.UI.dll</FxCopInputAssembly>
-    <FxCopUseTypeNameInSuppression>true</FxCopUseTypeNameInSuppression>
-    <FxCopModuleSuppressionsFile>ModuleSuppressions.cs</FxCopModuleSuppressionsFile>
-    <LangVersion>
-    </LangVersion>
-    <ErrorReport>
-    </ErrorReport>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DocumentationFile>
-    </DocumentationFile>
-    <FileAlignment>4096</FileAlignment>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <NoStdLib>false</NoStdLib>
-    <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>none</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <WarningsAsErrors>
-    </WarningsAsErrors>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-    <FxCopRules>
-    </FxCopRules>
-    <FxCopSpellCheckLanguages>
-    </FxCopSpellCheckLanguages>
-    <RunFxCop>false</RunFxCop>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualC">
       <Name>Microsoft.VisualC</Name>
