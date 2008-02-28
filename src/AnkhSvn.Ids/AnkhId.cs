@@ -31,5 +31,10 @@ namespace AnkhSvn.Ids
 		/// The command set as a guid
 		/// </summary>
 		public static readonly Guid CommandSetId = new Guid(CommandSet);
+
+		/// <summary>
+		/// The package is as a guid
+		/// </summary>
+		public static readonly Guid PackageGuid = new Guid(PackageId);
 	}
 }
