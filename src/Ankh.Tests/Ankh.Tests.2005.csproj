@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -166,12 +166,12 @@
       <Name>System.XML</Name>
     </Reference>
     <ProjectReference Include="..\Ankh.UI\Ankh.UI.2005.csproj">
-      <Name>Ankh.UI.2003</Name>
+      <Name>Ankh.UI.2005</Name>
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
     <ProjectReference Include="..\Ankh\Ankh.2005.csproj">
-      <Name>Ankh.2003</Name>
+      <Name>Ankh.2005</Name>
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
@@ -180,7 +180,7 @@
       <Name>TestUtils.2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.2005.csproj">
-      <Name>Utils.2003</Name>
+      <Name>Utils.2005</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
