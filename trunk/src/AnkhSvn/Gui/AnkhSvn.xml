@@ -13,7 +13,7 @@
 	</Imports>
 	<Defines>
 	</Defines>
-	<UI packageId="Ankh_CommandSetId" autoBmpId="StBmp">
+	<UI packageId="Ankh_PackageGuid" autoBmpId="StBmp">
 		<MenuRef id="guidSHLMainMenu:IDM_VS_MENU_FILE">
 			<Group id="Grp_FileMenuScc" priority="0x0800">
 				<Menu id="Menu_FileScc" priority="0x0000" name="SvnMenu" text="Sou&amp;rce Control (Ankh)">
