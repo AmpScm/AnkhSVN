@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<VsGui version="1.0"  xmlns="http://schemas.studioturtle.net/2007/01/gui/" 
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	   xsi:schemaLocation="http://schemas.studioturtle.net/2007/01/gui/ Gui.xsd">
+	<Imports>
+		<Import include="stdidcmd.h" />
+		<Import include="vsshlids.h" />
+		<Import include="msobtnid.h" />
+		<Import type="AnkhSvn.Ids.AnkhId" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Ankh_" />
+		<Import type="AnkhSvn.Ids.AnkhCommand" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Cmd_" />
+		<Import type="AnkhSvn.Ids.AnkhCommandGroup" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Grp_" />
+		<Import type="AnkhSvn.Ids.AnkhCommandMenu" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Menu_" />
+	</Imports>
+	<Defines>
+	</Defines>
+	<UI packageId="Ankh_CommandSetId" autoBmpId="StBmp">
+		<MenuRef id="guidSHLMainMenu:IDM_VS_MENU_FILE">
+			<Group id="Grp_FileMenuScc" priority="0x0800">
+				<Menu id="Menu_FileScc" priority="0x0000" name="SvnMenu" text="Sou&amp;rce Control (Ankh)">
+					<Group id="Grp_FileSccMenuUpdate" priority="0x0000">
+						<Button id="Cmd_FileSccMenuUpdateLatest" priority="0x0100" text="Get &amp;Latest Version of (Ankh)" />
+						<Button id="Cmd_FileSccMenuUpdateSpecific" priority="0x0200" text="&amp;Get Specific Version of (Ankh)"/>
+					</Group>
+				</Menu>
+			</Group>
+		</MenuRef>
+	</UI>
+</VsGui>
