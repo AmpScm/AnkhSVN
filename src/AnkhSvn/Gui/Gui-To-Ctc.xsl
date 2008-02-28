@@ -95,7 +95,6 @@
 		if(attrs.Length > 0)
 			typeAttr = (GuidAttribute)attrs[0];
 
-		sb.AppendFormat("\n // Loaded from: {0}\n", from);
 		sb.AppendFormat("\n // Type: {0}\n", tp.AssemblyQualifiedName);
 		foreach(System.Reflection.FieldInfo fif in tp.GetFields(BindingFlags.Public | System.Reflection.BindingFlags.Static))
 		{
@@ -136,7 +135,7 @@
 			}
 		}
 
-		sb.AppendFormat("// /Loaded\n\n", tp.AssemblyQualifiedName);
+		sb.AppendFormat("// /Loaded\n", tp.AssemblyQualifiedName);
 
 		return sb.ToString();
 	}
