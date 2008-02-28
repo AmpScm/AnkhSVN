@@ -81,7 +81,8 @@
 		
 		if(!File.Exists(from))
 		{
-			return string.Format(" // Ignored loading inputtype; from={0}\n\n", from);
+      throw new FileNotFoundException(string.Format("Import {0} missing", from));
+			//return string.Format(" // Ignored loading inputtype; from={0}\n\n", from);
 		}
 
 		AssemblyName name = AssemblyName.GetAssemblyName(from);
