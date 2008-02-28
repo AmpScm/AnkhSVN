@@ -6,12 +6,17 @@
 	<UsingTask TaskName="QQn.TurtleTasks.ApplyXslTransform" AssemblyFile="QQn.TurtleTasks.dll" />
 
 	<PropertyGroup>
-	  <!-- TODO: Calculate this some other way -->
+		<!-- TODO: Calculate this some other way -->
 		<QQnTurtleTasksFolder>..\..\tools\TurtleTasks\</QQnTurtleTasksFolder>
-		
+
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(QQnTurtleTasksFolder)QQn.TurtleTasks.targets</MSBuildAllProjects>
 		<CoreCompileDependsOn>ApplyXslTemplates;$(CoreCompileDependsOn);DownloadDependencies</CoreCompileDependsOn>
 	</PropertyGroup>
+	<PropertyGroup>
+		<LoadTimeSensitiveTargets>$(LoadTimeSensitiveTargets);DownloadDependencies;ApplyXslTemplates</LoadTimeSensitiveTargets>
+		<LoadTimeSensitiveItems>$(LoadTimeSensitiveItems);DependencyDownload;XslSource</LoadTimeSensitiveItems>
+	</PropertyGroup>
+
 
 	<Target Name="DownloadDependencies">
 		<CachedDownloadAndExtract
@@ -30,7 +35,7 @@
 			Outputs="@(XslSource->'%(To)')"
 			TargetDir="$(OutputPath)"
 			IntermediateDir="$(IntermediateOutputPath)"
-			Attributes=""
+			Attributes="@(XslSource->'%(Attributes)');Configuration=$(Configuration);Platform=$(Platform)"
 			>
 			<Output TaskParameter="FilesWritten" ItemName="FilesWritten" />
 		</ApplyXslTransform>

@@ -1,0 +1,358 @@
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+<!--
+*************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+This code is licensed under the Visual Studio SDK license terms.
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+*************************************************************************
+-->
+
+
+
+
+
+
+
+
+
+
+
+  <UsingTask TaskName="FindVsSDKInstallation" AssemblyFile="Microsoft.VsSDK.Build.Tasks.dll" />
+  <UsingTask TaskName="Ctc" AssemblyFile="Microsoft.VsSDK.Build.Tasks.dll" />
+  <UsingTask TaskName="CtoResourceMerger" AssemblyFile="Microsoft.VsSDK.Build.Tasks.dll" />
+  <UsingTask TaskName="DevEnvSetup" AssemblyFile="Microsoft.VsSDK.Build.Tasks.dll" />
+  <UsingTask TaskName="MPLex" AssemblyFile="Microsoft.VsSDK.Build.Tasks.dll" />
+  <UsingTask TaskName="RegPkg" AssemblyFile="Microsoft.VsSDK.Build.Tasks.dll" />
+  <UsingTask TaskName="VsTemplatePaths" AssemblyFile="Microsoft.VsSDK.Build.Tasks.dll" />
+  <UsingTask TaskName="ZipItems" AssemblyFile="Microsoft.VsSDK.Build.Tasks.dll" />
+
+  <!--
+    Set the general properties for this installation of the SDK
+  -->
+  <PropertyGroup>
+    <VsSDKVersion>8.0.61205.56</VsSDKVersion>
+  </PropertyGroup>
+
+  <Target Name="FindSDKInstallation"
+          Condition="'$(VsSDKInstall)'==''">
+    <FindVsSDKInstallation SDKVersion="$(VsSDKVersion)">
+      <Output TaskParameter="InstallationPath" PropertyName="VsSDKInstall" />
+      <Output TaskParameter="IncludesPath" PropertyName="VsSDKIncludes" />
+      <Output TaskParameter="ToolsPath" PropertyName="VsSDKToolsPath" />
+    </FindVsSDKInstallation>
+  </Target>
+
+
+  <!--
+    =======================================================================================================
+                                                CTC Compilation
+    =======================================================================================================
+  -->
+  <ItemGroup>
+    <!-- Define the standard include path for the CTC compiler. -->
+    <CtcIncludePath Condition="'$(VsSDKIncludes)' != ''" Include="$(VsSDKIncludes);$(VsSDKIncludes)office10" >
+      <InProject>false</InProject>
+    </CtcIncludePath>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <CtcCompileDependsOn>$(CtcCompileDependsOn);FindSDKInstallation</CtcCompileDependsOn>
+  </PropertyGroup>
+  
+  <Target Name="CtcCompile"
+          Inputs="@(CtcFile)" 
+          Outputs="@(CtcFile->'$(IntermediateOutputPath)%(FileName).cto')" 
+          DependsOnTargets="$(CtcCompileDependsOn)"
+          Condition="'$(BuildingProject)'!='false'">
+
+    <Ctc IncludeDirs="@(CtcIncludePath);$(VsSDKIncludes);$(VsSDKIncludes)\office10" 
+         Inputs="@(CtcFile)" 
+         Defines="$(CtcDefines)" 
+         OutputFile="@(CtcFile->'$(IntermediateOutputPath)%(FileName).cto')"
+         ProductVersion="$(ProductVersion)" 
+         SDKVersion="$(VsSDKVersion)" >
+    </Ctc>
+
+    <!--Record the CTC compile CTO outputs.-->
+    <CreateItem Include="@(CtcFile->'$(IntermediateOutputPath)%(FileName).cto')" Condition="Exists('@(CtcFile->'$(IntermediateOutputPath)%(FileName).cto')')">
+      <Output TaskParameter="Include" ItemName="FileWrites"/>
+    </CreateItem>
+
+    <!--Record the CTC compile CTSYM outputs.-->
+    <CreateItem Include="@(CtcFile->'$(IntermediateOutputPath)%(FileName).ctsym')" Condition="Exists('@(CtcFile->'$(IntermediateOutputPath)%(FileName).ctsym')')">
+      <Output TaskParameter="Include" ItemName="FileWrites"/>
+    </CreateItem>
+
+  </Target>
+
+  <!--
+    =======================================================================================================
+                                              Merging CTO resource
+    =======================================================================================================
+  -->
+  <PropertyGroup>
+    <!-- The result of the ctc compilation will be used by the resource generator, so this task
+         must depend on the ctc one -->
+    <PrepareResourcesDependsOn>$(PrepareResourcesDependsOn);MergeCtoResource</PrepareResourcesDependsOn>
+    <MergeCtoResourceDependsOn>$(MergeCtoResourceDependsOn);CtcCompile;ResGen;GenerateResourceToMergeWithCTO</MergeCtoResourceDependsOn>
+  </PropertyGroup>
+
+  <!--
+    Create the list of the .RESOURCES files to merge with the CTO data.
+  -->
+  <Target Name="GenerateResourceToMergeWithCTO"
+          DependsOnTargets="ResGen">
+    <CreateItem Include="@(ManifestResourceWithCulture);@(ManifestResourceWithNoCulture)" Condition="'%(ManifestResourceWithCulture.MergeWithCTO)'=='true' Or '%(ManifestResourceWithNoCulture.MergeWithCTO)'=='true'">
+      <Output TaskParameter="Include" ItemName="_ResourcesToMergeWithCTO" />
+    </CreateItem>
+  </Target>
+  
+  <Target Name="MergeCtoResource"
+          Condition="'@(CtcFile)'!='' And '$(BuildingProject)'!='false'"
+          DependsOnTargets="$(MergeCtoResourceDependsOn)">
+
+    <CtoResourceMerger DestinationResource="$(PackageResources)"
+                       CtoFile="@(CtcFile->'$(IntermediateOutputPath)%(FileName).cto')" 
+                       ResourcesToMerge="@(_ResourcesToMergeWithCTO)" >
+      <Output TaskParameter="GeneratedResource" ItemName="MergedCtoResource" />
+    </CtoResourceMerger>
+    
+  </Target>
+
+  <ItemGroup>
+    <ManifestResourceWithNoCulture Include="$(MergedCtoResource)" >
+      <InProject>false</InProject>
+    </ManifestResourceWithNoCulture>
+  </ItemGroup>
+
+  <!--
+    =======================================================================================================
+                                       Generate code from LEX files
+    =======================================================================================================
+  -->
+  <PropertyGroup>
+    <!--Make sure that the lexer runs before the C# compiler-->
+    <CoreCompileDependsOn>$(CoreCompileDependsOn);GenerateCodeFromLex</CoreCompileDependsOn>
+  </PropertyGroup>
+  <!--
+    TODO: When MPLex.exe will allow us to specify the name / path of the output file we should change this
+    target to use custom output names and use @(MPLexCompile->'$(IntermediateOutputPath)%(FileName).cs')
+    as default.
+  -->
+  <Target Name="GenerateCodeFromLex"
+          Condition="'$(BuildingProject)'!='false'"
+          Inputs="@(MPLexCompile);$(LexFrameFile)"
+          Outputs="@(MPLexCompile->'$(IntermediateOutputPath)%(FileName).cs')"
+          DependsOnTargets="$(GenerateCodeFromLexDependsOn)">
+
+    <MPLex InputFile="@(MPLexCompile)"
+           OutputFile="@(MPLexCompile->'$(IntermediateOutputPath)%(FileName).cs')"
+           CompressTables="$(CompressTables)"
+           FrameFile="$(LexFrameFile)" 
+           SDKVersion="$(VsSDKVersion)">
+      <Output TaskParameter="OutputFile" ItemName="Compile" />
+      <Output TaskParameter="OutputFile" ItemName="FileWrites"/>
+    </MPLex>
+
+  </Target>
+
+  <!--
+    =======================================================================================================
+                                      Generate parser code from Y files
+    =======================================================================================================
+  -->
+  <PropertyGroup>
+    <GenerateParserCodeFromGrammarDependsOn>$(GenerateParserCodeFromGrammarDependsOn);FindSDKInstallation</GenerateParserCodeFromGrammarDependsOn>
+    <CoreCompileDependsOn>$(CoreCompileDependsOn);GenerateParserCodeFromGrammar</CoreCompileDependsOn>
+  </PropertyGroup>
+  <Target Name="GenerateParserCodeFromGrammar"
+          Condition="'$(BuildingProject)'!='false'"
+          Inputs="@(MPPGCompile)"
+          Outputs="@(MPPGCompile->'$(IntermediateOutputPath)%(FileName).cs')"
+          DependsOnTargets="$(GenerateParserCodeFromGrammarDependsOn)">
+    
+    <!--Run the command line tool that generates the cs files.-->
+    <Exec Command="&quot;$(VsSDKToolsPath)\MPPG.exe&quot; @(MPPGCompile) > @(MPPGCompile->'$(IntermediateOutputPath)%(FileName).cs')" />
+
+    <!--Add the generated files to the list of the files to compile.-->
+    <CreateItem Include="@(MPPGCompile->'$(IntermediateOutputPath)%(FileName).cs')">
+      <Output TaskParameter="Include" ItemName="Compile" />
+      <Output TaskParameter="Include" ItemName="FileWrites"/>
+    </CreateItem>
+  </Target>
+
+  <!--
+    =======================================================================================================
+                                         Registering Managed Packages
+    =======================================================================================================
+  -->
+
+  <PropertyGroup>
+    <RegisterManagedPackageDependsOn>$(RegisterManagedPackageDependsOn);CoreBuild</RegisterManagedPackageDependsOn>
+  </PropertyGroup>
+  
+  <Target Name="RegisterManagedPackage" 
+          Condition="'$(RegisterOutputPackage)'=='true'" 
+          DependsOnTargets="$(RegisterManagedPackageDependsOn)">
+    
+    <RegPkg ItemToRegister="$(TargetPath)"
+            ProductVersion="$(ProductVersion)" 
+            RegistrationRoot="$(TargetRegistryRoot)"
+            SDKVersion="$(VsSDKVersion)"
+            Unregister="false"
+            UseCodebase="$(RegisterWithCodebase)" />
+    
+  </Target>
+
+  <!--
+    =======================================================================================================
+                                         Running DevEnv /Setup
+    =======================================================================================================
+  -->
+
+  <PropertyGroup>
+    <BuildDependsOn>$(BuildDependsOn);SettingUpDevenv</BuildDependsOn>
+    <SettingUpDevenvDependsOn>$(SettingUpDevenvDependsOn);RegisterManagedPackage</SettingUpDevenvDependsOn>
+    <DevenvSetupStateFile>$(IntermediateOutputPath)DevEnvSetup.cache</DevenvSetupStateFile>
+  </PropertyGroup>
+  <Target Name="SettingUpDevenv"
+          Inputs="@(CtcFile->'$(IntermediateOutputPath)%(FileName).cto')" 
+          Outputs="$(DevenvSetupStateFile)" 
+          DependsOnTargets="$(SettingUpDevenvDependsOn)">
+
+    <DevEnvSetup CTOFiles="@(CtcFile->'$(IntermediateOutputPath)%(FileName).cto')"
+                 ProductVersion="$(ProductVersion)"
+                 RegistryRoot="$(TargetRegistryRoot)"
+                 StateFile="$(DevenvSetupStateFile)" />
+  </Target>
+
+  <!--
+    =======================================================================================================
+                                         Creating Zip Files
+    =======================================================================================================
+  -->
+
+  <PropertyGroup>
+    <PrepareForRunDependsOn>
+      ZipFiles;
+      $(PrepareForRunDependsOn)
+    </PrepareForRunDependsOn>
+    <ZipFilesDependsOn>VsTemplatePathsTarget</ZipFilesDependsOn>
+  </PropertyGroup>
+
+  <!--Make sure that the zip output is set-->
+  <PropertyGroup>
+    <ZipProjectOutput Condition="'$(ZipProjectOutput)' == ''">$(OutputPath)</ZipProjectOutput>
+    <ZipItemOutput Condition="'$(ZipItemOutput)' == ''">$(OutputPath)</ZipItemOutput>
+    <ZipIntermediatePath Condition="'$(ZipIntermediatePath)' == ''">$(IntermediateOutputPath)</ZipIntermediatePath>
+  </PropertyGroup>
+
+  <Target Name="ZipFiles"            
+          DependsOnTargets="$(ZipFilesDependsOn)"
+          Condition="'@(ZipProject)_@(ZipItem)' != '_'">
+
+    <Message Text="Build_Status Zipping"/>
+
+    <!--
+      There are 2 options for using this task:
+        1) specifying a rootpath on each item
+        2) using the directory of the item as the rootpath
+      There are 2 destinations for zip files based on:
+        1) project templates
+        2) item templates
+        
+      So we have the task 4 times to deal with the different combinations
+      
+      Note: the name of the zip file will be based on the rootpath
+    -->
+
+    <!--Project using RootPath-->
+    <ZipItems 
+        Condition="'%(ZipProject.RootPath)'!='' AND '@(ZipProject)' != ''" 
+        Files="@(ZipProject)"
+        Action="New"
+        OutputSubPath="%(ZipProject.OutputSubPath)"
+        ProjectPath="$(MSBuildProjectDirectory)"
+        RootPath="$(MSBuildProjectDirectory)\%(ZipProject.RootPath)" 
+        ZipName="%(ZipProject.RootPath)"
+        TargetPath="$(ZipIntermediatePath)">
+      <Output  TaskParameter="ZipFile"
+          ItemName="IntermediateZipProject"/>
+    </ZipItems>
+
+    <!--Project using Directory-->
+    <ZipItems 
+        Condition="'%(ZipProject.RootPath)'=='' AND '@(ZipProject)' != ''" 
+        Files="@(ZipProject)"
+        Action="New"
+        OutputSubPath="%(ZipProject.OutputSubPath)"
+        ProjectPath="$(MSBuildProjectDirectory)"
+        RootPath="%(ZipProject.RootDir)%(ZipProject.Directory)" 
+        ZipName="%(ZipProject.Directory)"
+        TargetPath="$(ZipIntermediatePath)">
+      <Output  TaskParameter="ZipFile"
+          ItemName="IntermediateZipProject"/>
+    </ZipItems>
+
+    <!--Item using RootPath-->
+    <ZipItems 
+        Condition="'%(ZipItem.RootPath)'!='' AND '@(ZipItem)' != ''" 
+        Files="@(ZipItem)"
+        Action="New"
+        OutputSubPath="%(ZipItem.OutputSubPath)"
+        ProjectPath="$(MSBuildProjectDirectory)"
+        RootPath="$(MSBuildProjectDirectory)\%(ZipItem.RootPath)" 
+        ZipName="%(ZipItem.RootPath)"
+        TargetPath="$(ZipIntermediatePath)">
+      <Output  TaskParameter="ZipFile"
+          ItemName="IntermediateZipItem"/>
+    </ZipItems>
+
+    <!--Item using Directory-->
+    <ZipItems 
+        Condition="'%(ZipItem.RootPath)'=='' AND '@(ZipItem)' != ''" 
+        Files="@(ZipItem)"
+        Action="New"
+        OutputSubPath="%(ZipItem.OutputSubPath)"
+        ProjectPath="$(MSBuildProjectDirectory)"
+        RootPath="%(ZipItem.RootDir)%(ZipItem.Directory)" 
+        ZipName="%(ZipItem.Directory)"
+        TargetPath="$(ZipIntermediatePath)">
+      <Output  TaskParameter="ZipFile"
+          ItemName="IntermediateZipItem"/>
+    </ZipItems>
+
+    <Copy SourceFiles="@(IntermediateZipProject)" DestinationFiles="@(IntermediateZipProject->'$(ZipProjectOutput)\%(OutputSubPath)\%(FileName)%(Extension)')" />
+    <Copy SourceFiles="@(IntermediateZipItem)" DestinationFolder="$(ZipItemOutput)" />
+
+  </Target>
+
+  <!--Provide support for setting type (BuildAction) to ZipProject/ZipItem from VS-->
+  <ItemGroup>
+    <AvailableItemName Include="ZipProject"/>
+    <AvailableItemName Include="ZipItem"/>
+  </ItemGroup>
+
+  <!--Target to retrive deployment path for vstemplates zip files-->
+  <Target Name="VsTemplatePathsTarget"
+          Inputs="$(TargetRegistryRoot);$(VsTemplateLanguage)" 
+          Outputs="$(DevenvSetupStateFile)" 
+          DependsOnTargets="$(VsTemplatePathsTargetDependsOn)">
+
+    <VsTemplatePaths
+        Language="$(VsTemplateLanguage)"
+        RegistryHive="$(TargetRegistryRoot)">
+      <Output TaskParameter="ProjectTemplates" PropertyName="ZipProjectOutput"/>
+      <Output TaskParameter="ItemTemplates" PropertyName="ZipItemOutput"/>
+    </VsTemplatePaths>
+
+    <!--Make sure those directories exist-->
+    <MakeDir Directories="$(ZipProjectOutput);$(ZipItemOutput)"/>
+  </Target>
+
+</Project>
