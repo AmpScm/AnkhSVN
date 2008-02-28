@@ -17,11 +17,11 @@ namespace Ankh.Solution
     /// </summary>
     public class ProjectItemNode : SolutionExplorerTreeNode
     {
-        public ProjectItemNode( ProjectItem projectItem, uint itemID, Explorer explorer,
-            SolutionExplorerTreeNode parent, ParsedSolutionItem parsedItem ) :
-            base( itemID, explorer, parent )
+        public ProjectItemNode( VSITEMSELECTION selection, uint itemID, Explorer explorer,
+            SolutionExplorerTreeNode parent, ProjectItem item, ParsedSolutionItem parsedItem ) :
+            base( selection, explorer, parent )
         {
-            this.projectItem = projectItem;
+            this.projectItem = item;
             this.parsedProjectItem=parsedItem;
             
             this.FindResources();                      

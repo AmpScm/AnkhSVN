@@ -153,5 +153,11 @@ namespace Ankh
         {
             get;
         }
+
+        IAnkhVSService AnkhVSService
+        {
+            get;
+            set; 
+        }
     }
 }

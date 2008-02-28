@@ -97,5 +97,30 @@ namespace Ankh.VSPackage
 
             return VSConstants.S_OK;
         }
+
+internal VSITEMSELECTION[] GetSelection()
+{
+    IVsMonitorSelection monitor = this.GetService( typeof( IVsMonitorSelection ) ) as IVsMonitorSelection;
+
+    IntPtr hier;
+    uint itemId;
+    IVsMultiItemSelect multiItemSelect;
+    IntPtr selectionContainer;
+
+    monitor.GetCurrentSelection( out hier, out itemId, out multiItemSelect, out selectionContainer );
+
+
+    VSITEMSELECTION[] selection = new VSITEMSELECTION[] { };
+    if ( itemId != Microsoft.VisualStudio.VSConstants.VSITEMID_SELECTION )
+    {
+        VSITEMSELECTION sel = new VSITEMSELECTION();
+        sel.itemid = itemId;
+        sel.pHier = Marshal.GetObjectForIUnknown(hier) as IVsHierarchy;
+        selection = new VSITEMSELECTION[] { sel };
+
+    }
+
+    return selection;
+}
     }
 }

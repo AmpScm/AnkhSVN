@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Solution;
 using System.Collections;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.EventSinks
 {
@@ -16,9 +17,13 @@ namespace Ankh.EventSinks
 
         public void VisitProject( HierarchyProject project )
         {
-            this.project = new ProjectNode(project.ItemID, (Explorer)context.SolutionExplorer, 
+            VSITEMSELECTION sel = new VSITEMSELECTION();
+            sel.itemid = project.ItemID;
+            sel.pHier = project.Hierarchy;
+
+            this.project = new ProjectNode(sel, (Explorer)context.SolutionExplorer, 
                 null,
-                context.DTE.Solution.Projects.Item(1), project.Hierarchy );
+                context.DTE.Solution.Projects.Item(1) );
             this.items.Add( project, this.project );
         }
 
@@ -28,8 +33,12 @@ namespace Ankh.EventSinks
 
             if ( parentNode != null )
             {
-                ProjectItemNode node = new ProjectItemNode( projectItem.ProjectItem, projectItem.ItemID,
-                    (Explorer)this.context.SolutionExplorer, parentNode, null );
+                VSITEMSELECTION sel = new VSITEMSELECTION();
+                sel.itemid = projectItem.ItemID;
+                sel.pHier = parentNode.Hierarchy;
+
+                ProjectItemNode node = new ProjectItemNode( sel, projectItem.ItemID,
+                    (Explorer)this.context.SolutionExplorer, parentNode, projectItem.ProjectItem, null );
                 parentNode.AddChild( node );
                 this.items.Add(projectItem, node);
 

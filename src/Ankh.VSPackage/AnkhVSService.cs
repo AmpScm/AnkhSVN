@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.VSPackage
 {
@@ -18,6 +19,11 @@ namespace Ankh.VSPackage
         public void SetContext( IContext context )
         {
             this.sccProviderService.Context = context;
+        }
+
+        public VSITEMSELECTION[] GetSelection()
+        {
+            return this.package.GetSelection();
         }
 
         private SccProviderService sccProviderService;

@@ -17,6 +17,7 @@ using DteConstants = EnvDTE.Constants;
 using System.Windows.Forms;
 using System.Threading;
 using Ankh.UI;
+using Microsoft.VisualStudio.Shell.Interop;
 
 
 namespace Ankh.Solution
@@ -33,7 +34,8 @@ namespace Ankh.Solution
         {
             this.dte = dte;
             this.context = context;
-            this.nodes = new Hashtable();
+            this.nodes = new Hashtable(new VSITEMSELECTIONHashCodeProvider(),
+                new VSITEMSELECTIONEqualityComparer());
             
             // get the uihierarchy root
             this.solutionNode = null;
@@ -89,9 +91,9 @@ namespace Ankh.Solution
         {
             this.ForcePoll();
 
-            foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )
+            foreach( VSITEMSELECTION selection in this.Context.AnkhVSService.GetSelection())
             {
-                SolutionExplorerTreeNode node = this.GetNode( item );
+                SolutionExplorerTreeNode node = this.GetNode( selection );
                 if ( node != null )
                 {
                     if ( node == this.solutionNode )
@@ -132,9 +134,9 @@ namespace Ankh.Solution
         {
             this.ForcePoll();
 
-            foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )
+            foreach( VSITEMSELECTION selection in (Array)this.Context.AnkhVSService.GetSelection())
             {
-                SolutionExplorerTreeNode node = this.GetNode( item );
+                SolutionExplorerTreeNode node = this.GetNode( selection );
                 if ( node != null )
                 {
                     this.RefreshNode( node );
@@ -245,9 +247,8 @@ namespace Ankh.Solution
         {
             this.ForcePoll();
 
-            //foreach( SelectedItem item in items )         
-            object o = this.UIHierarchy.SelectedItems;         
-            foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )         
+            //foreach( SelectedItem item in items )             
+            foreach( VSITEMSELECTION item in this.Context.AnkhVSService.GetSelection() )         
             {         
                 SolutionExplorerTreeNode node = this.GetNode( item );         
                 if ( node != null )         
@@ -274,10 +275,9 @@ namespace Ankh.Solution
 
             ArrayList list = new ArrayList();
 
-            object o = this.UIHierarchy.SelectedItems;         
-            foreach( UIHierarchyItem item in (Array)this.UIHierarchy.SelectedItems )         
+            foreach( VSITEMSELECTION selection in this.context.AnkhVSService.GetSelection())         
             {         
-                SolutionExplorerTreeNode node = this.GetNode( item );         
+                SolutionExplorerTreeNode node = this.GetNode( selection );         
                 if ( node != null )         
                     node.GetResources( list, getChildItems, filter );         
             }
@@ -347,18 +347,18 @@ namespace Ankh.Solution
             get{ return this.dte; }
         }
 
-        internal UIHierarchy UIHierarchy
-        {
-            get
-            {
-                if ( this.uiHierarchy == null )
-                {
-                    this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item(
-                        DteConstants.vsWindowKindSolutionExplorer ).Object; 
-                }
-                return this.uiHierarchy;
-            }
-        }
+        //internal UIHierarchy UIHierarchy
+        //{
+        //    get
+        //    {
+        //        if ( this.uiHierarchy == null )
+        //        {
+        //            this.uiHierarchy = (UIHierarchy)this.dte.Windows.Item(
+        //                DteConstants.vsWindowKindSolutionExplorer ).Object; 
+        //        }
+        //        return this.uiHierarchy;
+        //    }
+        //}
 
         /// <summary>
         /// Retrieves the window handle to the solution explorer treeview and uses it
@@ -488,12 +488,12 @@ namespace Ankh.Solution
         /// <param name="projectKey">The modeled ProjectItem or an unmodeled placeholder for it</param>
         /// <param name="parsedKey">A parsed item for unmodeled projects</param>
         /// <param name="node">Our own representation</param>
-        internal void AddUIHierarchyItemResource( UIHierarchyItem item, SolutionExplorerTreeNode node )
+        internal void AddHierarchyItemResource( VSITEMSELECTION item, SolutionExplorerTreeNode node )
         {
             this.nodes[ item ] = node;
         }
 
-        internal void RemoveUIHierarchyResource( UIHierarchyItem uIHierarchyItem )
+        internal void RemoveHierarchyResource( VSITEMSELECTION uIHierarchyItem )
         {
             this.nodes.Remove( uIHierarchyItem );
         }
@@ -543,91 +543,92 @@ namespace Ankh.Solution
 
         private SolutionExplorerTreeNode GetNodeForProject( Project project )
         {
-            EnvDTE.UIHierarchy hierarchy = this.dte.Windows.Item( EnvDTE.Constants.vsWindowKindSolutionExplorer ).Object as EnvDTE.UIHierarchy;
+            return null;
+            //EnvDTE.UIHierarchy hierarchy = this.dte.Windows.Item( EnvDTE.Constants.vsWindowKindSolutionExplorer ).Object as EnvDTE.UIHierarchy;
 
-            if ( hierarchy.UIHierarchyItems.Count < 1 )
-            {
-                return null;
-            }
+            //if ( hierarchy.UIHierarchyItems.Count < 1 )
+            //{
+            //    return null;
+            //}
 
-            string hierarchyPath = hierarchy.UIHierarchyItems.Item(1).Name + "\\" + this.BuildHierarchyPathForProject( project );
+            //string hierarchyPath = hierarchy.UIHierarchyItems.Item(1).Name + "\\" + this.BuildHierarchyPathForProject( project );
 
-            try
-            {
-                UIHierarchyItem item = hierarchy.GetItem( hierarchyPath );
-                return this.GetNode( item );
-            }
-            catch ( Exception )
-            {
+            //try
+            //{
+            //    UIHierarchyItem item = hierarchy.GetItem( hierarchyPath );
+            //    return this.GetNode( item );
+            //}
+            //catch ( Exception )
+            //{
                 
-                SolutionExplorerTreeNode node = SearchForProject( project, hierarchy.UIHierarchyItems.Item(1).UIHierarchyItems );
-                //if ( node == null )
-                //{
-                //    DumpHierarchy( hierarchy );  // DumpHierarchy expands all tree nodes, don't enable in non-debug builds
-                //}
-                return node;
-            }
+            //    SolutionExplorerTreeNode node = SearchForProject( project, hierarchy.UIHierarchyItems.Item(1).UIHierarchyItems );
+            //    //if ( node == null )
+            //    //{
+            //    //    DumpHierarchy( hierarchy );  // DumpHierarchy expands all tree nodes, don't enable in non-debug builds
+            //    //}
+            //    return node;
+            //}
         }
 
-        private SolutionExplorerTreeNode SearchForProject( Project project, UIHierarchyItems hierarchyItems )
-        {
-            try
-            {
-                foreach ( UIHierarchyItem item in hierarchyItems )
-                {
-                    SolutionExplorerTreeNode treeNode = null;
-                    if ( item.Object == project )
-                    {
-                        treeNode = GetNode( item ); ;
-                    }
-                    else if ( item.Object is Project )
-                    {
-                        treeNode = SearchPossibleSolutionFolder( project, item.Object as Project, item );
-                    }
-                    else if ( item.Object is ProjectItem )
-                    {
-                        // Children of a solution folder are ProjectItem objects. Their .Object are the actual children
-                        ProjectItem projectItem = item.Object as ProjectItem;
-                        Project childProject = DteUtils.GetProjectItemObject(projectItem) as Project;
-                        if ( childProject != null )
-                        {
-                            if ( childProject == project )
-                            {
-                                treeNode = GetNode( item );
-                            }
-                            else
-                            {
-                                treeNode = SearchPossibleSolutionFolder( project, childProject, item );
-                            }
+        //private SolutionExplorerTreeNode SearchForProject( Project project, UIHierarchyItems hierarchyItems )
+        //{
+        //    try
+        //    {
+        //        foreach ( UIHierarchyItem item in hierarchyItems )
+        //        {
+        //            SolutionExplorerTreeNode treeNode = null;
+        //            if ( item.Object == project )
+        //            {
+        //                treeNode = GetNode( item ); ;
+        //            }
+        //            else if ( item.Object is Project )
+        //            {
+        //                treeNode = SearchPossibleSolutionFolder( project, item.Object as Project, item );
+        //            }
+        //            else if ( item.Object is ProjectItem )
+        //            {
+        //                // Children of a solution folder are ProjectItem objects. Their .Object are the actual children
+        //                ProjectItem projectItem = item.Object as ProjectItem;
+        //                Project childProject = DteUtils.GetProjectItemObject(projectItem) as Project;
+        //                if ( childProject != null )
+        //                {
+        //                    if ( childProject == project )
+        //                    {
+        //                        treeNode = GetNode( item );
+        //                    }
+        //                    else
+        //                    {
+        //                        treeNode = SearchPossibleSolutionFolder( project, childProject, item );
+        //                    }
                             
-                        }
-                    }
+        //                }
+        //            }
 
-                    if ( treeNode != null )
-                    {
-                        return treeNode;
-                    }
-                }
-                return null;
-            }
-            catch ( Exception )
-            {
-                return null;
-            }
-        }
+        //            if ( treeNode != null )
+        //            {
+        //                return treeNode;
+        //            }
+        //        }
+        //        return null;
+        //    }
+        //    catch ( Exception )
+        //    {
+        //        return null;
+        //    }
+        //}
 
-        private SolutionExplorerTreeNode SearchPossibleSolutionFolder( Project project, Project possibleSolutionFolder, UIHierarchyItem item )
-        {
-            // is this a solution folder?
-            if ( possibleSolutionFolder != null && possibleSolutionFolder.Kind == DteUtils.SolutionFolderKind )
-            {
-                return SearchForProject( project, item.UIHierarchyItems );
-            }
-            else
-            {
-                return null;
-            }
-        }
+        //private SolutionExplorerTreeNode SearchPossibleSolutionFolder( Project project, Project possibleSolutionFolder, UIHierarchyItem item )
+        //{
+        //    // is this a solution folder?
+        //    if ( possibleSolutionFolder != null && possibleSolutionFolder.Kind == DteUtils.SolutionFolderKind )
+        //    {
+        //        return SearchForProject( project, item.UIHierarchyItems );
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
 
         [Conditional("DEBUG")]
         private void DumpHierarchy( UIHierarchy hierarchy )
@@ -672,19 +673,14 @@ namespace Ankh.Solution
             }
         }
 
-        private SolutionExplorerTreeNode GetNode(UIHierarchyItem item)
+        private SolutionExplorerTreeNode GetNode(VSITEMSELECTION item)
         {
             if ( !this.context.AnkhLoadedForSolution )
                 return null;
 
-            if ( this.uiHierarchy.UIHierarchyItems.Count == 0)
-            {
-                return null;
-            }
-
-            if ( item == this.UIHierarchy.UIHierarchyItems.Item( 1 ) )
-                return this.solutionNode;
-            else
+            //if ( item == this.UIHierarchy.UIHierarchyItems.Item( 1 ) )
+            //    return this.solutionNode;
+            //else
                 return this.nodes[ item ] as SolutionExplorerTreeNode;
         }
 
@@ -801,202 +797,242 @@ namespace Ankh.Solution
             return result;
         }
 
+        private class VSITEMSELECTIONHashCodeProvider : IHashCodeProvider
+        {
+            #region IHashCodeProvider Members
+
+            public int GetHashCode( object obj )
+            {
+                VSITEMSELECTION sel = (VSITEMSELECTION)obj;
+                if ( sel.pHier != null )
+                {
+                    return (int)( sel.pHier.GetHashCode() ^ sel.itemid );
+                }
+                else
+                {
+                    return (int)sel.itemid;
+                }
+            }
+
+            #endregion
+        }
+
+        private class VSITEMSELECTIONEqualityComparer : IComparer
+        {
+           
+
+            public int Compare( object x, object y )
+            {
+                VSITEMSELECTION sel1 = (VSITEMSELECTION)x;
+                VSITEMSELECTION sel2 = (VSITEMSELECTION)y;
+                if ( sel1.pHier == sel2.pHier && sel1.itemid == sel2.itemid )
+                {
+                    return 0;
+                }
+                else
+                {
+                    return (int)(sel1.itemid - sel2.itemid);
+                }
+            }
+        }
+
         #region SolutionLoadStrategy
         /// <summary>
         /// Encapsulates the details of how to handle a solution load.
         /// </summary>
-        private class SolutionLoadStrategy
-        {
-            protected SolutionLoadStrategy()
-            {
-            }
+        //private class SolutionLoadStrategy
+        //{
+        //    protected SolutionLoadStrategy()
+        //    {
+        //    }
 
-            public virtual void Load( Explorer outer )
-            {
-                DateTime startTime = DateTime.Now;
-                outer.context.StartOperation( "Synchronizing with solution explorer");
+        //    public virtual void Load( Explorer outer )
+        //    {
+        //        DateTime startTime = DateTime.Now;
+        //        outer.context.StartOperation( "Synchronizing with solution explorer");
 
-                Debug.Assert( outer.UIHierarchy.UIHierarchyItems.Count > 0 );
-                if ( outer.UIHierarchy.UIHierarchyItems.Count < 1 )
-                {
-                    return;
-                }
+        //        Debug.Assert( outer.UIHierarchy.UIHierarchyItems.Count > 0 );
+        //        if ( outer.UIHierarchy.UIHierarchyItems.Count < 1 )
+        //        {
+        //            return;
+        //        }
 
-                // avoid lots of flickering while we walk the tree
-                outer.TreeView.LockWindowUpdate();
-                try
-                {
-                    // we assume there is a single root node
-                    outer.solutionNode = (SolutionNode)SolutionExplorerTreeNode.CreateSolutionNode(
-                        outer.UIHierarchy.UIHierarchyItems.Item(1), outer);
+        //        // avoid lots of flickering while we walk the tree
+        //        outer.TreeView.LockWindowUpdate();
+        //        try
+        //        {
+        //            // we assume there is a single root node
+        //            outer.solutionNode = (SolutionNode)SolutionExplorerTreeNode.CreateSolutionNode(
+        //                outer.UIHierarchy.UIHierarchyItems.Item(1), outer);
 
-                    // and we're done
-                    outer.context.OutputPane.WriteLine( "Time: {0}", DateTime.Now - startTime );
-                    if ( outer.SolutionFinishedLoading != null )
-                        outer.SolutionFinishedLoading( outer, EventArgs.Empty );
-                }
-                finally
-                {
-                    // done
-                    outer.TreeView.UnlockWindowUpdate();
-                    outer.context.EndOperation();
-                }
+        //            // and we're done
+        //            outer.context.OutputPane.WriteLine( "Time: {0}", DateTime.Now - startTime );
+        //            if ( outer.SolutionFinishedLoading != null )
+        //                outer.SolutionFinishedLoading( outer, EventArgs.Empty );
+        //        }
+        //        finally
+        //        {
+        //            // done
+        //            outer.TreeView.UnlockWindowUpdate();
+        //            outer.context.EndOperation();
+        //        }
 
-                outer.CreateOverlayImages();
-            }
+        //        outer.CreateOverlayImages();
+        //    }
 
-            public virtual void CancelLoad()
-            {
-                // no-op, since it will never be called
-            }
+        //    public virtual void CancelLoad()
+        //    {
+        //        // no-op, since it will never be called
+        //    }
 
-            public static SolutionLoadStrategy GetStrategy( string version )
-            {
-                // just load right away if we're on vs7.x, poll on a 
-                // thread if we're on 8(+).x
-                if ( strategy == null )
-                {
-                    if ( version[0] == '7' )
-                        strategy = new SolutionLoadStrategy();
-                    else
-                        strategy = new SolutionLoadStrategy2005();
-                }
+        //    public static SolutionLoadStrategy GetStrategy( string version )
+        //    {
+        //        // just load right away if we're on vs7.x, poll on a 
+        //        // thread if we're on 8(+).x
+        //        if ( strategy == null )
+        //        {
+        //            if ( version[0] == '7' )
+        //                strategy = new SolutionLoadStrategy();
+        //            else
+        //                strategy = new SolutionLoadStrategy2005();
+        //        }
 
-                return strategy;
-            }
+        //        return strategy;
+        //    }
 
-            private static SolutionLoadStrategy strategy;
-        }
-
-
-        private class SolutionLoadStrategy2005 : SolutionLoadStrategy
-        {
-            public override void Load( Explorer outer )
-            {
-                this.outer = outer;
-
-                // create a thread to poll the solution explorer
-                System.Threading.Thread thread = new System.Threading.Thread(
-                    new System.Threading.ThreadStart(this.ThreadProc) );
-                thread.Start();
-            }
-
-            public override void CancelLoad()
-            {
-                this.done = true;
-            }
+        //    private static SolutionLoadStrategy strategy;
+        //}
 
 
-            private void ThreadProc()
-            {
-                try
-                {
-                    this.done = false;
-                    DateTime startTime = DateTime.Now;
+        //private class SolutionLoadStrategy2005 : SolutionLoadStrategy
+        //{
+        //    public override void Load( Explorer outer )
+        //    {
+        //        this.outer = outer;
 
-                    // this really shouldn't happen
-                    Debug.Assert( outer.UIHierarchy.UIHierarchyItems.Count > 0 );
-                    if ( outer.UIHierarchy.UIHierarchyItems.Count < 1 )
-                    {
-                        return;
-                    }
+        //        // create a thread to poll the solution explorer
+        //        System.Threading.Thread thread = new System.Threading.Thread(
+        //            new System.Threading.ThreadStart(this.ThreadProc) );
+        //        thread.Start();
+        //    }
 
-                    // loop until all the items have been loaded in the solution explorer
-                    UIHierarchyItem item = outer.UIHierarchy.UIHierarchyItems.Item( 1 );
+        //    public override void CancelLoad()
+        //    {
+        //        this.done = true;
+        //    }
 
-                    // if there is a Misc Items project in the solution, 
-                    // it doesn't necessarily appear as an UIHierarchyItem
-                    int targetCount = outer.DTE.Solution.Projects.Count;
-                    targetCount = this.HasMiscItems() ? targetCount - 1 : targetCount;
 
-                    while( !done && DateTime.Now - startTime < TimeOut )
-                    {
-                        Trace.WriteLine( String.Format("UIHierarchyItems: {0}, Projects.Count: {1}",
-                            item.UIHierarchyItems.Count, outer.dte.Solution.Projects.Count),
-                            "Ankh" );
+        //    private void ThreadProc()
+        //    {
+        //        try
+        //        {
+        //            this.done = false;
+        //            DateTime startTime = DateTime.Now;
+
+        //            // this really shouldn't happen
+        //            Debug.Assert( outer.UIHierarchy.UIHierarchyItems.Count > 0 );
+        //            if ( outer.UIHierarchy.UIHierarchyItems.Count < 1 )
+        //            {
+        //                return;
+        //            }
+
+        //            // loop until all the items have been loaded in the solution explorer
+        //            UIHierarchyItem item = outer.UIHierarchy.UIHierarchyItems.Item( 1 );
+
+        //            // if there is a Misc Items project in the solution, 
+        //            // it doesn't necessarily appear as an UIHierarchyItem
+        //            int targetCount = outer.DTE.Solution.Projects.Count;
+        //            targetCount = this.HasMiscItems() ? targetCount - 1 : targetCount;
+
+        //            while( !done && DateTime.Now - startTime < TimeOut )
+        //            {
+        //                Trace.WriteLine( String.Format("UIHierarchyItems: {0}, Projects.Count: {1}",
+        //                    item.UIHierarchyItems.Count, outer.dte.Solution.Projects.Count),
+        //                    "Ankh" );
  
-                        if ( item.UIHierarchyItems.Count >= targetCount )
-                        {
-                            // make sure this is invoked on the main GUI thread
-                            Trace.WriteLine( "Found all UIHierarchyItems, loading", "Ankh" );
-                            this.outer.Context.UIShell.SynchronizingObject.Invoke( 
-                                new LoadDelegate( this.DoLoad ), 
-                                new object[]{} );
-                            done = true;
-                        }
-                        System.Threading.Thread.Sleep( 250 );
-                    }
+        //                if ( item.UIHierarchyItems.Count >= targetCount )
+        //                {
+        //                    // make sure this is invoked on the main GUI thread
+        //                    Trace.WriteLine( "Found all UIHierarchyItems, loading", "Ankh" );
+        //                    this.outer.Context.UIShell.SynchronizingObject.Invoke( 
+        //                        new LoadDelegate( this.DoLoad ), 
+        //                        new object[]{} );
+        //                    done = true;
+        //                }
+        //                System.Threading.Thread.Sleep( 250 );
+        //            }
 
-                    if ( !done )
-                    {
-                        // if we have discovered some, load anyway
-                        if ( item.UIHierarchyItems.Count > 0 )
-                        {
-                            Trace.WriteLine( "UIHierarchyItems for all projects not found, " + 
-                                "loading those present", "Ankh" );
-                            Trace.WriteLine(  String.Format("UIHierarchyItems: {0}, Projects.Count: {1}",
-                                item.UIHierarchyItems.Count, outer.dte.Solution.Projects.Count),
-                                "Ankh" );
-                            this.outer.Context.UIShell.SynchronizingObject.Invoke( 
-                                new LoadDelegate( this.DoLoad ), 
-                                new object[]{} );
-                        }
-                        else
-                        {
-                            Trace.WriteLine( "No UIHierarchyItems found during solution load", "Ankh" );
+        //            if ( !done )
+        //            {
+        //                // if we have discovered some, load anyway
+        //                if ( item.UIHierarchyItems.Count > 0 )
+        //                {
+        //                    Trace.WriteLine( "UIHierarchyItems for all projects not found, " + 
+        //                        "loading those present", "Ankh" );
+        //                    Trace.WriteLine(  String.Format("UIHierarchyItems: {0}, Projects.Count: {1}",
+        //                        item.UIHierarchyItems.Count, outer.dte.Solution.Projects.Count),
+        //                        "Ankh" );
+        //                    this.outer.Context.UIShell.SynchronizingObject.Invoke( 
+        //                        new LoadDelegate( this.DoLoad ), 
+        //                        new object[]{} );
+        //                }
+        //                else
+        //                {
+        //                    Trace.WriteLine( "No UIHierarchyItems found during solution load", "Ankh" );
 
-                            this.outer.Context.UIShell.SynchronizingObject.Invoke(
-                                new LoadDelegate( this.ShowTimeOutMessage ),
-                                new object[]{} );                        
-                        }
-                    }
-                }
-                catch( Exception ex )
-                {
-                    Debug.WriteLine( ex );
-                }
-            }
+        //                    this.outer.Context.UIShell.SynchronizingObject.Invoke(
+        //                        new LoadDelegate( this.ShowTimeOutMessage ),
+        //                        new object[]{} );                        
+        //                }
+        //            }
+        //        }
+        //        catch( Exception ex )
+        //        {
+        //            Debug.WriteLine( ex );
+        //        }
+        //    }
 
-            private void ShowTimeOutMessage()
-            {
-                outer.Context.UIShell.ShowMessageBox( 
-                    "Solution is under version control, but UIHiearchyItems " + 
-                    "in the solution explorer failed to appear", 
-                    "Solution load timed out", MessageBoxButtons.OK );
-            }
+        //    private void ShowTimeOutMessage()
+        //    {
+        //        outer.Context.UIShell.ShowMessageBox( 
+        //            "Solution is under version control, but UIHiearchyItems " + 
+        //            "in the solution explorer failed to appear", 
+        //            "Solution load timed out", MessageBoxButtons.OK );
+        //    }
 
-            private void DoLoad()
-            {
-                try
-                {
-                    base.Load( this.outer );
-                }
-                catch( Exception ex )
-                {
-                    this.outer.Context.ErrorHandler.Handle( ex );
-                }
-            }
+        //    private void DoLoad()
+        //    {
+        //        try
+        //        {
+        //            base.Load( this.outer );
+        //        }
+        //        catch( Exception ex )
+        //        {
+        //            this.outer.Context.ErrorHandler.Handle( ex );
+        //        }
+        //    }
 
-            private bool HasMiscItems()
-            {
-                foreach (Project project in Enumerators.EnumerateProjects(this.outer.Context.DTE))
-                {
-                    if (project.Kind == MiscItemsKind)
-                        return true;
-                }
-                return false;
-            }
+        //    private bool HasMiscItems()
+        //    {
+        //        foreach (Project project in Enumerators.EnumerateProjects(this.outer.Context.DTE))
+        //        {
+        //            if (project.Kind == MiscItemsKind)
+        //                return true;
+        //        }
+        //        return false;
+        //    }
 
-            private const string MiscItemsKind = "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}";
-            private readonly static TimeSpan TimeOut = new TimeSpan(0, 15, 0);
-            private delegate void LoadDelegate( );
-            private Explorer outer;
-            private bool done;
-        }
+        //    private const string MiscItemsKind = "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}";
+        //    private readonly static TimeSpan TimeOut = new TimeSpan(0, 15, 0);
+        //    private delegate void LoadDelegate( );
+        //    private Explorer outer;
+        //    private bool done;
+        //}
         #endregion
 
 
-        internal const int LockOverlay = 15;
+      
+internal const int LockOverlay = 15;
         internal const int ReadonlyOverlay = 14;
         internal const int LockReadonlyOverlay = 13;
         private _DTE dte;
