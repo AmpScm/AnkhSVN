@@ -159,7 +159,7 @@
       <Name>System.XML</Name>
     </Reference>
     <ProjectReference Include="..\Utils\Utils.2005.csproj">
-      <Name>Utils</Name>
+      <Name>Utils.2005</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
