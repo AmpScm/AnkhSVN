@@ -37,6 +37,8 @@ namespace Ankh.UI
             this.newRootTextBox.TextChanged += new EventHandler( newRootTextBox_TextChanged );
 
             Win32.SHAutoComplete( this.newRootTextBox.Handle, Shacf.FileSysDirs );
+
+
         }
 
         
@@ -227,35 +229,49 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
             this.explorerPanel = new System.Windows.Forms.Panel();
-            this.splitter = new System.Windows.Forms.Splitter();
+            this.listView = new Ankh.UI.FileSystemDetailsView();
+            this.treeView = new Ankh.UI.FileSystemTreeView();
             this.topPanel = new System.Windows.Forms.Panel();
             this.addWorkingCopyLabel = new System.Windows.Forms.Label();
             this.addButton = new System.Windows.Forms.Button();
             this.newRootTextBox = new System.Windows.Forms.TextBox();
-            this.listView = new Ankh.UI.FileSystemDetailsView();
-            this.treeView = new Ankh.UI.FileSystemTreeView();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.explorerPanel.SuspendLayout();
             this.topPanel.SuspendLayout();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // explorerPanel
             // 
-            this.explorerPanel.Controls.Add( this.listView );
-            this.explorerPanel.Controls.Add( this.splitter );
-            this.explorerPanel.Controls.Add( this.treeView );
+            this.explorerPanel.Controls.Add( this.splitContainer );
             this.explorerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.explorerPanel.Location = new System.Drawing.Point( 0, 29 );
             this.explorerPanel.Name = "explorerPanel";
             this.explorerPanel.Size = new System.Drawing.Size( 902, 604 );
             this.explorerPanel.TabIndex = 1;
             // 
-            // splitter
+            // listView
             // 
-            this.splitter.Location = new System.Drawing.Point( 207, 0 );
-            this.splitter.Name = "splitter";
-            this.splitter.Size = new System.Drawing.Size( 3, 604 );
-            this.splitter.TabIndex = 1;
-            this.splitter.TabStop = false;
+            this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView.HideSelection = false;
+            this.listView.Location = new System.Drawing.Point( 0, 0 );
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size( 598, 604 );
+            this.listView.TabIndex = 0;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
+            // 
+            // treeView
+            // 
+            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView.HideSelection = false;
+            this.treeView.Location = new System.Drawing.Point( 0, 0 );
+            this.treeView.Name = "treeView";
+            this.treeView.SelectedItem = null;
+            this.treeView.Size = new System.Drawing.Size( 300, 604 );
+            this.treeView.TabIndex = 0;
             // 
             // topPanel
             // 
@@ -273,7 +289,7 @@ namespace Ankh.UI
             this.addWorkingCopyLabel.AutoSize = true;
             this.addWorkingCopyLabel.Location = new System.Drawing.Point( 3, 8 );
             this.addWorkingCopyLabel.Name = "addWorkingCopyLabel";
-            this.addWorkingCopyLabel.Size = new System.Drawing.Size( 96, 13 );
+            this.addWorkingCopyLabel.Size = new System.Drawing.Size( 95, 13 );
             this.addWorkingCopyLabel.TabIndex = 2;
             this.addWorkingCopyLabel.Text = "Add working copy:";
             // 
@@ -291,29 +307,26 @@ namespace Ankh.UI
             // 
             this.newRootTextBox.Location = new System.Drawing.Point( 105, 5 );
             this.newRootTextBox.Name = "newRootTextBox";
-            this.newRootTextBox.Size = new System.Drawing.Size( 240, 21 );
+            this.newRootTextBox.Size = new System.Drawing.Size( 240, 20 );
             this.newRootTextBox.TabIndex = 0;
             this.newRootTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler( this.newRootTextBox_KeyDown );
             // 
-            // listView
+            // splitContainer
             // 
-            this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView.HideSelection = false;
-            this.listView.Location = new System.Drawing.Point( 210, 0 );
-            this.listView.Name = "listView";
-            this.listView.Size = new System.Drawing.Size( 692, 604 );
-            this.listView.TabIndex = 2;
-            this.listView.View = System.Windows.Forms.View.Details;
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point( 0, 0 );
+            this.splitContainer.Name = "splitContainer";
             // 
-            // treeView
+            // splitContainer.Panel1
             // 
-            this.treeView.Dock = System.Windows.Forms.DockStyle.Left;
-            this.treeView.HideSelection = false;
-            this.treeView.Location = new System.Drawing.Point( 0, 0 );
-            this.treeView.Name = "treeView";
-            this.treeView.SelectedItem = null;
-            this.treeView.Size = new System.Drawing.Size( 207, 604 );
-            this.treeView.TabIndex = 0;
+            this.splitContainer.Panel1.Controls.Add( this.treeView );
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add( this.listView );
+            this.splitContainer.Size = new System.Drawing.Size( 902, 604 );
+            this.splitContainer.SplitterDistance = 300;
+            this.splitContainer.TabIndex = 0;
             // 
             // WorkingCopyExplorerControl
             // 
@@ -324,6 +337,9 @@ namespace Ankh.UI
             this.explorerPanel.ResumeLayout( false );
             this.topPanel.ResumeLayout( false );
             this.topPanel.PerformLayout();
+            this.splitContainer.Panel1.ResumeLayout( false );
+            this.splitContainer.Panel2.ResumeLayout( false );
+            this.splitContainer.ResumeLayout( false );
             this.ResumeLayout( false );
 
         }
@@ -332,18 +348,14 @@ namespace Ankh.UI
         private Panel explorerPanel;
         private FileSystemTreeView treeView;
         private FileSystemDetailsView listView;
-        private Splitter splitter;
 
         private IFileSystemItem[] selection = new IFileSystemItem[] { };
         private Panel topPanel;
         private Label addWorkingCopyLabel;
         private Button addButton;
         private TextBox newRootTextBox;
+        private SplitContainer splitContainer;
 
         private IContextMenu customContextMenu;
-
-        
-
-       
     }
 }
