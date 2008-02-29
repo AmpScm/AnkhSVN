@@ -44,7 +44,7 @@ namespace AnkhSvn.AnkhSvn
     [ProvideMenuResource(1000, 1)]
     [Guid(GuidList.guidAnkhSvnPkgString)]
 	[CLSCompliant(false)]
-    public sealed class AnkhSvnPackage : Package
+    public sealed partial class AnkhSvnPackage : Package
     {
         /// <summary>
         /// Default constructor of the package.
@@ -73,57 +73,15 @@ namespace AnkhSvn.AnkhSvn
             Trace.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
 
-			// TODO: Remove... Just some hack to showcase the command infrastructure
-			HookAllCommands();
+			// TODO: Register essential services which can't be delayed.
+			IServiceContainer container = (IServiceContainer)GetService(typeof(IServiceContainer));
+
+			Debug.Assert(container != null, "Service container available");
+
+			// container.AddService(.., ..., true)
+			// container.AddService(.., new ServiceCreatorCallback(..), true)
+			GC.KeepAlive(this.AnkhContext);
         }
 		#endregion
-
-		private void HookAllCommands()
-		{
-			// Hack from package wizard, just hook all commands to provide some feedback
-
-			// Add our command handlers for menu (commands must exist in the .vsct file)
-			OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-			if (null != mcs)
-			{
-				foreach (AnkhCommand cmd in Enum.GetValues(typeof(AnkhCommand)))
-				{
-					if (cmd <= AnkhCommand.CommandFirst)
-						continue;
-
-					// Create the command for the menu item.
-					CommandID menuCommandID = new CommandID(GuidList.guidAnkhSvnCmdSet, (int)cmd);
-					MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
-					mcs.AddCommand(menuItem);
-				}
-			}
-		}
-        
-
-        /// <summary>
-        /// This function is the callback used to execute a command when the a menu item is clicked.
-        /// See the Initialize method to see how the menu item is associated to this function using
-        /// the OleMenuCommandService service and the MenuCommand class.
-        /// </summary>
-        private void MenuItemCallback(object sender, EventArgs e)
-        {
-            // Show a Message Box to prove we were here
-            IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
-            Guid clsid = Guid.Empty;
-            int result;
-            Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(uiShell.ShowMessageBox(
-                       0,
-                       ref clsid,
-                       "AnkhSvn",
-                       string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.ToString()),
-                       string.Empty,
-                       0,
-                       OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                       OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
-                       OLEMSGICON.OLEMSGICON_INFO,
-                       0,        // false
-                       out result));
-        }
-
     }
 }
