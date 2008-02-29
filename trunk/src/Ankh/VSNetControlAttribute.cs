@@ -3,6 +3,8 @@ using System;
 using EnvDTE;
 using Microsoft.Office.Core;
 using System.Reflection;
+using AnkhSvn.Ids;
+using System.Diagnostics;
 
 namespace Ankh
 {
@@ -12,15 +14,34 @@ namespace Ankh
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class VSNetControlAttribute : Attribute
     {
+		readonly AnkhCommand _command;
         public const string AnkhSubMenu = "An&kh";
+
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="commandBar">The name of the command bar.</param>
+		[Obsolete("Use VSNetControlAttribute(AnkhCommand, String, ...)")]
+		public VSNetControlAttribute(string commandBar)
+		{
+			this.commandBar = commandBar;
+		}
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="commandBar">The name of the command bar.</param>
-        public VSNetControlAttribute( string commandBar )
-        {	
+        public VSNetControlAttribute(AnkhCommand command, string commandBar )
+        {
+			_command = command;
             this.commandBar = commandBar;
         }
+
+		public AnkhCommand Command
+		{
+			[DebuggerStepThrough]
+			get { return _command; }
+		}
 
         /// <summary>
         /// The name of the commandbar where the command should be placed.

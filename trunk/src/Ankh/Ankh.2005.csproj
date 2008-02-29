@@ -11,8 +11,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Ankh</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Ankh.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -42,6 +41,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -58,12 +58,13 @@
     <NoStdLib>false</NoStdLib>
     <NoWarn>0618</NoWarn>
     <Optimize>false</Optimize>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <LangVersion>default</LangVersion>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -85,6 +86,7 @@
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
+    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '(svnlib) Release|AnyCPU' ">
     <OutputPath>bin\(svnlib) Release\</OutputPath>
@@ -129,9 +131,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AnkhUserControlHostLib">
-      <Name>AnkhUserControlHostLib</Name>
-      <HintPath>..\lib\AnkhUserControlHostLib.dll</HintPath>
+    <Reference Include="Ankh.SHDocVw, Version=1.1.0.0, Culture=neutral, PublicKeyToken=64de3c7d1c18daba, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Ankh.SHDocVw.dll</HintPath>
     </Reference>
     <Reference Include="EnvDTE">
       <Name>envdte</Name>
@@ -145,10 +147,6 @@
     <Reference Include="Interop.esproj">
       <Name>Interop.esproj</Name>
       <HintPath>..\lib\Interop.esproj.dll</HintPath>
-    </Reference>
-    <Reference Include="Interop.SHDocVw">
-      <Name>Interop.SHDocVw</Name>
-      <HintPath>..\lib\Interop.SHDocVw.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
@@ -194,6 +192,10 @@
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Name>Ankh.UI.2005</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AnkhSvn.Ids\AnkhSvn.Ids.csproj">
+      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
+      <Name>AnkhSvn.Ids</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.2005.csproj">
       <Name>Utils.2005</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
@@ -202,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.build" />
+    <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
     <None Include="Config\Config.xsx">
       <DependentUpon>Config.xsd</DependentUpon>
@@ -221,9 +224,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CommandBarContextMenu.cs" />
-    <Compile Include="CommandMap.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\AddItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -257,6 +257,7 @@
     <Compile Include="Commands\CommandBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\CommandEventArgs.cs" />
     <Compile Include="Commands\CommitItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -297,6 +298,8 @@
     <Compile Include="Commands\MakeDirectoryCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\Mapper\CommandMapper.cs" />
+    <Compile Include="Commands\Mapper\CommandMap.cs" />
     <Compile Include="Commands\RefreshCommand.cs">
       <SubType>Code</SubType>
     </Compile>

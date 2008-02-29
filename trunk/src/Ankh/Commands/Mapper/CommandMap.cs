@@ -11,7 +11,7 @@ using System.Globalization;
 namespace Ankh
 {
     /// <summary>
-    /// Responsible for registering the ICommand implementations in this assembly.
+    /// Responsible for registering the ICommand implementations in this assembly for the AddIn
     /// </summary>
     public class CommandMap : DictionaryBase
     {

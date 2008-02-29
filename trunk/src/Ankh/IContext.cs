@@ -29,6 +29,7 @@ namespace Ankh
         /// <summary>
         /// The addin object.
         /// </summary>
+		[Obsolete("null in package")]
         EnvDTE.AddIn AddIn { get; }
 
         /// <summary>

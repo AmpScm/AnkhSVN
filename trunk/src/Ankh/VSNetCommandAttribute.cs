@@ -1,5 +1,7 @@
 // $Id$
 using System;
+using System.Diagnostics;
+using AnkhSvn.Ids;
 
 namespace Ankh
 {
@@ -9,10 +11,19 @@ namespace Ankh
     [AttributeUsage(AttributeTargets.Class)]
     public class VSNetCommandAttribute : Attribute
     {
+		readonly AnkhCommand _command;
+
+		[Obsolete("Use VSNetCommandAttribute(AnkhCommand, string, ...)")]		
         public VSNetCommandAttribute( string name )
         {
             this.name = name;
         }
+
+		public VSNetCommandAttribute(AnkhCommand command, string name)
+		{
+			_command = command;
+			this.name = name;
+		}
 
         /// <summary>
         /// The registered name of the command.
@@ -22,6 +33,12 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get{ return name; }
         }
+
+		public AnkhCommand Command
+		{
+			[DebuggerStepThrough]
+			get { return _command; }
+		}
 
         /// <summary>
         /// The tooltip associated with this command.
