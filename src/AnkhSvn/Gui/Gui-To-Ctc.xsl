@@ -519,9 +519,14 @@
 		</xsl:if>
 		<xsl:text>, </xsl:text>
 		<!-- Localized Command Name-->
-		<xsl:if test="@localizedName">
-			<xsl:value-of select="me:CQuote(@localizedName)"/>
-		</xsl:if>
+    <xsl:choose>
+      <xsl:when test="@localizedName">
+        <xsl:value-of select="me:CQuote(@localizedName)"/>
+      </xsl:when>
+      <xsl:when test="@name">
+        <xsl:value-of select="me:CQuote(@name)"/>
+      </xsl:when>
+    </xsl:choose>		
 		<xsl:text>;&#10;</xsl:text>
 	</xsl:template>
 	<xsl:template match="gui:ComboBox">

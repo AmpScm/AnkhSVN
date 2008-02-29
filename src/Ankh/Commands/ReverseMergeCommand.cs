@@ -13,7 +13,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to revert current item to a specific revision.
     /// </summary>
-    [VSNetCommand(AnkhCommand.ReverseMerge,
+    [VSNetCommand(AnkhCommand.RevertToRevision,
 		"ReverseMerge",
          Text = "Re&vert to Revision...", 
          Tooltip = "Revert this item to a specific revision.", 

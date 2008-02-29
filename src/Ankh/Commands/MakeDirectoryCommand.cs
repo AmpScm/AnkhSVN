@@ -12,7 +12,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to creates a new directory here in the Repository Explorer.
     /// </summary>
-    [VSNetCommand(AnkhCommand.MakeDirectory,
+    [VSNetCommand(AnkhCommand.NewDirectory,
 		"MakeDirectoryCommand",
          Text = "Ne&w Directory...",
          Tooltip = "Create a new directory here.",

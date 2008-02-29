@@ -18,65 +18,129 @@
       <Group id="Grp_FileMenuScc" priority="0x0800">
         <Menu id="Menu_FileScc" priority="0x0000" name="SvnMenu" text="Sou&amp;rce Control (Ankh)">
           <Group id="Grp_FileSccMenuUpdate" priority="0x0000">
-            <Button id="Cmd_FileSccMenuUpdateLatest" priority="0x0100" text="Get &amp;Latest Version of (Ankh)" />
-            <Button id="Cmd_FileSccMenuUpdateSpecific" priority="0x0200" text="&amp;Get Specific Version of (Ankh)" />
-
-            <Button id="Cmd_AddItem" priority="0x301" text="&amp;Add..."
-                    toolTip="Add selected items to the working copy." />
-            <Button id="Cmd_AddRepositoryRoot" priority="0x301" text="A&amp;dd Repository Url"
+            <Button id="Cmd_AddItem" name="AddItem" priority="0x301"
+                    text="&amp;Add..."
+                    toolTip="Add selected items to the working copy." iconFile="menu/Add.bmp"/>
+            <Button id="Cmd_AddRepositoryRoot" name="AddRepositoryRoot" priority="0x301"
+                    text="A&amp;dd Repository Url"
                     toolTip="Add a new URL to the Repository Explorer." iconFile="menu/AddUrl.bmp" />
-            <Button id="Cmd_AddSolutionToRepository" priority="0x301" text="Add Sol&amp;ution to Subversion repository..."
+            <Button id="Cmd_AddSolutionToRepository" name="AddSolutionToRepository" priority="0x301"
+                    text="Add Sol&amp;ution to Subversion repository..."
                     toolTip="Add this solution to a Subversion repository." iconFile="menu/AddSolutionToRepository.bmp" />
-            <Button id="Cmd_AddWorkingCopyExplorerRoot" priority="0x301" text="A&amp;dd New Root..."
+            <Button id="Cmd_AddWorkingCopyExplorerRoot" name="AddWorkingCopyExplorerRoot" priority="0x301"
+                    text="A&amp;dd New Root..."
                     toolTip="Add a new root to the Working Copy Explorer." iconFile="menu/AddFolder.bmp" />
-            <Button id="Cmd_Blame" priority="0x301" text="&amp;Blame..."
+            <Button id="Cmd_Blame" name="Blame" priority="0x301"
+                    text="&amp;Blame..."
                     toolTip="Identify which user wrote which lines." iconFile="menu/Blame.bmp" />
-            <Button id="Cmd_Checkout" priority="0x301" text="Chec&amp;kout a Repository..."
+            <Button id="Cmd_Checkout" name="Checkout" priority="0x301"
+                    text="Chec&amp;kout a Repository..."
                     toolTip="Checkout a Subversion repository." iconFile="menu/CheckoutDirectory.bmp" />
-            <Button id="Cmd_CheckoutFolder" priority="0x301" text="Chec&amp;kout Folder..."
+            <Button id="Cmd_CheckoutFolder" name="CheckoutFolder" priority="0x301"
+                    text="Chec&amp;kout Folder..."
                     toolTip="Checkout this folder." iconFile="menu/CheckoutDirectory.bmp" />
-            <Button id="Cmd_CheckoutSolution" priority="0x301" text="Checkout &amp;Solution..."
+            <Button id="Cmd_CheckoutSolution" name="CheckoutSolution" priority="0x301"
+                    text="Checkout &amp;Solution..."
                     toolTip="Checkout this solution." iconFile="menu/CheckoutSolution.bmp" />
-            <Button id="Cmd_Cleanup" priority="0x301" text="Cl&amp;eanup"
+            <Button id="Cmd_Cleanup" name="Cleanup" priority="0x301"
+                    text="Cl&amp;eanup"
                     toolTip="Cleanup the working copy." iconFile="menu/Cleanup.bmp" />
-            <Button id="Cmd_CommitItem" priority="0x301" text="&amp;Commit..."
+            <Button id="Cmd_CommitItem" name="CommitItem" priority="0x301"
+                    text="&amp;Commit..."
                     toolTip="Commit selected items to the Subversion repository." iconFile="menu/Commit.bmp" />
-            <Button id="Cmd_CopyReposExplorerUrl" priority="0x301" text="Copy &amp;Url"
+            <Button id="Cmd_CopyReposExplorerUrl" name="CopyReposExplorerUrl" priority="0x301"
+                    text="Copy &amp;Url"
                     toolTip="Copy the Url of this item to the clipboard." iconFile="menu/CopyUrlToClipboard.bmp" />
-            <Button id="Cmd_CreatePatch" priority="0x301" text="Create &amp;Patch..."
-                    toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.bmp"/>
-            <Button id="Cmd_DiffExternalLocalItem" priority="0x301" text="Diff E&amp;xternal"
-                    toolTip="Diff against local text base using external tool." iconFile="menu/Diff.bmp"/>
-            <Button id="Cmd_DiffLocalItem" priority="0x301" text="Di&amp;ff..."
-                    toolTip="Show differences compared to local text base." iconFile="menu/Diff.bmp"/>
-            <Button id="Cmd_EditConfigFile" priority="0x301" text="EditConfigFile" />
-            <Button id="Cmd_Export" priority="0x301" text="Export" />
-            <Button id="Cmd_ExportFolder" priority="0x301" text="ExportFolder" />
-            <Button id="Cmd_Lock" priority="0x301" text="Lock" />
-            <Button id="Cmd_Log" priority="0x301" text="Log" />
-            <Button id="Cmd_MakeDirectory" priority="0x301" text="MakeDirectory" />
-            <Button id="Cmd_Refresh" priority="0x301" text="Refresh" />
-            <Button id="Cmd_RefreshRepositoryItem" priority="0x301" text="RefreshRepositoryItem" />
-            <Button id="Cmd_Relocate" priority="0x301" text="Relocate" />
-            <Button id="Cmd_RemoveRepositoryRoot" priority="0x301" text="RemoveRepositoryRoot" />
-            <Button id="Cmd_RemoveWorkingCopyExplorerRoot" priority="0x301" text="RemoveWorkingCopyExplorerRoot" />
-            <Button id="Cmd_ResolveConflict" priority="0x301" text="ResolveConflict" />
-            <Button id="Cmd_ResolveConflictExternal" priority="0x301" text="ResolveConflictExternal" />
-            <Button id="Cmd_ReverseMerge" priority="0x301" text="ReverseMerge" />
-            <Button id="Cmd_RevertItem" priority="0x301" text="RevertItem" />
-            <Button id="Cmd_SaveToFile" priority="0x301" text="SaveToFile" />
-            <Button id="Cmd_SendErrorReport" priority="0x301" text="SendErrorReport" />
-            <Button id="Cmd_ShowCommitDialog" priority="0x301" text="ShowCommitDialog" />
-            <Button id="Cmd_ShowRepositoryExplorer" priority="0x301" text="ShowRepositoryExplorer" />
-            <Button id="Cmd_ShowWorkingCopyExplorer" priority="0x301" text="ShowWorkingCopyExplorer" />
-            <Button id="Cmd_SwitchItem" priority="0x301" text="SwitchItem" />
-            <Button id="Cmd_ToggleAnkh" priority="0x301" text="ToggleAnkh" />
-            <Button id="Cmd_Unlock" priority="0x301" text="Unlock" />
-            <Button id="Cmd_UpdateItem" priority="0x301" text="UpdateItem" />
-            <Button id="Cmd_ViewInVsNet" priority="0x301" text="ViewInVsNet" />
-            <Button id="Cmd_ViewInWindows" priority="0x301" text="ViewInWindows" />
-            <Button id="Cmd_ViewRepositoryFile" priority="0x301" text="ViewRepositoryFile" />
-            <Button id="Cmd_CheckForOrphanedTreeNodes" priority="0x301" text="CheckForOrphanedTreeNodes" />
+            <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x301"
+                    text="Create &amp;Patch..."
+                    toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.bmp" />
+            <Button id="Cmd_DiffExternalLocalItem" name="DiffExternalLocalItem" priority="0x301"
+                    text="Diff E&amp;xternal"
+                    toolTip="Diff against local text base using external tool." iconFile="menu/Diff.bmp" />
+            <Button id="Cmd_DiffLocalItem" name="DiffLocalItem" priority="0x301"
+                    text="Di&amp;ff..."
+                    toolTip="Show differences compared to local text base." iconFile="menu/Diff.bmp" />
+            <Button id="Cmd_EditConfigFile" name="EditConfigFile" priority="0x301"
+                    text="&amp;Configuration..."
+                    toolTip="Configure AnkhSVN." iconFile="menu/EditConfigFile.bmp" />
+            <Button id="Cmd_Export" name="Export" priority="0x301"
+                    text="E&amp;xport a Repository or Local Folder..."
+                    toolTip="Export a Subversion repository or local folder." iconFile="menu/Export.bmp" />
+            <Button id="Cmd_ExportFolder" name="ExportFolder" priority="0x301"
+                    text="E&amp;xport this folder"
+                    toolTip="Export this folder." iconFile="menu/Export.bmp" />
+            <Button id="Cmd_Lock" name="Lock" priority="0x301"
+                    text="Loc&amp;k..."
+                    toolTip="Lock the selected item." iconFile="menu/Lock.bmp" />
+            <Button id="Cmd_Log" name="Log" priority="0x301"
+                    text="&amp;Log"
+                    toolTip="Show the change log for the selected item." iconFile="menu/Log.bmp" />
+            <Button id="Cmd_NewDirectory" name="NewDirectory" priority="0x301"
+                    text="Ne&amp;w Directory..."
+                    toolTip="Create a new directory here." iconFile="menu/MakeDirectory.bmp" />
+            <Button id="Cmd_Refresh" name="Refresh" priority="0x301"
+                    text="Refres&amp;h"
+                    toolTip="Refresh this view." iconFile="menu/Refresh.bmp"/>
+            <Button id="Cmd_RefreshRepositoryItem" name="RefreshRepositoryItem" priority="0x301"
+                    text="Refres&amp;h"
+                    toolTip="Refresh this item." iconFile="menu/Refresh.bmp"/>
+            <Button id="Cmd_Relocate" name="Relocate" priority="0x301"
+                    text="Relo&amp;cate..."
+                    toolTip="Relocate this file." iconFile="menu/Relocate.bmp" />
+            <Button id="Cmd_RemoveRepositoryRoot" name="RemoveRepositoryRoot" priority="0x301"
+                    text="&amp;Remove Repository URL"
+                    toolTip="Remove a URL from the Repository Explorer." iconFile="menu/RemoveUrl.bmp"/>
+            <Button id="Cmd_RemoveWorkingCopyExplorerRoot" name="RemoveWorkingCopyExplorerRoot" priority="0x301"
+                    text="&amp;Remove Root"
+                    toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.bmp"/>
+            <Button id="Cmd_ResolveConflict" name="ResolveConflict" priority="0x301"
+                    text="Res&amp;olve Conflict..."
+                    toolTip="Resolve conflict between changes." iconFile="menu/ResolveConflict.bmp"/>
+            <Button id="Cmd_ResolveConflictExternal" name="ResolveConflictExternal" priority="0x301"
+                    text="Resolve Conflict E&amp;xternal..."
+                    toolTip="Resolve conflict between changes using external tool." iconFile="menu/ResolveConflict.bmp"/>
+            <Button id="Cmd_RevertItem" name="RevertItem" priority="0x301"
+                    text="&amp;Revert"
+                    toolTip="Revert this item to last updated revision." iconFile="menu/Revert.bmp"/>
+            <Button id="Cmd_RevertToRevision" name="RevertToRevision" priority="0x301"
+                    text="Re&amp;vert to Revision..."
+                    toolTip="Revert this item to a specific revision." iconFile="menu/RevertToVersion.bmp" />
+            <Button id="Cmd_SaveToFile" name="SaveToFile" priority="0x301"
+                    text="Save to &amp;File"
+                    toolTip="Save the file to disk." iconFile="menu/SaveToFile.bmp" />
+            <Button id="Cmd_SendFeedback" name="SendFeedback" priority="0x301"
+                    text="Send Feedback..."
+                    toolTip="Send the AnkhSVN team comments and suggestions." iconFile="menu/SendSuggest.bmp" />
+            <Button id="Cmd_ShowCommitDialog" name="ShowCommitDialog" priority="0x301"
+                    text="Show &amp;Commit Dialog"
+                    toolTip="Show the commit dialog." iconFile="menu/Commit.bmp"/>
+            <Button id="Cmd_ShowRepositoryExplorer" name="ShowRepositoryExplorer" priority="0x301"
+                    text="&amp;Repository Explorer"
+                    toolTip="Show the Repository Explorer window." iconFile="menu/ReposExplorer.bmp"/>
+            <Button id="Cmd_ShowWorkingCopyExplorer" name="ShowWorkingCopyExplorer" priority="0x301"
+                    text="&amp;Working Copy Explorer"
+                    toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.bmp"/>
+            <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x301"
+                    text="&amp;Switch..."
+                    toolTip="Switch this item to a different URL." iconFile="menu/Switch.bmp"/>
+            <Button id="Cmd_ToggleAnkh" name="ToggleAnkh" priority="0x301"
+                    text="Enable Ank&amp;hSVN for this solution"
+                    toolTip="Enable Ankh for this solution." iconFile="menu/ToggleAnkh.bmp"/>
+            <Button id="Cmd_Unlock" name="Unlock" priority="0x301"
+                    text="U&amp;nlock..."
+                    toolTip="Unlock the selected items." iconFile="menu/Unlock.bmp"/>
+            <Button id="Cmd_UpdateItem" name="UpdateItem" priority="0x301" 
+                    text="&amp;Update..." 
+                    toolTip="Updates local items with changes from the Subversion repository." iconFile="menu/Update.bmp"/>
+            <Button id="Cmd_ViewInVsNet" name="ViewInVsNet" priority="0x301" 
+                    text="In &amp;Visual Studio" 
+                    toolTip="View this file in Visual Studio." iconFile="menu/ViewInVSNet.bmp"/>
+            <Button id="Cmd_ViewInWindows" name="ViewInWindows" priority="0x301" 
+                    text="In Wi&amp;ndows" 
+                    toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.bmp"/>
+            <Button id="Cmd_ViewRepositoryFile" name="ViewRepositoryFile" priority="0x301" 
+                    text="In Repository" 
+                    toolTip="View this file" iconFile="menu/ViewInWindows.bmp"/>
           </Group>
         </Menu>
       </Group>
