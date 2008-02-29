@@ -99,6 +99,7 @@
       <To>Gui\Ctc\AnkhSvn.ctc</To>
       <Debug>true</Debug>
     </XslSource>
+    <Compile Include="AnkhSvnPackage.Commands.cs" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
       <SubType>
@@ -115,6 +116,10 @@
     <ProjectReference Include="..\AnkhSvn.Ids\AnkhSvn.Ids.csproj">
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>AnkhSvn.Ids</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh\Ankh.2005.csproj">
+      <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
+      <Name>Ankh.2005</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
