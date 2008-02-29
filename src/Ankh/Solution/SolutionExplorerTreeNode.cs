@@ -12,6 +12,7 @@ using System.IO;
 
 using C = Utils.Win32.Constants;
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Solution
 {
@@ -394,7 +395,8 @@ namespace Ankh.Solution
 
 #if DEBUG
 
-    [VSNetCommand("CheckForOrphanedTreeNodes", Text="Check for orphaned tree nodes", 
+    [VSNetCommand(AnkhCommand.CheckForOrphanedTreeNodes,
+		"CheckForOrphanedTreeNodes", Text="Check for orphaned tree nodes", 
         Bitmap=ResourceBitmaps.Default, 
         Tooltip="Check for orphaned tree nodes")]
     [VSNetControl( "Tools.AnkhSVN", Position=1 )]
