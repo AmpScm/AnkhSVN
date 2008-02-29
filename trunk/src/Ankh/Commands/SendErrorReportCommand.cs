@@ -6,7 +6,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to send the AnkhSVN team comments and suggestions.
     /// </summary>
-    [VSNetCommand(AnkhCommand.SendErrorReport,
+    [VSNetCommand(AnkhCommand.SendFeedback,
 		"SendErrorReport",
          Text = "Send Feedback...", 
          Tooltip = "Send the AnkhSVN team comments and suggestions.",
