@@ -33,7 +33,7 @@ namespace AnkhSvn.AnkhSvn
 
 			Debug.Assert(cCmds == 1, "Multiple commands"); // Should never happen in VS
 
-			if (pguidCmdGroup != AnkhId.CommandSetId)
+			if (pguidCmdGroup != AnkhId.CommandSetGuid)
 			{
 				// Filter out commands that are not defined by this package
 				return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
@@ -89,7 +89,7 @@ namespace AnkhSvn.AnkhSvn
 
 		public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
 		{
-			if(pguidCmdGroup != AnkhId.CommandSetId)
+			if(pguidCmdGroup != AnkhId.CommandSetGuid)
 			{
 				return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
 			}

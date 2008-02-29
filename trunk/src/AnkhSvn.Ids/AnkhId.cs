@@ -25,16 +25,26 @@ namespace AnkhSvn.Ids
 		/// <remarks>Must be changed when the PackageId changes</remarks>
 		public const string CommandSet = "aa61c329-d559-468f-8f0f-4f03896f704d";
 
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string BmpId = "9db594ca-ebdd-40e1-9e37-51b7f9ef8df0";
+		
 
 
 		/// <summary>
 		/// The command set as a guid
 		/// </summary>
-		public static readonly Guid CommandSetId = new Guid(CommandSet);
+		public static readonly Guid CommandSetGuid = new Guid(CommandSet);
 
 		/// <summary>
 		/// The package is as a guid
 		/// </summary>
 		public static readonly Guid PackageGuid = new Guid(PackageId);
+
+		/// <summary>
+		/// The guid for the generated Bmp
+		/// </summary>
+		public static readonly Guid BmpGuid = new Guid(BmpId);
 	}
 }

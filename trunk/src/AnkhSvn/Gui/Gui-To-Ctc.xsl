@@ -154,7 +154,7 @@
   
   public string generateBitmap(XPathNodeIterator nodes, string bitmapFile, string sourceFile)
   {
-    /*string baseDir = Path.GetDirectoryName(sourceFile);
+    string baseDir = Path.GetDirectoryName(sourceFile);
     int imgCount = nodes.Count;
     Bitmap bmp = new Bitmap(16 * imgCount, 16, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
     
@@ -166,7 +166,8 @@
       int i = 0;
       foreach(XPathNavigator n in nodes)
       {
-        using(Image img = Image.FromFile(Path.Combine(baseDir, n.Value)))
+        string fp = Path.GetFullPath(Path.Combine(baseDir, n.Value));
+        using(Image img = Image.FromFile(fp))
         {
           g.DrawImage(img, 16 * i++, 0);
         }
@@ -174,7 +175,7 @@
     }
     System.Console.WriteLine("Should generate bitmap for {0} images", nodes.Count);
     
-    bmp.Save(bitmapFile, System.Drawing.Imaging.ImageFormat.Bmp);*/
+    bmp.Save(bitmapFile, System.Drawing.Imaging.ImageFormat.Bmp);
     return "";
   }
   
@@ -195,13 +196,7 @@
    ]]>
 	</msxsl:script>
 	<xsl:output method="text" />
-	<!-- Simple XML schema to generate the ctc file from our own format.
-  
-       Eventually the VSCT compiler will provide a complete xml format,
-       but it seems this will be over complicated for us; We just
-       create a format which for now is transformed in a .ctc, and
-       perhaps we can change it later to use the new vsct format
-  -->
+	<!-- Simple XML schema to generate the ctc file from our own format. -->
 	<xsl:template match="/gui:VsGui">
 		<xsl:text>/* Generated file; please edit the .gui file instead of this file */&#10;&#10;&#10;</xsl:text>
 		<xsl:text>/* Includes */&#10;</xsl:text>

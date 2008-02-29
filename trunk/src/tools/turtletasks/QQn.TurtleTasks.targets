@@ -11,6 +11,8 @@
 		
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(QQnTurtleTasksFolder)QQn.TurtleTasks.targets</MSBuildAllProjects>
 		<CoreCompileDependsOn>ApplyXslTemplates;$(CoreCompileDependsOn);DownloadDependencies</CoreCompileDependsOn>
+		<CoreResGenDependsOn>$(CoreResGenDependsOn);ApplyXslTemplates</CoreResGenDependsOn>
+		<CtcCompileDependsOn>$(CtcCompileDependsOn);ApplyXslTemplates</CtcCompileDependsOn>
 	</PropertyGroup>
 
 	<Target Name="DownloadDependencies">
