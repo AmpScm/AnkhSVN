@@ -3,13 +3,15 @@ using System.IO;
 using EnvDTE;
 
 using Utils.Services;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Enables or disables Ankh for a solution.
     /// </summary>
-    [VSNetCommand("ToggleAnkh",
+    [VSNetCommand(AnkhCommand.ToggleAnkh,
+		"ToggleAnkh",
          Text = "Enable AnkhSVN for this solution", 
          Tooltip = "Enable Ankh for this solution.", 
          Bitmap = ResourceBitmaps.ToggleAnkh ),
@@ -107,8 +109,9 @@ namespace Ankh.Commands
 
         private void SetToolTipAndCaption( IContext context, object ctrl, string text )
         {
-            context.CommandBars.SetControlCaption( ctrl, text );
-            context.CommandBars.SetControlToolTip( ctrl, text + ".");
+			// TODO: Use new command routing for this
+            //context.CommandBars.SetControlCaption( ctrl, text );
+            //context.CommandBars.SetControlToolTip( ctrl, text + ".");
         }
 
         private bool updating = false;

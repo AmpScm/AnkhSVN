@@ -6,13 +6,15 @@ using Ankh.UI;
 
 
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to switch current item to a different URL.
     /// </summary>
-    [VSNetCommand("SwitchItem",
+    [VSNetCommand(AnkhCommand.SwitchItem,
+		"SwitchItem",
          Text = "&Switch...", 
          Tooltip = "Switch this item to a different URL.", 
          Bitmap = ResourceBitmaps.Switch ),

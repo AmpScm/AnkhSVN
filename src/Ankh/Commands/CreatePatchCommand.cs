@@ -2,13 +2,15 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// A command that lets you create a patch.
     /// </summary>
-    [VSNetCommand( "CreatePatch",
+    [VSNetCommand(AnkhCommand.CreatePatch,
+		"CreatePatch",
          Text = "Create &Patch...", 
          Tooltip = "Create a patch file of changes.", 
          Bitmap = ResourceBitmaps.CreatePatch),

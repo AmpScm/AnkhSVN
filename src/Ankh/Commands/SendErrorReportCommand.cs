@@ -1,11 +1,13 @@
 using System;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to send the AnkhSVN team comments and suggestions.
     /// </summary>
-    [VSNetCommand("SendErrorReport",
+    [VSNetCommand(AnkhCommand.SendErrorReport,
+		"SendErrorReport",
          Text = "Send Feedback...", 
          Tooltip = "Send the AnkhSVN team comments and suggestions.",
          Bitmap = ResourceBitmaps.SendSuggest),

@@ -11,13 +11,15 @@ using System.Collections;
 
 
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to resolve conflict between changes.
     /// </summary>
-    [VSNetCommand( "ResolveConflict",
+    [VSNetCommand(AnkhCommand.ResolveConflict,
+		"ResolveConflict",
          Text = "Res&olve Conflict...",  
          Bitmap = ResourceBitmaps.ResolveConflict, 
          Tooltip = "Resolve conflict between changes."),

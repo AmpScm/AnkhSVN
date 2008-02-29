@@ -6,13 +6,15 @@ using System.Windows.Forms;
 
 using System.IO;
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to revert current item to a specific revision.
     /// </summary>
-    [VSNetCommand( "ReverseMerge",
+    [VSNetCommand(AnkhCommand.ReverseMerge,
+		"ReverseMerge",
          Text = "Re&vert to Revision...", 
          Tooltip = "Revert this item to a specific revision.", 
          Bitmap = ResourceBitmaps.RevertToVersion),

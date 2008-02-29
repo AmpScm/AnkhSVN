@@ -4,13 +4,15 @@ using EnvDTE;
 using Ankh.UI;
 using Clipboard = System.Windows.Forms.Clipboard;
 using Ankh.RepositoryExplorer;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to copy the URL of this item to the clipboard in Repository Explorer.
     /// </summary>
-    [VSNetCommand("CopyReposExplorerUrl",
+    [VSNetCommand(AnkhCommand.CopyReposExplorerUrl,
+		"CopyReposExplorerUrl",
         Text = "Copy &URL",
         Tooltip = "Copy the URL of this item to the clipboard.", 
          Bitmap = ResourceBitmaps.CopyUrlToClipboard ),

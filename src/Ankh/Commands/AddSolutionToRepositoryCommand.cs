@@ -10,6 +10,7 @@ using System.Collections;
 using System.Reflection;
 using System.Text;
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
@@ -18,7 +19,8 @@ namespace Ankh.Commands
     /// by checking out the repository directory to the solution directory, then
     /// recursively adding all solution items.
     /// </summary>
-    [VSNetCommand("AddSolutionToRepository",
+    [VSNetCommand(AnkhCommand.AddSolutionToRepository,
+		"AddSolutionToRepository",
          Text = "Add Sol&ution to Subversion repository...",
          Tooltip = "Add this solution to a Subversion repository.",
          Bitmap = ResourceBitmaps.AddSolutionToRepository),

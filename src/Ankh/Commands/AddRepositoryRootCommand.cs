@@ -4,13 +4,15 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to add a new URL to the Repository Explorer.
     /// </summary>
-    [VSNetCommand("AddRepositoryRootCommand",
+    [VSNetCommand(AnkhCommand.AddRepositoryRoot,
+		"AddRepositoryRootCommand",
        Text = "A&dd Repository URL",
         Tooltip = "Add a new URL to the Repository Explorer.",
         Bitmap = ResourceBitmaps.AddURL)]

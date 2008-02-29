@@ -6,13 +6,15 @@ using System.Windows.Forms;
 using System.IO;
 
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to add selected items to the working copy.
     /// </summary>
-    [VSNetCommand("AddItem",
+    [VSNetCommand(AnkhCommand.AddItem,
+		"AddItem",
         Text = "A&dd...",
         Tooltip = "Add selected items to the working copy.",
         Bitmap = ResourceBitmaps.Add),

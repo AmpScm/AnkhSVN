@@ -3,13 +3,15 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Ankh.RepositoryExplorer;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Lets the user cat a file from a repos and have Windows open it.
     /// </summary>
-    [VSNetCommand("ViewInWindows",
+    [VSNetCommand(AnkhCommand.ViewInWindows,
+		"ViewInWindows",
          Text = "In Wi&ndows",
          Tooltip="Have Windows launch the associated application.", 
          Bitmap = ResourceBitmaps.ViewInWindows ),

@@ -1,11 +1,13 @@
 using System;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to add a new root to the Working Copy Explorer.
     /// </summary>
-    [VSNetCommand( "AddWorkingCopyExplorerRoot",
+    [VSNetCommand(AnkhCommand.AddWorkingCopyExplorerRoot,
+		"AddWorkingCopyExplorerRoot",
          Text = "A&dd New Root...",
          Tooltip = "Add a new root to the Working Copy Explorer.",
          Bitmap = ResourceBitmaps.AddFolder ),

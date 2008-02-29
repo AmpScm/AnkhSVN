@@ -1,12 +1,14 @@
 // $Id$
 using System;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to remove a URL from the Repository Explorer.
     /// </summary>
-    [VSNetCommand("RemoveRepositoryRootCommand",
+    [VSNetCommand(AnkhCommand.RemoveRepositoryRoot,
+		"RemoveRepositoryRootCommand",
          Text = "&Remove Repository URL",
          Tooltip = "Remove a URL from the Repository Explorer.",
          Bitmap = ResourceBitmaps.RemoveURL )]

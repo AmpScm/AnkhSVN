@@ -3,13 +3,15 @@ using System.IO;
 using Ankh.UI;
 using EnvDTE;
 using SHDocVw;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Shows differences compared to local text base.
     /// </summary>
-    [VSNetCommand( "DiffLocalItem",
+    [VSNetCommand(AnkhCommand.DiffLocalItem,
+		"DiffLocalItem",
          Text = "Di&ff...", 
          Tooltip = "Show differences compared to local text base.", 
          Bitmap = ResourceBitmaps.Diff),

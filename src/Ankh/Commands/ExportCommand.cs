@@ -4,13 +4,15 @@ using Ankh.UI;
 using System.Windows.Forms;
 using Utils;
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to export a Subversion repository or local folder.
     /// </summary>
-    [VSNetCommand("Export",
+    [VSNetCommand(AnkhCommand.Export,
+		"Export",
          Text = "E&xport a Repository or Local Folder...", 
          Tooltip = "Export a Subversion repository or local folder.", 
          Bitmap = ResourceBitmaps.Export),

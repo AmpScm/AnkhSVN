@@ -4,13 +4,15 @@ using System.Windows.Forms;
 using Utils;
 using EnvDTE;
 using Ankh.RepositoryExplorer;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
 	/// <summary>
 	/// Command to check out current folder in the Repository Explorer.
 	/// </summary>
-    [VSNetCommand("CheckoutFolder",
+    [VSNetCommand(AnkhCommand.CheckoutFolder,
+		"CheckoutFolder",
          Text = "Chec&kout Folder...",
          Tooltip = "Checkout this folder.", 
          Bitmap = ResourceBitmaps.CheckoutDirectory ),

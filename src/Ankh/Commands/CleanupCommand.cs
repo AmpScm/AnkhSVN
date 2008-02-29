@@ -2,13 +2,15 @@
 using System;
 using EnvDTE;
 using System.Collections;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to cleanup the working copy.
     /// </summary>
-    [VSNetCommand( "Cleanup",
+    [VSNetCommand(AnkhCommand.Cleanup,
+		"Cleanup",
          Text="Cle&anup",
          Tooltip = "Cleanup the working copy.", 
          Bitmap = ResourceBitmaps.Cleanup ),

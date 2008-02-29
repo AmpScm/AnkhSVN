@@ -1,13 +1,15 @@
 // $Id$
 using System;
 using Ankh.RepositoryExplorer;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to refresh the current item in the Repository Explorer.
     /// </summary>
-    [VSNetCommand("RefreshRepositoryItem",
+    [VSNetCommand(AnkhCommand.RefreshRepositoryItem,
+		"RefreshRepositoryItem",
          Text = "Refres&h",
          Tooltip = "Refresh this item.",
          Bitmap = ResourceBitmaps.Refresh ),
