@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.ComponentModel;
 
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using IManagedServiceProvider = System.IServiceProvider;
 using SharpSvn;
 using Utils.Services;
 
@@ -31,14 +32,23 @@ namespace Ankh
         /// </summary>
         public event EventHandler Unloading;
 
+		public AnkhContext(EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell)
+			: this(dte, uiShell)
+		{
+			this.addin = addin;
+		}
 
-        public AnkhContext( EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell )
+		public AnkhContext(IManagedServiceProvider serviceProvider)
+			: this((EnvDTE._DTE)serviceProvider.GetService(typeof(EnvDTE._DTE)), new UIShell())
+		{
+			// Called from the package initializer
+		}
+
+        public AnkhContext( EnvDTE._DTE dte, IUIShell uiShell )
         {
-            this.dte = dte;
-            this.addin = addin;
+            this.dte = dte;      
             this.uiShell = uiShell;
             this.uiShell.Context = this;
-
 
             this.dteStrategyFactory = Ankh.DteStrategyFactory.CreateDteStrategyFactory( this );
 
@@ -100,6 +110,7 @@ namespace Ankh
         /// <summary>
         /// The addin object.
         /// </summary>
+		[Obsolete("Null for package")]
         public EnvDTE.AddIn AddIn
         {
             [System.Diagnostics.DebuggerStepThrough]
