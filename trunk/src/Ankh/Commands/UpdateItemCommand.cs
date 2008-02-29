@@ -9,13 +9,15 @@ using Ankh.Solution;
 
 
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// A command that updates an item.
     /// </summary>
-    [VSNetCommand("UpdateItem",
+    [VSNetCommand(AnkhCommand.UpdateItem,
+		"UpdateItem",
          Text = "&Update...",
          Tooltip = "Updates local items with changes from the Subversion repository.",
          Bitmap = ResourceBitmaps.Update),

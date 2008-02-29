@@ -2,13 +2,15 @@
 using System;
 using EnvDTE;
 using Ankh.UI;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to refresh this view.
     /// </summary>
-    [VSNetCommand("Refresh",
+    [VSNetCommand(AnkhCommand.Refresh,
+		"Refresh",
          Text = "Refres&h",
          Tooltip = "Refresh this view.", 
          Bitmap = ResourceBitmaps.Refresh),

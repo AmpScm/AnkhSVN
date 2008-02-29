@@ -8,13 +8,15 @@ using System.IO;
 using System.Collections;
 using System.Diagnostics;
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to identify which users to blame for which lines.
     /// </summary>
-    [VSNetCommand("Blame",
+    [VSNetCommand(AnkhCommand.Blame,
+		"Blame",
         Text = "&Blame...",
         Tooltip = "Identify which users to blame for which lines.",
         Bitmap = ResourceBitmaps.Blame),

@@ -8,13 +8,15 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections;
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to revert current item to last updated revision.
     /// </summary>
-    [VSNetCommand("RevertItem",
+    [VSNetCommand(AnkhCommand.RevertItem,
+		"RevertItem",
          Text = "&Revert...",
          Tooltip = "Revert this item to last updated revision.",
          Bitmap = ResourceBitmaps.Revert),

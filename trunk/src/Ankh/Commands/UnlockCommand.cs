@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to unlock the selected items.
     /// </summary>
-    [VSNetCommand("Unlock",
+    [VSNetCommand(AnkhCommand.Unlock,
+		"Unlock",
          Text = "U&nlock...",
          Tooltip = "Unlock the selected items.",
          Bitmap = ResourceBitmaps.Unlock),

@@ -8,13 +8,15 @@ using System.IO;
 using System.Collections;
 using SharpSvn;
 using System.Collections.ObjectModel;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to show the change log for the selected item.
     /// </summary>
-    [VSNetCommand("Log",
+    [VSNetCommand(AnkhCommand.Log,
+		"Log",
          Text = "&Log...",
          Tooltip = "Show the change log for the selected item.",
          Bitmap = ResourceBitmaps.Log),

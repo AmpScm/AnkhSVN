@@ -11,13 +11,15 @@ using Utils;
 
 using EnvDTE;
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to commit selected items to the Subversion repository.
     /// </summary>
-    [VSNetCommand("CommitItem",
+    [VSNetCommand(AnkhCommand.CommitItem,
+		"CommitItem",
          Text = "&Commit...",
          Tooltip = "Commit selected items to the Subversion repository.",
          Bitmap = ResourceBitmaps.Commit),

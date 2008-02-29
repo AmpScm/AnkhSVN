@@ -5,13 +5,15 @@ using System.Collections;
 using Ankh.RepositoryExplorer;
 using Ankh.UI;
 using Utils;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to creates a new directory here in the Repository Explorer.
     /// </summary>
-    [VSNetCommand("MakeDirectoryCommand",
+    [VSNetCommand(AnkhCommand.MakeDirectory,
+		"MakeDirectoryCommand",
          Text = "Ne&w Directory...",
          Tooltip = "Create a new directory here.",
          Bitmap = ResourceBitmaps.MakeDirectory ),

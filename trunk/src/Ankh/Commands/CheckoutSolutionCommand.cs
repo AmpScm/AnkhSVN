@@ -5,13 +5,15 @@ using Utils;
 using EnvDTE;
 using Ankh.RepositoryExplorer;
 using Ankh.UI;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to checkout current solution in Repository Explorer.
     /// </summary>
-    [VSNetCommand("CheckoutSolution",
+    [VSNetCommand(AnkhCommand.CheckoutSolution,
+		"CheckoutSolution",
          Text = "Checkout &Solution...",
          Tooltip = "Checkout this solution.", 
          Bitmap = ResourceBitmaps.CheckoutSolution),

@@ -3,13 +3,15 @@ using Ankh.UI;
 using System.Windows.Forms;
 
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to relocate this file.
     /// </summary>
-    [VSNetCommand("Relocate",
+    [VSNetCommand(AnkhCommand.Relocate,
+		"Relocate",
          Text = "Relo&cate...",
          Tooltip = "Relocate this file.", 
          Bitmap = ResourceBitmaps.Relocate),

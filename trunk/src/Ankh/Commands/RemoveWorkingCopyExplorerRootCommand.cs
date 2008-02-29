@@ -1,13 +1,15 @@
 using System;
 using System.Text;
 using System.Collections;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to remove current root from the Working Copy Explorer.
     /// </summary>
-    [VSNetCommand( "RemoveWorkingCopyExplorerRoot",
+    [VSNetCommand(AnkhCommand.RemoveWorkingCopyExplorerRoot,
+		"RemoveWorkingCopyExplorerRoot",
          Text = "&Remove Root",
          Tooltip = "Remove this root from the Working Copy Explorer.",
          Bitmap = ResourceBitmaps.RemoveFolder ),

@@ -3,13 +3,15 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Ankh.RepositoryExplorer;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to save currnet file to disk from Repository Explorer.
     /// </summary>
-    [VSNetCommand("SaveToFile",
+    [VSNetCommand(AnkhCommand.SaveToFile,
+		"SaveToFile",
         Text = "Save to &File",
         Tooltip="Save the file to disk.", 
         Bitmap = ResourceBitmaps.SaveToFile ),

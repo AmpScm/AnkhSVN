@@ -3,13 +3,15 @@ using System.Collections;
 
 using System.Text;
 using SharpSvn;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to lock the selected item.
     /// </summary>
-    [VSNetCommand("Lock",
+    [VSNetCommand(AnkhCommand.Lock,
+		"Lock",
          Text = "Loc&k...",
          Tooltip = "Lock the selected item.",
          Bitmap = ResourceBitmaps.Lock),

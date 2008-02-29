@@ -5,13 +5,15 @@ using System.IO;
 using System.Collections;
 
 using Ankh.RepositoryExplorer;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// A command that lets you view a repository file.
     /// </summary>
-    [VSNetCommand("ViewRepositoryFile", Tooltip="View this file", Text = "In VS.NET" ),
+    [VSNetCommand(AnkhCommand.ViewRepositoryFile,
+		"ViewRepositoryFile", Tooltip="View this file", Text = "In VS.NET" ),
     VSNetControl( "ReposExplorer.View", Position = 1 ) ]
     public abstract class ViewRepositoryFileCommand : CommandBase
     {

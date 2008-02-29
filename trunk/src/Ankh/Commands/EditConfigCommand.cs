@@ -3,13 +3,15 @@ using Ankh.Config;
 using EnvDTE;
 using Ankh.UI;
 using System.Windows.Forms;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to show the AnkhSVN configuration dialog.
     /// </summary>
-    [VSNetCommand( "EditConfigFile",
+    [VSNetCommand(AnkhCommand.EditConfigFile,
+		"EditConfigFile",
          Text = "&Configuration...",
          Tooltip = "Configure AnkhSVN.",
          Bitmap = ResourceBitmaps.EditConfigFile ),

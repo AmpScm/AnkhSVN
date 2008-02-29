@@ -8,6 +8,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections;
+using AnkhSvn.Ids;
 
 
 namespace Ankh.Commands
@@ -15,7 +16,8 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to resolve conflict between changes using external tool.
     /// </summary>
-    [VSNetCommand( "ResolveConflictExternalCommand",
+    [VSNetCommand(AnkhCommand.ResolveConflictExternal,
+		"ResolveConflictExternalCommand",
          Text = "Resolve Conflict E&xternal...",
          Bitmap = ResourceBitmaps.ResolveConflict, 
          Tooltip = "Resolve conflict between changes using external tool."),

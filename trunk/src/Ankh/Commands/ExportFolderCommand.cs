@@ -4,13 +4,15 @@ using System.Windows.Forms;
 using Utils;
 using EnvDTE;
 using Ankh.RepositoryExplorer;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command for exporting a folder
     /// </summary>
-    [VSNetCommand("ExportFolder",
+    [VSNetCommand(AnkhCommand.ExportFolder,
+		"ExportFolder",
          Tooltip="Export this folder.", 
          Text = "E&xport Folder...",
          Bitmap = ResourceBitmaps.Export ),
