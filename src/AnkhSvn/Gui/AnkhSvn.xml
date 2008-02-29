@@ -1,71 +1,85 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<VsGui version="1.0"  xmlns="http://schemas.studioturtle.net/2007/01/gui/" 
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<VsGui version="1.0"  xmlns="http://schemas.studioturtle.net/2007/01/gui/"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xsi:schemaLocation="http://schemas.studioturtle.net/2007/01/gui/ Gui.xsd">
-	<Imports>
-		<Import include="stdidcmd.h" />
-		<Import include="vsshlids.h" />
-		<Import include="msobtnid.h" />
-		<Import type="AnkhSvn.Ids.AnkhId" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Ankh_" />
-		<Import type="AnkhSvn.Ids.AnkhCommand" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Cmd_" />
-		<Import type="AnkhSvn.Ids.AnkhCommandGroup" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Grp_" />
-		<Import type="AnkhSvn.Ids.AnkhCommandMenu" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Menu_" />
-	</Imports>
-	<Defines>
-	</Defines>
-	<UI packageId="Ankh_PackageGuid" autoBmpId="StBmp">
-		<MenuRef id="guidSHLMainMenu:IDM_VS_MENU_FILE">
-			<Group id="Grp_FileMenuScc" priority="0x0800">
-				<Menu id="Menu_FileScc" priority="0x0000" name="SvnMenu" text="Sou&amp;rce Control (Ankh)">
-					<Group id="Grp_FileSccMenuUpdate" priority="0x0000">
-						<Button id="Cmd_FileSccMenuUpdateLatest" priority="0x0100" text="Get &amp;Latest Version of (Ankh)" />
-						<Button id="Cmd_FileSccMenuUpdateSpecific" priority="0x0200" text="&amp;Get Specific Version of (Ankh)"/>
-						<Button id="Cmd_AddItem" priority="0x301" text="AddItem" />
-						<Button id="Cmd_AddRepositoryRoot" priority="0x301" text="AddRepositoryRoot" />
-						<Button id="Cmd_AddSolutionToRepository" priority="0x301" text="AddSolutionToRepository" />
-						<Button id="Cmd_AddWorkingCopyExplorerRoot" priority="0x301" text="AddWorkingCopyExplorerRoot" />
-						<Button id="Cmd_Blame" priority="0x301" text="Blame" />
-						<Button id="Cmd_ChangeAdminDirName" priority="0x301" text="ChangeAdminDirName" />
-						<Button id="Cmd_Checkout" priority="0x301" text="Checkout" />
-						<Button id="Cmd_CheckoutFolder" priority="0x301" text="CheckoutFolder" />
-						<Button id="Cmd_CheckoutSolution" priority="0x301" text="CheckoutSolution" />
-						<Button id="Cmd_Cleanup" priority="0x301" text="Cleanup" />
-						<Button id="Cmd_CommitItem" priority="0x301" text="CommitItem" />
-						<Button id="Cmd_CopyReposExplorerUrl" priority="0x301" text="CopyReposExplorerUrl" />
-						<Button id="Cmd_CreatePatch" priority="0x301" text="CreatePatch" />
-						<Button id="Cmd_DiffExternalLocalItem" priority="0x301" text="DiffExternalLocalItem" />
-						<Button id="Cmd_DiffLocalItem" priority="0x301" text="DiffLocalItem" />
-						<Button id="Cmd_EditConfigFile" priority="0x301" text="EditConfigFile" />
-						<Button id="Cmd_Export" priority="0x301" text="Export"/>
-						<Button id="Cmd_ExportFolder" priority="0x301" text="ExportFolder"/>
-						<Button id="Cmd_Lock" priority="0x301" text="Lock"/>
-						<Button id="Cmd_Log" priority="0x301" text="Log"/>
-						<Button id="Cmd_MakeDirectory" priority="0x301" text="MakeDirectory"/>
-						<Button id="Cmd_Refresh" priority="0x301" text="Refresh"/>
-						<Button id="Cmd_RefreshRepositoryItem" priority="0x301" text="RefreshRepositoryItem"/>
-						<Button id="Cmd_Relocate" priority="0x301" text="Relocate"/>
-						<Button id="Cmd_RemoveRepositoryRoot" priority="0x301" text="RemoveRepositoryRoot"/>
-						<Button id="Cmd_RemoveWorkingCopyExplorerRoot" priority="0x301" text="RemoveWorkingCopyExplorerRoot"/>
-						<Button id="Cmd_ResolveConflict" priority="0x301" text="ResolveConflict"/>
-						<Button id="Cmd_ResolveConflictExternal" priority="0x301" text="ResolveConflictExternal"/>
-						<Button id="Cmd_ReverseMerge" priority="0x301" text="ReverseMerge"/>
-						<Button id="Cmd_RevertItem" priority="0x301" text="RevertItem"/>
-						<Button id="Cmd_SaveToFile" priority="0x301" text="SaveToFile"/>
-						<Button id="Cmd_SendErrorReport" priority="0x301" text="SendErrorReport"/>
-						<Button id="Cmd_ShowCommitDialog" priority="0x301" text="ShowCommitDialog"/>
-						<Button id="Cmd_ShowRepositoryExplorer" priority="0x301" text="ShowRepositoryExplorer"/>
-						<Button id="Cmd_ShowWorkingCopyExplorer" priority="0x301" text="ShowWorkingCopyExplorer"/>
-						<Button id="Cmd_SwitchItem" priority="0x301" text="SwitchItem"/>
-						<Button id="Cmd_ToggleAnkh" priority="0x301" text="ToggleAnkh"/>
-						<Button id="Cmd_Unlock" priority="0x301" text="Unlock"/>
-						<Button id="Cmd_UpdateItem" priority="0x301" text="UpdateItem"/>
-						<Button id="Cmd_ViewInVsNet" priority="0x301" text="ViewInVsNet"/>
-						<Button id="Cmd_ViewInWindows" priority="0x301" text="ViewInWindows"/>
-						<Button id="Cmd_ViewRepositoryFile" priority="0x301" text="ViewRepositoryFile"/>
-						<Button id="Cmd_CheckForOrphanedTreeNodes" priority="0x301" text="CheckForOrphanedTreeNodes"/>					
-					</Group>
-				</Menu>
-			</Group>
-		</MenuRef>
-	</UI>
+  <Imports>
+    <Import include="stdidcmd.h" />
+    <Import include="vsshlids.h" />
+    <Import include="msobtnid.h" />
+    <Import type="AnkhSvn.Ids.AnkhId" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Ankh_" />
+    <Import type="AnkhSvn.Ids.AnkhCommand" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Cmd_" />
+    <Import type="AnkhSvn.Ids.AnkhCommandGroup" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Grp_" />
+    <Import type="AnkhSvn.Ids.AnkhCommandMenu" from="..\..\AnkhSvn.Ids\bin\$(Configuration)\AnkhSvn.Ids.dll" prefix="Menu_" />
+  </Imports>
+  <Defines>
+  </Defines>
+  <UI packageId="Ankh_PackageGuid" autoBmpId="Ankh_BmpGuid">
+    <MenuRef id="guidSHLMainMenu:IDM_VS_MENU_FILE">
+      <Group id="Grp_FileMenuScc" priority="0x0800">
+        <Menu id="Menu_FileScc" priority="0x0000" name="SvnMenu" text="Sou&amp;rce Control (Ankh)">
+          <Group id="Grp_FileSccMenuUpdate" priority="0x0000">
+            <Button id="Cmd_FileSccMenuUpdateLatest" priority="0x0100" text="Get &amp;Latest Version of (Ankh)" />
+            <Button id="Cmd_FileSccMenuUpdateSpecific" priority="0x0200" text="&amp;Get Specific Version of (Ankh)" />
+
+            <Button id="Cmd_AddItem" priority="0x301" text="&amp;Add..."
+                    toolTip="Add selected items to the working copy." />
+            <Button id="Cmd_AddRepositoryRoot" priority="0x301" text="A&amp;dd Repository Url"
+                    toolTip="Add a new URL to the Repository Explorer." iconFile="menu/AddUrl.bmp" />
+            <Button id="Cmd_AddSolutionToRepository" priority="0x301" text="Add Sol&amp;ution to Subversion repository..."
+                    toolTip="Add this solution to a Subversion repository." iconFile="menu/AddSolutionToRepository.bmp" />
+            <Button id="Cmd_AddWorkingCopyExplorerRoot" priority="0x301" text="A&amp;dd New Root..."
+                    toolTip="Add a new root to the Working Copy Explorer." iconFile="menu/AddFolder.bmp" />
+            <Button id="Cmd_Blame" priority="0x301" text="&amp;Blame..."
+                    toolTip="Identify which user wrote which lines." iconFile="menu/Blame.bmp" />
+            <Button id="Cmd_Checkout" priority="0x301" text="Chec&amp;kout a Repository..."
+                    toolTip="Checkout a Subversion repository." iconFile="menu/CheckoutDirectory.bmp" />
+            <Button id="Cmd_CheckoutFolder" priority="0x301" text="Chec&amp;kout Folder..."
+                    toolTip="Checkout this folder." iconFile="menu/CheckoutDirectory.bmp" />
+            <Button id="Cmd_CheckoutSolution" priority="0x301" text="Checkout &amp;Solution..."
+                    toolTip="Checkout this solution." iconFile="menu/CheckoutSolution.bmp" />
+            <Button id="Cmd_Cleanup" priority="0x301" text="Cl&amp;eanup"
+                    toolTip="Cleanup the working copy." iconFile="menu/Cleanup.bmp" />
+            <Button id="Cmd_CommitItem" priority="0x301" text="&amp;Commit..."
+                    toolTip="Commit selected items to the Subversion repository." iconFile="menu/Commit.bmp" />
+            <Button id="Cmd_CopyReposExplorerUrl" priority="0x301" text="Copy &amp;Url"
+                    toolTip="Copy the Url of this item to the clipboard." iconFile="menu/CopyUrlToClipboard.bmp" />
+            <Button id="Cmd_CreatePatch" priority="0x301" text="Create &amp;Patch..."
+                    toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.bmp"/>
+            <Button id="Cmd_DiffExternalLocalItem" priority="0x301" text="Diff E&amp;xternal"
+                    toolTip="Diff against local text base using external tool." iconFile="menu/Diff.bmp"/>
+            <Button id="Cmd_DiffLocalItem" priority="0x301" text="Di&amp;ff..."
+                    toolTip="Show differences compared to local text base." iconFile="menu/Diff.bmp"/>
+            <Button id="Cmd_EditConfigFile" priority="0x301" text="EditConfigFile" />
+            <Button id="Cmd_Export" priority="0x301" text="Export" />
+            <Button id="Cmd_ExportFolder" priority="0x301" text="ExportFolder" />
+            <Button id="Cmd_Lock" priority="0x301" text="Lock" />
+            <Button id="Cmd_Log" priority="0x301" text="Log" />
+            <Button id="Cmd_MakeDirectory" priority="0x301" text="MakeDirectory" />
+            <Button id="Cmd_Refresh" priority="0x301" text="Refresh" />
+            <Button id="Cmd_RefreshRepositoryItem" priority="0x301" text="RefreshRepositoryItem" />
+            <Button id="Cmd_Relocate" priority="0x301" text="Relocate" />
+            <Button id="Cmd_RemoveRepositoryRoot" priority="0x301" text="RemoveRepositoryRoot" />
+            <Button id="Cmd_RemoveWorkingCopyExplorerRoot" priority="0x301" text="RemoveWorkingCopyExplorerRoot" />
+            <Button id="Cmd_ResolveConflict" priority="0x301" text="ResolveConflict" />
+            <Button id="Cmd_ResolveConflictExternal" priority="0x301" text="ResolveConflictExternal" />
+            <Button id="Cmd_ReverseMerge" priority="0x301" text="ReverseMerge" />
+            <Button id="Cmd_RevertItem" priority="0x301" text="RevertItem" />
+            <Button id="Cmd_SaveToFile" priority="0x301" text="SaveToFile" />
+            <Button id="Cmd_SendErrorReport" priority="0x301" text="SendErrorReport" />
+            <Button id="Cmd_ShowCommitDialog" priority="0x301" text="ShowCommitDialog" />
+            <Button id="Cmd_ShowRepositoryExplorer" priority="0x301" text="ShowRepositoryExplorer" />
+            <Button id="Cmd_ShowWorkingCopyExplorer" priority="0x301" text="ShowWorkingCopyExplorer" />
+            <Button id="Cmd_SwitchItem" priority="0x301" text="SwitchItem" />
+            <Button id="Cmd_ToggleAnkh" priority="0x301" text="ToggleAnkh" />
+            <Button id="Cmd_Unlock" priority="0x301" text="Unlock" />
+            <Button id="Cmd_UpdateItem" priority="0x301" text="UpdateItem" />
+            <Button id="Cmd_ViewInVsNet" priority="0x301" text="ViewInVsNet" />
+            <Button id="Cmd_ViewInWindows" priority="0x301" text="ViewInWindows" />
+            <Button id="Cmd_ViewRepositoryFile" priority="0x301" text="ViewRepositoryFile" />
+            <Button id="Cmd_CheckForOrphanedTreeNodes" priority="0x301" text="CheckForOrphanedTreeNodes" />
+          </Group>
+        </Menu>
+      </Group>
+    </MenuRef>
+  </UI>
 </VsGui>

@@ -122,6 +122,43 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Gui\menu\Add.bmp" />
+    <Content Include="Gui\menu\AddFolder.bmp" />
+    <Content Include="Gui\menu\AddSolutionToRepository.bmp" />
+    <Content Include="Gui\menu\AddUrl.bmp" />
+    <Content Include="Gui\menu\Blame.bmp" />
+    <Content Include="Gui\menu\ChangeAdminDirName.bmp" />
+    <Content Include="Gui\menu\CheckOutDirectory.bmp" />
+    <Content Include="Gui\menu\CheckOutSolution.bmp" />
+    <Content Include="Gui\menu\Cleanup.bmp" />
+    <Content Include="Gui\menu\Commit.bmp" />
+    <Content Include="Gui\menu\CopyUrlToClipboard.bmp" />
+    <Content Include="Gui\menu\CreatePatch.bmp" />
+    <Content Include="Gui\menu\Default.bmp" />
+    <Content Include="Gui\menu\Diff.bmp" />
+    <Content Include="Gui\menu\EditConfigFile.bmp" />
+    <Content Include="Gui\menu\Export.bmp" />
+    <Content Include="Gui\menu\Lock.bmp" />
+    <Content Include="Gui\menu\Log.bmp" />
+    <Content Include="Gui\menu\MakeDirectory.bmp" />
+    <Content Include="Gui\menu\Refresh.bmp" />
+    <Content Include="Gui\menu\Relocate.bmp" />
+    <Content Include="Gui\menu\RemoveFolder.bmp" />
+    <Content Include="Gui\menu\RemoveUrl.bmp" />
+    <Content Include="Gui\menu\ReposExplorer.bmp" />
+    <Content Include="Gui\menu\ResolveConflict.bmp" />
+    <Content Include="Gui\menu\Revert.bmp" />
+    <Content Include="Gui\menu\RevertToVersion.bmp" />
+    <Content Include="Gui\menu\SaveToFile.bmp" />
+    <Content Include="Gui\menu\SendSuggest.bmp" />
+    <Content Include="Gui\menu\ShowCommit.bmp" />
+    <Content Include="Gui\menu\Switch.bmp" />
+    <Content Include="Gui\menu\ToggleAnkh.bmp" />
+    <Content Include="Gui\menu\Unlock.bmp" />
+    <Content Include="Gui\menu\Update.bmp" />
+    <Content Include="Gui\menu\ViewInVSNet.bmp" />
+    <Content Include="Gui\menu\ViewInWindows.bmp" />
+    <Content Include="Gui\menu\WorkExplorer.bmp" />
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -133,7 +170,7 @@
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
       <Name>Ankh.2005</Name>
     </ProjectReference>
-  </ItemGroup>  
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '9.0'" />
   <Import Project="..\tools\VSSdk2005Tasks\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '8.0'" />
