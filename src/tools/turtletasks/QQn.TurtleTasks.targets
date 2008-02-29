@@ -32,7 +32,7 @@
 			IntermediateDir="$(IntermediateOutputPath)"
 			Attributes=""
 			>
-			<Output TaskParameter="FilesWritten" ItemName="FilesWritten" />
+			<Output TaskParameter="FilesWritten" ItemName="FileWrites" />
 		</ApplyXslTransform>
 	</Target>
 </Project>
