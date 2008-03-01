@@ -30,7 +30,7 @@ namespace Ankh
     /// A class that wraps operations on the VS command bar model, enabling us
     /// to load in both VS200[23] and VS2005
     /// </summary>
-    public class VSCommandBars
+    public abstract class VSCommandBars
     {
         public VSCommandBars( IContext context )
         {
@@ -75,18 +75,7 @@ namespace Ankh
             return null;
         }
 
-        protected virtual object SearchForCommandBar( ICommandBarPredicate pred )
-        {
-            foreach ( CommandBar bar in this.context.DTE.CommandBars )
-            {
-                if ( pred.IsMatch( new CommandBarAdapter( bar ) ) )
-                {
-                    return bar;
-                }
-            }
-
-            return this.context.DTE.CommandBars[ pred.Name ];
-        }
+        protected abstract object SearchForCommandBar( ICommandBarPredicate pred );
 
         public virtual object AddCommandBar( string name, vsCommandBarType type, object parent,
             int position )
@@ -146,11 +135,7 @@ namespace Ankh
 
         public static VSCommandBars Create( IContext context )
         {
-            if ( context.DTE.Version[0] == '7' )
-                return new VSCommandBars(context);
-            else
-                return new VSCommandBars2005(context);
-
+            return new VSCommandBars2005(context);
         }
 
         private object FindCommandBarInCache( ICommandBarPredicate pred )
