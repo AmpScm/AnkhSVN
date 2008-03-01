@@ -7,7 +7,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -123,51 +123,50 @@
     <Compile Include="AnkhSvnPackage.Commands.cs" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
-      <SubType>
-      </SubType>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Gui\Gui.xsx">
       <DependentUpon>Gui.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Gui\menu\Add.bmp" />
-    <Content Include="Gui\menu\AddFolder.bmp" />
-    <Content Include="Gui\menu\AddSolutionToRepository.bmp" />
-    <Content Include="Gui\menu\AddUrl.bmp" />
-    <Content Include="Gui\menu\Blame.bmp" />
-    <Content Include="Gui\menu\ChangeAdminDirName.bmp" />
-    <Content Include="Gui\menu\CheckOutDirectory.bmp" />
-    <Content Include="Gui\menu\CheckOutSolution.bmp" />
-    <Content Include="Gui\menu\Cleanup.bmp" />
-    <Content Include="Gui\menu\Commit.bmp" />
-    <Content Include="Gui\menu\CopyUrlToClipboard.bmp" />
-    <Content Include="Gui\menu\CreatePatch.bmp" />
-    <Content Include="Gui\menu\Default.bmp" />
-    <Content Include="Gui\menu\Diff.bmp" />
-    <Content Include="Gui\menu\EditConfigFile.bmp" />
-    <Content Include="Gui\menu\Export.bmp" />
-    <Content Include="Gui\menu\Lock.bmp" />
-    <Content Include="Gui\menu\Log.bmp" />
-    <Content Include="Gui\menu\MakeDirectory.bmp" />
-    <Content Include="Gui\menu\Refresh.bmp" />
-    <Content Include="Gui\menu\Relocate.bmp" />
-    <Content Include="Gui\menu\RemoveFolder.bmp" />
-    <Content Include="Gui\menu\RemoveUrl.bmp" />
-    <Content Include="Gui\menu\ReposExplorer.bmp" />
-    <Content Include="Gui\menu\ResolveConflict.bmp" />
-    <Content Include="Gui\menu\Revert.bmp" />
-    <Content Include="Gui\menu\RevertToVersion.bmp" />
-    <Content Include="Gui\menu\SaveToFile.bmp" />
-    <Content Include="Gui\menu\SendSuggest.bmp" />
-    <Content Include="Gui\menu\ShowCommit.bmp" />
-    <Content Include="Gui\menu\Switch.bmp" />
-    <Content Include="Gui\menu\ToggleAnkh.bmp" />
-    <Content Include="Gui\menu\Unlock.bmp" />
-    <Content Include="Gui\menu\Update.bmp" />
-    <Content Include="Gui\menu\ViewInVSNet.bmp" />
-    <Content Include="Gui\menu\ViewInWindows.bmp" />
-    <Content Include="Gui\menu\WorkExplorer.bmp" />
+    <Content Include="Gui\menu\Add.png" />
+    <Content Include="Gui\menu\AddFolder.png" />
+    <Content Include="Gui\menu\AddSolutionToRepository.png" />
+    <Content Include="Gui\menu\AddUrl.png" />
+    <Content Include="Gui\menu\Blame.png" />
+    <Content Include="Gui\menu\ChangeAdminDirName.png" />
+    <Content Include="Gui\menu\CheckOutDirectory.png" />
+    <Content Include="Gui\menu\CheckOutSolution.png" />
+    <Content Include="Gui\menu\Cleanup.png" />
+    <Content Include="Gui\menu\Commit.png" />
+    <Content Include="Gui\menu\CopyUrlToClipboard.png" />
+    <Content Include="Gui\menu\CreatePatch.png" />
+    <Content Include="Gui\menu\Default.png" />
+    <Content Include="Gui\menu\Diff.png" />
+    <Content Include="Gui\menu\EditConfigFile.png" />
+    <Content Include="Gui\menu\Export.png" />
+    <Content Include="Gui\menu\Lock.png" />
+    <Content Include="Gui\menu\Log.png" />
+    <Content Include="Gui\menu\MakeDirectory.png" />
+    <Content Include="Gui\menu\Refresh.png" />
+    <Content Include="Gui\menu\Relocate.png" />
+    <Content Include="Gui\menu\RemoveFolder.png" />
+    <Content Include="Gui\menu\RemoveUrl.png" />
+    <Content Include="Gui\menu\ReposExplorer.png" />
+    <Content Include="Gui\menu\ResolveConflict.png" />
+    <Content Include="Gui\menu\Revert.png" />
+    <Content Include="Gui\menu\RevertToVersion.png" />
+    <Content Include="Gui\menu\SaveToFile.png" />
+    <Content Include="Gui\menu\SendSuggest.png" />
+    <Content Include="Gui\menu\ShowCommit.png" />
+    <Content Include="Gui\menu\Switch.png" />
+    <Content Include="Gui\menu\ToggleAnkh.png" />
+    <Content Include="Gui\menu\Unlock.png" />
+    <Content Include="Gui\menu\Update.png" />
+    <Content Include="Gui\menu\ViewInVSNet.png" />
+    <Content Include="Gui\menu\ViewInWindows.png" />
+    <Content Include="Gui\menu\WorkExplorer.png" />
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
