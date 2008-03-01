@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
 using Utils.Win32;
-
+using SH = SHDocVw;
 
 using SharpSvn;
 
@@ -472,7 +472,7 @@ namespace Ankh
             if ( this.RepositoryExplorer.Handle == IntPtr.Zero )
             {
                 throw new InvalidOperationException( "Handle should never be zero" );
-            }
+            }*/
         }
 
         private void CreateCommitDialog()
