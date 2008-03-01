@@ -21,7 +21,8 @@
           <Group id="Grp_FileSccMenuUpdate" priority="0x0000">
             <Button id="Cmd_AddItem" name="AddItem" priority="0x301"
                     text="&amp;Add..."
-                    toolTip="Add selected items to the working copy." iconFile="menu/Add.png"/>
+                    toolTip="Add selected items to the working copy." iconFile="menu/Add.png">              
+            </Button>
             <Button id="Cmd_AddRepositoryRoot" name="AddRepositoryRoot" priority="0x301"
                     text="A&amp;dd Repository Url"
                     toolTip="Add a new URL to the Repository Explorer." iconFile="menu/AddUrl.png" />
@@ -144,10 +145,14 @@
       <!-- View - Group containing the Solution Explorer,.. -->
       <Button id="Cmd_ShowRepositoryExplorer" name="ShowRepositoryExplorer" priority="0x901"
                   text="Repositor&amp;y Explorer"
-                  toolTip="Show the Repository Explorer window." iconFile="menu/ReposExplorer.png"/>
+                  toolTip="Show the Repository Explorer window." iconFile="menu/ReposExplorer.png">
+        <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="r"/>
+      </Button>
       <Button id="Cmd_ShowWorkingCopyExplorer" name="ShowWorkingCopyExplorer" priority="0x902"
               text="&amp;Working Copy Explorer"
-              toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.png"/>
+              toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.png">
+        <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="w"/>
+      </Button>
     </GroupRef>      
   </UI>
 </VsGui>

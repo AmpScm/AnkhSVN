@@ -179,6 +179,19 @@
     return "";
   }
   
+  public string safeToUpper(string value)
+  {
+    if(string.IsNullOrEmpty(value) || value.Length > 1)
+      return value;
+      
+    char c = value[0];
+    
+    if((c >= 'a') && (c <= 'z'))
+      return value.ToUpperInvariant();
+    else
+      return value;
+  }
+  
   public int nodePosition(XPathNavigator needle, XPathNodeIterator haystack)
   {
     int i = 0;
@@ -260,6 +273,8 @@
     <xsl:text>CMDUSED_END&#10;&#10;</xsl:text>
 
     <xsl:text>KEYBINDINGS_SECTION&#10;</xsl:text>
+    <xsl:text>&#9;&#9;// Command ID, Editor ID, Emulation ID, Key state&#10;</xsl:text>
+    <xsl:apply-templates select="gui:UI//gui:KeyBinding" />
     <xsl:text>KEYBINDINGS_END&#10;&#10;</xsl:text>
 
     <xsl:text>VISIBILITY_SECTION&#10;</xsl:text>
@@ -654,5 +669,61 @@
       <xsl:value-of select="@priority"/>
       <xsl:text>;&#10;</xsl:text>
     </xsl:if>
+  </xsl:template>
+  <xsl:template match="gui:KeyBinding">
+    <xsl:text>&#9;&#9;</xsl:text>
+    <!-- Command Id -->
+    <xsl:value-of select="../@id"/>
+    <xsl:text>, </xsl:text>
+    <!-- Editor Id -->
+    <xsl:value-of select="@editor"/>
+    <xsl:text>, </xsl:text>
+    <!-- Emulation (Defined as for future use; repeat editor) -->
+    <xsl:value-of select="@editor"/>
+    <xsl:text>, </xsl:text>
+    <xsl:choose>
+      <xsl:when test="string-length(@key1) = 1">
+        <xsl:text>'</xsl:text>
+        <xsl:value-of select="me:safeToUpper(@key1)"/>
+        <xsl:text>'</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@key"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="':'"/>
+    <xsl:if test="contains(@mod1, 'ctrl')">
+      <xsl:value-of select="'C'"/>
+    </xsl:if>
+    <xsl:if test="contains(@mod1, 'alt')">
+      <xsl:value-of select="'A'"/>
+    </xsl:if>
+    <xsl:if test="contains(@mod1, 'shift')">
+      <xsl:value-of select="'S'"/>
+    </xsl:if>
+    <xsl:if test="@key2">
+      <xsl:text> : </xsl:text>
+      <xsl:choose>
+        <xsl:when test="string-length(@key2) = 1">
+          <xsl:text>'</xsl:text>
+          <xsl:value-of select="me:safeToUpper(@key2)"/>
+          <xsl:text>'</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@key2"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="':'"/>
+      <xsl:if test="contains(@mod2, 'ctrl')">
+        <xsl:value-of select="'C'"/>
+      </xsl:if>
+      <xsl:if test="contains(@mod2, 'alt')">
+        <xsl:value-of select="'A'"/>
+      </xsl:if>
+      <xsl:if test="contains(@mod2, 'shift')">
+        <xsl:value-of select="'S'"/>
+      </xsl:if>      
+    </xsl:if>
+    <xsl:text>;&#10;</xsl:text>
   </xsl:template>
 </xsl:stylesheet>
