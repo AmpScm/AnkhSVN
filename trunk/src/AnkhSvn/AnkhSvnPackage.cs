@@ -73,10 +73,16 @@ namespace Ankh.VSPackage
             Trace.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
 
-			// TODO: Register essential services which can't be delayed.
 			IServiceContainer container = (IServiceContainer)GetService(typeof(IServiceContainer));
 
-			Debug.Assert(container != null, "Service container available");
+            Debug.Assert( container != null, "Service container available" );
+
+            SccProviderService service = new SccProviderService();
+            container.AddService( typeof( SccProviderService ), service, true );
+
+            IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)GetService( typeof( IVsRegisterScciProvider ) );
+            rscp.RegisterSourceControlProvider( GuidList.guidAnkhSccProviderService );
+
 
 			// container.AddService(.., ..., true)
 			// container.AddService(.., new ServiceCreatorCallback(..), true)
