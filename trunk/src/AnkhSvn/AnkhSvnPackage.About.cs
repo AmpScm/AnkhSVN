@@ -7,7 +7,7 @@ using System.Reflection;
 using SharpSvn;
 using Microsoft.VisualStudio.Shell;
 
-namespace AnkhSvn.AnkhSvn
+namespace Ankh.VSPackage
 {
     // This attribute is used to register the informations needed to show the this package
     // in the Help/About dialog of Visual Studio.

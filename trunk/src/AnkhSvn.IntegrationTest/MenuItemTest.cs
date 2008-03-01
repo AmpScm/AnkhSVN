@@ -42,7 +42,7 @@ namespace AnkhSvn_IntegrationTestProject
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
 			{
-				CommandID menuItemCmd = new CommandID(AnkhSvn.AnkhSvn.GuidList.guidAnkhSvnCmdSet, (int)AnkhSvn.Ids.AnkhCommand.FileSccMenuUpdateLatest);
+				CommandID menuItemCmd = new CommandID(Ankh.VSPackage.GuidList.guidAnkhSvnCmdSet, (int)AnkhSvn.Ids.AnkhCommand.FileSccMenuUpdateLatest);
 
 				// Create the DialogBoxListener Thread.
 				string expectedDialogBoxText = string.Format(CultureInfo.CurrentCulture, "{0}\n\nInside {1}.MenuItemCallback()", "AnkhSvn", "AnkhSvn.AnkhSvn.AnkhSvnPackage");

@@ -13,7 +13,7 @@ using Ankh.Commands;
 using Ankh;
 using VSConstants = Microsoft.VisualStudio.VSConstants;
 
-namespace AnkhSvn.AnkhSvn
+namespace Ankh.VSPackage
 {
 	// The command routing at package level
 	public partial class AnkhSvnPackage : IOleCommandTarget

@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using AnkhSvn.Ids;
 
-namespace AnkhSvn.AnkhSvn
+namespace Ankh.VSPackage
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.

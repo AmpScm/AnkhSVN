@@ -37,12 +37,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Tests.2005", "Ankh.Tes
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstallLib", "InstallLib\InstallLib.2005.vcproj", "{2A753B40-AB06-4D27-A093-D1D351BC9522}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B093CEC2-73C7-4DF4-B8C2-E144BE37DB19}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -52,8 +46,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		WiX\Ankh-UI.wxs = WiX\Ankh-UI.wxs
 		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
 		ankh.reg = ankh.reg
-		WiX\apr-iconv.wxs = WiX\apr-iconv.wxs
-		Ankh\1033\BitmapDll.dll = Ankh\1033\BitmapDll.dll
 		CHANGES = CHANGES
 		CONTRIBUTERS = CONTRIBUTERS
 		..\deploy.build = ..\deploy.build
@@ -61,12 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		lib\lib.wxs = lib\lib.wxs
 		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
 		master.build = master.build
-		WiX\NSvn.msm.build = WiX\NSvn.msm.build
-		WiX\NSvn.msm.wxs = WiX\NSvn.msm.wxs
 		Ankh\AnkhSetup\README.rtf = Ankh\AnkhSetup\README.rtf
-		readme.txt = readme.txt
-		register.bat = register.bat
-		removeankh.reg = removeankh.reg
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtils.2005", "TestUtils\TestUtils.2005.csproj", "{874C0358-E7DD-42DA-BF07-58198B41FD25}"
@@ -123,10 +110,6 @@ Global
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Debug|Any CPU.Build.0 = Debug|Win32
-		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Release|Any CPU.ActiveCfg = Release|Win32
-		{2A753B40-AB06-4D27-A093-D1D351BC9522}.Release|Any CPU.Build.0 = Release|Win32
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -151,7 +134,7 @@ Global
 		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844} = {A1A67782-22E0-4435-89AE-0D0CC81B4ACD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 EndGlobal
