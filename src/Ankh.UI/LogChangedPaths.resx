@@ -121,31 +121,13 @@
   <data name="dataGridView1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
-  <metadata name="CopyFromRevision.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="CopyFromRevision.HeaderText" xml:space="preserve">
-    <value>Copy from revision</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CopyFromRevision.Width" type="System.Int32, mscorlib">
-    <value>118</value>
-  </data>
-  <metadata name="CopyFromPath.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="CopyFromPath.HeaderText" xml:space="preserve">
-    <value>Copy from path</value>
-  </data>
-  <data name="CopyFromPath.Width" type="System.Int32, mscorlib">
-    <value>103</value>
-  </data>
   <metadata name="Action.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="Action.HeaderText" xml:space="preserve">
     <value>Action</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Action.Width" type="System.Int32, mscorlib">
     <value>62</value>
   </data>
@@ -158,12 +140,30 @@
   <data name="Path.Width" type="System.Int32, mscorlib">
     <value>54</value>
   </data>
+  <metadata name="CopyFromPath.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="CopyFromPath.HeaderText" xml:space="preserve">
+    <value>Copy from path</value>
+  </data>
+  <data name="CopyFromPath.Width" type="System.Int32, mscorlib">
+    <value>103</value>
+  </data>
+  <metadata name="CopyFromRevision.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="CopyFromRevision.HeaderText" xml:space="preserve">
+    <value>Copy from revision</value>
+  </data>
+  <data name="CopyFromRevision.Width" type="System.Int32, mscorlib">
+    <value>118</value>
+  </data>
   <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="blameToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>136, 22</value>
+    <value>125, 22</value>
   </data>
   <data name="blameToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Blame</value>
@@ -172,13 +172,13 @@
     <value>Tahoma, 8.25pt, style=Bold</value>
   </data>
   <data name="compareToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>136, 22</value>
+    <value>125, 22</value>
   </data>
   <data name="compareToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Compare</value>
   </data>
   <data name="contextMenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>137, 48</value>
+    <value>126, 48</value>
   </data>
   <data name="&gt;&gt;contextMenuStrip1.Name" xml:space="preserve">
     <value>contextMenuStrip1</value>
@@ -243,17 +243,17 @@
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
     <value>537, 294</value>
   </data>
-  <data name="&gt;&gt;CopyFromRevision.Name" xml:space="preserve">
-    <value>CopyFromRevision</value>
+  <data name="&gt;&gt;blameToolStripMenuItem.Name" xml:space="preserve">
+    <value>blameToolStripMenuItem</value>
   </data>
-  <data name="&gt;&gt;CopyFromRevision.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;blameToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;CopyFromPath.Name" xml:space="preserve">
-    <value>CopyFromPath</value>
+  <data name="&gt;&gt;compareToolStripMenuItem.Name" xml:space="preserve">
+    <value>compareToolStripMenuItem</value>
   </data>
-  <data name="&gt;&gt;CopyFromPath.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;compareToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Action.Name" xml:space="preserve">
     <value>Action</value>
@@ -267,17 +267,17 @@
   <data name="&gt;&gt;Path.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;blameToolStripMenuItem.Name" xml:space="preserve">
-    <value>blameToolStripMenuItem</value>
+  <data name="&gt;&gt;CopyFromPath.Name" xml:space="preserve">
+    <value>CopyFromPath</value>
   </data>
-  <data name="&gt;&gt;blameToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;CopyFromPath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;compareToolStripMenuItem.Name" xml:space="preserve">
-    <value>compareToolStripMenuItem</value>
+  <data name="&gt;&gt;CopyFromRevision.Name" xml:space="preserve">
+    <value>CopyFromRevision</value>
   </data>
-  <data name="&gt;&gt;compareToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;CopyFromRevision.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>LogChangedPaths</value>

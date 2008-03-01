@@ -106,6 +106,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.4.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="SharpSvn, Version=1.4999.370.29608, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
@@ -187,6 +191,8 @@
     <Content Include="ProjectItemsEventSinkTest.cs">
       <SubType>Code</SubType>
     </Content>
+    <Compile Include="Presenters\SvnLogPresenterTest.cs" />
+    <Compile Include="Services\LogServicetest.cs" />
     <Compile Include="SolutionExplorerTest.cs">
       <SubType>Code</SubType>
     </Compile>
