@@ -59,5 +59,35 @@ namespace AnkhSvn.AnkhSvn {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AnkhSvn - The open source Subversion plugin for Visual Studio
+        /// * AnkhSvn {0}
+        /// * Subversion {1}
+        /// * SharpSvn {2}.
+        /// </summary>
+        internal static string AboutDetails {
+            get {
+                return ResourceManager.GetString("AboutDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}.
+        /// </summary>
+        internal static string AboutProductId {
+            get {
+                return ResourceManager.GetString("AboutProductId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AnkhSvn - The open source Subversion plugin for Visual Studio.
+        /// </summary>
+        internal static string AboutTitleName {
+            get {
+                return ResourceManager.GetString("AboutTitleName", resourceCulture);
+            }
+        }
     }
 }
