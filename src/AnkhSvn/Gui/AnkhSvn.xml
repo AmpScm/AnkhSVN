@@ -15,8 +15,9 @@
   </Defines>
   <UI packageId="Ankh_PackageGuid" autoBmpId="Ankh_BmpGuid">
     <MenuRef id="guidSHLMainMenu:IDM_VS_MENU_FILE">
+      <!-- Visual Studio file menu -->
       <Group id="Grp_FileMenuScc" priority="0x0800">
-        <Menu id="Menu_FileScc" priority="0x0000" name="SvnMenu" text="Sou&amp;rce Control (Ankh)">
+        <Menu id="Menu_FileScc" priority="0x0000" name="SvnMenu" text="Sub&amp;version">
           <Group id="Grp_FileSccMenuUpdate" priority="0x0000">
             <Button id="Cmd_AddItem" name="AddItem" priority="0x301"
                     text="&amp;Add..."
@@ -113,13 +114,7 @@
                     toolTip="Send the AnkhSVN team comments and suggestions." iconFile="menu/SendSuggest.bmp" />
             <Button id="Cmd_ShowCommitDialog" name="ShowCommitDialog" priority="0x301"
                     text="Show &amp;Commit Dialog"
-                    toolTip="Show the commit dialog." iconFile="menu/Commit.bmp"/>
-            <Button id="Cmd_ShowRepositoryExplorer" name="ShowRepositoryExplorer" priority="0x301"
-                    text="&amp;Repository Explorer"
-                    toolTip="Show the Repository Explorer window." iconFile="menu/ReposExplorer.bmp"/>
-            <Button id="Cmd_ShowWorkingCopyExplorer" name="ShowWorkingCopyExplorer" priority="0x301"
-                    text="&amp;Working Copy Explorer"
-                    toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.bmp"/>
+                    toolTip="Show the commit dialog." iconFile="menu/Commit.bmp"/>            
             <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x301"
                     text="&amp;Switch..."
                     toolTip="Switch this item to a different URL." iconFile="menu/Switch.bmp"/>
@@ -145,5 +140,14 @@
         </Menu>
       </Group>
     </MenuRef>
+    <GroupRef id="guidSHLMainMenu:IDG_VS_VIEW_ORG_WINDOWS">
+      <!-- View - Group containing the Solution Explorer,.. -->
+      <Button id="Cmd_ShowRepositoryExplorer" name="ShowRepositoryExplorer" priority="0x901"
+                  text="Repositor&amp;y Explorer"
+                  toolTip="Show the Repository Explorer window." iconFile="menu/ReposExplorer.bmp"/>
+      <Button id="Cmd_ShowWorkingCopyExplorer" name="ShowWorkingCopyExplorer" priority="0x902"
+              text="&amp;Working Copy Explorer"
+              toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.bmp"/>
+    </GroupRef>      
   </UI>
 </VsGui>
