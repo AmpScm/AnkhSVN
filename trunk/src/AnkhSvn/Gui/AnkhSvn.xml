@@ -140,15 +140,37 @@
           </Group>
         </Menu>
       </Group>
+      <!--*** Context menu's in the solution explorer **-->
+      <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_SOLUTION_SCC">
+        <!-- VS Predefined group for SCC commands on the solution -->
+        <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
+        <ButtonRef id="Cmd_CommitItem" priority="0x20" />
+        <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
+        <ButtonRef id="Cmd_RevertItem" priority="0x40" />
+      </GroupRef>
+      <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_SCC">
+        <!-- VS Predefined group for SCC commands on projects -->
+        <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
+        <ButtonRef id="Cmd_CommitItem" priority="0x20" />
+        <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
+        <ButtonRef id="Cmd_RevertItem" priority="0x40" />
+      </GroupRef>
+      <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
+        <!-- VS Predefined group for SCC commands on project items -->
+        <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
+        <ButtonRef id="Cmd_CommitItem" priority="0x20" />
+        <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
+        <ButtonRef id="Cmd_RevertItem" priority="0x40" />
+      </GroupRef>
     </MenuRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_VIEW_ORG_WINDOWS">
-      <!-- View - Group containing the Solution Explorer,.. -->
-      <Button id="Cmd_ShowRepositoryExplorer" name="ShowRepositoryExplorer" priority="0x901"
+      <!-- View - The Group containing the Solution Explorer,.. -->
+      <Button id="Cmd_ShowRepositoryExplorer" name="RepositoryExplorer" priority="0x901"
                   text="Repositor&amp;y Explorer"
                   toolTip="Show the Repository Explorer window." iconFile="menu/ReposExplorer.png">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="r"/>
       </Button>
-      <Button id="Cmd_ShowWorkingCopyExplorer" name="ShowWorkingCopyExplorer" priority="0x902"
+      <Button id="Cmd_ShowWorkingCopyExplorer" name="WorkingCopyExplorer" priority="0x902"
               text="&amp;Working Copy Explorer"
               toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.png">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="w"/>

@@ -15,6 +15,8 @@ namespace Ankh
         /// </summary>
         event EventHandler Unloading;
 
+        IAnkhPackage Package { get; }
+
         /// <summary>
         /// The top level automation object.
         /// </summary>
@@ -102,12 +104,6 @@ namespace Ankh
         /// Watches the project files.
         /// </summary>
         FileWatcher ProjectFileWatcher{ get; }
-
-        /// <summary>
-        /// Gets the DTE strategy factory.
-        /// </summary>
-        /// <value>The DTE strategy factory.</value>
-        IDteStrategyFactory DteStrategyFactory { get; }
 
         /// <summary>
         /// The OLE Serviceprovider.

@@ -444,7 +444,7 @@ namespace Ankh
         private void CreateRepositoryExplorer()
         {   
             Debug.WriteLine( "Creating repository explorer", "Ankh" );
-            ToolWindowResult result = this.context.DteStrategyFactory.GetToolWindowStrategy().
+            ToolWindowResult result = DteStrategyFactory.CreateDteStrategyFactory(Context).GetToolWindowStrategy().
                 CreateToolWindow(typeof(RepositoryExplorerControl),
                 "Repository Explorer", REPOSEXPLORERGUID);
 
@@ -479,7 +479,7 @@ namespace Ankh
         {
             Debug.WriteLine( "Creating commit dialog user control", "Ankh" );
 
-            ToolWindowResult result = this.context.DteStrategyFactory.GetToolWindowStrategy().
+            ToolWindowResult result = DteStrategyFactory.CreateDteStrategyFactory(Context).GetToolWindowStrategy().
                 CreateToolWindow( typeof(CommitDialog), 
                 "Commit", CommitDialogGuid );
             
@@ -500,7 +500,7 @@ namespace Ankh
         private void CreateWorkingCopyExplorer()
         {
             Debug.WriteLine( "Creating working copy explorer tool window", "Ankh" );
-            ToolWindowResult result = this.context.DteStrategyFactory.GetToolWindowStrategy().
+            ToolWindowResult result = DteStrategyFactory.CreateDteStrategyFactory(Context).GetToolWindowStrategy().
                 CreateToolWindow(typeof(WorkingCopyExplorerControl),
                 "Working Copy Explorer", WorkingCopyExplorerGuid );
 

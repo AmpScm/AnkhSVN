@@ -41,10 +41,9 @@ namespace Ankh.VSPackage
     [ProvideMenuResource(1000, 1)]
     [Guid(GuidList.guidAnkhSvnPkgString)]
 	[CLSCompliant(false)]
-
     [ProvideSourceControlProvider( "AnkhSVN Source Control Provider", "#100" )]
     [ProvideService( typeof( SccProviderService ), ServiceName = "AnkhSVN Source Control Provider Service" )]
-    public sealed partial class AnkhSvnPackage : Package
+    public sealed partial class AnkhSvnPackage : Package, IAnkhPackage
     {
         /// <summary>
         /// Default constructor of the package.
@@ -75,7 +74,7 @@ namespace Ankh.VSPackage
 
 			IServiceContainer container = (IServiceContainer)GetService(typeof(IServiceContainer));
 
-            Debug.Assert( container != null, "Service container available" );
+            Debug.Assert(container != null, "Service container available");
 
             SccProviderService service = new SccProviderService();
             container.AddService( typeof( SccProviderService ), service, true );
@@ -83,10 +82,9 @@ namespace Ankh.VSPackage
             IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)GetService( typeof( IVsRegisterScciProvider ) );
             rscp.RegisterSourceControlProvider( GuidList.guidAnkhSccProviderService );
 
-
+            container.AddService(typeof(IAnkhPackage), this, true);
 			// container.AddService(.., ..., true)
-			// container.AddService(.., new ServiceCreatorCallback(..), true)
-			//GC.KeepAlive(this.AnkhContext);
+			// container.AddService(.., new ServiceCreatorCallback(..), true) // Delayed creation of the service
         }
 		#endregion
     }

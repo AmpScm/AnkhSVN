@@ -46,6 +46,7 @@
     <Compile Include="AnkhId.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AnkhToolWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -26,10 +26,19 @@ namespace AnkhSvn.Ids
 		public const string CommandSet = "aa61c329-d559-468f-8f0f-4f03896f704d";
 
 		/// <summary>
-		/// 
+		/// The guid used for our on-and-only bitmap resource
 		/// </summary>
 		public const string BmpId = "9db594ca-ebdd-40e1-9e37-51b7f9ef8df0";
-		
+
+
+
+
+
+
+        public const string RepositoryExplorerToolWindowId = "748becbe-04a1-4ffa-8e1e-46840f91a083";
+        public const string PendingChangesToolWindowId = "896e815d-3862-4978-a1bc-cb6a3e70045c";
+        public const string WorkingCopyExplorerToolWindowId = "a1929d7e-610a-48b0-8152-8e4aa202427f";
+
 
 
 		/// <summary>

@@ -17,14 +17,9 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus( Ankh.IContext context )
+        public override void OnExecute(CommandEventArgs e)
         {
-            return Enabled;
-        }
-
-        public override void Execute( Ankh.IContext context, string parameters )
-        {
-            context.UIShell.ShowWorkingCopyExplorer( true );
+            e.Context.Package.ShowToolWindow(AnkhToolWindow.WorkingCopyExplorer);
         }
 
         #endregion
