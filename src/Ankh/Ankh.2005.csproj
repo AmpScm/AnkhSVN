@@ -139,11 +139,6 @@
       <Name>envdte</Name>
       <HintPath>..\lib\envdte.dll</HintPath>
     </Reference>
-    <Reference Include="Extensibility">
-      <Name>extensibility</Name>
-      <HintPath>I:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\PublicAssemblies\extensibility.dll</HintPath>
-      <AssemblyFolderKey>hklm\publicassemblies</AssemblyFolderKey>
-    </Reference>
     <Reference Include="Interop.esproj">
       <Name>Interop.esproj</Name>
       <HintPath>..\lib\Interop.esproj.dll</HintPath>
@@ -371,9 +366,9 @@
     <Compile Include="ConflictManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Connect.cs">
+    <None Include="Connect.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </None>
     <Compile Include="CreateToolWindow2ToolWindowStrategy.cs" />
     <Compile Include="DteStrategyFactory.cs" />
     <Compile Include="DteUtils.cs" />

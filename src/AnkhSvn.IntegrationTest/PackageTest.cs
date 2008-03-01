@@ -49,7 +49,7 @@ namespace IntegrationTestProject
 
 				//Validate package load
 				IVsPackage package;
-				Guid packageGuid = new Guid(AnkhSvn.AnkhSvn.GuidList.guidAnkhSvnPkgString);
+                Guid packageGuid = new Guid(Ankh.VSPackage.GuidList.guidAnkhSvnPkgString);
 				Assert.IsTrue(0 == shellService.LoadPackage(ref packageGuid, out package));
 				Assert.IsNotNull(package, "Package failed to load");
 

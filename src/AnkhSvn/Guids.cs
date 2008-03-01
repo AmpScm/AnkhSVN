@@ -1,7 +1,7 @@
 ﻿using System;
 using AnkhSvn.Ids;
 
-namespace AnkhSvn.AnkhSvn
+namespace Ankh.VSPackage
 {
     static class GuidList
     {

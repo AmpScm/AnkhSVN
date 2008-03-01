@@ -53,7 +53,7 @@ namespace Ankh
                 System.Collections.Specialized.StringDictionary();
 
             Utils.ErrorMessage.SendByMail(ErrorReportMailAddress, ErrrorReportSubject, null,
-                typeof(Connect).Assembly, dict);
+                typeof(ErrorHandler).Assembly, dict);
         }
 
         public void Write( string message, Exception ex, TextWriter writer )
@@ -231,7 +231,7 @@ namespace Ankh
                 if (dlg.ShowDialog() == DialogResult.Retry)
                 {
                     Utils.ErrorMessage.SendByMail(ErrorReportMailAddress,
-                        ErrrorReportSubject, ex, typeof(Connect).Assembly, additionalInfo);
+                        ErrrorReportSubject, ex, typeof(ErrorHandler).Assembly, additionalInfo);
                 }
             }
         }
