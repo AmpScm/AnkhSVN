@@ -21,7 +21,7 @@ namespace Ankh.Commands
         //[Obsolete("Please implement Update(CommandUpdateEventArgs)")]
         public virtual vsCommandStatus QueryStatus(IContext context)
         {
-            throw new NotImplementedException();
+            return (vsCommandStatus)999;
         }
 
         /// <summary>
@@ -36,6 +36,9 @@ namespace Ankh.Commands
         public virtual void OnUpdate(CommandUpdateEventArgs e)
         {
             EnvDTE.vsCommandStatus status = QueryStatus(e.Context);
+
+            if (status == (vsCommandStatus)999)
+                return; // Not implemented value; see above
 
             if ((status & EnvDTE.vsCommandStatus.vsCommandStatusEnabled) == 0)
                 e.Enabled = false;
@@ -73,14 +76,13 @@ namespace Ankh.Commands
         }
 
         /// <summary>
-        /// Whether the Shift key is down.
+        /// Gets whether the Shift key was down when the current window message was send
         /// </summary>
         public static bool Shift
         {
             get
             {
-                return Utils.Win32.Win32.GetAsyncKeyState(
-                    (int)System.Windows.Forms.Keys.ShiftKey) != 0;
+                return (0 != System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift);
             }
         }
 
