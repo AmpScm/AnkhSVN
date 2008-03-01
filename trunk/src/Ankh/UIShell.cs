@@ -4,7 +4,6 @@ using Ankh.UI;
 using EnvDTE;
 using System.Diagnostics;
 using System.Windows.Forms;
-using SH = SHDocVw; 
 using System.IO;
 using Utils.Win32;
 
@@ -523,22 +522,6 @@ namespace Ankh
             this.commitDialogWindow.Visible = false;
         }
 
-
-        private SH.WebBrowser NewBrowserWindow(SH.WebBrowser browser)
-        {
-            browser.NewWindow2 += new SH.DWebBrowserEvents2_NewWindow2EventHandler(this.NewWindow2);
-            object nullObject = null;
-            object newWindowFlag = 0x1;
-            object aboutBlank = "about:blank";
-
-            this.newBrowser = null;
-            browser.Navigate2( ref aboutBlank, ref newWindowFlag, ref nullObject, 
-                ref nullObject, ref nullObject );
-
-            Debug.Assert( this.newBrowser != null );
-            return this.newBrowser;                
-        }
-
         protected static void GetPathInfo(object sender, ResolvingPathEventArgs args)
         {
             SvnItem item = (SvnItem)args.Item;
@@ -567,13 +550,6 @@ namespace Ankh
             {
                 // swallow, no biggie
             }
-        }
-
-
-        private SH.WebBrowser newBrowser;
-        private void NewWindow2(ref object ppDisp, ref bool Cancel)
-        {
-            this.newBrowser = (SH.WebBrowser)ppDisp;
         }
 
         private RepositoryExplorerControl repositoryExplorerControl;

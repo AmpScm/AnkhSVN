@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using EnvDTE;
-using Microsoft.Office.Core;
+//using Microsoft.Office.Core;
 using System.Reflection;
 using AnkhSvn.Ids;
 using System.Diagnostics;
@@ -72,12 +72,12 @@ namespace Ankh
         /// <param name="context"></param>
         public virtual void AddControl( ICommand cmd, IContext context, string tag )
         {
-            object bar = GetCommandBar( this.commandBar, context );
+            /*object bar = GetCommandBar( this.commandBar, context );
             if ( bar != null )
             {
                 object cntrl = context.CommandBars.AddControl(cmd.Command, bar, 1);
                 context.CommandBars.SetControlTag(cntrl, tag);
-            }
+            }*/
             
         }
 
@@ -89,7 +89,7 @@ namespace Ankh
         /// <returns></returns>
         public static object GetCommandBar( string name, IContext context )
         {
-            string[] path = name.Split( '.' );
+            /*string[] path = name.Split( '.' );
             object bar;
 
             //TODO: is this really necessary?
@@ -127,7 +127,8 @@ namespace Ankh
                             
             }
 
-            return bar;
+            return bar;*/
+            return null;
         }
 
         /// <summary>
@@ -140,7 +141,7 @@ namespace Ankh
         protected void AddControls( string[] baseBars, ICommand cmd, 
             IContext context, string tag)
         {
-            // Use each of the 
+            /*// Use each of the 
             foreach( string baseBar in baseBars )
             {
                 string barName;
@@ -159,7 +160,7 @@ namespace Ankh
                         1 );
                     context.CommandBars.SetControlTag( cntrl, tag );
                 }
-            }
+            }*/
         }
 
         private string commandBar;

@@ -155,16 +155,6 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual VSCommandBars CommandBars
-        {
-            get
-            {
-                if ( this.commandBars == null )
-                    this.commandBars = VSCommandBars.Create( this );
-                return this.commandBars;
-            }
-        }
-
         public virtual void StartOperation(string description)
         {
             // TODO:  Add ContextBase.StartOperation implementation
@@ -673,7 +663,6 @@ namespace Ankh.Tests
         public ISolutionExplorer explorer;
         public IUIShell uiShell;
         private ConfigLoader configLoader;
-        private VSCommandBars commandBars;
         private Control control;
 
         #region IContext Members
@@ -682,11 +671,6 @@ namespace Ankh.Tests
         {
             throw new Exception( "The method or operation is not implemented." );
         }
-
-        #endregion
-
-        #region IContext Members
-
 
         public IWorkingCopyExplorer WorkingCopyExplorer
         {
@@ -697,11 +681,6 @@ namespace Ankh.Tests
         {
             get { throw new Exception( "The method or operation is not implemented." ); }
         }
-
-        #endregion
-
-		#region IContext Members
-
 
 		public IDteStrategyFactory DteStrategyFactory
 		{

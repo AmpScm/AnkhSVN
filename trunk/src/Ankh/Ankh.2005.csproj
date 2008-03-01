@@ -151,10 +151,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="office, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\office.dll</HintPath>
-    </Reference>
     <Reference Include="SharpSvn, Version=1.4999.350.29541, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
@@ -294,7 +290,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\Mapper\CommandMapper.cs" />
-    <Compile Include="Commands\Mapper\CommandMap.cs" />
+    <None Include="Commands\Mapper\CommandMap.cs" />
     <Compile Include="Commands\RefreshCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -492,7 +488,7 @@
     <Compile Include="UIShell.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="VSCommandBars.cs" />
+    <None Include="VSCommandBars.cs" />
     <Compile Include="VSNetCommandAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
