@@ -5,7 +5,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
-using SHDocVw;
 using System.Diagnostics;
 
 namespace Ankh.UI
@@ -38,10 +37,8 @@ namespace Ankh.UI
                 using ( StreamWriter w = new StreamWriter( path, true, System.Text.Encoding.Default ) )
                     w.Write( this.diffHtmlModel.GetHtml() );
                 
-                object url = "file://" + path;
-                object nullObj = null;
-                this.webBrowser.Navigate2( ref url, ref nullObj, ref nullObj,
-                    ref nullObj, ref nullObj );
+                string url = "file://" + path;
+                this.webBrowser.Navigate(url);
             }
         }
 
@@ -63,7 +60,7 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(DiffView));
-            this.webBrowser = new AxSHDocVw.AxWebBrowser();
+            this.webBrowser = new WebBrowser();
             ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,7 +68,6 @@ namespace Ankh.UI
             // 
             this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.webBrowser.Enabled = true;
-            this.webBrowser.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("webBrowser.OcxState")));
             this.webBrowser.Size = new System.Drawing.Size(328, 184);
             this.webBrowser.TabIndex = 0;
             // 
@@ -90,7 +86,7 @@ namespace Ankh.UI
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-        private AxSHDocVw.AxWebBrowser webBrowser;
+        private WebBrowser webBrowser;
 
         private DiffHtmlModel diffHtmlModel;
 

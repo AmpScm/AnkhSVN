@@ -130,6 +130,10 @@
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
+    <ProjectReference Include="..\AnkhSvn.Ids\AnkhSvn.Ids.csproj">
+      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
+      <Name>AnkhSvn.Ids</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh\Ankh.2005.csproj">
       <Name>Ankh.2005</Name>
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
