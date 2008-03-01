@@ -41,6 +41,9 @@ namespace Ankh.VSPackage
     [ProvideMenuResource(1000, 1)]
     [Guid(GuidList.guidAnkhSvnPkgString)]
 	[CLSCompliant(false)]
+
+    [ProvideSourceControlProvider( "AnkhSVN Source Control Provider", "#100" )]
+    [ProvideService( typeof( SccProviderService ), ServiceName = "AnkhSVN Source Control Provider Service" )]
     public sealed partial class AnkhSvnPackage : Package
     {
         /// <summary>

@@ -121,6 +121,8 @@
     </XslSource>
     <Compile Include="AnkhSvnPackage.About.cs" />
     <Compile Include="AnkhSvnPackage.Commands.cs" />
+    <Compile Include="ProvideSourceControlProvider.cs" />
+    <Compile Include="SccProviderService.cs" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
       <SubType>Designer</SubType>
