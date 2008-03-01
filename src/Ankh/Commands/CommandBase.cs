@@ -18,12 +18,42 @@ namespace Ankh.Commands
         /// <summary>
         /// Get the status of the command
         /// </summary>
-        public abstract vsCommandStatus QueryStatus( IContext context );
+        //[Obsolete("Please implement Update(CommandUpdateEventArgs)")]
+        public virtual vsCommandStatus QueryStatus(IContext context)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Execute the command
         /// </summary>
-        public abstract void Execute( IContext context, string parameters );
+        //[Obsolete("Please implement OnExecute(CommandEventArgs)")]
+        public virtual void Execute(IContext context, string parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void OnUpdate(CommandUpdateEventArgs e)
+        {
+            EnvDTE.vsCommandStatus status = QueryStatus(e.Context);
+
+            if ((status & EnvDTE.vsCommandStatus.vsCommandStatusEnabled) == 0)
+                e.Enabled = false;
+
+            if ((status & EnvDTE.vsCommandStatus.vsCommandStatusLatched) != 0)
+                e.Latched = true;
+
+            if ((status & EnvDTE.vsCommandStatus.vsCommandStatusNinched) != 0)
+                e.Ninched = true;
+
+            if ((status & EnvDTE.vsCommandStatus.vsCommandStatusInvisible) != 0)
+                e.Visible = false;
+        }
+
+        public virtual void OnExecute(CommandEventArgs e)
+        {
+            Execute(e.Context, e.Argument as string);
+        }
 
         /// <summary>
         /// The EnvDTE.Command instance corresponding to this command.
@@ -33,7 +63,7 @@ namespace Ankh.Commands
             [System.Diagnostics.DebuggerStepThrough]
             get
             {
-                return this.command; 
+                return this.command;
             }
             [System.Diagnostics.DebuggerStepThrough]
             set
@@ -48,64 +78,58 @@ namespace Ankh.Commands
         public static bool Shift
         {
             get
-            { 
-                return Utils.Win32.Win32.GetAsyncKeyState( 
-                    (int)System.Windows.Forms.Keys.ShiftKey ) != 0;
+            {
+                return Utils.Win32.Win32.GetAsyncKeyState(
+                    (int)System.Windows.Forms.Keys.ShiftKey) != 0;
             }
         }
 
-        protected void SaveAllDirtyDocuments( IContext context )
+        protected void SaveAllDirtyDocuments(IContext context)
         {
-            context.DTE.ExecuteCommand( "File.SaveAll", "" );
+            context.DTE.ExecuteCommand("File.SaveAll", "");
         }
 
-        protected const vsCommandStatus Enabled = 
+        protected const vsCommandStatus Enabled =
             vsCommandStatus.vsCommandStatusEnabled |
             vsCommandStatus.vsCommandStatusSupported;
 
-        protected const vsCommandStatus Disabled = 
+        protected const vsCommandStatus Disabled =
             vsCommandStatus.vsCommandStatusSupported;
 
-        protected object GetControl(IContext context, string barName, string name )
-        {
-            // TODO: either preload this or find a better way to map to 
-            // the commandbarcontrols for a command
-            object bar = VSNetControlAttribute.GetCommandBar( barName, context );           
-            return context.CommandBars.FindControl(bar, barName + "." + name);
-        }
-
-        protected static XslTransform GetTransform( IContext context, string name )
+        protected static XslTransform GetTransform(IContext context, string name)
         {
             // is the file already there?
             string configDir = Path.GetDirectoryName(context.ConfigLoader.ConfigPath);
-            string path = Path.Combine( configDir, name  );
+            string path = Path.Combine(configDir, name);
 
-            if ( !File.Exists( path ) )
-                CreateTransformFile( path, name );
+            if (!File.Exists(path))
+                CreateTransformFile(path, name);
 
-            Debug.Assert( File.Exists( path ) );
+            Debug.Assert(File.Exists(path));
 
-            XPathDocument doc = new XPathDocument( new StreamReader( path) );
-            
+            XPathDocument doc = new XPathDocument(new StreamReader(path));
+
+            // TODO: Transforms should be cached as a dynamic assembly is created
+            // which stays in memory until the appdomain closes
             XslTransform transform = new XslTransform();
-            transform.Load( doc );
+            transform.Load(doc);
 
             return transform;
         }
 
-        protected static void CreateTransformFile( string path, string name )
+        protected static void CreateTransformFile(string path, string name)
         {
             // get the embedded resource and copy it to path
             string resourceName = "Ankh.Commands." + name;
-            Stream ins = 
-                typeof(CommandBase).Assembly.GetManifestResourceStream( resourceName );
+            Stream ins =
+                typeof(CommandBase).Assembly.GetManifestResourceStream(resourceName);
             int len;
-            byte[] buffer = new byte[ 4096 ];
-            using( FileStream outs = new FileStream( path, FileMode.Create, FileAccess.Write ) )
+            byte[] buffer = new byte[4096];
+            using (FileStream outs = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
-                while( (len = ins.Read( buffer, 0, 4096 )) > 0 )
+                while ((len = ins.Read(buffer, 0, 4096)) > 0)
                 {
-                    outs.Write( buffer, 0, len );
+                    outs.Write(buffer, 0, len);
                 }
             }
         }

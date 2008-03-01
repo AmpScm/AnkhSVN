@@ -34,7 +34,7 @@ namespace Ankh.Commands.Mapper
 		protected internal void OnExecute(CommandEventArgs e)
 		{
 			if (ICommand != null)
-				ICommand.Execute(e.Context, e.Argument as string);
+				ICommand.OnExecute(e);
 
 			if (Execute != null)
 				Execute(this, e);
@@ -42,22 +42,8 @@ namespace Ankh.Commands.Mapper
 
 		protected internal void OnUpdate(CommandUpdateEventArgs e)
 		{
-			if (ICommand != null)
-			{
-				EnvDTE.vsCommandStatus status = ICommand.QueryStatus(e.Context);
-
-				if ((status & EnvDTE.vsCommandStatus.vsCommandStatusEnabled) == 0)
-					e.Enabled = false;
-
-				if ((status & EnvDTE.vsCommandStatus.vsCommandStatusLatched) != 0)
-					e.Latched = true;
-
-				if ((status & EnvDTE.vsCommandStatus.vsCommandStatusNinched) != 0)
-					e.Ninched = true;
-
-				if ((status & EnvDTE.vsCommandStatus.vsCommandStatusInvisible) != 0)
-					e.Visible = false;
-			}
+            if (ICommand != null)
+                ICommand.OnUpdate(e);			
 
 			if (Update != null)
 				Update(this, e);

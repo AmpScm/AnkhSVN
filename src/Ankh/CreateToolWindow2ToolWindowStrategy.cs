@@ -26,7 +26,7 @@ namespace Ankh
             string typeName = controlType.FullName;
 
             object control = null;
-            Window window = windows2.CreateToolWindow2( this.context.AddIn, assembly, typeName,
+            Window window = windows2.CreateToolWindow2( null, assembly, typeName,
                 caption, guid, ref control );
 
             if ( window == null )

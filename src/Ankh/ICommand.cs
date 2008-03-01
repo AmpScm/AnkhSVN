@@ -1,4 +1,5 @@
 using EnvDTE;
+using Ankh.Commands;
 
 namespace Ankh
 {
@@ -10,12 +11,12 @@ namespace Ankh
 		/// <summary>
 		/// Get the status of the command
 		/// </summary>
-		vsCommandStatus QueryStatus( IContext context );
+        void OnUpdate(CommandUpdateEventArgs e);
 
 		/// <summary>
 		/// Execute the command
 		/// </summary>
-		void Execute(IContext context, string parameters);
+        void OnExecute(CommandEventArgs e);                     
 
 		/// <summary>
 		/// The EnvDTE.Command instance corresponding to this command.
