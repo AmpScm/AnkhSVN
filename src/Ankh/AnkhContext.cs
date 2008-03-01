@@ -42,6 +42,9 @@ namespace Ankh
 			: this((EnvDTE._DTE)serviceProvider.GetService(typeof(EnvDTE._DTE)), new UIShell())
 		{
 			// Called from the package initializer
+            package = (IAnkhPackage)serviceProvider.GetService(typeof(IAnkhPackage));
+
+            Debug.Assert(package != null);
 		}
 
         public AnkhContext( EnvDTE._DTE dte, IUIShell uiShell )
@@ -49,8 +52,6 @@ namespace Ankh
             this.dte = dte;      
             this.uiShell = uiShell;
             this.uiShell.Context = this;
-
-            this.dteStrategyFactory = Ankh.DteStrategyFactory.CreateDteStrategyFactory( this );
 
             this.errorHandler = new ErrorHandler( dte.Version, this );
 
@@ -92,10 +93,11 @@ namespace Ankh
             NotificationHandler.GetHandler(this);
         }
 
+        public IAnkhPackage Package
+        {
+            get { return package; }
+        }
         
-
-        
-
         /// <summary>
         /// The top level automation object.
         /// </summary>
@@ -287,14 +289,6 @@ namespace Ankh
             [DebuggerStepThrough]
             get { return this.workingCopyExplorer; }
         }
-
-        public IDteStrategyFactory DteStrategyFactory
-        {
-            get { return this.dteStrategyFactory; }
-        }
-
-
-
 
         /// <summary>
         /// Event handler for the SolutionOpened event. Can also be called at
@@ -710,6 +704,6 @@ namespace Ankh
         
         private Ankh.Config.ConfigLoader configLoader;
 
-        private IDteStrategyFactory dteStrategyFactory;
+        readonly IAnkhPackage package;
     }
 }

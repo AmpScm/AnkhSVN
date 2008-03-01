@@ -5,6 +5,8 @@ namespace Ankh.VSPackage
 {
     static class GuidList
     {
+        // Please add new guids to the AnkhId class.. This class is here for compatibility with the VS Wizard framework
+
 		public const string guidAnkhSvnPkgString = AnkhId.PackageId;
         public static readonly Guid guidAnkhSvnPkg = new Guid( guidAnkhSvnPkgString );
 

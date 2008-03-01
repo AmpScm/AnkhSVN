@@ -653,6 +653,7 @@ namespace Ankh.Tests
 
         }
 
+
         public FileWatcher projectFileWatcher;
         public Config.Config config;
         public _DTE dte;
@@ -687,6 +688,12 @@ namespace Ankh.Tests
 			get { throw new Exception("The method or operation is not implemented."); }
 		}
 
+        public IAnkhPackage Package
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
 		#endregion
-	}
+
+    }
 }

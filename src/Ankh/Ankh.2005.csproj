@@ -389,6 +389,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
+    <Compile Include="IAnkhPackage.cs" />
     <Compile Include="IDteStrategyFactory.cs" />
     <Compile Include="IToolWindowStrategy.cs" />
     <Compile Include="IWorkingCopyExplorer.cs" />

@@ -67,6 +67,10 @@
       <Project>{FA90174C-5763-46E8-9C95-328CA8451072}</Project>
       <Name>AnkhSvn</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ankh\Ankh.2005.csproj">
+      <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
+      <Name>Ankh.2005</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

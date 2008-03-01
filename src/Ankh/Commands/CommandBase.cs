@@ -82,7 +82,7 @@ namespace Ankh.Commands
         {
             get
             {
-                return (0 != System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift);
+                return (0 != (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift));
             }
         }
 
