@@ -25,13 +25,6 @@ namespace Ankh
         /// </summary>
         IUIShell UIShell { get; }
 
-
-        /// <summary>
-        /// The addin object.
-        /// </summary>
-		[Obsolete("null in package")]
-        EnvDTE.AddIn AddIn { get; }
-
         /// <summary>
         /// The SolutionExplorer object.
         /// </summary>
@@ -109,11 +102,6 @@ namespace Ankh
         /// Watches the project files.
         /// </summary>
         FileWatcher ProjectFileWatcher{ get; }
-
-        /// <summary>
-        /// Wrapper over the VS command bar model.
-        /// </summary>
-        VSCommandBars CommandBars{ get; }
 
         /// <summary>
         /// Gets the DTE strategy factory.

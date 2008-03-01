@@ -77,8 +77,6 @@ namespace Ankh
 
             this.ankhLoadedForSolution = false;
            
-            this.commandBars = VSCommandBars.Create(this);
-
             this.SetUpEvents();    
             
             this.conflictManager = new ConflictManager(this);
@@ -273,12 +271,6 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.projectFileWatcher; }
-        }
-
-        public VSCommandBars CommandBars
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.commandBars; }
         }
 
         public IServiceProvider ServiceProvider
@@ -717,8 +709,6 @@ namespace Ankh
         private IUIShell uiShell;
         
         private Ankh.Config.ConfigLoader configLoader;
-
-        private VSCommandBars commandBars;
 
         private IDteStrategyFactory dteStrategyFactory;
     }

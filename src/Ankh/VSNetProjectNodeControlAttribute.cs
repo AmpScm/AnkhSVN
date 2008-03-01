@@ -1,5 +1,5 @@
 using System;
-using Microsoft.Office.Core;
+//using Microsoft.Office.Core;
 
 namespace Ankh
 {
