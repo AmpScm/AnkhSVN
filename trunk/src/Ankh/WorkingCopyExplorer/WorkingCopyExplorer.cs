@@ -18,26 +18,33 @@ namespace Ankh.WorkingCopyExplorer
 
         public WorkingCopyExplorer( IContext context )
         {
-            this.context = context;
-            this.control = context.UIShell.WorkingCopyExplorer;
-            this.control.StateImages = StatusImages.StatusImageList;
+            this.context = context;            
             this.statusCache = this.context.StatusCache;
 
             this.roots = new ArrayList();
 
             this.LoadRoots();
-
             this.Context.Unloading += new EventHandler( Context_Unloading );
 
-            this.control.WantNewRoot += new EventHandler( control_WantNewRoot );
-            this.control.ValidatingNewRoot += new System.ComponentModel.CancelEventHandler( control_ValidatingNewRoot );
+            if (context.UIShell.WorkingCopyExplorer != null)
+            {
+                SetControl(context.UIShell.WorkingCopyExplorer);                
+            }
         }
 
-        
+        public void SetControl(WorkingCopyExplorerControl wcControl)
+        {
+            if (this.control != null)
+            {
+                if (wcControl != this.control)
+                    throw new InvalidOperationException();
+            }
 
-        
-
-        
+            control = wcControl;
+            control.StateImages = StatusImages.StatusImageList;
+            control.WantNewRoot += new EventHandler(control_WantNewRoot);
+            control.ValidatingNewRoot += new System.ComponentModel.CancelEventHandler(control_ValidatingNewRoot);
+        }       
 
         public IContext Context
         {
@@ -75,6 +82,8 @@ namespace Ankh.WorkingCopyExplorer
 
         private FileSystemRootItem GetSelectedRoot()
         {
+            if (control == null)
+                return null;
             IFileSystemItem[] items = this.control.GetSelectedItems();
 
             if ( items.Length != 1 )

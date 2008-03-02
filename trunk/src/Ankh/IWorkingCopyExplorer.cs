@@ -10,5 +10,9 @@ namespace Ankh
         IContextMenu ContextMenu { get; set; }
         bool IsRootSelected { get; }
         void RemoveSelectedRoot();
+
+
+        // Temporary helper
+        void SetControl(WorkingCopyExplorerControl wcControl);
     }
 }

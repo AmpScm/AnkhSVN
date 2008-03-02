@@ -18,6 +18,7 @@ using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using IManagedServiceProvider = System.IServiceProvider;
 using SharpSvn;
 using Utils.Services;
+using Ankh.UI.Services;
 
 namespace Ankh
 {

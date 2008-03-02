@@ -24,7 +24,7 @@ namespace Ankh.Commands
 
         public override void Execute(IContext context, string parameters)
         {
-            context.UIShell.ToggleCommitDialog( true );
+            context.Package.ShowToolWindow(AnkhToolWindow.PendingChanges);
         }
 
         #endregion

@@ -5,6 +5,13 @@ using System.Runtime.InteropServices;
 
 namespace AnkhSvn.Ids
 {
+    /// <summary>
+    /// List of ankh menus
+    /// </summary>
+    /// <remarks>
+    /// <para>New items should be added at the end. Items should only be obsoleted between releases.</para>
+    /// <para>The values of this enum are part of our interaction with other packages within Visual Studio</para>
+    /// </remarks>
 	[Guid(AnkhId.CommandSet)]
 	public enum AnkhCommandMenu
 	{
@@ -18,5 +25,17 @@ namespace AnkhSvn.Ids
 		MenuFirst = 0x5FFFFFFF,
 
 		FileScc,
+
+        RepositoryExplorerToolBar,
+        RepositoryExplorerContextMenu,
+        WorkingCopyExplorerToolBar,
+        WorkingCopyExplorerContextMenu,
+
+        SolutionExplorerSccForSolution,
+        SolutionExplorerSccForProject,
+        SolutionExplorerSccForItem,
+
+        PendingChangesToolBar,
+        PendingChangesContextMenu,
 	}
 }

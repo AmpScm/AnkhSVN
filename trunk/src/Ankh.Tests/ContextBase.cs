@@ -8,6 +8,7 @@ using System.IO;
 
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using SharpSvn;
+using Ankh.UI.Services;
 
 namespace Ankh.Tests
 {
@@ -628,6 +629,164 @@ namespace Ankh.Tests
             public void ShowWorkingCopyExplorer( bool p )
             {
                 throw new Exception( "The method or operation is not implemented." );
+            }
+
+            #endregion
+
+            #region IUIShell Members
+
+
+            Ankh.UI.WorkingCopyExplorerControl IUIShell.WorkingCopyExplorer
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public Ankh.UI.CommitDialog CommitDialog
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            #endregion
+
+            #region IUIShell Members
+
+            Ankh.UI.RepositoryExplorerControl IUIShell.RepositoryExplorer
+            {
+                get { throw new NotImplementedException(); }
+                set { throw new NotImplementedException(); }
+            }
+
+            System.ComponentModel.ISynchronizeInvoke IUIShell.SynchronizingObject
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            IContext IUIShell.Context
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            Ankh.UI.CommitDialog IUIShell.CommitDialog
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            DialogResult IUIShell.QueryWhetherAnkhShouldLoad()
+            {
+                throw new NotImplementedException();
+            }
+
+            void IUIShell.SetRepositoryExplorerSelection(object[] selection)
+            {
+                throw new NotImplementedException();
+            }
+
+            CommitContext IUIShell.ShowCommitDialogModal(CommitContext ctx)
+            {
+                throw new NotImplementedException();
+            }
+
+            string IUIShell.ShowNewDirectoryDialog()
+            {
+                throw new NotImplementedException();
+            }
+
+            bool IUIShell.RepositoryExplorerHasFocus()
+            {
+                throw new NotImplementedException();
+            }
+
+            bool IUIShell.WorkingCopyExplorerHasFocus()
+            {
+                throw new NotImplementedException();
+            }
+
+            bool IUIShell.SolutionExplorerHasFocus()
+            {
+                throw new NotImplementedException();
+            }
+
+            bool IUIShell.RunWithProgressDialog(IProgressWorker worker, string caption)
+            {
+                throw new NotImplementedException();
+            }
+
+            DialogResult IUIShell.ShowMessageBox(string text, string caption, MessageBoxButtons buttons)
+            {
+                throw new NotImplementedException();
+            }
+
+            DialogResult IUIShell.ShowMessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+            {
+                throw new NotImplementedException();
+            }
+
+            DialogResult IUIShell.ShowMessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IUIShell.DisplayHtml(string caption, string html, bool reuse)
+            {
+                throw new NotImplementedException();
+            }
+
+            PathSelectorInfo IUIShell.ShowPathSelector(PathSelectorInfo info)
+            {
+                throw new NotImplementedException();
+            }
+
+            LockDialogInfo IUIShell.ShowLockDialog(LockDialogInfo info)
+            {
+                throw new NotImplementedException();
+            }
+
+            LogDialogInfo IUIShell.ShowLogDialog(LogDialogInfo info)
+            {
+                throw new NotImplementedException();
+            }
+
+            SwitchDialogInfo IUIShell.ShowSwitchDialog(SwitchDialogInfo info)
+            {
+                throw new NotImplementedException();
+            }
+
+            RepositoryRootInfo IUIShell.ShowAddRepositoryRootDialog()
+            {
+                throw new NotImplementedException();
+            }
+
+            string IUIShell.ShowAddWorkingCopyExplorerRootDialog()
+            {
+                throw new NotImplementedException();
             }
 
             #endregion

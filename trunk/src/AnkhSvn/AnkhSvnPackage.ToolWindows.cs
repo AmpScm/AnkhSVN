@@ -8,14 +8,17 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.UI;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.ComponentModel.Design;
+using Ankh.UI.Services;
+using System.Diagnostics;
 
 namespace Ankh.VSPackage
 {   
     // We define the toolwindows here. We implement them as some kind of
     // .Net control hosted in this container. This container makes sure
     // user settings are persisted, etc.
-    [ProvideToolWindow(typeof(WorkingCopyExplorerToolWindow), Style=VsDockStyle.Float, Transient=false)]
-    [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style=VsDockStyle.Float, Transient=false, Width=200, Height=400)]
+    [ProvideToolWindow(typeof(WorkingCopyExplorerToolWindow), Style=VsDockStyle.Float, Transient=false, Width=600, Height=300)]
+    [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style=VsDockStyle.Float, Transient=false, Width=600, Height=300)]
     [ProvideToolWindow(typeof(PendingChangesToolWindow), Style=VsDockStyle.Linked, Orientation=ToolWindowOrientation.Bottom, Transient=false)]
 	public partial class AnkhSvnPackage
 	{
@@ -56,6 +59,8 @@ namespace Ankh.VSPackage
     class AnkhToolWindowSite : IAnkhToolWindowSite
     {
         readonly ToolWindowPane _pane;
+        Container _container;
+
         public AnkhToolWindowSite(ToolWindowPane pane)
         {
             if (pane == null)
@@ -86,12 +91,12 @@ namespace Ankh.VSPackage
 
         public System.ComponentModel.IComponent Component
         {
-            get { return _pane.Window as Component; }
+            get { return _pane.Window as IComponent; }
         }
 
         public System.ComponentModel.IContainer Container
         {
-            get { return null; }
+            get { return _container ?? (_container = new Container()); }
         }
 
         public bool DesignMode
@@ -118,43 +123,79 @@ namespace Ankh.VSPackage
         }
 
         #endregion
+
+        #region IAnkhUISite Members
+
+
+        public void ShowContextMenu(AnkhCommandMenu menu, System.Drawing.Point position)
+        {
+            ShowContextMenu(new CommandID(AnkhId.CommandSetGuid, (int)menu), position);
+        }
+
+        public void ShowContextMenu(CommandID menu, System.Drawing.Point position)
+        {
+            IMenuCommandService mcs = (IMenuCommandService)GetService(typeof(IMenuCommandService));
+
+            mcs.ShowContextMenu(menu, position.X, position.Y);
+        }
+
+        #endregion
+    }
+
+    public class AnkhToolWindowPane : ToolWindowPane
+    {
+        readonly AnkhToolWindowSite _site;
+        Control _control;
+
+        protected AnkhToolWindowPane()
+            : base(new ServiceContainer())
+        {
+            _site = new AnkhToolWindowSite(this);
+        }
+
+        protected Control Control
+        {
+            get { return _control; }
+            set
+            {
+                Debug.Assert(_control == null);
+                _control = value;
+
+                if (value != null)
+                    value.Site = _site;
+            }
+        }
+
+        public override IWin32Window Window
+        {
+            get { return _control; }
+        }
     }
 
     /// <summary>
     /// Wrapper for the WorkingCopyExplorer in the Ankh assembly
     /// </summary>
     [Guid(AnkhId.WorkingCopyExplorerToolWindowId)]
-    public class WorkingCopyExplorerToolWindow : ToolWindowPane
+    public class WorkingCopyExplorerToolWindow : AnkhToolWindowPane
     {
-        Control _control;
-
         public WorkingCopyExplorerToolWindow()
-            : base(null)
         {
             this.Caption = "Working Copy Explorer";
             
-            // Set the image that will appear on the tab of the window frame
-			// when docked with another window.
-			// The resource ID corresponds to the one defined in Resources.resx
-			// while the Index is the offset in the bitmap strip. Each image in
-			// the strip is 16x16.
-			//this.BitmapResourceID = 301;
-			//this.BitmapIndex = 3;
+			this.BitmapResourceID = 401;
+			this.BitmapIndex = 0;
 
-			// Add the toolbar by specifying the Guid/MenuID pair corresponding to
-			// the toolbar definition in the vsct file.
-			//this.ToolBar = new CommandID(GuidsList.guidClientCmdSet, PkgCmdId.IDM_MyToolbar);
-			// Specify that we want the toolbar at the top of the window
-			//this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.WorkingCopyExplorerToolBar);
+            this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
 
 			// Creating the user control that will be displayed in the window
-            _control = new WorkingCopyExplorerControl();
-            _control.Site = new AnkhToolWindowSite(this);
+            Control = new WorkingCopyExplorerControl();
         }
 
-        public override IWin32Window Window
+        public override void OnToolBarAdded()
         {
-            get { return _control; }
+            base.OnToolBarAdded();
+            ((AnkhSvnPackage)Package).AnkhContext.UIShell.WorkingCopyExplorer = Control as WorkingCopyExplorerControl;
         }
     }
 
@@ -162,35 +203,25 @@ namespace Ankh.VSPackage
     /// Wrapper for the RepositoryExplorer in the Ankh assembly
     /// </summary>
     [Guid(AnkhId.RepositoryExplorerToolWindowId)]
-    public class RepositoryExplorerToolWindow : ToolWindowPane
+    public class RepositoryExplorerToolWindow : AnkhToolWindowPane
     {
-        Control _control;
         public RepositoryExplorerToolWindow()
-            : base(null)
         {
             this.Caption = "Repository Explorer";
 
-            // Set the image that will appear on the tab of the window frame
-            // when docked with another window.
-            // The resource ID corresponds to the one defined in Resources.resx
-            // while the Index is the offset in the bitmap strip. Each image in
-            // the strip is 16x16.
-            //this.BitmapResourceID = 301;
-            //this.BitmapIndex = 3;
+            this.BitmapResourceID = 401;
+            this.BitmapIndex = 1;
 
-            // Add the toolbar by specifying the Guid/MenuID pair corresponding to
-            // the toolbar definition in the vsct file.
-            //this.ToolBar = new CommandID(GuidsList.guidClientCmdSet, PkgCmdId.IDM_MyToolbar);
-            // Specify that we want the toolbar at the top of the window
-            //this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.RepositoryExplorerToolBar);
+            this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
 
-            // Creating the user control that will be displayed in the window
-            _control = new RepositoryExplorerControl();
+            Control = new RepositoryExplorerControl();
         }
 
-        public override IWin32Window Window
+        public override void OnToolBarAdded()
         {
-            get { return _control; }
+            base.OnToolBarAdded();
+            ((AnkhSvnPackage)Package).AnkhContext.UIShell.RepositoryExplorer = Control as RepositoryExplorerControl;
         }
     }
 
@@ -198,35 +229,24 @@ namespace Ankh.VSPackage
     /// Wrapper for the Commit dialog in the Ankh assembly
     /// </summary>
     [Guid(AnkhId.PendingChangesToolWindowId)]
-    public class PendingChangesToolWindow : ToolWindowPane
+    public class PendingChangesToolWindow : AnkhToolWindowPane
     {
-        Control _control;
-
         public PendingChangesToolWindow()
-            : base(null)
         {
             this.Caption = "Pending Changes";
-            // Set the image that will appear on the tab of the window frame
-            // when docked with another window.
-            // The resource ID corresponds to the one defined in Resources.resx
-            // while the Index is the offset in the bitmap strip. Each image in
-            // the strip is 16x16.
-            //this.BitmapResourceID = 301;
-            //this.BitmapIndex = 3;
 
-            // Add the toolbar by specifying the Guid/MenuID pair corresponding to
-            // the toolbar definition in the vsct file.
-            //this.ToolBar = new CommandID(GuidsList.guidClientCmdSet, PkgCmdId.IDM_MyToolbar);
-            // Specify that we want the toolbar at the top of the window
-            //this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            this.BitmapResourceID = 401;
+            this.BitmapIndex = 2;
 
-            // Creating the user control that will be displayed in the window
-            _control = new CommitDialog();
+            this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.PendingChangesToolBar);
+            this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            
+            Control = new CommitDialog();
         }
 
-        public override IWin32Window Window
+        public override void OnToolBarAdded()
         {
-            get { return _control; }
+            base.OnToolBarAdded();
         }
     }
 }

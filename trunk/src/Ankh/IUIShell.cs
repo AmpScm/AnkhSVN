@@ -16,7 +16,8 @@ namespace Ankh
         /// </summary>
         RepositoryExplorerControl RepositoryExplorer
         {
-            get; 
+            get;
+            set;
         }
 
         /// <summary>
@@ -39,6 +40,13 @@ namespace Ankh
         Ankh.UI.WorkingCopyExplorerControl WorkingCopyExplorer
         {
             get;
+            set;
+        }
+
+        Ankh.UI.CommitDialog CommitDialog
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -46,12 +54,6 @@ namespace Ankh
         /// </summary>
         /// <returns></returns>
         DialogResult QueryWhetherAnkhShouldLoad();
-
-        /// <summary>
-        /// Whether to show the repository explorer tool window.
-        /// </summary>
-        /// <param name="show"></param>
-        void ShowRepositoryExplorer(bool show);
 
         /// <summary>
         /// Set the selection for the repository explorer.
@@ -72,17 +74,6 @@ namespace Ankh
         /// </summary>
         /// <returns>The name of the new dialog, or null.</returns>
         string ShowNewDirectoryDialog();
-
-        /// <summary>
-        /// Shows/hides the commit dialog
-        /// </summary>
-        void ToggleCommitDialog( bool show );
-
-        /// <summary>
-        /// Resets the commit dialog.
-        /// </summary>
-        void ResetCommitDialog();
-
 
         /// <summary>
         /// Whether the Repository Explorer window has focus
@@ -184,7 +175,5 @@ namespace Ankh
         RepositoryRootInfo ShowAddRepositoryRootDialog();
 
         string ShowAddWorkingCopyExplorerRootDialog();
-
-        void ShowWorkingCopyExplorer( bool p );
     }
 }
