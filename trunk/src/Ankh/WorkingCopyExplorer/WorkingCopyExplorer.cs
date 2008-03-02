@@ -161,18 +161,6 @@ namespace Ankh.WorkingCopyExplorer
 
         #endregion
 
-        public IContextMenu ContextMenu
-        {
-            get
-            {
-                return this.control.CustomContextMenu;
-            }
-            set
-            {
-                this.control.CustomContextMenu = value;
-            }
-        }
-
         internal IFileSystemItem[] GetFileSystemItemsForDirectory( SvnItem directoryItem )
         {
             ArrayList items = new ArrayList();
