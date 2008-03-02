@@ -46,7 +46,8 @@ namespace Ankh.UI
             set
             {
                 base.Site = value;
-                _uiSite = value as IAnkhUISite;
+                if(value is IAnkhUISite)
+                    _uiSite = value as IAnkhUISite;
             }
         }     
         

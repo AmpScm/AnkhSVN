@@ -75,7 +75,7 @@ namespace Ankh.UI
     /// <summary>
     /// Treeview that shows the layout of a SVN repository
     /// </summary>
-    public class RepositoryTreeView : PathTreeView
+    public partial class RepositoryTreeView : PathTreeView
     {
         public RepositoryTreeView()
         {

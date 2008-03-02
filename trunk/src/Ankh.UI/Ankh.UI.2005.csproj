@@ -126,14 +126,26 @@
     <Compile Include="AddRepositoryRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AddRepositoryRootDialog.Designer.cs">
+      <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="AddSolutionDialog.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddSolutionDialog.Designer.cs">
+      <DependentUpon>AddSolutionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AddWorkingCopyExplorerRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AddWorkingCopyExplorerRootDialog.Designer.cs">
+      <DependentUpon>AddWorkingCopyExplorerRootDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdminDirDialog.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdminDirDialog.Designer.cs">
+      <DependentUpon>AdminDirDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -141,20 +153,26 @@
     <Compile Include="CheckoutDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ClientCertDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ClientCertPassphraseDialog.cs">
-      <SubType>Form</SubType>
+    <Compile Include="CheckoutDialog.Designer.cs">
+      <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CommitDialog.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="CommitDialog.Designer.cs">
+      <DependentUpon>CommitDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ConfigurationDialog.Designer.cs">
+      <DependentUpon>ConfigurationDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConflictDialog.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConflictDialog.Designer.cs">
+      <DependentUpon>ConflictDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="DiffHtmlModel.cs">
       <SubType>Code</SubType>
@@ -165,20 +183,20 @@
     <Compile Include="DiffView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="EolStylePropertyEditor.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="DiffView.Designer.cs">
+      <DependentUpon>DiffView.cs</DependentUpon>
     </Compile>
     <Compile Include="ErrorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExecutablePropertyEditor.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="ErrorDialog.Designer.cs">
+      <DependentUpon>ErrorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="ExportDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExternalsPropertyEditor.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="ExportDialog.Designer.cs">
+      <DependentUpon>ExportDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="FileSystemDetailsView.cs">
       <SubType>Component</SubType>
@@ -188,17 +206,16 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Helpers\SvnClientFactory.cs" />
-    <Compile Include="IContextMenu.cs" />
     <Compile Include="ICurrentItemSource.cs" />
     <Compile Include="IFileSystemItem.cs" />
-    <Compile Include="IgnorePropertyEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="IPropertyEditor.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IRepositoryTreeView.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LockDialog.Designer.cs">
+      <DependentUpon>LockDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogDialog.Designer.cs">
+      <DependentUpon>LogDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="LogDialogView.cs">
       <SubType>UserControl</SubType>
@@ -206,16 +223,115 @@
     <Compile Include="LogDialogView.Designer.cs">
       <DependentUpon>LogDialogView.cs</DependentUpon>
     </Compile>
+    <Compile Include="LogMessageControl.Designer.cs">
+      <DependentUpon>LogMessageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MultiLineStringEditorWithTemplates.Designer.cs">
+      <DependentUpon>MultiLineStringEditorWithTemplates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MultiLineStringTypeEditorDialog.Designer.cs">
+      <DependentUpon>MultiLineStringTypeEditorDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewDirectoryDialog.Designer.cs">
+      <DependentUpon>NewDirectoryDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PathSelectionTreeView.Designer.cs">
+      <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PathSelector.Designer.cs">
+      <DependentUpon>PathSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PopUpListForm.Designer.cs">
+      <DependentUpon>PopUpListForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presenters\SvnLogPresenter.cs" />
-    <Compile Include="RepositoryExplorerControl.Designer.cs" />
+    <Compile Include="ProgressDialog.Designer.cs">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyEditorDialog.Designer.cs">
+      <DependentUpon>PropertyEditorDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyEditors\EolStylePropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyEditors\EolStylePropertyEditor.Designer.cs">
+      <DependentUpon>EolStylePropertyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyEditors\ExecutablePropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyEditors\ExecutablePropertyEditor.Designer.cs">
+      <DependentUpon>ExecutablePropertyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyEditors\ExternalsPropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyEditors\ExternalsPropertyEditor.Designer.cs">
+      <DependentUpon>ExternalsPropertyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyEditors\IgnorePropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyEditors\IgnorePropertyEditor.Designer.cs">
+      <DependentUpon>IgnorePropertyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyEditors\IPropertyEditor.cs" />
+    <Compile Include="PropertyEditors\KeywordsPropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyEditors\KeywordsPropertyEditor.Designer.cs">
+      <DependentUpon>KeywordsPropertyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyEditors\MimeTypePropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyEditors\MimeTypePropertyEditor.Designer.cs">
+      <DependentUpon>MimeTypePropertyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyEditors\PlainPropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyEditors\PlainPropertyEditor.Designer.cs">
+      <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RelocateDialog.Designer.cs">
+      <DependentUpon>RelocateDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RenameDialog.Designer.cs">
+      <DependentUpon>RenameDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RepositoryExplorerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RepositoryExplorerControl.Designer.cs">
+      <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RepositoryTreeView.Designer.cs">
+      <DependentUpon>RepositoryTreeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReverseMergeDialog.Designer.cs">
+      <DependentUpon>ReverseMergeDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RevisionPicker.Designer.cs">
+      <DependentUpon>RevisionPicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\IAnkhUISite.cs" />
     <Compile Include="Services\IAnkhPackage.cs" />
     <Compile Include="Services\SvnLogService.cs" />
+    <Compile Include="SwitchDialog.Designer.cs">
+      <DependentUpon>SwitchDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TestRepositoryExplorer.Designer.cs">
+      <DependentUpon>TestRepositoryExplorer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateDialog.Designer.cs">
+      <DependentUpon>UpdateDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewLogDialog.Designer.cs">
+      <DependentUpon>ViewLogDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\ISvnLogView.cs" />
     <Compile Include="Services\ISvnLogService.cs" />
-    <Compile Include="KeywordsPropertyEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="LockDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -233,9 +349,6 @@
     </Compile>
     <Compile Include="LogDialogTest.Designer.cs">
       <DependentUpon>LogDialogTest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LoginDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="LogMessageControl.cs">
       <SubType>UserControl</SubType>
@@ -255,9 +368,6 @@
     <Compile Include="LogRevisionControl.Designer.cs">
       <DependentUpon>LogRevisionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MimeTypePropertyEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="MultiLineStringEditorWithTemplates.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -276,9 +386,6 @@
     <Compile Include="PathTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PlainPropertyEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="PopUpListForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -294,9 +401,6 @@
     <Compile Include="RenameDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RepositoryExplorerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="RepositoryTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -310,9 +414,6 @@
     </Compile>
     <Compile Include="RevisionPicker.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SslServerTrustDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="TypeConverters.cs" />
     <Compile Include="SwitchDialog.cs">
@@ -333,6 +434,9 @@
     <Compile Include="WorkingCopyExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="WorkingCopyExplorerControl.Designer.cs">
+      <DependentUpon>WorkingCopyExplorerControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AddRepositoryRootDialog.resx">
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -349,14 +453,6 @@
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ClientCertDialog.resx">
-      <DependentUpon>ClientCertDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ClientCertPassphraseDialog.resx">
-      <DependentUpon>ClientCertPassphraseDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="CommitDialog.resx">
       <DependentUpon>CommitDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -369,32 +465,12 @@
       <DependentUpon>DiffView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="EolStylePropertyEditor.resx">
-      <DependentUpon>EolStylePropertyEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ErrorDialog.resx">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExecutablePropertyEditor.resx">
-      <DependentUpon>ExecutablePropertyEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ExportDialog.resx">
       <DependentUpon>ExportDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ExternalsPropertyEditor.resx">
-      <DependentUpon>ExternalsPropertyEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="IgnorePropertyEditor.resx">
-      <DependentUpon>IgnorePropertyEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="KeywordsPropertyEditor.resx">
-      <DependentUpon>KeywordsPropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LockDialog.resx">
@@ -405,16 +481,8 @@
       <DependentUpon>LogDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="LoginDialog.resx">
-      <DependentUpon>LoginDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="LogMessageControl.resx">
       <DependentUpon>LogMessageControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MimeTypePropertyEditor.resx">
-      <DependentUpon>MimeTypePropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="NewDirectoryDialog.resx">
@@ -433,10 +501,6 @@
       <DependentUpon>PathTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PlainPropertyEditor.resx">
-      <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ProgressDialog.resx">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -453,10 +517,6 @@
       <DependentUpon>RenameDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RepositoryExplorerControl.resx">
-      <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="RepositoryTreeView.resx">
       <DependentUpon>RepositoryTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -467,10 +527,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RevisionPicker.resx">
       <DependentUpon>RevisionPicker.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SslServerTrustDialog.resx">
-      <DependentUpon>SslServerTrustDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SwitchDialog.resx">
@@ -538,6 +594,38 @@
     <EmbeddedResource Include="PopUpListForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PopUpListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\EolStylePropertyEditor.resx">
+      <DependentUpon>EolStylePropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\ExecutablePropertyEditor.resx">
+      <DependentUpon>ExecutablePropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\ExternalsPropertyEditor.resx">
+      <DependentUpon>ExternalsPropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\IgnorePropertyEditor.resx">
+      <DependentUpon>IgnorePropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\KeywordsPropertyEditor.resx">
+      <DependentUpon>KeywordsPropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\MimeTypePropertyEditor.resx">
+      <DependentUpon>MimeTypePropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\PlainPropertyEditor.resx">
+      <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RepositoryExplorerControl.resx">
+      <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <SubType>Designer</SubType>
