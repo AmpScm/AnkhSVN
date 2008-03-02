@@ -9,8 +9,8 @@ namespace AnkhSvn.Ids
 	/// List of ankh commands
 	/// </summary>
 	/// <remarks>
-	/// <para>New items should be added at the end. unused items should only be obsoleted.</para>
-	/// <para>This list of commands is part of the public api for communicating within Visual Studio</para>
+    /// <para>New items should be added at the end. Items should only be obsoleted between releases.</para>
+    /// <para>The values of this enum are part of our interaction with other packages within Visual Studio</para>
 	/// </remarks>
 	[Guid(AnkhId.CommandSet)]
 	public enum AnkhCommand // : int

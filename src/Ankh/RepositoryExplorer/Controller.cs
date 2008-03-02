@@ -26,15 +26,8 @@ namespace Ankh.RepositoryExplorer
         {
             this.context = context;
 
-            this.repositoryExplorer = context.UIShell.RepositoryExplorer;
-
-            this.enableBackgroundListing = repositoryExplorer.EnableBackgroundListing;
-
-            this.repositoryExplorer.EnableBackgroundListingChanged += 
-                new EventHandler( this.BackgroundListingChanged );
-            this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
-            this.repositoryExplorer.SelectionChanged +=new EventHandler(SelectionChanged);
-            this.repositoryExplorer.AddRepoButtonClicked += new EventHandler(AddRepoButtonClicked);
+            if (context.UIShell.RepositoryExplorer != null)
+                SetControl(context.UIShell.RepositoryExplorer);            
 
             this.context.Unloading += new EventHandler(ContextUnloading);
             
@@ -43,21 +36,32 @@ namespace Ankh.RepositoryExplorer
             this.LoadReposRoots();
         }
 
+        internal void SetControl(RepositoryExplorerControl value)
+        {
+            this.repositoryExplorer = context.UIShell.RepositoryExplorer;
+
+            if (repositoryExplorer != null)
+            {
+                this.repositoryExplorer.EnableBackgroundListingChanged +=
+                    new EventHandler(this.BackgroundListingChanged);
+                this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
+                this.repositoryExplorer.SelectionChanged += new EventHandler(SelectionChanged);
+                this.repositoryExplorer.AddRepoButtonClicked += new EventHandler(AddRepoButtonClicked);
+            }
+        }
+
         /// <summary>
         /// The selected node in the repository explorer.
         /// </summary>
         public INode SelectedNode
         {
-            get{ return (INode)this.repositoryExplorer.SelectedNode; }
-        }
-
-        /// <summary>
-        /// The command bar associated with the repository explorer.
-        /// </summary>
-        public object CommandBar
-        {
-            get{ return this.repositoryExplorer.CommandBar; }
-            set{ this.repositoryExplorer.CommandBar = value; }
+            get 
+            {
+                if (this.repositoryExplorer != null)
+                    return (INode)this.repositoryExplorer.SelectedNode;
+                else
+                    return null;
+            }
         }
 
         /// <summary>
@@ -170,7 +174,7 @@ namespace Ankh.RepositoryExplorer
                             children[i++] = new Node( parent, entry );
                     }
 
-                    if ( this.enableBackgroundListing )
+                    if ( EnableBackgroundListing )
                         new BackgroundLister( children, this ).Start();
                 }
 
@@ -288,7 +292,7 @@ namespace Ankh.RepositoryExplorer
         /// <param name="args"></param>
         private void BackgroundListingChanged( object sender, EventArgs args )
         {
-            this.enableBackgroundListing = this.repositoryExplorer.EnableBackgroundListing;
+            // Nothing to do
         }
 
         private object[] selection = new object[]{ null };
@@ -408,7 +412,7 @@ namespace Ankh.RepositoryExplorer
             {
                 // run as long as there are items in the queue or until the user
                 // cancels background listing
-                while( queue.Count > 0 && this.parent.enableBackgroundListing )
+                while( queue.Count > 0 && this.parent.EnableBackgroundListing )
                 {
                     INode node = (INode)queue.Dequeue();
                     Debug.WriteLine( Thread.CurrentThread.Name + " listing " + node.Url, 
@@ -477,14 +481,20 @@ namespace Ankh.RepositoryExplorer
             #endregion
         }
 
+        protected bool EnableBackgroundListing
+        {
+            get
+            {
+                if (repositoryExplorer != null)
+                    return repositoryExplorer.EnableBackgroundListing;
+                return false;
+            }
+        }
+
 
         private static readonly NodeComparer NODECOMPARER = new NodeComparer();
         private RepositoryExplorerControl repositoryExplorer;
         private Hashtable directories;
         private IContext context;        
-
-        private bool enableBackgroundListing = false;
-
-        
     }
 }

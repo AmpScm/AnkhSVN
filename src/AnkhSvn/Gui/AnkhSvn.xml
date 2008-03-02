@@ -21,7 +21,7 @@
           <Group id="Grp_FileSccMenuUpdate" priority="0x0000">
             <Button id="Cmd_AddItem" name="AddItem" priority="0x301"
                     text="&amp;Add..."
-                    toolTip="Add selected items to the working copy." iconFile="menu/Add.png">              
+                    toolTip="Add selected items to the working copy." iconFile="menu/Add.png">
             </Button>
             <Button id="Cmd_AddRepositoryRoot" name="AddRepositoryRoot" priority="0x301"
                     text="A&amp;dd Repository Url"
@@ -29,9 +29,6 @@
             <Button id="Cmd_AddSolutionToRepository" name="AddSolutionToRepository" priority="0x301"
                     text="Add Sol&amp;ution to Subversion repository..."
                     toolTip="Add this solution to a Subversion repository." iconFile="menu/AddSolutionToRepository.png" />
-            <Button id="Cmd_AddWorkingCopyExplorerRoot" name="AddWorkingCopyExplorerRoot" priority="0x301"
-                    text="A&amp;dd New Root..."
-                    toolTip="Add a new root to the Working Copy Explorer." iconFile="menu/AddFolder.png" />
             <Button id="Cmd_Blame" name="Blame" priority="0x301"
                     text="&amp;Blame..."
                     toolTip="Identify which user wrote which lines." iconFile="menu/Blame.png" />
@@ -92,9 +89,6 @@
             <Button id="Cmd_RemoveRepositoryRoot" name="RemoveRepositoryRoot" priority="0x301"
                     text="&amp;Remove Repository URL"
                     toolTip="Remove a URL from the Repository Explorer." iconFile="menu/RemoveUrl.png"/>
-            <Button id="Cmd_RemoveWorkingCopyExplorerRoot" name="RemoveWorkingCopyExplorerRoot" priority="0x301"
-                    text="&amp;Remove Root"
-                    toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.png"/>
             <Button id="Cmd_ResolveConflict" name="ResolveConflict" priority="0x301"
                     text="Res&amp;olve Conflict..."
                     toolTip="Resolve conflict between changes." iconFile="menu/ResolveConflict.png"/>
@@ -115,7 +109,7 @@
                     toolTip="Send the AnkhSVN team comments and suggestions." iconFile="menu/SendSuggest.png" />
             <Button id="Cmd_ShowCommitDialog" name="ShowCommitDialog" priority="0x301"
                     text="Show &amp;Commit Dialog"
-                    toolTip="Show the commit dialog." iconFile="menu/Commit.png"/>            
+                    toolTip="Show the commit dialog." iconFile="menu/Commit.png"/>
             <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x301"
                     text="&amp;Switch..."
                     toolTip="Switch this item to a different URL." iconFile="menu/Switch.png"/>
@@ -125,43 +119,15 @@
             <Button id="Cmd_Unlock" name="Unlock" priority="0x301"
                     text="U&amp;nlock..."
                     toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>
-            <Button id="Cmd_UpdateItem" name="UpdateItem" priority="0x301" 
-                    text="&amp;Update..." 
+            <Button id="Cmd_UpdateItem" name="UpdateItem" priority="0x301"
+                    text="&amp;Update..."
                     toolTip="Updates local items with changes from the Subversion repository." iconFile="menu/Update.png"/>
-            <Button id="Cmd_ViewInVsNet" name="ViewInVsNet" priority="0x301" 
-                    text="In &amp;Visual Studio" 
-                    toolTip="View this file in Visual Studio." iconFile="menu/ViewInVSNet.png"/>
-            <Button id="Cmd_ViewInWindows" name="ViewInWindows" priority="0x301" 
-                    text="In Wi&amp;ndows" 
-                    toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.png"/>
-            <Button id="Cmd_ViewRepositoryFile" name="ViewRepositoryFile" priority="0x301" 
-                    text="In Repository" 
+            <Button id="Cmd_ViewRepositoryFile" name="ViewRepositoryFile" priority="0x301"
+                    text="In Repository"
                     toolTip="View this file" iconFile="menu/ViewInWindows.png"/>
           </Group>
         </Menu>
       </Group>
-      <!--*** Context menu's in the solution explorer **-->
-      <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_SOLUTION_SCC">
-        <!-- VS Predefined group for SCC commands on the solution -->
-        <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
-        <ButtonRef id="Cmd_CommitItem" priority="0x20" />
-        <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
-        <ButtonRef id="Cmd_RevertItem" priority="0x40" />
-      </GroupRef>
-      <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_SCC">
-        <!-- VS Predefined group for SCC commands on projects -->
-        <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
-        <ButtonRef id="Cmd_CommitItem" priority="0x20" />
-        <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
-        <ButtonRef id="Cmd_RevertItem" priority="0x40" />
-      </GroupRef>
-      <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
-        <!-- VS Predefined group for SCC commands on project items -->
-        <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
-        <ButtonRef id="Cmd_CommitItem" priority="0x20" />
-        <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
-        <ButtonRef id="Cmd_RevertItem" priority="0x40" />
-      </GroupRef>
     </MenuRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_VIEW_ORG_WINDOWS">
       <!-- View - The Group containing the Solution Explorer,.. -->
@@ -175,6 +141,141 @@
               toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.png">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="w"/>
       </Button>
-    </GroupRef>      
+    </GroupRef>
+
+    <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_SOLUTION_SCC">
+      <!-- VS Predefined group for SCC commands on the solution -->
+      <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
+      <ButtonRef id="Cmd_CommitItem" priority="0x20" />
+      <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
+      <ButtonRef id="Cmd_RevertItem" priority="0x40" />
+      <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x50" name="Subversion" text="&amp;Subversion">
+        <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
+          <ButtonRef id="Cmd_AddItem" priority="0x10" />
+          <ButtonRef id="Cmd_SwitchItem" priority="0x20" />
+          <ButtonRef id="Cmd_Log" priority="0x30" />
+          <ButtonRef id="Cmd_Lock" priority="0x40" />
+          <ButtonRef id="Cmd_Unlock" priority="0x50" />
+          <ButtonRef id="Cmd_Cleanup" priority="0x60" />
+          <ButtonRef id="Cmd_Blame" priority="0x70" />
+          <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
+          <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
+          <ButtonRef id="Cmd_ResolveConflict" priority="0xA0" />
+          <ButtonRef id="Cmd_ResolveConflictExternal" priority="0xB0" />
+          <ButtonRef id="Cmd_RevertItem" priority="0xC0" />
+          <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
+          <ButtonRef id="Cmd_Refresh" priority="0xE0" />
+        </Group>
+      </Menu>
+    </GroupRef>
+    <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_SCC">
+      <!-- VS Predefined group for SCC commands on projects -->
+      <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
+      <ButtonRef id="Cmd_CommitItem" priority="0x20" />
+      <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
+      <ButtonRef id="Cmd_RevertItem" priority="0x40" />
+      <Menu id="Menu_SolutionExplorerSccForProject" priority="0x50" name="Subversion" text="&amp;Subversion">
+        <Group id="Grp_SolutionExplorerSccForProject" priority="0x100">
+          <ButtonRef id="Cmd_AddItem" priority="0x10" />
+          <ButtonRef id="Cmd_SwitchItem" priority="0x20" />
+          <ButtonRef id="Cmd_Log" priority="0x30" />
+          <ButtonRef id="Cmd_Lock" priority="0x40" />
+          <ButtonRef id="Cmd_Unlock" priority="0x50" />
+          <ButtonRef id="Cmd_Cleanup" priority="0x60" />
+          <ButtonRef id="Cmd_Blame" priority="0x70" />
+          <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
+          <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
+          <ButtonRef id="Cmd_ResolveConflict" priority="0xA0" />
+          <ButtonRef id="Cmd_ResolveConflictExternal" priority="0xB0" />
+          <ButtonRef id="Cmd_RevertItem" priority="0xC0" />
+          <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
+          <ButtonRef id="Cmd_Refresh" priority="0xE0" />
+        </Group>
+      </Menu>
+    </GroupRef>
+    <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
+      <!-- VS Predefined group for SCC commands on project items -->
+      <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
+      <ButtonRef id="Cmd_CommitItem" priority="0x20" />
+      <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
+      <ButtonRef id="Cmd_RevertItem" priority="0x40" />
+      <Menu id="Menu_SolutionExplorerSccForItem" priority="0x50" name="Subversion" text="&amp;Subversion">
+        <Group id="Grp_SolutionExplorerSccForItem" priority="0x100">
+          <ButtonRef id="Cmd_AddItem" priority="0x10" />
+          <ButtonRef id="Cmd_SwitchItem" priority="0x20" />
+          <ButtonRef id="Cmd_Log" priority="0x30" />
+          <ButtonRef id="Cmd_Lock" priority="0x40" />
+          <ButtonRef id="Cmd_Unlock" priority="0x50" />
+          <ButtonRef id="Cmd_Cleanup" priority="0x60" />
+          <ButtonRef id="Cmd_Blame" priority="0x70" />
+          <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
+          <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
+          <ButtonRef id="Cmd_ResolveConflict" priority="0xA0" />
+          <ButtonRef id="Cmd_ResolveConflictExternal" priority="0xB0" />
+          <ButtonRef id="Cmd_RevertItem" priority="0xC0" />
+          <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
+          <ButtonRef id="Cmd_Refresh" priority="0xE0" />
+        </Group>
+      </Menu>
+    </GroupRef>
+    <GroupRef id="Menu_RepositoryExplorerToolBar">
+      <!-- The Repository Explorer Toolbar -->
+      <Menu id="Menu_RepositoryExplorerToolBar" name="RepositoryExplorer" priority="0" type="ToolWindowToolbar">
+
+        <Group id="Grp_RepositoryExplorerToolBar" priority="0x100">
+          <Button id="Cmd_ViewInVsNet" name="ViewInVsNet" priority="0x100"
+                    text="In &amp;Visual Studio"
+                    toolTip="View this file in Visual Studio." iconFile="menu/ViewInVSNet.png"/>
+          <Button id="Cmd_ViewInWindows" name="ViewInWindows" priority="0x200"
+                  text="In Wi&amp;ndows"
+                  toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.png"/>
+        </Group>
+      </Menu>
+    </GroupRef>
+    <GroupRef id="Menu_RepositoryExplorerContextMenu">
+      <!-- The Repository Explorer Context Menu -->
+      <Menu id="Menu_RepositoryExplorerContextMenu" name="RepositoryExplorerContext" priority="0" type="Context">
+        <Group id="Grp_RepositoryExplorerContext" priority="0x100">
+          <ButtonRef id="Cmd_ViewInVsNet" priority="0x100"/>
+          <ButtonRef id="Cmd_ViewInWindows" priority="0x200"/>
+        </Group>
+      </Menu>
+    </GroupRef>
+    <GroupRef id="Menu_WorkingCopyExplorerToolBar">
+      <!-- The Working Copy Explorer Toolbar -->
+      <Menu id="Menu_WorkingCopyExplorerToolBar" name="WorkingCopyExplorer" priority="0" type="ToolWindowToolbar">
+        <Group id="Grp_WorkingCopyExplorerToolBar" priority="0x100">
+          <Button id="Cmd_AddWorkingCopyExplorerRoot" name="AddWorkingCopyExplorerRoot" priority="0x301"
+                    text="A&amp;dd New Root..."
+                    toolTip="Add a new root to the Working Copy Explorer." iconFile="menu/AddFolder.png" />
+          <Button id="Cmd_RemoveWorkingCopyExplorerRoot" name="RemoveWorkingCopyExplorerRoot" priority="0x301"
+        text="&amp;Remove Root"
+        toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.png"/>
+        </Group>
+      </Menu>
+    </GroupRef>
+    <GroupRef id="Menu_WorkingCopyExplorerContextMenu">
+      <!-- The Working Copy Explorer Toolbar -->
+      <Menu id="Menu_WorkingCopyExplorerContextMenu" name="WorkingCopyExplorerContext" priority="0" type="ToolWindowToolbar">
+        <Group id="Grp_WorkingCopyExplorerContext" priority="0x100">
+        </Group>
+      </Menu>
+    </GroupRef>
+    <GroupRef id="Menu_PendingChangesToolBar">
+      <!-- The Working Copy Explorer Toolbar -->
+      <Menu id="Menu_PendingChangesToolBar" name="PendingChanges" priority="0" type="ToolWindowToolbar">
+        <Group id="Grp_PendingChangesToolBar" priority="0x100">
+          <ButtonRef id="Cmd_Refresh" priority="0x100" />
+        </Group>
+      </Menu>
+    </GroupRef>
+    <GroupRef id="Menu_PendingChangesContextMenu">
+      <!-- The Working Copy Explorer Toolbar -->
+      <Menu id="Menu_PendingChangesContextMenu" name="PendingChangesContext" priority="0" type="ToolWindowToolbar">
+        <Group id="Grp_PendingChangesContextMenu" priority="0x100">
+          <ButtonRef id="Cmd_Refresh" priority="0x100" />
+        </Group>
+      </Menu>
+    </GroupRef>
   </UI>
 </VsGui>

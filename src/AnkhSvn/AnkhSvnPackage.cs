@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using AnkhSvn.Ids;
+using Ankh.UI.Services;
 
 namespace Ankh.VSPackage
 {
