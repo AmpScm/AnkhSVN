@@ -842,11 +842,6 @@ namespace Ankh.Tests
             get { throw new Exception( "The method or operation is not implemented." ); }
         }
 
-		public IDteStrategyFactory DteStrategyFactory
-		{
-			get { throw new Exception("The method or operation is not implemented."); }
-		}
-
         public IAnkhPackage Package
         {
             get { throw new Exception("The method or operation is not implemented."); }
