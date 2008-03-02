@@ -12,7 +12,7 @@ namespace Ankh.UI
     /// <summary>
     /// Represents a TreeView that can be used to choose from a set of paths.
     /// </summary>
-    public class PathSelectionTreeView : PathTreeView
+    public partial class PathSelectionTreeView : PathTreeView
     {
         /// <summary>
         /// Fired when the treeview needs information about a path.
@@ -348,37 +348,6 @@ namespace Ankh.UI
         private static readonly Color EnabledColor = Color.Black;
         private static readonly Color DisabledColor = Color.Gray;
         
-       
-        public static void Main()
-        {
-            Form form = new Form();
-            PathSelectionTreeView tree = new PathSelectionTreeView();
-            form.Controls.Add( tree );
-            tree.Dock = DockStyle.Fill;
-            tree.UrlPaths = true;
-
-            tree.Items = new string[]{ 
-                                         "trunk/src/Ankh/Commands/AddItemCommand.cs",
-                                         "trunk/src/Ankh/Commands/CheckoutFolderCommand.cs",
-                                         "trunk/src/Ankh/Commands/CheckoutSolutionCommand.cs",
-                                         "trunk/src/Ankh/Commands/CleanupCommand.cs",
-                                         "trunk/src/Ankh/Commands/CommandBase.cs",
-                                         "trunk/src/Ankh/Commands/CommitItemCommand.cs",
-                                         "trunk/src/Ankh/Commands/CopyReposExplorerUrl.cs",
-                                         "trunk/src/Ankh/Commands/LocalDiffCommandBase.cs",
-                                         "trunk/src/Ankh/Commands/RefreshCommand.cs",
-                                         "trunk/src/Ankh/Commands/RenameFileCommand.cs",
-                                         "trunk/src/Ankh/Commands/ResolveConflictCommand.cs",
-                                         "trunk/src/Ankh/Commands/RevertItemCommand.cs",
-                                         "trunk/src/Ankh/Commands/RunSvnCommand.cs",
-                                         "trunk/src/Ankh/Commands/ShowRepositoryExplorerCommand.cs",
-                                         "trunk/src/Ankh/Commands/ToggleAnkhCommand.cs",
-                                         "trunk/src/Ankh/Commands/UpdateItemCommand.cs",
-                                         "trunk/src/Ankh/Commands/ViewRepositoryFileCommand.cs"
-                                     };
-            Application.Run( form );
-
-        }
     }
 
     public class ResolvingPathEventArgs

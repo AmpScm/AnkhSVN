@@ -9,14 +9,13 @@ using System.Windows.Forms;
 namespace Ankh.UI
 {
     /// <summary>
-    /// Property editor for executable properties.
+    /// Summary description for EolStylePropertyEditor.
     /// </summary>
-    internal class ExecutablePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    internal partial class EolStylePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
     {
-		
         public event EventHandler Changed;
-	
-        public ExecutablePropertyEditor()
+
+        public EolStylePropertyEditor()
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
@@ -24,53 +23,53 @@ namespace Ankh.UI
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
 
+            this.selectedValue = "native";
+
             // TODO: Add any initialization after the InitForm call
 
         }
 
         public void Reset()
         {
-            this.executableCheckBox.Checked = false;
-            this.dirty = false;
         }
 
         public bool Valid
         {
-			
-            get
-            { 
+            get 
+            {
                 if (!this.dirty)
                 {
                     return false;
                 }
                 else 
-                    return this.executableCheckBox.Checked; 
+                    return true;
             }
+
         }
 
         public PropertyItem PropertyItem
         {
+
             get
             {
-                if ( !this.Valid )
+                if( !this.Valid)
                 {
                     throw new InvalidOperationException(
-                        "Can not get a property item when valid is false");
+                        "Can not get a property item when Valid is false");
                 }
-				
-                return new TextPropertyItem("File is executable");
+          
+                return new TextPropertyItem(selectedValue);
             }
-
             set
             {
-                this.executableCheckBox.Checked = true;
+                TextPropertyItem item = (TextPropertyItem)value;
                 this.dirty = false;
             }
         }
 
         public override string ToString()
         {
-            return "executable";
+            return "eol-style";
         }
 
         /// <summary> 
@@ -88,39 +87,16 @@ namespace Ankh.UI
             base.Dispose( disposing );
         }
 
-		#region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            this.executableCheckBox = new System.Windows.Forms.CheckBox();
-            this.SuspendLayout();
-            // 
-            // executableCheckBox
-            // 
-            this.executableCheckBox.Name = "executableCheckBox";
-            this.executableCheckBox.Size = new System.Drawing.Size(160, 24);
-            this.executableCheckBox.TabIndex = 1;
-            this.executableCheckBox.Text = "Executable";
-            this.executableCheckBox.Click += new System.EventHandler(this.executableCheckBox_Click);
-            // 
-            // ExecutablePropertyEditor
-            // 
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.executableCheckBox});
-            this.Name = "ExecutablePropertyEditor";
-            this.ResumeLayout(false);
+		
 
-        }
-		#endregion
-        private void executableCheckBox_Click(object sender, System.EventArgs e)
+        private void RadioButton_CheckedChanged(object sender, System.EventArgs e)
         {
             // Enables save button
             this.dirty = true;
-            if (Changed != null)
-                Changed (this, EventArgs.Empty );
+            if ( Changed != null )
+                Changed(this, EventArgs.Empty);
+    
+            selectedValue = ((RadioButton)sender).Text;
         }
 
         private void CreateMyToolTip()
@@ -136,10 +112,13 @@ namespace Ankh.UI
             conflictToolTip.ShowAlways = true;
          
             // Set up the ToolTip text for the Button and Checkbox.
-            conflictToolTip.SetToolTip( this.executableCheckBox, "File is executable");
+            conflictToolTip.SetToolTip( this.nativeRadioButton, "Default. Line endings dependant on operating system");
+            conflictToolTip.SetToolTip( this.lfRadioButton, "End of line style is LF (Line Feed)");
+            conflictToolTip.SetToolTip( this.crRadioButton, "End of line style is CR");
+            conflictToolTip.SetToolTip( this.crlfRdioButton, "End of line style is CRLF");
         }
-
-        private System.Windows.Forms.CheckBox executableCheckBox;
+        
+        private string selectedValue;
         /// <summary>
         /// Flag for enabling/disabling save button
         /// </summary>
@@ -151,9 +130,8 @@ namespace Ankh.UI
         private System.ComponentModel.Container components = null;
 
       
-    }
-	
 
-	
+       
+    }
 }
 

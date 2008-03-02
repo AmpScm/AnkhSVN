@@ -15,7 +15,7 @@ namespace Ankh.UI
     /// <summary>
     /// A control that allows the user to pick a revision.
     /// </summary>
-    public class RevisionPicker : System.Windows.Forms.UserControl
+    public partial class RevisionPicker : System.Windows.Forms.UserControl
     {
         public event EventHandler Changed;
 
@@ -152,48 +152,6 @@ namespace Ankh.UI
             base.Dispose( disposing );
         }
 
-		#region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            this.revisionTypeBox = new System.Windows.Forms.ComboBox();
-            this.datePicker = new System.Windows.Forms.DateTimePicker();
-            this.SuspendLayout();
-            // 
-            // revisionTypeBox
-            // 
-            this.revisionTypeBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-                | System.Windows.Forms.AnchorStyles.Right)));
-            this.revisionTypeBox.Location = new System.Drawing.Point(0, 0);
-            this.revisionTypeBox.Name = "revisionTypeBox";
-            this.revisionTypeBox.Size = new System.Drawing.Size(200, 21);
-            this.revisionTypeBox.TabIndex = 0;
-            this.revisionTypeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.revisionTypeBox_KeyUp);
-            this.revisionTypeBox.SelectionChangeCommitted += new System.EventHandler(this.revisionTypeBox_SelectionChangeCommitted);
-            // 
-            // datePicker
-            // 
-            this.datePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.datePicker.Enabled = false;
-            this.datePicker.Location = new System.Drawing.Point(200, 0);
-            this.datePicker.Name = "datePicker";
-            this.datePicker.Size = new System.Drawing.Size(144, 20);
-            this.datePicker.TabIndex = 1;
-            // 
-            // RevisionPicker
-            // 
-            this.Controls.Add(this.datePicker);
-            this.Controls.Add(this.revisionTypeBox);
-            this.Name = "RevisionPicker";
-            this.Size = new System.Drawing.Size(344, 20);
-            this.ResumeLayout(false);
-
-        }
-		#endregion
-
         /// <summary>
         /// Adds or removes a choice from the combo box.
         /// </summary>
@@ -286,39 +244,5 @@ namespace Ankh.UI
 
         private static readonly Regex NUMBER = new Regex(@"\d+");
         private RevisionChoice dateRevisionChoice;
-        private System.Windows.Forms.ComboBox revisionTypeBox;
-        private System.Windows.Forms.DateTimePicker datePicker;
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
-
-        private static void Main()
-        {
-            p1 = new RevisionPicker();
-
-            p2 = new RevisionPicker();
-            p2.Top = 40;
-
-            Button ok = new Button();
-            ok.Text = "OK";
-            ok.Click += new EventHandler(ok_Click);
-            ok.Top = 80;
-
-            Form f = new Form();
-            f.Controls.Add( p1 );
-            f.Controls.Add( p2 );
-            f.Controls.Add( ok );
-
-            f.ShowDialog();
-        }
-
-        private static RevisionPicker p1, p2;
-
-        private static void ok_Click(object sender, EventArgs e)
-        {
-            p2.Revision = p1.Revision;
-
-        }
     }
 }

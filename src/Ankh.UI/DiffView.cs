@@ -12,13 +12,12 @@ namespace Ankh.UI
     /// <summary>
     /// This is a control that displays unified diffs.
     /// </summary>
-    public class DiffView : System.Windows.Forms.UserControl
+    public partial class DiffView : System.Windows.Forms.UserControl
     {
         public DiffView()
         {
             this.diffHtmlModel = new DiffHtmlModel();
-
-            this.components = new System.ComponentModel.Container();
+            
             this.InitializeComponent();
         }
 
@@ -57,36 +56,6 @@ namespace Ankh.UI
             base.Dispose( disposing );
         }            
 
-        private void InitializeComponent()
-        {
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(DiffView));
-            this.webBrowser = new WebBrowser();
-            ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // webBrowser
-            // 
-            this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser.Enabled = true;
-            this.webBrowser.Size = new System.Drawing.Size(328, 184);
-            this.webBrowser.TabIndex = 0;
-            // 
-            // DiffView
-            // 
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.webBrowser});
-            this.Name = "DiffView";
-            this.Size = new System.Drawing.Size(328, 184);
-            ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).EndInit();
-            this.ResumeLayout(false);
-
-        }
-
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
-        private WebBrowser webBrowser;
 
         private DiffHtmlModel diffHtmlModel;
 
