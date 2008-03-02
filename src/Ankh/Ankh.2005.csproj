@@ -213,7 +213,6 @@
     <Compile Include="BlameResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CommandBarContextMenu.cs" />
     <Compile Include="Commands\AddItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>

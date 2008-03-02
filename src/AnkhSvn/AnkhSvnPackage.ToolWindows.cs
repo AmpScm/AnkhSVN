@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell;
-using System.Runtime.InteropServices;
-using AnkhSvn.Ids;
-using Microsoft.VisualStudio.Shell.Interop;
-using Ankh.UI;
-using System.Windows.Forms;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using Ankh.UI.Services;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms;
+using Ankh.UI;
+using Ankh.UI.Services;
+using AnkhSvn.Ids;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.VSPackage
 {   
@@ -127,16 +127,25 @@ namespace Ankh.VSPackage
         #region IAnkhUISite Members
 
 
-        public void ShowContextMenu(AnkhCommandMenu menu, System.Drawing.Point position)
+        public bool ShowContextMenu(AnkhCommandMenu menu, System.Drawing.Point position)
         {
-            ShowContextMenu(new CommandID(AnkhId.CommandSetGuid, (int)menu), position);
+            return ShowContextMenu(new CommandID(AnkhId.CommandSetGuid, (int)menu), position);
         }
 
-        public void ShowContextMenu(CommandID menu, System.Drawing.Point position)
+        public bool ShowContextMenu(CommandID menu, System.Drawing.Point position)
         {
             IMenuCommandService mcs = (IMenuCommandService)GetService(typeof(IMenuCommandService));
 
-            mcs.ShowContextMenu(menu, position.X, position.Y);
+            try
+            {
+                mcs.ShowContextMenu(menu, position.X, position.Y);
+            }
+            catch (COMException)
+            {
+                return false;                
+            }
+
+            return true;
         }
 
         #endregion

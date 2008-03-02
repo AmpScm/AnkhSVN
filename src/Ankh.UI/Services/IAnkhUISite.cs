@@ -15,7 +15,7 @@ namespace Ankh.UI.Services
     {
         IAnkhPackage Package { get; }
 
-        void ShowContextMenu(AnkhCommandMenu menu, Point position);
-        void ShowContextMenu(CommandID menu, Point position);
+        bool ShowContextMenu(AnkhCommandMenu menu, Point position);
+        bool ShowContextMenu(CommandID menu, Point position);
     }
 }

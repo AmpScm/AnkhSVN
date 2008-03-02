@@ -121,10 +121,7 @@
                     toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>
             <Button id="Cmd_UpdateItem" name="UpdateItem" priority="0x301"
                     text="&amp;Update..."
-                    toolTip="Updates local items with changes from the Subversion repository." iconFile="menu/Update.png"/>
-            <Button id="Cmd_ViewRepositoryFile" name="ViewRepositoryFile" priority="0x301"
-                    text="In Repository"
-                    toolTip="View this file" iconFile="menu/ViewInWindows.png"/>
+                    toolTip="Updates local items with changes from the Subversion repository." iconFile="menu/Update.png"/>            
           </Group>
         </Menu>
       </Group>
@@ -229,6 +226,9 @@
           <Button id="Cmd_ViewInWindows" name="ViewInWindows" priority="0x200"
                   text="In Wi&amp;ndows"
                   toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.png"/>
+          <Button id="Cmd_ViewRepositoryFile" name="ViewRepositoryFile" priority="0x300"
+                    text="In Repository"
+                    toolTip="View this file" iconFile="menu/ViewInWindows.png"/>
         </Group>
       </Menu>
     </GroupRef>
@@ -238,6 +238,7 @@
         <Group id="Grp_RepositoryExplorerContext" priority="0x100">
           <ButtonRef id="Cmd_ViewInVsNet" priority="0x100"/>
           <ButtonRef id="Cmd_ViewInWindows" priority="0x200"/>
+          <ButtonRef id="Cmd_ViewRepositoryFile" priority="0x300"/>
         </Group>
       </Menu>
     </GroupRef>
@@ -258,6 +259,7 @@
       <!-- The Working Copy Explorer Toolbar -->
       <Menu id="Menu_WorkingCopyExplorerContextMenu" name="WorkingCopyExplorerContext" priority="0" type="ToolWindowToolbar">
         <Group id="Grp_WorkingCopyExplorerContext" priority="0x100">
+          <ButtonRef id="Cmd_Refresh" priority="0x100" />
         </Group>
       </Menu>
     </GroupRef>
