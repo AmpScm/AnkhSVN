@@ -74,16 +74,17 @@ namespace Ankh.VSPackage
             base.Initialize();
 
 			IServiceContainer container = (IServiceContainer)GetService(typeof(IServiceContainer));
+            container.AddService( typeof( IAnkhPackage ), this, true );
 
             Debug.Assert(container != null, "Service container available");
 
-            SccProviderService service = new SccProviderService();
+            SccProviderService service = new SccProviderService(this.AnkhContext);
             container.AddService( typeof( SccProviderService ), service, true );
 
             IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)GetService( typeof( IVsRegisterScciProvider ) );
             rscp.RegisterSourceControlProvider( GuidList.guidAnkhSccProviderService );
 
-            container.AddService(typeof(IAnkhPackage), this, true);
+       
 			// container.AddService(.., ..., true)
 			// container.AddService(.., new ServiceCreatorCallback(..), true) // Delayed creation of the service
         }
