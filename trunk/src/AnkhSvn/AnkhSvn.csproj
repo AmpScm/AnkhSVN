@@ -199,4 +199,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterBuild" DependsOnTargets="FindSDKInstallation">
+    <Exec Command="&quot;$(VsSDKInstall)\VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2005.wxi&quot; /codebase &gt; nul:" />
+    <Exec Command="&quot;$(VsSDKInstall)\VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2008.wxi&quot; /codebase &gt; nul:" />
+  </Target>
 </Project>
