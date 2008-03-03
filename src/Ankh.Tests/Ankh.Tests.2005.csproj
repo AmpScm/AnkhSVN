@@ -158,9 +158,6 @@
     <Compile Include="AnkhContextTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="BlameResultTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -192,6 +189,7 @@
       <SubType>Code</SubType>
     </Content>
     <Compile Include="Presenters\SvnLogPresenterTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LogServicetest.cs" />
     <Compile Include="SolutionExplorerTest.cs">
       <SubType>Code</SubType>
