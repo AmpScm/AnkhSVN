@@ -8,10 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CONTRIBUTERS = CONTRIBUTERS
 		..\deploy.build = ..\deploy.build
 		IntegrationTests.testrunconfig = IntegrationTests.testrunconfig
-		lib\lib.build = lib\lib.build
 		lib\lib.wxs = lib\lib.wxs
 		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
-		master.build = master.build
 		readme.txt = readme.txt
 		UnitTests.testrunconfig = UnitTests.testrunconfig
 	EndProjectSection
@@ -105,7 +103,7 @@ Global
 		{CBE396C6-F315-4DA4-BB3B-2FBDE5969BD2} = {08FF496A-CD90-4B17-8FA0-F4CA88AB49D3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 EndGlobal
