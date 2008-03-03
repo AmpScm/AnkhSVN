@@ -4,7 +4,6 @@ using System.Collections;
 using EnvDTE;
 using Microsoft.Win32;
 using Microsoft;
-using Interop.esproj;
 using System.Threading;
 //using Microsoft.VisualStudio.VCProjectEngine;
 
