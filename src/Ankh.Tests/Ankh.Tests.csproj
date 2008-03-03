@@ -152,7 +152,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ankh.Tests.build" />
     <Compile Include="AnkhContextTest.cs">
       <SubType>Code</SubType>
     </Compile>

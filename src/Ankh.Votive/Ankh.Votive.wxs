@@ -21,6 +21,11 @@
 				</Directory>
 			</Directory>
 		</Directory>
+		<!-- Make sure the packages are set up in The VS Environment -->
+		<CustomActionRef Id="VS2005Setup"/>
+		<CustomActionRef Id="VS90Setup"/>
+
+		<!-->UIRef Id="WixUI_Mondo" /-->
 
 		<Feature Id="ProductFeature" Title="Ankh.Votive" Level="1">
 			<ComponentGroupRef Id="CG_AnkhSvn"/>
