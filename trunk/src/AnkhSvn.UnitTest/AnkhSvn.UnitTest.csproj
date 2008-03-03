@@ -59,7 +59,7 @@
     <None Include="AnkhSvn.UnitTest.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ankh.UI\Ankh.UI.2005.csproj">
+    <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj">
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Name>Ankh.UI.2005</Name>
     </ProjectReference>
@@ -71,7 +71,7 @@
       <Project>{FA90174C-5763-46E8-9C95-328CA8451072}</Project>
       <Name>AnkhSvn</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ankh\Ankh.2005.csproj">
+    <ProjectReference Include="..\Ankh\Ankh.csproj">
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
       <Name>Ankh.2005</Name>
     </ProjectReference>

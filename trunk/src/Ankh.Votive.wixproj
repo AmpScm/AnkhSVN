@@ -1,0 +1,76 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProductVersion>3.0</ProductVersion>
+    <ProjectGuid>{94f8e63f-0ade-40c1-ba57-2f50fe88ecd2}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>AnkhSVN</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
+    <WixToolPath>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <SuppressIces>
+    </SuppressIces>
+    <SuppressValidation>False</SuppressValidation>
+    <CompilerAdditionalOptions>
+    </CompilerAdditionalOptions>
+    <LinkerAdditionalOptions>
+    </LinkerAdditionalOptions>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Ankh.Votive\Ankh.Votive.wxs" />
+    <Compile Include="autolib\SharpSvn\SharpSvn.wxs" />
+    <Compile Include="Ankh\Ankh.wxs" />
+    <Compile Include="Ankh.UI\Ankh.UI.wxs" />
+    <Compile Include="AnkhSvn\AnkhSvn.wxs" />
+    <Compile Include="Utils\Utils.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Ankh.UI\" />
+    <Folder Include="AnkhSvn\" />
+    <Folder Include="Ankh\" />
+    <Folder Include="autolib\" />
+    <Folder Include="autolib\SharpSvn\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Ankh.Votive" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="AnkhSvn.Ids\AnkhSvn.Ids.csproj">
+      <Name>AnkhSvn.Ids</Name>
+      <Project>{61d343cf-77ba-4ef2-96f5-e0d4efd04844}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="AnkhSvn\AnkhSvn.csproj">
+      <Name>AnkhSvn</Name>
+      <Project>{fa90174c-5763-46e8-9c95-328ca8451072}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="Ankh\Ankh.2005.csproj">
+      <Name>Ankh.2005</Name>
+      <Project>{ce58aac8-2271-4223-882f-0cd1a7105a52}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="Utils\Utils.2005.csproj">
+      <Name>Utils.2005</Name>
+      <Project>{a3248e1e-8272-4227-af02-bb86040fbed9}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>

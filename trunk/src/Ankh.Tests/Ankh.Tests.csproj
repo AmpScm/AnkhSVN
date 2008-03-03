@@ -129,7 +129,7 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Ankh.UI\Ankh.UI.2005.csproj">
+    <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj">
       <Name>Ankh.UI.2005</Name>
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
@@ -138,16 +138,16 @@
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>AnkhSvn.Ids</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ankh\Ankh.2005.csproj">
+    <ProjectReference Include="..\Ankh\Ankh.csproj">
       <Name>Ankh.2005</Name>
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\TestUtils\TestUtils.2005.csproj">
+    <ProjectReference Include="..\TestUtils\TestUtils.csproj">
       <Project>{874C0358-E7DD-42DA-BF07-58198B41FD25}</Project>
       <Name>TestUtils.2005</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Utils\Utils.2005.csproj">
+    <ProjectReference Include="..\Utils\Utils.csproj">
       <Name>Utils.2005</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
