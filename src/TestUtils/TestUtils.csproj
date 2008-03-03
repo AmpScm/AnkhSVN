@@ -94,7 +94,6 @@
     <Compile Include="Zip.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="TestUtils.build" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
