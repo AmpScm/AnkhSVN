@@ -10,7 +10,7 @@
     <WixToolPath>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>Ankh.Votive\bin\Debug\</OutputPath>
     <IntermediateOutputPath>obj\Debug\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
     <SuppressIces>
@@ -20,29 +20,66 @@
     </CompilerAdditionalOptions>
     <LinkerAdditionalOptions>
     </LinkerAdditionalOptions>
+    <Cultures>
+    </Cultures>
+    <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
+    <LibBindFiles>False</LibBindFiles>
+    <SuppressPdbOutput>False</SuppressPdbOutput>
+    <SuppressSpecificWarnings>
+    </SuppressSpecificWarnings>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <VerboseOutput>False</VerboseOutput>
+    <WixVariables>
+    </WixVariables>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>False</Pedantic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>Ankh.Votive\bin\Release\</OutputPath>
     <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
+    <Cultures>
+    </Cultures>
+    <DefineConstants>
+    </DefineConstants>
+    <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
+    <LibBindFiles>False</LibBindFiles>
+    <SuppressPdbOutput>False</SuppressPdbOutput>
+    <SuppressSpecificWarnings>
+    </SuppressSpecificWarnings>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <VerboseOutput>False</VerboseOutput>
+    <WixVariables>
+    </WixVariables>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>False</Pedantic>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Ankh.UI\Ankh.UI.wxs" />
     <Compile Include="Ankh.Votive\Ankh.Votive.wxs" />
     <Compile Include="autolib\SharpSvn\SharpSvn.wxs" />
     <Compile Include="Ankh\Ankh.wxs" />
-    <Compile Include="Ankh.UI\Ankh.UI.wxs" />
     <Compile Include="AnkhSvn\AnkhSvn.wxs" />
+    <Compile Include="AnkhSvn.Ids\AnkhSvn.Ids.wxs" />
+    <Compile Include="lib\lib.wxs" />
     <Compile Include="Utils\Utils.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Ankh.UI\" />
     <Folder Include="AnkhSvn\" />
+    <Folder Include="AnkhSvn.Ids\" />
     <Folder Include="Ankh\" />
+    <Folder Include="lib\" />
     <Folder Include="autolib\" />
     <Folder Include="autolib\SharpSvn\" />
     <Folder Include="Utils\" />
     <Folder Include="Ankh.Votive" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Ankh.UI\Ankh.UI.csproj">
+      <Name>Ankh.UI</Name>
+      <Project>{ac32dd7a-4fc3-42c5-afa7-ade81f13a6de}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="AnkhSvn.Ids\AnkhSvn.Ids.csproj">
       <Name>AnkhSvn.Ids</Name>
       <Project>{61d343cf-77ba-4ef2-96f5-e0d4efd04844}</Project>
@@ -53,13 +90,13 @@
       <Project>{fa90174c-5763-46e8-9c95-328ca8451072}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="Ankh\Ankh.2005.csproj">
-      <Name>Ankh.2005</Name>
+    <ProjectReference Include="Ankh\Ankh.csproj">
+      <Name>Ankh (Ankh\Ankh)</Name>
       <Project>{ce58aac8-2271-4223-882f-0cd1a7105a52}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="Utils\Utils.2005.csproj">
-      <Name>Utils.2005</Name>
+    <ProjectReference Include="Utils\Utils.csproj">
+      <Name>Utils</Name>
       <Project>{a3248e1e-8272-4227-af02-bb86040fbed9}</Project>
       <Private>True</Private>
     </ProjectReference>
