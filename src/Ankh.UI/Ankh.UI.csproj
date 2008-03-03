@@ -117,9 +117,8 @@
       <Name>AnkhSvn.Ids</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
-      <Name>Utils.2005</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Name>Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -134,6 +134,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AnkhSvn.wxs" />
     <Content Include="Gui\menu\Add.png" />
     <Content Include="Gui\menu\AddFolder.png" />
     <Content Include="Gui\menu\AddSolutionToRepository.png" />
@@ -176,7 +177,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj">
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
-      <Name>Ankh.UI.2005</Name>
+      <Name>Ankh.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\AnkhSvn.Ids\AnkhSvn.Ids.csproj">
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
