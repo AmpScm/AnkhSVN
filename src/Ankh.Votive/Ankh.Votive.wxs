@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="274ee41e-23a2-41bc-a144-fff9e08e956f" Name="Ankh.Votive" Language="1033" Version="1.0.0.0" Manufacturer="Ankh.Votive" UpgradeCode="40880177-2453-4ec7-8eef-744ec101b688">
+	<Product Id="274ee41e-23a2-41bc-a144-fff9e08e956f" Name="AnkhSVN" Language="1033" 
+			 Version="2.0.0.0" Manufacturer="AnkhSVN" UpgradeCode="40880177-2453-4ec7-8eef-744ec101b688">
+		
 		<Package InstallerVersion="200" Compressed="yes" />
 
 		<Media Id="1" Cabinet="Ankh.Votive.cab" EmbedCab="yes" />
 
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLLOCATION" Name="Ankh.Votive">
+				<Directory Id="INSTALLLOCATION" Name="AnkhSvn 2.0">
+					<Directory Id="APP_bin" Name=".">
+						<Directory Id="DIR_SharpSvn" Name="." />
+						<!-- All assemblies are placed here -->
+					</Directory>
 					<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
 					<!-- <Component Id="ProductComponent" Guid="bf5eac53-92ec-4b9a-94d9-f84bb1951fad"> -->
 						<!-- TODO: Insert files, registry keys, and other resources here. -->
@@ -17,8 +23,7 @@
 		</Directory>
 
 		<Feature Id="ProductFeature" Title="Ankh.Votive" Level="1">
-			<!-- TODO: Remove the comments around this ComponentRef element and the Component above in order to add resources to this installer. -->
-			<!-- <ComponentRef Id="ProductComponent" /> -->
+			<ComponentGroupRef Id="CG_AnkhSvn"/>
 		</Feature>
 	</Product>
 </Wix>
