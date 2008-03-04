@@ -71,5 +71,7 @@ namespace AnkhSvn.Ids
 		ViewInWindows,
 		ViewRepositoryFile,
 		CheckForOrphanedTreeNodes,
+
+		RunSvnCommand,
 	}
 }

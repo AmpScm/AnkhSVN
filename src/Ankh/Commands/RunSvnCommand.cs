@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Utils;
 using System.Threading;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
@@ -14,7 +15,7 @@ namespace Ankh.Commands
     /// A command used to run svn.exe directly from the VS.NET command window.
     /// This command should be aliased as "svn".
     /// </summary>
-    [VSNetCommand("RunSvn")]
+	[VSNetCommand(AnkhCommand.RunSvnCommand, "RunSvn")]
     public class RunSvnCommand : CommandBase
     {
         public RunSvnCommand()

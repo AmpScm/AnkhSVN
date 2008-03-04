@@ -21,7 +21,6 @@ namespace Ankh
 		/// Constructor
 		/// </summary>
 		/// <param name="commandBar">The name of the command bar.</param>
-		[Obsolete("Use VSNetControlAttribute(AnkhCommand, String, ...)")]
 		public VSNetControlAttribute(string commandBar)
 		{
 			this.commandBar = commandBar;
