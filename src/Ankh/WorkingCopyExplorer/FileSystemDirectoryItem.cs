@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Collections;
 using Ankh.UI;
+using SharpSvn;
 
 namespace Ankh.WorkingCopyExplorer
 {
@@ -38,7 +39,7 @@ namespace Ankh.WorkingCopyExplorer
         {
             if ( rescan )
             {
-                this.Explorer.Context.StatusCache.Status( this.svnItem.Path );
+                this.Explorer.Context.StatusCache.Status(this.svnItem.Path, SvnDepth.Infinity);
                 this.FindChildren();
 
                 this.OnItemChanged( ItemChangedType.ChildrenInvalidated );

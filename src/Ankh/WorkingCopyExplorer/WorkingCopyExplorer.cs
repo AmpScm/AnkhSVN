@@ -295,7 +295,7 @@ namespace Ankh.WorkingCopyExplorer
 
         private FileSystemRootItem CreateRoot( string directory )
         {
-            this.statusCache.Status( directory );
+            this.statusCache.Status(directory, SvnDepth.Infinity);
             SvnItem item = this.statusCache[ directory ];
             FileSystemRootItem root = new FileSystemRootItem( this, item );
             return root;

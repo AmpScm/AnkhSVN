@@ -28,7 +28,7 @@ namespace Ankh.Tests
         public void TestVariousPathVariations()
         {
             StatusCache cache = new StatusCache( this.Client );
-            cache.Status( this.WcPath );
+            cache.Status(this.WcPath, SvnDepth.Infinity);
 
             string formPath = Path.Combine(this.WcPath, "Form1.cs");
 
@@ -53,7 +53,7 @@ namespace Ankh.Tests
             this.Client.Delete(Path.Combine( this.WcPath, "WindowsApplication.sln" ));
             
             // should be two deletions now
-            cache.Status( this.WcPath );
+            cache.Status(this.WcPath, SvnDepth.Infinity);
             IList deletions = cache.GetDeletions( this.WcPath );
             Assert.AreEqual( 2, deletions.Count );
 
@@ -81,7 +81,7 @@ namespace Ankh.Tests
         public void TestGetPathNotInInitialStatus()
         {
             StatusCache cache = new StatusCache(this.Client);
-            cache.Status( Path.Combine(this.WcPath, "doc") );
+            cache.Status(Path.Combine(this.WcPath, "doc"), SvnDepth.Infinity);
             using( StreamWriter w = new StreamWriter(Path.Combine(this.WcPath, "Form1.cs")) )
                 w.WriteLine( "Foo" );
 

@@ -65,7 +65,7 @@ namespace Ankh
 
             this.projectFileWatcher = new FileWatcher(this.client);
 
-            this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
+            this.outputPane = new OutputPaneWriter( this, "AnkhSVN" );
             this.solutionExplorer = new Solution.Explorer( this.dte, this);
 
             this.progressDialog = new ProgressDialog();             
@@ -424,8 +424,11 @@ namespace Ankh
 			get { return selectionContext; }
 		}
 
-
-
+		public ISynchronizeInvoke SynchronizingObject
+		{
+			get { return progressDialog; }
+		}
+		
         #region SetUpEvents
         /// <summary>
         /// Sets up event handlers.
@@ -699,12 +702,5 @@ namespace Ankh
         private Ankh.Config.ConfigLoader configLoader;
 
         readonly IAnkhPackage package;
-
-		#region IContext Members
-
-
-		
-
-		#endregion
 	}
 }

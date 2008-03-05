@@ -152,5 +152,10 @@ namespace Ankh
 		{
 			get;
 		}
+
+		System.ComponentModel.ISynchronizeInvoke SynchronizingObject
+		{
+			get;
+		}
     }
 }

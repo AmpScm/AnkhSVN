@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using Microsoft.VisualStudio;
+using SharpSvn;
 
 namespace Ankh.EventSinks
 {
@@ -83,7 +84,7 @@ namespace Ankh.EventSinks
                             newProject.AddProjectToSvn();
 
                             // make sure we have an updated status for the items in that directory, otherwise they'll be seen as unversionable
-                            this.Context.StatusCache.Status( newProject.ProjectDirectory );
+                            this.Context.StatusCache.Status(newProject.ProjectDirectory, SvnDepth.Infinity);
                         }
                     }
                     this.Context.SolutionExplorer.SyncAll();

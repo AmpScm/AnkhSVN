@@ -175,7 +175,7 @@ namespace Ankh.Solution
                 if ( rescan )
                 {
                     if (this.Directory != null && this.Directory.Length > 0)
-                        this.explorer.Context.StatusCache.Status(this.Directory);
+                        this.explorer.Context.StatusCache.Status(this.Directory, SvnDepth.Infinity);
 
                     this.DisposeChildren();
                     this.FindChildren( );

@@ -81,7 +81,7 @@ namespace Ankh
         {
             get
             {
-                return this.RepositoryExplorer;
+				return this.RepositoryExplorer ?? Context.SynchronizingObject;
             }
         }
 

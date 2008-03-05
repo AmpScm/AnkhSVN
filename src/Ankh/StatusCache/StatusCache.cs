@@ -24,16 +24,6 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Fill the cache by running status recursively on this directory.
-        /// </summary>
-        /// <param name="dir"></param>
-	    [Obsolete("Assumes SvnDepth.Children")]
-	    public void Status( string dir )
-        {
-            this.Status( dir, SvnDepth.Children );
-        }
-
-        /// <summary>
         /// Fill the cache by running status on this directory.
         /// </summary>
         /// <param name="dir"></param>
