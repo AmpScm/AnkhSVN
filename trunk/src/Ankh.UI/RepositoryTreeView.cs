@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 
-using Utils.Win32;
 using System.Runtime.InteropServices;
 
 namespace Ankh.UI

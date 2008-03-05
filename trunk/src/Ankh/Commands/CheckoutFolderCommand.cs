@@ -35,27 +35,28 @@ namespace Ankh.Commands
         public override void Execute(IContext context, string parameters)
         {
             /// first get the parent folder
-            FolderBrowser browser = new FolderBrowser();
+			using (FolderBrowserDialog browser = new FolderBrowserDialog())
+			{
+				/// give a chance to the user to bail
+				if (browser.ShowDialog() != DialogResult.OK)
+					return;
 
-            /// give a chance to the user to bail
-            if ( browser.ShowDialog() != DialogResult.OK) 
-                return;
+				try
+				{
+					context.StartOperation("Checking out");
 
-            try
-            {
-                context.StartOperation( "Checking out" );
+					INode node = context.RepositoryExplorer.SelectedNode;
 
-                INode node = context.RepositoryExplorer.SelectedNode;
+					CheckoutRunner runner = new CheckoutRunner(
+						browser.SelectedPath, node.Revision, new Uri(node.Url));
+					context.UIShell.RunWithProgressDialog(runner, "Checking out folder");
 
-                CheckoutRunner runner = new CheckoutRunner( 
-                    browser.DirectoryPath, node.Revision, new Uri(node.Url));
-                context.UIShell.RunWithProgressDialog( runner, "Checking out folder" );
-
-            }
-            finally
-            {
-                context.EndOperation();
-            }
+				}
+				finally
+				{
+					context.EndOperation();
+				}
+			}
         }
 
         #endregion

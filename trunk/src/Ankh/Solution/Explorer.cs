@@ -2,17 +2,14 @@
 using System;
 using EnvDTE;
 using Utils;
-
-
-
 using Utils.Win32;
+
 using System.Collections;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Diagnostics;
 using System.IO;
 
-using C = Utils.Win32.Constants;
 using DteConstants = EnvDTE.Constants;
 using System.Windows.Forms;
 using System.Threading;
@@ -27,8 +24,6 @@ namespace Ankh.Solution
     /// </summary>
     public class Explorer : ISolutionExplorer
     {
-        public event EventHandler SolutionFinishedLoading;
-
         public Explorer( _DTE dte, IContext context )
         {
             this.dte = dte;

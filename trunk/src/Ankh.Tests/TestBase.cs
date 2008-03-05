@@ -1,14 +1,10 @@
 // $Id$
 using System;
-using ICSharpCode.SharpZipLib;
-using ICSharpCode.SharpZipLib.Zip;
 using System.IO;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using System.Collections;
-using System.Threading;
 using Utils;
 using Utils.Win32;
 using System.Text;

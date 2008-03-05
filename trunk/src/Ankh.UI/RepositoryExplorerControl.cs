@@ -3,19 +3,11 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Windows.Forms;
 
-using Utils;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
-using Utils.Win32;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using SharpSvn;
 using Ankh.UI.Services;
 using AnkhSvn.Ids;
-using System.ComponentModel.Design;
 
 namespace Ankh.UI
 {

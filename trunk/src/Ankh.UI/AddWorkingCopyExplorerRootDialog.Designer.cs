@@ -13,7 +13,6 @@ namespace Ankh.UI
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.workingCopyRootTextBox = new System.Windows.Forms.TextBox();
-			this.folderBrowser = new Utils.FolderBrowser();
 			this.browseFolderButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
@@ -81,7 +80,6 @@ namespace Ankh.UI
 
         private Button okButton;
         private TextBox workingCopyRootTextBox;
-        private Utils.FolderBrowser folderBrowser;
         private Button browseFolderButton;
         private Button cancelButton;
     }
