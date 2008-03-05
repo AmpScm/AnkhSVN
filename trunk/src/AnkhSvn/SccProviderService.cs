@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using SharpSvn;
+using Microsoft.VisualStudio;
 
 namespace Ankh.VSPackage
 {

@@ -1,5 +1,10 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
+    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == ''">8.0</VisualStudioVersion>
+    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</VisualStudioVersion>
+    <!-- BH: Hopefully MSBuild 4.0 adds some kind of property to retrieve the real version; luckily we only need to check 8.0 vs 8.0+ -->
+  </PropertyGroup>
+  <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
@@ -130,7 +135,12 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ShellAssembly Condition="'$(VisualStudioVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
+    <ShellAssembly Condition="'$(VisualStudioVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="$(ShellAssembly)" />
     <Reference Include="Ankh.SHDocVw, Version=1.1.0.0, Culture=neutral, PublicKeyToken=64de3c7d1c18daba, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Ankh.SHDocVw.dll</HintPath>
@@ -193,9 +203,6 @@
     </None>
     <None Include="WorkingCopyExplorer\WCExplorer.cd" />
     <Compile Include="AnkhContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AnkhStatus.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BlameResult.cs">
@@ -378,6 +385,9 @@
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solution\IRefreshableProject.cs" />
+    <Compile Include="StatusCache\AnkhStatus.cs" />
+    <Compile Include="StatusCache\StatusCache.cs" />
+    <Compile Include="StatusCache\SvnItem.cs" />
     <Compile Include="StatusImages.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />
@@ -388,7 +398,6 @@
     <Compile Include="Solution\SolutionExplorerTreeNode.cs" />
     <Compile Include="Solution\SolutionFolderNode.cs" />
     <Compile Include="TreeNode.cs" />
-    <Compile Include="VSInterfaces.cs" />
     <Compile Include="Extenders\ExtenderProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -459,20 +468,13 @@
     <Compile Include="Solution\SolutionNode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StatusCache.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SvnClient.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SvnItem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SwitchDialogInfo.cs" />
     <Compile Include="UIShell.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="VSCommandBars.cs" />
     <Compile Include="VSNetCommandAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
