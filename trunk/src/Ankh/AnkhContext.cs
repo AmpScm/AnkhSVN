@@ -69,8 +69,6 @@ namespace Ankh
 
             this.progressDialog = new ProgressDialog();             
 
-            this.ankhLoadedForSolution = false;
-           
             this.SetUpEvents();    
             
             this.conflictManager = new ConflictManager(this);
@@ -175,7 +173,15 @@ namespace Ankh
         public bool AnkhLoadedForSolution
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.ankhLoadedForSolution; }
+            get
+			{ 
+				IAnkhSccService scc = (IAnkhSccService)Package.GetService(typeof(IAnkhSccService));
+
+				if(scc == null)
+					return false;
+				else
+					return scc.IsActive;				 
+			}
         }
 
 
@@ -305,12 +311,8 @@ namespace Ankh
         /// </summary>
         public void SolutionClosing()
         {
-            this.ankhLoadedForSolution = false;
-
             this.conflictManager.RemoveAllTaskItems();
             this.SolutionExplorer.Unload();
-
-            
         }
 
         /// <summary>
@@ -479,10 +481,6 @@ namespace Ankh
             this.SolutionClosing();
         }
 
-        private void HandleSolutionFinishedLoading( object sender, EventArgs args )
-        {
-            this.ankhLoadedForSolution = true;
-        }
         /// <summary>
         /// try to load the configuration file
         /// </summary>
@@ -680,7 +678,6 @@ namespace Ankh
 
         private Ankh.Config.Config config;
 
-        private bool ankhLoadedForSolution;
         private StatusCache statusCache;
 
         private bool operationRunning;
