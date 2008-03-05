@@ -82,8 +82,8 @@ namespace Ankh.Tests
     <xsl:value-of select='Author'/> - <xsl:value-of select='Revision'/>
 </xsl:template>
 </xsl:stylesheet>" ) );
-            
-            XslTransform transform = new XslTransform();
+
+			XslCompiledTransform transform = new XslCompiledTransform();
             transform.Load( doc, null, null  );
 
             StringWriter writer = new StringWriter();

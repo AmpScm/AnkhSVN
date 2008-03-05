@@ -54,7 +54,7 @@ namespace Ankh.Config
         {
             // load the config schema
             Assembly assembly = Assembly.GetExecutingAssembly();
-            ConfigLoader.schemas = new XmlSchemaCollection();
+            ConfigLoader.schemas = new XmlSchemaSet();
 
             XmlReader reader = new XmlTextReader( assembly.GetManifestResourceStream(
                 ConfigLoader.configSchemaResource ) );
@@ -213,12 +213,12 @@ namespace Ankh.Config
             this.errors.Clear();
 
             try                                                            
-            {                
-                XmlValidatingReader vr = new XmlValidatingReader( reader );
-
-                vr.ValidationType = ValidationType.Schema;
-                vr.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
-                vr.Schemas.Add( schemas );
+            {
+				XmlReaderSettings xs = new XmlReaderSettings();
+				xs.ValidationType = ValidationType.Schema;
+				xs.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
+				xs.Schemas.Add(schemas);
+				XmlReader vr = XmlReader.Create(reader, xs);
 
                 XmlSerializer serializer = new XmlSerializer( typeof(Config) );
                 return (Config)serializer.Deserialize( vr );
@@ -388,7 +388,7 @@ namespace Ankh.Config
         private const string CONFIGFILENAME = "ankhsvn.xml";
         private const string CONFIGDIRNAME = "AnkhSVN";
         private System.Collections.ArrayList errors;
-        private static readonly XmlSchemaCollection schemas;
+        private static readonly XmlSchemaSet schemas;
         private const string configNamespace = "http://ankhsvn.com/Config.xsd";
         private const string configFileResource = "Ankh.Config.Config.xml";
         private const string configSchemaResource = "Ankh.Config.Config.xsd";

@@ -71,7 +71,7 @@ namespace Ankh.Commands
                 resources = new SvnItem[] { (SvnItem)resources[0] };
             }
 
-            XslTransform transform = CommandBase.GetTransform( 
+            XslCompiledTransform transform = CommandBase.GetTransform( 
                 context, BlameTransform );
 
             foreach( SvnItem item in resources )
