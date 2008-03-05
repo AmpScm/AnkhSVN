@@ -36,10 +36,6 @@ namespace Ankh.UI
             this.listView.MouseDown += new MouseEventHandler( HandleMouseDown );
 
             this.newRootTextBox.TextChanged += new EventHandler( newRootTextBox_TextChanged );
-
-            Win32.SHAutoComplete( this.newRootTextBox.Handle, Shacf.FileSysDirs );
-
-
         }
 
         public string NewRootPath

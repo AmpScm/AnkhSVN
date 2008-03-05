@@ -13,9 +13,6 @@ namespace Ankh.UI
         public AddWorkingCopyExplorerRootDialog()
         {
             this.InitializeComponent();
-
-            Win32.SHAutoComplete(this.workingCopyRootTextBox.Handle,
-                Shacf.Filesystem);
         }
 
         public string NewRoot
