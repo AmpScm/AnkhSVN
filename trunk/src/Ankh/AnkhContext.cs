@@ -391,7 +391,7 @@ namespace Ankh
 
         }
 
-        public ISelectionContainer Selection
+        public IAnkhSelectionContainer Selection
         {
             get 
             {
@@ -623,7 +623,7 @@ namespace Ankh
         #endregion
 
 
-        private class NullSelectionContainer : ISelectionContainer
+        private class NullSelectionContainer : IAnkhSelectionContainer
         {
             public void RefreshSelectionParents()
             {
@@ -660,7 +660,7 @@ namespace Ankh
         private EnvDTE.AddIn addin;
         private IWin32Window hostWindow;
 
-        private ISelectionContainer selectionContainer = NullSelectionContainer.Instance;
+        private IAnkhSelectionContainer selectionContainer = NullSelectionContainer.Instance;
 
         private WorkingCopyExplorer.WorkingCopyExplorer workingCopyExplorer;
         private RepositoryExplorer.Controller repositoryController;

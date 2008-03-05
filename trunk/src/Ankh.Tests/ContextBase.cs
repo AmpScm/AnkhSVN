@@ -413,7 +413,7 @@ namespace Ankh.Tests
                 return resources;
             }
 
-            System.Collections.IList Ankh.ISelectionContainer.GetSelectionResources(bool getChildItems)
+            System.Collections.IList Ankh.IAnkhSelectionContainer.GetSelectionResources(bool getChildItems)
             {
                 // TODO:  Add Explorer.Ankh.ISelectionContainer.GetSelectionResources implementation
                 return this.GetSelectionResources( getChildItems, null );
@@ -837,7 +837,7 @@ namespace Ankh.Tests
             get { throw new Exception( "The method or operation is not implemented." ); }
         }
 
-        public ISelectionContainer Selection
+        public IAnkhSelectionContainer Selection
         {
             get { throw new Exception( "The method or operation is not implemented." ); }
         }

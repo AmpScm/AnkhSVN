@@ -142,7 +142,7 @@ namespace Ankh
             get;
         }
 
-        ISelectionContainer Selection
+        IAnkhSelectionContainer Selection
         {
             get;
         }
