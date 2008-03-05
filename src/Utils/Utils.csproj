@@ -110,9 +110,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileUtils.cs" />
-    <Compile Include="FolderBrowser.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="HashUtils.cs" />
     <Compile Include="Ole\ICustomDoc.cs">
       <SubType>Code</SubType>
@@ -180,10 +177,6 @@
     <Compile Include="Win32\Win32.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="FolderBrowser.resx">
-      <DependentUpon>FolderBrowser.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <None Include="Utils.snk" />
     <None Include="Utils.wxs" />
   </ItemGroup>

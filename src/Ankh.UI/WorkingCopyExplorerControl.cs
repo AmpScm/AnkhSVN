@@ -5,7 +5,6 @@ using System.Collections;
 using System.IO;
 using System.Drawing;
 using System.Diagnostics;
-using Utils.Win32;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Ankh.UI.Services;

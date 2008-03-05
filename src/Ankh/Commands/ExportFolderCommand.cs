@@ -35,26 +35,28 @@ namespace Ankh.Commands
         public override void Execute(IContext context, string parameters)
         {
             /// first get the parent folder
-            FolderBrowser browser = new FolderBrowser();
+			using (FolderBrowserDialog browser = new FolderBrowserDialog())
+			{
 
-            /// give a chance to the user to bail
-            if ( browser.ShowDialog() != DialogResult.OK) 
-                return;
+				/// give a chance to the user to bail
+				if (browser.ShowDialog() != DialogResult.OK)
+					return;
 
-            try
-            {
-                context.StartOperation( "Exporting" );
+				try
+				{
+					context.StartOperation("Exporting");
 
-                INode node = context.RepositoryExplorer.SelectedNode;
+					INode node = context.RepositoryExplorer.SelectedNode;
 
-                ExportRunner runner = new ExportRunner( browser.DirectoryPath, node.Revision, node.Url);
-                context.UIShell.RunWithProgressDialog( runner, "Exporting folder" );
+					ExportRunner runner = new ExportRunner(browser.SelectedPath, node.Revision, node.Url);
+					context.UIShell.RunWithProgressDialog(runner, "Exporting folder");
 
-            }
-            finally
-            {
-                context.EndOperation();
-            }
+				}
+				finally
+				{
+					context.EndOperation();
+				}
+			}
         }
 
         #endregion

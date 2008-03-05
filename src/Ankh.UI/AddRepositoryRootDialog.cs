@@ -5,7 +5,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using Utils.Win32;
 using Utils;
 using SharpSvn;
 
@@ -80,12 +79,14 @@ namespace Ankh.UI
         private void browseButton_Click(object sender, System.EventArgs e)
         {
             // Browse to a local repository
+			using (FolderBrowserDialog browser = new FolderBrowserDialog())
+			{
+				browser.ShowNewFolderButton = false;
 
-            FolderBrowser browser = new FolderBrowser();
-
-            //convert the returned directory path to a URL - for a local path URL no need for encoding
-            if ( browser.ShowDialog() == DialogResult.OK) 
-                urlTextBox.Text ="file:///" +  browser.DirectoryPath.Replace( '\\', '/');
+				//convert the returned directory path to a URL - for a local path URL no need for encoding
+				if (browser.ShowDialog() == DialogResult.OK)
+					urlTextBox.Text = "file:///" + browser.SelectedPath.Replace('\\', '/');
+			}
 
         }
 

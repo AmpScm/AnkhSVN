@@ -1,11 +1,8 @@
 using System;
-using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
 using Utils;
-using Utils.Win32;
 using SharpSvn;
 using Utils.Services;
 
@@ -128,11 +125,13 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void exportFromDirButton_Click(object sender, System.EventArgs e)
         {
-            using (FolderBrowser browser = new FolderBrowser())
+			using (FolderBrowserDialog browser = new FolderBrowserDialog())
             {
+				browser.ShowNewFolderButton = false;
+
                 if (browser.ShowDialog(this) == DialogResult.OK)
                 {
-                    this.exportFromDirTextBox.Text = browser.DirectoryPath;
+                    this.exportFromDirTextBox.Text = browser.SelectedPath;
                 }
             }
 
@@ -145,11 +144,11 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void BrowseClicked(object sender, System.EventArgs e)
         {
-            using (FolderBrowser browser = new FolderBrowser())
+			using (FolderBrowserDialog browser = new FolderBrowserDialog())
             {
                 if (browser.ShowDialog(this) == DialogResult.OK)
                 {
-                    this.localDirTextBox.Text = browser.DirectoryPath;
+                    this.localDirTextBox.Text = browser.SelectedPath;
                 }
             }
         }

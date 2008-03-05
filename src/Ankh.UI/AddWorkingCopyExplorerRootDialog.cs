@@ -1,7 +1,5 @@
 using System;
-using System.Text;
 using System.Windows.Forms;
-using Utils.Win32;
 using System.IO;
 
 namespace Ankh.UI
@@ -28,10 +26,15 @@ namespace Ankh.UI
 
         private void browseFolderButton_Click(object sender, EventArgs e)
         {
-            if (folderBrowser.ShowDialog(this) == DialogResult.OK)
-            {
-                this.workingCopyRootTextBox.Text = folderBrowser.DirectoryPath;
-            }
+			using (FolderBrowserDialog folderBrowser = new FolderBrowserDialog())
+			{
+				folderBrowser.ShowNewFolderButton = false;
+
+				if (folderBrowser.ShowDialog(this) == DialogResult.OK)
+				{
+					this.workingCopyRootTextBox.Text = folderBrowser.SelectedPath;
+				}
+			}
         }
     }
 }
