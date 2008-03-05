@@ -244,7 +244,7 @@ namespace Ankh
             return containingDir;
         }
 
-        private IList<SvnItem> RefreshDeletionsList(IList deletions)
+        private IList RefreshDeletionsList(IList deletions)
         {
             ArrayList newList = new ArrayList();
 
