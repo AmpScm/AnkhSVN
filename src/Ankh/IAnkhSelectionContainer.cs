@@ -4,7 +4,7 @@ using EnvDTE;
 
 namespace Ankh
 {
-    public interface ISelectionContainer
+    public interface IAnkhSelectionContainer
     {
         /// <summary>
         /// Refreshes the parents of the selected items.

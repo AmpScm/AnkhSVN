@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace Ankh
 {
-    public interface ISolutionExplorer : ISelectionContainer
+    public interface ISolutionExplorer : IAnkhSelectionContainer
     {
         /// <summary>
         /// Refreshes all subnodes of a specific project.
