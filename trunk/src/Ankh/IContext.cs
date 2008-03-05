@@ -6,6 +6,7 @@ using System;
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using SharpSvn;
 using Ankh.UI.Services;
+using Ankh.Selection;
 
 namespace Ankh
 {
@@ -146,5 +147,10 @@ namespace Ankh
         {
             get;
         }
+
+		ISelectionContext SelectionContext
+		{
+			get;
+		}
     }
 }

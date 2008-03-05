@@ -13,7 +13,6 @@ namespace Ankh.Commands.Mapper
 
 		public event EventHandler<CommandEventArgs> Execute;
 		public event EventHandler<CommandUpdateEventArgs> Update;
-		public event EventHandler<HelpEventArgs> Help;
 
 		public CommandMapItem(AnkhCommand command)
 		{
@@ -47,12 +46,6 @@ namespace Ankh.Commands.Mapper
 
 			if (Update != null)
 				Update(this, e);
-		}
-
-		protected internal void OnHelp(HelpEventArgs e)
-		{
-			if (Help != null)
-				OnHelp(e);
 		}
 
 		public bool IsHandled
@@ -116,17 +109,6 @@ namespace Ankh.Commands.Mapper
 			}
 
 			return false;
-		}
-
-		public void ShowHelp(AnkhCommand command, HelpEventArgs e)
-		{
-			EnsureLoaded();
-			CommandMapItem item;
-
-			if (_map.TryGetValue(command, out item))
-			{
-				item.OnHelp(e);
-			}
 		}
 
 		/// <summary>

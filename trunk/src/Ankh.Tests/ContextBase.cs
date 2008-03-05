@@ -847,7 +847,11 @@ namespace Ankh.Tests
             get { throw new Exception("The method or operation is not implemented."); }
         }
 
-		#endregion
+		public Ankh.Selection.ISelectionContext SelectionContext
+		{
+			get { throw new Exception("The method or operation is not implemented."); }
+		}
 
-    }
+		#endregion
+	}
 }

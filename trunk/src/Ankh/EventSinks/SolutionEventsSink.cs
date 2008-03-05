@@ -24,7 +24,6 @@ namespace Ankh.EventSinks
         public SolutionEventsSink( IContext context )
             : base( context )
         {
-            this.hierarchyEvents = new HierarchyEventsSink( this.Context );
             this.AdviseSolutionEvents();
 
         }
@@ -63,8 +62,6 @@ namespace Ankh.EventSinks
                 // this won't be true until the solution is finally loaded
                 if ( this.Context.AnkhLoadedForSolution )
                 {
-                    this.hierarchyEvents.AddHierarchy( pHierarchy );
-
                     bool shouldAdd = false;
                     VSProject newProject = null;
                     try
@@ -116,7 +113,6 @@ namespace Ankh.EventSinks
             {
                 VSProject project = VSProject.FromVsHierarchy( this.Context, pHierarchy );
                 this.Context.SolutionExplorer.RemoveProject( project.Project );
-                this.hierarchyEvents.RemoveHierarchy( pHierarchy );
             }
             catch ( NoProjectAutomationObjectException )
             {
@@ -209,8 +205,6 @@ namespace Ankh.EventSinks
 
         private void SetupEventsForSolution()
         {
-            this.hierarchyEvents = new HierarchyEventsSink( this.Context );
-
             this.eventSinks = new ArrayList();
 
             this.eventSinks.Add( new TrackProjectDocumentsEventSink( this.Context ) );
@@ -223,9 +217,6 @@ namespace Ankh.EventSinks
         {
             if ( this.Context.AnkhLoadedForSolution )
             {
-                this.hierarchyEvents.Unhook();
-                this.hierarchyEvents = null;
-
                 foreach ( EventSink sink in this.eventSinks )
                     sink.Unhook();
 
@@ -233,7 +224,6 @@ namespace Ankh.EventSinks
             }
         }
 
-        private HierarchyEventsSink hierarchyEvents;
         private uint cookie;
         private IVsSolution solution;
         private IList eventSinks;

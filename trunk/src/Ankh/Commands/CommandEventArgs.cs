@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using AnkhSvn.Ids;
+using Ankh.Selection;
 
 namespace Ankh.Commands
 {
@@ -36,6 +37,15 @@ namespace Ankh.Commands
 		public IContext Context
 		{
 			get { return _context; }
+		}
+
+		/// <summary>
+		/// Gets the Visual Studio selection
+		/// </summary>
+		/// <value>The selection.</value>
+		public ISelectionContext Selection
+		{
+			get { return _context.SelectionContext; }
 		}
 
 		public object Argument
@@ -104,6 +114,15 @@ namespace Ankh.Commands
 			get { return _context; }
 		}
 
+		/// <summary>
+		/// Gets the Visual Studio selection
+		/// </summary>
+		/// <value>The selection.</value>
+		public ISelectionContext Selection
+		{
+			get { return _context.SelectionContext; }
+		}
+
 		public bool Enabled
 		{
 			get { return !_disabled; }
@@ -137,21 +156,6 @@ namespace Ankh.Commands
 		public string OriginalText
 		{
 			get { return _originalText; }
-		}
-	}
-
-	public class HelpEventArgs : EventArgs
-	{
-		readonly AnkhCommand _command;
-
-		public HelpEventArgs(AnkhCommand command)
-		{
-			_command = command;
-		}
-
-		public AnkhCommand Command
-		{
-			get { return _command; }
 		}
 	}
 }
