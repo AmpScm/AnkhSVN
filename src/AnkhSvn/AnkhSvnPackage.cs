@@ -44,6 +44,7 @@ namespace Ankh.VSPackage
 	[CLSCompliant(false)]
 	[ProvideSourceControlProvider("AnkhSVN Source Control Provider", "#100")]
 	[ProvideService(typeof(SccProviderService), ServiceName = "AnkhSVN Source Control Provider Service")]
+    [ProvideAutoLoad("F1536EF8-92EC-443C-9ED7-FDADF150DA82")] // = VSConstants.UICONTEXT_SolutionExists.ToString()
 	public sealed partial class AnkhSvnPackage : Package, IAnkhPackage
 	{
 		/// <summary>
