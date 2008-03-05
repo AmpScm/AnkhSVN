@@ -18,9 +18,6 @@ namespace Ankh.UI
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-
-            Win32.SHAutoComplete(this.urlTextBox.Handle,
-                Shacf.UrlAll);
         }
 
         /// <summary>

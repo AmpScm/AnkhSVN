@@ -29,9 +29,6 @@ namespace Ankh.UI
             this.revisionPicker.CommittedEnabled = false;
             this.revisionPicker.PreviousEnabled = false;
 
-            Win32.SHAutoComplete( this.urlTextBox.Handle, 
-                Shacf.UrlAll );
-
             this.ValidateAdd();
         }
 
