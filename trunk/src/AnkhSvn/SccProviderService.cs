@@ -6,11 +6,12 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using SharpSvn;
 using Microsoft.VisualStudio;
+using Ankh.UI.Services;
 
 namespace Ankh.VSPackage
 {
     [GuidAttribute( GuidList.guidAnkhSccProviderServiceString )]
-    class SccProviderService : IVsSccProvider, IVsSccManager2, IVsSccGlyphs
+    class SccProviderService : IVsSccProvider, IVsSccManager2, IVsSccGlyphs, IAnkhSccService
     {
         public SccProviderService( IContext context )
         {
