@@ -1,24 +1,19 @@
 // $Id$
 using System;
-using EnvDTE;
-
-
-
-using Ankh.UI;
-using Utils;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using Ankh.Solution;
 using System.Collections;
-using System.IO;
-using System.Diagnostics;
 using System.ComponentModel;
-
-using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-using IManagedServiceProvider = System.IServiceProvider;
-using SharpSvn;
-using Utils.Services;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
+using Ankh.Solution;
+using Ankh.UI;
 using Ankh.UI.Services;
+using EnvDTE;
+using SharpSvn;
+using Utils;
+using Utils.Services;
+using IManagedServiceProvider = System.IServiceProvider;
+using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh
 {
