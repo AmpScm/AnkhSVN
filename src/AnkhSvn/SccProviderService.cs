@@ -121,6 +121,10 @@ namespace Ankh.VSPackage
             return new NodeStatus( kind, item.IsReadOnly, item.IsLocked );
         }
 
+		public bool IsActive
+		{
+			get { return active; }
+		}
 
         private uint baseIndex;
         private bool active;
