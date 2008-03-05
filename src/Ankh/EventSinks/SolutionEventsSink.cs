@@ -9,6 +9,7 @@ using System.ComponentModel;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using Microsoft.VisualStudio;
 
 namespace Ankh.EventSinks
 {
