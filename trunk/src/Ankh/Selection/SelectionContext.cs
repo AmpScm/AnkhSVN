@@ -13,7 +13,9 @@ namespace Ankh.Selection
 	public interface ISelectionContext
 	{
 		ICollection<string> GetSelectedFiles();
-		ICollection<SvnItem> GetSelectedSvnItems();
+        ICollection<string> GetSelectedFiles(bool recursive);
+        ICollection<SvnItem> GetSelectedSvnItems();
+		ICollection<SvnItem> GetSelectedSvnItems(bool recursive);
 	}
 
 	/// <summary>
@@ -30,7 +32,9 @@ namespace Ankh.Selection
 		IVsMultiItemSelect _currentSelection;
 		ISelectionContainer _currentContainer;
 		string[] _filenames;
+        string[] _filenamesRecursive;
 		SvnItem[] _svnItems;
+        SvnItem[] _svnItemsRecursive;
 
 		public SelectionContext(IServiceProvider environment, StatusCache cache)
 		{
@@ -93,11 +97,13 @@ namespace Ankh.Selection
 		{
 			_filenames = null;
 			_svnItems = null;
+            _filenamesRecursive = null;
+            _svnItemsRecursive = null;
 		}
 
 		#endregion
 
-		protected class SelectionItem
+		protected class SelectionItem : IEquatable<SelectionItem>
 		{
 			readonly IVsHierarchy _hierarchy;
 			readonly uint _id;
@@ -117,8 +123,35 @@ namespace Ankh.Selection
 			{
 				get { return _id; }
 			}
-		}
 
+            #region IEquatable<SelectionItem> Members
+
+            public bool Equals(SelectionItem other)
+            {
+                if (other == null)
+                    return false;
+
+                return (other.Id == Id) && (other.Hierarchy == Hierarchy);
+            }
+
+            public override bool Equals(object obj)
+            {
+                return Equals(obj as SelectionItem);
+            }
+
+            public override int GetHashCode()
+            {
+                return _hierarchy.GetHashCode() ^ _id.GetHashCode();
+            }
+
+            #endregion
+        }
+
+        protected IEnumerable<SelectionItem> GetSelectedItems(bool recursive)
+        {
+            return recursive ? GetSelectedItemsRecursive() : GetSelectedItems();
+        }
+        
 		protected IEnumerable<SelectionItem> GetSelectedItems()
 		{
 			if (_currentSelection != null)
@@ -147,31 +180,135 @@ namespace Ankh.Selection
 			{
 				yield return new SelectionItem(_currentHierarchy, _currentItem);
 			}
-			else if (_currentItem == VSConstants.VSITEMID_ROOT)
-			{
-				// This is the case in the solution explorer when only the solution is selected
+            else if (_currentContainer == null)
+            { 
+                // No selection, no hierarchy.... -> no selection!
+            }
+            else if (_currentItem == VSConstants.VSITEMID_ROOT)
+            {
+                // This is the case in the solution explorer when only the solution is selected
 
-				// TODO: Check if the container is the Solution Explorer
+                // TODO: Check if the container is the Solution Explorer
 
-				IVsSolution2 s2 = null;
-				
-				if(_environment != null)
-					s2 = (IVsSolution2)_environment.GetService(typeof(SVsSolution));
+                IVsSolution2 s2 = null;
 
-				if (s2 != null)
-				{
-					IVsHierarchy h = s2 as IVsHierarchy;
+                if (_environment != null)
+                    s2 = (IVsSolution2)_environment.GetService(typeof(SVsSolution));
 
-					yield return new SelectionItem(h, _currentItem);
-				}				
-			}
+                if (s2 != null)
+                {
+                    IVsHierarchy h = s2 as IVsHierarchy;
+
+                    yield return new SelectionItem(h, _currentItem);
+                }
+            }
 		}
+
+        protected IEnumerable<SelectionItem> GetSelectedItemsRecursive()
+        {
+            Dictionary<SelectionItem, SelectionItem> ticked = new Dictionary<SelectionItem, SelectionItem>();
+            foreach (SelectionItem si in GetSelectedItems())
+            {
+                if (ticked.ContainsKey(si))
+                    continue;
+
+                ticked.Add(si, si);
+                yield return si;
+
+                foreach (SelectionItem i in GetDescendants(si, ticked))
+                {
+                    yield return i;
+                }
+            }
+        }
+
+        private static uint GetItemIdFromObject(object pvar)
+        {
+            if (pvar == null) return VSConstants.VSITEMID_NIL;
+            if (pvar is int) return (uint)(int)pvar;
+            if (pvar is uint) return (uint)pvar;
+            if (pvar is short) return (uint)(short)pvar;
+            if (pvar is ushort) return (uint)(ushort)pvar;
+            if (pvar is long) return (uint)(long)pvar;
+            return VSConstants.VSITEMID_NIL;
+        }
+
+        private IEnumerable<SelectionItem> GetDescendants(SelectionItem si, Dictionary<SelectionItem, SelectionItem> previous)
+        {
+            if (si.Hierarchy == null)
+                yield break;
+
+            Guid hierarchyId = typeof(IVsHierarchy).GUID;
+            IntPtr hierPtr;
+            uint id;
+
+            int hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out id);
+
+            if (hr == VSConstants.S_OK || hierPtr != IntPtr.Zero)
+            {
+                IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
+                Marshal.Release(hierPtr); // we are responsible to release the refcount on the out IntPtr parameter
+                if (nestedHierarchy != null)
+                {
+                    // Display name and type of the node in the Output Window
+                    SelectionItem i = new SelectionItem(nestedHierarchy, id);
+
+                    if (previous.ContainsKey(i))
+                        yield break;
+
+                    previous.Add(i, i);
+
+                    yield return i;
+
+                    foreach (SelectionItem ii in GetDescendants(i, previous))
+                    {
+                        yield return ii;
+                    }
+                }
+            }
+            
+            // Note: There is a bug with firstchild on solutions pre vs2008, in that it contains
+            // all projects on the top level instead of below solution folders. But we can ignore 
+            // that as we would include the projects anyway
+            object child;
+            Marshal.ThrowExceptionForHR(si.Hierarchy.GetProperty(si.Id, 
+                (int)__VSHPROPID.VSHPROPID_FirstChild, out child));
+
+            uint childId = GetItemIdFromObject(child);
+            while (childId != VSConstants.VSITEMID_NIL)
+            {
+                SelectionItem i = new SelectionItem(si.Hierarchy, childId);
+                if (!previous.ContainsKey(i))
+                {
+                    previous.Add(i, i);
+                    yield return i;
+                }
+
+                foreach (SelectionItem ii in GetDescendants(i, previous))
+                {
+                    yield return ii;
+                }
+
+                Marshal.ThrowExceptionForHR(si.Hierarchy.GetProperty(i.Id, 
+                    (int)__VSHPROPID.VSHPROPID_NextSibling, out child));
+
+                childId = GetItemIdFromObject(child);
+            }
+        }
+                
 
 		#region ISelectionContext Members
 
-		public ICollection<string> GetSelectedFiles()
+        public ICollection<string> GetSelectedFiles()
+        {
+            return GetSelectedFiles(false);
+        }
+
+        public ICollection<string> GetSelectedFiles(bool recursive)
 		{
-			if (_filenames != null)
+            if (recursive && (_filenamesRecursive != null))
+                return _filenamesRecursive;
+            else if(!recursive && (_filenames != null))
 				return _filenames;
 
 			List<string> filenames = new List<string>();
@@ -179,7 +316,7 @@ namespace Ankh.Selection
 
 			// Selection can be generated by several objects. 
 			// E.g. the solution provider, a document, our own toolwindows..
-			foreach (SelectionItem i in GetSelectedItems())
+			foreach (SelectionItem i in GetSelectedItems(recursive))
 			{
 				IVsSccProject2 p2 = i.Hierarchy as IVsSccProject2;
 
@@ -242,23 +379,38 @@ namespace Ankh.Selection
 
 				GC.KeepAlive(i.Hierarchy);
 			}
-			return _filenames = filenames.ToArray();
+
+            if(recursive)
+			    return _filenamesRecursive = filenames.ToArray();
+            else
+                return _filenames = filenames.ToArray();
 		}
 
-		public ICollection<SvnItem> GetSelectedSvnItems()
+        public ICollection<SvnItem> GetSelectedSvnItems()
+        {
+            return GetSelectedSvnItems(false);
+        }
+
+		public ICollection<SvnItem> GetSelectedSvnItems(bool recursive)
 		{
-			if(_svnItems != null)
-				return _svnItems;
+            if (recursive && (_svnItemsRecursive != null))
+                return _svnItemsRecursive;
+            else if (!recursive && (_svnItems != null))
+                return _svnItems;
 
 			List<SvnItem> items = new List<SvnItem>();
-			foreach (string file in GetSelectedFiles())
+			foreach (string file in GetSelectedFiles(recursive))
 			{
 				SvnItem i = _cache[file];
 
 				if (i != null)
 					items.Add(i);
 			}
-			return _svnItems = items.ToArray();
+
+            if(recursive)
+                return _svnItemsRecursive = items.ToArray();
+            else
+			    return _svnItems = items.ToArray();
 		}
 
 		#endregion
