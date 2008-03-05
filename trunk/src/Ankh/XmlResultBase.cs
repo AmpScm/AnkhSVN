@@ -29,7 +29,7 @@ namespace Ankh
             get{ return this.writer; }
         }
 
-        public void Transform( XslTransform transform, TextWriter writer )
+        public void Transform( XslCompiledTransform transform, TextWriter writer )
         {
             transform.Transform( this.XmlDocument, new XsltArgumentList(), writer );
         }

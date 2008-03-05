@@ -66,16 +66,8 @@ namespace Ankh
 
             this.outputPane = new OutputPaneWriter( dte, "AnkhSVN" );
             this.solutionExplorer = new Solution.Explorer( this.dte, this);
-            this.solutionExplorer.SolutionFinishedLoading += 
-                new EventHandler(this.HandleSolutionFinishedLoading);
-
 
             this.progressDialog = new ProgressDialog();             
-
-            string iconvdir = Path.Combine( 
-                Path.GetDirectoryName(this.GetType().Assembly.Location), 
-                "iconv" );
-            Utils.Win32.Win32.SetEnvironmentVariable( "APR_ICONV_PATH", iconvdir );
 
             this.ankhLoadedForSolution = false;
            

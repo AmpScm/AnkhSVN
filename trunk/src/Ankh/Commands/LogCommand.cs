@@ -59,7 +59,7 @@ namespace Ankh.Commands
             Debug.Assert( this.result != null );
 
             // transform it to HTML and display it
-            XslTransform transform = CommandBase.GetTransform( context, "log.xsl" );
+            XslCompiledTransform transform = CommandBase.GetTransform( context, "log.xsl" );
             StringWriter writer = new StringWriter();
             this.result.Transform( transform, writer );
 

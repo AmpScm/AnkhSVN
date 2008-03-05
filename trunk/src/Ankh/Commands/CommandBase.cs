@@ -98,7 +98,7 @@ namespace Ankh.Commands
         protected const vsCommandStatus Disabled =
             vsCommandStatus.vsCommandStatusSupported;
 
-        protected static XslTransform GetTransform(IContext context, string name)
+        protected static XslCompiledTransform GetTransform(IContext context, string name)
         {
             // is the file already there?
             string configDir = Path.GetDirectoryName(context.ConfigLoader.ConfigPath);
@@ -113,7 +113,7 @@ namespace Ankh.Commands
 
             // TODO: Transforms should be cached as a dynamic assembly is created
             // which stays in memory until the appdomain closes
-            XslTransform transform = new XslTransform();
+			XslCompiledTransform transform = new XslCompiledTransform();
             transform.Load(doc);
 
             return transform;
