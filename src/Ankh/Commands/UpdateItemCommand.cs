@@ -29,7 +29,7 @@ namespace Ankh.Commands
 
 		public override void OnUpdate(CommandUpdateEventArgs e)
 		{
-			ICollection<string> files = e.Selection.GetSelectedFiles();
+			ICollection<string> files = e.Selection.GetSelectedFiles(true);
 
 			if (files == null)
 			{
@@ -51,7 +51,7 @@ namespace Ankh.Commands
 				this.SaveAllDirtyDocuments(e.Context);
 				e.Context.StartOperation("Updating");
 
-				List<SvnItem> files = new List<SvnItem>(e.Selection.GetSelectedSvnItems());
+				List<SvnItem> files = new List<SvnItem>(e.Selection.GetSelectedSvnItems(true));
 
 				// we assume by now that all items are working copy resources.                
 				UpdateRunner runner = new UpdateRunner(e.Context, files);
