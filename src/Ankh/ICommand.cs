@@ -11,20 +11,11 @@ namespace Ankh
 		/// <summary>
 		/// Get the status of the command
 		/// </summary>
-        void OnUpdate(CommandUpdateEventArgs e);
+		void OnUpdate(CommandUpdateEventArgs e);
 
 		/// <summary>
 		/// Execute the command
 		/// </summary>
-        void OnExecute(CommandEventArgs e);                     
-
-		/// <summary>
-		/// The EnvDTE.Command instance corresponding to this command.
-		/// </summary>
-		EnvDTE.Command Command
-		{
-			get;
-			set;
-		}
+		void OnExecute(CommandEventArgs e);
 	}
 }
