@@ -34,7 +34,7 @@ namespace Ankh.Tests
             get
             {
                 if ( this.outputPane == null )
-                    this.outputPane = new OutputPaneWriter( this.DTE, "Test" );
+                    this.outputPane = new OutputPaneWriter( this, "Test" );
                 return this.outputPane;
             }
         }
@@ -848,6 +848,11 @@ namespace Ankh.Tests
         }
 
 		public Ankh.Selection.ISelectionContext SelectionContext
+		{
+			get { throw new Exception("The method or operation is not implemented."); }
+		}
+
+		public System.ComponentModel.ISynchronizeInvoke SynchronizingObject
 		{
 			get { throw new Exception("The method or operation is not implemented."); }
 		}

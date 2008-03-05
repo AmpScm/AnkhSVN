@@ -31,9 +31,8 @@ namespace AnkhSvn.Ids
 		public const string BmpId = "9db594ca-ebdd-40e1-9e37-51b7f9ef8df0";
 
 
-
-
-
+		public const string AnkhOutputPaneId = "ba0eec02-577c-424e-b6aa-fc8499d917ba";
+		
 
         public const string RepositoryExplorerToolWindowId = "748becbe-04a1-4ffa-8e1e-46840f91a083";
         public const string PendingChangesToolWindowId = "896e815d-3862-4978-a1bc-cb6a3e70045c";
@@ -55,5 +54,7 @@ namespace AnkhSvn.Ids
 		/// The guid for the generated Bmp
 		/// </summary>
 		public static readonly Guid BmpGuid = new Guid(BmpId);
+
+		public static readonly Guid AnkhOutputPaneGuid = new Guid(AnkhOutputPaneId);
 	}
 }
