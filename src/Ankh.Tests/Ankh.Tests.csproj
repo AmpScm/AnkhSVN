@@ -179,9 +179,9 @@
     <Content Include="LogResultTest.cs">
       <SubType>Code</SubType>
     </Content>
-    <Compile Include="OutputPaneWriterTest.cs">
+    <Content Include="OutputPaneWriterTest.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </Content>
     <Content Include="ProjectItemsEventSinkTest.cs">
       <SubType>Code</SubType>
     </Content>

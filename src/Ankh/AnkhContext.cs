@@ -14,6 +14,7 @@ using Utils;
 using Utils.Services;
 using IManagedServiceProvider = System.IServiceProvider;
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using Ankh.Selection;
 
 namespace Ankh
 {
@@ -28,23 +29,28 @@ namespace Ankh
         /// </summary>
         public event EventHandler Unloading;
 
+		[Obsolete("Use AnkhContext(IAnkhPackage)")]
 		public AnkhContext(EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell)
 			: this(dte, uiShell)
 		{
-			this.addin = addin;
 		}
 
-		public AnkhContext(IManagedServiceProvider serviceProvider)
-			: this((EnvDTE._DTE)serviceProvider.GetService(typeof(EnvDTE._DTE)), new UIShell())
+		public AnkhContext(IAnkhPackage package)
+			: this(package, (EnvDTE._DTE)package.GetService(typeof(EnvDTE._DTE)), new UIShell())
 		{
-			// Called from the package initializer
-            package = (IAnkhPackage)serviceProvider.GetService(typeof(IAnkhPackage));
-
-            Debug.Assert(package != null);
+            Trace.Assert(package != null);
 		}
 
-        public AnkhContext( EnvDTE._DTE dte, IUIShell uiShell )
+		[Obsolete("Use AnkhContext(IAnkhPackage)")]
+		public AnkhContext(EnvDTE._DTE dte, IUIShell uiShell)
+			: this(null, dte, uiShell)
+		{
+		}
+
+        protected AnkhContext(IAnkhPackage package, EnvDTE._DTE dte, IUIShell uiShell )
         {
+			this.package = package;			
+
             this.dte = dte;      
             this.uiShell = uiShell;
             this.uiShell.Context = this;
@@ -68,7 +74,10 @@ namespace Ankh
             
             this.conflictManager = new ConflictManager(this);
 
-            this.statusCache = new StatusCache( this.client );
+			this.statusCache = new StatusCache(this.client);
+
+			this.selectionContext = new SelectionContext(package, statusCache);
+            
 
             this.repositoryController = 
                 new RepositoryExplorer.Controller( this );
@@ -91,16 +100,6 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get{ return this.dte; }
-        }
-
-        /// <summary>
-        /// The addin object.
-        /// </summary>
-		[Obsolete("Null for package")]
-        public EnvDTE.AddIn AddIn
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.addin; }
         }
 
         /// <summary>
@@ -416,6 +415,15 @@ namespace Ankh
             }
         }
 
+		/// <summary>
+		/// Gets the selection context.
+		/// </summary>
+		/// <value>The selection context.</value>
+		public Ankh.Selection.ISelectionContext SelectionContext
+		{
+			get { return selectionContext; }
+		}
+
 
 
         #region SetUpEvents
@@ -654,10 +662,11 @@ namespace Ankh
             public static readonly NullSelectionContainer Instance = new NullSelectionContainer();
             private SvnItem[] EmptyList = new SvnItem[]{};
         }
-        
+
+
+		SelectionContext selectionContext;
 
         private EnvDTE._DTE dte;
-        private EnvDTE.AddIn addin;
         private IWin32Window hostWindow;
 
         private IAnkhSelectionContainer selectionContainer = NullSelectionContainer.Instance;
@@ -690,5 +699,12 @@ namespace Ankh
         private Ankh.Config.ConfigLoader configLoader;
 
         readonly IAnkhPackage package;
-    }
+
+		#region IContext Members
+
+
+		
+
+		#endregion
+	}
 }
