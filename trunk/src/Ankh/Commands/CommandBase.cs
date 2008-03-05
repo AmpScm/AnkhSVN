@@ -7,6 +7,8 @@ using System.Xml.Xsl;
 using System.Xml.XPath;
 using System.IO;
 using System.Diagnostics;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -56,23 +58,6 @@ namespace Ankh.Commands
         public virtual void OnExecute(CommandEventArgs e)
         {
             Execute(e.Context, e.Argument as string);
-        }
-
-        /// <summary>
-        /// The EnvDTE.Command instance corresponding to this command.
-        /// </summary>
-        public EnvDTE.Command Command
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get
-            {
-                return this.command;
-            }
-            [System.Diagnostics.DebuggerStepThrough]
-            set
-            {
-                this.command = value;
-            }
         }
 
         /// <summary>
@@ -136,6 +121,18 @@ namespace Ankh.Commands
             }
         }
 
-        private EnvDTE.Command command;
+		protected IList<SvnItem> GetSvnItems(IContext context, IEnumerable<string> paths)
+		{
+			List<SvnItem> items = new List<SvnItem>();
+			foreach (string path in paths)
+			{
+				SvnItem i = context.StatusCache[path];
+
+				if (i != null)
+					items.Add(i);
+			}
+
+			return items;
+		}
     }
 }

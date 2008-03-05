@@ -418,7 +418,7 @@ namespace Ankh.Solution
 
         private void MaybeRefreshNode( IntPtr hItem )
         {
-            using ( new SuspendItemExpandedScope() )
+            /*using ( new SuspendItemExpandedScope() )
             {
                 SearchHItemVisitor visitor = new SearchHItemVisitor( hItem );
 
@@ -432,7 +432,7 @@ namespace Ankh.Solution
                     // last item in the project, we don't want that.
                     this.treeView.EnsureVisible( hItem );
                 }
-            }
+            }*/
         }
 
        
