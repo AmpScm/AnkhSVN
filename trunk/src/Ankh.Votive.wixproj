@@ -13,8 +13,7 @@
     <OutputPath>Ankh.Votive\bin\Debug\</OutputPath>
     <IntermediateOutputPath>Ankh.Votive\obj\Debug\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
-    <SuppressIces>
-    </SuppressIces>
+    <SuppressIces>ICE03;ICE025;ICE82</SuppressIces>
     <SuppressValidation>False</SuppressValidation>
     <CompilerAdditionalOptions>
     </CompilerAdditionalOptions>
@@ -50,6 +49,12 @@
     </WixVariables>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>False</Pedantic>
+    <SuppressIces>ICE03;ICE025;ICE82</SuppressIces>
+    <SuppressValidation>False</SuppressValidation>
+    <CompilerAdditionalOptions>
+    </CompilerAdditionalOptions>
+    <LinkerAdditionalOptions>
+    </LinkerAdditionalOptions>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Ankh.UI\Ankh.UI.wxs" />

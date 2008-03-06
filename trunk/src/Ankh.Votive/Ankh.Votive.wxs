@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="274ee41e-23a2-41bc-a144-fff9e08e956f" Name="AnkhSVN" Language="1033" 
+  <Product Id="274ee41e-23a2-41bc-a144-fff9e08e956f" Name="AnkhSVN" Language="1033"
 			 Version="2.0.0.0" Manufacturer="AnkhSVN" UpgradeCode="40880177-2453-4ec7-8eef-744ec101b688">
-		
-		<Package InstallerVersion="200" Compressed="yes" />
 
-		<Media Id="1" Cabinet="Ankh.Votive.cab" EmbedCab="yes" />
+    <Package InstallerVersion="300" Compressed="yes" />
 
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLLOCATION" Name="AnkhSvn 2.0">
-					<Directory Id="APP_bin" Name=".">
-						<Directory Id="DIR_SharpSvn" Name="." />
-						<!-- All assemblies are placed here -->
-					</Directory>
-					<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-					<!-- <Component Id="ProductComponent" Guid="bf5eac53-92ec-4b9a-94d9-f84bb1951fad"> -->
-						<!-- TODO: Insert files, registry keys, and other resources here. -->
-					<!-- </Component> -->
-				</Directory>
-			</Directory>
-		</Directory>
-		<!-- Make sure the packages are set up in The VS Environment -->
-		<CustomActionRef Id="VS2005Setup"/>
-		<CustomActionRef Id="VS90Setup"/>
+    <Media Id="1" Cabinet="Ankh.Votive.cab" EmbedCab="yes" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLLOCATION" Name="AnkhSvn 2.0">
+          <Directory Id="APP_bin" Name=".">
+            <Directory Id="DIR_SharpSvn" Name=".">
+              <!-- Include the VC 8.0 SP1 CRT to make sure we run correctly on Visual Studio 8.0 pre SP1 -->
+              <Merge Id="CRT" Language="0" SourceFile="$(sys.SOURCEFILEDIR)..\lib\microsoft_vc80_crt_x86.msm" DiskId="1" />
+            </Directory>
+            <!-- All assemblies are placed here -->
+          </Directory>
+          <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+          <!-- <Component Id="ProductComponent" Guid="bf5eac53-92ec-4b9a-94d9-f84bb1951fad"> -->
+          <!-- TODO: Insert files, registry keys, and other resources here. -->
+          <!-- </Component> -->
+        </Directory>
+      </Directory>
+    </Directory>
+    <!-- Make sure the packages are set up in The VS Environment -->
+    <CustomActionRef Id="VS2005Setup"/>
+    <CustomActionRef Id="VS90Setup"/>
 
-		<!-->UIRef Id="WixUI_Mondo" /-->
+    <!-->UIRef Id="WixUI_Mondo" /-->
 
-		<Feature Id="ProductFeature" Title="Ankh.Votive" Level="1">
-			<ComponentGroupRef Id="CG_AnkhSvn"/>
-		</Feature>
-	</Product>
+    <Feature Id="ProductFeature" Title="Ankh.Votive" Level="1">
+      <ComponentGroupRef Id="CG_AnkhSvn"/>
+      <MergeRef Id="CRT"/>
+    </Feature>
+  </Product>
 </Wix>
