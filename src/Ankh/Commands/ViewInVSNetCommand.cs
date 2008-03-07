@@ -32,7 +32,7 @@ namespace Ankh.Commands
                 context.UIShell.RunWithProgressDialog( runner, "Retrieving file" );
 
                 context.DTE.ItemOperations.OpenFile( runner.Path, 
-                    Constants.vsViewKindPrimary );
+                    EnvDTE.Constants.vsViewKindPrimary );
             }
             finally
             {
