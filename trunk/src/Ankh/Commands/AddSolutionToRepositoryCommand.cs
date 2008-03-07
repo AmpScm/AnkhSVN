@@ -4,12 +4,11 @@ using System.Windows.Forms;
 using Utils;
 using System.IO;
 using System.Collections;
-
-
 using System.Reflection;
 using System.Text;
 using SharpSvn;
 using AnkhSvn.Ids;
+using EnvDTE;
 
 namespace Ankh.Commands
 {
