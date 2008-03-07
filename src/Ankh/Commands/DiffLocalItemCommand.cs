@@ -1,6 +1,7 @@
 // $Id$
 using System.IO;
 using Ankh.UI;
+using EnvDTE;
 using SHDocVw;
 using AnkhSvn.Ids;
 

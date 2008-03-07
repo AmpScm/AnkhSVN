@@ -1,6 +1,7 @@
 using System;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
+using Utils.Win32;
 
 namespace Ankh.Commands
 {
