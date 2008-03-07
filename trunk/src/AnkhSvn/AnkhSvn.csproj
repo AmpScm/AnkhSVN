@@ -118,9 +118,10 @@
     </XslSource>
     <Compile Include="AnkhSvnPackage.About.cs" />
     <Compile Include="AnkhSvnPackage.Commands.cs" />
+    <Compile Include="AnkhSvnPackage.Extenders.cs" />
     <Compile Include="AnkhSvnPackage.ToolWindows.cs" />
     <Compile Include="ProvideSourceControlProvider.cs" />
-    <Compile Include="SccProviderService.cs" />
+    <Compile Include="Scc\AnkhSccProvider.cs" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
       <SubType>
@@ -129,6 +130,9 @@
     <None Include="Gui\Gui.xsx">
       <DependentUpon>Gui.xsd</DependentUpon>
     </None>
+    <Compile Include="Scc\AnkhSccProvider.QueryEditSave.cs" />
+    <Compile Include="Scc\AnkhSccProvider.Glyphs.cs" />
+    <Compile Include="Scc\AnkhSccProvider.Solution.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AnkhSvn.wxs" />

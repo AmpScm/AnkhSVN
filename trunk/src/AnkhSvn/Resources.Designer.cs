@@ -89,5 +89,14 @@ namespace Ankh.VSPackage {
                 return ResourceManager.GetString("AboutTitleName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to Sub&amp;version.
+        /// </summary>
+        internal static string AddToSubversionCommandName {
+            get {
+                return ResourceManager.GetString("AddToSubversionCommandName", resourceCulture);
+            }
+        }
     }
 }

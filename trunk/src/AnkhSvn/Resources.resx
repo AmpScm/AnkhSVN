@@ -129,4 +129,7 @@
   <data name="AboutTitleName" xml:space="preserve">
     <value>AnkhSvn - The open source Subversion plugin for Visual Studio</value>
   </data>
+  <data name="AddToSubversionCommandName" xml:space="preserve">
+    <value>Add to Sub&amp;version</value>
+  </data>
 </root>
