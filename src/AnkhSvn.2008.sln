@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B093CEC2-73C7-4DF4-B8C2-E144BE37DB19}"
 	ProjectSection(SolutionItems) = preProject
-		WiX\Ankh-UI.wxs = WiX\Ankh-UI.wxs
-		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
 		BUILD.txt = BUILD.txt
 		CHANGES = CHANGES
 		CONTRIBUTERS = CONTRIBUTERS
@@ -107,7 +105,7 @@ Global
 		{CBE396C6-F315-4DA4-BB3B-2FBDE5969BD2} = {08FF496A-CD90-4B17-8FA0-F4CA88AB49D3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal
