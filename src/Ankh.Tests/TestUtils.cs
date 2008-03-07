@@ -34,7 +34,7 @@ namespace Ankh.Tests
         /// <param name="version"></param>
         public static void ToggleAnkh( bool enable, string version )
         {
-            string keyname = String.Format( Key, version );
+            /*string keyname = String.Format( Key, version );
             int val = enable ? 1 : 0;
             // HKCU?
             RegistryKey key = Registry.CurrentUser.OpenSubKey( keyname, true );
@@ -52,7 +52,7 @@ namespace Ankh.Tests
             {
                 // user doesn't have access to the key(shouldn't happen)
                 // swallow
-            }
+            }*/
         }
 
         private const string Key = 

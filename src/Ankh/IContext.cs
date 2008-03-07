@@ -22,6 +22,7 @@ namespace Ankh
         /// <summary>
         /// The top level automation object.
         /// </summary>
+        [Obsolete("Please use the package api instead of the automation model")]
         EnvDTE._DTE DTE { get; }
 
         /// <summary>

@@ -143,11 +143,11 @@ namespace Ankh.Solution
 
         public void RemoveProject( Project project )
         {
-            SolutionExplorerTreeNode node = this.GetNodeForProject( project );
-            if ( node != null )
+            //SolutionExplorerTreeNode node = this.GetNodeForProject( project );
+            /*if ( node != null )
             {
                 node.Remove();
-            }
+            }*/
         }
 
         /// <summary>
@@ -710,7 +710,7 @@ namespace Ankh.Solution
             if ( !this.context.AnkhLoadedForSolution )
                 return null;
 
-            if ( this.uiHierarchy.UIHierarchyItems.Count == 0)
+            //if ( this.uiHierarchy.UIHierarchyItems.Count == 0)
             {
                 return null;
             }

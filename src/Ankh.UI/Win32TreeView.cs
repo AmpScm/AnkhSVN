@@ -18,6 +18,7 @@ namespace Ankh.UI
         {
             this.CheckForZero( hwnd, "hwnd" );
             this.hwnd = hwnd;
+            this.AssignHandle(hwnd);
         }
 
         /// <summary>

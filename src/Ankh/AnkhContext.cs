@@ -70,15 +70,17 @@ namespace Ankh
 
             this.progressDialog = new ProgressDialog();             
 
-            this.SetUpEvents();    
+            //this.SetUpEvents();    
             
             this.conflictManager = new ConflictManager(this);
 
 			this.statusCache = new StatusCache(this.client);
 
 			this.selectionContext = new SelectionContext(package, statusCache);
-            
+            this.solutionExplorerWindow = new SolutionExplorerWindow(package, SynchronizingObject);
 
+            GC.KeepAlive(this.solutionExplorerWindow.TreeWindow);
+            
             this.repositoryController = 
                 new RepositoryExplorer.Controller( this );
             this.workingCopyExplorer =
@@ -273,7 +275,7 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get 
             {
-                return this.dte as IServiceProvider;
+                return (IServiceProvider)DTE;
             }
         }
 
@@ -289,15 +291,7 @@ namespace Ankh
         /// </summary>
         public bool EnableAnkhForLoadedSolution()
         {
-            if ( this.SolutionLoaded() )
-            {
-                this.solutionEvents.InitializeForLoadedSolution();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
         }
 
         /// <summary>
@@ -429,64 +423,6 @@ namespace Ankh
 			get { return progressDialog; }
 		}
 		
-        #region SetUpEvents
-        /// <summary>
-        /// Sets up event handlers.
-        /// </summary>
-        private void SetUpEvents()
-        {
-            this.solutionEvents = new Ankh.EventSinks.SolutionEventsSink( this );
-            this.solutionEvents.SolutionLoaded += new CancelEventHandler( this.HandleSolutionLoaded );
-            this.solutionEvents.SolutionBeforeClosing  += new EventHandler( this.HandleSolutionClosing );
-        }
-        #endregion        
-
-        private void HandleSolutionLoaded( object sender, System.ComponentModel.CancelEventArgs args )
-        {
-            args.Cancel = !SolutionLoaded();
-        }
-
-        private bool SolutionLoaded( )
-        {
-            try
-            {
-                if ( !this.CheckWhetherAnkhShouldLoad() )
-                {
-                    return false;
-                }
-
-
-                System.Diagnostics.Trace.WriteLine( "Solution opening", "Ankh" );
-
-                Utils.DebugTimer timer = DebugTimer.Start();
-
-                this.solutionExplorer.Load();
-
-                timer.End( "Solution opened", "Ankh" );
-
-                //MessageBox.Show( timer.ToString() );
-
-                // Add Conflict tasks for all conflicts in solution
-                this.conflictManager.CreateTaskItems();
-
-                return true;
-            }
-            catch ( Exception ex )
-            {
-                ErrorHandler.Handle( ex );
-                return false;
-            }
-            finally
-            {
-                this.EndOperation();
-            }
-        }
-
-        private void HandleSolutionClosing( object sender, EventArgs args )
-        {
-            this.SolutionClosing();
-        }
-
         /// <summary>
         /// try to load the configuration file
         /// </summary>
@@ -668,6 +604,7 @@ namespace Ankh
 
 
 		SelectionContext selectionContext;
+        SolutionExplorerWindow solutionExplorerWindow;
 
         private EnvDTE._DTE dte;
         private IWin32Window hostWindow;

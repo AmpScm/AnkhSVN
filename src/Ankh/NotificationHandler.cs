@@ -35,15 +35,6 @@ namespace Ankh
             actionStatus[SvnNotifyAction.LockFailedUnlock] = "Failed unlock";
 
             ankhContext.Client.Notify += new EventHandler<SvnNotifyEventArgs>(OnNotification);
-#if DEBUG
-            ankhContext.Client.Cancel += new EventHandler<SvnCancelEventArgs>(OnCancel);
-#endif
-        }
-
-        void OnCancel(object sender, SvnCancelEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Cancel called. Cancelled: " + e.Cancel,
-                "Ankh");
         }
 
         void OnNotification(object sender, SvnNotifyEventArgs e)

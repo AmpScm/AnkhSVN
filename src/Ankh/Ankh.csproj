@@ -157,6 +157,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="SharpSvn, Version=1.4999.350.29541, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
@@ -383,6 +384,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selection\SelectionContext.cs" />
     <Compile Include="Solution\IRefreshableProject.cs" />
+    <Compile Include="Solution\SolutionExplorerWindow.cs" />
+    <Compile Include="Solution\SolutionTreeViewManager.cs" />
     <Compile Include="StatusCache\AnkhStatus.cs" />
     <Compile Include="StatusCache\StatusCache.cs" />
     <Compile Include="StatusCache\SvnItem.cs" />
