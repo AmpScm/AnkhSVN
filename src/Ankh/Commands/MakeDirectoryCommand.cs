@@ -34,8 +34,10 @@ namespace Ankh.Commands
                 return Disabled;
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             INode node = context.RepositoryExplorer.SelectedNode;
             System.Diagnostics.Debug.Assert( node != null );
 

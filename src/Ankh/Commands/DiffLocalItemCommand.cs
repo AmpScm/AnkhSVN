@@ -20,8 +20,10 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override void Execute(Ankh.IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             try
             {
                 this.SaveAllDirtyDocuments( context );

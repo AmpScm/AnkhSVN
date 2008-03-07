@@ -36,8 +36,10 @@ namespace Ankh.Commands
             }
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             // We know now that there is exactly one resource
             SvnItem dir = (SvnItem)context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback(SvnItem.DirectoryFilter) )[0];

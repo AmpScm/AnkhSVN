@@ -27,16 +27,18 @@ namespace Ankh.Commands
         {
             return Enabled;
         }
-       
-        public override void Execute(IContext context, string parameters)
+
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             this.context = context;
             this.window = (CommandWindow)((Window)context.DTE.Windows.Item( 
                 EnvDTE.Constants.vsWindowKindCommandWindow )).Object;
 
             // is it one of the intrinsic commands?
-            if ( !ParseIntrinsicCommand( parameters ) )
-                this.RunCommand( this.SvnExePath, parameters );
+            if ( !ParseIntrinsicCommand( e.Argument as string ) )
+                this.RunCommand( this.SvnExePath, e.Argument as string );
         }
 
         private string SvnExePath

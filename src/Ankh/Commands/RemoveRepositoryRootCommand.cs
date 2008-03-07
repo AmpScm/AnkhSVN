@@ -25,8 +25,10 @@ namespace Ankh.Commands
                 return Disabled;
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             context.RepositoryExplorer.RemoveRoot( context.RepositoryExplorer.SelectedNode );
         }
 

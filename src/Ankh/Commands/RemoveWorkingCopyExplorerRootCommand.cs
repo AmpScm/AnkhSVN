@@ -23,8 +23,10 @@ namespace Ankh.Commands
             return context.WorkingCopyExplorer.IsRootSelected ? Enabled : EnvDTE.vsCommandStatus.vsCommandStatusInvisible;
         }
 
-        public override void Execute( IContext context, string parameters )
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             context.WorkingCopyExplorer.RemoveSelectedRoot();
         }
 
