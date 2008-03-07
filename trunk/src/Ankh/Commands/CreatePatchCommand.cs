@@ -23,7 +23,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            this.SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments( context );
 
             context.StartOperation( "Creating patch" );
             try

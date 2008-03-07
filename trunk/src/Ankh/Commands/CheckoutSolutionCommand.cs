@@ -22,16 +22,16 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IRepositoryTreeNode node = context.RepositoryExplorer.SelectedNode;
-            if ( node!= null && !node.IsDirectory && 
-                node.Name.ToLower().EndsWith(".sln" ) )
+            IRepositoryTreeNode node = e.Context.RepositoryExplorer.SelectedNode;
+            if (node == null & !node.IsDirectory &&
+                node.Name.ToLower().EndsWith(".sln"))
             {
-                return Enabled;
+                // e.Enabled = true;
             }
             else
-                return Disabled;
+                e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)

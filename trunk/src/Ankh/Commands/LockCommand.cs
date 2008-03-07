@@ -96,11 +96,14 @@ namespace Ankh.Commands
             context.Client.Lock(paths, args);
         }
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IList resources = context.Selection.GetSelectionResources( true,
+
+            IList resources = e.Context.Selection.GetSelectionResources( true,
                 new ResourceFilterCallback(SvnItem.NotLockedAndLockableFilter) );
-            return resources.Count > 0 ? Enabled : Disabled;
+
+            if (resources.Count == 0)
+                e.Enabled = false;
         }
         
         private LockDialogInfo info;

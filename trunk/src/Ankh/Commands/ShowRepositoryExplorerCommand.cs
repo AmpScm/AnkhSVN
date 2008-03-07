@@ -1,6 +1,5 @@
 // $Id: MergeItemCommand.cs 594 2003-06-01 23:56:34Z Arild $
 using System;
-using EnvDTE;
 using AnkhSvn.Ids;
 
 namespace Ankh.Commands

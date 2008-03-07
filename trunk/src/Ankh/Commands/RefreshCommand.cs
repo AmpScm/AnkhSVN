@@ -1,6 +1,5 @@
 // $Id$
 using System;
-using EnvDTE;
 using Ankh.UI;
 using AnkhSvn.Ids;
 
@@ -17,13 +16,6 @@ namespace Ankh.Commands
          VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 2 )]
     public class RefreshCommand : CommandBase
     {
-        #region Implementation of ICommand
-
-        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
-        {
-            return Enabled;
-        }
-
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
@@ -38,7 +30,5 @@ namespace Ankh.Commands
                 context.EndOperation();
             }
         }
-
-        #endregion
     }
 }

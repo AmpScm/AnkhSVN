@@ -23,21 +23,19 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IList resources = context.Selection.GetSelectionResources(
+            IList resources = e.Context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
-            if ( resources.Count > 0 )
-                return Enabled;
-            else
-                return Disabled;
+            if (resources.Count == 0)
+                e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
 
-            this.SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments( context );
 
             IList resources = context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );

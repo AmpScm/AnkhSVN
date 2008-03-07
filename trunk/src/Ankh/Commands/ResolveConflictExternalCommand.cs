@@ -1,7 +1,5 @@
 // $Id: ResolveConflictCommand.cs 1580 2004-07-24 01:44:31Z Arild $
 using System;
-using EnvDTE;
-
 using Ankh.UI;
 using System.Windows.Forms;
 using System.IO;
@@ -26,13 +24,12 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            // Allow external merge if enabled in config file
-            if ( context.Config.ChooseDiffMergeManual && context.Config.MergeExePath != null )
-                return Enabled;
-            else 
-                return vsCommandStatus.vsCommandStatusInvisible;
+            if (!e.Context.Config.ChooseDiffMergeManual || e.Context.Config.MergeExePath == null)
+            {
+                e.Enabled = e.Visible = false;
+            }
         }
 
         /// <summary>

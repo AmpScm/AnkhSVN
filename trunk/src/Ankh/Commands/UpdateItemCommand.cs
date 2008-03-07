@@ -1,16 +1,11 @@
 // $Id$
 using System;
-using EnvDTE;
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Ankh.UI;
-using System.Collections;
-using System.Diagnostics;
-using Ankh.Solution;
-
-
-using SharpSvn;
 using AnkhSvn.Ids;
-using System.Collections.Generic;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -48,7 +43,7 @@ namespace Ankh.Commands
 			try
 			{
 				// save all files
-				this.SaveAllDirtyDocuments(e.Context);
+				SaveAllDirtyDocuments(e.Context);
 				e.Context.StartOperation("Updating");
 
 				List<SvnItem> files = new List<SvnItem>(e.Selection.GetSelectedSvnItems(true));

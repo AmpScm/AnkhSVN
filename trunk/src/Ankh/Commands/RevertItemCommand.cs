@@ -1,14 +1,9 @@
 // $Id$
 using System;
-
-
-using EnvDTE;
-using Ankh.UI;
-using System.Text;
-using System.Windows.Forms;
 using System.Collections;
-using SharpSvn;
+using System.Windows.Forms;
 using AnkhSvn.Ids;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -25,22 +20,20 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
-        {   
-            if ( context.Selection.GetSelectionResources( true, 
-                new ResourceFilterCallback( SvnItem.ModifiedFilter ) ).Count > 0 )
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+            if ( e.Context.Selection.GetSelectionResources( true, 
+                new ResourceFilterCallback( SvnItem.ModifiedFilter ) ).Count == 0 )
             {
-                return Enabled;
+                e.Enabled = false;
             }
-            else
-                return Disabled;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
 
-            this.SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments( context );
 
             // get the modified resources
             IList resources = context.Selection.GetSelectionResources( true,

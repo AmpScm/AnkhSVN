@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using Utils;
-using EnvDTE;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
 
@@ -21,15 +20,14 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if ( context.RepositoryExplorer.SelectedNode != null &&
-                context.RepositoryExplorer.SelectedNode.IsDirectory )
+            if ( e.Context.RepositoryExplorer.SelectedNode == null ||
+                !e.Context.RepositoryExplorer.SelectedNode.IsDirectory)
             {
-                return Enabled;
+                // BH: Why don't we allow exporting single files?
+                e.Enabled = false;
             } 
-            else
-                return Disabled;
         }
 
         public override void OnExecute(CommandEventArgs e)

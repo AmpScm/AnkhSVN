@@ -19,13 +19,6 @@ namespace Ankh.Commands
         [VSNetControl( "ReposExplorer", Position = 1 )]
     public class AddRepositoryRootCommand : CommandBase
     {
-        #region Implementation of ICommand
-
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
-        {
-            return Enabled;
-        }
-
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
@@ -36,7 +29,5 @@ namespace Ankh.Commands
 
             context.RepositoryExplorer.AddRoot( info );
         }
-
-        #endregion
     }
 }

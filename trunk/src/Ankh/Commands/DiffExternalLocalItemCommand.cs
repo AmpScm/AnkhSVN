@@ -1,7 +1,6 @@
 // $Id: DiffLocalItemCommand.cs 1503 2004-07-07 04:33:39Z Arild $
 using System.IO;
 using Ankh.UI;
-using EnvDTE;
 using AnkhSvn.Ids;
 
 namespace Ankh.Commands
@@ -19,13 +18,11 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
             // Allow external diff if enabled in config file
-            if ( context.Config.ChooseDiffMergeManual && context.Config.DiffExePath != null )
-                return Enabled;
-            else 
-                return vsCommandStatus.vsCommandStatusInvisible;
+            if ( !e.Context.Config.ChooseDiffMergeManual || e.Context.Config.DiffExePath == null )
+                e.Enabled = e.Visible = false;
         }
 
         #endregion

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using EnvDTE;
 using Ankh.Commands;
 using System.IO;
+using AnkhSvn.Ids;
 
 namespace Ankh.Tests.Commands
 {
@@ -42,7 +43,7 @@ namespace Ankh.Tests.Commands
             SendErrorReportCommand cmd = new SendErrorReportCommand();
 
             // just ensure the message is sent.
-            cmd.Execute( this.context, "" );
+            cmd.OnExecute( new CommandEventArgs(AnkhCommand.SendFeedback, this.context));
             Assert.IsTrue( ((TestErrorHandler)this.context.ErrorHandler).Sent );
         }
 

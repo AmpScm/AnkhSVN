@@ -1,14 +1,11 @@
 // $Id$
 using System;
-using EnvDTE;
-
 using Ankh.UI;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections;
-
 
 using SharpSvn;
 using AnkhSvn.Ids;
@@ -41,22 +38,20 @@ namespace Ankh.Commands
 
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            int count = context.Selection.GetSelectionResources(false, 
+            int count = e.Context.Selection.GetSelectionResources(false, 
                 new ResourceFilterCallback(SvnItem.ConflictedFilter) ).Count;
 
-            if ( count > 0 )
-                return Enabled;
-            else
-                return Disabled;
+            if (count == 0)
+                e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
 
-            this.SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments( context );
 
             context.StartOperation( "Resolving" );
 

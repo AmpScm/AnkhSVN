@@ -1,5 +1,4 @@
 // $Id$
-using EnvDTE;
 using System.Collections;
 using Ankh.UI;
 using System.Windows.Forms;

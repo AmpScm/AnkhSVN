@@ -1,5 +1,4 @@
 using System;
-using EnvDTE;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
 

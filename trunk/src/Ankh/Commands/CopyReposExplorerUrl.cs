@@ -1,6 +1,5 @@
 // $Id$
 using System;
-using EnvDTE;
 using Ankh.UI;
 using Clipboard = System.Windows.Forms.Clipboard;
 using Ankh.RepositoryExplorer;
@@ -21,13 +20,11 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
             // all we need is a selection in the repos explorer
-            if ( context.RepositoryExplorer.SelectedNode != null )
-                return Enabled;
-            else
-                return Disabled;
+            if (e.Context.RepositoryExplorer.SelectedNode == null)
+                e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)

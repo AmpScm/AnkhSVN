@@ -1,6 +1,5 @@
 // $Id$
 using System;
-using EnvDTE;
 using System.Collections;
 using AnkhSvn.Ids;
 
@@ -17,13 +16,6 @@ namespace Ankh.Commands
          VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 11)]
     public class Cleanup : CommandBase
     {
-        #region Implementation of ICommand
-
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
-        {
-            return Enabled;
-        }
-
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
@@ -37,8 +29,6 @@ namespace Ankh.Commands
 
             context.EndOperation();
         }
-
-        #endregion
     }
 }
 
