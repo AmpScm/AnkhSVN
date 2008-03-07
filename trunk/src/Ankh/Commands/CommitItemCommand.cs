@@ -37,8 +37,10 @@ namespace Ankh.Commands
             }
         }
 
-        public override void Execute(Ankh.IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             // make sure all files are saved
             this.SaveAllDirtyDocuments( context );
 

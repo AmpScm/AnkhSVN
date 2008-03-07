@@ -24,8 +24,10 @@ namespace Ankh.Commands
             return Enabled;
         }
 
-        public override void Execute(Ankh.IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             try
             {
                 context.StartOperation( "Refreshing" );

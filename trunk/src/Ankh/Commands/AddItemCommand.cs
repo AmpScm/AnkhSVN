@@ -33,8 +33,10 @@ namespace Ankh.Commands
             }
         }
 
-        public override void Execute(IContext context, string parameters )
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             AddFilter filter = new AddFilter();
             IList resources = context.Selection.GetSelectionResources( true,
                 new ResourceFilterCallback(filter.Filter) );

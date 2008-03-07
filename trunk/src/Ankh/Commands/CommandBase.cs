@@ -20,20 +20,11 @@ namespace Ankh.Commands
         /// <summary>
         /// Get the status of the command
         /// </summary>
-        //[Obsolete("Please implement Update(CommandUpdateEventArgs)")]
+        [Obsolete("Please implement Update(CommandUpdateEventArgs)")]
         public virtual vsCommandStatus QueryStatus(IContext context)
         {
             return (vsCommandStatus)999;
-        }
-
-        /// <summary>
-        /// Execute the command
-        /// </summary>
-        //[Obsolete("Please implement OnExecute(CommandEventArgs)")]
-        public virtual void Execute(IContext context, string parameters)
-        {
-            throw new NotImplementedException();
-        }
+        }   
 
         public virtual void OnUpdate(CommandUpdateEventArgs e)
         {

@@ -78,8 +78,10 @@ namespace Ankh.Commands
             }
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             string solutionDir = Path.GetDirectoryName(context.DTE.Solution.FullName);
             string noLoad = Path.Combine(solutionDir, "Ankh.NoLoad");
             string load = Path.Combine(solutionDir, "Ankh.Load");

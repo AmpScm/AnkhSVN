@@ -25,8 +25,10 @@ namespace Ankh.Commands
             return resources.Count > 0 ? CommandBase.Enabled : CommandBase.Disabled;
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             IList resources = context.Selection.GetSelectionResources(true, 
                 new ResourceFilterCallback( SvnItem.LockedFilter ) );
 

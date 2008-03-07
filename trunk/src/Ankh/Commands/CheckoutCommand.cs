@@ -27,8 +27,10 @@ namespace Ankh.Commands
             return Enabled;
         }
 
-        public override void Execute(IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             using(CheckoutDialog dlg = new CheckoutDialog())
             {
                 if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )

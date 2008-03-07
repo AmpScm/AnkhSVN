@@ -18,8 +18,10 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override void Execute(IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             try
             {
                 context.StartOperation( "Opening" );

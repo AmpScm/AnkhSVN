@@ -18,8 +18,10 @@ namespace Ankh.Commands
          VSNetControl( "ReposExplorer.View", Position = 1 )]
     public class ViewInWindowsCommand : ViewRepositoryFileCommand
     {
-        public override void Execute(IContext context, string parameters)
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             try
             {
                 context.StartOperation( "Opening" );

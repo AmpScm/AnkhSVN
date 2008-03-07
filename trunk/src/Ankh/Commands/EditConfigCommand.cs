@@ -25,8 +25,10 @@ namespace Ankh.Commands
             return Enabled;
         }
 
-        public override void Execute( IContext context, string parameters )
+        public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context;
+
             Config.Config config = context.ConfigLoader.LoadConfig();
             using ( ConfigurationDialog dialog = new ConfigurationDialog( config ) )
             {
