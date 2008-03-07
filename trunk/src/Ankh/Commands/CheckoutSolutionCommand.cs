@@ -25,8 +25,8 @@ namespace Ankh.Commands
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             IRepositoryTreeNode node = e.Context.RepositoryExplorer.SelectedNode;
-            if (node == null & !node.IsDirectory &&
-                node.Name.ToLower().EndsWith(".sln"))
+            if (node != null && !node.IsDirectory &&
+                node.Name.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
             {
                 // e.Enabled = true;
             }

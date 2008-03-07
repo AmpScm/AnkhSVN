@@ -3,22 +3,67 @@ using System.Collections.Generic;
 using System.Text;
 using AnkhSvn.Ids;
 using Ankh.Selection;
+using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Commands
 {
-	public class CommandEventArgs : EventArgs
-	{
-		readonly AnkhCommand _command;
-		readonly IContext _context;
+    public class BaseCommandEventArgs : EventArgs
+    {
+        readonly AnkhCommand _command;
+        readonly IContext _context;
+        Nullable<bool> _inAutomation;
+
+        public BaseCommandEventArgs(AnkhCommand command, IContext context)
+		{
+			_command = command;
+			_context = context;
+		}
+
+        public AnkhCommand Command
+        {
+            get { return _command; }
+        }
+
+        public IContext Context
+        {
+            get { return _context; }
+        }
+
+        /// <summary>
+        /// Gets the Visual Studio selection
+        /// </summary>
+        /// <value>The selection.</value>
+        public ISelectionContext Selection
+        {
+            get { return _context.SelectionContext; }
+        }
+
+        public bool IsInAutomation
+        {
+            get
+            {
+                if (_inAutomation.HasValue)
+                    return _inAutomation.Value;
+
+                if (Context != null)
+                    _inAutomation = VsShellUtilities.IsInAutomationFunction(Context.Package);
+                else
+                    _inAutomation = false;
+
+                return _inAutomation.Value;
+            }
+        }
+    }
+	public class CommandEventArgs : BaseCommandEventArgs
+	{		
 		readonly object _argument;
 		object _result;
 		bool _promptUser;
 		bool _dontPromptUser;
 
 		public CommandEventArgs(AnkhCommand command, IContext context)
+            : base(command, context)
 		{
-			_command = command;
-			_context = context;
 		}
 
 		public CommandEventArgs(AnkhCommand command, IContext context, object argument, bool promptUser, bool dontPromptUser)
@@ -27,26 +72,7 @@ namespace Ankh.Commands
 			_argument = argument;
 			_promptUser = promptUser;
 			_dontPromptUser = dontPromptUser;
-		}
-
-		public AnkhCommand Command
-		{
-			get { return _command; }
-		}
-
-		public IContext Context
-		{
-			get { return _context; }
-		}
-
-		/// <summary>
-		/// Gets the Visual Studio selection
-		/// </summary>
-		/// <value>The selection.</value>
-		public ISelectionContext Selection
-		{
-			get { return _context.SelectionContext; }
-		}
+		}				
 
 		public object Argument
 		{
@@ -77,10 +103,8 @@ namespace Ankh.Commands
 		Status
 	}
 
-	public class CommandUpdateEventArgs : EventArgs
+	public class CommandUpdateEventArgs : BaseCommandEventArgs
 	{
-		readonly AnkhCommand _command;
-		readonly IContext _context;
 		readonly TextQueryType _queryType;
 		readonly string _originalText;
 		bool _disabled;
@@ -92,35 +116,14 @@ namespace Ankh.Commands
 		public CommandUpdateEventArgs(AnkhCommand command, IContext context, TextQueryType textQuery, string oldText)
 			: this(command, context)
 		{
-			_command = command;
 			_queryType = textQuery;
 			if (textQuery != TextQueryType.None)
 				_originalText = oldText;
 		}
 
 		public CommandUpdateEventArgs(AnkhCommand command, IContext context)
+            : base(command, context)
 		{
-			_command = command;
-			_context = context;
-		}
-
-		public AnkhCommand Command
-		{
-			get { return _command; }
-		}
-
-		public IContext Context
-		{
-			get { return _context; }
-		}
-
-		/// <summary>
-		/// Gets the Visual Studio selection
-		/// </summary>
-		/// <value>The selection.</value>
-		public ISelectionContext Selection
-		{
-			get { return _context.SelectionContext; }
 		}
 
 		public bool Enabled
