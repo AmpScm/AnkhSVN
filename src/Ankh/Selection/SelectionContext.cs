@@ -244,7 +244,7 @@ namespace Ankh.Selection
 
             int hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out id);
 
-            if (hr == VSConstants.S_OK || hierPtr != IntPtr.Zero)
+            if (hr == VSConstants.S_OK && hierPtr != IntPtr.Zero)
             {
                 IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
                 Marshal.Release(hierPtr); // we are responsible to release the refcount on the out IntPtr parameter
