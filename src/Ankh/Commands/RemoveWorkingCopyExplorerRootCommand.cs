@@ -18,9 +18,10 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus( IContext context )
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            return context.WorkingCopyExplorer.IsRootSelected ? Enabled : EnvDTE.vsCommandStatus.vsCommandStatusInvisible;
+            if(!e.Context.WorkingCopyExplorer.IsRootSelected)
+                e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)

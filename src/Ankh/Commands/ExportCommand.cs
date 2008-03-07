@@ -19,13 +19,6 @@ namespace Ankh.Commands
          VSNetControl( "Tools.AnkhSVN", Position = 3 )]
     public class ExportCommand : CommandBase
     {
-        #region Implementation of ICommand
-
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
-        {
-            return Enabled;
-        }
-
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
@@ -51,7 +44,5 @@ namespace Ankh.Commands
                 }
             }
         }
-
-        #endregion
     }
 }

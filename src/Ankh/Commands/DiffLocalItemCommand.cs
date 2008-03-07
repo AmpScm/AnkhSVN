@@ -1,7 +1,6 @@
 // $Id$
 using System.IO;
 using Ankh.UI;
-using EnvDTE;
 using SHDocVw;
 using AnkhSvn.Ids;
 
@@ -26,7 +25,7 @@ namespace Ankh.Commands
 
             try
             {
-                this.SaveAllDirtyDocuments( context );
+                SaveAllDirtyDocuments( context );
 
                 context.StartOperation( "Diffing" );
 

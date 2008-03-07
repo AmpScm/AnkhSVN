@@ -1,6 +1,4 @@
 // $Id: ViewRepositoryFileCommand.cs 738 2003-06-22 23:25:33Z Arild $
-using EnvDTE;
-
 using System.IO;
 using System.Collections;
 

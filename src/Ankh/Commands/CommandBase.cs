@@ -1,6 +1,5 @@
 // $Id$
 using System;
-using EnvDTE;
 
 using Ankh.UI;
 using System.Xml.Xsl;
@@ -17,39 +16,12 @@ namespace Ankh.Commands
     /// </summary>
     public abstract class CommandBase : ICommand
     {
-        /// <summary>
-        /// Get the status of the command
-        /// </summary>
-        [Obsolete("Please implement Update(CommandUpdateEventArgs)")]
-        public virtual vsCommandStatus QueryStatus(IContext context)
-        {
-            return (vsCommandStatus)999;
-        }   
-
         public virtual void OnUpdate(CommandUpdateEventArgs e)
         {
-            EnvDTE.vsCommandStatus status = QueryStatus(e.Context);
-
-            if (status == (vsCommandStatus)999)
-                return; // Not implemented value; see above
-
-            if ((status & EnvDTE.vsCommandStatus.vsCommandStatusEnabled) == 0)
-                e.Enabled = false;
-
-            if ((status & EnvDTE.vsCommandStatus.vsCommandStatusLatched) != 0)
-                e.Latched = true;
-
-            if ((status & EnvDTE.vsCommandStatus.vsCommandStatusNinched) != 0)
-                e.Ninched = true;
-
-            if ((status & EnvDTE.vsCommandStatus.vsCommandStatusInvisible) != 0)
-                e.Visible = false;
+            // Just leave the defaults: Enabled          
         }
 
-        public virtual void OnExecute(CommandEventArgs e)
-        {
-            Execute(e.Context, e.Argument as string);
-        }
+        public abstract void OnExecute(CommandEventArgs e);
 
         /// <summary>
         /// Gets whether the Shift key was down when the current window message was send
@@ -62,17 +34,10 @@ namespace Ankh.Commands
             }
         }
 
-        protected void SaveAllDirtyDocuments(IContext context)
+        protected static void SaveAllDirtyDocuments(IContext context)
         {
             context.DTE.ExecuteCommand("File.SaveAll", "");
         }
-
-        protected const vsCommandStatus Enabled =
-            vsCommandStatus.vsCommandStatusEnabled |
-            vsCommandStatus.vsCommandStatusSupported;
-
-        protected const vsCommandStatus Disabled =
-            vsCommandStatus.vsCommandStatusSupported;
 
         protected static XslCompiledTransform GetTransform(IContext context, string name)
         {
@@ -111,19 +76,5 @@ namespace Ankh.Commands
                 }
             }
         }
-
-		protected IList<SvnItem> GetSvnItems(IContext context, IEnumerable<string> paths)
-		{
-			List<SvnItem> items = new List<SvnItem>();
-			foreach (string path in paths)
-			{
-				SvnItem i = context.StatusCache[path];
-
-				if (i != null)
-					items.Add(i);
-			}
-
-			return items;
-		}
     }
 }

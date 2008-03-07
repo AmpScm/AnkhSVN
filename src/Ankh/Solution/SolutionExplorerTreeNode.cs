@@ -13,6 +13,7 @@ using System.IO;
 using C = Utils.Win32.Constants;
 using SharpSvn;
 using AnkhSvn.Ids;
+using Ankh.Commands;
 
 namespace Ankh.Solution
 {
@@ -402,13 +403,10 @@ namespace Ankh.Solution
     [VSNetControl( "Tools.AnkhSVN", Position=1 )]
     public class CheckForOrphanedTreeNodes : Ankh.Commands.CommandBase
     {
-        public override vsCommandStatus QueryStatus( IContext context )
+        public override void OnExecute(CommandEventArgs e)
         {
-            return Enabled;
-        }
+            IContext context = e.Context;
 
-        public override void Execute( IContext context, string parameters )
-        {
             context.StatusCache.ScanForOrphanedTreeNodes(context.OutputPane);
         }
     }

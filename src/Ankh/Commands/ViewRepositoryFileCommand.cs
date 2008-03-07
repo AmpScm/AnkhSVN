@@ -1,10 +1,6 @@
 // $Id$
-using EnvDTE;
-
-using System.IO;
+using System;
 using System.Collections;
-
-using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
 
 namespace Ankh.Commands
@@ -18,12 +14,13 @@ namespace Ankh.Commands
     public abstract class ViewRepositoryFileCommand : CommandBase
     {
         #region ICommand Members
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            // we enable it if it's a file.
-            return context.RepositoryExplorer.SelectedNode != null &&
-                !context.RepositoryExplorer.SelectedNode.IsDirectory ? 
-                Enabled : Disabled;
+            if (e.Context.RepositoryExplorer.SelectedNode == null ||
+                e.Context.RepositoryExplorer.SelectedNode.IsDirectory)
+            {
+                e.Enabled = false;
+            }
         }
         #endregion
       

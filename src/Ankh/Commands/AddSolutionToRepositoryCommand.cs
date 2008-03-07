@@ -2,7 +2,6 @@ using System;
 using Ankh.UI;
 using System.Windows.Forms;
 using Utils;
-using EnvDTE;
 using System.IO;
 using System.Collections;
 
@@ -30,22 +29,22 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if ( context.AnkhLoadedForSolution || 
-                !File.Exists(context.DTE.Solution.FullName))
+            if (e.Context.AnkhLoadedForSolution ||
+                !File.Exists(e.Context.DTE.Solution.FullName))
             {
-                return Disabled;
+                e.Enabled = false;
             }
-            else
-                return context.SolutionIsOpen ? Enabled : Disabled;
+            else if (!e.Context.SolutionIsOpen)
+                e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
 
-            this.SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments( context );
 
             string url;
 

@@ -25,13 +25,13 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if ( context.Selection.GetSelectionResources( true, 
-                new ResourceFilterCallback( SvnItem.VersionedSingleFileFilter) ).Count > 0 )
-                return Enabled;
-            else
-                return Disabled;
+            if (e.Context.Selection.GetSelectionResources( true, 
+                new ResourceFilterCallback( SvnItem.VersionedSingleFileFilter) ).Count == 0 )
+            {
+                e.Enabled = false;
+            }
         }
 
         public override void OnExecute(CommandEventArgs e)

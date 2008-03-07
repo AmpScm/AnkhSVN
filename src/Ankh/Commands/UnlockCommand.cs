@@ -18,11 +18,13 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IList resources = context.Selection.GetSelectionResources(true, 
+            IList resources = e.Context.Selection.GetSelectionResources(true, 
                 new ResourceFilterCallback( SvnItem.LockedFilter ) );
-            return resources.Count > 0 ? CommandBase.Enabled : CommandBase.Disabled;
+
+            if (resources.Count == 0)
+                e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)

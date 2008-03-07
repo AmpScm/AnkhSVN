@@ -14,13 +14,6 @@ namespace Ankh.Commands
          VSNetControl( "WorkingCopyExplorer", Position = 1 )]
     public class AddWorkingCopyExplorerRootCommand : CommandBase
     {
-        #region Implementation of ICommand
-
-        public override EnvDTE.vsCommandStatus QueryStatus( IContext context )
-        {
-            return Enabled;
-        }
-
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
@@ -31,7 +24,5 @@ namespace Ankh.Commands
                 context.WorkingCopyExplorer.AddRoot( newRoot );
             }
         }
-
-        #endregion
     }
 }

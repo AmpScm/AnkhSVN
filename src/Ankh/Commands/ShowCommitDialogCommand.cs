@@ -15,20 +15,11 @@ namespace Ankh.Commands
          VSNetControl( "Tools.AnkhSVN", Position = 2 )]
     public class ShowCommitDialogCommand : CommandBase
     {
-        #region Implementation of ICommand
-
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
-        {
-            return Enabled;
-        }
-
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
 
             context.Package.ShowToolWindow(AnkhToolWindow.PendingChanges);
         }
-
-        #endregion
     }
 }

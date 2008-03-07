@@ -6,10 +6,6 @@ using System.Collections;
 using System.Threading;
 using System.IO;
 using Utils;
-
-
-
-using EnvDTE;
 using SharpSvn;
 using AnkhSvn.Ids;
 
@@ -42,7 +38,7 @@ namespace Ankh.Commands
             IContext context = e.Context;
 
             // make sure all files are saved
-            this.SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments( context );
 
             IList resources = context.Selection.GetSelectionResources( true, 
                 new ResourceFilterCallback(SvnItem.ModifiedFilter) );

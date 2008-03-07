@@ -1,13 +1,13 @@
-    using EnvDTE;
-using System.Diagnostics;
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Utils;
 using System.Threading;
 using AnkhSvn.Ids;
+using EnvDTE;
+using Utils;
 
 namespace Ankh.Commands
 {
@@ -21,11 +21,6 @@ namespace Ankh.Commands
         public RunSvnCommand()
         {
             this.workingDirectory = Environment.CurrentDirectory;
-        }
-
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
-        {
-            return Enabled;
         }
 
         public override void OnExecute(CommandEventArgs e)

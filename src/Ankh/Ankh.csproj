@@ -220,9 +220,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\CatRunner.cs" />
-    <Compile Include="Commands\ChangeAdminDirNameCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\CheckoutCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -283,7 +280,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\Mapper\CommandMapper.cs" />
-    <None Include="Commands\Mapper\CommandMap.cs" />
     <Compile Include="Commands\RefreshCommand.cs">
       <SubType>Code</SubType>
     </Compile>

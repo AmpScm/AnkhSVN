@@ -20,15 +20,13 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if ( context.RepositoryExplorer.SelectedNode != null &&
-                context.RepositoryExplorer.SelectedNode.IsDirectory )
+            if (e.Context.RepositoryExplorer.SelectedNode == null ||
+                !e.Context.RepositoryExplorer.SelectedNode.IsDirectory )
             {
-                return Enabled;
+                e.Enabled = false;
             } 
-            else
-                return Disabled;
         }
 
         public override void OnExecute(CommandEventArgs e)
