@@ -92,6 +92,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>pdbonly</DebugType>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '(svnlib) Release|AnyCPU' ">
     <OutputPath>bin\(svnlib) Release\</OutputPath>
@@ -352,30 +353,16 @@
     <Compile Include="ConflictManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="Connect.cs">
-      <SubType>Code</SubType>
-    </None>
-    <Compile Include="DteUtils.cs" />
-    <Compile Include="Enumerators.cs" />
     <Compile Include="ErrorHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventSinks\CommandsEventSink.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventSinks\DocumentEventsSink.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\EventSink.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EventSinks\HierarchyEventsSink.cs" />
     <Compile Include="EventSinks\ProjectFilesEventSink.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EventSinks\SolutionEventsSink.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="EventSinks\SolutionEventsSink.cs" />
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
     <Compile Include="IAnkhPackage.cs" />
     <Compile Include="IAnkhSelectionContainer.cs" />
@@ -383,22 +370,21 @@
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selection\SelectionContext.cs" />
-    <Compile Include="Solution\IRefreshableProject.cs" />
-    <Compile Include="Solution\SolutionExplorerWindow.cs" />
-    <Compile Include="Solution\SolutionTreeViewManager.cs" />
+    <Content Include="SolutionExplorer\Explorer.cs" />
+    <Compile Include="Selection\SelectionUtils.cs" />
+    <Compile Include="SolutionExplorer\SolutionExplorerWindow.cs" />
+    <Compile Include="SolutionExplorer\SolutionTreeViewManager.cs" />
     <Compile Include="StatusCache\AnkhStatus.cs" />
     <Compile Include="StatusCache\StatusCache.cs" />
     <Compile Include="StatusCache\SvnItem.cs" />
     <Compile Include="StatusImages.cs" />
+    <Compile Include="TreeNode.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemItem.cs" />
     <Compile Include="NodeStatus.cs" />
     <Compile Include="NodeStatusKind.cs" />
     <Compile Include="NoProjectAutomationObjectException.cs" />
-    <Compile Include="Solution\SolutionExplorerTreeNode.cs" />
-    <Compile Include="Solution\SolutionFolderNode.cs" />
-    <Compile Include="TreeNode.cs" />
     <Compile Include="Extenders\ExtenderProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -415,9 +401,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IErrorHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ISolutionExplorer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IUIShell.cs">
@@ -449,26 +432,9 @@
     <Compile Include="ResourceBitmaps.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Solution\Explorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Solution\INodeVisitor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Solution\ParsedSolution.cs" />
-    <Compile Include="Solution\ParsedSolutionItem.cs" />
-    <Compile Include="Solution\ProjectItemNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Solution\ProjectNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Solution\SolutionNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SvnClient.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Content Include="SolutionExplorer\lock.ico" />
+    <Content Include="SolutionExplorer\lockedreadonly.ico" />
+    <Content Include="SolutionExplorer\readonly.ico" />
     <Compile Include="SwitchDialogInfo.cs" />
     <Compile Include="UIShell.cs">
       <SubType>Code</SubType>
@@ -487,7 +453,6 @@
     <Compile Include="VSNetProjectNodeControlAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="VSProject.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemRootItem.cs" />
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorer.cs" />
     <Compile Include="WorkingCopyOperations.cs" />
@@ -501,15 +466,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="status_icons.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="lock.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="lockedreadonly.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="readonly.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

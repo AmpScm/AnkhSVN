@@ -23,60 +23,12 @@ namespace Ankh.Extenders
 
         public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, IExtenderSite ExtenderSite, int Cookie)
         {
-            try
-            {
-                IList resources = this.context.SolutionExplorer.GetSelectionResources(false);
-                if ( resources.Count > 0 )
-                {
-                    SvnItem resource = (SvnItem)resources[0];
-
-                    // is this resource already cached?
-                    ResourceExtender extender = (ResourceExtender)this.extenders[ 
-                        resource.Path ];
-                    if ( extender == null )
-                    {
-                        extender = new ResourceExtender();
-                        this.extenders[resource.Path] = extender;
-                    }
-
-                    // make sure it's up to date
-                    resource.Refresh( this.context.Client );
-                    extender.SetStatus( resource.Status );
- 
-                    return extender;
-                }
-                else
-                    return null;
-            }
-            catch( Exception ex )
-            {
-                this.context.ErrorHandler.Handle( ex );
-                return null;
-            }
+            return null;
         }
 
         public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
         {
-            try
-            {
-				if (!this.context.AnkhLoadedForSolution)
-				return false;
-
-                IList resources = 
-                    this.context.SolutionExplorer.GetSelectionResources(false);
-                if ( resources.Count > 0 )
-                {
-                    SvnItem resource = (SvnItem)resources[0];
-                    return resource.IsVersioned;
-                }
-                else
-                    return false;
-            }
-            catch( Exception ex )
-            {
-                this.context.ErrorHandler.Handle( ex );
-                return false;
-            }
+            return false;
         }
 
         #endregion

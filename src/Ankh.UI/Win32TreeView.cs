@@ -12,13 +12,17 @@ namespace Ankh.UI
     /// Wraps a HWND to a Win32 treeview
     /// </summary>
     public class Win32TreeView : NativeWindow
-    {
-        
+    {        
         public Win32TreeView( IntPtr hwnd )
         {
             this.CheckForZero( hwnd, "hwnd" );
             this.hwnd = hwnd;
-            this.AssignHandle(hwnd);
+            //this.AssignHandle(hwnd);
+        }
+
+        public bool IsValid
+        {
+            get { return true; }
         }
 
         /// <summary>

@@ -60,13 +60,13 @@ namespace Ankh
         /// </summary>
         public void CreateTaskItems()
         {
-            IList conflictItems =  this.context.SolutionExplorer.GetAllResources(new ResourceFilterCallback(ConflictedFilter)); 
+            /*IList conflictItems =  this.context.SolutionExplorer.GetAllResources(new ResourceFilterCallback(ConflictedFilter)); 
             foreach(SvnItem item in conflictItems)
             {
                 this.AddTask(item.Path);
             }
             if(conflictItems.Count > 0) 
-                this.NavigateTaskList(); 
+                this.NavigateTaskList(); */
         }
 
         /// <summary>

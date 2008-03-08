@@ -208,7 +208,7 @@ namespace Ankh.Commands
         private static ArrayList CheckForProjectsNotUnderTheSolutionRoot( IList vsProjects )
         {
             ArrayList notUnderSolutionRoot = new ArrayList();
-            ArrayList toRemove = new ArrayList();
+            /*ArrayList toRemove = new ArrayList();
             foreach ( VSProject vsProject in vsProjects )
             {
                 if ( !vsProject.IsUnderSolutionRoot )
@@ -222,7 +222,7 @@ namespace Ankh.Commands
             foreach(VSProject vsProject in toRemove)
             {
                 vsProjects.Remove( vsProject );
-            }
+            }*/
 
             return notUnderSolutionRoot;
         }
@@ -230,7 +230,7 @@ namespace Ankh.Commands
         private IList GetVSProjects(IContext context)
         {
             ArrayList list = new ArrayList();
-            foreach ( Project project in Enumerators.EnumerateProjects( context.DTE ) ) 
+            /*foreach ( Project project in Enumerators.EnumerateProjects( context.DTE ) ) 
             {
                 VSProject vsProject = VSProject.FromProject( context, project );
                 if ( !vsProject.IsSolutionFolder )
@@ -241,7 +241,7 @@ namespace Ankh.Commands
                 {
                     list.AddRange( vsProject.GetSubProjects(false) );
                 }
-            }
+            }*/
             return list;
         }
 
@@ -252,10 +252,10 @@ namespace Ankh.Commands
         /// <param name="context"></param>
         private void AddProjects( IContext context, IList vsProjects )
         {
-            foreach ( VSProject vsProject in vsProjects )
+            /*foreach ( VSProject vsProject in vsProjects )
             {
                 this.paths.AddRange( vsProject.AddProjectToSvn() ); 
-            }
+            }*/
         }
 
 

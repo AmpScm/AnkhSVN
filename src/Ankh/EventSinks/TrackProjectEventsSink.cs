@@ -15,7 +15,7 @@ using System.Collections.Specialized;
 using System.Collections;
 using Microsoft.VisualStudio.Shell.Interop;
 
-using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using IServiceProvider = System.IServiceProvider;
 using SharpSvn;
 using Microsoft.VisualStudio;
 
@@ -505,15 +505,8 @@ namespace Ankh.EventSinks
         {
             // The DTE object is also a service provider, the starting point for retrieving any kind of service in the VS env
             IServiceProvider sp = this.context.ServiceProvider;
-            IntPtr svcPtr;
 
-            // This is the service and interface we want
-            Guid serviceGuid = typeof( SVsTrackProjectDocuments ).GUID;
-            Guid interfaceGuid = typeof( IVsTrackProjectDocuments2 ).GUID;
-
-            // Get an interface and convert it to a C# reference
-            sp.QueryService( ref serviceGuid, ref interfaceGuid, out svcPtr );
-            this.trackProjectDocuments = (IVsTrackProjectDocuments2)Marshal.GetObjectForIUnknown( svcPtr );
+            this.trackProjectDocuments = (IVsTrackProjectDocuments2)sp.GetService(typeof(SVsTrackProjectDocuments));
 
             // ATPDE will return S_OK while not setting the cookie if the interop definition of the IVTPD interface is wrong
             if ( this.trackProjectDocuments.AdviseTrackProjectDocumentsEvents( this, out this.cookie ) != VSConstants.S_OK || this.cookie == 0 )

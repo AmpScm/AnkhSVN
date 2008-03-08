@@ -8,7 +8,7 @@ using System.Globalization;
 using System.ComponentModel;
 using Microsoft.VisualStudio.Shell.Interop;
 
-using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using IServiceProvider = System.IServiceProvider;
 using Microsoft.VisualStudio;
 using SharpSvn;
 
@@ -19,44 +19,33 @@ namespace Ankh.EventSinks
     /// </summary>
     public class SolutionEventsSink : EventSink, IVsSolutionEvents
     {
-        public event CancelEventHandler SolutionLoaded;
-        public event EventHandler SolutionBeforeClosing;
+        public event EventHandler AfterOpenSolution;
+        public event EventHandler BeforeCloseSolution;
 
         public SolutionEventsSink( IContext context )
             : base( context )
         {
             this.AdviseSolutionEvents();
-
         }
 
         private void AdviseSolutionEvents()
         {
             IServiceProvider sp = this.Context.ServiceProvider;
-            Guid serviceGuid = typeof(SVsSolution).GUID;
-            Guid interfaceGuid = typeof(IVsSolution).GUID;
 
-            IntPtr ptr;
-            Marshal.ThrowExceptionForHR(sp.QueryService( ref serviceGuid, ref interfaceGuid, out ptr ));
-            this.solution = (IVsSolution)Marshal.GetObjectForIUnknown( ptr );
+            this.solution = (IVsSolution)sp.GetService(typeof(SVsSolution));
+            
             Marshal.ThrowExceptionForHR( this.solution.AdviseSolutionEvents( this, out this.cookie ) );
         }
 
         public override void Unhook()
         {
-            this.UnhookEventsForSolution();
             this.solution.UnadviseSolutionEvents( this.cookie );
-        }
-
-        public void InitializeForLoadedSolution()
-        {
-            this.SetupEventsForSolution();
         }
 
         #region IVsSolutionEvents Members
 
         int IVsSolutionEvents.OnAfterOpenProject( IVsHierarchy pHierarchy, int fAdded )
         {
-            this.Context.SolutionExplorer.SyncAll();
             return VSConstants.S_OK;
         }
 
@@ -87,7 +76,8 @@ namespace Ankh.EventSinks
 
         int IVsSolutionEvents.OnAfterOpenSolution( object pUnkReserved, int fNewSolution )
         {
-            this.SetupEventsForSolution();
+            if (AfterOpenSolution != null)
+                AfterOpenSolution(this, EventArgs.Empty);
 
             return VSConstants.S_OK;
         }       
@@ -99,6 +89,8 @@ namespace Ankh.EventSinks
 
         int IVsSolutionEvents.OnBeforeCloseSolution( object pUnkReserved )
         {
+            if (BeforeCloseSolution != null)
+                BeforeCloseSolution(this, EventArgs.Empty);
             return VSConstants.S_OK;
         }
 
@@ -110,31 +102,7 @@ namespace Ankh.EventSinks
 
         #endregion
 
-        private void SetupEventsForSolution()
-        {
-            this.eventSinks = new ArrayList();
-
-            this.eventSinks.Add( new TrackProjectDocumentsEventSink( this.Context ) );
-            this.eventSinks.Add( new ProjectFilesEventSink( this.Context ) );
-            this.eventSinks.Add( new DocumentEventsSink( this.Context ) );
-            this.eventSinks.Add( new CommandsEventSink( this.Context ) );
-        }
-
-        private void UnhookEventsForSolution()
-        {
-            if ( this.Context.AnkhLoadedForSolution )
-            {
-                foreach ( EventSink sink in this.eventSinks )
-                    sink.Unhook();
-
-                this.eventSinks = null;
-            }
-        }
-
         private uint cookie;
         private IVsSolution solution;
-        private IList eventSinks;
-
-        
     }
 }
