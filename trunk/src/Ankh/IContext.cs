@@ -1,9 +1,8 @@
 // $Id$
 using System.Windows.Forms;
-using Ankh.Solution;
 using System;
 
-using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using IServiceProvider = System.IServiceProvider;
 using SharpSvn;
 using Ankh.UI.Services;
 using Ankh.Selection;
@@ -31,10 +30,8 @@ namespace Ankh
         IUIShell UIShell { get; }
 
         /// <summary>
-        /// The SolutionExplorer object.
+        /// 
         /// </summary>
-        ISolutionExplorer SolutionExplorer { get; }
-
         string SolutionDirectory{ get; }
 
         /// <summary>

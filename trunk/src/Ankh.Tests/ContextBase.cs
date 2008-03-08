@@ -6,7 +6,7 @@ using System.Collections;
 using System.Windows.Forms;
 using System.IO;
 
-using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using IServiceProvider = System.IServiceProvider;
 using SharpSvn;
 using Ankh.UI.Services;
 
@@ -218,20 +218,6 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual ISolutionExplorer SolutionExplorer
-        {
-            get
-            {
-                if ( this.explorer == null )
-                    this.explorer = new ExplorerImpl(this);
-                return this.explorer;
-            }
-            set
-            {
-                this.explorer = value;
-            }
-        }
-
         public event System.EventHandler Unloading;
 
         public virtual bool AnkhLoadedForSolution
@@ -322,149 +308,6 @@ namespace Ankh.Tests
             #endregion
 
         }
-
-        public class ExplorerImpl : ISolutionExplorer
-        {
-            public ExplorerImpl( IContext ctx )
-            {
-                this.context = ctx;
-            }
-
-            #region ISolutionExplorer Members
-
-            public virtual System.Collections.IList GetItemResources(ProjectItem item, bool recursive)
-            {
-                ArrayList list = new ArrayList();
-                for( short i = 1; i <= item.FileCount; i++ )
-                {
-                    string path = item.get_FileNames(i);
-
-					SvnStatusArgs sa = new SvnStatusArgs();
-					SvnStatusEventArgs ea = null;
-
-					this.context.Client.Status(path, sa,
-						delegate(object sender, SvnStatusEventArgs e)
-						{
-							e.Detach();
-							ea = e;
-						});
-
-                    list.Add( new SvnItem( path, ea ) );
-                }
-                return list;
-            }
-
-            public virtual void Unload()
-            {
-                // TODO:  Add Explorer.Unload implementation
-            }
-
-            public virtual void VisitSelectedNodes(Ankh.Solution.INodeVisitor visitor)
-            {
-                // TODO:  Add Explorer.VisitSelectedNodes implementation
-            }
-
-            public virtual ProjectItem GetSelectedProjectItem()
-            {
-                // TODO:  Add Explorer.GetSelectedProjectItem implementation
-                return null;
-            }
-
-            public virtual void Refresh(ProjectItem item)
-            {
-                // TODO:  Add Explorer.Refresh implementation
-            }
-
-            void Ankh.ISolutionExplorer.Refresh(Project project)
-            {
-                // TODO:  Add Explorer.Ankh.ISolutionExplorer.Refresh implementation
-            }
-
-
-            public bool RenameInProgress
-            {
-                get { return false; }
-            }
-
-
-            #endregion
-
-            #region ISelectionContainer Members
-
-            public virtual void RefreshSelectionParents()
-            {
-                // TODO:  Add Explorer.RefreshSelectionParents implementation
-            }
-
-            public virtual void SyncAll()
-            {
-                // TODO:  Add Explorer.SyncAll implementation
-            }
-
-            public virtual System.Collections.IList GetSelectionResources(bool getChildItems, Ankh.ResourceFilterCallback filter)
-            {
-                // TODO:  Add Explorer.GetSelectionResources implementation
-                ArrayList resources = new ArrayList();
-                foreach( SvnItem item in this.Selection )
-                {
-                    if ( filter == null || filter(item) )
-                        resources.Add(item);
-                }
-                return resources;
-            }
-
-            System.Collections.IList Ankh.IAnkhSelectionContainer.GetSelectionResources(bool getChildItems)
-            {
-                // TODO:  Add Explorer.Ankh.ISelectionContainer.GetSelectionResources implementation
-                return this.GetSelectionResources( getChildItems, null );
-            }
-
-            public virtual void RefreshSelection()
-            {
-                // TODO:  Add Explorer.RefreshSelection implementation
-            }
-
-            public virtual System.Collections.IList GetAllResources(Ankh.ResourceFilterCallback filter)
-            {
-                // TODO:  Add Explorer.GetAllResources implementation
-                return null;
-            }
-
-            #endregion
-
-            private IContext context;
-
-            public IList Selection = new object[]{};
-
-            #region ISolutionExplorer Members
-
-
-            public void SetUpDelayedProjectRefresh(Project project)
-            {
-            }
-
-            public void SetUpDelayedSolutionRefresh()
-            {
-            }
-
-            #endregion
-
-            #region ISolutionExplorer Members
-
-
-            public void RemoveProject( Project project )
-            {
-                throw new Exception( "The method or operation is not implemented." );
-            }
-
-            public void SetUpDelayedProjectRefresh( Ankh.Solution.IRefreshableProject project )
-            {
-                throw new Exception( "The method or operation is not implemented." );
-            }
-
-            #endregion
-        }
-
 
         public class UIShellImpl : IUIShell
         {
@@ -820,7 +663,6 @@ namespace Ankh.Tests
         public StatusCache statusCache;
         public IErrorHandler errorHandler;
         public OutputPaneWriter outputPane;
-        public ISolutionExplorer explorer;
         public IUIShell uiShell;
         private ConfigLoader configLoader;
         private Control control;

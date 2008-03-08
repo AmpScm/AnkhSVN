@@ -509,42 +509,5 @@ namespace Ankh
 
         private AnkhStatus status;
         private string path;
-
-#if DEBUG
-        internal int ScanForOrphanedTreeNodes( TextWriter writer )
-        {
-            if ( this.Changed == null)
-            {
-                return 0;
-            }
-
-            int numOrphans = 0;
-
-            foreach ( Delegate del in this.Changed.GetInvocationList() )
-            {
-                Ankh.Solution.SolutionExplorerTreeNode treeNode = del.Target as Ankh.Solution.SolutionExplorerTreeNode;
-                if ( treeNode == null )
-                {
-                    continue;
-                }
-
-                if ( treeNode.IsOrphaned() )
-                {
-                    numOrphans++;
-                    
-                }
-            }
-
-            if ( numOrphans > 0 )
-            {
-                writer.WriteLine( "Found {0} orphaned node{1} for item {2}", 
-                    numOrphans,
-                    numOrphans == 1 ? "" : "s",
-                    this.Path );
-            }
-
-            return numOrphans;
-        }
-#endif
     }
 }

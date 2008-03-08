@@ -138,14 +138,6 @@ namespace Ankh.WorkingCopyExplorer
         public IList GetSelectionResources( bool getChildItems, ResourceFilterCallback filter )
         {
             ArrayList selectedResources = new ArrayList();
-            foreach ( IFileSystemItem sel in this.control.GetSelectedItems() )
-            {
-                FileSystemItem fileSystemItem = sel as FileSystemItem;
-                if ( fileSystemItem != null )
-                {
-                    fileSystemItem.GetResources( selectedResources, getChildItems, filter );
-                }
-            }
             return selectedResources;
         }
 
