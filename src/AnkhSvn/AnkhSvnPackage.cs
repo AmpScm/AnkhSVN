@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using AnkhSvn.Ids;
 using Ankh.UI.Services;
+using Ankh.VSPackage.Scc;
 
 namespace Ankh.VSPackage
 {
@@ -43,7 +44,7 @@ namespace Ankh.VSPackage
 	[Guid(GuidList.guidAnkhSvnPkgString)]
 	[CLSCompliant(false)]
 	[ProvideSourceControlProvider("AnkhSVN Source Control Provider", "#100")]
-	[ProvideService(typeof(SccProviderService), ServiceName = "AnkhSVN Source Control Provider Service")]
+	[ProvideService(typeof(AnkhSccProvider), ServiceName = "AnkhSVN - Subversion Source Control Provider Service")]
     [ProvideAutoLoad("F1536EF8-92EC-443C-9ED7-FDADF150DA82")] // = VSConstants.UICONTEXT_SolutionExists.ToString()
 	public sealed partial class AnkhSvnPackage : Package, IAnkhPackage
 	{
@@ -79,8 +80,8 @@ namespace Ankh.VSPackage
 
 			Debug.Assert(container != null, "Service container available");
 
-			SccProviderService service = new SccProviderService(this.AnkhContext);
-			container.AddService(typeof(SccProviderService), service, true);
+            AnkhSccProvider service = new AnkhSccProvider(this.AnkhContext);
+            container.AddService(typeof(AnkhSccProvider), service, true);
 			container.AddService(typeof(IAnkhSccService), service, true);
 
 			IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)GetService(typeof(IVsRegisterScciProvider));

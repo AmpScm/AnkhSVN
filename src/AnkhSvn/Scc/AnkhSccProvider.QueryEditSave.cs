@@ -62,6 +62,7 @@ namespace Ankh.VSPackage.Scc
         /// <returns></returns>
         public int IsReloadable(string pszMkDocument, out int pbResult)
         {
+            pbResult = 1;
             return VSConstants.S_OK;
         }
 
@@ -78,7 +79,19 @@ namespace Ankh.VSPackage.Scc
         }
 
         /// <summary>
-        /// Called when a file is about to be edited.
+        /// Called by projects and editors before modifying a file
+        /// The function allows the source control systems to take the necessary actions (checkout, flip attributes)
+        /// to make the file writable in order to allow the edit to continue
+        ///
+        /// There are a lot of cases to deal with during QueryEdit/QuerySave. 
+        /// - called in commmand line mode, when UI cannot be displayed
+        /// - called during builds, when save shoudn't probably be allowed
+        /// - called during projects migration, when projects are not open and not registered yet with source control
+        /// - checking out files may bring new versions from vss database which may be reloaded and the user may lose in-memory changes; some other files may not be reloadable
+        /// - not all editors call QueryEdit when they modify the file the first time (buggy editors!), and the files may be already dirty in memory when QueryEdit is called
+        /// - files on disk may be modified outside IDE and may have attributes incorrect for their scc status
+        /// - checkouts may fail
+        /// The sample provider won't deal with all these situations, but a real source control provider should!
         /// </summary>
         /// <param name="rgfQueryEdit">The RGF query edit.</param>
         /// <param name="cFiles">The c files.</param>
@@ -90,6 +103,8 @@ namespace Ankh.VSPackage.Scc
         /// <returns></returns>
         public int QueryEditFiles(uint rgfQueryEdit, int cFiles, string[] rgpszMkDocuments, uint[] rgrgf, VSQEQS_FILE_ATTRIBUTE_DATA[] rgFileInfo, out uint pfEditVerdict, out uint prgfMoreInfo)
         {
+            pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
+            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0;
             return VSConstants.S_OK;
         }
 
@@ -103,6 +118,8 @@ namespace Ankh.VSPackage.Scc
         /// <returns></returns>
         public int QuerySaveFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo, out uint pdwQSResult)
         {
+            pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+
             return VSConstants.S_OK;
         }
 
@@ -118,6 +135,7 @@ namespace Ankh.VSPackage.Scc
         /// <returns></returns>
         public int QuerySaveFiles(uint rgfQuerySave, int cFiles, string[] rgpszMkDocuments, uint[] rgrgf, VSQEQS_FILE_ATTRIBUTE_DATA[] rgFileInfo, out uint pdwQSResult)
         {
+            pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
             return VSConstants.S_OK;
         }
 
@@ -132,6 +150,8 @@ namespace Ankh.VSPackage.Scc
         /// <returns></returns>
         public int QuerySaveFile2(string pszMkDocument, uint[] rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo, out uint pdwQSResult, out uint prgfMoreInfo)
         {
+            pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+            prgfMoreInfo = (uint)tagVSQuerySaveResultFlags.QSR_DefaultFlag;
             return VSConstants.S_OK;
         }
 
@@ -148,6 +168,8 @@ namespace Ankh.VSPackage.Scc
         /// <returns></returns>
         public int QuerySaveFiles2(uint[] rgfQuerySave, int cFiles, string[] rgpszMkDocuments, uint[] rgrgf, VSQEQS_FILE_ATTRIBUTE_DATA[] rgFileInfo, out uint pdwQSResult, out uint prgfMoreInfo)
         {
+            pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+            prgfMoreInfo = (uint)tagVSQuerySaveResultFlags.QSR_DefaultFlag;
             return VSConstants.S_OK;
         }
     }
