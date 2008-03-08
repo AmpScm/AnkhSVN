@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
+using SharpSvn;
 
 namespace Ankh.VSPackage.Scc
 {
@@ -43,10 +45,12 @@ namespace Ankh.VSPackage.Scc
             return VSConstants.S_OK;
         }
 
-        /*public int GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode, out string pbstrTooltipText)
+        public int GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode, out string pbstrTooltipText)
         {
             // Todo find file via hierarchy, reusing code from SelectionContext 
-        }*/
+            pbstrTooltipText = "AnkhSvn";
+            return VSConstants.S_OK;
+        }
 
         public int GetCustomGlyphList(uint BaseIndex, out uint pdwImageListHandle)
         {

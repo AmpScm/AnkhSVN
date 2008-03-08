@@ -77,6 +77,9 @@ namespace Ankh.VSPackage.Scc
         /// </returns>
         public int GetNamespaceExtensionInformation(int vsofsdDlg, out string pbstrNamespaceGUID, out string pbstrTrayDisplayName, out string pbstrProtocolPrefix)
         {
+            pbstrNamespaceGUID = Guid.Empty.ToString();
+            pbstrTrayDisplayName = "Subversion";
+            pbstrProtocolPrefix = "svn://";
             return VSConstants.E_NOTIMPL;
         }
 
