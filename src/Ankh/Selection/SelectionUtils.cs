@@ -24,7 +24,7 @@ namespace Ankh.Selection
 
             for (int i = 0; i < nEls; i++)
             {
-                IntPtr pathIntPtr = Marshal.ReadIntPtr(pathStr[0].pElems, i);
+                IntPtr pathIntPtr = Marshal.ReadIntPtr(pathStr[0].pElems, i*IntPtr.Size);
                 files[i] = Marshal.PtrToStringUni(pathIntPtr);
 
                 if(free)
@@ -45,7 +45,7 @@ namespace Ankh.Selection
 
             for(int i = 0; i < items.Length; i++)
             {
-                items[i] = Marshal.ReadInt32(dwords[0].pElems, i);
+                items[i] = Marshal.ReadInt32(dwords[0].pElems, i * sizeof(int));
             }
 
             if(free && dwords[0].pElems != IntPtr.Zero)
