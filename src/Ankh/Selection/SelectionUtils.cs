@@ -104,7 +104,12 @@ namespace Ankh.Selection
             int hr = GetSccFiles(hierarchy, id, out fls, out flags);
 
             if (hr != VSConstants.S_OK || !includeSpecial || flags == null || flags.Length == 0)
+            {
+                if (hr == VSConstants.S_OK)
+                    files = fls;
+
                 return hr;
+            }
 
             bool foundOne = false;
             foreach(uint u in flags)
@@ -124,7 +129,7 @@ namespace Ankh.Selection
 
             IVsSccProject2 p2 = (IVsSccProject2)hierarchy;
 
-            List<string> fileList = new List<string>(files);
+            List<string> fileList = new List<string>(fls);
             List<int> flagList = new List<int>(flags);
 
             if(flagList.Count > fileList.Count)
