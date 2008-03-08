@@ -27,9 +27,7 @@ namespace Ankh.Tests
             this.uiShell = new MyUIShellImpl();
             this.ctx = new ContextBase( );
             this.uiShell.Context = this.ctx;
-            this.explorer = new ContextBase.ExplorerImpl( this.ctx );            
             this.ctx.UIShell = this.uiShell;
-            this.ctx.SolutionExplorer = this.explorer;
         }
 
         [Test]
@@ -80,7 +78,6 @@ namespace Ankh.Tests
             // single item
             string path = Path.Combine( this.WcPath, "Class1.cs" );
             SvnItem item = this.ctx.StatusCache[path];
-            this.explorer.Selection = new SvnItem[]{ item };
 
             this.cmd.OnExecute(new CommandEventArgs(AnkhCommand.Log, this.ctx));
 
@@ -123,7 +120,6 @@ namespace Ankh.Tests
 
         private MyUIShellImpl uiShell;
         private ContextBase ctx;
-        private ContextBase.ExplorerImpl explorer;
 
         private ICommand cmd;
 
