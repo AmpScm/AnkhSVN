@@ -144,7 +144,7 @@ namespace Ankh
             {
                 foreach( Watcher w in this.projectWatchers )
                 {
-                    if ( PathUtils.NormalizePath(w.FilePath) == PathUtils.NormalizePath(path) )
+                    if ( PathUtils.AreEqual(w.FilePath, path) )
                         return true;
                 }
             }
