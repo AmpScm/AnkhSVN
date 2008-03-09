@@ -41,7 +41,7 @@ namespace Ankh.Commands
                         w.Write( html );
 
                     // the Start Page window is a web browser
-                    Window browserWindow = context.DTE.Windows.Item( 
+                    Window browserWindow = ((IDTEContext)e.Context).DTE.Windows.Item( 
                         Constants.vsWindowKindWebBrowser );
                     WebBrowser browser = (WebBrowser)browserWindow.Object;
 

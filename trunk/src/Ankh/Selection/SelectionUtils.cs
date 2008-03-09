@@ -17,6 +17,7 @@ namespace Ankh.Selection
         /// </summary>
         /// <param name="pathStr">The path STR.</param>
         /// <returns></returns>
+        [CLSCompliant(false)]
         public static string[] GetFileNamesFromOleBuffer(CALPOLESTR[] pathStr, bool free)
         {
             int nEls = (int)pathStr[0].cElems;
@@ -36,6 +37,7 @@ namespace Ankh.Selection
             return files;
         }
 
+        [CLSCompliant(false)]
         public static int[] GetFlagsFromOleBuffer(CADWORD[] dwords, bool free)
         {
             if(dwords == null)
@@ -54,12 +56,13 @@ namespace Ankh.Selection
             return items;
         }
 
-        public static int GetSccFiles(IVsHierarchy hierarchy, uint id, out string[] files, out int[] flags)
+        [CLSCompliant(false)]
+        public static int GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, out int[] flags)
         {
             if (hierarchy == null)
                 throw new ArgumentNullException("hierarchy");
 
-            IVsSccProject2 p2 = hierarchy as IVsSccProject2;
+            IVsSccProject2 p2 = sccProject;
             int hr;
 
             if (p2 != null)
@@ -95,13 +98,14 @@ namespace Ankh.Selection
             return VSConstants.E_FAIL;
         }
 
-        public static int GetSccFiles(IVsHierarchy hierarchy, uint id, out string[] files, bool includeSpecial)
+        [CLSCompliant(false)]
+        public static int GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, bool includeSpecial)
         {
             string[] fls;
             int[] flags;
             files = null;
 
-            int hr = GetSccFiles(hierarchy, id, out fls, out flags);
+            int hr = GetSccFiles(hierarchy, sccProject, id, out fls, out flags);
 
             if (hr != VSConstants.S_OK || !includeSpecial || flags == null || flags.Length == 0)
             {
@@ -127,7 +131,7 @@ namespace Ankh.Selection
                 return VSConstants.S_OK;
             }
 
-            IVsSccProject2 p2 = (IVsSccProject2)hierarchy;
+            IVsSccProject2 p2 = sccProject;
 
             List<string> fileList = new List<string>(fls);
             List<int> flagList = new List<int>(flags);
@@ -192,14 +196,49 @@ namespace Ankh.Selection
             }
         }
 
+        [CLSCompliant(false)]
+        public static IVsSccProject2 GetSolutionAsSccProject(IServiceProvider context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            return new SolutionSccHelper(context);
+        }
+
         class SolutionSccHelper : IVsSccProject2
         {
             readonly IServiceProvider _context;
+            IVsSolution _solution;
+            IVsHierarchy _solAsHierarchy;
 
             public SolutionSccHelper(IServiceProvider context)
             {
                 _context = context;
             }
+
+            protected IVsSolution Solution
+            {
+                get
+                {
+                    if (_solution != null)
+                        return _solution;
+
+                    return _solution = (IVsSolution)_context.GetService(typeof(SVsSolution));
+                }
+            }
+
+            protected IVsHierarchy SolutionAsHierarchy
+            {
+                get
+                {
+                    if (_solAsHierarchy == null)
+                        _solAsHierarchy = Solution as IVsHierarchy;
+
+                    return _solAsHierarchy;
+                }
+            }
+
+
             #region IVsSccProject2 Members
 
             public int GetSccFiles(uint itemid, Microsoft.VisualStudio.OLE.Interop.CALPOLESTR[] pCaStringsOut, Microsoft.VisualStudio.OLE.Interop.CADWORD[] pCaFlagsOut)

@@ -7,12 +7,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+
 [assembly: AssemblyTitle("AnkhSvn")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("AnkhSVN - Subversion support for Visual Studio")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("AnkhSvn")]
-[assembly: AssemblyProduct("AnkhSvn")]
-[assembly: AssemblyCopyright("Copyright © Ankh Team 2008")]
+[assembly: AssemblyCompany("AnkhSVN Team")]
+[assembly: AssemblyProduct("AnkhSVN - Subversion support for Visual Studio")]
+[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]   
 [assembly: ComVisible(false)]     

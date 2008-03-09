@@ -7,122 +7,198 @@ using System.Runtime.InteropServices;
 using System.Collections;
 using Microsoft.VisualStudio.OLE.Interop;
 using IServiceProvider = System.IServiceProvider;
+using Microsoft.VisualStudio.Shell;
+using Ankh.SolutionExplorer;
 
 namespace Ankh.Selection
 {
-	public interface ISelectionContext
-	{
-		ICollection<string> GetSelectedFiles();
+    public interface ISelectionContext
+    {
+        ICollection<string> GetSelectedFiles();
         ICollection<string> GetSelectedFiles(bool recursive);
         ICollection<SvnItem> GetSelectedSvnItems();
-		ICollection<SvnItem> GetSelectedSvnItems(bool recursive);
-	}
+        ICollection<SvnItem> GetSelectedSvnItems(bool recursive);
 
-	/// <summary>
-	/// 
-	/// </summary>
-	class SelectionContext : IVsSelectionEvents, IDisposable, ISelectionContext
-	{
-		IServiceProvider _environment;
-		StatusCache _cache;
-		uint _cookie;
+        string SolutionFilename { get; }
 
-		uint _currentItem;
-		IVsHierarchy _currentHierarchy;
-		IVsMultiItemSelect _currentSelection;
-		ISelectionContainer _currentContainer;
-		string[] _filenames;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    class SelectionContext : IVsSelectionEvents, IDisposable, ISelectionContext
+    {
+        readonly IServiceProvider _context;
+        readonly StatusCache _cache;
+        readonly SolutionExplorerWindow _solutionExplorer;
+        bool _disposed;
+        uint _cookie;
+
+        uint _currentItem;
+        IVsHierarchy _currentHierarchy;
+        IVsMultiItemSelect _currentSelection;
+        ISelectionContainer _currentContainer;
+        IVsSolution _solution;
+        string[] _filenames;
         string[] _filenamesRecursive;
-		SvnItem[] _svnItems;
+        SvnItem[] _svnItems;
         SvnItem[] _svnItemsRecursive;
+        bool _deteminedSolutionExplorer;
+        bool _isSolutionExplorer;
+        string _solutionFilename;
 
-		public SelectionContext(IServiceProvider environment, StatusCache cache)
-		{
-			if (environment == null)
-				throw new ArgumentNullException("environment");
-			else if(cache == null)
-				throw new ArgumentNullException("cache");
+        public SelectionContext(IServiceProvider environment, StatusCache cache, SolutionExplorerWindow solutionExplorer)
+        {
+            if (environment == null)
+                throw new ArgumentNullException("environment");
+            else if (cache == null)
+                throw new ArgumentNullException("cache");
+            else if (solutionExplorer == null)
+                throw new ArgumentNullException("solutionExplorer");
 
-			_environment = environment;
-			_cache = cache;
+            _context = environment;
+            _cache = cache;
+            _solutionExplorer = solutionExplorer;
 
-			IVsMonitorSelection monitor = (IVsMonitorSelection)environment.GetService(typeof(IVsMonitorSelection));
+            IVsMonitorSelection monitor = (IVsMonitorSelection)environment.GetService(typeof(IVsMonitorSelection));
 
-			if (monitor != null)
-				Marshal.ThrowExceptionForHR(monitor.AdviseSelectionEvents(this, out _cookie));
-			else
-				_environment = null;
-		}
+            if (monitor != null)
+                Marshal.ThrowExceptionForHR(monitor.AdviseSelectionEvents(this, out _cookie));
+            else
+                _context = null;
+        }
 
-		public void Dispose()
-		{
-			if (_environment != null)
-			{
-				IVsMonitorSelection monitor = (IVsMonitorSelection)_environment.GetService(typeof(IVsMonitorSelection));
-				_environment = null;
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _disposed = true;
+                IVsMonitorSelection monitor = (IVsMonitorSelection)_context.GetService(typeof(IVsMonitorSelection));
 
-				Marshal.ThrowExceptionForHR(monitor.UnadviseSelectionEvents(_cookie));
-			}
-		}
+                Marshal.ThrowExceptionForHR(monitor.UnadviseSelectionEvents(_cookie));
+                ClearCache();
+            }
+        }
 
-		#region IVsSelectionEvents Members
+        #region IVsSelectionEvents Members
 
-		public int OnCmdUIContextChanged(uint dwCmdUICookie, int fActive)
-		{
-			/// Some global state change which might change UI cueues
-			return VSConstants.S_OK;
-		}
+        public int OnCmdUIContextChanged(uint dwCmdUICookie, int fActive)
+        {
+            /// Some global state change which might change UI cueues
+            return VSConstants.S_OK;
+        }
 
-		public int OnElementValueChanged(uint elementid, object varValueOld, object varValueNew)
-		{
-			// Some property changed
-			return VSConstants.S_OK;
-		}
+        public int OnElementValueChanged(uint elementid, object varValueOld, object varValueNew)
+        {
+            // Some property changed
+            return VSConstants.S_OK;
+        }
 
-		public int OnSelectionChanged(IVsHierarchy pHierOld, uint itemidOld, IVsMultiItemSelect pMISOld, ISelectionContainer pSCOld,
-				IVsHierarchy pHierNew, uint itemidNew, IVsMultiItemSelect pMISNew, ISelectionContainer pSCNew)
-		{
-			// The current selection changed; store for future reference
-			_currentHierarchy = pHierNew;
-			_currentItem = itemidNew;
-			_currentSelection = pMISNew;
-			_currentContainer = pSCNew;
+        public int OnSelectionChanged(IVsHierarchy pHierOld, uint itemidOld, IVsMultiItemSelect pMISOld, ISelectionContainer pSCOld,
+                IVsHierarchy pHierNew, uint itemidNew, IVsMultiItemSelect pMISNew, ISelectionContainer pSCNew)
+        {
+            if (!_disposed)
+            {
+                // The current selection changed; store for future reference
+                _currentHierarchy = pHierNew;
+                _currentItem = itemidNew;
+                _currentSelection = pMISNew;
+                _currentContainer = pSCNew;
+            }
 
-			ClearCache();
+            ClearCache();
 
-			return VSConstants.S_OK;
-		}
+            return VSConstants.S_OK;
+        }
 
-		private void ClearCache()
-		{
-			_filenames = null;
-			_svnItems = null;
+        private void ClearCache()
+        {
+            _filenames = null;
+            _svnItems = null;
             _filenamesRecursive = null;
             _svnItemsRecursive = null;
-		}
+            _deteminedSolutionExplorer = false;
+            _isSolutionExplorer = false;
+            _solution = null;
+            _solutionFilename = null;
+        }
 
-		#endregion
+        public IVsSolution Solution
+        {
+            get
+            {
+                if (_solution == null)
+                    _solution = (IVsSolution)_context.GetService(typeof(SVsSolution));
 
-		protected class SelectionItem : IEquatable<SelectionItem>
-		{
-			readonly IVsHierarchy _hierarchy;
-			readonly uint _id;
+                return _solution;
+            }
+        }
 
-			public SelectionItem(IVsHierarchy hierarchy, uint id)
-			{
-				_hierarchy = hierarchy;
-				_id = id;
-			}
+        public string SolutionFilename
+        {
+            get
+            {
+                if (_solutionFilename == null)
+                {
+                    if (Solution != null)
+                    {
+                        string solutionDir, solutionFile, solutionUserFile;
+                        if (Solution.GetSolutionInfo(out solutionDir, out solutionFile, out solutionUserFile) == VSConstants.S_OK)
+                        {
+                            _solutionFilename = solutionFile;
+                        }
+                    }
+                }
+                return _solutionFilename;
+            }
+        }
 
-			public IVsHierarchy Hierarchy
-			{
-				get { return _hierarchy; }
-			}
+        #endregion
 
-			public uint Id
-			{
-				get { return _id; }
-			}
+        protected class SelectionItem : IEquatable<SelectionItem>
+        {
+            readonly IVsHierarchy _hierarchy;
+            IVsSccProject2 _sccProject;
+            readonly uint _id;
+
+            public SelectionItem(IVsHierarchy hierarchy, uint id)
+            {
+                _hierarchy = hierarchy;
+                _id = id;
+            }
+
+            public SelectionItem(IVsHierarchy hierarchy, uint id, IVsSccProject2 project)
+            {
+                _hierarchy = hierarchy;
+                _sccProject = project;
+                _id = id;
+            }
+
+            public IVsHierarchy Hierarchy
+            {
+                get { return _hierarchy; }
+            }
+
+            public virtual IVsSccProject2 SccProject
+            {
+                get
+                {
+                    if (_sccProject == null)
+                        _sccProject = _hierarchy as IVsSccProject2;
+
+                    return _sccProject;
+                }
+            }
+
+            public uint Id
+            {
+                get { return _id; }
+            }
+
+            public virtual bool IsSolution
+            {
+                get { return false; }
+            }
 
             #region IEquatable<SelectionItem> Members
 
@@ -151,58 +227,92 @@ namespace Ankh.Selection
         {
             return recursive ? GetSelectedItemsRecursive() : GetSelectedItems();
         }
-        
-		protected IEnumerable<SelectionItem> GetSelectedItems()
-		{
-			if (_currentSelection != null)
-			{
-				uint nItems;
-				int withinSingleHierarchy;
-				Marshal.ThrowExceptionForHR(_currentSelection.GetSelectionInfo(out nItems, out withinSingleHierarchy));
 
-				uint flags = 0;
+        protected bool MightBeSolutionExplorerSelection
+        {
+            get
+            {
+                if (!_deteminedSolutionExplorer)
+                {
+                    _deteminedSolutionExplorer = true;
+                    IVsUIHierarchyWindow hw = _solutionExplorer.HierarchyWindow;
+                    IntPtr hierarchy;
+                    IVsMultiItemSelect ms;
+                    uint itemId;
 
-				bool singleHierarchy = (withinSingleHierarchy != 0);
+                    if (hw.GetCurrentSelection(out hierarchy, out itemId, out ms) != VSConstants.S_OK)
+                        return _isSolutionExplorer = false;
 
-				if (singleHierarchy && _currentHierarchy != null)
-					flags = (uint)__VSGSIFLAGS.GSI_fOmitHierPtrs; // Don't marshal the hierarchy for every item
+                    IVsHierarchy hier = null;
+                    if (hierarchy != IntPtr.Zero)
+                    {
+                        hier = (IVsHierarchy)Marshal.GetObjectForIUnknown(hierarchy);
+                        Marshal.Release(hierarchy);
+                    }
 
-				VSITEMSELECTION[] items = new VSITEMSELECTION[nItems];
+                    if (_currentItem != itemId)
+                        return _isSolutionExplorer = false;
 
-				Marshal.ThrowExceptionForHR(_currentSelection.GetSelectedItems(flags, nItems, items));
+                    if (ms != _currentSelection)
+                        return _isSolutionExplorer = false;
 
-				for (int i = 0; i < nItems; i++)
-				{
-					yield return new SelectionItem(singleHierarchy ? _currentHierarchy : items[i].pHier, items[i].itemid);
-				}
-			}
-			else if (_currentHierarchy != null)
-			{
-				yield return new SelectionItem(_currentHierarchy, _currentItem);
-			}
+                    _isSolutionExplorer = (hier is IVsSolution);
+                }
+
+                return _isSolutionExplorer;
+            }
+        }
+
+        protected IEnumerable<SelectionItem> GetSelectedItems()
+        {
+            if (_currentSelection != null)
+            {
+                uint nItems;
+                int withinSingleHierarchy;
+                Marshal.ThrowExceptionForHR(_currentSelection.GetSelectionInfo(out nItems, out withinSingleHierarchy));
+
+                uint flags = 0;
+
+                bool singleHierarchy = (withinSingleHierarchy != 0);
+
+                if (singleHierarchy && _currentHierarchy != null)
+                    flags = (uint)__VSGSIFLAGS.GSI_fOmitHierPtrs; // Don't marshal the hierarchy for every item
+
+                VSITEMSELECTION[] items = new VSITEMSELECTION[nItems];
+
+                Marshal.ThrowExceptionForHR(_currentSelection.GetSelectedItems(flags, nItems, items));
+
+                for (int i = 0; i < nItems; i++)
+                {
+                    SelectionItem si = new SelectionItem(singleHierarchy ? _currentHierarchy : items[i].pHier, items[i].itemid);
+
+                    if (si.Hierarchy != null)
+                        yield return si;
+                    else if (si.Id == VSConstants.VSITEMID_ROOT && MightBeSolutionExplorerSelection)
+                        yield return new SelectionItem((IVsHierarchy)Solution, si.Id, SelectionUtils.GetSolutionAsSccProject(_context));
+                    // else skip
+                }
+            }
+            else if (_currentHierarchy != null)
+            {
+                yield return new SelectionItem(_currentHierarchy, _currentItem);
+            }
             else if (_currentContainer == null)
-            { 
+            {
                 // No selection, no hierarchy.... -> no selection!
             }
             else if (_currentItem == VSConstants.VSITEMID_ROOT)
             {
                 // This is the case in the solution explorer when only the solution is selected
 
-                // TODO: Check if the container is the Solution Explorer
+                // We must validate whether the window is really the solution explorer
 
-                IVsSolution2 s2 = null;
-
-                if (_environment != null)
-                    s2 = (IVsSolution2)_environment.GetService(typeof(SVsSolution));
-
-                if (s2 != null)
+                if (MightBeSolutionExplorerSelection)
                 {
-                    IVsHierarchy h = s2 as IVsHierarchy;
-
-                    yield return new SelectionItem(h, _currentItem);
+                    yield return new SelectionItem((IVsHierarchy)Solution, _currentItem, SelectionUtils.GetSolutionAsSccProject(_context));
                 }
             }
-		}
+        }
 
         protected IEnumerable<SelectionItem> GetSelectedItemsRecursive()
         {
@@ -266,12 +376,12 @@ namespace Ankh.Selection
                     }
                 }
             }
-            
+
             // Note: There is a bug with firstchild on solutions pre vs2008, in that it contains
             // all projects on the top level instead of below solution folders. But we can ignore 
             // that as we would include the projects anyway
             object child;
-            Marshal.ThrowExceptionForHR(si.Hierarchy.GetProperty(si.Id, 
+            Marshal.ThrowExceptionForHR(si.Hierarchy.GetProperty(si.Id,
                 (int)__VSHPROPID.VSHPROPID_FirstChild, out child));
 
             uint childId = GetItemIdFromObject(child);
@@ -289,15 +399,15 @@ namespace Ankh.Selection
                     yield return ii;
                 }
 
-                Marshal.ThrowExceptionForHR(si.Hierarchy.GetProperty(i.Id, 
+                Marshal.ThrowExceptionForHR(si.Hierarchy.GetProperty(i.Id,
                     (int)__VSHPROPID.VSHPROPID_NextSibling, out child));
 
                 childId = GetItemIdFromObject(child);
             }
         }
-                
 
-		#region ISelectionContext Members
+
+        #region ISelectionContext Members
 
         public ICollection<string> GetSelectedFiles()
         {
@@ -305,58 +415,57 @@ namespace Ankh.Selection
         }
 
         public ICollection<string> GetSelectedFiles(bool recursive)
-		{
+        {
             if (recursive && (_filenamesRecursive != null))
                 return _filenamesRecursive;
-            else if(!recursive && (_filenames != null))
-				return _filenames;
+            else if (!recursive && (_filenames != null))
+                return _filenames;
 
-			List<string> filenames = new List<string>();
+            List<string> filenames = new List<string>();
 
-			// Selection can be generated by several objects. 
-			// E.g. the solution provider, a document, our own toolwindows..
-			foreach (SelectionItem i in GetSelectedItems(recursive))
-			{
+            // Selection can be generated by several objects. 
+            // E.g. the solution provider, a document, our own toolwindows..
+            foreach (SelectionItem i in GetSelectedItems(recursive))
+            {
                 string[] files;
 
-                Marshal.ThrowExceptionForHR(SelectionUtils.GetSccFiles(i.Hierarchy, i.Id, out files, true));
-
-                filenames.AddRange(files);
+                if (SelectionUtils.GetSccFiles(i.Hierarchy, i.SccProject, i.Id, out files, true) == VSConstants.S_OK)
+                    filenames.AddRange(files);
             }
 
-            if(recursive)
-			    return _filenamesRecursive = filenames.ToArray();
+            if (recursive)
+                return _filenamesRecursive = filenames.ToArray();
             else
                 return _filenames = filenames.ToArray();
-		}
+        }
 
         public ICollection<SvnItem> GetSelectedSvnItems()
         {
             return GetSelectedSvnItems(false);
         }
 
-		public ICollection<SvnItem> GetSelectedSvnItems(bool recursive)
-		{
+        public ICollection<SvnItem> GetSelectedSvnItems(bool recursive)
+        {
             if (recursive && (_svnItemsRecursive != null))
                 return _svnItemsRecursive;
             else if (!recursive && (_svnItems != null))
                 return _svnItems;
 
-			List<SvnItem> items = new List<SvnItem>();
-			foreach (string file in GetSelectedFiles(recursive))
-			{
-				SvnItem i = _cache[file];
+            List<SvnItem> items = new List<SvnItem>();
+            foreach (string file in GetSelectedFiles(recursive))
+            {
+                SvnItem i = _cache[file];
 
-				if (i != null)
-					items.Add(i);
-			}
+                if (i != null)
+                    items.Add(i);
+            }
 
-            if(recursive)
+            if (recursive)
                 return _svnItemsRecursive = items.ToArray();
             else
-			    return _svnItems = items.ToArray();
-		}
+                return _svnItems = items.ToArray();
+        }
 
-		#endregion		
-	}
+        #endregion
+    }
 }

@@ -5,6 +5,7 @@ using EnvDTE;
 using Ankh.UI;
 using System.Windows.Forms;
 using TestUtils;
+using System.ComponentModel.Design;
 
 namespace Ankh.Tests
 {
@@ -40,7 +41,7 @@ namespace Ankh.Tests
             IContext context = this.CreateContext();
             Assert.IsFalse( context.SolutionIsOpen );
 
-            context.DTE.Solution.Open( this.Solution );
+            ((IDTEContext)context).DTE.Solution.Open( this.Solution );
             
             Assert.IsTrue( context.SolutionIsOpen );
 
@@ -55,7 +56,7 @@ namespace Ankh.Tests
             IContext context = this.CreateContext();
             Assert.IsFalse( context.AnkhLoadedForSolution );
 
-            context.DTE.Solution.Open( this.Solution );
+            ((IDTEContext)context).Solution.Open(this.Solution);
 
             Assert.IsTrue( context.AnkhLoadedForSolution );
 
@@ -77,7 +78,7 @@ namespace Ankh.Tests
             File.Delete( solutionDir );
             Zip.ExtractZipResource( solutionDir, this.GetType(), "Ankh.Tests.unversioned.zip" );
 
-            context.DTE.Solution.Open( Path.Combine(solutionDir, "WindowsApplication.sln" ) );
+            ((IDTEContext)context).Solution.Open(Path.Combine(solutionDir, "WindowsApplication.sln"));
 
             Assert.IsFalse( context.AnkhLoadedForSolution );
 
@@ -95,7 +96,7 @@ namespace Ankh.Tests
             IContext context = this.CreateContext();
             ((UIShell)context.UIShell).AllowLoad = DialogResult.No;
 
-            context.DTE.Solution.Open( this.Solution );
+            ((IDTEContext)context).Solution.Open(this.Solution);
             
             Assert.IsFalse( context.AnkhLoadedForSolution );
 
@@ -113,7 +114,7 @@ namespace Ankh.Tests
             IContext context = this.CreateContext();
             ((UIShell)context.UIShell).AllowLoad = DialogResult.Cancel;
 
-            context.DTE.Solution.Open( this.Solution );
+            ((IDTEContext)context).Solution.Open(this.Solution);
             
             Assert.IsFalse( context.AnkhLoadedForSolution );
 
@@ -148,7 +149,7 @@ namespace Ankh.Tests
 
             IContext context = this.CreateContext();
             context.Unloading +=new EventHandler(context_Unloading);
-            context.DTE.Solution.Open( this.Solution );
+            ((IDTEContext)context).Solution.Open(this.Solution);
             context.Shutdown();
 
             Assert.IsTrue( this.unloadingCalled );

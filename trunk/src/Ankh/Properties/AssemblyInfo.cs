@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Resources;
 
 //
 // General Information about an assembly is controlled through the following 
@@ -9,14 +10,15 @@ using System.Runtime.CompilerServices;
 // associated with an assembly.
 
 [assembly: CLSCompliant(false)] // TODO: Should be true
-[assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("AnkhSVN - Subversion support for Visual Studio")]
+[assembly: AssemblyDescription("AnkhSVN - Subversion support for Visual Studio")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCompany("AnkhSVN Team")]
+[assembly: AssemblyProduct("AnkhSVN - Subversion support for Visual Studio")]
+[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: NeutralResourcesLanguage("en")]
 
 // We only want the Connect class to be visible
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
@@ -32,4 +34,4 @@ using System.Runtime.CompilerServices;
 // You can specify all the value or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersionAttribute("99.0.0.9999")]
+[assembly: AssemblyVersionAttribute("2.0.*")]

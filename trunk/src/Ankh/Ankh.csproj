@@ -370,7 +370,6 @@
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selection\SelectionContext.cs" />
-    <Content Include="SolutionExplorer\Explorer.cs" />
     <Compile Include="Selection\SelectionUtils.cs" />
     <Compile Include="SolutionExplorer\SolutionExplorerWindow.cs" />
     <Compile Include="SolutionExplorer\SolutionTreeViewManager.cs" />

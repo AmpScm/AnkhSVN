@@ -28,7 +28,7 @@ namespace Ankh.Commands
             IContext context = e.Context;
 
             this.context = context;
-            this.window = (CommandWindow)((Window)context.DTE.Windows.Item( 
+            this.window = (CommandWindow)((Window)((IDTEContext)this.context).DTE.Windows.Item( 
                 EnvDTE.Constants.vsWindowKindCommandWindow )).Object;
 
             // is it one of the intrinsic commands?

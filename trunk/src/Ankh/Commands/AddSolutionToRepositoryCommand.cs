@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Text;
 using SharpSvn;
 using AnkhSvn.Ids;
-using EnvDTE;
 
 namespace Ankh.Commands
 {
@@ -30,8 +29,8 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (e.Context.AnkhLoadedForSolution ||
-                !File.Exists(e.Context.DTE.Solution.FullName))
+            if (e.Context.AnkhLoadedForSolution || string.IsNullOrEmpty(e.Selection.SolutionFilename) 
+                || !File.Exists(e.Selection.SolutionFilename))
             {
                 e.Enabled = false;
             }
@@ -98,8 +97,8 @@ namespace Ankh.Commands
 
             // now check out the repository directory into the solution dir
             context.StartOperation( "Checking out repository directory" );
-            string solutionDir = Path.GetDirectoryName( 
-                context.DTE.Solution.FullName );
+            string solutionDir = Path.GetDirectoryName(
+                e.Selection.SolutionFilename);
             try
             {
                 // check out the repository directory specified               
@@ -119,9 +118,9 @@ namespace Ankh.Commands
                 // the solution dir is already a wc                
                 this.paths = new ArrayList();
                 this.paths.Add( solutionDir );
-                    
-                context.Client.Add( context.DTE.Solution.FullName, SvnDepth.Empty );
-                this.paths.Add( context.DTE.Solution.FullName );
+
+                context.Client.Add(e.Selection.SolutionFilename, SvnDepth.Empty);
+                this.paths.Add(e.Selection.SolutionFilename);
                 this.AddProjects( context, vsProjects );  
             }
             catch( Exception )
@@ -185,7 +184,8 @@ namespace Ankh.Commands
                 }
                         
                 // we want ankh to get enabled right away
-                context.DTE.ExecuteCommand( "Ankh.ToggleAnkh", "" );
+                // BH: This won't work any more
+                // context.DTE.ExecuteCommand( "Ankh.ToggleAnkh", "" );
 
                 // Make sure the URL typed gets remembered.
                 RegistryUtils.CreateNewTypedUrl( url );

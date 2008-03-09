@@ -31,7 +31,7 @@ namespace Ankh.Commands
                 CatRunner runner = new CatRunner(node.Name, node.Revision, new Uri(node.Url));
                 context.UIShell.RunWithProgressDialog( runner, "Retrieving file" );
 
-                context.DTE.ItemOperations.OpenFile( runner.Path, 
+                ((IDTEContext)e.Context).DTE.ItemOperations.OpenFile(runner.Path, 
                     EnvDTE.Constants.vsViewKindPrimary );
             }
             finally

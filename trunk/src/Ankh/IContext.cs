@@ -9,6 +9,15 @@ using Ankh.Selection;
 
 namespace Ankh
 {
+    [CLSCompliant(false)]
+    public interface IDTEContext
+    {
+        /// <summary>
+        /// The top level automation object.
+        /// </summary>
+        EnvDTE._DTE DTE { get; }
+    }
+
     public interface IContext
     {
         /// <summary>
@@ -16,7 +25,7 @@ namespace Ankh
         /// </summary>
         event EventHandler Unloading;
 
-        IAnkhPackage Package { get; }
+        IAnkhPackage Package { get; }        
 
         /// <summary>
         /// The top level automation object.
