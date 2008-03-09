@@ -7,6 +7,7 @@ using Microsoft.VSSDK.Tools.VsIdeTesting;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 using EnvDTE;
+using AnkhSvn.Ids;
 
 namespace IntegrationTestProject
 {
@@ -49,7 +50,7 @@ namespace IntegrationTestProject
 
 				//Validate package load
 				IVsPackage package;
-                Guid packageGuid = new Guid(Ankh.VSPackage.GuidList.guidAnkhSvnPkgString);
+                Guid packageGuid = AnkhId.PackageGuid;
 				Assert.IsTrue(0 == shellService.LoadPackage(ref packageGuid, out package));
 				Assert.IsNotNull(package, "Package failed to load");
 

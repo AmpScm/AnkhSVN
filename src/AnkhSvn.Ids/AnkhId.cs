@@ -25,6 +25,9 @@ namespace AnkhSvn.Ids
 		/// <remarks>Must be changed when the PackageId changes</remarks>
 		public const string CommandSet = "aa61c329-d559-468f-8f0f-4f03896f704d";
 
+
+        public const string SccProviderId = "8770915b-b235-42ec-bbc6-8e93286e59b5";   
+
 		/// <summary>
 		/// The guid used for our on-and-only bitmap resource
 		/// </summary>
@@ -56,5 +59,7 @@ namespace AnkhSvn.Ids
 		public static readonly Guid BmpGuid = new Guid(BmpId);
 
 		public static readonly Guid AnkhOutputPaneGuid = new Guid(AnkhOutputPaneId);
+
+        public static readonly Guid SccProviderGuid = new Guid(SccProviderId);
 	}
 }

@@ -19,6 +19,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.Shell;
 using Ankh.VSPackage;
+using AnkhSvn.Ids;
 
 namespace UnitTestProject.MenuItemTests
 {
@@ -43,7 +44,7 @@ namespace UnitTestProject.MenuItemTests
 			Assert.AreEqual(0, package.SetSite(serviceProvider), "SetSite did not return S_OK");
 
 			//Verify that the menu command can be found
-            CommandID menuCommandID = new CommandID(Ankh.VSPackage.GuidList.guidAnkhSvnCmdSet, (int)AnkhSvn.Ids.AnkhCommand.FileSccMenuUpdateLatest);
+            CommandID menuCommandID = new CommandID(AnkhId.CommandSetGuid, (int)AnkhSvn.Ids.AnkhCommand.FileSccMenuUpdateLatest);
 			System.Reflection.MethodInfo info = typeof(Package).GetMethod("GetService", BindingFlags.Instance | BindingFlags.NonPublic);
 			Assert.IsNotNull(info);
 			OleMenuCommandService mcs = info.Invoke(package, new object[] { (typeof(IMenuCommandService)) }) as OleMenuCommandService;
