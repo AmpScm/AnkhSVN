@@ -53,6 +53,11 @@ namespace IntegrationTests
 		// [TestCleanup()]
 		// public void MyTestCleanup() { }
 		//
+        [TestInitialize()]
+        public void Initialize()
+        {
+            UIThreadInvoker.Initialize();
+        }
 		#endregion
 
 		[TestMethod]

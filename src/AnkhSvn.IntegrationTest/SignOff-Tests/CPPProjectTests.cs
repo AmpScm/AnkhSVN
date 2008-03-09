@@ -57,7 +57,14 @@ namespace IntegrationTests
 		//
 		#endregion
 
+        [TestInitialize()]
+        public void Initialize()
+        {
+            UIThreadInvoker.Initialize();
+        }
+
 		[TestMethod]
+        [HostType("VS IDE")]
 		public void CPPWinformsApplication()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
