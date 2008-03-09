@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using System.Globalization;
+using AnkhSvn.Ids;
 
 namespace Ankh.VSPackage
 {
@@ -37,7 +38,7 @@ namespace Ankh.VSPackage
         /// </summary>
         public Guid RegGuid
         {
-            get { return GuidList.guidAnkhSccProviderService; }
+            get { return AnkhId.SccProviderGuid; }
         }
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace Ankh.VSPackage
         /// </summary>
         public Guid UINamePkg
         {
-            get { return GuidList.guidAnkhSvnPkg; }
+            get { return AnkhId.PackageGuid; }
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace Ankh.VSPackage
         /// </summary>
         public Guid SccProviderService
         {
-            get { return GuidList.guidAnkhSccProviderService; }
+            get { return AnkhId.SccProviderGuid; }
         }
 
         /// <summary>
@@ -108,7 +109,7 @@ namespace Ankh.VSPackage
         /// <param name="context"></param>
         public override void Unregister( RegistrationContext context )
         {
-            context.RemoveKey( "SourceControlProviders\\" + GuidList.guidAnkhSvnPkg.ToString( "B" ) );
+            context.RemoveKey( "SourceControlProviders\\" + AnkhId.SccProviderGuid.ToString( "B" ) );
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Ankh.VSPackage
 	[ProvideLoadKey("Standard", "2.0", "AnkhSvn", "AnkhSvn", 1)]
 	// This attribute is needed to let the shell know that this package exposes some menus.
 	[ProvideMenuResource(1000, 1)]
-	[Guid(GuidList.guidAnkhSvnPkgString)]
+	[Guid(AnkhId.PackageId)]
 	[CLSCompliant(false)]
 	[ProvideSourceControlProvider("AnkhSVN Source Control Provider", "#100")]
 	[ProvideService(typeof(AnkhSccProvider), ServiceName = "AnkhSVN - Subversion Source Control Provider Service")]
@@ -85,7 +85,7 @@ namespace Ankh.VSPackage
 			container.AddService(typeof(IAnkhSccService), service, true);
 
 			IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)GetService(typeof(IVsRegisterScciProvider));
-			rscp.RegisterSourceControlProvider(GuidList.guidAnkhSccProviderService);
+			rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid);
 
 
 			// container.AddService(.., ..., true)

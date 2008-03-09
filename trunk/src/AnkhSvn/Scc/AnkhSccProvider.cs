@@ -8,10 +8,11 @@ using SharpSvn;
 using Microsoft.VisualStudio;
 using Ankh.UI.Services;
 using Microsoft.VisualStudio.OLE.Interop;
+using AnkhSvn.Ids;
 
 namespace Ankh.VSPackage.Scc
 {
-    [GuidAttribute( GuidList.guidAnkhSccProviderServiceString )]
+    [GuidAttribute(AnkhId.SccProviderId)]
     partial class AnkhSccProvider : IVsSccProvider, IVsSccGlyphs, IVsSccControlNewSolution, IAnkhSccService
     {
         public AnkhSccProvider(IContext context)
@@ -26,9 +27,9 @@ namespace Ankh.VSPackage.Scc
         /// <returns>
         /// The method returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>.
         /// </returns>
-        public int AnyItemsUnderSourceControl( out int pfResult )
+        public int AnyItemsUnderSourceControl(out int pfResult)
         {
-            Trace.WriteLine( "In AnyItemsUnderSourceControl" );
+            Trace.WriteLine("In AnyItemsUnderSourceControl");
             pfResult = active ? 1 : 0;
             return VSConstants.S_OK;
         }
@@ -41,7 +42,7 @@ namespace Ankh.VSPackage.Scc
         /// </returns>
         public int SetActive()
         {
-            Trace.WriteLine( "In SetActive" );
+            Trace.WriteLine("In SetActive");
             this.active = true;
             return VSConstants.S_OK;
         }
@@ -54,7 +55,7 @@ namespace Ankh.VSPackage.Scc
         /// </returns>
         public int SetInactive()
         {
-            Trace.WriteLine( "In SetInActive" );
+            Trace.WriteLine("In SetInActive");
             this.active = false;
             return VSConstants.S_OK;
         }
@@ -65,7 +66,7 @@ namespace Ankh.VSPackage.Scc
         /// </summary>
         /// <param name="pbInstalled">The pb installed.</param>
         /// <returns></returns>
-        public int IsInstalled( out int pbInstalled )
+        public int IsInstalled(out int pbInstalled)
         {
             pbInstalled = 1;
 
@@ -82,7 +83,7 @@ namespace Ankh.VSPackage.Scc
         /// <param name="pszSccLocalPath">The PSZ SCC local path.</param>
         /// <param name="pszProvider">The PSZ provider.</param>
         /// <returns></returns>
-        public int RegisterSccProject( IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider )
+        public int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
         {
             return VSConstants.S_OK;
         }
@@ -92,7 +93,7 @@ namespace Ankh.VSPackage.Scc
         /// </summary>
         /// <param name="pscp2Project">The PSCP2 project.</param>
         /// <returns></returns>
-        public int UnregisterSccProject( IVsSccProject2 pscp2Project )
+        public int UnregisterSccProject(IVsSccProject2 pscp2Project)
         {
             return VSConstants.S_OK;
 
@@ -102,9 +103,9 @@ namespace Ankh.VSPackage.Scc
         /// Gets a value indicating whether the Ankh Scc service is active
         /// </summary>
         /// <value><c>true</c> if this instance is active; otherwise, <c>false</c>.</value>
-		public bool IsActive
-		{
-			get { return active; }
+        public bool IsActive
+        {
+            get { return active; }
         }
 
         #region // Obsolete Methods

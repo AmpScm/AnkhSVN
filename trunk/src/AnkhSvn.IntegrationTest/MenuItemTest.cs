@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VsSDK.IntegrationTestLibrary;
 using Microsoft.VSSDK.Tools.VsIdeTesting;
+using AnkhSvn.Ids;
 
 namespace AnkhSvn_IntegrationTestProject
 {
@@ -42,7 +43,7 @@ namespace AnkhSvn_IntegrationTestProject
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
 			{
-				CommandID menuItemCmd = new CommandID(Ankh.VSPackage.GuidList.guidAnkhSvnCmdSet, (int)AnkhSvn.Ids.AnkhCommand.FileSccMenuUpdateLatest);
+                CommandID menuItemCmd = new CommandID(AnkhId.CommandSetGuid, (int)AnkhSvn.Ids.AnkhCommand.FileSccMenuUpdateLatest);
 
 				// Create the DialogBoxListener Thread.
 				string expectedDialogBoxText = string.Format(CultureInfo.CurrentCulture, "{0}\n\nInside {1}.MenuItemCallback()", "AnkhSvn", "AnkhSvn.AnkhSvn.AnkhSvnPackage");
