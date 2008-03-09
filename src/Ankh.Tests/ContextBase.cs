@@ -552,7 +552,7 @@ namespace Ankh.Tests
                 throw new NotImplementedException();
             }
 
-            CommitContext IUIShell.ShowCommitDialogModal(CommitContext ctx)
+            DialogResult IUIShell.ShowCommitDialogModal(CommitContext ctx)
             {
                 throw new NotImplementedException();
             }

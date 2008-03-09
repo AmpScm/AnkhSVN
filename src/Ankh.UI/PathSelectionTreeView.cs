@@ -66,7 +66,9 @@ namespace Ankh.UI
             set
             { 
                 this.recursive = value;
+                BeginUpdate();
                 this.UncheckChildren( this.Nodes, value );
+                EndUpdate();
             }
         }
 

@@ -221,7 +221,6 @@
     <Compile Include="Commands\BlameCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\CatRunner.cs" />
     <Compile Include="Commands\CheckoutCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -305,6 +304,7 @@
     <Compile Include="Commands\RevertItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\Runners\CatRunner.cs" />
     <Compile Include="Commands\RunSvnCommand.cs">
       <SubType>Code</SubType>
     </Compile>
