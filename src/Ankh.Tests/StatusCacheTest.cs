@@ -27,7 +27,7 @@ namespace Ankh.Tests
         [Test]
         public void TestVariousPathVariations()
         {
-            StatusCache cache = new StatusCache( this.Client );
+            StatusCache cache = new StatusCache();
             cache.Status(this.WcPath, SvnDepth.Infinity);
 
             string formPath = Path.Combine(this.WcPath, "Form1.cs");
@@ -48,7 +48,7 @@ namespace Ankh.Tests
         [Test]
         public void TestGetDeletions()
         {
-            StatusCache cache = new StatusCache( this.Client );
+            StatusCache cache = new StatusCache();
             this.Client.Delete(Path.Combine( this.WcPath, "Class1.cs" ));
             this.Client.Delete(Path.Combine( this.WcPath, "WindowsApplication.sln" ));
             
@@ -80,7 +80,7 @@ namespace Ankh.Tests
         [Test]
         public void TestGetPathNotInInitialStatus()
         {
-            StatusCache cache = new StatusCache(this.Client);
+            StatusCache cache = new StatusCache();
             cache.Status(Path.Combine(this.WcPath, "doc"), SvnDepth.Infinity);
             using( StreamWriter w = new StreamWriter(Path.Combine(this.WcPath, "Form1.cs")) )
                 w.WriteLine( "Foo" );
@@ -95,7 +95,7 @@ namespace Ankh.Tests
         [Test]
         public void TestGetUnversionedItem()
         {
-            StatusCache cache = new StatusCache(this.Client);
+            StatusCache cache = new StatusCache();
 
             string path = Path.GetTempFileName();
             SvnItem item = cache[path];

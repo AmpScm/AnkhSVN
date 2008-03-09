@@ -116,7 +116,8 @@ namespace Ankh.Tests
             get
             {
                 if ( this.statusCache == null )
-                    this.statusCache = new StatusCache( this.Client );
+                    this.statusCache = new StatusCache();
+
                 return this.statusCache;
             }
         }
