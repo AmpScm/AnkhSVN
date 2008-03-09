@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestLists xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2006">
+  <TestList name="AnkhSvn" id="444308c6-05f3-4995-ac7c-2306985ba1b6" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <TestLinks>
+      <TestLink id="eca49091-6494-1899-0447-2c2c72a95dea" name="CreateEmptySolution" storage="ankhsvn.integrationtest\bin\debug\ankhsvn.integrationtest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="e720aa83-e127-bb5e-04d2-ac6bbe81af06" name="VBWinformsApplication" storage="ankhsvn.integrationtest\bin\debug\ankhsvn.integrationtest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="69b91fed-5e38-8892-2304-03caf4fc01f4" name="LaunchCommand" storage="ankhsvn.integrationtest\bin\debug\ankhsvn.integrationtest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="184fb922-880f-a21b-3d4e-7a7e120fe2f4" name="MenuItemCallback" storage="ankhsvn.unittest\bin\debug\ankhsvn.unittest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="ffbbb488-3637-c432-8540-386b3fdeb9b5" name="InitializeMenuCommand" storage="ankhsvn.unittest\bin\debug\ankhsvn.unittest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="c8b4648b-3b2b-e148-4b59-31a61905c1a9" name="SetSite" storage="ankhsvn.unittest\bin\debug\ankhsvn.unittest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="4d0e7952-a721-55b8-c692-60e647ab1123" name="CreateInstance" storage="ankhsvn.unittest\bin\debug\ankhsvn.unittest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="e0b397dc-eee5-afee-8532-c42d70ac5f5c" name="IsIVsPackage" storage="ankhsvn.unittest\bin\debug\ankhsvn.unittest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="c6ce2762-8b91-b70d-0ec5-a1c0424bac50" name="WinformsApplication" storage="ankhsvn.integrationtest\bin\debug\ankhsvn.integrationtest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="03bfd36a-c738-bc6f-c0e8-e20bfe95b203" name="CPPWinformsApplication" storage="ankhsvn.integrationtest\bin\debug\ankhsvn.integrationtest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="b38e2fca-2f22-0ca8-bf98-6d18294923b0" name="PackageLoadTest" storage="ankhsvn.integrationtest\bin\debug\ankhsvn.integrationtest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="Lists of Tests" id="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <RunConfiguration id="0af6b64c-46e5-4d20-a1b5-4d2a86380e98" name="IntegrationTests" storage="integrationtests.testrunconfig" type="Microsoft.VisualStudio.TestTools.Common.TestRunConfiguration, Microsoft.VisualStudio.QualityTools.Common,   PublicKeyToken=b03f5f7f11d50a3a" />
+  </TestList>
+</TestLists>
