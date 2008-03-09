@@ -61,7 +61,7 @@ namespace Ankh
 
             this.conflictManager = new ConflictManager(this);
 
-            this.statusCache = new StatusCache(this.client);
+            this.statusCache = new StatusCache();
 
             this.solutionExplorerWindow = new SolutionExplorerWindow(package, SynchronizingObject);
             this.selectionContext = new SelectionContext(package, statusCache, solutionExplorerWindow);

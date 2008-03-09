@@ -199,27 +199,7 @@ namespace Ankh
         /// </summary>
         public virtual bool IsVersionable
         {
-            get
-            {
-                string dir;
-                if ( this.IsDirectory )
-                {
-                    // find the parent dir
-                    if ( this.path.EndsWith( System.IO.Path.DirectorySeparatorChar.ToString() ) )
-                        dir = this.path.Substring(0, this.path.Length-2); 
-                    else
-                        dir = this.path;
-                    dir = System.IO.Path.GetDirectoryName( dir );
-                }
-                else
-                    // find the containing dir
-                    dir = System.IO.Path.GetDirectoryName( this.path );
-
-                if( dir == null )
-                    return false;
-                return Directory.Exists( 
-                    System.IO.Path.Combine( dir, SvnClient.AdministrativeDirectoryName));
-            }
+            get { return SvnTools.IsBelowManagedPath(path); }
         }
 
         /// <summary>

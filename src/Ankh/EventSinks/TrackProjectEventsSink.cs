@@ -462,10 +462,7 @@ namespace Ankh.EventSinks
             if ( !item.IsVersioned )
                 return false;
 
-            string oldPath = PathUtils.NormalizePath( item.Path );
-            newPath = PathUtils.NormalizePath( newPath );
-
-            return oldPath == newPath;
+            return PathUtils.AreEqual(item.Path, newPath);
         }
 
         private bool CanDeletePath(string path)
