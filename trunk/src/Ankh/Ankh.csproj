@@ -68,7 +68,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <LangVersion>default</LangVersion>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
     <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -484,6 +484,29 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target
+        Name="GenerateSerializationAssemblies"
+        Condition="'$(_SGenGenerateSerializationAssembliesConfig)' == 'On' or ('@(WebReferenceUrl)'!='' and '$(_SGenGenerateSerializationAssembliesConfig)' == 'Auto')"
+        DependsOnTargets="AssignTargetPaths;Compile;ResolveKeySource"
+        Inputs="$(MSBuildAllProjects);@(IntermediateAssembly)"
+        Outputs="$(IntermediateOutputPath)$(_SGenDllName)">
+
+        <SGen
+            BuildAssemblyName="$(TargetFileName)"
+            BuildAssemblyPath="$(IntermediateOutputPath)"
+            References="@(ReferencePath)"
+            ShouldGenerateSerializer="true"
+            UseProxyTypes="false"
+            KeyContainer="$(KeyContainerName)"
+            KeyFile="$(KeyOriginatorFile)"
+            DelaySign="$(DelaySign)"
+            ToolPath="$(SGenToolPath)">
+
+            <Output TaskParameter="SerializationAssembly" ItemName="SerializationAssembly"/>
+
+        </SGen>
+
+    </Target>
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
