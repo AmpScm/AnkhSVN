@@ -24,18 +24,11 @@ namespace Ankh.Commands
 
 		public override void OnUpdate(CommandUpdateEventArgs e)
 		{
-			ICollection<string> files = e.Selection.GetSelectedFiles(true);
-
-			if (files == null)
-			{
-				e.Enabled = false;
-				return;
-			}
-
-			// TODO: Filter files which are not managed by subversion
-
-			if (files.Count == 0)
-				e.Enabled = false;
+            foreach (string file in e.Selection.GetSelectedFiles(true))
+            {
+                e.Enabled = true;
+                break;
+            }
 		}
 
 		public override void OnExecute(CommandEventArgs e)
