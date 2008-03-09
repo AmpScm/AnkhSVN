@@ -79,7 +79,7 @@ namespace Ankh.SolutionExplorer
                     if (shell != null)
                     {
                         IVsWindowFrame solutionExplorer;
-                        Guid solutionExplorerGuid = new Guid("3ae79031-e1bc-11d0-8f78-00a0c9110057"); // GUID_SolutionExplorer from vsshell.h
+                        Guid solutionExplorerGuid = new Guid(ToolWindowGuids80.SolutionExplorer);
 
                         Marshal.ThrowExceptionForHR(shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref solutionExplorerGuid, out solutionExplorer));
 

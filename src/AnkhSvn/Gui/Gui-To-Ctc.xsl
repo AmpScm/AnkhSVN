@@ -334,7 +334,8 @@
       <xsl:if test="@dontCache='true'">
         <xsl:text>|DONTCACHE</xsl:text>
       </xsl:if>
-      <xsl:if test="@dynamicVisibility='true'">
+      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true'">
+        <!-- Should set if default invisible-->
         <xsl:text>|DYNAMICVISIBILITY</xsl:text>
       </xsl:if>
       <xsl:if test="@noCustomize='true'">
@@ -465,13 +466,13 @@
       <xsl:if test="@textChanges='true'">
         <xsl:text>|TEXTCHANGES</xsl:text>
       </xsl:if>
-      <xsl:if test="@defaultDisabled='true'">
+      <xsl:if test="@defaultDisabled='true' or @defaultInvisible='true'">
         <xsl:text>|DEFAULTDISABLED</xsl:text>
       </xsl:if>
       <xsl:if test="@defaultInvisible='true'">
         <xsl:text>|DEFAULTINVISIBLE</xsl:text>
       </xsl:if>
-      <xsl:if test="@dynamicVisibility='true'">
+      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true'">
         <xsl:text>|DYNAMICVISIBILITY</xsl:text>
       </xsl:if>
       <xsl:if test="@dynamicItemStart='true'">
@@ -579,7 +580,7 @@
       <xsl:if test="@defaultInvisible='true'">
         <xsl:text>|DEFAULTINVISIBLE</xsl:text>
       </xsl:if>
-      <xsl:if test="@dynamicVisibility='true'">
+      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true'">
         <xsl:text>|DYNAMICVISIBILITY</xsl:text>
       </xsl:if>
       <xsl:if test="@commandWellOnly='true'">

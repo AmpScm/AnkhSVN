@@ -15,7 +15,6 @@ namespace AnkhSvn.Ids
 	[Guid(AnkhId.CommandSet)]
 	public enum AnkhCommand // : int
 	{
-		[Obsolete]
 		None = 0,
 
 		// These values live in the same numberspace as the other values within 
