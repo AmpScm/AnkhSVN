@@ -103,7 +103,7 @@ namespace Ankh.SolutionExplorer
         }
     
 
-        public IVsUIHierarchyWindow TreeWindow
+        public IVsUIHierarchyWindow HierarchyWindow
         {
             get
             {

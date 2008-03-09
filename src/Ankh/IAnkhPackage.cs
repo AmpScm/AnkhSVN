@@ -9,6 +9,7 @@ using Ankh.UI.Services;
 
 namespace Ankh
 {
+    [CLSCompliant(false)]
     public interface IAnkhToolWindowSite : IAnkhUISite
     {
         IVsWindowFrame Frame { get; }

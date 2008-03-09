@@ -55,7 +55,7 @@ namespace Ankh.Commands
 					CheckoutRunner runner = new CheckoutRunner(browser.SelectedPath, parent.Revision, new Uri(parent.Url));
 					context.UIShell.RunWithProgressDialog(runner, "Checking out solution");
 
-					context.DTE.Solution.Open(Path.Combine(browser.SelectedPath, node.Name));
+					((IDTEContext)context).DTE.Solution.Open(Path.Combine(browser.SelectedPath, node.Name));
 				}
 				finally
 				{

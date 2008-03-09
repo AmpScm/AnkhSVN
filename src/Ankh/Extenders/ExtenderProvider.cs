@@ -21,6 +21,7 @@ namespace Ankh.Extenders
 
         #region IExtenderProvider Members
 
+        [CLSCompliant(false)]
         public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, IExtenderSite ExtenderSite, int Cookie)
         {
             return null;
@@ -41,7 +42,7 @@ namespace Ankh.Extenders
         {
             ExtenderProvider.provider = new ExtenderProvider( context );
 
-            _DTE dte = context.DTE;
+            _DTE dte = ((IDTEContext)context).DTE;
             foreach( string catid in CATIDS )
             {
                 // cookies need to be stored so we can unregister the extender provider later
@@ -55,6 +56,7 @@ namespace Ankh.Extenders
         /// Unregister all extender provider registrations.
         /// </summary>
         /// <param name="dte"></param>
+        [CLSCompliant(false)]
         public static void Unregister( _DTE dte )
         {
             // use the stored cookies to unregister the registered providers.

@@ -152,9 +152,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnkhContextTest.cs">
+    <Content Include="AnkhContextTest.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </Content>
     <Compile Include="BlameResultTest.cs">
       <SubType>Code</SubType>
     </Compile>

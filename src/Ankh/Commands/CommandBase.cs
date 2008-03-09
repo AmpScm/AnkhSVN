@@ -36,7 +36,7 @@ namespace Ankh.Commands
 
         protected static void SaveAllDirtyDocuments(IContext context)
         {
-            context.DTE.ExecuteCommand("File.SaveAll", "");
+            ((IDTEContext)context).DTE.ExecuteCommand("File.SaveAll", "");
         }
 
         protected static XslCompiledTransform GetTransform(IContext context, string name)

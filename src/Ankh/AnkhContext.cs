@@ -22,36 +22,24 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
-    public class AnkhContext : IContext
+    public class AnkhContext : IContext, IDTEContext
     {
         /// <summary>
         /// Fired when the addin is unloading.
         /// </summary>
         public event EventHandler Unloading;
 
-        [Obsolete("Use AnkhContext(IAnkhPackage)")]
-        public AnkhContext(EnvDTE._DTE dte, EnvDTE.AddIn addin, IUIShell uiShell)
-            : this(dte, uiShell)
-        {
-        }
-
         public AnkhContext(IAnkhPackage package)
-            : this(package, (EnvDTE._DTE)package.GetService(typeof(EnvDTE._DTE)), new UIShell())
+            : this(package, new UIShell())
         {
             Trace.Assert(package != null);
         }
 
-        [Obsolete("Use AnkhContext(IAnkhPackage)")]
-        public AnkhContext(EnvDTE._DTE dte, IUIShell uiShell)
-            : this(null, dte, uiShell)
-        {
-        }
-
-        protected AnkhContext(IAnkhPackage package, EnvDTE._DTE dte, IUIShell uiShell)
+        public AnkhContext(IAnkhPackage package, IUIShell uiShell)
         {
             this.package = package;
 
-            this.dte = dte;
+            this.dte = (EnvDTE._DTE)package.GetService(typeof(EnvDTE._DTE));
             this.uiShell = uiShell;
             this.uiShell.Context = this;
 
@@ -75,8 +63,9 @@ namespace Ankh
 
             this.statusCache = new StatusCache(this.client);
 
-            this.selectionContext = new SelectionContext(package, statusCache);
             this.solutionExplorerWindow = new SolutionExplorerWindow(package, SynchronizingObject);
+            this.selectionContext = new SelectionContext(package, statusCache, solutionExplorerWindow);
+            
 
             //GC.KeepAlive(this.solutionExplorerWindow.TreeWindow);
 
@@ -114,6 +103,7 @@ namespace Ankh
         /// <summary>
         /// The top level automation object.
         /// </summary>
+        [CLSCompliant(false)]
         public EnvDTE._DTE DTE
         {
             [System.Diagnostics.DebuggerStepThrough]
@@ -238,7 +228,7 @@ namespace Ankh
                     return null;
 
                 // no point in doing anything if the solution dir doesn't exist
-                string solutionPath = this.dte.Solution.FullName;
+                string solutionPath = SelectionContext.SolutionFilename;
                 if (solutionPath == String.Empty || !File.Exists(solutionPath))
                     return null;
 

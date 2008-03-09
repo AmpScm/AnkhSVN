@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using EnvDTE;
 
 using Utils.Services;
 using AnkhSvn.Ids;
@@ -31,7 +30,7 @@ namespace Ankh.Commands
 
             try
             {
-                string solutionPath = e.Context.DTE.Solution.FullName;
+                string solutionPath = e.Selection.SolutionFilename;
 
                 // if this path isn't valid, we don't wanna enable anything
                 if (!File.Exists(solutionPath))
@@ -82,7 +81,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            string solutionDir = Path.GetDirectoryName(context.DTE.Solution.FullName);
+            string solutionDir = Path.GetDirectoryName(e.Selection.SolutionFilename);
             string noLoad = Path.Combine(solutionDir, "Ankh.NoLoad");
             string load = Path.Combine(solutionDir, "Ankh.Load");
 
