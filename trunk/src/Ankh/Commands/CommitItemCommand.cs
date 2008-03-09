@@ -8,6 +8,8 @@ using System.IO;
 using Utils;
 using SharpSvn;
 using AnkhSvn.Ids;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Ankh.Commands
 {
@@ -26,11 +28,13 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (e.Context.Selection.GetSelectionResources(true,
-                new ResourceFilterCallback(SvnItem.ModifiedFilter)).Count == 0)
+            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
             {
-                // e.Enabled = false;
+                if (i.IsModified)
+                    return;
             }
+
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
@@ -40,8 +44,13 @@ namespace Ankh.Commands
             // make sure all files are saved
             SaveAllDirtyDocuments( context );
 
-            IList resources = context.Selection.GetSelectionResources( true, 
-                new ResourceFilterCallback(SvnItem.ModifiedFilter) );
+            Collection<SvnItem> resources = new Collection<SvnItem>();
+
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (item.IsModified)
+                    resources.Add(item);
+            }
 
             CommitOperation operation = new CommitOperation( new SimpleProgressWorker(
                 new SimpleProgressWorkerCallback(this.DoCommit)), resources, context);

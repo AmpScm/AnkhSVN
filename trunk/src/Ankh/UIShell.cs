@@ -137,7 +137,7 @@ namespace Ankh
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public CommitContext ShowCommitDialogModal(CommitContext ctx)
+        public DialogResult ShowCommitDialogModal(CommitContext ctx)
         {
             /*
             //if ( this.commitDialogWindow == null ) 
@@ -191,7 +191,7 @@ namespace Ankh
 
             return ctx;
              */
-            return null;
+            return DialogResult.OK;
         }
 
         /// <summary>

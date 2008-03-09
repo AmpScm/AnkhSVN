@@ -62,8 +62,11 @@ namespace Ankh
             }
 
             // don't show the dialog if shift is down.
-            if ( ! (Commands.CommandBase.Shift ) )
-                this.commitContext = context.UIShell.ShowCommitDialogModal( this.commitContext );
+            if (!(Commands.CommandBase.Shift))
+            {
+                if (context.UIShell.ShowCommitDialogModal(this.commitContext) != DialogResult.OK)
+                    return false;
+            }
 
             if ( commitContext.Cancelled )
             {

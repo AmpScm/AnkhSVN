@@ -66,7 +66,7 @@ namespace Ankh
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        CommitContext ShowCommitDialogModal( CommitContext ctx );
+        DialogResult ShowCommitDialogModal( CommitContext ctx );
 
 
         /// <summary>
