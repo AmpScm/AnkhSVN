@@ -39,6 +39,12 @@ namespace IntegrationTests
 
 		#endregion
 
+        [TestInitialize]
+        public void Initialize()
+        {
+            UIThreadInvoker.Initialize();
+        }
+
 		[TestMethod]
 		[HostType("VS IDE")]
 		public void CreateEmptySolution()
