@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.UI
 {
+	[CLSCompliant(false)]
     public class ItemExpandedEventArgs : EventArgs
     {
         public ItemExpandedEventArgs( uint hItem, TreeViewAction action )
@@ -30,16 +31,13 @@ namespace Ankh.UI
         private TreeViewAction action;
     }
 
-
-    public delegate void ItemExpandedEventHandler( object sender, ItemExpandedEventArgs e );
-
-
     /// <summary>
     /// Used to wrap the host window for a treeview, so we can intercept WM_NOTIFY messages.
     /// </summary>
     public class Win32TreeViewHost : NativeWindow
     {
-        public event ItemExpandedEventHandler ItemExpanded;
+        [CLSCompliant(false)]
+        public event EventHandler<ItemExpandedEventArgs> ItemExpanded;
 
         public Win32TreeViewHost( IntPtr hWnd )
         {
@@ -79,6 +77,7 @@ namespace Ankh.UI
             }
         }
 
+        [CLSCompliant(false)]
         protected virtual void OnItemExpanded( ItemExpandedEventArgs args )
         {
             if ( this.ItemExpanded != null && args.Action == TreeViewAction.Expand )

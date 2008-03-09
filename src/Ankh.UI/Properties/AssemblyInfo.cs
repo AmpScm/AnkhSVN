@@ -1,16 +1,37 @@
+// $Id$
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System.Resources;
 
-[assembly:AssemblyVersion("0.6.0.2522")]
-        [assembly:Utils.VersionAttribute( "Subversion", 1, 3, 2, Tag="" )]
-[assembly:Utils.VersionAttribute( "Neon", 0, 24, 7, Tag="" )]
-[assembly:Utils.VersionAttribute( "Berkeley DB", 4, 2, 52, Tag="" )]
-[assembly:Utils.VersionAttribute( "OpenSSL", 0, 9, 8, Tag="a" )]
-[assembly:Utils.VersionAttribute( "ZLib", 1, 2, 3, Tag="" )]
-[assembly:Utils.VersionAttribute( "apr", 0, 9, 6, Tag="" )]
-[assembly:Utils.VersionAttribute( "apr-util", 0, 9, 6, Tag="" )]
-[assembly:Utils.VersionAttribute( "apr-iconv", 0, 9, 6, Tag="" )]
-[assembly:Utils.VersionAttribute( "Ankh", 0, 6, 0, Tag="Daily_01082006_18.11" )]
+//
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
 
-[assembly:ComVisible(false)]
+[assembly: CLSCompliant(true)]
+[assembly: AssemblyTitle("AnkhSVN - Subversion support for Visual Studio")]
+[assembly: AssemblyDescription("AnkhSVN - Subversion support for Visual Studio")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("AnkhSVN Team")]
+[assembly: AssemblyProduct("AnkhSVN - Subversion support for Visual Studio")]
+[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2008")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+[assembly: NeutralResourcesLanguage("en")]
+
+// We only want the Connect class to be visible
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+
+//
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Revision
+//      Build Number
+//
+// You can specify all the value or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
+
+[assembly: AssemblyVersionAttribute("2.0.*")]

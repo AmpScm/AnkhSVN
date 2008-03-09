@@ -165,7 +165,9 @@ namespace Ankh.UI
 
         protected Ankh.UI.PathSelectionTreeView pathSelectionTreeView;
         protected System.Windows.Forms.CheckBox recursiveCheckBox;
+        [CLSCompliant(false)]
         protected System.Windows.Forms.Button okButton;
+        [CLSCompliant(false)]
         protected System.Windows.Forms.Button cancelButton;
 
         /// <summary>
