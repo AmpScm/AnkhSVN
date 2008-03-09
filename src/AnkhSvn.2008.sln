@@ -2,14 +2,14 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B093CEC2-73C7-4DF4-B8C2-E144BE37DB19}"
 	ProjectSection(SolutionItems) = preProject
+		AllTests.testrunconfig = AllTests.testrunconfig
+		AnkhSvn.2008.vsmdi = AnkhSvn.2008.vsmdi
 		BUILD.txt = BUILD.txt
 		CHANGES = CHANGES
 		CONTRIBUTERS = CONTRIBUTERS
-		IntegrationTests.testrunconfig = IntegrationTests.testrunconfig
 		lib\lib.wxs = lib\lib.wxs
 		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
 		readme.txt = readme.txt
-		UnitTests.testrunconfig = UnitTests.testrunconfig
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ankh", "Ankh", "{48E3C46A-B9D8-42BE-B077-683B60E34AE3}"
@@ -43,6 +43,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.UI", "Ankh.UI\Ankh.UI.csproj", "{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}"
 EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = AnkhSvn.2008.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -104,7 +107,7 @@ Global
 		{CBE396C6-F315-4DA4-BB3B-2FBDE5969BD2} = {08FF496A-CD90-4B17-8FA0-F4CA88AB49D3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal
