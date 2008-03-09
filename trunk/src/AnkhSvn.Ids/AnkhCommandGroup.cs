@@ -15,7 +15,6 @@ namespace AnkhSvn.Ids
 	[Guid(AnkhId.CommandSet)]
 	public enum AnkhCommandGroup
 	{
-		[Obsolete]
 		None = 0,
 
 		// These values live in the same numberspace as the other values within 
@@ -25,7 +24,8 @@ namespace AnkhSvn.Ids
 
 		FileSourceControl,
 		FileMenuScc,
-		FileSccMenuUpdate,
+		FileSccMenuTasks,
+        FileSccMenuManagement,
 
         SolutionExplorerSccForSolution,
         SolutionExplorerSccForProject,

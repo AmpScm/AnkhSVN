@@ -165,7 +165,7 @@ dir     List the contents of the working directory
             string path = string.Join( " ", parameters, 1, parameters.Length-1 );
 
             // absolute or relative?
-            if ( !Path.IsPathRooted( path ) )
+            if ( !PathUtils.IsPathAbsolute( path ) )
                 path = Path.GetFullPath( Path.Combine( this.workingDirectory, path ) );
 
             if ( Directory.Exists( path ) )
