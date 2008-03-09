@@ -17,40 +17,50 @@ using Microsoft.VsSDK.UnitTestLibrary;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ankh.VSPackage;
+using EnvDTE;
+using AnkhSvn_UnitTestProject.Mocks;
+using Rhino.Mocks;
 
 namespace UnitTestProject
 {
-	[TestClass()]
-	public class PackageTest
-	{
-		[TestMethod()]
-		public void CreateInstance()
-		{
-			AnkhSvnPackage package = new AnkhSvnPackage();
-		}
+    [TestClass()]
+    public class PackageTest
+    {
+        [TestMethod()]
+        public void CreateInstance()
+        {
+            //AnkhSvnPackage package = new AnkhSvnPackage();
+        }
 
-		[TestMethod()]
-		public void IsIVsPackage()
-		{
-			AnkhSvnPackage package = new AnkhSvnPackage();
-			Assert.IsNotNull(package as IVsPackage, "The object does not implement IVsPackage");
-		}
+        [TestMethod()]
+        public void IsIVsPackage()
+        {
+            AnkhSvnPackage package = new AnkhSvnPackage();
+            Assert.IsNotNull(package as IVsPackage, "The object does not implement IVsPackage");
+        }
 
-		[TestMethod()]
-		public void SetSite()
-		{
-			// Create the package
-			IVsPackage package = new AnkhSvnPackage() as IVsPackage;
-			Assert.IsNotNull(package, "The object does not implement IVsPackage");
+        [TestMethod()]
+        public void SetSite()
+        {
+            MockRepository mocks = new MockRepository();
+            // Create the package
+            IVsPackage package = new AnkhSvnPackage() as IVsPackage;
+            Assert.IsNotNull(package, "The object does not implement IVsPackage");
 
-			// Create a basic service provider
-			OleServiceProvider serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
+            // Create a basic service provider
+            OleServiceProvider serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
+            serviceProvider.AddService(typeof(SVsUIShell), UIShellMock.GetInstance(mocks), true);
+            serviceProvider.AddService(typeof(IVsOutputWindow), OutputPaneMock.GetServiceInstance(mocks), true);
+            serviceProvider.AddService(typeof(DTE), DteMock.GetDteInstance(mocks), true);
 
-			// Site the package
-			Assert.AreEqual(0, package.SetSite(serviceProvider), "SetSite did not return S_OK");
+            using (mocks.Playback())
+            {
+                // Site the package
+                Assert.AreEqual(0, package.SetSite(serviceProvider), "SetSite did not return S_OK");
 
-			// Unsite the package
-			Assert.AreEqual(0, package.SetSite(null), "SetSite(null) did not return S_OK");
-		}
-	}
+                // Unsite the package
+                Assert.AreEqual(0, package.SetSite(null), "SetSite(null) did not return S_OK");
+            }
+        }
+    }
 }
