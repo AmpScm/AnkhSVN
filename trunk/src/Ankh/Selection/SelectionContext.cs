@@ -12,17 +12,6 @@ using Ankh.SolutionExplorer;
 
 namespace Ankh.Selection
 {
-    public interface ISelectionContext
-    {
-        ICollection<string> GetSelectedFiles();
-        ICollection<string> GetSelectedFiles(bool recursive);
-        ICollection<SvnItem> GetSelectedSvnItems();
-        ICollection<SvnItem> GetSelectedSvnItems(bool recursive);
-
-        string SolutionFilename { get; }
-
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -39,10 +28,15 @@ namespace Ankh.Selection
         IVsMultiItemSelect _currentSelection;
         ISelectionContainer _currentContainer;
         IVsSolution _solution;
-        string[] _filenames;
-        string[] _filenamesRecursive;
-        SvnItem[] _svnItems;
-        SvnItem[] _svnItemsRecursive;
+
+        CachedEnumerable<SelectionItem> _selectionItems;
+        CachedEnumerable<SelectionItem> _selectionItemsRecursive;
+        CachedEnumerable<string> _filenames;
+        CachedEnumerable<string> _filenamesRecursive;
+        CachedEnumerable<SvnItem> _svnItems;
+        CachedEnumerable<SvnItem> _svnItemsRecursive;
+        CachedEnumerable<string> _selectedProjects;
+        CachedEnumerable<string> _selectedProjectsRecursive;
         bool _deteminedSolutionExplorer;
         bool _isSolutionExplorer;
         string _solutionFilename;
@@ -113,13 +107,15 @@ namespace Ankh.Selection
 
         private void ClearCache()
         {
+            _selectionItems = null;
+            _selectionItemsRecursive = null;
             _filenames = null;
-            _svnItems = null;
             _filenamesRecursive = null;
+            _svnItems = null;
             _svnItemsRecursive = null;
+
             _deteminedSolutionExplorer = false;
             _isSolutionExplorer = false;
-            _solution = null;
             _solutionFilename = null;
         }
 
@@ -221,12 +217,7 @@ namespace Ankh.Selection
             }
 
             #endregion
-        }
-
-        protected IEnumerable<SelectionItem> GetSelectedItems(bool recursive)
-        {
-            return recursive ? GetSelectedItemsRecursive() : GetSelectedItems();
-        }
+        }     
 
         protected bool MightBeSolutionExplorerSelection
         {
@@ -263,7 +254,26 @@ namespace Ankh.Selection
             }
         }
 
+        protected IEnumerable<SelectionItem> GetSelectedItems(bool recursive)
+        {
+            return recursive ? GetSelectedItemsRecursive() : GetSelectedItems();
+        }
+
         protected IEnumerable<SelectionItem> GetSelectedItems()
+        {
+            return _selectionItems ?? (_selectionItems = new CachedEnumerable<SelectionItem>(InternalGetSelectedItems()));
+        }
+
+        protected IEnumerable<SelectionItem> GetSelectedItemsRecursive()
+        {
+            return _selectionItemsRecursive ?? (_selectionItemsRecursive = new CachedEnumerable<SelectionItem>(InternalGetSelectedItemsRecursive()));
+        }
+
+        /// <summary>
+        /// Gets the selected items; yielding for each result to allow delay loading
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<SelectionItem> InternalGetSelectedItems()
         {
             if (_currentSelection != null)
             {
@@ -314,7 +324,11 @@ namespace Ankh.Selection
             }
         }
 
-        protected IEnumerable<SelectionItem> GetSelectedItemsRecursive()
+        /// <summary>
+        /// Gets the selected items and its descendants; yielding for each result to allow delay loading
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<SelectionItem> InternalGetSelectedItemsRecursive()
         {
             Dictionary<SelectionItem, SelectionItem> ticked = new Dictionary<SelectionItem, SelectionItem>();
             foreach (SelectionItem si in GetSelectedItems())
@@ -343,7 +357,13 @@ namespace Ankh.Selection
             return VSConstants.VSITEMID_NIL;
         }
 
-        private IEnumerable<SelectionItem> GetDescendants(SelectionItem si, Dictionary<SelectionItem, SelectionItem> previous)
+        /// <summary>
+        /// Gets the descendants of a selection item; yielding for each result to allow delay loading
+        /// </summary>
+        /// <param name="si"></param>
+        /// <param name="previous"></param>
+        /// <returns></returns>
+        private static IEnumerable<SelectionItem> GetDescendants(SelectionItem si, Dictionary<SelectionItem, SelectionItem> previous)
         {
             if (si.Hierarchy == null)
                 yield break;
@@ -409,61 +429,111 @@ namespace Ankh.Selection
 
         #region ISelectionContext Members
 
-        public ICollection<string> GetSelectedFiles()
+        public IEnumerable<string> GetSelectedFiles()
         {
-            return GetSelectedFiles(false);
+            return _filenames ?? (_filenames = new CachedEnumerable<string>(InternalGetSelectedFiles(false)));
         }
 
-        public ICollection<string> GetSelectedFiles(bool recursive)
+        protected IEnumerable<string> GetSelectedFilesRecursive()
         {
-            if (recursive && (_filenamesRecursive != null))
-                return _filenamesRecursive;
-            else if (!recursive && (_filenames != null))
-                return _filenames;
+            return _filenamesRecursive ?? (_filenamesRecursive = new CachedEnumerable<string>(InternalGetSelectedFiles(true)));
+        }
 
-            List<string> filenames = new List<string>();
+        public IEnumerable<string> GetSelectedFiles(bool recursive)
+        {
+            return recursive ? GetSelectedFiles() : GetSelectedFilesRecursive();
+        }
 
-            // Selection can be generated by several objects. 
-            // E.g. the solution provider, a document, our own toolwindows..
+        /// <summary>
+        /// Gets the selected files; yielding for each result to allow delay loading
+        /// </summary>
+        /// <param name="recursive"></param>
+        /// <returns></returns>
+        IEnumerable<string> InternalGetSelectedFiles(bool recursive)
+        {
             foreach (SelectionItem i in GetSelectedItems(recursive))
             {
                 string[] files;
 
                 if (SelectionUtils.GetSccFiles(i.Hierarchy, i.SccProject, i.Id, out files, true) == VSConstants.S_OK)
-                    filenames.AddRange(files);
+                {
+                    foreach (string file in files)
+                        yield return file;
+                }
             }
-
-            if (recursive)
-                return _filenamesRecursive = filenames.ToArray();
-            else
-                return _filenames = filenames.ToArray();
         }
 
-        public ICollection<SvnItem> GetSelectedSvnItems()
+        public IEnumerable<SvnItem> GetSelectedSvnItems()
         {
-            return GetSelectedSvnItems(false);
+            return _svnItems ?? (_svnItems = new CachedEnumerable<SvnItem>(InternalGetSelectedSvnItems(false)));
         }
 
-        public ICollection<SvnItem> GetSelectedSvnItems(bool recursive)
+        protected IEnumerable<SvnItem> GetSelectedSvnItemsRecursive()
         {
-            if (recursive && (_svnItemsRecursive != null))
-                return _svnItemsRecursive;
-            else if (!recursive && (_svnItems != null))
-                return _svnItems;
+            return _svnItemsRecursive ?? (_svnItemsRecursive = new CachedEnumerable<SvnItem>(InternalGetSelectedSvnItems(true)));
+        }
 
-            List<SvnItem> items = new List<SvnItem>();
+        public IEnumerable<SvnItem> GetSelectedSvnItems(bool recursive)
+        {
+            return recursive ? GetSelectedSvnItemsRecursive() : GetSelectedSvnItemsRecursive();
+        }
+
+        IEnumerable<SvnItem> InternalGetSelectedSvnItems(bool recursive)
+        {
             foreach (string file in GetSelectedFiles(recursive))
             {
-                SvnItem i = _cache[file];
-
-                if (i != null)
-                    items.Add(i);
+                yield return _cache[file];                
             }
+        }
 
-            if (recursive)
-                return _svnItemsRecursive = items.ToArray();
-            else
-                return _svnItems = items.ToArray();
+        #endregion
+
+        #region ISelectionContext Members
+
+        public IEnumerable<string> GetOwnerProjects()
+        {
+            return _selectedProjects ?? (_selectedProjects = new CachedEnumerable<string>(InternalGetOwnerProjects(false)));
+        }
+
+        protected IEnumerable<string> GetOwnerProjectsRecursive()
+        {
+            return _selectedProjectsRecursive ?? (_selectedProjectsRecursive = new CachedEnumerable<string>(InternalGetOwnerProjects(true)));
+        }
+
+        public IEnumerable<string> GetOwnerProjects(bool recursive)
+        {
+            return recursive ? GetOwnerProjectsRecursive() : GetOwnerProjects();
+        }
+
+        public IEnumerable<string> InternalGetOwnerProjects(bool recursive)
+        {
+            Hashtable ht = new Hashtable();
+            foreach (SelectionItem si in GetSelectedItems(recursive))
+            {
+                if (!ht.Contains(si.Hierarchy))
+                {
+                    ht.Add(si.Hierarchy, si);
+
+                    IVsProject project = (si.SccProject as IVsProject) ?? (si.Hierarchy as IVsProject);
+
+                    string name = null;
+
+                    if (project != null)
+                    {
+                        if (VSConstants.S_OK != project.GetMkDocument(VSConstants.VSITEMID_ROOT, out name))
+                            name = null;
+                    }
+
+                    if (si.Hierarchy is IVsSolution)
+                        name = SolutionFilename;
+
+                    if (name != null && !ht.ContainsKey(name))
+                    {
+                        ht.Add(name, si);
+                        yield return name;
+                    }
+                }
+            }
         }
 
         #endregion

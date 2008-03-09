@@ -18,6 +18,7 @@ namespace Ankh.Commands
     {
         public override void OnExecute(CommandEventArgs e)
         {
+            GC.KeepAlive(e.Selection.GetOwnerProjects(true));
             IContext context = e.Context;
 
             try
