@@ -37,50 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Tests", "Ankh.Tests\An
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B093CEC2-73C7-4DF4-B8C2-E144BE37DB19}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-	ProjectSection(SolutionItems) = preProject
-		WiX\Ankh-UI.wxs = WiX\Ankh-UI.wxs
-		WiX\Ankh.msi.wxs = WiX\Ankh.msi.wxs
-		ankh.reg = ankh.reg
-		CHANGES = CHANGES
-		CONTRIBUTERS = CONTRIBUTERS
-		..\deploy.build = ..\deploy.build
-		lib\lib.build = lib\lib.build
-		lib\lib.wxs = lib\lib.wxs
-		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
-		master.build = master.build
-		Ankh\AnkhSetup\README.rtf = Ankh\AnkhSetup\README.rtf
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtils", "TestUtils\TestUtils.csproj", "{874C0358-E7DD-42DA-BF07-58198B41FD25}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ankh", "Ankh", "{48E3C46A-B9D8-42BE-B077-683B60E34AE3}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VStudio", "VStudio", "{A1A67782-22E0-4435-89AE-0D0CC81B4ACD}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnkhSvn", "AnkhSvn\AnkhSvn.csproj", "{FA90174C-5763-46E8-9C95-328CA8451072}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnkhSvn.Ids", "AnkhSvn.Ids\AnkhSvn.Ids.csproj", "{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -92,59 +49,187 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Ankh.Votive", "Ankh.Votive.
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions", "{2A99D7C3-4AA0-4B9A-846B-D27730F23474}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Ids", "Ankh.Ids\Ankh.Ids.csproj", "{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Services", "Ankh.Services\Ankh.Services.csproj", "{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementation", "Implementation", "{4A42502C-DBFF-40C9-81ED-EE95DDD82B94}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Scc", "Ankh.Scc\Ankh.Scc.csproj", "{ECE36A69-DD85-4AAB-B329-12BAE4675056}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.VS", "Ankh.VS\Ankh.VS.csproj", "{906E3F01-CD79-4F80-BCA7-1105224328C4}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{7207B9A7-E4B0-49D4-9F09-16CF29D38835}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Package", "Ankh.Package\Ankh.Package.csproj", "{FA90174C-5763-46E8-9C95-328CA8451072}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{16898D70-FA00-46A2-8141-27B38D97E0CF}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{A0B1E164-8624-42B6-9A13-D016C4EFE94A}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		(svnlib) Debug|Any CPU = (svnlib) Debug|Any CPU
+		(svnlib) Release|Any CPU = (svnlib) Release|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
 		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.(svnlib) Debug|Any CPU.ActiveCfg = (svnlib) Debug|Any CPU
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.(svnlib) Debug|Any CPU.Build.0 = (svnlib) Debug|Any CPU
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.(svnlib) Release|Any CPU.ActiveCfg = (svnlib) Release|Any CPU
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.(svnlib) Release|Any CPU.Build.0 = (svnlib) Release|Any CPU
 		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE58AAC8-2271-4223-882F-0CD1A7105A52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3248E1E-8272-4227-AF02-BB86040FBED9}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3248E1E-8272-4227-AF02-BB86040FBED9}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3248E1E-8272-4227-AF02-BB86040FBED9}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3248E1E-8272-4227-AF02-BB86040FBED9}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release|Any CPU.Build.0 = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{874C0358-E7DD-42DA-BF07-58198B41FD25}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{874C0358-E7DD-42DA-BF07-58198B41FD25}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA90174C-5763-46E8-9C95-328CA8451072}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA90174C-5763-46E8-9C95-328CA8451072}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA90174C-5763-46E8-9C95-328CA8451072}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA90174C-5763-46E8-9C95-328CA8451072}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94F8E63F-0ADE-40C1-BA57-2F50FE88ECD2}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94F8E63F-0ADE-40C1-BA57-2F50FE88ECD2}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94F8E63F-0ADE-40C1-BA57-2F50FE88ECD2}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94F8E63F-0ADE-40C1-BA57-2F50FE88ECD2}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
 		{94F8E63F-0ADE-40C1-BA57-2F50FE88ECD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{94F8E63F-0ADE-40C1-BA57-2F50FE88ECD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94F8E63F-0ADE-40C1-BA57-2F50FE88ECD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94F8E63F-0ADE-40C1-BA57-2F50FE88ECD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
+		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
+		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECE36A69-DD85-4AAB-B329-12BAE4675056}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECE36A69-DD85-4AAB-B329-12BAE4675056}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECE36A69-DD85-4AAB-B329-12BAE4675056}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECE36A69-DD85-4AAB-B329-12BAE4675056}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
+		{ECE36A69-DD85-4AAB-B329-12BAE4675056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECE36A69-DD85-4AAB-B329-12BAE4675056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECE36A69-DD85-4AAB-B329-12BAE4675056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECE36A69-DD85-4AAB-B329-12BAE4675056}.Release|Any CPU.Build.0 = Release|Any CPU
+		{906E3F01-CD79-4F80-BCA7-1105224328C4}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{906E3F01-CD79-4F80-BCA7-1105224328C4}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{906E3F01-CD79-4F80-BCA7-1105224328C4}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{906E3F01-CD79-4F80-BCA7-1105224328C4}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
+		{906E3F01-CD79-4F80-BCA7-1105224328C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{906E3F01-CD79-4F80-BCA7-1105224328C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{906E3F01-CD79-4F80-BCA7-1105224328C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{906E3F01-CD79-4F80-BCA7-1105224328C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA90174C-5763-46E8-9C95-328CA8451072}.(svnlib) Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA90174C-5763-46E8-9C95-328CA8451072}.(svnlib) Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA90174C-5763-46E8-9C95-328CA8451072}.(svnlib) Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA90174C-5763-46E8-9C95-328CA8451072}.(svnlib) Release|Any CPU.Build.0 = Release|Any CPU
+		{FA90174C-5763-46E8-9C95-328CA8451072}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA90174C-5763-46E8-9C95-328CA8451072}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA90174C-5763-46E8-9C95-328CA8451072}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA90174C-5763-46E8-9C95-328CA8451072}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{CE58AAC8-2271-4223-882F-0CD1A7105A52} = {48E3C46A-B9D8-42BE-B077-683B60E34AE3}
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747} = {48E3C46A-B9D8-42BE-B077-683B60E34AE3}
-		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE} = {48E3C46A-B9D8-42BE-B077-683B60E34AE3}
-		{FA90174C-5763-46E8-9C95-328CA8451072} = {A1A67782-22E0-4435-89AE-0D0CC81B4ACD}
-		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844} = {A1A67782-22E0-4435-89AE-0D0CC81B4ACD}
+		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844} = {2A99D7C3-4AA0-4B9A-846B-D27730F23474}
+		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB} = {2A99D7C3-4AA0-4B9A-846B-D27730F23474}
+		{CE58AAC8-2271-4223-882F-0CD1A7105A52} = {4A42502C-DBFF-40C9-81ED-EE95DDD82B94}
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE} = {4A42502C-DBFF-40C9-81ED-EE95DDD82B94}
+		{ECE36A69-DD85-4AAB-B329-12BAE4675056} = {4A42502C-DBFF-40C9-81ED-EE95DDD82B94}
+		{906E3F01-CD79-4F80-BCA7-1105224328C4} = {4A42502C-DBFF-40C9-81ED-EE95DDD82B94}
+		{FA90174C-5763-46E8-9C95-328CA8451072} = {7207B9A7-E4B0-49D4-9F09-16CF29D38835}
+		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E} = {16898D70-FA00-46A2-8141-27B38D97E0CF}
+		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747} = {16898D70-FA00-46A2-8141-27B38D97E0CF}
+		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A0B1E164-8624-42B6-9A13-D016C4EFE94A}
+		{874C0358-E7DD-42DA-BF07-58198B41FD25} = {A0B1E164-8624-42B6-9A13-D016C4EFE94A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 EndGlobal
