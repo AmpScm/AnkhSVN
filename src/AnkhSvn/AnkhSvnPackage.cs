@@ -85,7 +85,10 @@ namespace Ankh.VSPackage
 			container.AddService(typeof(IAnkhSccService), service, true);
 
 			IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)GetService(typeof(IVsRegisterScciProvider));
-			rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid);
+            if (rscp != null)
+            {
+                rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid);
+            }
 
 
 			// container.AddService(.., ..., true)
