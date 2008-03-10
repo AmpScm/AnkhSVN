@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
+[assembly: CLSCompliant(true)]
 [assembly: AssemblyTitle("AnkhSvn")]
 [assembly: AssemblyDescription("AnkhSVN - Subversion support for Visual Studio")]
 [assembly: AssemblyConfiguration("")]
@@ -17,7 +18,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]   
 [assembly: ComVisible(false)]     
-[assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguage("en")]
 
 // Version information for an assembly consists of the following four values:
