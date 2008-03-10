@@ -12,9 +12,9 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ankh.VSPackage</RootNamespace>
-    <AssemblyName>AnkhSvn</AssemblyName>
+    <AssemblyName>Ankh.Package</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>AnkhSvn.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Ankh.Package.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <ProjectGuid>{FA90174C-5763-46E8-9C95-328CA8451072}</ProjectGuid>
   </PropertyGroup>
@@ -105,7 +105,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AnkhSvn.snk" />
     <None Include="Resources\Images_32bit.bmp" />
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +128,7 @@
     </Compile>
     <Compile Include="ProvideSourceControlProvider.cs" />
     <Compile Include="Scc\AnkhSccProvider.cs" />
+    <None Include="Ankh.Package.snk" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
       <SubType>
@@ -148,7 +148,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AnkhSvn.wxs" />
+    <Content Include="Ankh.Package.wxs" />
     <Content Include="Gui\menu\Add.png" />
     <Content Include="Gui\menu\AddFolder.png" />
     <Content Include="Gui\menu\AddSolutionToRepository.png" />

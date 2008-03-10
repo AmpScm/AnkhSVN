@@ -9,7 +9,7 @@ namespace Ankh.VSPackage.Scc
     /// <summary>
     /// 
     /// </summary>
-    partial class AnkhSccProvider : IVsQueryEditQuerySave2, IVsQueryEditQuerySave2
+    partial class AnkhSccProvider : IVsQueryEditQuerySave2
 	{
         /// <summary>
         /// Creates a batch of a sequence of documents before attempting to save them to disk.
