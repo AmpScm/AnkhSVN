@@ -179,15 +179,15 @@ namespace Ankh.WorkingCopyExplorer
             {
                 if ( path.ToLower().EndsWith( ".sln" ) )
                 {
-                    this.Context.DTE.Solution.Open( path );
+                    ((IDTEContext)this.Context).DTE.Solution.Open( path );
                 }
                 else if ( path.ToLower().EndsWith( "proj" ) )
                 {
-                    this.Context.DTE.ExecuteCommand( "File.OpenProject", path );
+                    ((IDTEContext)this.Context).DTE.ExecuteCommand("File.OpenProject", path);
                 }
                 else
                 {
-                    this.context.DTE.ItemOperations.OpenFile( path, EnvDTE.Constants.vsViewKindPrimary );
+                    ((IDTEContext)this.Context).DTE.ItemOperations.OpenFile(path, EnvDTE.Constants.vsViewKindPrimary);
                 }
             }
         }

@@ -9,7 +9,7 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: CLSCompliant(false)] // TODO: Should be true
+[assembly: CLSCompliant(true)] 
 [assembly: AssemblyTitle("AnkhSVN - Subversion support for Visual Studio")]
 [assembly: AssemblyDescription("AnkhSVN - Subversion support for Visual Studio")]
 [assembly: AssemblyConfiguration("")]

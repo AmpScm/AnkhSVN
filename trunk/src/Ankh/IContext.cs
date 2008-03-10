@@ -28,12 +28,6 @@ namespace Ankh
         IAnkhPackage Package { get; }        
 
         /// <summary>
-        /// The top level automation object.
-        /// </summary>
-        [Obsolete("Please use the package api instead of the automation model")]
-        EnvDTE._DTE DTE { get; }
-
-        /// <summary>
         /// The UI shell.
         /// </summary>
         IUIShell UIShell { get; }

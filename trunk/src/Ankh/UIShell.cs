@@ -124,10 +124,11 @@ namespace Ankh
                 return false;
         }
 
+        [Obsolete]
         public bool SolutionExplorerHasFocus()
         {
             // The new command routing should make this method obsolete
-            return this.Context.DTE.ActiveWindow.Type == vsWindowType.vsWindowTypeSolutionExplorer;
+            return false;// this.Context.DTE.ActiveWindow.Type == vsWindowType.vsWindowTypeSolutionExplorer;
         }
 
 
@@ -255,7 +256,7 @@ namespace Ankh
                 w.Write(html);
 
             // the Start Page window is a web browser
-            Window browserWindow = context.DTE.Windows.Item(
+            Window browserWindow = ((IDTEContext)context).DTE.Windows.Item(
                 EnvDTE.Constants.vsWindowKindWebBrowser);
             SH.WebBrowser browser = (SH.WebBrowser)browserWindow.Object;
 
