@@ -20,6 +20,7 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
+
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
@@ -98,12 +99,12 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-
-            IList resources = e.Context.Selection.GetSelectionResources( true,
-                new ResourceFilterCallback(SvnItem.NotLockedAndLockableFilter) );
-
-            if (resources.Count == 0)
-                e.Enabled = false;
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            {
+                if (!item.IsLocked && item.IsVersioned && item.IsFile)
+                    return;
+            }
+            e.Enabled = false;
         }
         
         private LockDialogInfo info;
