@@ -222,9 +222,6 @@
           <Button id="Cmd_ViewInWindows" name="ViewInWindows" priority="0x200"
                   text="In Wi&amp;ndows"
                   toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.png"/>
-          <Button id="Cmd_ViewRepositoryFile" name="ViewRepositoryFile" priority="0x300"
-                    text="In Repository"
-                    toolTip="View this file" iconFile="menu/ViewInWindows.png"/>
           <Button id="Cmd_CheckoutFolder" name="CheckoutFolder" priority="0x301"
                     text="Chec&amp;kout Folder..."
                     toolTip="Checkout this folder." iconFile="menu/CheckoutDirectory.png" defaultInvisible="true"/>
