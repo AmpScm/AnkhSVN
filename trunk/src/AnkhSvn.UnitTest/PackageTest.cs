@@ -49,12 +49,6 @@ namespace UnitTestProject
             IVsPackage package = new AnkhSvnPackage() as IVsPackage;
             Assert.IsNotNull(package, "The object does not implement IVsPackage");
 
-            //// Create a basic service provider
-            //OleServiceProvider serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
-            //serviceProvider.AddService(typeof(SVsUIShell), UIShellMock.GetInstance(mocks), true);
-            //serviceProvider.AddService(typeof(IVsOutputWindow), OutputPaneMock.GetServiceInstance(mocks), true);
-            //serviceProvider.AddService(typeof(DTE), DteMock.GetDteInstance(mocks), true);
-
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), AnkhContextMock.GetInstance(mocks)))
             using (ServiceProviderHelper.SetSite(package))
