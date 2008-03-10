@@ -74,8 +74,7 @@ namespace Ankh.Commands
                 resources = info.CheckedItems;
             }
 
-            context.StartOperation("Adding");
-            try
+            using(context.StartOperation("Adding"))
             {
                 SvnAddArgs args = new SvnAddArgs();
                 args.ThrowOnError = false;
@@ -87,10 +86,6 @@ namespace Ankh.Commands
                     context.Client.Add(item.Path, args);
                 }
                 context.Selection.RefreshSelection();
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }
         #endregion

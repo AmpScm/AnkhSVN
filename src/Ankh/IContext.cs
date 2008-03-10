@@ -20,22 +20,12 @@ namespace Ankh
 
     public interface IContext
     {
-        /// <summary>
-        /// Raised when Ankh is unloading.
-        /// </summary>
-        event EventHandler Unloading;
-
         IAnkhPackage Package { get; }        
 
         /// <summary>
         /// The UI shell.
         /// </summary>
         IUIShell UIShell { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        string SolutionDirectory{ get; }
 
         /// <summary>
         /// The output pane.
@@ -50,6 +40,7 @@ namespace Ankh
         /// <summary>
         /// The repository explorer controller.
         /// </summary>
+		[Obsolete("Use .SelectionContext wherever possible")]
         RepositoryExplorer.Controller RepositoryExplorer { get; }
 
         /// <summary>
@@ -61,12 +52,6 @@ namespace Ankh
         /// Whether Ankh is loaded for the current solution.
         /// </summary>
         bool AnkhLoadedForSolution { get; }
-
-        /// <summary>
-        /// Reloads the current solution.
-        /// </summary>
-        /// <returns>True if the solution has been reloaded.</returns>
-        bool ReloadSolutionIfNecessary();
 
         /// <summary>
         /// The Ankh configuration.
@@ -104,46 +89,22 @@ namespace Ankh
         ConflictManager ConflictManager { get; }
 
         /// <summary>
-        /// Watches the project files.
-        /// </summary>
-        FileWatcher ProjectFileWatcher{ get; }
-
-        /// <summary>
         /// The OLE Serviceprovider.
         /// </summary>
         IServiceProvider ServiceProvider { get; }
 
         /// <summary>
-        /// Event handler for the SolutionOpened event. Can also be called at
-        /// addin load time, or if Ankh is enabled for a solution.
-        /// </summary>
-        bool EnableAnkhForLoadedSolution();
-
-        /// <summary>
-        /// Called when a solution is closed.
-        /// </summary>
-        void SolutionClosing();
-
-        /// <summary>
         /// Should be called before starting any lengthy operation
         /// </summary>
-        void StartOperation( string description );
-
-        /// <summary>
-        ///  called at the end of any lengthy operation
-        /// </summary>
-        void EndOperation();
-
-        /// <summary>
-        /// Miscellaneous cleanup stuff goes here.
-        /// </summary>
-        void Shutdown();
+        IDisposable StartOperation( string description );
 
         IWorkingCopyExplorer WorkingCopyExplorer
         {
             get;
         }
 
+
+        [Obsolete("Please use .SelectionContext instead")]
         IAnkhSelectionContainer Selection
         {
             get;

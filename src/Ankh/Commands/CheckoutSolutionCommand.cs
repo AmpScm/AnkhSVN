@@ -45,10 +45,8 @@ namespace Ankh.Commands
 				if (browser.ShowDialog() != DialogResult.OK)
 					return;
 
-				try
+				using(context.StartOperation("Checking out"))
 				{
-					context.StartOperation("Checking out");
-
 					INode node = context.RepositoryExplorer.SelectedNode;
 					INode parent = node.Parent;
 
@@ -56,10 +54,6 @@ namespace Ankh.Commands
 					context.UIShell.RunWithProgressDialog(runner, "Checking out solution");
 
 					((IDTEContext)context).DTE.Solution.Open(Path.Combine(browser.SelectedPath, node.Name));
-				}
-				finally
-				{
-					context.EndOperation();
 				}
 			}
         }

@@ -40,29 +40,24 @@ namespace Ankh.Commands
             SvnItem dir = (SvnItem)context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback(SvnItem.DirectoryFilter) )[0];
 
-            context.StartOperation( "Relocating" );
-            try
+            using (context.StartOperation("Relocating"))
             {
-                using( RelocateDialog dlg = new RelocateDialog() )
+                using (RelocateDialog dlg = new RelocateDialog())
                 {
                     dlg.CurrentUrl = dir.Status.Uri.ToString();
-                    if ( dlg.ShowDialog() != DialogResult.OK )
+                    if (dlg.ShowDialog() != DialogResult.OK)
                         return;
 
                     // we need it on another thread because it actually
                     // contacts the repos to verify 
                     RelocateRunner runner = new RelocateRunner(
-                        dir.Path, new Uri(dlg.FromSegment), new Uri(dlg.ToSegment), 
-                        dlg.Recursive );
+                        dir.Path, new Uri(dlg.FromSegment), new Uri(dlg.ToSegment),
+                        dlg.Recursive);
 
-                    context.UIShell.RunWithProgressDialog( runner, "Relocating" );
+                    context.UIShell.RunWithProgressDialog(runner, "Relocating");
 
-                    dir.Refresh( context.Client );
+                    dir.Refresh(context.Client);
                 }
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }
 

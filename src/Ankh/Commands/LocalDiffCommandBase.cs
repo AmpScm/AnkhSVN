@@ -7,6 +7,7 @@ using Ankh.UI;
 using System.Windows.Forms;
 using Utils;
 using SharpSvn;
+using Ankh.Selection;
 
 namespace Ankh.Commands
 {
@@ -20,11 +21,11 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected virtual string GetExe( Ankh.IContext context )
+        protected virtual string GetExe(ISelectionContext selection, IContext context)
         {
-            if ( !context.Config.ChooseDiffMergeManual )
+            if (!context.Config.ChooseDiffMergeManual)
                 return context.Config.DiffExePath;
-            else 
+            else
                 return null;
         }
 
@@ -33,27 +34,23 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff( IContext context )
+        protected virtual string GetDiff(ISelectionContext selection, IContext context)
         {
-            bool useExternalDiff = GetExe( context ) != null;
+            bool useExternalDiff = GetExe(selection, context) != null;
 
             // We use VersionedFilter here to allow diffs between arbitrary revisions
-            IList resources = context.Selection.GetSelectionResources(
-                true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
-
-            // filter out directories
             ArrayList checkedResources = new ArrayList();
-            foreach ( SvnItem item in resources )
+            foreach (SvnItem item in selection.GetSelectedSvnItems(true))
             {
-                if ( item.IsFile )
-                {
-                    checkedResources.Add( item );
-                }
+                if (item.IsVersioned && item.IsFile)
+                    checkedResources.Add(item);
             }
 
+            IList resources = new ArrayList(checkedResources);
+
             // are we shifted?
-            PathSelectorInfo info = new PathSelectorInfo( "Select items for diffing", 
-                resources, checkedResources );
+            PathSelectorInfo info = new PathSelectorInfo("Select items for diffing",
+                resources, checkedResources);
             info.RevisionStart = SvnRevision.Base;
             info.RevisionEnd = SvnRevision.Working;
 
@@ -66,56 +63,56 @@ namespace Ankh.Commands
             SvnRevision revisionEnd = SvnRevision.Working;
 
             // should we show the path selector?
-            if ( !CommandBase.Shift && resources.Count != 1 )
+            if (!CommandBase.Shift && resources.Count != 1)
             {
-                info = context.UIShell.ShowPathSelector( info );
-                    
-                if ( info == null )
+                info = context.UIShell.ShowPathSelector(info);
+
+                if (info == null)
                     return null;
             }
 
-            if ( useExternalDiff )
+            if (useExternalDiff)
             {
-                return DoExternalDiff( info, context );
+                return DoExternalDiff(info, selection, context);
             }
             else
             {
-                return DoInternalDiff( info, context );
+                return DoInternalDiff(info, selection, context);
             }
         }
-        
-        private string DoInternalDiff( PathSelectorInfo info, IContext context )
+
+        private string DoInternalDiff(PathSelectorInfo info, ISelectionContext selection, IContext context)
         {
             string curdir = Environment.CurrentDirectory;
-                
+
             // we go to the solution directory so that the diff paths will be relative 
             // to that directory
-            string slndir = context.SolutionDirectory;
+            string slndir = Path.GetDirectoryName(selection.SolutionFilename);
 
             try
             {
                 // switch to the solution dir, so we can get relative paths.
                 // if a solution isn't open, don't bother
-                if ( slndir != null )
+                if (slndir != null)
                 {
                     Environment.CurrentDirectory = slndir;
                 }
 
                 MemoryStream stream = new MemoryStream();
-                foreach( SvnItem item in info.CheckedItems )
+                foreach (SvnItem item in info.CheckedItems)
                 {
                     // try to get a relative path to the item from the solution directory
                     string path = null;
 
-                    if ( slndir != null )
+                    if (slndir != null)
                     {
-                        path = Utils.Win32.Win32.PathRelativePathTo( slndir,
+                        path = Utils.Win32.Win32.PathRelativePathTo(slndir,
                                         Utils.Win32.FileAttribute.Directory, item.Path,
-                                        Utils.Win32.FileAttribute.Normal ); 
+                                        Utils.Win32.FileAttribute.Normal);
                     }
 
                     // We can't use a path with more than two .. relative paths as input to svn diff (see svn issue #2448)
-                    if ( path == null || path.IndexOf( @"..\..\.." ) >= 0 )
+                    if (path == null || path.IndexOf(@"..\..\..") >= 0)
                     {
                         path = item.Path;
                     }
@@ -127,40 +124,40 @@ namespace Ankh.Commands
                     context.Client.Diff(path, new SvnRevisionRange(info.RevisionStart, info.RevisionEnd), args, stream);
                 }
 
-                return System.Text.Encoding.Default.GetString( stream.ToArray() );
+                return System.Text.Encoding.Default.GetString(stream.ToArray());
             }
             finally
             {
                 Environment.CurrentDirectory = curdir;
             }
-                
+
         }
-        
-        private string DoExternalDiff( PathSelectorInfo info, IContext context )
+
+        private string DoExternalDiff(PathSelectorInfo info, ISelectionContext selection, IContext context)
         {
-            foreach ( SvnItem item in info.CheckedItems )
+            foreach (SvnItem item in info.CheckedItems)
             {
                 // skip unmodified for a diff against the textbase
-                if ( info.RevisionStart == SvnRevision.Base && 
-                    info.RevisionEnd == SvnRevision.Working && !item.IsModified )
+                if (info.RevisionStart == SvnRevision.Base &&
+                    info.RevisionEnd == SvnRevision.Working && !item.IsModified)
                     continue;
 
-                string quotedLeftPath = GetPath( info.RevisionStart, item, context );
-                string quotedRightPath = GetPath( info.RevisionEnd, item, context );
-                string diffString = this.GetExe( context );
-                diffString = diffString.Replace( "%base", quotedLeftPath );
-                diffString = diffString.Replace( "%mine", quotedRightPath );
+                string quotedLeftPath = GetPath(info.RevisionStart, item, selection, context);
+                string quotedRightPath = GetPath(info.RevisionEnd, item, selection, context);
+                string diffString = this.GetExe(selection, context);
+                diffString = diffString.Replace("%base", quotedLeftPath);
+                diffString = diffString.Replace("%mine", quotedRightPath);
 
                 // We can't use System.Diagnostics.Process here because we want to keep the
                 // program path and arguments together, which it doesn't allow.
                 Utils.Exec exec = new Utils.Exec();
-                exec.ExecPath( diffString );
+                exec.ExecPath(diffString);
             }
 
             return null;
         }
 
-        private string GetPath( SvnRevision revision, SvnItem item, IContext context )
+        private string GetPath(SvnRevision revision, SvnItem item, ISelectionContext selection, IContext context)
         {
             // is it local?
             if (revision == SvnRevision.Base)
@@ -184,8 +181,8 @@ namespace Ankh.Commands
             }
 
             // we need to get it from the repos
-            CatRunner runner = new CatRunner( revision, item.Status.Uri );
-            context.UIShell.RunWithProgressDialog( runner, "Retrieving file for diffing" );
+            CatRunner runner = new CatRunner(revision, item.Status.Uri);
+            context.UIShell.RunWithProgressDialog(runner, "Retrieving file for diffing");
             //			runner.Work( context );
             return runner.Path;
         }

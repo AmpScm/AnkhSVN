@@ -24,28 +24,23 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            context.StartOperation( "Saving" );
-            try
+            using (context.StartOperation("Saving"))
             {
                 INode node = context.RepositoryExplorer.SelectedNode;
                 string filename = null;
-                using( SaveFileDialog sfd = new SaveFileDialog() )
+                using (SaveFileDialog sfd = new SaveFileDialog())
                 {
                     sfd.FileName = node.Name;
-                    if ( sfd.ShowDialog() == DialogResult.OK )
+                    if (sfd.ShowDialog() == DialogResult.OK)
                         filename = sfd.FileName;
                     else
                         return;
                 }
 
-                
-                CatRunner runner = new CatRunner( node.Revision, new Uri(node.Url), 
-                    filename );
-                context.UIShell.RunWithProgressDialog( runner, "Retrieving file" );
-            }
-            finally
-            {
-                context.EndOperation();
+
+                CatRunner runner = new CatRunner(node.Revision, new Uri(node.Url),
+                    filename);
+                context.UIShell.RunWithProgressDialog(runner, "Retrieving file");
             }
         }
 

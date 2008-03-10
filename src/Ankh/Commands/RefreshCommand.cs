@@ -21,14 +21,9 @@ namespace Ankh.Commands
             GC.KeepAlive(e.Selection.GetOwnerProjects(true));
             IContext context = e.Context;
 
-            try
+            using(context.StartOperation( "Refreshing" ))
             {
-                context.StartOperation( "Refreshing" );
                 context.Selection.RefreshSelection();
-            }
-            finally
-            {
-                context.EndOperation();
             }
         }
     }

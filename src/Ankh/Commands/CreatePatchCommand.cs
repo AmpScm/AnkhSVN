@@ -10,9 +10,9 @@ namespace Ankh.Commands
     /// A command that lets you create a patch.
     /// </summary>
     [VSNetCommand(AnkhCommand.CreatePatch,
-		"CreatePatch",
-         Text = "Create &Patch...", 
-         Tooltip = "Create a patch file of changes.", 
+        "CreatePatch",
+         Text = "Create &Patch...",
+         Tooltip = "Create a patch file of changes.",
          Bitmap = ResourceBitmaps.CreatePatch),
         VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 9)]
     public class CreatePatchCommand : LocalDiffCommandBase
@@ -23,38 +23,34 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments(context);
 
-            context.StartOperation( "Creating patch" );
-            try
+            using (context.StartOperation("Creating patch"))
             {
-                string diff = this.GetDiff( context );
-                
-                if ( diff == null )
+                string diff = this.GetDiff(e.Selection, context);
+
+                if (diff == null)
                 {
-                    MessageBox.Show( context.HostWindow, "Nothing to diff here. Move along." );
+                    MessageBox.Show(context.HostWindow, "Nothing to diff here. Move along.");
                     return;
                 }
 
-                using( SaveFileDialog dlg = new SaveFileDialog() )
+                using (SaveFileDialog dlg = new SaveFileDialog())
                 {
                     dlg.Filter = "Patch files(*.patch)|*.patch|Diff files(*.diff)|*.diff|" +
                         "Text files(*.txt)|*.txt|All files(*.*)|*.*";
                     dlg.AddExtension = true;
 
-                    if ( dlg.ShowDialog( context.HostWindow ) == DialogResult.OK )
+                    if (dlg.ShowDialog(context.HostWindow) == DialogResult.OK)
                     {
-                        using( StreamWriter w = File.CreateText(dlg.FileName) )
-                            w.Write( diff );
+                        using (StreamWriter w = File.CreateText(dlg.FileName))
+                            w.Write(diff);
                     }
                 }
             }
-            finally
-            {
-                context.EndOperation();
-            }
+
         } // Execute
 
         #endregion
-    } 
+    }
 }

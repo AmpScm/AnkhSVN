@@ -25,54 +25,42 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IList resources = e.Context.Selection.GetSelectionResources(
-                true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (item.IsVersioned)
+                    return;
+            }
 
-            if ( resources.Count == 0 )
-                e.Enabled = false;
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context;
 
-            SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments(context);
 
             IList resources = context.Selection.GetSelectionResources(
-                true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
-            context.StartOperation( "Merging" );
-            try
+                true, new ResourceFilterCallback(SvnItem.VersionedFilter));
+            using (context.StartOperation("Merging"))
             {
-                using ( ReverseMergeDialog dlg = new ReverseMergeDialog() )
+                using (ReverseMergeDialog dlg = new ReverseMergeDialog())
                 {
                     dlg.GetPathInfo += new ResolvingPathInfoHandler(SvnItem.GetPathInfo);
                     dlg.Items = resources;
                     dlg.CheckedItems = resources;
                     dlg.Recursive = true;
 
-                    if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                    if (dlg.ShowDialog(context.HostWindow) != DialogResult.OK)
                         return;
 
-                    context.ProjectFileWatcher.StartWatchingForChanges();
-               
                     ReverseMergeRunner runner = new ReverseMergeRunner(
                         dlg.CheckedItems, dlg.Revision, dlg.Recursive ? SvnDepth.Infinity : SvnDepth.Empty,
-                        dlg.DryRun );
-                    context.UIShell.RunWithProgressDialog( runner, "Merging" );
-
-                    // we need to refresh every item, not just those selected since 
-                    // the operation might be recursive
-                    if ( !context.ReloadSolutionIfNecessary() )
-                    {
-                        foreach( SvnItem item in resources )
-                            item.Refresh( context.Client);
-                    }
+                        dlg.DryRun);
+                    context.UIShell.RunWithProgressDialog(runner, "Merging");
                 }
             }
-            finally
-            {
-                context.EndOperation();
-            }
+
         }
 
         #endregion

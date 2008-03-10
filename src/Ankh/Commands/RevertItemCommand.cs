@@ -71,26 +71,16 @@ namespace Ankh.Commands
             }
                
             // perform the actual revert 
-            context.OutputPane.StartActionText("Reverting");  
-            context.ProjectFileWatcher.StartWatchingForChanges();
-            try
+            using (context.OutputPane.StartActionText("Reverting"))
             {
                 SvnRevertArgs args = new SvnRevertArgs();
                 args.Depth = depth;
+                args.ThrowOnError = false;
                 context.Client.Revert(paths, args);
-            }
-            catch //( NotVersionControlledException )
-            {
-                // empty
-            }
 
-            if ( !context.ReloadSolutionIfNecessary() )
-            {
-                foreach( SvnItem item in resources )
-                    item.Refresh( context.Client );
+                foreach (SvnItem item in resources)
+                    item.Refresh(context.Client);
             }
-
-            context.OutputPane.EndActionText();
         }
 
         #endregion

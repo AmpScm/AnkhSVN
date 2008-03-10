@@ -37,33 +37,28 @@ namespace Ankh.Commands
             IContext context = e.Context;
 
             INode node = context.RepositoryExplorer.SelectedNode;
-            System.Diagnostics.Debug.Assert( node != null );
+            System.Diagnostics.Debug.Assert(node != null);
 
             string dirname = context.UIShell.ShowNewDirectoryDialog();
 
             // did the user bail out?
-            if ( dirname == null )
+            if (dirname == null)
                 return;
 
             // first show the log message dialog
-            this.url = UriUtils.Combine( node.Url, dirname );
+            this.url = UriUtils.Combine(node.Url, dirname);
             CommitOperation operation = new CommitOperation(
-                new SimpleProgressWorker( new SimpleProgressWorkerCallback(this.DoCreateDir) ), 
-                new string[]{ this.url }, context );
+                new SimpleProgressWorker(new SimpleProgressWorkerCallback(this.DoCreateDir)),
+                new string[] { this.url }, context);
             operation.UrlPaths = true;
 
-            if ( !operation.ShowLogMessageDialog() )
+            if (!operation.ShowLogMessageDialog())
                 return;
 
-            context.StartOperation( "Creating directory " + url );
-            try
+            using (context.StartOperation("Creating directory " + url))
             {
-                operation.Run( "Creating directory" );
-                context.RepositoryExplorer.Refresh( context.RepositoryExplorer.SelectedNode );
-            }
-            finally
-            {
-                context.EndOperation();
+                operation.Run("Creating directory");
+                context.RepositoryExplorer.Refresh(context.RepositoryExplorer.SelectedNode);
             }
         }
 

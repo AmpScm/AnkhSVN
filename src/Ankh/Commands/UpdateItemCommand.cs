@@ -31,37 +31,24 @@ namespace Ankh.Commands
             }
 		}
 
-		public override void OnExecute(CommandEventArgs e)
-		{
-			try
-			{
-				// save all files
-				SaveAllDirtyDocuments(e.Context);
-				e.Context.StartOperation("Updating");
+        public override void OnExecute(CommandEventArgs e)
+        {
+            // save all files
+            SaveAllDirtyDocuments(e.Context);
 
-				List<SvnItem> files = new List<SvnItem>(e.Selection.GetSelectedSvnItems(true));
+            using (e.Context.StartOperation("Updating"))
+            {
 
-				// we assume by now that all items are working copy resources.                
-				UpdateRunner runner = new UpdateRunner(e.Context, files);
-				if (!runner.MaybeShowUpdateDialog())
-					return;
+                List<SvnItem> files = new List<SvnItem>(e.Selection.GetSelectedSvnItems(true));
 
-				// run the actual update on another thread
-				e.Context.ProjectFileWatcher.StartWatchingForChanges();
-				bool completed = e.Context.UIShell.RunWithProgressDialog(runner, "Updating");
+                // we assume by now that all items are working copy resources.                
+                UpdateRunner runner = new UpdateRunner(e.Context, files);
+                if (!runner.MaybeShowUpdateDialog())
+                    return;
 
-				// this *must* happen on the primary thread.
-				if (completed)
-				{
-					if (!e.Context.ReloadSolutionIfNecessary())
-						e.Context.Selection.RefreshSelection();
-				}
-			}
-			finally
-			{
-				e.Context.EndOperation();
-			}
-		}
+                e.Context.UIShell.RunWithProgressDialog(runner, "Updating");
+            }
+        }
 
 		#endregion
 
