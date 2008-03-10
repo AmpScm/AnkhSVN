@@ -64,10 +64,11 @@
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\ServiceProviderHelper.cs" />
     <Compile Include="Mocks\AnkhContextMock.cs" />
+    <Compile Include="Mocks\AnkhUIShellMock.cs" />
     <Compile Include="Mocks\DteMock.cs" />
     <Compile Include="Mocks\OutputPaneMock.cs" />
     <Compile Include="Mocks\SelectionContext.cs" />
-    <Compile Include="Mocks\UIShellMock.cs" />
+    <Compile Include="Mocks\VSUIShellMock.cs" />
     <Compile Include="PackageTest.cs" />
     <!---->
     <Compile Include="MenuItemTests\MenuItemCallback.cs" />

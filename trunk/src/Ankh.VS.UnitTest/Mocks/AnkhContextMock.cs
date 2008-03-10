@@ -24,13 +24,18 @@ namespace AnkhSvn_UnitTestProject.Mocks
             return GetInstance(mocks, uiShell, mocks.DynamicMock<ISelectionContext>());
         }
 
-        static IContext GetInstance(MockRepository mocks, IUIShell uiShell, ISelectionContext selContext)
+        public static IContext GetInstance(MockRepository mocks, IUIShell uiShell, ISelectionContext selContext)
         {
-            IContext context = mocks.DynamicMock<IContext>();
-            
+            EnvDTE.DTE dte = DteMock.GetDteInstance(mocks);
+
+            IContext context = mocks.DynamicMultiMock<IContext>(typeof(IDTEContext));
+            Ankh.Config.Config config = new Ankh.Config.Config();
 
             using (mocks.Record())
             {
+                Expect.Call(((IDTEContext)context).DTE).Return(dte).Repeat.Any();
+                Expect.Call(context.Config).Return(config).Repeat.Any();
+
                 if (uiShell != null)
                     Expect.Call(context.UIShell).Return(uiShell).Repeat.Any();
                 Expect.Call(context.SelectionContext).Return(selContext).Repeat.Any();

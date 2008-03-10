@@ -7,7 +7,7 @@ using Microsoft.VisualStudio;
 
 namespace AnkhSvn_UnitTestProject.Mocks
 {
-    static class UIShellMock
+    static class VSUIShellMock
     {
         public static IVsUIShell GetInstance(MockRepository mocks)
         {
