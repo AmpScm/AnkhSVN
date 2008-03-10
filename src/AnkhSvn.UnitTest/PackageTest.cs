@@ -20,6 +20,8 @@ using Ankh.VSPackage;
 using EnvDTE;
 using AnkhSvn_UnitTestProject.Mocks;
 using Rhino.Mocks;
+using AnkhSvn_UnitTestProject.Helpers;
+using Ankh;
 
 namespace UnitTestProject
 {
@@ -29,7 +31,7 @@ namespace UnitTestProject
         [TestMethod()]
         public void CreateInstance()
         {
-            //AnkhSvnPackage package = new AnkhSvnPackage();
+            AnkhSvnPackage package = new AnkhSvnPackage();
         }
 
         [TestMethod()]
@@ -47,17 +49,16 @@ namespace UnitTestProject
             IVsPackage package = new AnkhSvnPackage() as IVsPackage;
             Assert.IsNotNull(package, "The object does not implement IVsPackage");
 
-            // Create a basic service provider
-            OleServiceProvider serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
-            serviceProvider.AddService(typeof(SVsUIShell), UIShellMock.GetInstance(mocks), true);
-            serviceProvider.AddService(typeof(IVsOutputWindow), OutputPaneMock.GetServiceInstance(mocks), true);
-            serviceProvider.AddService(typeof(DTE), DteMock.GetDteInstance(mocks), true);
+            //// Create a basic service provider
+            //OleServiceProvider serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
+            //serviceProvider.AddService(typeof(SVsUIShell), UIShellMock.GetInstance(mocks), true);
+            //serviceProvider.AddService(typeof(IVsOutputWindow), OutputPaneMock.GetServiceInstance(mocks), true);
+            //serviceProvider.AddService(typeof(DTE), DteMock.GetDteInstance(mocks), true);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(IContext), AnkhContextMock.GetInstance(mocks)))
+            using (ServiceProviderHelper.SetSite(package))
             {
-                // Site the package
-                Assert.AreEqual(0, package.SetSite(serviceProvider), "SetSite did not return S_OK");
-
                 // Unsite the package
                 Assert.AreEqual(0, package.SetSite(null), "SetSite(null) did not return S_OK");
             }
