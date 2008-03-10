@@ -100,6 +100,9 @@ namespace Ankh.Commands.Mapper
 				}
 				catch (Exception ex)
 				{
+                    if (e.Context.ErrorHandler == null)
+                        throw;
+
 					e.Context.ErrorHandler.Handle(ex);
 					return false;
 
