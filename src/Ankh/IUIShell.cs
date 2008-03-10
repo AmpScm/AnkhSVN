@@ -91,6 +91,7 @@ namespace Ankh
         /// Whether the Repository Explorer window has focus
         /// </summary>
         /// <returns></returns>
+        [Obsolete]
         bool SolutionExplorerHasFocus();
 
 

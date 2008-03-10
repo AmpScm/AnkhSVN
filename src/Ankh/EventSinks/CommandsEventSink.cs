@@ -16,8 +16,6 @@ namespace Ankh.EventSinks
 
         public override void Unhook()
         {
-            _DTE dte = this.Context.DTE;
-
             if ( this.projectShowAll != null )
             {
                 this.projectShowAll.AfterExecute -= new _dispCommandEvents_AfterExecuteEventHandler(
