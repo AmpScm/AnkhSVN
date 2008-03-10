@@ -10,19 +10,16 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System;
-using System.Collections;
-using System.Text;
-using System.Reflection;
-using System.ComponentModel.Design;
-using Microsoft.VsSDK.UnitTestLibrary;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.Shell;
-using Ankh.VSPackage;
 using AnkhSvn.Ids;
 using AnkhSvn_UnitTestProject.Mocks;
-using EnvDTE;
 using Rhino.Mocks;
+using AnkhSvn_UnitTestProject.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Ankh.VSPackage;
+using Microsoft.VisualStudio.Shell;
+using EnvDTE;
+using Ankh;
+using System.ComponentModel.Design;
 
 namespace UnitTestProject.MenuItemTests
 {
@@ -37,64 +34,32 @@ namespace UnitTestProject.MenuItemTests
         public void InitializeMenuCommand()
         {
             MockRepository mocks = new MockRepository();
-            // Create the package
-            IVsPackage package = new AnkhSvnPackage() as IVsPackage;
-            Assert.IsNotNull(package, "The object does not implement IVsPackage");
+            AnkhSvnPackage package = new AnkhSvnPackage();
 
-            // Create a basic service provider
-            OleServiceProvider serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
-
-            serviceProvider.AddService(typeof(DTE), DteMock.GetDteInstance(mocks), true);
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(DTE), DteMock.GetDteInstance(mocks)))
+            using (ServiceProviderHelper.AddService(typeof(IContext), AnkhContextMock.GetInstance(mocks)))
+            using (ServiceProviderHelper.SetSite(package))
             {
-                // Site the package
-                Assert.AreEqual(0, package.SetSite(serviceProvider), "SetSite did not return S_OK");
-
                 //Verify that the menu command can be found
-                CommandID menuCommandID = new CommandID(AnkhId.CommandSetGuid, (int)AnkhSvn.Ids.AnkhCommand.FileSccMenuUpdateLatest);
-                System.Reflection.MethodInfo info = typeof(Package).GetMethod("GetService", BindingFlags.Instance | BindingFlags.NonPublic);
-                Assert.IsNotNull(info);
-                OleMenuCommandService mcs = info.Invoke(package, new object[] { (typeof(IMenuCommandService)) }) as OleMenuCommandService;
-                Assert.IsNotNull(mcs.FindCommand(menuCommandID));
+                OleMenuCommandService mcs = ReflectionHelper.InvokeMethod<Package, OleMenuCommandService>(package, "GetService", typeof(IMenuCommandService));
+                Assert.IsNotNull(mcs.FindCommand(new CommandID(AnkhId.CommandSetGuid, (int)AnkhSvn.Ids.AnkhCommand.Refresh)));
             }
         }
 
         [TestMethod]
-        public void MenuItemCallback()
+        public void TestRefreshCommand()
         {
             MockRepository mocks = new MockRepository();
             // Create the package
-            IVsPackage package = new AnkhSvnPackage() as IVsPackage;
-            Assert.IsNotNull(package, "The object does not implement IVsPackage");
-
-            // Create a basic service provider
-            OleServiceProvider serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
-
-            // Create a UIShell service mock and proffer the service so that it can called from the MenuItemCallback method
-            IVsUIShell uishellMock = UIShellMock.GetInstance(mocks);
-            IVsOutputWindow outputWindow = OutputPaneMock.GetServiceInstance(mocks);
-            DTE dteMock = DteMock.GetDteInstance(mocks);
+            AnkhSvnPackage package = new AnkhSvnPackage();
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(IContext), AnkhContextMock.GetInstance(mocks)))
+            using (ServiceProviderHelper.SetSite(package))
             {
-                serviceProvider.AddService(typeof(SVsUIShell), uishellMock, true);
-                serviceProvider.AddService(typeof(EnvDTE.DTE), dteMock, true);
-                serviceProvider.AddService(typeof(IVsOutputWindow), outputWindow, true);
-
-                // Site the package
-                Assert.AreEqual(0, package.SetSite(serviceProvider), "SetSite did not return S_OK");
-
-                //Invoke private method on package class and observe that the method does not throw
-                System.Reflection.MethodInfo info = package.GetType().GetMethod("MenuItemCallback", BindingFlags.Instance | BindingFlags.NonPublic);
-                Assert.IsNotNull(info, "Failed to get the private method MenuItemCallback throug refplection");
-                info.Invoke(package, new object[] { null, null });
-
-                //Clean up services
-                serviceProvider.RemoveService(typeof(SVsUIShell));
-                serviceProvider.RemoveService(typeof(DTE));
-                serviceProvider.RemoveService(typeof(IVsOutputWindow));
+                CommandExecutor.ExecuteCommand(package, AnkhCommand.Refresh);
             }
-
         }
     }
 }
