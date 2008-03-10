@@ -22,11 +22,12 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if ( e.Context.Selection.GetSelectionResources( true, 
-                new ResourceFilterCallback( SvnItem.ModifiedFilter ) ).Count == 0 )
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                e.Enabled = false;
+                if (item.IsModified)
+                    return;
             }
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)

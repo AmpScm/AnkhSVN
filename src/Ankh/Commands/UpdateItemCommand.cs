@@ -26,9 +26,9 @@ namespace Ankh.Commands
 		{
             foreach (string file in e.Selection.GetSelectedFiles(true))
             {
-                e.Enabled = true;
-                break;
+                return;
             }
+            e.Enabled = false;
 		}
 
         public override void OnExecute(CommandEventArgs e)
