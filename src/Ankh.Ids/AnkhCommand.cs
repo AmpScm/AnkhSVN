@@ -68,7 +68,6 @@ namespace AnkhSvn.Ids
 		UpdateItem,
 		ViewInVsNet,
 		ViewInWindows,
-		ViewRepositoryFile,
 		CheckForOrphanedTreeNodes,
 
 		RunSvnCommand,
