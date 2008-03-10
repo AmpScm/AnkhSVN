@@ -234,7 +234,6 @@
         <Group id="Grp_RepositoryExplorerContext" priority="0x100">
           <ButtonRef id="Cmd_ViewInVsNet" priority="0x100"/>
           <ButtonRef id="Cmd_ViewInWindows" priority="0x200"/>
-          <ButtonRef id="Cmd_ViewRepositoryFile" priority="0x300"/>
         </Group>
       </Menu>
     </GroupRef>
