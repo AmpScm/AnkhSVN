@@ -25,13 +25,14 @@ namespace Ankh.Commands
     {
         #region Implementation of ICommand
 
-        public override void  OnUpdate(CommandUpdateEventArgs e)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (e.Context.Selection.GetSelectionResources(false,
-                new ResourceFilterCallback(SvnItem.VersionedFilter)).Count == 0)
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                e.Enabled = false;
+                if (item.IsVersioned)
+                    return;
             }
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)

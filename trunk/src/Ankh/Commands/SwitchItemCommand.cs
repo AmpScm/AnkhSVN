@@ -25,10 +25,12 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IList resources = e.Context.Selection.GetSelectionResources(
-                false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
-            if (resources.Count == 0)
-                e.Enabled = false;
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            {
+                if (item.IsVersioned)
+                    return;
+            }
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
