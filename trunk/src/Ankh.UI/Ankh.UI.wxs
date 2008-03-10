@@ -1,10 +1,12 @@
 ﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment>
-		<ComponentGroup Id="CG_Ankh.UI">
+		<ComponentGroup Id="Ankh.UI">
+      <ComponentGroupRef Id="Ankh.Ids"/>
+      <ComponentGroupRef Id="Ankh.Services"/>
 			<ComponentRef Id="C_Ankh.UI.dll"/>
 		</ComponentGroup>
 		<DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.UI.TargetDir)">
-			<Component Id="C_Ankh.UI.dll" DiskId="1" Guid="BE3BF683-9D60-444a-923F-3A2891F628B7">
+			<Component Id="C_Ankh.UI.dll" Guid="BE3BF683-9D60-444a-923F-3A2891F628B7">
 				<File Id="CF_Ankh.UI.dll" Name="Ankh.UI.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
 				<?ifdef Ankh_Pdb?>
 				<File Id="CF_Ankh.UI.pdb" Name="Ankh.UI.pdb" Checksum="yes" Vital="yes" />

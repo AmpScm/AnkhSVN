@@ -1,15 +1,15 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment>
-		<ComponentGroup Id="CG_Ankh">
-			<ComponentRef Id="C_Ankh.dll" />
-			<ComponentGroupRef Id="CG_Ankh.SHDocVw" />
-			<ComponentGroupRef Id="CG_Ankh.UI" />
-			<ComponentGroupRef Id="CG_AnkhSvn.Ids" />
-			<ComponentGroupRef Id="CG_Utils" />
-			<ComponentGroupRef Id="CG_Microsoft.VisualStudio.OLE.Interop"/>
-			<ComponentGroupRef Id="CG_Microsoft.VisualStudio.Shell.Interop"/>
+		<ComponentGroup Id="Ankh">
+      <ComponentGroupRef Id="Ankh.Ids" />
+      <ComponentGroupRef Id="Ankh.Services" />			
+			<ComponentGroupRef Id="Ankh.SHDocVw" />
+			<ComponentGroupRef Id="Utils" />
+			<ComponentGroupRef Id="Microsoft.VisualStudio.OLE.Interop"/>
+			<ComponentGroupRef Id="Microsoft.VisualStudio.Shell.Interop"/>
 			<ComponentGroupRef Id="LOCAL_SharpSvn_Win32"/>
 			<ComponentGroupRef Id="LOCAL_SharpSvnUI"/>
+      <ComponentRef Id="C_Ankh.dll" />
 		</ComponentGroup>
 		<DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.TargetDir)">
 			<Component Id="C_Ankh.dll" DiskId="1" Guid="02BBB6F8-8035-421f-83EC-7CA51E05B981">

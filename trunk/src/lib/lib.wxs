@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<!-- ShDocVw interop -->
 	<Fragment>
-		<ComponentGroup Id="CG_Ankh.SHDocVw">
+		<ComponentGroup Id="Ankh.SHDocVw">
 			<ComponentRef Id="C_Ankh.SHDocVw.dll"/>
 		</ComponentGroup>
 		<DirectoryRef Id="APP_bin" FileSource="$(var.SolutionDir)lib\">
@@ -13,7 +13,7 @@
 	</Fragment>
 	<!-- Visual Studio Ole Interop -->
 	<Fragment>
-		<ComponentGroup Id="CG_Microsoft.VisualStudio.OLE.Interop">
+		<ComponentGroup Id="Microsoft.VisualStudio.OLE.Interop">
 			<ComponentRef Id="C_Microsoft.VisualStudio.OLE.Interop.dll"/>
 		</ComponentGroup>
 		<DirectoryRef Id="APP_bin" FileSource="$(var.SolutionDir)lib\">
@@ -25,7 +25,7 @@
 	</Fragment>
 	<!-- Visual Studio Shell Interop -->
 	<Fragment>
-		<ComponentGroup Id="CG_Microsoft.VisualStudio.Shell.Interop">
+		<ComponentGroup Id="Microsoft.VisualStudio.Shell.Interop">
 			<ComponentRef Id="C_Microsoft.VisualStudio.Shell.Interop.dll"/>
 		</ComponentGroup>
 		<DirectoryRef Id="APP_bin" FileSource="$(var.SolutionDir)lib\">
