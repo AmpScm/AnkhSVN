@@ -89,11 +89,6 @@
       <Project>{61d343cf-77ba-4ef2-96f5-e0d4efd04844}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="AnkhSvn\AnkhSvn.csproj">
-      <Name>AnkhSvn</Name>
-      <Project>{fa90174c-5763-46e8-9c95-328ca8451072}</Project>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="Ankh\Ankh.csproj">
       <Name>Ankh (Ankh\Ankh)</Name>
       <Project>{ce58aac8-2271-4223-882f-0cd1a7105a52}</Project>
