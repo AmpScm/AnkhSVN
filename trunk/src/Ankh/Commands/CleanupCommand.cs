@@ -20,14 +20,13 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            context.StartOperation( "Running cleanup" );
-
-            IList resources = context.Selection.GetSelectionResources( false,
-                new ResourceFilterCallback(SvnItem.DirectoryFilter) );
-            foreach( SvnItem item in resources )
-                context.Client.CleanUp( item.Path );
-
-            context.EndOperation();
+            using (context.StartOperation("Running cleanup"))
+            {
+                IList resources = context.Selection.GetSelectionResources(false,
+                    new ResourceFilterCallback(SvnItem.DirectoryFilter));
+                foreach (SvnItem item in resources)
+                    context.Client.CleanUp(item.Path);
+            }
         }
     }
 }

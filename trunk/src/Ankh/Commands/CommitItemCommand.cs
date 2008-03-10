@@ -75,33 +75,31 @@ namespace Ankh.Commands
                 string startText = "Committing ";
                 if ( repositories.Count > 1 && items.Count > 0 )
                     startText += "to repository " + ((SvnItem)items[0]).Status.WorkingCopyInfo.RepositoryUri;
-                context.StartOperation( startText );
-
-                try
+                using (context.StartOperation(startText))
                 {
-                    this.paths = SvnItem.GetPaths( items );
-
-                    bool completed = operation.Run( "Committing" );
-
-                    if(completed)
+                    try
                     {
-                        foreach( SvnItem item in items )
-                            item.Refresh( context.Client );                        
-                    }
-                }
-           
-                catch( SvnException )
-                {
-                    context.OutputPane.WriteLine( "Commit aborted" );
-                    throw;
-                }
-                finally
-                {
-                    if (this.commitInfo != null)
-                        context.OutputPane.WriteLine("\nCommitted revision {0}.", 
-                            this.commitInfo.Revision);
+                        this.paths = SvnItem.GetPaths(items);
 
-                    context.EndOperation();
+                        bool completed = operation.Run("Committing");
+
+                        if (completed)
+                        {
+                            foreach (SvnItem item in items)
+                                item.Refresh(context.Client);
+                        }
+                    }
+                    catch (SvnException)
+                    {
+                        context.OutputPane.WriteLine("Commit aborted");
+                        throw;
+                    }
+                    finally
+                    {
+                        if (this.commitInfo != null)
+                            context.OutputPane.WriteLine("\nCommitted revision {0}.",
+                                this.commitInfo.Revision);
+                    }
                 }
             }
 

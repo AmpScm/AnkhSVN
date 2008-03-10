@@ -23,24 +23,19 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            using(ExportDialog dlg = new ExportDialog())
+            using (ExportDialog dlg = new ExportDialog())
             {
-                if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                if (dlg.ShowDialog(context.HostWindow) != DialogResult.OK)
                     return;
 
-                context.StartOperation( "Exporting" );
-                try
+                using (context.StartOperation("Exporting"))
                 {
-                    ExportRunner runner = new ExportRunner( 
-                        dlg.LocalPath, dlg.Revision, dlg.Source, dlg.NonRecursive ? SvnDepth.Infinity:SvnDepth.Empty );
-                    context.UIShell.RunWithProgressDialog( runner, "Exporting" );
+                    ExportRunner runner = new ExportRunner(
+                        dlg.LocalPath, dlg.Revision, dlg.Source, dlg.NonRecursive ? SvnDepth.Infinity : SvnDepth.Empty);
+                    context.UIShell.RunWithProgressDialog(runner, "Exporting");
 
                     // make sure it's remembered
-                    RegistryUtils.CreateNewTypedUrl( dlg.Source);
-                }
-                finally
-                {
-                    context.EndOperation();
+                    RegistryUtils.CreateNewTypedUrl(dlg.Source);
                 }
             }
         }

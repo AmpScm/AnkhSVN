@@ -35,37 +35,27 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments(context);
 
             IList resources = context.Selection.GetSelectionResources(
-                false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
+                false, new ResourceFilterCallback(SvnItem.VersionedFilter));
 
-            if ( resources.Count == 0 )
+            if (resources.Count == 0)
                 return;
 
-            SwitchDialogInfo info = new SwitchDialogInfo( resources, 
-                new object[]{resources[0]} );
+            SwitchDialogInfo info = new SwitchDialogInfo(resources,
+                new object[] { resources[0] });
 
-            info = context.UIShell.ShowSwitchDialog( info );
+            info = context.UIShell.ShowSwitchDialog(info);
 
-            if ( info == null ) 
+            if (info == null)
                 return;
 
-            context.StartOperation( "Switching" );
-            context.ProjectFileWatcher.StartWatchingForChanges();
-            try
+            using (context.StartOperation("Switching"))
             {
-                SwitchRunner runner = new SwitchRunner(info.Path, new Uri(info.SwitchToUrl), 
-                    info.RevisionStart, info.Depth );
-                context.UIShell.RunWithProgressDialog( runner, "Switching" );
-                if ( !context.ReloadSolutionIfNecessary() )
-                {
-                    context.Selection.RefreshSelection();
-                }
-            }
-            finally
-            {
-                context.EndOperation();
+                SwitchRunner runner = new SwitchRunner(info.Path, new Uri(info.SwitchToUrl),
+                    info.RevisionStart, info.Depth);
+                context.UIShell.RunWithProgressDialog(runner, "Switching");
             }
         }
 

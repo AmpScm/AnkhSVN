@@ -2,6 +2,7 @@
 using System.IO;
 using Ankh.UI;
 using AnkhSvn.Ids;
+using Ankh.Selection;
 
 namespace Ankh.Commands
 {
@@ -9,11 +10,11 @@ namespace Ankh.Commands
     /// Command to diff against local text base using external tool.
     /// </summary>
     [VSNetCommand(AnkhCommand.DiffExternalLocalItem,
-		"DiffExternalLocalItem",
-         Text = "Diff E&xternal", 
-         Tooltip = "Diff against local text base using external tool.", 
+        "DiffExternalLocalItem",
+         Text = "Diff E&xternal",
+         Tooltip = "Diff against local text base using external tool.",
          Bitmap = ResourceBitmaps.Diff),
-         VSNetItemControl( "", Position = 1 )]
+         VSNetItemControl("", Position = 1)]
     public class DiffExternalLocalItem : DiffLocalItem
     {
         #region Implementation of ICommand
@@ -21,7 +22,7 @@ namespace Ankh.Commands
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             // Allow external diff if enabled in config file
-            if ( !e.Context.Config.ChooseDiffMergeManual || e.Context.Config.DiffExePath == null )
+            if (!e.Context.Config.ChooseDiffMergeManual || e.Context.Config.DiffExePath == null)
                 e.Enabled = e.Visible = false;
         }
 
@@ -32,8 +33,8 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected override string GetExe( Ankh.IContext context )
-        {
+        protected override string GetExe(ISelectionContext selection, IContext context)
+        {            
             return context.Config.DiffExePath;
         }
     }

@@ -157,9 +157,10 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual void StartOperation(string description)
+        public virtual IDisposable StartOperation(string description)
         {
             // TODO:  Add ContextBase.StartOperation implementation
+            return new object[0].GetEnumerator();
         }
 
         public virtual void Shutdown()
@@ -669,11 +670,7 @@ namespace Ankh.Tests
         private Control control;
 
         #region IContext Members
-
-        bool IContext.EnableAnkhForLoadedSolution()
-        {
-            throw new Exception( "The method or operation is not implemented." );
-        }
+    
 
         public IWorkingCopyExplorer WorkingCopyExplorer
         {

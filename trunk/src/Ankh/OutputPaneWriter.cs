@@ -71,18 +71,34 @@ namespace Ankh
 		/// Writes Start text to outputpane.
 		/// </summary>
 		/// <param name="action">Action.</param>
-		public void StartActionText(string action)
+		public IDisposable StartActionText(string action)
 		{
-
 			this.Activate();
 			this.outputPane.OutputString(this.FormatMessage(action) + Environment.NewLine +
 				Environment.NewLine);
+
+            return new EndAction(this);
 		}
+
+        sealed class EndAction : IDisposable
+        {
+            OutputPaneWriter _pw;
+            public EndAction(OutputPaneWriter pw)
+            {
+                _pw = pw;
+            }
+
+            public void Dispose()
+            {
+                _pw.EndActionText();
+                _pw = null;
+            }
+        }
 
 		/// <summary>
 		/// Writes end text to outputpane.
 		/// </summary>
-		public void EndActionText()
+		void EndActionText()
 		{
 			this.outputPane.OutputString(this.FormatMessage("Done") + Environment.NewLine +
 				Environment.NewLine);

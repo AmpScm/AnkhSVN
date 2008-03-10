@@ -29,8 +29,6 @@ namespace Ankh.RepositoryExplorer
             if (context.UIShell.RepositoryExplorer != null)
                 SetControl(context.UIShell.RepositoryExplorer);            
 
-            this.context.Unloading += new EventHandler(ContextUnloading);
-            
             this.directories = new Hashtable();
 
             this.LoadReposRoots();

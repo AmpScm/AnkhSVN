@@ -326,7 +326,7 @@ namespace Ankh
         /// <summary>
         /// Should be called before starting any lengthy operation
         /// </summary>
-        public void StartOperation(string description)
+        public IDisposable StartOperation(string description)
         {
             //TODO: maybe refactor this?
             this.operationRunning = true;
@@ -340,9 +340,29 @@ namespace Ankh
                 // Swallow, not critical
             }
 
-            this.OutputPane.StartActionText(description);
-
             this.progressDialog.Caption = description;
+
+            return new OperationCompleter(this, this.OutputPane.StartActionText(description));
+        }
+
+        class OperationCompleter : IDisposable
+        {
+            AnkhContext _context;
+            IDisposable _disp2;
+            
+            public OperationCompleter(AnkhContext context, IDisposable disp2)
+            {
+                _context = context;
+                _disp2 = disp2;
+            }
+
+            public void Dispose()
+            {
+                _context.EndOperation();
+                _context = null;
+                _disp2.Dispose();
+                _disp2 = null;
+            }
         }
 
         /// <summary>
@@ -361,8 +381,6 @@ namespace Ankh
                 {
                     // swallow, not critical
                 }
-
-                this.OutputPane.EndActionText();
                 this.operationRunning = false;
             }
         }

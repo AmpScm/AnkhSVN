@@ -42,22 +42,22 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments(context);
 
             string url;
 
-            IList vsProjects = this.GetVSProjects( context );
+            IList vsProjects = this.GetVSProjects(context);
             ArrayList notUnderSolutionRoot = CheckForProjectsNotUnderTheSolutionRoot(vsProjects);
-            
+
             // any projects not under the solution root, allow the user to bail out now
-            if ( notUnderSolutionRoot.Count > 0)
+            if (notUnderSolutionRoot.Count > 0)
             {
                 string[] projectNames = (string[])notUnderSolutionRoot.ToArray(typeof(string));
-                string projectNamesString = this.FormatProjectNames( projectNames );
-                if ( context.UIShell.ShowMessageBox("The following project(s) are not under the solution root and\r\n" + 
-                    "will not be imported into the repository if you choose to continue.\r\n\r\n" + 
+                string projectNamesString = this.FormatProjectNames(projectNames);
+                if (context.UIShell.ShowMessageBox("The following project(s) are not under the solution root and\r\n" +
+                    "will not be imported into the repository if you choose to continue.\r\n\r\n" +
                     projectNamesString + "\r\n" +
-                    "Do you want to continue anyway?\r\n", 
+                    "Do you want to continue anyway?\r\n",
                     "Project(s) not under the solution root.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) ==
                     DialogResult.No)
                 {
@@ -67,18 +67,17 @@ namespace Ankh.Commands
 
             // user wants to go on anyway.
 
-            using( AddSolutionDialog dlg = new AddSolutionDialog() )
+            using (AddSolutionDialog dlg = new AddSolutionDialog())
             {
-                if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                if (dlg.ShowDialog(context.HostWindow) != DialogResult.OK)
                     return;
 
                 url = dlg.BaseUrl;
 
                 // do we need to create a new repository directory?
-                if ( dlg.CreateSubDirectory )
+                if (dlg.CreateSubDirectory)
                 {
-                    context.StartOperation( "Creating repository directory" );
-                    try
+                    using (context.StartOperation("Creating repository directory"))
                     {
                         url = UriUtils.Combine(url, dlg.SubDirectoryName);
                         MakeDirWorker makeDirWorker = new MakeDirWorker(url,
@@ -88,108 +87,83 @@ namespace Ankh.Commands
                                 "Creating directory");
                         }
                     }
-                    finally
-                    {
-                        context.EndOperation();
-                    }
                 }
             }
+            string solutionDir = Path.GetDirectoryName(
+                    e.Selection.SolutionFilename);
+
 
             // now check out the repository directory into the solution dir
-            context.StartOperation( "Checking out repository directory" );
-            string solutionDir = Path.GetDirectoryName(
-                e.Selection.SolutionFilename);
-            try
+            using (context.StartOperation("Checking out repository directory"))
             {
+
+
                 // check out the repository directory specified               
-                CheckoutRunner checkoutRunner = new CheckoutRunner(  
-                    solutionDir, SvnRevision.Head, new Uri(url) );
-                context.UIShell.RunWithProgressDialog( checkoutRunner, "Checking out" );
-            }
-            finally
-            {
-                context.EndOperation();
+                CheckoutRunner checkoutRunner = new CheckoutRunner(
+                    solutionDir, SvnRevision.Head, new Uri(url));
+                context.UIShell.RunWithProgressDialog(checkoutRunner, "Checking out");
             }
 
             // walk the tree and add all the files
-            context.StartOperation( "Adding files" );
-            try
-            {
-                // the solution dir is already a wc                
-                this.paths = new ArrayList();
-                this.paths.Add( solutionDir );
-
-                context.Client.Add(e.Selection.SolutionFilename, SvnDepth.Empty);
-                this.paths.Add(e.Selection.SolutionFilename);
-                this.AddProjects( context, vsProjects );  
-            }
-            catch( Exception )
-            {
-                // oops, bad stuff happened
-                context.StartOperation( "Error: Reverting changes" );
+            using (context.StartOperation("Adding files"))
                 try
                 {
-                    SvnRevertArgs args = new SvnRevertArgs();
-                    args.Depth = SvnDepth.Infinity;
-                    context.Client.Revert(new string[] { solutionDir }, args);
-                    PathUtils.RecursiveDelete(
-                        Path.Combine(solutionDir, SvnClient.AdministrativeDirectoryName));
+                    // the solution dir is already a wc                
+                    this.paths = new ArrayList();
+                    this.paths.Add(solutionDir);
+
+                    context.Client.Add(e.Selection.SolutionFilename, SvnDepth.Empty);
+                    this.paths.Add(e.Selection.SolutionFilename);
+                    this.AddProjects(context, vsProjects);
                 }
-                finally
+                catch (Exception)
                 {
-                    context.EndOperation();
+                    // oops, bad stuff happened
+                    using (context.StartOperation("Error: Reverting changes"))
+                    {
+                        SvnRevertArgs args = new SvnRevertArgs();
+                        args.Depth = SvnDepth.Infinity;
+                        context.Client.Revert(new string[] { solutionDir }, args);
+                        PathUtils.RecursiveDelete(
+                            Path.Combine(solutionDir, SvnClient.AdministrativeDirectoryName));
+                    }
+                    throw;
                 }
-                throw;                
-            }
-            finally
-            {
-                context.EndOperation();
-            }
 
             // now commit the added files
-            CommitOperation operation = new CommitOperation( new SimpleProgressWorker( 
-                        new SimpleProgressWorkerCallback(this.DoCommit)), this.paths, context );
+            CommitOperation operation = new CommitOperation(new SimpleProgressWorker(
+                        new SimpleProgressWorkerCallback(this.DoCommit)), this.paths, context);
 
-            if ( !operation.ShowLogMessageDialog( ) )
+            if (!operation.ShowLogMessageDialog())
             {
                 // oops - after all this work, the user cancelled
-                context.StartOperation( "Aborted - reverting" );
-                try
+                using (context.StartOperation("Aborted - reverting"))
                 {
                     SvnRevertArgs args = new SvnRevertArgs();
                     args.Depth = SvnDepth.Infinity;
                     context.Client.Revert(new string[] { solutionDir }, args);
                     PathUtils.RecursiveDelete(
                         Path.Combine(solutionDir, SvnClient.AdministrativeDirectoryName));
-                }
-                finally
-                {
-                    context.EndOperation();
                 }
             }
             else
-            {  
+            {
                 // go ahead with the commit
-                context.StartOperation( "Committing added files" );
-                try
+                using (context.StartOperation("Committing added files"))
                 {
-                    bool completed = operation.Run( "Committing" ); 
+                    bool completed = operation.Run("Committing");
 
-                    if ( !completed )
+                    if (!completed)
                         return;
                 }
-                finally
-                {
-                    context.EndOperation();
-                }
-                        
+
                 // we want ankh to get enabled right away
                 // BH: This won't work any more
                 // context.DTE.ExecuteCommand( "Ankh.ToggleAnkh", "" );
 
                 // Make sure the URL typed gets remembered.
-                RegistryUtils.CreateNewTypedUrl( url );
-                    
+                RegistryUtils.CreateNewTypedUrl(url);
+
             }
         }
 

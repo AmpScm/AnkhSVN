@@ -22,17 +22,16 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            try
+            using (context.StartOperation("Opening"))
             {
-                context.StartOperation( "Opening" );
 
                 // make the catrunner get it on a separate thread.
                 INode node = context.RepositoryExplorer.SelectedNode;
-                CatRunner runner = new CatRunner( node.Name, 
-                    node.Revision, new Uri(node.Url) );
+                CatRunner runner = new CatRunner(node.Name,
+                    node.Revision, new Uri(node.Url));
 
-                context.UIShell.RunWithProgressDialog( runner, "Retrieving" );
-                 
+                context.UIShell.RunWithProgressDialog(runner, "Retrieving");
+
                 // now have windows try to start it.
                 Process process = new Process();
                 process.StartInfo.FileName = runner.Path;
@@ -42,21 +41,17 @@ namespace Ankh.Commands
                 {
                     process.Start();
                 }
-                catch( Win32Exception ex )
+                catch (Win32Exception ex)
                 {
                     // no application is associated with the file type
-                    if ( ex.NativeErrorCode == NOASSOCIATEDAPP )
-                        MessageBox.Show( "Windows could not find an application associated with the file type", 
-                            "No associated application", MessageBoxButtons.OK );
+                    if (ex.NativeErrorCode == NOASSOCIATEDAPP)
+                        MessageBox.Show("Windows could not find an application associated with the file type",
+                            "No associated application", MessageBoxButtons.OK);
                     else
                         throw;
                 }
             }
-            finally
-            {
-                context.EndOperation();
-            }
-        }        
+        }
 
         private const int NOASSOCIATEDAPP = 1155;
     }

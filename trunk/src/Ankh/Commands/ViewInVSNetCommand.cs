@@ -22,21 +22,16 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            try
+            using (context.StartOperation("Opening"))
             {
-                context.StartOperation( "Opening" );
 
                 INode node = context.RepositoryExplorer.SelectedNode;
 
                 CatRunner runner = new CatRunner(node.Name, node.Revision, new Uri(node.Url));
-                context.UIShell.RunWithProgressDialog( runner, "Retrieving file" );
+                context.UIShell.RunWithProgressDialog(runner, "Retrieving file");
 
-                ((IDTEContext)e.Context).DTE.ItemOperations.OpenFile(runner.Path, 
-                    EnvDTE.Constants.vsViewKindPrimary );
-            }
-            finally
-            {
-                context.EndOperation();
+                ((IDTEContext)e.Context).DTE.ItemOperations.OpenFile(runner.Path,
+                    EnvDTE.Constants.vsViewKindPrimary);
             }
         }
 

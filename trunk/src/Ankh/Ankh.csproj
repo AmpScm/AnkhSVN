@@ -359,9 +359,6 @@
     <Compile Include="EventSinks\EventSink.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EventSinks\ProjectFilesEventSink.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="EventSinks\SolutionEventsSink.cs" />
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
     <Compile Include="IAnkhPackage.cs" />
@@ -486,29 +483,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target
-        Name="GenerateSerializationAssemblies"
-        Condition="'$(_SGenGenerateSerializationAssembliesConfig)' == 'On' or ('@(WebReferenceUrl)'!='' and '$(_SGenGenerateSerializationAssembliesConfig)' == 'Auto')"
-        DependsOnTargets="AssignTargetPaths;Compile;ResolveKeySource"
-        Inputs="$(MSBuildAllProjects);@(IntermediateAssembly)"
-        Outputs="$(IntermediateOutputPath)$(_SGenDllName)">
-
-        <SGen
-            BuildAssemblyName="$(TargetFileName)"
-            BuildAssemblyPath="$(IntermediateOutputPath)"
-            References="@(ReferencePath)"
-            ShouldGenerateSerializer="true"
-            UseProxyTypes="false"
-            KeyContainer="$(KeyContainerName)"
-            KeyFile="$(KeyOriginatorFile)"
-            DelaySign="$(DelaySign)"
-            ToolPath="$(SGenToolPath)">
-
-            <Output TaskParameter="SerializationAssembly" ItemName="SerializationAssembly"/>
-
-        </SGen>
-
-    </Target>
+  <Target Name="GenerateSerializationAssemblies" Condition="'$(_SGenGenerateSerializationAssembliesConfig)' == 'On' or ('@(WebReferenceUrl)'!='' and '$(_SGenGenerateSerializationAssembliesConfig)' == 'Auto')" DependsOnTargets="AssignTargetPaths;Compile;ResolveKeySource" Inputs="$(MSBuildAllProjects);@(IntermediateAssembly)" Outputs="$(IntermediateOutputPath)$(_SGenDllName)">
+    <SGen BuildAssemblyName="$(TargetFileName)" BuildAssemblyPath="$(IntermediateOutputPath)" References="@(ReferencePath)" ShouldGenerateSerializer="true" UseProxyTypes="false" KeyContainer="$(KeyContainerName)" KeyFile="$(KeyOriginatorFile)" DelaySign="$(DelaySign)" ToolPath="$(SGenToolPath)">
+      <Output TaskParameter="SerializationAssembly" ItemName="SerializationAssembly" />
+    </SGen>
+  </Target>
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>

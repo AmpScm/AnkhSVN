@@ -24,7 +24,6 @@ namespace Ankh.WorkingCopyExplorer
             this.roots = new ArrayList();
 
             this.LoadRoots();
-            this.Context.Unloading += new EventHandler( Context_Unloading );
 
             if (context.UIShell.WorkingCopyExplorer != null)
             {

@@ -26,24 +26,19 @@ namespace Ankh.Commands
         {
             IContext context = e.Context;
 
-            using(CheckoutDialog dlg = new CheckoutDialog())
+            using (CheckoutDialog dlg = new CheckoutDialog())
             {
-                if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                if (dlg.ShowDialog(context.HostWindow) != DialogResult.OK)
                     return;
 
-                context.StartOperation( "Checking out" );
-                try
+                using (context.StartOperation("Checking out"))
                 {
                     CheckoutRunner runner = new CheckoutRunner(
-                        dlg.LocalPath, dlg.Revision, new Uri(dlg.Url), dlg.Recursive ? SvnDepth.Infinity : SvnDepth.Empty );
-                    context.UIShell.RunWithProgressDialog( runner, "Checking out" );
+                        dlg.LocalPath, dlg.Revision, new Uri(dlg.Url), dlg.Recursive ? SvnDepth.Infinity : SvnDepth.Empty);
+                    context.UIShell.RunWithProgressDialog(runner, "Checking out");
 
                     // make sure it's remembered
-                    RegistryUtils.CreateNewTypedUrl( dlg.Url );
-                }
-                finally
-                {
-                    context.EndOperation();
+                    RegistryUtils.CreateNewTypedUrl(dlg.Url);
                 }
             }
         }
