@@ -98,6 +98,7 @@ namespace Ankh
         /// </summary>
         IDisposable StartOperation( string description );
 
+        [Obsolete("Use .SelectionContext wherever possible")]
         IWorkingCopyExplorer WorkingCopyExplorer
         {
             get;
