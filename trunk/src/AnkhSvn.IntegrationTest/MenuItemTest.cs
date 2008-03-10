@@ -34,6 +34,12 @@ namespace AnkhSvn_IntegrationTestProject
 			}
 		}
 
+        [TestInitialize]
+        public void Initialize()
+        {
+            UIThreadInvoker.Initialize();
+        }
+
 		/// <summary>
 		///A test for lauching the command and closing the associated dialogbox
 		///</summary>
@@ -43,12 +49,12 @@ namespace AnkhSvn_IntegrationTestProject
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
 			{
-                CommandID menuItemCmd = new CommandID(AnkhId.CommandSetGuid, (int)AnkhSvn.Ids.AnkhCommand.FileSccMenuUpdateLatest);
+                CommandID menuItemCmd = new CommandID(AnkhId.CommandSetGuid, (int)AnkhSvn.Ids.AnkhCommand.Checkout);
 
 				// Create the DialogBoxListener Thread.
 				string expectedDialogBoxText = string.Format(CultureInfo.CurrentCulture, "{0}\n\nInside {1}.MenuItemCallback()", "AnkhSvn", "AnkhSvn.AnkhSvn.AnkhSvnPackage");
-				DialogBoxPurger purger = new DialogBoxPurger(NativeMethods.IDOK, expectedDialogBoxText);
-
+				DialogBoxPurger purger = new DialogBoxPurger(NativeMethods.IDCANCEL, expectedDialogBoxText);
+                
 				try
 				{
 					purger.Start();

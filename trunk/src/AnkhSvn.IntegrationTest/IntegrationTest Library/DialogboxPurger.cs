@@ -22,7 +22,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
 		/// <summary>
 		/// Object used for synchronization between thread calls.
 		/// </summary>
-		internal static volatile object Mutex = new object();
+		internal static readonly object Mutex = new object();
 
 		/// <summary>
 		/// The IVsUIShell. This cannot be queried on the working thread from the service provider. Must be done in the main thread.!!
