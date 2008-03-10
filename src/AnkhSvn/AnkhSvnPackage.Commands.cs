@@ -132,17 +132,29 @@ namespace Ankh.VSPackage
 			return VSConstants.S_OK;
 		}
 
-		AnkhContext _context;
-		public AnkhContext AnkhContext
+		IContext _context;
+		public IContext AnkhContext
 		{
 			get
 			{
-				if (_context == null)
-					_context = new AnkhContext(this);
+                if (_context == null)
+                {
+                    _context = GetService<IContext>();
+                    if (_context == null)
+                    {
+                        _context = new AnkhContext(this);
+                        // TODO: AddService...
+                    }
+                }
 
 				return _context;
 			}
 		}
+
+        public T GetService<T>()
+        {
+            return (T)GetService(typeof(T));
+        }
 
 		Ankh.Commands.Mapper.CommandMapper _mapper;
 
@@ -157,25 +169,7 @@ namespace Ankh.VSPackage
 			}
 		}
 
-		private void Temporary_OnCommand(CommandEventArgs e)
-		{
-			// Show a Message Box to prove we were here
-			Microsoft.VisualStudio.Shell.Interop.IVsUIShell uiShell = (IVsUIShell)GetService(typeof(Microsoft.VisualStudio.Shell.Interop.SVsUIShell));
-			Guid clsid = Guid.Empty;
-			int result;
-			Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(uiShell.ShowMessageBox(
-					   0,
-					   ref clsid,
-					   "AnkhSvn",
-					   string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback() for {1}", this.ToString(), e.Command),
-					   string.Empty,
-					   0,
-					   OLEMSGBUTTON.OLEMSGBUTTON_OK,
-					   OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
-					   OLEMSGICON.OLEMSGICON_INFO,
-					   0,        // false
-					   out result));
-		}
+		
 
 
 		#region // Interop code from: VS2008SDK\VisualStudioIntegration\Common\Source\CSharp\Project\Misc\NativeMethods.cs
