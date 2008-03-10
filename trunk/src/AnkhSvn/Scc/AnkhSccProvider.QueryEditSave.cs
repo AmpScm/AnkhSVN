@@ -9,7 +9,7 @@ namespace Ankh.VSPackage.Scc
     /// <summary>
     /// 
     /// </summary>
-    partial class AnkhSccProvider : IVsQueryEditQuerySave2, IVsQueryEditQuerySave3
+    partial class AnkhSccProvider : IVsQueryEditQuerySave2, IVsQueryEditQuerySave2
 	{
         /// <summary>
         /// Creates a batch of a sequence of documents before attempting to save them to disk.
@@ -91,7 +91,6 @@ namespace Ankh.VSPackage.Scc
         /// - not all editors call QueryEdit when they modify the file the first time (buggy editors!), and the files may be already dirty in memory when QueryEdit is called
         /// - files on disk may be modified outside IDE and may have attributes incorrect for their scc status
         /// - checkouts may fail
-        /// The sample provider won't deal with all these situations, but a real source control provider should!
         /// </summary>
         /// <param name="rgfQueryEdit">The RGF query edit.</param>
         /// <param name="cFiles">The c files.</param>
@@ -139,6 +138,8 @@ namespace Ankh.VSPackage.Scc
             return VSConstants.S_OK;
         }
 
+#if VS2008_PLUS
+        // TODO: Implement IVsQueryEditQuerySave3 extra's. 
         /// <summary>
         /// Notifies the environment that a file is about to be saved.
         /// </summary>
@@ -172,5 +173,6 @@ namespace Ankh.VSPackage.Scc
             prgfMoreInfo = (uint)tagVSQuerySaveResultFlags.QSR_DefaultFlag;
             return VSConstants.S_OK;
         }
+#endif
     }
 }
