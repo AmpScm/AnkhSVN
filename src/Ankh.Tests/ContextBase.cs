@@ -160,7 +160,7 @@ namespace Ankh.Tests
         public virtual IDisposable StartOperation(string description)
         {
             // TODO:  Add ContextBase.StartOperation implementation
-            return new object[0].GetEnumerator();
+            return null;
         }
 
         public virtual void Shutdown()
