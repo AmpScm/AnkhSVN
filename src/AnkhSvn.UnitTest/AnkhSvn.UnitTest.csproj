@@ -93,7 +93,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Ankh\Ankh.csproj">
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
-      <Name>Ankh %28Ankh\Ankh%29</Name>
+      <Name>Ankh</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

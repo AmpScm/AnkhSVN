@@ -131,7 +131,8 @@
     <Compile Include="Scc\AnkhSccProvider.cs" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </None>
     <None Include="Gui\Gui.xsx">
       <DependentUpon>Gui.xsd</DependentUpon>
@@ -188,17 +189,29 @@
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
+      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
+      <Name>Ankh.Ids</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Scc\Ankh.Scc.csproj">
+      <Project>{ECE36A69-DD85-4AAB-B329-12BAE4675056}</Project>
+      <Name>Ankh.Scc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
+      <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
+      <Name>Ankh.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj">
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Name>Ankh.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AnkhSvn.Ids\AnkhSvn.Ids.csproj">
-      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
-      <Name>AnkhSvn.Ids</Name>
+    <ProjectReference Include="..\Ankh.VS\Ankh.VS.csproj">
+      <Project>{906E3F01-CD79-4F80-BCA7-1105224328C4}</Project>
+      <Name>Ankh.VS</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ankh\Ankh.csproj">
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
-      <Name>Ankh %28Ankh\Ankh%29</Name>
+      <Name>Ankh</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

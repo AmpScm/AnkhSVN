@@ -100,7 +100,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
-      <Name>Utils.2005</Name>
+      <Name>Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

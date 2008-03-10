@@ -183,16 +183,20 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
+      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
+      <Name>Ankh.Ids</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
+      <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
+      <Name>Ankh.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj">
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Name>Ankh.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AnkhSvn.Ids\AnkhSvn.Ids.csproj">
-      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
-      <Name>AnkhSvn.Ids</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
-      <Name>Utils.2005</Name>
+      <Name>Utils</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
