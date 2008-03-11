@@ -5,7 +5,7 @@ using NUnit.Framework;
 using System.IO;
 using Utils;
 
-namespace Utils.Tests._2003
+namespace Utils.Tests
 {
     [TestFixture]
     public class FileUtilsTest

@@ -3,7 +3,7 @@ using System.Text;
 using NUnit.Framework;
 using Utils;
 
-namespace Utils.Tests._2003
+namespace Utils.Tests
 {
 	/// <summary>
 	/// Summary description for Win32Tests.
