@@ -24,6 +24,7 @@ namespace Ankh.Scc
             AnkhSccProvider service = new AnkhSccProvider(Context);
             Container.AddService(typeof(AnkhSccProvider), service, true);
             Container.AddService(typeof(IAnkhSccService), service, true);
+            Container.AddService(typeof(IAnkhProjectDocumentTracker), new ProjectDocumentTracker(Context));
 
             IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)GetService(typeof(IVsRegisterScciProvider));
             if (rscp != null)

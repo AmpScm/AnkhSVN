@@ -66,14 +66,24 @@
     <Compile Include="AnkhSccProvider.Solution.cs">
       <DependentUpon>AnkhSccProvider.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProjectDocumentTracker.cs" />
+    <Compile Include="ProjectDocumentTracker.Add.cs">
+      <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectDocumentTracker.Batching.cs">
+      <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectDocumentTracker.Remove.cs">
+      <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectDocumentTracker.Rename.cs">
+      <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="AnkhSccProvider.TrackDocuments.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
