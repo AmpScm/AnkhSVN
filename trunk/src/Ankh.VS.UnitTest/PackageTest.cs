@@ -22,6 +22,7 @@ using AnkhSvn_UnitTestProject.Mocks;
 using Rhino.Mocks;
 using AnkhSvn_UnitTestProject.Helpers;
 using Ankh;
+using Ankh.Scc;
 
 namespace UnitTestProject
 {
@@ -49,8 +50,11 @@ namespace UnitTestProject
             IVsPackage package = new AnkhSvnPackage() as IVsPackage;
             Assert.IsNotNull(package, "The object does not implement IVsPackage");
 
+            IFileStatusCache statusCache = mocks.DynamicMock<IFileStatusCache>();
+
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), AnkhContextMock.GetInstance(mocks)))
+            using (ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache))
             using (ServiceProviderHelper.SetSite(package))
             {
                 // Unsite the package
