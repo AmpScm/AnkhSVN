@@ -35,10 +35,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementation", "Implementation", "{9B380404-6594-4737-8518-291DEDEF3496}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BEAF04B7-B1BB-4ABA-BF6F-00495274C725}"
-	ProjectSection(SolutionItems) = preProject
-		AllTests.testrunconfig = AllTests.testrunconfig
-		AnkhSvn.2008.vsmdi = AnkhSvn.2008.vsmdi
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{E7D88D59-A87F-4939-AB58-315F8C41E20B}"
 EndProject
@@ -52,7 +48,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.VS.IntegrationTest", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.VS.UnitTest", "Ankh.VS.UnitTest\Ankh.VS.UnitTest.csproj", "{CBE396C6-F315-4DA4-BB3B-2FBDE5969BD2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BED3AA50-17ED-4A23-9104-72E31091B216}"
+	ProjectSection(SolutionItems) = preProject
+		AllTests.testrunconfig = AllTests.testrunconfig
+		AnkhSvn.2008.vsmdi = AnkhSvn.2008.vsmdi
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = AnkhSvn.2008.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -132,7 +137,7 @@ Global
 		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB} = {01F3ED56-C896-409C-8464-DB82B3AF1364}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal

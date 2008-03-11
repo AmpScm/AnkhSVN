@@ -7,7 +7,7 @@ namespace AnkhSvn_UnitTestProject.Helpers
 {
     class ServiceProviderHelper : IDisposable
     {
-        static OleServiceProvider serviceProvider;
+        internal static OleServiceProvider serviceProvider;
         static ServiceProviderHelper()
         {
             serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();

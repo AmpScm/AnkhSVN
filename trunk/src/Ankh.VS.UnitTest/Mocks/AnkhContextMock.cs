@@ -11,20 +11,10 @@ namespace AnkhSvn_UnitTestProject.Mocks
     {
         public static IContext GetInstance(MockRepository mocks)
         {
-            return GetInstance(mocks, null, mocks.DynamicMock<ISelectionContext>());
-        }
-
-        public static IContext GetInstance(MockRepository mocks, ISelectionContext selContext)
-        {
-            return GetInstance(mocks, null, selContext);
+            return GetInstance(mocks, null);
         }
 
         public static IContext GetInstance(MockRepository mocks, IUIShell uiShell)
-        {
-            return GetInstance(mocks, uiShell, mocks.DynamicMock<ISelectionContext>());
-        }
-
-        public static IContext GetInstance(MockRepository mocks, IUIShell uiShell, ISelectionContext selContext)
         {
             EnvDTE.DTE dte = DteMock.GetDteInstance(mocks);
 
@@ -38,7 +28,6 @@ namespace AnkhSvn_UnitTestProject.Mocks
 
                 if (uiShell != null)
                     Expect.Call(context.UIShell).Return(uiShell).Repeat.Any();
-                Expect.Call(context.SelectionContext).Return(selContext).Repeat.Any();
             }
 
             return context;
