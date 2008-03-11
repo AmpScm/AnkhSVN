@@ -122,7 +122,7 @@ namespace Ankh.Tests
         private MyUIShellImpl uiShell;
         private ContextBase ctx;
 
-        private ICommand cmd;
+        private ICommandHandler cmd;
 
         
     }
