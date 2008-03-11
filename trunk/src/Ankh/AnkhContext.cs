@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using Ankh.SolutionExplorer;
 using Ankh.UI;
 using Ankh.UI.Services;
 using SharpSvn;
@@ -16,6 +15,7 @@ using Ankh.Selection;
 using Ankh.EventSinks;
 using System.Collections.Generic;
 using Ankh.Scc;
+using Ankh.VS;
 
 namespace Ankh
 {
@@ -23,9 +23,8 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
-    public class OldAnkhContext : IContext, IDTEContext
+    public class OldAnkhContext : IContext, IDTEContext, IAnkhServiceProvider
     {
-        AnkhRuntime _runtime;
         /// <summary>
         /// Fired when the addin is unloading.
         /// </summary>
@@ -63,12 +62,7 @@ namespace Ankh
 
             this.conflictManager = new ConflictManager(this);
 
-            this.statusCache = new StatusCache();
-
-            this.solutionExplorerWindow = new SolutionExplorerWindow(package, SynchronizingObject);
-            this.selectionContext = new SelectionContext(package, statusCache, solutionExplorerWindow);
-
-            package.AddService(typeof(ISelectionContext), selectionContext);
+            this.statusCache = new StatusCache();            
 
             //GC.KeepAlive(this.solutionExplorerWindow.TreeWindow);
 
@@ -90,12 +84,18 @@ namespace Ankh
 
         void OnAfterOpenSolution(object sender, EventArgs e)
         {
-            solutionExplorerWindow.EnableAnkhIcons(true);
+            IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
+
+            if(window != null)
+                window.EnableAnkhIcons(true);
         }
 
         void OnBeforeCloseSolution(object sender, EventArgs e)
         {
-            solutionExplorerWindow.EnableAnkhIcons(false);
+            IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
+
+            if (window != null)
+                window.EnableAnkhIcons(false);
         }
 
         public IAnkhPackage Package
@@ -193,7 +193,7 @@ namespace Ankh
         /// <summary>
         /// The error handler.
         /// </summary>
-        public IErrorHandler ErrorHandler
+        public IAnkhErrorHandler ErrorHandler
         {
             [System.Diagnostics.DebuggerStepThrough]
             get { return this.errorHandler; }
@@ -222,23 +222,6 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get { return this.operationRunning; }
         }
-
-        public string SolutionDirectory
-        {
-            get
-            {
-                if (!this.SolutionIsOpen)
-                    return null;
-
-                // no point in doing anything if the solution dir doesn't exist
-                string solutionPath = SelectionContext.SolutionFilename;
-                if (solutionPath == String.Empty || !File.Exists(solutionPath))
-                    return null;
-
-                return Path.GetDirectoryName(solutionPath);
-            }
-        }
-
 
         /// <summary>
         /// An IWin32Window to be used for parenting dialogs.
@@ -402,15 +385,6 @@ namespace Ankh
             get { return new NullSelectionContainer(); }
         }
 
-        /// <summary>
-        /// Gets the selection context.
-        /// </summary>
-        /// <value>The selection context.</value>
-        public Ankh.Selection.ISelectionContext SelectionContext
-        {
-            get { return selectionContext; }
-        }
-
         public ISynchronizeInvoke SynchronizingObject
         {
             get { return progressDialog; }
@@ -465,7 +439,7 @@ namespace Ankh
             }
             catch (Exception ex)
             {
-                this.ErrorHandler.Handle(ex);
+                this.ErrorHandler.OnError(ex);
             }
         }
 
@@ -481,63 +455,7 @@ namespace Ankh
 
             // Let SharpSvnUI handle login and SSL dialogs
             SharpSvn.UI.SharpSvnUI.Bind(client, this.HostWindow);
-        }
-
-        private bool CheckWhetherAnkhShouldLoad()
-        {
-            string solutionDir = this.SolutionDirectory;
-
-            // if we don't have a valid solution directory, no point in going on
-            if (solutionDir == null)
-                return false;
-
-            // maybe this solution has never been loaded before with Ankh?
-            if (File.Exists(Path.Combine(solutionDir, "Ankh.Load")))
-            {
-                Debug.WriteLine("Found Ankh.Load", "Ankh");
-                return true;
-            }
-            //  user has expressly specified that this solution should load?
-            else if (File.Exists(Path.Combine(solutionDir, "Ankh.NoLoad")))
-            {
-                Debug.WriteLine("Found Ankh.NoLoad", "Ankh");
-                return false;
-            }
-            else
-            {
-                Debug.WriteLine("Found neither Ankh.Load nor Ankh.NoLoad", "Ankh");
-
-                // is this a wc?
-                // the user must manually enable Ankh if soln dir is not vc
-                if (AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath(solutionDir))
-                    return this.QueryWhetherAnkhShouldLoad(solutionDir);
-                else
-                    return false;
-            }
-        }
-
-        private bool QueryWhetherAnkhShouldLoad(string solutionDir)
-        {
-            DialogResult res = this.uiShell.QueryWhetherAnkhShouldLoad();
-
-            if (res == DialogResult.Yes)
-            {
-                Debug.WriteLine("Creating Ankh.Load", "Ankh");
-                string ankhLoad = Path.Combine(solutionDir, "Ankh.Load");
-                File.Create(ankhLoad).Close();
-                File.SetAttributes(ankhLoad, FileAttributes.Hidden);
-                return true;
-            }
-            else if (res == DialogResult.No)
-            {
-                Debug.WriteLine("Creating Ankh.NoLoad", "Ankh");
-                string ankhNoLoad = Path.Combine(solutionDir, "Ankh.NoLoad");
-                File.Create(ankhNoLoad).Close();
-                File.SetAttributes(ankhNoLoad, FileAttributes.Hidden);
-            }
-
-            return false;
-        }
+        }   
 
         #region Win32Window class
         private class Win32Window : IWin32Window
@@ -595,10 +513,6 @@ namespace Ankh
             private SvnItem[] EmptyList = new SvnItem[] { };
         }
 
-
-        SelectionContext selectionContext;
-        SolutionExplorerWindow solutionExplorerWindow;
-
         private EnvDTE._DTE dte;
         private IWin32Window hostWindow;
 
@@ -619,7 +533,7 @@ namespace Ankh
         private bool operationRunning;
 
         private ConflictManager conflictManager;
-        private IErrorHandler errorHandler;
+        private IAnkhErrorHandler errorHandler;
 
         private FileWatcher projectFileWatcher;
 
@@ -631,5 +545,24 @@ namespace Ankh
         private Ankh.Config.ConfigLoader configLoader;
 
         readonly IAnkhPackage package;
+
+        #region IAnkhServiceProvider Members
+
+        public T GetService<T>()
+        {
+            return (T)GetService(typeof(T));
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region IServiceProvider Members
+
+        public object GetService(Type serviceType)
+        {
+            return ServiceProvider.GetService(serviceType);
+        }
+
+        #endregion
     }
 }

@@ -486,7 +486,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             mocks = new MockRepository();
 
-            IErrorHandler errorHandler = mocks.DynamicMock<IErrorHandler>();
+            IAnkhErrorHandler errorHandler = mocks.DynamicMock<IAnkhErrorHandler>();
             using (mocks.Record())
             {
                 errorHandler.SendReport();

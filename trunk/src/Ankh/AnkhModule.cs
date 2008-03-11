@@ -29,11 +29,16 @@ namespace Ankh
             // TODO: Register services
             if(null == Container.GetService(typeof(IFileStatusCache)))
                 Container.AddService(typeof(IFileStatusCache), _context.StatusCache);
-            Container.AddService(typeof(IStatusImageMapper), new StatusImages.TempStatusImageMapper());            
+            Container.AddService(typeof(IStatusImageMapper), new StatusImages.TempStatusImageMapper());
+#if !DEBUG
+            Container.AddService(typeof(IAnkhErrorHandler), new ErrorHandler());
+#endif
         }
 
         public override void OnInitialize()
         {
+            EnsureService<IAnkhErrorHandler>();
+            
             //throw new NotImplementedException();
         }
     }

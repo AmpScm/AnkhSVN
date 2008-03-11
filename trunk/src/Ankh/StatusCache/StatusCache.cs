@@ -33,10 +33,6 @@ namespace Ankh
         {
             lock (this)
             {
-                Debug.WriteLine(
-                    String.Format("Generating {0} status cache for {1}",
-                    depth, dir),
-                    "Ankh");
                 if (!AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath(dir))
                 {
                     foreach (string file in Directory.GetFiles(dir))
@@ -71,8 +67,6 @@ namespace Ankh
 
                 if (!_map.TryGetValue(normPath, out item))
                 {
-                    System.Diagnostics.Debug.WriteLine(
-                        "Cached item not found for " + normPath, "Ankh");
                     this.cacheMisses++;
 
                     // fill the status cache from this directory
@@ -101,9 +95,6 @@ namespace Ankh
                 else
                 {
                     this.cacheHits++;
-                    System.Diagnostics.Debug.WriteLine(
-                        "Cached item found for " + path,
-                        "Ankh");
                 }
 
                 return item;
@@ -158,8 +149,6 @@ namespace Ankh
         /// <param name="status"></param>
         private void Callback(object sender, SvnStatusEventArgs e)
         {
-            Debug.WriteLine("Received status for " + e.Path + ": " + e.LocalContentStatus,
-                "Ankh");
             // we need all paths to be on ONE form
             string normPath = PathUtils.NormalizePath(e.Path, this.currentPath);
 

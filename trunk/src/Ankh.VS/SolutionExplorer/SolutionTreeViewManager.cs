@@ -8,28 +8,25 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Ankh.Scc;
 
 namespace Ankh.SolutionExplorer
 {
     class SolutionTreeViewManager
     {
-        readonly IServiceProvider _environment;
-        readonly ISynchronizeInvoke _synchronizer;
+        readonly IAnkhServiceProvider _environment;
 
         bool _useAnkhIcons;
         IntPtr _originalImageList;
 
         Win32TreeView _treeViewControl;
 
-        public SolutionTreeViewManager(IServiceProvider environment, ISynchronizeInvoke synchronizer)
+        public SolutionTreeViewManager(IAnkhServiceProvider environment)
         {
             if (environment == null)
                 throw new ArgumentNullException("environment");
-            else if (synchronizer == null)
-                throw new ArgumentNullException("synchronizer");
 
-            _environment = environment;
-            _synchronizer = synchronizer;
+            _environment = environment;            
         }
 
         public Win32TreeView TreeView
@@ -170,6 +167,11 @@ namespace Ankh.SolutionExplorer
 
             return IntPtr.Zero;
         }
+        IStatusImageMapper _statusImageMapper;
+        IStatusImageMapper StatusImageMapper
+        {
+            get { return _statusImageMapper ?? (_statusImageMapper = _environment.GetService<IStatusImageMapper>()); }
+        }
 
         void SetIcons()
         {
@@ -177,11 +179,11 @@ namespace Ankh.SolutionExplorer
                 return; // Nothing to do
 
             // store the original image list (check that we're not storing our own statusImageList
-            if (StatusImages.StatusImageList.Handle != TreeView.StatusImageList)
+            if (StatusImageMapper.StatusImageList.Handle != TreeView.StatusImageList)
                 _originalImageList = TreeView.StatusImageList;
 
             // and assign the status image list to the tree
-            TreeView.StatusImageList = StatusImages.StatusImageList.Handle;
+            TreeView.StatusImageList = StatusImageMapper.StatusImageList.Handle;
             TreeView.SuppressStatusImageChange = true;
         }
 

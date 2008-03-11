@@ -11,23 +11,16 @@ using Microsoft.VisualStudio.OLE.Interop;
 using IServiceProvider = System.IServiceProvider;
 using Microsoft.VisualStudio.Shell;
 using Ankh.UI;
+using Ankh.VS;
 
 namespace Ankh.SolutionExplorer
 {
-    interface IAnkhSolutionExplorerWindow
-    {
-        void Show();
-
-        void EnableAnkhIcons(bool enabled);
-    }
-
     /// <summary>
     /// 
     /// </summary>
     class SolutionExplorerWindow : IVsWindowFrameNotify, IVsWindowFrameNotify2, IDisposable, IAnkhSolutionExplorerWindow
     {
-        readonly IServiceProvider _environment;
-        readonly ISynchronizeInvoke _synchronizer;
+        readonly IAnkhServiceProvider _environment;
         readonly SolutionTreeViewManager _manager;
         
         IVsWindowFrame _solutionExplorer;
@@ -36,18 +29,13 @@ namespace Ankh.SolutionExplorer
         
         uint _cookie;
 
-        public SolutionExplorerWindow(IServiceProvider environment, ISynchronizeInvoke synchronizer)
+        public SolutionExplorerWindow(IAnkhServiceProvider environment)
         {
             if (environment == null)
                 throw new ArgumentNullException("environment");
-            else if (synchronizer == null)
-                throw new ArgumentNullException("synchronizer");
 
             _environment = environment;
-            _synchronizer = synchronizer;
-
-
-            _manager = new SolutionTreeViewManager(environment, synchronizer);
+            _manager = new SolutionTreeViewManager(environment);
 
             if (SolutionExplorerFrame.IsVisible() == VSConstants.S_OK)
                 _manager.Ensure(this);

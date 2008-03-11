@@ -326,11 +326,6 @@
     <Compile Include="IWorkingCopyExplorer.cs" />
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Selection\CachedEnumerable.cs" />
-    <Compile Include="Selection\SelectionContext.cs" />
-    <Compile Include="Selection\SelectionUtils.cs" />
-    <Compile Include="SolutionExplorer\SolutionExplorerWindow.cs" />
-    <Compile Include="SolutionExplorer\SolutionTreeViewManager.cs" />
     <Compile Include="StatusCache\StatusCache.cs" />
     <Compile Include="StatusImages.cs" />
     <Compile Include="TreeNode.cs" />
@@ -348,9 +343,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IErrorHandler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IUIShell.cs">
@@ -382,9 +374,6 @@
     <Compile Include="ResourceBitmaps.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Content Include="SolutionExplorer\lock.ico" />
-    <Content Include="SolutionExplorer\lockedreadonly.ico" />
-    <Content Include="SolutionExplorer\readonly.ico" />
     <Compile Include="SwitchDialogInfo.cs" />
     <Compile Include="UIShell.cs">
       <SubType>Code</SubType>

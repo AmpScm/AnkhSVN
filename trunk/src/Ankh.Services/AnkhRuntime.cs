@@ -11,6 +11,7 @@ namespace Ankh
         readonly ServiceContainer _container;
         readonly CommandMapper _commandMapper;
         readonly AnkhContext _context;
+        bool _ensureServices;
 
         public AnkhRuntime(IServiceProvider parentProvider)
         {
@@ -24,8 +25,22 @@ namespace Ankh
 
             if (parentProvider.GetService(typeof(AnkhRuntime)) == null)
                 _container.AddService(typeof(AnkhRuntime), this, true);
+
+#if DEBUG
+            PreloadServicesViaEnsure = true;
+#endif
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether all modules must preload their services
+        /// </summary>
+        /// <value><c>true</c> if all services should preload their required services, otherwise <c>false</c>.</value>
+        public bool PreloadServicesViaEnsure
+        {
+            get { return _ensureServices; }
+            set { _ensureServices = value; }
+        }
+        
         #region IAnkhServiceProvider Members
 
         /// <summary>

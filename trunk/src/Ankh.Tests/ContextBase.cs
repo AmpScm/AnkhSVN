@@ -138,7 +138,7 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual IErrorHandler ErrorHandler
+        public virtual IAnkhErrorHandler ErrorHandler
         {
             get
             {
@@ -242,13 +242,13 @@ namespace Ankh.Tests
                 throw new Exception( "Exception thrown", handler.Exception );            
         }
 
-        public class ErrorHandlerImpl : IErrorHandler
+        public class ErrorHandlerImpl : IAnkhErrorHandler
         {
             public Exception Exception;
 
             #region IErrorHandler Members
 
-            public virtual void Handle(Exception ex)
+            public virtual void OnError(Exception ex)
             {
                 this.Exception = ex;
             }
@@ -664,7 +664,7 @@ namespace Ankh.Tests
         public _DTE dte;
         public SvnClient client;
         public StatusCache statusCache;
-        public IErrorHandler errorHandler;
+        public IAnkhErrorHandler errorHandler;
         public OutputPaneWriter outputPane;
         public IUIShell uiShell;
         private ConfigLoader configLoader;

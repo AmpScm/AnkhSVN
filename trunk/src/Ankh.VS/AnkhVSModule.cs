@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Ankh.SolutionExplorer;
+using Ankh.Selection;
+using Ankh.Scc;
 
 namespace Ankh.VS
 {
@@ -24,6 +27,11 @@ namespace Ankh.VS
         public override void OnPreInitialize()
         {
             Runtime.CommandMapper.LoadFrom(typeof(AnkhVSModule).Assembly);
+
+            SolutionExplorerWindow window = new SolutionExplorerWindow(this);
+
+            Container.AddService(typeof(IAnkhSolutionExplorerWindow), window, true);
+            Container.AddService(typeof(ISelectionContext), new SelectionContext(this, window), true);
         }
 
         /// <summary>
@@ -31,6 +39,9 @@ namespace Ankh.VS
         /// </summary>
         public override void OnInitialize()
         {
+            EnsureService<IFileStatusCache>();
+            EnsureService<IStatusImageMapper>();
+
             //throw new NotImplementedException();
         }
     }

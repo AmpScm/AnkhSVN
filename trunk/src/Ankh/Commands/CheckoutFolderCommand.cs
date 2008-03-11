@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-using EnvDTE;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
 

@@ -148,7 +148,7 @@ namespace Ankh.EventSinks
             }
             catch ( Exception ex )
             {
-                this.Context.ErrorHandler.Handle( ex );
+                this.Context.ErrorHandler.OnError( ex );
                 return VSConstants.E_FAIL;
             }
         }
@@ -284,7 +284,7 @@ namespace Ankh.EventSinks
             }
             catch ( Exception ex )
             {
-                this.context.ErrorHandler.Handle( ex );
+                this.context.ErrorHandler.OnError( ex );
                 return VSConstants.E_FAIL;
             }
         }        
@@ -330,7 +330,7 @@ namespace Ankh.EventSinks
             }
             catch ( Exception ex )
             {
-                this.context.ErrorHandler.Handle( ex );
+                this.context.ErrorHandler.OnError( ex );
                 return VSConstants.E_FAIL;
             }
         }
@@ -371,7 +371,7 @@ namespace Ankh.EventSinks
             }
             catch ( Exception ex )
             {
-                context.ErrorHandler.Handle( ex );
+                context.ErrorHandler.OnError( ex );
                 return VSConstants.E_FAIL;
             }
         }
@@ -436,7 +436,7 @@ namespace Ankh.EventSinks
             }
             catch( Exception ex )
             {
-                this.context.ErrorHandler.Handle( ex );
+                this.context.ErrorHandler.OnError( ex );
                 return VSConstants.E_FAIL;
             }
         }

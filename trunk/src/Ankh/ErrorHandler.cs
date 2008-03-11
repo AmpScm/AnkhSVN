@@ -17,7 +17,7 @@ namespace Ankh
     /// <summary>
     /// Encapsulates error handling functionality.
     /// </summary>
-    public class ErrorHandler : IErrorHandler
+    public class ErrorHandler : IAnkhErrorHandler
     {
         public ErrorHandler( string dteVersion, IContext context )
         {
@@ -29,7 +29,7 @@ namespace Ankh
         /// Handles an exception.
         /// </summary>
         /// <param name="ex"></param>
-        public void Handle( Exception ex )
+        public void OnError( Exception ex )
         {
             try
             {
@@ -67,7 +67,7 @@ namespace Ankh
         {
             // we're only interested in the inner exception - we know where the 
             // outer one comes from
-            Handle( ex.InnerException );
+            OnError( ex.InnerException );
         }
 
         private void DoHandle(SvnRepositoryHookException e)

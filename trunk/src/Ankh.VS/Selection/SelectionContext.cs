@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using IServiceProvider = System.IServiceProvider;
 using Microsoft.VisualStudio.Shell;
 using Ankh.SolutionExplorer;
+using Ankh.Scc;
 
 namespace Ankh.Selection
 {
@@ -17,8 +18,8 @@ namespace Ankh.Selection
     /// </summary>
     class SelectionContext : IVsSelectionEvents, IDisposable, ISelectionContext
     {
-        readonly IServiceProvider _context;
-        readonly StatusCache _cache;
+        readonly IAnkhServiceProvider _context;
+        readonly IFileStatusCache _cache;
         readonly SolutionExplorerWindow _solutionExplorer;
         bool _disposed;
         uint _cookie;
@@ -41,17 +42,15 @@ namespace Ankh.Selection
         bool _isSolutionExplorer;
         string _solutionFilename;
 
-        public SelectionContext(IServiceProvider environment, StatusCache cache, SolutionExplorerWindow solutionExplorer)
+        public SelectionContext(IAnkhServiceProvider environment, SolutionExplorerWindow solutionExplorer)
         {
             if (environment == null)
                 throw new ArgumentNullException("environment");
-            else if (cache == null)
-                throw new ArgumentNullException("cache");
             else if (solutionExplorer == null)
                 throw new ArgumentNullException("solutionExplorer");
 
             _context = environment;
-            _cache = cache;
+            _cache = environment.GetService<IFileStatusCache>();
             _solutionExplorer = solutionExplorer;
 
             IVsMonitorSelection monitor = (IVsMonitorSelection)environment.GetService(typeof(IVsMonitorSelection));
