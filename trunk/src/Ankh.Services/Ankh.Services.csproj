@@ -69,8 +69,9 @@
     <Compile Include="Selection\ISelectionContext.cs" />
     <Compile Include="Selection\LocalSvnItem.cs" />
     <Compile Include="Selection\RemoteSvnItem.cs" />
+    <Compile Include="Subversion\ISvnLogService.cs" />
     <Compile Include="UI\IAnkhUISite.cs" />
-    <Compile Include="UI\ISvnLogService.cs" />
+    <Compile Include="UI\ISvnLogView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">

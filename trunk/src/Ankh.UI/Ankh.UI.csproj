@@ -331,7 +331,6 @@
     <Compile Include="ViewLogDialog.Designer.cs">
       <DependentUpon>ViewLogDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\ISvnLogView.cs" />
     <Compile Include="LockDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -635,6 +634,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>WorkingCopyExplorerControl.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
