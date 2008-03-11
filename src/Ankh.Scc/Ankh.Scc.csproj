@@ -57,9 +57,15 @@
   <ItemGroup>
     <Compile Include="AnkhSccModule.cs" />
     <Compile Include="AnkhSccProvider.cs" />
-    <Compile Include="AnkhSccProvider.Glyphs.cs" />
-    <Compile Include="AnkhSccProvider.QueryEditSave.cs" />
-    <Compile Include="AnkhSccProvider.Solution.cs" />
+    <Compile Include="AnkhSccProvider.Glyphs.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccProvider.QueryEditSave.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccProvider.Solution.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
