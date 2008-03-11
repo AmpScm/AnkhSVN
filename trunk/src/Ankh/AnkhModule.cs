@@ -8,7 +8,7 @@ namespace Ankh
 {
     public class AnkhModule : Module
     {
-        OldAnkhContext _context;
+        IContext _context;
         public AnkhModule(AnkhRuntime runtime)
             : base(runtime)
         {
@@ -19,7 +19,7 @@ namespace Ankh
             Runtime.CommandMapper.LoadFrom(typeof(AnkhModule).Assembly);
 
             // Ensure old context behaviour
-            _context = (OldAnkhContext)GetService<IContext>();
+            _context = GetService<IContext>();
             if (_context == null)
             {
                 _context = new OldAnkhContext(GetService<IAnkhPackage>());
@@ -27,7 +27,7 @@ namespace Ankh
             }
 
             // TODO: Register services
-            Container.AddService(typeof(IFileStatusCache), _context.StatusCache);
+                Container.AddService(typeof(IFileStatusCache), _context.StatusCache);
             Container.AddService(typeof(IStatusImageMapper), new StatusImages.TempStatusImageMapper());            
         }
 
