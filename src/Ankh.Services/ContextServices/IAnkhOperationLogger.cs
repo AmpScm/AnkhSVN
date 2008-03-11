@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ankh.ContextServices
 {
-    interface IAnkhOperationLogger
+    public interface IAnkhOperationLogger
     {
         IDisposable BeginOperation(string message);
 
