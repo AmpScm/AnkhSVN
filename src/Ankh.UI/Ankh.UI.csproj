@@ -428,8 +428,6 @@
     <Compile Include="ViewLogDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Win32TreeView.cs" />
-    <Compile Include="Win32TreeViewHost.cs" />
     <Compile Include="WorkingCopyExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

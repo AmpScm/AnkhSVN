@@ -68,13 +68,13 @@ namespace Ankh.Tests.Commands
             }
         }
 
-        private class TestErrorHandler : IErrorHandler
+        private class TestErrorHandler : IAnkhErrorHandler
         {
             public bool Sent = false;
 
             #region IErrorHandler Members
 
-            public void Handle(Exception ex)
+            public void OnError(Exception ex)
             {
                 // TODO:  Add TestErrorHandler.Handle implementation
             }

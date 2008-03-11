@@ -62,7 +62,7 @@ namespace Ankh
         /// <summary>
         /// The error handler.
         /// </summary>
-        IErrorHandler ErrorHandler { get; }
+        IAnkhErrorHandler ErrorHandler { get; }
 
         /// <summary>
         /// The configloader.
@@ -111,11 +111,6 @@ namespace Ankh
         {
             get;
         }
-
-		ISelectionContext SelectionContext
-		{
-			get;
-		}
 
 		System.ComponentModel.ISynchronizeInvoke SynchronizingObject
 		{

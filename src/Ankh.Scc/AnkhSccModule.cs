@@ -20,7 +20,6 @@ namespace Ankh.Scc
         public override void OnPreInitialize()
         {
             Runtime.CommandMapper.LoadFrom(typeof(AnkhSccModule).Assembly);
-
             
             AnkhSccProvider service = new AnkhSccProvider(Context);
             Container.AddService(typeof(AnkhSccProvider), service, true);
@@ -38,7 +37,10 @@ namespace Ankh.Scc
         /// </summary>
         public override void OnInitialize()
         {
-            //throw new NotImplementedException();
+            EnsureService<IStatusImageMapper>();
+            EnsureService<IFileStatusCache>();
+            
+
         }
     }
 }

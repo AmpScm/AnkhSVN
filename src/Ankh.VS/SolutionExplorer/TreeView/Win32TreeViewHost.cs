@@ -58,16 +58,16 @@ namespace Ankh.UI
             }
         }
 
-        private unsafe void WmNotify( System.Windows.Forms.Message m )
+        private void WmNotify( System.Windows.Forms.Message m )
         {
-            NMTREEVIEW* nmtv = (NMTREEVIEW*)m.LParam;
-            switch ( nmtv->nmhdr.code )
+            NMTREEVIEW nmtv = (NMTREEVIEW)Marshal.PtrToStructure(m.LParam, typeof(NMTREEVIEW));
+            switch ( nmtv.nmhdr.code )
             {
                 case unchecked( (int)Msg.TVN_ITEMEXPANDEDA ):
                 case unchecked( (int)Msg.TVN_ITEMEXPANDEDW ):
                     this.OnItemExpanded( new ItemExpandedEventArgs(
-                        (uint)nmtv->itemNew.hItem.ToInt32(),
-                        ( nmtv->itemNew.state & Constants.TVIS_EXPANDED ) != 0 ?
+                        (uint)nmtv.itemNew.hItem.ToInt32(),
+                        ( nmtv.itemNew.state & Constants.TVIS_EXPANDED ) != 0 ?
                             TreeViewAction.Expand :
                             TreeViewAction.Collapse
                         ) );

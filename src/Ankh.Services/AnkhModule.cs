@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 
 namespace Ankh
 {
@@ -57,6 +58,21 @@ namespace Ankh
         /// Called when <see cref="AnkhRuntime.Start"/> is called
         /// </summary>
         public abstract void OnInitialize();
+
+
+        /// <summary>
+        /// Ensures the service exists when using the testing infrastructure; skipped in release builds
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        [Conditional("Debug")]
+        protected void EnsureService<T>()
+        {
+            if (Runtime.PreloadServicesViaEnsure)
+            {
+                Debug.Assert(GetService(typeof(T)) != null, string.Format("{0} service is not registered", typeof(T).FullName));
+            }
+        }
+
 
         #region IAnkhServiceProvider Members
 

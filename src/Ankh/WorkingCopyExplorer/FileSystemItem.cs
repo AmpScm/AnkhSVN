@@ -70,7 +70,7 @@ namespace Ankh.WorkingCopyExplorer
             }
             catch ( Exception ex )
             {
-                this.Explorer.Context.ErrorHandler.Handle( ex );
+                this.Explorer.Context.ErrorHandler.OnError( ex );
             }
         }
        
@@ -115,7 +115,7 @@ namespace Ankh.WorkingCopyExplorer
                 }
                 catch ( Exception ex )
                 {
-                    this.explorer.Context.ErrorHandler.Handle( ex );
+                    this.explorer.Context.ErrorHandler.OnError( ex );
                     return 0;
                 }
             }
@@ -135,7 +135,7 @@ namespace Ankh.WorkingCopyExplorer
             }
             catch ( Exception ex )
             {
-                this.explorer.Context.ErrorHandler.Handle( ex );
+                this.explorer.Context.ErrorHandler.OnError( ex );
                 return false;
             }
         }
@@ -148,7 +148,7 @@ namespace Ankh.WorkingCopyExplorer
             }
             catch ( Exception ex )
             {
-                this.explorer.Context.ErrorHandler.Handle( ex );
+                this.explorer.Context.ErrorHandler.OnError( ex );
                 return 0;
             }
         }
