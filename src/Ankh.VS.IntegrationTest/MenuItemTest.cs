@@ -43,7 +43,7 @@ namespace AnkhSvn_IntegrationTestProject
 		/// <summary>
 		///A test for lauching the command and closing the associated dialogbox
 		///</summary>
-		[TestMethod()]
+		[TestMethod, Ignore] // show Dialog
 		[HostType("VS IDE")]
 		public void LaunchCommand()
 		{

@@ -18,29 +18,16 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 {
     static class CommandTester
     {
-        public static void TestExecution<TCommand>(AnkhCommand commandEnum)
+        public static void TestExecution(AnkhCommand commandEnum)
         {
-            AnkhSvnPackage package = new AnkhSvnPackage();
-            using (ServiceProviderHelper.SetSite(package))
-            {
-                CommandMapItem cmi = package.CommandMapper[commandEnum];
-                Assert.IsNotNull(cmi);
-                Assert.AreEqual<AnkhCommand>(commandEnum, cmi.Command);
+            AnkhRuntime runtime = new AnkhRuntime(ServiceProviderHelper.serviceProvider);
+            runtime.AddModule(new AnkhModule(runtime));
+            runtime.Start();
 
-                bool executed = false;
-                bool updated = false;
-                cmi.Execute += delegate { executed = true; };
-                cmi.Update += delegate
-                {
-                    Assert.IsNotNull(cmi.ICommand);
-                    Assert.IsInstanceOfType(cmi.ICommand, typeof(TCommand));
-                    updated = true;
-                };
-
-                CommandExecutor.ExecuteCommand(package, commandEnum);
-                Assert.IsTrue(executed);
-                Assert.IsTrue(updated);
-            }
+            bool executed = runtime.CommandMapper.Execute(commandEnum, new CommandEventArgs(commandEnum, runtime.Context));
+            if (!executed)
+                Assert.Inconclusive("Command disabled");
+            Assert.IsTrue(executed);
         }
     }
     [TestClass]
@@ -52,13 +39,14 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
                 // TODO: set-up fake selection
-                CommandTester.TestExecution<AddItemCommand>(AnkhCommand.AddItem);
+                CommandTester.TestExecution(AnkhCommand.AddItem);
             }
         }
 
@@ -81,7 +69,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<AddRepositoryRootCommand>(AnkhCommand.AddRepositoryRoot);
+                CommandTester.TestExecution(AnkhCommand.AddRepositoryRoot);
             }
         }
 
@@ -99,7 +87,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<AddSolutionToRepositoryCommand>(AnkhCommand.AddSolutionToRepository);
+                CommandTester.TestExecution(AnkhCommand.AddSolutionToRepository);
             }
         }
 
@@ -120,7 +108,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<AddWorkingCopyExplorerRootCommand>(AnkhCommand.AddWorkingCopyExplorerRoot);
+                CommandTester.TestExecution(AnkhCommand.AddWorkingCopyExplorerRoot);
             }
         }
 
@@ -130,13 +118,14 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
                 
-                CommandTester.TestExecution<BlameCommand>(AnkhCommand.Blame);
+                CommandTester.TestExecution(AnkhCommand.Blame);
             }
         }
 
@@ -151,7 +140,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
                 // TODO: set-up fake selection
-                CommandTester.TestExecution<CheckoutCommand>(AnkhCommand.Checkout);
+                CommandTester.TestExecution(AnkhCommand.Checkout);
             }
         }
 
@@ -169,12 +158,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
             
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<Cleanup>(AnkhCommand.Cleanup);
+                CommandTester.TestExecution(AnkhCommand.Cleanup);
             }
         }
 
@@ -184,12 +174,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using(mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<CommitItemCommand>(AnkhCommand.CommitItem);
+                CommandTester.TestExecution(AnkhCommand.CommitItem);
             }
         }
 
@@ -200,9 +191,10 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             IContext context = AnkhContextMock.GetInstance(mocks);
             using(mocks.Playback())
+
             using(ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<CopyReposExplorerUrl>(AnkhCommand.CopyReposExplorerUrl);
+                CommandTester.TestExecution(AnkhCommand.CopyReposExplorerUrl);
             }
         }
 
@@ -213,11 +205,12 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, uiShell, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks, uiShell);
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<CreatePatchCommand>(AnkhCommand.CreatePatch);
+                CommandTester.TestExecution(AnkhCommand.CreatePatch);
             }
         }
 
@@ -230,7 +223,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<DiffExternalLocalItem>(AnkhCommand.DiffExternalLocalItem);
+                CommandTester.TestExecution(AnkhCommand.DiffExternalLocalItem);
             }
         }
 
@@ -240,14 +233,15 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, uiShell, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks, uiShell);
             
             Assert.Inconclusive("Diff not verified");
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<DiffLocalItem>(AnkhCommand.DiffLocalItem);
+                CommandTester.TestExecution(AnkhCommand.DiffLocalItem);
             }
         }
 
@@ -257,13 +251,14 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, uiShell, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks, uiShell);
 
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<ExportCommand>(AnkhCommand.Export);
+                CommandTester.TestExecution(AnkhCommand.Export);
             }
         }
 
@@ -273,13 +268,14 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, uiShell, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks, uiShell);
 
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<ExportFolderCommand>(AnkhCommand.ExportFolder);
+                CommandTester.TestExecution(AnkhCommand.ExportFolder);
             }
         }
 
@@ -288,12 +284,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<LockCommand>(AnkhCommand.Lock);
+                CommandTester.TestExecution(AnkhCommand.Lock);
             }
         }
 
@@ -302,12 +299,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<LogCommand>(AnkhCommand.Log);
+                CommandTester.TestExecution(AnkhCommand.Log);
             }
         }
 
@@ -316,12 +314,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<MakeDirectoryCommand>(AnkhCommand.NewDirectory);
+                CommandTester.TestExecution(AnkhCommand.NewDirectory);
             }
         }
 
@@ -331,12 +330,14 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
 
             IContext context = AnkhContextMock.GetInstance(mocks);
+            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
 
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
                 // TODO: set-up fake selection
-                CommandTester.TestExecution<RefreshCommand>(AnkhCommand.Refresh);
+                CommandTester.TestExecution(AnkhCommand.Refresh);
             }
         }
 
@@ -345,12 +346,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<RelocateCommand>(AnkhCommand.Relocate);
+                CommandTester.TestExecution(AnkhCommand.Relocate);
             }
         }
 
@@ -359,12 +361,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<RemoveRepositoryRootCommand>(AnkhCommand.RemoveRepositoryRoot);
+                CommandTester.TestExecution(AnkhCommand.RemoveRepositoryRoot);
             }
         }
 
@@ -373,12 +376,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<RemoveWorkingCopyExplorerRootCommand>(AnkhCommand.RemoveWorkingCopyExplorerRoot);
+                CommandTester.TestExecution(AnkhCommand.RemoveWorkingCopyExplorerRoot);
             }
         }
 
@@ -387,12 +391,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<ResolveConflictCommand>(AnkhCommand.ResolveConflict);
+                CommandTester.TestExecution(AnkhCommand.ResolveConflict);
             }
         }
 
@@ -401,12 +406,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<ResolveConflictExternalCommand>(AnkhCommand.ResolveConflictExternal);
+                CommandTester.TestExecution(AnkhCommand.ResolveConflictExternal);
             }
         }
 
@@ -415,12 +421,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<ReverseMergeCommand>(AnkhCommand.RevertToRevision);
+                CommandTester.TestExecution(AnkhCommand.RevertToRevision);
             }
         }
 
@@ -429,12 +436,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<RevertItemCommand>(AnkhCommand.RevertItem);
+                CommandTester.TestExecution(AnkhCommand.RevertItem);
             }
         }
 
@@ -443,12 +451,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             MockRepository mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<SaveToFileCommand>(AnkhCommand.SaveToFile);
+                CommandTester.TestExecution(AnkhCommand.SaveToFile);
             }
         }
 
@@ -472,7 +481,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<SendErrorReportCommand>(AnkhCommand.SendFeedback);
+                CommandTester.TestExecution(AnkhCommand.SendFeedback);
             }
         }
 
@@ -497,7 +506,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<ShowCommitDialogCommand>(AnkhCommand.ShowCommitDialog);
+                CommandTester.TestExecution(AnkhCommand.ShowCommitDialog);
             }
         }
 
@@ -521,7 +530,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<ShowRepositoryExplorerCommand>(AnkhCommand.ShowRepositoryExplorer);
+                CommandTester.TestExecution(AnkhCommand.ShowRepositoryExplorer);
             }
         }
 
@@ -545,7 +554,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<ShowWorkingCopyExplorerCommand>(AnkhCommand.ShowWorkingCopyExplorer);
+                CommandTester.TestExecution(AnkhCommand.ShowWorkingCopyExplorer);
             }
         }
 
@@ -555,12 +564,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<SwitchItemCommand>(AnkhCommand.SwitchItem);
+                CommandTester.TestExecution(AnkhCommand.SwitchItem);
             }
         }
 
@@ -570,12 +580,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<UnlockCommand>(AnkhCommand.Unlock);
+                CommandTester.TestExecution(AnkhCommand.Unlock);
             }
         }
 
@@ -585,12 +596,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<UpdateItem>(AnkhCommand.UpdateItem);
+                CommandTester.TestExecution(AnkhCommand.UpdateItem);
             }
         }
 
@@ -600,12 +612,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<ViewInVSNetCommand>(AnkhCommand.ViewInVsNet);
+                CommandTester.TestExecution(AnkhCommand.ViewInVsNet);
             }
         }
 
@@ -615,27 +628,13 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             MockRepository mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
+            IContext context = AnkhContextMock.GetInstance(mocks);
 
             using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution<ViewInWindowsCommand>(AnkhCommand.ViewInWindows);
-            }
-        }
-
-        [TestMethod]
-        public void ViewRepositoryFileCommand()
-        {
-            MockRepository mocks = new MockRepository();
-
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks, selC);
-
-            using (mocks.Playback())
-            using (ServiceProviderHelper.AddService(typeof(IContext), context))
-            {
-                //CommandTester.TestExecution<ViewRepositoryFileCommand>(AnkhCommand.ViewRepositoryFile);
+                CommandTester.TestExecution(AnkhCommand.ViewInWindows);
             }
         }
     }
