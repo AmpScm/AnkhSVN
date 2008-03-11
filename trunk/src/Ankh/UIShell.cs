@@ -278,7 +278,7 @@ namespace Ankh
             using (PathSelector selector = new PathSelector())
             {
                 // to provide information about the paths
-                selector.GetPathInfo += new ResolvingPathInfoHandler(GetPathInfo);
+                selector.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
 
                 selector.EnableRecursive = info.EnableRecursive;
                 selector.Items = info.Items;
@@ -332,7 +332,7 @@ namespace Ankh
         {
             using (LockDialog dlg = new LockDialog())
             {
-                dlg.GetPathInfo += new ResolvingPathInfoHandler(GetPathInfo);
+                dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
 
                 dlg.Items = info.Items;
                 dlg.CheckedItems = info.CheckedItems;
@@ -363,7 +363,7 @@ namespace Ankh
                 dlg.Options = PathSelectorOptions.DisplayRevisionRange;
                 dlg.RevisionStart = info.RevisionStart;
                 dlg.RevisionEnd = info.RevisionEnd;
-                dlg.GetPathInfo += new ResolvingPathInfoHandler(GetPathInfo);
+                dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
                 dlg.StopOnCopy = info.StopOnCopy;
 
                 if (dlg.ShowDialog(this.Context.HostWindow) != DialogResult.OK)
@@ -382,7 +382,7 @@ namespace Ankh
         {
             using (SwitchDialog dialog = new SwitchDialog())
             {
-                dialog.GetPathInfo += new ResolvingPathInfoHandler(GetUrlPathinfo);
+                dialog.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetUrlPathinfo);
                 dialog.Items = info.Items;
                 dialog.SingleSelection = true;
                 dialog.CheckedItems = info.Items;

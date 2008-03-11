@@ -11,17 +11,12 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to add a new URL to the Repository Explorer.
     /// </summary>
-    [VSNetCommand(AnkhCommand.AddRepositoryRoot,
-		"AddRepositoryRootCommand",
-       Text = "A&dd Repository URL",
-        Tooltip = "Add a new URL to the Repository Explorer.",
-        Bitmap = ResourceBitmaps.AddURL)]
-        [VSNetControl( "ReposExplorer", Position = 1 )]
+    [Command(AnkhCommand.AddRepositoryRoot)]
     public class AddRepositoryRootCommand : CommandBase
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             RepositoryRootInfo info = context.UIShell.ShowAddRepositoryRootDialog();
             if ( info == null )

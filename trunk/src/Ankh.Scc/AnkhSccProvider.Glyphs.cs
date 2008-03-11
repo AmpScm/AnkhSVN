@@ -5,10 +5,17 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using SharpSvn;
 
-namespace Ankh.VSPackage.Scc
+namespace Ankh.Scc
 {
     partial class AnkhSccProvider : IVsSccManager2, IVsSccManagerTooltip
     {
+        IStatusImageMapper _statusImages;
+
+        IStatusImageMapper StatusImages
+        {
+            get { return _statusImages ?? (_statusImages = context.GetService<IStatusImageMapper>()); }
+        }
+
         /// <summary>
         /// This method is called by projects to discover the source control glyphs 
         /// to use on files and the files' source control status; this is the only way to get status.
@@ -22,7 +29,7 @@ namespace Ankh.VSPackage.Scc
         {
             for (int i = 0; i < cFiles; i++)
             {
-                SvnItem item = this.context.StatusCache[rgpszFullPaths[i]];
+                SvnItem item = StatusCache[rgpszFullPaths[i]];
                 NodeStatus nodeStatus = GenerateStatus(item);
                 rgsiGlyphs[i] = (VsStateIcon)
                     StatusImages.GetStatusImageForNodeStatus(nodeStatus);

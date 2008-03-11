@@ -10,31 +10,25 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to relocate this file.
     /// </summary>
-    [VSNetCommand(AnkhCommand.Relocate,
-		"Relocate",
-         Text = "Relo&cate...",
-         Tooltip = "Relocate this file.", 
-         Bitmap = ResourceBitmaps.Relocate),
-         VSNetFolderNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 7),
-         VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position = 1 ),
-         VSNetControl("WorkingCopyExplorer." + VSNetControlAttribute.AnkhSubMenu, Position = 1),
-         VSNetProjectNodeControl( VSNetControlAttribute.AnkhSubMenu, Position = 7 )]
+    [Command(AnkhCommand.Relocate)]
     public class RelocateCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if ( e.Context.Selection.GetSelectionResources( false, 
-                new ResourceFilterCallback(SvnItem.DirectoryFilter) ).Count != 1 )
+            IContext context = e.Context.GetService<IContext>();
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                e.Enabled = false;
-            }
+                if (item.IsDirectory && item.IsVersioned)
+                    return;
+            }            
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             // We know now that there is exactly one resource
             SvnItem dir = (SvnItem)context.Selection.GetSelectionResources(

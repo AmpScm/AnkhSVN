@@ -16,31 +16,27 @@ namespace Ankh.Commands
     /// by checking out the repository directory to the solution directory, then
     /// recursively adding all solution items.
     /// </summary>
-    [VSNetCommand(AnkhCommand.AddSolutionToRepository,
-		"AddSolutionToRepository",
-         Text = "Add Sol&ution to Subversion repository...",
-         Tooltip = "Add this solution to a Subversion repository.",
-         Bitmap = ResourceBitmaps.AddSolutionToRepository),
-         VSNetControl( "Solution." + VSNetControlAttribute.AnkhSubMenu, Position = 1 ),
-         VSNetControl( "File", Position = 14 )]
+    [Command(AnkhCommand.AddSolutionToRepository)]
     public class AddSolutionToRepositoryCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (e.Context.AnkhLoadedForSolution || string.IsNullOrEmpty(e.Selection.SolutionFilename) 
+            IContext context = e.Context.GetService<IContext>();
+
+            if (context.AnkhLoadedForSolution || string.IsNullOrEmpty(e.Selection.SolutionFilename) 
                 || !File.Exists(e.Selection.SolutionFilename))
             {
                 e.Enabled = false;
             }
-            else if (!e.Context.SolutionIsOpen)
+            else if (!context.SolutionIsOpen)
                 e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             SaveAllDirtyDocuments(context);
 

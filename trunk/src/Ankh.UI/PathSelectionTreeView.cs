@@ -17,7 +17,7 @@ namespace Ankh.UI
         /// <summary>
         /// Fired when the treeview needs information about a path.
         /// </summary>
-        public event ResolvingPathInfoHandler ResolvingPathInfo;
+        public event EventHandler<ResolvingPathEventArgs> ResolvingPathInfo;
 
         public PathSelectionTreeView()
         {
@@ -352,7 +352,7 @@ namespace Ankh.UI
         
     }
 
-    public class ResolvingPathEventArgs
+    public class ResolvingPathEventArgs : EventArgs
     {
         public ResolvingPathEventArgs( object item )
         {
@@ -379,8 +379,4 @@ namespace Ankh.UI
         private string path = "";
         private object item;
     }
-
-    public delegate void ResolvingPathInfoHandler( object sender, ResolvingPathEventArgs args );
-
-   
 }

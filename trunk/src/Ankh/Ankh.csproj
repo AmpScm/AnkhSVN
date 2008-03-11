@@ -211,6 +211,7 @@
     <Compile Include="AnkhContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AnkhModule.cs" />
     <Compile Include="BlameResult.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -240,10 +241,7 @@
     <Compile Include="Commands\CleanupCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\CommandBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\CommandEventArgs.cs" />
+    <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\CommitItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -284,7 +282,6 @@
     <Compile Include="Commands\MakeDirectoryCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\Mapper\CommandMapper.cs" />
     <Compile Include="Commands\RefreshCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -371,21 +368,16 @@
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selection\CachedEnumerable.cs" />
-    <Compile Include="Selection\ISelectionContext.cs" />
     <Compile Include="Selection\SelectionContext.cs" />
     <Compile Include="Selection\SelectionUtils.cs" />
     <Compile Include="SolutionExplorer\SolutionExplorerWindow.cs" />
     <Compile Include="SolutionExplorer\SolutionTreeViewManager.cs" />
-    <Compile Include="StatusCache\AnkhStatus.cs" />
     <Compile Include="StatusCache\StatusCache.cs" />
-    <Compile Include="StatusCache\SvnItem.cs" />
     <Compile Include="StatusImages.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemItem.cs" />
-    <Compile Include="NodeStatus.cs" />
-    <Compile Include="NodeStatusKind.cs" />
     <Compile Include="NoProjectAutomationObjectException.cs" />
     <Compile Include="Extenders\ExtenderProvider.cs">
       <SubType>Code</SubType>
@@ -394,9 +386,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileWatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ICommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IContext.cs">
@@ -439,20 +428,6 @@
     <Content Include="SolutionExplorer\readonly.ico" />
     <Compile Include="SwitchDialogInfo.cs" />
     <Compile Include="UIShell.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VSNetCommandAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VSNetControlAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VSNetFolderNodeControlAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VSNetItemControlAttribute.cs" />
-    <Compile Include="VSNetProjectItemControlAttribute.cs" />
-    <Compile Include="VSNetProjectNodeControlAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\FileSystemRootItem.cs" />

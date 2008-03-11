@@ -11,17 +11,12 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to export a Subversion repository or local folder.
     /// </summary>
-    [VSNetCommand(AnkhCommand.Export,
-		"Export",
-         Text = "E&xport a Repository or Local Folder...", 
-         Tooltip = "Export a Subversion repository or local folder.", 
-         Bitmap = ResourceBitmaps.Export),
-         VSNetControl( "Tools.AnkhSVN", Position = 3 )]
+    [Command(AnkhCommand.Export)]
     public class ExportCommand : CommandBase
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             using (ExportDialog dlg = new ExportDialog())
             {

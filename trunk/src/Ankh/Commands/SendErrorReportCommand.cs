@@ -6,17 +6,12 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to send the AnkhSVN team comments and suggestions.
     /// </summary>
-    [VSNetCommand(AnkhCommand.SendFeedback,
-		"SendErrorReport",
-         Text = "Send Feedback...", 
-         Tooltip = "Send the AnkhSVN team comments and suggestions.",
-         Bitmap = ResourceBitmaps.SendSuggest),
-         VSNetControl( "Tools.AnkhSVN", Position = 7 )]
+    [Command(AnkhCommand.SendFeedback)]
     public class SendErrorReportCommand : CommandBase
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             context.ErrorHandler.SendReport();
         }

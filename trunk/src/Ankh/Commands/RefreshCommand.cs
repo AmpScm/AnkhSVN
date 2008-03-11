@@ -8,18 +8,13 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to refresh this view.
     /// </summary>
-    [VSNetCommand(AnkhCommand.Refresh,
-		"Refresh",
-         Text = "Refres&h",
-         Tooltip = "Refresh this view.", 
-         Bitmap = ResourceBitmaps.Refresh),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 2 )]
+    [Command(AnkhCommand.Refresh)]
     public class RefreshCommand : CommandBase
     {
         public override void OnExecute(CommandEventArgs e)
         {
             GC.KeepAlive(e.Selection.GetOwnerProjects(true));
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             using(context.StartOperation( "Refreshing" ))
             {

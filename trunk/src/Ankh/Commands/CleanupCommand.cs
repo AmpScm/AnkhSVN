@@ -11,12 +11,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to cleanup the working copy.
     /// </summary>
-    [VSNetCommand(AnkhCommand.Cleanup,
-		"Cleanup",
-         Text="Cle&anup",
-         Tooltip = "Cleanup the working copy.", 
-         Bitmap = ResourceBitmaps.Cleanup ),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 11)]
+    [Command(AnkhCommand.Cleanup)]
     public class Cleanup : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -30,7 +25,7 @@ namespace Ankh.Commands
         }
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
             SvnClient client = context.Client;
             using (context.StartOperation("Running cleanup"))
             {

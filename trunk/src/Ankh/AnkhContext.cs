@@ -15,6 +15,7 @@ using IServiceProvider = System.IServiceProvider;
 using Ankh.Selection;
 using Ankh.EventSinks;
 using System.Collections.Generic;
+using Ankh.Scc;
 
 namespace Ankh
 {
@@ -22,20 +23,21 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
-    public class AnkhContext : IContext, IDTEContext
+    public class OldAnkhContext : IContext, IDTEContext
     {
+        AnkhRuntime _runtime;
         /// <summary>
         /// Fired when the addin is unloading.
         /// </summary>
         public event EventHandler Unloading;
 
-        public AnkhContext(IAnkhPackage package)
+        public OldAnkhContext(IAnkhPackage package)
             : this(package, new UIShell())
         {
             Trace.Assert(package != null);
         }
 
-        public AnkhContext(IAnkhPackage package, IUIShell uiShell)
+        public OldAnkhContext(IAnkhPackage package, IUIShell uiShell)
         {
             this.package = package;
 
@@ -65,7 +67,8 @@ namespace Ankh
 
             this.solutionExplorerWindow = new SolutionExplorerWindow(package, SynchronizingObject);
             this.selectionContext = new SelectionContext(package, statusCache, solutionExplorerWindow);
-            
+
+            package.AddService(typeof(ISelectionContext), selectionContext);
 
             //GC.KeepAlive(this.solutionExplorerWindow.TreeWindow);
 
@@ -347,10 +350,10 @@ namespace Ankh
 
         class OperationCompleter : IDisposable
         {
-            AnkhContext _context;
+            OldAnkhContext _context;
             IDisposable _disp2;
             
-            public OperationCompleter(AnkhContext context, IDisposable disp2)
+            public OperationCompleter(OldAnkhContext context, IDisposable disp2)
             {
                 _context = context;
                 _disp2 = disp2;

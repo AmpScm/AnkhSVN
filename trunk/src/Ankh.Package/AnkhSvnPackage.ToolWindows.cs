@@ -127,18 +127,18 @@ namespace Ankh.VSPackage
         #region IAnkhUISite Members
 
 
-        public bool ShowContextMenu(AnkhCommandMenu menu, System.Drawing.Point position)
+        public bool ShowContextMenu(AnkhCommandMenu menu, int x, int y)
         {
-            return ShowContextMenu(new CommandID(AnkhId.CommandSetGuid, (int)menu), position);
+            return ShowContextMenu(new CommandID(AnkhId.CommandSetGuid, (int)menu), x, y);
         }
 
-        public bool ShowContextMenu(CommandID menu, System.Drawing.Point position)
+        public bool ShowContextMenu(CommandID menu, int x, int y)
         {
             IMenuCommandService mcs = (IMenuCommandService)GetService(typeof(IMenuCommandService));
 
             try
             {
-                mcs.ShowContextMenu(menu, position.X, position.Y);
+                mcs.ShowContextMenu(menu, x, y);
             }
             catch (COMException)
             {

@@ -13,12 +13,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to revert current item to a specific revision.
     /// </summary>
-    [VSNetCommand(AnkhCommand.RevertToRevision,
-		"ReverseMerge",
-         Text = "Re&vert to Revision...", 
-         Tooltip = "Revert this item to a specific revision.", 
-         Bitmap = ResourceBitmaps.RevertToVersion),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 4 )]
+    [Command(AnkhCommand.RevertToRevision)]
     public class ReverseMergeCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -36,17 +31,17 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             SaveAllDirtyDocuments(context);
 
             IList resources = context.Selection.GetSelectionResources(
                 true, new ResourceFilterCallback(SvnItem.VersionedFilter));
-            using (context.StartOperation("Merging"))
+            using (e.Context.BeginOperation("Merging"))
             {
                 using (ReverseMergeDialog dlg = new ReverseMergeDialog())
                 {
-                    dlg.GetPathInfo += new ResolvingPathInfoHandler(SvnItem.GetPathInfo);
+                    dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
                     dlg.Items = resources;
                     dlg.CheckedItems = resources;
                     dlg.Recursive = true;
@@ -60,7 +55,13 @@ namespace Ankh.Commands
                     context.UIShell.RunWithProgressDialog(runner, "Merging");
                 }
             }
+        }
 
+        public static void GetPathInfo(object sender, ResolvingPathEventArgs args)
+        {
+            SvnItem item = (SvnItem)args.Item;
+            args.IsDirectory = item.IsDirectory;
+            args.Path = item.Path;
         }
 
         #endregion

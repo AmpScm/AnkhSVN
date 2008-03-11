@@ -14,7 +14,7 @@ namespace Ankh.UI
         /// <summary>
         /// Fired at regular intervals.
         /// </summary>
-        public event ProgressStatusDelegate ProgressStatus;
+        public event EventHandler<ProgressStatusEventArgs> ProgressStatus;
 
         /// <summary>
         /// Loader Form
@@ -118,7 +118,4 @@ namespace Ankh.UI
         private bool done;
         private bool cancelled;
     }
-
-    public delegate void ProgressStatusDelegate( object sender, 
-        ProgressStatusEventArgs args );
 }

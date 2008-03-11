@@ -146,7 +146,7 @@ namespace Ankh.UI
 
             this.currentDirectory = directory;
 
-            this.currentDirectory.ItemChanged += new ItemChangedEventHandler( this.item_Changed );
+            this.currentDirectory.ItemChanged += new EventHandler<ItemChangedEventArgs>( this.item_Changed );
 
             this.BeginUpdate();
             try
@@ -162,7 +162,7 @@ namespace Ankh.UI
                     lvi.Tag = item;
 
                     // we need to know when this item changes
-                    item.ItemChanged += new ItemChangedEventHandler( item_Changed );
+                    item.ItemChanged += new EventHandler<ItemChangedEventArgs>( item_Changed );
                 }
 
                 this.Sort();
@@ -225,13 +225,13 @@ namespace Ankh.UI
                 IFileSystemItem fileSystemItem = lvi.Tag as IFileSystemItem;
                 if ( fileSystemItem != null )
                 {
-                    fileSystemItem.ItemChanged -= new ItemChangedEventHandler( this.item_Changed );
+                    fileSystemItem.ItemChanged -= new EventHandler<ItemChangedEventArgs>( this.item_Changed );
                 }
             }
 
             if ( this.currentDirectory != null )
             {
-                this.currentDirectory.ItemChanged -= new ItemChangedEventHandler( this.item_Changed );
+                this.currentDirectory.ItemChanged -= new EventHandler<ItemChangedEventArgs>( this.item_Changed );
             }
         }
 

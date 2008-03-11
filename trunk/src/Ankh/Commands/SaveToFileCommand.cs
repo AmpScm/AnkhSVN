@@ -10,19 +10,14 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to save currnet file to disk from Repository Explorer.
     /// </summary>
-    [VSNetCommand(AnkhCommand.SaveToFile,
-		"SaveToFile",
-        Text = "Save to &File",
-        Tooltip="Save the file to disk.", 
-        Bitmap = ResourceBitmaps.SaveToFile ),
-        VSNetControl( "ReposExplorer.View", Position = 1 ) ]
+    [Command(AnkhCommand.SaveToFile)]
     public class SaveToFileCommand : ViewRepositoryFileCommand
     {
         #region Implementation of ICommand
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             using (context.StartOperation("Saving"))
             {

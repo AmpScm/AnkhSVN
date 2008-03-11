@@ -441,7 +441,7 @@ namespace Ankh.Selection
 
         public IEnumerable<string> GetSelectedFiles(bool recursive)
         {
-            return recursive ? GetSelectedFiles() : GetSelectedFilesRecursive();
+            return recursive ? GetSelectedFilesRecursive() : GetSelectedFiles();
         }
 
         /// <summary>

@@ -72,6 +72,10 @@
       <Project>{FA90174C-5763-46E8-9C95-328CA8451072}</Project>
       <Name>AnkhSvn</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
+      <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
+      <Name>Ankh.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.VS.IntegrationTest.snk" />

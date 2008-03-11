@@ -12,19 +12,14 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to checkout a Subversion repository.
     /// </summary>
-    [VSNetCommand(AnkhCommand.Checkout,
-		"Checkout",
-         Text = "Chec&kout a Repository...",
-         Tooltip="Checkout a Subversion repository.", 
-         Bitmap = ResourceBitmaps.CheckoutDirectory),
-         VSNetControl( "Tools.AnkhSVN", Position = 1 )]
+    [Command(AnkhCommand.Checkout)]
     public class CheckoutCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             using (CheckoutDialog dlg = new CheckoutDialog())
             {

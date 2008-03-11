@@ -16,7 +16,7 @@ namespace Ankh.UI
         /// <summary>
         /// Used to retrieve information about a path.
         /// </summary>
-        public event ResolvingPathInfoHandler GetPathInfo
+        public event EventHandler<ResolvingPathEventArgs> GetPathInfo
         {
             add{ this.pathSelectionTreeView.ResolvingPathInfo += value; }
             remove{ this.pathSelectionTreeView.ResolvingPathInfo -= value; }

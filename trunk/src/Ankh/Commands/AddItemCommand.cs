@@ -15,12 +15,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to add selected items to the working copy.
     /// </summary>
-    [VSNetCommand(AnkhCommand.AddItem,
-        "AddItem",
-        Text = "A&dd...",
-        Tooltip = "Add selected items to the working copy.",
-        Bitmap = ResourceBitmaps.Add),
-    VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 1)]
+    [Command(AnkhCommand.AddItem)]
     public class AddItemCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -40,7 +35,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             SortedList<string, SvnItem> paths = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
             IList resources = new Collection<SvnItem>();

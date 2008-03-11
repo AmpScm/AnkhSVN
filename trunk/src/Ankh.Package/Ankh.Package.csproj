@@ -127,7 +127,6 @@
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="ProvideSourceControlProvider.cs" />
-    <Compile Include="Scc\AnkhSccProvider.cs" />
     <None Include="Ankh.Package.snk" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
@@ -137,15 +136,6 @@
     <None Include="Gui\Gui.xsx">
       <DependentUpon>Gui.xsd</DependentUpon>
     </None>
-    <Compile Include="Scc\AnkhSccProvider.QueryEditSave.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Scc\AnkhSccProvider.Glyphs.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Scc\AnkhSccProvider.Solution.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ankh.Package.wxs" />

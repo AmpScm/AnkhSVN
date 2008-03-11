@@ -10,29 +10,26 @@ namespace Ankh.Commands
     /// <summary>
     /// Command for exporting a folder
     /// </summary>
-    [VSNetCommand(AnkhCommand.ExportFolder,
-		"ExportFolder",
-         Text = "E&xport Folder...",
-         Tooltip="Export this folder.",          
-         Bitmap = ResourceBitmaps.Export ),
-         VSNetControl( "ReposExplorer", Position = 1 ) ]
+    [Command(AnkhCommand.ExportFolder)]
     public class ExportFolderCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if ( e.Context.RepositoryExplorer.SelectedNode == null ||
-                !e.Context.RepositoryExplorer.SelectedNode.IsDirectory)
+            IContext context = e.Context.GetService<IContext>();
+
+            if (context.RepositoryExplorer.SelectedNode == null ||
+                !context.RepositoryExplorer.SelectedNode.IsDirectory)
             {
                 // BH: Why don't we allow exporting single files?
                 e.Enabled = false;
-            } 
+            }
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             /// first get the parent folder
             using (FolderBrowserDialog browser = new FolderBrowserDialog())

@@ -265,7 +265,7 @@ namespace Ankh.UI
 
             Point screen = this.treeView.PointToScreen( new Point(args.X, args.Y) );
 
-            UISite.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen);
+            UISite.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
         }
 
         private void treeView_AfterSelect(object sender, TreeViewEventArgs e)

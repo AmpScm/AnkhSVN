@@ -8,6 +8,7 @@ using Ankh.UI;
 using System.Diagnostics;
 using SharpSvn;
 using System.Collections.ObjectModel;
+using Ankh.Selection;
 
 namespace Ankh
 {
@@ -25,7 +26,7 @@ namespace Ankh
     /// <summary>
     /// Represents a version controlled path on disk, caching it's status.
     /// </summary>
-    public class SvnItem
+    public class SvnItem : LocalSvnItem
     {
         /// <summary>
         /// Fired when the status of this item changes.
@@ -42,7 +43,7 @@ namespace Ankh
 
         /// <summary>
         /// The status of this item.
-        /// </summary>
+        /// </summsary>
         public AnkhStatus Status
         {
             get{ return this.status; }
@@ -464,14 +465,6 @@ namespace Ankh
         public static bool NoFilter( SvnItem item )
         {
             return true;
-        }
-
-
-        public static void GetPathInfo( object sender, ResolvingPathEventArgs args )
-        {
-            SvnItem item = (SvnItem)args.Item;
-            args.IsDirectory = item.IsDirectory;
-            args.Path = item.Path;
         }
 
         /// <summary>

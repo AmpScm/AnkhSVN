@@ -15,7 +15,7 @@ namespace Ankh.Commands
     /// A command used to run svn.exe directly from the VS.NET command window.
     /// This command should be aliased as "svn".
     /// </summary>
-	[VSNetCommand(AnkhCommand.RunSvnCommand, "RunSvn")]
+	[Command(AnkhCommand.RunSvnCommand)]
     public class RunSvnCommand : CommandBase
     {
         public RunSvnCommand()
@@ -25,7 +25,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             this.context = context;
             this.window = (CommandWindow)((Window)((IDTEContext)this.context).DTE.Windows.Item( 

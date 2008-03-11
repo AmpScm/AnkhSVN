@@ -9,6 +9,7 @@ using System.IO;
 using IServiceProvider = System.IServiceProvider;
 using SharpSvn;
 using Ankh.UI.Services;
+using Ankh.UI;
 
 namespace Ankh.Tests
 {

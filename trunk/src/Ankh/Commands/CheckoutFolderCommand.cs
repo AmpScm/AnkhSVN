@@ -10,20 +10,17 @@ namespace Ankh.Commands
 	/// <summary>
 	/// Command to check out current folder in the Repository Explorer.
 	/// </summary>
-    [VSNetCommand(AnkhCommand.CheckoutFolder,
-		"CheckoutFolder",
-         Text = "Chec&kout Folder...",
-         Tooltip = "Checkout this folder.", 
-         Bitmap = ResourceBitmaps.CheckoutDirectory ),
-         VSNetControl( "ReposExplorer", Position = 1 )]
+    [Command(AnkhCommand.CheckoutFolder)]
     public class CheckoutFolderCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (e.Context.RepositoryExplorer.SelectedNode == null ||
-                !e.Context.RepositoryExplorer.SelectedNode.IsDirectory )
+            IContext context = e.Context.GetService<IContext>();
+
+            if (context.RepositoryExplorer.SelectedNode == null ||
+                !context.RepositoryExplorer.SelectedNode.IsDirectory )
             {
                 e.Enabled = false;
             } 
@@ -31,7 +28,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             /// first get the parent folder
 			using (FolderBrowserDialog browser = new FolderBrowserDialog())
