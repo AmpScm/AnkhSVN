@@ -27,6 +27,7 @@ namespace Ankh
             }
 
             // TODO: Register services
+            if(null == Container.GetService(typeof(IFileStatusCache)))
                 Container.AddService(typeof(IFileStatusCache), _context.StatusCache);
             Container.AddService(typeof(IStatusImageMapper), new StatusImages.TempStatusImageMapper());            
         }

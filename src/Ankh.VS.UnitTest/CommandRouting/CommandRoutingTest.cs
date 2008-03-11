@@ -13,6 +13,7 @@ using Ankh.Selection;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.UI.Services;
 using Ankh.UI;
+using Ankh.Scc;
 
 namespace AnkhSvn_UnitTestProject.CommandRouting
 {
@@ -33,10 +34,29 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
     [TestClass]
     public class CommandRoutingTest
     {
+        MockRepository mocks;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            mocks = new MockRepository();
+
+            IFileStatusCache statusCache = mocks.DynamicMock<IFileStatusCache>();
+            ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache);
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            ServiceProviderHelper.serviceProvider.RemoveService(typeof(IFileStatusCache));
+
+            mocks = null;
+        }
+
         [TestMethod]
         public void AddItem()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
@@ -53,7 +73,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void AddRepositoryRoot()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             IUIShell uiShell = mocks.DynamicMock<IUIShell>();
 
@@ -76,7 +96,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void AddSolutionToRepositoryCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             
             IContext context = AnkhContextMock.GetInstance(mocks);
             using (mocks.Record())
@@ -94,7 +114,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void AddWorkingCopyExplorerRootCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             IUIShell uiShell = mocks.DynamicMock<IUIShell>();
 
@@ -115,7 +135,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void BlameCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
@@ -132,7 +152,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod, Ignore] // Command shows dialog directly
         public void CheckoutCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -155,7 +175,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void CleanupCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
@@ -171,7 +191,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void CommitItemCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
@@ -187,7 +207,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void CopyReposExplorerUrl()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             IContext context = AnkhContextMock.GetInstance(mocks);
             using(mocks.Playback())
@@ -201,7 +221,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod, Ignore] // shows MessageBox
         public void CreatePatch()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
@@ -217,7 +237,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void DiffExternalLocalItem()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             IContext context = AnkhContextMock.GetInstance(mocks);
             using (mocks.Playback())
@@ -230,7 +250,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void DiffLocalItem()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks, uiShell);
@@ -248,7 +268,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod, Ignore] // Shows dialog
         public void ExportCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks, uiShell);
@@ -265,7 +285,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod] 
         public void ExportFolderCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks, uiShell);
@@ -282,7 +302,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void LockCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -297,7 +317,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void LogCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -312,7 +332,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void MakeDirectoryCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -327,7 +347,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void Refresh()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             IContext context = AnkhContextMock.GetInstance(mocks);
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
@@ -344,7 +364,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void RelocateCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -359,7 +379,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void RemoveReposRoot()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -374,7 +394,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void RemoveWorkingCopyRoot()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -389,7 +409,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void ResolveConflictCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -404,7 +424,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void ResolveConflictExternalCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -419,7 +439,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void ReverseMergeCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -434,7 +454,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void RevertItemCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -449,7 +469,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void SaveToFileCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
 
@@ -464,7 +484,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void SendErrorReportCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             IErrorHandler errorHandler = mocks.DynamicMock<IErrorHandler>();
             using (mocks.Record())
@@ -489,7 +509,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         public void ShowCommitDialog()
         {
             
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             IAnkhPackage package = mocks.CreateMock<IAnkhPackage>();
             using (mocks.Record())
             {
@@ -513,7 +533,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void ShowReposExplorer()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             IAnkhPackage package = mocks.CreateMock<IAnkhPackage>();
             using (mocks.Record())
             {
@@ -537,7 +557,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void ShowWorkingCopyExplorer()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
             IAnkhPackage package = mocks.CreateMock<IAnkhPackage>();
             using (mocks.Record())
             {
@@ -561,7 +581,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void SwitchItemCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
@@ -577,7 +597,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void UnlockCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
@@ -593,7 +613,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void UpdateItemCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
@@ -609,7 +629,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void ViewInVSNetCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
@@ -625,7 +645,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [TestMethod]
         public void ViewInWindowsCommand()
         {
-            MockRepository mocks = new MockRepository();
+            mocks = new MockRepository();
 
             ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
             IContext context = AnkhContextMock.GetInstance(mocks);
