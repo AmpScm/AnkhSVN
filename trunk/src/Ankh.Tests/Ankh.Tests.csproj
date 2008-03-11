@@ -143,7 +143,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Ankh\Ankh.csproj">
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
-      <Name>Ankh %28Implementation\Ankh%29</Name>
+      <Name>Ankh</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestUtils\TestUtils.csproj">
       <Project>{874C0358-E7DD-42DA-BF07-58198B41FD25}</Project>
@@ -162,18 +162,18 @@
     <Compile Include="BlameResultTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\BlameCommandTest.cs">
+    <Content Include="Commands\BlameCommandTest.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </Content>
     <Content Include="Commands\CommitItemTest.cs">
       <SubType>Code</SubType>
     </Content>
-    <Compile Include="Commands\LogCommandTest.cs">
+    <Content Include="Commands\LogCommandTest.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\SendErrorReportTest.cs">
+    </Content>
+    <Content Include="Commands\SendErrorReportTest.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </Content>
     <Compile Include="ContextBase.cs">
       <SubType>Code</SubType>
     </Compile>
