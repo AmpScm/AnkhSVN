@@ -109,7 +109,14 @@ namespace Ankh.Commands
             {
                 try
                 {
-                    item.OnExecute(e);
+                    CommandUpdateEventArgs u = new CommandUpdateEventArgs(command, e.Context);
+                    item.OnUpdate(u);
+                    if (u.Enabled)
+                    {
+                        item.OnExecute(e);
+                    }
+                    else
+                        return false;
                 }
                 catch (Exception ex)
                 {
