@@ -60,7 +60,7 @@ namespace Ankh.VSPackage
 				oldText = GetText(pCmdText);
 			}
 
-			CommandUpdateEventArgs updateArgs = new CommandUpdateEventArgs((AnkhCommand)prgCmds[0].cmdID, AnkhContext, textQuery, oldText);
+			CommandUpdateEventArgs updateArgs = new CommandUpdateEventArgs((AnkhCommand)prgCmds[0].cmdID, Context, textQuery, oldText);
 
 			OLECMDF cmdf = OLECMDF.OLECMDF_SUPPORTED;
 
@@ -103,7 +103,7 @@ namespace Ankh.VSPackage
 			// Ok, now make sure we have the command enabled and it's somebody just running commands
 			// at random.
 
-			CommandUpdateEventArgs updateArgs = new CommandUpdateEventArgs((AnkhCommand)nCmdID, AnkhContext);
+			CommandUpdateEventArgs updateArgs = new CommandUpdateEventArgs((AnkhCommand)nCmdID, Context);
 
 			if (!CommandMapper.PerformUpdate(updateArgs.Command, updateArgs) || !updateArgs.Enabled)
 				return (int)OLEConstants.OLECMDERR_E_DISABLED; // Command is disabled, don't process any further
@@ -115,7 +115,7 @@ namespace Ankh.VSPackage
 
 			CommandEventArgs args = new CommandEventArgs(
 				(AnkhCommand)nCmdID, 
-				AnkhContext,
+				Context,
 				argIn,
 				(OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER,
 				(OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER);
@@ -124,7 +124,7 @@ namespace Ankh.VSPackage
 			// AnkhCommands.PerformCommand(args.Command, args);
 			CommandMapper.Execute(args.Command, args);
 
-			if (args.Result != null && pvaOut != IntPtr.Zero)
+			if (pvaOut != IntPtr.Zero)
 			{
 				Marshal.GetNativeVariantForObject(args.Result, pvaOut);
 			}
@@ -135,20 +135,7 @@ namespace Ankh.VSPackage
 		IContext _context;
 		public IContext AnkhContext
 		{
-			get
-			{
-                if (_context == null)
-                {
-                    _context = GetService<IContext>();
-                    if (_context == null)
-                    {
-                        _context = new AnkhContext(this);
-                        // TODO: AddService...
-                    }
-                }
-
-				return _context;
-			}
+			get { return _context ?? (_context = GetService<IContext>()); }
 		}
 
         public T GetService<T>()
@@ -156,22 +143,16 @@ namespace Ankh.VSPackage
             return (T)GetService(typeof(T));
         }
 
-		Ankh.Commands.Mapper.CommandMapper _mapper;
+		Ankh.Commands.CommandMapper _mapper;
 
-		public Ankh.Commands.Mapper.CommandMapper CommandMapper
+		public Ankh.Commands.CommandMapper CommandMapper
 		{
 			get
 			{
-				if (_mapper == null)
-					_mapper = new Ankh.Commands.Mapper.CommandMapper();
-
-				return _mapper;
+                return _mapper ?? (_mapper = _runtime.CommandMapper);
 			}
 		}
-
-		
-
-
+        
 		#region // Interop code from: VS2008SDK\VisualStudioIntegration\Common\Source\CSharp\Project\Misc\NativeMethods.cs
 
 		/// <summary>

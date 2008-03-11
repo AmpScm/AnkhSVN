@@ -8,12 +8,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to unlock the selected items.
     /// </summary>
-    [VSNetCommand(AnkhCommand.Unlock,
-		"Unlock",
-         Text = "U&nlock...",
-         Tooltip = "Unlock the selected items.",
-         Bitmap = ResourceBitmaps.Unlock),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 8 )] 
+    [Command(AnkhCommand.Unlock)] 
 	public class UnlockCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -30,7 +25,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             IList resources = context.Selection.GetSelectionResources(true, 
                 new ResourceFilterCallback( SvnItem.LockedFilter ) );

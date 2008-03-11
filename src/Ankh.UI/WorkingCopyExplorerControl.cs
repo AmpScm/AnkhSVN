@@ -187,7 +187,7 @@ namespace Ankh.UI
 
         private void ShowContextMenu( Point point)
         {
-            _uiSite.ShowContextMenu(AnkhCommandMenu.WorkingCopyExplorerContextMenu, point);
+            _uiSite.ShowContextMenu(AnkhCommandMenu.WorkingCopyExplorerContextMenu, point.X, point.Y);
         }
 
         private void newRootTextBox_KeyDown( object sender, KeyEventArgs e )

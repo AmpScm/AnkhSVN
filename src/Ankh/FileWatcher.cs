@@ -13,9 +13,9 @@ using SharpSvn;
 namespace Ankh
 {
     /// <summary>
-    /// Arguments for the ProjectFileModifiedDelegate
+    /// Arguments for the ProjectEventHandler<FileModifiedEventArgs>
     /// </summary>
-    public class FileModifiedEventArgs
+    public class FileModifiedEventArgs : EventArgs
     {
         public FileModifiedEventArgs( string file )
         {
@@ -29,9 +29,6 @@ namespace Ankh
         private string filename;
     }
 
-    public delegate void FileModifiedDelegate( object sender, 
-        FileModifiedEventArgs args );
-
     /// <summary>
     /// Watches files.
     /// </summary>
@@ -40,7 +37,7 @@ namespace Ankh
         /// <summary>
         /// A project file is modified.
         /// </summary>
-        public event FileModifiedDelegate FileModified;
+        public event EventHandler<FileModifiedEventArgs> FileModified;
 
         public FileWatcher(SvnClient client)
         {

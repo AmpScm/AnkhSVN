@@ -15,12 +15,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to resolve conflict between changes.
     /// </summary>
-    [VSNetCommand(AnkhCommand.ResolveConflict,
-		"ResolveConflict",
-         Text = "Res&olve Conflict...",  
-         Bitmap = ResourceBitmaps.ResolveConflict, 
-         Tooltip = "Resolve conflict between changes."),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 6 )]
+    [Command(AnkhCommand.ResolveConflict)]
     public class ResolveConflictCommand : CommandBase
     {    
         /// <summary>
@@ -40,16 +35,18 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            int count = e.Context.Selection.GetSelectionResources(false, 
-                new ResourceFilterCallback(SvnItem.ConflictedFilter) ).Count;
-
-            if (count == 0)
-                e.Enabled = false;
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (item.Status.LocalContentStatus == SvnStatus.Conflicted)
+                    return;
+            }
+            
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             SaveAllDirtyDocuments( context );
 

@@ -13,12 +13,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to switch current item to a different URL.
     /// </summary>
-    [VSNetCommand(AnkhCommand.SwitchItem,
-		"SwitchItem",
-         Text = "&Switch...", 
-         Tooltip = "Switch this item to a different URL.", 
-         Bitmap = ResourceBitmaps.Switch ),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 7 )]
+    [Command(AnkhCommand.SwitchItem)]
     public class SwitchItemCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -35,7 +30,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             SaveAllDirtyDocuments(context);
 

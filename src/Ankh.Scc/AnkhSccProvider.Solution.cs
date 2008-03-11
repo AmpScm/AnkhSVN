@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 
-namespace Ankh.VSPackage.Scc
+namespace Ankh.Scc
 {
     partial class AnkhSccProvider : IVsSccControlNewSolution, IVsSccOpenFromSourceControl
 	{

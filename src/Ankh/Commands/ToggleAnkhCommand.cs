@@ -9,18 +9,14 @@ namespace Ankh.Commands
     /// <summary>
     /// Enables or disables Ankh for a solution.
     /// </summary>
-    [VSNetCommand(AnkhCommand.ToggleAnkh,
-        "ToggleAnkh",
-         Text = "Enable AnkhSVN for this solution",
-         Tooltip = "Enable Ankh for this solution.",
-         Bitmap = ResourceBitmaps.ToggleAnkh),
-         VSNetControl("Solution." + VSNetControlAttribute.AnkhSubMenu, Position = 1)]
+    [Command(AnkhCommand.ToggleAnkh)]
     public class ToggleAnkhCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            IContext context = e.Context.GetService<IContext>();
             if (this.updating)
             {
                 return; // Enabled
@@ -41,7 +37,7 @@ namespace Ankh.Commands
 
                 string solutionDir = Path.GetDirectoryName(solutionPath);
 
-                if ((!e.Context.SolutionIsOpen))
+                if ((!context.SolutionIsOpen))
                 {
                     // we want it to show "Enable" if we're not in a wc
                     e.Text = "Enable AnkhSVN for this solution";
@@ -79,8 +75,6 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
-
             string solutionDir = Path.GetDirectoryName(e.Selection.SolutionFilename);
             string noLoad = Path.Combine(solutionDir, "Ankh.NoLoad");
             string load = Path.Combine(solutionDir, "Ankh.Load");

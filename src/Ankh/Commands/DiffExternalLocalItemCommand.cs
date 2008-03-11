@@ -9,20 +9,17 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to diff against local text base using external tool.
     /// </summary>
-    [VSNetCommand(AnkhCommand.DiffExternalLocalItem,
-        "DiffExternalLocalItem",
-         Text = "Diff E&xternal",
-         Tooltip = "Diff against local text base using external tool.",
-         Bitmap = ResourceBitmaps.Diff),
-         VSNetItemControl("", Position = 1)]
+    [Command(AnkhCommand.DiffExternalLocalItem)]
     public class DiffExternalLocalItem : DiffLocalItem
     {
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            IContext context = e.Context.GetService<IContext>();
+
             // Allow external diff if enabled in config file
-            if (!e.Context.Config.ChooseDiffMergeManual || e.Context.Config.DiffExePath == null)
+            if (!context.Config.ChooseDiffMergeManual || context.Config.DiffExePath == null)
                 e.Enabled = e.Visible = false;
         }
 

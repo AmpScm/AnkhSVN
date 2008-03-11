@@ -16,12 +16,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to commit selected items to the Subversion repository.
     /// </summary>
-    [VSNetCommand(AnkhCommand.CommitItem,
-		"CommitItem",
-         Text = "&Commit...",
-         Tooltip = "Commit selected items to the Subversion repository.",
-         Bitmap = ResourceBitmaps.Commit),
-         VSNetItemControl( "", Position = 2 )]
+    [Command(AnkhCommand.CommitItem)]
     public class CommitItemCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -39,7 +34,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             // make sure all files are saved
             SaveAllDirtyDocuments( context );

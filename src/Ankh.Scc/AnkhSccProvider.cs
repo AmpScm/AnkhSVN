@@ -6,18 +6,27 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using SharpSvn;
 using Microsoft.VisualStudio;
-using Ankh.UI.Services;
 using Microsoft.VisualStudio.OLE.Interop;
 using AnkhSvn.Ids;
 
-namespace Ankh.VSPackage.Scc
+namespace Ankh.Scc
 {
-    [GuidAttribute(AnkhId.SccProviderId)]
-    partial class AnkhSccProvider : IVsSccProvider, IVsSccGlyphs, IVsSccControlNewSolution, IAnkhSccService
+    [GuidAttribute(AnkhId.SccProviderId), CLSCompliant(false)]
+    public partial class AnkhSccProvider : IVsSccProvider, IVsSccGlyphs, IVsSccControlNewSolution, IAnkhSccService
     {
-        public AnkhSccProvider(IContext context)
+        IFileStatusCache _statusCache; 
+        public AnkhSccProvider(AnkhContext context)
         {
             this.context = context;
+        }
+
+        /// <summary>
+        /// Gets the status cache.
+        /// </summary>
+        /// <value>The status cache.</value>
+        public IFileStatusCache StatusCache
+        {
+            get { return _statusCache ?? (_statusCache = context.GetService<IFileStatusCache>()); }
         }
 
         /// <summary>
@@ -135,7 +144,6 @@ namespace Ankh.VSPackage.Scc
 
         private uint baseIndex;
         private bool active;
-        private IContext context;
-
+        private AnkhContext context;
     }
 }

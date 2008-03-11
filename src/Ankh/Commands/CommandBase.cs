@@ -14,7 +14,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Base class for ICommand instances
     /// </summary>
-    public abstract class CommandBase : ICommand
+    public abstract class CommandBase : Ankh.Commands.ICommandHandler
     {
         public virtual void OnUpdate(CommandUpdateEventArgs e)
         {

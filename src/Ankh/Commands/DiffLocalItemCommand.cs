@@ -10,20 +10,14 @@ namespace Ankh.Commands
     /// <summary>
     /// Shows differences compared to local text base.
     /// </summary>
-    [VSNetCommand(AnkhCommand.DiffLocalItem,
-        "DiffLocalItem",
-         Text = "Di&ff...",
-         Tooltip = "Show differences compared to local text base.",
-         Bitmap = ResourceBitmaps.Diff),
-         VSNetItemControl("", Position = 1)]
+    [Command(AnkhCommand.DiffLocalItem)]
     public class DiffLocalItem : LocalDiffCommandBase
     {
         #region Implementation of ICommand
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
-
+            IContext context = e.Context.GetService<IContext>();
 
             SaveAllDirtyDocuments(context);
 

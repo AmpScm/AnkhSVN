@@ -10,12 +10,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to lock the selected item.
     /// </summary>
-    [VSNetCommand(AnkhCommand.Lock,
-		"Lock",
-         Text = "Loc&k...",
-         Tooltip = "Lock the selected item.",
-         Bitmap = ResourceBitmaps.Lock),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 8 )]
+    [Command(AnkhCommand.Lock)]
     public class LockCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -23,7 +18,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             IList resources = context.Selection.GetSelectionResources(true, 
                 new ResourceFilterCallback( SvnItem.NotLockedAndLockableFilter ) );

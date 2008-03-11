@@ -12,19 +12,16 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to checkout current solution in Repository Explorer.
     /// </summary>
-    [VSNetCommand(AnkhCommand.CheckoutSolution,
-		"CheckoutSolution",
-         Text = "Checkout &Solution...",
-         Tooltip = "Checkout this solution.", 
-         Bitmap = ResourceBitmaps.CheckoutSolution),
-         VSNetControl( "ReposExplorer", Position = 2 )]
+    [Command(AnkhCommand.CheckoutSolution)]
     public class CheckoutSolutionCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IRepositoryTreeNode node = e.Context.RepositoryExplorer.SelectedNode;
+            IContext context = e.Context.GetService<IContext>();
+
+            IRepositoryTreeNode node = context.RepositoryExplorer.SelectedNode;
             if (node != null && !node.IsDirectory &&
                 node.Name.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
             {
@@ -36,7 +33,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             /// first get the parent folder
 			using (FolderBrowserDialog browser = new FolderBrowserDialog())

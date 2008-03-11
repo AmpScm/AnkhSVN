@@ -15,7 +15,7 @@ namespace Ankh
     /// <summary>
     /// Maintains path->SvnItem mappings.
     /// </summary>
-    public class StatusCache
+    public class StatusCache : Ankh.Scc.IFileStatusCache
     {
         public StatusCache()
         {

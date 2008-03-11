@@ -12,7 +12,7 @@ namespace Ankh.UI
     /// </summary>
     public partial class ReverseMergeDialog : System.Windows.Forms.Form
     {
-        public event ResolvingPathInfoHandler GetPathInfo
+        public event EventHandler<ResolvingPathEventArgs> GetPathInfo
         {
             add { this.treeView.ResolvingPathInfo += value; }
             remove { this.treeView.ResolvingPathInfo -= value; }

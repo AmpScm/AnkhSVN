@@ -15,12 +15,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to show the change log for the selected item.
     /// </summary>
-    [VSNetCommand(AnkhCommand.Log,
-		"Log",
-         Text = "&Log...",
-         Tooltip = "Show the change log for the selected item.",
-         Bitmap = ResourceBitmaps.Log),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 6 )]
+    [Command(AnkhCommand.Log)]
 	public class LogCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -37,7 +32,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             IList resources = context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );

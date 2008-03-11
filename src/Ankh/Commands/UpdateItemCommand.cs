@@ -12,41 +12,42 @@ namespace Ankh.Commands
 	/// <summary>
 	/// A command that updates an item.
 	/// </summary>
-	[VSNetCommand(AnkhCommand.UpdateItem,
-		"UpdateItem",
-		 Text = "&Update...",
-		 Tooltip = "Updates local items with changes from the Subversion repository.",
-		 Bitmap = ResourceBitmaps.Update),
-		 VSNetItemControl("", Position = 3)]
+	[Command(AnkhCommand.UpdateItem)]
 	public class UpdateItem : CommandBase
 	{
 		#region Implementation of ICommand
 
 		public override void OnUpdate(CommandUpdateEventArgs e)
 		{
-            foreach (string file in e.Selection.GetSelectedFiles(true))
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                return;
+                if (item.IsVersioned)
+                    return;
             }
             e.Enabled = false;
 		}
 
         public override void OnExecute(CommandEventArgs e)
         {
+            IContext context = e.Context.GetService<IContext>();
             // save all files
-            SaveAllDirtyDocuments(e.Context);
+            //SaveAllDirtyDocuments(e.Context);
 
-            using (e.Context.StartOperation("Updating"))
+            using (e.Context.BeginOperation("Updating"))
             {
-
-                List<SvnItem> files = new List<SvnItem>(e.Selection.GetSelectedSvnItems(true));
+                ArrayList files = new ArrayList();
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                {
+                    if(item.IsVersioned)
+                        files.Add(item);
+                }
 
                 // we assume by now that all items are working copy resources.                
-                UpdateRunner runner = new UpdateRunner(e.Context, files);
+                UpdateRunner runner = new UpdateRunner(context, files);
                 if (!runner.MaybeShowUpdateDialog())
                     return;
 
-                e.Context.UIShell.RunWithProgressDialog(runner, "Updating");
+                context.UIShell.RunWithProgressDialog(runner, "Updating");
             }
         }
 
@@ -81,7 +82,7 @@ namespace Ankh.Commands
 				// equivalent to accepting the default in the dialog.
 				using (UpdateDialog d = new UpdateDialog())
 				{
-					d.GetPathInfo += new ResolvingPathInfoHandler(SvnItem.GetPathInfo);
+					d.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
 					d.Items = this.resources;
 					d.CheckedItems = this.resources;
 					d.Recursive = true;
@@ -100,6 +101,14 @@ namespace Ankh.Commands
 				// the user hasn't cancelled the update
 				return true;
 			}
+
+            public static void GetPathInfo(object sender, ResolvingPathEventArgs args)
+            {
+                SvnItem item = (SvnItem)args.Item;
+                args.IsDirectory = item.IsDirectory;
+                args.Path = item.Path;
+            }
+
 
 			/// <summary>
 			/// The actual updating happens here.

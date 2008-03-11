@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI.Services
+namespace Ankh.Scc
 {
 	/// <summary>
 	/// 

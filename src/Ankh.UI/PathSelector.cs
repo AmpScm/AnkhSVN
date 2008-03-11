@@ -21,7 +21,7 @@ namespace Ankh.UI
         /// <summary>
         /// Invoked when the treeview needs more information about a node.
         /// </summary>
-        public event ResolvingPathInfoHandler GetPathInfo
+        public event EventHandler<ResolvingPathEventArgs> GetPathInfo
         {
             add
             { 
@@ -209,7 +209,7 @@ namespace Ankh.UI
         
 
         private PathSelectorOptions options;        
-        private ResolvingPathInfoHandler getPathInfo;
+        private EventHandler<ResolvingPathEventArgs> getPathInfo;
 
 
         public static void Main()

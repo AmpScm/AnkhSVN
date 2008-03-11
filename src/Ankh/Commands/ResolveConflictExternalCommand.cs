@@ -14,19 +14,16 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to resolve conflict between changes using external tool.
     /// </summary>
-    [VSNetCommand(AnkhCommand.ResolveConflictExternal,
-		"ResolveConflictExternalCommand",
-         Text = "Resolve Conflict E&xternal...",
-         Bitmap = ResourceBitmaps.ResolveConflict, 
-         Tooltip = "Resolve conflict between changes using external tool."),
-         VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 6)]
+    [Command(AnkhCommand.ResolveConflictExternal)]
     public class ResolveConflictExternalCommand : ResolveConflictCommand
     {
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.Context.Config.ChooseDiffMergeManual || e.Context.Config.MergeExePath == null)
+            IContext context = e.Context.GetService<IContext>();
+
+            if (!context.Config.ChooseDiffMergeManual || context.Config.MergeExePath == null)
             {
                 e.Enabled = e.Visible = false;
             }

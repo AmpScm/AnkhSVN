@@ -68,7 +68,7 @@ namespace Ankh
             using( ProgressDialog dialog = new ProgressDialog() )
             {
                 dialog.Caption = caption;
-                dialog.ProgressStatus +=new ProgressStatusDelegate(this.ProgressStatus);
+                dialog.ProgressStatus +=new EventHandler<ProgressStatusEventArgs>(this.ProgressStatus);
 
                 thread.Start();
 

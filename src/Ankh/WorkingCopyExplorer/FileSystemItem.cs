@@ -11,7 +11,7 @@ namespace Ankh.WorkingCopyExplorer
 {
     internal abstract class FileSystemItem : TreeNode, Ankh.UI.IFileSystemItem
     {
-        public event ItemChangedEventHandler ItemChanged;
+        public event EventHandler<ItemChangedEventArgs> ItemChanged;
 
         public FileSystemItem( FileSystemItem parent, WorkingCopyExplorer explorer, SvnItem svnItem ) : base(parent)
         {

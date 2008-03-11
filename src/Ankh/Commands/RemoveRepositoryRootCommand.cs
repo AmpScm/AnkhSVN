@@ -7,19 +7,16 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to remove a URL from the Repository Explorer.
     /// </summary>
-    [VSNetCommand(AnkhCommand.RemoveRepositoryRoot,
-		"RemoveRepositoryRootCommand",
-         Text = "&Remove Repository URL",
-         Tooltip = "Remove a URL from the Repository Explorer.",
-         Bitmap = ResourceBitmaps.RemoveURL )]
-         [VSNetControl( "ReposExplorer", Position = 1 )]
+    [Command(AnkhCommand.RemoveRepositoryRoot)]
     public class RemoveRepositoryRootCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.Context.RepositoryExplorer.IsRootNode(e.Context.RepositoryExplorer.SelectedNode))
+            IContext context = e.Context.GetService<IContext>();
+
+            if (!context.RepositoryExplorer.IsRootNode(context.RepositoryExplorer.SelectedNode))
             {
                 e.Enabled = false;
             }
@@ -27,7 +24,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             context.RepositoryExplorer.RemoveRoot( context.RepositoryExplorer.SelectedNode );
         }

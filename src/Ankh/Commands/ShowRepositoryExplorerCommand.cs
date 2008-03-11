@@ -7,19 +7,16 @@ namespace Ankh.Commands
 	/// <summary>
     /// Command to show the Repository Explorer window.
 	/// </summary>
-    [VSNetCommand(AnkhCommand.ShowRepositoryExplorer,
-		"ShowRepositoryExplorer",
-         Text = "&Repository Explorer",
-         Tooltip = "Show the Repository Explorer window.",
-         Bitmap = ResourceBitmaps.ReposExplorer),
-    VSNetControl( "Tools.AnkhSVN", Position = 4 )]
+    [Command(AnkhCommand.ShowRepositoryExplorer)]
 	public class ShowRepositoryExplorerCommand : CommandBase
     {
         #region Implementation of ICommand
 
         public override void OnExecute(CommandEventArgs e)
         {
-            e.Context.Package.ShowToolWindow(AnkhToolWindow.RepositoryExplorer);
+            IContext context = e.Context.GetService<IContext>();
+
+            context.Package.ShowToolWindow(AnkhToolWindow.RepositoryExplorer);
         }
 
         #endregion

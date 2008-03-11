@@ -12,7 +12,9 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using AnkhSvn.Ids;
 using Ankh.UI.Services;
-using Ankh.VSPackage.Scc;
+using Ankh.Scc;
+using Ankh.VS;
+using Ankh.UI;
 
 namespace Ankh.VSPackage
 {
@@ -48,6 +50,8 @@ namespace Ankh.VSPackage
     [ProvideAutoLoad("F1536EF8-92EC-443C-9ED7-FDADF150DA82")] // = VSConstants.UICONTEXT_SolutionExists.ToString()
 	public sealed partial class AnkhSvnPackage : Package, IAnkhPackage
 	{
+        AnkhRuntime _runtime;
+
 		/// <summary>
 		/// Default constructor of the package.
 		/// Inside this method you can place any initialization code that does not require 
@@ -75,25 +79,29 @@ namespace Ankh.VSPackage
 			Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
 			base.Initialize();
 
-			IServiceContainer container = (IServiceContainer)GetService(typeof(IServiceContainer));
-			container.AddService(typeof(IAnkhPackage), this, true);
+            IServiceContainer container = (IServiceContainer)GetService(typeof(IServiceContainer));            
 
-			Debug.Assert(container != null, "Service container available");
+            Debug.Assert(container != null, "Service container available");
 
-            AnkhSccProvider service = new AnkhSccProvider(this.AnkhContext);
-            container.AddService(typeof(AnkhSccProvider), service, true);
-			container.AddService(typeof(IAnkhSccService), service, true);
+            container.AddService(typeof(IAnkhPackage), this, true);
+            
+            _runtime = new AnkhRuntime(this);
+            _runtime.AddModule(new AnkhModule(_runtime));
+            _runtime.AddModule(new AnkhSccModule(_runtime));
+            _runtime.AddModule(new AnkhVSModule(_runtime));
+            _runtime.AddModule(new AnkhUIModule(_runtime));
 
-			IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)GetService(typeof(IVsRegisterScciProvider));
-            if (rscp != null)
-            {
-                rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid);
-            }
-
-
-			// container.AddService(.., ..., true)
-			// container.AddService(.., new ServiceCreatorCallback(..), true) // Delayed creation of the service
+            _runtime.Start();         
 		}
 		#endregion
+
+        /// <summary>
+        /// Gets the context.
+        /// </summary>
+        /// <value>The context.</value>
+        public AnkhContext Context
+        {
+            get { return _runtime.Context; }
+        }
 	}
 }

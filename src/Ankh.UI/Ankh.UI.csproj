@@ -151,6 +151,7 @@
     <Compile Include="AdminDirDialog.Designer.cs">
       <DependentUpon>AdminDirDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnkhUIModule.cs" />
     <Compile Include="CheckoutDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -317,9 +318,6 @@
     <Compile Include="RevisionPicker.Designer.cs">
       <DependentUpon>RevisionPicker.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\IAnkhSccService.cs" />
-    <Compile Include="Services\IAnkhUISite.cs" />
-    <Compile Include="Services\IAnkhPackage.cs" />
     <Compile Include="Services\SvnLogService.cs" />
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
@@ -334,7 +332,6 @@
       <DependentUpon>ViewLogDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ISvnLogView.cs" />
-    <Compile Include="Services\ISvnLogService.cs" />
     <Compile Include="LockDialog.cs">
       <SubType>Form</SubType>
     </Compile>

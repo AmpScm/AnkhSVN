@@ -24,11 +24,9 @@ namespace Ankh.UI
         private ItemChangedType changeType;
     }
 
-    public delegate void ItemChangedEventHandler(object sender, ItemChangedEventArgs e);
-
     public interface IFileSystemItem
     {
-        event ItemChangedEventHandler ItemChanged;
+        event EventHandler<ItemChangedEventArgs> ItemChanged;
     
         bool IsContainer
         {

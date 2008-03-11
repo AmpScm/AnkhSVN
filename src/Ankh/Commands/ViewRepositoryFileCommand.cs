@@ -13,8 +13,8 @@ namespace Ankh.Commands
         #region ICommand Members
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (e.Context.RepositoryExplorer.SelectedNode == null ||
-                e.Context.RepositoryExplorer.SelectedNode.IsDirectory)
+            /*if (e.Context.RepositoryExplorer.SelectedNode == null ||
+                e.Context.RepositoryExplorer.SelectedNode.IsDirectory)*/
             {
                 e.Enabled = false;
             }

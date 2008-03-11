@@ -8,21 +8,16 @@ namespace Ankh.Commands
     /// <summary>
     /// A command that opens a file from the server in VS.NET
     /// </summary>
-    [VSNetCommand(AnkhCommand.ViewInVsNet,
-		"ViewInVsNet",
-         Text = "In &Visual Studio",
-         Tooltip = "View this file in Visual Studio.", 
-         Bitmap = ResourceBitmaps.ViewInVSNet ),
-         VSNetControl( "ReposExplorer.View", Position = 1 )]
+    [Command(AnkhCommand.ViewInVsNet)]
     public class ViewInVSNetCommand : ViewRepositoryFileCommand
     {
         #region Implementation of ICommand
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
-            using (context.StartOperation("Opening"))
+            using (e.Context.BeginOperation("Opening"))
             {
 
                 INode node = context.RepositoryExplorer.SelectedNode;

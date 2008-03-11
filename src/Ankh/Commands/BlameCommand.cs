@@ -15,12 +15,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to identify which users to blame for which lines.
     /// </summary>
-    [VSNetCommand(AnkhCommand.Blame,
-		"Blame",
-        Text = "&Blame...",
-        Tooltip = "Identify which users to blame for which lines.",
-        Bitmap = ResourceBitmaps.Blame),
-    VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 10)]
+    [Command(AnkhCommand.Blame)]
     public class BlameCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -37,10 +32,10 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
-            IList resources = context.Selection.GetSelectionResources( true, 
-                new ResourceFilterCallback( SvnItem.VersionedFilter) );
+            IList resources = new ArrayList();/* context.Selection.GetSelectionResources(true,
+                 new ResourceFilterCallback(SvnItem.VersionedFilter));*/
 
             if ( resources.Count == 0 )
             {

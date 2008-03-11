@@ -33,7 +33,7 @@ namespace Ankh.UI
             InitializeComponent();
             this.CreateToolTips();
 
-            this.commitItemsTree.ResolvingPathInfo += new ResolvingPathInfoHandler(commitItemsTree_GetPathInfo);
+            this.commitItemsTree.ResolvingPathInfo += new EventHandler<ResolvingPathEventArgs>(commitItemsTree_GetPathInfo);
             this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
 
             // Support Ctrl-A to select everything.

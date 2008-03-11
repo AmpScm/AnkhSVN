@@ -6,6 +6,7 @@ using IServiceProvider = System.IServiceProvider;
 using SharpSvn;
 using Ankh.UI.Services;
 using Ankh.Selection;
+using Ankh.UI;
 
 namespace Ankh
 {

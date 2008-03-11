@@ -91,7 +91,10 @@
                     toolTip="Switch this item to a different URL." iconFile="menu/Switch.png"/>
             <Button id="Cmd_Unlock" name="Unlock" priority="0x301"
                     text="U&amp;nlock..."
-                    toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>            
+                    toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>
+            <Button id="Cmd_UpdateItem" name="UpdateItem" priority="0x301"
+                    text="&amp;Update..."
+                    toolTip="Updates local items with changes from the Subversion repository." iconFile="menu/Update.png"/>
           </Group>
           <Group id="Grp_FileSccMenuManagement" priority="0x0200">
             <Button id="Cmd_ShowCommitDialog" name="ShowCommitDialog" priority="0x301"
@@ -106,6 +109,7 @@
             <Button id="Cmd_ToggleAnkh" name="ToggleAnkh" priority="0x301"
                     text="Enable Ank&amp;hSVN for this solution"
                     toolTip="Enable Ankh for this solution." iconFile="menu/ToggleAnkh.png"/>
+            <Button id="Cmd_RunSvnCommand" name="RunSvn" text="RunSvn" priority="0xffff" commandWellOnly="true" allowParams="true" />
           </Group>
         </Menu>
       </Group>

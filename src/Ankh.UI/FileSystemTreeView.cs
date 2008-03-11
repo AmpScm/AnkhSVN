@@ -143,7 +143,7 @@ namespace Ankh.UI
 
         private void AddNode( TreeNodeCollection nodes, IFileSystemItem child )
         {
-            child.ItemChanged += new ItemChangedEventHandler( child_ItemChanged );
+            child.ItemChanged += new EventHandler<ItemChangedEventArgs>( child_ItemChanged );
             TreeNode node = nodes.Add( child.Text );
             node.Tag = child;
 
@@ -180,7 +180,7 @@ namespace Ankh.UI
                 IFileSystemItem item = node.Tag as IFileSystemItem;
                 if ( item != null )
                 {
-                    item.ItemChanged -= new ItemChangedEventHandler( this.child_ItemChanged );
+                    item.ItemChanged -= new EventHandler<ItemChangedEventArgs>( this.child_ItemChanged );
                 }
 
                 RecursivelyUnhookFromEvents( node.Nodes );

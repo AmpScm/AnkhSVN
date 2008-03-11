@@ -10,12 +10,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to revert current item to last updated revision.
     /// </summary>
-    [VSNetCommand(AnkhCommand.RevertItem,
-		"RevertItem",
-         Text = "&Revert...",
-         Tooltip = "Revert this item to last updated revision.",
-         Bitmap = ResourceBitmaps.Revert),
-         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 4 )]
+    [Command(AnkhCommand.RevertItem)]
     public class RevertItemCommand : CommandBase
     {
         #region Implementation of ICommand
@@ -32,7 +27,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context;
+            IContext context = e.Context.GetService<IContext>();
 
             SaveAllDirtyDocuments( context );
 
