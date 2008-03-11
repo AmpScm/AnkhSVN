@@ -20,6 +20,7 @@ using Microsoft.VisualStudio.Shell;
 using EnvDTE;
 using Ankh;
 using System.ComponentModel.Design;
+using Ankh.Scc;
 
 namespace UnitTestProject.MenuItemTests
 {
@@ -36,9 +37,12 @@ namespace UnitTestProject.MenuItemTests
             MockRepository mocks = new MockRepository();
             AnkhSvnPackage package = new AnkhSvnPackage();
 
+            IFileStatusCache statusCache = mocks.DynamicMock<IFileStatusCache>();
+
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(DTE), DteMock.GetDteInstance(mocks)))
             using (ServiceProviderHelper.AddService(typeof(IContext), AnkhContextMock.GetInstance(mocks)))
+            using (ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache))
             using (ServiceProviderHelper.SetSite(package))
             {
                 //Verify that the menu command can be found
@@ -54,8 +58,11 @@ namespace UnitTestProject.MenuItemTests
             // Create the package
             AnkhSvnPackage package = new AnkhSvnPackage();
 
+            IFileStatusCache statusCache = mocks.DynamicMock<IFileStatusCache>();
+
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), AnkhContextMock.GetInstance(mocks)))
+            using (ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache))
             using (ServiceProviderHelper.SetSite(package))
             {
                 CommandExecutor.ExecuteCommand(package, AnkhCommand.Refresh);
