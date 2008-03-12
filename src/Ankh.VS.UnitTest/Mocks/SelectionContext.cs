@@ -35,12 +35,12 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 yield break;
             }
 
-            public IEnumerable<string> GetOwnerProjects()
+            public IEnumerable<SvnProject> GetOwnerProjects()
             {
                 yield break;
             }
 
-            public IEnumerable<string> GetOwnerProjects(bool recursive)
+            public IEnumerable<SvnProject> GetOwnerProjects(bool recursive)
             {
                 yield break;
             }

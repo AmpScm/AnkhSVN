@@ -71,6 +71,7 @@
     <Compile Include="Selection\ISelectionContext.cs" />
     <Compile Include="Selection\LocalSvnItem.cs" />
     <Compile Include="Selection\RemoteSvnItem.cs" />
+    <Compile Include="Selection\SvnProject.cs" />
     <Compile Include="Subversion\ISvnLogService.cs" />
     <Compile Include="UI\IAnkhUISite.cs" />
     <Compile Include="UI\ISvnLogView.cs" />

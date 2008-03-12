@@ -27,25 +27,7 @@ namespace Ankh.Scc
         public IFileStatusCache StatusCache
         {
             get { return _statusCache ?? (_statusCache = context.GetService<IFileStatusCache>()); }
-        }
-
-        public void LoadingManagedSolution(bool asPrimarySccProvider)
-        {
-            // Called by the package when a solution is loaded which is marked as managed by us
-        }
-
-        public bool IsSolutionManaged
-        {
-            get { return true; }
-            set { throw new InvalidOperationException(); }
-        }
-
-        public bool IsSolutionDirty
-        {
-            // TODO: Only return true if the solution was not previously managed by Ankh
-            get { return true; }
-            set { }
-        }
+        }      
 
         /// <summary>
         /// Determines if any item in the solution are under source control.
@@ -112,6 +94,16 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
         {
+            SccProjectData data;
+            if (!_projectMap.TryGetValue(pscp2Project, out data))
+            {
+                // This method is called before the OpenProject calls
+                _projectMap.Add(pscp2Project, data = new SccProjectData(pscp2Project));
+            }
+
+            data.IsManaged = (pszProvider == AnkhId.SubversionSccName);
+            data.IsRegistered = true;
+
             return VSConstants.S_OK;
         }
 
@@ -122,6 +114,12 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int UnregisterSccProject(IVsSccProject2 pscp2Project)
         {
+            SccProjectData data;
+            if (_projectMap.TryGetValue(pscp2Project, out data))
+            {
+                data.IsRegistered = false;
+            }
+
             return VSConstants.S_OK;
 
         }
@@ -162,6 +160,6 @@ namespace Ankh.Scc
 
         private uint baseIndex;
         private bool active;
-        private AnkhContext context;
+        private AnkhContext context;        
     }
 }

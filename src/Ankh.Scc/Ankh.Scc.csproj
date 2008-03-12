@@ -60,6 +60,9 @@
     <Compile Include="AnkhSccProvider.Glyphs.cs">
       <DependentUpon>AnkhSccProvider.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnkhSccProvider.Projects.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
     <Compile Include="AnkhSccProvider.QueryEditSave.cs">
       <DependentUpon>AnkhSccProvider.cs</DependentUpon>
     </Compile>
@@ -79,12 +82,16 @@
     <Compile Include="ProjectDocumentTracker.Rename.cs">
       <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProjectDocumentTracker.Solution.cs">
+      <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SccProjectData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.Scc.snk" />
