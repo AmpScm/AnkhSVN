@@ -16,6 +16,8 @@ namespace AnkhSvn.Ids
 	public enum AnkhCommand // : int
 	{
 		None = 0,
+        MarkProjectDirty,
+        
 
 		// These values live in the same numberspace as the other values within 
 		// the command set. So we start countin at this number to make sure we

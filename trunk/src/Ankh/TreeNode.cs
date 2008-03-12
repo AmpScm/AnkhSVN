@@ -257,11 +257,11 @@ namespace Ankh
 
         protected static void UnhookEvents( IList svnItems, EventHandler del )
         {
-            foreach ( SvnItem item in svnItems )
-            {
-                item.Changed -= del;
-                item.ChildrenChanged -= del;
-            }
+            //foreach ( SvnItem item in svnItems )
+            //{
+            //    item.Changed -= del;
+            //    item.ChildrenChanged -= del;
+            //}
         }
 
         /// <summary>

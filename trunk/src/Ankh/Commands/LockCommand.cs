@@ -40,7 +40,7 @@ namespace Ankh.Commands
                 context.UIShell.RunWithProgressDialog( new SimpleProgressWorker(
                     new SimpleProgressWorkerCallback( this.ProgressCallback ) ), "Locking files" );
                 foreach ( SvnItem item in info.CheckedItems )
-                    item.Refresh( context.Client );
+                    item.MarkDirty();
             }
             finally
             {

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using SharpSvn;
 using AnkhSvn.Ids;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
@@ -44,7 +45,7 @@ namespace Ankh.Commands
                 new SimpleProgressWorkerCallback( this.DoUnlock )), "Unlocking files" );
             
             foreach( SvnItem item in this.info.CheckedItems )
-                item.Refresh( context.Client );
+                item.MarkDirty();
         }
 
         #endregion

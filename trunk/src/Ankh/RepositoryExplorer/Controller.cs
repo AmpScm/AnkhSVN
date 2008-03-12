@@ -233,7 +233,8 @@ namespace Ankh.RepositoryExplorer
                     continue;
 
                 string label = String.Format( "{0} [{1}]", node.Url, node.Revision );
-                this.repositoryExplorer.AddRoot( label, node );
+#warning Needs fix!
+                //this.repositoryExplorer.AddRoot( label, node );
             }
         }
 
