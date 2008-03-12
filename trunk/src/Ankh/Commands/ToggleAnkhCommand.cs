@@ -3,6 +3,8 @@ using System.IO;
 
 using Utils.Services;
 using AnkhSvn.Ids;
+using Ankh.Selection;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -12,96 +14,55 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ToggleAnkh)]
     public class ToggleAnkhCommand : CommandBase
     {
-        #region Implementation of ICommand
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-            if (this.updating)
+            IAnkhSccService scc = e.Context.GetService<IAnkhSccService>();
+
+            if (scc == null || !scc.IsActive)
             {
-                return; // Enabled
-            }
-
-            this.updating = true;
-
-            try
-            {
-                string solutionPath = e.Selection.SolutionFilename;
-
-                // if this path isn't valid, we don't wanna enable anything
-                if (!File.Exists(solutionPath))
-                {
-                    e.Enabled = false;
-                    return;
-                }
-
-                string solutionDir = Path.GetDirectoryName(solutionPath);
-
-                if ((!context.SolutionIsOpen))
-                {
-                    // we want it to show "Enable" if we're not in a wc
-                    e.Text = "Enable AnkhSVN for this solution";
-                    e.Enabled = false;
-                    return;
-                }
-
-                // now we have to figure out what text to set for the command    
-                if (File.Exists(Path.Combine(solutionDir, "Ankh.Load")))
-                {
-                    e.Text = "Disable AnkhSVN for this solution";
-                }
-                else
-                {
-                    // we will allow the user to load for a solution where the 
-                    // solution dir is not versioned
-                    if (!AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath(
-                        solutionDir))
-                    {
-                        e.Text = "Force AnkhSVN to load for this solution";
-                    }
-                    else
-                    {
-                        e.Text = "Enable AnkhSVN for this solution";
-                    }
-                }
-
+                e.Enabled = false;
                 return;
             }
-            finally
+
+            bool enable = false;
+            bool first = true;
+            foreach (SvnProject project in e.Selection.GetOwnerProjects())
             {
-                this.updating = false;
+                if (first)
+                {
+                    enable = !scc.IsProjectManaged(project);
+                    first = false;
+                }
+                else if (enable == scc.IsProjectManaged(project))
+                {
+                    // Some projects managed and some not. Disable command
+                    e.Enabled = false;
+                    break;
+                }
             }
+
+            e.Text = enable ? "Enable Ank&hSVN" : "Disable Ank&hSVN";
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            string solutionDir = Path.GetDirectoryName(e.Selection.SolutionFilename);
-            string noLoad = Path.Combine(solutionDir, "Ankh.NoLoad");
-            string load = Path.Combine(solutionDir, "Ankh.Load");
+            IAnkhSccService scc = e.Context.GetService<IAnkhSccService>();
 
-            // disable or enable?
-            if (File.Exists(load))
+            if (scc == null || !scc.IsActive)
+                return;
+
+            bool enable = false;
+            bool first = true;
+            foreach (SvnProject project in e.Selection.GetOwnerProjects())
             {
-                File.Delete(load);
-                File.Create(noLoad).Close();
-            }
-            else
-            {
-                // delete doesnt throw if the file doesn't exist
-                File.Delete(noLoad);
-                File.Create(load).Close();
-            }
+                if (first)
+                {
+                    enable = !scc.IsProjectManaged(project);
+                    first = false;
+                }
+
+                scc.SetProjectManaged(project, enable);
+            }            
         }
-
-        #endregion
-
-        private void SetToolTipAndCaption(IContext context, object ctrl, string text)
-        {
-            // TODO: Use new command routing for this
-            //context.CommandBars.SetControlCaption( ctrl, text );
-            //context.CommandBars.SetControlToolTip( ctrl, text + ".");
-        }
-
-        private bool updating = false;
     }
 }

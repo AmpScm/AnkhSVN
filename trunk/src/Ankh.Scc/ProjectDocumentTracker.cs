@@ -17,7 +17,9 @@ namespace Ankh.Scc
     {
         readonly AnkhContext _context;
         bool _hooked;
-        uint _cookie;
+        uint _projectCookie;
+        uint _documentCookie;
+        readonly AnkhSccProvider _sccProvider;
 
         public ProjectDocumentTracker(AnkhContext context)
         {
@@ -25,6 +27,7 @@ namespace Ankh.Scc
                 throw new ArgumentNullException("context");
 
             _context = context;
+            _sccProvider = context.GetService<AnkhSccProvider>();
 
             Hook(true);
         }
@@ -38,17 +41,27 @@ namespace Ankh.Scc
                 IVsTrackProjectDocuments2 tracker = (IVsTrackProjectDocuments2)_context.GetService(typeof(SVsTrackProjectDocuments));
 
                 if (tracker != null)
-                    Marshal.ThrowExceptionForHR(tracker.AdviseTrackProjectDocumentsEvents(this, out _cookie));
+                    Marshal.ThrowExceptionForHR(tracker.AdviseTrackProjectDocumentsEvents(this, out _projectCookie));
 
                 _hooked = true;
+
+                IVsSolution solution = (IVsSolution)_context.GetService(typeof(SVsSolution));
+
+                if (solution != null)
+                    solution.AdviseSolutionEvents(this, out _documentCookie);
             }
             else 
             {
                 IVsTrackProjectDocuments2 tracker = (IVsTrackProjectDocuments2)_context.GetService(typeof(SVsTrackProjectDocuments));
 
                 if (tracker != null)
-                    tracker.UnadviseTrackProjectDocumentsEvents(_cookie);
+                    tracker.UnadviseTrackProjectDocumentsEvents(_projectCookie);
                 _hooked = false;
+
+                IVsSolution solution = (IVsSolution)_context.GetService(typeof(SVsSolution));
+
+                if (solution != null)
+                    solution.UnadviseSolutionEvents(_documentCookie);
             }
         }
         #region IVsTrackProjectDocumentsEvents2 Members

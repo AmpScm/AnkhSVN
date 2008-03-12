@@ -43,13 +43,13 @@ namespace Ankh.Selection
         /// Gets the projects owning selected files
         /// </summary>
         /// <returns></returns>
-        IEnumerable<string> GetOwnerProjects();
+        IEnumerable<SvnProject> GetOwnerProjects();
         /// <summary>
         /// Gets the projects owning selected files
         /// </summary>
         /// <param name="recursive">if set to <c>true</c> [recursive].</param>
         /// <returns></returns>
-        IEnumerable<string> GetOwnerProjects(bool recursive);
+        IEnumerable<SvnProject> GetOwnerProjects(bool recursive);
 
         /// <summary>
         /// Gets the current solution filename (full path)

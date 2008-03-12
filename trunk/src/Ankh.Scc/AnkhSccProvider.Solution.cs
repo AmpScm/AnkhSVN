@@ -16,6 +16,13 @@ namespace Ankh.Scc
         /// </returns>
         public int AddNewSolutionToSourceControl()
         {
+            SetProjectManagedRaw(null, true);
+
+            foreach (IVsSccProject2 project in _projectMap.Keys)
+            {
+                SetProjectManagedRaw(project, true);
+            }
+
             return VSConstants.S_OK;
         }
 

@@ -14,7 +14,7 @@ namespace Ankh.VSPackage
     [ProvideSolutionProperties(AnkhSvnPackage.SubversionPropertyCategory)]
     partial class AnkhSvnPackage : IVsPersistSolutionProps    
 	{
-        const string SubversionPropertyCategory = "SubversionScc";
+        const string SubversionPropertyCategory = AnkhId.SubversionSccName;
         const string ManagedPropertyName = "Svn-Managed";
         const string ManagerPropertyName = "Manager";
 
@@ -39,14 +39,25 @@ namespace Ankh.VSPackage
 
                 IAnkhSccService scc = GetService<IAnkhSccService>();
 
-                if (scc == null || !scc.IsSolutionManaged)
+                if (scc == null)
+                {
+                    // Nothing to save, nothing loaded
                     pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
+                }
+                else if (scc.IsSolutionDirty)
+                {
+                    // Something changed -> Save
+                    pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasDirtyProps;
+                }
+                else if (!scc.IsProjectManaged(null))
+                {
+                    // Nothing changed and unmanaged; not adding anything
+                    pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
+                }
                 else
                 {
-                    if (scc.IsSolutionDirty)
-                        pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasDirtyProps;
-                    else
-                        pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoDirtyProps;
+                    // Nothing changed
+                    pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoDirtyProps;
                 }
             }
 
@@ -69,7 +80,7 @@ namespace Ankh.VSPackage
             {
                 IAnkhSccService scc = GetService<IAnkhSccService>();
 
-                if (scc != null && scc.IsSolutionManaged)
+                if (scc != null && scc.IsProjectManaged(null))
                 {
                     // Calls WriteSolutionProps for us
                     pPersistence.SavePackageSolutionProps(1, pHierarchy, this, SubversionPropertyCategory);
@@ -92,7 +103,7 @@ namespace Ankh.VSPackage
                 IAnkhSccService scc = GetService<IAnkhSccService>();
                 if (scc != null)
                 {
-                    if (scc.IsSolutionManaged)
+                    if (scc.IsProjectManaged(null))
                     {
                         obj = true.ToString();
                         pPropBag.Write(ManagedPropertyName, ref obj);

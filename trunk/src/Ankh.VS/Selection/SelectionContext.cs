@@ -36,8 +36,8 @@ namespace Ankh.Selection
         CachedEnumerable<string> _filenamesRecursive;
         CachedEnumerable<SvnItem> _svnItems;
         CachedEnumerable<SvnItem> _svnItemsRecursive;
-        CachedEnumerable<string> _selectedProjects;
-        CachedEnumerable<string> _selectedProjectsRecursive;
+        CachedEnumerable<SvnProject> _selectedProjects;
+        CachedEnumerable<SvnProject> _selectedProjectsRecursive;
         bool _deteminedSolutionExplorer;
         bool _isSolutionExplorer;
         string _solutionFilename;
@@ -112,6 +112,8 @@ namespace Ankh.Selection
             _filenamesRecursive = null;
             _svnItems = null;
             _svnItemsRecursive = null;
+            _selectedProjects = null;
+            _selectedProjectsRecursive = null;
 
             _deteminedSolutionExplorer = false;
             _isSolutionExplorer = false;
@@ -489,22 +491,22 @@ namespace Ankh.Selection
 
         #region ISelectionContext Members
 
-        public IEnumerable<string> GetOwnerProjects()
+        public IEnumerable<SvnProject> GetOwnerProjects()
         {
-            return _selectedProjects ?? (_selectedProjects = new CachedEnumerable<string>(InternalGetOwnerProjects(false)));
+            return _selectedProjects ?? (_selectedProjects = new CachedEnumerable<SvnProject>(InternalGetOwnerProjects(false)));
         }
 
-        protected IEnumerable<string> GetOwnerProjectsRecursive()
+        protected IEnumerable<SvnProject> GetOwnerProjectsRecursive()
         {
-            return _selectedProjectsRecursive ?? (_selectedProjectsRecursive = new CachedEnumerable<string>(InternalGetOwnerProjects(true)));
+            return _selectedProjectsRecursive ?? (_selectedProjectsRecursive = new CachedEnumerable<SvnProject>(InternalGetOwnerProjects(true)));
         }
 
-        public IEnumerable<string> GetOwnerProjects(bool recursive)
+        public IEnumerable<SvnProject> GetOwnerProjects(bool recursive)
         {
             return recursive ? GetOwnerProjectsRecursive() : GetOwnerProjects();
         }
 
-        public IEnumerable<string> InternalGetOwnerProjects(bool recursive)
+        public IEnumerable<SvnProject> InternalGetOwnerProjects(bool recursive)
         {
             Hashtable ht = new Hashtable();
             foreach (SelectionItem si in GetSelectedItems(recursive))
@@ -513,7 +515,8 @@ namespace Ankh.Selection
                 {
                     ht.Add(si.Hierarchy, si);
 
-                    IVsProject project = (si.SccProject as IVsProject) ?? (si.Hierarchy as IVsProject);
+                    IVsProject vsProject = (si.SccProject as IVsProject);
+                    IVsProject project = vsProject ?? (si.Hierarchy as IVsProject);
 
                     string name = null;
 
@@ -529,7 +532,7 @@ namespace Ankh.Selection
                     if (name != null && !ht.ContainsKey(name))
                     {
                         ht.Add(name, si);
-                        yield return name;
+                        yield return new SvnProject(name, (vsProject != null) ? si.SccProject : _context.GetService(typeof(SVsSolution)));
                     }
                 }
             }

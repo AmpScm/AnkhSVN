@@ -9,9 +9,6 @@ namespace AnkhSvn.Ids
 	/// </summary>
 	public static class AnkhId
 	{
-		// These guid's are used via this definition 
-		// through the Package, the Gui, etc.
-
 //************ The Package Load Key Registration ***********************************
 		/// <summary>
 		/// The guid the AnkhSvn package is registered with inside Visual Studio
@@ -22,6 +19,10 @@ namespace AnkhSvn.Ids
         public const string PlkProduct = "AnkhSvn";
         public const string PlkCompany = "AnkhSvn";
 //**********************************************************************************
+
+
+        public const string SubversionSccName = "SubversionScc";
+
 
 		/// <summary>
 		/// The guid used for registering the commands registered by the AnkhSvn package
