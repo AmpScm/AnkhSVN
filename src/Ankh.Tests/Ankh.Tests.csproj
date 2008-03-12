@@ -192,9 +192,9 @@
     <Compile Include="Presenters\SvnLogPresenterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LogServicetest.cs" />
-    <Compile Include="StatusCacheTest.cs">
+    <Content Include="StatusCacheTest.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </Content>
     <Content Include="SvnItemTest.cs">
       <SubType>Code</SubType>
     </Content>
