@@ -151,9 +151,7 @@ namespace Ankh.Commands
 
                 if (_map.TryGetValue(command, out item))
                     return item;
-                else if (command <= AnkhCommand.CommandFirst)
-                    return null;
-                else if (Enum.IsDefined(typeof(AnkhCommand), command))
+                else
                 {
                     item = new CommandMapItem(command);
 
@@ -161,8 +159,6 @@ namespace Ankh.Commands
 
                     return item;
                 }
-                else
-                    return null;
             }
         }
 
