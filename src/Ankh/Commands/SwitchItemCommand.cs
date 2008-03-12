@@ -34,7 +34,7 @@ namespace Ankh.Commands
 
             SaveAllDirtyDocuments(context);
 
-            IList resources = context.Selection.GetSelectionResources(
+            /*IList resources = context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback(SvnItem.VersionedFilter));
 
             if (resources.Count == 0)
@@ -53,7 +53,7 @@ namespace Ankh.Commands
                 SwitchRunner runner = new SwitchRunner(info.Path, new Uri(info.SwitchToUrl),
                     info.RevisionStart, info.Depth);
                 context.UIShell.RunWithProgressDialog(runner, "Switching");
-            }
+            }*/
         }
 
         #endregion

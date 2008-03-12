@@ -31,6 +31,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            /*
             IContext context = e.Context.GetService<IContext>();
 
             SaveAllDirtyDocuments(context);
@@ -54,7 +55,7 @@ namespace Ankh.Commands
                         dlg.DryRun);
                     context.UIShell.RunWithProgressDialog(runner, "Merging");
                 }
-            }
+            }*/
         }
 
         public static void GetPathInfo(object sender, ResolvingPathEventArgs args)

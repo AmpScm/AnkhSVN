@@ -80,7 +80,7 @@ namespace Ankh.Commands
                 {
                     context.Client.Add(item.Path, args);
                 }
-                context.Selection.RefreshSelection();
+                //context.Selection.RefreshSelection();
             }
         }
         #endregion

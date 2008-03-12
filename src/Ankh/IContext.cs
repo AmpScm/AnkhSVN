@@ -100,13 +100,6 @@ namespace Ankh
             get;
         }
 
-
-        [Obsolete("Please use .SelectionContext instead")]
-        IAnkhSelectionContainer Selection
-        {
-            get;
-        }
-
 		System.ComponentModel.ISynchronizeInvoke SynchronizingObject
 		{
 			get;

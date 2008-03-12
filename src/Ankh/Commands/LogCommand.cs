@@ -34,7 +34,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            IList resources = context.Selection.GetSelectionResources(
+            /*IList resources = context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
 
             this.info = new LogDialogInfo( resources, resources );
@@ -62,7 +62,7 @@ namespace Ankh.Commands
             this.result.Transform( transform, writer );
 
             // display the HTML with the filename as caption
-            context.UIShell.DisplayHtml( "Log", writer.ToString(), false );
+            context.UIShell.DisplayHtml( "Log", writer.ToString(), false );*/
         }
 
         #endregion

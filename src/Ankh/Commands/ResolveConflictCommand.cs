@@ -50,7 +50,7 @@ namespace Ankh.Commands
 
             SaveAllDirtyDocuments( context );
 
-            using(context.StartOperation( "Resolving" ))
+            /*using(context.StartOperation( "Resolving" ))
             {
                 IList items = context.Selection.GetSelectionResources(false, 
                      new ResourceFilterCallback(SvnItem.ConflictedFilter) );
@@ -60,7 +60,7 @@ namespace Ankh.Commands
                     this.Resolve( context, item );
                     item.MarkDirty();
                 }
-            }
+            }*/
         }
 
         #endregion

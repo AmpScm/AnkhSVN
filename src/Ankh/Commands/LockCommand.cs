@@ -18,7 +18,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            /*IContext context = e.Context.GetService<IContext>();
 
             IList resources = context.Selection.GetSelectionResources(true, 
                 new ResourceFilterCallback( SvnItem.NotLockedAndLockableFilter ) );
@@ -50,7 +50,7 @@ namespace Ankh.Commands
             if ( this.lockFailedFiles.Count > 0 )
             {
                 this.ShowLockFailedMessage( context );
-            }
+            }*/
         }
 
         #endregion
