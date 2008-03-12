@@ -111,7 +111,7 @@ namespace Ankh.VSPackage
 			object argIn = null;
 
 			if(pvaIn != IntPtr.Zero)
-				Marshal.GetObjectForNativeVariant(pvaIn);
+				argIn = Marshal.GetObjectForNativeVariant(pvaIn);
 
 			CommandEventArgs args = new CommandEventArgs(
 				(AnkhCommand)nCmdID, 
