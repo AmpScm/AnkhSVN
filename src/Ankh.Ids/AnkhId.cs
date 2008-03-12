@@ -12,13 +12,17 @@ namespace AnkhSvn.Ids
 		// These guid's are used via this definition 
 		// through the Package, the Gui, etc.
 
-		// Changing these corrupts all kinds of registrations
+//************ The Package Load Key Registration ***********************************
 		/// <summary>
 		/// The guid the AnkhSvn package is registered with inside Visual Studio
 		/// </summary>
-		/// <remarks>Must match the GUID in the PLK. If you might ever change this guid 
-		/// you must also change the <see cref="CommandSet"/> guid</remarks>
 		public const string PackageId  = "604ad610-5cf9-4bd5-8acc-f49810e2efd4";
+
+        public const string PlkVersion = "2.0";
+        public const string PlkProduct = "AnkhSvn";
+        public const string PlkCompany = "AnkhSvn";
+//**********************************************************************************
+
 		/// <summary>
 		/// The guid used for registering the commands registered by the AnkhSvn package
 		/// </summary>

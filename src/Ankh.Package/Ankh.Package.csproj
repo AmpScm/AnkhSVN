@@ -77,7 +77,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="AnkhSvnPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +108,19 @@
       <Transform>Gui\Gui-To-Ctc.xsl</Transform>
       <To>$(IntermediateOutputPath)AnkhSvn.ctc</To>
       <Debug>true</Debug>
-    </XslSource>
+    </XslSource>    
+    <None Include="Ankh.Package.snk" />    
+    <None Include="Gui\Gui-To-Ctc.xsl" />
+    <None Include="Gui\Gui.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="Gui\Gui.xsx">
+      <DependentUpon>Gui.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+	<Compile Include="AnkhSvnPackage.cs" />
     <Compile Include="AnkhSvnPackage.About.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
@@ -122,18 +133,11 @@
     <Compile Include="AnkhSvnPackage.ToolWindows.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProvideSourceControlProvider.cs" />
-    <None Include="Ankh.Package.snk" />
-    <None Include="Gui\Gui-To-Ctc.xsl" />
-    <None Include="Gui\Gui.xsd">
-      <SubType>
-      </SubType>
-    </None>
-    <None Include="Gui\Gui.xsx">
-      <DependentUpon>Gui.xsd</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="AnkhSvnPackage.SolutionProperties.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Attributes\ProvideSolutionProperties.cs" />
+    <Compile Include="Attributes\ProvideSourceControlProvider.cs" />
     <Content Include="Ankh.Package.wxs" />
     <Content Include="Gui\menu\Add.png" />
     <Content Include="Gui\menu\AddFolder.png" />

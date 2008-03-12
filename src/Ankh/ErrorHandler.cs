@@ -10,6 +10,7 @@ using System.Collections;
 using Ankh.Config;
 using System.Xml.Serialization;
 using SharpSvn;
+using Ankh.ContextServices;
 
 
 namespace Ankh
@@ -19,9 +20,8 @@ namespace Ankh
     /// </summary>
     public class ErrorHandler : IAnkhErrorHandler
     {
-        public ErrorHandler( string dteVersion, IContext context )
+        public ErrorHandler(IAnkhServiceProvider context )
         {
-            this.dteVersion = dteVersion;
             this.context = context;
         }
 
@@ -33,6 +33,8 @@ namespace Ankh
         {
             try
             {
+                // BH: Uses reflection to find the best match based on the exception??
+
                 Type t = typeof(ErrorHandler);
                 t.InvokeMember( "DoHandle", BindingFlags.InvokeMethod | BindingFlags.Instance |
                     BindingFlags.NonPublic, null, 
@@ -151,27 +153,17 @@ namespace Ankh
         private void DoHandle( Exception ex )
         {
             DoLogException( ex );
-
-#if REPORTERROR
-
             ShowErrorDialog(ex, true, true);
-#else
-                MessageBox.Show( ex.Message, "Unexpected error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error );
-#endif              
-
         }
        
         public void LogException( Exception ex, string message, params object[] args )
         {
-            try
+            IAnkhOperationLogger logger = context.GetService<IAnkhOperationLogger>();
+
+            if (logger != null)
             {
-                this.context.OutputPane.WriteLine( message, args );
-                this.DoLogException( ex );
-            }
-            catch ( Exception newEx )
-            {
-                ShowErrorDialog( newEx, true, true );
+                logger.WriteLine(string.Format(message, args));
+                logger.WriteLine(ex.ToString());
             }
         }
 
@@ -211,7 +203,7 @@ namespace Ankh
         private string ErrorFile
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return Path.Combine( this.context.ConfigLoader.ConfigDir, ErrorLogFile ); }
+            get { return Path.Combine(Path.GetTempPath(), "AnkhErrors.txt");/* this.context.ConfigLoader.ConfigDir, ErrorLogFile );*/ }
         }
        
         private void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError )
@@ -220,7 +212,6 @@ namespace Ankh
             string message = GetNestedMessages( ex );
             System.Collections.Specialized.StringDictionary additionalInfo = 
                 new System.Collections.Specialized.StringDictionary();
-            additionalInfo["dte"] = this.dteVersion;
 
             using( ErrorDialog dlg = new ErrorDialog() )
             {
@@ -326,13 +317,12 @@ namespace Ankh
             }
         }
 
-        private string dteVersion;
         private static readonly string NL = Environment.NewLine;
         private const int LockedFileErrorCode = 720032;
         private const string ErrorReportUrl = "http://ankhsvn.com/error/report.aspx";
         private const string ErrorReportMailAddress = "error@ankhsvn.tigris.org";
         private const string ErrrorReportSubject = "Exception";
         private const string ErrorLogFile = "errors.xml";
-        private IContext context;
+        private IAnkhServiceProvider context;
     }
 }

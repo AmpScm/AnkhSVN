@@ -7,7 +7,6 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-   
     /// <summary>
     /// Wraps a HWND to a Win32 treeview
     /// </summary>

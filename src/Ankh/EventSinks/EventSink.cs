@@ -14,7 +14,7 @@ namespace Ankh.EventSinks
     /// </summary>
     public abstract class EventSink
     {
-        protected EventSink( IContext context )
+        protected EventSink(IAnkhServiceProvider context)
         {
             this.context = context;
         }
@@ -24,30 +24,12 @@ namespace Ankh.EventSinks
         /// </summary>
         public abstract void Unhook();
 
-
-
-        protected IContext Context
+        protected IAnkhServiceProvider Context
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.context; }
-        }  
+            get { return this.context; }
+        }
 
-        /// <summary>
-        /// Whether a VC++ project is currently being added. This property is
-        /// used by the VCProjectEventSink to keep track of when a VC++ project is being 
-        /// added and suppress file added events during that time.
-        /// </summary>
-        protected static bool AddingProject
-        {
-            get{ return addingProject; }
-            set{ addingProject = value; }
-        }        
-      
-       
-        
-        protected const int REFRESHDELAY = 800;
-        private static bool addingProject = false;
-        private IContext context;
-
+        private IAnkhServiceProvider context;
     }
 }

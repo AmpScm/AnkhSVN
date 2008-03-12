@@ -15,6 +15,7 @@ using Ankh.UI.Services;
 using Ankh.Scc;
 using Ankh.VS;
 using Ankh.UI;
+using Ankh.VSPackage.Attributes;
 
 namespace Ankh.VSPackage
 {
@@ -36,16 +37,19 @@ namespace Ankh.VSPackage
 	// attribute specifies the registry root to use if no one is provided to regpkg.exe with
 	// the /root switch.
 	[DefaultRegistryRoot("Software\\Microsoft\\VisualStudio\\9.0")]
+
 	// In order be loaded inside Visual Studio in a machine that has not the VS SDK installed, 
 	// package needs to have a valid load key (it can be requested at 
 	// http://msdn.microsoft.com/vstudio/extend/). This attributes tells the shell that this 
 	// package has a load key embedded in its resources.
-	[ProvideLoadKey("Standard", "2.0", "AnkhSvn", "AnkhSvn", 1)]
-	// This attribute is needed to let the shell know that this package exposes some menus.
-	[ProvideMenuResource(1000, 1)]
-	[Guid(AnkhId.PackageId)]
+	[ProvideLoadKey("Standard", AnkhId.PlkVersion, AnkhId.PlkProduct, AnkhId.PlkCompany, 1)]
+    [Guid(AnkhId.PackageId)]
+
+    // This attribute is needed to let the shell know that this package exposes some menus.
+	[ProvideMenuResource(1000, 1)] // The number must match the number in the .csproj file for the ctc task
+	
 	[CLSCompliant(false)]
-	[ProvideSourceControlProvider("AnkhSVN Source Control Provider", "#100")]
+    [ProvideSourceControlProvider("AnkhSVN - Subversion Source Control Provider Service", "#100")]
 	[ProvideService(typeof(AnkhSccProvider), ServiceName = "AnkhSVN - Subversion Source Control Provider Service")]
     [ProvideAutoLoad("F1536EF8-92EC-443C-9ED7-FDADF150DA82")] // = VSConstants.UICONTEXT_SolutionExists.ToString()
 	public sealed partial class AnkhSvnPackage : Package, IAnkhPackage
@@ -63,8 +67,6 @@ namespace Ankh.VSPackage
 		{
 			Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
 		}
-
-
 
 		/////////////////////////////////////////////////////////////////////////////
 		// Overriden Package Implementation

@@ -14,5 +14,11 @@ namespace Ankh.Scc
 		/// </summary>
 		/// <value><c>true</c> if this instance is active; otherwise, <c>false</c>.</value>
 		bool IsActive { get; }
-	}
+
+        bool IsSolutionManaged { get; }
+
+        bool IsSolutionDirty { get; set; }
+
+        void LoadingManagedSolution(bool asPrimarySccProvider);
+    }
 }

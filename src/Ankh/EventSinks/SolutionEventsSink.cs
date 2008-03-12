@@ -22,7 +22,7 @@ namespace Ankh.EventSinks
         public event EventHandler AfterOpenSolution;
         public event EventHandler BeforeCloseSolution;
 
-        public SolutionEventsSink( IContext context )
+        public SolutionEventsSink( IAnkhServiceProvider context )
             : base( context )
         {
             this.AdviseSolutionEvents();
@@ -30,10 +30,8 @@ namespace Ankh.EventSinks
 
         private void AdviseSolutionEvents()
         {
-            IServiceProvider sp = this.Context.ServiceProvider;
+            this.solution = (IVsSolution)Context.GetService(typeof(SVsSolution));
 
-            this.solution = (IVsSolution)sp.GetService(typeof(SVsSolution));
-            
             Marshal.ThrowExceptionForHR( this.solution.AdviseSolutionEvents( this, out this.cookie ) );
         }
 

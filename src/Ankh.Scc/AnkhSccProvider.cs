@@ -29,6 +29,24 @@ namespace Ankh.Scc
             get { return _statusCache ?? (_statusCache = context.GetService<IFileStatusCache>()); }
         }
 
+        public void LoadingManagedSolution(bool asPrimarySccProvider)
+        {
+            // Called by the package when a solution is loaded which is marked as managed by us
+        }
+
+        public bool IsSolutionManaged
+        {
+            get { return true; }
+            set { throw new InvalidOperationException(); }
+        }
+
+        public bool IsSolutionDirty
+        {
+            // TODO: Only return true if the solution was not previously managed by Ankh
+            get { return true; }
+            set { }
+        }
+
         /// <summary>
         /// Determines if any item in the solution are under source control.
         /// </summary>

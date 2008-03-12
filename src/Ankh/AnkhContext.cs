@@ -44,7 +44,7 @@ namespace Ankh
             this.uiShell = uiShell;
             this.uiShell.Context = this;
 
-            this.errorHandler = new ErrorHandler(dte.Version, this);
+            this.errorHandler = new ErrorHandler(package);
 
             this.hostWindow = new Win32Window(new IntPtr(dte.MainWindow.HWnd));
 
@@ -73,7 +73,6 @@ namespace Ankh
 
             SolutionEventsSink solutionEvents = new SolutionEventsSink(this);
             eventSinks.Add(solutionEvents);
-            eventSinks.Add(new TrackProjectDocumentsEventSink(this));
 
             AnkhServices.AddService(typeof(IWorkingCopyOperations), new WorkingCopyOperations(client));
             NotificationHandler.GetHandler(this);
