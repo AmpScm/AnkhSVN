@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Scc;
 using Ankh.UI;
+using Ankh.Extenders;
 
 namespace Ankh
 {
@@ -30,6 +31,9 @@ namespace Ankh
             if(null == Container.GetService(typeof(IFileStatusCache)))
                 Container.AddService(typeof(IFileStatusCache), _context.StatusCache);
             Container.AddService(typeof(IStatusImageMapper), new StatusImages.TempStatusImageMapper());
+            Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
+
+
 #if !DEBUG
             Container.AddService(typeof(IAnkhErrorHandler), new ErrorHandler(Context));
 #endif

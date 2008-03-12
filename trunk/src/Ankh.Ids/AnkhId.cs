@@ -31,7 +31,8 @@ namespace AnkhSvn.Ids
 		public const string CommandSet = "aa61c329-d559-468f-8f0f-4f03896f704d";
 
 
-        public const string SccProviderId = "8770915b-b235-42ec-bbc6-8e93286e59b5";   
+        public const string SccProviderId = "8770915b-b235-42ec-bbc6-8e93286e59b5";
+        public const string ExtenderProviderName = "AnkhExtenederProvider";
 
 		/// <summary>
 		/// The guid used for our on-and-only bitmap resource

@@ -10,7 +10,7 @@ namespace Ankh.Extenders
 {
 
     [ComVisible(true)]
-    [InterfaceType( ComInterfaceType.InterfaceIsDual )]
+    [InterfaceType(ComInterfaceType.InterfaceIsDual)]
     public interface IResourceExtender
     {
         string Url
@@ -43,7 +43,7 @@ namespace Ankh.Extenders
             get;
         }
 
-        
+
 
         string LastCommittedAuthor
         {
@@ -68,99 +68,80 @@ namespace Ankh.Extenders
     [ClassInterface(ClassInterfaceType.None)]
     public class ResourceExtender : IResourceExtender
     {
-        public ResourceExtender( )
+        readonly IAnkhServiceProvider _context;
+        readonly SvnItem _item;
+        public ResourceExtender(SvnItem item, IAnkhServiceProvider context)
         {
-            // empty
+            if (item == null)
+                throw new ArgumentNullException("item");
+            else if (context == null)
+                throw new ArgumentNullException("context");
+
+            _item = item;
+            _context = context;
         }
 
-        public override bool Equals(object o)
-        {
-            if (o == (object)this)
-                return true;
-
-            ResourceExtender other = o as ResourceExtender;
-            if (other == null)
-                return false;
-
-            return other.status.Uri == this.status.Uri;
-        }
-
-        public override int GetHashCode()
-        {
-            return this.status.Uri.GetHashCode();
-        }
-
-
-        [Category( "Subversion" ),
-         Description("URL" )]
+        [Category("Subversion"),
+         Description("URL")]
         public string Url
         {
-            get{ return this.status.Uri.ToString(); }
+            get { return _item.Status.Uri.ToString(); }
         }
 
-        [Category( "Subversion" ),
-         Description( "Repository UUID" )]
+        [Category("Subversion"),
+         Description("Repository UUID")]
         public string RepositoryUuid
         {
-            get  {  return this.status.WorkingCopyInfo.RepositoryId.ToString(); }
+            get { return _item.Status.WorkingCopyInfo.RepositoryId.ToString(); }
         }
 
-        [Category( "Subversion" ),
-         Description( "Last committed author" )]
+        [Category("Subversion"),
+         Description("Last committed author")]
         public string LastCommittedAuthor
         {
-            get{ return this.status.WorkingCopyInfo.LastChangeAuthor; }
+            get { return _item.Status.WorkingCopyInfo.LastChangeAuthor; }
         }
 
         [Category("Subversion"),
-         Description( "Revision" )]                
+         Description("Revision")]
         public long Revision
         {
-            get{ return this.status.WorkingCopyInfo.Revision; }
+            get { return _item.Status.WorkingCopyInfo.Revision; }
         }
 
         [Category("Subversion"),
-         Description( "Last committed date" )]
+         Description("Last committed date")]
         public DateTime LastCommittedDate
         {
-            get{ return this.status.WorkingCopyInfo.LastChangeTime.ToLocalTime(); }
+            get { return _item.Status.WorkingCopyInfo.LastChangeTime.ToLocalTime(); }
         }
 
         [Category("Subversion"),
-         Description( "Last committed revision" )]
+         Description("Last committed revision")]
         public long LastCommittedRevision
         {
-            get{ return this.status.WorkingCopyInfo.LastChangeRevision; }
+            get { return _item.Status.WorkingCopyInfo.LastChangeRevision; }
         }
 
         [Category("Subversion"),
-         Description( "Text status" )]
+         Description("Text status")]
         public string TextStatus
         {
-            get{ return this.status.LocalContentStatus.ToString(); }
+            get { return _item.Status.LocalContentStatus.ToString(); }
         }
 
         [Category("Subversion"),
-         Description( "Property status" )]
+         Description("Property status")]
         public string PropertyStatus
         {
-            get{ return this.status.LocalPropertyStatus.ToString(); }
+            get { return _item.Status.LocalPropertyStatus.ToString(); }
         }
 
         [Category("Subversion"),
-        Description( "Locked" )]
+        Description("Locked")]
         public bool Locked
         {
-            get{ return this.status.LocalLocked; }
+            get { return _item.Status.LocalLocked; }
         }
-
-        public void SetStatus(AnkhStatus status)
-        {
-            if (status == null)
-                throw new ArgumentNullException("status");
-            this.status = status;
-        }
-
-		private AnkhStatus status;
     }
 }

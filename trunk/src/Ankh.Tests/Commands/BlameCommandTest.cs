@@ -121,9 +121,5 @@ namespace Ankh.Tests
 
         private MyUIShellImpl uiShell;
         private ContextBase ctx;
-
-        private ICommandHandler cmd;
-
-        
     }
 }

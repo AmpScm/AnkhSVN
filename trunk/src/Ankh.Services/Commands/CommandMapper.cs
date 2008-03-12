@@ -57,10 +57,10 @@ namespace Ankh.Commands
 
     public sealed class CommandMapper
     {
-        readonly IServiceProvider _context;
+        readonly IAnkhServiceProvider _context;
         readonly Dictionary<AnkhCommand, CommandMapItem> _map;
 
-        public CommandMapper(IServiceProvider context)
+        public CommandMapper(IAnkhServiceProvider context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -82,7 +82,7 @@ namespace Ankh.Commands
                 }
                 catch (Exception ex)
                 {
-                    IAnkhErrorHandler handler = (IAnkhErrorHandler)_context.GetService(typeof(IAnkhErrorHandler));
+                    IAnkhErrorHandler handler = _context.GetService<IAnkhErrorHandler>();
 
                     if (handler != null)
                     {
@@ -94,7 +94,6 @@ namespace Ankh.Commands
                 }
 
                 return item.IsHandled;
-
             }
 
             return false;
@@ -120,7 +119,7 @@ namespace Ankh.Commands
                 }
                 catch (Exception ex)
                 {
-                    IAnkhErrorHandler handler = (IAnkhErrorHandler)_context.GetService(typeof(IAnkhErrorHandler));
+                    IAnkhErrorHandler handler = _context.GetService<IAnkhErrorHandler>();
 
                     if (handler != null)
                     {
