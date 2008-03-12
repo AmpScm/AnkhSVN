@@ -32,7 +32,11 @@ namespace AnkhSvn.Ids
 
 
         public const string SccProviderId = "8770915b-b235-42ec-bbc6-8e93286e59b5";
-        public const string ExtenderProviderName = "AnkhExtenederProvider";
+
+        public const string LogMessageLanguageServiceId = "1dfe69ce-7f9b-4cc5-b09b-e5bde95e9439";
+        public const string LogMessageServiceName = "AnkhSvn LogMessages";
+
+        public const string ExtenderProviderName = "AnkhExtenderProvider";
 
 		/// <summary>
 		/// The guid used for our on-and-only bitmap resource
