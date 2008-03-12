@@ -17,7 +17,7 @@ namespace Ankh
     /// </summary>
     public class StatusCache : Ankh.Scc.IFileStatusCache
     {
-        public StatusCache(AnkhContext context)
+        public StatusCache(IAnkhServiceProvider context)
         {
             this.context = context;
             this.client = new SvnClient();
@@ -246,7 +246,7 @@ namespace Ankh
         private int cacheHits = 0;
         private int cacheMisses = 0;
 
-        readonly AnkhContext context;
+        readonly IAnkhServiceProvider context;
         private Dictionary<string, IList> _deletions;
         private SvnClient client;
         private string currentPath;
