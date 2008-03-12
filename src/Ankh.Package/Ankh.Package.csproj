@@ -108,8 +108,8 @@
       <Transform>Gui\Gui-To-Ctc.xsl</Transform>
       <To>$(IntermediateOutputPath)AnkhSvn.ctc</To>
       <Debug>true</Debug>
-    </XslSource>    
-    <None Include="Ankh.Package.snk" />    
+    </XslSource>
+    <None Include="Ankh.Package.snk" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
       <SubType>
@@ -120,14 +120,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-	<Compile Include="AnkhSvnPackage.cs" />
+    <Compile Include="AnkhSvnPackage.cs" />
     <Compile Include="AnkhSvnPackage.About.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="AnkhSvnPackage.Commands.cs">
-      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AnkhSvnPackage.Extenders.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="AnkhSvnPackage.ToolWindows.cs">

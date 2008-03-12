@@ -1,8 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
-using EnvDTE;
 using System.Reflection;
 using System.Collections;
+using AnkhSvn.Ids;
+using Ankh.Selection;
 
 
 namespace Ankh.Extenders
@@ -10,87 +11,134 @@ namespace Ankh.Extenders
     /// <summary>
     /// This is the class factory for extender objects
     /// </summary>
-    [GuidAttribute("BAB7BC93-6097-486e-B29D-CFEA4AB9107B"), ProgId("Ankh.ExtenderProvider")]	
-    public class ExtenderProvider : IExtenderProvider
+    public class AnkhExtenderProvider : EnvDTE.IExtenderProvider, IDisposable
     {
-        private ExtenderProvider( IContext context )
+        public const string ServiceName = AnkhId.ExtenderProviderName;
+        #region CATIDs        
+        public const string CATID_CscFileBrowse = "8d58e6af-ed4e-48b0-8c7b-c74ef0735451";
+        public const string CATID_CscFolderBrowse = "914fe278-054a-45db-bf9e-5f22484cc84c";
+        public const string CATID_CscProjectBrowse = "4ef9f003-de95-4d60-96b0-212979f2a857";
+        public const string CATID_VbFileBrowse = "ea5bd05d-3c72-40a5-95a0-28a2773311ca";
+        public const string CATID_VbFolderBrowse = "932dc619-2eaa-4192-b7e6-3d15ad31df49";
+        public const string CATID_VbProjectBrowse = "e0fdc879-c32a-4751-a3d3-0b3824bd575f";
+        public const string CATID_VjFileBrowse = "e6fdf869-f3d1-11d4-8576-0002a516ece8";
+        public const string CATID_VjFolderBrowse = "e6fdf86a-f3d1-11d4-8576-0002a516ece8";
+        public const string CATID_VjProjectBrowse = "e6fdf86c-f3d1-11d4-8576-0002a516ece8";
+        public const string CATID_SolutionBrowse = "a2392464-7c22-11d3-bdca-00c04f688e50";
+        public const string CATID_CcFileBrowse = "ee8299c9-19b6-4f20-abea-e1fd9a33b683";
+        public const string CATID_CcProjectBrowse = "ee8299cb-19b6-4f20-abea-e1fd9a33b683";
+        public const string CATID_GenericProject = "610d4611-d0d5-11d2-8599-006097c68e81";
+        #endregion
+
+        readonly IAnkhServiceProvider _context;
+        int[] _cookies;
+
+        public AnkhExtenderProvider(IAnkhServiceProvider context)
         {
-            this.context = context;
-            this.extenders = new Hashtable();
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
+
+            EnvDTE._DTE dte = _context.GetService<EnvDTE._DTE>();
+            EnvDTE.ObjectExtenders extenders;
+            if(dte != null && ((extenders = dte.ObjectExtenders) != null))
+            {
+                _cookies = new int[CATIDS.Length];
+                int n = 0;
+                foreach(string catid in CATIDS)
+                {
+                    string cid = new Guid(catid).ToString("B");
+                    
+                    _cookies[n++] = extenders.RegisterExtenderProvider(cid, ServiceName, this, ServiceName);
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_cookies == null)
+                return;
+            EnvDTE._DTE dte = _context.GetService<EnvDTE._DTE>();
+            EnvDTE.ObjectExtenders extenders;
+            if (dte != null && ((extenders = dte.ObjectExtenders) != null))
+            foreach (int cookie in _cookies)
+            {
+                extenders.UnregisterExtenderProvider(cookie);
+            }
+
+            _cookies = null;
         }
 
         #region IExtenderProvider Members
 
-        [CLSCompliant(false)]
-        public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, IExtenderSite ExtenderSite, int Cookie)
-        {
-            return null;
-        }
-
         public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
         {
+            ISelectionContext selection = _context.GetService<ISelectionContext>();
+
+            if (selection != null)
+            {
+                bool first = false;
+                foreach (SvnItem item in selection.GetSelectedSvnItems())
+                {
+                    if (!item.IsVersioned && !item.IsVersionable)
+                        return false;
+                    else if (first)
+                        first = false;
+                    else
+                        return true;
+                }
+
+                if (!first)
+                    return true;
+            }
+
             return false;
         }
 
-        #endregion
-
-
-        /// <summary>
-        /// Registers the extender provider for all the cathegories we want.
-        /// </summary>
-        public static void Register( IContext context )
-        {
-            ExtenderProvider.provider = new ExtenderProvider( context );
-
-            _DTE dte = ((IDTEContext)context).DTE;
-            foreach( string catid in CATIDS )
-            {
-                // cookies need to be stored so we can unregister the extender provider later
-                cookies.Add ( dte.ObjectExtenders.RegisterExtenderProvider( 
-                    catid, "Ankh", provider, string.Empty ) );
-            }
-        }
-
-        
-        /// <summary>
-        /// Unregister all extender provider registrations.
-        /// </summary>
-        /// <param name="dte"></param>
         [CLSCompliant(false)]
-        public static void Unregister( _DTE dte )
+        public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, EnvDTE.IExtenderSite ExtenderSite, int Cookie)
         {
-            // use the stored cookies to unregister the registered providers.
-            try
-            {
-                foreach( int cookie in cookies )
-                    dte.ObjectExtenders.UnregisterExtenderProvider( cookie );
-            }
-            catch( Exception )
-            {
-                // HACK: swallow
-            }
-        }
+            ISelectionContext selection = _context.GetService<ISelectionContext>();
 
-        private static ExtenderProvider provider;
-        private static ArrayList cookies = new ArrayList();
-        private Hashtable extenders;
+            if (selection != null)
+            {
+                SvnItem selected = null;
 
-        private IContext context;
+                foreach (SvnItem item in selection.GetSelectedSvnItems())
+                {
+                    if (!item.IsVersioned && !item.IsVersionable)
+                        return false;
+
+                    selected = item;
+                    break;
+                }
+            
+                if(selected == null)
+                    return null;
+
+                return new ResourceExtender(selected, _context);
+            }
+            
+            return null;
+        }        
+
+        #endregion   
 
         private readonly static string[] CATIDS = new string[]{
-                                                                  "{8D58E6AF-ED4E-48B0-8C7B-C74EF0735451}", // C# File Browse
-                                                                  "{914FE278-054A-45DB-BF9E-5F22484CC84C}", // C# folder browse
-                                                                  "{4EF9F003-DE95-4d60-96B0-212979F2A857}", // C# Project browse
-                                                                  "{EA5BD05D-3C72-40A5-95A0-28A2773311CA}", // VB file browse
-                                                                  "{932DC619-2EAA-4192-B7E6-3D15AD31DF49}", // VB folder browse
-                                                                  "{E0FDC879-C32A-4751-A3D3-0B3824BD575F}", // VB project browse
-                                                                  "{E6FDF869-F3D1-11D4-8576-0002A516ECE8}", // VJ# file browse
-                                                                  "{E6FDF86A-F3D1-11D4-8576-0002A516ECE8}", // VJ# folder browse
-                                                                  "{E6FDF86C-F3D1-11D4-8576-0002A516ECE8}", // VJ# project browse
-                                                                  "{A2392464-7C22-11d3-BDCA-00C04F688E50}", // solution browse object
-                                                                  "{EE8299C9-19B6-4f20-ABEA-E1FD9A33B683}", // C++ File Browse object
-                                                                  "{EE8299CB-19B6-4f20-ABEA-E1FD9A33B683}", // C++ Project Browse Object
-                                                                  "{610d4611-d0d5-11d2-8599-006097c68e81}" // generic project
-                                                              };
+        CATID_CscFileBrowse,
+        CATID_CscFolderBrowse,
+        CATID_CscProjectBrowse,
+        CATID_VbFileBrowse,
+        CATID_VbFolderBrowse,
+        CATID_VbProjectBrowse,
+        CATID_VjFileBrowse,
+        CATID_VjFolderBrowse,
+        CATID_VjProjectBrowse,
+        CATID_SolutionBrowse,
+        CATID_CcFileBrowse,
+        CATID_CcProjectBrowse,
+        CATID_GenericProject
+        };                                                      
     }
 }
