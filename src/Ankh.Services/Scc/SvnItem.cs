@@ -9,6 +9,7 @@ using System.Diagnostics;
 using SharpSvn;
 using System.Collections.ObjectModel;
 using Ankh.Selection;
+using Ankh.Scc;
 
 namespace Ankh
 {
@@ -16,7 +17,7 @@ namespace Ankh
     /// Used to decide whether this particular SvnItem should be included in a collection.
     /// </summary>
     public delegate bool ResourceFilterCallback( SvnItem item );
-
+    [Obsolete]
     public enum EventBehavior
     {
         Raise,
@@ -31,12 +32,13 @@ namespace Ankh
         /// <summary>
         /// Fired when the status of this item changes.
         /// </summary>
-        public event EventHandler Changed;
+        //public event EventHandler Changed;
 
-        public event EventHandler ChildrenChanged;
+        //public event EventHandler ChildrenChanged;
 
-        public SvnItem(string path, AnkhStatus status)
+        public SvnItem(IAnkhServiceProvider context, string path, AnkhStatus status)
         {
+            this.context = context;
             this.path = path;
             this.status = status;
         }
@@ -46,7 +48,11 @@ namespace Ankh
         /// </summsary>
         public AnkhStatus Status
         {
-            get{ return this.status; }
+            get
+            {
+                EnsureClean();
+                return this.status; 
+            }
         }
 
         /// <summary>
@@ -54,13 +60,18 @@ namespace Ankh
         /// </summary>
         public string Path
         {
-            get{ return this.path; }
+            get
+            {
+                EnsureClean();
+                return this.path; 
+            }
         }
 
         public string Name
         {
             get 
             {
+                EnsureClean();
                 if ( this.Path.EndsWith("/") )
                 {
                     return System.IO.Path.GetFileName( this.Path.Substring( 0, this.Path.Length - 1 ) );
@@ -72,10 +83,65 @@ namespace Ankh
             }
         }
 
+        public void Refresh()
+        {
+            ISvnClientPool clientPool = context.GetService<ISvnClientPool>();
+            IFileStatusCache statusCache = context.GetService<IFileStatusCache>();
+
+            string path = this.path;
+            
+            // if it's a single file, refresh the directory with Files unrecursively
+            if (GetIsFile())
+                path = System.IO.Path.GetDirectoryName(path);
+
+            SvnStatusArgs args = new SvnStatusArgs();
+            args.Depth = SvnDepth.Files;
+            args.RetrieveAllEntries = true;
+            args.ThrowOnError = false;
+
+            if (clientPool != null && statusCache != null)
+            {
+                using (SvnPoolClient client = clientPool.GetClient())
+                {
+                    if (client != null)
+                    {
+                        client.Status(path, args, delegate(object sender, SvnStatusEventArgs e)
+                        {
+                            SvnItem i = statusCache[e.Path];
+                            if (i != null)
+                            {
+                                i.status = e;
+                                i.dirty = false;
+                            }
+                        });
+                    }
+
+                }
+            }
+            else 
+            {
+#warning this else case should be removed when client pool is implemented
+
+                SvnClient client2 = new SvnClient();
+                client2.Status(path, args, delegate(object sender, SvnStatusEventArgs e)
+                {
+                    SvnItem i = statusCache[e.Path];
+                    if (i != null && i.dirty)
+                    {
+                        i.status = e;
+                        i.dirty = false;
+                    }
+                });
+            }
+        }
+
+
+
         /// <summary>
         /// Set the status of this item to the passed in status.
         /// </summary>
         /// <param name="status"></param>
+        [Obsolete("Use Refresh(AnkhContext)")]
         public virtual void Refresh( AnkhStatus status )
         {
             this.Refresh( status, EventBehavior.Raise );
@@ -86,22 +152,19 @@ namespace Ankh
         /// Set the status of this item to the passed in status.
         /// </summary>
         /// <param name="status"></param>
+        [Obsolete("Use Refresh(AnkhContext)")]
         public virtual void Refresh(AnkhStatus status, EventBehavior eventBehavior)
         {
             AnkhStatus oldStatus = this.status;
             this.status = status;
-
-            if (eventBehavior == EventBehavior.Raise)
-            {
-                if (!oldStatus.Equals(status))
-                    this.OnChanged();
-            }
-        }
+            dirty = false;
+       }
 
         /// <summary>
         /// Refresh the existing status of the item, using client.
         /// </summary>
         /// <param name="client"></param>
+        [Obsolete("Use Refresh(AnkhContext)")]
         public virtual void Refresh( SvnClient client )
         {
             this.Refresh( client, EventBehavior.Raise );
@@ -112,6 +175,7 @@ namespace Ankh
         /// </summary>
         /// <param name="client"></param>
         /// <param name="eventBehavior">Whether to raise events.</param>
+        [Obsolete("Use Refresh(IContext)")]
         public virtual void Refresh(SvnClient client, EventBehavior eventBehavior)
         {
             AnkhStatus oldStatus = this.status;
@@ -124,12 +188,7 @@ namespace Ankh
                 this.status = statuses.Count > 0 ? statuses[0] : AnkhStatus.None;
             else
                 this.status = AnkhStatus.None;
-
-            if (eventBehavior == EventBehavior.Raise)
-            {
-                if (!oldStatus.Equals(this.status))
-                    this.OnChanged();
-            }
+            dirty = false;
         }
 
         /// <summary>
@@ -139,6 +198,7 @@ namespace Ankh
         {
             get
             {
+                EnsureClean();
                 SvnStatus s = this.status.LocalContentStatus;
                 return s == SvnStatus.Added ||
                        s == SvnStatus.Conflicted ||
@@ -159,6 +219,7 @@ namespace Ankh
         {
             get
             {
+                EnsureClean();
                 SvnStatus t = this.status.LocalContentStatus;
                 SvnStatus p = this.status.LocalPropertyStatus;
                 return this.IsVersioned &&
@@ -173,7 +234,8 @@ namespace Ankh
         public virtual bool IsDirectory
         {
             get
-            { 
+            {
+                EnsureClean();
                 if ( this.status.WorkingCopyInfo != null )
                     return this.status.WorkingCopyInfo.NodeKind == SvnNodeKind.Directory;
                 else
@@ -188,11 +250,17 @@ namespace Ankh
         {
             get
             {
-                if (this.status.WorkingCopyInfo != null)
+                EnsureClean();
+                return GetIsFile();
+            }
+        }
+
+        bool GetIsFile()
+        {
+            if (this.status.WorkingCopyInfo != null)
                     return this.status.WorkingCopyInfo.NodeKind == SvnNodeKind.File;
                 else
                     return File.Exists(this.path);
-            }
         }
 
         /// <summary>
@@ -200,7 +268,11 @@ namespace Ankh
         /// </summary>
         public virtual bool IsVersionable
         {
-            get { return SvnTools.IsBelowManagedPath(path); }
+            get 
+            {
+                EnsureClean(); 
+                return SvnTools.IsBelowManagedPath(path);
+            }
         }
 
         /// <summary>
@@ -230,6 +302,7 @@ namespace Ankh
         {
             get
             {
+                EnsureClean();
                 return this.Status.LocalLocked;
             }
         }
@@ -237,25 +310,25 @@ namespace Ankh
 
         public virtual bool IsDeleted
         {
-            get { return this.status.LocalContentStatus == SvnStatus.Deleted; }
+            get 
+            {
+                EnsureClean();
+                return this.status.LocalContentStatus == SvnStatus.Deleted; 
+            }
         }
 
         public virtual bool IsDeletedFromDisk
         {
-            get { return this.status.LocalContentStatus == SvnStatus.None && !File.Exists(this.Path) && !Directory.Exists(this.Path); }
+            get 
+            {
+                EnsureClean();
+                return this.status.LocalContentStatus == SvnStatus.None && !File.Exists(this.Path) && !Directory.Exists(this.Path); 
+            }
         }
 
         public override string ToString()
         {
             return this.path;
-        }
-
-        public void NotifyChildrenChanged()
-        {
-            if ( this.ChildrenChanged != null )
-            {
-                this.ChildrenChanged( this, EventArgs.Empty );
-            }
         }
 
 
@@ -300,28 +373,18 @@ namespace Ankh
             return list;
         }
 
-
-        protected virtual void OnChanged()
-        {
-            if ( this.Changed != null )
-                this.Changed( this, EventArgs.Empty );
-        }
-
         private class UnversionableItem : SvnItem
         {
-            public UnversionableItem() : base( "", AnkhStatus.Unversioned )
+            public UnversionableItem() : base(null, "", AnkhStatus.Unversioned )
             {}
 
-            protected override void OnChanged()
-            {
-                // empty
-            }
-
+            [Obsolete]
             public override void Refresh(SvnClient client)
             {
                 // empty
             }
 
+            [Obsolete]
             public override void Refresh(AnkhStatus status)
             {
                 // empty
@@ -477,9 +540,24 @@ namespace Ankh
             return item.Status.LocalContentStatus == SvnStatus.Conflicted;
         }
 
+        void EnsureClean()
+        {
+            if(dirty)
+                this.Refresh();
+        }
 
+        public void MarkDirty()
+        {
+            dirty = true;
+        }
 
+        public bool IsDirty
+        {
+            get { return dirty; }
+        }
 
+        private bool dirty;
+        readonly IAnkhServiceProvider context;
         private AnkhStatus status;
         private string path;
     }

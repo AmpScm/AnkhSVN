@@ -110,6 +110,7 @@
                     text="Enable Ank&amp;hSVN"
                     toolTip="Enable Subversion management on this project." iconFile="menu/ToggleAnkh.png" textChanges="true"/>
             <Button id="Cmd_RunSvnCommand" name="RunSvn" text="RunSvn" priority="0xffff" commandWellOnly="true" allowParams="true" />
+            <Button id="Cmd_MarkProjectDirty" name="MarkProjectDirty" text="MarkProjectDirty" priority="0xffff" commandWellOnly="true" allowParams="true" />
           </Group>
         </Menu>
       </Group>

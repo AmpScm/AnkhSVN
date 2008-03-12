@@ -70,11 +70,6 @@ namespace Ankh
         Ankh.Config.ConfigLoader ConfigLoader { get; }
 
         /// <summary>
-        /// The status cache.
-        /// </summary>
-        StatusCache StatusCache { get; }
-
-        /// <summary>
         /// Whether an operation is currently running.
         /// </summary>
         bool OperationRunning { get; }

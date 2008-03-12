@@ -29,11 +29,21 @@ namespace Ankh.Scc
         {
             for (int i = 0; i < cFiles; i++)
             {
-                SvnItem item = StatusCache[rgpszFullPaths[i]];
-                NodeStatus nodeStatus = GenerateStatus(item);
-                rgsiGlyphs[i] = (VsStateIcon)
-                    StatusImages.GetStatusImageForNodeStatus(nodeStatus);
-                rgdwSccStatus[i] = 21;
+                if (rgpszFullPaths != null)
+                {
+                    SvnItem item = StatusCache[rgpszFullPaths[i]];
+
+                    NodeStatus nodeStatus = GenerateStatus(item);
+                    if (rgsiGlyphs != null)
+                    {
+                        rgsiGlyphs[i] = (VsStateIcon)
+                            StatusImages.GetStatusImageForNodeStatus(nodeStatus);
+                    }
+                    if (rgdwSccStatus != null)
+                    {
+                        rgdwSccStatus[i] = 21;
+                    }
+                }
             }
 
             return VSConstants.S_OK;

@@ -19,7 +19,8 @@ namespace Ankh.WorkingCopyExplorer
         public WorkingCopyExplorer( IContext context )
         {
             this.context = context;            
-            this.statusCache = this.context.StatusCache;
+#warning fix statuscache
+            //this.statusCache = this.context.StatusCache;
 
             this.roots = new ArrayList();
 

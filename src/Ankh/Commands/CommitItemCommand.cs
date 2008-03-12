@@ -10,6 +10,7 @@ using SharpSvn;
 using AnkhSvn.Ids;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -61,7 +62,7 @@ namespace Ankh.Commands
             this.commitContext = operation.CommitContext;
 
             // we need to commit to each repository separately
-            ICollection repositories = this.SortByRepository( context, operation.Items );           
+            ICollection repositories = this.SortByRepository( e.Context, operation.Items );           
 
             this.commitInfo = null;
             
@@ -81,7 +82,7 @@ namespace Ankh.Commands
                         if (completed)
                         {
                             foreach (SvnItem item in items)
-                                item.Refresh(context.Client);
+                                item.MarkDirty();
                         }
                     }
                     catch (SvnException)
@@ -119,7 +120,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        private ICollection SortByRepository( IContext context, IList items )
+        private ICollection SortByRepository( AnkhContext context, IList items )
         {
             Hashtable repositories = new Hashtable();
             foreach( SvnItem item in items )
@@ -140,7 +141,7 @@ namespace Ankh.Commands
             return repositories.Values;
         }
 
-        private string GetUuid( IContext context, SvnItem item )
+        private string GetUuid( AnkhContext context, SvnItem item )
         {
             string uuid = item.Status.WorkingCopyInfo != null ? item.Status.WorkingCopyInfo.RepositoryId.ToString() : null;
             // freshly added items have no uuid
@@ -149,7 +150,8 @@ namespace Ankh.Commands
                 string parentDir = PathUtils.GetParent( item.Path );
                 if ( Directory.Exists( parentDir ) )
                 {
-                    SvnItem parentItem = context.StatusCache[parentDir];
+                    IFileStatusCache statusCache = context.GetService<IFileStatusCache>();
+                    SvnItem parentItem = statusCache[parentDir];
                     uuid = parentItem.Status.WorkingCopyInfo != null ? parentItem.Status.WorkingCopyInfo.RepositoryId.ToString() : null;
 
                     // still nothing? try the parent item

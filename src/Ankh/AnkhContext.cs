@@ -62,8 +62,6 @@ namespace Ankh
 
             this.conflictManager = new ConflictManager(this);
 
-            this.statusCache = new StatusCache();            
-
             //GC.KeepAlive(this.solutionExplorerWindow.TreeWindow);
 
             this.repositoryController =
@@ -205,15 +203,6 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get { return this.configLoader; }
-        }
-
-        /// <summary>
-        /// The status cache.
-        /// </summary>
-        public StatusCache StatusCache
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.statusCache; }
         }
 
         public bool OperationRunning
@@ -526,8 +515,6 @@ namespace Ankh
         private List<EventSink> eventSinks = new List<EventSink>();
 
         private Ankh.Config.Config config;
-
-        private StatusCache statusCache;
 
         private bool operationRunning;
 

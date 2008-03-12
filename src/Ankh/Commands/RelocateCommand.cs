@@ -50,7 +50,7 @@ namespace Ankh.Commands
 
                     context.UIShell.RunWithProgressDialog(runner, "Relocating");
 
-                    dir.Refresh(context.Client);
+                    dir.MarkDirty();
                 }
             }
         }

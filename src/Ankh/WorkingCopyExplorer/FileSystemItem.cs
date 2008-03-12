@@ -18,7 +18,7 @@ namespace Ankh.WorkingCopyExplorer
             this.explorer = explorer;
             this.svnItem = svnItem;
 
-            this.svnItem.Changed += new EventHandler( this.ChildOrResourceChanged );
+            //this.svnItem.Changed += new EventHandler( this.ChildOrResourceChanged );
 
             this.CurrentStatus = MergeStatuses( this.svnItem );
         }
@@ -153,9 +153,9 @@ namespace Ankh.WorkingCopyExplorer
             }
         }
 
-        internal void Refresh(SvnClient client)
+        internal void Refresh()
         {
-            this.svnItem.Refresh(client);
+            this.svnItem.Refresh();
         }
 
         public static FileSystemItem Create( WorkingCopyExplorer explorer, SvnItem item )
@@ -172,7 +172,7 @@ namespace Ankh.WorkingCopyExplorer
 
         protected override void DoDispose()
         {
-            this.svnItem.Changed -= new EventHandler( this.ChildOrResourceChanged );
+            //this.svnItem.Changed -= new EventHandler( this.ChildOrResourceChanged );
         }
 
         protected override bool RemoveTreeNodeIfResourcesDeleted()

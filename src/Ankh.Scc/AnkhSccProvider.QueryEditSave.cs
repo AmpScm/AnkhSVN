@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using AnkhSvn.Ids;
+using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.Scc
 {
@@ -118,7 +120,17 @@ namespace Ankh.Scc
         public int QuerySaveFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo, out uint pdwQSResult)
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+            SvnItem item = StatusCache[pszMkDocument];
+            if(item != null)
+                item.MarkDirty();
 
+            IVsUIShell uiShell = (IVsUIShell)context.GetService(typeof(SVsUIShell));
+            
+            // After marking the item dirty, force the SccGlyphs to be reloaded. The SvnItems know if they need refreshing at that point
+            Guid commandSet = AnkhId.CommandSetGuid;
+            object nullObj = pszMkDocument;
+            uiShell.PostExecCommand(ref commandSet, (uint)AnkhCommand.MarkProjectDirty, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref nullObj);
+            
             return VSConstants.S_OK;
         }
 

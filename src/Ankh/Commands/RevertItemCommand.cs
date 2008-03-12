@@ -75,7 +75,7 @@ namespace Ankh.Commands
                 context.Client.Revert(paths, args);
 
                 foreach (SvnItem item in resources)
-                    item.Refresh(context.Client);
+                    item.MarkDirty();
             }
         }
 

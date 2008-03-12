@@ -58,7 +58,7 @@ namespace Ankh.Commands
                 foreach( SvnItem item in items )
                 {
                     this.Resolve( context, item );
-                    item.Refresh( context.Client );
+                    item.MarkDirty();
                 }
             }
         }

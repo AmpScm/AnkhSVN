@@ -17,8 +17,9 @@ namespace Ankh
     /// </summary>
     public class StatusCache : Ankh.Scc.IFileStatusCache
     {
-        public StatusCache()
+        public StatusCache(AnkhContext context)
         {
+            this.context = context;
             this.client = new SvnClient();
             _map = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
             this._deletions = new Dictionary<string, IList>(StringComparer.OrdinalIgnoreCase);
@@ -76,7 +77,6 @@ namespace Ankh
 
                     if (Directory.Exists(directory))
                         this.Status(directory, SvnDepth.Children);
-
                     if (!_map.TryGetValue(normPath, out item))
                     {
                         Collection<SvnStatusEventArgs> statuses;
@@ -86,10 +86,10 @@ namespace Ankh
                         args.RetrieveAllEntries = true;
                         if (this.client.GetStatus(normPath, args, out statuses) && statuses.Count > 0)
                         {
-                            _map[normPath] = item = new SvnItem(path, statuses[0]);
+                            _map[normPath] = item = new SvnItem(context, path, statuses[0]);
                         }
                         else
-                            _map[normPath] = item = new SvnItem(path, AnkhStatus.None);
+                            _map[normPath] = item = new SvnItem(context, path, AnkhStatus.None);
                     }
                 }
                 else
@@ -158,7 +158,7 @@ namespace Ankh
             if (_map.TryGetValue(normPath, out existingItem) && existingItem != SvnItem.Unversionable)
                 existingItem.Refresh(e);
             else
-                _map[normPath] = new SvnItem(e.Path, e);
+                _map[normPath] = new SvnItem(context, e.Path, e);
 
             if (e.LocalContentStatus == SvnStatus.Deleted)
             {
@@ -246,6 +246,7 @@ namespace Ankh
         private int cacheHits = 0;
         private int cacheMisses = 0;
 
+        readonly AnkhContext context;
         private Dictionary<string, IList> _deletions;
         private SvnClient client;
         private string currentPath;

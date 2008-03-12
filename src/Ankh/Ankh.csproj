@@ -225,6 +225,7 @@
     <Compile Include="Commands\ExportFolderCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\MarkProjectDirty.cs" />
     <Compile Include="Commands\Runners\ExportRunner.cs">
       <SubType>Code</SubType>
     </Compile>

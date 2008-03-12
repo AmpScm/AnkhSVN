@@ -39,7 +39,8 @@ namespace Ankh.WorkingCopyExplorer
         {
             if ( rescan )
             {
-                this.Explorer.Context.StatusCache.Status(this.svnItem.Path, SvnDepth.Infinity);
+#warning fix statuscache
+                //this.Explorer.Context.StatusCache.Status(this.svnItem.Path, SvnDepth.Infinity);
                 this.FindChildren();
 
                 this.OnItemChanged( ItemChangedType.ChildrenInvalidated );
