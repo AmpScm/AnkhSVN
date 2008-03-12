@@ -20,10 +20,6 @@ namespace Ankh.UI
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-
-            this.mineFileRadioButton.Checked = true;
-
-            this.CreateToolTips();
         }
 
         /// <summary>
@@ -114,22 +110,6 @@ namespace Ankh.UI
         {
             this.selectedChoice = (string)((RadioButton) sender).Tag;
         }
-
-        private void CreateToolTips()
-        {
-            // Create the ToolTip and associate with the Form container.
-            ToolTip conflictToolTip = new ToolTip();
-
-            // Set up the ToolTip text for the Button and Checkbox.
-            conflictToolTip.SetToolTip( this.mineFileRadioButton, "Latest local file" ); 
-            conflictToolTip.SetToolTip( this.oldRevRadioButton, "Latest updated revision" );
-            conflictToolTip.SetToolTip( this.newRevRadioButton, "Latest version in repository" );
-            conflictToolTip.SetToolTip( this.fileRadioButton, "File with conflict markers" );
-            conflictToolTip.SetToolTip( this.okButton, "Resolve conflict and delete the three files that are not selected." ); 
-            conflictToolTip.SetToolTip( this.cancelButton, "Cancel this dialog." );  
-        }
-
-
 		
         private string selectedChoice;        
         private bool binary = false;
