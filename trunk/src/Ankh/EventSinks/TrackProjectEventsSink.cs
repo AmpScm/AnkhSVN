@@ -18,6 +18,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using IServiceProvider = System.IServiceProvider;
 using SharpSvn;
 using Microsoft.VisualStudio;
+using Ankh.Scc;
 
 namespace Ankh.EventSinks
 {
@@ -25,10 +26,11 @@ namespace Ankh.EventSinks
     /// Provides an implementation of the Visual Studio IVsTrackProjectDocumentsEvents2 interface, 
     /// which can be used to listen for Add, Remove and Rename operations.
     /// </summary>
-    class TrackProjectDocumentsEventSink : EventSink, IVsTrackProjectDocumentsEvents2
+    /*class TrackProjectDocumentsEventSink : EventSink, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
     {
 
-        public TrackProjectDocumentsEventSink( IContext context ) : base (context)
+        public TrackProjectDocumentsEventSink(IAnkhServiceProvider context)
+            : base(context)
         {
             this.context = context;
             AdviseEvents();
@@ -44,131 +46,139 @@ namespace Ankh.EventSinks
 
         #region IVsTrackProjectDocumentsEvents2 Members
 
-        public int OnAfterAddDirectoriesEx( int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSADDDIRECTORYFLAGS[] rgFlags )
+        public int OnAfterAddDirectoriesEx(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSADDDIRECTORYFLAGS[] rgFlags)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterAddDirectoriesEx() of: {0}", this.ToString() ) );
-            return this.OnAfterAdd( rgpszMkDocuments );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnAfterAddDirectoriesEx() of: {0}", this.ToString()));
+            return this.OnAfterAdd(rgpszMkDocuments);
         }
 
-        public int OnAfterAddFilesEx( int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSADDFILEFLAGS[] rgFlags )
+        public int OnAfterAddFilesEx(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSADDFILEFLAGS[] rgFlags)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterAddFilesEx() of {0}", this.ToString() ) );
-            return this.OnAfterAdd( rgpszMkDocuments );            
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnAfterAddFilesEx() of {0}", this.ToString()));
+            return this.OnAfterAdd(rgpszMkDocuments);
         }
 
-        public int OnAfterRemoveDirectories( int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEDIRECTORYFLAGS[] rgFlags )
+        public int OnAfterRemoveDirectories(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEDIRECTORYFLAGS[] rgFlags)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterRemoveDirectories() of: {0}", this.ToString() ) );
-            this.OnRemove( rgpszMkDocuments );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnAfterRemoveDirectories() of: {0}", this.ToString()));
+            this.OnRemove(rgpszMkDocuments);
             return VSConstants.S_OK;
         }
 
-        public int OnAfterRemoveFiles( int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEFILEFLAGS[] rgFlags )
+        public int OnAfterRemoveFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEFILEFLAGS[] rgFlags)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterRemoveFiles() of: {0}", this.ToString() ) );
-            this.OnRemove( rgpszMkDocuments );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnAfterRemoveFiles() of: {0}", this.ToString()));
+            this.OnRemove(rgpszMkDocuments);
             return VSConstants.S_OK;
         }
 
-        public int OnAfterRenameDirectories( int cProjects, int cDirs, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, VSRENAMEDIRECTORYFLAGS[] rgFlags )
+        public int OnAfterRenameDirectories(int cProjects, int cDirs, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, VSRENAMEDIRECTORYFLAGS[] rgFlags)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterRenameDirectories() of: {0}", this.ToString() ) );
-            return OnAfterRename( rgszMkOldNames, rgszMkNewNames, true );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnAfterRenameDirectories() of: {0}", this.ToString()));
+            return OnAfterRename(rgszMkOldNames, rgszMkNewNames, true);
         }
 
-        public int OnAfterRenameFiles( int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, VSRENAMEFILEFLAGS[] rgFlags )
+        public int OnAfterRenameFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, VSRENAMEFILEFLAGS[] rgFlags)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterRenameFiles() of: {0}", this.ToString() ) );
-            return OnAfterRename( rgszMkOldNames, rgszMkNewNames, false );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnAfterRenameFiles() of: {0}", this.ToString()));
+            return OnAfterRename(rgszMkOldNames, rgszMkNewNames, false);
         }
 
-        public int OnAfterSccStatusChanged( int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, uint[] rgdwSccStatus )
+        public int OnAfterSccStatusChanged(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, uint[] rgdwSccStatus)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnAfterSccStatusChanged() of: {0}", this.ToString() ) );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnAfterSccStatusChanged() of: {0}", this.ToString()));
             return VSConstants.S_OK;
         }
 
-        public int OnQueryAddDirectories( IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYADDDIRECTORYFLAGS[] rgFlags, VSQUERYADDDIRECTORYRESULTS[] pSummaryResult, VSQUERYADDDIRECTORYRESULTS[] rgResults )
+        public int OnQueryAddDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYADDDIRECTORYFLAGS[] rgFlags, VSQUERYADDDIRECTORYRESULTS[] pSummaryResult, VSQUERYADDDIRECTORYRESULTS[] rgResults)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnQueryAddDirectories() of: {0}", this.ToString() ) );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnQueryAddDirectories() of: {0}", this.ToString()));
             return VSConstants.S_OK;
         }
 
-        public int OnQueryAddFiles( IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYADDFILEFLAGS[] rgFlags, VSQUERYADDFILERESULTS[] pSummaryResult, VSQUERYADDFILERESULTS[] rgResults )
+        public int OnQueryAddFiles(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYADDFILEFLAGS[] rgFlags, VSQUERYADDFILERESULTS[] pSummaryResult, VSQUERYADDFILERESULTS[] rgResults)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnQueryAddFiles() of: {0}", this.ToString() ) );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnQueryAddFiles() of: {0}", this.ToString()));
             return VSConstants.S_OK;
         }
 
-        public int OnQueryRemoveDirectories( IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYFLAGS[] rgFlags, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults )
+        public int OnQueryRemoveDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYFLAGS[] rgFlags, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnQueryRemoveDirectories() of: {0}", this.ToString() ) );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnQueryRemoveDirectories() of: {0}", this.ToString()));
 
             // OnQueryRemove expects this to be non-null.
-            if ( rgResults == null )
+            if (rgResults == null)
             {
-                rgResults = new VSQUERYREMOVEDIRECTORYRESULTS[ rgpszMkDocuments.Length ];
+                rgResults = new VSQUERYREMOVEDIRECTORYRESULTS[rgpszMkDocuments.Length];
             }
-            return OnQueryRemove( rgpszMkDocuments, pSummaryResult, rgResults );
+            return OnQueryRemove(rgpszMkDocuments, pSummaryResult, rgResults);
         }
 
-        private int OnQueryRemove( string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults )
+        private int OnQueryRemove(string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults)
         {
             try
             {
                 int i = 0;
-                pSummaryResult[ 0 ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
-                foreach ( string path in rgpszMkDocuments )
+                pSummaryResult[0] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
+                foreach (string path in rgpszMkDocuments)
                 {
-                    SvnItem item = this.Context.StatusCache[ path ];
-                    if ( item.IsVersioned )
+                    SvnItem item = this.Context.GetService<IFileStatusCache>()[path];
+                    if (item.IsVersioned)
                     {
-                        if ( this.CanSvnDelete( item ) )
+                        if (this.CanSvnDelete(item))
                         {
-                            if ( item.IsDirectory )
+                            if (item.IsDirectory)
                             {
-                                this.BackupDirectory( path );
+                                this.BackupDirectory(path);
                             }
 
-                            rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
+                            rgResults[i] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
                         }
                         else
                         {
-                            rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK; 
-                            pSummaryResult[ 0 ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
+                            rgResults[i] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
+                            pSummaryResult[0] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
                         }
                     }
                     else
                     {
-                        rgResults[ i ] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
+                        rgResults[i] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
                     }
                 }
 
                 return VSConstants.S_OK;
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                this.Context.ErrorHandler.OnError( ex );
-                return VSConstants.E_FAIL;
+                IAnkhErrorHandler errorHandler = Context.GetService<IAnkhErrorHandler>();
+
+                if (errorHandler != null)
+                {
+                    errorHandler.OnError(ex);
+
+                    return VSConstants.E_FAIL;
+                }
+
+                throw;
             }
         }
 
-        private void BackupDirectory( string directory )
+        private void BackupDirectory(string directory)
         {
             string backupDirectory = GetBackupDirectoryName(directory);
-            FileUtils.CopyDirectory( directory, backupDirectory );
+            FileUtils.CopyDirectory(directory, backupDirectory);
         }
 
-        private void RestoreBackupDirectory( string directory )
+        private void RestoreBackupDirectory(string directory)
         {
             try
             {
-                string backupDirectory = GetBackupDirectoryName( directory );
+                string backupDirectory = GetBackupDirectoryName(directory);
                 // OnRemove can be called without OnQueryRemove*
                 // in that case backupDirectory doesn't exist
-                if ( Directory.Exists( backupDirectory ) ) 
+                if (Directory.Exists(backupDirectory))
                 {
-                    Directory.Move( backupDirectory, directory );
+                    Directory.Move(backupDirectory, directory);
                 }
             }
             finally
@@ -182,65 +192,65 @@ namespace Ankh.EventSinks
             this.BackupSuffix = Guid.NewGuid().ToString();
         }
 
-        private string GetBackupDirectoryName( string directory )
+        private string GetBackupDirectoryName(string directory)
         {
-            string parentDir = PathUtils.GetParent( directory );
-            string dirName = PathUtils.GetName( directory );
+            string parentDir = PathUtils.GetParent(directory);
+            string dirName = PathUtils.GetName(directory);
 
-            return Path.Combine( parentDir, dirName + BackupSuffix );
+            return Path.Combine(parentDir, dirName + BackupSuffix);
         }
 
 
-        public int OnQueryRemoveFiles( IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYREMOVEFILEFLAGS[] rgFlags, VSQUERYREMOVEFILERESULTS[] pSummaryResult, VSQUERYREMOVEFILERESULTS[] rgResults )
+        public int OnQueryRemoveFiles(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYREMOVEFILEFLAGS[] rgFlags, VSQUERYREMOVEFILERESULTS[] pSummaryResult, VSQUERYREMOVEFILERESULTS[] rgResults)
         {
-            VSQUERYREMOVEDIRECTORYRESULTS[] results = new VSQUERYREMOVEDIRECTORYRESULTS[ rgpszMkDocuments.Length ];
+            VSQUERYREMOVEDIRECTORYRESULTS[] results = new VSQUERYREMOVEDIRECTORYRESULTS[rgpszMkDocuments.Length];
 
-            VSQUERYREMOVEDIRECTORYRESULTS[] summaryResults = new VSQUERYREMOVEDIRECTORYRESULTS[ 1 ];
+            VSQUERYREMOVEDIRECTORYRESULTS[] summaryResults = new VSQUERYREMOVEDIRECTORYRESULTS[1];
 
-            int hr = this.OnQueryRemove( rgpszMkDocuments, results, summaryResults );
+            int hr = this.OnQueryRemove(rgpszMkDocuments, results, summaryResults);
 
             // we need to convert to the appropriate enum (even if they have exactly the same flags...)
-            if ( rgResults != null )
+            if (rgResults != null)
             {
-                ConvertRemoveFileResults( results, rgResults ); 
+                ConvertRemoveFileResults(results, rgResults);
             }
-            ConvertRemoveFileResults( summaryResults, pSummaryResult );
+            ConvertRemoveFileResults(summaryResults, pSummaryResult);
 
             return hr;
         }
 
-        private static void ConvertRemoveFileResults( VSQUERYREMOVEDIRECTORYRESULTS[] results, VSQUERYREMOVEFILERESULTS[] rgResults )
+        private static void ConvertRemoveFileResults(VSQUERYREMOVEDIRECTORYRESULTS[] results, VSQUERYREMOVEFILERESULTS[] rgResults)
         {
-            for ( int i = 0; i < results.Length; i++ )
+            for (int i = 0; i < results.Length; i++)
             {
-                rgResults[ i ] = results[ i ] == VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK ?
+                rgResults[i] = results[i] == VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK ?
                     VSQUERYREMOVEFILERESULTS.VSQUERYREMOVEFILERESULTS_RemoveNotOK :
                     VSQUERYREMOVEFILERESULTS.VSQUERYREMOVEFILERESULTS_RemoveOK;
             }
         }
 
-        public int OnQueryRenameDirectories( IVsProject pProject, int cDirs, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEDIRECTORYFLAGS[] rgFlags, VSQUERYRENAMEDIRECTORYRESULTS[] pSummaryResult, VSQUERYRENAMEDIRECTORYRESULTS[] rgResults )
+        public int OnQueryRenameDirectories(IVsProject pProject, int cDirs, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEDIRECTORYFLAGS[] rgFlags, VSQUERYRENAMEDIRECTORYRESULTS[] pSummaryResult, VSQUERYRENAMEDIRECTORYRESULTS[] rgResults)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnQueryRenameDirectories() of: {0}", this.ToString() ) );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnQueryRenameDirectories() of: {0}", this.ToString()));
 
             VSQUERYRENAMEFILERESULTS[] fileResults = new VSQUERYRENAMEFILERESULTS[1];
 
-            int hr = OnQueryRename( rgszMkOldNames, rgszMkNewNames, fileResults );
+            int hr = OnQueryRename(rgszMkOldNames, rgszMkNewNames, fileResults);
 
             // Convert VSQUERYRENAMEFILERESULTS to VSQUERYRENAMEDIRECTORYRESULTS.
-            pSummaryResult[0] = (fileResults[0] == VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK) ? 
-                VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK : 
+            pSummaryResult[0] = (fileResults[0] == VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK) ?
+                VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK :
                 VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameNotOK;
             return hr;
         }
 
-        public int OnQueryRenameFiles( IVsProject pProject, int cFiles, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEFILEFLAGS[] rgFlags, VSQUERYRENAMEFILERESULTS[] pSummaryResult, VSQUERYRENAMEFILERESULTS[] rgResults )
+        public int OnQueryRenameFiles(IVsProject pProject, int cFiles, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEFILEFLAGS[] rgFlags, VSQUERYRENAMEFILERESULTS[] pSummaryResult, VSQUERYRENAMEFILERESULTS[] rgResults)
         {
-            Trace.WriteLine( string.Format( CultureInfo.CurrentCulture, "Entering OnQueryRenameFiles() of: {0}", this.ToString() ) );
-            return OnQueryRename( rgszMkOldNames, rgszMkNewNames, pSummaryResult );
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering OnQueryRenameFiles() of: {0}", this.ToString()));
+            return OnQueryRename(rgszMkOldNames, rgszMkNewNames, pSummaryResult);
         }
 
-       
+
         #endregion
 
         /// <summary>
@@ -250,87 +260,97 @@ namespace Ankh.EventSinks
         /// <param name="rgszMkNewNames"></param>
         /// <param name="directory"></param>
         /// <returns></returns>
-        private int OnAfterRename( string[] rgszMkOldNames, string[] rgszMkNewNames, bool directory )
+        private int OnAfterRename(string[] rgszMkOldNames, string[] rgszMkNewNames, bool directory)
         {
-            try
+            using (SvnReference x = context.GetService<ISvnClientPool>().GetClient())
             {
-                for ( int i = 0; i < rgszMkOldNames.Length; i++ )
+                try
                 {
-                    SvnItem item = this.context.StatusCache[rgszMkOldNames[i]];
-                    item.Refresh( this.context.Client );
-                    if ( item.IsVersioned || item.Status.LocalContentStatus == SvnStatus.Missing )
+                    for (int i = 0; i < rgszMkOldNames.Length; i++)
                     {
-                        Trace.WriteLine( String.Format( "Renaming {0} to {1}", rgszMkOldNames[i], rgszMkNewNames[i] ) );
-                        // We need to rename back first for svn move to work
-                        if ( Directory.Exists( rgszMkNewNames[i] ) )
+                        SvnItem item = this.context.GetService<IFileStatusCache>()[rgszMkOldNames[i]];
+                        item.Refresh(context);
+
+                        if (item.IsVersioned || item.Status.LocalContentStatus == SvnStatus.Missing)
                         {
-                            Directory.Move( rgszMkNewNames[i], rgszMkOldNames[i ]);
+                            Trace.WriteLine(String.Format("Renaming {0} to {1}", rgszMkOldNames[i], rgszMkNewNames[i]));
+                            // We need to rename back first for svn move to work
+                            if (Directory.Exists(rgszMkNewNames[i]))
+                            {
+                                Directory.Move(rgszMkNewNames[i], rgszMkOldNames[i]);
+                            }
+                            else
+                            {
+                                File.Move(rgszMkNewNames[i], rgszMkOldNames[i]);
+                            }
+                            SvnMoveArgs args = new SvnMoveArgs();
+                            args.Force = true;
+                            x.Svn.Move(rgszMkOldNames[i], rgszMkNewNames[i], args);
                         }
                         else
                         {
-                            File.Move( rgszMkNewNames[i], rgszMkOldNames[i] );
+                            Trace.WriteLine(String.Format("Not renaming {0} to {1}. TextStatus is {2}",
+                                rgszMkOldNames[i], rgszMkNewNames[i], item.Status.LocalContentStatus));
                         }
-                        SvnMoveArgs args = new SvnMoveArgs();
-                        args.Force = true;
-                        this.context.Client.Move( rgszMkOldNames[i], rgszMkNewNames[i], args );
                     }
-                    else
-                    {
-                        Trace.WriteLine( String.Format( "Not renaming {0} to {1}. TextStatus is {2}", 
-                            rgszMkOldNames[i], rgszMkNewNames[i], item.Status.LocalContentStatus ) );
-                    }
+                    return VSConstants.S_OK;
                 }
-                return VSConstants.S_OK;
+                catch (Exception ex)
+                {
+                    IAnkhErrorHandler handler = context.GetService<IAnkhErrorHandler>();
+                    if (handler != null)
+                    {
+                        handler.OnError(ex);
+                        return VSConstants.E_FAIL;
+                    }
+
+                    throw;
+                }
             }
-            catch ( Exception ex )
-            {
-                this.context.ErrorHandler.OnError( ex );
-                return VSConstants.E_FAIL;
-            }
-        }        
+        }
 
         /// <summary>
         /// Perform the actual Add here, for both files and directories.
         /// </summary>
         /// <param name="paths"></param>
         /// <returns></returns>
-        private int OnAfterAdd( string[] paths )
+        private int OnAfterAdd(string[] paths)
         {
             try
             {
-                if ( this.context.Config.AutoAddNewFiles && !this.context.OperationRunning )
+                if (this.context.Config.AutoAddNewFiles && !this.context.OperationRunning)
                 {
-                    foreach ( string file in paths )
+                    foreach (string file in paths)
                     {
                         try
                         {
                             SvnItem svnItem = this.context.StatusCache[file];
 
                             // make sure we have up to date info on this item.
-                            svnItem.Refresh( this.context.Client );
+                            svnItem.Refresh(this.context.Client);
 
-                            if ( !svnItem.IsVersioned && svnItem.IsVersionable &&
-                                svnItem.Status.LocalContentStatus != SvnStatus.Ignored )
+                            if (!svnItem.IsVersioned && svnItem.IsVersionable &&
+                                svnItem.Status.LocalContentStatus != SvnStatus.Ignored)
                             {
-                                this.context.Client.Add( file, SvnDepth.Empty );
+                                this.context.Client.Add(file, SvnDepth.Empty);
                             }
                         }
-                        catch ( SvnException ex )
+                        catch (SvnException ex)
                         {
                             // don't propagate this exception
                             // just tell the user and move on
-                            this.context.ErrorHandler.Write( "Unable to add file: ", ex,
-                                this.context.OutputPane );
+                            this.context.ErrorHandler.Write("Unable to add file: ", ex,
+                                this.context.OutputPane);
                         }
                     }
 
-                    
+
                 }
                 return VSConstants.S_OK;
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                this.context.ErrorHandler.OnError( ex );
+                this.context.ErrorHandler.OnError(ex);
                 return VSConstants.E_FAIL;
             }
         }
@@ -342,36 +362,36 @@ namespace Ankh.EventSinks
         /// <param name="rgszMkNewNames"></param>
         /// <param name="pSummaryResult"></param>
         /// <returns></returns>
-        private int OnQueryRename( string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEFILERESULTS[] pSummaryResult )
+        private int OnQueryRename(string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEFILERESULTS[] pSummaryResult)
         {
             try
             {
                 pSummaryResult[0] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK;
 
-                for ( int i = 0; i < rgszMkOldNames.Length; i++ )
+                for (int i = 0; i < rgszMkOldNames.Length; i++)
                 {
                     SvnItem item = context.StatusCache[rgszMkOldNames[i]];
-                    item.Refresh( this.Context.Client, EventBehavior.DontRaise );
+                    item.Refresh(this.Context.Client, EventBehavior.DontRaise);
 
-                    if ( !IsUnmodifiedOrUnversioned( item ) )
+                    if (!IsUnmodifiedOrUnversioned(item))
                     {
                         pSummaryResult[0] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
-                        this.context.OutputPane.WriteLine( "SVN prohibits renaming modified items. " + 
-                            "Please commit the modifications before attempting a rename." );
+                        this.context.OutputPane.WriteLine("SVN prohibits renaming modified items. " +
+                            "Please commit the modifications before attempting a rename.");
                     }
-                    else if ( IsCaseOnlySvnRename( item, rgszMkNewNames[i] ) )
+                    else if (IsCaseOnlySvnRename(item, rgszMkNewNames[i]))
                     {
                         pSummaryResult[0] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
-                        this.Context.OutputPane.WriteLine( "Cannot rename {0} to {1}. SVN does not allow case only renames.",
-                            rgszMkOldNames[i], rgszMkNewNames[i] );
+                        this.Context.OutputPane.WriteLine("Cannot rename {0} to {1}. SVN does not allow case only renames.",
+                            rgszMkOldNames[i], rgszMkNewNames[i]);
                     }
                 }
 
                 return VSConstants.S_OK;
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                context.ErrorHandler.OnError( ex );
+                context.ErrorHandler.OnError(ex);
                 return VSConstants.E_FAIL;
             }
         }
@@ -383,14 +403,14 @@ namespace Ankh.EventSinks
         /// <param name="rgResults"></param>
         /// <param name="pSummaryResult"></param>
         /// <returns></returns>
-        private int OnRemove( string[] rgpszMkDocuments )
+        private int OnRemove(string[] rgpszMkDocuments)
         {
             try
             {
-                for( int i = 0; i < rgpszMkDocuments.Length; i++ )
+                for (int i = 0; i < rgpszMkDocuments.Length; i++)
                 {
-                    SvnItem item = context.StatusCache[ rgpszMkDocuments[i] ];
-                    item.Refresh(this.context.Client, EventBehavior.DontRaise );
+                    SvnItem item = context.StatusCache[rgpszMkDocuments[i]];
+                    item.Refresh(this.context.Client, EventBehavior.DontRaise);
 
                     // VC++ projects don't delete the files until *after* OnAfterRemoveFiles has fired
                     bool wasUnmodified = item.Status.LocalContentStatus == SvnStatus.Normal &&
@@ -400,12 +420,12 @@ namespace Ankh.EventSinks
                     bool wasAddedOrMissing = item.Status.LocalContentStatus == SvnStatus.Added || item.Status.LocalContentStatus == SvnStatus.Missing;
 
                     if ((item.Status.LocalContentStatus == SvnStatus.Missing || item.IsDeleted ||
-                        item.Status.LocalContentStatus == SvnStatus.Normal) && 
-                        this.PromptDelete( item ) )
+                        item.Status.LocalContentStatus == SvnStatus.Normal) &&
+                        this.PromptDelete(item))
                     {
-                        if ( item.IsDirectory )
+                        if (item.IsDirectory)
                         {
-                            this.RestoreBackupDirectory( item.Path );
+                            this.RestoreBackupDirectory(item.Path);
                         }
 
                         try
@@ -424,42 +444,42 @@ namespace Ankh.EventSinks
                         }
 
                         // VC++ gets annoyed if the file doesn't exist when trying to delete it.
-                        if ( wasUnmodified && !item.IsDirectory )
+                        if (wasUnmodified && !item.IsDirectory)
                         {
-                            File.Create( rgpszMkDocuments[ i ] ).Close();
+                            File.Create(rgpszMkDocuments[i]).Close();
                         }
 
-                        item.Refresh( context.Client, EventBehavior.Raise );
+                        item.Refresh(context.Client, EventBehavior.Raise);
                     }
                 }
                 return VSConstants.S_OK;
             }
-            catch( Exception ex )
+            catch (Exception ex)
             {
-                this.context.ErrorHandler.OnError( ex );
+                this.context.ErrorHandler.OnError(ex);
                 return VSConstants.E_FAIL;
             }
         }
 
-        private bool PromptDelete( SvnItem item )
+        private bool PromptDelete(SvnItem item)
         {
-            String message = String.Format("Do you want to delete {0} from your Subversion working copy?", 
+            String message = String.Format("Do you want to delete {0} from your Subversion working copy?",
                 item.Path);
-            return this.context.UIShell.ShowMessageBox( message, "Delete from working copy", MessageBoxButtons.YesNo ) ==
+            return this.context.UIShell.ShowMessageBox(message, "Delete from working copy", MessageBoxButtons.YesNo) ==
                 DialogResult.Yes;
         }
 
-        private bool IsUnmodifiedOrUnversioned( SvnItem item )
+        private bool IsUnmodifiedOrUnversioned(SvnItem item)
         {
             return (
-                ( item.IsVersioned && !item.IsModified ) ||
-                ( !item.IsVersioned )
+                (item.IsVersioned && !item.IsModified) ||
+                (!item.IsVersioned)
             );
         }
 
-        private bool IsCaseOnlySvnRename( SvnItem item, string newPath )
+        private bool IsCaseOnlySvnRename(SvnItem item, string newPath)
         {
-            if ( !item.IsVersioned )
+            if (!item.IsVersioned)
                 return false;
 
             return PathUtils.AreEqual(item.Path, newPath);
@@ -476,22 +496,22 @@ namespace Ankh.EventSinks
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        private bool CanSvnDelete( SvnItem item )
+        private bool CanSvnDelete(SvnItem item)
         {
-            if ( item.IsVersioned && !item.IsDeleted )
+            if (item.IsVersioned && !item.IsDeleted)
             {
-                if ( item.IsModified )
+                if (item.IsModified)
                 {
-                    DialogResult dr = this.context.UIShell.ShowMessageBox( 
+                    DialogResult dr = this.context.UIShell.ShowMessageBox(
                         item.Path + " has local modifications. Delete anyway?",
-                        "Local modifications detected", MessageBoxButtons.YesNo );
+                        "Local modifications detected", MessageBoxButtons.YesNo);
 
                     return dr == DialogResult.Yes;
                 }
                 else
                     return true;
             }
-            else 
+            else
                 return false;
         }
 
@@ -506,9 +526,9 @@ namespace Ankh.EventSinks
             this.trackProjectDocuments = (IVsTrackProjectDocuments2)sp.GetService(typeof(SVsTrackProjectDocuments));
 
             // ATPDE will return S_OK while not setting the cookie if the interop definition of the IVTPD interface is wrong
-            if ( this.trackProjectDocuments.AdviseTrackProjectDocumentsEvents( this, out this.cookie ) != VSConstants.S_OK || this.cookie == 0 )
+            if (this.trackProjectDocuments.AdviseTrackProjectDocumentsEvents(this, out this.cookie) != VSConstants.S_OK || this.cookie == 0)
             {
-                throw new Exception( "Couldn't register project documents events interface" );
+                throw new Exception("Couldn't register project documents events interface");
             };
 
 
@@ -528,7 +548,7 @@ namespace Ankh.EventSinks
             //while ( fetched == 1 )
             //{
             //    IVsHierarchy hi = hierarchies[0];
-                
+
 
             //    uint root = unchecked( (uint)(int)VSITEMID.VSITEMID_ROOT );
             //    object var;
@@ -540,7 +560,7 @@ namespace Ankh.EventSinks
             //        hr = hi.AdviseHierarchyEvents( new HierarchyEvents( this.context, name ), out cookie );
             //    }
 
-               
+
 
             //    //DisplayHierarchy( hi, root );
 
@@ -553,19 +573,19 @@ namespace Ankh.EventSinks
 
         private void UnadviseEvents()
         {
-            this.trackProjectDocuments.UnadviseTrackProjectDocumentsEvents( this.cookie );
+            this.trackProjectDocuments.UnadviseTrackProjectDocumentsEvents(this.cookie);
         }
 
 
-        private IContext context;
+        private IAnkhServiceProvider context;
         private uint cookie;
 
         private IVsTrackProjectDocuments2 trackProjectDocuments;
 
         private string BackupSuffix = Guid.NewGuid().ToString();
-        
 
 
-    }
+
+    }*/
 
 }

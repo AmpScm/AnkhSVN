@@ -5,14 +5,13 @@ using Microsoft.VisualStudio.Shell;
 using System.Globalization;
 using AnkhSvn.Ids;
 
-namespace Ankh.VSPackage
+namespace Ankh.VSPackage.Attributes
 {
-
     /// <summary>
-    /// This attribute registers the source control provider.
+    /// This attribute registers the package as source control provider.
     /// </summary>
     [AttributeUsage( AttributeTargets.Class, AllowMultiple = true, Inherited = true )]
-    public sealed class ProvideSourceControlProvider : RegistrationAttribute
+    internal sealed class ProvideSourceControlProvider : RegistrationAttribute
     {
         private string _regName = null;
         private string _uiName = null;

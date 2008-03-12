@@ -31,7 +31,7 @@ namespace Ankh
                 Container.AddService(typeof(IFileStatusCache), _context.StatusCache);
             Container.AddService(typeof(IStatusImageMapper), new StatusImages.TempStatusImageMapper());
 #if !DEBUG
-            Container.AddService(typeof(IAnkhErrorHandler), new ErrorHandler());
+            Container.AddService(typeof(IAnkhErrorHandler), new ErrorHandler(Context));
 #endif
         }
 
