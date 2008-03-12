@@ -31,7 +31,7 @@ namespace Ankh.Commands
             IContext context = e.Context.GetService<IContext>();
 
             // We know now that there is exactly one resource
-            SvnItem dir = (SvnItem)context.Selection.GetSelectionResources(
+            /*SvnItem dir = (SvnItem)context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback(SvnItem.DirectoryFilter) )[0];
 
             using (context.StartOperation("Relocating"))
@@ -52,7 +52,7 @@ namespace Ankh.Commands
 
                     dir.MarkDirty();
                 }
-            }
+            }*/
         }
 
         #endregion

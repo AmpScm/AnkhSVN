@@ -28,7 +28,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            IList resources = context.Selection.GetSelectionResources(true, 
+            /*IList resources = context.Selection.GetSelectionResources(true, 
                 new ResourceFilterCallback( SvnItem.LockedFilter ) );
 
             this.info = new PathSelectorInfo( "Unlock files", resources, resources );
@@ -45,7 +45,7 @@ namespace Ankh.Commands
                 new SimpleProgressWorkerCallback( this.DoUnlock )), "Unlocking files" );
             
             foreach( SvnItem item in this.info.CheckedItems )
-                item.MarkDirty();
+                item.MarkDirty();*/
         }
 
         #endregion

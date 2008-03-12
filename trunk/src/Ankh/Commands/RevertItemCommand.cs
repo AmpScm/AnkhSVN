@@ -31,7 +31,7 @@ namespace Ankh.Commands
 
             SaveAllDirtyDocuments( context );
 
-            // get the modified resources
+            /*// get the modified resources
             IList resources = context.Selection.GetSelectionResources( true,
                 new ResourceFilterCallback( SvnItem.ModifiedFilter ) );
 
@@ -76,7 +76,7 @@ namespace Ankh.Commands
 
                 foreach (SvnItem item in resources)
                     item.MarkDirty();
-            }
+            }*/
         }
 
         #endregion

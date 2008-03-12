@@ -18,7 +18,10 @@ namespace Ankh.Commands
 
             using(context.StartOperation( "Refreshing" ))
             {
-                context.Selection.RefreshSelection();
+                foreach(SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                {
+                }
+                
             }
         }
     }
