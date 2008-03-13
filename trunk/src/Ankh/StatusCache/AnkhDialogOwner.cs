@@ -23,7 +23,7 @@ namespace Ankh
 
         IVsUIShell Shell
         {
-            get { return _shell ?? (_shell = (IVsUIShell)_context.GetService(typeof(SVsShell))); }
+            get { return _shell ?? (_shell = (IVsUIShell)_context.GetService(typeof(SVsUIShell))); }
         }
 
         #region IAnkhDialogOwner Members

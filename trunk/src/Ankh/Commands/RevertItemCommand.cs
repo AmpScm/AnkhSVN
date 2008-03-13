@@ -87,11 +87,15 @@ namespace Ankh.Commands
                         item.MarkDirty();
                     }
                 }
-                context.Client.Revert(paths, args);
 
-                IProjectNotifier pn = e.Context.GetService<IProjectNotifier>();
-                if(pn != null)
-                    pn.MarkDirty(e.Selection.GetOwnerProjects(true));
+                using (SvnClient client = e.Context.GetService<ISvnClientPool>().GetClient())
+                {
+                    client.Revert(paths, args);
+
+                    IProjectNotifier pn = e.Context.GetService<IProjectNotifier>();
+                    if (pn != null)
+                        pn.MarkDirty(e.Selection.GetOwnerProjects(true));
+                }
             }
         }
 
