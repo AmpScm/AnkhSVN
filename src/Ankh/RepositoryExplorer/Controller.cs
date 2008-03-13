@@ -14,6 +14,7 @@ using SharpSvn;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Globalization;
+using Ankh.ContextServices;
 
 namespace Ankh.RepositoryExplorer
 {
@@ -204,7 +205,7 @@ namespace Ankh.RepositoryExplorer
                 if ( ex.InnerException != null )
                     msg += Environment.NewLine + ex.InnerException.Message;
 
-                MessageBox.Show( this.context.HostWindow, 
+                MessageBox.Show(context.GetService<IAnkhDialogOwner>().DialogOwner, 
                     @"Unable to load the %APPDATA%\AnkhSVN\reposroots.xml file." 
                     + Environment.NewLine + 
                     "The file may be corrupt. Edit it or delete it to have it recreated." + 

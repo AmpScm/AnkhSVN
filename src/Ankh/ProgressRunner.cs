@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Ankh.UI;
 using SharpSvn;
+using Ankh.ContextServices;
 
 namespace Ankh
 {
@@ -72,7 +73,7 @@ namespace Ankh
 
                 thread.Start();
 
-                dialog.ShowDialog( this.Context.HostWindow );
+                dialog.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner);
             }
             if ( this.cancelled )
             {

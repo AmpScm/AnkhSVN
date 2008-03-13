@@ -26,7 +26,7 @@ namespace Ankh.Commands
 
                 if (diff == null)
                 {
-                    MessageBox.Show(context.HostWindow, "Nothing to diff here. Move along.");
+                    MessageBox.Show(e.Context.DialogOwner, "Nothing to diff here. Move along.");
                     return;
                 }
 
@@ -36,7 +36,7 @@ namespace Ankh.Commands
                         "Text files(*.txt)|*.txt|All files(*.*)|*.*";
                     dlg.AddExtension = true;
 
-                    if (dlg.ShowDialog(context.HostWindow) == DialogResult.OK)
+                    if (dlg.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)
                     {
                         using (StreamWriter w = File.CreateText(dlg.FileName))
                             w.Write(diff);

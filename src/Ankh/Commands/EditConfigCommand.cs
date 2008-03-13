@@ -19,7 +19,7 @@ namespace Ankh.Commands
             Config.Config config = context.ConfigLoader.LoadConfig();
             using ( ConfigurationDialog dialog = new ConfigurationDialog( config ) )
             {
-                if ( dialog.ShowDialog( context.HostWindow ) == DialogResult.OK )
+                if (dialog.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)
                 {
                     context.ConfigLoader.SaveConfig( config );
                 }

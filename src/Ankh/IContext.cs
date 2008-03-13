@@ -19,7 +19,7 @@ namespace Ankh
         EnvDTE._DTE DTE { get; }
     }
 
-    public interface IContext
+    public interface IContext : IAnkhServiceProvider
     {
         IAnkhPackage Package { get; }        
 
@@ -73,11 +73,6 @@ namespace Ankh
         /// Whether an operation is currently running.
         /// </summary>
         bool OperationRunning { get; }
-
-        /// <summary>
-        /// An IWin32Window to be used for parenting dialogs.
-        /// </summary>
-        IWin32Window HostWindow { get; }
 
         /// <summary>
         /// Manage issues related to conflicts.

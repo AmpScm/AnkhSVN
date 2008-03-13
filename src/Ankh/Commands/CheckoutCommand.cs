@@ -23,7 +23,7 @@ namespace Ankh.Commands
 
             using (CheckoutDialog dlg = new CheckoutDialog())
             {
-                if (dlg.ShowDialog(context.HostWindow) != DialogResult.OK)
+                if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
                     return;
 
                 using (context.StartOperation("Checking out"))
