@@ -122,7 +122,7 @@ namespace Ankh
         /// Set the status of this item to the passed in status.
         /// </summary>
         /// <param name="status"></param>
-        [Obsolete("Use Refresh(AnkhContext)")]
+        [Obsolete("Use Refresh()")]
         public virtual void Refresh( AnkhStatus status )
         {
             this.Refresh( status, EventBehavior.Raise );
@@ -133,7 +133,7 @@ namespace Ankh
         /// Set the status of this item to the passed in status.
         /// </summary>
         /// <param name="status"></param>
-        [Obsolete("Use Refresh(AnkhContext)")]
+        [Obsolete("Use Refresh()")]
         public virtual void Refresh(AnkhStatus status, EventBehavior eventBehavior)
         {
             AnkhStatus oldStatus = this.status;
@@ -145,7 +145,7 @@ namespace Ankh
         /// Refresh the existing status of the item, using client.
         /// </summary>
         /// <param name="client"></param>
-        [Obsolete("Use Refresh(AnkhContext)")]
+        [Obsolete("Use Refresh()")]
         public virtual void Refresh( SvnClient client )
         {
             this.Refresh( client, EventBehavior.Raise );
@@ -156,7 +156,7 @@ namespace Ankh
         /// </summary>
         /// <param name="client"></param>
         /// <param name="eventBehavior">Whether to raise events.</param>
-        [Obsolete("Use Refresh(IContext)")]
+        [Obsolete("Use Refresh()")]
         public virtual void Refresh(SvnClient client, EventBehavior eventBehavior)
         {
             AnkhStatus oldStatus = this.status;

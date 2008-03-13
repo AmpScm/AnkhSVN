@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="110" xml:space="preserve">
-    <value>AnkhSvn</value>
+    <value>AnkhSVN</value>
   </data>
   <data name="112" xml:space="preserve">
-    <value>AnkhSvn - The open source Subversion plugin for Visual Studio</value>
+    <value>AnkhSVN - The open source Subversion plugin for Visual Studio</value>
   </data>
   <data name="301" xml:space="preserve">
-    <value>AnkhSVN Log Messages</value>
+    <value>Log Messages (AnkhSVN)</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="400" type="System.Resources.ResXFileRef, System.Windows.Forms">
