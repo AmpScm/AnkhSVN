@@ -175,7 +175,7 @@ namespace Ankh.Scc
             {
                 // Solution folders are projects without Scc state
                 // We let them follow the solution settings (See OnSolutionOpen() for the not added case
-                if(added)
+                if (added)
                     data.SetManaged(true);
 
                 data.Project.SccGlyphChanged(0, null, null, null);
@@ -190,14 +190,6 @@ namespace Ankh.Scc
         internal void OnProjectClosed(IVsSccProject2 project, bool removed)
         {
             _projectMap.Remove(project);
-        }        
-
-        internal void OnProjectFileAdded(IVsSccProject2 project, string filename, VSADDFILEFLAGS flags)
-        {
-        }
-
-        internal void OnProjectDirectoryAdded(IVsSccProject2 project, string directoryname, VSADDDIRECTORYFLAGS flags)
-        {
         }
     }
 }
