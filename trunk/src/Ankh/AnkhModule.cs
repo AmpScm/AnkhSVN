@@ -4,6 +4,7 @@ using System.Text;
 using Ankh.Scc;
 using Ankh.UI;
 using Ankh.Extenders;
+using Ankh.ContextServices;
 
 namespace Ankh
 {
@@ -18,6 +19,9 @@ namespace Ankh
         public override void OnPreInitialize()
         {
             Runtime.CommandMapper.LoadFrom(typeof(AnkhModule).Assembly);
+
+            Container.AddService(typeof(IAnkhDialogOwner), new AnkhDialogOwner(Context));
+            Container.AddService(typeof(ISvnClientPool), new AnkhSvnClientPool(Context));
 
             // Ensure old context behaviour
             _context = GetService<IContext>();

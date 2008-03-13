@@ -327,6 +327,8 @@
     <Compile Include="IWorkingCopyExplorer.cs" />
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatusCache\AnkhDialogOwner.cs" />
+    <Compile Include="StatusCache\AnkhSvnClientPool.cs" />
     <Compile Include="StatusCache\StatusCache.cs" />
     <Compile Include="StatusImages.cs" />
     <Compile Include="TreeNode.cs" />
