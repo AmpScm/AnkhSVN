@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Ankh.UI;
+using Ankh.Selection;
 
 namespace Ankh.Commands
 {
@@ -20,7 +21,21 @@ namespace Ankh.Commands
             // Mark Scc Glyphs dirty, to force reload of glyphs from StatusCache
             IAnkhPackage package = e.Context.GetService<IAnkhPackage>();
 
-            string commandString = e.Argument as string;
+            IEnumerable<SvnProject> projEnum = e.Argument as IEnumerable<SvnProject>;
+            
+            List<IVsProject2> projects = null;
+            if (projEnum != null)
+            {
+                projects = new List<IVsProject2>();
+
+                foreach(SvnProject p in projEnum)
+                {
+                    IVsProject2 vsProj = p.RawHandle as IVsProject2;
+                    if(vsProj != null)
+                        projects.Add(vsProj);
+                }
+            }
+
             IVsSolution sol = (IVsSolution)package.GetService(typeof(IVsSolution));
             if (sol != null)
             {
@@ -39,7 +54,7 @@ namespace Ankh.Commands
                             // The commented code updates only the projects that contain the file. Not sure if this is beneficial
                             // Figuring this out can be very expensive, and getting a status is usually just a hashtable lookup
 
-                            //IVsProject2 proj = sccProject2 as IVsProject2;
+                            IVsProject2 proj = sccProject2 as IVsProject2;
                             //int pfFound = -1;
                             //VSDOCUMENTPRIORITY[] priorities = new VSDOCUMENTPRIORITY[0];
                             //uint pItemId;
@@ -49,7 +64,9 @@ namespace Ankh.Commands
                             //    proj.IsDocumentInProject(commandString, out pfFound, priorities, out pItemId) == VSConstants.S_OK))
                             //{
                             //    if (pfFound != 0)
-                            sccProject2.SccGlyphChanged(0, null, null, null);
+                            
+                            if(projects == null || (proj != null && projects.Count > 0 && projects.Contains(proj)))
+                                sccProject2.SccGlyphChanged(0, null, null, null);
                             //}
                         }
                     }

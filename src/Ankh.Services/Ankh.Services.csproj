@@ -76,6 +76,7 @@
     <Compile Include="UI\IAnkhUISite.cs" />
     <Compile Include="UI\ISvnLogView.cs" />
     <Compile Include="VS\IAnkhSolutionExplorerWindow.cs" />
+    <Compile Include="Scc\IProjectNotifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
