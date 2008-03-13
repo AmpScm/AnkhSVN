@@ -15,6 +15,12 @@ namespace Ankh
         SvnPoolClient GetClient();
 
         /// <summary>
+        /// Gets a free <see cref="SvnClient"/> instance from the pool
+        /// </summary>
+        /// <returns></returns>
+        SvnPoolClient GetNoUIClient();
+
+        /// <summary>
         /// Returns the client.
         /// </summary>
         /// <param name="poolClient">The pool client.</param>

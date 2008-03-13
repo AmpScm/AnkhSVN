@@ -47,7 +47,7 @@ namespace Ankh.Commands
                     dlg.CheckedItems = resources;
                     dlg.Recursive = true;
 
-                    if (dlg.ShowDialog(context.HostWindow) != DialogResult.OK)
+                    if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
                         return;
 
                     ReverseMergeRunner runner = new ReverseMergeRunner(

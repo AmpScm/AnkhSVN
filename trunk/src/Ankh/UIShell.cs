@@ -9,6 +9,7 @@ using Utils.Win32;
 using SH = SHDocVw;
 
 using SharpSvn;
+using Ankh.ContextServices;
 
 namespace Ankh
 {
@@ -97,7 +98,7 @@ namespace Ankh
 
             //TODO: The UIShell should be responsible for maintaining the hostwindow
             return MessageBox.Show(
-                this.context.HostWindow, msg, "Ankh",
+                Context.GetService<IAnkhDialogOwner>().DialogOwner, msg, "Ankh",
                 MessageBoxButtons.YesNoCancel);
         }
 
@@ -217,7 +218,7 @@ namespace Ankh
         public DialogResult ShowMessageBox(string text, string caption,
             MessageBoxButtons buttons)
         {
-            return MessageBox.Show(this.Context.HostWindow, text, caption,
+            return MessageBox.Show(Context.GetService<IAnkhDialogOwner>().DialogOwner, text, caption,
                 buttons);
         }
 
@@ -231,7 +232,7 @@ namespace Ankh
         public DialogResult ShowMessageBox(string text, string caption,
             MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            return MessageBox.Show(this.Context.HostWindow, text, caption,
+            return MessageBox.Show(Context.GetService<IAnkhDialogOwner>().DialogOwner, text, caption,
                 buttons, icon);
         }
 
@@ -245,7 +246,7 @@ namespace Ankh
         public DialogResult ShowMessageBox(string text, string caption,
             MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
         {
-            return MessageBox.Show(this.Context.HostWindow, text, caption,
+            return MessageBox.Show(Context.GetService<IAnkhDialogOwner>().DialogOwner, text, caption,
                 buttons, icon, defaultButton);
         }
 
@@ -307,7 +308,7 @@ namespace Ankh
 
 
                 // show it
-                if (selector.ShowDialog(this.Context.HostWindow) == DialogResult.OK)
+                if (selector.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) == DialogResult.OK)
                 {
                     info.CheckedItems = selector.CheckedItems;
                     info.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
@@ -338,7 +339,7 @@ namespace Ankh
                 dlg.CheckedItems = info.CheckedItems;
                 dlg.Message = info.Message;
                 dlg.StealLocks = info.StealLocks;
-                if (dlg.ShowDialog(this.Context.HostWindow) != DialogResult.OK)
+                if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                     return null;
 
                 info.CheckedItems = dlg.CheckedItems;
@@ -366,7 +367,7 @@ namespace Ankh
                 dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
                 dlg.StopOnCopy = info.StopOnCopy;
 
-                if (dlg.ShowDialog(this.Context.HostWindow) != DialogResult.OK)
+                if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                     return null;
 
                 info.CheckedItems = dlg.CheckedItems;
@@ -389,7 +390,7 @@ namespace Ankh
                 dialog.Options = PathSelectorOptions.DisplaySingleRevision;
                 dialog.Recursive = true;
 
-                if (dialog.ShowDialog(this.Context.HostWindow) != DialogResult.OK)
+                if (dialog.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                     return null;
 
                 info.SwitchToUrl = dialog.ToUrl;
@@ -405,7 +406,7 @@ namespace Ankh
         {
             using (NewDirectoryDialog dlg = new NewDirectoryDialog())
             {
-                if (dlg.ShowDialog(this.Context.HostWindow) != DialogResult.OK)
+                if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                     return null;
 
                 return dlg.DirectoryName;
@@ -416,7 +417,7 @@ namespace Ankh
         {
             using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())
             {
-                if (dlg.ShowDialog(this.Context.HostWindow) != DialogResult.OK)
+                if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                     return null;
 
                 return new RepositoryRootInfo(dlg.Url, dlg.Revision);
@@ -427,7 +428,7 @@ namespace Ankh
         {
             using (AddWorkingCopyExplorerRootDialog dlg = new AddWorkingCopyExplorerRootDialog())
             {
-                if (dlg.ShowDialog(this.context.HostWindow) != DialogResult.OK)
+                if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                 {
                     return null;
                 }

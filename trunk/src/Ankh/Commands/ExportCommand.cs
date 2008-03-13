@@ -20,7 +20,7 @@ namespace Ankh.Commands
 
             using (ExportDialog dlg = new ExportDialog())
             {
-                if (dlg.ShowDialog(context.HostWindow) != DialogResult.OK)
+                if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
                     return;
 
                 using (context.StartOperation("Exporting"))

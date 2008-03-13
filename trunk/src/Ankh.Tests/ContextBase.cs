@@ -699,5 +699,23 @@ namespace Ankh.Tests
 		}
 
 		#endregion
-	}
+
+        #region IAnkhServiceProvider Members
+
+        public T GetService<T>()
+        {
+            return (T)GetService(typeof(T));
+        }
+
+        #endregion
+
+        #region IServiceProvider Members
+
+        public object GetService(Type serviceType)
+        {
+            return ServiceProvider.GetService(serviceType);
+        }
+
+        #endregion
+    }
 }

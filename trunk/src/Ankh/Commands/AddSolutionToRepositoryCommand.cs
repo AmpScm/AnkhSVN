@@ -65,7 +65,7 @@ namespace Ankh.Commands
 
             using (AddSolutionDialog dlg = new AddSolutionDialog())
             {
-                if (dlg.ShowDialog(context.HostWindow) != DialogResult.OK)
+                if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
                     return;
 
                 url = dlg.BaseUrl;

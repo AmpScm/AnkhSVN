@@ -9,6 +9,7 @@ using System.Collections;
 
 using SharpSvn;
 using AnkhSvn.Ids;
+using Ankh.ContextServices;
 
 namespace Ankh.Commands
 {
@@ -94,7 +95,7 @@ namespace Ankh.Commands
                                                    };
                     dialog.Binary = binary;
 
-                    if ( dialog.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                    if (dialog.ShowDialog(context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                         return;
                         
                     selection = dialog.Selection;

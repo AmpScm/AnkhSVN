@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Ankh.UI;
 using AnkhSvn.Ids;
 using SharpSvn;
+using Ankh.ContextServices;
 
 namespace Ankh.Commands
 {
@@ -89,7 +90,9 @@ namespace Ankh.Commands
 
 					if (!CommandBase.Shift)
 					{
-						if (d.ShowDialog(this.Context.HostWindow) != DialogResult.OK)
+                        IAnkhDialogOwner owner = Context.GetService<IAnkhDialogOwner>();
+
+						if (d.ShowDialog(owner.DialogOwner) != DialogResult.OK)
 							return false;
 					}
 
