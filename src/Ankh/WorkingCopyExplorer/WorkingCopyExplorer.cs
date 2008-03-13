@@ -211,7 +211,7 @@ namespace Ankh.WorkingCopyExplorer
 
         private bool IsRootValid( string path )
         {
-            return Directory.Exists( path ) && AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath( path );
+            return Directory.Exists( path ) && context.GetService<IWorkingCopyOperations>().IsWorkingCopyPath( path );
         }
 
         void control_WantNewRoot( object sender, EventArgs e )

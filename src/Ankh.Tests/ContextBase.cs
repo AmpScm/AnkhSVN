@@ -148,16 +148,6 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual FileWatcher ProjectFileWatcher
-        {
-            get
-            {
-                if ( this.projectFileWatcher == null )
-                    this.projectFileWatcher = new FileWatcher( this.Client );
-                return this.projectFileWatcher;
-            }
-        }
-
         public virtual IDisposable StartOperation(string description)
         {
             // TODO:  Add ContextBase.StartOperation implementation
@@ -375,7 +365,10 @@ namespace Ankh.Tests
 
             public virtual bool RunWithProgressDialog( IProgressWorker worker, string caption )
             {
-                worker.Work( this.Context );
+                using (SvnClient client = context.ClientPool.GetClient())
+                {
+                    worker.Work(new AnkhWorkerArgs(context, client));
+                }
                 return true;
             }
 
@@ -658,8 +651,6 @@ namespace Ankh.Tests
 
         }
 
-
-        public FileWatcher projectFileWatcher;
         public Config.Config config;
         public _DTE dte;
         public SvnClient client;
@@ -714,6 +705,16 @@ namespace Ankh.Tests
         public object GetService(Type serviceType)
         {
             return ServiceProvider.GetService(serviceType);
+        }
+
+        #endregion
+
+        #region IContext Members
+
+
+        public ISvnClientPool ClientPool
+        {
+            get { return GetService<ISvnClientPool>(); }
         }
 
         #endregion

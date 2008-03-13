@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Ankh.ContextServices;
+using SharpSvn;
+using System.ComponentModel.Design;
 
 namespace Ankh
 {
@@ -10,6 +12,7 @@ namespace Ankh
         readonly IAnkhServiceProvider _context;
         readonly Stack<SvnPoolClient> _clients = new Stack<SvnPoolClient>();
         readonly Stack<SvnPoolClient> _uiClients = new Stack<SvnPoolClient>();
+        readonly NotificationHandler _notifyHandler;
         const int MaxPoolSize = 10;
 
         public AnkhSvnClientPool(IAnkhServiceProvider context)
@@ -18,9 +21,16 @@ namespace Ankh
                 throw new ArgumentNullException("context");
 
             _context = context;
+            _notifyHandler = context.GetService<NotificationHandler>();
+
+            if (_notifyHandler == null)
+            {
+                _notifyHandler = new NotificationHandler(context);
+                context.GetService<IServiceContainer>().AddService(typeof(NotificationHandler), _notifyHandler);
+            }
         }
 
-        public SvnPoolClient GetClient()
+        public SvnClient GetClient()
         {
             lock (_uiClients)
             {
@@ -31,7 +41,7 @@ namespace Ankh
             }
         }
 
-        public SvnPoolClient GetNoUIClient()
+        public SvnClient GetNoUIClient()
         {
  	        lock (_clients)
             {
@@ -46,12 +56,20 @@ namespace Ankh
         {
             AnkhSvnPoolClient client = new AnkhSvnPoolClient(this, hookUI);
 
+            ////// should we use a custom configuration directory?
+            //if (this.config.Subversion.ConfigDir != null)
+            //    this.client.LoadConfiguration(
+            //        Environment.ExpandEnvironmentVariables(this.config.Subversion.ConfigDir));
+
             if (hookUI)
             {
                 IAnkhDialogOwner owner = _context.GetService<IAnkhDialogOwner>();
 
                 if (owner != null)
+                {
+                    // Let SharpSvnUI handle login and SSL dialogs
                     SharpSvn.UI.SharpSvnUI.Bind(client, owner.DialogOwner);
+                }
             }
 
             return client;

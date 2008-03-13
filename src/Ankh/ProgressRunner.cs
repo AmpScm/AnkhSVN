@@ -6,23 +6,48 @@ using Ankh.ContextServices;
 
 namespace Ankh
 {
-    public interface IProgressWorker
-    {        
-        void Work( IContext context );
+    public class AnkhWorkerArgs : EventArgs
+    {
+        AnkhContext _context;
+        SvnClient _client;
+
+        public AnkhWorkerArgs(IAnkhServiceProvider context, SvnClient client)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context.GetService<AnkhContext>();
+            _client = client;
+        }
+
+        public SvnClient Client
+        {
+            get { return _client; }
+        }
+
+        public AnkhContext Context
+        {
+            get { return _context; }
+        }
     }
 
-    public delegate void SimpleProgressWorkerCallback( IContext context );
+    public interface IProgressWorker
+    {
+        void Work(AnkhWorkerArgs e);
+    }
+
+    public delegate void SimpleProgressWorkerCallback(AnkhWorkerArgs e);
 
 
     public class SimpleProgressWorker : IProgressWorker
     {
-        public SimpleProgressWorker( SimpleProgressWorkerCallback cb )
+        public SimpleProgressWorker(SimpleProgressWorkerCallback cb)
         {
             this.callback = cb;
         }
-        public void Work(IContext context)
+        public void Work(AnkhWorkerArgs e)
         {
-            this.callback( context );
+            this.callback(e);
         }
 
         private SimpleProgressWorkerCallback callback;
@@ -34,66 +59,79 @@ namespace Ankh
     /// </summary>
     public class ProgressRunner
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="callback">The callback which performs 
-        /// the actual operation.</param>
-        public ProgressRunner( IContext context, IProgressWorker worker )
-        {
-            this.context = context;
-            this.worker = worker;
-        }
+        IAnkhServiceProvider _context;
+        IProgressWorker _worker;
 
-        public ProgressRunner( IContext context ) : this( context, null )
-        {}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgressRunner"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="worker">The worker.</param>
+        public ProgressRunner(IAnkhServiceProvider context, IProgressWorker worker)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
+            _worker = worker;
+        }
 
         /// <summary>
         /// Whether the operation was cancelled.
         /// </summary>
         public bool Cancelled
         {
-            get{ return this.cancelled; }
+            get { return this.cancelled; }
         }
-            
 
         /// <summary>
         /// Call this to start the operation.
         /// </summary>
         /// <param name="caption">The caption to use in the progress dialog.</param>
-        public void Start( string caption )
+        public void Start(string caption)
         {
-            Thread thread = new Thread( new ThreadStart(this.Run) );
+            Thread thread = new Thread(new ThreadStart(this.Run));
 
-            using( ProgressDialog dialog = new ProgressDialog() )
+            using (ProgressDialog dialog = new ProgressDialog())
             {
                 dialog.Caption = caption;
-                dialog.ProgressStatus +=new EventHandler<ProgressStatusEventArgs>(this.ProgressStatus);
+                dialog.ProgressStatus += new EventHandler<ProgressStatusEventArgs>(this.ProgressStatus);
 
                 thread.Start();
 
-                dialog.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner);
+                dialog.ShowDialog(_context.GetService<IAnkhDialogOwner>().DialogOwner);
             }
-            if ( this.cancelled )
+            if (this.cancelled)
             {
-                this.Context.OutputPane.WriteLine( "Cancelled" );
+                IAnkhOperationLogger logger = _context.GetService<IAnkhOperationLogger>();
+
+                if (logger != null)
+                {
+                    logger.WriteLine("Cancelled");
+                }
             }
-            else if ( this.exception != null )
+            else if (this.exception != null)
                 throw new ProgressRunnerException(this.exception);
-        }  
-      
-        private IContext Context
-        {
-            get{ return this.context; }
         }
 
         private void Run()
         {
             try
             {
-                this.Context.Client.Cancel += new EventHandler<SvnCancelEventArgs>(this.Cancel);
-                this.worker.Work(this.Context);
+                ISvnClientPool pool = _context.GetService<ISvnClientPool>();
+
+                using (SvnClient client = (pool != null) ? pool.GetClient() : new SvnClient())
+                {
+                    client.Cancel += new EventHandler<SvnCancelEventArgs>(Cancel);
+                    try
+                    {
+                        _worker.Work(new AnkhWorkerArgs(_context, client));
+                    }
+                    finally
+                    {
+                        client.Cancel -= new EventHandler<SvnCancelEventArgs>(Cancel);
+                    }
+                }
             }
             catch (SvnOperationCanceledException)
             {
@@ -106,20 +144,22 @@ namespace Ankh
             finally
             {
                 this.done = true;
-                this.Context.Client.Cancel -= new EventHandler<SvnCancelEventArgs>(this.Cancel);
             }
         }
 
-
-        private void ProgressStatus( object sender, ProgressStatusEventArgs args )
+        private void ProgressStatus(object sender, ProgressStatusEventArgs e)
         {
-            args.Done = this.done;
-            this.cancel = args.Cancelled;
+            if (done)
+                e.Done = true;
+
+            if(e.Cancelled)
+                this.cancel = true;
         }
 
         private void Cancel(object sender, SvnCancelEventArgs args)
         {
-            args.Cancel = this.cancel;
+            if(this.cancel)
+                args.Cancel = true;
         }
 
         /// <summary>
@@ -127,16 +167,14 @@ namespace Ankh
         /// </summary>
         public class ProgressRunnerException : ApplicationException
         {
-            public ProgressRunnerException( Exception realException ) : 
-                base( "Exception thrown in progress runner thread", realException )
-            {}            
+            public ProgressRunnerException(Exception realException) :
+                base("Exception thrown in progress runner thread", realException)
+            { }
         }
 
         private bool done = false;
-        private bool cancel = false;
+        private volatile bool cancel = false; // Modified out of thread
         private bool cancelled = false;
         private Exception exception;
-        private IContext context;
-        private IProgressWorker worker;
     }
 }

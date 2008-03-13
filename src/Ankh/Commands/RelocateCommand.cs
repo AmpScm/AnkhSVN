@@ -71,11 +71,11 @@ namespace Ankh.Commands
                 this.recursive = recursive;
             }
 
-            public void Work(IContext context)
+            public void Work(AnkhWorkerArgs e)
             {
                 SvnRelocateArgs args = new SvnRelocateArgs();
                 args.NonRecursive = !recursive;
-                context.Client.Relocate(this.path, this.from, this.to);
+                e.Client.Relocate(this.path, this.from, this.to);
             }
 
 

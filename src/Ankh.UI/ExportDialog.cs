@@ -13,7 +13,8 @@ namespace Ankh.UI
     /// </summary>
     public partial class ExportDialog : System.Windows.Forms.Form
     {
-        public ExportDialog()
+        readonly IAnkhServiceProvider _context;
+        protected ExportDialog()
         {
             //
             // Required for Windows Form Designer support
@@ -22,6 +23,16 @@ namespace Ankh.UI
 
             this.ControlsChanged(this, EventArgs.Empty);
         }
+
+        
+        public ExportDialog(IAnkhServiceProvider context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
+        }
+
 
         /// <summary>
         /// The URL of the repository.
@@ -86,14 +97,21 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void ControlsChanged(object sender, System.EventArgs e)
         {
-            IWorkingCopyOperations wcOps = AnkhServices.GetService<IWorkingCopyOperations>();
-            if (this.revisionPicker.Valid && this.localDirTextBox.Text.Length > 0)
+            IWorkingCopyOperations wcOps = _context.GetService<IWorkingCopyOperations>();
+
+            bool enable = false;
+            if (wcOps != null)
             {
-                if (this.radioButtonFromURL.Checked)
-                    this.okButton.Enabled = UriUtils.ValidUrl.IsMatch(this.urlTextBox.Text);
-                else
-                    this.okButton.Enabled = wcOps.IsWorkingCopyPath(this.exportFromDirTextBox.Text);
+                if (this.revisionPicker.Valid && this.localDirTextBox.Text.Length > 0)
+                {
+                    if (this.radioButtonFromURL.Checked)
+                        enable = UriUtils.ValidUrl.IsMatch(this.urlTextBox.Text);
+                    else
+                        enable = wcOps.IsWorkingCopyPath(this.exportFromDirTextBox.Text);
+                }
             }
+
+            this.okButton.Enabled = enable;
         }
 
         /// <summary>

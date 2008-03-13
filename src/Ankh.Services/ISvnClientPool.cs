@@ -12,13 +12,13 @@ namespace Ankh
         /// Gets a free <see cref="SvnClient"/> instance from the pool
         /// </summary>
         /// <returns></returns>
-        SvnPoolClient GetClient();
+        SvnClient GetClient();
 
         /// <summary>
         /// Gets a free <see cref="SvnClient"/> instance from the pool
         /// </summary>
         /// <returns></returns>
-        SvnPoolClient GetNoUIClient();
+        SvnClient GetNoUIClient();
 
         /// <summary>
         /// Returns the client.
@@ -28,10 +28,17 @@ namespace Ankh
         bool ReturnClient(SvnPoolClient poolClient);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class SvnPoolClient : SvnClient, IDisposable
     {
         ISvnClientPool _pool;
 
+        // Note: All this depends on the knowledge that VC++ implements the disposable
+        // pattern as it should be. IDisposable and Dispose route to Dispose(true), which we override
+        // when we are sure we are returned to the pool
+               
         protected SvnPoolClient(ISvnClientPool pool)
         {
             if (pool == null)
@@ -46,15 +53,10 @@ namespace Ankh
         /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing || _pool == null)
+            if (disposing && _pool != null)
                 ReturnClient();
             else
                 base.Dispose(disposing);
-        }
-
-        public new void Dispose()
-        {
-            ReturnClient();
         }
 
         void IDisposable.Dispose()
@@ -62,6 +64,9 @@ namespace Ankh
             ReturnClient();
         }
 
+        /// <summary>
+        /// Returns the client to the threadpool, or disposes the cleint
+        /// </summary>
         protected virtual void ReturnClient()
         {
             if (!_pool.ReturnClient(this))
@@ -71,6 +76,9 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Calls the original dispose method
+        /// </summary>
         protected void InnerDispose()
         {
             base.Dispose(true);

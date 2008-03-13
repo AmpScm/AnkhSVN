@@ -148,7 +148,6 @@
     <Compile Include="RegistryUtils.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\AnkhServices.cs" />
     <Compile Include="Services\IWorkingCopyOperations.cs" />
     <Compile Include="Timer.cs">
       <SubType>Code</SubType>

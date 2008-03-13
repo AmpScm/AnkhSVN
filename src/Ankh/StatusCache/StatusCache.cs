@@ -34,7 +34,7 @@ namespace Ankh
         {
             lock (this)
             {
-                if (!AnkhServices.GetService<IWorkingCopyOperations>().IsWorkingCopyPath(dir))
+                if (!context.GetService<IWorkingCopyOperations>().IsWorkingCopyPath(dir))
                 {
                     foreach (string file in Directory.GetFiles(dir))
                     {

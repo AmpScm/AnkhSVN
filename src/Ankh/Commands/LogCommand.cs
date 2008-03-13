@@ -67,7 +67,7 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void ProgressCallback(IContext context)
+        private void ProgressCallback(AnkhWorkerArgs e)
         {
             this.result = new LogResult();
             this.result.Start();
@@ -79,7 +79,7 @@ namespace Ankh.Commands
             args.Log += new EventHandler<SvnLogEventArgs>(result.Receive);
 
             Collection<SvnLogEventArgs> logItems;
-            context.Client.GetLog(paths[0], args, out logItems);
+            e.Client.GetLog(paths[0], args, out logItems);
 
             this.result.End();
         }

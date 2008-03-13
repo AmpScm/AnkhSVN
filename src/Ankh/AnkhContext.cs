@@ -16,6 +16,7 @@ using Ankh.EventSinks;
 using System.Collections.Generic;
 using Ankh.Scc;
 using Ankh.VS;
+using Ankh.ContextServices;
 
 namespace Ankh
 {
@@ -52,8 +53,6 @@ namespace Ankh
 
             this.LoadConfig();
 
-            this.projectFileWatcher = new FileWatcher(this.client);
-
             this.outputPane = new OutputPaneWriter(this, "AnkhSVN");
 
             this.progressDialog = new ProgressDialog();
@@ -70,10 +69,7 @@ namespace Ankh
                 new Ankh.WorkingCopyExplorer.WorkingCopyExplorer(this);
 
             SolutionEventsSink solutionEvents = new SolutionEventsSink(this);
-            eventSinks.Add(solutionEvents);
-
-            AnkhServices.AddService(typeof(IWorkingCopyOperations), new WorkingCopyOperations(client));
-            NotificationHandler.GetHandler(this);
+            eventSinks.Add(solutionEvents);            
 
             solutionEvents.AfterOpenSolution += new EventHandler(OnAfterOpenSolution);
             solutionEvents.BeforeCloseSolution += new EventHandler(OnBeforeCloseSolution);
@@ -139,10 +135,10 @@ namespace Ankh
         /// <summary>
         /// The SvnContext object used by the NSvn objects.
         /// </summary>
-        public SvnClient Client
+        public ISvnClientPool ClientPool
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this.client; }
+            get { return this.clientPool ?? (this.clientPool = GetService<ISvnClientPool>()); }
         }
 
         /// <summary>
@@ -212,18 +208,6 @@ namespace Ankh
         }
 
         /// <summary>
-        /// An IWin32Window to be used for parenting dialogs.
-        /// </summary>
-        public IWin32Window HostWindow
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get
-            {
-                return this.hostWindow;
-            }
-        }
-
-        /// <summary>
         /// Manage issues related to conflicts.
         /// </summary>
         public ConflictManager ConflictManager
@@ -231,16 +215,7 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get { return this.conflictManager; }
         }
-
-        /// <summary>
-        /// Watches the project and solution files.
-        /// </summary>
-        public FileWatcher ProjectFileWatcher
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.projectFileWatcher; }
-        }
-
+       
         public IServiceProvider ServiceProvider
         {
             [System.Diagnostics.DebuggerStepThrough]
@@ -271,30 +246,6 @@ namespace Ankh
         public void SolutionClosing()
         {
             this.conflictManager.RemoveAllTaskItems();
-        }
-
-        /// <summary>
-        /// Reloads the current solution.
-        /// </summary>
-        /// <returns>True if the solution has been reloaded.</returns>
-        public bool ReloadSolutionIfNecessary()
-        {
-            if (this.projectFileWatcher.HasDirtyFiles && !this.Config.DisableSolutionReload)
-            {
-                if (MessageBox.Show(this.HostWindow,
-                    "One or more of your project files have changed as a result of a " +
-                    "Subversion operation." + Environment.NewLine +
-                    "It is recommended that you reload the solution now. " + Environment.NewLine +
-                    "Do you want to reload the solution?", "Project files changed",
-                    MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    string filename = this.dte.Solution.FullName;
-                    this.dte.Solution.Close(true);
-                    this.dte.Solution.Open(filename);
-                    return true;
-                }
-            }
-            return false;
         }
 
         /// <summary>
@@ -368,16 +319,6 @@ namespace Ankh
                 this.Unloading(this, EventArgs.Empty);
         }
 
-        public IAnkhSelectionContainer Selection
-        {
-            get { return new NullSelectionContainer(); }
-        }
-
-        public ISynchronizeInvoke SynchronizingObject
-        {
-            get { return progressDialog; }
-        }
-
         /// <summary>
         /// try to load the configuration file
         /// </summary>
@@ -389,7 +330,7 @@ namespace Ankh
             }
             catch (Ankh.Config.ConfigException ex)
             {
-                MessageBox.Show(this.HostWindow,
+                MessageBox.Show(GetService<IAnkhDialogOwner>().DialogOwner,
                     "There is an error in your configuration file:" +
                     Environment.NewLine + Environment.NewLine +
                     ex.Message + Environment.NewLine + Environment.NewLine +
@@ -433,16 +374,10 @@ namespace Ankh
 
         private void SetupFromConfig()
         {
-            this.client = new SvnClient();
-            //// should we use a custom configuration directory?
-            if (this.config.Subversion.ConfigDir != null)
-                this.client.LoadConfiguration(
-                    Environment.ExpandEnvironmentVariables(this.config.Subversion.ConfigDir));
-            else
-                this.client.LoadConfigurationDefault();
-
-            // Let SharpSvnUI handle login and SSL dialogs
-            SharpSvn.UI.SharpSvnUI.Bind(client, this.HostWindow);
+            using (SvnClient client = ClientPool.GetClient())
+            {
+                
+            }
         }   
 
         #region Win32Window class
@@ -468,43 +403,8 @@ namespace Ankh
         }
         #endregion
 
-
-        private class NullSelectionContainer : IAnkhSelectionContainer
-        {
-            public void RefreshSelectionParents()
-            {
-            }
-
-            public void RefreshSelection()
-            {
-            }
-
-            public void SyncAll()
-            {
-            }
-
-            public IList GetSelectionResources(bool getChildItems)
-            {
-                return EmptyList;
-            }
-
-            public IList GetSelectionResources(bool getChildItems, ResourceFilterCallback filter)
-            {
-                return EmptyList;
-            }
-
-            public IList GetAllResources(ResourceFilterCallback filter)
-            {
-                return EmptyList;
-            }
-            public static readonly NullSelectionContainer Instance = new NullSelectionContainer();
-            private SvnItem[] EmptyList = new SvnItem[] { };
-        }
-
         private EnvDTE._DTE dte;
         private IWin32Window hostWindow;
-
-        private IAnkhSelectionContainer selectionContainer = NullSelectionContainer.Instance;
 
         private WorkingCopyExplorer.WorkingCopyExplorer workingCopyExplorer;
         private RepositoryExplorer.Controller repositoryController;
@@ -521,10 +421,8 @@ namespace Ankh
         private ConflictManager conflictManager;
         private IAnkhErrorHandler errorHandler;
 
-        private FileWatcher projectFileWatcher;
-
         private ProgressDialog progressDialog;
-        private SvnClient client;
+        private ISvnClientPool clientPool;
 
         private IUIShell uiShell;
 

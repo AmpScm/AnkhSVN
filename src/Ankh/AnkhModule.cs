@@ -5,6 +5,7 @@ using Ankh.Scc;
 using Ankh.UI;
 using Ankh.Extenders;
 using Ankh.ContextServices;
+using Utils.Services;
 
 namespace Ankh
 {
@@ -20,8 +21,11 @@ namespace Ankh
         {
             Runtime.CommandMapper.LoadFrom(typeof(AnkhModule).Assembly);
 
-            Container.AddService(typeof(IAnkhDialogOwner), new AnkhDialogOwner(Context));
-            Container.AddService(typeof(ISvnClientPool), new AnkhSvnClientPool(Context));
+            Container.AddService(typeof(IAnkhDialogOwner), new AnkhDialogOwner(Context), true);
+
+            Container.AddService(typeof(IWorkingCopyOperations), new WorkingCopyOperations(Context), true);
+
+            Container.AddService(typeof(ISvnClientPool), new AnkhSvnClientPool(Context), true);
 
             // Ensure old context behaviour
             _context = GetService<IContext>();

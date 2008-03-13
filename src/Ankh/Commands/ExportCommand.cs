@@ -18,7 +18,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            using (ExportDialog dlg = new ExportDialog())
+            using (ExportDialog dlg = new ExportDialog(e.Context))
             {
                 if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
                     return;

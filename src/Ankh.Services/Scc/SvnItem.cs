@@ -89,7 +89,7 @@ namespace Ankh
             IFileStatusCache statusCache = context.GetService<IFileStatusCache>();
 
             string path = this.path;
-            
+
             // if it's a single file, refresh the directory with Files unrecursively
             if (GetIsFile())
                 path = System.IO.Path.GetDirectoryName(path);
@@ -99,39 +99,20 @@ namespace Ankh
             args.RetrieveAllEntries = true;
             args.ThrowOnError = false;
 
-            if (clientPool != null && statusCache != null)
+            using (SvnClient client = clientPool.GetNoUIClient())
             {
-                using (SvnPoolClient client = clientPool.GetClient())
+                if (client != null)
                 {
-                    if (client != null)
+                    client.Status(path, args, delegate(object sender, SvnStatusEventArgs e)
                     {
-                        client.Status(path, args, delegate(object sender, SvnStatusEventArgs e)
+                        SvnItem i = statusCache[e.Path];
+                        if (i != null)
                         {
-                            SvnItem i = statusCache[e.Path];
-                            if (i != null)
-                            {
-                                i.status = e;
-                                i.dirty = false;
-                            }
-                        });
-                    }
-
+                            i.status = e;
+                            i.dirty = false;
+                        }
+                    });
                 }
-            }
-            else 
-            {
-#warning this else case should be removed when client pool is implemented
-
-                SvnClient client2 = new SvnClient();
-                client2.Status(path, args, delegate(object sender, SvnStatusEventArgs e)
-                {
-                    SvnItem i = statusCache[e.Path];
-                    if (i != null && i.dirty)
-                    {
-                        i.status = e;
-                        i.dirty = false;
-                    }
-                });
             }
         }
 

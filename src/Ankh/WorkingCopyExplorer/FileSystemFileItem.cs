@@ -34,7 +34,7 @@ namespace Ankh.WorkingCopyExplorer
         {
             if ( rescan )
             {
-                this.SvnItem.Refresh( this.Explorer.Context.Client );
+                this.SvnItem.Refresh();
             }
             this.CurrentStatus = MergeStatuses( this.CheckChildStatuses(), this.ThisNodeStatus() );
         }

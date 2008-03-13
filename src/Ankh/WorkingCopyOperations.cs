@@ -9,9 +9,14 @@ namespace Ankh
 {
     internal class WorkingCopyOperations : IWorkingCopyOperations
     {
-        public WorkingCopyOperations(SvnClient client)
+        IAnkhServiceProvider _context;
+
+        public WorkingCopyOperations(IAnkhServiceProvider context)
         {
-            this.client = client;
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
         }
 
         public bool IsWorkingCopyPath(string path)
@@ -22,7 +27,8 @@ namespace Ankh
             string dir = path;
             if (!Directory.Exists(path))
                 dir = Path.GetDirectoryName(path);
-            return Directory.Exists(Path.Combine(dir, SvnClient.AdministrativeDirectoryName));
+
+            return SvnTools.IsManagedPath(path);
         }
 
         public string GetWorkingCopyRootedPath(string path)
@@ -52,13 +58,7 @@ namespace Ankh
 
         static string GetParentDir(string path)
         {
-            if (path.Length <= 1)
-                return null;
-            else return path[path.Length - 1] == Path.DirectorySeparatorChar ?
-                Path.GetDirectoryName(path.Substring(0, path.Length - 1)) :
-                Path.GetDirectoryName(path);
+            return Path.GetDirectoryName(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
         }
-
-        private SvnClient client;
     }
 }

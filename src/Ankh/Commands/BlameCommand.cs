@@ -106,7 +106,7 @@ namespace Ankh.Commands
                 this.result = result;
             }
 
-            public void Work(IContext context)
+            public void Work(AnkhWorkerArgs e)
             {
                 SvnBlameArgs args = new SvnBlameArgs();
                 args.Start = start;
@@ -115,7 +115,8 @@ namespace Ankh.Commands
                 //args.IgnoreMimeType
                 //args.IgnoreSpacing
                 //args.IncludeMergedRevisions
-                context.Client.Blame(this.path, args, new EventHandler<SvnBlameEventArgs>(this.result.Receive));
+                
+                e.Client.Blame(this.path, args, new EventHandler<SvnBlameEventArgs>(this.result.Receive));
             }
 
             private string path;

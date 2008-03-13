@@ -50,12 +50,12 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void DoUnlock(IContext context)
+        private void DoUnlock(AnkhWorkerArgs e)
         {
             string[] paths = SvnItem.GetPaths(this.info.CheckedItems);
             SvnUnlockArgs args = new SvnUnlockArgs();
             args.BreakLock = false;
-            context.Client.Unlock(paths, args);
+            e.Client.Unlock(paths, args);
         }
 
         private PathSelectorInfo info;

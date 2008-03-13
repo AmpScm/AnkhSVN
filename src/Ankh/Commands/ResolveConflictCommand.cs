@@ -78,68 +78,72 @@ namespace Ankh.Commands
             SvnWorkingCopyInfo entry = item.Status.WorkingCopyInfo;
             SvnWorkingCopyState state;
             bool binary = false;
-            if (context.Client.GetWorkingCopyState(item.Path, out state))
-                binary = !state.IsTextFile;
-            if ( binary || mergeExe == null )
-            {
-                string selection;
 
-                using( ConflictDialog dialog = new ConflictDialog(  ) )
+            using (SvnClient client = context.ClientPool.GetNoUIClient())
+            {
+                if (client.GetWorkingCopyState(item.Path, out state))
+                    binary = !state.IsTextFile;
+                if (binary || mergeExe == null)
                 {
-                    entry = item.Status.WorkingCopyInfo;
-                    dialog.Filenames = new string[]{
+                    string selection;
+
+                    using (ConflictDialog dialog = new ConflictDialog())
+                    {
+                        entry = item.Status.WorkingCopyInfo;
+                        dialog.Filenames = new string[]{
                                                        entry.ConflictWorkFile,
                                                        entry.ConflictNewFile,
                                                        entry.ConflictOldFile,
                                                        item.Path
                                                    };
-                    dialog.Binary = binary;
+                        dialog.Binary = binary;
 
-                    if (dialog.ShowDialog(context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-                        return;
-                        
-                    selection = dialog.Selection;
-                }   
-    
-                if ( selection != item.Path )
-                    this.Copy( item.Path, selection );
+                        if (dialog.ShowDialog(context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
+                            return;
 
-                SvnResolvedArgs args = new SvnResolvedArgs();
-                args.Depth = SvnDepth.Empty;
-                context.Client.Resolved( item.Path, args);
-                context.OutputPane.WriteLine( 
-                    "Resolved conflicted state of {0}", item.Path );
-                
-                // delete the associated conflict task item
-                context.ConflictManager.RemoveTaskItem(item.Path);
+                        selection = dialog.Selection;
+                    }
 
-            }
-            else
-            {
-                string itemPath = Path.GetDirectoryName( item.Path );
-                string oldPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.WorkingCopyInfo.ConflictOldFile ));
-                string newPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.WorkingCopyInfo.ConflictNewFile ));
-                string workingPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.WorkingCopyInfo.ConflictWorkFile ));
-                string mergedPath = String.Format("\"{0}\"", item.Path);
+                    if (selection != item.Path)
+                        this.Copy(item.Path, selection);
 
-                string mergeString = mergeExe;
-                mergeString = mergeString.Replace( "%merged", mergedPath );
-                mergeString = mergeString.Replace( "%base", oldPath );
-                mergeString = mergeString.Replace( "%theirs", newPath );
-                mergeString = mergeString.Replace( "%mine", workingPath );
-
-                // We can't use System.Diagnostics.Process here because we want to keep the
-                // program path and arguments together, which it doesn't allow.
-                Utils.Exec exec = new Utils.Exec();
-                exec.ExecPath( mergeString );
-                exec.WaitForExit();
-
-                if ( MessageBox.Show( "Have all conflicts been resolved?",
-                    "Resolve", MessageBoxButtons.YesNo, MessageBoxIcon.Question ) == DialogResult.Yes )
-                {
                     SvnResolvedArgs args = new SvnResolvedArgs();
                     args.Depth = SvnDepth.Empty;
-                    context.Client.Resolved( item.Path, args );
+                    client.Resolved(item.Path, args);
+                    context.OutputPane.WriteLine(
+                        "Resolved conflicted state of {0}", item.Path);
+
+                    // delete the associated conflict task item
+                    context.ConflictManager.RemoveTaskItem(item.Path);
+
+                }
+                else
+                {
+                    string itemPath = Path.GetDirectoryName(item.Path);
+                    string oldPath = String.Format("\"{0}\"", Path.Combine(itemPath, item.Status.WorkingCopyInfo.ConflictOldFile));
+                    string newPath = String.Format("\"{0}\"", Path.Combine(itemPath, item.Status.WorkingCopyInfo.ConflictNewFile));
+                    string workingPath = String.Format("\"{0}\"", Path.Combine(itemPath, item.Status.WorkingCopyInfo.ConflictWorkFile));
+                    string mergedPath = String.Format("\"{0}\"", item.Path);
+
+                    string mergeString = mergeExe;
+                    mergeString = mergeString.Replace("%merged", mergedPath);
+                    mergeString = mergeString.Replace("%base", oldPath);
+                    mergeString = mergeString.Replace("%theirs", newPath);
+                    mergeString = mergeString.Replace("%mine", workingPath);
+
+                    // We can't use System.Diagnostics.Process here because we want to keep the
+                    // program path and arguments together, which it doesn't allow.
+                    Utils.Exec exec = new Utils.Exec();
+                    exec.ExecPath(mergeString);
+                    exec.WaitForExit();
+
+                    if (MessageBox.Show("Have all conflicts been resolved?",
+                        "Resolve", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        SvnResolvedArgs args = new SvnResolvedArgs();
+                        args.Depth = SvnDepth.Empty;
+                        client.Resolved(item.Path, args);
+                    }
                 }
             }
         }        
