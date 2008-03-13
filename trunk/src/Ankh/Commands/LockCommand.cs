@@ -89,7 +89,10 @@ namespace Ankh.Commands
             SvnLockArgs args = new SvnLockArgs();
             args.StealLock = info.StealLocks;
             args.Comment = info.Message;
-            context.Client.Lock(paths, args);
+            using (SvnClient client = context.ClientPool.GetClient())
+            {
+                client.Lock(paths, args);
+            }
         }
 
         public override void OnUpdate(CommandUpdateEventArgs e)

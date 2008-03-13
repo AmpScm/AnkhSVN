@@ -81,17 +81,19 @@ namespace Ankh.Commands
                 this.dryRun = dryRun;
             }
 
-            public void Work(IContext context)
+            public void Work(AnkhWorkerArgs e)
             {
                 SvnMergeArgs args = new SvnMergeArgs();
                 args.Depth = depth;
                 args.DryRun = dryRun;
                 args.IgnoreAncestry = false;
                 args.Force = false;
+
                 foreach (SvnItem item in this.items)
                 {
-                    context.Client.Merge(item.Path, item.Path, new SvnRevisionRange(SvnRevision.Working, revision), args);
+                    e.Client.Merge(item.Path, item.Path, new SvnRevisionRange(SvnRevision.Working, revision), args);
                 }
+
             }
 
             private IList items;

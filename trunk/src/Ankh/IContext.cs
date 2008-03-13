@@ -34,9 +34,9 @@ namespace Ankh
         OutputPaneWriter OutputPane { get; }
 
         /// <summary>
-        /// The SvnContext object used by the NSvn objects.
+        /// The ISvnClientPool object used by the NSvn objects.
         /// </summary>
-        SvnClient Client { get; }
+        ISvnClientPool ClientPool { get; }
 
         /// <summary>
         /// The repository explorer controller.
@@ -94,10 +94,5 @@ namespace Ankh
         {
             get;
         }
-
-		System.ComponentModel.ISynchronizeInvoke SynchronizingObject
-		{
-			get;
-		}
     }
 }

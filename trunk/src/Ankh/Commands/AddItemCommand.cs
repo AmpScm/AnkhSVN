@@ -70,6 +70,7 @@ namespace Ankh.Commands
             }
 
             using(context.StartOperation("Adding"))
+            using(SvnClient client = context.ClientPool.GetClient())
             {
                 SvnAddArgs args = new SvnAddArgs();
                 args.ThrowOnError = false;
@@ -78,7 +79,7 @@ namespace Ankh.Commands
 
                 foreach (SvnItem item in resources)
                 {
-                    context.Client.Add(item.Path, args);
+                    client.Add(item.Path, args);
                 }
                 //context.Selection.RefreshSelection();
             }

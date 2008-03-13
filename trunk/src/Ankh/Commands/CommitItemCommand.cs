@@ -106,13 +106,13 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void DoCommit(IContext context)
+        private void DoCommit(AnkhWorkerArgs e)
         {
             SvnCommitArgs args = new SvnCommitArgs();
             args.LogMessage = storedLogMessage;
             args.Depth = SvnDepth.Infinity;
             args.KeepLocks = commitContext.KeepLocks;
-            context.Client.Commit(this.paths, args, out commitInfo);
+            e.Client.Commit(this.paths, args, out commitInfo);
         }
 
         /// <summary>

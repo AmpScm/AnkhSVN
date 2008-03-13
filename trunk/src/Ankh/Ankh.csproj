@@ -342,9 +342,6 @@
     <Compile Include="Extenders\ResourceExtender.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FileWatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IContext.cs">
       <SubType>Code</SubType>
     </Compile>

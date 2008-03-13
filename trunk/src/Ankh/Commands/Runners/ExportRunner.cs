@@ -27,12 +27,12 @@ namespace Ankh.Commands
             // empty
         }
 
-        public void Work(IContext context)
+        public void Work(AnkhWorkerArgs e)
         {
             SvnExportArgs args = new SvnExportArgs();
             args.Depth = depth;
             args.Revision = revision;
-            context.Client.Export(this.url, this.path, args);
+            e.Client.Export(this.url, this.path, args);
         }
 
         private SvnRevision revision;

@@ -61,10 +61,10 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void DoCreateDir( IContext context )
+        private void DoCreateDir( AnkhWorkerArgs e )
         {
             // create the dir.
-            context.Client.CreateDirectory( this.url );
+            e.Client.CreateDirectory( this.url );
         }
 
         private string url;        

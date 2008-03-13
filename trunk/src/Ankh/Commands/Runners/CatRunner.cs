@@ -41,14 +41,14 @@ namespace Ankh.Commands
             get{ return this.path; }
         }
 
-        public void Work( IContext context )
+        public void Work(AnkhWorkerArgs e)
         {
             using (FileStream fs = new FileStream(this.path, FileMode.Create,
                        FileAccess.Write))
             {
                 SvnWriteArgs args = new SvnWriteArgs();
                 args.Revision = this.revision;
-                context.Client.Write(this.url, fs, args);
+                e.Client.Write(this.url, fs, args);
             }
         }
 

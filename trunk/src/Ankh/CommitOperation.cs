@@ -44,7 +44,7 @@ namespace Ankh
         {
             string templateText = this.context.Config.LogMessageTemplate != null ? 
                 context.Config.LogMessageTemplate : "";;
-            LogMessageTemplate template = new LogMessageTemplate( templateText );
+            LogMessageTemplate template = new LogMessageTemplate(context, templateText );
 
             this.commitContext = new CommitContext( template, this.items, this.UrlPaths );            
 

@@ -99,29 +99,32 @@ namespace Ankh.Commands
                 }
 
                 MemoryStream stream = new MemoryStream();
-                foreach (SvnItem item in info.CheckedItems)
+                using (SvnClient client = context.ClientPool.GetClient())
                 {
-                    // try to get a relative path to the item from the solution directory
-                    string path = null;
-
-                    if (slndir != null)
+                    foreach (SvnItem item in info.CheckedItems)
                     {
-                        path = Utils.Win32.Win32.PathRelativePathTo(slndir,
-                                        Utils.Win32.FileAttribute.Directory, item.Path,
-                                        Utils.Win32.FileAttribute.Normal);
-                    }
+                        // try to get a relative path to the item from the solution directory
+                        string path = null;
 
-                    // We can't use a path with more than two .. relative paths as input to svn diff (see svn issue #2448)
-                    if (path == null || path.IndexOf(@"..\..\..") >= 0)
-                    {
-                        path = item.Path;
-                    }
+                        if (slndir != null)
+                        {
+                            path = Utils.Win32.Win32.PathRelativePathTo(slndir,
+                                            Utils.Win32.FileAttribute.Directory, item.Path,
+                                            Utils.Win32.FileAttribute.Normal);
+                        }
 
-                    SvnDiffArgs args = new SvnDiffArgs();
-                    args.IgnoreAncestry = true;
-                    args.NoDeleted = false;
-                    args.Depth = info.Depth;
-                    context.Client.Diff(path, new SvnRevisionRange(info.RevisionStart, info.RevisionEnd), args, stream);
+                        // We can't use a path with more than two .. relative paths as input to svn diff (see svn issue #2448)
+                        if (path == null || path.IndexOf(@"..\..\..") >= 0)
+                        {
+                            path = item.Path;
+                        }
+
+                        SvnDiffArgs args = new SvnDiffArgs();
+                        args.IgnoreAncestry = true;
+                        args.NoDeleted = false;
+                        args.Depth = info.Depth;
+                        client.Diff(path, new SvnRevisionRange(info.RevisionStart, info.RevisionEnd), args, stream);
+                    }
                 }
 
                 return System.Text.Encoding.Default.GetString(stream.ToArray());
@@ -169,11 +172,13 @@ namespace Ankh.Commands
                     return empty;
                 }
                 else
-                {
-                    SvnWorkingCopyState result;
-                    context.Client.GetWorkingCopyState(item.Path, out result);
-                    return result.WorkingCopyBasePath;
-                }
+                    using (SvnClient client = context.ClientPool.GetClient())
+                    {
+                        SvnWorkingCopyState result;
+                        client.GetWorkingCopyState(item.Path, out result);
+                        return result.WorkingCopyBasePath;
+                    }
+                
             }
             else if (revision == SvnRevision.Working)
             {

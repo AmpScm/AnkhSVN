@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
 using System.Diagnostics;
+using System.Threading;
+using Ankh.ContextServices;
 
 namespace Ankh
 {
     public sealed class NotificationHandler
     {
-        private NotificationHandler(IContext ankhContext)
+        IAnkhServiceProvider _context;
+        IAnkhOperationLogger _logger;
+
+        public NotificationHandler(IAnkhServiceProvider context)
         {
-            this.ankhContext = ankhContext;
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
+
+            // TODO: Localize
             actionStatus[SvnNotifyAction.Add] = "Added";
             actionStatus[SvnNotifyAction.Copy] = "Copied";
             actionStatus[SvnNotifyAction.Delete] = "Deleted";
@@ -33,23 +43,45 @@ namespace Ankh
             actionStatus[SvnNotifyAction.LockUnlocked] = "Unlocked";
             actionStatus[SvnNotifyAction.LockFailedLock] = "Failed lock";
             actionStatus[SvnNotifyAction.LockFailedUnlock] = "Failed unlock";
+        }
 
-            ankhContext.Client.Notify += new EventHandler<SvnNotifyEventArgs>(OnNotification);
+        public void Hook(SvnClient client, bool hook)
+        {
+            if (client == null)
+                throw new ArgumentNullException("hook");
+
+            client.Notify += new EventHandler<SvnNotifyEventArgs>(OnNotification);
         }
 
         void OnNotification(object sender, SvnNotifyEventArgs e)
         {
-            if ( this.ankhContext.UIShell.SynchronizingObject.InvokeRequired )
+            SynchronizationContext context = SynchronizationContext.Current;
+
+            if (context != null)
             {
-                Debug.WriteLine( "OnNotification: Invoking back to main GUI thread", 
-                    "Ankh" );
-                this.ankhContext.UIShell.SynchronizingObject.Invoke(
-                    new EventHandler<SvnNotifyEventArgs>(this.OnNotification),
-                    new object[]{sender, e} );
-                return;
+                e.Detach();
+                context.Post(
+                    delegate(object state)
+                    {
+                        OnNotify(e);
+                    }, null);
             }
+            else
+                OnNotify(e);
+        }
+
+        IAnkhOperationLogger Logger
+        {
+            get { return _logger ?? (_logger = _context.GetService<IAnkhOperationLogger>()); }
+        }
+
+        void OnNotify(SvnNotifyEventArgs e)
+        {
+            if (Logger == null)
+                return;
 
             string actionValue;
+            
             if ( actionStatus.TryGetValue(e.Action, out actionValue) && actionValue != null)
             {
                 string nodeKind = "";
@@ -58,37 +90,16 @@ namespace Ankh
                 else if (e.NodeKind == SvnNodeKind.Directory)
                     nodeKind = " directory";
 
-                this.ankhContext.OutputPane.WriteLine( "{0}{1}: {2}",
-                    actionValue,
-                    nodeKind, 
-                    e.Path );
+                Logger.WriteLine(string.Format("{0}{1}: {2}", actionValue, nodeKind, e.Path ));
             }
 
 			if (e.Action == SvnNotifyAction.CommitSendData)
-                this.ankhContext.OutputPane.Write( '.' );
+                Logger.Write(".");
 
             if (e.Action == SvnNotifyAction.UpdateCompleted)
-                this.ankhContext.OutputPane.WriteLine( "{0}Updated {1} to revision {2}.", 
-                    Environment.NewLine, 
-                    e.Path, 
-                    e.Revision);
+                Logger.WriteLine(string.Format("{0}Updated {1} to revision {2}.", Environment.NewLine, e.Path, e.Revision));
         }
 
-        public static NotificationHandler GetHandler(IContext ankhContext)
-        {
-            lock (_lock)
-            {
-                if (_instance != null)
-                    return _instance;
-
-                _instance = new NotificationHandler(ankhContext);
-                return _instance;
-            }
-        }
-
-        readonly IContext ankhContext;
         readonly Dictionary<SvnNotifyAction, string> actionStatus = new Dictionary<SvnNotifyAction, string>();
-        static NotificationHandler _instance;
-        static readonly object _lock = new object();
     }
 }

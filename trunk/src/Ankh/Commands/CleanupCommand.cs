@@ -23,10 +23,11 @@ namespace Ankh.Commands
             }
             e.Enabled = false;
         }
+
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context.GetService<IContext>();
-            SvnClient client = context.Client;
+            using (SvnClient client = e.Context.GetService<ISvnClientPool>().GetClient())
             using (context.StartOperation("Running cleanup"))
             {
                 SortedList<string, SvnItem> list = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);

@@ -116,7 +116,7 @@ namespace Ankh.Commands
 			/// <summary>
 			/// The actual updating happens here.
 			/// </summary>
-			public void Work(IContext context)
+            public void Work(AnkhWorkerArgs e)
 			{
 				string[] paths = SvnItem.GetPaths(this.resources);
 				SvnUpdateArgs args = new SvnUpdateArgs();
@@ -124,7 +124,8 @@ namespace Ankh.Commands
 				args.Revision = revision;
 				args.Depth = depth;
 				args.IgnoreExternals = false;
-				context.Client.Update(paths, args);
+
+                e.Client.Update(paths, args);
 
 				if (this.conflictsOccurred)
 					context.ConflictManager.NavigateTaskList();

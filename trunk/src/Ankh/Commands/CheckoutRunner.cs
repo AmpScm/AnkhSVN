@@ -31,13 +31,13 @@ namespace Ankh.Commands
             // empty
         }
 
-        public void Work(IContext context)
+        public void Work(AnkhWorkerArgs e)
         {
             SvnUpdateResult result;
             SvnCheckOutArgs args = new SvnCheckOutArgs();
             args.Revision = revision;
             args.Depth = depth;
-            context.Client.CheckOut(this.url, this.path, args, out result);
+            e.Client.CheckOut(this.url, this.path, args, out result);
         }
 
         private SvnRevision revision;

@@ -329,14 +329,13 @@ namespace Ankh.RepositoryExplorer
                 get{ return this.entries; }
             }
 
-            public void Work(IContext context)
+            public void Work(AnkhWorkerArgs e)
             {
                 ReposListArgs args = new ReposListArgs();
                 args.Depth = SvnDepth.Children;
                 args.Revision = this.node.Revision;
                 args.EntryItems = SvnDirEntryItems.AllFieldsV15;
-                context.Client.GetList(this.node.Url, args, out entries);
-                
+                e.Client.GetList(this.node.Url, args, out entries);                
             }
 
             class ReposListArgs : SvnListArgs
@@ -410,44 +409,43 @@ namespace Ankh.RepositoryExplorer
             /// </summary>
             private void Work()
             {
-                // run as long as there are items in the queue or until the user
-                // cancels background listing
-                while( queue.Count > 0 && this.parent.EnableBackgroundListing )
+                using (SvnClient client = parent.context.ClientPool.GetClient())
                 {
-                    INode node = (INode)queue.Dequeue();
-                    Debug.WriteLine( Thread.CurrentThread.Name + " listing " + node.Url, 
-                        "Ankh" );
+                    // run as long as there are items in the queue or until the user
+                    // cancels background listing
+                    while (queue.Count > 0 && this.parent.EnableBackgroundListing)
+                    {
+                        INode node = (INode)queue.Dequeue();
+                        Debug.WriteLine(Thread.CurrentThread.Name + " listing " + node.Url,
+                            "Ankh");
 
-					SvnListArgs args = new SvnListArgs();
-					args.Revision = node.Revision;
-					args.Depth = SvnDepth.Empty;
-					Collection<SvnListEventArgs> list;
-					if (this.parent.context.Client.GetList(node.Url, args, out list))
-					{
-						int i = 0;
-						INode[] children = new INode[list.Count];
-						foreach (SvnListEventArgs e in list)
-						{
-							children[i] = new Node(node, e);
-
-							// we put the directories on the queue
-							lock (this.parent.directories)
-							{
-								if (children[i].IsDirectory &&
-									!this.parent.directories.Contains(
-									children[i].Url)
-									)
-								{
-									this.queue.Enqueue(children[i]);
-								}
-							}
-						}
+                        SvnListArgs args = new SvnListArgs();
+                        args.Revision = node.Revision;
+                        args.Depth = SvnDepth.Empty;
+                        Collection<SvnListEventArgs> list;
 
 
-						// store the list in the hashtable
-						lock (this.parent.directories)
-							this.parent.directories[node.Url] = children;
-					}
+                        List<INode> items = new List<INode>();
+                        client.List(node.Url, args, 
+                            delegate(object sender, SvnListEventArgs e)
+                            {
+                                Node n = new Node(node, e);
+                                items.Add(n);
+
+                                lock(this.parent.directories)
+                                {
+                                    if(n.IsDirectory && !this.parent.directories.ContainsKey(n.Url))
+                                    {
+                                        this.queue.Enqueue(n);
+                                    }
+                                }
+                            });
+
+                        lock(this.parent.directories)
+                        {
+                            this.parent.directories[node.Url] = items.ToArray();
+                        }                        
+                    }
                 }
             }
 

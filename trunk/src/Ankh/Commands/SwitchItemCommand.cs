@@ -72,12 +72,12 @@ namespace Ankh.Commands
                 this.depth = depth;
             }
 
-            public void Work(IContext context)
+            public void Work(AnkhWorkerArgs e)
             {
                 SvnSwitchArgs args = new SvnSwitchArgs();
                 args.Revision = revision;
                 args.Depth = depth;
-                context.Client.Switch(this.path, this.url, args);
+                e.Client.Switch(this.path, this.url, args);
             }
 
             private string path;

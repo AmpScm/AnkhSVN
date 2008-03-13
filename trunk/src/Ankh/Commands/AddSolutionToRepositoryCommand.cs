@@ -40,126 +40,130 @@ namespace Ankh.Commands
 
             SaveAllDirtyDocuments(context);
 
-            string url;
-
-            IList vsProjects = this.GetVSProjects(context);
-            ArrayList notUnderSolutionRoot = CheckForProjectsNotUnderTheSolutionRoot(vsProjects);
-
-            // any projects not under the solution root, allow the user to bail out now
-            if (notUnderSolutionRoot.Count > 0)
+            using (SvnClient client = context.ClientPool.GetClient())
             {
-                string[] projectNames = (string[])notUnderSolutionRoot.ToArray(typeof(string));
-                string projectNamesString = this.FormatProjectNames(projectNames);
-                if (context.UIShell.ShowMessageBox("The following project(s) are not under the solution root and\r\n" +
-                    "will not be imported into the repository if you choose to continue.\r\n\r\n" +
-                    projectNamesString + "\r\n" +
-                    "Do you want to continue anyway?\r\n",
-                    "Project(s) not under the solution root.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) ==
-                    DialogResult.No)
+                string url;
+
+                IList vsProjects = this.GetVSProjects(context);
+                ArrayList notUnderSolutionRoot = CheckForProjectsNotUnderTheSolutionRoot(vsProjects);
+
+                // any projects not under the solution root, allow the user to bail out now
+                if (notUnderSolutionRoot.Count > 0)
                 {
-                    return;
-                }
-            }
-
-            // user wants to go on anyway.
-
-            using (AddSolutionDialog dlg = new AddSolutionDialog())
-            {
-                if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
-                    return;
-
-                url = dlg.BaseUrl;
-
-                // do we need to create a new repository directory?
-                if (dlg.CreateSubDirectory)
-                {
-                    using (context.StartOperation("Creating repository directory"))
+                    string[] projectNames = (string[])notUnderSolutionRoot.ToArray(typeof(string));
+                    string projectNamesString = this.FormatProjectNames(projectNames);
+                    if (context.UIShell.ShowMessageBox("The following project(s) are not under the solution root and\r\n" +
+                        "will not be imported into the repository if you choose to continue.\r\n\r\n" +
+                        projectNamesString + "\r\n" +
+                        "Do you want to continue anyway?\r\n",
+                        "Project(s) not under the solution root.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) ==
+                        DialogResult.No)
                     {
-                        url = UriUtils.Combine(url, dlg.SubDirectoryName);
-                        MakeDirWorker makeDirWorker = new MakeDirWorker(url,
-                                   dlg.LogMessage, context);
+                        return;
+                    }
+                }
+
+                // user wants to go on anyway.
+
+                using (AddSolutionDialog dlg = new AddSolutionDialog())
+                {
+                    if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
+                        return;
+
+                    url = dlg.BaseUrl;
+
+                    // do we need to create a new repository directory?
+                    if (dlg.CreateSubDirectory)
+                    {
+                        using (context.StartOperation("Creating repository directory"))
                         {
-                            context.UIShell.RunWithProgressDialog(makeDirWorker,
-                                "Creating directory");
+                            url = UriUtils.Combine(url, dlg.SubDirectoryName);
+                            MakeDirWorker makeDirWorker = new MakeDirWorker(url,
+                                       dlg.LogMessage, context);
+                            {
+                                context.UIShell.RunWithProgressDialog(makeDirWorker,
+                                    "Creating directory");
+                            }
                         }
                     }
                 }
-            }
-            string solutionDir = Path.GetDirectoryName(
-                    e.Selection.SolutionFilename);
+                string solutionDir = Path.GetDirectoryName(
+                        e.Selection.SolutionFilename);
 
 
-            // now check out the repository directory into the solution dir
-            using (context.StartOperation("Checking out repository directory"))
-            {
-
-
-                // check out the repository directory specified               
-                CheckoutRunner checkoutRunner = new CheckoutRunner(
-                    solutionDir, SvnRevision.Head, new Uri(url));
-                context.UIShell.RunWithProgressDialog(checkoutRunner, "Checking out");
-            }
-
-            // walk the tree and add all the files
-            using (context.StartOperation("Adding files"))
-                try
+                // now check out the repository directory into the solution dir
+                using (context.StartOperation("Checking out repository directory"))
                 {
-                    // the solution dir is already a wc                
-                    this.paths = new ArrayList();
-                    this.paths.Add(solutionDir);
 
-                    context.Client.Add(e.Selection.SolutionFilename, SvnDepth.Empty);
-                    this.paths.Add(e.Selection.SolutionFilename);
-                    this.AddProjects(context, vsProjects);
+
+                    // check out the repository directory specified               
+                    CheckoutRunner checkoutRunner = new CheckoutRunner(
+                        solutionDir, SvnRevision.Head, new Uri(url));
+                    context.UIShell.RunWithProgressDialog(checkoutRunner, "Checking out");
                 }
-                catch (Exception)
+
+                // walk the tree and add all the files
+                using (context.StartOperation("Adding files"))
+
+                    try
+                    {
+                        // the solution dir is already a wc                
+                        this.paths = new ArrayList();
+                        this.paths.Add(solutionDir);
+
+                        client.Add(e.Selection.SolutionFilename, SvnDepth.Empty);
+                        this.paths.Add(e.Selection.SolutionFilename);
+                        this.AddProjects(context, vsProjects);
+                    }
+                    catch (Exception)
+                    {
+                        // oops, bad stuff happened
+                        using (context.StartOperation("Error: Reverting changes"))
+                        {
+                            SvnRevertArgs args = new SvnRevertArgs();
+                            args.Depth = SvnDepth.Infinity;
+                            client.Revert(new string[] { solutionDir }, args);
+                            PathUtils.RecursiveDelete(
+                                Path.Combine(solutionDir, SvnClient.AdministrativeDirectoryName));
+                        }
+                        throw;
+                    }
+
+                // now commit the added files
+                CommitOperation operation = new CommitOperation(new SimpleProgressWorker(
+                            new SimpleProgressWorkerCallback(this.DoCommit)), this.paths, context);
+
+                if (!operation.ShowLogMessageDialog())
                 {
-                    // oops, bad stuff happened
-                    using (context.StartOperation("Error: Reverting changes"))
+                    // oops - after all this work, the user cancelled
+                    using (context.StartOperation("Aborted - reverting"))
                     {
                         SvnRevertArgs args = new SvnRevertArgs();
                         args.Depth = SvnDepth.Infinity;
-                        context.Client.Revert(new string[] { solutionDir }, args);
+                        client.Revert(new string[] { solutionDir }, args);
                         PathUtils.RecursiveDelete(
                             Path.Combine(solutionDir, SvnClient.AdministrativeDirectoryName));
                     }
-                    throw;
                 }
-
-            // now commit the added files
-            CommitOperation operation = new CommitOperation(new SimpleProgressWorker(
-                        new SimpleProgressWorkerCallback(this.DoCommit)), this.paths, context);
-
-            if (!operation.ShowLogMessageDialog())
-            {
-                // oops - after all this work, the user cancelled
-                using (context.StartOperation("Aborted - reverting"))
+                else
                 {
-                    SvnRevertArgs args = new SvnRevertArgs();
-                    args.Depth = SvnDepth.Infinity;
-                    context.Client.Revert(new string[] { solutionDir }, args);
-                    PathUtils.RecursiveDelete(
-                        Path.Combine(solutionDir, SvnClient.AdministrativeDirectoryName));
+                    // go ahead with the commit
+                    using (context.StartOperation("Committing added files"))
+                    {
+                        bool completed = operation.Run("Committing");
+
+                        if (!completed)
+                            return;
+                    }
+
+                    // we want ankh to get enabled right away
+                    // BH: This won't work any more
+                    // context.DTE.ExecuteCommand( "Ankh.ToggleAnkh", "" );
+
+                    // Make sure the URL typed gets remembered.
+                    RegistryUtils.CreateNewTypedUrl(url);
+
                 }
-            }
-            else
-            {
-                // go ahead with the commit
-                using (context.StartOperation("Committing added files"))
-                {
-                    bool completed = operation.Run("Committing");
-
-                    if (!completed)
-                        return;
-                }
-
-                // we want ankh to get enabled right away
-                // BH: This won't work any more
-                // context.DTE.ExecuteCommand( "Ankh.ToggleAnkh", "" );
-
-                // Make sure the URL typed gets remembered.
-                RegistryUtils.CreateNewTypedUrl(url);
-
             }
         }
 
@@ -230,12 +234,12 @@ namespace Ankh.Commands
 
 
 
-        private void DoCommit(IContext context)
+        private void DoCommit(AnkhWorkerArgs e)
         {
-            string[] paths = (string[])(new ArrayList(this.paths).ToArray(typeof(string)));
+            string[] paths = (string[])this.paths.ToArray(typeof(string));
             SvnCommitArgs args = new SvnCommitArgs();
             args.Depth = SvnDepth.Empty;
-            context.Client.Commit(paths, args);
+            e.Client.Commit(paths, args);
         }
 
         /// <summary>
@@ -250,12 +254,12 @@ namespace Ankh.Commands
                 this.context = context;
             }
 
-            public void Work(IContext context)
+            public void Work(AnkhWorkerArgs e)
             {
                 SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
                 args.LogMessage = this.logMessage;
                 args.MakeParents = true;
-                context.Client.RemoteCreateDirectory(new Uri(this.url), args);
+                e.Client.RemoteCreateDirectory(new Uri(this.url), args);
             }
 
             private IContext context;
