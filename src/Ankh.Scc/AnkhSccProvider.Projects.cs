@@ -4,12 +4,13 @@ using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
 using Ankh.Selection;
+using Microsoft.VisualStudio;
 
 namespace Ankh.Scc
 {
     partial class AnkhSccProvider
     {
-        readonly Dictionary<IVsSccProject2, SccProjectData> _projectMap = new Dictionary<IVsSccProject2,SccProjectData>();
+        readonly Dictionary<IVsSccProject2, SccProjectData> _projectMap = new Dictionary<IVsSccProject2, SccProjectData>();
         bool _managedSolution;
         bool _isDirty;
 
@@ -21,10 +22,10 @@ namespace Ankh.Scc
 
         public bool IsProjectManaged(SvnProject project)
         {
-            if(!IsActive)
+            if (!IsActive)
                 return false;
 
-            if(project == null)
+            if (project == null)
                 return _managedSolution;
 
             return IsProjectManagedRaw(project.RawHandle);
@@ -47,7 +48,7 @@ namespace Ankh.Scc
 
             SccProjectData data;
 
-            if(_projectMap.TryGetValue(sccProject, out data))
+            if (_projectMap.TryGetValue(sccProject, out data))
                 return data.IsManaged;
 
             return false;
@@ -70,22 +71,28 @@ namespace Ankh.Scc
                 return;
 
             if (project == null)
-            {   
+            {
                 // We are talking about the solution
-                
+
                 if (managed != _managedSolution)
                 {
                     _managedSolution = managed;
                     IsSolutionDirty = true;
+
+                    foreach (SccProjectData p in _projectMap.Values)
+                    {
+                        if (p.IsSolutionFolder)
+                            p.SetManaged(managed);
+                    }
                 }
                 return;
             }
 
             IVsSccProject2 sccProject = project as IVsSccProject2;
 
-            if(sccProject == null)
+            if (sccProject == null)
             {
-                if(project is IVsSolution)
+                if (project is IVsSolution)
                     SetProjectManagedRaw(null, managed);
 
                 return;
@@ -93,7 +100,7 @@ namespace Ankh.Scc
 
             SccProjectData data;
 
-             if(!_projectMap.TryGetValue(sccProject, out data))
+            if (!_projectMap.TryGetValue(sccProject, out data))
                 return;
 
             if (managed == data.IsManaged)
@@ -114,6 +121,20 @@ namespace Ankh.Scc
         /// </summary>
         internal void OnSolutionOpened()
         {
+            if (_managedSolution)
+            {
+                foreach (SccProjectData data in _projectMap.Values)
+                {
+                    if (data.IsSolutionFolder)
+                    {
+                        // Solution folders don't save their Scc management state
+                        // We let them follow the solution settings
+
+                        data.SetManaged(true);
+                        data.Project.SccGlyphChanged(0, null, null, null);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -146,8 +167,19 @@ namespace Ankh.Scc
         /// <param name="added">The project was added after opening</param>
         internal void OnProjectOpened(IVsSccProject2 project, bool added)
         {
-            if (!_projectMap.ContainsKey(project))
-                _projectMap.Add(project, new SccProjectData(project));
+            SccProjectData data;
+            if (!_projectMap.TryGetValue(project, out data))
+                _projectMap.Add(project, data = new SccProjectData(project));
+
+            if (_managedSolution && data.IsSolutionFolder)
+            {
+                // Solution folders are projects without Scc state
+                // We let them follow the solution settings (See OnSolutionOpen() for the not added case
+                if(added)
+                    data.SetManaged(true);
+
+                data.Project.SccGlyphChanged(0, null, null, null);
+            }
         }
 
         /// <summary>
@@ -158,6 +190,14 @@ namespace Ankh.Scc
         internal void OnProjectClosed(IVsSccProject2 project, bool removed)
         {
             _projectMap.Remove(project);
+        }        
+
+        internal void OnProjectFileAdded(IVsSccProject2 project, string filename, VSADDFILEFLAGS flags)
+        {
+        }
+
+        internal void OnProjectDirectoryAdded(IVsSccProject2 project, string directoryname, VSADDDIRECTORYFLAGS flags)
+        {
         }
     }
 }
