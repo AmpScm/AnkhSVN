@@ -4,6 +4,8 @@ using System.Collections;
 using System.Windows.Forms;
 using AnkhSvn.Ids;
 using SharpSvn;
+using System.Collections.Generic;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -31,6 +33,7 @@ namespace Ankh.Commands
 
             SaveAllDirtyDocuments( context );
 
+            // TODO: fix user interface
             /*// get the modified resources
             IList resources = context.Selection.GetSelectionResources( true,
                 new ResourceFilterCallback( SvnItem.ModifiedFilter ) );
@@ -65,18 +68,31 @@ namespace Ankh.Commands
                     return;
                 }
             }
-               
+            */
+   
             // perform the actual revert 
-            using (context.OutputPane.StartActionText("Reverting"))
+            using (context.StartOperation("Reverting"))
             {
                 SvnRevertArgs args = new SvnRevertArgs();
-                args.Depth = depth;
+                //args.Depth = depth;
                 args.ThrowOnError = false;
+
+                List<string> paths = new List<string>();
+
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                {
+                    if (item.IsModified)
+                    {
+                        paths.Add(item.Path);
+                        item.MarkDirty();
+                    }
+                }
                 context.Client.Revert(paths, args);
 
-                foreach (SvnItem item in resources)
-                    item.MarkDirty();
-            }*/
+                IProjectNotifier pn = e.Context.GetService<IProjectNotifier>();
+                if(pn != null)
+                    pn.MarkDirty(e.Selection.GetOwnerProjects(true));
+            }
         }
 
         #endregion
