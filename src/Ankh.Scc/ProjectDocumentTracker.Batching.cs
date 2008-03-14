@@ -7,6 +7,8 @@ namespace Ankh.Scc
 {
     partial class ProjectDocumentTracker
     {
+        bool _batchOk;
+        bool _inBatch;
         /// <summary>
         /// Indicates that a project is about start a batch query process.
         /// </summary>
@@ -15,6 +17,7 @@ namespace Ankh.Scc
         /// </returns>
         public int OnBeginQueryBatch()
         {
+            _inBatch = _batchOk = true;
             return VSConstants.S_OK;
         }
 
@@ -26,6 +29,7 @@ namespace Ankh.Scc
         /// </returns>
         public int OnCancelQueryBatch()
         {
+            _inBatch = _batchOk = false;
             return VSConstants.S_OK;
         }
 
@@ -38,8 +42,9 @@ namespace Ankh.Scc
         /// </returns>
         public int OnEndQueryBatch(out int pfActionOK)
         {
-            pfActionOK = 1;
+            pfActionOK = _inBatch && _batchOk ? 1 : 0;
+            _inBatch = _batchOk = false;
             return VSConstants.S_OK;
-        }   
+        }
     }
 }

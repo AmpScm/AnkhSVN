@@ -19,16 +19,21 @@ namespace Ankh.Scc
             for (int i = 0; i < cFiles; i++)
             {
                 bool ok;
-                
+
                 _sccProvider.OnBeforeProjectRenameFile(sccProject, rgszMkOldNames[i], rgszMkNewNames[i], rgFlags[i], out ok);
 
-                rgResults[i] = ok ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
+                if (rgResults != null)
+                    rgResults[i] = ok ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
 
                 if (!ok)
                     allOk = false;
             }
 
-            pSummaryResult[0] = allOk ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
+            if (pSummaryResult != null)
+                pSummaryResult[0] = allOk ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
+
+            if (!allOk)
+                _batchOk = false;
 
             return VSConstants.S_OK;
         }
@@ -64,19 +69,24 @@ namespace Ankh.Scc
                 return VSConstants.S_OK; // Not for us
 
             bool allOk = true;
-            for(int i = 0; i < cDirs; i++)
+            for (int i = 0; i < cDirs; i++)
             {
                 bool ok;
-                
+
                 _sccProvider.OnBeforeProjectDirectoryRename(sccProject, rgszMkOldNames[i], rgszMkNewNames[i], rgFlags[i], out ok);
 
-                rgResults[i] = ok ? VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK : VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameNotOK;
+                if (rgResults != null)
+                    rgResults[i] = ok ? VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK : VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameNotOK;
 
                 if (!ok)
                     allOk = false;
             }
 
-            pSummaryResult[0] = allOk ? VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK : VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameNotOK;
+            if (pSummaryResult != null)
+                pSummaryResult[0] = allOk ? VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK : VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameNotOK;
+
+            if (!allOk)
+                _batchOk = false;
 
             return VSConstants.S_OK;
         }
