@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.ContextServices;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace Ankh
 {
@@ -50,6 +51,7 @@ namespace Ankh
         /// <returns>
         /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
+        [DebuggerStepThrough]
         public T GetService<T>()
         {
             return _runtime.GetService<T>();
@@ -66,6 +68,7 @@ namespace Ankh
         /// <returns>
         /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
+        [DebuggerStepThrough]
         public object GetService(Type serviceType)
         {
             return _runtime.GetService(serviceType);
