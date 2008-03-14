@@ -7,8 +7,11 @@ namespace Ankh
 {
     public sealed class AnkhStatus
     {
-        private AnkhStatus(SvnStatusEventArgs args)
+        public AnkhStatus(SvnStatusEventArgs args)
         {
+            if (args == null)
+                throw new ArgumentNullException("args");
+
             fullPath = args.FullPath;
             isRemoteUpdated = args.IsRemoteUpdated;
             localContentStatus = args.LocalContentStatus;
@@ -144,15 +147,6 @@ namespace Ankh
             unversioned = new AnkhStatus(SvnStatus.NotVersioned);
 
             none = new AnkhStatus(SvnStatus.None);
-        }
-
-        public static implicit operator AnkhStatus(SvnStatusEventArgs args)
-        {
-            if (args == null)
-                throw new ArgumentNullException("args");
-
-            args.Detach();
-            return new AnkhStatus(args);
         }
 
         public static AnkhStatus Unversioned

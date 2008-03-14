@@ -82,7 +82,12 @@ namespace Ankh.Scc
                     foreach (SccProjectData p in _projectMap.Values)
                     {
                         if (p.IsSolutionFolder)
+                        {
                             p.SetManaged(managed);
+
+                            if (managed)
+                                p.Project.SccGlyphChanged(0, null, null, null);
+                        }
                     }
                 }
                 return;
@@ -121,18 +126,22 @@ namespace Ankh.Scc
         /// </summary>
         internal void OnSolutionOpened()
         {
-            if (_managedSolution)
-            {
-                foreach (SccProjectData data in _projectMap.Values)
-                {
-                    if (data.IsSolutionFolder)
-                    {
-                        // Solution folders don't save their Scc management state
-                        // We let them follow the solution settings
+            if (!IsActive)
+                return;
 
+            foreach (SccProjectData data in _projectMap.Values)
+            {
+                if (data.IsSolutionFolder)
+                {
+                    // Solution folders don't save their Scc management state
+                    // We let them follow the solution settings
+
+                    if(_managedSolution)
                         data.SetManaged(true);
-                        data.Project.SccGlyphChanged(0, null, null, null);
-                    }
+
+                    // Flush the glyph cache of solution folders
+                    // (Well known VS bug: Initially clear)
+                    data.Project.SccGlyphChanged(0, null, null, null);
                 }
             }
         }
@@ -143,7 +152,9 @@ namespace Ankh.Scc
         internal void OnSolutionClosed()
         {
             Debug.Assert(_projectMap.Count == 0);
+
             _projectMap.Clear();
+            StatusCache.ClearCache();
 
             // Clear status for reopening solution
             _managedSolution = false;
