@@ -33,8 +33,8 @@ namespace Ankh.UI
         {
             get
             {
-                int editControl = Win32.SendMessage(_hwnd, Msg.TVM_GETEDITCONTROL, IntPtr.Zero, IntPtr.Zero);
-                return editControl != 0;
+                IntPtr editControl = Win32.SendMessage(_hwnd, Msg.TVM_GETEDITCONTROL, IntPtr.Zero, IntPtr.Zero);
+                return editControl != IntPtr.Zero;
             }
         }
 
@@ -103,7 +103,7 @@ namespace Ankh.UI
         [DebuggerNonUserCode]
         protected override void WndProc(ref System.Windows.Forms.Message m)
         {
-            if (m.Msg == (int)Msg.TVM_SETIMAGELIST && (uint)m.WParam == Constants.TVSIL_STATE)
+            if (m.Msg == (int)Msg.TVM_SETIMAGELIST && m.WParam == Constants.TVSIL_STATE)
             {
                 return;
             }

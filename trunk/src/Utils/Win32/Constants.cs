@@ -76,19 +76,19 @@ namespace Utils.Win32
         /// Indicates the normal image list, which contains selected, nonselected, 
         /// and overlay images for the items of a tree-view control.
         /// </summary>
-        public const uint TVSIL_NORMAL = 0x0;
+        public static readonly IntPtr TVSIL_NORMAL = (IntPtr)0x0;
 
         /// <summary>
         /// Indicates the state image list. You can use state images to indicate 
         /// application-defined item states. A state image is displayed to the 
         /// left of an item's selected or nonselected image.
         /// </summary>
-        public const uint TVSIL_STATE = 0x2;
+        public static readonly IntPtr TVSIL_STATE = (IntPtr)0x2;
 
 
-        public const uint LVSIL_NORMAL = 0x0;
-        public const uint LVSIL_SMALL = 0x1;
-        public const uint LVSIL_STATE = 0x2;
+        public static readonly IntPtr LVSIL_NORMAL = (IntPtr)0x0;
+        public static readonly IntPtr LVSIL_SMALL = (IntPtr)0x1;
+        public static readonly IntPtr LVSIL_STATE = (IntPtr)0x2;
 
         // file attribute constants
         /// <summary>
