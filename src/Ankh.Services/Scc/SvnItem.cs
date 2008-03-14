@@ -16,7 +16,7 @@ namespace Ankh
     /// <summary>
     /// Used to decide whether this particular SvnItem should be included in a collection.
     /// </summary>
-    public delegate bool ResourceFilterCallback( SvnItem item );
+    public delegate bool ResourceFilterCallback(SvnItem item);
     [Obsolete]
     public enum EventBehavior
     {
@@ -29,15 +29,13 @@ namespace Ankh
     /// </summary>
     public class SvnItem : LocalSvnItem
     {
-        /// <summary>
-        /// Fired when the status of this item changes.
-        /// </summary>
-        //public event EventHandler Changed;
-
-        //public event EventHandler ChildrenChanged;
-
         public SvnItem(IAnkhServiceProvider context, string path, AnkhStatus status)
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (string.IsNullOrEmpty("path"))
+                throw new ArgumentNullException("path");
+
             this.context = context;
             this.path = path;
             this.status = status;
@@ -51,7 +49,7 @@ namespace Ankh
             get
             {
                 EnsureClean();
-                return this.status; 
+                return this.status;
             }
         }
 
@@ -60,27 +58,12 @@ namespace Ankh
         /// </summary>
         public string Path
         {
-            get
-            {
-                EnsureClean();
-                return this.path; 
-            }
+            get { return this.path; }
         }
 
         public string Name
         {
-            get 
-            {
-                EnsureClean();
-                if ( this.Path.EndsWith("/") )
-                {
-                    return System.IO.Path.GetFileName( this.Path.Substring( 0, this.Path.Length - 1 ) );
-                }
-                else
-                {
-                    return System.IO.Path.GetFileName( this.Path );
-                }
-            }
+            get { return System.IO.Path.GetFileName(Path); }
         }
 
         public void Refresh()
@@ -108,7 +91,8 @@ namespace Ankh
                         SvnItem i = statusCache[e.Path];
                         if (i != null)
                         {
-                            i.status = e;
+                            e.Detach();
+                            i.status = new AnkhStatus(e);
                             i.dirty = false;
                         }
                     });
@@ -122,10 +106,10 @@ namespace Ankh
         /// Set the status of this item to the passed in status.
         /// </summary>
         /// <param name="status"></param>
-        [Obsolete("Use Refresh()")]
-        public virtual void Refresh( AnkhStatus status )
+        public virtual void RefreshTo(AnkhStatus status)
         {
-            this.Refresh( status, EventBehavior.Raise );
+            this.status = status;
+            dirty = false;
         }
 
 
@@ -139,16 +123,16 @@ namespace Ankh
             AnkhStatus oldStatus = this.status;
             this.status = status;
             dirty = false;
-       }
+        }
 
         /// <summary>
         /// Refresh the existing status of the item, using client.
         /// </summary>
         /// <param name="client"></param>
         [Obsolete("Use Refresh()")]
-        public virtual void Refresh( SvnClient client )
+        public virtual void Refresh(SvnClient client)
         {
-            this.Refresh( client, EventBehavior.Raise );
+            this.Refresh(client, EventBehavior.Raise);
         }
 
         /// <summary>
@@ -166,7 +150,7 @@ namespace Ankh
             args.RetrieveAllEntries = true;
             args.ThrowOnError = false;
             if (client.GetStatus(path, args, out statuses))
-                this.status = statuses.Count > 0 ? statuses[0] : AnkhStatus.None;
+                this.status = statuses.Count > 0 ? new AnkhStatus(statuses[0]) : AnkhStatus.None;
             else
                 this.status = AnkhStatus.None;
             dirty = false;
@@ -217,10 +201,10 @@ namespace Ankh
             get
             {
                 EnsureClean();
-                if ( this.status.WorkingCopyInfo != null )
+                if (this.status.WorkingCopyInfo != null)
                     return this.status.WorkingCopyInfo.NodeKind == SvnNodeKind.Directory;
                 else
-                    return Directory.Exists( this.path );
+                    return Directory.Exists(this.path);
             }
         }
 
@@ -239,9 +223,9 @@ namespace Ankh
         bool GetIsFile()
         {
             if (this.status.WorkingCopyInfo != null)
-                    return this.status.WorkingCopyInfo.NodeKind == SvnNodeKind.File;
-                else
-                    return File.Exists(this.path);
+                return this.status.WorkingCopyInfo.NodeKind == SvnNodeKind.File;
+            else
+                return File.Exists(this.path);
         }
 
         /// <summary>
@@ -249,9 +233,9 @@ namespace Ankh
         /// </summary>
         public virtual bool IsVersionable
         {
-            get 
+            get
             {
-                EnsureClean(); 
+                EnsureClean();
                 return SvnTools.IsBelowManagedPath(path);
             }
         }
@@ -265,10 +249,10 @@ namespace Ankh
             {
                 try
                 {
-                    return this.IsFile && File.Exists( this.Path ) &&
-                        (File.GetAttributes( this.Path ) & FileAttributes.ReadOnly) != 0;
+                    return this.IsFile && File.Exists(this.Path) &&
+                        (File.GetAttributes(this.Path) & FileAttributes.ReadOnly) != 0;
                 }
-                catch( IOException )
+                catch (IOException)
                 {
                     return false;
                 }
@@ -291,19 +275,19 @@ namespace Ankh
 
         public virtual bool IsDeleted
         {
-            get 
+            get
             {
                 EnsureClean();
-                return this.status.LocalContentStatus == SvnStatus.Deleted; 
+                return this.status.LocalContentStatus == SvnStatus.Deleted;
             }
         }
 
         public virtual bool IsDeletedFromDisk
         {
-            get 
+            get
             {
                 EnsureClean();
-                return this.status.LocalContentStatus == SvnStatus.None && !File.Exists(this.Path) && !Directory.Exists(this.Path); 
+                return this.status.LocalContentStatus == SvnStatus.None && !File.Exists(this.Path) && !Directory.Exists(this.Path);
             }
         }
 
@@ -318,17 +302,17 @@ namespace Ankh
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        public static string[] GetPaths( System.Collections.IList items )
+        public static string[] GetPaths(System.Collections.IList items)
         {
             string[] paths = new string[items.Count];
             int i = 0;
-            foreach ( SvnItem item in items )
+            foreach (SvnItem item in items)
             {
-                Debug.Assert( item != null, "SvnItem should not be null" );
+                Debug.Assert(item != null, "SvnItem should not be null");
 
-                if ( item != null )
+                if (item != null)
                 {
-                    paths[ i++ ] = item.Path; 
+                    paths[i++] = item.Path;
                 }
             }
 
@@ -342,22 +326,23 @@ namespace Ankh
         /// <param name="callback">A callback to be used to determine whether 
         /// an item should be included in the returned list.</param>
         /// <returns>A new IList of SvnItem instances.</returns>
-        public static IList Filter( IList items, ResourceFilterCallback callback )
+        public static IList Filter(IList items, ResourceFilterCallback callback)
         {
-            ArrayList list = new ArrayList( items.Count );
-            foreach( SvnItem item in items )
+            ArrayList list = new ArrayList(items.Count);
+            foreach (SvnItem item in items)
             {
-                if ( callback( item ) )
-                    list.Add( item );
+                if (callback(item))
+                    list.Add(item);
             }
 
             return list;
         }
 
-        private class UnversionableItem : SvnItem
+        private sealed class UnversionableItem : SvnItem
         {
-            public UnversionableItem() : base(null, "", AnkhStatus.Unversioned )
-            {}
+            public UnversionableItem(IAnkhServiceProvider context, string path)
+                : base(context, path, AnkhStatus.Unversioned)
+            { }
 
             [Obsolete]
             public override void Refresh(SvnClient client)
@@ -365,8 +350,7 @@ namespace Ankh
                 // empty
             }
 
-            [Obsolete]
-            public override void Refresh(AnkhStatus status)
+            public override void RefreshTo(AnkhStatus status)
             {
                 // empty
             }
@@ -434,19 +418,19 @@ namespace Ankh
                     return false;
                 }
             }
-        }
 
-        /// <summary>
-        /// Represents an unversionable item.
-        /// </summary>
-        public static readonly SvnItem Unversionable = new UnversionableItem();
+            public override bool IsUnversionable
+            {
+                get { return true; }
+            }
+        }
 
         /// <summary>
         /// A ResourceFilterCallback method that filters for modified items.
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static bool ModifiedFilter( SvnItem item )
+        public static bool ModifiedFilter(SvnItem item)
         {
             return item.IsModified;
         }
@@ -456,57 +440,57 @@ namespace Ankh
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static bool DirectoryFilter( SvnItem item )
+        public static bool DirectoryFilter(SvnItem item)
         {
             return item.IsVersioned && item.IsDirectory;
         }
 
-        public static bool VersionedFilter( SvnItem item )
+        public static bool VersionedFilter(SvnItem item)
         {
             return item.IsVersioned;
         }
 
-        public static bool UnversionedFilter( SvnItem item )
+        public static bool UnversionedFilter(SvnItem item)
         {
             return !item.IsVersioned;
         }
 
-        public static bool UnmodifiedSingleFileFilter( SvnItem item )
+        public static bool UnmodifiedSingleFileFilter(SvnItem item)
         {
             return item.IsVersioned && !item.IsModified && item.IsFile;
         }
 
-        public static bool UnmodifiedItemFilter( SvnItem item )
+        public static bool UnmodifiedItemFilter(SvnItem item)
         {
             return item.IsVersioned && !item.IsModified;
         }
 
-        public static bool VersionedSingleFileFilter( SvnItem item )
+        public static bool VersionedSingleFileFilter(SvnItem item)
         {
             return item.IsVersioned && item.IsFile;
         }
 
-        public static bool LockedFilter( SvnItem item )
+        public static bool LockedFilter(SvnItem item)
         {
             return item.IsLocked;
         }
 
-        public static bool NotLockedAndLockableFilter( SvnItem item )
+        public static bool NotLockedAndLockableFilter(SvnItem item)
         {
             return item.IsVersioned && !item.IsLocked && item.IsFile;
         }
 
-        public static bool ExistingOnDiskFilter( SvnItem item )
+        public static bool ExistingOnDiskFilter(SvnItem item)
         {
             return !item.IsDeletedFromDisk;
         }
 
-        public static bool NotDeletedFilter( SvnItem item )
+        public static bool NotDeletedFilter(SvnItem item)
         {
             return !item.IsDeleted && !item.IsDeletedFromDisk;
         }
 
-        public static bool NoFilter( SvnItem item )
+        public static bool NoFilter(SvnItem item)
         {
             return true;
         }
@@ -516,14 +500,14 @@ namespace Ankh
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static bool ConflictedFilter( SvnItem item )
+        public static bool ConflictedFilter(SvnItem item)
         {
             return item.Status.LocalContentStatus == SvnStatus.Conflicted;
         }
 
         void EnsureClean()
         {
-            if(dirty)
+            if (dirty)
                 this.Refresh();
         }
 
@@ -537,9 +521,14 @@ namespace Ankh
             get { return dirty; }
         }
 
+        public virtual bool IsUnversionable
+        {
+            get { return (object)status == (object)AnkhStatus.Unversioned; }
+        }
+
         private bool dirty;
-        readonly IAnkhServiceProvider context;
         private AnkhStatus status;
-        private string path;
+        readonly IAnkhServiceProvider context;
+        readonly string path;
     }
 }

@@ -22,7 +22,7 @@ namespace Ankh
             this.context = context;
             this.client = new SvnClient();
             _map = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-            this._deletions = new Dictionary<string, IList>(StringComparer.OrdinalIgnoreCase);
+            this._deletions = new Dictionary<string, List<SvnItem>>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -41,9 +41,9 @@ namespace Ankh
                         string normPath = PathUtils.NormalizePath(file);
                         SvnItem existingItem;
                         if (_map.TryGetValue(normPath, out existingItem))
-                            existingItem.Refresh(AnkhStatus.None);
+                            existingItem.RefreshTo(AnkhStatus.None);
                         else
-                            _map[normPath] = SvnItem.Unversionable;
+                            _map[normPath] = new SvnItem(context, file, AnkhStatus.Unversioned);
                     }
                     return;
                 }
@@ -86,7 +86,7 @@ namespace Ankh
                         args.RetrieveAllEntries = true;
                         if (this.client.GetStatus(normPath, args, out statuses) && statuses.Count > 0)
                         {
-                            _map[normPath] = item = new SvnItem(context, path, statuses[0]);
+                            _map[normPath] = item = new SvnItem(context, path, new AnkhStatus(statuses[0]));
                         }
                         else
                             _map[normPath] = item = new SvnItem(context, path, AnkhStatus.None);
@@ -99,6 +99,15 @@ namespace Ankh
 
                 return item;
             }
+        }
+
+        /// <summary>
+        /// Clears the whole cache; called from solution closing (Scc)
+        /// </summary>
+        public void ClearCache()
+        {
+            this._deletions.Clear();
+            this._map.Clear();
         }
 
         /// <summary>
@@ -125,11 +134,11 @@ namespace Ankh
         /// </summary>
         /// <param name="dir"></param>
         /// <returns></returns>
-        public IList GetDeletions(string dir)
+        public IList<SvnItem> GetDeletions(string dir)
         {
             string normdir = PathUtils.NormalizePath(dir, this.currentPath);
 
-            IList deletions;
+            List<SvnItem> deletions;
             if (_deletions.TryGetValue(normdir, out deletions))
             {
                 deletions = RefreshDeletionsList(deletions);
@@ -139,8 +148,6 @@ namespace Ankh
             else
                 return new SvnItem[] { };
         }
-
-
 
         /// <summary>
         /// Status callback.
@@ -152,24 +159,27 @@ namespace Ankh
             // we need all paths to be on ONE form
             string normPath = PathUtils.NormalizePath(e.Path, this.currentPath);
 
+            e.Detach();
+
             // is there already an item for this path?
             SvnItem existingItem;
+            AnkhStatus status = new AnkhStatus(e);
 
-            if (_map.TryGetValue(normPath, out existingItem) && existingItem != SvnItem.Unversionable)
-                existingItem.Refresh(e);
+            if (_map.TryGetValue(normPath, out existingItem) && !existingItem.IsUnversionable)
+                existingItem.RefreshTo(status);
             else
-                _map[normPath] = new SvnItem(context, e.Path, e);
+                _map[normPath] = new SvnItem(context, e.Path, status);
 
             if (e.LocalContentStatus == SvnStatus.Deleted)
             {
                 string containingDir;
-                containingDir = GetNormalizedParentDirectory(e.Path);
+                containingDir = Path.GetDirectoryName(e.Path);
 
                 // store the deletions keyed on the parent directory
-                IList list;
+                List<SvnItem> list;
 
                 if (!_deletions.TryGetValue(containingDir, out list))
-                    list = new ArrayList();
+                    list = new List<SvnItem>();
 
                 SvnItem deletedItem;
 
@@ -182,60 +192,19 @@ namespace Ankh
             }
         }
 
-        //private void DeletedItemChanged(object sender, EventArgs e)
-        //{
-        //    SvnItem deletedItem = (SvnItem)sender;
-        //    string parentDir = this.GetNormalizedParentDirectory( deletedItem.Path );
-
-        //    // are we tracking this item? we should
-        //    IList dirDeletions = (IList)this.deletions[ parentDir ];
-        //    if ( dirDeletions == null )
-        //    {
-        //        Debug.WriteLine( "Event raised from deleted item we're not tracking" );
-        //        return;
-        //    }
-
-        //    // get rid of the item from the directory
-        //    dirDeletions.Remove( deletedItem );
-
-        //    // is the list for that directory now empty?
-        //    if ( dirDeletions.Count == 0 )
-        //    {
-        //        dirDeletions.Remove( parentDir );
-        //    }
-
-        //    // if it's anything but deleted, put it in the regular table
-        //    if ( deletedItem.Status.TextStatus != StatusKind.None )
-        //    {
-        //        this.table[ deletedItem.Path ] = deletedItem;                
-        //    }
-        //}
-
-        private string GetNormalizedParentDirectory(string path)
+        private List<SvnItem> RefreshDeletionsList(List<SvnItem> deletions)
         {
-            string containingDir;
-            // find the parent directory
-            if (path[path.Length - 1] == '\\')
-            {
-                containingDir = Path.GetDirectoryName(
-                    path.Substring(0, path.Length - 1));
-            }
-            else
-            {
-                containingDir = Path.GetDirectoryName(path);
-            }
+            List<SvnItem> newList = new List<SvnItem>();
 
-            containingDir = PathUtils.NormalizePath(containingDir, this.currentPath);
-            return containingDir;
-        }
-
-        private IList RefreshDeletionsList(IList deletions)
-        {
-            ArrayList newList = new ArrayList();
-
+            // First mark all items dirty to get an optimized refresh
             foreach (SvnItem item in deletions)
             {
-                item.Refresh(this.client);
+                item.MarkDirty();
+            }
+
+            // Now get the deleted items
+            foreach(SvnItem item in deletions)
+            {
                 if (item.Status.LocalContentStatus == SvnStatus.Deleted)
                     newList.Add(item);
             }
@@ -247,7 +216,7 @@ namespace Ankh
         private int cacheMisses = 0;
 
         readonly IAnkhServiceProvider context;
-        private Dictionary<string, IList> _deletions;
+        private Dictionary<string, List<SvnItem>> _deletions;
         private SvnClient client;
         private string currentPath;
         readonly Dictionary<string, SvnItem> _map;

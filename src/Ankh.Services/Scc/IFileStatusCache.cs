@@ -11,5 +11,10 @@ namespace Ankh.Scc
         /// </summary>
         /// <value></value>
         SvnItem this[string path] { get; }
+
+        /// <summary>
+        /// Clears the whole statuscache; called when closing the solution
+        /// </summary>
+        void ClearCache();
     }
 }

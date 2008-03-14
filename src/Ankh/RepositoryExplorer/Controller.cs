@@ -422,13 +422,12 @@ namespace Ankh.RepositoryExplorer
                         SvnListArgs args = new SvnListArgs();
                         args.Revision = node.Revision;
                         args.Depth = SvnDepth.Empty;
-                        Collection<SvnListEventArgs> list;
-
 
                         List<INode> items = new List<INode>();
                         client.List(node.Url, args, 
                             delegate(object sender, SvnListEventArgs e)
                             {
+                                e.Detach();
                                 Node n = new Node(node, e);
                                 items.Add(n);
 

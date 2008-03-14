@@ -153,7 +153,7 @@ namespace Ankh.WorkingCopyExplorer
             }
         }
 
-        internal void Refresh()
+        internal new void Refresh()
         {
             this.svnItem.Refresh();
         }
