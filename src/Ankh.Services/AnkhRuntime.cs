@@ -8,10 +8,23 @@ namespace Ankh
 {
     public class AnkhRuntime : IAnkhServiceProvider
     {
-        readonly ServiceContainer _container;
+        readonly IServiceContainer _container;
         readonly CommandMapper _commandMapper;
         readonly AnkhContext _context;
         bool _ensureServices;
+
+        public AnkhRuntime(IServiceContainer parentContainer)
+        {
+            if (parentContainer == null)
+                throw new ArgumentNullException("parentContainer");
+
+            _container = parentContainer;
+
+            _commandMapper = ((CommandMapper)_container.GetService(typeof(CommandMapper))) ?? new CommandMapper(this);
+            _context = ((AnkhContext)_container.GetService(typeof(AnkhContext))) ?? AnkhContext.Create(this);
+
+            InitializeServices();
+        }
 
         public AnkhRuntime(IServiceProvider parentProvider)
         {
@@ -20,11 +33,21 @@ namespace Ankh
 
             _container = new ServiceContainer(parentProvider);
 
-            _commandMapper = ((CommandMapper)parentProvider.GetService(typeof(CommandMapper))) ?? new CommandMapper(this);
-            _context = ((AnkhContext)parentProvider.GetService(typeof(AnkhContext))) ?? AnkhContext.Create(this);
+            _commandMapper = ((CommandMapper)_container.GetService(typeof(CommandMapper))) ?? new CommandMapper(this);
+            _context = ((AnkhContext)_container.GetService(typeof(AnkhContext))) ?? AnkhContext.Create(this);
 
-            if (parentProvider.GetService(typeof(AnkhRuntime)) == null)
+            InitializeServices();
+        }
+
+        void InitializeServices()
+        {
+            if (_container.GetService(typeof(AnkhRuntime)) == null)
+            {
                 _container.AddService(typeof(AnkhRuntime), this, true);
+
+                if (_container.GetService(typeof(IAnkhServiceProvider)) == null)
+                    _container.AddService(typeof(IAnkhServiceProvider), this);
+            }
 
 #if DEBUG
             PreloadServicesViaEnsure = true;
