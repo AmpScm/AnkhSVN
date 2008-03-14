@@ -25,9 +25,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions", "{01F3ED56-C896-409C-8464-DB82B3AF1364}"
 	ProjectSection(SolutionItems) = preProject
 		BUILD.txt = BUILD.txt
-		CHANGES = CHANGES
-		CONTRIBUTERS = CONTRIBUTERS
-		Ankh\AnkhSetup\LICENCE.rtf = Ankh\AnkhSetup\LICENCE.rtf
+		CHANGES.txt = CHANGES.txt
+		CONTRIBUTERS.txt = CONTRIBUTERS.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Services", "Ankh.Services\Ankh.Services.csproj", "{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}"
@@ -55,6 +54,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - The Subversion plugin for Visual Studio
+	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = AnkhSvn.2008.vsmdi
 	EndGlobalSection
@@ -122,10 +125,10 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE} = {9B380404-6594-4737-8518-291DEDEF3496}
 		{CE58AAC8-2271-4223-882F-0CD1A7105A52} = {9B380404-6594-4737-8518-291DEDEF3496}
 		{ECE36A69-DD85-4AAB-B329-12BAE4675056} = {9B380404-6594-4737-8518-291DEDEF3496}
 		{906E3F01-CD79-4F80-BCA7-1105224328C4} = {9B380404-6594-4737-8518-291DEDEF3496}
-		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE} = {9B380404-6594-4737-8518-291DEDEF3496}
 		{874C0358-E7DD-42DA-BF07-58198B41FD25} = {E7D88D59-A87F-4939-AB58-315F8C41E20B}
 		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {E7D88D59-A87F-4939-AB58-315F8C41E20B}
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747} = {BEAF04B7-B1BB-4ABA-BF6F-00495274C725}
@@ -137,7 +140,7 @@ Global
 		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB} = {01F3ED56-C896-409C-8464-DB82B3AF1364}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal

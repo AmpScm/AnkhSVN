@@ -192,8 +192,6 @@ namespace Ankh.SolutionExplorer
             if (TreeView == null)
                 return; // Nothing to do
 
-            TreeView.ClearStatusImages();
-
             // if someone wants VSS images now, let them.
             TreeView.SuppressStatusImageChange = false;
 
