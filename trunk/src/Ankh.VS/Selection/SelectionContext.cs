@@ -16,7 +16,7 @@ namespace Ankh.Selection
     /// <summary>
     /// 
     /// </summary>
-    class SelectionContext : IVsSelectionEvents, IDisposable, ISelectionContext
+    class SelectionContext : IVsSelectionEvents, IDisposable, ISelectionContext, ISccProjectWalker
     {
         readonly IAnkhServiceProvider _context;
         readonly IFileStatusCache _cache;
@@ -533,6 +533,54 @@ namespace Ankh.Selection
                     {
                         ht.Add(name, si);
                         yield return new SvnProject(name, (vsProject != null) ? si.SccProject : _context.GetService(typeof(SVsSolution)));
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region ISccProjectWalker Members
+
+        /// <summary>
+        /// Gets the list of files specified by the hierarchy (IVsSccProject2 or IVsHierarchy)
+        /// </summary>
+        /// <param name="hierarchy"></param>
+        /// <param name="id"></param>
+        /// <param name="depth"></param>
+        /// <returns></returns>
+        /// <remarks>The list might contain duplicates if files are included more than once</remarks>
+        public IEnumerable<string> GetSccFiles(object hierarchy, uint id, ProjectWalkDepth depth)
+        {
+            // Note: This command is not cached as the other commands on this object!
+
+            if (hierarchy == null)
+                throw new ArgumentNullException("hierarchy");
+
+            SelectionItem si = new SelectionItem(hierarchy as IVsHierarchy, id, hierarchy as IVsSccProject2);
+
+            string[] files;
+            int hr = SelectionUtils.GetSccFiles(si.Hierarchy, si.SccProject, id, out files, depth >= ProjectWalkDepth.SpecialFiles);
+            Marshal.ThrowExceptionForHR(hr);
+
+            foreach (string file in files)
+            {
+                yield return file;
+            }
+
+            if (depth >= ProjectWalkDepth.AllDescendants)
+            {
+                Dictionary<SelectionItem, SelectionItem> previous = new Dictionary<SelectionItem, SelectionItem>();
+                previous.Add(si, si);
+
+                foreach (SelectionItem item in GetDescendants(si, previous))
+                {
+                    hr = SelectionUtils.GetSccFiles(si.Hierarchy, si.SccProject, id, out files, depth >= ProjectWalkDepth.SpecialFiles);
+                    Marshal.ThrowExceptionForHR(hr);
+
+                    foreach (string file in files)
+                    {
+                        yield return file;
                     }
                 }
             }

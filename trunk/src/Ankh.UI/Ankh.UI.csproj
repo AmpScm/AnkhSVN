@@ -50,7 +50,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
@@ -72,7 +72,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
@@ -99,9 +99,6 @@
     <VSLangAssembly Condition="'$(VisualStudioVersion)' == '9.0'">Microsoft.VisualStudio.Package.LanguageService.9.0</VSLangAssembly>
     <LogMessageFile Condition="'$(VisualStudioVersion)' == '8.0'">PendingChanges\LogMessageLanguageService.VS2005.cs</LogMessageFile>
     <LogMessageFile Condition="'$(VisualStudioVersion)' == '9.0'">PendingChanges\LogMessageLanguageService.VS2008.cs</LogMessageFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(VisualStudioVersion)' == '9.0'">
-    <DefineConstants>$(DefineConstants);VS90SDK</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="$(ShellAssembly)" />

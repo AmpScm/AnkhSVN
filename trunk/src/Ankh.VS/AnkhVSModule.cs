@@ -31,7 +31,10 @@ namespace Ankh.VS
             SolutionExplorerWindow window = new SolutionExplorerWindow(this);
 
             Container.AddService(typeof(IAnkhSolutionExplorerWindow), window, true);
-            Container.AddService(typeof(ISelectionContext), new SelectionContext(this, window), true);
+
+            SelectionContext selection = new SelectionContext(this, window);
+            Container.AddService(typeof(ISelectionContext), selection, true);
+            Container.AddService(typeof(ISccProjectWalker), selection);
         }
 
         /// <summary>
