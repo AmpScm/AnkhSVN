@@ -23,12 +23,14 @@ namespace Ankh.Scc
             // For now, we allow adding all files as is
             // We might propose moving files to within a managed root
 
-            for (int i = 0; i < cFiles; i++)
-            {
-                rgResults[i] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
-            }
+            if (rgResults != null)
+                for (int i = 0; i < cFiles; i++)
+                {
+                    rgResults[i] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
+                }
 
-            pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK; // All ok
+            if (pSummaryResult != null)
+                pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK; // All ok
 
             return VSConstants.S_OK;
         }
@@ -52,13 +54,15 @@ namespace Ankh.Scc
             // For now, we allow adding all files as is
             // We might propose moving files to within a managed root
 
-            for (int i = 0; i < cFiles; i++)
-            {
-                rgResults[i] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
-            }
+            if (rgResults != null)
+                for (int i = 0; i < cFiles; i++)
+                {
+                    rgResults[i] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
+                }
 
-            pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK; // All ok
-            
+            if (pSummaryResult != null)
+                pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK; // All ok
+
             return VSConstants.S_OK;
         }
 
@@ -85,14 +89,14 @@ namespace Ankh.Scc
 
                 for (; iFile < iLastFileThisProject; iFile++)
                 {
-                    if(sccProject == null)
+                    if (sccProject == null)
                         continue; // Not handled by our provider
 
                     _sccProvider.OnProjectFileAdded(sccProject, rgpszMkDocuments[iFile], rgFlags[iFile]);
                 }
             }
             return VSConstants.S_OK;
-        }        
+        }
 
         /// <summary>
         /// This method notifies the client when a project has requested to add directories.
@@ -112,7 +116,7 @@ namespace Ankh.Scc
             {
                 rgResults[i] = VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddOK;
             }
-            
+
             pSummaryResult[0] = VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddOK; // All ok
 
             return VSConstants.S_OK;
@@ -150,6 +154,6 @@ namespace Ankh.Scc
             }
 
             return VSConstants.S_OK;
-        }        
+        }
     }
 }
