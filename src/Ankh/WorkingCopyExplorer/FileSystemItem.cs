@@ -11,16 +11,26 @@ namespace Ankh.WorkingCopyExplorer
 {
     internal abstract class FileSystemItem : TreeNode, Ankh.UI.IFileSystemItem
     {
+        readonly IAnkhServiceProvider _context;
         public event EventHandler<ItemChangedEventArgs> ItemChanged;
 
-        public FileSystemItem( FileSystemItem parent, WorkingCopyExplorer explorer, SvnItem svnItem ) : base(parent)
+        public FileSystemItem( IAnkhServiceProvider context, FileSystemItem parent, WorkingCopyExplorer explorer, SvnItem svnItem ) : base(parent)
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
             this.explorer = explorer;
             this.svnItem = svnItem;
 
             //this.svnItem.Changed += new EventHandler( this.ChildOrResourceChanged );
 
             this.CurrentStatus = MergeStatuses( this.svnItem );
+        }
+
+        protected IAnkhServiceProvider Context
+        {
+            get { return _context; }
         }
 
        
@@ -158,15 +168,15 @@ namespace Ankh.WorkingCopyExplorer
             this.svnItem.Refresh();
         }
 
-        public static FileSystemItem Create( WorkingCopyExplorer explorer, SvnItem item )
+        public static FileSystemItem Create(IAnkhServiceProvider context, WorkingCopyExplorer explorer, SvnItem item )
         {
             if ( item.IsDirectory )
             {
-                return new FileSystemDirectoryItem( explorer, item );
+                return new FileSystemDirectoryItem(context, explorer, item );
             }
             else
             {
-                return new FileSystemFileItem( explorer, item );
+                return new FileSystemFileItem(context, explorer, item );
             }
         }
 

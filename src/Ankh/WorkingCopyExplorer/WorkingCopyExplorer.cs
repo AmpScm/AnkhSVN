@@ -10,17 +10,20 @@ using System.Reflection;
 using Utils;
 using SharpSvn;
 using Utils.Services;
+using Ankh.Scc;
 
 namespace Ankh.WorkingCopyExplorer
 {
     class WorkingCopyExplorer : Ankh.IWorkingCopyExplorer
     {
 
-        public WorkingCopyExplorer( IContext context )
+        public WorkingCopyExplorer(IContext context)
         {
-            this.context = context;            
-#warning fix statuscache
-            //this.statusCache = this.context.StatusCache;
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            this.context = context;
+            this.statusCache = context.GetService<IFileStatusCache>();
 
             this.roots = new ArrayList();
 
@@ -28,7 +31,7 @@ namespace Ankh.WorkingCopyExplorer
 
             if (context.UIShell.WorkingCopyExplorer != null)
             {
-                SetControl(context.UIShell.WorkingCopyExplorer);                
+                SetControl(context.UIShell.WorkingCopyExplorer);
             }
         }
 
@@ -44,7 +47,7 @@ namespace Ankh.WorkingCopyExplorer
             control.StateImages = StatusImages.StatusImageList;
             control.WantNewRoot += new EventHandler(control_WantNewRoot);
             control.ValidatingNewRoot += new System.ComponentModel.CancelEventHandler(control_ValidatingNewRoot);
-        }       
+        }
 
         public IContext Context
         {
@@ -53,7 +56,7 @@ namespace Ankh.WorkingCopyExplorer
 
         #region IWorkingCopyExplorer Members
 
-        public void AddRoot( string directory )
+        public void AddRoot(string directory)
         {
             FileSystemRootItem root = CreateRoot(directory);
 
@@ -71,13 +74,13 @@ namespace Ankh.WorkingCopyExplorer
         public void RemoveSelectedRoot()
         {
             FileSystemRootItem root = GetSelectedRoot();
-            if ( root != null )
+            if (root != null)
             {
-                this.roots.Remove( root );
-                this.control.RemoveRoot( root );
+                this.roots.Remove(root);
+                this.control.RemoveRoot(root);
 
                 root.Dispose();
-            }        
+            }
         }
 
         private FileSystemRootItem GetSelectedRoot()
@@ -86,12 +89,12 @@ namespace Ankh.WorkingCopyExplorer
                 return null;
             IFileSystemItem[] items = this.control.GetSelectedItems();
 
-            if ( items.Length != 1 )
+            if (items.Length != 1)
             {
                 return null;
             }
 
-            return items[ 0 ] as FileSystemRootItem;
+            return items[0] as FileSystemRootItem;
         }
 
         #endregion
@@ -100,10 +103,10 @@ namespace Ankh.WorkingCopyExplorer
 
         public void RefreshSelectionParents()
         {
-            foreach ( IFileSystemItem selectedItem in this.control.GetSelectedItems() )
+            foreach (IFileSystemItem selectedItem in this.control.GetSelectedItems())
             {
                 FileSystemItem item = selectedItem as FileSystemItem;
-                if ( item != null && item.Parent != null )
+                if (item != null && item.Parent != null)
                 {
                     item.Parent.Refresh();
                 }
@@ -112,10 +115,10 @@ namespace Ankh.WorkingCopyExplorer
 
         public void RefreshSelection()
         {
-            foreach ( IFileSystemItem selectedItem in this.control.GetSelectedItems() )
+            foreach (IFileSystemItem selectedItem in this.control.GetSelectedItems())
             {
                 FileSystemItem item = selectedItem as FileSystemItem;
-                if ( item != null )
+                if (item != null)
                 {
                     item.Refresh();
                 }
@@ -124,64 +127,64 @@ namespace Ankh.WorkingCopyExplorer
 
         public void SyncAll()
         {
-            foreach ( FileSystemItem item in this.roots )
+            foreach (FileSystemItem item in this.roots)
             {
                 item.Refresh();
             }
         }
 
-        public System.Collections.IList GetSelectionResources( bool getChildItems )
+        public System.Collections.IList GetSelectionResources(bool getChildItems)
         {
-            return this.GetSelectionResources( getChildItems, new ResourceFilterCallback( SvnItem.NoFilter ) );
+            return this.GetSelectionResources(getChildItems, new ResourceFilterCallback(SvnItem.NoFilter));
         }
 
-        public IList GetSelectionResources( bool getChildItems, ResourceFilterCallback filter )
+        public IList GetSelectionResources(bool getChildItems, ResourceFilterCallback filter)
         {
             ArrayList selectedResources = new ArrayList();
             return selectedResources;
         }
 
-        public IList GetAllResources( ResourceFilterCallback filter )
+        public IList GetAllResources(ResourceFilterCallback filter)
         {
             ArrayList resources = new ArrayList();
-            foreach ( FileSystemItem item in this.roots )
+            foreach (FileSystemItem item in this.roots)
             {
-                item.GetResources( resources, true, filter );
+                item.GetResources(resources, true, filter);
             }
             return resources;
         }
 
         #endregion
 
-        internal IFileSystemItem[] GetFileSystemItemsForDirectory( SvnItem directoryItem )
+        internal IFileSystemItem[] GetFileSystemItemsForDirectory(SvnItem directoryItem)
         {
             ArrayList items = new ArrayList();
-            foreach ( string path in Directory.GetFileSystemEntries( directoryItem.Path ) )
+            foreach (string path in Directory.GetFileSystemEntries(directoryItem.Path))
             {
-                if ( PathUtils.GetName( path ) != SvnClient.AdministrativeDirectoryName )
+                if (PathUtils.GetName(path) != SvnClient.AdministrativeDirectoryName)
                 {
-                    SvnItem item = this.statusCache[ path ];
-                    items.Add( FileSystemItem.Create( this, item ) );
+                    SvnItem item = this.statusCache[path];
+                    items.Add(FileSystemItem.Create(context, this, item));
                 }
             }
 
-            foreach ( SvnItem item in this.statusCache.GetDeletions( directoryItem.Path ) )
+            foreach (SvnItem item in this.statusCache.GetDeletions(directoryItem.Path))
             {
-                items.Add( FileSystemItem.Create( this, item ) );
+                items.Add(FileSystemItem.Create(context, this, item));
             }
 
-            return (IFileSystemItem[])items.ToArray( typeof( IFileSystemItem ) );
+            return (IFileSystemItem[])items.ToArray(typeof(IFileSystemItem));
         }
 
-         internal void OpenItem( string path )
+        internal void OpenItem(string path)
         {
-            if ( File.Exists( path ) )
+            if (File.Exists(path))
             {
-                if ( path.ToLower().EndsWith( ".sln" ) )
+                if (path.ToLower().EndsWith(".sln"))
                 {
-                    ((IDTEContext)this.Context).DTE.Solution.Open( path );
+                    ((IDTEContext)this.Context).DTE.Solution.Open(path);
                 }
-                else if ( path.ToLower().EndsWith( "proj" ) )
+                else if (path.ToLower().EndsWith("proj"))
                 {
                     ((IDTEContext)this.Context).DTE.ExecuteCommand("File.OpenProject", path);
                 }
@@ -192,56 +195,56 @@ namespace Ankh.WorkingCopyExplorer
             }
         }
 
-        void Context_Unloading( object sender, EventArgs e )
+        void Context_Unloading(object sender, EventArgs e)
         {
             this.SaveRoots();
         }
 
-        void control_ValidatingNewRoot( object sender, System.ComponentModel.CancelEventArgs e )
+        void control_ValidatingNewRoot(object sender, System.ComponentModel.CancelEventArgs e)
         {
             try
             {
-                e.Cancel = !IsRootValid( this.control.NewRootPath );
+                e.Cancel = !IsRootValid(this.control.NewRootPath);
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                this.Context.ErrorHandler.OnError( ex );
+                this.Context.ErrorHandler.OnError(ex);
             }
         }
 
-        private bool IsRootValid( string path )
+        private bool IsRootValid(string path)
         {
-            return Directory.Exists( path ) && context.GetService<IWorkingCopyOperations>().IsWorkingCopyPath( path );
+            return Directory.Exists(path) && context.GetService<IWorkingCopyOperations>().IsWorkingCopyPath(path);
         }
 
-        void control_WantNewRoot( object sender, EventArgs e )
+        void control_WantNewRoot(object sender, EventArgs e)
         {
             try
             {
-                if ( this.IsRootValid( this.control.NewRootPath ) )
+                if (this.IsRootValid(this.control.NewRootPath))
                 {
-                    this.AddRoot( this.control.NewRootPath );
+                    this.AddRoot(this.control.NewRootPath);
                 }
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                this.Context.ErrorHandler.OnError( ex );
+                this.Context.ErrorHandler.OnError(ex);
             }
         }
 
         private void SaveRoots()
         {
-            string[] rootPaths = new string[ this.roots.Count ];
-            for ( int i = 0; i < rootPaths.Length; i++ )
+            string[] rootPaths = new string[this.roots.Count];
+            for (int i = 0; i < rootPaths.Length; i++)
             {
-                rootPaths[ i ] = ((FileSystemItem)this.roots[ i ]).SvnItem.Path;
+                rootPaths[i] = ((FileSystemItem)this.roots[i]).SvnItem.Path;
             }
-            this.Context.ConfigLoader.SaveWorkingCopyExplorerRoots( rootPaths );
+            this.Context.ConfigLoader.SaveWorkingCopyExplorerRoots(rootPaths);
         }
 
         private void LoadRoots()
         {
-            System.Threading.Thread t = new System.Threading.Thread( new ThreadStart( this.DoLoadRoots ) );
+            System.Threading.Thread t = new System.Threading.Thread(new ThreadStart(this.DoLoadRoots));
             t.Start();
         }
 
@@ -253,50 +256,50 @@ namespace Ankh.WorkingCopyExplorer
             try
             {
                 rootPaths = this.Context.ConfigLoader.LoadWorkingCopyExplorerRoots();
-                if ( rootPaths == null )
+                if (rootPaths == null)
                 {
                     return;
                 }
 
-                foreach ( string root in rootPaths )
+                foreach (string root in rootPaths)
                 {
-                    if ( Directory.Exists( root ) )
+                    if (Directory.Exists(root))
                     {
-                        FileSystemRootItem rootItem = CreateRoot( root );
+                        FileSystemRootItem rootItem = CreateRoot(root);
                         this.Context.UIShell.SynchronizingObject.Invoke(
-                            new DoAddRootDelegate( this.DoAddRoot ), new object[] { rootItem } );
+                            new DoAddRootDelegate(this.DoAddRoot), new object[] { rootItem });
                     }
                 }
 
             }
-            catch ( TargetInvocationException ex )
+            catch (TargetInvocationException ex)
             {
-                this.Context.ErrorHandler.OnError( ex.InnerException );
+                this.Context.ErrorHandler.OnError(ex.InnerException);
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                this.Context.ErrorHandler.OnError( ex );
+                this.Context.ErrorHandler.OnError(ex);
             }
         }
 
-        private void DoAddRoot( FileSystemRootItem root )
+        private void DoAddRoot(FileSystemRootItem root)
         {
-            this.control.AddRoot( root );
-            this.roots.Add( root );
+            this.control.AddRoot(root);
+            this.roots.Add(root);
         }
 
-        private FileSystemRootItem CreateRoot( string directory )
+        private FileSystemRootItem CreateRoot(string directory)
         {
-            this.statusCache.Status(directory, SvnDepth.Infinity);
-            SvnItem item = this.statusCache[ directory ];
-            FileSystemRootItem root = new FileSystemRootItem( this, item );
+            this.statusCache.UpdateStatus(directory, SvnDepth.Infinity);
+            SvnItem item = this.statusCache[directory];
+            FileSystemRootItem root = new FileSystemRootItem(context, this, item);
             return root;
         }
 
 
         private WorkingCopyExplorerControl control;
         private IContext context;
-        private StatusCache statusCache;
+        private IFileStatusCache statusCache;
         private ArrayList roots;
     }
 }

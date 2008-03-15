@@ -3,13 +3,14 @@ using System.Text;
 using System.Collections;
 using Ankh.UI;
 using SharpSvn;
+using Ankh.Scc;
 
 namespace Ankh.WorkingCopyExplorer
 {
     internal class FileSystemDirectoryItem : FileSystemItem
     {
-        public FileSystemDirectoryItem( WorkingCopyExplorer explorer, SvnItem item )
-            : base( null, explorer, item )
+        public FileSystemDirectoryItem(IAnkhServiceProvider context, WorkingCopyExplorer explorer, SvnItem item )
+            : base(context, null, explorer, item )
         {
             this.FindChildren();
             this.Refresh( false );
@@ -35,12 +36,16 @@ namespace Ankh.WorkingCopyExplorer
             }
         }
 
+
         public override void Refresh( bool rescan )
         {
             if ( rescan )
             {
-#warning fix statuscache
-                //this.Explorer.Context.StatusCache.Status(this.svnItem.Path, SvnDepth.Infinity);
+                IFileStatusCache cache = Context.GetService<IFileStatusCache>();
+
+                if(cache != null)
+                    cache.UpdateStatus(this.svnItem.Path, SvnDepth.Infinity);
+
                 this.FindChildren();
 
                 this.OnItemChanged( ItemChangedType.ChildrenInvalidated );

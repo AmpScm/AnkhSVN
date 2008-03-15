@@ -6,8 +6,8 @@ namespace Ankh.WorkingCopyExplorer
 {
     internal class FileSystemFileItem : FileSystemItem
     {
-        public FileSystemFileItem( WorkingCopyExplorer explorer, SvnItem item )
-            : base( null, explorer, item )
+        public FileSystemFileItem(IAnkhServiceProvider context, WorkingCopyExplorer explorer, SvnItem item )
+            : base(context, null, explorer, item )
         {
 
         }
