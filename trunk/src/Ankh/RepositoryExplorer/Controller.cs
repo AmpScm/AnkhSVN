@@ -25,6 +25,9 @@ namespace Ankh.RepositoryExplorer
     {
         public Controller( IContext context )
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
             this.context = context;
 
             if (context.UIShell.RepositoryExplorer != null)

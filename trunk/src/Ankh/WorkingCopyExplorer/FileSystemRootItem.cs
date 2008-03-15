@@ -5,7 +5,8 @@ namespace Ankh.WorkingCopyExplorer
 {
     class FileSystemRootItem : FileSystemDirectoryItem
     {
-        public FileSystemRootItem( WorkingCopyExplorer explorer, SvnItem svnItem ) : base(explorer, svnItem)
+        public FileSystemRootItem(IAnkhServiceProvider context, WorkingCopyExplorer explorer, SvnItem svnItem ) 
+            : base(context, explorer, svnItem)
         {
             
         }

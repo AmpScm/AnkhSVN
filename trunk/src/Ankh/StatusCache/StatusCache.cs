@@ -32,10 +32,14 @@ namespace Ankh
         /// <param name="recurse">Whether to recurse to subdirectories.</param>
         public void Status(string dir, SvnDepth depth)
         {
+            if (string.IsNullOrEmpty(dir))
+                throw new ArgumentNullException("dir");
+
             lock (this)
             {
-                if (!context.GetService<IWorkingCopyOperations>().IsWorkingCopyPath(dir))
+                if (!SvnTools.IsManagedPath(dir))
                 {
+                    // TODO: Clean all descendants of this directory
                     foreach (string file in Directory.GetFiles(dir))
                     {
                         string normPath = PathUtils.NormalizePath(file);
@@ -57,6 +61,11 @@ namespace Ankh
                 args.NoIgnore = true;
                 this.client.Status(dir, args, new EventHandler<SvnStatusEventArgs>(Callback));
             }
+        }
+
+        void Ankh.Scc.IFileStatusCache.UpdateStatus(string directory, SvnDepth depth)
+        {
+            Status(directory, depth);
         }
 
         public SvnItem this[string path]
@@ -147,6 +156,11 @@ namespace Ankh
             }
             else
                 return new SvnItem[] { };
+        }
+
+        IEnumerable<SvnItem> Ankh.Scc.IFileStatusCache.GetDeletions(string dir)
+        {
+            return GetDeletions(dir);
         }
 
         /// <summary>
