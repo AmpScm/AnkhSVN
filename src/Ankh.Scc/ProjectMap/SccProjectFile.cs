@@ -128,6 +128,11 @@ namespace Ankh.Scc.ProjectMap
             {
                 _firstReference = reference._nextReference;
                 reference._nextReference = null;
+
+                if (_firstReference == null)
+                {
+                    _context.GetService<AnkhSccProvider>().RemoveFile(this);
+                }
                 return;
             }
 

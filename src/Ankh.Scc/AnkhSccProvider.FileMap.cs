@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Scc.ProjectMap;
 using System.IO;
+using System.Diagnostics;
 
 namespace Ankh.Scc
 {
@@ -50,8 +51,9 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="filename">The filename.</param>
+        /// <param name="forDelete">if set to <c>true</c> the file was deleted; if set to <c>false</c> the file was removed.</param>
         /// <param name="flags">The flags.</param>
-        internal void OnProjectFileRemoved(IVsSccProject2 project, string filename, VSREMOVEFILEFLAGS flags)
+        internal void OnProjectFileRemoved(IVsSccProject2 project, string filename, bool forDelete, VSREMOVEFILEFLAGS flags)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
@@ -61,10 +63,10 @@ namespace Ankh.Scc
 
             if (IsActive)
             {
-                // BH: Called by both remove and delete from project??
-
-                // Was it in subversion -> Remove
-                
+                if (forDelete)
+                {
+                    // Was it in subversion -> Remove
+                }                
             }
         }
 
@@ -209,6 +211,13 @@ namespace Ankh.Scc
                 _fileMap.Add(path, projectFile = new SccProjectFile(_context, path));
 
             return projectFile;
+        }
+
+        internal void RemoveFile(SccProjectFile file)
+        {
+            Debug.Assert(_fileMap[file.Filename] == file);
+
+            _fileMap.Remove(file.Filename);
         }
         #endregion
     }
