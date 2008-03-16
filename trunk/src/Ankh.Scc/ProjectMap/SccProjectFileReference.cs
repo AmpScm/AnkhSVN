@@ -27,6 +27,7 @@ namespace Ankh.Scc.ProjectMap
             _project = project;
             _file = file;
             _refCount = 1; // One should only create a reference if one needs one
+            file.AddReference(this);
         }
 
         public SccProjectFile ProjectFile
