@@ -575,7 +575,7 @@ namespace Ankh.Selection
 
                 foreach (SelectionItem item in GetDescendants(si, previous))
                 {
-                    hr = SelectionUtils.GetSccFiles(si.Hierarchy, si.SccProject, id, out files, depth >= ProjectWalkDepth.SpecialFiles);
+                    hr = SelectionUtils.GetSccFiles(item.Hierarchy, item.SccProject, item.Id, out files, depth >= ProjectWalkDepth.SpecialFiles);
                     Marshal.ThrowExceptionForHR(hr);
 
                     foreach (string file in files)

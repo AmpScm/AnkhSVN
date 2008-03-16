@@ -8,6 +8,7 @@ using SharpSvn;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using AnkhSvn.Ids;
+using Ankh.Scc.ProjectMap;
 
 namespace Ankh.Scc
 {
@@ -102,11 +103,12 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(pscp2Project, out data))
             {
                 // This method is called before the OpenProject calls
-                _projectMap.Add(pscp2Project, data = new SccProjectData(pscp2Project));
+                _projectMap.Add(pscp2Project, data = new SccProjectData(_context, pscp2Project));
             }
 
             data.IsManaged = (pszProvider == AnkhId.SubversionSccName);
             data.IsRegistered = true;
+            data.Load();
 
             return VSConstants.S_OK;
         }
@@ -163,6 +165,6 @@ namespace Ankh.Scc
         #endregion
 
         private uint baseIndex;
-        private bool active;
+        private bool active;        
     }
 }

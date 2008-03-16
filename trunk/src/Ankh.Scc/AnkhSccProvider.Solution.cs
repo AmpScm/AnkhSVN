@@ -12,7 +12,7 @@ namespace Ankh.Scc
         /// Adds the current solution to source control.
         /// </summary>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK" />. If it fails, it returns an error code.
         /// </returns>
         public int AddNewSolutionToSourceControl()
         {

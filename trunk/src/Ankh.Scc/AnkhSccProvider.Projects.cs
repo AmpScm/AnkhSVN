@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
-using Ankh.Selection;
+using System.Text;
 using Microsoft.VisualStudio;
-using Ankh.Commands;
-using AnkhSvn.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using Ankh.Commands;
+using Ankh.Scc.ProjectMap;
+using Ankh.Selection;
+using AnkhSvn.Ids;
 
 namespace Ankh.Scc
 {
@@ -171,7 +173,7 @@ namespace Ankh.Scc
         internal void OnProjectLoaded(IVsSccProject2 project)
         {
             if (!_projectMap.ContainsKey(project))
-                _projectMap.Add(project, new SccProjectData(project));
+                _projectMap.Add(project, new SccProjectData(_context, project));
         }
 
         /// <summary>
@@ -183,7 +185,7 @@ namespace Ankh.Scc
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
-                _projectMap.Add(project, data = new SccProjectData(project));
+                _projectMap.Add(project, data = new SccProjectData(_context, project));
 
             if (_managedSolution && data.IsSolutionFolder)
             {
@@ -194,6 +196,8 @@ namespace Ankh.Scc
 
                 data.Project.SccGlyphChanged(0, null, null, null);
             }
+
+            data.Load();
         }
 
         /// <summary>
@@ -203,7 +207,13 @@ namespace Ankh.Scc
         /// <param name="removed">if set to <c>true</c> the project is being removed or unloaded from the solution.</param>
         internal void OnProjectClosed(IVsSccProject2 project, bool removed)
         {
-            _projectMap.Remove(project);
+            SccProjectData data;
+
+            if(_projectMap.TryGetValue(project, out data))
+            {
+                data.OnClose();
+                _projectMap.Remove(project);
+            }
         }
 
         bool _registeredSccCleanup;

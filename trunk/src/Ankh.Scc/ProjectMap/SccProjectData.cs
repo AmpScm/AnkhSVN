@@ -6,22 +6,30 @@ using System.Runtime.InteropServices;
 using AnkhSvn.Ids;
 using Microsoft.VisualStudio;
 
-namespace Ankh.Scc
+namespace Ankh.Scc.ProjectMap
 {
     class SccProjectData
     {
+        readonly IAnkhServiceProvider _context;
         readonly IVsSccProject2 _project;
         readonly bool _isSolutionFolder;
+        readonly SccProjectFileCollection _files;
         bool _isManaged;
         bool _isRegistered;
+        bool _loaded;
+        AnkhSccProvider _scc;
 
-        public SccProjectData(IVsSccProject2 project)
+        public SccProjectData(IAnkhServiceProvider context, IVsSccProject2 project)
         {
-            if (project == null)
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (project == null)
                 throw new ArgumentNullException("project");
 
+            _context = context;
             _project = project;
             _isSolutionFolder = IsSolutionFolderProject(project);
+            _files = new SccProjectFileCollection();
         }
 
         public IVsSccProject2 Project
@@ -71,8 +79,69 @@ namespace Ankh.Scc
             IsManaged = managed;
         }
 
+        internal void OnClose()
+        {
+            while (_files.Count > 0)
+            {
+                SccProjectFileReference r = _files[0];
+                while (r.ReferenceCount > 0)
+                {
+                    r.ReleaseReference();
+                }
+            }
+            _loaded = false;
+        }        
+
+        internal void Load()
+        {
+            if (_loaded)
+                return;
+            
+            OnClose();
+            _loaded = true;
+
+            ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+
+            if (walker != null)
+            {
+                foreach (string file in walker.GetSccFiles(_project, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendants))
+                {
+                    AddPath(file);                    
+                }
+            }                
+        }
+
+        internal void AddPath(string path)
+        {
+            if (_files.Contains(path))
+                _files[path].AddReference();
+            else
+                _files.Add(new SccProjectFileReference(_context, this, Scc.GetFile(path)));
+        }
+
+        internal void RemoveFile(string path)
+        {
+            if (!_files.Contains(path))
+                throw new ArgumentOutOfRangeException("path");
+
+            _files[path].ReleaseReference();
+        }
+
+        #region File list management code
+        internal void InvokeRemoveReference(SccProjectFileReference sccProjectFileReference)
+        {
+            _files.Remove(sccProjectFileReference);
+        }
+        #endregion
+
 
         #region Helper code
+
+        protected AnkhSccProvider Scc
+        {
+            get { return _scc ?? (_scc = _context.GetService<AnkhSccProvider>()); }
+        }
+
         /// <summary>
         /// Checks whether the specified project is a solution folder
         /// </summary>
@@ -92,6 +161,6 @@ namespace Ankh.Scc
 
             return false;
         }
-        #endregion
+        #endregion     
     }
 }
