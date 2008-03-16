@@ -157,7 +157,7 @@ namespace Ankh.VSPackage
         Control _control;
 
         protected AnkhToolWindowPane()
-            : base(new ServiceContainer())
+            : base(new AnkhServiceContainer())
         {
             _site = new AnkhToolWindowSite(this);
         }

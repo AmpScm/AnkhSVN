@@ -30,9 +30,11 @@ namespace Ankh.Tests.Services
 			bool completed = false;
 			int counter = 0;
 
-			
+            AnkhServiceContainer container = new AnkhServiceContainer();
+            container.AddService(typeof(ISvnClientPool), new AnkhSvnClientPool(container));
 
-			ISvnLogService logSvc = new SvnLogService();//syncContext);
+            // Todo: Provide an ServiceContainer
+			ISvnLogService logSvc = new SvnLogService(null);//syncContext);
 			logSvc.RemoteTarget = new Uri("http://ankhsvn.open.collab.net/svn/ankhsvn/");
 			logSvc.RequiredItemCount = 10;
 			logSvc.LogItemReceived += delegate(object sender, EventArgs e)
@@ -73,7 +75,7 @@ namespace Ankh.Tests.Services
 		{
 			bool completed = false;
 			int counter = 0;
-			ISvnLogService logSvc = new SvnLogService();
+			ISvnLogService logSvc = new SvnLogService(null);
 			logSvc.RemoteTarget = new Uri("http://ankhsvn.open.collab.net/svn/ankhsvn/");
 			logSvc.RequiredItemCount = 10;
 			logSvc.LogItemReceived += delegate(object sender, EventArgs e)

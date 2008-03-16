@@ -32,7 +32,7 @@ namespace Ankh
             if (parentProvider == null)
                 throw new ArgumentNullException("parentProvider");
 
-            _container = new ServiceContainer(parentProvider);
+            _container = new AnkhServiceContainer(parentProvider);
 
             _commandMapper = ((CommandMapper)_container.GetService(typeof(CommandMapper))) ?? new CommandMapper(this);
             _context = ((AnkhContext)_container.GetService(typeof(AnkhContext))) ?? AnkhContext.Create(this);

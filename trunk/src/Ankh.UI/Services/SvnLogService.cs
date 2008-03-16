@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
 using Utils.Services;
-using Ankh.UI.Helpers;
 using System.Threading;
 using System.ComponentModel;
 
@@ -11,8 +10,7 @@ namespace Ankh.UI.Services
 {
 	public class SvnLogService : ISvnLogService
 	{
-		[ThreadStatic]
-		static SvnClient client;
+        readonly IAnkhServiceProvider _context;
 		//ISynchronizeInvoke syncContext;
 
 		Uri remoteTarget;
@@ -31,22 +29,16 @@ namespace Ankh.UI.Services
 
 		SynchronizationContext syncContext;
 		SendOrPostCallback sopCallback;
-		public SvnLogService()//ISynchronizeInvoke syncContext)
+		public SvnLogService(IAnkhServiceProvider context)//ISynchronizeInvoke syncContext)
 		{
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
 			//this.syncContext = syncContext;
 			syncContext = SynchronizationContext.Current;
 			sopCallback = new SendOrPostCallback(SopCallback);
 			logItemReceiver += new EventHandler<SvnLogEventArgs>(OnReceiveItem);
-		}
-
-		SvnClient Client
-		{
-			get 
-			{
-				if(client == null)
-					client = SvnClientFactory.NewClient();
-				return client;
-			}
 		}
 
 		public Uri RemoteTarget
@@ -112,10 +104,13 @@ namespace Ankh.UI.Services
 
 		void DoFetch(SvnLogArgs args)
 		{
-			if (LocalTarget != null)
-				Client.Log(LocalTarget, args, logItemReceiver);
-			if (RemoteTarget != null)
-				Client.Log(RemoteTarget, args, logItemReceiver);
+            using (SvnClient client = _context.GetService<ISvnClientPool>().GetClient())
+            {
+                if (LocalTarget != null)
+                    client.Log(LocalTarget, args, logItemReceiver);
+                if (RemoteTarget != null)
+                    client.Log(RemoteTarget, args, logItemReceiver);
+            }
 		}
 
 		void FetchCompleted(IAsyncResult rslt)
