@@ -14,10 +14,14 @@ namespace Ankh.Scc
     [GuidAttribute(AnkhId.SccProviderId), CLSCompliant(false)]
     public partial class AnkhSccProvider : IVsSccProvider, IVsSccGlyphs, IVsSccControlNewSolution, IAnkhSccService
     {
-        IFileStatusCache _statusCache; 
+        readonly AnkhContext _context;
+        IFileStatusCache _statusCache;
         public AnkhSccProvider(AnkhContext context)
         {
-            this.context = context;
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
         }
 
         /// <summary>
@@ -26,8 +30,8 @@ namespace Ankh.Scc
         /// <value>The status cache.</value>
         public IFileStatusCache StatusCache
         {
-            get { return _statusCache ?? (_statusCache = context.GetService<IFileStatusCache>()); }
-        }      
+            get { return _statusCache ?? (_statusCache = _context.GetService<IFileStatusCache>()); }
+        }
 
         /// <summary>
         /// Determines if any item in the solution are under source control.
@@ -160,6 +164,5 @@ namespace Ankh.Scc
 
         private uint baseIndex;
         private bool active;
-        private AnkhContext context;        
     }
 }

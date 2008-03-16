@@ -5,6 +5,9 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
 using Ankh.Selection;
 using Microsoft.VisualStudio;
+using Ankh.Commands;
+using AnkhSvn.Ids;
+using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.Scc
 {
@@ -201,6 +204,29 @@ namespace Ankh.Scc
         internal void OnProjectClosed(IVsSccProject2 project, bool removed)
         {
             _projectMap.Remove(project);
+        }
+
+        bool _registeredSccCleanup;
+        internal void OnSccCleanup(CommandEventArgs e)
+        {
+            _registeredSccCleanup = false;
+        }
+
+        void RegisterForSccCleanup()
+        {
+            if (_registeredSccCleanup)
+                return;
+
+            IVsUIShell shell = (IVsUIShell)_context.GetService(typeof(SVsUIShell));
+
+            if(shell != null)
+            {
+                Guid ankhCommands = AnkhId.CommandSetGuid;
+                object nil = null;
+
+                if(ErrorHandler.Succeeded(shell.PostExecCommand(ref ankhCommands, (uint)AnkhCommand.SccFinishTasks, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref nil)))
+                    _registeredSccCleanup = true;
+            }
         }
     }
 }

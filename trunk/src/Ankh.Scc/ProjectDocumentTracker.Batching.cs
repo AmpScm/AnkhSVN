@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Scc
 {
     partial class ProjectDocumentTracker
     {
+        readonly List<String> _batchErrors = new List<string>();
         bool _batchOk;
         bool _inBatch;
+        
         /// <summary>
         /// Indicates that a project is about start a batch query process.
         /// </summary>
@@ -45,6 +48,25 @@ namespace Ankh.Scc
             pfActionOK = _inBatch && _batchOk ? 1 : 0;
             _inBatch = _batchOk = false;
             return VSConstants.S_OK;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected void ShowQueryErrorDialog()
+        {
+            IVsUIShell shell = (IVsUIShell)_context.GetService(typeof(SVsUIShell));
+
+            // TODO: Show dialog containing a summary of the errors in _batchErrors
+
+            // shell.ShowMessageBox(....)
+            _batchErrors.Clear();
+        }
+
+        void AddBatchError(string message)
+        {
+            if (!_batchErrors.Contains(message))
+                _batchErrors.Add(message);
         }
     }
 }

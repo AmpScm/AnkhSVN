@@ -97,16 +97,8 @@ namespace Ankh.VSPackage
 			if((OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP)
 			{
 				// Informally confirmed by MS: Never raised by VS (Office only)
-				return VSConstants.S_OK;
+				return VSConstants.E_NOTIMPL;
 			}
-			
-			// Ok, now make sure we have the command enabled and it's somebody just running commands
-			// at random.
-
-			CommandUpdateEventArgs updateArgs = new CommandUpdateEventArgs((AnkhCommand)nCmdID, Context);
-
-			if (!CommandMapper.PerformUpdate(updateArgs.Command, updateArgs) || !updateArgs.Enabled)
-				return (int)OLEConstants.OLECMDERR_E_DISABLED; // Command is disabled, don't process any further
 			
 			object argIn = null;
 
@@ -122,7 +114,8 @@ namespace Ankh.VSPackage
 
 			// TODO: enable something like
 			// AnkhCommands.PerformCommand(args.Command, args);
-			CommandMapper.Execute(args.Command, args);
+            if (!CommandMapper.Execute(args.Command, args))
+                return (int)OLEConstants.OLECMDERR_E_DISABLED;
 
 			if (pvaOut != IntPtr.Zero)
 			{

@@ -125,7 +125,7 @@ namespace Ankh.Scc
             if(item != null)
                 item.MarkDirty();
 
-            IProjectNotifier pn = context.GetService<IProjectNotifier>();
+            IProjectNotifier pn = _context.GetService<IProjectNotifier>();
             if (pn != null)
                 pn.MarkDirty(new SvnProject[0]); // TODO: find a way to pass project
             
