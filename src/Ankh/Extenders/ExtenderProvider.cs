@@ -78,7 +78,7 @@ namespace Ankh.Extenders
 
             if (selection != null)
             {
-                bool first = false;
+                bool first = true;
                 foreach (SvnItem item in selection.GetSelectedSvnItems())
                 {
                     if (!item.IsVersioned && !item.IsVersionable)
