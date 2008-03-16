@@ -15,8 +15,9 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="filename">The filename.</param>
+        /// <param name="fileOrigin">The file origin.</param>
         /// <param name="flags">The flags.</param>
-        internal void OnProjectFileAdded(IVsSccProject2 project, string filename, VSADDFILEFLAGS flags)
+        internal void OnProjectFileAdded(IVsSccProject2 project, string filename, string fileOrigin, VSADDFILEFLAGS flags)
         {
         }
 

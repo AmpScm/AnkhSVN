@@ -4,6 +4,10 @@ using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
+using Ankh.Commands;
+using AnkhSvn.Ids;
+using Microsoft.VisualStudio.OLE.Interop;
+using System.IO;
 
 namespace Ankh.Scc
 {
@@ -20,6 +24,9 @@ namespace Ankh.Scc
         uint _projectCookie;
         uint _documentCookie;
         readonly AnkhSccProvider _sccProvider;
+        bool _collectHints;
+        readonly List<string> _fileHints = new List<string>();
+        readonly SortedList<string, string> _fileOrigins;
 
         public ProjectDocumentTracker(AnkhContext context)
         {
@@ -28,6 +35,7 @@ namespace Ankh.Scc
 
             _context = context;
             _sccProvider = context.GetService<AnkhSccProvider>();
+            _fileOrigins = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
 
             Hook(true);
         }
@@ -84,6 +92,16 @@ namespace Ankh.Scc
         /// </returns>
         public int HandsOffFiles(uint grfRequiredAccess, int cFiles, string[] rgpszMkDocuments)
         {
+            if (_collectHints && rgpszMkDocuments != null)
+            {
+                // Some projects call HandsOffFiles of files they want to add. Use that to collect extra origin information
+                foreach (string file in rgpszMkDocuments)
+                {
+                    string fullFile = Path.GetFullPath(file);
+                    if (!_fileHints.Contains(fullFile))
+                        _fileHints.Add(fullFile);
+                }
+            }
             return VSConstants.S_OK;
         }
 
@@ -98,6 +116,33 @@ namespace Ankh.Scc
         public int HandsOnFiles(int cFiles, string[] rgpszMkDocuments)
         {
             return VSConstants.S_OK;
-        }                 
+        }
+
+        bool _registeredSccCleanup;
+        internal void OnSccCleanup(CommandEventArgs e)
+        {
+            _registeredSccCleanup = false;
+            _collectHints = false;
+
+            _fileHints.Clear();
+            _fileOrigins.Clear();
+        }
+
+        void RegisterForSccCleanup()
+        {
+            if (_registeredSccCleanup)
+                return;
+
+            IVsUIShell shell = (IVsUIShell)_context.GetService(typeof(SVsUIShell));
+
+            if(shell != null)
+            {
+                Guid ankhCommands = AnkhId.CommandSetGuid;
+                object nil = null;
+
+                if(ErrorHandler.Succeeded(shell.PostExecCommand(ref ankhCommands, (uint)AnkhCommand.SccFinishTasks, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref nil)))
+                    _registeredSccCleanup = true;
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace Ankh.Scc
 
         IStatusImageMapper StatusImages
         {
-            get { return _statusImages ?? (_statusImages = context.GetService<IStatusImageMapper>()); }
+            get { return _statusImages ?? (_statusImages = _context.GetService<IStatusImageMapper>()); }
         }
 
         /// <summary>

@@ -97,9 +97,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SccProjectData.cs" />
+    <Compile Include="TaskFinisher.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ankh.Scc.snk" />    
+    <None Include="Ankh.Scc.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">

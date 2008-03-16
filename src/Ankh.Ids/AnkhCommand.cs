@@ -16,7 +16,10 @@ namespace AnkhSvn.Ids
 	public enum AnkhCommand // : int
 	{
 		None = 0,
+
+        // Special task commands not used in menu's
         MarkProjectDirty,
+        SccFinishTasks,
         
 
 		// These values live in the same numberspace as the other values within 

@@ -65,6 +65,7 @@
     <Compile Include="Scc\AnkhStatus.cs" />
     <Compile Include="Scc\IFileStatusCache.cs" />
     <Compile Include="Scc\ISccHierarchyWalker.cs" />
+    <Compile Include="Scc\IProjectFileMapper.cs" />
     <Compile Include="Scc\IStatusImageMapper.cs" />
     <Compile Include="Scc\NodeStatus.cs" />
     <Compile Include="Scc\NodeStatusKind.cs" />

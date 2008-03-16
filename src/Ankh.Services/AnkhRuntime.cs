@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.Design;
 using Ankh.Commands;
+using System.Diagnostics;
 
 namespace Ankh
 {
@@ -71,6 +72,7 @@ namespace Ankh
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [DebuggerStepThrough]
         public T GetService<T>()
         {
             return (T)GetService(typeof(T));
@@ -87,6 +89,7 @@ namespace Ankh
         /// <returns>
         /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
+        [DebuggerStepThrough]
         public object GetService(Type serviceType)
         {
             return _container.GetService(serviceType);
