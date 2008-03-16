@@ -13,16 +13,26 @@ namespace Ankh.UI
 {
     public partial class LogDialogTest : Form
     {
-        public LogDialogTest()
+        readonly IAnkhServiceProvider _context;
+        public LogDialogTest(IAnkhServiceProvider context)
+            : this()
         {
-            InitializeComponent();
+            if (context == null)
+                throw new ArgumentNullException("context");
 
-			SvnLogService logSvc = new SvnLogService();
+            _context = context;
+
+			SvnLogService logSvc = new SvnLogService(_context);
 
 			SvnLogPresenter presenter = new SvnLogPresenter(this.logDialogView1, logSvc);
 			logSvc.RemoteTarget = new Uri("http://ankhsvn.open.collab.net/svn/ankhsvn/");
 
 			presenter.Start();
+        }
+
+        protected LogDialogTest()
+        {
+            InitializeComponent();
         }
 
 		//public Uri RemoteTarget

@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using SharpSvn;
 using System.Globalization;
 using System.Collections.ObjectModel;
-using Ankh.UI.Helpers;
 
 namespace Ankh.UI
 {

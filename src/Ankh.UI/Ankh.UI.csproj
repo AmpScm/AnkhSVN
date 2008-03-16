@@ -235,7 +235,6 @@
     <Compile Include="FileSystemTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Helpers\SvnClientFactory.cs" />
     <Compile Include="ICurrentItemSource.cs" />
     <Compile Include="IFileSystemItem.cs" />
     <Compile Include="IRepositoryTreeView.cs">
