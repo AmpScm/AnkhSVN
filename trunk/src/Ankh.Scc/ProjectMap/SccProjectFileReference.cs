@@ -68,6 +68,7 @@ namespace Ankh.Scc.ProjectMap
 
             if (_refCount <= 0)
             {
+                _file.RemoveReference(this);
                 _project.InvokeRemoveReference(this);
             }
         }

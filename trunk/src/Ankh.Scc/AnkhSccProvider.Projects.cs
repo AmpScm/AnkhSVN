@@ -152,13 +152,29 @@ namespace Ankh.Scc
         }
 
         /// <summary>
+        /// Called by ProjectDocumentTracker just before a solution is closed
+        /// </summary>
+        /// <remarks>At this time the closing can not be canceled.</remarks>
+        internal void OnStartedSolutionClose()
+        {
+#if !DEBUG
+            // Skip file by file cleanup of the project<-> file mapping
+            // Should proably always be enabled around the release of AnkhSVN 2.0
+            _projectMap.Clear();
+            _fileMap.Clear();
+#endif
+        }
+
+        /// <summary>
         /// Called by ProjectDocumentTracker when a solution is closed
         /// </summary>
         internal void OnSolutionClosed()
         {
             Debug.Assert(_projectMap.Count == 0);
+            Debug.Assert(_fileMap.Count == 0);
 
             _projectMap.Clear();
+            _fileMap.Clear();
             StatusCache.ClearCache();
 
             // Clear status for reopening solution

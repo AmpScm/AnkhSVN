@@ -18,6 +18,12 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
+        public int OnBeforeCloseSolution(object pUnkReserved)
+        {
+            _sccProvider.OnStartedSolutionClose();
+            return VSConstants.S_OK;
+        }
+
         public int OnAfterCloseSolution(object pUnkReserved)
         {
             _sccProvider.OnSolutionClosed();
@@ -59,12 +65,7 @@ namespace Ankh.Scc
             }
 
             return VSConstants.S_OK;
-        }
-
-        public int OnBeforeCloseSolution(object pUnkReserved)
-        {
-            return VSConstants.S_OK;
-        }
+        }        
 
         public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
         {

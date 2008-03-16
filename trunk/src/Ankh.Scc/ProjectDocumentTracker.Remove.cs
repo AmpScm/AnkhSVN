@@ -38,7 +38,11 @@ namespace Ankh.Scc
                     if (sccProject == null)
                         continue; // Not handled by our provider
 
-                    _sccProvider.OnProjectFileRemoved(sccProject, rgpszMkDocuments[iFile], rgFlags[iFile]);
+                    string file = rgpszMkDocuments[iFile];
+
+                    bool wasDeleted = System.IO.File.Exists(file);
+
+                    _sccProvider.OnProjectFileRemoved(sccProject, file, wasDeleted, rgFlags[iFile]);
                 }
             }
             return VSConstants.S_OK;
