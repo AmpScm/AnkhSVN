@@ -14,7 +14,7 @@ namespace Ankh.Scc.ProjectMap
     {
         readonly IAnkhServiceProvider _context;
         readonly string _filename;
-        SccProjectFileReference _firstReference;
+        SccProjectFileReference _firstReference;        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SccProjectFile"/> class.
