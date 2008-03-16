@@ -6,10 +6,11 @@ using Microsoft.VisualStudio;
 using Ankh.UI;
 using Ankh.Selection;
 using Ankh.Commands;
+using AnkhSvn.Ids;
 
 namespace Ankh.Scc
 {
-    [Command(AnkhSvn.Ids.AnkhCommand.MarkProjectDirty)]
+    [Command(AnkhCommand.MarkProjectDirty)]
     public class MarkProjectDirty : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
@@ -32,8 +33,11 @@ namespace Ankh.Scc
 
                 IVsSccProject2 scc = project.RawHandle as IVsSccProject2;
 
-                if(scc != null)
+                if (scc != null)
+                {
+                    // Mark all glyphs cached in a project dirty
                     scc.SccGlyphChanged(0, null, null, null);
+                }
             }
         }
     }
