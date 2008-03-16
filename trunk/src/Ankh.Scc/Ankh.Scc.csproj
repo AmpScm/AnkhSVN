@@ -73,6 +73,7 @@
     <Compile Include="AnkhSccProvider.FileMap.cs">
       <DependentUpon>AnkhSccProvider.cs</DependentUpon>
     </Compile>
+    <Compile Include="MarkProjectDirty.cs" />
     <Compile Include="ProjectDocumentTracker.cs" />
     <Compile Include="ProjectDocumentTracker.Add.cs">
       <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
