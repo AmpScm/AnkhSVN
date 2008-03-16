@@ -5,8 +5,15 @@ using System.Text;
 namespace Ankh.Selection
 {
     /// <summary>
-    /// 
+    /// An <see cref="SvnProject"/> instance is a black box reference to a project
     /// </summary>
+    /// <remarks>
+    /// <para>Normally you only use <see cref="SvnProject"/> instances to pass between the <see cref="ISelectionContext"/>, 
+    /// <see cref="ISccHierarchyWalker"/> and <see cref="IProjectFileMapper"/> services</para>
+    /// <para>The SvnProject contains a <see cref="path"/> and a <see cref="rawhandle"/> which can both be null but not both at the same time</para>
+    /// <para>FullPath = null in case of a solution only-project (E.g. website project)</para>
+    /// <para>RawHandle = null when retrieved from the selectionprovider when the file is not in a project (E.g. solution folder)</para>
+    /// </remarks>
     public class SvnProject
     {
         readonly string _fullPath;
@@ -19,8 +26,15 @@ namespace Ankh.Selection
         /// <param name="rawHandle">The raw handle.</param>
         public SvnProject(string fullPath, object rawHandle)
         {
-            if (string.IsNullOrEmpty(fullPath))
+            if (string.IsNullOrEmpty(fullPath) && rawHandle == null)
                 throw new ArgumentNullException("fullPath");
+
+            // Current implementation details (which might change)
+
+            // fullpath or rawHandle must be non-null
+
+            // rawHandle = a IVsSccProject2 instance
+            // fullPath = a file in the
 
             _fullPath = fullPath;
             _rawHandle = rawHandle;

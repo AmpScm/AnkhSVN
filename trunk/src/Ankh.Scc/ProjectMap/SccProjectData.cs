@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.Runtime.InteropServices;
 using AnkhSvn.Ids;
 using Microsoft.VisualStudio;
+using Ankh.Selection;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -17,7 +18,10 @@ namespace Ankh.Scc.ProjectMap
         bool _isManaged;
         bool _isRegistered;
         bool _loaded;
+        string _projectFile;
+        bool _checkedProjectFile;
         AnkhSccProvider _scc;
+        SvnProject _svnProjectInstance;
 
         public SccProjectData(IAnkhServiceProvider context, IVsSccProject2 project)
         {
@@ -43,6 +47,56 @@ namespace Ankh.Scc.ProjectMap
 
             // Called by IVsSccManager.RegisterSccProject() when we were preregistered
             internal set { _isManaged = value; }
+        }
+
+        public string ProjectFile
+        {
+            get
+            {
+                if (!_checkedProjectFile)
+                {
+                    _checkedProjectFile = true;
+                    ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+
+                    if (walker != null)
+                    {
+                        foreach (string file in walker.GetSccFiles(Project, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.Empty))
+                        {
+                            _projectFile = file;
+                            break;
+                        }
+                    }
+                }
+
+                return _projectFile;
+            }
+        }
+
+        public SvnProject SvnProject
+        {
+            get
+            {
+                if (_svnProjectInstance == null)
+                    _svnProjectInstance = new SvnProject(ProjectFile, Project);
+
+                return _svnProjectInstance;
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the project might have been renamed
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="oldName">The old name.</param>
+        /// <param name="newName">The new name.</param>
+        internal void CheckProjectRename(IVsSccProject2 project, string oldName, string newName)
+        {
+            if (_checkedProjectFile && oldName == ProjectFile)
+            {
+                _checkedProjectFile = false;
+                _projectFile = null;
+                _svnProjectInstance = null;
+            }
         }
 
         /// <summary>
@@ -111,6 +165,14 @@ namespace Ankh.Scc.ProjectMap
             }                
         }
 
+        public IEnumerable<string> GetAllFiles()
+        {
+            foreach (SccProjectFileReference r in _files)
+            {
+                yield return r.Filename;
+            }
+        }
+
         internal void AddPath(string path)
         {
             if (_files.Contains(path))
@@ -161,6 +223,18 @@ namespace Ankh.Scc.ProjectMap
 
             return false;
         }
-        #endregion     
+        #endregion                
+    
+        /// <summary>
+        /// Determines whether the project contains the specified file
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// 	<c>true</c> if the project contains the file; otherwise, <c>false</c>.
+        /// </returns>
+        internal bool ContainsFile(string path)
+        {
+            return _files.Contains(path);
+        }
     }
 }

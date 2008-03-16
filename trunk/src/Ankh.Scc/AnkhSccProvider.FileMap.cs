@@ -5,13 +5,15 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Scc.ProjectMap;
 using System.IO;
 using System.Diagnostics;
+using System.Collections;
+using Ankh.Selection;
 
 namespace Ankh.Scc
 {
     /// <summary>
     /// 
     /// </summary>
-	partial class AnkhSccProvider
+	partial class AnkhSccProvider : IProjectFileMapper
 	{
         // ********************************************************
         // This file contains two very important features of the Scc provider:
@@ -149,6 +151,8 @@ namespace Ankh.Scc
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
                 return; // Not managed by us
+            else
+                data.CheckProjectRename(project, oldName, newName);
 
             data.RemoveFile(oldName);
             data.AddPath(newName);
@@ -173,7 +177,7 @@ namespace Ankh.Scc
             ok = true;
 
             if (!_projectMap.ContainsKey(project))
-                return; // Not managed by us
+                return; // Not managed by us            
 
             if (!IsActive)
                 return;
@@ -219,6 +223,151 @@ namespace Ankh.Scc
 
             _fileMap.Remove(file.Filename);
         }
+        #endregion
+
+        #region IProjectFileMapper Members
+
+        public IEnumerable<Ankh.Selection.SvnProject> GetAllProjectsContaining(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            path = Path.GetFullPath(path);
+
+            SccProjectFile file;
+            if (!_fileMap.TryGetValue(path, out file))
+                yield break;
+
+            foreach(SccProjectData pd in file.GetOwnerProjects())
+            {
+                yield return pd.SvnProject;
+            }
+        }
+
+        public IEnumerable<Ankh.Selection.SvnProject> GetAllProjectsContaining(ICollection<string> paths)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
+            Hashtable projects = new Hashtable();
+            foreach (string path in paths)
+            {
+                SccProjectFile file;
+                if (!_fileMap.TryGetValue(path, out file))
+                    continue;
+
+                foreach (SccProjectData pd in file.GetOwnerProjects())
+                {
+                    if (projects.Contains(pd))
+                        continue;
+
+                    projects.Add(pd, pd);
+
+                    yield return pd.SvnProject;
+                }
+            }            
+        }
+
+        /// <summary>
+        /// Gets a list of all files contained within <paramref name="project"/>
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetAllFilesOf(Ankh.Selection.SvnProject project)
+        {
+            if (project == null)
+                throw new ArgumentNullException("project");
+
+            project = ResolveRawProject(project);
+
+            IVsSccProject2 scc = project.RawHandle as IVsSccProject2;
+            SccProjectData data;
+
+            if (scc == null || !_projectMap.TryGetValue(scc, out data))
+                yield break;
+
+            foreach(string file in data.GetAllFiles())
+            {
+                if (file[file.Length-1] != '\\') // Don't return paths
+                    yield return file;
+            }
+        }
+
+        public IEnumerable<string> GetAllFilesOf(ICollection<Ankh.Selection.SvnProject> projects)
+        {
+            SortedList<string, string> files = new SortedList<string,string>(StringComparer.OrdinalIgnoreCase);
+            Hashtable handled = new Hashtable();
+            foreach (SvnProject p in projects)
+            {
+                SvnProject project = ResolveRawProject(p);
+
+                IVsSccProject2 scc = project.RawHandle as IVsSccProject2;
+                SccProjectData data;
+
+                if (scc == null || !_projectMap.TryGetValue(scc, out data))
+                    continue;
+
+                if (handled.Contains(data))
+                    continue;
+
+                handled.Add(data, data);
+
+                foreach (string file in data.GetAllFiles())
+                {
+                    if (file[file.Length - 1] == '\\') // Don't return paths
+                        continue;
+
+                    if (files.ContainsKey(file))
+                        continue;
+
+                    files.Add(file, file);
+                    yield return file;
+                }
+            }            
+        }
+
+        public ICollection<string> GetAllFilesOfAllProjects()
+        {
+            List<string> files = new List<string>(_fileMap.Count+1);
+
+            ISelectionContext selection = _context.GetService<ISelectionContext>();
+
+            if (selection != null && !string.IsNullOrEmpty(selection.SolutionFilename))
+                files.Add(selection.SolutionFilename);
+
+            foreach(string file in files)
+            {
+                if (file[file.Length - 1] == '\\') // Don't return paths
+                        continue;
+
+                files.Add(file);
+            }
+
+            return files.ToArray();
+        }
+
+        #endregion
+
+        #region IProjectFileMapper Members
+
+
+        public SvnProject ResolveRawProject(SvnProject project)
+        {
+            if (project == null)
+                throw new ArgumentNullException("project");
+
+            if (project.RawHandle == null)
+            {
+                foreach (SccProjectData pd in _projectMap.Values)
+                {
+                    if (pd.IsSolutionFolder && pd.ContainsFile(project.FullPath))
+                        return pd.SvnProject;
+                }
+            }
+
+            return project;
+        }
+
         #endregion
     }
 }
