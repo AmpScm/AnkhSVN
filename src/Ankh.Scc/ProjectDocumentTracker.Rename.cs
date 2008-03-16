@@ -54,7 +54,7 @@ namespace Ankh.Scc
                     if (sccProject == null)
                         continue; // Not handled by our provider
 
-                    _sccProvider.OnProjectRenameFile(sccProject, rgszMkOldNames[iFile], rgszMkNewNames[iFile], rgFlags[iFile]);
+                    _sccProvider.OnProjectRenamedFile(sccProject, rgszMkOldNames[iFile], rgszMkNewNames[iFile], rgFlags[iFile]);
                 }
             }
 
@@ -107,7 +107,7 @@ namespace Ankh.Scc
                     if (sccProject == null)
                         continue; // Not handled by our provider
 
-                    _sccProvider.OnProjectDirectoryRename(sccProject, rgszMkOldNames[iDirectory], rgszMkNewNames[iDirectory], rgFlags[iDirectory]);
+                    _sccProvider.OnProjectDirectoryRenamed(sccProject, rgszMkOldNames[iDirectory], rgszMkNewNames[iDirectory], rgFlags[iDirectory]);
                 }
             }
 

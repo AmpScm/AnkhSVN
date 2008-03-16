@@ -89,6 +89,10 @@
     <Compile Include="ProjectDocumentTracker.Solution.cs">
       <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProjectMap\SccProjectData.cs" />
+    <Compile Include="ProjectMap\SccProjectFile.cs" />
+    <Compile Include="ProjectMap\SccProjectFileCollection.cs" />
+    <Compile Include="ProjectMap\SccProjectFileReference.cs" />
     <Compile Include="ProjectNotifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -96,7 +100,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SccProjectData.cs" />
     <Compile Include="TaskFinisher.cs" />
   </ItemGroup>
   <ItemGroup>
