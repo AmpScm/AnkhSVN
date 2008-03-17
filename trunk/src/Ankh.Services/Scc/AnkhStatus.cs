@@ -8,14 +8,14 @@ namespace Ankh
     public sealed class AnkhStatus
     {
         readonly SvnNodeKind _nodeKind;        
-        readonly string fullPath;
-        readonly SvnStatus localContentStatus;
-        readonly bool localCopied;
-        readonly bool localLocked;
-        readonly SvnStatus localPropertyStatus;
-        readonly string path;
-        readonly bool switched;
-        readonly Uri uri;
+        readonly string _fullPath;
+        readonly SvnStatus _localContentStatus;
+        readonly bool _localCopied;
+        readonly bool _localLocked;
+        readonly SvnStatus _localPropertyStatus;
+        readonly string _path;
+        readonly bool _switched;
+        readonly Uri _uri;
 
         readonly string _repositoryId;
         readonly DateTime _lastChangeTime;
@@ -29,14 +29,14 @@ namespace Ankh
                 throw new ArgumentNullException("args");
 
             _nodeKind = args.NodeKind;
-            fullPath = args.FullPath;
-            localContentStatus = args.LocalContentStatus;
-            localCopied = args.LocalCopied;
-            localLocked = args.LocalLocked;
-            localPropertyStatus = args.LocalPropertyStatus;
-            path = args.Path;
-            switched = args.Switched;
-            uri = args.Uri;
+            _fullPath = args.FullPath;
+            _localContentStatus = args.LocalContentStatus;
+            _localCopied = args.LocalCopied;
+            _localLocked = args.LocalLocked;
+            _localPropertyStatus = args.LocalPropertyStatus;
+            _path = args.Path;
+            _switched = args.Switched;
+            _uri = args.Uri;
 
             if (args.WorkingCopyInfo != null)
             {
@@ -54,10 +54,10 @@ namespace Ankh
         /// <param name="allStatuses"></param>
         private AnkhStatus(SvnStatus allStatuses)
         {
-            localContentStatus = allStatuses;
-            localPropertyStatus = allStatuses;
-            localLocked = false;
-            localCopied = false;
+            _localContentStatus = allStatuses;
+            _localPropertyStatus = allStatuses;
+            _localLocked = false;
+            _localCopied = false;
         }
 
         #region Static instances
@@ -113,7 +113,7 @@ namespace Ankh
         //     the subversion api
         public string FullPath
         {
-            get { return fullPath; }
+            get { return _fullPath; }
         }
 
         //
@@ -121,7 +121,7 @@ namespace Ankh
         //     Content status in working copy
         public SvnStatus LocalContentStatus
         {
-            get { return localContentStatus; }
+            get { return _localContentStatus; }
         }
         //
         // Summary:
@@ -132,36 +132,36 @@ namespace Ankh
         //     (or part of a subtree that is scheduled as such.).
         public bool LocalCopied
         {
-            get { return localCopied; }
+            get { return _localCopied; }
         }
         //
         // Summary:
         //     Gets a boolean indicating whether the workingcopy is locked
         public bool LocalLocked
         {
-            get { return localLocked; }
+            get { return _localLocked; }
         }
         //
         // Summary:
         //     Property status in working copy
         public SvnStatus LocalPropertyStatus
         {
-            get { return localPropertyStatus; }
+            get { return _localPropertyStatus; }
         }
         public string Path
         {
-            get { return path; }
+            get { return _path; }
         }
         //
         // Summary:
         //     Gets a boolean indicating whether the file is switched in the working copy
         public bool Switched
         {
-            get { return switched; }
+            get { return _switched; }
         }
         public Uri Uri
         {
-            get { return uri; }
+            get { return _uri; }
         }           
     }
 
