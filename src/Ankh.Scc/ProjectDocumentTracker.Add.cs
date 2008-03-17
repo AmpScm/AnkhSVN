@@ -108,8 +108,17 @@ namespace Ankh.Scc
 
         protected bool SvnCanAddPath(string fullpath)
         {
-            // TODO: Determine if we could add fullname
-            return true;
+            using (SvnSccContext svn = new SvnSccContext(_context))
+            {
+                // TODO: Determine if we could add fullname
+                if (!svn.CouldAdd(fullpath))
+                {
+                    _batchErrors.Add(string.Format(Resources.PathXBlocked, fullpath));
+                    return false;
+                }
+                else
+                    return true;
+            }
         }
 
         /// <summary>

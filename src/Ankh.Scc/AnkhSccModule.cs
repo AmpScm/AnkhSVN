@@ -23,9 +23,10 @@ namespace Ankh.Scc
             
             AnkhSccProvider service = new AnkhSccProvider(Context);
             Container.AddService(typeof(AnkhSccProvider), service, true);
-            Container.AddService(typeof(IAnkhSccService), service, true);
+            Container.AddService(typeof(IAnkhSccService), service);
+            Container.AddService(typeof(IProjectFileMapper), service);
             Container.AddService(typeof(IAnkhProjectDocumentTracker), new ProjectDocumentTracker(Context));
-            Container.AddService(typeof(IProjectNotifier), new ProjectNotifier(this), true);
+            Container.AddService(typeof(IProjectNotifier), new ProjectNotifier(this));          
 
             // TODO: We should only call this if we are initializing to be the SCC provider.
 
