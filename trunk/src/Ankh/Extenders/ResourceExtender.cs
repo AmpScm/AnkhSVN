@@ -92,35 +92,35 @@ namespace Ankh.Extenders
          Description("Repository UUID")]
         public string RepositoryUuid
         {
-            get { return _item.Status.WorkingCopyInfo.RepositoryId.ToString(); }
+            get { return _item.Status.RepositoryId; }
         }
 
         [Category("Subversion"),
          Description("Last committed author")]
         public string LastCommittedAuthor
         {
-            get { return _item.Status.WorkingCopyInfo.LastChangeAuthor; }
+            get { return _item.Status.LastChangeAuthor; }
         }
 
         [Category("Subversion"),
          Description("Revision")]
         public long Revision
         {
-            get { return _item.Status.WorkingCopyInfo.Revision; }
+            get { return _item.Status.Revision; }
         }
 
         [Category("Subversion"),
          Description("Last committed date")]
         public DateTime LastCommittedDate
         {
-            get { return _item.Status.WorkingCopyInfo.LastChangeTime.ToLocalTime(); }
+            get { return _item.Status.LastChangeTime.ToLocalTime(); }
         }
 
         [Category("Subversion"),
          Description("Last committed revision")]
         public long LastCommittedRevision
         {
-            get { return _item.Status.WorkingCopyInfo.LastChangeRevision; }
+            get { return _item.Status.LastChangeRevision; }
         }
 
         [Category("Subversion"),

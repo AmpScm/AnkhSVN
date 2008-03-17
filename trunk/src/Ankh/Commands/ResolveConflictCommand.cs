@@ -73,8 +73,11 @@ namespace Ankh.Commands
         /// <param name="item"></param>
         private void Resolve(IContext context, SvnItem item)
         {
+            // TODO: Retrieve live information instead of using the cache
+            // BH: We don't cache data to use it on only 1 location
 
-            string mergeExe = GetExe( context );
+
+            /*string mergeExe = GetExe( context );
             SvnWorkingCopyInfo entry = item.Status.WorkingCopyInfo;
             SvnWorkingCopyState state;
             bool binary = false;
@@ -145,7 +148,7 @@ namespace Ankh.Commands
                         client.Resolved(item.Path, args);
                     }
                 }
-            }
+            }*/
         }        
 
         private void Copy( string toPath, string fromFile )

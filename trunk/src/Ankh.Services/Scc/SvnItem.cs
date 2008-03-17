@@ -201,8 +201,8 @@ namespace Ankh
             get
             {
                 EnsureClean();
-                if (this.status.WorkingCopyInfo != null)
-                    return this.status.WorkingCopyInfo.NodeKind == SvnNodeKind.Directory;
+                if (this.status.NodeKind == SvnNodeKind.Directory || this.Status.NodeKind == SvnNodeKind.File)
+                    return (this.status.NodeKind == SvnNodeKind.Directory);
                 else
                     return Directory.Exists(this.path);
             }
@@ -222,8 +222,8 @@ namespace Ankh
 
         bool GetIsFile()
         {
-            if (this.status.WorkingCopyInfo != null)
-                return this.status.WorkingCopyInfo.NodeKind == SvnNodeKind.File;
+            if (this.status.NodeKind == SvnNodeKind.Directory || this.Status.NodeKind == SvnNodeKind.File)
+                return this.status.NodeKind == SvnNodeKind.File;
             else
                 return File.Exists(this.path);
         }

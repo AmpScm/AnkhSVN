@@ -7,126 +7,43 @@ namespace Ankh
 {
     public sealed class AnkhStatus
     {
+        readonly SvnNodeKind _nodeKind;        
+        readonly string fullPath;
+        readonly SvnStatus localContentStatus;
+        readonly bool localCopied;
+        readonly bool localLocked;
+        readonly SvnStatus localPropertyStatus;
+        readonly string path;
+        readonly bool switched;
+        readonly Uri uri;
+
+        readonly string _repositoryId;
+        readonly DateTime _lastChangeTime;
+        readonly string _lastChangeAuthor;
+        readonly long _lastChangeRevision;
+        readonly long _revision;
+
         public AnkhStatus(SvnStatusEventArgs args)
         {
             if (args == null)
                 throw new ArgumentNullException("args");
 
+            _nodeKind = args.NodeKind;
             fullPath = args.FullPath;
-            isRemoteUpdated = args.IsRemoteUpdated;
             localContentStatus = args.LocalContentStatus;
             localCopied = args.LocalCopied;
             localLocked = args.LocalLocked;
             localPropertyStatus = args.LocalPropertyStatus;
             path = args.Path;
-            remoteContentStatus = args.RemoteContentStatus;
-            remoteLock = args.RemoteLock;
-            remotePropertyStatus = args.RemotePropertyStatus;
-            remoteUpdateCommitAuthor = args.RemoteUpdateCommitAuthor;
-            remoteUpdateCommitDate = args.RemoteUpdateCommitTime;
-            remoteUpdateNodeKind = args.RemoteUpdateNodeKind;
-            remoteUpdateRevision = args.RemoteUpdateRevision;
             switched = args.Switched;
             uri = args.Uri;
-            workingCopyInfo = args.WorkingCopyInfo;
-        }
 
-        public override bool Equals(object obj)
-        {
-            AnkhStatus other = obj as AnkhStatus;
-            if (other == null)
-                return false;
-
-            return other.LocalContentStatus == LocalContentStatus &&
-                other.LocalPropertyStatus == LocalPropertyStatus &&
-                other.RemoteContentStatus == RemoteContentStatus &&
-                other.RemotePropertyStatus == RemotePropertyStatus &&
-                other.LocalLocked == LocalLocked &&
-                other.LocalCopied == LocalCopied &&
-                other.Switched == Switched &&
-                Compare(other.WorkingCopyInfo, WorkingCopyInfo);
-        }
-
-        public override int GetHashCode()
-        {
-            int hashCode = WorkingCopyInfo == null ? 0 : WorkingCopyInfo.GetHashCode();
-
-            if (LocalCopied)
-                hashCode ^= 1 << 32;
-            if (LocalLocked)
-                hashCode ^= 1 << 31;
-            if (Switched)
-                hashCode ^= 1 << 30;
-
-            return hashCode ^
-                (int)LocalContentStatus << 24 ^ // Although SvnStatus is an int, treat it as a byte because there will probably never be more than 256 statuses
-                (int)LocalPropertyStatus << 16 ^
-                (int)RemoteContentStatus << 8 ^
-                (int)RemotePropertyStatus;
-        }
-
-        static bool Compare(SvnWorkingCopyInfo a, SvnWorkingCopyInfo b)
-        {
-            if (a == null)
-            {
-                if (b == null)
-                    return true;
-                else
-                    return false;
-            }
-            else
-            {
-                if (b == null)
-                    return false;
-
-                return Compare(a.Name, b.Name) &&
-                    a.Revision == b.Revision &&
-                    Compare(a.Checksum, b.Checksum) &&
-                    Compare(a.Uri, b.Uri) &&
-                    Compare(a.RepositoryId, b.RepositoryId) &&
-                    Compare(a.RepositoryUri, b.RepositoryUri) &&
-                    a.NodeKind == b.NodeKind &&
-                    a.Schedule == b.Schedule &&
-                    a.IsCopy == b.IsCopy &&
-                    a.IsDeleted == b.IsDeleted &&
-                    Compare(a.CopiedFrom, b.CopiedFrom) &&
-                    a.CopiedFromRevision == b.CopiedFromRevision &&
-                    Compare(a.ConflictNewFile, b.ConflictNewFile) &&
-                    Compare(a.ConflictOldFile, b.ConflictOldFile) &&
-                    Compare(a.ConflictWorkFile, b.ConflictWorkFile) &&
-                    Compare(a.PropertyRejectFile, b.PropertyRejectFile) &&
-                    Compare(a.ContentChangeTime, b.ContentChangeTime) &&
-                    Compare(a.PropertyChangeTime, b.PropertyChangeTime) &&
-                    a.LastChangeRevision == b.LastChangeRevision &&
-                    Compare(a.LastChangeTime, b.LastChangeTime) &&
-                    Compare(a.LastChangeAuthor, b.LastChangeAuthor) &&
-                    Compare(a.LockToken, b.LockToken) &&
-                    Compare(a.LockComment, b.LockComment) &&
-                    Compare(a.LockOwner, b.LockOwner) &&
-                    Compare(a.LockTime, b.LockTime) &&
-                    Compare(a.ChangeList, b.ChangeList) &&
-                    a.IsAbsent == b.IsAbsent &&
-                    a.IsIncomplete == b.IsIncomplete &&
-                    a.WorkingCopySize == b.WorkingCopySize;
-            }
-        }
-        static bool Compare(object a, object b)
-        {
-            if (a == null)
-            {
-                if (b == null)
-                    return true;
-                else
-                    return false;
-            }
-            else
-            {
-                if (b == null)
-                    return false;
-                else
-                    return a.Equals(b);
-            }
-        }
+            _lastChangeTime = args.WorkingCopyInfo.LastChangeTime;
+            _lastChangeRevision = args.WorkingCopyInfo.LastChangeRevision;
+            _lastChangeAuthor = args.WorkingCopyInfo.LastChangeAuthor;
+            _revision = args.WorkingCopyInfo.Revision;
+            _repositoryId = args.WorkingCopyInfo.RepositoryId.ToString();
+        }        
 
         /// <summary>
         /// Create non-locked, non-copied item with status specified
@@ -138,24 +55,50 @@ namespace Ankh
             localPropertyStatus = allStatuses;
             localLocked = false;
             localCopied = false;
-            remoteContentStatus = allStatuses;
-            remotePropertyStatus = allStatuses;
         }
 
-        static AnkhStatus()
-        {
-            unversioned = new AnkhStatus(SvnStatus.NotVersioned);
-
-            none = new AnkhStatus(SvnStatus.None);
-        }
-
+        #region Static instances
+        readonly static AnkhStatus _unversioned = new AnkhStatus(SvnStatus.NotVersioned);
+        readonly static AnkhStatus _none = new AnkhStatus(SvnStatus.None);
         public static AnkhStatus Unversioned
         {
-            get { return unversioned; }
+            get { return _unversioned; }
         }
+
         public static AnkhStatus None
         {
-            get { return none; }
+            get { return _none; }
+        }
+        #endregion
+
+        public SvnNodeKind NodeKind
+        {
+            get { return _nodeKind; }
+        }
+
+        public DateTime LastChangeTime
+        {
+            get { return _lastChangeTime; }
+        }
+
+        public string LastChangeAuthor
+        {
+            get { return _lastChangeAuthor; }
+        }
+
+        public long LastChangeRevision
+        {
+            get { return _lastChangeRevision; }
+        }
+
+        public long Revision
+        {
+            get { return _revision; }
+        }
+
+        public string RepositoryId
+        {
+            get { return _repositoryId; }
         }
 
         // Summary:
@@ -169,14 +112,7 @@ namespace Ankh
         {
             get { return fullPath; }
         }
-        //
-        // Summary:
-        //     Gets the out of date status of the item; if true the RemoteUpdate* properties
-        //     are set
-        public bool IsRemoteUpdated
-        {
-            get { return isRemoteUpdated; }
-        }
+
         //
         // Summary:
         //     Content status in working copy
@@ -213,48 +149,6 @@ namespace Ankh
         {
             get { return path; }
         }
-        public SvnStatus RemoteContentStatus
-        {
-            get { return remoteContentStatus; }
-        }
-        public SvnLockInfo RemoteLock
-        {
-            get { return remoteLock; }
-        }
-        public SvnStatus RemotePropertyStatus
-        {
-            get { return remotePropertyStatus; }
-        }
-
-        //
-        // Summary:
-        //     Out of Date: Gets the author of the OutOfDate commit
-        public string RemoteUpdateCommitAuthor
-        {
-            get { return remoteUpdateCommitAuthor; }
-        }
-        //
-        // Summary:
-        //     Out of Date: Last commit date of the item
-        public DateTime RemoteUpdateCommitDate
-        {
-            get { return remoteUpdateCommitDate; }
-        }
-        //
-        // Summary:
-        //     Out of Date: Gets the node kind of the OutOfDate commit
-        public SvnNodeKind RemoteUpdateNodeKind
-        {
-            get { return remoteUpdateNodeKind; }
-        }
-
-        //
-        // Summary:
-        //     Out of Date: Last commit version of the item
-        public long RemoteUpdateRevision
-        {
-            get { return remoteUpdateRevision; }
-        }
         //
         // Summary:
         //     Gets a boolean indicating whether the file is switched in the working copy
@@ -265,32 +159,7 @@ namespace Ankh
         public Uri Uri
         {
             get { return uri; }
-        }
-        public SvnWorkingCopyInfo WorkingCopyInfo
-        {
-            get { return workingCopyInfo; }
-        }
-
-
-        readonly SvnWorkingCopyInfo workingCopyInfo;
-        readonly static AnkhStatus unversioned;
-        readonly static AnkhStatus none;
-        readonly string fullPath;
-        readonly bool isRemoteUpdated;
-        readonly SvnStatus localContentStatus;
-        readonly bool localCopied;
-        readonly bool localLocked;
-        readonly SvnStatus localPropertyStatus;
-        readonly string path;
-        readonly SvnStatus remoteContentStatus;
-        readonly SvnLockInfo remoteLock;
-        readonly SvnStatus remotePropertyStatus;
-        readonly string remoteUpdateCommitAuthor;
-        readonly DateTime remoteUpdateCommitDate;
-        readonly SvnNodeKind remoteUpdateNodeKind;
-        readonly long remoteUpdateRevision;
-        readonly bool switched;
-        readonly Uri uri;
+        }           
     }
 
 }

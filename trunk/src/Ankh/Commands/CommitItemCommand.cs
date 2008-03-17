@@ -70,7 +70,7 @@ namespace Ankh.Commands
             {
                 string startText = "Committing ";
                 if ( repositories.Count > 1 && items.Count > 0 )
-                    startText += "to repository " + ((SvnItem)items[0]).Status.WorkingCopyInfo.RepositoryUri;
+                    startText += "to repository " + ((SvnItem)items[0]).Status.Uri;
                 using (context.StartOperation(startText))
                 {
                     try
@@ -143,7 +143,7 @@ namespace Ankh.Commands
 
         private string GetUuid( AnkhContext context, SvnItem item )
         {
-            string uuid = item.Status.WorkingCopyInfo != null ? item.Status.WorkingCopyInfo.RepositoryId.ToString() : null;
+            string uuid = item.Status.RepositoryId;
             // freshly added items have no uuid
             if ( uuid == null )
             {
@@ -152,7 +152,7 @@ namespace Ankh.Commands
                 {
                     IFileStatusCache statusCache = context.GetService<IFileStatusCache>();
                     SvnItem parentItem = statusCache[parentDir];
-                    uuid = parentItem.Status.WorkingCopyInfo != null ? parentItem.Status.WorkingCopyInfo.RepositoryId.ToString() : null;
+                    uuid = parentItem.Status.RepositoryId;
 
                     // still nothing? try the parent item
                     if ( uuid == null )
