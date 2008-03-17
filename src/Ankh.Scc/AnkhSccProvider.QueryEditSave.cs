@@ -120,7 +120,7 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int OnAfterSaveUnreloadableFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo)
         {
-            MarkDirty(null, pszMkDocument);
+            MarkGlyphsDirty(null, pszMkDocument);
 
             return VSConstants.S_OK;
         }
@@ -169,7 +169,7 @@ namespace Ankh.Scc
             if(item != null)
                 item.MarkDirty();
 
-            MarkDirty(null, pszMkDocument);
+            MarkGlyphsDirty(null, pszMkDocument);
             
             return VSConstants.S_OK;
         }
