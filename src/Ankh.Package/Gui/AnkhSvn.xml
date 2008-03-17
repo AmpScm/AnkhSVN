@@ -12,7 +12,6 @@
     <Import type="AnkhSvn.Ids.AnkhCommandMenu" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Menu_" />
   </Imports>
   <Defines>
-	  
   </Defines>
   <UI packageId="Ankh_PackageGuid" autoBmpId="Ankh_BmpGuid">
     <MenuRef id="guidSHLMainMenu:IDM_VS_MENU_FILE">
