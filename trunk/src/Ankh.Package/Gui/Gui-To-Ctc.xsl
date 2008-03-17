@@ -69,7 +69,7 @@
 		if(from.Contains("$(Configuration)"))
 		{
 			if(string.IsNullOrEmpty(configuration))
-				configuration = "debug";
+				throw new InvalidOperationException("Configuration not set");
 				
 			string altFrom = from.Replace("$(Configuration)", configuration);
 			
@@ -81,7 +81,7 @@
 		
 		if(!File.Exists(from))
 		{
-      throw new FileNotFoundException(string.Format("Import {0} missing", from));
+			throw new FileNotFoundException(string.Format("Import {0} missing", from));
 			//return string.Format(" // Ignored loading inputtype; from={0}\n\n", from);
 		}
 
@@ -96,6 +96,7 @@
 		if(attrs.Length > 0)
 			typeAttr = (GuidAttribute)attrs[0];
 
+		sb.AppendFormat("\n // Imported from: {0}", from);
 		sb.AppendFormat("\n // Type: {0}\n", tp.AssemblyQualifiedName);
 		foreach(System.Reflection.FieldInfo fif in tp.GetFields(BindingFlags.Public | System.Reflection.BindingFlags.Static))
 		{
