@@ -20,7 +20,7 @@ namespace Ankh
                     statusImages.MakeTransparent(statusImages.GetPixel(0, 0));
 
                     statusImageList = new ImageList();
-                    statusImageList.ImageSize = new Size(statusImages.Width / STATUS_IMAGE_COUNT, statusImages.Height);
+                    statusImageList.ImageSize = new Size(8, statusImages.Height);
                     statusImageList.Images.AddStrip(statusImages);
                 }
                 return statusImageList;

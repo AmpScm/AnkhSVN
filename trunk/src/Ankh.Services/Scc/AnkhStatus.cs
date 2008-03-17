@@ -38,11 +38,14 @@ namespace Ankh
             switched = args.Switched;
             uri = args.Uri;
 
-            _lastChangeTime = args.WorkingCopyInfo.LastChangeTime;
-            _lastChangeRevision = args.WorkingCopyInfo.LastChangeRevision;
-            _lastChangeAuthor = args.WorkingCopyInfo.LastChangeAuthor;
-            _revision = args.WorkingCopyInfo.Revision;
-            _repositoryId = args.WorkingCopyInfo.RepositoryId.ToString();
+            if (args.WorkingCopyInfo != null)
+            {
+                _lastChangeTime = args.WorkingCopyInfo.LastChangeTime;
+                _lastChangeRevision = args.WorkingCopyInfo.LastChangeRevision;
+                _lastChangeAuthor = args.WorkingCopyInfo.LastChangeAuthor;
+                _revision = args.WorkingCopyInfo.Revision;
+                _repositoryId = args.WorkingCopyInfo.RepositoryId.ToString();
+            }
         }        
 
         /// <summary>
