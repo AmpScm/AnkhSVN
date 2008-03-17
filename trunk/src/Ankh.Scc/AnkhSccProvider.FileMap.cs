@@ -21,7 +21,7 @@ namespace Ankh.Scc
         //  - The tracking of changes in the File <-> Project mapping (Many <-> Many)
         //  - The persistance of history on project add/remove/rename actions
         //
-        Dictionary<string, SccProjectFile> _fileMap = new Dictionary<string, SccProjectFile>(StringComparer.OrdinalIgnoreCase);
+        readonly Dictionary<string, SccProjectFile> _fileMap = new Dictionary<string, SccProjectFile>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Called when a file is added to a project
@@ -42,7 +42,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return; // Let the other SCC package manage it
 
-            MarkDirty(data, filename);
+            MarkGlyphsDirty(data, filename);
 
             if (string.IsNullOrEmpty(fileOrigin))
                 return; // Don't add new files to Subversion yet to allow case only renames, etc.
@@ -67,10 +67,8 @@ namespace Ankh.Scc
                 if(addRepos != status.WorkingCopyInfo.RepositoryId)
                     return; // We can't copy it to another repository then where it came from..
                 
-                using (svn.MarkIgnoreFile(filename))
-                {
-                    svn.SafeWcCopyFixup(fileOrigin, filename);
-                }
+                svn.SafeWcCopyFixup(fileOrigin, filename);
+                MarkFilesDirty(filename);
             }
         }        
 
@@ -96,7 +94,7 @@ namespace Ankh.Scc
             {
                 SvnStatusEventArgs status = svn.SafeGetStatus(filename);
 
-                MarkDirty(data, filename);
+                MarkGlyphsDirty(data, filename);
                 if (!forDelete)
                 {
                     if (svn.IsUnversioned(status))
@@ -106,6 +104,7 @@ namespace Ankh.Scc
                 }
                 
                 svn.SafeDelete(filename);
+                MarkFilesDirty(filename);
             }
         }
 
@@ -209,7 +208,7 @@ namespace Ankh.Scc
             {
                 SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
 
-                MarkDirty(data, newName); // Mark the glyphs dirty anyway
+                MarkGlyphsDirty(data, newName); // Mark the glyphs dirty anyway
 
                 if (svn.IsUnversioned(status))
                 {
@@ -217,6 +216,8 @@ namespace Ankh.Scc
                 }
 
                 svn.SafeWcMoveFixup(oldName, newName);
+                MarkFilesDirty(newName);
+                MarkFilesDirty(oldName);
             }            
         }
 
@@ -263,10 +264,23 @@ namespace Ankh.Scc
 
             data.RemoveFile(Path.GetFullPath(oldName).TrimEnd('\\') + '\\');
             data.AddPath(Path.GetFullPath(newName).TrimEnd('\\') + '\\');
-            MarkDirty(data, newName);
+            MarkGlyphsDirty(data, newName);
         }
 
-        private void MarkDirty(SccProjectData project, string filename)
+        /// <summary>
+        /// Temporary
+        /// </summary>
+        /// <param name="filename"></param>
+        private void MarkFilesDirty(string filename)
+        {
+            if(string.IsNullOrEmpty(filename))
+                throw new ArgumentNullException("filename");
+
+            if (StatusCache != null)
+                StatusCache.MarkDirty(filename);
+        }
+
+        private void MarkGlyphsDirty(SccProjectData project, string filename)
         {
             List<SvnProject> projects = new List<SvnProject>();
             // TODO: We can probably do this smarter then the notifier; but for now it works

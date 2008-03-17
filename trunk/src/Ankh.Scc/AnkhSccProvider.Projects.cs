@@ -175,6 +175,7 @@ namespace Ankh.Scc
 
             _projectMap.Clear();
             _fileMap.Clear();
+            _unreloadable.Clear();
             StatusCache.ClearCache();
 
             // Clear status for reopening solution
