@@ -14,6 +14,7 @@ namespace Ankh.Scc
     /// </summary>
     partial class AnkhSccProvider : IVsQueryEditQuerySave2
 	{
+        readonly SortedList<string, int> _unreloadable = new SortedList<string, int>(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         /// Creates a batch of a sequence of documents before attempting to save them to disk.
         /// </summary>
@@ -42,6 +43,22 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int DeclareReloadableFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo)
         {
+            if(!string.IsNullOrEmpty(pszMkDocument))
+                lock (_unreloadable)
+                {
+                    int n;
+
+                    if (!_unreloadable.TryGetValue(pszMkDocument, out n))
+                        n = 0;
+
+                    n--;
+
+                    if (n != 0)
+                        _unreloadable[pszMkDocument] = n;
+                    else
+                        _unreloadable.Remove(pszMkDocument);
+                }
+
             return VSConstants.S_OK;
         }
 
@@ -54,6 +71,22 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int DeclareUnreloadableFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo)
         {
+            if(!string.IsNullOrEmpty(pszMkDocument))
+                lock (_unreloadable)
+                {
+                    int n;
+
+                    if (!_unreloadable.TryGetValue(pszMkDocument, out n))
+                        n = 0;
+
+                    n++;
+
+                    if (n != 0)
+                        _unreloadable[pszMkDocument] = n;
+                    else
+                        _unreloadable.Remove(pszMkDocument);
+                }
+
             return VSConstants.S_OK;
         }
 
@@ -65,7 +98,16 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int IsReloadable(string pszMkDocument, out int pbResult)
         {
-            pbResult = 1;
+            lock (_unreloadable)
+            {
+                int n;
+
+                if (_unreloadable.TryGetValue(pszMkDocument, out n))
+                    pbResult = (n != 0) ? 1 : 0;
+                else
+                    pbResult = 1;
+            }
+
             return VSConstants.S_OK;
         }
 
@@ -78,6 +120,8 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int OnAfterSaveUnreloadableFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo)
         {
+            MarkDirty(null, pszMkDocument);
+
             return VSConstants.S_OK;
         }
 
@@ -125,9 +169,7 @@ namespace Ankh.Scc
             if(item != null)
                 item.MarkDirty();
 
-            IProjectNotifier pn = _context.GetService<IProjectNotifier>();
-            if (pn != null)
-                pn.MarkDirty(new SvnProject[0]); // TODO: find a way to pass project
+            MarkDirty(null, pszMkDocument);
             
             return VSConstants.S_OK;
         }

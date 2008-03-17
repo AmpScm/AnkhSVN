@@ -101,6 +101,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SvnSccTools.cs" />
     <Compile Include="TaskFinisher.cs" />
   </ItemGroup>
   <ItemGroup>

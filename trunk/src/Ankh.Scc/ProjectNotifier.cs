@@ -11,26 +11,35 @@ namespace Ankh.Scc
 {
     public class ProjectNotifier : IProjectNotifier
     {
-        public ProjectNotifier(IAnkhServiceProvider serviceProvider)
+        readonly IAnkhServiceProvider _context;
+
+        public ProjectNotifier(IAnkhServiceProvider context)
         {
-            this.context = serviceProvider;
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
         }
 
         public void MarkDirty(Ankh.Selection.SvnProject project)
         {
+            // TODO: We could probably group the projects and only post the command once
             MarkDirty(new SvnProject[] { project });
         }
 
-        public void MarkDirty(IEnumerable<Ankh.Selection.SvnProject> projects)
+        public void MarkDirty(IEnumerable<SvnProject> projects)
         {
-            IVsUIShell uiShell = (IVsUIShell)context.GetService(typeof(SVsUIShell));
+            // TODO: We could probably group the projects and only post the command once
 
-            // After marking the item dirty, force the SccGlyphs to be reloaded. The SvnItems know if they need refreshing at that point
-            Guid commandSet = AnkhId.CommandSetGuid;
-            object projectsObj = projects;
-            uiShell.PostExecCommand(ref commandSet, (uint)AnkhCommand.MarkProjectDirty, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref projectsObj);
-        }
+            IVsUIShell uiShell = (IVsUIShell)_context.GetService(typeof(SVsUIShell));
 
-        IAnkhServiceProvider context;
+            if (uiShell != null)
+            {
+                // After marking the item dirty, force the SccGlyphs to be reloaded. The SvnItems know if they need refreshing at that point
+                Guid commandSet = AnkhId.CommandSetGuid;
+                object projectsObj = new List<SvnProject>(projects); // Cache a list instead of the enumerator
+                uiShell.PostExecCommand(ref commandSet, (uint)AnkhCommand.MarkProjectDirty, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref projectsObj);
+            }
+        }        
     }
 }

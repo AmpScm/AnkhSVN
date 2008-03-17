@@ -120,4 +120,7 @@
   <data name="AddToSubversionCommandName" xml:space="preserve">
     <value>Add to Sub&amp;version</value>
   </data>
+  <data name="PathXBlocked" xml:space="preserve">
+    <value>The path '{0}' is currently blocked by subversion; do you have a file with a case-only-different name?</value>
+  </data>
 </root>

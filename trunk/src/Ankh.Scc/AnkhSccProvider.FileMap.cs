@@ -7,6 +7,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections;
 using Ankh.Selection;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -38,15 +39,40 @@ namespace Ankh.Scc
 
             data.AddPath(filename);
 
-            if (IsActive)
+            if (!IsActive)
+                return; // Let the other SCC package manage it
+
+            MarkDirty(data, filename);
+
+            if (string.IsNullOrEmpty(fileOrigin))
+                return; // Don't add new files to Subversion yet to allow case only renames, etc.
+
+            using (SvnSccContext svn = new SvnSccContext(_context))
             {
-                // Should we add it to subversion now or can we wait till commit time
-                if (!string.IsNullOrEmpty(fileOrigin))
+                SvnStatusEventArgs status = svn.SafeGetStatus(fileOrigin);
+
+                if (status == null)
+                    return; // The origin was not managed by subversion
+
+                if ((status.LocalContentStatus == SvnStatus.NotVersioned ||
+                    status.LocalContentStatus == SvnStatus.Added) && !status.LocalCopied)
                 {
-                    // We have a file origin; make sure it does not get lost
+                    return; // The origin was new itself
+                }
+
+                Guid addRepos;
+                if(!svn.TryGetRepositoryId(filename, out addRepos))
+                    return; // Adding would fail, don't even try
+
+                if(addRepos != status.WorkingCopyInfo.RepositoryId)
+                    return; // We can't copy it to another repository then where it came from..
+                
+                using (svn.MarkIgnoreFile(filename))
+                {
+                    svn.SafeWcCopyFixup(fileOrigin, filename);
                 }
             }
-        }
+        }        
 
         /// <summary>
         /// Called when a file is removed from a project
@@ -63,12 +89,23 @@ namespace Ankh.Scc
 
             data.RemoveFile(filename);
 
-            if (IsActive)
+            if (!IsActive)
+                return; // Let the other SCC package manage it
+
+            using (SvnSccContext svn = new SvnSccContext(_context))
             {
-                if (forDelete)
+                SvnStatusEventArgs status = svn.SafeGetStatus(filename);
+
+                MarkDirty(data, filename);
+                if (!forDelete)
                 {
-                    // Was it in subversion -> Remove
-                }                
+                    if (svn.IsUnversioned(status))
+                        return; // The file was only removed from the project. We should not touch it
+
+                    // else: The file was already removed on disk; mark it as deleted in subversion
+                }
+                
+                svn.SafeDelete(filename);
             }
         }
 
@@ -132,11 +169,19 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
-            // TODO: Is the file managed in Subversion: Verify renaming of more than casing
-            if (oldName != newName && string.Equals(oldName, newName, StringComparison.OrdinalIgnoreCase))
+            using (SvnSccContext svn = new SvnSccContext(_context))
             {
-                ok = false; // For now just disallow casing only changes
-            }
+                if (!svn.CouldAdd(newName))
+                {
+                    ok = false;
+                    return;
+                }
+
+                SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
+
+                if (svn.IsUnversioned(status))
+                    return;
+            }          
         }
 
         /// <summary>
@@ -157,11 +202,22 @@ namespace Ankh.Scc
             data.RemoveFile(oldName);
             data.AddPath(newName);
 
-            if (IsActive)
+            if (!IsActive)
+                return;
+
+            using (SvnSccContext svn = new SvnSccContext(_context))
             {
-                // Was the file in subversion?
-                // Fix history by doing the action subversion style
-            }
+                SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
+
+                MarkDirty(data, newName); // Mark the glyphs dirty anyway
+
+                if (svn.IsUnversioned(status))
+                {
+                    return; // Nothing to do
+                }
+
+                svn.SafeWcMoveFixup(oldName, newName);
+            }            
         }
 
         /// <summary>
@@ -202,11 +258,38 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 return; // Not managed by us
 
+            if(!IsActive)
+                return;
+
             data.RemoveFile(Path.GetFullPath(oldName).TrimEnd('\\') + '\\');
             data.AddPath(Path.GetFullPath(newName).TrimEnd('\\') + '\\');
+            MarkDirty(data, newName);
         }
 
-        #region ProjectFie
+        private void MarkDirty(SccProjectData project, string filename)
+        {
+            List<SvnProject> projects = new List<SvnProject>();
+            // TODO: We can probably do this smarter then the notifier; but for now it works
+            if (project != null)
+                projects.Add(project.SvnProject);
+
+            if (filename != null)
+            {
+                SccProjectFile file;
+                if (_fileMap.TryGetValue(filename, out file))
+                {
+                    foreach (SccProjectData pd in file.GetOwnerProjects())
+                    {
+                        projects.Add(pd.SvnProject);
+                    }
+                }
+            }
+
+            if(projects.Count > 0)
+                _context.GetService<IProjectNotifier>().MarkDirty(projects);
+        }      
+
+        #region ProjectFile
         internal SccProjectFile GetFile(string path)
         {
             SccProjectFile projectFile;

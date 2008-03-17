@@ -68,5 +68,14 @@ namespace Ankh.Scc {
                 return ResourceManager.GetString("AddToSubversionCommandName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path &apos;{0}&apos; is currently blocked by subversion; do you have a file with a case-only-different name?.
+        /// </summary>
+        internal static string PathXBlocked {
+            get {
+                return ResourceManager.GetString("PathXBlocked", resourceCulture);
+            }
+        }
     }
 }
