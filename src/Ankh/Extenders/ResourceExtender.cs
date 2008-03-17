@@ -13,7 +13,7 @@ namespace Ankh.Extenders
     [InterfaceType(ComInterfaceType.InterfaceIsDual)]
     public interface IResourceExtender
     {
-        string Url
+        Uri Url
         {
             get;
         }
@@ -83,9 +83,9 @@ namespace Ankh.Extenders
 
         [Category("Subversion"),
          Description("URL")]
-        public string Url
+        public Uri Url
         {
-            get { return _item.Status.Uri.ToString(); }
+            get { return _item.Status.Uri; }
         }
 
         [Category("Subversion"),

@@ -29,17 +29,30 @@ namespace Ankh
     /// </summary>
     public class SvnItem : LocalSvnItem
     {
-        public SvnItem(IAnkhServiceProvider context, string path, AnkhStatus status)
+        readonly IAnkhServiceProvider _context;
+        readonly string _fullPath;
+        bool _dirty;        
+        AnkhStatus _status;        
+
+#if DEBUG
+        bool _refreshing;
+#endif
+
+        public SvnItem(IAnkhServiceProvider context, string fullPath, AnkhStatus status)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            else if (string.IsNullOrEmpty("path"))
-                throw new ArgumentNullException("path");
+            else if (string.IsNullOrEmpty(fullPath))
+                throw new ArgumentNullException("fullPath");
+            else if (status == null)
+                throw new ArgumentNullException("status");
 
-            this.context = context;
-            this.path = path;
-            this.status = status;
+            _context = context;
+            _fullPath = fullPath;
+            _status = status;
         }
+
+
 
         /// <summary>
         /// The status of this item.
@@ -48,8 +61,10 @@ namespace Ankh
         {
             get
             {
-                EnsureClean();
-                return this.status;
+                using (EnsureClean())
+                {
+                    return _status;
+                }
             }
         }
 
@@ -58,7 +73,7 @@ namespace Ankh
         /// </summary>
         public string Path
         {
-            get { return this.path; }
+            get { return this._fullPath; }
         }
 
         public string Name
@@ -68,10 +83,10 @@ namespace Ankh
 
         public void Refresh()
         {
-            ISvnClientPool clientPool = context.GetService<ISvnClientPool>();
-            IFileStatusCache statusCache = context.GetService<IFileStatusCache>();
+            ISvnClientPool clientPool = _context.GetService<ISvnClientPool>();
+            IFileStatusCache statusCache = _context.GetService<IFileStatusCache>();
 
-            string path = this.path;
+            string path = this._fullPath;
 
             // if it's a single file, refresh the directory with Files unrecursively
             if (GetIsFile())
@@ -91,8 +106,8 @@ namespace Ankh
                         SvnItem i = statusCache[e.Path];
                         if (i != null)
                         {
-                            i.status = new AnkhStatus(e);
-                            i.dirty = false;
+                            i._status = new AnkhStatus(e);
+                            i._dirty = false;
                         }
                     });
                 }
@@ -107,22 +122,9 @@ namespace Ankh
         /// <param name="status"></param>
         public virtual void RefreshTo(AnkhStatus status)
         {
-            this.status = status;
-            dirty = false;
+            _status = status;
+            _dirty = false;
         }
-
-
-        /// <summary>
-        /// Set the status of this item to the passed in status.
-        /// </summary>
-        /// <param name="status"></param>
-        [Obsolete("Use Refresh()")]
-        public virtual void Refresh(AnkhStatus status, EventBehavior eventBehavior)
-        {
-            AnkhStatus oldStatus = this.status;
-            this.status = status;
-            dirty = false;
-        }  
 
         /// <summary>
         /// Is this item versioned?
@@ -131,17 +133,19 @@ namespace Ankh
         {
             get
             {
-                EnsureClean();
-                SvnStatus s = this.status.LocalContentStatus;
-                return s == SvnStatus.Added ||
-                       s == SvnStatus.Conflicted ||
-                       s == SvnStatus.Merged ||
-                       s == SvnStatus.Modified ||
-                       s == SvnStatus.Normal ||
-                       s == SvnStatus.Replaced ||
-                       s == SvnStatus.Deleted ||
-                    //s == StatusKind.Missing ||
-                       s == SvnStatus.Incomplete;
+                using (EnsureClean())
+                {
+                    SvnStatus s = _status.LocalContentStatus;
+                    return s == SvnStatus.Added ||
+                           s == SvnStatus.Conflicted ||
+                           s == SvnStatus.Merged ||
+                           s == SvnStatus.Modified ||
+                           s == SvnStatus.Normal ||
+                           s == SvnStatus.Replaced ||
+                           s == SvnStatus.Deleted ||
+                        //s == StatusKind.Missing ||
+                           s == SvnStatus.Incomplete;
+                }
             }
         }
 
@@ -152,12 +156,14 @@ namespace Ankh
         {
             get
             {
-                EnsureClean();
-                SvnStatus t = this.status.LocalContentStatus;
-                SvnStatus p = this.status.LocalPropertyStatus;
-                return this.IsVersioned &&
-                    (t != SvnStatus.Normal ||
-                      (p != SvnStatus.None && p != SvnStatus.Normal));
+                using (EnsureClean())
+                {
+                    SvnStatus t = _status.LocalContentStatus;
+                    SvnStatus p = _status.LocalPropertyStatus;
+                    return this.IsVersioned &&
+                        (t != SvnStatus.Normal ||
+                          (p != SvnStatus.None && p != SvnStatus.Normal));
+                }
             }
         }
 
@@ -168,11 +174,13 @@ namespace Ankh
         {
             get
             {
-                EnsureClean();
-                if (this.status.NodeKind == SvnNodeKind.Directory || this.Status.NodeKind == SvnNodeKind.File)
-                    return (this.status.NodeKind == SvnNodeKind.Directory);
-                else
-                    return Directory.Exists(this.path);
+                using (EnsureClean())
+                {
+                    if (_status.NodeKind == SvnNodeKind.Directory || _status.NodeKind == SvnNodeKind.File)
+                        return (_status.NodeKind == SvnNodeKind.Directory);
+                    else
+                        return Directory.Exists(this._fullPath);
+                }
             }
         }
 
@@ -183,17 +191,19 @@ namespace Ankh
         {
             get
             {
-                EnsureClean();
-                return GetIsFile();
+                using (EnsureClean())
+                {
+                    return GetIsFile();
+                }
             }
         }
 
         bool GetIsFile()
         {
-            if (this.status.NodeKind == SvnNodeKind.Directory || this.Status.NodeKind == SvnNodeKind.File)
-                return this.status.NodeKind == SvnNodeKind.File;
+            if (_status.NodeKind == SvnNodeKind.Directory || _status.NodeKind == SvnNodeKind.File)
+                return _status.NodeKind == SvnNodeKind.File;
             else
-                return File.Exists(this.path);
+                return File.Exists(this._fullPath);
         }
 
         /// <summary>
@@ -203,8 +213,10 @@ namespace Ankh
         {
             get
             {
-                EnsureClean();
-                return SvnTools.IsBelowManagedPath(path);
+                using (EnsureClean())
+                {
+                    return SvnTools.IsBelowManagedPath(_fullPath);
+                }
             }
         }
 
@@ -235,8 +247,10 @@ namespace Ankh
         {
             get
             {
-                EnsureClean();
-                return this.Status.LocalLocked;
+                using (EnsureClean())
+                {
+                    return this.Status.LocalLocked;
+                }
             }
         }
 
@@ -245,8 +259,10 @@ namespace Ankh
         {
             get
             {
-                EnsureClean();
-                return this.status.LocalContentStatus == SvnStatus.Deleted;
+                using (EnsureClean())
+                {
+                    return _status.LocalContentStatus == SvnStatus.Deleted;
+                }
             }
         }
 
@@ -254,14 +270,16 @@ namespace Ankh
         {
             get
             {
-                EnsureClean();
-                return this.status.LocalContentStatus == SvnStatus.None && !File.Exists(this.Path) && !Directory.Exists(this.Path);
+                using (EnsureClean())
+                {
+                    return _status.LocalContentStatus == SvnStatus.None && !File.Exists(this.Path) && !Directory.Exists(this.Path);
+                }
             }
         }
 
         public override string ToString()
         {
-            return this.path;
+            return this._fullPath;
         }
 
 
@@ -467,30 +485,59 @@ namespace Ankh
             return item.Status.LocalContentStatus == SvnStatus.Conflicted;
         }
 
-        void EnsureClean()
+        Cleaner EnsureClean()
         {
-            if (dirty)
+#if DEBUG
+            Debug.Assert(_refreshing == false, "Recursive refresh call");
+            _refreshing = true;
+#endif
+
+            if (_dirty)
                 this.Refresh();
+
+#if DEBUG
+            
+            return new Cleaner(this);
+#else
+            return null; // Optimized away
+#endif
         }
 
         public void MarkDirty()
         {
-            dirty = true;
+            _dirty = true;
         }
 
         public bool IsDirty
         {
-            get { return dirty; }
+            get { return _dirty; }
         }
 
         public virtual bool IsUnversionable
         {
-            get { return (object)status == (object)AnkhStatus.Unversioned; }
+            get { return (object)_status == (object)AnkhStatus.Unversioned; }
         }
 
-        private bool dirty;
-        private AnkhStatus status;
-        readonly IAnkhServiceProvider context;
-        readonly string path;
+        #region Cleaner
+        sealed class Cleaner : IDisposable
+        {
+#if DEBUG
+            SvnItem _instance;
+#endif
+
+            public Cleaner(SvnItem instance)
+            {
+#if DEBUG
+                _instance = instance;
+#endif
+            }
+            public void Dispose()
+            {
+#if DEBUG
+                _instance._refreshing = false;
+#endif
+            }
+        }
+        #endregion
     }
 }
