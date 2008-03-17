@@ -186,8 +186,6 @@ namespace Ankh
             // we need all paths to be on ONE form
             string normPath = PathUtils.NormalizePath(e.FullPath);
 
-            e.Detach();
-
             // is there already an item for this path?
             SvnItem existingItem;
             AnkhStatus status = new AnkhStatus(e);

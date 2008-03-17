@@ -91,7 +91,6 @@ namespace Ankh
                         SvnItem i = statusCache[e.Path];
                         if (i != null)
                         {
-                            e.Detach();
                             i.status = new AnkhStatus(e);
                             i.dirty = false;
                         }
@@ -123,38 +122,7 @@ namespace Ankh
             AnkhStatus oldStatus = this.status;
             this.status = status;
             dirty = false;
-        }
-
-        /// <summary>
-        /// Refresh the existing status of the item, using client.
-        /// </summary>
-        /// <param name="client"></param>
-        [Obsolete("Use Refresh()")]
-        public virtual void Refresh(SvnClient client)
-        {
-            this.Refresh(client, EventBehavior.Raise);
-        }
-
-        /// <summary>
-        /// Refresh the existing status of the item, using client.
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="eventBehavior">Whether to raise events.</param>
-        [Obsolete("Use Refresh()")]
-        public virtual void Refresh(SvnClient client, EventBehavior eventBehavior)
-        {
-            AnkhStatus oldStatus = this.status;
-            Collection<SvnStatusEventArgs> statuses;
-            SvnStatusArgs args = new SvnStatusArgs();
-            args.Depth = SvnDepth.Empty;
-            args.RetrieveAllEntries = true;
-            args.ThrowOnError = false;
-            if (client.GetStatus(path, args, out statuses))
-                this.status = statuses.Count > 0 ? new AnkhStatus(statuses[0]) : AnkhStatus.None;
-            else
-                this.status = AnkhStatus.None;
-            dirty = false;
-        }
+        }  
 
         /// <summary>
         /// Is this item versioned?
@@ -342,13 +310,7 @@ namespace Ankh
         {
             public UnversionableItem(IAnkhServiceProvider context, string path)
                 : base(context, path, AnkhStatus.Unversioned)
-            { }
-
-            [Obsolete]
-            public override void Refresh(SvnClient client)
-            {
-                // empty
-            }
+            { }  
 
             public override void RefreshTo(AnkhStatus status)
             {
