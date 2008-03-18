@@ -124,6 +124,7 @@
 					val = formatGuid(itemAttr.Value.ToString()) + ":";
 
 				sb.AppendFormat("#define {0}{1} {3}0x{2,-8:X}\n", prefix, fif.Name, v, val);
+				sb.AppendFormat("#define {0}{1}_IdOnly 0x{2,-8:X}\n", prefix, fif.Name, v);
 			}
 			else if(v is Guid)
 			{

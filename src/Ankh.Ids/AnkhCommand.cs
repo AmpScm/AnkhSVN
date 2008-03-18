@@ -75,6 +75,53 @@ namespace AnkhSvn.Ids
 		ViewInWindows,
 		CheckForOrphanedTreeNodes,
 
+        PendingChangesSpacer, // Whitespace command to move all buttons a bit
+
+        CommitPendingChanges,
+        CommitPendingChangesKeepingLocks,
+
+        SolutionUpdateHead,
+        SolutionUpdateSpecific,        
+
+        PendingChangesViewFlat,
+        PendingChangesViewProject,
+        PendingChangesViewChangeList,
+        PendingChangesViewFolder,                
+
+        PendingChangesViewAll,
+        PendingChangesViewLogMessage,
+
+        ItemConflictEdit,
+        ItemConflictEditVisualStudio,
+        ItemConflictResolvedMerged,
+        ItemConflictResolvedMineFull,
+        ItemConflictResolvedTheirsFull,
+
+        ItemCompareBase,
+        ItemCompareHead,
+        ItemCompareCommitted,
+        ItemComparePrevious,
+        ItemCompareSpecific,
+        
+        ItemOpenVisualStudio,
+        ItemOpenWindows,
+        ItemOpenTextEditor,
+        ItemOpenFolder,
+        ItemOpenSolutionExplorer,
+
+        ItemRevertBase,
+        ItemRevertSpecific,
+
+        ItemIgnoreFile,
+        ItemIgnoreFileType,
+        ItemIgnoreFilesInFolder,
+        
+        RefreshPendingChanges,
+
+        SolutionSwitchCombo,
+        SolutionSwitchComboFill,
+        SolutionSwitchDialog,        
+
 		RunSvnCommand,
 	}
 }

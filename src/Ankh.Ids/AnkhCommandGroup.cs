@@ -38,5 +38,13 @@ namespace AnkhSvn.Ids
 
         PendingChangesToolBar,
         PendingChangesContextMenu,
+
+        PendingChangesSolutionCommands,
+        PendingChangesView,
+        PendingChangesItems,
+        PendingChangesAdmin,
+        PendingChangesSwitch,
+
+        PendingChangesOpenEx
 	}
 }

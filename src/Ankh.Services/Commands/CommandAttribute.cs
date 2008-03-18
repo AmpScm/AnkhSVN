@@ -5,7 +5,7 @@ using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true)]
     public /*sealed*/ class CommandAttribute : Attribute // TODO: Mark sealed
     {
         readonly AnkhCommand _command;
