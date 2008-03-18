@@ -70,8 +70,6 @@ namespace Ankh.Extenders
             _cookies = null;
         }
 
-        #region IExtenderProvider Members
-
         public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
         {
             ISelectionContext selection = _context.GetService<ISelectionContext>();
@@ -117,13 +115,11 @@ namespace Ankh.Extenders
                 if(selected == null)
                     return null;
 
-                return new ResourceExtender(selected, _context);
+                return new SvnItemExtender(selected, _context);
             }
             
             return null;
         }        
-
-        #endregion   
 
         private readonly static string[] CATIDS = new string[]{
         CATID_CscFileBrowse,
