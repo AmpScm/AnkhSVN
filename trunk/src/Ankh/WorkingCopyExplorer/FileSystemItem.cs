@@ -55,7 +55,7 @@ namespace Ankh.WorkingCopyExplorer
             get { return this.explorer; }
         }
 
-        public override void GetResources( IList list, bool getChildItems, ResourceFilterCallback filter )
+        public override void GetResources( IList list, bool getChildItems, Predicate<SvnItem> filter )
         {
             if ( filter( this.svnItem ) )
             {

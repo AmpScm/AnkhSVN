@@ -1,4 +1,5 @@
 // $Id$
+using System;
 using System.Collections;
 using EnvDTE;
 
@@ -37,7 +38,7 @@ namespace Ankh
         /// that are added.</param>
         /// <returns>A list of SvnItem instances.</returns>
         IList GetSelectionResources( bool getChildItems, 
-            ResourceFilterCallback filter );
+            Predicate<SvnItem> filter );
 
         /// <summary>
         /// Returns all  the SvnItem resources from root
@@ -45,6 +46,6 @@ namespace Ankh
         /// <param name="filter">A callback used to filter the items
         /// that are added.</param>
         /// <returns>A list of SvnItem instances.</returns>
-        IList GetAllResources( ResourceFilterCallback filter );
+        IList GetAllResources( Predicate<SvnItem> filter );
     }
 }

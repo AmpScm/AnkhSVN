@@ -12,11 +12,7 @@ using Ankh.Selection;
 using Ankh.Scc;
 
 namespace Ankh
-{
-    /// <summary>
-    /// Used to decide whether this particular SvnItem should be included in a collection.
-    /// </summary>
-    public delegate bool ResourceFilterCallback(SvnItem item);
+{    
     [Obsolete]
     public enum EventBehavior
     {
@@ -33,10 +29,7 @@ namespace Ankh
         readonly string _fullPath;
         bool _dirty;        
         AnkhStatus _status;        
-
-#if DEBUG
         bool _refreshing;
-#endif
 
         public SvnItem(IAnkhServiceProvider context, string fullPath, AnkhStatus status)
         {
@@ -106,8 +99,7 @@ namespace Ankh
                         SvnItem i = statusCache[e.Path];
                         if (i != null)
                         {
-                            i._status = new AnkhStatus(e);
-                            i._dirty = false;
+                            i.RefreshTo(new AnkhStatus(e));
                         }
                     });
                 }
@@ -122,6 +114,9 @@ namespace Ankh
         /// <param name="status"></param>
         public virtual void RefreshTo(AnkhStatus status)
         {
+            if (status == null)
+                throw new ArgumentNullException("status");
+
             _status = status;
             _dirty = false;
         }
@@ -135,18 +130,23 @@ namespace Ankh
             {
                 using (EnsureClean())
                 {
-                    SvnStatus s = _status.LocalContentStatus;
-                    return s == SvnStatus.Added ||
-                           s == SvnStatus.Conflicted ||
-                           s == SvnStatus.Merged ||
-                           s == SvnStatus.Modified ||
-                           s == SvnStatus.Normal ||
-                           s == SvnStatus.Replaced ||
-                           s == SvnStatus.Deleted ||
-                        //s == StatusKind.Missing ||
-                           s == SvnStatus.Incomplete;
+                    return GetIsVersioned();
                 }
             }
+        }
+
+        bool GetIsVersioned()
+        {
+            SvnStatus s = _status.LocalContentStatus;
+            return s == SvnStatus.Added ||
+                   s == SvnStatus.Conflicted ||
+                   s == SvnStatus.Merged ||
+                   s == SvnStatus.Modified ||
+                   s == SvnStatus.Normal ||
+                   s == SvnStatus.Replaced ||
+                   s == SvnStatus.Deleted ||
+                //s == StatusKind.Missing ||
+                   s == SvnStatus.Incomplete;
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace Ankh
                 {
                     SvnStatus t = _status.LocalContentStatus;
                     SvnStatus p = _status.LocalPropertyStatus;
-                    return this.IsVersioned &&
+                    return GetIsVersioned() &&
                         (t != SvnStatus.Normal ||
                           (p != SvnStatus.None && p != SvnStatus.Normal));
                 }
@@ -312,7 +312,7 @@ namespace Ankh
         /// <param name="callback">A callback to be used to determine whether 
         /// an item should be included in the returned list.</param>
         /// <returns>A new IList of SvnItem instances.</returns>
-        public static IList Filter(IList items, ResourceFilterCallback callback)
+        public static IList Filter(IList items, Predicate<SvnItem> callback)
         {
             ArrayList list = new ArrayList(items.Count);
             foreach (SvnItem item in items)
@@ -403,100 +403,16 @@ namespace Ankh
             {
                 get { return true; }
             }
-        }
-
-        /// <summary>
-        /// A ResourceFilterCallback method that filters for modified items.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static bool ModifiedFilter(SvnItem item)
-        {
-            return item.IsModified;
-        }
-
-        /// <summary>
-        /// A ResourceFilterCallback that filters for versioned directories.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static bool DirectoryFilter(SvnItem item)
-        {
-            return item.IsVersioned && item.IsDirectory;
-        }
-
-        public static bool VersionedFilter(SvnItem item)
-        {
-            return item.IsVersioned;
-        }
-
-        public static bool UnversionedFilter(SvnItem item)
-        {
-            return !item.IsVersioned;
-        }
-
-        public static bool UnmodifiedSingleFileFilter(SvnItem item)
-        {
-            return item.IsVersioned && !item.IsModified && item.IsFile;
-        }
-
-        public static bool UnmodifiedItemFilter(SvnItem item)
-        {
-            return item.IsVersioned && !item.IsModified;
-        }
-
-        public static bool VersionedSingleFileFilter(SvnItem item)
-        {
-            return item.IsVersioned && item.IsFile;
-        }
-
-        public static bool LockedFilter(SvnItem item)
-        {
-            return item.IsLocked;
-        }
-
-        public static bool NotLockedAndLockableFilter(SvnItem item)
-        {
-            return item.IsVersioned && !item.IsLocked && item.IsFile;
-        }
-
-        public static bool ExistingOnDiskFilter(SvnItem item)
-        {
-            return !item.IsDeletedFromDisk;
-        }
-
-        public static bool NotDeletedFilter(SvnItem item)
-        {
-            return !item.IsDeleted && !item.IsDeletedFromDisk;
-        }
-
-        public static bool NoFilter(SvnItem item)
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Filter for conflicted items.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static bool ConflictedFilter(SvnItem item)
-        {
-            return item.Status.LocalContentStatus == SvnStatus.Conflicted;
-        }
+        }        
 
         Cleaner EnsureClean()
         {
-#if DEBUG
-            Debug.Assert(_refreshing == false, "Recursive refresh call");
-            _refreshing = true;
-#endif
+            Trace.Assert(!_refreshing, "Recursive refresh call");
 
             if (_dirty)
                 this.Refresh();
 
-#if DEBUG
-            
+#if TRACE
             return new Cleaner(this);
 #else
             return null; // Optimized away
@@ -521,21 +437,15 @@ namespace Ankh
         #region Cleaner
         sealed class Cleaner : IDisposable
         {
-#if DEBUG
             SvnItem _instance;
-#endif
 
             public Cleaner(SvnItem instance)
             {
-#if DEBUG
                 _instance = instance;
-#endif
             }
             public void Dispose()
             {
-#if DEBUG
                 _instance._refreshing = false;
-#endif
             }
         }
         #endregion
