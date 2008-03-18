@@ -135,16 +135,16 @@ namespace Ankh.WorkingCopyExplorer
 
         public System.Collections.IList GetSelectionResources(bool getChildItems)
         {
-            return this.GetSelectionResources(getChildItems, new ResourceFilterCallback(SvnItem.NoFilter));
+            return this.GetSelectionResources(getChildItems, new Predicate<SvnItem>(SvnItemFilters.NoFilter));
         }
 
-        public IList GetSelectionResources(bool getChildItems, ResourceFilterCallback filter)
+        public IList GetSelectionResources(bool getChildItems, Predicate<SvnItem> filter)
         {
             ArrayList selectedResources = new ArrayList();
             return selectedResources;
         }
 
-        public IList GetAllResources(ResourceFilterCallback filter)
+        public IList GetAllResources(Predicate<SvnItem> filter)
         {
             ArrayList resources = new ArrayList();
             foreach (FileSystemItem item in this.roots)

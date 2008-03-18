@@ -71,7 +71,7 @@ namespace Ankh
         /// </summary>
         /// <param name="list"></param>
         public abstract void GetResources( IList list, bool getChildItems,
-            ResourceFilterCallback filter );
+            Predicate<SvnItem> filter );
 
         public void Refresh()
         {
@@ -198,7 +198,7 @@ namespace Ankh
 
 
         protected void GetChildResources( System.Collections.IList list, bool getChildItems,
-            ResourceFilterCallback filter )
+            Predicate<SvnItem> filter )
         {
             if ( getChildItems )
             {
@@ -207,7 +207,7 @@ namespace Ankh
             }
         }
 
-        protected void FilterResources( IList inList, IList outList, ResourceFilterCallback filter )
+        protected void FilterResources( IList inList, IList outList, Predicate<SvnItem> filter )
         {
             foreach ( SvnItem item in inList )
             {
