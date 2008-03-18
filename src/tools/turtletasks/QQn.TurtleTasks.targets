@@ -7,7 +7,7 @@
 
 	<PropertyGroup>
 	  <!-- TODO: Calculate this some other way -->
-		<QQnTurtleTasksFolder>..\..\tools\TurtleTasks\</QQnTurtleTasksFolder>
+		<QQnTurtleTasksFolder>..\tools\TurtleTasks\</QQnTurtleTasksFolder>
 		
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(QQnTurtleTasksFolder)QQn.TurtleTasks.targets</MSBuildAllProjects>
 		<CoreCompileDependsOn>ApplyXslTemplates;$(CoreCompileDependsOn);DownloadDependencies</CoreCompileDependsOn>
@@ -15,9 +15,17 @@
 		<CtcCompileDependsOn>$(CtcCompileDependsOn);ApplyXslTemplates</CtcCompileDependsOn>
 	</PropertyGroup>
 
-	<Target Name="DownloadDependencies">
+	<Target Name="DownloadDependencies" 
+     Inputs="$(MSBuildAllProjects)" 
+     Outputs="@(DependencyDownload->'%(TargetDir)\%(Version)-%(Identity).tick')">
+     
+     <!--Message Importance="High" Text="Dependencies: $(MSBuildAllProjects)" />
+     <Message Importance="High" Text="Ticks: @(DependencyDownload->'%(TargetDir)\%(Version)-%(Identity).tick')" />
+     <Message Importance="High" Text="Urls: @(DependencyDownload->'%(Url)%(Identity)')" /-->
+          
+    <Delete Files="@(DependencyDownload->'%(TargetDir)\%(Version)-%(Identity).tick')" />
 		<CachedDownloadAndExtract
-			Uris="@(DependencyDownload->'%(Url)')"
+			Uris="@(DependencyDownload->'%(Url)%(Identity)')"
 			DownloadDir="$(CachedDownloadDir)"
 			TargetDir="@(DependencyDownload->'%(TargetDir)')"
 			Prefix="@(DependencyDownload->'%(Version)')">
