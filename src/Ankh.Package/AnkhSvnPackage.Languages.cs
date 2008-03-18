@@ -28,6 +28,7 @@ namespace Ankh.VSPackage
         ShowSmartIndent=true,
         SingleCodeWindowOnly=true,
         SupportCopyPasteOfHTML=false)]
+    [ProvideService(typeof(LogMessageLanguageService))]
     partial class AnkhSvnPackage
     {        
     }
