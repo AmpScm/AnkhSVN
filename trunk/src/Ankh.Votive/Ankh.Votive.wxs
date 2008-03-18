@@ -34,7 +34,7 @@
 		  <RemoveExistingProducts After="InstallFinalize" />
 	  </InstallExecuteSequence>
 
-    <UIRef Id="WixUI_Mondo" />
+    <!-->UIRef Id="WixUI_Mondo" /-->
 
     <Feature Id="ProductFeature" Title="Ankh.Votive" Level="1">
       <ComponentGroupRef Id="Ankh.Package"/>

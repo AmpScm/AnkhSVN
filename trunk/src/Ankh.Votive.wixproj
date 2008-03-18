@@ -65,6 +65,7 @@
     <Compile Include="Ankh.VS\Ankh.VS.wxs" />
     <Compile Include="Ankh\Ankh.wxs" />
     <Compile Include="Ankh.Votive\Ankh.Votive.wxs" />
+    <Compile Include="Ankh.Votive\VSExtension.wxs" />
     <Compile Include="autolib\SharpSvn\SharpSvn.wxs" />
     <Compile Include="lib\lib.wxs" />
     <Compile Include="Utils\Utils.wxs" />
@@ -124,14 +125,6 @@
       <Project>{a3248e1e-8272-4227-af02-bb86040fbed9}</Project>
       <Private>True</Private>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WixExtension Include="WixVSExtension">
-      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixVSExtension.dll</HintPath>
-    </WixExtension>
-    <WixExtension Include="WixUIExtension">
-      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll</HintPath>
-    </WixExtension>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
