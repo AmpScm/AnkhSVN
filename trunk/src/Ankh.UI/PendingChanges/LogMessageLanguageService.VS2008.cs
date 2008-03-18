@@ -8,7 +8,7 @@ namespace Ankh.UI.PendingChanges
     {
         public override string GetFormatFilterList()
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

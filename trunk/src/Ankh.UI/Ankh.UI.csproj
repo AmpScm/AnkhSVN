@@ -111,6 +111,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\AnkhSVN\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Common\Assemblies\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
@@ -270,9 +271,45 @@
     <Compile Include="PathSelector.Designer.cs">
       <DependentUpon>PathSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="PendingChanges\LogMessageEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PendingChanges\LogMessageEditor.Designer.cs">
+      <DependentUpon>LogMessageEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PendingChanges\PendingCommitsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PendingChanges\PendingCommitsPage.Designer.cs">
+      <DependentUpon>PendingCommitsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PendingChanges\PendingIssuesPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PendingChanges\PendingIssuesPage.Designer.cs">
+      <DependentUpon>PendingIssuesPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="PendingChanges\LogMessageLanguageService.cs" />
     <Compile Include="$(LogMessageFile)">
       <DependentUpon>LogMessageLanguageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PendingChanges\PendingChangesPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PendingChanges\PendingChangesPage.Designer.cs">
+      <DependentUpon>PendingChangesPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PendingChanges\PendingChangesToolControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PendingChanges\PendingChangesToolControl.Designer.cs">
+      <DependentUpon>PendingChangesToolControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PendingChanges\RecentChangesPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PendingChanges\RecentChangesPage.Designer.cs">
+      <DependentUpon>RecentChangesPage.cs</DependentUpon>
     </Compile>
     <Compile Include="PopUpListForm.Designer.cs">
       <DependentUpon>PopUpListForm.cs</DependentUpon>
@@ -617,6 +654,26 @@
     <EmbeddedResource Include="MultiLineStringTypeEditorDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MultiLineStringTypeEditorDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PendingChanges\LogMessageEditor.resx">
+      <DependentUpon>LogMessageEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PendingChanges\PendingCommitsPage.resx">
+      <DependentUpon>PendingCommitsPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PendingChanges\PendingChangesPage.resx">
+      <DependentUpon>PendingChangesPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PendingChanges\PendingChangesToolControl.resx">
+      <DependentUpon>PendingChangesToolControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PendingChanges\PendingIssuesPage.resx">
+      <DependentUpon>PendingIssuesPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PopUpListForm.resx">
       <SubType>Designer</SubType>

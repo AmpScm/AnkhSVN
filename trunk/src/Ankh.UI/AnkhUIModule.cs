@@ -19,7 +19,7 @@ namespace Ankh.UI
 
             // Instantiate the logmessage language service
             LogMessageLanguageService ls = new LogMessageLanguageService();
-            Container.AddService(typeof(LogMessageLanguageService), ls);
+            Container.AddService(typeof(LogMessageLanguageService), ls, true);
             ls.SetSite(Container);
         }
 

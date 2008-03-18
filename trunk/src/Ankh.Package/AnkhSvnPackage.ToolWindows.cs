@@ -169,10 +169,15 @@ namespace Ankh.VSPackage
             {
                 Debug.Assert(_control == null);
                 _control = value;
-
-                if (value != null)
-                    value.Site = _site;
             }
+        }
+
+        public override void OnToolBarAdded()
+        {
+            base.OnToolBarAdded();
+
+            if (Control != null)
+                Control.Site = _site;
         }
 
         public override IWin32Window Window
@@ -249,8 +254,9 @@ namespace Ankh.VSPackage
 
             this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.PendingChangesToolBar);
             this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
-            
-            Control = new CommitDialog();
+
+            Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
+                //new CommitDialog();
         }
 
         public override void OnToolBarAdded()
