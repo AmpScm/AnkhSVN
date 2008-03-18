@@ -94,8 +94,8 @@
     <Content Include="Ankh.Services.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <DependencyDownload Include="SharpSvn">
-      <Url>http://qqn.nl/~bert/builds/sharpsvn/SSvn-1.4999.384.zip</Url>
+    <DependencyDownload Include="SSvn-1.4999.384.zip">
+      <Url>http://qqn.nl/~bert/builds/sharpsvn/</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
       <Visible>false</Visible>
