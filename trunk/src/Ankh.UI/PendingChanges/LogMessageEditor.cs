@@ -71,7 +71,7 @@ namespace Ankh.UI.PendingChanges
         protected override bool IsInputKey(Keys keyData)
         {
             // Since we process each pressed keystroke, the return value is always true.
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -79,6 +79,7 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
+            base.OnGotFocus(e);
             if (codeEditorNativeWindow != null)
             {
                 codeEditorNativeWindow.Focus();

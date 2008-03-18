@@ -719,6 +719,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\TabSourceFiles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TabItems.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TabNotes.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
