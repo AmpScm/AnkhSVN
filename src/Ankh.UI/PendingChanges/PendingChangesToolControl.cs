@@ -86,9 +86,9 @@ namespace Ankh.UI.PendingChanges
                 }
             }
 
-            newToolStripButton.Checked = (page == _commitsPage);
-            openToolStripButton.Checked = (page == _changesPage);
-            saveToolStripButton.Checked = (page == _issuesPage);
+            fileChangesButton.Checked = (page == _commitsPage);
+            issuesButton.Checked = (page == _changesPage);
+            recentChangesButton.Checked = (page == _issuesPage);
         }
 
         private void newToolStripButton_Click(object sender, EventArgs e)

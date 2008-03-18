@@ -30,9 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingChangesToolControl));
             this.pendingChangesTabs = new System.Windows.Forms.ToolStrip();
-            this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.fileChangesButton = new System.Windows.Forms.ToolStripButton();
+            this.issuesButton = new System.Windows.Forms.ToolStripButton();
+            this.recentChangesButton = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pendingChangesTabs.SuspendLayout();
             this.SuspendLayout();
@@ -44,9 +44,9 @@
             this.pendingChangesTabs.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.pendingChangesTabs.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.pendingChangesTabs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripButton,
-            this.openToolStripButton,
-            this.saveToolStripButton});
+            this.fileChangesButton,
+            this.issuesButton,
+            this.recentChangesButton});
             this.pendingChangesTabs.Location = new System.Drawing.Point(0, 0);
             this.pendingChangesTabs.Name = "pendingChangesTabs";
             this.pendingChangesTabs.Padding = new System.Windows.Forms.Padding(0);
@@ -55,35 +55,35 @@
             this.pendingChangesTabs.TabIndex = 0;
             this.pendingChangesTabs.Text = "toolStrip1";
             // 
-            // newToolStripButton
+            // fileChangesButton
             // 
-            this.newToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.newToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripButton.Image")));
-            this.newToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.newToolStripButton.Name = "newToolStripButton";
-            this.newToolStripButton.Size = new System.Drawing.Size(35, 36);
-            this.newToolStripButton.Text = "File Changes";
-            this.newToolStripButton.Click += new System.EventHandler(this.newToolStripButton_Click);
+            this.fileChangesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.fileChangesButton.Image = ((System.Drawing.Image)(resources.GetObject("fileChangesButton.Image")));
+            this.fileChangesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.fileChangesButton.Name = "fileChangesButton";
+            this.fileChangesButton.Size = new System.Drawing.Size(35, 36);
+            this.fileChangesButton.Text = "Local File Changes";
+            this.fileChangesButton.Click += new System.EventHandler(this.newToolStripButton_Click);
             // 
-            // openToolStripButton
+            // issuesButton
             // 
-            this.openToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.openToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripButton.Image")));
-            this.openToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.openToolStripButton.Name = "openToolStripButton";
-            this.openToolStripButton.Size = new System.Drawing.Size(35, 36);
-            this.openToolStripButton.Text = "Issues";
-            this.openToolStripButton.Click += new System.EventHandler(this.openToolStripButton_Click);
+            this.issuesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.issuesButton.Image = ((System.Drawing.Image)(resources.GetObject("issuesButton.Image")));
+            this.issuesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.issuesButton.Name = "issuesButton";
+            this.issuesButton.Size = new System.Drawing.Size(35, 36);
+            this.issuesButton.Text = "Issues";
+            this.issuesButton.Click += new System.EventHandler(this.openToolStripButton_Click);
             // 
-            // saveToolStripButton
+            // recentChangesButton
             // 
-            this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.saveToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripButton.Image")));
-            this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.saveToolStripButton.Name = "saveToolStripButton";
-            this.saveToolStripButton.Size = new System.Drawing.Size(35, 36);
-            this.saveToolStripButton.Text = "Recent Changes";
-            this.saveToolStripButton.Click += new System.EventHandler(this.saveToolStripButton_Click);
+            this.recentChangesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.recentChangesButton.Image = ((System.Drawing.Image)(resources.GetObject("recentChangesButton.Image")));
+            this.recentChangesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.recentChangesButton.Name = "recentChangesButton";
+            this.recentChangesButton.Size = new System.Drawing.Size(35, 36);
+            this.recentChangesButton.Text = "Recent Changes";
+            this.recentChangesButton.Click += new System.EventHandler(this.saveToolStripButton_Click);
             // 
             // panel1
             // 
@@ -111,9 +111,9 @@
         #endregion
 
         private System.Windows.Forms.ToolStrip pendingChangesTabs;
-        private System.Windows.Forms.ToolStripButton newToolStripButton;
-        private System.Windows.Forms.ToolStripButton openToolStripButton;
-        private System.Windows.Forms.ToolStripButton saveToolStripButton;
+        private System.Windows.Forms.ToolStripButton fileChangesButton;
+        private System.Windows.Forms.ToolStripButton issuesButton;
+        private System.Windows.Forms.ToolStripButton recentChangesButton;
         private System.Windows.Forms.Panel panel1;
     }
 }
