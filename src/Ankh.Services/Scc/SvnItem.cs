@@ -249,7 +249,7 @@ namespace Ankh
             {
                 using (EnsureClean())
                 {
-                    return this.Status.LocalLocked;
+                    return _status.LocalLocked;
                 }
             }
         }
