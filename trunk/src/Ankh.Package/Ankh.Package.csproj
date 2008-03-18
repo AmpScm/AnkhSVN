@@ -201,9 +201,6 @@
     <Content Include="Gui\PendingChanges\ShowAll.png" />
     <Content Include="Gui\PendingChanges\ShowComment.png" />
     <Content Include="Gui\PendingChanges\Switch.png" />
-    <Content Include="Gui\PendingChanges\TabItems.png" />
-    <Content Include="Gui\PendingChanges\TabNotes.png" />
-    <Content Include="Gui\PendingChanges\TabSourceFiles.png" />
     <Content Include="Gui\PendingChanges\Update.png" />
     <Content Include="Gui\PendingChanges\UpdateSpecific.png" />
     <Content Include="Gui\PendingChanges\ViewItems.png" />
