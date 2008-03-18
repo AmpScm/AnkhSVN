@@ -180,6 +180,33 @@
     <Content Include="Gui\menu\ViewInVSNet.png" />
     <Content Include="Gui\menu\ViewInWindows.png" />
     <Content Include="Gui\menu\WorkExplorer.png" />
+    <Content Include="Gui\PendingChanges\CheckOut.png" />
+    <Content Include="Gui\PendingChanges\Commit.png" />
+    <Content Include="Gui\PendingChanges\Compare.png" />
+    <Content Include="Gui\PendingChanges\ConflictResolved.png" />
+    <Content Include="Gui\PendingChanges\EditConflict.png" />
+    <Content Include="Gui\PendingChanges\FilterOnSolution.png" />
+    <Content Include="Gui\PendingChanges\FindInSolution.png" />
+    <Content Include="Gui\PendingChanges\FlatView.png" />
+    <Content Include="Gui\PendingChanges\FolderView.png" />
+    <Content Include="Gui\PendingChanges\Help.png" />
+    <Content Include="Gui\PendingChanges\ignore.png" />
+    <Content Include="Gui\PendingChanges\Open.png" />
+    <Content Include="Gui\PendingChanges\OpenFolder.png" />
+    <Content Include="Gui\PendingChanges\PendingChanges.png" />
+    <Content Include="Gui\PendingChanges\Refresh.png" />
+    <Content Include="Gui\PendingChanges\RepoBrowser.png" />
+    <Content Include="Gui\PendingChanges\Revert.png" />
+    <Content Include="Gui\PendingChanges\RevisionGraph.png" />
+    <Content Include="Gui\PendingChanges\ShowAll.png" />
+    <Content Include="Gui\PendingChanges\ShowComment.png" />
+    <Content Include="Gui\PendingChanges\Switch.png" />
+    <Content Include="Gui\PendingChanges\TabItems.png" />
+    <Content Include="Gui\PendingChanges\TabNotes.png" />
+    <Content Include="Gui\PendingChanges\TabSourceFiles.png" />
+    <Content Include="Gui\PendingChanges\Update.png" />
+    <Content Include="Gui\PendingChanges\UpdateSpecific.png" />
+    <Content Include="Gui\PendingChanges\ViewItems.png" />
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
