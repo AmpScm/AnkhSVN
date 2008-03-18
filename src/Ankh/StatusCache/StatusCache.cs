@@ -111,7 +111,7 @@ namespace Ankh
                             directory = Path.GetDirectoryName(directory);
 
                         if (Directory.Exists(directory))
-                            this.Status(directory, SvnDepth.Children);
+                            this.Status(directory, SvnDepth.Files);
                         if (!_map.TryGetValue(normPath, out item))
                         {
                             Collection<SvnStatusEventArgs> statuses;
