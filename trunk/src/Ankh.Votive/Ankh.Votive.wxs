@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="274ee41e-23a2-41bc-a144-fff9e08e956f" Name="AnkhSVN" Language="1033"
-			 Version="2.0.0.0" Manufacturer="AnkhSVN" UpgradeCode="40880177-2453-4ec7-8eef-744ec101b688">
+			 Version="2.0.0.0" Manufacturer="AnkhSVN Team" UpgradeCode="40880177-2453-4ec7-8eef-744ec101b688">
 
-    <Package InstallerVersion="300" Compressed="yes" />
+    <Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated"/>
+
+	  <Upgrade Id="40880177-2453-4ec7-8eef-744ec101b688">
+		  <UpgradeVersion Minimum="2.0.0.0" Maximum="2.0.0.0" IncludeMinimum="yes" IncludeMaximum="yes" Property="ANKHSVNUPGRADE"/>
+	  </Upgrade>
 
     <Media Id="1" Cabinet="Ankh.Votive.cab" EmbedCab="yes" />
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -26,8 +30,11 @@
     <!-- Make sure the packages are set up in The VS Environment -->
     <CustomActionRef Id="VS2005Setup"/>
     <CustomActionRef Id="VS90Setup"/>
+	  <InstallExecuteSequence>
+		  <RemoveExistingProducts After="InstallFinalize" />
+	  </InstallExecuteSequence>
 
-    <!-->UIRef Id="WixUI_Mondo" /-->
+    <UIRef Id="WixUI_Mondo" />
 
     <Feature Id="ProductFeature" Title="Ankh.Votive" Level="1">
       <ComponentGroupRef Id="Ankh.Package"/>
