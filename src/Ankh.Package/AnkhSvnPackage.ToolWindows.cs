@@ -116,7 +116,13 @@ namespace Ankh.VSPackage
 
         public object GetService(Type serviceType)
         {
-            if (Package != null)
+            IServiceProvider paneSp = _pane;
+
+            object ob = paneSp.GetService(serviceType);
+
+            if (ob != null)
+                return ob;
+            else if (Package != null)
                 return Package.GetService(serviceType);
             else
                 return null;

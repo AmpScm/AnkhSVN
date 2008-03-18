@@ -274,9 +274,6 @@
     <Compile Include="PendingChanges\LogMessageEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PendingChanges\LogMessageEditor.Designer.cs">
-      <DependentUpon>LogMessageEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="PendingChanges\PendingCommitsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

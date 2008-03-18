@@ -8,69 +8,15 @@ using SharpSvn;
 
 namespace Ankh.Extenders
 {
-
-    [ComVisible(true)]
-    [InterfaceType(ComInterfaceType.InterfaceIsDual)]
-    public interface IResourceExtender
-    {
-        Uri Url
-        {
-            get;
-        }
-
-        string RepositoryUuid
-        {
-            get;
-        }
-
-        DateTime LastCommittedDate
-        {
-            get;
-        }
-
-        long Revision
-        {
-            get;
-        }
-
-        string TextStatus
-        {
-            get;
-        }
-
-        string PropertyStatus
-        {
-            get;
-        }
-
-
-
-        string LastCommittedAuthor
-        {
-            get;
-        }
-
-        long LastCommittedRevision
-        {
-            get;
-        }
-
-        bool Locked
-        {
-            get;
-        }
-
-    }
     /// <summary>
-    /// Summary description for TestExtender.
+    /// Extends <see cref="SvnItem"/> in the property grid
     /// </summary>
     [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.None)]
-    public class ResourceExtender : IResourceExtender
+    public class SvnItemExtender
     {
         readonly IAnkhServiceProvider _context;
         readonly SvnItem _item;
-        public ResourceExtender(SvnItem item, IAnkhServiceProvider context)
+        public SvnItemExtender(SvnItem item, IAnkhServiceProvider context)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
@@ -81,64 +27,55 @@ namespace Ankh.Extenders
             _context = context;
         }
 
-        [Category("Subversion"),
-         Description("URL")]
+        [Category("Subversion"), Description("URL")]
         public Uri Url
         {
             get { return _item.Status.Uri; }
         }
 
-        [Category("Subversion"),
-         Description("Repository UUID")]
+        [Category("Subversion"), Description("Repository UUID")]
         public string RepositoryUuid
         {
             get { return _item.Status.RepositoryId; }
         }
 
-        [Category("Subversion"),
-         Description("Last committed author")]
+        [Category("Subversion"), Description("Last committed author")]
         public string LastCommittedAuthor
         {
             get { return _item.Status.LastChangeAuthor; }
         }
 
-        [Category("Subversion"),
-         Description("Revision")]
+        [Category("Subversion"), Description("Revision")]
         public long Revision
         {
             get { return _item.Status.Revision; }
         }
 
-        [Category("Subversion"),
-         Description("Last committed date")]
+        [Category("Subversion"), Description("Last committed date")]
         public DateTime LastCommittedDate
         {
             get { return _item.Status.LastChangeTime.ToLocalTime(); }
         }
 
-        [Category("Subversion"),
-         Description("Last committed revision")]
+        [Category("Subversion"), Description("Last committed revision")]
         public long LastCommittedRevision
         {
             get { return _item.Status.LastChangeRevision; }
         }
 
-        [Category("Subversion"),
-         Description("Text status")]
+        [Category("Subversion"), Description("Text status")]
         public string TextStatus
         {
             get { return _item.Status.LocalContentStatus.ToString(); }
         }
 
-        [Category("Subversion"),
-         Description("Property status")]
+        [Category("Subversion"), Description("Property status")]
         public string PropertyStatus
         {
             get { return _item.Status.LocalPropertyStatus.ToString(); }
         }
 
-        [Category("Subversion"),
-        Description("Locked")]
+        [Category("Subversion"), Description("Locked")]
         public bool Locked
         {
             get { return _item.Status.LocalLocked; }

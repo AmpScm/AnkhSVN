@@ -1,6 +1,4 @@
-﻿// Based on: Samples\IDE\CSharp\Examle.LanuageServiceInDialog\CodeEditor.cs
-// of the Microsoft Visual Studio SDK
-//***************************************************************************
+﻿//***************************************************************************
 //
 //    Copyright (c) Microsoft Corporation. All rights reserved.
 //    This code is licensed under the Visual Studio SDK license terms.
@@ -11,23 +9,16 @@
 //
 //***************************************************************************
 
-
 using System;
-using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
-using IServiceProvider = System.IServiceProvider;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-using IMenuCommandService = System.ComponentModel.Design.IMenuCommandService;
-using OleMenuCommandService = Microsoft.VisualStudio.Shell.OleMenuCommandService;
-using AnkhSvn.Ids;
+
 namespace Ankh.UI.PendingChanges
 {
     /// <summary>
@@ -36,7 +27,7 @@ namespace Ankh.UI.PendingChanges
     /// <seealso cref="UserControl"/>
     public partial class LogMessageEditor : UserControl
     {
-        private CommentEditorNativeWindow commentEditorNativeWindow;
+        private CodeEditorNativeWindow codeEditorNativeWindow;
 
         #region Methods
 
@@ -44,11 +35,12 @@ namespace Ankh.UI.PendingChanges
         /// Creation and initialization of <see cref="CodeEditorNativeWindow"/> class.
         /// </summary>
         /// <param name="serviceProvider">The IOleServiceProvider interface is a generic access mechanism to locate a globally unique identifier (GUID) identified service.</param>
-        public void Init(IServiceProvider serviceProvider)
+        [CLSCompliant(false)]
+        public void Init(IOleServiceProvider serviceProvider)
         {
-            commentEditorNativeWindow = new CommentEditorNativeWindow();
-            commentEditorNativeWindow.Init(serviceProvider, this);
-            commentEditorNativeWindow.Area = this.ClientRectangle;
+            codeEditorNativeWindow = new CodeEditorNativeWindow();
+            codeEditorNativeWindow.Init(serviceProvider, this);
+            codeEditorNativeWindow.Area = this.ClientRectangle;
         }
 
         protected override void Dispose(bool disposing)
@@ -57,9 +49,9 @@ namespace Ankh.UI.PendingChanges
             {
                 if (disposing)
                 {
-                    if (commentEditorNativeWindow != null)
+                    if (codeEditorNativeWindow != null)
                     {
-                        commentEditorNativeWindow.Dispose();
+                        codeEditorNativeWindow.Dispose();
                     }
                 }
             }
@@ -79,14 +71,18 @@ namespace Ankh.UI.PendingChanges
         protected override bool IsInputKey(Keys keyData)
         {
             // Since we process each pressed keystroke, the return value is always true.
-            return true;
+            return false;
         }
 
+        /// <summary>
+        /// Overrides OnGotFocus method to handle OnGotFocus event
+        /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
-            base.OnGotFocus(e);
-            if (commentEditorNativeWindow != null)
-                commentEditorNativeWindow.Focus();
+            if (codeEditorNativeWindow != null)
+            {
+                codeEditorNativeWindow.Focus();
+            }
         }
 
         /// <summary>
@@ -94,45 +90,22 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         protected override void OnSizeChanged(EventArgs e)
         {
-            if (commentEditorNativeWindow != null)
+            if (codeEditorNativeWindow != null)
             {
-                commentEditorNativeWindow.Area = this.ClientRectangle;
+                codeEditorNativeWindow.Area = this.ClientRectangle;
             }
         }
 
-        #endregion        
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if (commentEditorNativeWindow.PreFilterMessage(ref msg))
-                return true;
-
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        internal object GetCommentService(Type serviceType)
-        {
-            if (commentEditorNativeWindow != null)
-            {
-                if (serviceType == typeof(IOleCommandTarget))
-                    return (IOleCommandTarget)commentEditorNativeWindow;
-
-                return null;
-            }
-
-            return null;
-        }
+        #endregion
     }
 
     /// <summary>
     /// This class inherits from NativeWindow class, that provides a low-level encapsulation of a window handle and a window procedure
     /// </summary>
     /// <seealso cref="NativeWindow"/>
-    internal class CommentEditorNativeWindow : NativeWindow, IOleCommandTarget, IDisposable, System.Windows.Forms.IMessageFilter
+    internal class CodeEditorNativeWindow : NativeWindow, System.Windows.Forms.IMessageFilter, IOleCommandTarget, IDisposable
     {
         #region Fields
-
-        private Control _parent;
 
         /// <summary>
         /// Editor window handle
@@ -155,13 +128,15 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         private IOleServiceProvider serviceProvider;
 
-        IServiceProvider _serviceProvider;
+        /// <summary>
+        /// priority command target cookie
+        /// </summary>
+        private uint priorityCommandTargetCookie;
 
         /// <summary>
         /// Reference to VsCodeWindow object
         /// </summary>
         private IVsCodeWindow codeWindow;
-        IVsWindowPane windowPane;
 
         #endregion
 
@@ -176,7 +151,8 @@ namespace Ankh.UI.PendingChanges
             {
                 if (editorHwnd != IntPtr.Zero)
                 {
-                    NativeMethods.SetWindowPos(editorHwnd, IntPtr.Zero, value.X, value.Y, value.Width, value.Height, 0x04);
+                    NativeMethods.SetWindowPos(editorHwnd, IntPtr.Zero, value.X, value.Y,
+                        value.Width, value.Height, 0x04);
                 }
             }
         }
@@ -200,27 +176,23 @@ namespace Ankh.UI.PendingChanges
 
             // initialize code window
             INITVIEW[] initView = new INITVIEW[1];
-            initView[0].fDragDropMove = 1;
-            initView[0].fHotURLs = 1;
-            initView[0].fOvertype = 0;
             initView[0].fSelectionMargin = 0;
-            // fStreamSelMode = obsolete
-            initView[0].fVirtualSpace = 0;
-            initView[0].fVisibleWhitespace = 0;
+            initView[0].IndentStyle = vsIndentStyle.vsIndentStyleSmart;
             initView[0].fWidgetMargin = 0;
-            initView[0].IndentStyle = vsIndentStyle.vsIndentStyleNone;
+            initView[0].fVirtualSpace = 0;
+            initView[0].fDragDropMove = 1;
+            initView[0].fVisibleWhitespace = 0;
 
             IVsCodeWindowEx codeWindowEx = codeWindow as IVsCodeWindowEx;
-            int hr = codeWindowEx.Initialize(
-                (uint)(_codewindowbehaviorflags.CWB_DISABLEDROPDOWNBAR | _codewindowbehaviorflags.CWB_DISABLESPLITTER),
+            int hr = codeWindowEx.Initialize((uint)_codewindowbehaviorflags.CWB_DISABLEDROPDOWNBAR |
+                (uint)_codewindowbehaviorflags.CWB_DISABLESPLITTER,
                 0, null, null,
-                (uint)TextViewInitFlags.VIF_SET_WIDGET_MARGIN |
-                (uint)TextViewInitFlags.VIF_SET_SELECTION_MARGIN |
-                (uint)TextViewInitFlags.VIF_VSCROLL |
-                //(int)TextViewInitFlags2.VIF_ACTIVEINMODALSTATE |
-                (uint)TextViewInitFlags2.VIF_SUPPRESSBORDER |
-                (uint)TextViewInitFlags2.VIF_SUPPRESS_STATUS_BAR_UPDATE |
-                (uint)TextViewInitFlags2.VIF_SUPPRESSTRACKCHANGES,
+                (int)TextViewInitFlags.VIF_SET_WIDGET_MARGIN |
+                (int)TextViewInitFlags.VIF_SET_SELECTION_MARGIN |
+                (int)TextViewInitFlags2.VIF_ACTIVEINMODALSTATE |
+                (int)TextViewInitFlags2.VIF_SUPPRESSBORDER |
+                (int)TextViewInitFlags2.VIF_SUPPRESS_STATUS_BAR_UPDATE |
+                (int)TextViewInitFlags2.VIF_SUPPRESSTRACKCHANGES,
                 initView);
 
             if (hr != VSConstants.S_OK)
@@ -246,14 +218,13 @@ namespace Ankh.UI.PendingChanges
             }
 
             // create pane window
-            windowPane = codeWindow as IVsWindowPane;
+            IVsWindowPane windowPane = codeWindow as IVsWindowPane;
 
             hr = windowPane.SetSite(serviceProvider);
             if (hr != VSConstants.S_OK)
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
-
 
             hr = windowPane.CreatePaneWindow(parentHandle, 10, 10, 50, 50, out editorHwnd);
             if (hr != VSConstants.S_OK)
@@ -309,19 +280,16 @@ namespace Ankh.UI.PendingChanges
             NativeMethods.SetFocus(editorHwnd);
         }
 
-        bool _registeredFilter;
-
         /// <summary>
         /// Window initialization
         /// </summary>
         /// <param name="serviceProvider">IOleServiceProvider</param>
         /// <param name="parent">Control, that can be used to create other controls</param>
-        public void Init(IServiceProvider serviceProvider, Control parent)
+        public void Init(IOleServiceProvider serviceProvider, UserControl parent)
         {
             // Store service provider
-            this.serviceProvider = (IOleServiceProvider)serviceProvider.GetService(typeof(IOleServiceProvider));
-            _serviceProvider = serviceProvider;
-            _parent = parent;
+            this.serviceProvider = serviceProvider;
+
             //Create window            
             CreateCodeWindow(parent.Handle, out codeWindow);
             commandTarget = codeWindow as IOleCommandTarget;
@@ -334,111 +302,24 @@ namespace Ankh.UI.PendingChanges
                 Marshal.ThrowExceptionForHR(hr);
             }
 
-            /*IVsTextViewEx exView = textView as IVsTextViewEx;
-            if (exView != null)
-            {
-                object frame;
-                hr = exView.GetWindowFrame(out frame);
-
-                if (hr != VSConstants.S_OK)
-                {
-                    Marshal.ThrowExceptionForHR(hr);
-                }
-
-                IVsWindowFrame vsFrame = frame as IVsWindowFrame;
-
-                vsFrame.SetProperty(
-                GC.KeepAlive(vsFrame);
-            }*/
-
             commandHwnd = textView.GetWindowHandle();
 
             //Assign a handle to this window
             AssignHandle(commandHwnd);
             NativeMethods.ShowWindow(editorHwnd, 1);
 
-            if (parent.TopLevelControl is Form)
+            //Register priority command target
+            IVsRegisterPriorityCommandTarget register = QueryService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
+            hr = register.RegisterPriorityCommandTarget(0, (IOleCommandTarget)this, out priorityCommandTargetCookie);
+
+            if (hr != VSConstants.S_OK)
             {
-                //Add message filter
-                Application.AddMessageFilter((System.Windows.Forms.IMessageFilter)this);
-                _registeredFilter = true;
+                Marshal.ThrowExceptionForHR(hr);
             }
+
+            //Add message filter
+            Application.AddMessageFilter((System.Windows.Forms.IMessageFilter)this);
         }
-
-        /// <summary>
-        /// Invokes the default window procedure associated with this window.
-        /// </summary>
-        /// <param name="m">A <see cref="T:System.Windows.Forms.Message"/> that is associated with the current Windows message.</param>
-        protected override void WndProc(ref Message m)
-        {
-            //			if(false)
-            switch (m.Msg)
-            {
-                case NativeMethods.WM_RBUTTONDOWN:
-                    return;
-                case NativeMethods.WM_RBUTTONUP:
-                    try
-                    {
-
-                        // TODO: Show context menu
-
-                        
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Trace.WriteLine(ex.ToString());
-                    }
-
-                    return;
-            }
-            base.WndProc(ref m);
-        }
-
-        //bool _registered;
-        //uint priorityCommandTargetCookie;
-        //public void RegisterTarget(bool doRegister)
-        //{
-        //    if (serviceProvider == null)
-        //        return;
-
-        //    return;
-        //    //Register priority command target
-        //    IVsRegisterPriorityCommandTarget register = QueryService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
-
-        //    if (register == null)
-        //        return;
-
-        //    if (doRegister && !_registered)
-        //    {
-        //        int hr = register.RegisterPriorityCommandTarget(0, (IOleCommandTarget)this, out priorityCommandTargetCookie);
-
-        //        if (hr != VSConstants.S_OK)
-        //        {
-        //            Marshal.ThrowExceptionForHR(hr);
-        //        }
-        //        else
-        //            _registered = true;
-        //    }
-        //    else if (_registered && !doRegister)
-        //    {
-        //        // Remove this object from the list of the priority command targets.
-        //        if (priorityCommandTargetCookie != 0)
-        //        {
-        //            _registered = false;
-
-        //            if (null != register)
-        //            {
-        //                int hr = register.UnregisterPriorityCommandTarget(priorityCommandTargetCookie);
-
-        //                priorityCommandTargetCookie = 0;					
-        //                if (hr != VSConstants.S_OK)
-        //                {
-        //                    Marshal.ThrowExceptionForHR(hr);
-        //                }
-        //            }					
-        //        }
-        //    }
-        //}
 
         /// <summary>
         ///  This method is used to get service of specified type
@@ -494,11 +375,25 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         public void Dispose()
         {
-            windowPane = null;
-
             //Remove message filter
+            Application.RemoveMessageFilter((System.Windows.Forms.IMessageFilter)this);
+
             if (serviceProvider != null)
             {
+                // Remove this object from the list of the priority command targets.
+                if (priorityCommandTargetCookie != 0)
+                {
+                    IVsRegisterPriorityCommandTarget register = QueryService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
+                    if (null != register)
+                    {
+                        int hr = register.UnregisterPriorityCommandTarget(priorityCommandTargetCookie);
+                        if (hr != VSConstants.S_OK)
+                        {
+                            Marshal.ThrowExceptionForHR(hr);
+                        }
+                    }
+                    priorityCommandTargetCookie = 0;
+                }
                 serviceProvider = null;
             }
 
@@ -507,9 +402,6 @@ namespace Ankh.UI.PendingChanges
                 codeWindow.Close();
                 codeWindow = null;
             }
-
-            if (_registeredFilter)
-                Application.RemoveMessageFilter(this);
         }
 
         #endregion
@@ -539,7 +431,7 @@ namespace Ankh.UI.PendingChanges
 
             int hr = filterKeys2.TranslateAcceleratorEx(messages,
                 (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_UseTextEditorKBScope //Translates keys using TextEditor key bindings. Equivalent to passing CMDUIGUID_TextEditor, CMDSETID_StandardCommandSet97, and guidKeyDupe for scopes and the VSTAEXF_IgnoreActiveKBScopes flag. 
-                ,//| (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState,  //By default this function cannot be called when the shell is in a modal state, since command routing is inherently dangerous. However if you must access this in a modal state, specify this flag, but keep in mind that many commands will cause unpredictable behavior if fired. 
+                | (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState,  //By default this function cannot be called when the shell is in a modal state, since command routing is inherently dangerous. However if you must access this in a modal state, specify this flag, but keep in mind that many commands will cause unpredictable behavior if fired. 
                 0,
                 null,
                 out cmdGuid,
@@ -585,7 +477,10 @@ namespace Ankh.UI.PendingChanges
         /// <returns></returns>
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
-            return commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+            int hr = commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+
+
+            return hr;
         }
 
         #endregion
@@ -603,9 +498,6 @@ namespace Ankh.UI.PendingChanges
             [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
             [return: MarshalAs(UnmanagedType.U1)]
             internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-            public const int WM_RBUTTONDOWN = 0x0204;
-            public const int WM_RBUTTONUP = 0x0205;
         }
     }
 }

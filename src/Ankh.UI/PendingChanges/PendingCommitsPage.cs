@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -20,11 +21,25 @@ namespace Ankh.UI.PendingChanges
 
         }
 
+        bool _createdEditor;
         protected override void OnUISiteChanged()
         {
             base.OnUISiteChanged();
 
-            logMessageEditor.Init(UISite);
+            if (!_createdEditor)
+            {
+                //UISite.
+                IOleServiceProvider sp = (IOleServiceProvider)UISite.GetService(typeof(IOleServiceProvider));
+
+                if (sp != null)
+                    logMessageEditor.Init(sp);
+            }
+        }
+
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            _createdEditor = false;
+            base.OnHandleDestroyed(e);
         }
     }
 }
