@@ -140,8 +140,11 @@ namespace Ankh.Scc
                             repId = e.RepositoryId;
                         }))
                     {
-                        repositoryId = repId;
-                        return true;
+                        if (repId != Guid.Empty) // Directory was just added; Guid not updated
+                        {
+                            repositoryId = repId;
+                            return true;
+                        }
                     }
                     else
                         return false;
