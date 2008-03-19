@@ -77,5 +77,50 @@ namespace Ankh.Scc {
                 return ResourceManager.GetString("PathXBlocked", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This file is marked as Conflicted..
+        /// </summary>
+        internal static string ToolTipConflict {
+            get {
+                return ResourceManager.GetString("ToolTipConflict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This file does not exist on disk..
+        /// </summary>
+        internal static string ToolTipDoesNotExist {
+            get {
+                return ResourceManager.GetString("ToolTipDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This file is explicitly ignored by subversion..
+        /// </summary>
+        internal static string ToolTipIgnored {
+            get {
+                return ResourceManager.GetString("ToolTipIgnored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have exclusively locked this file..
+        /// </summary>
+        internal static string ToolTipLocked {
+            get {
+                return ResourceManager.GetString("ToolTipLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This file must be locked before it can be editted..
+        /// </summary>
+        internal static string ToolTipMustLock {
+            get {
+                return ResourceManager.GetString("ToolTipMustLock", resourceCulture);
+            }
+        }
     }
 }

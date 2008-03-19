@@ -123,4 +123,19 @@
   <data name="PathXBlocked" xml:space="preserve">
     <value>The path '{0}' is currently blocked by subversion; do you have a file with a case-only-different name?</value>
   </data>
+  <data name="ToolTipConflict" xml:space="preserve">
+    <value>This file is marked as Conflicted.</value>
+  </data>
+  <data name="ToolTipDoesNotExist" xml:space="preserve">
+    <value>This file does not exist on disk.</value>
+  </data>
+  <data name="ToolTipIgnored" xml:space="preserve">
+    <value>This file is explicitly ignored by subversion.</value>
+  </data>
+  <data name="ToolTipLocked" xml:space="preserve">
+    <value>You have exclusively locked this file.</value>
+  </data>
+  <data name="ToolTipMustLock" xml:space="preserve">
+    <value>This file must be locked before it can be editted.</value>
+  </data>
 </root>

@@ -29,7 +29,7 @@ namespace Ankh.Scc
        SCC_STATUS_RESERVED_2       = 0x8000
     }
     
-    partial class AnkhSccProvider : IVsSccManager2, IVsSccManagerTooltip
+    partial class AnkhSccProvider : IVsSccManager2, IVsSccManagerTooltip, IVsSccGlyphs
     {
         IStatusImageMapper _statusImages;
 
@@ -56,10 +56,10 @@ namespace Ankh.Scc
             {
                 string path = rgpszFullPaths[i];
 
-                AnkhGlyph glyph;                    
+                AnkhGlyph glyph;
                 SvnItem item = StatusCache[rgpszFullPaths[i]];
 
-                if(item != null)
+                if (item != null)
                     glyph = StatusImages.GetStatusImageForSvnItem(item);
                 else
                     glyph = AnkhGlyph.None;
@@ -74,15 +74,29 @@ namespace Ankh.Scc
                 {
                     // This will make VS use the right texts on refactor, replace, etc.
 
-                    SccStatus status = (SccStatus)0;
-                    if(item.IsVersioned)
-                        status = SccStatus.SCC_STATUS_CONTROLLED;
+                    SccStatus status;
+                    switch (glyph)
+                    {
+                        case AnkhGlyph.MustLock:
+                            status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_LOCKED;
+                            break;
+                        case AnkhGlyph.None:
+                        case AnkhGlyph.Blank:
+                        case AnkhGlyph.Ignored:
+                        case AnkhGlyph.FileMissing:
+                            status = SccStatus.SCC_STATUS_NOTCONTROLLED;
+                            break;
+                        case AnkhGlyph.LockedModified:
+                        case AnkhGlyph.LockedNormal:
+                            status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
+                                | SccStatus.SCC_STATUS_OUTBYUSER | SccStatus.SCC_STATUS_OUTEXCLUSIVE;
+                            break;
+                        default:
+                            status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
+                                | SccStatus.SCC_STATUS_OUTBYUSER;
+                            break;
+                    }
 
-                    if(!item.ReadOnlyMustLock)
-                        status |= SccStatus.SCC_STATUS_CHECKEDOUT | SccStatus.SCC_STATUS_OUTBYUSER;
-                    else
-                        status |= SccStatus.SCC_STATUS_LOCKED;
-                                        
                     rgdwSccStatus[i] = (uint)status;
                 }
             }
@@ -105,8 +119,40 @@ namespace Ankh.Scc
 
         public int GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode, out string pbstrTooltipText)
         {
-            // Todo find file via hierarchy, reusing code from SelectionContext 
-            pbstrTooltipText = "AnkhSvn";
+            IFileStatusCache cache = StatusCache;
+            ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+            pbstrTooltipText = null;
+
+            if((walker == null) || (cache == null))
+                return VSConstants.S_OK;
+
+            
+            foreach(string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.SpecialFiles))
+            {
+                SvnItem item = cache[file];
+
+                if(item.ReadOnlyMustLock)
+                {
+                    pbstrTooltipText = Resources.ToolTipMustLock;
+                    return VSConstants.S_OK;
+                }
+                else if(item.InConflict)
+                {
+                    pbstrTooltipText = Resources.ToolTipConflict;
+                    return VSConstants.S_OK;
+                }        
+                else if(!item.Exists)
+                {
+                    pbstrTooltipText = Resources.ToolTipDoesNotExist;
+                    return VSConstants.S_OK;
+                }
+                else if (item.IsLocked)
+                {
+                    pbstrTooltipText = Resources.ToolTipLocked;
+                    return VSConstants.S_OK;
+                }
+            }
+
             return VSConstants.S_OK;
         }
 
