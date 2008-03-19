@@ -13,7 +13,6 @@ namespace Ankh
         readonly bool _localCopied;
         readonly bool _localLocked;
         readonly SvnStatus _localPropertyStatus;
-        readonly string _path;
         readonly bool _switched;
         readonly Uri _uri;
 
@@ -34,7 +33,6 @@ namespace Ankh
             _localCopied = args.LocalCopied;
             _localLocked = args.LocalLocked;
             _localPropertyStatus = args.LocalPropertyStatus;
-            _path = args.Path;
             _switched = args.Switched;
             _uri = args.Uri;
 
@@ -148,10 +146,7 @@ namespace Ankh
         {
             get { return _localPropertyStatus; }
         }
-        public string Path
-        {
-            get { return _path; }
-        }
+
         //
         // Summary:
         //     Gets a boolean indicating whether the file is switched in the working copy

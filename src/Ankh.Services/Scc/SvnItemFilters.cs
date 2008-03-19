@@ -84,12 +84,12 @@ namespace Ankh.Scc
 
         public static bool ExistingOnDiskFilter(SvnItem item)
         {
-            return !item.IsDeletedFromDisk;
+            return item.Exists;
         }
 
         public static bool NotDeletedFilter(SvnItem item)
         {
-            return !item.IsDeleted && !item.IsDeletedFromDisk;
+            return !item.IsDeleted && item.Exists;
         }
 
         public static bool NoFilter(SvnItem item)

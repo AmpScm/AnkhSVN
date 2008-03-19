@@ -7,6 +7,28 @@ using SharpSvn;
 
 namespace Ankh.Scc
 {
+    enum SccStatus 
+    {
+       SCC_STATUS_INVALID          = -1,
+       SCC_STATUS_NOTCONTROLLED    = 0x0000,
+       SCC_STATUS_CONTROLLED       = 0x0001,
+       SCC_STATUS_CHECKEDOUT       = 0x0002,
+       SCC_STATUS_OUTOTHER         = 0x0004,
+       SCC_STATUS_OUTEXCLUSIVE     = 0x0008,
+       SCC_STATUS_OUTMULTIPLE      = 0x0010,
+       SCC_STATUS_OUTOFDATE        = 0x0020,
+       SCC_STATUS_DELETED          = 0x0040,
+       SCC_STATUS_LOCKED           = 0x0080,
+       SCC_STATUS_MERGED           = 0x0100,
+       SCC_STATUS_SHARED           = 0x0200,
+       SCC_STATUS_PINNED           = 0x0400,
+       SCC_STATUS_MODIFIED         = 0x0800,
+       SCC_STATUS_OUTBYUSER        = 0x1000,
+       SCC_STATUS_NOMERGE          = 0x2000,
+       SCC_STATUS_RESERVED_1       = 0x4000,
+       SCC_STATUS_RESERVED_2       = 0x8000
+    }
+    
     partial class AnkhSccProvider : IVsSccManager2, IVsSccManagerTooltip
     {
         IStatusImageMapper _statusImages;
@@ -27,22 +49,41 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int GetSccGlyph(int cFiles, string[] rgpszFullPaths, VsStateIcon[] rgsiGlyphs, uint[] rgdwSccStatus)
         {
+            if (rgpszFullPaths == null)
+                return VSConstants.E_POINTER; // Documented as impossible
+
             for (int i = 0; i < cFiles; i++)
             {
-                if (rgpszFullPaths != null)
-                {
-                    SvnItem item = StatusCache[rgpszFullPaths[i]];
+                string path = rgpszFullPaths[i];
 
-                    NodeStatus nodeStatus = GenerateStatus(item);
-                    if (rgsiGlyphs != null)
-                    {
-                        rgsiGlyphs[i] = (VsStateIcon)
-                            StatusImages.GetStatusImageForNodeStatus(nodeStatus);
-                    }
-                    if (rgdwSccStatus != null)
-                    {
-                        rgdwSccStatus[i] = 21;
-                    }
+                AnkhGlyph glyph;                    
+                SvnItem item = StatusCache[rgpszFullPaths[i]];
+
+                if(item != null)
+                    glyph = StatusImages.GetStatusImageForSvnItem(item);
+                else
+                    glyph = AnkhGlyph.None;
+
+                if (glyph == AnkhGlyph.Blank && _fileMap.ContainsKey(path))
+                    glyph = AnkhGlyph.ShouldBeAdded;
+
+                if (rgsiGlyphs != null)
+                    rgsiGlyphs[i] = (VsStateIcon)glyph;
+
+                if (rgdwSccStatus != null)
+                {
+                    // This will make VS use the right texts on refactor, replace, etc.
+
+                    SccStatus status = (SccStatus)0;
+                    if(item.IsVersioned)
+                        status = SccStatus.SCC_STATUS_CONTROLLED;
+
+                    if(!item.ReadOnlyMustLock)
+                        status |= SccStatus.SCC_STATUS_CHECKEDOUT | SccStatus.SCC_STATUS_OUTBYUSER;
+                    else
+                        status |= SccStatus.SCC_STATUS_LOCKED;
+                                        
+                    rgdwSccStatus[i] = (uint)status;
                 }
             }
 
@@ -76,27 +117,6 @@ namespace Ankh.Scc
             this.baseIndex = BaseIndex;
 
             return VSConstants.S_OK;
-        }
-
-        protected static NodeStatus GenerateStatus(SvnItem item)
-        {
-            AnkhStatus status = item.Status;
-            NodeStatusKind kind;
-            if (status.LocalContentStatus != SvnStatus.Normal)
-            {
-                kind = (NodeStatusKind)status.LocalContentStatus;
-            }
-            else if (status.LocalPropertyStatus != SvnStatus.Normal &&
-                status.LocalPropertyStatus != SvnStatus.None)
-            {
-                kind = (NodeStatusKind)status.LocalPropertyStatus;
-            }
-            else
-            {
-                kind = NodeStatusKind.Normal;
-            }
-
-            return new NodeStatus(kind, item.IsReadOnly, item.IsLocked);
-        }
+        }        
     }
 }
