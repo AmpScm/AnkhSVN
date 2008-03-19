@@ -133,16 +133,10 @@ namespace Ankh.Scc
             if (_registeredSccCleanup)
                 return;
 
-            IVsUIShell shell = (IVsUIShell)_context.GetService(typeof(SVsUIShell));
+            IAnkhCommandService cmd = _context.GetService<IAnkhCommandService>();
 
-            if(shell != null)
-            {
-                Guid ankhCommands = AnkhId.CommandSetGuid;
-                object nil = null;
-
-                if(ErrorHandler.Succeeded(shell.PostExecCommand(ref ankhCommands, (uint)AnkhCommand.SccFinishTasks, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref nil)))
-                    _registeredSccCleanup = true;
-            }
+            if (cmd != null && cmd.PostExecCommand(AnkhCommand.SccFinishTasks))
+                _registeredSccCleanup = true;
         }
     }
 }
