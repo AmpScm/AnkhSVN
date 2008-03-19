@@ -23,7 +23,7 @@ namespace Ankh
     /// <summary>
     /// Represents a version controlled path on disk, caching it's status.
     /// </summary>
-    public class SvnItem : LocalSvnItem
+    public sealed class SvnItem : LocalSvnItem
     {
         readonly IAnkhServiceProvider _context;
         readonly string _fullPath;
@@ -112,7 +112,7 @@ namespace Ankh
         /// Set the status of this item to the passed in status.
         /// </summary>
         /// <param name="status"></param>
-        public virtual void RefreshTo(AnkhStatus status)
+        public void RefreshTo(AnkhStatus status)
         {
             if (status == null)
                 throw new ArgumentNullException("status");
@@ -124,7 +124,7 @@ namespace Ankh
         /// <summary>
         /// Is this item versioned?
         /// </summary>
-        public virtual bool IsVersioned
+        public bool IsVersioned
         {
             get
             {
@@ -152,7 +152,7 @@ namespace Ankh
         /// <summary>
         /// Is this resource modified(implies that it is versioned)?
         /// </summary>
-        public virtual bool IsModified
+        public bool IsModified
         {
             get
             {
@@ -170,7 +170,7 @@ namespace Ankh
         /// <summary>
         /// Is this item a directory?
         /// </summary>
-        public virtual bool IsDirectory
+        public bool IsDirectory
         {
             get
             {
@@ -187,7 +187,7 @@ namespace Ankh
         /// <summary>
         /// Is this item a file?
         /// </summary>
-        public virtual bool IsFile
+        public bool IsFile
         {
             get
             {
@@ -209,7 +209,7 @@ namespace Ankh
         /// <summary>
         /// Whether the item is potentially versionable.
         /// </summary>
-        public virtual bool IsVersionable
+        public bool IsVersionable
         {
             get
             {
@@ -223,7 +223,7 @@ namespace Ankh
         /// <summary>
         /// Whether the item is read only on disk.
         /// </summary>
-        public virtual bool IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -243,7 +243,7 @@ namespace Ankh
         /// Whether the item is locked
         /// </summary>
         /// <returns></returns>
-        public virtual bool IsLocked
+        public bool IsLocked
         {
             get
             {
@@ -255,7 +255,7 @@ namespace Ankh
         }
 
 
-        public virtual bool IsDeleted
+        public bool IsDeleted
         {
             get
             {
@@ -266,7 +266,7 @@ namespace Ankh
             }
         }
 
-        public virtual bool IsDeletedFromDisk
+        public bool IsDeletedFromDisk
         {
             get
             {
@@ -322,88 +322,7 @@ namespace Ankh
             }
 
             return list;
-        }
-
-        private sealed class UnversionableItem : SvnItem
-        {
-            public UnversionableItem(IAnkhServiceProvider context, string path)
-                : base(context, path, AnkhStatus.Unversioned)
-            { }  
-
-            public override void RefreshTo(AnkhStatus status)
-            {
-                // empty
-            }
-
-            public override bool IsDirectory
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public override bool IsFile
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public override bool IsModified
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public override bool IsVersioned
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public override bool IsVersionable
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public override bool IsReadOnly
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public override bool IsDeleted
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public override bool IsDeletedFromDisk
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public override bool IsUnversionable
-            {
-                get { return true; }
-            }
-        }        
+        }               
 
         Cleaner EnsureClean()
         {
@@ -429,7 +348,7 @@ namespace Ankh
             get { return _dirty; }
         }
 
-        public virtual bool IsUnversionable
+        public bool IsUnversionable
         {
             get { return (object)_status == (object)AnkhStatus.Unversioned; }
         }

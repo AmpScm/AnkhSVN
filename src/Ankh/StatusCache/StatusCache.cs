@@ -67,7 +67,7 @@ namespace Ankh
                 args.RetrieveAllEntries = true;
                 args.NoIgnore = true;
                 args.ThrowOnError = false;
-                this._client.Status(dir, args, new EventHandler<SvnStatusEventArgs>(Callback));
+                this._client.Status(dir, args, StatusCallback);
             }
         }
 
@@ -146,6 +146,7 @@ namespace Ankh
                             args.Depth = SvnDepth.Empty;
                             args.ThrowOnError = false;
                             args.RetrieveAllEntries = true;
+                            args.NoIgnore = true;
                             if (this._client.GetStatus(normPath, args, out statuses) && statuses.Count > 0)
                             {
                                 _map[normPath] = item = new SvnItem(_context, path, new AnkhStatus(statuses[0]));
@@ -208,7 +209,7 @@ namespace Ankh
         /// </summary>
         /// <param name="path"></param>
         /// <param name="status"></param>
-        private void Callback(object sender, SvnStatusEventArgs e)
+        private void StatusCallback(object sender, SvnStatusEventArgs e)
         {
             // Note: There is a lock(_lock) around this in our caller; should we remove it there and apply it here?
 
@@ -217,25 +218,19 @@ namespace Ankh
             Debug.Assert(path == PathUtils.NormalizePath(e.FullPath), "Normalization rules must match SharpSVNs");
 
             // is there already an item for this path?
-            SvnItem existingItem;
+            SvnItem item;
             AnkhStatus status = new AnkhStatus(e);
 
-            bool recreate = false;
-            if (_map.TryGetValue(path, out existingItem))
+            if (!_map.TryGetValue(path, out item) || item.Path != path)
             {
-                if(existingItem.IsUnversionable ||
-                    existingItem.Path != e.FullPath)
-                {
-                    recreate = true;
-                }
-                else
-                    existingItem.Dispose();
-            }
-            else
-                recreate = true;
+                // We only create an item if we don't have an existing
+                // with a valid path. (No casing changes allowed!)
 
-            if(recreate)
+                if (item != null)
+                    item.Dispose();
+
                 _map[path] = new SvnItem(_context, path, status); 
+            }                
             
             if (e.LocalContentStatus == SvnStatus.Deleted)
             {
