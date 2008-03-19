@@ -167,6 +167,7 @@
       <DependentUpon>Config.xsd</DependentUpon>
     </None>
     <None Include="WorkingCopyExplorer\WCExplorer.cd" />
+    <Compile Include="AnkhCommandService.cs" />
     <Compile Include="AnkhContext.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -4,6 +4,7 @@ using System.Text;
 using Ankh.ContextServices;
 using SharpSvn;
 using System.ComponentModel.Design;
+using Ankh.Scc;
 
 namespace Ankh
 {
@@ -30,7 +31,7 @@ namespace Ankh
             }
         }
 
-        public SvnClient GetClient()
+        public SvnPoolClient GetClient()
         {
             lock (_uiClients)
             {
@@ -41,9 +42,9 @@ namespace Ankh
             }
         }
 
-        public SvnClient GetNoUIClient()
+        public SvnPoolClient GetNoUIClient()
         {
- 	        lock (_clients)
+            lock (_clients)
             {
                 if (_clients.Count > 0)
                     return _clients.Pop();
@@ -75,6 +76,25 @@ namespace Ankh
             return client;
         }
 
+        internal bool ReturnClient(SvnPoolClient poolClient, IList<string> changedPaths)
+        {
+            bool ok = ReturnClient(poolClient);
+
+            if (changedPaths != null && changedPaths.Count > 0)
+            {
+                // TODO: Marshal to UI thread if we are not there!!!
+
+                IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
+
+                if (monitor != null)
+                {
+                    monitor.ScheduleStatusUpdate(changedPaths);
+                }
+            }
+
+            return ok;
+        }
+
         public bool ReturnClient(SvnPoolClient poolClient)
         {
             AnkhSvnPoolClient pc = poolClient as AnkhSvnPoolClient;
@@ -97,6 +117,7 @@ namespace Ankh
 
         class AnkhSvnPoolClient : SvnPoolClient
         {
+            readonly Dictionary<string, string> _touchedPaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             readonly bool _uiEnabled;
             public AnkhSvnPoolClient(AnkhSvnClientPool pool, bool uiEnabled)
                 : base(pool)
@@ -107,6 +128,25 @@ namespace Ankh
             public bool UIEnabled
             {
                 get { return _uiEnabled; }
+            }
+
+            protected override void OnNotify(SvnNotifyEventArgs e)
+            {
+                base.OnNotify(e);
+
+                string path = e.FullPath;
+                if (!string.IsNullOrEmpty(path) && !_touchedPaths.ContainsKey(path))
+                    _touchedPaths[path] = path;
+            }
+
+            protected override void ReturnClient()
+            {
+                List<string> paths = new List<string>(_touchedPaths.Values);
+                _touchedPaths.Clear();
+                if (!((AnkhSvnClientPool)SvnClientPool).ReturnClient(this, paths))
+                {
+                    InnerDispose();
+                }
             }
         }
     }

@@ -6,19 +6,23 @@ using System.Diagnostics;
 
 namespace Ankh
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>The default implementation of this service is thread safe</remarks>
     public interface ISvnClientPool
     {
         /// <summary>
         /// Gets a free <see cref="SvnClient"/> instance from the pool
         /// </summary>
         /// <returns></returns>
-        SvnClient GetClient();
+        SvnPoolClient GetClient();
 
         /// <summary>
         /// Gets a free <see cref="SvnClient"/> instance from the pool
         /// </summary>
         /// <returns></returns>
-        SvnClient GetNoUIClient();
+        SvnPoolClient GetNoUIClient();
 
         /// <summary>
         /// Returns the client.
@@ -35,9 +39,9 @@ namespace Ankh
     {
         ISvnClientPool _pool;
 
-        // Note: All this depends on the knowledge that VC++ implements the disposable
-        // pattern as it should be. IDisposable and Dispose route to Dispose(true), which we override
-        // when we are sure we are returned to the pool
+        // Note: We can only implement our own Dispose over the existing
+        // As VC++ unconditionally calls GC.SuppressFinalize() just before returning
+        // Luckily the using construct uses the last defined or IDisposable methods which we can override
                
         protected SvnPoolClient(ISvnClientPool pool)
         {
@@ -45,23 +49,24 @@ namespace Ankh
                 throw new ArgumentNullException("pool");
 
             _pool = pool;
-        }
+        }  
 
         /// <summary>
-        /// Returns the SvnClient to the pool
+        /// Returns the client to the client pool
         /// </summary>
-        /// <param name="disposing"></param>
-        protected override void Dispose(bool disposing)
+        public new void Dispose()
         {
-            if (disposing && _pool != null)
-                ReturnClient();
-            else
-                base.Dispose(disposing);
+            ReturnClient();
         }
 
         void IDisposable.Dispose()
         {
             ReturnClient();
+        }
+
+        protected ISvnClientPool SvnClientPool
+        {
+            get { return _pool; }
         }
 
         /// <summary>
@@ -81,7 +86,7 @@ namespace Ankh
         /// </summary>
         protected void InnerDispose()
         {
-            base.Dispose(true);
+            base.Dispose(); // Includes GC.SuppressFinalize()
         }
     }
 }

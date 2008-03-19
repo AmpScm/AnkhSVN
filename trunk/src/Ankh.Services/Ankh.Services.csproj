@@ -52,6 +52,7 @@
     <Compile Include="Commands\CommandMapper.cs" />
     <Compile Include="Commands\CommandUpdateEventArgs.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
+    <Compile Include="Commands\IAnkhCommandService.cs" />
     <Compile Include="ContextServices\IAnkhDialogOwner.cs" />
     <Compile Include="ContextServices\IAnkhErrorHandler.cs" />
     <Compile Include="ContextServices\IAnkhOperationLogger.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scc\AnkhStatus.cs" />
     <Compile Include="Scc\IFileStatusCache.cs" />
+    <Compile Include="Scc\IFileStatusMonitor.cs" />
     <Compile Include="Scc\ISccHierarchyWalker.cs" />
     <Compile Include="Scc\IProjectFileMapper.cs" />
     <Compile Include="Scc\IStatusImageMapper.cs" />
