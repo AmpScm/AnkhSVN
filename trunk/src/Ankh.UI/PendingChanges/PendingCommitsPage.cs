@@ -25,11 +25,21 @@ namespace Ankh.UI.PendingChanges
             if (!_createdEditor)
             {
                 //UISite.
-                IOleServiceProvider sp = (IOleServiceProvider)UISite.GetService(typeof(IOleServiceProvider));
+                IOleServiceProvider sp = UISite.GetService<IOleServiceProvider>();
 
                 if (sp != null)
+                {
                     logMessageEditor.Init(sp);
+                    UISite.CommandTarget = logMessageEditor.CommandTarget;
+                    _createdEditor = true;
+                }
             }
+        }
+
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            base.OnHandleDestroyed(e);
+            _createdEditor = false;
         }
 
         protected override Type PageType

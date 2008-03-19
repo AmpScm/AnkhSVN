@@ -51,6 +51,7 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        [CLSCompliant(false)]
         public IAnkhUISite UISite
         {
             get { return _site; }

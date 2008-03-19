@@ -43,6 +43,11 @@ namespace Ankh.UI.PendingChanges
             codeEditorNativeWindow.Area = this.ClientRectangle;
         }
 
+        public IOleCommandTarget CommandTarget
+        {
+            get { return codeEditorNativeWindow; }
+        }
+
         protected override void Dispose(bool disposing)
         {
             try
@@ -79,7 +84,6 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
-            base.OnGotFocus(e);
             if (codeEditorNativeWindow != null)
             {
                 codeEditorNativeWindow.Focus();
@@ -155,6 +159,11 @@ namespace Ankh.UI.PendingChanges
                     NativeMethods.SetWindowPos(editorHwnd, IntPtr.Zero, value.X, value.Y,
                         value.Width, value.Height, 0x04);
                 }
+                if(commandHwnd != IntPtr.Zero)
+                {
+                    NativeMethods.SetWindowPos(this.commandHwnd, IntPtr.Zero, value.X, value.Y,
+                        value.Width, value.Height, 0x04);
+                }
             }
         }
 
@@ -167,7 +176,7 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         /// <param name="parentHandle">Parent window handle</param>
         /// <param name="codeWindow">Represents a multiple-document interface (MDI) child that contains one or more code views.</param>
-        private void CreateCodeWindow(IntPtr parentHandle, out IVsCodeWindow codeWindow)
+        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, out IVsCodeWindow codeWindow)
         {
             ILocalRegistry localRegistry = QueryService<ILocalRegistry>(typeof(SLocalRegistry));
 
@@ -190,7 +199,7 @@ namespace Ankh.UI.PendingChanges
                 0, null, null,
                 (int)TextViewInitFlags.VIF_SET_WIDGET_MARGIN |
                 (int)TextViewInitFlags.VIF_SET_SELECTION_MARGIN |
-                (int)TextViewInitFlags2.VIF_ACTIVEINMODALSTATE |
+                (int)TextViewInitFlags.VIF_VSCROLL |
                 (int)TextViewInitFlags2.VIF_SUPPRESSBORDER |
                 (int)TextViewInitFlags2.VIF_SUPPRESS_STATUS_BAR_UPDATE |
                 (int)TextViewInitFlags2.VIF_SUPPRESSTRACKCHANGES,
@@ -203,7 +212,7 @@ namespace Ankh.UI.PendingChanges
 
             // set buffer
             Guid guidVsTextBuffer = typeof(VsTextBufferClass).GUID;
-            IVsTextBuffer textBuffer = CreateObject(localRegistry, guidVsTextBuffer, typeof(IVsTextBuffer).GUID) as IVsTextBuffer;
+            IVsTextBuffer textBuffer = (IVsTextBuffer)CreateObject(localRegistry, guidVsTextBuffer, typeof(IVsTextBuffer).GUID);
             Guid CLSID_LogMessageService = typeof(LogMessageLanguageService).GUID;
 
             hr = textBuffer.SetLanguageServiceID(ref CLSID_LogMessageService);
@@ -212,14 +221,14 @@ namespace Ankh.UI.PendingChanges
                 Marshal.ThrowExceptionForHR(hr);
             }
 
-            hr = codeWindow.SetBuffer(textBuffer as IVsTextLines);
+            hr = codeWindow.SetBuffer((IVsTextLines)textBuffer);
             if (hr != VSConstants.S_OK)
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
 
             // create pane window
-            IVsWindowPane windowPane = codeWindow as IVsWindowPane;
+            IVsWindowPane windowPane = (IVsWindowPane)codeWindow;
 
             hr = windowPane.SetSite(serviceProvider);
             if (hr != VSConstants.S_OK)
@@ -227,7 +236,7 @@ namespace Ankh.UI.PendingChanges
                 Marshal.ThrowExceptionForHR(hr);
             }
 
-            hr = windowPane.CreatePaneWindow(parentHandle, 10, 10, 50, 50, out editorHwnd);
+            hr = windowPane.CreatePaneWindow(parentHandle, place.X, place.Y, place.Width, place.Height, out editorHwnd);
             if (hr != VSConstants.S_OK)
             {
                 Marshal.ThrowExceptionForHR(hr);
@@ -292,7 +301,7 @@ namespace Ankh.UI.PendingChanges
             this.serviceProvider = serviceProvider;
 
             //Create window            
-            CreateCodeWindow(parent.Handle, out codeWindow);
+            CreateCodeWindow(parent.Handle, parent.ClientRectangle, out codeWindow);
             commandTarget = codeWindow as IOleCommandTarget;
 
             IVsTextView textView;
@@ -308,16 +317,7 @@ namespace Ankh.UI.PendingChanges
             //Assign a handle to this window
             AssignHandle(commandHwnd);
             NativeMethods.ShowWindow(editorHwnd, 1);
-
-            //Register priority command target
-            IVsRegisterPriorityCommandTarget register = QueryService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
-            hr = register.RegisterPriorityCommandTarget(0, (IOleCommandTarget)this, out priorityCommandTargetCookie);
-
-            if (hr != VSConstants.S_OK)
-            {
-                Marshal.ThrowExceptionForHR(hr);
-            }
-
+  
             //Add message filter
             Application.AddMessageFilter((System.Windows.Forms.IMessageFilter)this);
         }
@@ -377,26 +377,7 @@ namespace Ankh.UI.PendingChanges
         public void Dispose()
         {
             //Remove message filter
-            Application.RemoveMessageFilter((System.Windows.Forms.IMessageFilter)this);
-
-            if (serviceProvider != null)
-            {
-                // Remove this object from the list of the priority command targets.
-                if (priorityCommandTargetCookie != 0)
-                {
-                    IVsRegisterPriorityCommandTarget register = QueryService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
-                    if (null != register)
-                    {
-                        int hr = register.UnregisterPriorityCommandTarget(priorityCommandTargetCookie);
-                        if (hr != VSConstants.S_OK)
-                        {
-                            Marshal.ThrowExceptionForHR(hr);
-                        }
-                    }
-                    priorityCommandTargetCookie = 0;
-                }
-                serviceProvider = null;
-            }
+            Application.RemoveMessageFilter((System.Windows.Forms.IMessageFilter)this);           
 
             if (codeWindow != null)
             {
