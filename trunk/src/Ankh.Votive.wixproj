@@ -8,12 +8,13 @@
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
     <WixToolPath>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPath>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>Ankh.Votive\bin\Debug\</OutputPath>
     <IntermediateOutputPath>Ankh.Votive\obj\Debug\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
-    <SuppressIces>ICE03;ICE025;ICE82;ICE25</SuppressIces>
+    <SuppressIces>ICE03;ICE25;ICE61;ICE82</SuppressIces>
     <SuppressValidation>False</SuppressValidation>
     <CompilerAdditionalOptions>
     </CompilerAdditionalOptions>
@@ -23,7 +24,7 @@
     </Cultures>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
-    <SuppressPdbOutput>False</SuppressPdbOutput>
+    <SuppressPdbOutput>True</SuppressPdbOutput>
     <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <VerboseOutput>False</VerboseOutput>
@@ -41,7 +42,7 @@
     </DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
-    <SuppressPdbOutput>False</SuppressPdbOutput>
+    <SuppressPdbOutput>True</SuppressPdbOutput>
     <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <VerboseOutput>False</VerboseOutput>
@@ -49,7 +50,7 @@
     </WixVariables>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>False</Pedantic>
-    <SuppressIces>ICE03;ICE025;ICE82;ICE25</SuppressIces>
+    <SuppressIces>ICE03;ICE25;ICE61;ICE82</SuppressIces>
     <SuppressValidation>False</SuppressValidation>
     <CompilerAdditionalOptions>
     </CompilerAdditionalOptions>
@@ -62,6 +63,7 @@
     <Compile Include="Ankh.Scc\Ankh.Scc.wxs" />
     <Compile Include="Ankh.Services\Ankh.Services.wxs" />
     <Compile Include="Ankh.UI\Ankh.UI.wxs" />
+    <Compile Include="Ankh.Votive\Ankh-UI.wxs" />
     <Compile Include="Ankh.VS\Ankh.VS.wxs" />
     <Compile Include="Ankh\Ankh.wxs" />
     <Compile Include="Ankh.Votive\Ankh.Votive.wxs" />
@@ -135,4 +137,10 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -1,44 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="274ee41e-23a2-41bc-a144-fff9e08e956f" Name="AnkhSVN" Language="1033"
-			 Version="2.0.0.0" Manufacturer="AnkhSVN Team" UpgradeCode="40880177-2453-4ec7-8eef-744ec101b688">
+	<Product Id="274ee41e-23a2-41bc-a144-fff9e08e956f" Name="AnkhSVN" Language="1033"
+			   Version="2.0.0.0" Manufacturer="AnkhSVN Team" UpgradeCode="40880177-2453-4EC7-8EEF-744EC101B688">
+		<Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated" 
+				 Platform="intel" Languages="1033" />
 
-    <Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated"/>
+		<?ifndef ankhVersion ?>
+		<?define ankhVersion=2.0.0.1 ?>
+		<?endif?>
+		<Upgrade Id="40880177-2453-4EC7-8EEF-744EC101B688">
+			<UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0.0" Maximum="$(var.ankhVersion)" 
+							IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="yes" />
+			<UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="99.0.0.0"
+							IncludeMinimum="no" IncludeMaximum="yes" />
+		</Upgrade>
 
-	  <Upgrade Id="40880177-2453-4ec7-8eef-744ec101b688">
-		  <UpgradeVersion Minimum="2.0.0.0" Maximum="2.0.0.0" IncludeMinimum="yes" IncludeMaximum="yes" Property="ANKHSVNUPGRADE"/>
-	  </Upgrade>
+		<Property Id="ShortProductName" Value="AnkhSVN" />
+		<Property Id="ARPCONTACT">AnkhSVN - users@ankhsvn.open.collab.net</Property>
+		<Property Id="ARPURLINFOABOUT">http://ankhsvn.open.collab.net/</Property>
+		<Property Id="ARPHELPLINK">http://ankhsvn.open.collab.net/</Property>
+		<Property Id="ARPURLUPDATEINFO">http://ankhsvn.open.collab.net/</Property>
 
-    <Media Id="1" Cabinet="Ankh.Votive.cab" EmbedCab="yes" />
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLLOCATION" Name="AnkhSvn 2.0">
-          <Directory Id="APP_bin" Name=".">
-            <Directory Id="DIR_SharpSvn" Name=".">
-              <!-- Include the VC 8.0 SP1 CRT to make sure we run correctly on Visual Studio 8.0 pre SP1 -->
-              <Merge Id="CRT" Language="0" SourceFile="$(sys.SOURCEFILEDIR)..\lib\microsoft_vc80_crt_x86.msm" DiskId="1" />
-            </Directory>
-            <!-- All assemblies are placed here -->
-          </Directory>
-          <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-          <!-- <Component Id="ProductComponent" Guid="bf5eac53-92ec-4b9a-94d9-f84bb1951fad"> -->
-          <!-- TODO: Insert files, registry keys, and other resources here. -->
-          <!-- </Component> -->
-        </Directory>
-      </Directory>
-    </Directory>
-    <!-- Make sure the packages are set up in The VS Environment -->
-    <CustomActionRef Id="VS2005Setup"/>
-    <CustomActionRef Id="VS90Setup"/>
-	  <InstallExecuteSequence>
-		  <RemoveExistingProducts After="InstallFinalize" />
-	  </InstallExecuteSequence>
+		<!-- Error messages -->
+		<Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
+		<Property Id="VSDUIANDADVERTISED">This advertised application will not be installed because it might be unsafe. Contact your administrator to change the installation user interface option of the package to basic.</Property>
 
-    <!-->UIRef Id="WixUI_Mondo" /-->
+		<!-- Secure these -->
+		<Property Id="NEWERPRODUCTFOUND" Secure="yes" />
 
-    <Feature Id="ProductFeature" Title="Ankh.Votive" Level="1">
-      <ComponentGroupRef Id="Ankh.Package"/>
-      <MergeRef Id="CRT"/>
-    </Feature>
-  </Product>
+		<!-- Errormessages -->
+		<CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]" />
+		<CustomAction Id="ERRCA_UIANDADVERTISED" Error="[VSDUIANDADVERTISED]" />
+
+		<Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" />
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLLOCATION" Name="AnkhSvn 2.0">
+					<Directory Id="APP_bin" Name=".">
+						<Directory Id="DIR_SharpSvn" Name=".">
+							<!-- Include the VC 8.0 SP1 CRT to make sure we run correctly on Visual Studio 8.0 pre SP1 -->
+							<Merge Id="CRT" Language="0" SourceFile="$(sys.SOURCEFILEDIR)..\lib\microsoft_vc80_crt_x86.msm" DiskId="1" />
+						</Directory>
+						<!-- All assemblies are placed here -->
+					</Directory>					
+				</Directory>
+			</Directory>
+		</Directory>
+		<!-- Make sure the packages are set up in The VS Environment -->
+		<CustomActionRef Id="VS2005Setup"/>
+		<CustomActionRef Id="VS90Setup"/>
+		<InstallExecuteSequence>
+			<Custom Action="ERRCA_CANCELNEWERVERSION" After="AppSearch">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
+			<RemoveExistingProducts After="InstallFinalize">PREVIOUSVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
+		</InstallExecuteSequence>
+
+		<UIRef Id="AnkhUI"/>
+
+		<Feature Id="ProductFeature" Title="Ankh.Votive" Level="1">
+			<ComponentGroupRef Id="Ankh.Package"/>
+			<MergeRef Id="CRT"/>
+		</Feature>
+	</Product>
 </Wix>
