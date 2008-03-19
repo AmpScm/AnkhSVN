@@ -449,5 +449,10 @@ namespace Ankh
             }
         }
         #endregion
+
+        public void Dispose()
+        {
+            // TODO: Mark item as no longer valid
+        }
     }
 }

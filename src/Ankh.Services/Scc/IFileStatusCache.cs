@@ -28,10 +28,16 @@ namespace Ankh.Scc
         void UpdateStatus(string directory, SvnDepth depth);
 
         /// <summary>
-        /// Marks the specified file dirty
+        /// Marks the specified path dirty
         /// </summary>
-        /// <param name="file"></param>
-        void MarkDirty(string file);
+        /// <param name="path"></param>
+        void MarkDirty(string path);
+
+        /// <summary>
+        /// Marks the specified paths dirty
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        void MarkDirty(IEnumerable<string> paths);
 
         /// <summary>
         /// Clears the whole statuscache; called when closing the solution

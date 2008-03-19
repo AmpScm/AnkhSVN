@@ -61,9 +61,6 @@ namespace Utils
                 directory += Path.DirectorySeparatorChar;
             }
 
-            path = path.ToUpperInvariant();
-            directory = directory.ToUpperInvariant();
-
             return path.StartsWith(directory, StringComparison.OrdinalIgnoreCase);
         }
 

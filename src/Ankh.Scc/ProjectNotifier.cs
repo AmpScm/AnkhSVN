@@ -6,10 +6,11 @@ using Microsoft.VisualStudio.Shell.Interop;
 using AnkhSvn.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 using Ankh.VS;
+using Ankh.Commands;
 
 namespace Ankh.Scc
 {
-    public class ProjectNotifier : IProjectNotifier
+    public class ProjectNotifier : IProjectNotifier, IFileStatusMonitor
     {
         readonly IAnkhServiceProvider _context;
 
@@ -31,15 +32,30 @@ namespace Ankh.Scc
         {
             // TODO: We could probably group the projects and only post the command once
 
-            IVsUIShell uiShell = (IVsUIShell)_context.GetService(typeof(SVsUIShell));
+            IAnkhCommandService cmd = _context.GetService<IAnkhCommandService>();
 
-            if (uiShell != null)
-            {
-                // After marking the item dirty, force the SccGlyphs to be reloaded. The SvnItems know if they need refreshing at that point
-                Guid commandSet = AnkhId.CommandSetGuid;
-                object projectsObj = new List<SvnProject>(projects); // Cache a list instead of the enumerator
-                uiShell.PostExecCommand(ref commandSet, (uint)AnkhCommand.MarkProjectDirty, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref projectsObj);
-            }
-        }        
+            if (cmd == null)
+                return;
+
+            cmd.PostExecCommand(AnkhCommand.MarkProjectDirty, new List<SvnProject>(projects));
+        }
+
+        public void ScheduleStatusUpdate(string path)
+        {
+            ScheduleStatusUpdate(new string[] { path });
+        }
+
+        public void ScheduleStatusUpdate(IList<string> paths)
+        {
+            IFileStatusCache cache = _context.GetService<IFileStatusCache>();
+
+            if (cache != null)
+                cache.MarkDirty(paths);
+
+            IProjectFileMapper mapper = _context.GetService<IProjectFileMapper>();
+
+            if (mapper != null)
+                MarkDirty(mapper.GetAllProjectsContaining(paths));
+        }
     }
 }

@@ -20,13 +20,16 @@ namespace Ankh.Scc
         public override void OnPreInitialize()
         {
             Runtime.CommandMapper.LoadFrom(typeof(AnkhSccModule).Assembly);
-            
+
             AnkhSccProvider service = new AnkhSccProvider(Context);
             Container.AddService(typeof(AnkhSccProvider), service, true);
             Container.AddService(typeof(IAnkhSccService), service);
             Container.AddService(typeof(IProjectFileMapper), service);
             Container.AddService(typeof(IAnkhProjectDocumentTracker), new ProjectDocumentTracker(Context));
-            Container.AddService(typeof(IProjectNotifier), new ProjectNotifier(this));          
+
+            ProjectNotifier notifier = new ProjectNotifier(this);
+            Container.AddService(typeof(IProjectNotifier), notifier);
+            Container.AddService(typeof(IFileStatusMonitor), notifier);
 
             // TODO: We should only call this if we are initializing to be the SCC provider.
 
@@ -44,7 +47,7 @@ namespace Ankh.Scc
         {
             EnsureService<IStatusImageMapper>();
             EnsureService<IFileStatusCache>();
-            
+
 
         }
     }

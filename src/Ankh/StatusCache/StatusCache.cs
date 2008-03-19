@@ -80,16 +80,43 @@ namespace Ankh
         /// Marks the specified file dirty
         /// </summary>
         /// <param name="file"></param>
-        void Ankh.Scc.IFileStatusCache.MarkDirty(string file)
+        void Ankh.Scc.IFileStatusCache.MarkDirty(string path)
         {
+            if (path == null)
+                throw new ArgumentNullException("path");
+
             lock (_lock)
             {
-                string normPath = PathUtils.NormalizePath(file);
+                string normPath = PathUtils.NormalizePath(path);
                 SvnItem item;
 
                 if (_map.TryGetValue(normPath, out item))
                 {
                     item.MarkDirty();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Marks the specified file dirty
+        /// </summary>
+        /// <param name="file"></param>
+        void Ankh.Scc.IFileStatusCache.MarkDirty(IEnumerable<string> paths)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
+            lock (_lock)
+            {
+                foreach (string path in paths)
+                {
+                    string normPath = PathUtils.NormalizePath(path);
+                    SvnItem item;
+
+                    if (_map.TryGetValue(normPath, out item))
+                    {
+                        item.MarkDirty();
+                    }
                 }
             }
         }
@@ -183,38 +210,54 @@ namespace Ankh
         /// <param name="status"></param>
         private void Callback(object sender, SvnStatusEventArgs e)
         {
-            // we need all paths to be on ONE form
-            string normPath = PathUtils.NormalizePath(e.FullPath);
+            // Note: There is a lock(_lock) around this in our caller; should we remove it there and apply it here?
+
+            string path = e.FullPath; // SharpSvn normalized it for us
+
+            Debug.Assert(path == PathUtils.NormalizePath(e.FullPath), "Normalization rules must match SharpSVNs");
 
             // is there already an item for this path?
             SvnItem existingItem;
             AnkhStatus status = new AnkhStatus(e);
 
-            if (_map.TryGetValue(normPath, out existingItem) && !existingItem.IsUnversionable)
-                existingItem.RefreshTo(status);
+            bool recreate = false;
+            if (_map.TryGetValue(path, out existingItem))
+            {
+                if(existingItem.IsUnversionable ||
+                    existingItem.Path != e.FullPath)
+                {
+                    recreate = true;
+                }
+                else
+                    existingItem.Dispose();
+            }
             else
-                _map[normPath] = new SvnItem(_context, e.Path, status);
+                recreate = true;
 
+            if(recreate)
+                _map[path] = new SvnItem(_context, path, status); 
+            
             if (e.LocalContentStatus == SvnStatus.Deleted)
             {
-                string containingDir;
-                containingDir = Path.GetDirectoryName(e.Path);
+                string parentDir = Path.GetDirectoryName(path);
 
                 // store the deletions keyed on the parent directory
                 List<SvnItem> list;
 
-                if (!_deletions.TryGetValue(containingDir, out list))
+                if (!_deletions.TryGetValue(parentDir, out list))
                     list = new List<SvnItem>();
 
                 SvnItem deletedItem;
 
-                if (_map.TryGetValue(normPath, out deletedItem) && !list.Contains(deletedItem))
+                if (_map.TryGetValue(path, out deletedItem) && !list.Contains(deletedItem))
                 {
                     list.Add(deletedItem);
                 }
 
-                _deletions[containingDir] = list;
+                _deletions[parentDir] = list;
             }
+
+            // Note: There is a lock(_lock) around this in our caller
         }
 
         static List<SvnItem> RefreshDeletionsList(List<SvnItem> deletions)
