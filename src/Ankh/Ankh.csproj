@@ -178,11 +178,11 @@
     <Compile Include="Commands\AddItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\AddRepositoryRootCommand.cs" />
+    <Compile Include="Commands\RepositoryExplorer\AddRepositoryRootCommand.cs" />
     <Compile Include="Commands\AddSolutionToRepositoryCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\AddWorkingCopyExplorerRootCommand.cs" />
+    <Compile Include="Commands\WorkingCopyExplorer\AddWorkingCopyExplorerRootCommand.cs" />
     <Compile Include="Commands\BlameCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -239,20 +239,20 @@
     <Compile Include="Commands\LogCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\MakeDirectoryCommand.cs">
+    <Compile Include="Commands\RepositoryExplorer\MakeDirectoryCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RefreshCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\RefreshRepositoryItemCommand.cs">
+    <Compile Include="Commands\RepositoryExplorer\RefreshRepositoryItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RelocateCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\RemoveRepositoryRootCommand.cs" />
-    <Compile Include="Commands\RemoveWorkingCopyExplorerRootCommand.cs" />
+    <Compile Include="Commands\RepositoryExplorer\RemoveRepositoryRootCommand.cs" />
+    <Compile Include="Commands\WorkingCopyExplorer\RemoveWorkingCopyExplorerRootCommand.cs" />
     <Compile Include="Commands\ResolveConflictCommand.cs">
       <SubType>Code</SubType>
     </Compile>
