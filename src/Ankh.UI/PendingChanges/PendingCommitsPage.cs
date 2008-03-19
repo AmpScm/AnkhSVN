@@ -6,20 +6,16 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using System.ComponentModel.Design;
 
 namespace Ankh.UI.PendingChanges
 {
-    public partial class PendingCommitsPage : PendingChangesPage
+    partial class PendingCommitsPage : PendingChangesPage
     {
         public PendingCommitsPage()
         {
             InitializeComponent();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
+        }    
 
         bool _createdEditor;
         protected override void OnUISiteChanged()
@@ -36,10 +32,12 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        protected override void OnHandleDestroyed(EventArgs e)
+        protected override Type PageType
         {
-            _createdEditor = false;
-            base.OnHandleDestroyed(e);
+            get
+            {
+                return typeof(PendingCommitsPage);
+            }
         }
     }
 }
