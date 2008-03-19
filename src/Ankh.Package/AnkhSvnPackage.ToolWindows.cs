@@ -11,6 +11,8 @@ using Ankh.UI.Services;
 using AnkhSvn.Ids;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio;
 
 namespace Ankh.VSPackage
 {   
@@ -56,17 +58,20 @@ namespace Ankh.VSPackage
         }  
 	}
 
-    class AnkhToolWindowSite : IAnkhToolWindowSite
+    class AnkhToolWindowSite : IAnkhToolWindowSite, IOleCommandTarget
     {
-        readonly ToolWindowPane _pane;
+        readonly AnkhToolWindowPane _pane;
         Container _container;
+        readonly string _originalTitle;
+        string _title;
 
-        public AnkhToolWindowSite(ToolWindowPane pane)
+        public AnkhToolWindowSite(AnkhToolWindowPane pane)
         {
             if (pane == null)
                 throw new ArgumentNullException("pane");
 
             _pane = pane;
+            _originalTitle = _title = pane.Caption;
         }
         #region IAnkhToolWindowSite Members
 
@@ -83,6 +88,23 @@ namespace Ankh.VSPackage
         public IVsWindowPane Pane
         {
             get { return _pane; }
+        }
+
+        public IOleCommandTarget CommandTarget
+        {
+            get { return _target; }
+            set { _target = value; }
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            set { _pane.Caption = _title = value; }
+        }
+
+        public string OriginalTitle
+        {
+            get { return _title; }
         }
 
         #endregion
@@ -116,7 +138,7 @@ namespace Ankh.VSPackage
 
         public object GetService(Type serviceType)
         {
-            IServiceProvider paneSp = _pane;
+            System.IServiceProvider paneSp = _pane;
 
             object ob = paneSp.GetService(serviceType);
 
@@ -164,9 +186,35 @@ namespace Ankh.VSPackage
         }
 
         #endregion
+
+        IOleCommandTarget _target;
+        IOleCommandTarget _baseTarget;
+        #region IOleCommandTarget Members
+
+        public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
+        {
+            IOleCommandTarget t = _target ?? _baseTarget ?? (_baseTarget = (IOleCommandTarget)_pane.BaseGetService(typeof(IOleCommandTarget)));
+
+            if (t != null)
+                return t.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+            else
+                return VSConstants.E_NOTIMPL;
+        }
+
+        public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
+        {
+            IOleCommandTarget t = _target ?? _baseTarget ?? (_baseTarget = (IOleCommandTarget)_pane.BaseGetService(typeof(IOleCommandTarget)));
+
+            if (t != null)
+                return t.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+            else
+                return VSConstants.E_NOTIMPL;
+        }
+
+        #endregion
     }
 
-    public class AnkhToolWindowPane : ToolWindowPane
+    public class AnkhToolWindowPane : ToolWindowPane, IOleCommandTarget
     {
         readonly AnkhToolWindowSite _site;
         Control _control;
@@ -198,6 +246,19 @@ namespace Ankh.VSPackage
         public override IWin32Window Window
         {
             get { return _control; }
+        }
+
+        protected override object GetService(Type serviceType)
+        {
+            if (serviceType == typeof(IOleCommandTarget))
+                return _site;
+            else
+                return base.GetService(serviceType);
+        }
+
+        internal object BaseGetService(Type serviceType)
+        {
+            return base.GetService(serviceType);
         }
     }
 

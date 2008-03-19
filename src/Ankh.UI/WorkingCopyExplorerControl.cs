@@ -180,6 +180,7 @@ namespace Ankh.UI
             }
         }
 
+        [CLSCompliant(false)]
         protected IAnkhUISite UISite
         {
             get { return _uiSite; }

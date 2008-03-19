@@ -653,10 +653,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>MultiLineStringTypeEditorDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PendingChanges\LogMessageEditor.resx">
-      <DependentUpon>LogMessageEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\PendingCommitsPage.resx">
       <DependentUpon>PendingCommitsPage.cs</DependentUpon>
       <SubType>Designer</SubType>
