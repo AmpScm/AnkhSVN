@@ -21,8 +21,13 @@ namespace Ankh
 
             _container = parentContainer;
 
-            _commandMapper = ((CommandMapper)_container.GetService(typeof(CommandMapper))) ?? new CommandMapper(this);
-            _context = ((AnkhContext)_container.GetService(typeof(AnkhContext))) ?? AnkhContext.Create(this);
+            _commandMapper = (CommandMapper)_container.GetService(typeof(CommandMapper));
+            if (_commandMapper == null)
+                _container.AddService(typeof(CommandMapper), _commandMapper = new CommandMapper(this));
+
+            _context = ((AnkhContext)_container.GetService(typeof(AnkhContext));
+            if(_context == null)
+                _container.AddService(typeof(AnkhContext), _context = AnkhContext.Create(this));
 
             InitializeServices();
         }
@@ -34,8 +39,13 @@ namespace Ankh
 
             _container = new AnkhServiceContainer(parentProvider);
 
-            _commandMapper = ((CommandMapper)_container.GetService(typeof(CommandMapper))) ?? new CommandMapper(this);
-            _context = ((AnkhContext)_container.GetService(typeof(AnkhContext))) ?? AnkhContext.Create(this);
+            _commandMapper = (CommandMapper)_container.GetService(typeof(CommandMapper));
+            if (_commandMapper == null)
+                _container.AddService(typeof(CommandMapper), _commandMapper = new CommandMapper(this));
+
+            _context = ((AnkhContext)_container.GetService(typeof(AnkhContext));
+            if(_context == null)
+                _container.AddService(typeof(AnkhContext), _context = AnkhContext.Create(this));
 
             InitializeServices();
         }

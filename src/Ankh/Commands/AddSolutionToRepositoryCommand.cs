@@ -23,14 +23,9 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-
-            if (context.AnkhLoadedForSolution || string.IsNullOrEmpty(e.Selection.SolutionFilename) 
-                || !File.Exists(e.Selection.SolutionFilename))
-            {
+            if (string.IsNullOrEmpty(e.Selection.SolutionFilename))
                 e.Enabled = false;
-            }
-            else if (!context.SolutionIsOpen)
+            else if (!File.Exists(e.Selection.SolutionFilename))
                 e.Enabled = false;
         }
 
