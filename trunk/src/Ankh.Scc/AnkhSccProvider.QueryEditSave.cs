@@ -152,7 +152,7 @@ namespace Ankh.Scc
             // TODO: Check SvnItem.ReadOnlyMustLock
 
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
-            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.)0;
+            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0;
             return VSConstants.S_OK;
         }
 
