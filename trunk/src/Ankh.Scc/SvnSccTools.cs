@@ -169,40 +169,42 @@ namespace Ankh.Scc
             bool ok;
             bool setReadOnly = false;
             using (MarkIgnoreFile(toPath))
-            using (MoveAway(toPath, true))
             {
-                string toDir = Path.GetDirectoryName(toPath);
-
-                if (!SvnTools.IsManagedPath(toDir))
+                using (MoveAway(toPath, true))
                 {
-                    SvnAddArgs aa = new SvnAddArgs();
-                    aa.Depth = SvnDepth.Empty;
-                    aa.AddParents = true;
-                    aa.Force = true;
-                    aa.ThrowOnError = false;
+                    string toDir = Path.GetDirectoryName(toPath);
 
-                    if (!_client.Add(toDir, aa))
-                        return false;
+                    if (!SvnTools.IsManagedPath(toDir))
+                    {
+                        SvnAddArgs aa = new SvnAddArgs();
+                        aa.Depth = SvnDepth.Empty;
+                        aa.AddParents = true;
+                        aa.Force = true;
+                        aa.ThrowOnError = false;
+
+                        if (!_client.Add(toDir, aa))
+                            return false;
+                    }
+
+                    Debug.Assert(SvnTools.IsManagedPath(toDir));
+
+                    SvnCopyArgs ca = new SvnCopyArgs();
+                    ca.AlwaysCopyAsChild = false;
+                    ca.MakeParents = false; // We just did that ourselves. Use Svn for this?
+                    ca.ThrowOnError = false;
+
+                    ok = _client.Copy(new SvnPathTarget(fromPath), toPath, ca);
+
+
+                    if (ok && File.Exists(toPath))
+                    {
+                        setReadOnly = (int)(File.GetAttributes(toPath) & FileAttributes.ReadOnly) != 0;
+                    }
                 }
 
-                Debug.Assert(SvnTools.IsManagedPath(toDir));
-
-                SvnCopyArgs ca = new SvnCopyArgs();
-                ca.AlwaysCopyAsChild = false;
-                ca.MakeParents = false; // We just did that ourselves. Use Svn for this?
-                ca.ThrowOnError = false;
-
-                ok = _client.Copy(new SvnPathTarget(fromPath), toPath, ca);
-
-
-                if (ok && File.Exists(toPath))
-                {
-                    setReadOnly = (int)(File.GetAttributes(toPath) & FileAttributes.ReadOnly) != 0;
-                }
+                if (setReadOnly)
+                    File.SetAttributes(toPath, File.GetAttributes(toPath) | FileAttributes.ReadOnly);
             }
-
-            if (setReadOnly)
-                File.SetAttributes(toPath, File.GetAttributes(toPath) | FileAttributes.ReadOnly);
 
             return ok;
         }
@@ -219,41 +221,43 @@ namespace Ankh.Scc
 
             using (MarkIgnoreFile(fromPath))
             using (MarkIgnoreFile(toPath))
-            using (TempFile(fromPath, toPath))
-            using (MoveAway(toPath, true))
             {
-                string toDir = Path.GetDirectoryName(toPath);
-
-                if (!SvnTools.IsManagedPath(toDir))
+                using (TempFile(fromPath, toPath))
+                using (MoveAway(toPath, true))
                 {
-                    SvnAddArgs aa = new SvnAddArgs();
-                    aa.Depth = SvnDepth.Empty;
-                    aa.AddParents = true;
-                    aa.Force = true;
-                    aa.ThrowOnError = false;
+                    string toDir = Path.GetDirectoryName(toPath);
 
-                    if (!_client.Add(toDir, aa))
-                        return false;
+                    if (!SvnTools.IsManagedPath(toDir))
+                    {
+                        SvnAddArgs aa = new SvnAddArgs();
+                        aa.Depth = SvnDepth.Empty;
+                        aa.AddParents = true;
+                        aa.Force = true;
+                        aa.ThrowOnError = false;
+
+                        if (!_client.Add(toDir, aa))
+                            return false;
+                    }
+
+                    Debug.Assert(SvnTools.IsManagedPath(toDir));
+
+                    SvnMoveArgs ma = new SvnMoveArgs();
+                    ma.AlwaysMoveAsChild = false;
+                    ma.MakeParents = false; // We just did that ourselves. Use Svn for this?
+                    ma.Force = true;
+                    ma.ThrowOnError = false;
+
+                    ok = _client.Move(fromPath, toPath, ma);
+
+                    if (ok)
+                    {
+                        setReadOnly = (File.GetAttributes(toPath) & FileAttributes.ReadOnly) != (FileAttributes)0;
+                    }
                 }
 
-                Debug.Assert(SvnTools.IsManagedPath(toDir));
-
-                SvnMoveArgs ma = new SvnMoveArgs();
-                ma.AlwaysMoveAsChild = false;
-                ma.MakeParents = false; // We just did that ourselves. Use Svn for this?
-                ma.Force = true;
-                ma.ThrowOnError = false;
-
-                ok = _client.Move(fromPath, toPath, ma);
-
-                if (ok)
-                {
-                    setReadOnly = (File.GetAttributes(toPath) & FileAttributes.ReadOnly) != (FileAttributes)0;
-                }
+                if (setReadOnly)
+                    File.SetAttributes(toPath, File.GetAttributes(toPath) | FileAttributes.ReadOnly);
             }
-
-            if (setReadOnly)
-                File.SetAttributes(toPath, File.GetAttributes(toPath) | FileAttributes.ReadOnly);
 
             return ok;
         }
