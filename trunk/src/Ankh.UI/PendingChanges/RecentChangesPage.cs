@@ -8,11 +8,19 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.PendingChanges
 {
-    public partial class RecentChangesPage : PendingChangesPage
+    partial class RecentChangesPage : PendingChangesPage
     {
         public RecentChangesPage()
         {
             InitializeComponent();
+        }
+
+        protected override Type PageType
+        {
+            get
+            {
+                return typeof(RecentChangesPage);
+            }
         }
     }
 }

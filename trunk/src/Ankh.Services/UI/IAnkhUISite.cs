@@ -11,7 +11,7 @@ namespace Ankh.UI.Services
     /// <summary>
     /// Site as set on package hosted components
     /// </summary>
-    public interface IAnkhUISite : ISite
+    public interface IAnkhUISite : ISite, IAnkhServiceProvider
     {
         IAnkhPackage Package { get; }
 

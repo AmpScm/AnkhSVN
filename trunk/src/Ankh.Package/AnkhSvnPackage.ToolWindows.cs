@@ -126,7 +126,7 @@ namespace Ankh.VSPackage
                 return Package.GetService(serviceType);
             else
                 return null;
-        }
+        }        
 
         #endregion
 
@@ -155,6 +155,15 @@ namespace Ankh.VSPackage
         }
 
         #endregion
+
+        #region IAnkhServiceProvider Members
+
+        public T GetService<T>()
+        {
+            return (T)GetService(typeof(T));
+        }
+
+        #endregion
     }
 
     public class AnkhToolWindowPane : ToolWindowPane
@@ -163,7 +172,7 @@ namespace Ankh.VSPackage
         Control _control;
 
         protected AnkhToolWindowPane()
-            : base(new AnkhServiceContainer())
+            : base(null)
         {
             _site = new AnkhToolWindowSite(this);
         }
