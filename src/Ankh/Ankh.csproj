@@ -182,6 +182,7 @@
     <Compile Include="Commands\AddSolutionToRepositoryCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\ViewRepositoryFileCommand.cs" />
     <Compile Include="Commands\WorkingCopyExplorer\AddWorkingCopyExplorerRootCommand.cs" />
     <Compile Include="Commands\BlameCommand.cs">
       <SubType>Code</SubType>
@@ -292,13 +293,10 @@
     <Compile Include="Commands\UpdateItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\ViewInVSNetCommand.cs">
+    <Compile Include="Commands\RepositoryExplorer\ViewInVSNetCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\ViewInWindowsCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\ViewRepositoryFileCommand.cs">
+    <Compile Include="Commands\RepositoryExplorer\ViewInWindowsCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CommitContext.cs">

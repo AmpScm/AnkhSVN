@@ -149,8 +149,10 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int QueryEditFiles(uint rgfQueryEdit, int cFiles, string[] rgpszMkDocuments, uint[] rgrgf, VSQEQS_FILE_ATTRIBUTE_DATA[] rgFileInfo, out uint pfEditVerdict, out uint prgfMoreInfo)
         {
+            // TODO: Check SvnItem.ReadOnlyMustLock
+
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
-            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0;
+            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.)0;
             return VSConstants.S_OK;
         }
 

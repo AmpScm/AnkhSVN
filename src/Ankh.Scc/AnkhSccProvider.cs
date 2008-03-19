@@ -13,7 +13,7 @@ using Ankh.Scc.ProjectMap;
 namespace Ankh.Scc
 {
     [GuidAttribute(AnkhId.SccProviderId), CLSCompliant(false)]
-    public partial class AnkhSccProvider : IVsSccProvider, IVsSccGlyphs, IVsSccControlNewSolution, IAnkhSccService
+    public partial class AnkhSccProvider : IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService
     {
         readonly AnkhContext _context;
         IFileStatusCache _statusCache;
