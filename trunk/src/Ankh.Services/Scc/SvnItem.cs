@@ -10,16 +10,10 @@ using SharpSvn;
 using System.Collections.ObjectModel;
 using Ankh.Selection;
 using Ankh.Scc;
+using SharpSvn.Implementation;
 
 namespace Ankh
 {    
-    [Obsolete]
-    public enum EventBehavior
-    {
-        Raise,
-        DontRaise,
-    }
-
     /// <summary>
     /// Represents a version controlled path on disk, caching it's status.
     /// </summary>
@@ -30,6 +24,9 @@ namespace Ankh
         bool _dirty;        
         AnkhStatus _status;        
         bool _refreshing;
+        int _readOnly;
+        int _exists;
+        int _mustLock;
 
         public SvnItem(IAnkhServiceProvider context, string fullPath, AnkhStatus status)
         {
@@ -44,8 +41,6 @@ namespace Ankh
             _fullPath = fullPath;
             _status = status;
         }
-
-
 
         /// <summary>
         /// The status of this item.
@@ -105,8 +100,6 @@ namespace Ankh
                 }
             }
         }
-
-
 
         /// <summary>
         /// Set the status of this item to the passed in status.
@@ -213,10 +206,7 @@ namespace Ankh
         {
             get
             {
-                using (EnsureClean())
-                {
-                    return SvnTools.IsBelowManagedPath(_fullPath);
-                }
+                return SvnTools.IsBelowManagedPath(_fullPath);
             }
         }
 
@@ -227,15 +217,57 @@ namespace Ankh
         {
             get
             {
-                try
+                if (_readOnly == 0)
                 {
-                    return this.IsFile && File.Exists(this.Path) &&
-                        (File.GetAttributes(this.Path) & FileAttributes.ReadOnly) != 0;
+                    if(this.IsFile && this.Exists)
+                        _readOnly = ((File.GetAttributes(_fullPath) & FileAttributes.ReadOnly) != 0) ? 2 : 1;
                 }
-                catch (IOException)
+                return (_readOnly == 2);
+            }
+        }
+
+        public bool Exists
+        {
+            get
+            {
+                if (_exists == 0)
                 {
-                    return false;
+                    if (IsDirectory)
+                        _exists = Directory.Exists(_fullPath) ? 2 : 1;
+                    else if (IsFile)
+                        _exists = File.Exists(_fullPath) ? 2 : 1;
+                    else
+                        _exists = 3;
                 }
+                return (_exists == 2);
+            }
+        }
+
+        public bool ReadOnlyMustLock
+        {
+            get
+            {
+                if (_mustLock == 0)
+                {
+                    _mustLock = 1;
+
+                    // Subversions sets must-lock files to read only; checking it without
+                    // checking the readonly flag first costs to much time for us.
+                    if (IsFile && IsReadOnly)
+                    {
+                        _mustLock = 1;
+                        using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
+                        {
+                            string propVal;
+                            if (client.TryGetProperty(new SvnPathTarget(_fullPath), SvnPropertyNames.SvnNeedsLock, out propVal))
+                            {
+                                _mustLock = 2;
+                            }
+                        }
+                    }
+                }
+
+                return (_mustLock == 2);
             }
         }
 
@@ -254,6 +286,17 @@ namespace Ankh
             }
         }
 
+        public bool InConflict
+        {
+            get
+            {
+                using (EnsureClean())
+                {
+                    return (_status.LocalContentStatus == SvnStatus.Conflicted) ||
+                        (_status.LocalPropertyStatus == SvnStatus.Conflicted);
+                }
+            }
+        }
 
         public bool IsDeleted
         {
@@ -266,13 +309,13 @@ namespace Ankh
             }
         }
 
-        public bool IsDeletedFromDisk
+        public bool IsIgnored
         {
             get
             {
                 using (EnsureClean())
                 {
-                    return _status.LocalContentStatus == SvnStatus.None && !File.Exists(this.Path) && !Directory.Exists(this.Path);
+                    return (_status.LocalContentStatus == SvnStatus.Ignored);
                 }
             }
         }
@@ -341,16 +384,14 @@ namespace Ankh
         public void MarkDirty()
         {
             _dirty = true;
+            _readOnly = 0;
+            _exists = 0;
+            _mustLock = 0; 
         }
 
         public bool IsDirty
         {
             get { return _dirty; }
-        }
-
-        public bool IsUnversionable
-        {
-            get { return (object)_status == (object)AnkhStatus.Unversioned; }
         }
 
         #region Cleaner

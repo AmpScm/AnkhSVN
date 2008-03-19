@@ -472,7 +472,7 @@ namespace Ankh
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;
-            args.Path = item.Status.Path;
+            args.Path = item.Status.FullPath;
         }
 
         private void EnsureWindowSize(Window window)

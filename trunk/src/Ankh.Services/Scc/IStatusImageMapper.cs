@@ -7,7 +7,7 @@ namespace Ankh.Scc
 {
     public interface IStatusImageMapper
     {
-        int GetStatusImageForNodeStatus(NodeStatus status);
+        AnkhGlyph GetStatusImageForSvnItem(SvnItem item);
 
         ImageList StatusImageList { get; }
     }

@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Collections;
 using Ankh.Scc;
+using SharpSvn;
 
 namespace Ankh
 {
@@ -59,19 +60,67 @@ namespace Ankh
 
         public class TempStatusImageMapper : IStatusImageMapper
         {
-            #region IStatusImageMapper Members
-
-            public int GetStatusImageForNodeStatus(NodeStatus status)
-            {
-                return StatusImages.GetStatusImageForNodeStatus(status);
-            }
-
             public ImageList StatusImageList
             {
                 get { return StatusImages.StatusImageList; }
             }
 
-            #endregion
+            public AnkhGlyph GetStatusImageForSvnItem(SvnItem item)
+            {
+                if (item == null)
+                    return AnkhGlyph.None;
+                else if (item.ReadOnlyMustLock)
+                    return AnkhGlyph.MustLock;
+                else if (item.InConflict)
+                    return AnkhGlyph.InConflict;
+                else if (item.IsIgnored)
+                    return AnkhGlyph.Ignored;
+                else if (!item.IsVersioned)
+                {
+                    if (!item.Exists)
+                        return AnkhGlyph.FileMissing;
+                    else if (item.IsVersionable)
+                        return AnkhGlyph.Blank; // Scc provider will apply ShouldBeAdded if in a project
+                    else
+                        return AnkhGlyph.None;
+                }
+                SvnStatus status = item.Status.LocalContentStatus;
+
+                if (status == SvnStatus.Normal)
+                    status = item.Status.LocalContentStatus;
+
+                switch (status)
+                {
+                    case SvnStatus.Normal:
+                        return item.IsLocked ? AnkhGlyph.LockedNormal : AnkhGlyph.Normal;
+                    case SvnStatus.Modified:
+                        return item.IsLocked ? AnkhGlyph.LockedModified : AnkhGlyph.Modified;
+
+                    case SvnStatus.Added:
+                    case SvnStatus.Replaced:
+                        // TODO: Check if replaced should have its own icon
+                        return item.Status.LocalCopied ? AnkhGlyph.AddedWithHistory : AnkhGlyph.Added;
+
+                    case SvnStatus.Missing:
+                    case SvnStatus.Deleted:
+                        return AnkhGlyph.Deleted;
+
+                    case SvnStatus.Conflicted: // Should have been handled above
+                    case SvnStatus.Obstructed:
+                        return AnkhGlyph.InConflict;
+
+                    case SvnStatus.Ignored: // Should have been handled abov
+                        return AnkhGlyph.Ignored;
+
+                    case SvnStatus.External:
+                    case SvnStatus.Incomplete:
+                        return AnkhGlyph.InConflict;
+       
+                    case SvnStatus.Zero:
+                    default:
+                        return AnkhGlyph.None;
+                }
+            }       
         }
     }
 }

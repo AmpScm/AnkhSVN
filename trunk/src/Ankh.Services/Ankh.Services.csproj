@@ -63,6 +63,7 @@
     <Compile Include="IAnkhServiceProvider.cs" />
     <Compile Include="ISvnClientPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scc\AnkhGlyph.cs" />
     <Compile Include="Scc\AnkhStatus.cs" />
     <Compile Include="Scc\IFileStatusCache.cs" />
     <Compile Include="Scc\IFileStatusMonitor.cs" />
