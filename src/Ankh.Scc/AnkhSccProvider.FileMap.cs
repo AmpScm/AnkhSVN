@@ -480,50 +480,6 @@ namespace Ankh.Scc
             {
                 data.OnFileClose(file, itemId);
             }
-        }
-
-        internal void MarkFileGlyphsDirty(IEnumerable<string> files)
-        {
-            if (files == null)
-                throw new ArgumentNullException("files");
-
-            foreach (string f in files)
-            {
-                SccProjectFile file;
-
-                if (_fileMap.TryGetValue(f, out file))
-                {
-                    foreach (SccProjectFileReference r in file.GetAllReferences())
-                    {
-                        r.MarkGlyphsDirty();
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when the in-memory dirty state of a file has changed
-        /// </summary>
-        /// <param name="file"></param>
-        internal void UpdateDocumentDirtyFlag(SccDocumentData file)
-        {
-            if (file == null)
-                throw new ArgumentNullException("file");
-
-            SccProjectFile fileData;
-
-            if (_fileMap.TryGetValue(file.Name, out fileData))
-            {
-                SvnItem item = StatusCache[file.Name];
-
-                if (item != null && item.Status.LocalContentStatus == SvnStatus.Normal)
-                {
-                    foreach (SccProjectFileReference r in fileData.GetAllReferences())
-                    {
-                        r.MarkGlyphsDirty();
-                    }
-                }
-            }
-        }
+        }         
     }
 }

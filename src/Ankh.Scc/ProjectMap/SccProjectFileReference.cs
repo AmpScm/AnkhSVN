@@ -119,17 +119,5 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
         }
-
-        internal bool MarkGlyphsDirty()
-        {
-            if (_ids != null)
-            {
-                if (0 == Project.Project.SccGlyphChanged(_ids.Length, _ids, null, null))
-                    return true;
-            }
-            Project.Project.SccGlyphChanged(0, null, null, null);
-            return false;
-
-        }
     }
 }

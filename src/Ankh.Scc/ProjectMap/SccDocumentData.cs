@@ -48,6 +48,20 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
+        IVsHierarchy _hierarchy;
+        internal IVsHierarchy Hierarchy
+        {
+            get { return _hierarchy; }
+            set { _hierarchy = value; }
+        }
+
+        uint _itemId;
+        internal uint ItemId
+        {
+            get { return _itemId; }
+            set { _itemId = value; }
+        }
+
         internal void OnSaved()
         {
         }
@@ -82,10 +96,10 @@ namespace Ankh.Scc.ProjectMap
 
         void UpdateGlyph()
         {
-            IAnkhCommandService cmd = _context.GetService<IAnkhCommandService>();
+            IVsSccProject2 project = Hierarchy as IVsSccProject2;
 
-            if (cmd != null)
-                cmd.PostExecCommand(AnkhCommand.MarkProjectDirty, this);
+            if (project != null)
+                project.SccGlyphChanged(0, null, null, null);
         }
 
         internal void Dispose()

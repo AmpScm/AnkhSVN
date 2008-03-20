@@ -93,9 +93,16 @@ namespace Ankh.Scc
                             _cookieMap.Remove(data.Cookie);
                             data.Cookie = 0;
                         }
+
+                        Debug.Assert(data.Hierarchy == hier);
+                        Debug.Assert(data.ItemId == itemId);
                     }
                     else
+                    {
                         _docMap.Add(name, data = new SccDocumentData(_context, name));
+                        data.Hierarchy = hier;
+                        data.ItemId = itemId;
+                    }
 
                     data.Cookie = cookie;
                     _cookieMap.Add(cookie, data);
@@ -127,6 +134,9 @@ namespace Ankh.Scc
             if (!_docMap.TryGetValue(pszMkDocument, out data))
             {
                 _docMap.Add(pszMkDocument, data = new SccDocumentData(_context, pszMkDocument));
+
+                data.Hierarchy = pHier;
+                data.ItemId = itemid;
             }
 
             if (itemid != VSConstants.VSITEMID_NIL && itemid != VSConstants.VSITEMID_SELECTION)
@@ -213,10 +223,10 @@ namespace Ankh.Scc
         public int OnAfterAttributeChangeEx(uint docCookie, uint grfAttribs, IVsHierarchy pHierOld, uint itemidOld, string pszMkDocumentOld, IVsHierarchy pHierNew, uint itemidNew, string pszMkDocumentNew)
         {
             SccDocumentData data;
-            if (TryGetDocument(docCookie, out data))
-            {
-                data.OnAttributeChange((__VSRDTATTRIB)grfAttribs);
-            }
+            if (!TryGetDocument(docCookie, out data))
+                return VSConstants.S_OK;
+
+            data.OnAttributeChange((__VSRDTATTRIB)grfAttribs);
 
             if (!string.IsNullOrEmpty(pszMkDocumentNew) && pszMkDocumentNew != pszMkDocumentOld)
             {
@@ -242,7 +252,15 @@ namespace Ankh.Scc
 
                     data.Dispose();
                 }
+
+                data = newData;
             }
+
+            if (pHierNew != null)
+                data.Hierarchy = pHierNew;
+            if (itemidNew != 0)
+                data.ItemId = itemidNew;            
+
             return VSConstants.S_OK;
         }
 

@@ -21,7 +21,7 @@ namespace Ankh.Scc
         public void OnExecute(CommandEventArgs e)
         {
             // Mark Scc Glyphs dirty, to force reload of glyphs from StatusCache
-            IEnumerable<SvnProject> projects = e.Argument as IEnumerable<SvnProject>;
+            IList<SvnProject> projects = e.Argument as IList<SvnProject>;
 
             if (projects != null)
             {
@@ -29,19 +29,13 @@ namespace Ankh.Scc
                 return;
             }
 
-            IEnumerable<string> files = e.Argument as IEnumerable<string>;
+            IList<string> files = e.Argument as IList<string>;
 
             if(files != null)
-                MarkFilesDirty(e, files);
-
-
-            SccDocumentData file = e.Argument as SccDocumentData;
-
-            if (file != null)
-                UpdateDocumentDirtyFlag(e, file);
+                MarkFilesDirty(e, files);            
         }
 
-        void MarkProjectsDirty(CommandEventArgs e, IEnumerable<SvnProject> projects)
+        void MarkProjectsDirty(CommandEventArgs e, IList<SvnProject> projects)
         {
             IProjectFileMapper mapper = e.Context.GetService<IProjectFileMapper>();
 
@@ -62,20 +56,25 @@ namespace Ankh.Scc
             }
         }
 
-        void MarkFilesDirty(CommandEventArgs e, IEnumerable<string> files)
+        void MarkFilesDirty(CommandEventArgs e, IList<string> files)
         {
-            AnkhSccProvider scc = e.Context.GetService<AnkhSccProvider>();
+            IProjectFileMapper mapper = e.Context.GetService<IProjectFileMapper>();
 
-            if (scc != null)
-                scc.MarkFileGlyphsDirty(files);            
-        }
+            if (mapper == null)
+                return;
 
-        void UpdateDocumentDirtyFlag(CommandEventArgs e, SccDocumentData file)
-        {
-            AnkhSccProvider scc = e.Context.GetService<AnkhSccProvider>();
+            foreach (SvnProject p in mapper.GetAllProjectsContaining(files))
+            {
+                SvnProject project = mapper.ResolveRawProject(p);
 
-            if (scc != null)
-                scc.UpdateDocumentDirtyFlag(file);
-        }     
+                IVsSccProject2 scc = project.RawHandle as IVsSccProject2;
+
+                if (scc != null)
+                {
+                    // Mark all glyphs cached in a project dirty
+                    scc.SccGlyphChanged(0, null, null, null);
+                }
+            }
+        }        
     }
 }
