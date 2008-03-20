@@ -49,8 +49,8 @@ namespace Ankh.VSPackage
 	[ProvideMenuResource(1000, 1)] // The number must match the number in the .csproj file for the ctc task
 	
 	[CLSCompliant(false)]
-    [ProvideSourceControlProvider("AnkhSVN - Subversion Source Control Provider Service", "#100")]
-	[ProvideService(typeof(AnkhSccProvider), ServiceName = "AnkhSVN - Subversion Source Control Provider Service")]
+    [ProvideSourceControlProvider("AnkhSVN - Subversion Support for Visual Studio", "#100")]
+	[ProvideService(typeof(ITheAnkhSvnSccProvider))]
     [ProvideAutoLoad("F1536EF8-92EC-443C-9ED7-FDADF150DA82")] // = VSConstants.UICONTEXT_SolutionExists.ToString()
 	public sealed partial class AnkhSvnPackage : Package, IAnkhPackage
 	{
