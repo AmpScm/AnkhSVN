@@ -10,6 +10,7 @@ namespace Ankh.Scc
         bool IsDocumentDirty(string path);
 
         bool SaveDocument(string path);
+        bool PromptSaveDocument(string path);
         bool SaveDocuments(IEnumerable<string> paths);
     }
 }
