@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="274ee41e-23a2-41bc-a144-fff9e08e956f" Name="AnkhSVN" Language="1033"
+	<Product Id="*" Name="AnkhSVN" Language="1033"
 			   Version="2.0.0.0" Manufacturer="AnkhSVN Team" UpgradeCode="40880177-2453-4EC7-8EEF-744EC101B688">
 		<Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated" 
 				 Platform="intel" Languages="1033" />
@@ -11,6 +11,8 @@
 		<Upgrade Id="40880177-2453-4EC7-8EEF-744EC101B688">
 			<UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0.0" Maximum="$(var.ankhVersion)" 
 							IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="yes" />
+			<UpgradeVersion Property="EXACTVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="$(ankhVersion)"
+							IncludeMinimum="yes" IncludeMaximum="yes" />
 			<UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="99.0.0.0"
 							IncludeMinimum="no" IncludeMaximum="yes" />
 		</Upgrade>
@@ -23,13 +25,13 @@
 
 		<!-- Error messages -->
 		<Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
-		<Property Id="VSDUIANDADVERTISED">This advertised application will not be installed because it might be unsafe. Contact your administrator to change the installation user interface option of the package to basic.</Property>
 
 		<!-- Secure these -->
 		<Property Id="NEWERPRODUCTFOUND" Secure="yes" />
 
 		<!-- Errormessages -->
 		<CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]" />
+		<CustomAction Id="ERRCA_CANCELEXACTVERSION" Error="[VSDVERSIONMSG]" />
 		<CustomAction Id="ERRCA_UIANDADVERTISED" Error="[VSDUIANDADVERTISED]" />
 
 		<Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" />
@@ -56,7 +58,8 @@
 		
 		<InstallExecuteSequence>
 			<Custom Action="ERRCA_CANCELNEWERVERSION" After="AppSearch">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
-			<RemoveExistingProducts After="InstallFinalize">PREVIOUSVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
+			<Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND ANKHSVNREINSTALL="" AND NOT Installed</Custom>
+			<RemoveExistingProducts After="InstallFinalize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt""</RemoveExistingProducts>
 		</InstallExecuteSequence>
 
 		<UIRef Id="AnkhUI"/>
