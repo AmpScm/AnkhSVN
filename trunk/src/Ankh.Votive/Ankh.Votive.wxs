@@ -59,7 +59,7 @@
 		<InstallExecuteSequence>
 			<Custom Action="ERRCA_CANCELNEWERVERSION" After="AppSearch">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
 			<Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND ANKHSVNREINSTALL="" AND NOT Installed</Custom>
-			<RemoveExistingProducts After="InstallFinalize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt""</RemoveExistingProducts>
+			<RemoveExistingProducts After="InstallFinalize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
 		</InstallExecuteSequence>
 
 		<UIRef Id="AnkhUI"/>
