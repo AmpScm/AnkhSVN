@@ -109,7 +109,7 @@ namespace Ankh.UI.PendingChanges
     /// This class inherits from NativeWindow class, that provides a low-level encapsulation of a window handle and a window procedure
     /// </summary>
     /// <seealso cref="NativeWindow"/>
-    internal class CodeEditorNativeWindow : NativeWindow, System.Windows.Forms.IMessageFilter, IOleCommandTarget, IDisposable
+    internal class CodeEditorNativeWindow : NativeWindow, IOleCommandTarget, IDisposable
     {
         #region Fields
 
@@ -313,10 +313,7 @@ namespace Ankh.UI.PendingChanges
             //Assign a handle to this window
             AssignHandle(commandHwnd);
             NativeMethods.ShowWindow(editorHwnd, 1);
-  
-            //Add message filter
-            Application.AddMessageFilter((System.Windows.Forms.IMessageFilter)this);
-        }
+          }
 
         /// <summary>
         ///  This method is used to get service of specified type
@@ -372,9 +369,6 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         public void Dispose()
         {
-            //Remove message filter
-            Application.RemoveMessageFilter((System.Windows.Forms.IMessageFilter)this);           
-
             if (codeWindow != null)
             {
                 codeWindow.Close();
@@ -382,50 +376,7 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        #endregion
-
-        #region IMessageFilter Members
-
-        /// <summary>
-        /// Filters out a message before it is dispatched
-        /// </summary>
-        /// <param name="m">The message to be dispatched. You cannot modify this message.</param>
-        /// <returns>True to filter the message and stop it from being dispatched; false to allow the message to continue to the next filter or control.</returns>
-        public bool PreFilterMessage(ref Message m)
-        {
-            //IVsFilterKeys2 performs advanced keyboard message translation
-            IVsFilterKeys2 filterKeys2 = QueryService<IVsFilterKeys2>(typeof(SVsFilterKeys));
-
-            MSG[] messages = new MSG[1];
-            messages[0].hwnd = m.HWnd;
-            messages[0].lParam = m.LParam;
-            messages[0].wParam = m.WParam;
-            messages[0].message = (uint)m.Msg;
-
-            Guid cmdGuid;
-            uint cmdCode;
-            int cmdTranslated;
-            int keyComboStarts;
-
-            int hr = filterKeys2.TranslateAcceleratorEx(messages,
-                (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_UseTextEditorKBScope //Translates keys using TextEditor key bindings. Equivalent to passing CMDUIGUID_TextEditor, CMDSETID_StandardCommandSet97, and guidKeyDupe for scopes and the VSTAEXF_IgnoreActiveKBScopes flag. 
-                | (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState,  //By default this function cannot be called when the shell is in a modal state, since command routing is inherently dangerous. However if you must access this in a modal state, specify this flag, but keep in mind that many commands will cause unpredictable behavior if fired. 
-                0,
-                null,
-                out cmdGuid,
-                out cmdCode,
-                out cmdTranslated,
-                out keyComboStarts);
-
-            if (hr != VSConstants.S_OK)
-            {
-                return false;
-            }
-
-            return cmdTranslated != 0;
-        }
-
-        #endregion
+        #endregion       
 
         #region IOleCommandTarget Members
         //This implementation is a simple delegation to the implementation inside the text view 
@@ -455,10 +406,7 @@ namespace Ankh.UI.PendingChanges
         /// <returns></returns>
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
-            int hr = commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
-
-
-            return hr;
+            return commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
         }
 
         #endregion
