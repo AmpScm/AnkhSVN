@@ -340,7 +340,7 @@ namespace Ankh.Selection
                 ticked.Add(si, si);
                 yield return si;
 
-                foreach (SelectionItem i in GetDescendants(si, ticked))
+                foreach (SelectionItem i in GetDescendants(si, ticked, ProjectWalkDepth.AllDescendants))
                 {
                     yield return i;
                 }
@@ -364,7 +364,7 @@ namespace Ankh.Selection
         /// <param name="si"></param>
         /// <param name="previous"></param>
         /// <returns></returns>
-        private static IEnumerable<SelectionItem> GetDescendants(SelectionItem si, Dictionary<SelectionItem, SelectionItem> previous)
+        private static IEnumerable<SelectionItem> GetDescendants(SelectionItem si, Dictionary<SelectionItem, SelectionItem> previous, ProjectWalkDepth depth)
         {
             if (si.Hierarchy == null)
                 yield break;
@@ -373,27 +373,30 @@ namespace Ankh.Selection
             IntPtr hierPtr;
             uint id;
 
-            int hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out id);
-
-            if (hr == VSConstants.S_OK && hierPtr != IntPtr.Zero)
+            if (depth > ProjectWalkDepth.AllDescendantsInHierarchy)
             {
-                IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
-                Marshal.Release(hierPtr); // we are responsible to release the refcount on the out IntPtr parameter
-                if (nestedHierarchy != null)
+                int hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out id);
+
+                if (hr == VSConstants.S_OK && hierPtr != IntPtr.Zero)
                 {
-                    // Display name and type of the node in the Output Window
-                    SelectionItem i = new SelectionItem(nestedHierarchy, id);
-
-                    if (previous.ContainsKey(i))
-                        yield break;
-
-                    previous.Add(i, i);
-
-                    yield return i;
-
-                    foreach (SelectionItem ii in GetDescendants(i, previous))
+                    IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
+                    Marshal.Release(hierPtr); // we are responsible to release the refcount on the out IntPtr parameter
+                    if (nestedHierarchy != null)
                     {
-                        yield return ii;
+                        // Display name and type of the node in the Output Window
+                        SelectionItem i = new SelectionItem(nestedHierarchy, id);
+
+                        if (previous.ContainsKey(i))
+                            yield break;
+
+                        previous.Add(i, i);
+
+                        yield return i;
+
+                        foreach (SelectionItem ii in GetDescendants(i, previous, depth))
+                        {
+                            yield return ii;
+                        }
                     }
                 }
             }
@@ -415,7 +418,7 @@ namespace Ankh.Selection
                     yield return i;
                 }
 
-                foreach (SelectionItem ii in GetDescendants(i, previous))
+                foreach (SelectionItem ii in GetDescendants(i, previous, depth))
                 {
                     yield return ii;
                 }
@@ -573,7 +576,7 @@ namespace Ankh.Selection
                 Dictionary<SelectionItem, SelectionItem> previous = new Dictionary<SelectionItem, SelectionItem>();
                 previous.Add(si, si);
 
-                foreach (SelectionItem item in GetDescendants(si, previous))
+                foreach (SelectionItem item in GetDescendants(si, previous, depth))
                 {
                     hr = SelectionUtils.GetSccFiles(item.Hierarchy, item.SccProject, item.Id, out files, depth >= ProjectWalkDepth.SpecialFiles);
                     Marshal.ThrowExceptionForHR(hr);

@@ -54,7 +54,7 @@ namespace Ankh.Scc.ProjectMap
 
         internal void OnClosed(bool closedWithoutSaving)
         {
-            if (closedWithoutSaving)
+            if (closedWithoutSaving && _isDirty)
                 UpdateGlyph();
             Dispose();
         }
