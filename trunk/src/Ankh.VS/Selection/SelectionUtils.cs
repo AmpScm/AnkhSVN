@@ -245,7 +245,13 @@ namespace Ankh.Selection
             {
                 if (itemid == VSConstants.VSITEMID_ROOT)
                 {
-                    pCaStringsOut[0] = CreateCALPOLESTR(new string[] { SelectionUtils.GetSolutionFileName(_context) });
+                    string solutionFilename = SelectionUtils.GetSolutionFileName(_context);
+
+                    if (!string.IsNullOrEmpty(solutionFilename))
+                        pCaStringsOut[0] = CreateCALPOLESTR(new string[] { SelectionUtils.GetSolutionFileName(_context) });
+                    else
+                        pCaStringsOut[0] = new CALPOLESTR();
+
                     pCaFlagsOut[0].cElems = 0;
                     pCaFlagsOut[0].pElems = IntPtr.Zero;
 
