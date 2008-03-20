@@ -8,6 +8,7 @@ namespace Ankh.Scc
     {
         Empty,
         SpecialFiles,
+        AllDescendantsInHierarchy,
         AllDescendants
     }
 

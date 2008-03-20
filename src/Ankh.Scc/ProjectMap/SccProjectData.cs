@@ -158,7 +158,7 @@ namespace Ankh.Scc.ProjectMap
 
             if (walker != null)
             {
-                foreach (string file in walker.GetSccFiles(_project, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendants))
+                foreach (string file in walker.GetSccFiles(_project, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy))
                 {
                     AddPath(file);                    
                 }
