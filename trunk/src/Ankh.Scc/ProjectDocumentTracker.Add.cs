@@ -84,8 +84,14 @@ namespace Ankh.Scc
 
                 // Save the origins of the to be added files as they are not available in the added event
 
-                if (rgpszSrcMkDocuments != null && !string.IsNullOrEmpty(rgpszSrcMkDocuments[i]))
+                string newDoc = rgpszNewMkDocuments[i];
+                string origDoc = rgpszSrcMkDocuments[i];
+
+                if (!string.IsNullOrEmpty(newDoc) && !string.IsNullOrEmpty(origDoc)
+                    && !string.Equals(newDoc, origDoc, StringComparison.OrdinalIgnoreCase)) // VS tries to add the file
+                {
                     _fileOrigins[rgpszNewMkDocuments[i]] = rgpszSrcMkDocuments[i];
+                }
 
                 if (!SvnCanAddPath(rgpszNewMkDocuments[i]))
                     ok = false;
