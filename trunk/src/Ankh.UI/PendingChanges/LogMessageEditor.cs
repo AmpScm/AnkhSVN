@@ -43,6 +43,7 @@ namespace Ankh.UI.PendingChanges
             codeEditorNativeWindow.Area = this.ClientRectangle;
         }
 
+        [CLSCompliant(false)]
         public IOleCommandTarget CommandTarget
         {
             get { return codeEditorNativeWindow; }
@@ -132,11 +133,6 @@ namespace Ankh.UI.PendingChanges
         /// Service provider
         /// </summary>
         private IOleServiceProvider serviceProvider;
-
-        /// <summary>
-        /// priority command target cookie
-        /// </summary>
-        private uint priorityCommandTargetCookie;
 
         /// <summary>
         /// Reference to VsCodeWindow object

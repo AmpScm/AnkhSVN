@@ -56,16 +56,19 @@
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer.Margin = new System.Windows.Forms.Padding(0);
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.Controls.Add(this.tableLayoutPanel1);
+            this.splitContainer.Panel1MinSize = 10;
             // 
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.pendingCommits);
+            this.splitContainer.Panel2MinSize = 10;
             this.splitContainer.Size = new System.Drawing.Size(768, 300);
             this.splitContainer.SplitterDistance = 83;
             this.splitContainer.SplitterWidth = 2;
@@ -75,7 +78,7 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 144F));
             this.tableLayoutPanel1.Controls.Add(this.textBox1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
@@ -87,8 +90,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(768, 83);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -213,7 +215,6 @@
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.ListView pendingCommits;
         private System.Windows.Forms.ColumnHeader pathColumn;
         private System.Windows.Forms.ColumnHeader projectColumn;
@@ -225,5 +226,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor;
+        private System.Windows.Forms.SplitContainer splitContainer;
     }
 }

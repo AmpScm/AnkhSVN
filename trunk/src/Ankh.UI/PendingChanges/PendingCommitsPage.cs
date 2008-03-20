@@ -49,5 +49,11 @@ namespace Ankh.UI.PendingChanges
                 return typeof(PendingCommitsPage);
             }
         }
+
+        public bool LogMessageVisible
+        {
+            get { return !splitContainer.Panel1Collapsed; }
+            set { splitContainer.Panel1Collapsed = !value; }
+        }
     }
 }
