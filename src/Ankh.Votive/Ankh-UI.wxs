@@ -286,7 +286,7 @@ terms below, click "I Agree", then "Next". Otherwise click "Cancel"]]></Text>
                     Text="[ButtonText_Cancel]">
                     <Publish Event="SpawnDialog" Value="Cancel" />
                 </Control>
-                <Control Id="BodyText1" Type="Text" X="18" Y="63" Width="354" Height="50">
+                <Control Id="BodyText1" Type="Text" X="32" Y="63" Width="354" Height="50">
                     <Text>[Setup] is ready to install [ProductName] on your computer.
 
 Click Install to start the installation.</Text>
