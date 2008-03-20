@@ -271,6 +271,7 @@
     <Compile Include="PathSelector.Designer.cs">
       <DependentUpon>PathSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="PendingChanges\Commands\ViewLogMessage.cs" />
     <Compile Include="PendingChanges\Commands\RefreshPendingChanges.cs" />
     <Compile Include="PendingChanges\LogMessageEditor.cs">
       <SubType>UserControl</SubType>

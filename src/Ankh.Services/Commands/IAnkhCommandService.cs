@@ -66,5 +66,11 @@ namespace Ankh.Commands
         /// <param name="command">The command.</param>
         /// <param name="args">The args.</param>
         bool PostExecCommand(CommandID command, object args);
+
+        /// <summary>
+        /// Updates the command UI.
+        /// </summary>
+        /// <param name="performImmediately">if set to <c>true</c> [perform immediately].</param>
+        void UpdateCommandUI(bool performImmediately);
     }
 }

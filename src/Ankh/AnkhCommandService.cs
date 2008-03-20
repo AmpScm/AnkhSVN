@@ -145,5 +145,22 @@ namespace Ankh
         }        
 
         #endregion
+
+        #region IAnkhCommandService Members
+
+
+        /// <summary>
+        /// Updates the command UI.
+        /// </summary>
+        /// <param name="performImmediately">if set to <c>true</c> [perform immediately].</param>
+        public void UpdateCommandUI(bool performImmediately)
+        {
+            IVsUIShell shell = UIShell;
+
+            if (shell != null)
+                shell.UpdateCommandUI(performImmediately ? 1 : 0);
+        }
+
+        #endregion
     }
 }

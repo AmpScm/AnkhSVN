@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.Services;
+using Microsoft.VisualStudio.Shell.Interop;
+using Ankh.Commands;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -90,6 +92,19 @@ namespace Ankh.UI.PendingChanges
             fileChangesButton.Checked = (page == _commitsPage);
             issuesButton.Checked = (page == _changesPage);
             recentChangesButton.Checked = (page == _issuesPage);
+
+            if (UISite != null)
+            {
+                IAnkhCommandService cmd = UISite.GetService<IAnkhCommandService>();
+
+                if (cmd != null)
+                    cmd.UpdateCommandUI(false);
+            }
+        }
+
+        private object IAnkhCommandHandler(Type type)
+        {
+            throw new NotImplementedException();
         }
 
         private void newToolStripButton_Click(object sender, EventArgs e)
