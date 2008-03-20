@@ -13,6 +13,7 @@ namespace Ankh.Scc.ProjectMap
         readonly SccProjectFile _file;
         readonly SccProjectData _project;
         int _refCount;
+        uint[] _ids;
 
         internal SccProjectFileReference _nextReference; // Linked list managed by SccProjectFile
 
@@ -77,6 +78,58 @@ namespace Ankh.Scc.ProjectMap
         {
             _refCount = 0;
             _project.InvokeRemoveReference(this);
+        }
+
+        internal void OnFileOpen(uint itemId)
+        {
+            if (_ids == null)
+                _ids = new uint[] { itemId };
+            else
+            {
+                // More than one item should never happen; but accept anyway
+                uint[] ids = new uint[_ids.Length + 1];
+
+                ids[1] = itemId;
+                _ids.CopyTo(ids, 1);
+                _ids = ids;
+            }
+        }
+
+        internal void OnFileClose(uint itemId)
+        {
+            if (_ids == null)
+                return;
+            else if (_ids.Length == 1 && _ids[0] == itemId)
+                _ids = null; // 99% case
+            else
+            {
+                int n = Array.IndexOf(_ids, itemId);
+
+                if (n >= 0)
+                {
+                    uint[] ids = new uint[_ids.Length - 1];
+                    for (int i = 0; i < ids.Length; i++)
+                    {
+                        if (i < n)
+                            ids[i] = _ids[i];
+                        else
+                            ids[i] = _ids[i + 1];
+                    }
+                    _ids = ids;
+                }
+            }
+        }
+
+        internal bool MarkGlyphsDirty()
+        {
+            if (_ids != null)
+            {
+                if (0 == Project.Project.SccGlyphChanged(_ids.Length, _ids, null, null))
+                    return true;
+            }
+            Project.Project.SccGlyphChanged(0, null, null, null);
+            return false;
+
         }
     }
 }

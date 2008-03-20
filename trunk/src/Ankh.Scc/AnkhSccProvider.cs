@@ -17,6 +17,7 @@ namespace Ankh.Scc
     {
         readonly AnkhContext _context;
         IFileStatusCache _statusCache;
+        IAnkhOpenDocumentTracker _documentTracker;
         public AnkhSccProvider(AnkhContext context)
         {
             if (context == null)
@@ -32,6 +33,11 @@ namespace Ankh.Scc
         public IFileStatusCache StatusCache
         {
             get { return _statusCache ?? (_statusCache = _context.GetService<IFileStatusCache>()); }
+        }
+
+        public IAnkhOpenDocumentTracker DocumentTracker
+        {
+            get { return _documentTracker ?? (_documentTracker = _context.GetService<IAnkhOpenDocumentTracker>()); }
         }
 
         /// <summary>

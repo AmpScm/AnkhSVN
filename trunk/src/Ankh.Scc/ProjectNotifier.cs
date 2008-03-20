@@ -10,7 +10,7 @@ using Ankh.Commands;
 
 namespace Ankh.Scc
 {
-    public class ProjectNotifier : IProjectNotifier, IFileStatusMonitor
+    class ProjectNotifier : IProjectNotifier, IFileStatusMonitor
     {
         readonly IAnkhServiceProvider _context;
 
@@ -38,6 +38,21 @@ namespace Ankh.Scc
                 return;
 
             cmd.PostExecCommand(AnkhCommand.MarkProjectDirty, new List<SvnProject>(projects));
+        }
+
+        /// <summary>
+        /// Marks the document with the specified name as dirty
+        /// </summary>
+        /// <param name="name"></param>
+        /// <remarks>name can be a non-path</remarks>
+        public void DocumentDirtyChanged(string path)
+        {
+            IAnkhCommandService cmd = _context.GetService<IAnkhCommandService>();
+
+            if (cmd == null)
+                return;
+
+            cmd.PostExecCommand(AnkhCommand.MarkProjectDirty, path);
         }
 
         public void ScheduleStatusUpdate(string path)

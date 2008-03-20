@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Scc
 {
-    partial class ProjectDocumentTracker
+    partial class ProjectTracker
     {
         readonly List<String> _batchErrors = new List<string>();
         bool _batchOk;

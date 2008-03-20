@@ -44,7 +44,7 @@ namespace Ankh.Scc
         /// <summary>
         /// File is readonly (STATEICON_READONLY /0x6)
         /// </summary>
-        ReadOnly,
+        FileDirty,
 
         /// <summary>
         /// (File is disabled) (STATEICON_DISABLED /0x7)

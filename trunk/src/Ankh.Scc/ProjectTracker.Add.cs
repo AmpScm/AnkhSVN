@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Ankh.Scc
 {
-    partial class ProjectDocumentTracker
+    partial class ProjectTracker
     {
         /// <summary>
         /// This method notifies the client when a project has requested to add files.

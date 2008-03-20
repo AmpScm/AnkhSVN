@@ -13,7 +13,7 @@ namespace Ankh.Scc
     [Command(AnkhCommand.SccFinishTasks)]
     class TaskFinisher : ICommandHandler
     {
-        ProjectDocumentTracker _tracker;
+        ProjectTracker _tracker;
         AnkhSccProvider _scc;
 
         #region ICommandHandler Members
@@ -25,7 +25,7 @@ namespace Ankh.Scc
         public void OnExecute(CommandEventArgs e)
         {
             if (_tracker == null)
-                _tracker = (ProjectDocumentTracker)e.Context.GetService<IAnkhProjectDocumentTracker>();
+                _tracker = (ProjectTracker)e.Context.GetService<IAnkhProjectDocumentTracker>();
             if(_scc == null)
                 _scc = (AnkhSccProvider)e.Context.GetService<IAnkhSccService>();
 
