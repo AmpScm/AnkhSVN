@@ -64,8 +64,17 @@ namespace Ankh.Scc
                 else
                     glyph = AnkhGlyph.None;
 
-                if (glyph == AnkhGlyph.Blank && _fileMap.ContainsKey(path))
-                    glyph = AnkhGlyph.ShouldBeAdded;
+                switch (glyph)
+                {
+                    case AnkhGlyph.Blank:
+                        if (_fileMap.ContainsKey(path))
+                            glyph = AnkhGlyph.ShouldBeAdded;
+                        break;
+                    case AnkhGlyph.Normal:
+                        if (DocumentTracker.IsDocumentDirty(path))
+                            glyph = AnkhGlyph.FileDirty;
+                        break;
+                }
 
                 if (rgsiGlyphs != null)
                     rgsiGlyphs[i] = (VsStateIcon)glyph;

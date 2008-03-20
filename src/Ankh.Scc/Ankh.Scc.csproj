@@ -73,22 +73,31 @@
     <Compile Include="AnkhSccProvider.FileMap.cs">
       <DependentUpon>AnkhSccProvider.cs</DependentUpon>
     </Compile>
+    <Compile Include="OpenDocumentTracker.cs" />
+    <Compile Include="OpenDocumentTracker.Api.cs">
+      <DependentUpon>OpenDocumentTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OpenDocumentTracker.Visibility.cs">
+      <DependentUpon>OpenDocumentTracker.cs</DependentUpon>
+    </Compile>
     <Compile Include="MarkProjectDirty.cs" />
-    <Compile Include="ProjectDocumentTracker.cs" />
-    <Compile Include="ProjectDocumentTracker.Add.cs">
-      <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
+    
+    <Compile Include="ProjectMap\SccDocumentData.cs" />
+    <Compile Include="ProjectTracker.cs" />
+    <Compile Include="ProjectTracker.Add.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProjectDocumentTracker.Batching.cs">
-      <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
+    <Compile Include="ProjectTracker.Batching.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProjectDocumentTracker.Remove.cs">
-      <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
+    <Compile Include="ProjectTracker.Remove.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProjectDocumentTracker.Rename.cs">
-      <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
+    <Compile Include="ProjectTracker.Rename.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProjectDocumentTracker.Solution.cs">
-      <DependentUpon>ProjectDocumentTracker.cs</DependentUpon>
+    <Compile Include="ProjectTracker.Solution.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
     <Compile Include="ProjectMap\SccProjectData.cs" />
     <Compile Include="ProjectMap\SccProjectFile.cs" />

@@ -442,12 +442,7 @@ namespace Ankh.Scc
 
             return files.ToArray();
         }
-
-        #endregion
-
-        #region IProjectFileMapper Members
-
-
+        
         public SvnProject ResolveRawProject(SvnProject project)
         {
             if (project == null)
@@ -466,5 +461,69 @@ namespace Ankh.Scc
         }
 
         #endregion
+
+        internal void OnFileOpen(IVsSccProject2 project, string file, uint itemId)
+        {
+            SccProjectData data;
+
+            if (_projectMap.TryGetValue(project, out data))
+            {
+                data.OnFileOpen(file, itemId);
+            }
+        }
+
+        internal void OnFileClose(IVsSccProject2 project, string file, uint itemId)
+        {
+            SccProjectData data;
+
+            if (_projectMap.TryGetValue(project, out data))
+            {
+                data.OnFileClose(file, itemId);
+            }
+        }
+
+        internal void MarkFileGlyphsDirty(IEnumerable<string> files)
+        {
+            if (files == null)
+                throw new ArgumentNullException("files");
+
+            foreach (string f in files)
+            {
+                SccProjectFile file;
+
+                if (_fileMap.TryGetValue(f, out file))
+                {
+                    foreach (SccProjectFileReference r in file.GetAllReferences())
+                    {
+                        r.MarkGlyphsDirty();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called when the in-memory dirty state of a file has changed
+        /// </summary>
+        /// <param name="file"></param>
+        internal void UpdateDocumentDirtyFlag(SccDocumentData file)
+        {
+            if (file == null)
+                throw new ArgumentNullException("file");
+
+            SccProjectFile fileData;
+
+            if (_fileMap.TryGetValue(file.Name, out fileData))
+            {
+                SvnItem item = StatusCache[file.Name];
+
+                if (item != null && item.Status.LocalContentStatus == SvnStatus.Normal)
+                {
+                    foreach (SccProjectFileReference r in fileData.GetAllReferences())
+                    {
+                        r.MarkGlyphsDirty();
+                    }
+                }
+            }
+        }
     }
 }

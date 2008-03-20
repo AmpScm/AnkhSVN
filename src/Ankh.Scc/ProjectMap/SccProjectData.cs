@@ -236,5 +236,21 @@ namespace Ankh.Scc.ProjectMap
         {
             return _files.Contains(path);
         }
+
+        internal void OnFileOpen(string file, uint itemId)
+        {
+            if (_files.Contains(file))
+            {
+                _files[file].OnFileOpen(itemId);
+            }
+        }
+
+        internal void OnFileClose(string file, uint itemId)
+        {
+            if (_files.Contains(file))
+            {
+                _files[file].OnFileClose(itemId);
+            }
+        }        
     }
 }

@@ -17,7 +17,7 @@ namespace Ankh.Scc
     }
 
     //[CLSCompliant(false)]
-    partial class ProjectDocumentTracker : IAnkhProjectDocumentTracker, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
+    partial class ProjectTracker : IAnkhProjectDocumentTracker, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
     {
         readonly AnkhContext _context;
         bool _hooked;
@@ -28,7 +28,7 @@ namespace Ankh.Scc
         readonly List<string> _fileHints = new List<string>();
         readonly SortedList<string, string> _fileOrigins;
 
-        public ProjectDocumentTracker(AnkhContext context)
+        public ProjectTracker(AnkhContext context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -44,29 +44,25 @@ namespace Ankh.Scc
         {
             if (enable == _hooked)
                 return;
-            else if (enable)
-            {
-                IVsTrackProjectDocuments2 tracker = (IVsTrackProjectDocuments2)_context.GetService(typeof(SVsTrackProjectDocuments));
 
+            IVsTrackProjectDocuments2 tracker = (IVsTrackProjectDocuments2)_context.GetService(typeof(SVsTrackProjectDocuments));
+            IVsSolution solution = (IVsSolution)_context.GetService(typeof(SVsSolution));
+            if (enable)
+            {
                 if (tracker != null)
                     Marshal.ThrowExceptionForHR(tracker.AdviseTrackProjectDocumentsEvents(this, out _projectCookie));
 
                 _hooked = true;
-
-                IVsSolution solution = (IVsSolution)_context.GetService(typeof(SVsSolution));
 
                 if (solution != null)
                     solution.AdviseSolutionEvents(this, out _documentCookie);
             }
             else 
             {
-                IVsTrackProjectDocuments2 tracker = (IVsTrackProjectDocuments2)_context.GetService(typeof(SVsTrackProjectDocuments));
-
                 if (tracker != null)
                     tracker.UnadviseTrackProjectDocumentsEvents(_projectCookie);
-                _hooked = false;
 
-                IVsSolution solution = (IVsSolution)_context.GetService(typeof(SVsSolution));
+                _hooked = false;
 
                 if (solution != null)
                     solution.UnadviseSolutionEvents(_documentCookie);

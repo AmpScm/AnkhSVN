@@ -25,7 +25,8 @@ namespace Ankh.Scc
             Container.AddService(typeof(AnkhSccProvider), service, true);
             Container.AddService(typeof(IAnkhSccService), service);
             Container.AddService(typeof(IProjectFileMapper), service);
-            Container.AddService(typeof(IAnkhProjectDocumentTracker), new ProjectDocumentTracker(Context));
+            Container.AddService(typeof(IAnkhProjectDocumentTracker), new ProjectTracker(Context));
+            Container.AddService(typeof(IAnkhOpenDocumentTracker), new OpenDocumentTracker(Context));
 
             ProjectNotifier notifier = new ProjectNotifier(this);
             Container.AddService(typeof(IProjectNotifier), notifier);

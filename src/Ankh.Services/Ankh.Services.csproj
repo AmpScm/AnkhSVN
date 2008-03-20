@@ -60,7 +60,7 @@
     <Compile Include="AnkhContext.cs" />
     <Compile Include="IAnkhPackage.cs" />
     <Compile Include="IAnkhRuntimeInfo.cs" />
-    <Compile Include="IAnkhSccService.cs" />
+    <Compile Include="Scc\IAnkhSccService.cs" />
     <Compile Include="IAnkhServiceProvider.cs" />
     <Compile Include="ISvnClientPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,6 +68,7 @@
     <Compile Include="Scc\AnkhStatus.cs" />
     <Compile Include="Scc\IFileStatusCache.cs" />
     <Compile Include="Scc\IFileStatusMonitor.cs" />
+    <Compile Include="Scc\IAnkhOpenDocumentTracker.cs" />
     <Compile Include="Scc\ISccHierarchyWalker.cs" />
     <Compile Include="Scc\IProjectFileMapper.cs" />
     <Compile Include="Scc\IStatusImageMapper.cs" />

@@ -22,8 +22,11 @@ namespace Ankh.Scc
         /// </summary>
         bool IsSolutionDirty { get; set; }
 
+        /// <summary>
+        /// Called by the package when loading a managed solution
+        /// </summary>
+        /// <param name="asPrimarySccProvider">if set to <c>true</c> Ankh is marked as the primary SCC provider; otherwise it is running as second chair</param>
         void LoadingManagedSolution(bool asPrimarySccProvider);
-
 
         /// <summary>
         /// Marks the specified project as managed by the Scc provider

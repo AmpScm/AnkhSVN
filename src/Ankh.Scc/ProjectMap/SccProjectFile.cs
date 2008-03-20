@@ -102,6 +102,22 @@ namespace Ankh.Scc.ProjectMap
             return pd;
         }
 
+        public IList<SccProjectFileReference> GetAllReferences()
+        {
+            List<SccProjectFileReference> refs = new List<SccProjectFileReference>();
+
+            SccProjectFileReference rf = _firstReference;
+
+            while (rf != null)
+            {
+                refs.Add(rf);
+
+                rf = rf._nextReference;
+            }
+
+            return refs;
+        }
+
         #region Linked list management
         internal void AddReference(SccProjectFileReference reference)
         {

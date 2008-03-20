@@ -149,10 +149,31 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int QueryEditFiles(uint rgfQueryEdit, int cFiles, string[] rgpszMkDocuments, uint[] rgrgf, VSQEQS_FILE_ATTRIBUTE_DATA[] rgFileInfo, out uint pfEditVerdict, out uint prgfMoreInfo)
         {
-            // TODO: Check SvnItem.ReadOnlyMustLock
-
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
             prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0;
+
+            if (rgpszMkDocuments != null)
+            {
+                for (int i = 0; i < cFiles; i++)
+                {
+                    SvnItem item = StatusCache[rgpszMkDocuments[i]];
+
+                    if (item == null || !item.IsVersioned)
+                        continue;
+
+                    if (item.ReadOnlyMustLock)
+                    {
+                        // TODO: Prompt user to lock the file
+
+                        pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                        prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout 
+                            | tagVSQueryEditResultFlags.QER_EditNotPossible
+                            | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
+                        break;
+                    }
+                }
+            }
+
             return VSConstants.S_OK;
         }
 
@@ -168,8 +189,17 @@ namespace Ankh.Scc
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
             SvnItem item = StatusCache[pszMkDocument];
-            if(item != null)
+            if (item != null)
+            {
+                if (item.ReadOnlyMustLock)
+                {
+                    // TODO: Prompt user to lock the file
+                    pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
+                    return VSConstants.S_OK;
+                }
+
                 item.MarkDirty();
+            }
 
             MarkGlyphsDirty(null, pszMkDocument);
             

@@ -7,7 +7,7 @@ using AnkhSvn.Ids;
 
 namespace Ankh.Scc
 {
-    partial class ProjectDocumentTracker : IVsSolutionEvents, IVsSolutionEvents2, IVsSolutionEvents3, IVsSolutionEvents4
+    partial class ProjectTracker : IVsSolutionEvents, IVsSolutionEvents2, IVsSolutionEvents3, IVsSolutionEvents4
     {
         #region IVsSolutionEvents Members
 
