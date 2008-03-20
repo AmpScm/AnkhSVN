@@ -11,7 +11,9 @@ namespace Ankh.VSPackage
 {
     // This attribute is used to register the informations needed to show the this package
     // in the Help/About dialog of Visual Studio.
-    [InstalledProductRegistration(true, "#110", "#112", "2.0", IconResourceID = 400)]
+    [InstalledProductRegistration(true, "#110", "#112", "2.0", 
+        IconResourceID = 400,
+        LanguageIndependentName="AnkhSVN")]
     public partial class AnkhSvnPackage : IVsInstalledProduct
     {
         #region IVsInstalledProduct Members

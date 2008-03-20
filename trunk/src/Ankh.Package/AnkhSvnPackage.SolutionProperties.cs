@@ -109,7 +109,7 @@ namespace Ankh.VSPackage
                         pPropBag.Write(ManagedPropertyName, ref obj);
                     
                         // BH: Don't localize this text! Changing it will change all solutions marked as managed by Ankh
-                        obj = "AnkhSVN - The Subversion plugin for Visual Studio";
+                        obj = "AnkhSVN - Subversion Support for Visual Studio";
                         pPropBag.Write(ManagerPropertyName, ref obj);
                     }
                 }
@@ -121,36 +121,32 @@ namespace Ankh.VSPackage
         public int ReadSolutionProps(IVsHierarchy pHierarchy, string pszProjectName, string pszProjectMk, string pszKey, int fPreLoad, IPropertyBag pPropBag)
         {
             // This function gets called by the shell when a solution with one of our property categories is opened in the IDE.
-            
+
             if (SubversionPropertyCategory == pszKey)
             {
-                // We were called to read the key written by this source control provider
-                // Make sure we were marked as primary Scc provider on this solution
-
-                object pVar;
-                pPropBag.Read(ManagedPropertyName, out pVar, null, 0, null);
-
-                string val = pVar as string;
-
-                bool result = false;
-                if (val != null && bool.TryParse(val, out result) && result)
+                IAnkhSccService scc = GetService<IAnkhSccService>();
+                if (scc != null)
                 {
-                    IVsRegisterScciProvider rscp = GetService<IVsRegisterScciProvider>();
-                    if (rscp != null)
-                    {
-                        // BH: This will make us the active Scc provider in Tools->Options                        
-                        rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid);
+                    // We were called to read the key written by this source control provider
+                    // Make sure we were marked as primary Scc provider on this solution
 
+                    object pVar;
+                    pPropBag.Read(ManagedPropertyName, out pVar, null, 0, null);
+
+                    string val = pVar as string;
+
+                    bool result = false;
+                    if (val != null && bool.TryParse(val, out result) && result)
+                    {
                         // (This is how automatic source control provider switching on solution opening should be implemented)
-                    }
-                }
 
-                if (result)
-                {
-                    // TODO: One day we might implement AnkhSvn as secondary solution here
-                    IAnkhSccService scc = GetService<IAnkhSccService>();
-                    if (scc != null)
+                        scc.RegisterAsPrimarySccProvider();
+                    }
+
+                    if (result)
                     {
+                        // TODO: One day we might implement AnkhSvn as secondary solution here
+
                         scc.LoadingManagedSolution(result);
                     }
                 }

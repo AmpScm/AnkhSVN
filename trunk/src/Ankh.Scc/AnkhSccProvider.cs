@@ -9,21 +9,42 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using AnkhSvn.Ids;
 using Ankh.Scc.ProjectMap;
+using Ankh.Selection;
 
 namespace Ankh.Scc
 {
     [GuidAttribute(AnkhId.SccProviderId), CLSCompliant(false)]
-    public partial class AnkhSccProvider : IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService
+    public interface ITheAnkhSvnSccProvider : IVsSccProvider
+    {
+    }
+
+    partial class AnkhSccProvider : ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService
     {
         readonly AnkhContext _context;
         IFileStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
+        bool _registeredOnce;
         public AnkhSccProvider(AnkhContext context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
             _context = context;
+        }
+
+        public void RegisterAsSccProvider()
+        {
+            _registeredOnce = true;
+            IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)_context.GetService<IVsRegisterScciProvider>();
+            if (rscp != null)
+            {
+                rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid);
+            }
+        }
+
+        public void RegisterAsPrimarySccProvider()
+        {
+            RegisterAsSccProvider();
         }
 
         /// <summary>
@@ -62,8 +83,24 @@ namespace Ankh.Scc
         /// </returns>
         public int SetActive()
         {
-            Trace.WriteLine("In SetActive");
             this.active = true;
+
+            //LoadInitialProjectMap(); // Make sure we know all projects
+
+            // Flush all glyphs of all projects when a user enables us.
+            IProjectNotifier pn = _context.GetService<IProjectNotifier>();
+
+            if(pn != null)
+            {
+                List<SvnProject> allProjects = new List<SvnProject>();
+
+                foreach (SccProjectData pd in _projectMap.Values)
+                {
+                    allProjects.Add(pd.SvnProject);
+                }
+                pn.MarkDirty(allProjects);            
+            }
+
             return VSConstants.S_OK;
         }
 
@@ -116,6 +153,9 @@ namespace Ankh.Scc
             data.IsRegistered = true;
             data.Load();
 
+            if (!_registeredOnce)
+                RegisterAsSccProvider();
+
             return VSConstants.S_OK;
         }
 
@@ -133,7 +173,6 @@ namespace Ankh.Scc
             }
 
             return VSConstants.S_OK;
-
         }
 
         /// <summary>
