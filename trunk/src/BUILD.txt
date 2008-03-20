@@ -54,12 +54,12 @@ into your non-experimental VS.NET IDE instance.  Perform at your own risk.)  To
 register the package in your real Visual Studio you can use:
 
 VS2008:
-"%programfiles%\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Tools\Bin\RegPkg.exe" src\AnkhSvn\bin\release\AnkhSvn.dll /codebase
-"%programfiles%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.com" /rt "Software\Microsoft\VisualStudio\9.0Exp" /RANU /setup
+"%programfiles%\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Tools\Bin\RegPkg.exe" src\AnkhSvn\bin\release\AnkhSvn.dll /codebase /root:Software\Microsoft\VisualStudio\9.0
+"%programfiles%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.com" /setup
 
 VS2005:
-"%programfiles%\Microsoft Visual Studio 2005 SDK\2007.02\VisualStudioIntegration\Tools\Bin\RegPkg.exe" src\AnkhSvn\bin\release\AnkhSvn.dll /codebase
-"%programfiles%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.com" /rt "Software\Microsoft\VisualStudio\8.0Exp" /setup
+"%programfiles%\Microsoft Visual Studio 2005 SDK\2007.02\VisualStudioIntegration\Tools\Bin\RegPkg.exe" src\AnkhSvn\bin\release\AnkhSvn.dll /codebase /root:Software\Microsoft\VisualStudio\8.0
+"%programfiles%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.com" /setup
 
 
 (To remove the package from your Visual Studio you can replace /codebase with /unregister)
