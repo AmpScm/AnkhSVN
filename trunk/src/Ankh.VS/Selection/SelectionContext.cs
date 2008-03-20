@@ -571,7 +571,7 @@ namespace Ankh.Selection
                 yield return file;
             }
 
-            if (depth >= ProjectWalkDepth.AllDescendants)
+            if (depth > ProjectWalkDepth.SpecialFiles)
             {
                 Dictionary<SelectionItem, SelectionItem> previous = new Dictionary<SelectionItem, SelectionItem>();
                 previous.Add(si, si);
