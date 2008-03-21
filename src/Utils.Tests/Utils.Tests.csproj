@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -89,9 +89,6 @@
   <ItemGroup>
     <Compile Include="FileUtilsTest.cs" />
     <Compile Include="HashUtilsTest.cs" />
-    <Compile Include="PathUtilsTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Win32Tests.cs">
       <SubType>Code</SubType>
