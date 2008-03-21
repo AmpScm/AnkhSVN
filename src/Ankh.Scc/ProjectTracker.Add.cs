@@ -242,6 +242,8 @@ namespace Ankh.Scc
                         //     The original paths are still on the clipboard
                         if (origin == null && System.Windows.Forms.Clipboard.ContainsText())
                         {
+                            // TODO: BH: Look into using IVsUIHierWinClipboardHelper to parse the clipboard data!
+
                             // In some cases (Websites) the solution explorer just dumps a bunch of file:// Url's on the clipboard
 
                             string text = System.Windows.Forms.Clipboard.GetText();
