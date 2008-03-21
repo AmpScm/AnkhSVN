@@ -11,7 +11,7 @@
 		<Upgrade Id="40880177-2453-4EC7-8EEF-744EC101B688">
 			<UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0.0" Maximum="$(var.ankhVersion)" 
 							IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="yes" />
-			<UpgradeVersion Property="EXACTVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="$(ankhVersion)"
+			<UpgradeVersion Property="EXACTVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="$(var.ankhVersion)"
 							IncludeMinimum="yes" IncludeMaximum="yes" />
 			<UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="99.0.0.0"
 							IncludeMinimum="no" IncludeMaximum="yes" />
