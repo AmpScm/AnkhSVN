@@ -77,14 +77,7 @@ namespace Ankh.WorkingCopyExplorer
 
         public void Open()
         {
-            try
-            {
-                this.explorer.OpenItem(this.SvnItem.Path);
-            }
-            catch (Exception ex)
-            {
-                this.Explorer.Context.ErrorHandler.OnError(ex);
-            }
+            this.explorer.OpenItem(this.SvnItem.Path);
         }
 
         [TextProperty("TextStatus", Order = 0, TextWidth = 18)]
@@ -142,15 +135,7 @@ namespace Ankh.WorkingCopyExplorer
 
         public override int GetHashCode()
         {
-            try
-            {
-                return _item.Path.GetHashCode();
-            }
-            catch (Exception ex)
-            {
-                this.explorer.Context.ErrorHandler.OnError(ex);
-                return 0;
-            }
+            return _item.Path.GetHashCode();
         }
 
         internal new void Refresh()

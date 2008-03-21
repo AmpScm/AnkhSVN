@@ -495,7 +495,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             IContext context = AnkhContextMock.GetInstance(mocks);
             mocks.BackToRecord(context, BackToRecordOptions.None);
-            Expect.Call(context.ErrorHandler).Return(errorHandler).Repeat.AtLeastOnce();
+            //Expect.Call(context.ErrorHandler).Return(errorHandler).Repeat.AtLeastOnce();
             mocks.Replay(context);
 
             using (mocks.Playback())

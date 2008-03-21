@@ -41,13 +41,9 @@ namespace Ankh
         {
             this.package = package;
 
-            this.dte = (EnvDTE._DTE)package.GetService(typeof(EnvDTE._DTE));
+            this.dte = (EnvDTE._DTE)package.GetService(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
             this.uiShell = uiShell;
             this.uiShell.Context = this;
-
-            this.errorHandler = new ErrorHandler(package);
-
-            this.hostWindow = new Win32Window(new IntPtr(dte.MainWindow.HWnd));
 
             this.configLoader = new Ankh.Config.ConfigLoader();
 
@@ -181,15 +177,6 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get { return this.config; }
-        }
-
-        /// <summary>
-        /// The error handler.
-        /// </summary>
-        public IAnkhErrorHandler ErrorHandler
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.errorHandler; }
         }
 
         /// <summary>
@@ -368,7 +355,12 @@ namespace Ankh
             }
             catch (Exception ex)
             {
-                this.ErrorHandler.OnError(ex);
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(ex);
+                else
+                    throw;                
             }
         }
 
@@ -404,7 +396,6 @@ namespace Ankh
         #endregion
 
         private EnvDTE._DTE dte;
-        private IWin32Window hostWindow;
 
         private WorkingCopyExplorer.WorkingCopyExplorer workingCopyExplorer;
         private RepositoryExplorer.Controller repositoryController;

@@ -19,15 +19,7 @@ namespace Ankh.WorkingCopyExplorer
 
         public override IFileSystemItem[] GetChildren()
         {
-            try
-            {
-                throw new InvalidOperationException( "Cannot get children for leaf item." );
-            }
-            catch ( Exception ex )
-            {
-                this.Explorer.Context.ErrorHandler.OnError( ex );
-                return new IFileSystemItem[] { };
-            }
+            return new IFileSystemItem[] { };
         }
 
         public override void Refresh( bool rescan )

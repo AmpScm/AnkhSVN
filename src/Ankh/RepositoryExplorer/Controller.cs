@@ -186,7 +186,7 @@ namespace Ankh.RepositoryExplorer
             }
             catch( Exception ex )
             {
-                this.context.ErrorHandler.OnError(ex);
+                //this.context.ErrorHandler.OnError(ex);
             }
         }        
 
