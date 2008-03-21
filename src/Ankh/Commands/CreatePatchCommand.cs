@@ -18,7 +18,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            SaveAllDirtyDocuments(context);
+            SaveAllDirtyDocuments(e.Selection, context);
 
             using (context.StartOperation("Creating patch"))
             {
