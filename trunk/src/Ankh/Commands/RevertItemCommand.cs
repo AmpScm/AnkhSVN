@@ -31,7 +31,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments(e.Selection, context);
 
             // TODO: fix user interface
             /*// get the modified resources

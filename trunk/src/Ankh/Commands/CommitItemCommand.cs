@@ -38,7 +38,7 @@ namespace Ankh.Commands
             IContext context = e.Context.GetService<IContext>();
 
             // make sure all files are saved
-            SaveAllDirtyDocuments( context );
+            SaveAllDirtyDocuments(e.Selection, context);
 
             Collection<SvnItem> resources = new Collection<SvnItem>();
 

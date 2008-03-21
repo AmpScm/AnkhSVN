@@ -36,9 +36,13 @@ namespace Ankh.Commands
             }
         }
 
-        protected static void SaveAllDirtyDocuments(IAnkhServiceProvider context)
+        protected static void SaveAllDirtyDocuments(ISelectionContext selection, IAnkhServiceProvider context)
         {
-            ISelectionContext selection = context.GetService<ISelectionContext>();
+            if (selection == null)
+                throw new ArgumentNullException("selection");
+            if (context == null)
+                throw new ArgumentNullException("context");
+
             IAnkhOpenDocumentTracker tracker = context.GetService<IAnkhOpenDocumentTracker>();
             if(selection != null && tracker != null)
                 tracker.SaveDocuments(selection.GetSelectedFiles());

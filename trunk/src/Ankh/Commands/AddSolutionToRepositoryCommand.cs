@@ -33,7 +33,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            SaveAllDirtyDocuments(context);
+            SaveAllDirtyDocuments(e.Selection, context);
 
             using (SvnClient client = context.ClientPool.GetClient())
             {
