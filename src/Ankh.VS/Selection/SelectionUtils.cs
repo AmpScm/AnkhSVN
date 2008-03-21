@@ -10,14 +10,14 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.Selection
 {
-    public static class SelectionUtils
+    static class SelectionUtils
     {
         /// <summary>
         /// Gets the files from an OLE String buffer and clears the buffer
         /// </summary>
         /// <param name="pathStr">The path STR.</param>
         /// <returns></returns>
-        [CLSCompliant(false)]
+        //[CLSCompliant(false)]
         public static string[] GetFileNamesFromOleBuffer(CALPOLESTR[] pathStr, bool free)
         {
             int nEls = (int)pathStr[0].cElems;
@@ -37,7 +37,7 @@ namespace Ankh.Selection
             return files;
         }
 
-        [CLSCompliant(false)]
+        //[CLSCompliant(false)]
         public static int[] GetFlagsFromOleBuffer(CADWORD[] dwords, bool free)
         {
             if(dwords == null)
@@ -56,7 +56,7 @@ namespace Ankh.Selection
             return items;
         }
 
-        [CLSCompliant(false)]
+        //[CLSCompliant(false)]
         public static int GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, out int[] flags)
         {
             if (hierarchy == null)
@@ -98,8 +98,16 @@ namespace Ankh.Selection
             return VSConstants.E_FAIL;
         }
 
-        [CLSCompliant(false)]
-        public static int GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, bool includeSpecial)
+        internal static int GetSccFiles(SelectionContext.SelectionItem item, out string[] files, bool includeSpecial)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            return GetSccFiles(item.Hierarchy, item.SccProject, item.Id, out files, includeSpecial);
+        }
+
+        //[CLSCompliant(false)]
+        internal static int GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, bool includeSpecial)
         {
             string[] fls;
             int[] flags;
@@ -196,13 +204,21 @@ namespace Ankh.Selection
             }
         }
 
-        [CLSCompliant(false)]
+        //[CLSCompliant(false)]
         public static IVsSccProject2 GetSolutionAsSccProject(IServiceProvider context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
             return new SolutionSccHelper(context);
+        }
+
+        public static bool IsSolutionSccProject(IVsSccProject2 project)
+        {
+            if (project == null)
+                throw new ArgumentNullException("project");
+
+            return project is SolutionSccHelper;
         }
 
         class SolutionSccHelper : IVsSccProject2
