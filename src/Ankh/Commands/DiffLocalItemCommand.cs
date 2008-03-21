@@ -4,6 +4,9 @@ using Ankh.UI;
 using EnvDTE;
 using SHDocVw;
 using AnkhSvn.Ids;
+using Ankh.VS;
+using System;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Commands
 {
@@ -33,17 +36,14 @@ namespace Ankh.Commands
                     using (StreamWriter w = new StreamWriter(htmlFile, false, System.Text.Encoding.Default))
                         w.Write(html);
 
-                    // the Start Page window is a web browser
-                    Window browserWindow = ((IDTEContext)e.Context).DTE.Windows.Item(
-                        Constants.vsWindowKindWebBrowser);
-                    WebBrowser browser = (WebBrowser)browserWindow.Object;
-
-                    // have it show the html
-                    object url = "file://" + htmlFile;
-                    object nullObject = null;
-                    browser.Navigate2(ref url, ref nullObject, ref nullObject,
-                        ref nullObject, ref nullObject);
-                    browserWindow.Activate();
+                    IAnkhWebBrowser browser = e.Context.GetService<IAnkhWebBrowser>();
+                    BrowserArgs args = new BrowserArgs();
+                    args.CreateFlags = __VSCREATEWEBBROWSER.VSCWB_AutoShow | 
+                        __VSCREATEWEBBROWSER.VSCWB_NoHistory | 
+                        __VSCREATEWEBBROWSER.VSCWB_StartCustom |
+                        __VSCREATEWEBBROWSER.VSCWB_OptionDisableStatusBar;
+                    args.BaseCaption = "Subversion";
+                    browser.Navigate(new Uri("file:///" + htmlFile), args);
                 }
             }
         }

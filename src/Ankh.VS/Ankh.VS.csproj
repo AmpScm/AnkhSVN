@@ -66,6 +66,7 @@
     <Compile Include="SolutionExplorer\SolutionExplorerWindow.cs" />
     <Compile Include="SolutionExplorer\SolutionTreeViewManager.cs" />
     <Compile Include="SolutionExplorer\TreeView\Win32TreeView.cs" />
+    <Compile Include="WebBrowser\AnkhWebBrowser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.VS.snk" />
