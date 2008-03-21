@@ -18,7 +18,7 @@ namespace Ankh.VS
         /// <param name="runtime">The runtime.</param>
         public AnkhVSModule(AnkhRuntime runtime)
             : base(runtime)
-        {            
+        {
         }
 
         /// <summary>
@@ -35,6 +35,8 @@ namespace Ankh.VS
             SelectionContext selection = new SelectionContext(this, window);
             Container.AddService(typeof(ISelectionContext), selection, true);
             Container.AddService(typeof(ISccProjectWalker), selection);
+            Container.AddService(typeof(IAnkhWebBrowser),
+                delegate { return new Ankh.VS.WebBrowser.AnkhWebBrowser(this); });
         }
 
         /// <summary>

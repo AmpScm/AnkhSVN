@@ -8,6 +8,8 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
+using Ankh.Selection;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -34,9 +36,12 @@ namespace Ankh.Commands
             }
         }
 
-        protected static void SaveAllDirtyDocuments(IContext context)
+        protected static void SaveAllDirtyDocuments(IAnkhServiceProvider context)
         {
-            ((IDTEContext)context).DTE.ExecuteCommand("File.SaveAll", "");
+            ISelectionContext selection = context.GetService<ISelectionContext>();
+            IAnkhOpenDocumentTracker tracker = context.GetService<IAnkhOpenDocumentTracker>();
+            if(selection != null && tracker != null)
+                tracker.SaveDocuments(selection.GetSelectedFiles());
         }
 
         protected static XslCompiledTransform GetTransform(IContext context, string name)
