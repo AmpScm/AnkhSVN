@@ -38,7 +38,7 @@ namespace Ankh
             // TODO: Register services
             if(null == Container.GetService(typeof(IFileStatusCache)))
                 Container.AddService(typeof(IFileStatusCache), new StatusCache(Context));
-            Container.AddService(typeof(IStatusImageMapper), new StatusImages.TempStatusImageMapper());
+            Container.AddService(typeof(IStatusImageMapper), new StatusImageMapper(Context));
             Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
 
 #if !DEBUG

@@ -43,8 +43,10 @@ namespace Ankh.WorkingCopyExplorer
                     throw new InvalidOperationException();
             }
 
+            IStatusImageMapper mapper = context.GetService<IStatusImageMapper>();
+
             control = wcControl;
-            control.StateImages = StatusImages.StatusImageList;
+            control.StateImages = mapper.StatusImageList;
             control.WantNewRoot += new EventHandler(control_WantNewRoot);
             control.ValidatingNewRoot += new System.ComponentModel.CancelEventHandler(control_ValidatingNewRoot);
         }

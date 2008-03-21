@@ -328,7 +328,7 @@
     <Compile Include="StatusCache\AnkhDialogOwner.cs" />
     <Compile Include="StatusCache\AnkhSvnClientPool.cs" />
     <Compile Include="StatusCache\StatusCache.cs" />
-    <Compile Include="StatusImages.cs" />
+    <Compile Include="StatusImageMapper.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />
@@ -388,7 +388,7 @@
     <EmbeddedResource Include="Config\Config.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="status_icons.bmp" />
+    <EmbeddedResource Include="StatusGlyphs.bmp" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

@@ -8,7 +8,8 @@ namespace Ankh.Scc
     public interface IStatusImageMapper
     {
         AnkhGlyph GetStatusImageForSvnItem(SvnItem item);
-
         ImageList StatusImageList { get; }
+
+        ImageList CreateStatusImageList();
     }
 }
