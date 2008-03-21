@@ -334,7 +334,8 @@ namespace Ankh.Scc
                 return new DelegateRunner(
                     delegate()
                     {
-                        change.IgnoreFile(0, path, 0);
+                        change.SyncFile(path);
+                        change.IgnoreFile(0, path, 0);                        
                     });
             }
             else

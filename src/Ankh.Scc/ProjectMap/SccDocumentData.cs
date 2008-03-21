@@ -14,6 +14,7 @@ namespace Ankh.Scc.ProjectMap
         readonly string _name;
         uint _cookie;
         bool _isDirty;
+        bool _initialUpdateCompleted;
 
         public SccDocumentData(IAnkhServiceProvider context, string name)
         {
@@ -75,14 +76,36 @@ namespace Ankh.Scc.ProjectMap
 
         internal void OnAttributeChange(__VSRDTATTRIB attributes)
         {
+            if (0 != (attributes & __VSRDTATTRIB.RDTA_DocDataReloaded))
+            {
+                if (_initialUpdateCompleted)
+                {
+                    IFileStatusCache statusCache = _context.GetService<IFileStatusCache>();
+
+                    if (statusCache != null)
+                    {
+                        if (statusCache.IsValidPath(Name))
+                        {
+                            statusCache.MarkDirty(Name);
+                            UpdateGlyph();
+                        }
+                    }
+                }
+                else
+                    _initialUpdateCompleted = true;
+            }
+
             if (0 != (attributes & __VSRDTATTRIB.RDTA_DocDataIsDirty))
             {
+                _initialUpdateCompleted = true;
                 SetDirty(true);
+
             }
             else if (0 != (attributes & __VSRDTATTRIB.RDTA_DocDataIsNotDirty))
             {
+                _initialUpdateCompleted = true;
                 SetDirty(false);
-            }            
+            }
         }
 
         void SetDirty(bool dirty)
@@ -107,7 +130,7 @@ namespace Ankh.Scc.ProjectMap
             OpenDocumentTracker tracker = (OpenDocumentTracker)_context.GetService<IAnkhOpenDocumentTracker>();
 
             if (tracker != null)
-                tracker.DoDispose(this);            
+                tracker.DoDispose(this);
         }
 
         internal void CopyState(SccDocumentData data)

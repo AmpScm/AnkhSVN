@@ -274,5 +274,30 @@ namespace Ankh
 
             return newList;
         }
+
+        #region IFileStatusCache Members
+
+
+        /// <summary>
+        /// Determines whether the path value specifies a valid path
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is valid path] [the specified name]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsValidPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            if (path.LastIndexOf(':') > 1)
+                return false;
+
+            // TODO: Add more checks. This code is called from the OpenDocumentTracker
+
+            return true;
+        }
+
+        #endregion
     }
 }
