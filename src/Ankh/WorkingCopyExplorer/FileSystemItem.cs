@@ -6,26 +6,29 @@ using System.IO;
 using Utils;
 using System.Collections;
 using SharpSvn;
+using Ankh.Scc;
 
 namespace Ankh.WorkingCopyExplorer
 {
     internal abstract class FileSystemItem : TreeNode, Ankh.UI.IFileSystemItem
     {
         readonly IAnkhServiceProvider _context;
+        readonly SvnItem _item;
         public event EventHandler<ItemChangedEventArgs> ItemChanged;
 
-        public FileSystemItem( IAnkhServiceProvider context, FileSystemItem parent, WorkingCopyExplorer explorer, SvnItem svnItem ) : base(parent)
+        public FileSystemItem(IAnkhServiceProvider context, FileSystemItem parent, WorkingCopyExplorer explorer, SvnItem svnItem)
+            : base(parent)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
+            else if (svnItem == null)
+                throw new ArgumentNullException("svnItem");
 
             _context = context;
+            _item = svnItem;
+
             this.explorer = explorer;
-            this.svnItem = svnItem;
-
-            //this.svnItem.Changed += new EventHandler( this.ChildOrResourceChanged );
-
-            this.CurrentStatus = MergeStatuses( this.svnItem );
+            this.CurrentStatus = MergeStatuses(_item);
         }
 
         protected IAnkhServiceProvider Context
@@ -33,21 +36,21 @@ namespace Ankh.WorkingCopyExplorer
             get { return _context; }
         }
 
-       
 
-        public abstract bool IsContainer{ get; }
+
+        public abstract bool IsContainer { get; }
 
         public virtual string Text
         {
             get
             {
-                return this.svnItem.Name;
+                return _item.Name;
             }
         }
 
         public SvnItem SvnItem
         {
-            get { return this.svnItem; }
+            get { return _item; }
         }
 
         public WorkingCopyExplorer Explorer
@@ -55,19 +58,19 @@ namespace Ankh.WorkingCopyExplorer
             get { return this.explorer; }
         }
 
-        public override void GetResources( IList list, bool getChildItems, Predicate<SvnItem> filter )
+        public override void GetResources(IList list, bool getChildItems, Predicate<SvnItem> filter)
         {
-            if ( filter( this.svnItem ) )
+            if (filter(_item))
             {
-                list.Add( this.svnItem );
+                list.Add(_item);
             }
-            if ( getChildItems )
+            if (getChildItems)
             {
-                this.GetChildResources( list, getChildItems, filter );
+                this.GetChildResources(list, getChildItems, filter);
             }
         }
 
-        
+
 
 
         public abstract IFileSystemItem[] GetChildren();
@@ -76,41 +79,41 @@ namespace Ankh.WorkingCopyExplorer
         {
             try
             {
-                this.explorer.OpenItem( this.SvnItem.Path );
+                this.explorer.OpenItem(this.SvnItem.Path);
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                this.Explorer.Context.ErrorHandler.OnError( ex );
+                this.Explorer.Context.ErrorHandler.OnError(ex);
             }
         }
-       
-        [TextProperty( "TextStatus", Order = 0, TextWidth = 18 )]
+
+        [TextProperty("TextStatus", Order = 0, TextWidth = 18)]
         public SvnStatus TextStatus
         {
-            get { return this.svnItem.Status.LocalContentStatus; }
+            get { return _item.Status.LocalContentStatus; }
         }
 
-        [TextProperty( "PropertyStatus", Order = 1, TextWidth = 18 )]
+        [TextProperty("PropertyStatus", Order = 1, TextWidth = 18)]
         public SvnStatus PropertyStatus
         {
-            get { return this.svnItem.Status.LocalPropertyStatus; }
+            get { return _item.Status.LocalPropertyStatus; }
         }
 
-        [TextProperty("Locked", Order=2, TextWidth=10)]
+        [TextProperty("Locked", Order = 2, TextWidth = 10)]
         public string Locked
         {
             get
             {
-                return this.svnItem.IsLocked ? "Yes" : "";
+                return _item.IsLocked ? "Yes" : "";
             }
         }
 
-        [TextProperty( "Read-only", Order = 3, TextWidth = 13 )]
+        [TextProperty("Read-only", Order = 3, TextWidth = 13)]
         public string ReadOnly
         {
             get
             {
-                return this.svnItem.IsReadOnly ? "Yes" : "";
+                return _item.IsReadOnly ? "Yes" : "";
             }
         }
 
@@ -119,64 +122,51 @@ namespace Ankh.WorkingCopyExplorer
         {
             get
             {
-                try
-                {
-                    return StatusImages.GetStatusImageForNodeStatus( this.CurrentStatus );
-                }
-                catch ( Exception ex )
-                {
-                    this.explorer.Context.ErrorHandler.OnError( ex );
-                    return 0;
-                }
+                return (int)_context.GetService<IStatusImageMapper>().GetStatusImageForSvnItem(SvnItem);
             }
         }
 
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            try
-            {
-                FileSystemItem other = obj as FileSystemItem;
-                if ( other == null )
-                {
-                    return false;
-                }
-                return PathUtils.AreEqual( this.SvnItem.Path, other.SvnItem.Path );
-            }
-            catch ( Exception ex )
-            {
-                this.explorer.Context.ErrorHandler.OnError( ex );
+            return Equals(obj as FileSystemItem);
+        }
+
+        public bool Equals(FileSystemItem other)
+        {
+            if (other == null)
                 return false;
-            }
+
+            return PathUtils.AreEqual(this.SvnItem.Path, other.SvnItem.Path);
         }
 
         public override int GetHashCode()
         {
             try
             {
-                return this.svnItem.Path.GetHashCode();
+                return _item.Path.GetHashCode();
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                this.explorer.Context.ErrorHandler.OnError( ex );
+                this.explorer.Context.ErrorHandler.OnError(ex);
                 return 0;
             }
         }
 
         internal new void Refresh()
         {
-            this.svnItem.Refresh();
+            _item.Refresh();
         }
 
-        public static FileSystemItem Create(IAnkhServiceProvider context, WorkingCopyExplorer explorer, SvnItem item )
+        public static FileSystemItem Create(IAnkhServiceProvider context, WorkingCopyExplorer explorer, SvnItem item)
         {
-            if ( item.IsDirectory )
+            if (item.IsDirectory)
             {
-                return new FileSystemDirectoryItem(context, explorer, item );
+                return new FileSystemDirectoryItem(context, explorer, item);
             }
             else
             {
-                return new FileSystemFileItem(context, explorer, item );
+                return new FileSystemFileItem(context, explorer, item);
             }
         }
 
@@ -193,14 +183,14 @@ namespace Ankh.WorkingCopyExplorer
 
         protected override NodeStatus ThisNodeStatus()
         {
-            return MergeStatuses( this.svnItem );
+            return MergeStatuses(_item);
         }
 
-        protected virtual void OnItemChanged( ItemChangedType changeType )
+        protected virtual void OnItemChanged(ItemChangedType changeType)
         {
-            if ( this.ItemChanged != null )
+            if (this.ItemChanged != null)
             {
-                this.ItemChanged( this, new ItemChangedEventArgs(changeType) );
+                this.ItemChanged(this, new ItemChangedEventArgs(changeType));
             }
         }
 
@@ -208,15 +198,9 @@ namespace Ankh.WorkingCopyExplorer
         {
             base.OnChanged();
 
-            this.OnItemChanged( ItemChangedType.StatusChanged );
+            this.OnItemChanged(ItemChangedType.StatusChanged);
         }
-        
-
 
         private WorkingCopyExplorer explorer;
-        protected SvnItem svnItem;
-
-        
-
     }
 }

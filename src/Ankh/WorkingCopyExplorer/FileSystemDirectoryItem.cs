@@ -44,7 +44,7 @@ namespace Ankh.WorkingCopyExplorer
                 IFileStatusCache cache = Context.GetService<IFileStatusCache>();
 
                 if(cache != null)
-                    cache.UpdateStatus(this.svnItem.Path, SvnDepth.Infinity);
+                    cache.UpdateStatus(SvnItem.Path, SvnDepth.Infinity);
 
                 this.FindChildren();
 
