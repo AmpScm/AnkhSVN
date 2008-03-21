@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Utils;
 using SharpSvn;
 using Ankh.Selection;
+using System.Text;
 
 namespace Ankh.Commands
 {
@@ -83,57 +84,28 @@ namespace Ankh.Commands
 
         private string DoInternalDiff(PathSelectorInfo info, ISelectionContext selection, IContext context)
         {
-            string curdir = Environment.CurrentDirectory;
-
-            // we go to the solution directory so that the diff paths will be relative 
-            // to that directory
             string slndir = Path.GetDirectoryName(selection.SolutionFilename);
 
-            try
+            SvnDiffArgs args = new SvnDiffArgs();
+            args.IgnoreAncestry = true;
+            args.NoDeleted = false;
+            args.Depth = info.Depth;
+            if (slndir != null)
+                args.RelativeToPath = slndir;
+            SvnRevisionRange range = new SvnRevisionRange(info.RevisionStart, info.RevisionEnd);
+            
+            using(MemoryStream stream = new MemoryStream())
+            using(StreamReader reader = new StreamReader(stream))
+            using (SvnClient client = context.ClientPool.GetClient())
             {
-                // switch to the solution dir, so we can get relative paths.
-                // if a solution isn't open, don't bother
-                if (slndir != null)
+                foreach (SvnItem item in info.CheckedItems)
                 {
-                    Environment.CurrentDirectory = slndir;
+                    client.Diff(item.Path, range, args, stream);
                 }
+                stream.Position = 0;
 
-                MemoryStream stream = new MemoryStream();
-                using (SvnClient client = context.ClientPool.GetClient())
-                {
-                    foreach (SvnItem item in info.CheckedItems)
-                    {
-                        // try to get a relative path to the item from the solution directory
-                        string path = null;
-
-                        if (slndir != null)
-                        {
-                            path = Utils.Win32.Win32.PathRelativePathTo(slndir,
-                                            Utils.Win32.FileAttribute.Directory, item.Path,
-                                            Utils.Win32.FileAttribute.Normal);
-                        }
-
-                        // We can't use a path with more than two .. relative paths as input to svn diff (see svn issue #2448)
-                        if (path == null || path.IndexOf(@"..\..\..") >= 0)
-                        {
-                            path = item.Path;
-                        }
-
-                        SvnDiffArgs args = new SvnDiffArgs();
-                        args.IgnoreAncestry = true;
-                        args.NoDeleted = false;
-                        args.Depth = info.Depth;
-                        client.Diff(path, new SvnRevisionRange(info.RevisionStart, info.RevisionEnd), args, stream);
-                    }
-                }
-
-                return System.Text.Encoding.Default.GetString(stream.ToArray());
+                return reader.ReadToEnd();
             }
-            finally
-            {
-                Environment.CurrentDirectory = curdir;
-            }
-
         }
 
         private string DoExternalDiff(PathSelectorInfo info, ISelectionContext selection, IContext context)

@@ -127,24 +127,5 @@ namespace Utils.Win32
         [DllImport("comctl32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ImageList_SetOverlayImage(IntPtr imageList, int image, int overlay);
-
-        [DllImport("shlwapi.dll", CharSet = CharSet.Auto)]
-        private static extern bool PathRelativePathToW(StringBuilder result, string from,
-            FileAttribute fromAttr, string to, FileAttribute toAttr);
-
-        public static string PathRelativePathTo(string from, FileAttribute fromAttr,
-            string to, FileAttribute toAttr)
-        {
-            if (from == null)
-                throw new ArgumentNullException("from");
-            if (to == null)
-                throw new ArgumentNullException("to");
-
-            StringBuilder builder = new StringBuilder(Constants.MAX_PATH, Constants.MAX_PATH);
-            if (!PathRelativePathToW(builder, from, fromAttr, to, toAttr))
-                return null;
-            else
-                return builder.ToString();
-        }
     }
 }
