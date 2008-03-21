@@ -62,33 +62,33 @@ namespace Ankh.Scc
         LockedModified,
 
         /// <summary>
-        /// File is marked as ignore (STATEICON_EXCLUDEDFROMSCC /0xA)
+        /// File is marked as ignore (STATEICON_CHECKEDOUTEXCLUSIVEOTHER /0xA)
         /// </summary>
         Ignored,
 
         /// <summary>
-        /// File is marked as added (Last+1 /0xB)
+        /// File is marked as added (STATEICON_EXCLUDEDFROMSCC /0xB)
         /// </summary>
         Added,
 
         /// <summary>
-        /// File is not managed yet, but is on the pending list (Last+2 /0xC)
+        /// File is not managed yet, but is on the pending list (Last+1 /0xC)
         /// </summary>
         /// <remarks>Currently generated internally by the Scc provider</remarks>
         ShouldBeAdded,
 
         /// <summary>
-        /// File is added but has history (Last+3 /0xD)
+        /// File is added but has history (Last+2 /0xD)
         /// </summary>
         AddedWithHistory,
 
         /// <summary>
-        /// File is replaced by an other file with the same name (Last+4 /0xE)
+        /// File is replaced by an other file with the same name (Last+3 /0xE)
         /// </summary>
         Replaced,
 
         /// <summary>
-        /// File is in conflict; must be resolved before continuing (Last+5 /0xF)
+        /// File is in conflict; must be resolved before continuing (Last+4 /0xF)
         /// </summary>
         InConflict
     }
