@@ -31,7 +31,7 @@ namespace Ankh.WorkingCopyExplorer
             }
             catch ( Exception ex )
             {
-                this.Explorer.Context.ErrorHandler.OnError( ex );
+                //this.Explorer.Context.ErrorHandler.OnError( ex );
                 return new IFileSystemItem[] { };
             }
         }

@@ -50,19 +50,9 @@ namespace Ankh
         bool SolutionIsOpen { get; }
 
         /// <summary>
-        /// Whether Ankh is loaded for the current solution.
-        /// </summary>
-        bool AnkhLoadedForSolution { get; }
-
-        /// <summary>
         /// The Ankh configuration.
         /// </summary>
         Ankh.Config.Config Config { get; }
-
-        /// <summary>
-        /// The error handler.
-        /// </summary>
-        IAnkhErrorHandler ErrorHandler { get; }
 
         /// <summary>
         /// The configloader.
@@ -78,11 +68,6 @@ namespace Ankh
         /// Manage issues related to conflicts.
         /// </summary>
         ConflictManager ConflictManager { get; }
-
-        /// <summary>
-        /// The OLE Serviceprovider.
-        /// </summary>
-        IServiceProvider ServiceProvider { get; }
 
         /// <summary>
         /// Should be called before starting any lengthy operation

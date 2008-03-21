@@ -204,14 +204,7 @@ namespace Ankh.WorkingCopyExplorer
 
         void control_ValidatingNewRoot(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            try
-            {
-                e.Cancel = !IsRootValid(this.control.NewRootPath);
-            }
-            catch (Exception ex)
-            {
-                this.Context.ErrorHandler.OnError(ex);
-            }
+            e.Cancel = !IsRootValid(this.control.NewRootPath);
         }
 
         private bool IsRootValid(string path)
@@ -221,16 +214,9 @@ namespace Ankh.WorkingCopyExplorer
 
         void control_WantNewRoot(object sender, EventArgs e)
         {
-            try
+            if (this.IsRootValid(this.control.NewRootPath))
             {
-                if (this.IsRootValid(this.control.NewRootPath))
-                {
-                    this.AddRoot(this.control.NewRootPath);
-                }
-            }
-            catch (Exception ex)
-            {
-                this.Context.ErrorHandler.OnError(ex);
+                this.AddRoot(this.control.NewRootPath);
             }
         }
 
@@ -276,11 +262,21 @@ namespace Ankh.WorkingCopyExplorer
             }
             catch (TargetInvocationException ex)
             {
-                this.Context.ErrorHandler.OnError(ex.InnerException);
+                IAnkhErrorHandler handler = context.GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(ex.InnerException);
+                else
+                    throw;
             }
             catch (Exception ex)
             {
-                this.Context.ErrorHandler.OnError(ex);
+                IAnkhErrorHandler handler = context.GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(ex);
+                else
+                    throw;
             }
         }
 

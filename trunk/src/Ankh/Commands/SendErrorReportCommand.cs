@@ -11,9 +11,12 @@ namespace Ankh.Commands
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IAnkhErrorHandler handler = e.Context.GetService<IAnkhErrorHandler>();
 
-            context.ErrorHandler.SendReport();
+            if (handler != null)
+            {
+                handler.SendReport();
+            }
         }
     }
 }
