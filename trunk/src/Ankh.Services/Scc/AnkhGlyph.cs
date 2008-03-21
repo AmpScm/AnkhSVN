@@ -11,12 +11,12 @@ namespace Ankh.Scc
     public enum AnkhGlyph
     {
         /// <summary>
-        /// Not supported / No Icon (STATEICON_NOSTATEICON /0x0)
+        /// Not supported / No Icon / Never visible (STATEICON_NOSTATEICON /0x0)
         /// </summary>
-        None,
+        None, // Icon 0 is drawn as icon 5
 
         /// <summary>
-        /// Path is versioned and not changed (STATEICON_CHECKEDIN /0x1)
+        /// The file must be locked before editting is allowed (STATEICON_CHECKEDIN /0x1)
         /// </summary>
         MustLock,
 
@@ -26,70 +26,71 @@ namespace Ankh.Scc
         Modified,
 
         /// <summary>
-        /// File is missing (STATEICON_ORPHANED /0x3)
+        /// File is deleted from scc (STATEICON_ORPHANED /0x3)
         /// </summary>
         Deleted,
 
         /// <summary>
-        /// Item is versioned and not modified (STATEICON_EDITABLE /0x4)
+        /// Item is versioned and dirty in memory (STATEICON_EDITABLE /0x4)
         /// </summary>
-        Normal,
+        FileDirty,
 
         /// <summary>
         /// Blank Icon / No Icon (STATEICON_BLANK /0x5)
         /// </summary>
         /// <remarks>This icon is applied to all tree items which don't retrieve scc status</remarks>
-        Blank,
+        Blank, // Icon 5 must be blank as it is used on all items without glyph
 
         /// <summary>
-        /// File is readonly (STATEICON_READONLY /0x6)
+        /// Item is versioned and unmodified (STATEICON_READONLY /0x6)
         /// </summary>
-        FileDirty,
+        Normal,
 
         /// <summary>
-        /// (File is disabled) (STATEICON_DISABLED /0x7)
+        /// File is versioned; but is not available on disk (STATEICON_DISABLED /0x7)
         /// </summary>
         FileMissing,
 
         /// <summary>
-        /// Locked locally (STATEICON_CHECKEDOUTEXCLUSIVE /0x8)
+        /// File is versioned but was inserted from an other location (STATEICON_CHECKEDOUTEXCLUSIVE /0x8)
         /// </summary>
-        LockedNormal,
+        CopiedOrMoved,        
 
         /// <summary>
-        /// File must be locked before editting (STATEICON_CHECKEDOUTSHAREDOTHER /0x9)
+        /// File is versioned and locally locked but not modified (STATEICON_CHECKEDOUTSHAREDOTHER /0x9)
         /// </summary>
-        LockedModified,
+        LockedNormal,        
 
         /// <summary>
-        /// File is marked as ignore (STATEICON_CHECKEDOUTEXCLUSIVEOTHER /0xA)
+        /// File is versioned, locally locked and not modified (STATEICON_CHECKEDOUTEXCLUSIVEOTHER /0xA)
         /// </summary>
-        Ignored,
+        LockedModified,        
 
         /// <summary>
-        /// File is marked as added (STATEICON_EXCLUDEDFROMSCC /0xB)
+        /// File is marked as explicitly ignored (STATEICON_EXCLUDEDFROMSCC /0xB)
         /// </summary>
-        Added,
+        Ignored,        
 
         /// <summary>
-        /// File is not managed yet, but is on the pending list (Last+1 /0xC)
+        /// File has been added but was never committed before (Last+1 /0xC)
+        /// </summary>        
+        Added,        
+
+        /// <summary>
+        /// File has not been added yet, but should be before committing (Last+2 /0xD)
         /// </summary>
         /// <remarks>Currently generated internally by the Scc provider</remarks>
         ShouldBeAdded,
+        
 
         /// <summary>
-        /// File is added but has history (Last+2 /0xD)
+        /// File is in conflict; must be resolved before continuing (Last+3 /0xE)
         /// </summary>
-        AddedWithHistory,
+        InConflict,
 
         /// <summary>
-        /// File is replaced by an other file with the same name (Last+3 /0xE)
+        /// Free 1 (Last+4 /0xF)
         /// </summary>
-        Replaced,
-
-        /// <summary>
-        /// File is in conflict; must be resolved before continuing (Last+4 /0xF)
-        /// </summary>
-        InConflict
+        Free1
     }
 }

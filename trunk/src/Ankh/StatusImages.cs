@@ -98,8 +98,7 @@ namespace Ankh
 
                     case SvnStatus.Added:
                     case SvnStatus.Replaced:
-                        // TODO: Check if replaced should have its own icon
-                        return item.Status.LocalCopied ? AnkhGlyph.AddedWithHistory : AnkhGlyph.Added;
+                        return item.Status.LocalCopied ? AnkhGlyph.CopiedOrMoved : AnkhGlyph.Added;
 
                     case SvnStatus.Missing:
                     case SvnStatus.Deleted:
