@@ -11,11 +11,12 @@ namespace Ankh.VS.WebBrowser
     {
         readonly IAnkhServiceProvider _serviceProvider;
 
-        public AnkhWebBrowser(IAnkhServiceProvider serviceProvider)
+        public AnkhWebBrowser(IAnkhServiceProvider context)
         {
-            if(serviceProvider == null)
-                throw new ArgumentNullException("serviceProvider");
-            _serviceProvider = serviceProvider;
+            if(context == null)
+                throw new ArgumentNullException("context");
+
+            _serviceProvider = context;
         }
 
         public void Navigate(Uri url)

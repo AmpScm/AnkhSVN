@@ -23,6 +23,7 @@ namespace Ankh.VS
             set { _baseCaption = value; }
         }
 
+        [CLSCompliant(false)]
         public __VSCREATEWEBBROWSER CreateFlags
         {
             get { return _createFlags; }
@@ -32,7 +33,15 @@ namespace Ankh.VS
 
     public abstract class BrowserResults
     {
-        public abstract IVsWebBrowser WebBrowser { get; }
-        public abstract IVsWindowFrame Frame { get; }
+        [CLSCompliant(false)]
+        public virtual IVsWebBrowser WebBrowser 
+        { 
+            get { throw new NotImplementedException(); }
+        }
+        [CLSCompliant(false)]
+        public virtual IVsWindowFrame Frame
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }
