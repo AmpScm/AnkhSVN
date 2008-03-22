@@ -1,22 +1,9 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="WindowPane.cs" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>                                                                
-//------------------------------------------------------------------------------
-
-using System;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell.Interop;
+﻿using System;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Windows.Forms;
-using System.Security.Permissions;
-
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-using IServiceProvider = System.IServiceProvider;
-using IMessageFilter = System.Windows.Forms.IMessageFilter;
+using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
-using System.Runtime.InteropServices;
+using IServiceProvider = System.IServiceProvider;
 
 namespace Ankh.VS.Dialogs
 {
@@ -25,28 +12,7 @@ namespace Ankh.VS.Dialogs
     /// </summary>
     [CLSCompliant(false)]
     public class AnkhDialogContainerWithToolbar : DialogContainerWithToolbar
-    {
-        private class ShowDialogContainer : Container
-        {
-            private IServiceProvider provider;
-            public ShowDialogContainer(IServiceProvider sp)
-            {
-                provider = sp;
-            }
-
-            protected override object GetService(Type serviceType)
-            {
-                if (provider != null)
-                {
-                    object service = provider.GetService(serviceType);
-                    if (null != service)
-                        return service;
-                }
-                return base.GetService(serviceType);
-            }
-        }
-
-
+    {        
         /// <summary>
         /// Initializes a new instance of the <see cref="AnkhDialogContainerWithToolbar"/> class.
         /// </summary>
@@ -122,6 +88,26 @@ namespace Ankh.VS.Dialogs
             }
 
             return result;
+        }
+
+        private class ShowDialogContainer : Container
+        {
+            readonly IServiceProvider _provider;
+            public ShowDialogContainer(IServiceProvider sp)
+            {
+                _provider = sp;
+            }
+
+            protected override object GetService(Type serviceType)
+            {
+                if (_provider != null)
+                {
+                    object service = _provider.GetService(serviceType);
+                    if (null != service)
+                        return service;
+                }
+                return base.GetService(serviceType);
+            }
         }
     }
 }
