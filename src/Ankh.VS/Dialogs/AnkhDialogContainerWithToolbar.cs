@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
+using IMessageFiler = System.Windows.Forms.IMessageFilter;
 using IServiceProvider = System.IServiceProvider;
+using IOleCommandTarget = Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget;
 
 namespace Ankh.VS.Dialogs
 {
