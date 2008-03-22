@@ -4,6 +4,9 @@ using System.Text;
 using Ankh.SolutionExplorer;
 using Ankh.Selection;
 using Ankh.Scc;
+using Ankh.UI;
+using Ankh.VS.Dialogs;
+using Ankh.VS.WebBrowser;
 
 namespace Ankh.VS
 {
@@ -28,15 +31,16 @@ namespace Ankh.VS
         {
             Runtime.CommandMapper.LoadFrom(typeof(AnkhVSModule).Assembly);
 
-            SolutionExplorerWindow window = new SolutionExplorerWindow(this);
+            SolutionExplorerWindow window = new SolutionExplorerWindow(Context);
 
-            Container.AddService(typeof(IAnkhSolutionExplorerWindow), window, true);
+            Container.AddService(typeof(IAnkhSolutionExplorerWindow), window);
 
-            SelectionContext selection = new SelectionContext(this, window);
-            Container.AddService(typeof(ISelectionContext), selection, true);
+            SelectionContext selection = new SelectionContext(Context, window);
+            Container.AddService(typeof(ISelectionContext), selection);
             Container.AddService(typeof(ISccProjectWalker), selection);
-            Container.AddService(typeof(IAnkhWebBrowser),
-                delegate { return new Ankh.VS.WebBrowser.AnkhWebBrowser(this); });
+
+            Container.AddService(typeof(IAnkhWebBrowser), new AnkhWebBrowser(Context));
+            Container.AddService(typeof(IDialogRunner), new VSDialogRunner(Context));
         }
 
         /// <summary>

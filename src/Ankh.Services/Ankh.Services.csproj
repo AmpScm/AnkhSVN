@@ -83,6 +83,7 @@
     <Compile Include="Selection\SvnProject.cs" />
     <Compile Include="Subversion\ISvnLogService.cs" />
     <Compile Include="UI\IAnkhUISite.cs" />
+    <Compile Include="UI\IDialogRunner.cs" />
     <Compile Include="UI\ISvnLogView.cs" />
     <Compile Include="VS\IAnkhSolutionExplorerWindow.cs" />
     <Compile Include="Scc\IProjectNotifier.cs" />
