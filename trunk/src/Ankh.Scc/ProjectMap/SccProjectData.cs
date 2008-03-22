@@ -9,11 +9,20 @@ using Ankh.Selection;
 
 namespace Ankh.Scc.ProjectMap
 {
+    /// <summary>
+    /// Enum of project types with workarounds
+    /// </summary>
+    enum SccProjectType
+    {
+        Normal,
+        SolutionFolder,
+        WebSite,
+    }
     class SccProjectData
     {
         readonly IAnkhServiceProvider _context;
         readonly IVsSccProject2 _project;
-        readonly bool _isSolutionFolder;
+        readonly SccProjectType _projectType;
         readonly SccProjectFileCollection _files;
         bool _isManaged;
         bool _isRegistered;
@@ -32,7 +41,7 @@ namespace Ankh.Scc.ProjectMap
 
             _context = context;
             _project = project;
-            _isSolutionFolder = IsSolutionFolderProject(project);
+            _projectType = GetProjectType(project);
             _files = new SccProjectFileCollection();
         }
 
@@ -114,7 +123,12 @@ namespace Ankh.Scc.ProjectMap
 
         public bool IsSolutionFolder
         {
-            get { return _isSolutionFolder; }
+            get { return _projectType == SccProjectType.SolutionFolder; }
+        }
+
+        public bool IsWebSite
+        {
+            get { return _projectType == SccProjectType.WebSite; }
         }
 
         internal void SetManaged(bool managed)
@@ -208,20 +222,23 @@ namespace Ankh.Scc.ProjectMap
         /// Checks whether the specified project is a solution folder
         /// </summary>
         private static readonly Guid _solutionFolderProjectId = new Guid("2150e333-8fdc-42a3-9474-1a3956d46de8");
-        static bool IsSolutionFolderProject(IVsSccProject2 project)
+        private static readonly Guid _websiteProjectId = new Guid("e24c65dc-7377-472b-9aba-bc803b73c61a");
+        static SccProjectType GetProjectType(IVsSccProject2 project)
         {
             IPersistFileFormat pFileFormat = project as IPersistFileFormat;
             if (pFileFormat != null)
             {
                 Guid guidClassID;
-                if (VSConstants.S_OK == pFileFormat.GetClassID(out guidClassID)
-                    && guidClassID == _solutionFolderProjectId)
-                {
-                    return true;
-                }
+                if (VSConstants.S_OK != pFileFormat.GetClassID(out guidClassID))
+                    return SccProjectType.Normal;
+
+                if (guidClassID == _solutionFolderProjectId)
+                    return SccProjectType.SolutionFolder;
+                else if (guidClassID == _websiteProjectId)
+                    return SccProjectType.SolutionFolder;
             }
 
-            return false;
+            return SccProjectType.Normal;
         }
         #endregion                
     

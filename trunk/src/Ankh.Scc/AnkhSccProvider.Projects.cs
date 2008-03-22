@@ -86,7 +86,7 @@ namespace Ankh.Scc
 
                     foreach (SccProjectData p in _projectMap.Values)
                     {
-                        if (p.IsSolutionFolder)
+                        if (p.IsSolutionFolder || p.IsWebSite)
                         {
                             p.SetManaged(managed);
 
@@ -136,7 +136,7 @@ namespace Ankh.Scc
 
             foreach (SccProjectData data in _projectMap.Values)
             {
-                if (data.IsSolutionFolder)
+                if (data.IsSolutionFolder || data.IsWebSite)
                 {
                     // Solution folders don't save their Scc management state
                     // We let them follow the solution settings
@@ -204,14 +204,19 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 _projectMap.Add(project, data = new SccProjectData(_context, project));
 
-            if (_managedSolution && data.IsSolutionFolder)
+            if(data.IsSolutionFolder || data.IsWebSite)
             {
                 // Solution folders are projects without Scc state
-                // We let them follow the solution settings (See OnSolutionOpen() for the not added case
-                if (added)
-                    data.SetManaged(true);
-
+                // Web sites are Solution-only projects with scc state
                 data.Project.SccGlyphChanged(0, null, null, null);
+
+                if (_managedSolution)
+                {
+                    // We let them follow the solution settings (See OnSolutionOpen() for the not added case
+                    if (added)
+                        data.SetManaged(true);
+
+                }
             }
 
             data.Load();
