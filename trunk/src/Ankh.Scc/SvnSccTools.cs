@@ -17,6 +17,7 @@ namespace Ankh.Scc
     {
         readonly IAnkhServiceProvider _context;
         readonly SvnClient _client;
+        readonly IFileStatusCache _statusCache;
 
         public SvnSccContext(IAnkhServiceProvider context)
         {
@@ -25,6 +26,7 @@ namespace Ankh.Scc
 
             _context = context;
             _client = context.GetService<ISvnClientPool>().GetClient();
+            _statusCache = context.GetService<IFileStatusCache>();
         }
 
         public void Dispose()
@@ -412,16 +414,26 @@ namespace Ankh.Scc
         {
             if (path == null)
                 throw new ArgumentNullException("path");
+            
+            SvnItem item = _statusCache[path];
+            
+            // we cannot add versioned files
+            if (item.IsVersioned)
+                return false; 
 
-            // For now we only check the obvious case issues
+            // no need to add directories, they don't get a 'can add' glyph,
+            // and are added automatically 'as parents'
+            if (item.IsDirectory)
+                return false;
 
+            // Perhaps use more of the cached svnitem below?
             string parentDir = Path.GetDirectoryName(path);
             string file = Path.GetFileName(path);
 
             SvnStatusArgs sa = new SvnStatusArgs();
             sa.ThrowOnError = false;
             sa.RetrieveAllEntries = true;
-            sa.Depth = SvnDepth.Children;
+            sa.Depth = SvnDepth.Files;
             bool ok = true;
 
             _client.Status(parentDir, sa,
