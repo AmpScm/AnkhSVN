@@ -47,6 +47,7 @@
     <RegisterOutputPackage>true</RegisterOutputPackage>
     <RegisterWithCodebase>true</RegisterWithCodebase>
     <CtcCompileDependsOn>ApplyXslTemplates;$(CtcCompileDependsOn)</CtcCompileDependsOn>
+    <ApplyXslTemplatesDependsOn>ResolveAssemblyReferences;$(ResolveAssemblyReferences)</ApplyXslTemplatesDependsOn>
     <ShellAssembly Condition="'$(VisualStudioVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
     <ShellAssembly Condition="'$(VisualStudioVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
     <VSLangAssembly Condition="'$(VisualStudioVersion)' == '8.0'">Microsoft.VisualStudio.Package.LanguageService.8.0</VSLangAssembly>

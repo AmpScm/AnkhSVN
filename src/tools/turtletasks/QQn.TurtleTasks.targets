@@ -10,9 +10,8 @@
 		<QQnTurtleTasksFolder>..\tools\TurtleTasks\</QQnTurtleTasksFolder>
 		
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(QQnTurtleTasksFolder)QQn.TurtleTasks.targets</MSBuildAllProjects>
-		<CoreCompileDependsOn>ApplyXslTemplates;$(CoreCompileDependsOn);DownloadDependencies</CoreCompileDependsOn>
-		<CoreResGenDependsOn>$(CoreResGenDependsOn);ApplyXslTemplates</CoreResGenDependsOn>
-		<CtcCompileDependsOn>$(CtcCompileDependsOn);ApplyXslTemplates</CtcCompileDependsOn>
+		<CoreCompileDependsOn>ApplyXslTemplates;DownloadDependencies;$(CoreCompileDependsOn);</CoreCompileDependsOn>
+		<ApplyXslTemplatesDependsOn>$(ApplyXslTemplatesDependsOn);</ApplyXslTemplatesDependsOn>
 	</PropertyGroup>
 
 	<Target Name="DownloadDependencies" 
@@ -33,7 +32,12 @@
 			<Output TaskParameter="CacheFiles" ItemName="DownloadedCacheFiles" />
 		</CachedDownloadAndExtract>
 	</Target>
-	<Target Name="ApplyXslTemplates" Inputs="@(XslSource);@(XslSource->'%(Template)')" Outputs="@(XslSource->'%(To)')">
+	<Target Name="ApplyXslTemplates" 
+			Inputs="@(XslSource);@(XslSource->'%(Template)');@(ReferencePath)" 
+			Outputs="@(XslSource->'%(To)')"
+			DependsOnTargets="$(ApplyXslTemplatesDependsOn)"
+			>
+		<Message Importance="High" Text="Extra references: @(ReferencePath)" />
 		<ApplyXslTransform
 			Sources="@(XslSource)"
 			Transform="@(XslSource->'%(Transform)')"
