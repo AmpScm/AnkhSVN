@@ -89,6 +89,9 @@
   <ItemGroup>
     <Compile Include="FileUtilsTest.cs" />
     <Compile Include="HashUtilsTest.cs" />
+    <Compile Include="PathUtilsTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
