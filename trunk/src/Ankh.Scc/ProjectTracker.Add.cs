@@ -5,6 +5,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Selection;
 using System.IO;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -36,7 +37,7 @@ namespace Ankh.Scc
                 bool ok = true;
 
                 // TODO: Verify the new names do not give invalid Subversion state (Double casings, etc.)
-                if (!SvnCanAddPath(rgpszMkDocuments[i]))
+                if (!SvnCanAddPath(rgpszMkDocuments[i], SvnNodeKind.File))
                     ok = false;
                 
                 if (rgResults != null)
@@ -93,7 +94,7 @@ namespace Ankh.Scc
                     _fileOrigins[rgpszNewMkDocuments[i]] = rgpszSrcMkDocuments[i];
                 }
 
-                if (!SvnCanAddPath(rgpszNewMkDocuments[i]))
+                if (!SvnCanAddPath(rgpszNewMkDocuments[i], SvnNodeKind.File))
                     ok = false;
 
                 if (rgResults != null)
@@ -112,12 +113,12 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
-        protected bool SvnCanAddPath(string fullpath)
+        protected bool SvnCanAddPath(string fullpath, SvnNodeKind nodeKind)
         {
             using (SvnSccContext svn = new SvnSccContext(_context))
             {
                 // TODO: Determine if we could add fullname
-                if (!svn.CouldAdd(fullpath))
+                if (!svn.CouldAdd(fullpath, nodeKind))
                 {
                     _batchErrors.Add(string.Format(Resources.PathXBlocked, fullpath));
                     return false;
@@ -347,7 +348,7 @@ namespace Ankh.Scc
             bool allOk = true;
             for (int i = 0; i < cDirectories; i++)
             {
-                bool ok = SvnCanAddPath(rgpszMkDocuments[i]);
+                bool ok = SvnCanAddPath(rgpszMkDocuments[i], SvnNodeKind.Directory);
 
                 if(rgResults != null)
                     rgResults[i] = ok ? VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddOK : VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddNotOK;

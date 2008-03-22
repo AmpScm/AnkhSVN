@@ -405,35 +405,33 @@ namespace Ankh.Scc
                 });
         }
 
+
+
+
+        static int i = 0;
         /// <summary>
         /// Check if adding the path might succeed
         /// </summary>
         /// <param name="path"></param>
         /// <returns><c>false</c> when adding the file will fail, <c>true</c> if it could succeed</returns>
-        public bool CouldAdd(string path)
+        public bool CouldAdd(string path, SvnNodeKind nodeKind)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
+
             
             SvnItem item = _statusCache[path];
-            
-            // we cannot add versioned files
-            if (item.IsVersioned)
-                return false; 
-
-            // no need to add directories, they don't get a 'can add' glyph,
-            // and are added automatically 'as parents'
-            if (item.IsDirectory)
-                return false;
-
-            // Perhaps use more of the cached svnitem below?
             string parentDir = Path.GetDirectoryName(path);
             string file = Path.GetFileName(path);
+
+            if (item.Name == file)
+                return true;
 
             SvnStatusArgs sa = new SvnStatusArgs();
             sa.ThrowOnError = false;
             sa.RetrieveAllEntries = true;
-            sa.Depth = SvnDepth.Files;
+            
+            sa.Depth = nodeKind == SvnNodeKind.File ? SvnDepth.Files : SvnDepth.Children;
             bool ok = true;
 
             _client.Status(parentDir, sa,
