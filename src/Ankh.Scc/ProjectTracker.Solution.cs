@@ -151,6 +151,7 @@ namespace Ankh.Scc
 
         public int OnQueryChangeProjectParent(IVsHierarchy pHierarchy, IVsHierarchy pNewParentHier, ref int pfCancel)
         {
+            pfCancel = 0;
             return VSConstants.S_OK;
         }
 

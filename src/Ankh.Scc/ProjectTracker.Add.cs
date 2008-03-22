@@ -30,16 +30,17 @@ namespace Ankh.Scc
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
 
             bool allOk = true;
-            
+
+            bool track = _sccProvider.TrackProjectChanges(pProject);
 
             for (int i = 0; i < cFiles; i++)
             {
                 bool ok = true;
 
                 // TODO: Verify the new names do not give invalid Subversion state (Double casings, etc.)
-                if (!SvnCanAddPath(rgpszMkDocuments[i], SvnNodeKind.File))
+                if (track && !SvnCanAddPath(rgpszMkDocuments[i], SvnNodeKind.File))
                     ok = false;
-                
+
                 if (rgResults != null)
                     rgResults[i] = ok ? VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK : VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddNotOK;
 
@@ -54,7 +55,7 @@ namespace Ankh.Scc
                 ShowQueryErrorDialog();
 
             return VSConstants.S_OK;
-        }        
+        }
 
         /// <summary>
         /// Determines if it is okay to add a collection of files (possibly from source control) whose final destination may be different from a source location.
@@ -79,6 +80,8 @@ namespace Ankh.Scc
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
             bool allOk = true;
 
+            bool track = _sccProvider.TrackProjectChanges(pProject);
+
             for (int i = 0; i < cFiles; i++)
             {
                 bool ok = true;
@@ -94,7 +97,7 @@ namespace Ankh.Scc
                     _fileOrigins[rgpszNewMkDocuments[i]] = rgpszSrcMkDocuments[i];
                 }
 
-                if (!SvnCanAddPath(rgpszNewMkDocuments[i], SvnNodeKind.File))
+                if (track && !SvnCanAddPath(rgpszNewMkDocuments[i], SvnNodeKind.File))
                     ok = false;
 
                 if (rgResults != null)
@@ -151,14 +154,16 @@ namespace Ankh.Scc
                 IVsProject project = rgpProjects[iProject];
                 IVsSccProject2 sccProject = project as IVsSccProject2;
 
+                bool track = _sccProvider.TrackProjectChanges(project);
+
                 for (; iFile < iLastFileThisProject; iFile++)
                 {
-                    if (sccProject == null)
+                    if (!track)
                         continue; // Not handled by our provider
 
                     string origin = null;
 
-                    if (!_fileOrigins.TryGetValue(rgpszMkDocuments[iFile], out origin) || (origin == null))
+                    if ((!_fileOrigins.TryGetValue(rgpszMkDocuments[iFile], out origin) || (origin == null)))
                     {
                         // We haven't got the project file origin for free via OnQueryAddFilesEx
                         // So:
@@ -187,7 +192,7 @@ namespace Ankh.Scc
                                 selectedFiles = new List<string>();
                         }
 
-                        
+
                         // **************** Check the current selection *************
                         // Checks for drag&drop actions. The selection contains the original list of files
                         foreach (string file in selectedFiles)
@@ -197,11 +202,11 @@ namespace Ankh.Scc
                                 FileInfo orgInfo = new FileInfo(file);
 
                                 if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
-                                {   
+                                {
                                     // BH: Don't verify filedates, etc; as they shouldn't be copied
                                     // We can be reasonably be sure its the same file. Same name and same length
 
-                                    if(FileContentsEquals(orgInfo.FullName, newInfo.FullName))
+                                    if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
                                     {
                                         // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
                                         _fileOrigins[newName] = origin = file;
@@ -216,7 +221,7 @@ namespace Ankh.Scc
                         // Checks for HandsOff events send by the project system
                         if (origin == null)
                         {
-                            foreach(string file in _fileHints)
+                            foreach (string file in _fileHints)
                             {
                                 if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
                                 {
@@ -288,7 +293,12 @@ namespace Ankh.Scc
                         // The clipboard seems to have some other format which might contain other info
                     }
 
-                    _sccProvider.OnProjectFileAdded(sccProject, rgpszMkDocuments[iFile], origin, rgFlags[iFile]);
+                    if (sccProject != null)
+                        _sccProvider.OnProjectFileAdded(sccProject, rgpszMkDocuments[iFile], origin, rgFlags[iFile]);
+                    else
+                    {
+                        // TODO: Just track svn changes?
+                    }
                 }
             }
             return VSConstants.S_OK;
@@ -345,15 +355,20 @@ namespace Ankh.Scc
         /// <remarks>Deny a query only if allowing the operation would compromise your stable state</remarks>
         public int OnQueryAddDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYADDDIRECTORYFLAGS[] rgFlags, VSQUERYADDDIRECTORYRESULTS[] pSummaryResult, VSQUERYADDDIRECTORYRESULTS[] rgResults)
         {
+            bool track = _sccProvider.TrackProjectChanges(pProject);
+
             bool allOk = true;
             for (int i = 0; i < cDirectories; i++)
             {
-                bool ok = SvnCanAddPath(rgpszMkDocuments[i], SvnNodeKind.Directory);
+                bool ok = true;
 
-                if(rgResults != null)
+                if (track && !SvnCanAddPath(rgpszMkDocuments[i], SvnNodeKind.Directory))
+                    ok = false;
+
+                if (rgResults != null)
                     rgResults[i] = ok ? VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddOK : VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddNotOK;
 
-                if(!ok)
+                if (!ok)
                     allOk = false;
             }
 
@@ -388,12 +403,15 @@ namespace Ankh.Scc
                 IVsProject project = rgpProjects[iProject];
                 IVsSccProject2 sccProject = project as IVsSccProject2;
 
+                bool track = _sccProvider.TrackProjectChanges(project);
+
                 for (; iDirectory < iLastDirectoryThisProject; iDirectory++)
                 {
-                    if (sccProject == null)
-                        continue; // Not handled by our provider
+                    if (!track)
+                        continue;
 
-                    _sccProvider.OnProjectDirectoryAdded(sccProject, rgpszMkDocuments[iDirectory], rgFlags[iDirectory]);
+                    if (sccProject != null)
+                        _sccProvider.OnProjectDirectoryAdded(sccProject, rgpszMkDocuments[iDirectory], rgFlags[iDirectory]);
                 }
             }
 
