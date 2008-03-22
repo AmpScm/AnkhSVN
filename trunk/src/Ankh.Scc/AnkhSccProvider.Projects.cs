@@ -222,6 +222,19 @@ namespace Ankh.Scc
             data.Load();
         }
 
+        internal bool TrackProjectChanges(IVsProject project)
+        {
+            IVsSccProject2 sccProject = project as IVsSccProject2;
+
+            SccProjectData data;
+            if (sccProject != null && _projectMap.TryGetValue(sccProject, out data))
+            {
+                return data.TrackProjectChanges(); // Allows temporary disabling changes
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Called by ProjectDocumentTracker when a scc-capable project is closed
         /// </summary>

@@ -158,25 +158,39 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
             _loaded = false;
-        }        
+        }
 
+        bool _inLoad;
         internal void Load()
         {
             if (_loaded)
                 return;
-            
-            OnClose();
-            _loaded = true;
 
-            ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
-
-            if (walker != null)
+            _inLoad = true;
+            try
             {
-                foreach (string file in walker.GetSccFiles(_project, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy))
+                OnClose();
+                _loaded = true;
+
+                ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+
+                if (walker != null)
                 {
-                    AddPath(file);                    
+                    foreach (string file in walker.GetSccFiles(_project, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy))
+                    {
+                        AddPath(file);
+                    }
                 }
-            }                
+            }
+            finally
+            {
+                _inLoad = false;
+            }
+        }
+
+        internal bool TrackProjectChanges()
+        {
+            return !_inLoad;
         }
 
         public IEnumerable<string> GetAllFiles()
