@@ -170,7 +170,7 @@ namespace Ankh.Scc
 
             using (SvnSccContext svn = new SvnSccContext(_context))
             {
-                if (!svn.CouldAdd(newName))
+                if (!svn.CouldAdd(newName, SvnNodeKind.File))
                 {
                     ok = false;
                     return;
