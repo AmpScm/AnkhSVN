@@ -59,11 +59,11 @@
     <None Include="Config.xsc">
       <DependentUpon>Config.xsd</DependentUpon>
     </None>
-    <None Include="Config.xsd">
+    <EmbeddedResource Include="Config.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>Config.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <None Include="Config.xss">
       <DependentUpon>Config.xsd</DependentUpon>
     </None>
