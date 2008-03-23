@@ -78,7 +78,7 @@ namespace Ankh.Commands
                 BlameResult result = new BlameResult();
 
                 result.Start();
-                BlameRunner runner = new BlameRunner( item.Path, 
+                BlameRunner runner = new BlameRunner( item.FullPath, 
                     revisionStart, revisionEnd, result );
                 context.UIShell.RunWithProgressDialog( runner, "Figuring out who to blame" );
                 result.End();
@@ -88,7 +88,7 @@ namespace Ankh.Commands
                 result.Transform( transform, writer );
 
                 // display the HTML with the filename as caption
-                string filename = Path.GetFileName( item.Path );
+                string filename = Path.GetFileName( item.FullPath );
                 context.UIShell.DisplayHtml( filename, writer.ToString(), false );
             }
         }

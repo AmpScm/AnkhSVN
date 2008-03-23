@@ -109,7 +109,7 @@ namespace Ankh.Commands
             {
                 SvnItem item = (SvnItem)args.Item;
                 args.IsDirectory = item.IsDirectory;
-                args.Path = item.Path;
+                args.Path = item.FullPath;
             }
 
 

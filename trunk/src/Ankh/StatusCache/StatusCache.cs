@@ -76,6 +76,36 @@ namespace Ankh
             Status(directory, depth);
         }
 
+        void Ankh.Scc.IFileStatusCache.RefreshMe(SvnItem item, SvnNodeKind nodeKind)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            string path = item.FullPath;
+
+            if (nodeKind == SvnNodeKind.File)
+                path = Path.GetDirectoryName(path);
+            // if it's a single file, refresh the directory with Files unrecursively            
+
+            SvnStatusArgs args = new SvnStatusArgs();
+            args.Depth = SvnDepth.Files;
+            args.RetrieveAllEntries = true;
+            args.NoIgnore = true;
+            args.ThrowOnError = false;
+
+            lock (_lock)
+            {
+                _client.Status(path, args, delegate(object sender, SvnStatusEventArgs e)
+                    {
+                        SvnItem i = this[e.Path];
+                        if (i != null)
+                        {
+                            i.RefreshTo(new AnkhStatus(e));
+                        }
+                    });
+            }
+        }
+
         /// <summary>
         /// Marks the specified file dirty
         /// </summary>
@@ -231,7 +261,7 @@ namespace Ankh
             SvnItem item;
             AnkhStatus status = new AnkhStatus(e);
 
-            if (!_map.TryGetValue(path, out item) || item.Path != path)
+            if (!_map.TryGetValue(path, out item) || item.FullPath != path)
             {
                 // We only create an item if we don't have an existing
                 // with a valid path. (No casing changes allowed!)

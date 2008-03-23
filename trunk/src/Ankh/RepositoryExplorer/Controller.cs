@@ -23,11 +23,13 @@ namespace Ankh.RepositoryExplorer
     /// </summary>
     public class Controller
     {
+        readonly IAnkhServiceProvider _context;
         public Controller( IContext context )
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
+            _context = context;
             this.context = context;
 
             if (context.UIShell.RepositoryExplorer != null)
@@ -186,7 +188,12 @@ namespace Ankh.RepositoryExplorer
             }
             catch( Exception ex )
             {
-                //this.context.ErrorHandler.OnError(ex);
+                IAnkhErrorHandler handler = _context.GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(ex);
+                else
+                    throw;
             }
         }        
 
