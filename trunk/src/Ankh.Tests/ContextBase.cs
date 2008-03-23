@@ -1,5 +1,5 @@
 using System;
-using Ankh.Config;
+using Ankh.Configuration;
 using EnvDTE;
 using NSvn.Core;
 using System.Collections;
@@ -95,7 +95,7 @@ namespace Ankh.Tests
             return false;
         }
 
-        public virtual Ankh.Config.Config Config
+        public virtual Ankh.Configuration.Config Config
         {
             get
             {
@@ -159,12 +159,12 @@ namespace Ankh.Tests
             // TODO:  Add ContextBase.Shutdown implementation
         }
 
-        public virtual Ankh.Config.ConfigLoader ConfigLoader
+        public virtual Ankh.Configuration.ConfigLoader ConfigLoader
         {
             get
             {
                 if ( this.configLoader == null )
-                    this.configLoader = new ConfigLoader( Path.GetTempPath() );
+                    this.configLoader = new ConfigLoader(this, Path.GetTempPath() );
                 return this.configLoader;
             }
         }
@@ -632,9 +632,9 @@ namespace Ankh.Tests
         }
 
 
-        protected virtual Config.Config CreateConfig()
+        protected virtual Configuration.Config CreateConfig()
         {
-            Config.Config config = new Config.Config();
+            Configuration.Config config = new Configuration.Config();
             config.AutoAddNewFiles = true;
             config.AutoAddNewFiles = true;
             config.LogMessageTemplate = "";
@@ -651,7 +651,7 @@ namespace Ankh.Tests
 
         }
 
-        public Config.Config config;
+        public Configuration.Config config;
         public _DTE dte;
         public SvnClient client;
         public StatusCache statusCache;
@@ -715,6 +715,16 @@ namespace Ankh.Tests
         public ISvnClientPool ClientPool
         {
             get { return GetService<ISvnClientPool>(); }
+        }
+
+        #endregion
+
+        #region IContext Members
+
+
+        public IAnkhConfigurationService Configuration
+        {
+            get { return configLoader; }
         }
 
         #endregion

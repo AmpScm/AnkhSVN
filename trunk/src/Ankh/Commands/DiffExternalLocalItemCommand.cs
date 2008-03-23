@@ -3,6 +3,7 @@ using System.IO;
 using Ankh.UI;
 using AnkhSvn.Ids;
 using Ankh.Selection;
+using Ankh.Configuration;
 
 namespace Ankh.Commands
 {
@@ -18,8 +19,9 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
+            Config config = context.Configuration.Instance;
             // Allow external diff if enabled in config file
-            if (!context.Config.ChooseDiffMergeManual || context.Config.DiffExePath == null)
+            if (!config.ChooseDiffMergeManual || config.DiffExePath == null)
                 e.Enabled = e.Visible = false;
         }
 
@@ -32,7 +34,7 @@ namespace Ankh.Commands
         /// <returns>The exe path.</returns>
         protected override string GetExe(ISelectionContext selection, IContext context)
         {            
-            return context.Config.DiffExePath;
+            return context.Configuration.Instance.DiffExePath;
         }
     }
 }

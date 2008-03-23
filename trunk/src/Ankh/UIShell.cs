@@ -10,6 +10,8 @@ using SH = SHDocVw;
 
 using SharpSvn;
 using Ankh.ContextServices;
+using Ankh.VS;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh
 {
@@ -18,11 +20,13 @@ namespace Ankh
     /// </summary>
     public class UIShell : IUIShell
     {
-        public UIShell()
+        readonly IAnkhServiceProvider _context;
+        public UIShell(IAnkhServiceProvider context)
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
         }
         #region IUIShell Members
         public RepositoryExplorerControl RepositoryExplorer
@@ -253,26 +257,21 @@ namespace Ankh
 
         public void DisplayHtml(string caption, string html, bool reuse)
         {
+            IAnkhWebBrowser browser = _context.GetService<IAnkhWebBrowser>();
+            
             string htmlFile = Path.GetTempFileName();
             using (StreamWriter w = new StreamWriter(htmlFile, false, System.Text.Encoding.UTF8))
                 w.Write(html);
-
-            // the Start Page window is a web browser
-            Window browserWindow = ((IDTEContext)context).DTE.Windows.Item(
-                EnvDTE.Constants.vsWindowKindWebBrowser);
-            SH.WebBrowser browser = (SH.WebBrowser)browserWindow.Object;
-
-            //            if ( !reuse ) 
-            //                browser = this.NewBrowserWindow( browser );
-
+            
             // have it show the html
-            object url = "file://" + htmlFile;
-            object nullObject = null;
+            Uri url = new Uri("file://" + htmlFile);
+            BrowserArgs args = new BrowserArgs();
+            args.BaseCaption = caption;
 
-            browser.Navigate2(ref url, ref nullObject, ref nullObject,
-                ref nullObject, ref nullObject);
-            browserWindow.Caption = caption;
-            browserWindow.Activate();
+            //if(reuse)
+            // args.CreateFlags |= __VSCREATEWEBBROWSER.VSCWB_ReuseExisting;
+
+            browser.Navigate(url, args);
         }
 
         public PathSelectorInfo ShowPathSelector(PathSelectorInfo info)

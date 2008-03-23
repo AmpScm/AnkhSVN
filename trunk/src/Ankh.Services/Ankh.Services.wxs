@@ -2,6 +2,7 @@
   <Fragment>
     <ComponentGroup Id="Ankh.Services">
       <ComponentGroupRef Id="Ankh.Ids"/>
+      <ComponentGroupRef Id="Ankh.Configuration"/>
       <ComponentRef Id="C_Ankh.Services.dll"/>
     </ComponentGroup>
     <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Services.TargetDir)">

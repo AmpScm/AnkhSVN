@@ -32,7 +32,7 @@ namespace Ankh
         public event EventHandler Unloading;
 
         public OldAnkhContext(IAnkhPackage package)
-            : this(package, new UIShell())
+            : this(package, new UIShell(package))
         {
             Trace.Assert(package != null);
         }
@@ -45,7 +45,7 @@ namespace Ankh
             this.uiShell = uiShell;
             this.uiShell.Context = this;
 
-            this.configLoader = new Ankh.Config.ConfigLoader();
+            this.config = package.GetService<IAnkhConfigurationService>();
 
             this.LoadConfig();
 
@@ -169,23 +169,13 @@ namespace Ankh
             }
         }
 
-
-        /// <summary>
-        /// The Ankh configuration.
-        /// </summary>
-        public Ankh.Config.Config Config
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.config; }
-        }
-
         /// <summary>
         /// The configloader.
         /// </summary>
-        public Ankh.Config.ConfigLoader ConfigLoader
+        public IAnkhConfigurationService Configuration
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this.configLoader; }
+            get { return this.config; }
         }
 
         public bool OperationRunning
@@ -313,26 +303,26 @@ namespace Ankh
         {
             try
             {
-                this.config = this.configLoader.LoadConfig();
+                this.config.LoadConfig();
             }
-            catch (Ankh.Config.ConfigException ex)
+            catch (Ankh.Configuration.ConfigException ex)
             {
                 MessageBox.Show(GetService<IAnkhDialogOwner>().DialogOwner,
                     "There is an error in your configuration file:" +
                     Environment.NewLine + Environment.NewLine +
                     ex.Message + Environment.NewLine + Environment.NewLine +
-                    "Please edit the " + this.configLoader.ConfigPath +
+                    "Please edit the " + this.config.UserConfigurationPath +
                     " file and correct the error." + Environment.NewLine +
                     "Ankh will now load a default configuration.", "Configuration error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 // fall back on the default configuration
-                this.config = this.configLoader.LoadDefaultConfig();
+                this.config.LoadDefaultConfig();
             }
 
             SetupFromConfig();
 
-            this.ConfigLoader.ConfigFileChanged += new EventHandler(ConfigLoader_ConfigFileChanged);
+            this.Configuration.ConfigFileChanged += new EventHandler(ConfigLoader_ConfigFileChanged);
 
         }
 
@@ -345,11 +335,11 @@ namespace Ankh
         {
             try
             {
-                this.config = this.ConfigLoader.LoadConfig();
+                this.Configuration.LoadConfig();
                 SetupFromConfig();
                 this.OutputPane.WriteLine("Configuration reloaded.");
             }
-            catch (Ankh.Config.ConfigException ex)
+            catch (Ankh.Configuration.ConfigException ex)
             {
                 this.OutputPane.WriteLine("Configuration file has errors: " + ex.Message);
             }
@@ -405,19 +395,16 @@ namespace Ankh
         //required to ensure events will still fire
         private List<EventSink> eventSinks = new List<EventSink>();
 
-        private Ankh.Config.Config config;
-
         private bool operationRunning;
 
         private ConflictManager conflictManager;
-        private IAnkhErrorHandler errorHandler;
 
         private ProgressDialog progressDialog;
         private ISvnClientPool clientPool;
 
         private IUIShell uiShell;
 
-        private Ankh.Config.ConfigLoader configLoader;
+        private IAnkhConfigurationService config;
 
         readonly IAnkhPackage package;
 

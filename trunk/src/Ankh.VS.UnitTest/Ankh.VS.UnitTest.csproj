@@ -80,6 +80,10 @@
     <None Include="Ankh.VS.UnitTest.snk" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ankh.Configuration\Ankh.Configuration.csproj">
+      <Project>{2FFF126C-D567-4491-8128-0D98CF74BDFD}</Project>
+      <Name>Ankh.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
       <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
       <Name>Ankh.Services</Name>

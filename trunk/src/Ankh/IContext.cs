@@ -50,14 +50,9 @@ namespace Ankh
         bool SolutionIsOpen { get; }
 
         /// <summary>
-        /// The Ankh configuration.
-        /// </summary>
-        Ankh.Config.Config Config { get; }
-
-        /// <summary>
         /// The configloader.
         /// </summary>
-        Ankh.Config.ConfigLoader ConfigLoader { get; }
+        IAnkhConfigurationService Configuration { get; }
 
         /// <summary>
         /// Whether an operation is currently running.

@@ -1,15 +1,23 @@
 using System;
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Xml.Schema;
-using System.Reflection;
 using System.Collections;
-using Ankh.RepositoryExplorer;
-using System.Threading;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Ankh.Config
+using Ankh.Configuration;
+using Ankh.RepositoryExplorer;
+using Ankh.UI;
+
+
+namespace Ankh.Configuration
 {
 	/// <summary>
 	/// Represents an error in the configuration file.
@@ -28,94 +36,151 @@ namespace Ankh.Config
 	/// <summary>
 	/// Contains functions used to load and save configuration data.
 	/// </summary>
-	public sealed class ConfigLoader
+    public sealed class ConfigLoader : IAnkhConfigurationService, IVsFileChangeEvents, IDisposable
 	{
+        const string _CONFIGDIRNAME = "AnkhSVN";
+        const string _CONFIGFILENAME = "AnkhSVN.user.xml";
+        private static readonly XmlSchemaSet _schemas;
 
-		public event EventHandler ConfigFileChanged;
+        readonly IAnkhServiceProvider _context;
+        readonly string _userConfigDir;
+        readonly List<string> _errors;
+        readonly object _lock = new object();
+        uint _cookie;
+        Config _instance;		
 
-		public ConfigLoader(string configDir)
+        static ConfigLoader()
+        {
+            // load the config schema
+            Assembly assembly = typeof(Config).Assembly;
+            ConfigLoader._schemas = new XmlSchemaSet();
+
+            XmlReader reader = new XmlTextReader(assembly.GetManifestResourceStream(
+                ConfigLoader.configSchemaResource));
+            ConfigLoader._schemas.Add(ConfigLoader.configNamespace, reader);
+        }
+
+        public ConfigLoader(IAnkhServiceProvider context)
+            : this(context, ConfigLoader.DefaultUserConfigurationPath)
+        {
+        }
+
+		public ConfigLoader(IAnkhServiceProvider context, string userConfigurationDir)
 		{
-			this.configDir = configDir;
-			this.errors = new ArrayList();
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (string.IsNullOrEmpty(userConfigurationDir))
+                throw new ArgumentNullException("userConfigurationDir");
 
-			EnsureConfig(this.ConfigPath);
+            _context = context;
+            _userConfigDir = userConfigurationDir;
 
-			this.configFileStamp = File.GetLastWriteTime(this.ConfigPath);
-			this.WatchConfigFile();
+            IVsFileChangeEx changeMonitor = (IVsFileChangeEx)_context.GetService(typeof(SVsFileChangeEx));
+
+            if (changeMonitor != null)
+                Marshal.ThrowExceptionForHR(changeMonitor.AdviseFileChange(AnkhConfigurationFile, (uint)_VSFILECHANGEFLAGS.VSFILECHG_Time, this, out _cookie));
+
+            _errors = new List<string>();
+
+			EnsureConfig(this.AnkhConfigurationFile);
 		}
 
+        public void Dispose()
+        {
+            if (_cookie != null)
+            {
+                IVsFileChangeEx changeMonitor = (IVsFileChangeEx)_context.GetService(typeof(SVsFileChangeEx));
 
+                if (changeMonitor != null)
+                {
+                    changeMonitor.UnadviseFileChange(_cookie);
+                    _cookie = 0;
+                }
+            }
+        }
 
-		public ConfigLoader()
-			: this(ConfigLoader.DefaultConfigDir)
-		{
-		}
+        public event EventHandler ConfigFileChanged;
 
-		static ConfigLoader()
-		{
-			// load the config schema
-			Assembly assembly = Assembly.GetExecutingAssembly();
-			ConfigLoader.schemas = new XmlSchemaSet();
+        public Config Instance
+        {
+            get { return _instance ?? (_instance = GetSafeConfigInstance()); }
+        }
 
-			XmlReader reader = new XmlTextReader(assembly.GetManifestResourceStream(
-				ConfigLoader.configSchemaResource));
-			ConfigLoader.schemas.Add(ConfigLoader.configNamespace, reader);
-		}
+        private Config GetSafeConfigInstance()
+        {
+            try
+            {
+                return GetNewConfigInstance();
+            }
+            catch
+            {
+                LoadDefaultConfig();
+                return _instance;
+            }
+        }
 
+        /// <summary>
+        /// Gets the user configuration path.
+        /// </summary>
+        /// <value>The user configuration path.</value>
+        public string UserConfigurationPath
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get { return _userConfigDir; }
+        }
+
+        public string AnkhConfigurationFile
+        {
+            [System.Diagnostics.DebuggerStepThrough]
+            get { return Path.Combine(UserConfigurationPath, _CONFIGFILENAME); }
+        }
+     		
 		/// <summary>
 		/// The default config directory - usually %APPDATA%\AnkhSVN
 		/// </summary>
-		public static string DefaultConfigDir
+		public static string DefaultUserConfigurationPath
 		{
 			get
 			{
 				return Path.Combine(Environment.GetFolderPath(
-					Environment.SpecialFolder.ApplicationData),
-					ConfigLoader.CONFIGDIRNAME);
+					Environment.SpecialFolder.ApplicationData), ConfigLoader._CONFIGDIRNAME);
 			}
-		}
-
-		public string ConfigPath
-		{
-			[System.Diagnostics.DebuggerStepThrough]
-			get { return Path.Combine(this.configDir, CONFIGFILENAME); }
-		}
-
-		public string ConfigDir
-		{
-			[System.Diagnostics.DebuggerStepThrough]
-			get { return this.configDir; }
-		}
+		}		
 
 		/// <summary>
 		/// Loads the Ankh configuration file from the given path.
 		/// </summary>
 		/// <returns>A Config object.</returns>
-		public Config LoadConfig()
-		{
-			lock (this.configFileLock)
-			{
-				// make sure there actually is a config file
-				EnsureConfig(this.ConfigPath);
+		public Config GetNewConfigInstance()
+        {
+			// make sure there actually is a config file
+			EnsureConfig(this.AnkhConfigurationFile);
 
-				errors.Clear();
-				return this.DeserializeConfig(new XmlTextReader(this.ConfigPath));
-			}
+			_errors.Clear();
+			return this.DeserializeConfig(new XmlTextReader(this.AnkhConfigurationFile));
 		}
+
+        bool IAnkhConfigurationService.LoadConfig()
+        {
+            _instance = GetNewConfigInstance();
+            return true;
+        }
 
 		/// <summary>
 		/// Loads the default config file. Used as a fallback if the
 		/// existing config file cannot be loaded.
 		/// </summary>
 		/// <returns></returns>
-		public Config LoadDefaultConfig()
+		public bool LoadDefaultConfig()
 		{
-			lock (this.configFileLock)
+			lock (this._lock)
 			{
-				Assembly assembly = Assembly.GetExecutingAssembly();
-				return this.DeserializeConfig(new XmlTextReader(
+				Assembly assembly = typeof(Config).Assembly;
+				_instance = this.DeserializeConfig(new XmlTextReader(
 					assembly.GetManifestResourceStream(
 					ConfigLoader.configFileResource)));
+
+                return true;
 			}
 		}
 
@@ -125,11 +190,11 @@ namespace Ankh.Config
 		/// <param name="config"></param>
 		public void SaveConfig(Config config)
 		{
-			EnsureConfig(this.ConfigPath);
+			EnsureConfig(this.AnkhConfigurationFile);
 
-			lock (this.configFileLock)
+			lock (this._lock)
 			{
-				using (StreamWriter writer = new StreamWriter(this.ConfigPath))
+				using (StreamWriter writer = File.CreateText(this.AnkhConfigurationFile))
 				{
 					XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
 					ns.Add("", ConfigLoader.configNamespace);
@@ -175,7 +240,7 @@ namespace Ankh.Config
 		/// </summary>
 		public string[] Errors
 		{
-			get { return (string[])this.errors.ToArray(typeof(string[])); }
+			get { return _errors.ToArray(); }
 		}
 
 
@@ -185,7 +250,7 @@ namespace Ankh.Config
 		/// <param name="path">The path to the config file.</param>
 		private void EnsureConfig(string path)
 		{
-			lock (this.configFileLock)
+			lock (this._lock)
 			{
 				string dirname = Path.GetDirectoryName(path);
 
@@ -197,7 +262,7 @@ namespace Ankh.Config
 				if (!File.Exists(path))
 				{
 					// Create a skeleton config file.
-					Assembly assembly = Assembly.GetExecutingAssembly();
+					Assembly assembly = typeof(Config).Assembly;
 					string config = "";
 					using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(
 							   ConfigLoader.configFileResource)))
@@ -211,14 +276,14 @@ namespace Ankh.Config
 
 		private Config DeserializeConfig(XmlReader reader)
 		{
-			this.errors.Clear();
+			_errors.Clear();
 
 			try
 			{
 				XmlReaderSettings xs = new XmlReaderSettings();
 				xs.ValidationType = ValidationType.Schema;
 				xs.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
-				xs.Schemas.Add(schemas);
+				xs.Schemas.Add(_schemas);
 				XmlReader vr = XmlReader.Create(reader, xs);
 
 				XmlSerializer serializer = new XmlSerializer(typeof(Config));
@@ -242,7 +307,7 @@ namespace Ankh.Config
 		private void ValidationEventHandler(object sender, ValidationEventArgs e)
 		{
 			if (e.Severity == XmlSeverityType.Error)
-				errors.Add(e.Message);
+				_errors.Add(e.Message);
 		}
 
 		private static bool WaitForNamedMutex(string mutexName, out Mutex mutex)
@@ -278,7 +343,7 @@ namespace Ankh.Config
 			string path = null;
 			try
 			{
-				path = Path.Combine(this.configDir, fileName);
+				path = Path.Combine(UserConfigurationPath, fileName);
 				using (StreamWriter writer = new StreamWriter(path))
 				{
 					XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfStrings));
@@ -304,9 +369,9 @@ namespace Ankh.Config
 		/// <returns></returns>
 		private string[] LoadStrings(string file)
 		{
-			lock (this.configFileLock)
+			lock (this._lock)
 			{
-				string path = Path.Combine(this.configDir, file);
+				string path = Path.Combine(UserConfigurationPath, file);
 
 				if (!File.Exists(path))
 					return new string[] { };
@@ -333,79 +398,58 @@ namespace Ankh.Config
 			}
 		}
 
+        int IVsFileChangeEvents.DirectoryChanged(string pszDirectory)
+        {
+            return VSConstants.S_OK;
+        }
 
-		private void WatchConfigFile()
-		{
-			Debug.Assert(File.Exists(this.ConfigPath), "Config file does not exist: " + this.ConfigPath);
+        int IVsFileChangeEvents.FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
+        {
+            if (rgpszFile == null)
+                return VSConstants.E_POINTER;
 
-			this.configFileWatcher = new FileSystemWatcher(this.ConfigDir, CONFIGFILENAME);
-			this.configFileWatcher.IncludeSubdirectories = false;
-			this.configFileWatcher.NotifyFilter = NotifyFilters.LastWrite;
-			this.configFileWatcher.Changed += new FileSystemEventHandler(configFileWatcher_Changed);
-			this.configFileWatcher.EnableRaisingEvents = true;
-		}
+            bool found = false;
 
-		void configFileWatcher_Changed(object sender, FileSystemEventArgs e)
-		{
-			lock (this.configFileLock)
+            foreach (string file in rgpszFile)
+            {
+                if (string.Equals(file, AnkhConfigurationFile, StringComparison.OrdinalIgnoreCase))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+                return VSConstants.S_OK;
+            
+			lock (this._lock) // BH: Why do we wrap this
 			{
-				try
-				{
-					if (!File.Exists(this.ConfigPath))
-					{
-						return;
-					}
+                try
+                {
+                    if (ConfigFileChanged != null)
+                        ConfigFileChanged(this, EventArgs.Empty);                    
+                }
+                catch (Exception ex)
+                {
+                    IAnkhErrorHandler errorHandler = _context.GetService<IAnkhErrorHandler>();
 
-					DateTime dt = File.GetLastWriteTime(this.ConfigPath);
-					if (dt != this.configFileStamp)
-					{
-						this.configFileStamp = dt;
-						if (this.ConfigFileChanged != null)
-						{
-							this.ConfigFileChanged(this, EventArgs.Empty);
-						}
-					}
-				}
-				catch (Exception
-#if DEBUG
-                        ex
-#endif
-)
-				{
-					// swallow
-#if DEBUG
-                    Debug.WriteLine( ex );
-#endif
-				}
+                    if (errorHandler != null)
+                        errorHandler.OnError(ex);
+                    else
+                        throw;
+                }
 			}
+
+            return VSConstants.S_OK;
 		}
 
-		private object configFileLock = new object();
-		private DateTime configFileStamp;
-		private string configDir;
-		private FileSystemWatcher configFileWatcher;
 		private const string REPOSROOTS = "reposroots.xml";
 		private const string WorkingCopyExplorerRoots = "wcroots.xml";
-		private const string CONFIGFILENAME = "ankhsvn.xml";
-		private const string CONFIGDIRNAME = "AnkhSVN";
-		private System.Collections.ArrayList errors;
-		private static readonly XmlSchemaSet schemas;
+				
 		private const string configNamespace = "http://ankhsvn.com/Config.xsd";
-		private const string configFileResource = "Ankh.Config.Config.xml";
-		private const string configSchemaResource = "Ankh.Config.Config.xsd";
+        private const string configFileResource = "Ankh.Configuration.Config.xml";
+		private const string configSchemaResource = "Ankh.Configuration.Config.xsd";
 		private const string ReposExplorerMutex = "Ankh.Config.ConfigLoader.reposroots.xml";
 		private const string WorkingCopyExplorerMutex = "Ankh.Config.ConfigLoader.reposroots.xml";
-
-
-
-	}
-
-
-	[Serializable]
-	[XmlRoot("ArrayOfString")]
-	public class ArrayOfStrings
-	{
-		[XmlElement("string")]
-		public string[] Strings = new string[0];
-	}
+    }	
 }

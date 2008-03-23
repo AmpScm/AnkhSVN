@@ -84,7 +84,6 @@ namespace Ankh.Commands
             this.result.End();
         }
 
-
         private LogDialogInfo info;
         private LogResult result;
     }

@@ -7,6 +7,7 @@ using Ankh.Extenders;
 using Ankh.ContextServices;
 using Utils.Services;
 using Ankh.Commands;
+using Ankh.Configuration;
 
 namespace Ankh
 {
@@ -22,6 +23,7 @@ namespace Ankh
         {
             Runtime.CommandMapper.LoadFrom(typeof(AnkhModule).Assembly);
 
+            Container.AddService(typeof(IAnkhConfigurationService), new ConfigLoader(Context));
             Container.AddService(typeof(IAnkhCommandService), new AnkhCommandService(Context));
             Container.AddService(typeof(IAnkhDialogOwner), new AnkhDialogOwner(Context));
             Container.AddService(typeof(IWorkingCopyOperations), new WorkingCopyOperations(Context));

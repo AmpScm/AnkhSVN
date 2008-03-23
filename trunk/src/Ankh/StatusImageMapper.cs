@@ -18,6 +18,8 @@ namespace Ankh
         {
             if (context == null)
                 throw new ArgumentNullException("context");
+
+            _context = context;
         }
 
         ImageList _statusImageList;

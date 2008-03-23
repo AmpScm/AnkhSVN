@@ -42,7 +42,7 @@ namespace Ankh.Commands
             {
                 // use the path in the config file if it's specified
                 // if not, just try to find it in PATH
-                string path = this.context.Config.Subversion.SvnExePath;
+                string path = this.context.Configuration.Instance.Subversion.SvnExePath;
                 return path != null ? path : "svn.exe";
             }
         }

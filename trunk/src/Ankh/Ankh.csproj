@@ -142,6 +142,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\Ankh.Configuration\Ankh.Configuration.csproj">
+      <Project>{2FFF126C-D567-4491-8128-0D98CF74BDFD}</Project>
+      <Name>Ankh.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>Ankh.Ids</Name>
@@ -163,9 +167,6 @@
   <ItemGroup>
     <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
-    <None Include="Config\Config.xsx">
-      <DependentUpon>Config.xsd</DependentUpon>
-    </None>
     <None Include="WorkingCopyExplorer\WCExplorer.cd" />
     <Compile Include="AnkhCommandService.cs" />
     <Compile Include="AnkhContext.cs">
@@ -303,9 +304,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CommitOperation.cs" />
-    <Compile Include="Config\Config.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Config\ConfigLoader.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -384,10 +382,6 @@
     </Compile>
     <EmbeddedResource Include="Commands\blame.xsl" />
     <EmbeddedResource Include="Commands\log.xsl" />
-    <EmbeddedResource Include="Config\Config.xml" />
-    <EmbeddedResource Include="Config\Config.xsd">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="StatusGlyphs.bmp" />
   </ItemGroup>
   <ItemGroup>

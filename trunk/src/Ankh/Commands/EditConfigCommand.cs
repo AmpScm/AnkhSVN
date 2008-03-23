@@ -1,5 +1,5 @@
 using System;
-using Ankh.Config;
+using Ankh.Configuration;
 using Ankh.UI;
 using System.Windows.Forms;
 using AnkhSvn.Ids;
@@ -16,12 +16,12 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            Config.Config config = context.ConfigLoader.LoadConfig();
+            Config config = context.Configuration.GetNewConfigInstance();
             using ( ConfigurationDialog dialog = new ConfigurationDialog( config ) )
             {
                 if (dialog.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)
                 {
-                    context.ConfigLoader.SaveConfig( config );
+                    context.Configuration.SaveConfig( config );
                 }
             }
         }

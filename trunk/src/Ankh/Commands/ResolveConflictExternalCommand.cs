@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections;
 using AnkhSvn.Ids;
-
+using Ankh.Configuration;
 
 namespace Ankh.Commands
 {
@@ -23,7 +23,9 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            if (!context.Config.ChooseDiffMergeManual || context.Config.MergeExePath == null)
+            Config config = context.Configuration.Instance;
+
+            if (!config.ChooseDiffMergeManual || config.MergeExePath == null)
             {
                 e.Enabled = e.Visible = false;
             }
@@ -36,7 +38,7 @@ namespace Ankh.Commands
         /// <returns>The exe path.</returns>
         protected override string GetExe( Ankh.IContext context )
         {
-            return context.Config.MergeExePath;
+            return context.Configuration.Instance.MergeExePath;
         }
 
         #endregion

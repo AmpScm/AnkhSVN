@@ -24,8 +24,8 @@ namespace Ankh.Commands
         /// <returns>The exe path.</returns>
         protected virtual string GetExe(ISelectionContext selection, IContext context)
         {
-            if (!context.Config.ChooseDiffMergeManual)
-                return context.Config.DiffExePath;
+            if (!context.Configuration.Instance.ChooseDiffMergeManual)
+                return context.Configuration.Instance.DiffExePath;
             else
                 return null;
         }
