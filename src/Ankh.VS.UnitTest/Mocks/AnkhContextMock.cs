@@ -19,7 +19,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
             EnvDTE.DTE dte = DteMock.GetDteInstance(mocks);
 
             IContext context = mocks.DynamicMultiMock<IContext>(typeof(IDTEContext));
-            Ankh.Configuration.Config config = new Ankh.Configuration.Config();
+            Ankh.Configuration.AnkhConfig config = new Ankh.Configuration.AnkhConfig();
 
             using (mocks.Record())
             {

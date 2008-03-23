@@ -144,7 +144,7 @@ Global
 		{2FFF126C-D567-4491-8128-0D98CF74BDFD} = {01F3ED56-C896-409C-8464-DB82B3AF1364}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 EndGlobal

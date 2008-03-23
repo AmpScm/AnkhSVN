@@ -19,7 +19,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            Config config = context.Configuration.Instance;
+            AnkhConfig config = context.Configuration.Instance;
             // Allow external diff if enabled in config file
             if (!config.ChooseDiffMergeManual || config.DiffExePath == null)
                 e.Enabled = e.Visible = false;
