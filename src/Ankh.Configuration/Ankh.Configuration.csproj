@@ -46,20 +46,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayOfStrings.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="AnkhConfig.cs" />
+    <Compile Include="Config.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Config.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Config.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>Config.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.Configuration.snk" />
     <None Include="Config.xsc">
       <DependentUpon>Config.xsd</DependentUpon>
+    </None>
+    <None Include="Config.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Config.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Config.xss">
       <DependentUpon>Config.xsd</DependentUpon>
