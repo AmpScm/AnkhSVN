@@ -77,7 +77,7 @@ namespace Ankh.WorkingCopyExplorer
 
         public void Open()
         {
-            this.explorer.OpenItem(this.SvnItem.Path);
+            this.explorer.OpenItem(this.SvnItem.FullPath);
         }
 
         [TextProperty("TextStatus", Order = 0, TextWidth = 18)]
@@ -130,12 +130,12 @@ namespace Ankh.WorkingCopyExplorer
             if (other == null)
                 return false;
 
-            return PathUtils.AreEqual(this.SvnItem.Path, other.SvnItem.Path);
+            return PathUtils.AreEqual(this.SvnItem.FullPath, other.SvnItem.FullPath);
         }
 
         public override int GetHashCode()
         {
-            return _item.Path.GetHashCode();
+            return _item.FullPath.GetHashCode();
         }
 
         internal new void Refresh()

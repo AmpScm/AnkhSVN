@@ -59,46 +59,23 @@ namespace Ankh
         /// <summary>
         /// The path of this item.
         /// </summary>
-        public string Path
+        public string FullPath
         {
             get { return this._fullPath; }
         }
 
         public string Name
         {
-            get { return System.IO.Path.GetFileName(Path); }
+            get { return Path.GetFileName(FullPath); }
         }
 
         public void Refresh()
         {
-            ISvnClientPool clientPool = _context.GetService<ISvnClientPool>();
             IFileStatusCache statusCache = _context.GetService<IFileStatusCache>();
 
-            string path = this._fullPath;
+            bool isFile = GetIsFile();
 
-            // if it's a single file, refresh the directory with Files unrecursively
-            if (GetIsFile())
-                path = System.IO.Path.GetDirectoryName(path);
-
-            SvnStatusArgs args = new SvnStatusArgs();
-            args.Depth = SvnDepth.Files;
-            args.RetrieveAllEntries = true;
-            args.ThrowOnError = false;
-
-            using (SvnClient client = clientPool.GetNoUIClient())
-            {
-                if (client != null)
-                {
-                    client.Status(path, args, delegate(object sender, SvnStatusEventArgs e)
-                    {
-                        SvnItem i = statusCache[e.Path];
-                        if (i != null)
-                        {
-                            i.RefreshTo(new AnkhStatus(e));
-                        }
-                    });
-                }
-            }
+            statusCache.RefreshMe(this, isFile ? SvnNodeKind.File : SvnNodeKind.Directory);
         }
 
         /// <summary>
@@ -281,7 +258,7 @@ namespace Ankh
             {
                 using (EnsureClean())
                 {
-                    return _status.LocalLocked;
+                    return _status.IsLockedLocal;
                 }
             }
         }
@@ -341,7 +318,7 @@ namespace Ankh
 
                 if (item != null)
                 {
-                    paths[i++] = item.Path;
+                    paths[i++] = item.FullPath;
                 }
             }
 

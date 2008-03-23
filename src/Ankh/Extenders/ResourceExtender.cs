@@ -78,7 +78,7 @@ namespace Ankh.Extenders
         [Category("Subversion"), Description("Locked")]
         public bool Locked
         {
-            get { return _item.Status.LocalLocked; }
+            get { return _item.Status.IsLockedLocal; }
         }
     }
 }

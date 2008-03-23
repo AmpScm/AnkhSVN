@@ -15,7 +15,7 @@ namespace Ankh.WorkingCopyExplorer
         {
             get
             {
-                return this.SvnItem.Path;
+                return this.SvnItem.FullPath;
             }
         }
     }

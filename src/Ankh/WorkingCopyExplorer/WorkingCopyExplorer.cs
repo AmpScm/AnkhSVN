@@ -161,7 +161,7 @@ namespace Ankh.WorkingCopyExplorer
         internal IFileSystemItem[] GetFileSystemItemsForDirectory(SvnItem directoryItem)
         {
             ArrayList items = new ArrayList();
-            foreach (string path in Directory.GetFileSystemEntries(directoryItem.Path))
+            foreach (string path in Directory.GetFileSystemEntries(directoryItem.FullPath))
             {
                 if (PathUtils.GetName(path) != SvnClient.AdministrativeDirectoryName)
                 {
@@ -170,7 +170,7 @@ namespace Ankh.WorkingCopyExplorer
                 }
             }
 
-            foreach (SvnItem item in this.statusCache.GetDeletions(directoryItem.Path))
+            foreach (SvnItem item in this.statusCache.GetDeletions(directoryItem.FullPath))
             {
                 items.Add(FileSystemItem.Create(context, this, item));
             }
@@ -225,7 +225,7 @@ namespace Ankh.WorkingCopyExplorer
             string[] rootPaths = new string[this.roots.Count];
             for (int i = 0; i < rootPaths.Length; i++)
             {
-                rootPaths[i] = ((FileSystemItem)this.roots[i]).SvnItem.Path;
+                rootPaths[i] = ((FileSystemItem)this.roots[i]).SvnItem.FullPath;
             }
             this.Context.Configuration.SaveWorkingCopyExplorerRoots(rootPaths);
         }

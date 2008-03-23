@@ -52,5 +52,12 @@ namespace Ankh.Scc
         /// 	<c>true</c> if the specified path is valid; otherwise, <c>false</c>.
         /// </returns>
         bool IsValidPath(string path);
+
+        /// <summary>
+        /// Called from <see cref="SvnItem.Refresh()"/>
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="svnNodeKind">Kind of the SVN node.</param>
+        void RefreshMe(SvnItem item, SvnNodeKind svnNodeKind);
     }
 }

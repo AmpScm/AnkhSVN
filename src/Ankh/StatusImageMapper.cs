@@ -80,7 +80,7 @@ namespace Ankh
 
                 case SvnStatus.Added:
                 case SvnStatus.Replaced:
-                    return item.Status.LocalCopied ? AnkhGlyph.CopiedOrMoved : AnkhGlyph.Added;
+                    return item.Status.IsCopied ? AnkhGlyph.CopiedOrMoved : AnkhGlyph.Added;
 
                 case SvnStatus.Missing:
                 case SvnStatus.Deleted:

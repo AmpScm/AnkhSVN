@@ -83,7 +83,7 @@ namespace Ankh.Commands
                 {
                     if (item.IsModified)
                     {
-                        paths.Add(item.Path);
+                        paths.Add(item.FullPath);
                         item.MarkDirty();
                     }
                 }

@@ -62,7 +62,7 @@ namespace Ankh.Commands
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;
-            args.Path = item.Path;
+            args.Path = item.FullPath;
         }
 
         #endregion
@@ -91,7 +91,7 @@ namespace Ankh.Commands
 
                 foreach (SvnItem item in this.items)
                 {
-                    e.Client.Merge(item.Path, item.Path, new SvnRevisionRange(SvnRevision.Working, revision), args);
+                    e.Client.Merge(item.FullPath, item.FullPath, new SvnRevisionRange(SvnRevision.Working, revision), args);
                 }
 
             }

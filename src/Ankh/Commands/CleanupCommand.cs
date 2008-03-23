@@ -36,7 +36,7 @@ namespace Ankh.Commands
                     if (!item.IsVersioned)
                         continue;
 
-                    string path = item.IsDirectory ? item.Path : Path.GetDirectoryName(item.Path);
+                    string path = item.IsDirectory ? item.FullPath : Path.GetDirectoryName(item.FullPath);
                     if (list.ContainsKey(path))
                         continue;
 

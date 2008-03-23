@@ -9,6 +9,7 @@ namespace Ankh
     {
         readonly SvnNodeKind _nodeKind;        
         readonly string _fullPath;
+        readonly string _changeList;
         readonly SvnStatus _localContentStatus;
         readonly bool _localCopied;
         readonly bool _localLocked;
@@ -43,6 +44,7 @@ namespace Ankh
                 _lastChangeAuthor = args.WorkingCopyInfo.LastChangeAuthor;
                 _revision = args.WorkingCopyInfo.Revision;
                 _repositoryId = args.WorkingCopyInfo.RepositoryId.ToString();
+                _changeList = args.WorkingCopyInfo.ChangeList;
             }
         }        
 
@@ -72,6 +74,54 @@ namespace Ankh
         }
         #endregion
 
+        /// <summary>
+        /// The full path of this status item
+        /// </summary>
+        /// <remarks>Guaranteed always normalized</remarks>
+        public string FullPath
+        {
+            get { return _fullPath; }
+        }
+
+        /// <summary>
+        /// Content status in working copy
+        /// </summary>
+        public SvnStatus LocalContentStatus
+        {
+            get { return _localContentStatus; }
+        }
+
+        /// <summary>
+        /// Property status in working copy
+        /// </summary>
+        public SvnStatus LocalPropertyStatus
+        {
+            get { return _localPropertyStatus; }
+        }
+
+        public SvnStatus CombinedStatus
+        {
+            get
+            {
+                if (_localPropertyStatus == SvnStatus.Conflicted) // Conflict has highest priority
+                    return SvnStatus.Conflicted;
+                else if (_localContentStatus != SvnStatus.Normal)
+                    return _localContentStatus;
+                else
+                    return _localPropertyStatus;
+            }
+        }
+
+        /// <summary>
+        /// Gets the change list in which the file is placed
+        /// </summary>
+        /// <value>The change list.</value>
+        /// <remarks>The changelist value is only valid if the file is modified</remarks>
+        public string ChangeList
+        {
+            get { return _changeList; }
+        }
+
         public SvnNodeKind NodeKind
         {
             get { return _nodeKind; }
@@ -100,60 +150,32 @@ namespace Ankh
         public string RepositoryId
         {
             get { return _repositoryId; }
-        }
-
-        // Summary:
-        //     The path the notification is about, translated via System.IO.Path.GetFullPath(System.String)
-        //
-        // Remarks:
-        //     The SharpSvn.SvnStatusEventArgs.FullPath property contains the path in normalized
-        //     format; while SharpSvn.SvnStatusEventArgs.Path returns the exact path from
-        //     the subversion api
-        public string FullPath
-        {
-            get { return _fullPath; }
-        }
-
-        //
-        // Summary:
-        //     Content status in working copy
-        public SvnStatus LocalContentStatus
-        {
-            get { return _localContentStatus; }
-        }
-        //
-        // Summary:
-        //     Gets a boolean indicating whether the file is copied in the working copy
-        //
-        // Remarks:
-        //     A file or directory can be 'copied' if it's scheduled for addition-with-history
-        //     (or part of a subtree that is scheduled as such.).
-        public bool LocalCopied
+        }        
+       
+        /// <summary>
+        /// Gets a boolean indicating whether the file is copied in the working copy
+        /// </summary>
+        public bool IsCopied
         {
             get { return _localCopied; }
         }
-        //
-        // Summary:
-        //     Gets a boolean indicating whether the workingcopy is locked
-        public bool LocalLocked
+        
+        /// <summary>
+        /// Gets a boolean indicating whether the workingcopy is locked in the local working copy
+        /// </summary>
+        public bool IsLockedLocal
         {
             get { return _localLocked; }
         }
-        //
-        // Summary:
-        //     Property status in working copy
-        public SvnStatus LocalPropertyStatus
-        {
-            get { return _localPropertyStatus; }
-        }
 
-        //
-        // Summary:
-        //     Gets a boolean indicating whether the file is switched in the working copy
-        public bool Switched
+        /// <summary>
+        /// Gets a boolean indicating whether the file is switched in the working copy
+        /// </summary>
+        public bool IsSwitched
         {
             get { return _switched; }
         }
+
         public Uri Uri
         {
             get { return _uri; }

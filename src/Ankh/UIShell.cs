@@ -464,14 +464,14 @@ namespace Ankh
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;
-            args.Path = item.Path;
+            args.Path = item.FullPath;
         }
 
         protected static void GetUrlPathinfo(object sender, ResolvingPathEventArgs args)
         {
             SvnItem item = (SvnItem)args.Item;
             args.IsDirectory = item.IsDirectory;
-            args.Path = item.Status.FullPath;
+            args.Path = item.FullPath;
         }
 
         private void EnsureWindowSize(Window window)

@@ -100,7 +100,7 @@ namespace Ankh.Commands
             {
                 foreach (SvnItem item in info.CheckedItems)
                 {
-                    client.Diff(item.Path, range, args, stream);
+                    client.Diff(item.FullPath, range, args, stream);
                 }
                 stream.Position = 0;
 
@@ -147,14 +147,14 @@ namespace Ankh.Commands
                     using (SvnClient client = context.ClientPool.GetClient())
                     {
                         SvnWorkingCopyState result;
-                        client.GetWorkingCopyState(item.Path, out result);
+                        client.GetWorkingCopyState(item.FullPath, out result);
                         return result.WorkingCopyBasePath;
                     }
                 
             }
             else if (revision == SvnRevision.Working)
             {
-                return item.Path;
+                return item.FullPath;
             }
 
             // we need to get it from the repos

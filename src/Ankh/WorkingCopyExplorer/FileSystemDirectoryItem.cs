@@ -29,9 +29,8 @@ namespace Ankh.WorkingCopyExplorer
                 this.Children.CopyTo( children, 0 );
                 return children;
             }
-            catch ( Exception ex )
+            catch
             {
-                //this.Explorer.Context.ErrorHandler.OnError( ex );
                 return new IFileSystemItem[] { };
             }
         }
@@ -44,7 +43,7 @@ namespace Ankh.WorkingCopyExplorer
                 IFileStatusCache cache = Context.GetService<IFileStatusCache>();
 
                 if(cache != null)
-                    cache.UpdateStatus(SvnItem.Path, SvnDepth.Infinity);
+                    cache.UpdateStatus(SvnItem.FullPath, SvnDepth.Infinity);
 
                 this.FindChildren();
 
