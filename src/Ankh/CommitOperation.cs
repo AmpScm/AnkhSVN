@@ -3,6 +3,7 @@ using Ankh.UI;
 using System.Collections;
 using System.Windows.Forms;
 using SharpSvn;
+using Ankh.Configuration;
 
 namespace Ankh
 {
@@ -42,8 +43,10 @@ namespace Ankh
 
         public bool ShowLogMessageDialog()
         {
-            string templateText = this.context.Config.LogMessageTemplate != null ? 
-                context.Config.LogMessageTemplate : "";;
+            Config config = this.context.Configuration.Instance;
+
+            string templateText = config.LogMessageTemplate != null ? 
+                context.Configuration.Instance.LogMessageTemplate : "";;
             LogMessageTemplate template = new LogMessageTemplate(context, templateText );
 
             this.commitContext = new CommitContext( template, this.items, this.UrlPaths );            
@@ -51,7 +54,7 @@ namespace Ankh
             // is there a previous log message?
             if ( this.LogMessage != null )
             {
-                if ( this.context.Config.AutoReuseComment ||
+                if ( config.AutoReuseComment ||
                     context.UIShell.ShowMessageBox(  
                     "The previous commit did not complete." + Environment.NewLine + 
                     "Do you want to reuse the log message?", 

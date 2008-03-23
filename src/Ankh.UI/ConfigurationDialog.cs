@@ -69,7 +69,7 @@ namespace Ankh.UI
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://ankhsvn.com/Config.xsd", IsNullable = false)]
-    public class Config
+    public class UIConfig
     {
 
         private ConfigRepositoryExplorer repositoryExplorerField;
@@ -112,7 +112,7 @@ namespace Ankh.UI
         [Description(@"This command line will be used for spawning an external merge program. " +
 "The options are %base %theirs %mine %merged, which will be replaced with the respective paths when a merge is executed.")]
         [TypeConverter(typeof(NullableStringTypeConverter))]
-        [Editor(typeof(Ankh.UI.Config.MergeExeTypeEditor), typeof(UITypeEditor))]
+        [Editor(typeof(Ankh.UI.UIConfig.MergeExeTypeEditor), typeof(UITypeEditor))]
         public string MergeExePath
         {
             get
@@ -150,7 +150,7 @@ namespace Ankh.UI
         [Description(@"This command line will be used for spawning an external diff program. " +
             "The options are %base and %mine, which will be replaced with the respective paths when a diff is executed.")]
         [TypeConverter(typeof(NullableStringTypeConverter))]
-        [Editor(typeof(Ankh.UI.Config.DiffExeTypeEditor), typeof(UITypeEditor))]
+        [Editor(typeof(Ankh.UI.UIConfig.DiffExeTypeEditor), typeof(UITypeEditor))]
         public string DiffExePath
         {
             get
@@ -184,7 +184,7 @@ namespace Ankh.UI
         //[Editor( typeof( MultilineStringEditor ), typeof( UITypeEditor ) )]
         [Category("Log message")]
         [DefaultValue("")]
-        [Editor(typeof(Ankh.UI.Config.LogMessageTypeEditor), typeof(UITypeEditor))]
+        [Editor(typeof(Ankh.UI.UIConfig.LogMessageTypeEditor), typeof(UITypeEditor))]
         public string LogMessageTemplate
         {
             get
@@ -330,7 +330,7 @@ namespace Ankh.UI
 Since Subversion 1.3, there is an environment variable (called SVN_ASP_DOT_NET_HACK)" +
 "you can set in order to switch *ALL* svn clients to the _svn directory. Since that release " +
 "the AdminDirectoryName serves as an override (if set), and may *only* contain _svn or .svn.")]
-        [TypeConverter(typeof(Ankh.UI.Config.AdminDirectoryNameTypeConverter))]
+        [TypeConverter(typeof(Ankh.UI.UIConfig.AdminDirectoryNameTypeConverter))]
         [DefaultValue((string)null)]
         public string AdminDirectoryName
         {

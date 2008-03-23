@@ -51,7 +51,7 @@ namespace Ankh.Commands
         protected static XslCompiledTransform GetTransform(IContext context, string name)
         {
             // is the file already there?
-            string configDir = Path.GetDirectoryName(context.ConfigLoader.ConfigPath);
+            string configDir = Path.GetDirectoryName(context.Configuration.UserConfigurationPath);
             string path = Path.Combine(configDir, name);
 
             if (!File.Exists(path))

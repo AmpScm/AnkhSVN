@@ -26,8 +26,8 @@ namespace Ankh.Commands
         /// <returns>The exe path.</returns>
         protected virtual string GetExe( Ankh.IContext context )
         {
-            if ( !context.Config.ChooseDiffMergeManual )
-                return context.Config.MergeExePath;
+            if ( !context.Configuration.Instance.ChooseDiffMergeManual )
+                return context.Configuration.Instance.MergeExePath;
             else
                 return null;
         }

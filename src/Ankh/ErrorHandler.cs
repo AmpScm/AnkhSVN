@@ -7,7 +7,7 @@ using System.Diagnostics;
 using Ankh.UI;
 using System.IO;
 using System.Collections;
-using Ankh.Config;
+using Ankh.Configuration;
 using System.Xml.Serialization;
 using SharpSvn;
 using Ankh.ContextServices;

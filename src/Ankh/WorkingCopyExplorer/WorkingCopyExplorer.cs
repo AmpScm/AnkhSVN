@@ -227,7 +227,7 @@ namespace Ankh.WorkingCopyExplorer
             {
                 rootPaths[i] = ((FileSystemItem)this.roots[i]).SvnItem.Path;
             }
-            this.Context.ConfigLoader.SaveWorkingCopyExplorerRoots(rootPaths);
+            this.Context.Configuration.SaveWorkingCopyExplorerRoots(rootPaths);
         }
 
         private void LoadRoots()
@@ -243,7 +243,7 @@ namespace Ankh.WorkingCopyExplorer
             string[] rootPaths;
             try
             {
-                rootPaths = this.Context.ConfigLoader.LoadWorkingCopyExplorerRoots();
+                rootPaths = this.Context.Configuration.LoadWorkingCopyExplorerRoots();
                 if (rootPaths == null)
                 {
                     return;

@@ -200,9 +200,9 @@ namespace Ankh.RepositoryExplorer
             string[] roots;
             try
             {
-                roots = this.context.ConfigLoader.LoadReposExplorerRoots();
+                roots = this.context.Configuration.LoadReposExplorerRoots();
             }
-            catch( Ankh.Config.ConfigException ex )
+            catch( Ankh.Configuration.ConfigException ex )
             {
                 string msg = ex.Message;
                 if ( ex.InnerException != null )
@@ -282,7 +282,7 @@ namespace Ankh.RepositoryExplorer
             foreach( INode node in rootNodes )
                 list.Add( node.Url + "|" + node.Revision );
 
-            this.context.ConfigLoader.SaveReposExplorerRoots(
+            this.context.Configuration.SaveReposExplorerRoots(
                 (string[])list.ToArray(typeof(string)));
         }
 

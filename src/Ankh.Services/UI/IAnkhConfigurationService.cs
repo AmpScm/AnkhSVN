@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Ankh.Configuration;
+
+namespace Ankh.UI
+{
+    public interface IAnkhConfigurationService
+    {
+        Configuration.Config Instance
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the user configuration path.
+        /// </summary>
+        /// <value>The user configuration path.</value>
+        string UserConfigurationPath
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Occurs when the configuration file changed
+        /// </summary>
+        event EventHandler ConfigFileChanged;
+
+        bool LoadConfig();
+
+        Config GetNewConfigInstance();
+
+        void SaveConfig(Config config);
+
+        void SaveReposExplorerRoots(string[] p);
+
+        string[] LoadReposExplorerRoots();
+
+        bool LoadDefaultConfig();
+
+        void SaveWorkingCopyExplorerRoots(string[] rootPaths);
+
+        string[] LoadWorkingCopyExplorerRoots();
+    }
+}
