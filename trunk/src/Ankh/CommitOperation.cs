@@ -43,7 +43,7 @@ namespace Ankh
 
         public bool ShowLogMessageDialog()
         {
-            Config config = this.context.Configuration.Instance;
+            AnkhConfig config = this.context.Configuration.Instance;
 
             string templateText = config.LogMessageTemplate != null ? 
                 context.Configuration.Instance.LogMessageTemplate : "";;

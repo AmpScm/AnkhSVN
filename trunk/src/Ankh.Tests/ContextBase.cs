@@ -95,7 +95,7 @@ namespace Ankh.Tests
             return false;
         }
 
-        public virtual Ankh.Configuration.Config Config
+        public virtual Ankh.Configuration.AnkhConfig Config
         {
             get
             {
@@ -632,9 +632,9 @@ namespace Ankh.Tests
         }
 
 
-        protected virtual Configuration.Config CreateConfig()
+        protected virtual Configuration.AnkhConfig CreateConfig()
         {
-            Configuration.Config config = new Configuration.Config();
+            Configuration.AnkhConfig config = new Configuration.AnkhConfig();
             config.AutoAddNewFiles = true;
             config.AutoAddNewFiles = true;
             config.LogMessageTemplate = "";
@@ -651,7 +651,7 @@ namespace Ankh.Tests
 
         }
 
-        public Configuration.Config config;
+        public Configuration.AnkhConfig config;
         public _DTE dte;
         public SvnClient client;
         public StatusCache statusCache;

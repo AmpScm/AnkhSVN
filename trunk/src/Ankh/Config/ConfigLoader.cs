@@ -47,12 +47,12 @@ namespace Ankh.Configuration
         readonly List<string> _errors;
         readonly object _lock = new object();
         uint _cookie;
-        Config _instance;		
+        AnkhConfig _instance;		
 
         static ConfigLoader()
         {
             // load the config schema
-            Assembly assembly = typeof(Config).Assembly;
+            Assembly assembly = typeof(AnkhConfig).Assembly;
             ConfigLoader._schemas = new XmlSchemaSet();
 
             XmlReader reader = new XmlTextReader(assembly.GetManifestResourceStream(
@@ -101,12 +101,12 @@ namespace Ankh.Configuration
 
         public event EventHandler ConfigFileChanged;
 
-        public Config Instance
+        public AnkhConfig Instance
         {
             get { return _instance ?? (_instance = GetSafeConfigInstance()); }
         }
 
-        private Config GetSafeConfigInstance()
+        private AnkhConfig GetSafeConfigInstance()
         {
             try
             {
@@ -151,7 +151,7 @@ namespace Ankh.Configuration
 		/// Loads the Ankh configuration file from the given path.
 		/// </summary>
 		/// <returns>A Config object.</returns>
-		public Config GetNewConfigInstance()
+		public AnkhConfig GetNewConfigInstance()
         {
 			// make sure there actually is a config file
 			EnsureConfig(this.AnkhConfigurationFile);
@@ -175,7 +175,7 @@ namespace Ankh.Configuration
 		{
 			lock (this._lock)
 			{
-				Assembly assembly = typeof(Config).Assembly;
+				Assembly assembly = typeof(AnkhConfig).Assembly;
 				_instance = this.DeserializeConfig(new XmlTextReader(
 					assembly.GetManifestResourceStream(
 					ConfigLoader.configFileResource)));
@@ -188,7 +188,7 @@ namespace Ankh.Configuration
 		/// Saves the supplied Config object
 		/// </summary>
 		/// <param name="config"></param>
-		public void SaveConfig(Config config)
+		public void SaveConfig(AnkhConfig config)
 		{
 			EnsureConfig(this.AnkhConfigurationFile);
 
@@ -198,7 +198,7 @@ namespace Ankh.Configuration
 				{
 					XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
 					ns.Add("", ConfigLoader.configNamespace);
-					XmlSerializer serializer = new XmlSerializer(typeof(Config));
+					XmlSerializer serializer = new XmlSerializer(typeof(AnkhConfig));
 					serializer.Serialize(writer, config, ns);
 				}
 			}
@@ -262,7 +262,7 @@ namespace Ankh.Configuration
 				if (!File.Exists(path))
 				{
 					// Create a skeleton config file.
-					Assembly assembly = typeof(Config).Assembly;
+					Assembly assembly = typeof(AnkhConfig).Assembly;
 					string config = "";
 					using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(
 							   ConfigLoader.configFileResource)))
@@ -274,7 +274,7 @@ namespace Ankh.Configuration
 			}
 		}
 
-		private Config DeserializeConfig(XmlReader reader)
+		private AnkhConfig DeserializeConfig(XmlReader reader)
 		{
 			_errors.Clear();
 
@@ -286,8 +286,8 @@ namespace Ankh.Configuration
 				xs.Schemas.Add(_schemas);
 				XmlReader vr = XmlReader.Create(reader, xs);
 
-				XmlSerializer serializer = new XmlSerializer(typeof(Config));
-				return (Config)serializer.Deserialize(vr);
+				XmlSerializer serializer = new XmlSerializer(typeof(AnkhConfig));
+				return (AnkhConfig)serializer.Deserialize(vr);
 			}
 			catch (InvalidOperationException ex)
 			{

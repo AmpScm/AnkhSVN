@@ -23,7 +23,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            Config config = context.Configuration.Instance;
+            AnkhConfig config = context.Configuration.Instance;
 
             if (!config.ChooseDiffMergeManual || config.MergeExePath == null)
             {

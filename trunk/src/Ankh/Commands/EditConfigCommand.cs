@@ -16,7 +16,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            Config config = context.Configuration.GetNewConfigInstance();
+            AnkhConfig config = context.Configuration.GetNewConfigInstance();
             using ( ConfigurationDialog dialog = new ConfigurationDialog( config ) )
             {
                 if (dialog.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)

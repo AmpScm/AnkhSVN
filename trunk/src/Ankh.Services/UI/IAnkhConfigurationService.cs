@@ -7,7 +7,7 @@ namespace Ankh.UI
 {
     public interface IAnkhConfigurationService
     {
-        Configuration.Config Instance
+        Configuration.AnkhConfig Instance
         {
             get;
         }
@@ -28,9 +28,9 @@ namespace Ankh.UI
 
         bool LoadConfig();
 
-        Config GetNewConfigInstance();
+        AnkhConfig GetNewConfigInstance();
 
-        void SaveConfig(Config config);
+        void SaveConfig(AnkhConfig config);
 
         void SaveReposExplorerRoots(string[] p);
 
