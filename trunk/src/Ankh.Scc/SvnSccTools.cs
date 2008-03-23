@@ -408,7 +408,6 @@ namespace Ankh.Scc
 
 
 
-        static int i = 0;
         /// <summary>
         /// Check if adding the path might succeed
         /// </summary>
@@ -418,15 +417,14 @@ namespace Ankh.Scc
         {
             if (path == null)
                 throw new ArgumentNullException("path");
-
             
-            SvnItem item = _statusCache[path];
-            string parentDir = Path.GetDirectoryName(path);
+            SvnItem item = _statusCache[path];            
             string file = Path.GetFileName(path);
 
-            if (item.Name == file)
+            if (item.IsVersioned && item.Name == file)
                 return true;
 
+            string parentDir = Path.GetDirectoryName(path);
             SvnStatusArgs sa = new SvnStatusArgs();
             sa.ThrowOnError = false;
             sa.RetrieveAllEntries = true;
