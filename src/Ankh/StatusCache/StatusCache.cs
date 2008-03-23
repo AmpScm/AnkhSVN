@@ -127,19 +127,19 @@ namespace Ankh
             {
                 lock (_lock)
                 {
-                    string normPath = PathUtils.NormalizePath(path);
+                    path = PathUtils.NormalizePath(path);
                     SvnItem item;
 
-                    if (!_map.TryGetValue(normPath, out item))
+                    if (!_map.TryGetValue(path, out item))
                     {
                         // fill the status cache from this directory
-                        string directory = normPath;
+                        string directory = path;
                         if (File.Exists(directory))
                             directory = Path.GetDirectoryName(directory);
 
                         if (Directory.Exists(directory))
                             this.Status(directory, SvnDepth.Files);
-                        if (!_map.TryGetValue(normPath, out item))
+                        if (!_map.TryGetValue(path, out item))
                         {
                             Collection<SvnStatusEventArgs> statuses;
                             SvnStatusArgs args = new SvnStatusArgs();
@@ -147,12 +147,18 @@ namespace Ankh
                             args.ThrowOnError = false;
                             args.RetrieveAllEntries = true;
                             args.NoIgnore = true;
-                            if (this._client.GetStatus(normPath, args, out statuses) && statuses.Count > 0)
+                            if (this._client.GetStatus(path, args, out statuses) && statuses.Count > 0)
                             {
-                                _map[normPath] = item = new SvnItem(_context, path, new AnkhStatus(statuses[0]));
+                                SvnStatusEventArgs s0 = statuses[0];
+                                _map[s0.FullPath] = item = new SvnItem(_context, s0.FullPath, new AnkhStatus(s0));
                             }
                             else
-                                _map[normPath] = item = new SvnItem(_context, path, AnkhStatus.None);
+                            {
+                                // Make sure the casing matches the on-disk casing if it exists
+                                string truePath = SvnTools.GetTruePath(path) ?? path;
+
+                                _map[path] = item = new SvnItem(_context, truePath, AnkhStatus.None);
+                            }
                         }
                     }     
 
