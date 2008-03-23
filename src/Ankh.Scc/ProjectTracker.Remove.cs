@@ -40,7 +40,7 @@ namespace Ankh.Scc
 
                     string file = rgpszMkDocuments[iFile];
 
-                    bool wasDeleted = System.IO.File.Exists(file);
+                    bool wasDeleted = !System.IO.File.Exists(file);
 
                     _sccProvider.OnProjectFileRemoved(sccProject, file, wasDeleted, rgFlags[iFile]);
                 }

@@ -125,9 +125,13 @@ namespace Ankh
         {
             get
             {
+                if (string.IsNullOrEmpty(path))
+                    throw new ArgumentNullException("path");
+
+                path = PathUtils.NormalizePath(path);
+
                 lock (_lock)
                 {
-                    path = PathUtils.NormalizePath(path);
                     SvnItem item;
 
                     if (!_map.TryGetValue(path, out item))
