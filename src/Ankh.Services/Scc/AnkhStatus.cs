@@ -123,8 +123,10 @@ namespace Ankh
 
                 if (_localContentStatus != SvnStatus.Normal)
                     return _localContentStatus;
-                else
+                else if (_localPropertyStatus != SvnStatus.None)
                     return _localPropertyStatus;
+                else
+                    return _localContentStatus;
             }
         }
 
