@@ -61,10 +61,8 @@ namespace Ankh.VSPackage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AnkhSvn - The open source Subversion plugin for Visual Studio
-        /// * AnkhSvn {0}
-        /// * Subversion {1}
-        /// * SharpSvn {2}.
+        ///   Looks up a localized string similar to AnkhSVN - Subversion Support for Visual Studio {0}
+        /// * Build on Subversion {1} via SharpSvn {2}.
         /// </summary>
         internal static string AboutDetails {
             get {
@@ -82,11 +80,20 @@ namespace Ankh.VSPackage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AnkhSvn - The open source Subversion plugin for Visual Studio.
+        ///   Looks up a localized string similar to AnkhSVN - Subversion Support for Visual Studio.
         /// </summary>
         internal static string AboutTitleName {
             get {
                 return ResourceManager.GetString("AboutTitleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AnkhSVN - Subversion Support.
+        /// </summary>
+        internal static string AboutTitleNameShort {
+            get {
+                return ResourceManager.GetString("AboutTitleNameShort", resourceCulture);
             }
         }
         
