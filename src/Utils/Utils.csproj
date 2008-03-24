@@ -74,14 +74,9 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.mshtml">
-      <Name>Microsoft.mshtml</Name>
-      <HintPath>D:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
-      <AssemblyFolderKey>hklm\primary interop assemblies</AssemblyFolderKey>
-    </Reference>
-    <Reference Include="stdole">
-      <Name>stdole</Name>
-      <HintPath>..\lib\stdole.dll</HintPath>
+    <Reference Include="SharpSvn, Version=1.4999.497.29991, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -111,33 +106,6 @@
     </Compile>
     <Compile Include="FileUtils.cs" />
     <Compile Include="HashUtils.cs" />
-    <Compile Include="Ole\ICustomDoc.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Ole\ICustomMethods.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Ole\IDocHostShowUI.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Ole\IDocHostUIHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Ole\IOleClientSite.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Ole\IOleDocumentSite.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Ole\IOleInPlaceSite.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Ole\IOleObject.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Ole\Site.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PathUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -148,7 +116,6 @@
     <Compile Include="RegistryUtils.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\IWorkingCopyOperations.cs" />
     <Compile Include="Timer.cs">
       <SubType>Code</SubType>
     </Compile>
