@@ -101,10 +101,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="$(ShellAssembly)" />
-    <Reference Include="Ankh.SHDocVw, Version=1.1.0.0, Culture=neutral, PublicKeyToken=64de3c7d1c18daba, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Ankh.SHDocVw.dll</HintPath>
-    </Reference>
     <Reference Include="EnvDTE">
       <Name>envdte</Name>
       <HintPath>..\lib\envdte.dll</HintPath>

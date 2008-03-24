@@ -46,10 +46,10 @@ namespace Ankh.Commands
                     continue;
                 else if (item.IsVersionable)
                 {
-                    if (paths.ContainsKey(item.Path))
+                    if (paths.ContainsKey(item.FullPath))
                         continue;
 
-                    paths.Add(item.Path, item);
+                    paths.Add(item.FullPath, item);
                     resources.Add(item);
                 }
             }
@@ -79,7 +79,7 @@ namespace Ankh.Commands
 
                 foreach (SvnItem item in resources)
                 {
-                    client.Add(item.Path, args);
+                    client.Add(item.FullPath, args);
                 }
                 //context.Selection.RefreshSelection();
             }
