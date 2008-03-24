@@ -30,7 +30,8 @@ namespace Ankh.Scc
         /// <summary>
         /// Marks the specified path dirty
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">A file of directory</param>
+        /// <remarks>If the file is in the cache</remarks>
         void MarkDirty(string path);
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace Ankh.Scc
         /// Called from <see cref="SvnItem.Refresh()"/>
         /// </summary>
         /// <param name="item">The item.</param>
-        /// <param name="svnNodeKind">Kind of the SVN node.</param>
-        void RefreshMe(SvnItem item, SvnNodeKind svnNodeKind);
+        /// <param name="diskNodeKind">The on-disk node kind if it is known to be correct.</param>
+        void RefreshItem(SvnItem item, SvnNodeKind diskNodeKind);
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using System.Collections;
-using Utils.Services;
+using Ankh.Scc;
 
 namespace Ankh.UI
 {

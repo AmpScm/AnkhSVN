@@ -112,17 +112,6 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual StatusCache StatusCache
-        {
-            get
-            {
-                if ( this.statusCache == null )
-                    this.statusCache = new StatusCache(null);
-
-                return this.statusCache;
-            }
-        }
-
         public virtual IUIShell UIShell
         {
             get
@@ -654,7 +643,6 @@ namespace Ankh.Tests
         public Configuration.AnkhConfig config;
         public _DTE dte;
         public SvnClient client;
-        public StatusCache statusCache;
         public IAnkhErrorHandler errorHandler;
         public OutputPaneWriter outputPane;
         public IUIShell uiShell;

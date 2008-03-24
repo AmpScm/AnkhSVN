@@ -140,7 +140,7 @@ namespace Ankh.WorkingCopyExplorer
 
         internal new void Refresh()
         {
-            _item.Refresh();
+            _item.MarkDirty();
         }
 
         public static FileSystemItem Create(IAnkhServiceProvider context, WorkingCopyExplorer explorer, SvnItem item)

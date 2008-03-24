@@ -145,7 +145,7 @@ namespace Ankh.Scc
                     pbstrTooltipText = Resources.ToolTipMustLock;
                     return VSConstants.S_OK;
                 }
-                else if(item.InConflict)
+                else if(item.IsConflicted)
                 {
                     pbstrTooltipText = Resources.ToolTipConflict;
                     return VSConstants.S_OK;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
-using Utils.Services;
+using Ankh.Scc;
 using System.Threading;
 using System.ComponentModel;
 

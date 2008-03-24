@@ -9,7 +9,7 @@ using System.Reflection;
 
 using Utils;
 using SharpSvn;
-using Utils.Services;
+using Ankh.Scc;
 using Ankh.Scc;
 
 namespace Ankh.WorkingCopyExplorer

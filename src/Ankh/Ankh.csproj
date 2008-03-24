@@ -325,7 +325,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusCache\AnkhDialogOwner.cs" />
     <Compile Include="StatusCache\AnkhSvnClientPool.cs" />
-    <Compile Include="StatusCache\StatusCache.cs" />
+    <Compile Include="StatusCache\DeletedFilesList.cs" />
+    <Compile Include="StatusCache\FileStatusCache.cs" />
     <Compile Include="StatusImageMapper.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
