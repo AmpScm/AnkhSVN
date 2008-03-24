@@ -8,10 +8,12 @@ using Ankh.Selection;
 using Ankh.Commands;
 using AnkhSvn.Ids;
 using Ankh.Scc.ProjectMap;
+using System.Diagnostics;
 
 namespace Ankh.Scc
 {
     [Command(AnkhCommand.MarkProjectDirty)]
+    [Command(AnkhCommand.MarkProjectRefresh)]
     public class MarkProjectDirty : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
@@ -20,8 +22,11 @@ namespace Ankh.Scc
 
         public void OnExecute(CommandEventArgs e)
         {
+            if (e.Argument == null)
+                return;
+
             // Mark Scc Glyphs dirty, to force reload of glyphs from StatusCache
-            IList<SvnProject> projects = e.Argument as IList<SvnProject>;
+            IEnumerable<SvnProject> projects = e.Argument as IEnumerable<SvnProject>;
 
             if (projects != null)
             {
@@ -31,11 +36,16 @@ namespace Ankh.Scc
 
             IList<string> files = e.Argument as IList<string>;
 
-            if(files != null)
-                MarkFilesDirty(e, files);            
+            if (files != null)
+            {
+                MarkFilesDirty(e, files);
+                return;
+            }
+
+            Trace.WriteLine("Ignored refresh command for wrong argument type");
         }
 
-        void MarkProjectsDirty(CommandEventArgs e, IList<SvnProject> projects)
+        void MarkProjectsDirty(CommandEventArgs e, IEnumerable<SvnProject> projects)
         {
             IProjectFileMapper mapper = e.Context.GetService<IProjectFileMapper>();
 
@@ -44,19 +54,13 @@ namespace Ankh.Scc
 
             foreach (SvnProject p in projects)
             {
-                SvnProject project = mapper.ResolveRawProject(p);
+                SvnProject project = mapper.ResolveRawProject(p);                
 
-                IVsSccProject2 scc = project.RawHandle as IVsSccProject2;
-
-                if (scc != null)
-                {
-                    // Mark all glyphs cached in a project dirty
-                    scc.SccGlyphChanged(0, null, null, null);
-                }
+                RefreshProject(e, project);                
             }
         }
 
-        void MarkFilesDirty(CommandEventArgs e, IList<string> files)
+        void MarkFilesDirty(CommandEventArgs e, IEnumerable<string> files)
         {
             IProjectFileMapper mapper = e.Context.GetService<IProjectFileMapper>();
 
@@ -67,14 +71,30 @@ namespace Ankh.Scc
             {
                 SvnProject project = mapper.ResolveRawProject(p);
 
-                IVsSccProject2 scc = project.RawHandle as IVsSccProject2;
+                RefreshProject(e, project);
+            }
+        }
 
-                if (scc != null)
+        private void RefreshProject(CommandEventArgs e, SvnProject project)
+        {
+            IVsSccProject2 scc = project.RawHandle;
+
+            if (scc == null)
+                return;
+
+            if (e.Command == AnkhCommand.MarkProjectRefresh)
+            {
+                AnkhSccProvider provider = e.Context.GetService<AnkhSccProvider>();
+
+                if (provider != null)
                 {
-                    // Mark all glyphs cached in a project dirty
-                    scc.SccGlyphChanged(0, null, null, null);
+                    provider.RefreshProject(project.RawHandle);
+                    return;
                 }
             }
-        }        
+            
+            // Mark all glyphs cached in a project dirty
+            scc.SccGlyphChanged(0, null, null, null);
+        }
     }
 }

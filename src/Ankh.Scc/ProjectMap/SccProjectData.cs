@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using AnkhSvn.Ids;
 using Microsoft.VisualStudio;
 using Ankh.Selection;
+using System.Diagnostics;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -18,6 +19,8 @@ namespace Ankh.Scc.ProjectMap
         SolutionFolder,
         WebSite,
     }
+
+    [DebuggerDisplay("Project={ProjectFile}, ProjectType={_projectType}")]
     class SccProjectData
     {
         readonly IAnkhServiceProvider _context;
@@ -169,7 +172,7 @@ namespace Ankh.Scc.ProjectMap
             _inLoad = true;
             try
             {
-                OnClose();
+                Debug.Assert(_files.Count == 0);
                 _loaded = true;
 
                 ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
@@ -181,11 +184,19 @@ namespace Ankh.Scc.ProjectMap
                         AddPath(file);
                     }
                 }
+
+                _project.SccGlyphChanged(0, null, null, null);
             }
             finally
             {
                 _inLoad = false;
             }
+        }
+
+        internal void Reload()
+        {
+            OnClose();
+            Load();
         }
 
         internal bool TrackProjectChanges()

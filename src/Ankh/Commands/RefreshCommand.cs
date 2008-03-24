@@ -24,7 +24,7 @@ namespace Ankh.Commands
                 }
                 IProjectNotifier pn = e.Context.GetService<IProjectNotifier>();
                 if(pn != null)
-                    pn.MarkDirty(e.Selection.GetOwnerProjects(true));
+                    pn.MarkFullRefresh(e.Selection.GetOwnerProjects(true));
             }
         }
     }

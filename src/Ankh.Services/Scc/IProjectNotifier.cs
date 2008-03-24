@@ -9,5 +9,8 @@ namespace Ankh.Scc
     {
         void MarkDirty(SvnProject project);
         void MarkDirty(IEnumerable<SvnProject> project);
+
+        void MarkFullRefresh(SvnProject project);
+        void MarkFullRefresh(IEnumerable<SvnProject> project);
     }
 }

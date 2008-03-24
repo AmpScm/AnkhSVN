@@ -18,7 +18,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        IEnumerable<SvnProject> GetAllProjectsContaining(ICollection<string> paths);
+        IEnumerable<SvnProject> GetAllProjectsContaining(IEnumerable<string> paths);
 
         /// <summary>
         /// Gets a list of all files contained within <paramref name="project"/>

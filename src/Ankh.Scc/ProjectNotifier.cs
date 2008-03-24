@@ -22,23 +22,63 @@ namespace Ankh.Scc
             _context = context;
         }
 
-        public void MarkDirty(Ankh.Selection.SvnProject project)
+        IAnkhCommandService _commandService;
+        /// <summary>
+        /// Gets the command service.
+        /// </summary>
+        /// <value>The command service.</value>
+        IAnkhCommandService CommandService
         {
-            // TODO: We could probably group the projects and only post the command once
+            get { return _commandService ?? (_commandService = _context.GetService<IAnkhCommandService>()); }
+        }
+
+        public void MarkDirty(SvnProject project)
+        {
+            if (project == null)
+                throw new ArgumentNullException("project");
+
             MarkDirty(new SvnProject[] { project });
         }
 
         public void MarkDirty(IEnumerable<SvnProject> projects)
         {
-            // TODO: We could probably group the projects and only post the command once
+            if (projects == null)
+                throw new ArgumentNullException("projects");
 
-            IAnkhCommandService cmd = _context.GetService<IAnkhCommandService>();
+            IAnkhCommandService cmd = CommandService;
 
             if (cmd == null)
                 return;
 
-            cmd.PostExecCommand(AnkhCommand.MarkProjectDirty, new List<SvnProject>(projects));
-        } 
+            // Don't pass an enumerator via a postexec.. It's context might not be valid after the call
+            IList<SvnProject> allProjects = (projects as IList<SvnProject>) ?? new List<SvnProject>(projects);
+
+            cmd.PostExecCommand(AnkhCommand.MarkProjectDirty, allProjects);
+        }
+
+        public void MarkFullRefresh(SvnProject project)
+        {
+            if(project == null)
+                throw new ArgumentNullException("project");
+
+            MarkFullRefresh(new SvnProject[] { project });
+        }
+
+        public void MarkFullRefresh(IEnumerable<SvnProject> projects)
+        {
+            if (projects == null)
+                throw new ArgumentNullException("projects");
+
+            IAnkhCommandService cmd = CommandService;
+
+            if (cmd == null)
+                return;
+
+            // Don't pass an enumerator via a postexec.. It's context might not be valid after the call
+            IList<SvnProject> allProjects = (projects as IList<SvnProject>) ?? new List<SvnProject>(projects);
+
+            cmd.PostExecCommand(AnkhCommand.MarkProjectRefresh, allProjects);
+        }
 
         public void ScheduleStatusUpdate(string path)
         {

@@ -151,10 +151,9 @@ namespace Ankh.Scc
 
             data.IsManaged = (pszProvider == AnkhId.SubversionSccName);
             data.IsRegistered = true;
-            data.Load();
 
-            if (!_registeredOnce)
-                RegisterAsSccProvider();
+            _syncMap = true;
+            RegisterForSccCleanup();
 
             return VSConstants.S_OK;
         }
