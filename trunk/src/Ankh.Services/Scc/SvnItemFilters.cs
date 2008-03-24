@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
+using System.Collections.ObjectModel;
 
 namespace Ankh.Scc
 {
@@ -89,7 +91,7 @@ namespace Ankh.Scc
 
         public static bool NotDeletedFilter(SvnItem item)
         {
-            return !item.IsDeleted && item.Exists;
+            return !item.IsDeleteScheduled && item.Exists;
         }
 
         public static bool NoFilter(SvnItem item)
@@ -97,5 +99,23 @@ namespace Ankh.Scc
             return true;
         }
 
+        /// <summary>
+        /// Filters a list of SvnItem instances using the provided callback.
+        /// </summary>
+        /// <param name="items">An IList containing SvnItem instances.</param>
+        /// <param name="callback">A callback to be used to determine whether 
+        /// an item should be included in the returned list.</param>
+        /// <returns>A new IList of SvnItem instances.</returns>
+        public static Collection<SvnItem> Filter(IList items, Predicate<SvnItem> callback)
+        {
+            List<SvnItem> list = new List<SvnItem>(items.Count);
+            foreach (SvnItem item in items)
+            {
+                if (callback(item))
+                    list.Add(item);
+            }
+
+            return new Collection<SvnItem>(list);
+        }
     }
 }

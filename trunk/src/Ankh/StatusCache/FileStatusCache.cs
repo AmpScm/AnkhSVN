@@ -60,7 +60,7 @@ namespace Ankh.StatusCache
                     Debug.Assert(false, "RefreshPath did not deliver up to date information", 
                         "The RefreshPath public api promises delivering up to date data, but none was received");
 
-                    updateItem.RefreshTo(AnkhStatus.None);
+                    updateItem.RefreshTo(item.Exists ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting);
                 }
             }
 
@@ -194,7 +194,7 @@ namespace Ankh.StatusCache
                         if (!_map.ContainsKey(walkPath))
                         {
                             // Mark it as existing if we are sure 
-                            _map[walkPath] = CreateItem(walkPath, AnkhStatus.None,
+                            _map[walkPath] = CreateItem(walkPath, AnkhStatus.NotVersioned,
                                 dir.Exists ? SvnNodeKind.Directory : SvnNodeKind.None);
                         }
 
@@ -204,7 +204,7 @@ namespace Ankh.StatusCache
                             foreach (FileInfo file in dir.GetFiles())
                             {
                                 if (!_map.ContainsKey(file.FullName))
-                                    _map[file.FullName] = CreateItem(file.FullName, AnkhStatus.None, SvnNodeKind.File);
+                                    _map[file.FullName] = CreateItem(file.FullName, AnkhStatus.NotVersioned, SvnNodeKind.File);
                             }
                         }
                     }
@@ -212,7 +212,7 @@ namespace Ankh.StatusCache
                     if (!_map.ContainsKey(path))
                     {
                         // Ok: We have a non existing file/directory; just create a nonexisting one
-                        _map[path] = CreateItem(path, AnkhStatus.None);
+                        _map[path] = CreateItem(path, AnkhStatus.NotExisting);
                     }
                 }
                 else
@@ -223,7 +223,7 @@ namespace Ankh.StatusCache
                     if (!updateItem.IsStatusClean())
                     {
                         // We did not; so the file does not exist!
-                        updateItem.RefreshTo(AnkhStatus.None);
+                        updateItem.RefreshTo(pathItem.Exists ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting);
                     }
                 }
             }
@@ -346,9 +346,11 @@ namespace Ankh.StatusCache
 
                     if (!_map.TryGetValue(path, out item))
                     {
-                        string truePath = SvnTools.GetTruePath(path) ?? path;
+                        string truePath = SvnTools.GetTruePath(path);
 
-                        _map[path] = item = new SvnItem(_context, truePath, AnkhStatus.None, SvnNodeKind.Unknown);
+                        // Just create an item based on his name. Delay the svn calls as long as we can
+                        _map[path] = item = new SvnItem(_context, truePath ?? path, 
+                            (truePath != null) ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting, SvnNodeKind.Unknown);
 
                         item.MarkDirty(); // Load status on first access
                     }

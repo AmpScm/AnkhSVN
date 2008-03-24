@@ -42,10 +42,11 @@ namespace Ankh
         AnkhStatus _status;
         string _name;
         XBool _statusDirty; // updating, dirty, dirty
-        XBool _isFile; // unknown, file, directory  // On disk status; Can conflict with SVN type!
-        XBool _exists; // unknown, Yes, No
+        XBool _isFile; // Unknown, file, directory  // On disk status; Can conflict with SVN type!
+        XBool _exists; // Unknown, Yes, No
         XBool _readOnly; // Unknown, Yes, No
-        XBool _mustLock; // unknown, Yes, No
+        XBool _mustLock; // Unknown, Yes, No
+        XBool _isVersionable; // Unknown, Yes, No
         bool _ticked;
 
         public SvnItem(IAnkhServiceProvider context, string fullPath, AnkhStatus status)            
@@ -95,17 +96,26 @@ namespace Ankh
 
             switch (status.LocalContentStatus)
             {
+                case SvnStatus.NotVersioned: // Node exists
                 case SvnStatus.Normal:
+                case SvnStatus.Added:
+                case SvnStatus.Replaced:
                 case SvnStatus.Modified:
                 case SvnStatus.Ignored:
-                case SvnStatus.Replaced:
+                case SvnStatus.Conflicted:
+
+                case SvnStatus.Obstructed: // node exists but is of the wrong type
+
                     _exists = XBool.True; // SVN checked this for us
                     break;
-
-                case SvnStatus.Obstructed:
-                    _exists = XBool.True; // node exists but is of the wrong type
-                    return; // Handle as we go
-                    
+                case SvnStatus.None:
+                case SvnStatus.Missing:
+                    _exists = XBool.False;
+                    break;
+                default:
+                // case SvnStatus.Deleted: // The file is scheduled for delete; but can exist locally
+                    break;
+                
             }
 
             // In the obstructed case the NodeKind is incorrect!
@@ -139,7 +149,8 @@ namespace Ankh
             _isFile = lead._isFile;
             _exists = lead._exists;
             _readOnly = lead._readOnly;
-            _mustLock = lead._mustLock; 
+            _mustLock = lead._mustLock;
+            _isVersionable = lead._isVersionable;
         }
 
         public void MarkDirty()
@@ -151,6 +162,7 @@ namespace Ankh
             _exists = XBool.None;
             _readOnly = XBool.None;
             _mustLock = XBool.None;
+            _isVersionable = XBool.None;
         }
 
         bool ISvnItemUpdate.IsStatusClean()
@@ -189,6 +201,7 @@ namespace Ankh
                 _exists = XBool.False; // Set all checks to false
                 _readOnly = XBool.False;
                 _mustLock = XBool.False;
+                _isVersionable = XBool.False;
                 return;
             }
 
@@ -349,15 +362,22 @@ namespace Ankh
         {
             get
             {
-                if((_statusDirty == XBool.False) && GetIsVersioned(_status))
-                    return true; // File is versioned; sure it is versionable too
-                else
-                    return Exists && SvnTools.IsBelowManagedPath(FullPath);
+                if (_isVersionable == XBool.None)
+                {
+                    if ((_statusDirty == XBool.False) && GetIsVersioned(_status))
+                        _isVersionable = XBool.True; // File is versioned; sure it is versionable too
+                    else if (Exists && SvnTools.IsBelowManagedPath(FullPath))
+                        _isVersionable = XBool.True;
+                    else
+                        _isVersionable = XBool.False;
+                }
+
+                return _isVersionable == XBool.True;
             }
         }        
 
         /// <summary>
-        /// Whether the item is read only on disk.
+        /// Gets a boolean indicating whether the <see cref="SvnItem"/> specifies a readonly file
         /// </summary>
         public bool IsReadOnly
         {
@@ -370,6 +390,9 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Gets a boolean indicating whether the <see cref="SvnItem"/> exists on disk
+        /// </summary>
         public bool Exists
         {
             get
@@ -381,6 +404,10 @@ namespace Ankh
             }
         }
  
+        /// <summary>
+        /// Gets a boolean indicating whether you must lock the <see cref="SvnItem"/> before editting
+        /// </summary>
+        /// <remarks>Assumes a mustlock file is readonly</remarks>
         public bool ReadOnlyMustLock
         {
             get
@@ -408,7 +435,7 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Whether the item is locked
+        /// Gets a boolean indicating whether the <see cref="SvnItem"/> is locally locked
         /// </summary>
         /// <returns></returns>
         public bool IsLocked
@@ -421,16 +448,22 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Gets a boolean indicating whether the <see cref="SvnItem"/> is obstructed by an invalid node
+        /// </summary>
         public bool IsObstructed
         {
             get
             {
                 EnsureClean();
                 
-                return _status.LocalContentStatus == SvnStatus.Conflicted;
+                return _status.LocalContentStatus == SvnStatus.Obstructed;
             }
         }
 
+        /// <summary>
+        /// Gets a boolean indicating whether the <see cref="SvnItem"/> is in conflict state
+        /// </summary>
         public bool IsConflicted
         {
             get
@@ -441,7 +474,10 @@ namespace Ankh
             }
         }
 
-        public bool IsDeleted
+        /// <summary>
+        /// Gets a boolean indicating whether the <see cref="SvnItem"/> is scheduled for delete
+        /// </summary>
+        public bool IsDeleteScheduled
         {
             get
             {
@@ -451,6 +487,9 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Gets a boolean indicating whether the <see cref="SvnItem"/> is explicitly ignored
+        /// </summary>
         public bool IsIgnored
         {
             get
@@ -461,6 +500,10 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Gets the full path
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return FullPath;
@@ -486,26 +529,7 @@ namespace Ankh
             }
 
             return paths;
-        }
-
-        /// <summary>
-        /// Filters a list of SvnItem instances using the provided callback.
-        /// </summary>
-        /// <param name="items">An IList containing SvnItem instances.</param>
-        /// <param name="callback">A callback to be used to determine whether 
-        /// an item should be included in the returned list.</param>
-        /// <returns>A new IList of SvnItem instances.</returns>
-        public static IList Filter(IList items, Predicate<SvnItem> callback)
-        {
-            ArrayList list = new ArrayList(items.Count);
-            foreach (SvnItem item in items)
-            {
-                if (callback(item))
-                    list.Add(item);
-            }
-
-            return list;
-        }               
+        }        
 
         void EnsureClean()
         {

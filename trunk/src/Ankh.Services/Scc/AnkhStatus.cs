@@ -65,12 +65,18 @@ namespace Ankh
         #region Static instances
         readonly static AnkhStatus _unversioned = new AnkhStatus(SvnStatus.NotVersioned);
         readonly static AnkhStatus _none = new AnkhStatus(SvnStatus.None);
-        public static AnkhStatus Unversioned
+        /// <summary>
+        /// Default status for nodes which do exist but are not managed
+        /// </summary>
+        public static AnkhStatus NotVersioned
         {
             get { return _unversioned; }
         }
 
-        public static AnkhStatus None
+        /// <summary>
+        /// Default status for nodes which don't exist and are not managed
+        /// </summary>
+        public static AnkhStatus NotExisting
         {
             get { return _none; }
         }
