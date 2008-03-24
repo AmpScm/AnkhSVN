@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
 using Utils.Win32;
-using SH = SHDocVw;
 
 using SharpSvn;
 using Ankh.ContextServices;

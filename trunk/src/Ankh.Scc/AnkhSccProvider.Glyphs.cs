@@ -7,28 +7,28 @@ using SharpSvn;
 
 namespace Ankh.Scc
 {
-    enum SccStatus 
+    enum SccStatus
     {
-       SCC_STATUS_INVALID          = -1,
-       SCC_STATUS_NOTCONTROLLED    = 0x0000,
-       SCC_STATUS_CONTROLLED       = 0x0001,
-       SCC_STATUS_CHECKEDOUT       = 0x0002,
-       SCC_STATUS_OUTOTHER         = 0x0004,
-       SCC_STATUS_OUTEXCLUSIVE     = 0x0008,
-       SCC_STATUS_OUTMULTIPLE      = 0x0010,
-       SCC_STATUS_OUTOFDATE        = 0x0020,
-       SCC_STATUS_DELETED          = 0x0040,
-       SCC_STATUS_LOCKED           = 0x0080,
-       SCC_STATUS_MERGED           = 0x0100,
-       SCC_STATUS_SHARED           = 0x0200,
-       SCC_STATUS_PINNED           = 0x0400,
-       SCC_STATUS_MODIFIED         = 0x0800,
-       SCC_STATUS_OUTBYUSER        = 0x1000,
-       SCC_STATUS_NOMERGE          = 0x2000,
-       SCC_STATUS_RESERVED_1       = 0x4000,
-       SCC_STATUS_RESERVED_2       = 0x8000
+        SCC_STATUS_INVALID = -1,
+        SCC_STATUS_NOTCONTROLLED = 0x0000,
+        SCC_STATUS_CONTROLLED = 0x0001,
+        SCC_STATUS_CHECKEDOUT = 0x0002,
+        SCC_STATUS_OUTOTHER = 0x0004,
+        SCC_STATUS_OUTEXCLUSIVE = 0x0008,
+        SCC_STATUS_OUTMULTIPLE = 0x0010,
+        SCC_STATUS_OUTOFDATE = 0x0020,
+        SCC_STATUS_DELETED = 0x0040,
+        SCC_STATUS_LOCKED = 0x0080,
+        SCC_STATUS_MERGED = 0x0100,
+        SCC_STATUS_SHARED = 0x0200,
+        SCC_STATUS_PINNED = 0x0400,
+        SCC_STATUS_MODIFIED = 0x0800,
+        SCC_STATUS_OUTBYUSER = 0x1000,
+        SCC_STATUS_NOMERGE = 0x2000,
+        SCC_STATUS_RESERVED_1 = 0x4000,
+        SCC_STATUS_RESERVED_2 = 0x8000
     }
-    
+
     partial class AnkhSccProvider : IVsSccManager2, IVsSccManagerTooltip, IVsSccGlyphs
     {
         IStatusImageMapper _statusImages;
@@ -132,37 +132,37 @@ namespace Ankh.Scc
             ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
             pbstrTooltipText = null;
 
-            if((walker == null) || (cache == null))
+            if ((walker == null) || (cache == null))
                 return VSConstants.S_OK;
-            
-            foreach(string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.SpecialFiles))
+
+            foreach (string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.SpecialFiles))
             {
                 SvnItem item = cache[file];
 
-                if(item.IsConflicted)
+                if (item.IsConflicted)
                 {
                     pbstrTooltipText = Resources.ToolTipConflict;
                     return VSConstants.S_OK;
                 }
-				else if (item.IsObstructed)
-				{
-					pbstrTooltipText = item.IsFile ? Resources.ToolTipFileObstructed : Resources.ToolTipDirObstructed;
-				}
-				else if(item.ReadOnlyMustLock)
+                else if (item.IsObstructed)
+                {
+                    pbstrTooltipText = item.IsFile ? Resources.ToolTipFileObstructed : Resources.ToolTipDirObstructed;
+                }
+                else if (item.ReadOnlyMustLock)
                 {
                     pbstrTooltipText = Resources.ToolTipMustLock;
                     return VSConstants.S_OK;
                 }
-				else if (!item.Exists)
-				{
-					pbstrTooltipText = Resources.ToolTipDoesNotExist;
-					return VSConstants.S_OK;
-				}
-				else if (item.IsLocked)
-				{
-					pbstrTooltipText = Resources.ToolTipLocked;
-					return VSConstants.S_OK;
-				}
+                else if (!item.Exists)
+                {
+                    pbstrTooltipText = Resources.ToolTipDoesNotExist;
+                    return VSConstants.S_OK;
+                }
+                else if (item.IsLocked)
+                {
+                    pbstrTooltipText = Resources.ToolTipLocked;
+                    return VSConstants.S_OK;
+                }
             }
 
             return VSConstants.S_OK;
@@ -175,6 +175,6 @@ namespace Ankh.Scc
             this.baseIndex = BaseIndex;
 
             return VSConstants.S_OK;
-        }        
+        }
     }
 }

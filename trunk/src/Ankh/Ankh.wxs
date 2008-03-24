@@ -3,7 +3,6 @@
 		<ComponentGroup Id="Ankh">
       <ComponentGroupRef Id="Ankh.Ids" />
       <ComponentGroupRef Id="Ankh.Services" />			
-			<ComponentGroupRef Id="Ankh.SHDocVw" />
       <ComponentGroupRef Id="Ankh.Configuration"/>
 			<ComponentGroupRef Id="Utils" />
 			<ComponentGroupRef Id="Microsoft.VisualStudio.OLE.Interop"/>

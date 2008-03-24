@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<!-- ShDocVw interop -->
-	<Fragment>
-		<ComponentGroup Id="Ankh.SHDocVw">
-			<ComponentRef Id="C_Ankh.SHDocVw.dll"/>
-		</ComponentGroup>
-		<DirectoryRef Id="APP_bin" FileSource="$(var.SolutionDir)lib\">
-			<Component Id="C_Ankh.SHDocVw.dll" Guid="4BF87A2B-D2E1-4432-A4C7-DDB206DEB96A">
-				<File Id="CF_Ankh.SHDocVw.dll" Name="Ankh.SHDocVw.dll" KeyPath="yes" Vital="yes" Checksum="yes" />
-			</Component>
-		</DirectoryRef>
-	</Fragment>
 	<!-- Visual Studio Ole Interop -->
 	<Fragment>
 		<ComponentGroup Id="Microsoft.VisualStudio.OLE.Interop">
