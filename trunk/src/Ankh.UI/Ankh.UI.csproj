@@ -95,7 +95,7 @@
   <PropertyGroup>
     <ShellAssembly Condition="'$(VisualStudioVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
     <ShellAssembly Condition="'$(VisualStudioVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
-    <VSLangAssembly Condition="'$(VisualStudioVersion)' == '8.0'">Microsoft.VisualStudio.Package.LanguageService.8.0</VSLangAssembly>
+    <VSLangAssembly Condition="'$(VisualStudioVersion)' == '8.0'">Microsoft.VisualStudio.Package.LanguageService</VSLangAssembly>
     <VSLangAssembly Condition="'$(VisualStudioVersion)' == '9.0'">Microsoft.VisualStudio.Package.LanguageService.9.0</VSLangAssembly>
     <LogMessageFile Condition="'$(VisualStudioVersion)' == '8.0'">PendingChanges\LogMessageLanguageService.VS2005.cs</LogMessageFile>
     <LogMessageFile Condition="'$(VisualStudioVersion)' == '9.0'">PendingChanges\LogMessageLanguageService.VS2008.cs</LogMessageFile>
@@ -194,7 +194,6 @@
       <DependentUpon>CommitDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigurationDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConfigurationDialog.Designer.cs">
       <DependentUpon>ConfigurationDialog.cs</DependentUpon>
