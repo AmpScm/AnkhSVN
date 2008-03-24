@@ -118,16 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutDetails" xml:space="preserve">
-    <value>AnkhSvn - The open source Subversion plugin for Visual Studio
- * AnkhSvn {0}
- * Subversion {1}
- * SharpSvn {2}</value>
+    <value>AnkhSVN - Subversion Support for Visual Studio {0}
+ * Build on Subversion {1} via SharpSvn {2}</value>
   </data>
   <data name="AboutProductId" xml:space="preserve">
     <value>{0}</value>
   </data>
   <data name="AboutTitleName" xml:space="preserve">
-    <value>AnkhSvn - The open source Subversion plugin for Visual Studio</value>
+    <value>AnkhSVN - Subversion Support for Visual Studio</value>
+  </data>
+  <data name="AboutTitleNameShort" xml:space="preserve">
+    <value>AnkhSVN - Subversion Support</value>
   </data>
   <data name="AddToSubversionCommandName" xml:space="preserve">
     <value>Add to Sub&amp;version</value>

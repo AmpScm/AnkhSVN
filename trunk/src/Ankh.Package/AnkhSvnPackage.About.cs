@@ -11,9 +11,7 @@ namespace Ankh.VSPackage
 {
     // This attribute is used to register the informations needed to show the this package
     // in the Help/About dialog of Visual Studio.
-    [InstalledProductRegistration(true, "#110", "#112", "2.0", 
-        IconResourceID = 400,
-        LanguageIndependentName="AnkhSVN")]
+    [InstalledProductRegistration(true, null, null, null)]
     public partial class AnkhSvnPackage : IVsInstalledProduct
     {
         #region IVsInstalledProduct Members
@@ -32,7 +30,16 @@ namespace Ankh.VSPackage
 
         public int OfficialName(out string pbstrName)
         {
-            pbstrName = Resources.AboutTitleName;
+            if (InCommandLineMode)
+            {
+                // We are running in /setup. The text is cached for the about box
+                pbstrName = Resources.AboutTitleNameShort;
+            }
+            else
+            {
+                // We are running with full UI. Probably used for the about box
+                pbstrName = Resources.AboutTitleName;
+            }
             return VSConstants.S_OK;
         }
 
