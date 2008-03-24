@@ -18,7 +18,7 @@ namespace Ankh
     /// <summary>
     /// Encapsulates error handling functionality.
     /// </summary>
-    public class ErrorHandler : IAnkhErrorHandler
+    class ErrorHandler : IAnkhErrorHandler
     {
         public ErrorHandler(IAnkhServiceProvider context )
         {
