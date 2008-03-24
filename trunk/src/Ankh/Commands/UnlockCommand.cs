@@ -58,6 +58,6 @@ namespace Ankh.Commands
             e.Client.Unlock(paths, args);
         }
 
-        private PathSelectorInfo info;
+        private PathSelectorInfo info=null;
 	}
 }

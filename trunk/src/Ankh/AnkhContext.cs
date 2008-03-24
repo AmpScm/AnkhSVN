@@ -14,7 +14,6 @@ using IServiceProvider = System.IServiceProvider;
 using Ankh.Selection;
 using Ankh.EventSinks;
 using System.Collections.Generic;
-using Ankh.Scc;
 using Ankh.VS;
 using Ankh.ContextServices;
 

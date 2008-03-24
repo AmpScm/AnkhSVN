@@ -276,13 +276,6 @@ namespace Ankh
             get { return IsDirectory ? SvnNodeKind.Directory : SvnNodeKind.File; }
         }
 
-
-        [Obsolete("Please use MarkDirty instead")]
-        public void Refresh()
-        {
-            RefreshMe();
-        }
-
         void RefreshMe()
         {
             _statusDirty = XBool.None;

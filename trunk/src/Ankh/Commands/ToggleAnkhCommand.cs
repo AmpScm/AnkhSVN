@@ -4,7 +4,6 @@ using System.IO;
 using Ankh.Scc;
 using AnkhSvn.Ids;
 using Ankh.Selection;
-using Ankh.Scc;
 
 namespace Ankh.Commands
 {

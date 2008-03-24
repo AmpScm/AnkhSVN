@@ -105,7 +105,7 @@ namespace Ankh.Commands
             e.Enabled = false;
         }
         
-        private LockDialogInfo info;
-        private ArrayList lockFailedFiles;
+        private LockDialogInfo info = null;
+        private ArrayList lockFailedFiles = null;
     }
 }
