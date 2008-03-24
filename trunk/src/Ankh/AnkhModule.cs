@@ -5,9 +5,9 @@ using Ankh.Scc;
 using Ankh.UI;
 using Ankh.Extenders;
 using Ankh.ContextServices;
-using Utils.Services;
 using Ankh.Commands;
 using Ankh.Configuration;
+using Ankh.StatusCache;
 
 namespace Ankh
 {
@@ -39,7 +39,7 @@ namespace Ankh
 
             // TODO: Register services
             if(null == Container.GetService(typeof(IFileStatusCache)))
-                Container.AddService(typeof(IFileStatusCache), new StatusCache(Context));
+                Container.AddService(typeof(IFileStatusCache), new FileStatusCache(Context));
             Container.AddService(typeof(IStatusImageMapper), new StatusImageMapper(Context));
             Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
 

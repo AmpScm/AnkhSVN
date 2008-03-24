@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Diagnostics;
+using SharpSvn;
 
 namespace Utils
 {
@@ -15,32 +17,8 @@ namespace Utils
         /// <returns></returns>
         public static string NormalizePath(string path)
         {
-            return NormalizePath(path, Environment.CurrentDirectory);
+            return SvnTools.GetNormalizedFullPath(path);
         }
-
-        /// <summary>
-        /// Normalizes the path to standard form
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <param name="basepath">The basepath.</param>
-        /// <returns></returns>
-        public static string NormalizePath(string path, string basepath)
-        {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
-            else if (string.IsNullOrEmpty(basepath))
-                throw new ArgumentNullException("basepath");
-
-            string normPath = path.Replace('/', '\\');
-
-            if (!IsPathAbsolute(normPath))
-            {
-                normPath = Path.GetFullPath(Path.Combine(basepath, path));
-            }
-
-            return normPath;
-        }
-
 
         /// <summary>
         /// Determines whether path is in the tree under directory.
@@ -147,7 +125,7 @@ namespace Utils
 
         public static bool AreEqual(string path1, string path2)
         {
-            return string.Equals(NormalizePath(path1), NormalizePath(path2), StringComparison.OrdinalIgnoreCase);
+            return string.Equals(SvnTools.GetNormalizedFullPath(path1), SvnTools.GetNormalizedFullPath(path2), StringComparison.OrdinalIgnoreCase);
         }
     }
 }

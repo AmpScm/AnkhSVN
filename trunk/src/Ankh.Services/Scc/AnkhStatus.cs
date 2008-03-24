@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
+using System.Diagnostics;
 
 namespace Ankh
 {
+    [DebuggerDisplay("Content={LocalContentStatus}, Property={LocalPropertyStatus}, Path={FullPath}")]
     public sealed class AnkhStatus
     {
         readonly SvnNodeKind _nodeKind;        
@@ -103,9 +105,23 @@ namespace Ankh
         {
             get
             {
-                if (_localPropertyStatus == SvnStatus.Conflicted) // Conflict has highest priority
-                    return SvnStatus.Conflicted;
-                else if (_localContentStatus != SvnStatus.Normal)
+                switch(_localContentStatus)
+                {
+                    // High priority statuses on the content
+                    case SvnStatus.Obstructed:
+                    case SvnStatus.Missing:
+                    case SvnStatus.Incomplete: 
+                        return _localContentStatus;
+                }
+
+                switch(_localPropertyStatus)
+                {
+                    // High priority on the properties
+                    case SvnStatus.Conflicted:
+                        return _localPropertyStatus;
+                }
+
+                if (_localContentStatus != SvnStatus.Normal)
                     return _localContentStatus;
                 else
                     return _localPropertyStatus;

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-using Utils.Services;
+using Ankh.Scc;
 using AnkhSvn.Ids;
 using Ankh.Selection;
 using Ankh.Scc;

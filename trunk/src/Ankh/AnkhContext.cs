@@ -9,7 +9,7 @@ using Ankh.UI;
 using Ankh.UI.Services;
 using SharpSvn;
 using Utils;
-using Utils.Services;
+using Ankh.Scc;
 using IServiceProvider = System.IServiceProvider;
 using Ankh.Selection;
 using Ankh.EventSinks;

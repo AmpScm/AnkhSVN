@@ -51,7 +51,7 @@ namespace Ankh
         {
             if (item == null)
                 return AnkhGlyph.None;
-            else if (item.InConflict)
+            else if (item.IsConflicted)
                 return AnkhGlyph.InConflict;
             else if (item.ReadOnlyMustLock)
                 return AnkhGlyph.MustLock;
