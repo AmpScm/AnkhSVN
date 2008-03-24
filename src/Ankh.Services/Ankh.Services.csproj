@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="AnkhModule.cs" />
     <Compile Include="AnkhRuntime.cs" />
+    <Compile Include="AnkhService.cs" />
     <Compile Include="Commands\BaseCommandEventArgs.cs" />
     <Compile Include="Commands\CommandAttribute.cs" />
     <Compile Include="Commands\CommandEventArgs.cs" />
@@ -108,7 +109,7 @@
     <Content Include="Ankh.Services.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <DependencyDownload Include="SSvn-1.4999.497.zip">
+    <DependencyDownload Include="SSvn-1.4999.498.zip">
       <Url>http://qqn.nl/~bert/builds/sharpsvn/</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
