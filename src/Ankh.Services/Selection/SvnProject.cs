@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Selection
 {
@@ -17,14 +18,15 @@ namespace Ankh.Selection
     public class SvnProject
     {
         readonly string _fullPath;
-        readonly object _rawHandle;
+        readonly IVsSccProject2 _rawHandle;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SvnProjectItem"/> class.
         /// </summary>
         /// <param name="fullPath">The full path.</param>
         /// <param name="rawHandle">The raw handle.</param>
-        public SvnProject(string fullPath, object rawHandle)
+        [CLSCompliant(false)]
+        public SvnProject(string fullPath, IVsSccProject2 rawHandle)
         {
             if (string.IsNullOrEmpty(fullPath) && rawHandle == null)
                 throw new ArgumentNullException("fullPath");
@@ -38,7 +40,7 @@ namespace Ankh.Selection
 
             _fullPath = fullPath;
             _rawHandle = rawHandle;
-        }
+        }        
 
         /// <summary>
         /// Gets the full path.
@@ -53,7 +55,8 @@ namespace Ankh.Selection
         /// Gets the raw handle.
         /// </summary>
         /// <value>The raw handle.</value>
-        public object RawHandle
+        [CLSCompliant(false)]
+        public IVsSccProject2 RawHandle
         {
             get { return _rawHandle; }
         }
