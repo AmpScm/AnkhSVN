@@ -87,7 +87,7 @@ namespace Ankh.Configuration
 
         public void Dispose()
         {
-            if (_cookie != null)
+            if (_cookie != 0)
             {
                 IVsFileChangeEx changeMonitor = (IVsFileChangeEx)_context.GetService(typeof(SVsFileChangeEx));
 
