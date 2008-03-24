@@ -539,7 +539,7 @@ namespace Ankh
             }
 
             [DllImport("kernel32.dll", ExactSpelling=true)]
-            extern static uint GetFileAttributesW(string filename);
+            extern static uint GetFileAttributesW([MarshalAs(UnmanagedType.LPWStr)]string filename);
 
             public const uint INVALID_FILE_ATTRIBUTES = 0xFFFFFFFF;
             public const uint FILE_ATTRIBUTE_DIRECTORY = 0x10;
