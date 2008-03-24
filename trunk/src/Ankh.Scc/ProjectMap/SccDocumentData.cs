@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Commands;
 using AnkhSvn.Ids;
+using Ankh.Selection;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -118,11 +119,15 @@ namespace Ankh.Scc.ProjectMap
         }
 
         void UpdateGlyph()
-        {
+        {            
             IVsSccProject2 project = Hierarchy as IVsSccProject2;
 
             if (project != null)
-                project.SccGlyphChanged(0, null, null, null);
+            {
+                IProjectNotifier pn = _context.GetService<IProjectNotifier>();
+
+                pn.MarkDirty(new SvnProject(null, project));
+            }
         }
 
         internal void Dispose()

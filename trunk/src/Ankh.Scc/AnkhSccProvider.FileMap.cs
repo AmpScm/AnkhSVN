@@ -22,6 +22,7 @@ namespace Ankh.Scc
         //  - The persistance of history on project add/remove/rename actions
         //
         readonly Dictionary<string, SccProjectFile> _fileMap = new Dictionary<string, SccProjectFile>(StringComparer.OrdinalIgnoreCase);
+        bool _syncMap;
 
         /// <summary>
         /// Called when a file is added to a project
@@ -341,7 +342,7 @@ namespace Ankh.Scc
             }
         }
 
-        public IEnumerable<Ankh.Selection.SvnProject> GetAllProjectsContaining(ICollection<string> paths)
+        public IEnumerable<Ankh.Selection.SvnProject> GetAllProjectsContaining(IEnumerable<string> paths)
         {
             if (paths == null)
                 throw new ArgumentNullException("paths");
@@ -377,7 +378,7 @@ namespace Ankh.Scc
 
             project = ResolveRawProject(project);
 
-            IVsSccProject2 scc = project.RawHandle as IVsSccProject2;
+            IVsSccProject2 scc = project.RawHandle;
             SccProjectData data;
 
             if (scc == null || !_projectMap.TryGetValue(scc, out data))
@@ -398,7 +399,7 @@ namespace Ankh.Scc
             {
                 SvnProject project = ResolveRawProject(p);
 
-                IVsSccProject2 scc = project.RawHandle as IVsSccProject2;
+                IVsSccProject2 scc = project.RawHandle;
                 SccProjectData data;
 
                 if (scc == null || !_projectMap.TryGetValue(scc, out data))

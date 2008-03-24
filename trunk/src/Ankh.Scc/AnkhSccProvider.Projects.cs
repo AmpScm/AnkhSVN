@@ -219,7 +219,21 @@ namespace Ankh.Scc
                 }
             }
 
-            data.Load();
+            _syncMap = true;
+            RegisterForSccCleanup();
+        }
+
+        /// <summary>
+        /// Called when a project is explicitly refreshed
+        /// </summary>
+        /// <param name="project"></param>
+        internal void RefreshProject(IVsSccProject2 project)
+        {
+            SccProjectData data;
+            if(_projectMap.TryGetValue(project, out data))
+            {
+                data.Reload();
+            }
         }
 
         internal bool TrackProjectChanges(IVsProject project)
@@ -255,6 +269,14 @@ namespace Ankh.Scc
         internal void OnSccCleanup(CommandEventArgs e)
         {
             _registeredSccCleanup = false;
+
+            if (_syncMap)
+            {
+                _syncMap = false;
+
+                foreach (SccProjectData pd in _projectMap.Values)
+                    pd.Load();
+            }                
         }
 
         void RegisterForSccCleanup()
