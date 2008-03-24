@@ -134,32 +134,35 @@ namespace Ankh.Scc
 
             if((walker == null) || (cache == null))
                 return VSConstants.S_OK;
-
             
             foreach(string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.SpecialFiles))
             {
                 SvnItem item = cache[file];
 
-                if(item.ReadOnlyMustLock)
+                if(item.IsConflicted)
+                {
+                    pbstrTooltipText = Resources.ToolTipConflict;
+                    return VSConstants.S_OK;
+                }
+				else if (item.IsObstructed)
+				{
+					pbstrTooltipText = item.IsFile ? Resources.ToolTipFileObstructed : Resources.ToolTipDirObstructed;
+				}
+				else if(item.ReadOnlyMustLock)
                 {
                     pbstrTooltipText = Resources.ToolTipMustLock;
                     return VSConstants.S_OK;
                 }
-                else if(item.IsConflicted)
-                {
-                    pbstrTooltipText = Resources.ToolTipConflict;
-                    return VSConstants.S_OK;
-                }        
-                else if(!item.Exists)
-                {
-                    pbstrTooltipText = Resources.ToolTipDoesNotExist;
-                    return VSConstants.S_OK;
-                }
-                else if (item.IsLocked)
-                {
-                    pbstrTooltipText = Resources.ToolTipLocked;
-                    return VSConstants.S_OK;
-                }
+				else if (!item.Exists)
+				{
+					pbstrTooltipText = Resources.ToolTipDoesNotExist;
+					return VSConstants.S_OK;
+				}
+				else if (item.IsLocked)
+				{
+					pbstrTooltipText = Resources.ToolTipLocked;
+					return VSConstants.S_OK;
+				}
             }
 
             return VSConstants.S_OK;
