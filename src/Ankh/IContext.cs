@@ -41,7 +41,7 @@ namespace Ankh
         /// <summary>
         /// The repository explorer controller.
         /// </summary>
-		[Obsolete("Use .SelectionContext wherever possible")]
+		//[Obsolete("Use .SelectionContext wherever possible")]
         RepositoryExplorer.Controller RepositoryExplorer { get; }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Ankh
         /// </summary>
         IDisposable StartOperation( string description );
 
-        [Obsolete("Use .SelectionContext wherever possible")]
+        //[Obsolete("Use .SelectionContext wherever possible")]
         IWorkingCopyExplorer WorkingCopyExplorer
         {
             get;

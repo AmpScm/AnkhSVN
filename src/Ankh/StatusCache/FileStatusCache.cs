@@ -9,7 +9,6 @@ using SharpSvn;
 using Ankh.Scc;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using Ankh.Scc;
 
 namespace Ankh.StatusCache
 {
