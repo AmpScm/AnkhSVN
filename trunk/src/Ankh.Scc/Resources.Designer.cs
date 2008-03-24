@@ -88,11 +88,29 @@ namespace Ankh.Scc {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This directory does not exist on disk. Instead there is a file with the same name.
+        /// </summary>
+        internal static string ToolTipDirObstructed {
+            get {
+                return ResourceManager.GetString("ToolTipDirObstructed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This file does not exist on disk..
         /// </summary>
         internal static string ToolTipDoesNotExist {
             get {
                 return ResourceManager.GetString("ToolTipDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This file does not exist on disk. Instead there is a directory with the same name.
+        /// </summary>
+        internal static string ToolTipFileObstructed {
+            get {
+                return ResourceManager.GetString("ToolTipFileObstructed", resourceCulture);
             }
         }
         

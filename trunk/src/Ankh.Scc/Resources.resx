@@ -126,8 +126,14 @@
   <data name="ToolTipConflict" xml:space="preserve">
     <value>This file is marked as Conflicted.</value>
   </data>
+  <data name="ToolTipDirObstructed" xml:space="preserve">
+    <value>This directory does not exist on disk. Instead there is a file with the same name</value>
+  </data>
   <data name="ToolTipDoesNotExist" xml:space="preserve">
     <value>This file does not exist on disk.</value>
+  </data>
+  <data name="ToolTipFileObstructed" xml:space="preserve">
+    <value>This file does not exist on disk. Instead there is a directory with the same name</value>
   </data>
   <data name="ToolTipIgnored" xml:space="preserve">
     <value>This file is explicitly ignored by subversion.</value>

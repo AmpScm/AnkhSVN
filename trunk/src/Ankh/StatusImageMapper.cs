@@ -51,7 +51,7 @@ namespace Ankh
         {
             if (item == null)
                 return AnkhGlyph.None;
-            else if (item.IsConflicted)
+            else if (item.IsConflicted || item.IsObstructed)
                 return AnkhGlyph.InConflict;
             else if (item.ReadOnlyMustLock)
                 return AnkhGlyph.MustLock;
@@ -66,12 +66,8 @@ namespace Ankh
                 else
                     return AnkhGlyph.None;
             }
-            SvnStatus status = item.Status.LocalContentStatus;
-
-            if (status == SvnStatus.Normal)
-                status = item.Status.LocalContentStatus;
-
-            switch (status)
+            
+			switch (item.Status.CombinedStatus)
             {
                 case SvnStatus.Normal:
                     return item.IsLocked ? AnkhGlyph.LockedNormal : AnkhGlyph.Normal;
@@ -90,7 +86,7 @@ namespace Ankh
                 case SvnStatus.Obstructed:
                     return AnkhGlyph.InConflict;
 
-                case SvnStatus.Ignored: // Should have been handled abov
+                case SvnStatus.Ignored: // Should have been handled above
                     return AnkhGlyph.Ignored;
 
                 case SvnStatus.External:
