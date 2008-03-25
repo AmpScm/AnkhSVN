@@ -24,9 +24,12 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            IAnkhOpenDocumentTracker documentTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
             foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
             {
                 if (i.IsModified)
+                    return;
+                if (documentTracker.IsDocumentDirty(i.FullPath))
                     return;
             }
 
