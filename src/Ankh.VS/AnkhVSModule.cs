@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Ankh.SolutionExplorer;
-using Ankh.Selection;
 using Ankh.Scc;
+using Ankh.Selection;
 using Ankh.UI;
 using Ankh.VS.Dialogs;
-using Ankh.VS.WebBrowser;
 using Ankh.VS.SolutionExplorer;
+using Ankh.VS.WebBrowser;
 
 namespace Ankh.VS
 {
