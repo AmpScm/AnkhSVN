@@ -89,7 +89,7 @@ namespace Ankh
                         return false;
                     }
 
-                    _args.LogMessage = dialog.RawLogMessage;
+                    _args.LogMessage = dialog.LogMessage;
                 }
             }
 

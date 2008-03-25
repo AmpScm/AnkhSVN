@@ -296,9 +296,6 @@
     <Compile Include="Commands\RepositoryExplorer\ViewInWindowsCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CommitContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CommitOperation.cs" />
     <Compile Include="Config\ConfigLoader.cs">
       <SubType>Code</SubType>
