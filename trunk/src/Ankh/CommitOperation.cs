@@ -4,6 +4,7 @@ using System.Collections;
 using System.Windows.Forms;
 using SharpSvn;
 using Ankh.Configuration;
+using Ankh.ContextServices;
 
 namespace Ankh
 {
@@ -12,16 +13,25 @@ namespace Ankh
     /// </summary>
     public class CommitOperation  
     {
-        public CommitOperation(IProgressWorker worker, IList items, IContext context)
-        {
-            this.worker = worker;
-            this.context = context;
-            this.items = items;
-        }
+        readonly IProgressWorker worker;
+        readonly IAnkhServiceProvider _context;
+        readonly IList items;
+        readonly SvnCommitArgs _args;
+        bool urlPaths;
+        string logMessage;
 
-        public CommitContext CommitContext
+        public CommitOperation(SvnCommitArgs args, IProgressWorker worker, IList items, IAnkhServiceProvider context)
         {
-            get{ return this.commitContext; }
+            if (args == null)
+                throw new ArgumentNullException("args");
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _args = args;
+            _context = context;
+            this.worker = worker;
+            
+            this.items = items;
         }
 
         public bool UrlPaths
@@ -43,45 +53,49 @@ namespace Ankh
 
         public bool ShowLogMessageDialog()
         {
-            AnkhConfig config = this.context.Configuration.Instance;
+            IAnkhConfigurationService configSvc = _context.GetService<IAnkhConfigurationService>();
+            IAnkhDialogOwner ownerSvc = _context.GetService<IAnkhDialogOwner>();
+
+            AnkhConfig config = configSvc.Instance;
 
             string templateText = config.LogMessageTemplate != null ? 
-                context.Configuration.Instance.LogMessageTemplate : "";;
-            LogMessageTemplate template = new LogMessageTemplate(context, templateText );
+                config.LogMessageTemplate : "";
+            LogMessageTemplate template = new LogMessageTemplate(_context, templateText );
 
-            this.commitContext = new CommitContext( template, this.items, this.UrlPaths );            
 
             // is there a previous log message?
             if ( this.LogMessage != null )
             {
                 if ( config.AutoReuseComment ||
-                    context.UIShell.ShowMessageBox(  
+                    MessageBox.Show( ownerSvc.DialogOwner, 
                     "The previous commit did not complete." + Environment.NewLine + 
                     "Do you want to reuse the log message?", 
                     "Previous log message", MessageBoxButtons.YesNo ) ==
                     DialogResult.Yes )
 
-                    this.commitContext.LogMessage = this.LogMessage;
+                    _args.LogMessage = this.LogMessage;
             }
 
             // don't show the dialog if shift is down.
             if (!(Commands.CommandBase.Shift))
             {
-                if (context.UIShell.ShowCommitDialogModal(this.commitContext) != DialogResult.OK)
-                    return false;
+                using (CommitDialog dialog = new CommitDialog())
+                {
+                    dialog.LogMessageTemplate = template;
+
+                    if (dialog.ShowDialog(ownerSvc.DialogOwner) != DialogResult.OK)
+                    {
+                        logMessage = dialog.RawLogMessage;
+                        return false;
+                    }
+
+                    _args.LogMessage = dialog.RawLogMessage;
+                }
             }
 
-            if ( commitContext.Cancelled )
-            {
-                this.logMessage = this.commitContext.RawLogMessage;
-                return false;                
-            }
-            else
-            {
-                this.items = commitContext.CommitItems;
-                this.logMessage = commitContext.LogMessage;
-                return true;                
-            }
+            //this.items = commitContext.CommitItems;
+            this.logMessage = _args.LogMessage;
+            return true;                
         }
 
         /// <summary>
@@ -89,14 +103,12 @@ namespace Ankh
         /// </summary>
         public bool Run( string caption )
         {
-            return this.context.UIShell.RunWithProgressDialog( this.worker, caption );
+            ProgressRunner runner = new ProgressRunner(_context, worker);
+            runner.Start(caption);
+
+            return !runner.Cancelled;
         } 
 
-        private IProgressWorker worker;
-        private IContext context;
-        private CommitContext commitContext;
-        private bool urlPaths;
-        private IList items;
-        private string logMessage;
+
     }
 }

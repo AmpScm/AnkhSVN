@@ -21,7 +21,7 @@ namespace Ankh.UI
     /// <summary>
     /// Dialog that lets a user enter a log message for a commit.
     /// </summary>
-    public partial class CommitDialog : UserControl
+    public partial class CommitDialog : Form
     {
         public event EventHandler Proceed;
 

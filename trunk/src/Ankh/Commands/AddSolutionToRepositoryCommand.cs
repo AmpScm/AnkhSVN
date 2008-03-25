@@ -19,6 +19,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.AddSolutionToRepository)]
     public class AddSolutionToRepositoryCommand : CommandBase
     {
+        SvnCommitArgs _args;
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -125,8 +126,11 @@ namespace Ankh.Commands
                     }
 
                 // now commit the added files
-                CommitOperation operation = new CommitOperation(new SimpleProgressWorker(
-                            new SimpleProgressWorkerCallback(this.DoCommit)), this.paths, context);
+                CommitOperation operation = new CommitOperation(
+                    _args,
+                    new SimpleProgressWorker(new SimpleProgressWorkerCallback(this.DoCommit)),
+                    this.paths,
+                    e.Context);
 
                 if (!operation.ShowLogMessageDialog())
                 {

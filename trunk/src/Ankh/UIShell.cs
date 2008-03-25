@@ -143,8 +143,8 @@ namespace Ankh
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public DialogResult ShowCommitDialogModal(CommitContext ctx)
-        {
+        //public DialogResult ShowCommitDialogModal(CommitContext ctx)
+        //{
             /*
             //if ( this.commitDialogWindow == null ) 
                 this.CreateCommitDialog();
@@ -197,8 +197,8 @@ namespace Ankh
 
             return ctx;
              */
-            return DialogResult.OK;
-        }
+        //    return DialogResult.OK;
+        //}
 
         /// <summary>
         /// Executes the worker.Work method while displaying a progress dialog.
