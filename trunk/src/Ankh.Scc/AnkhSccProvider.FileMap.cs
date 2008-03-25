@@ -48,28 +48,25 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(fileOrigin))
                 return; // Don't add new files to Subversion yet to allow case only renames, etc.
 
+            SvnItem originItem = StatusCache[fileOrigin];
+
+            if (!originItem.HasHistory)
+                return; // The origin was new itself
+
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
-                SvnStatusEventArgs status = svn.SafeGetStatus(fileOrigin);
-
-                if (status == null)
-                    return; // The origin was not managed by subversion
-
-                if ((status.LocalContentStatus == SvnStatus.NotVersioned ||
-                    status.LocalContentStatus == SvnStatus.Added) && !status.LocalCopied)
-                {
-                    return; // The origin was new itself
-                }
-
                 Guid addRepos;
+                Guid originRepos;
                 if(!svn.TryGetRepositoryId(filename, out addRepos))
                     return; // Adding would fail, don't even try
 
-                if(addRepos != status.WorkingCopyInfo.RepositoryId)
+                if (!svn.TryGetRepositoryId(fileOrigin, out originRepos))
+                    return; // We can't copy it to another repository then where it came from..
+
+                if(addRepos != originRepos)
                     return; // We can't copy it to another repository then where it came from..
                 
                 svn.SafeWcCopyFixup(fileOrigin, filename);
-                MarkFilesDirty(filename);
             }
         }        
 

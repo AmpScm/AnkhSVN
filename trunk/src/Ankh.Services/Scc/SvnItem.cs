@@ -265,6 +265,15 @@ namespace Ankh
             }
         }
 
+        public bool HasHistory
+        {
+            get
+            {
+                AnkhStatus status = Status;
+                return GetIsVersioned(status) && (status.LocalContentStatus != SvnStatus.Added || status.IsCopied);
+            }
+        }
+
         /// <summary>
         /// Gets a boolean indicating whether the item (on disk) is a directory
         /// </summary>

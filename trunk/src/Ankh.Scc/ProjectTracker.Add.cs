@@ -76,7 +76,7 @@ namespace Ankh.Scc
             // For now, we allow adding all files as is
             // We might propose moving files to within a managed root
 
-            RegisterForSccCleanup(); // Clear the origins table after adding
+            
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
             bool allOk = true;
 
@@ -110,8 +110,13 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = allOk ? VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK : VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddNotOK;
 
-            if (!allOk && !_inBatch)
-                ShowQueryErrorDialog();
+            if (!allOk)
+            {
+                RegisterForSccCleanup(); // Clear the origins table after adding
+
+                if (!_inBatch)
+                    ShowQueryErrorDialog();
+            }
 
             return VSConstants.S_OK;
         }
@@ -144,8 +149,18 @@ namespace Ankh.Scc
         public int OnAfterAddFilesEx(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSADDFILEFLAGS[] rgFlags)
         {
             int iFile = 0;
+            RegisterForSccCleanup(); // Clear the origins table after adding
 
             List<string> selectedFiles = null;
+
+            for (int i = 0; i < cFiles; i++)
+            {
+                string s = rgpszMkDocuments[i];
+                if (!string.IsNullOrEmpty(s))
+                {
+                    StatusCache.MarkDirty(s);
+                }
+            }
 
             for (int iProject = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
             {
