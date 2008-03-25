@@ -35,7 +35,7 @@ namespace Ankh.Scc
 
         IStatusImageMapper StatusImages
         {
-            get { return _statusImages ?? (_statusImages = _context.GetService<IStatusImageMapper>()); }
+            get { return _statusImages ?? (_statusImages = Context.GetService<IStatusImageMapper>()); }
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Ankh.Scc
         public int GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode, out string pbstrTooltipText)
         {
             IFileStatusCache cache = StatusCache;
-            ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+            ISccProjectWalker walker = Context.GetService<ISccProjectWalker>();
             pbstrTooltipText = null;
 
             if ((walker == null) || (cache == null))

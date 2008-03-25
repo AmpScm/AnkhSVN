@@ -34,7 +34,7 @@ namespace Ankh.Scc
                 return;
             }
 
-            IList<string> files = e.Argument as IList<string>;
+            IEnumerable<string> files = e.Argument as IEnumerable<string>;
 
             if (files != null)
             {

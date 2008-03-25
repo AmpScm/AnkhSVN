@@ -52,6 +52,20 @@ namespace Ankh.Selection
         IEnumerable<SvnProject> GetOwnerProjects(bool recursive);
 
         /// <summary>
+        /// Gets a list of currently selected projects
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<SvnProject> GetSelectedProjects(bool recursive);
+
+        /// <summary>
+        /// Gets a boolean indicating whether the solution node is currently selected
+        /// </summary>
+        bool IsSolutionSelected
+        {
+            get;
+        }
+
+        /// <summary>
         /// Gets the current solution filename (full path)
         /// </summary>
         /// <value>The solution filename.</value>

@@ -17,9 +17,8 @@ namespace Ankh.Scc
     }
 
     //[CLSCompliant(false)]
-    partial class ProjectTracker : IAnkhProjectDocumentTracker, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
+    partial class ProjectTracker : AnkhService, IAnkhProjectDocumentTracker, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
     {
-        readonly AnkhContext _context;
         bool _hooked;
         uint _projectCookie;
         uint _documentCookie;
@@ -29,15 +28,41 @@ namespace Ankh.Scc
         readonly SortedList<string, string> _fileOrigins;
 
         public ProjectTracker(AnkhContext context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
             _sccProvider = context.GetService<AnkhSccProvider>();
             _fileOrigins = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
 
             Hook(true);
+            LoadInitial();
+        }
+
+        private void LoadInitial()
+        {
+            IVsSolution solution = (IVsSolution)Context.GetService(typeof(SVsSolution));
+
+            if(solution == null)
+                return;
+
+            Guid none = Guid.Empty;
+            IEnumHierarchies hierEnum;
+            if (!ErrorHandler.Succeeded(solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION, ref none, out hierEnum)))
+                return;
+
+            IVsHierarchy[] hiers = new IVsHierarchy[32];
+            uint nFetched;
+            while (ErrorHandler.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out nFetched)))
+            {
+                if (nFetched == 0)
+                    break;
+                for (int i = 0; i < nFetched; i++)
+                {
+                    IVsSccProject2 p2 = hiers[i] as IVsSccProject2;
+
+                    if(p2 != null)
+                        _sccProvider.OnProjectOpened(p2, false);
+                }                
+            }            
         }
 
         public void Hook(bool enable)
@@ -45,8 +70,8 @@ namespace Ankh.Scc
             if (enable == _hooked)
                 return;
 
-            IVsTrackProjectDocuments2 tracker = (IVsTrackProjectDocuments2)_context.GetService(typeof(SVsTrackProjectDocuments));
-            IVsSolution solution = (IVsSolution)_context.GetService(typeof(SVsSolution));
+            IVsTrackProjectDocuments2 tracker = (IVsTrackProjectDocuments2)Context.GetService(typeof(SVsTrackProjectDocuments));
+            IVsSolution solution = (IVsSolution)Context.GetService(typeof(SVsSolution));
             if (enable)
             {
                 if (tracker != null)
@@ -129,7 +154,7 @@ namespace Ankh.Scc
             if (_registeredSccCleanup)
                 return;
 
-            IAnkhCommandService cmd = _context.GetService<IAnkhCommandService>();
+            IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
 
             if (cmd != null && cmd.PostExecCommand(AnkhCommand.SccFinishTasks))
                 _registeredSccCleanup = true;

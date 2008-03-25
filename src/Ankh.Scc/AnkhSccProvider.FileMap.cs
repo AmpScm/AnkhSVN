@@ -48,7 +48,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(fileOrigin))
                 return; // Don't add new files to Subversion yet to allow case only renames, etc.
 
-            using (SvnSccContext svn = new SvnSccContext(_context))
+            using (SvnSccContext svn = new SvnSccContext(Context))
             {
                 SvnStatusEventArgs status = svn.SafeGetStatus(fileOrigin);
 
@@ -91,7 +91,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return; // Let the other SCC package manage it
 
-            using (SvnSccContext svn = new SvnSccContext(_context))
+            using (SvnSccContext svn = new SvnSccContext(Context))
             {
                 SvnStatusEventArgs status = svn.SafeGetStatus(filename);
 
@@ -169,7 +169,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
-            using (SvnSccContext svn = new SvnSccContext(_context))
+            using (SvnSccContext svn = new SvnSccContext(Context))
             {
                 if (!svn.CouldAdd(newName, SvnNodeKind.File))
                 {
@@ -205,7 +205,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
-            using (SvnSccContext svn = new SvnSccContext(_context))
+            using (SvnSccContext svn = new SvnSccContext(Context))
             {
                 SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
 
@@ -301,7 +301,7 @@ namespace Ankh.Scc
             }
 
             if(projects.Count > 0)
-                _context.GetService<IProjectNotifier>().MarkDirty(projects);
+                Context.GetService<IProjectNotifier>().MarkDirty(projects);
         }      
 
         #region ProjectFile
@@ -310,7 +310,7 @@ namespace Ankh.Scc
             SccProjectFile projectFile;
 
             if (!_fileMap.TryGetValue(path, out projectFile))
-                _fileMap.Add(path, projectFile = new SccProjectFile(_context, path));
+                _fileMap.Add(path, projectFile = new SccProjectFile(Context, path));
 
             return projectFile;
         }
@@ -428,7 +428,7 @@ namespace Ankh.Scc
         {
             List<string> files = new List<string>(_fileMap.Count+1);
 
-            ISelectionContext selection = _context.GetService<ISelectionContext>();
+            ISelectionContext selection = Context.GetService<ISelectionContext>();
 
             if (selection != null && !string.IsNullOrEmpty(selection.SolutionFilename))
                 files.Add(selection.SolutionFilename);
@@ -449,12 +449,16 @@ namespace Ankh.Scc
             if (project == null)
                 throw new ArgumentNullException("project");
 
-            if (project.RawHandle == null)
+            if (project.RawHandle == null && !project.IsSolution)
             {
-                foreach (SccProjectData pd in _projectMap.Values)
+                SccProjectFile file;
+
+                if (_fileMap.TryGetValue(project.FullPath, out file))
                 {
-                    if (pd.IsSolutionFolder && pd.ContainsFile(project.FullPath))
-                        return pd.SvnProject;
+                    foreach (SccProjectData p in file.GetOwnerProjects())
+                    {
+                        return p.SvnProject;
+                    }
                 }
             }
 

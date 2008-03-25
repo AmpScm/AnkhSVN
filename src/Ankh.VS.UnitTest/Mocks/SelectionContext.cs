@@ -49,6 +49,16 @@ namespace AnkhSvn_UnitTestProject.Mocks
             {
                 get { return null; }
             }
+
+            public IEnumerable<SvnProject> GetSelectedProjects(bool recursive)
+            {
+                yield break;
+            }
+
+            public bool IsSolutionSelected
+            {
+                get { return false; }
+            }
         }
     }
 }

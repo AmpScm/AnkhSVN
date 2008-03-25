@@ -118,7 +118,7 @@ namespace Ankh.Scc
 
         protected bool SvnCanAddPath(string fullpath, SvnNodeKind nodeKind)
         {
-            using (SvnSccContext svn = new SvnSccContext(_context))
+            using (SvnSccContext svn = new SvnSccContext(Context))
             {
                 // TODO: Determine if we could add fullname
                 if (!svn.CouldAdd(fullpath, nodeKind))
@@ -182,7 +182,7 @@ namespace Ankh.Scc
                         //      the current selection is still the original selection
                         if (selectedFiles == null)
                         {
-                            ISelectionContext selection = _context.GetService<ISelectionContext>();
+                            ISelectionContext selection = Context.GetService<ISelectionContext>();
                             if (selection != null)
                             {
                                 // BH: resx files are not correctly included if we don't retrieve this list recursive
