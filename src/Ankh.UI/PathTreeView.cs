@@ -3,17 +3,27 @@ using System;
 using System.Windows.Forms;
 using Utils.Win32;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace Ankh.UI
 {
     /// <summary>
     /// A treeview that displays the system icons for paths.
     /// </summary>
+    [Docking(DockingBehavior.Ask)]
+    [Designer("System.Windows.Forms.Design.TreeViewDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [DesignTimeVisible(true)]
     public class PathTreeView : TreeView
     {
         public PathTreeView()
         {
-            this.GetSystemImageList();
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            if (Visible && !DesignMode)
+                this.GetSystemImageList();
         }
 
         public int ClosedFolderIndex

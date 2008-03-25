@@ -31,7 +31,6 @@ namespace Ankh.UI
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-            this.CreateToolTips();
 
             this.commitItemsTree.ResolvingPathInfo += new EventHandler<ResolvingPathEventArgs>(commitItemsTree_GetPathInfo);
             this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
@@ -144,33 +143,6 @@ namespace Ankh.UI
             }
             base.Dispose( disposing );
         }
-
-        /// <summary>
-        /// Makes tooltips on buttons and fields. 
-        /// </summary>
-        private void CreateToolTips()
-        {
-            // Create the ToolTip and associate with the Form container.
-            ToolTip commitToolTip = new ToolTip();
-
-            // Set up the delays in milliseconds for the ToolTip.
-            commitToolTip.AutoPopDelay = 5000;
-            commitToolTip.InitialDelay = 1000;
-            commitToolTip.ReshowDelay = 500;
-            // Force the ToolTip text to be displayed whether or not the form is active.
-            commitToolTip.ShowAlways = true;
-         
-            // Set up the ToolTip text for the Button and Checkbox.
-            //            commitToolTip.SetToolTip( this.fileTreeView, 
-            //                "Three view of files you attempt to publish/commit. Files will be added into the repository." ); 
-            //Doesn't work:(. Don't understand why.
-            //            commitToolTip.SetToolTip( this.logMessageControl, 
-            //                "Write changes you have performed since last revision or update" ); 
-            commitToolTip.SetToolTip( this.commitButton, 
-                "Perform the commit." ); 
-            commitToolTip.SetToolTip( this.cancelButton, "Cancel the commit." );  
-        }
-        
 
         /// <summary>
         /// Initialize the log message in the text box.
