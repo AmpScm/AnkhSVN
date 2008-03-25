@@ -9,9 +9,8 @@ using System.Diagnostics;
 
 namespace Ankh.Scc
 {
-    partial class OpenDocumentTracker : IAnkhOpenDocumentTracker, IVsRunningDocTableEvents4, IVsRunningDocTableEvents3, IVsRunningDocTableEvents2, IVsRunningDocTableEvents
+    partial class OpenDocumentTracker : AnkhService, IAnkhOpenDocumentTracker, IVsRunningDocTableEvents4, IVsRunningDocTableEvents3, IVsRunningDocTableEvents2, IVsRunningDocTableEvents
     {
-        readonly AnkhContext _context;
         readonly Dictionary<string, SccDocumentData> _docMap = new Dictionary<string, SccDocumentData>(StringComparer.OrdinalIgnoreCase);
         readonly Dictionary<uint, SccDocumentData> _cookieMap = new Dictionary<uint, SccDocumentData>();
         readonly AnkhSccProvider _sccProvider;
@@ -20,18 +19,45 @@ namespace Ankh.Scc
         uint _cookie;
 
         public OpenDocumentTracker(AnkhContext context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
             _sccProvider = context.GetService<AnkhSccProvider>();
+
             Hook(true);
+            LoadInitial();
         }
 
         protected IVsRunningDocumentTable RunningDocumentTable
         {
-            get { return _docTable ?? (_docTable = (IVsRunningDocumentTable)_context.GetService(typeof(SVsRunningDocumentTable))); }
+            get { return _docTable ?? (_docTable = (IVsRunningDocumentTable)Context.GetService(typeof(SVsRunningDocumentTable))); }
+        }
+
+        void LoadInitial()
+        {
+            IVsRunningDocumentTable rdt = RunningDocumentTable;
+            if (rdt == null)
+                return;
+
+            IEnumRunningDocuments docEnum;
+            if(!ErrorHandler.Succeeded(rdt.GetRunningDocumentsEnum(out docEnum)))
+                return;
+
+            uint[] cookies = new uint[256];
+            uint nFetched;
+            while (ErrorHandler.Succeeded(docEnum.Next((uint)cookies.Length, cookies, out nFetched)))
+            {
+                if (nFetched == 0)
+                    break;
+
+                for (int i = 0; i < nFetched; i++)
+                {
+                    SccDocumentData data;
+                    if (TryGetDocument(cookies[i], out data))
+                    {
+                        data.OnCookieLoad();
+                    }
+                }
+            }
         }
 
         void Hook(bool enable)
@@ -99,7 +125,7 @@ namespace Ankh.Scc
                     }
                     else
                     {
-                        _docMap.Add(name, data = new SccDocumentData(_context, name));
+                        _docMap.Add(name, data = new SccDocumentData(Context, name));
                         data.Hierarchy = hier;
                         data.ItemId = itemId;
                     }
@@ -133,7 +159,7 @@ namespace Ankh.Scc
             SccDocumentData data;
             if (!_docMap.TryGetValue(pszMkDocument, out data))
             {
-                _docMap.Add(pszMkDocument, data = new SccDocumentData(_context, pszMkDocument));
+                _docMap.Add(pszMkDocument, data = new SccDocumentData(Context, pszMkDocument));
 
                 data.Hierarchy = pHier;
                 data.ItemId = itemid;
@@ -235,7 +261,7 @@ namespace Ankh.Scc
                 SccDocumentData newData;
 
                 if (!_docMap.TryGetValue(pszMkDocumentNew, out newData))
-                    _docMap.Add(pszMkDocumentNew, newData = new SccDocumentData(_context, pszMkDocumentNew));
+                    _docMap.Add(pszMkDocumentNew, newData = new SccDocumentData(Context, pszMkDocumentNew));
                 else if (newData.Cookie != 0)
                 {
                     _cookieMap.Remove(newData.Cookie);

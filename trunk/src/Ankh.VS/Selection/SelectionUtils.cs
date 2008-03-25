@@ -18,7 +18,7 @@ namespace Ankh.Selection
         /// <param name="pathStr">The path STR.</param>
         /// <returns></returns>
         //[CLSCompliant(false)]
-        public static string[] GetFileNamesFromOleBuffer(CALPOLESTR[] pathStr, bool free)
+        internal static string[] GetFileNamesFromOleBuffer(CALPOLESTR[] pathStr, bool free)
         {
             int nEls = (int)pathStr[0].cElems;
             string[] files = new string[nEls];
@@ -38,150 +38,125 @@ namespace Ankh.Selection
         }
 
         //[CLSCompliant(false)]
-        public static int[] GetFlagsFromOleBuffer(CADWORD[] dwords, bool free)
+        internal static int[] GetFlagsFromOleBuffer(CADWORD[] dwords, bool free)
         {
             if(dwords == null)
                 throw new ArgumentNullException("dwords");
 
-            int[] items = new int[dwords[0].cElems];
+            int n = (int)dwords[0].cElems;
+            int[] items = (n > 0) ? new int[n] : null;
 
-            for(int i = 0; i < items.Length; i++)
+            bool foundFlag = false;
+
+            for(int i = 0; i < n; i++)
             {
-                items[i] = Marshal.ReadInt32(dwords[0].pElems, i * sizeof(int));
+                int v = items[i] = Marshal.ReadInt32(dwords[0].pElems, i * sizeof(int));
+
+                if (v != 0)
+                    foundFlag = true;                
             }
 
             if(free && dwords[0].pElems != IntPtr.Zero)
                 Marshal.FreeCoTaskMem(dwords[0].pElems);
             
-            return items;
+            return foundFlag ? items : null;
         }
 
         //[CLSCompliant(false)]
-        public static int GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, out int[] flags)
+        public static bool GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, out int[] flags, bool includeNoScc)
         {
             if (hierarchy == null)
                 throw new ArgumentNullException("hierarchy");
 
-            IVsSccProject2 p2 = sccProject;
             int hr;
-
-            if (p2 != null)
-            {
-                CALPOLESTR[] str = new CALPOLESTR[1];
-                CADWORD[] dw = new CADWORD[1];
-                hr = p2.GetSccFiles(id, str, dw);
-
-                if (hr == VSConstants.S_OK)
-                {
-                    files = GetFileNamesFromOleBuffer(str, true);
-                    flags = GetFlagsFromOleBuffer(dw, true);
-                    return VSConstants.S_OK;
-                }
-            }
-
-            IVsProject3 p3 = hierarchy as IVsProject3;
-
-            if(p3 != null)
-            {
-                string mkdocument;
-                if (p3.GetMkDocument(id, out mkdocument) == VSConstants.S_OK && mkdocument != null)
-                {
-                    files = new string[] { mkdocument };
-                    flags = null;
-                    return VSConstants.S_OK;
-                }
-            }
+            bool ok = false;
 
             files = null;
             flags = null;
 
-            return VSConstants.E_FAIL;
+            if (sccProject != null)
+            {
+                CALPOLESTR[] str = new CALPOLESTR[1];
+                CADWORD[] dw = new CADWORD[1];
+
+                if (ErrorHandler.Succeeded(hr = sccProject.GetSccFiles(id, str, dw)))
+                {
+                    files = GetFileNamesFromOleBuffer(str, true);
+                    flags = GetFlagsFromOleBuffer(dw, true);
+
+                    if (!includeNoScc || files.Length > 0)
+                        return true; // Try the GetMkDocument route to find an alternative
+                    else
+                        ok = true; // Let's try GetMkDocument()
+                }
+                else if (hr != VSConstants.E_NOTIMPL)
+                    return false; // 
+            }
+
+            // If sccProject2.GetSccFiles() returns E_NOTIMPL we must try GetMkDocument
+            // We also try this if the item does not implement IVsSccProject2
+
+            IVsProject project = hierarchy as IVsProject;
+            if (project != null)
+            {
+                string mkDocument;
+
+                if (ErrorHandler.Succeeded(project.GetMkDocument(id, out mkDocument)))
+                {
+                    if (string.IsNullOrEmpty(mkDocument))
+                        files = new string[0];
+                    else
+                        files = new string[] { mkDocument };
+
+                    return true;
+                }
+            }
+
+            return ok;
         }
 
-        internal static int GetSccFiles(SelectionContext.SelectionItem item, out string[] files, bool includeSpecial)
+        internal static bool GetSccFiles(SelectionContext.SelectionItem item, out string[] files, bool includeSpecial, bool includeNoScc)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
 
-            return GetSccFiles(item.Hierarchy, item.SccProject, item.Id, out files, includeSpecial);
+            return GetSccFiles(item.Hierarchy, item.SccProject, item.Id, out files, includeSpecial, includeNoScc);
         }
 
         //[CLSCompliant(false)]
-        internal static int GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, bool includeSpecial)
+        internal static bool GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, bool includeSpecial, bool includeNoScc)
         {
-            string[] fls;
             int[] flags;
             files = null;
 
-            int hr = GetSccFiles(hierarchy, sccProject, id, out fls, out flags);
+            if (!GetSccFiles(hierarchy, sccProject, id, out files, out flags, includeNoScc))
+                return false;
+            else if(flags == null || sccProject == null)
+                return true;
 
-            if (hr != VSConstants.S_OK || !includeSpecial || flags == null || flags.Length == 0)
+            int n = Math.Min(files.Length, flags.Length);
+
+            List<string> allFiles = new List<string>(files);
+            for(int i = 0; i < n; i++)
             {
-                if (hr == VSConstants.S_OK)
-                    files = fls;
-
-                return hr;
-            }
-
-            bool foundOne = false;
-            foreach(uint u in flags)
-            {
-                if(u != 0)
-                {
-                    foundOne = true;
-                    break;
-                }
-            }
-
-            if(!foundOne)
-            {
-                files = fls;
-                return VSConstants.S_OK;
-            }
-
-            IVsSccProject2 p2 = sccProject;
-
-            List<string> fileList = new List<string>(fls);
-            List<int> flagList = new List<int>(flags);
-
-            if(flagList.Count > fileList.Count)
-                flagList.RemoveRange(fileList.Count, flagList.Count - fileList.Count);
-            else
-                while(flagList.Count < fileList.Count)
-                    flagList.Add(0);
-
-            for (int i = 0; i < fileList.Count; i++)
-            {
-                if (flagList[i] != 0)
+                if (0 != (flags[i] & (int)tagVsSccFilesFlags.SFF_HasSpecialFiles))
                 {
                     CALPOLESTR[] str = new CALPOLESTR[1];
                     CADWORD[] dw = new CADWORD[1];
-                    hr = p2.GetSccSpecialFiles(id, fileList[i], str, dw);
 
-                    if (hr != VSConstants.S_OK)
-                        return hr;
+                    if (ErrorHandler.Succeeded(sccProject.GetSccSpecialFiles(id, allFiles[i], str, dw)))
+                    {
+                        files = GetFileNamesFromOleBuffer(str, true);
+                        flags = GetFlagsFromOleBuffer(dw, true);
 
-                    fls = GetFileNamesFromOleBuffer(str, true);
-                    flags = GetFlagsFromOleBuffer(dw, true);
-
-                    foreach (string s in fls)
-                        fileList.Add(s);
-
-                    if (flags != null)
-                        foreach (int n in flags)
-                            flagList.Add(n);
-
-                    if (flagList.Count > fileList.Count)
-                        flagList.RemoveRange(fileList.Count, flagList.Count - fileList.Count);
-                    else
-                        while (flagList.Count < fileList.Count)
-                            flagList.Add(0);
+                        if (files != null && files.Length > 0)
+                            allFiles.AddRange(files);
+                    }
                 }
             }
 
-            files = fileList.ToArray();
-
-            return VSConstants.S_OK;
+            files = allFiles.ToArray();
+            return true;
         }
 
         /// <summary>

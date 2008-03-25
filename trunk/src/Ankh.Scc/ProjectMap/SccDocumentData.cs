@@ -64,6 +64,14 @@ namespace Ankh.Scc.ProjectMap
             set { _itemId = value; }
         }
 
+        /// <summary>
+        /// Called when initialized from existing state; instead of document creation
+        /// </summary>
+        internal void OnCookieLoad()
+        {
+            _initialUpdateCompleted = true;
+        }
+
         internal void OnSaved()
         {
         }
@@ -144,6 +152,6 @@ namespace Ankh.Scc.ProjectMap
                 throw new ArgumentNullException("data");
 
             _isDirty = data._isDirty;
-        }
+        }        
     }
 }

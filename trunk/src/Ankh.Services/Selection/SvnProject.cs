@@ -20,6 +20,12 @@ namespace Ankh.Selection
         readonly string _fullPath;
         readonly IVsSccProject2 _rawHandle;
 
+        static readonly SvnProject _solution = new SvnProject();
+        public static SvnProject Solution
+        {
+            get { return _solution; }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SvnProjectItem"/> class.
         /// </summary>
@@ -40,7 +46,10 @@ namespace Ankh.Selection
 
             _fullPath = fullPath;
             _rawHandle = rawHandle;
-        }        
+        }
+
+        private SvnProject()
+        { }
 
         /// <summary>
         /// Gets the full path.
@@ -59,6 +68,17 @@ namespace Ankh.Selection
         public IVsSccProject2 RawHandle
         {
             get { return _rawHandle; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is solution.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is solution; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsSolution
+        {
+            get { return _rawHandle == null && _fullPath == null; }
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Ankh.Scc
         /// </summary>
         protected void ShowQueryErrorDialog()
         {
-            IVsUIShell shell = (IVsUIShell)_context.GetService(typeof(SVsUIShell));
+            IVsUIShell shell = (IVsUIShell)Context.GetService(typeof(SVsUIShell));
 
             // TODO: Show dialog containing a summary of the errors in _batchErrors
 

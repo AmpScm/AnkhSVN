@@ -18,24 +18,19 @@ namespace Ankh.Scc
     {
     }
 
-    partial class AnkhSccProvider : ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService
+    partial class AnkhSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService
     {
-        readonly AnkhContext _context;
         IFileStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
-        bool _registeredOnce;
-        public AnkhSccProvider(AnkhContext context)
-        {
-            if (context == null)
-                throw new ArgumentNullException("context");
 
-            _context = context;
+        public AnkhSccProvider(AnkhContext context)
+            : base(context)
+        {
         }
 
         public void RegisterAsSccProvider()
         {
-            _registeredOnce = true;
-            IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)_context.GetService<IVsRegisterScciProvider>();
+            IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)Context.GetService<IVsRegisterScciProvider>();
             if (rscp != null)
             {
                 rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid);
@@ -53,12 +48,12 @@ namespace Ankh.Scc
         /// <value>The status cache.</value>
         public IFileStatusCache StatusCache
         {
-            get { return _statusCache ?? (_statusCache = _context.GetService<IFileStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = Context.GetService<IFileStatusCache>()); }
         }
 
         public IAnkhOpenDocumentTracker DocumentTracker
         {
-            get { return _documentTracker ?? (_documentTracker = _context.GetService<IAnkhOpenDocumentTracker>()); }
+            get { return _documentTracker ?? (_documentTracker = Context.GetService<IAnkhOpenDocumentTracker>()); }
         }
 
         /// <summary>
@@ -88,7 +83,7 @@ namespace Ankh.Scc
             //LoadInitialProjectMap(); // Make sure we know all projects
 
             // Flush all glyphs of all projects when a user enables us.
-            IProjectNotifier pn = _context.GetService<IProjectNotifier>();
+            IProjectNotifier pn = Context.GetService<IProjectNotifier>();
 
             if(pn != null)
             {
@@ -146,7 +141,7 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(pscp2Project, out data))
             {
                 // This method is called before the OpenProject calls
-                _projectMap.Add(pscp2Project, data = new SccProjectData(_context, pscp2Project));
+                _projectMap.Add(pscp2Project, data = new SccProjectData(Context, pscp2Project));
             }
 
             data.IsManaged = (pszProvider == AnkhId.SubversionSccName);

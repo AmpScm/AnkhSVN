@@ -16,9 +16,8 @@ namespace Ankh.Selection
     /// <summary>
     /// 
     /// </summary>
-    class SelectionContext : IVsSelectionEvents, IDisposable, ISelectionContext, ISccProjectWalker
+    class SelectionContext : AnkhService, IVsSelectionEvents, IDisposable, ISelectionContext, ISccProjectWalker
     {
-        readonly IAnkhServiceProvider _context;
         readonly IFileStatusCache _cache;
         readonly SolutionExplorerWindow _solutionExplorer;
         bool _disposed;
@@ -42,23 +41,19 @@ namespace Ankh.Selection
         bool _isSolutionExplorer;
         string _solutionFilename;
 
-        public SelectionContext(IAnkhServiceProvider environment, SolutionExplorerWindow solutionExplorer)
+        public SelectionContext(IAnkhServiceProvider context, SolutionExplorerWindow solutionExplorer)
+            : base(context)
         {
-            if (environment == null)
-                throw new ArgumentNullException("environment");
-            else if (solutionExplorer == null)
+            if (solutionExplorer == null)
                 throw new ArgumentNullException("solutionExplorer");
 
-            _context = environment;
-            _cache = environment.GetService<IFileStatusCache>();
+            _cache = context.GetService<IFileStatusCache>();
             _solutionExplorer = solutionExplorer;
 
-            IVsMonitorSelection monitor = (IVsMonitorSelection)environment.GetService(typeof(IVsMonitorSelection));
+            IVsMonitorSelection monitor = context.GetService<IVsMonitorSelection>();
 
             if (monitor != null)
                 Marshal.ThrowExceptionForHR(monitor.AdviseSelectionEvents(this, out _cookie));
-            else
-                _context = null;
         }
 
         public void Dispose()
@@ -66,9 +61,10 @@ namespace Ankh.Selection
             if (!_disposed)
             {
                 _disposed = true;
-                IVsMonitorSelection monitor = (IVsMonitorSelection)_context.GetService(typeof(IVsMonitorSelection));
+                IVsMonitorSelection monitor = (IVsMonitorSelection)Context.GetService(typeof(IVsMonitorSelection));
 
-                Marshal.ThrowExceptionForHR(monitor.UnadviseSelectionEvents(_cookie));
+                if(_cookie != 0)
+                    Marshal.ThrowExceptionForHR(monitor.UnadviseSelectionEvents(_cookie));
                 ClearCache();
             }
         }
@@ -125,7 +121,7 @@ namespace Ankh.Selection
             get
             {
                 if (_solution == null)
-                    _solution = (IVsSolution)_context.GetService(typeof(SVsSolution));
+                    _solution = (IVsSolution)Context.GetService(typeof(SVsSolution));
 
                 return _solution;
             }
@@ -242,7 +238,7 @@ namespace Ankh.Selection
                     if (ms != _currentSelection)
                         return _isSolutionExplorer = false;
 
-                    _isSolutionExplorer = (hier is IVsSolution);
+                    _isSolutionExplorer = (hier is IVsSolution) || (hier == null);
                 }
 
                 return _isSolutionExplorer;
@@ -294,7 +290,7 @@ namespace Ankh.Selection
                     if (si.Hierarchy != null)
                         yield return si;
                     else if (si.Id == VSConstants.VSITEMID_ROOT && MightBeSolutionExplorerSelection)
-                        yield return new SelectionItem((IVsHierarchy)Solution, si.Id, SelectionUtils.GetSolutionAsSccProject(_context));
+                        yield return new SelectionItem((IVsHierarchy)Solution, si.Id, SelectionUtils.GetSolutionAsSccProject(Context));
                     // else skip
                 }
             }
@@ -314,7 +310,7 @@ namespace Ankh.Selection
 
                 if (MightBeSolutionExplorerSelection)
                 {
-                    yield return new SelectionItem((IVsHierarchy)Solution, _currentItem, SelectionUtils.GetSolutionAsSccProject(_context));
+                    yield return new SelectionItem((IVsHierarchy)Solution, _currentItem, SelectionUtils.GetSolutionAsSccProject(Context));
                 }
             }
         }
@@ -367,7 +363,7 @@ namespace Ankh.Selection
             IntPtr hierPtr;
             uint id;
 
-            if (depth > ProjectWalkDepth.AllDescendantsInHierarchy)
+            if (depth == ProjectWalkDepth.AllDescendants)
             {
                 int hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out id);
 
@@ -451,12 +447,20 @@ namespace Ankh.Selection
         {
             foreach (SelectionItem i in GetSelectedItems(recursive))
             {
+                Dictionary<string, string> foundFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 string[] files;
 
-                if (SelectionUtils.GetSccFiles(i, out files, true) == VSConstants.S_OK)
+                if (SelectionUtils.GetSccFiles(i, out files, true, true))
                 {
                     foreach (string file in files)
-                        yield return file;
+                    {
+                        if (!foundFiles.ContainsKey(file))
+                        {
+                            foundFiles.Add(file, file);
+
+                            yield return file;
+                        }
+                    }
                 }
             }
         }
@@ -503,22 +507,6 @@ namespace Ankh.Selection
             return recursive ? GetOwnerProjectsRecursive() : GetOwnerProjects();
         }
 
-        string SafeTryGetName(SelectionItem si, uint overrideId)
-        {
-            uint id = (overrideId != 0) ? overrideId : si.Id;
-
-            string[] files;
-            if(ErrorHandler.Succeeded(SelectionUtils.GetSccFiles(si.Hierarchy, si.SccProject, id, out files, false)))
-            {
-                foreach(string file in files)
-                {
-                    return file;
-                }
-            }
-
-            return null;
-        }
-
         public IEnumerable<SvnProject> InternalGetOwnerProjects(bool recursive)
         {
             Hashtable ht = new Hashtable();
@@ -532,23 +520,24 @@ namespace Ankh.Selection
 
                 ht.Add(si.Hierarchy, si);
 
-                if (si.SccProject != null && !si.IsSolution)
+                if (si.IsSolution)
+                    yield return SvnProject.Solution;
+                else if (si.SccProject != null)
                 {
-                    // The 
-                    yield return new SvnProject(SafeTryGetName(si, VSConstants.VSITEMID_ROOT), si.SccProject);
+                    yield return new SvnProject(null, si.SccProject);
                     continue;
                 }
 
                 string[] files;
 
                 // No need to fetch special files as we only want projects!
-                if (!ErrorHandler.Succeeded(SelectionUtils.GetSccFiles(si, out files, false)))
+                if (!SelectionUtils.GetSccFiles(si, out files, false, false) || files.Length == 0)
                     continue; // No files selected
 
                 if (projectMapper == null && !searchedProjectMapper)
                 {
                     searchedProjectMapper = true;
-                    projectMapper = _context.GetService<IProjectFileMapper>();
+                    projectMapper = Context.GetService<IProjectFileMapper>();
                 }
 
                 foreach (string file in files)
@@ -579,7 +568,7 @@ namespace Ankh.Selection
                 }
             }
         }
-        
+
 
         #endregion
 
@@ -603,8 +592,8 @@ namespace Ankh.Selection
             SelectionItem si = new SelectionItem(hierarchy as IVsHierarchy, id);
 
             string[] files;
-            int hr = SelectionUtils.GetSccFiles(si, out files, depth >= ProjectWalkDepth.SpecialFiles);
-            Marshal.ThrowExceptionForHR(hr);
+            if (!SelectionUtils.GetSccFiles(si, out files, depth >= ProjectWalkDepth.SpecialFiles, depth != ProjectWalkDepth.AllDescendantsInHierarchy))
+                yield break;
 
             foreach (string file in files)
             {
@@ -618,14 +607,38 @@ namespace Ankh.Selection
 
                 foreach (SelectionItem item in GetDescendants(si, previous, depth))
                 {
-                    hr = SelectionUtils.GetSccFiles(item, out files, depth >= ProjectWalkDepth.SpecialFiles);
-                    Marshal.ThrowExceptionForHR(hr);
+                    if (!SelectionUtils.GetSccFiles(item, out files, depth >= ProjectWalkDepth.SpecialFiles, depth != ProjectWalkDepth.AllDescendantsInHierarchy))
+                        continue;
 
                     foreach (string file in files)
                     {
                         yield return file;
                     }
                 }
+            }
+        }
+
+        #endregion
+
+        #region ISelectionContext Members
+
+        public IEnumerable<SvnProject> GetSelectedProjects(bool recursive)
+        {
+            // Temporary implementation
+            return GetOwnerProjects(recursive);
+        }
+
+        public bool IsSolutionSelected
+        {
+            get 
+            {
+                foreach (SelectionItem item in GetSelectedItems(false))
+                {
+                    if (item.IsSolution)
+                        return true;
+                }
+
+                return false;
             }
         }
 

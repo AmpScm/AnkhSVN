@@ -47,9 +47,7 @@ namespace Ankh.Scc
             IVsSccProject2 sccProject = project as IVsSccProject2;
 
             if (sccProject == null)
-            {
-                return (project is IVsSolution) ? _managedSolution : false;
-            }
+                return false;
 
             SccProjectData data;
 
@@ -190,7 +188,7 @@ namespace Ankh.Scc
         internal void OnProjectLoaded(IVsSccProject2 project)
         {
             if (!_projectMap.ContainsKey(project))
-                _projectMap.Add(project, new SccProjectData(_context, project));
+                _projectMap.Add(project, new SccProjectData(Context, project));
         }
 
         /// <summary>
@@ -202,7 +200,7 @@ namespace Ankh.Scc
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
-                _projectMap.Add(project, data = new SccProjectData(_context, project));
+                _projectMap.Add(project, data = new SccProjectData(Context, project));
 
             if(data.IsSolutionFolder || data.IsWebSite)
             {
@@ -284,7 +282,7 @@ namespace Ankh.Scc
             if (_registeredSccCleanup)
                 return;
 
-            IAnkhCommandService cmd = _context.GetService<IAnkhCommandService>();
+            IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
 
             if (cmd != null && cmd.PostExecCommand(AnkhCommand.SccFinishTasks))
                 _registeredSccCleanup = true;

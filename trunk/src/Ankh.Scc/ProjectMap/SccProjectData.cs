@@ -173,6 +173,9 @@ namespace Ankh.Scc.ProjectMap
             try
             {
                 Debug.Assert(_files.Count == 0);
+
+                _projectFile = null;
+                _svnProjectInstance = null;                
                 _loaded = true;
 
                 ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();

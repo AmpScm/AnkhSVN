@@ -50,10 +50,17 @@ namespace Ankh.Scc
             if (cmd == null)
                 return;
 
-            // Don't pass an enumerator via a postexec.. It's context might not be valid after the call
-            IList<SvnProject> allProjects = (projects as IList<SvnProject>) ?? new List<SvnProject>(projects);
+            IList<SvnProject> prjs;
 
-            cmd.PostExecCommand(AnkhCommand.MarkProjectDirty, allProjects);
+            if (null == (prjs = projects as IList<SvnProject>) || projects is SvnProject[])
+            {
+                // Don't pass arrays (marshalled as safe-arrays (object[])
+                // Don't pass enumerators out of context
+                prjs = new List<SvnProject>(projects);
+            }
+
+            if (prjs.Count > 0)
+                cmd.PostExecCommand(AnkhCommand.MarkProjectDirty, prjs);
         }
 
         public void MarkFullRefresh(SvnProject project)
@@ -74,10 +81,17 @@ namespace Ankh.Scc
             if (cmd == null)
                 return;
 
-            // Don't pass an enumerator via a postexec.. It's context might not be valid after the call
-            IList<SvnProject> allProjects = (projects as IList<SvnProject>) ?? new List<SvnProject>(projects);
+            IList<SvnProject> prjs;
 
-            cmd.PostExecCommand(AnkhCommand.MarkProjectRefresh, allProjects);
+            if (null == (prjs = projects as IList<SvnProject>) || projects is SvnProject[])
+            {
+                // Don't pass arrays (marshalled as safe-arrays (object[])
+                // Don't pass enumerators out of context
+                prjs = new List<SvnProject>(projects);
+            }
+
+            if (prjs.Count > 0)
+                cmd.PostExecCommand(AnkhCommand.MarkProjectRefresh, prjs);
         }
 
         public void ScheduleStatusUpdate(string path)
