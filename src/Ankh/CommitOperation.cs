@@ -82,7 +82,7 @@ namespace Ankh
                 using (CommitDialog dialog = new CommitDialog())
                 {
                     dialog.LogMessageTemplate = template;
-
+                    dialog.CommitItems = items;
                     if (dialog.ShowDialog(ownerSvc.DialogOwner) != DialogResult.OK)
                     {
                         logMessage = dialog.RawLogMessage;
