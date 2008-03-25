@@ -7,6 +7,7 @@ using Ankh.UI;
 using Ankh.VS.Dialogs;
 using Ankh.VS.SolutionExplorer;
 using Ankh.VS.WebBrowser;
+using Ankh.ContextServices;
 
 namespace Ankh.VS
 {
@@ -39,6 +40,7 @@ namespace Ankh.VS
             Container.AddService(typeof(ISelectionContext), selection);
             Container.AddService(typeof(ISccProjectWalker), selection);
 
+            Container.AddService(typeof(IAnkhDialogOwner), new AnkhDialogOwner(Context));
             Container.AddService(typeof(IAnkhWebBrowser), new AnkhWebBrowser(Context));
             Container.AddService(typeof(IDialogRunner), new VSDialogRunner(Context));
             Container.AddService(typeof(IStatusImageMapper), new StatusImageMapper(Context));

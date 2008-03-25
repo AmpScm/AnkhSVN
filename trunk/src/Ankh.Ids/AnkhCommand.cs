@@ -64,7 +64,7 @@ namespace AnkhSvn.Ids
 		RevertItem,
 		SaveToFile,
 		SendFeedback,
-		ShowCommitDialog,
+		ShowPendingChanges,
 		ShowRepositoryExplorer,
 		ShowWorkingCopyExplorer,
 		SwitchItem,

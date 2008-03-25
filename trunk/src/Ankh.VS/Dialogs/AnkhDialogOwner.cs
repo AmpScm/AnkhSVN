@@ -6,24 +6,20 @@ using Ankh.ContextServices;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Runtime.InteropServices;
 
-namespace Ankh
+namespace Ankh.VS.Dialogs
 {
-    class AnkhDialogOwner : IWin32Window, IAnkhDialogOwner
+    class AnkhDialogOwner : AnkhService, IWin32Window, IAnkhDialogOwner
     {
-        readonly IAnkhServiceProvider _context;
         IVsUIShell _shell;
 
         public AnkhDialogOwner(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
         }
 
         IVsUIShell Shell
         {
-            get { return _shell ?? (_shell = (IVsUIShell)_context.GetService(typeof(SVsUIShell))); }
+            get { return _shell ?? (_shell = (IVsUIShell)GetService(typeof(SVsUIShell))); }
         }
 
         #region IAnkhDialogOwner Members
@@ -38,6 +34,23 @@ namespace Ankh
                     return null;                
             }
         }
+
+        #region IAnkhDialogOwner Members
+
+
+        public IDisposable InstallFormRouting(Ankh.UI.VSContainerForm container, EventArgs eventArgs)
+        {
+            return new VSCommandRouting(Context, container);            
+        }
+
+        public void OnContainerCreated(Ankh.UI.VSContainerForm form)
+        {
+            VSCommandRouting routing = VSCommandRouting.FromForm(form);
+
+            if (routing != null)
+                routing.OnHandleCreated();
+        }
+        #endregion
 
         #endregion
 
@@ -56,7 +69,7 @@ namespace Ankh
 
                 return handle;
             }
-        }
+        }        
 
         #endregion
     }

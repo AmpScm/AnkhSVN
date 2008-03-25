@@ -7,7 +7,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to show the commit log dialog.
     /// </summary>
-    [Command(AnkhCommand.ShowCommitDialog)]
+    [Command(AnkhCommand.ShowPendingChanges)]
     public class ShowCommitDialogCommand : CommandBase
     {
         public override void OnExecute(CommandEventArgs e)

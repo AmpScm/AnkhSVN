@@ -68,7 +68,7 @@ namespace Ankh
         /// </returns>
         object IServiceProvider.GetService(Type serviceType)
         {
-            return _context.GetService<IServiceContainer>();
+            return _context.GetService(serviceType);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Ankh
         /// </returns>
         protected object GetService(Type serviceType)
         {
-            return _context.GetService<IServiceContainer>();
+            return _context.GetService(serviceType);
         }
 
         #endregion
