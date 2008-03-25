@@ -6,6 +6,7 @@ using Ankh.RepositoryExplorer;
 using Ankh.UI;
 using Utils;
 using AnkhSvn.Ids;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -15,6 +16,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.NewDirectory)]
     public class MakeDirectoryCommand : CommandBase
     {
+        SvnCommitArgs _args;
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -45,8 +47,10 @@ namespace Ankh.Commands
             // first show the log message dialog
             this.url = UriUtils.Combine(node.Url, dirname);
             CommitOperation operation = new CommitOperation(
+                _args,
                 new SimpleProgressWorker(new SimpleProgressWorkerCallback(this.DoCreateDir)),
-                new string[] { this.url }, context);
+                new string[] { this.url },
+                e.Context);
             operation.UrlPaths = true;
 
             if (!operation.ShowLogMessageDialog())

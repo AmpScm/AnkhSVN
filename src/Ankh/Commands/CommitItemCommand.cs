@@ -20,6 +20,14 @@ namespace Ankh.Commands
     [Command(AnkhCommand.CommitItem)]
     public class CommitItemCommand : CommandBase
     {
+        string[] paths;
+        SvnCommitResult commitInfo;
+        string storedLogMessage = null;
+
+        static readonly string DefaultUuid = Guid.NewGuid().ToString();
+
+        SvnCommitArgs _args;
+
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -38,10 +46,9 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-
             // make sure all files are saved
-            SaveAllDirtyDocuments(e.Selection, context);
+            IAnkhOpenDocumentTracker tracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
+            tracker.SaveDocuments(e.Selection.GetSelectedFiles());
 
             Collection<SvnItem> resources = new Collection<SvnItem>();
 
@@ -49,10 +56,19 @@ namespace Ankh.Commands
             {
                 if (item.IsModified)
                     resources.Add(item);
+                // Check for dirty files is not necessary here, because we just saved the dirty documents
             }
 
-            CommitOperation operation = new CommitOperation( new SimpleProgressWorker(
-                new SimpleProgressWorkerCallback(this.DoCommit)), resources, context);
+            if (resources.Count == 0)
+                return;
+
+            _args = new SvnCommitArgs();
+
+            CommitOperation operation = new CommitOperation( 
+                _args,
+                new SimpleProgressWorker(new SimpleProgressWorkerCallback(this.DoCommit)),
+                resources,
+                e.Context);
 
             operation.LogMessage = this.storedLogMessage;
 
@@ -61,8 +77,6 @@ namespace Ankh.Commands
             this.storedLogMessage = operation.LogMessage;
             if ( cancelled )
                 return;
-
-            this.commitContext = operation.CommitContext;
 
             // we need to commit to each repository separately
             ICollection repositories = this.SortByRepository( e.Context, operation.Items );           
@@ -74,7 +88,7 @@ namespace Ankh.Commands
                 string startText = "Committing ";
                 if ( repositories.Count > 1 && items.Count > 0 )
                     startText += "to repository " + ((SvnItem)items[0]).Status.Uri;
-                using (context.StartOperation(startText))
+                using (e.Context.BeginOperation(startText))
                 {
                     try
                     {
@@ -90,14 +104,14 @@ namespace Ankh.Commands
                     }
                     catch (SvnException)
                     {
-                        context.OutputPane.WriteLine("Commit aborted");
+                        //context.OutputPane.WriteLine("Commit aborted");
                         throw;
                     }
                     finally
                     {
-                        if (this.commitInfo != null)
-                            context.OutputPane.WriteLine("\nCommitted revision {0}.",
-                                this.commitInfo.Revision);
+                        //if (this.commitInfo != null)
+                        //    context.OutputPane.WriteLine("\nCommitted revision {0}.",
+                        //        this.commitInfo.Revision);
                     }
                 }
             }
@@ -111,11 +125,8 @@ namespace Ankh.Commands
 
         private void DoCommit(AnkhWorkerArgs e)
         {
-            SvnCommitArgs args = new SvnCommitArgs();
-            args.LogMessage = storedLogMessage;
-            args.Depth = SvnDepth.Infinity;
-            args.KeepLocks = commitContext.KeepLocks;
-            e.Client.Commit(this.paths, args, out commitInfo);
+            _args.ThrowOnError = false;
+            e.Client.Commit(this.paths, _args, out commitInfo);
         }
 
         /// <summary>
@@ -169,11 +180,6 @@ namespace Ankh.Commands
             return uuid;
         }
 
-        private string[] paths;
-        private SvnCommitResult commitInfo;
-        private CommitContext commitContext;
-        private string storedLogMessage = null;
 
-        private static readonly string DefaultUuid = Guid.NewGuid().ToString();
     }
 }

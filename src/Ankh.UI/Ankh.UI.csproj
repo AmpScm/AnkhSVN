@@ -188,7 +188,7 @@
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CommitDialog.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="CommitDialog.Designer.cs">
       <DependentUpon>CommitDialog.cs</DependentUpon>

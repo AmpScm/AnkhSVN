@@ -62,14 +62,6 @@ namespace Ankh
         void SetRepositoryExplorerSelection( object[] selection );
 
         /// <summary>
-        /// Displays the commit dialog modally.
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <returns></returns>
-        DialogResult ShowCommitDialogModal( CommitContext ctx );
-
-
-        /// <summary>
         /// Shows the "New directory" dialog.
         /// </summary>
         /// <returns>The name of the new dialog, or null.</returns>
