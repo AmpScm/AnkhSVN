@@ -336,12 +336,6 @@ namespace Ankh.Tests
                 return false;
             }
 
-            public virtual CommitContext ShowCommitDialogModal( CommitContext ctx )
-            {
-                // TODO: Add implementation
-                return null;
-            }
-
             public virtual void ToggleCommitDialog( bool show )
             {
                 // TODO: add implementation
@@ -533,11 +527,6 @@ namespace Ankh.Tests
             }
 
             void IUIShell.SetRepositoryExplorerSelection(object[] selection)
-            {
-                throw new NotImplementedException();
-            }
-
-            DialogResult IUIShell.ShowCommitDialogModal(CommitContext ctx)
             {
                 throw new NotImplementedException();
             }
