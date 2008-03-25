@@ -3,10 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using SharpSvn;
+
 using Ankh.UI;
 using AnkhSvn.Ids;
-using SharpSvn;
-using Ankh.ContextServices;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {

@@ -1,20 +1,19 @@
 using System;
-using Ankh.UI;
 using System.Collections;
-using System.Threading;
-
-
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
+using System.Threading;
+using System.Windows.Forms;
+using SharpSvn;
 using EnvDTE;
 using Utils;
-using System.Windows.Forms;
 
-using Thread = System.Threading.Thread;
-using SharpSvn;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Globalization;
 using Ankh.ContextServices;
+using Ankh.UI;
+using Ankh.VS;
+using Thread = System.Threading.Thread;
 
 namespace Ankh.RepositoryExplorer
 {

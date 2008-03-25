@@ -21,7 +21,7 @@ namespace Ankh.VSPackage
     // user settings are persisted, etc.
     [ProvideToolWindow(typeof(WorkingCopyExplorerToolWindow), Style=VsDockStyle.Float, Transient=false, Width=600, Height=300)]
     [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style=VsDockStyle.Float, Transient=false, Width=600, Height=300)]
-    [ProvideToolWindow(typeof(PendingChangesToolWindow), Style=VsDockStyle.Linked, Orientation=ToolWindowOrientation.Bottom, Transient=false)]
+    [ProvideToolWindow(typeof(PendingChangesToolWindow), Style=VsDockStyle.Tabbed, Orientation=ToolWindowOrientation.Bottom, Transient=false, Window=ToolWindowGuids80.Outputwindow)]
 	public partial class AnkhSvnPackage
 	{
         public void ShowToolWindow(AnkhToolWindow window)

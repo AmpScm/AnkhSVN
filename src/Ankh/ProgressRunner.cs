@@ -1,8 +1,10 @@
 using System;
 using System.Threading;
-using Ankh.UI;
 using SharpSvn;
+
 using Ankh.ContextServices;
+using Ankh.UI;
+using Ankh.VS;
 
 namespace Ankh
 {

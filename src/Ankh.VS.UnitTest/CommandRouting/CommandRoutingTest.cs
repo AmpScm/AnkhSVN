@@ -526,7 +526,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution(AnkhCommand.ShowCommitDialog);
+                CommandTester.TestExecution(AnkhCommand.ShowPendingChanges);
             }
         }
 

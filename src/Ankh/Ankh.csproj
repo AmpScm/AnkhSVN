@@ -316,7 +316,6 @@
     <Compile Include="IWorkingCopyExplorer.cs" />
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatusCache\AnkhDialogOwner.cs" />
     <Compile Include="StatusCache\AnkhSvnClientPool.cs" />
     <Compile Include="StatusCache\DeletedFilesList.cs" />
     <Compile Include="StatusCache\FileStatusCache.cs" />

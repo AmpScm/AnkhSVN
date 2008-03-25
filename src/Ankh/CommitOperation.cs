@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using SharpSvn;
 using Ankh.Configuration;
 using Ankh.ContextServices;
+using Ankh.VS;
 
 namespace Ankh
 {
@@ -83,7 +84,7 @@ namespace Ankh
                 {
                     dialog.LogMessageTemplate = template;
                     dialog.CommitItems = items;
-                    if (dialog.ShowDialog(ownerSvc.DialogOwner) != DialogResult.OK)
+                    if (dialog.ShowDialog(_context, ownerSvc.DialogOwner) != DialogResult.OK)
                     {
                         logMessage = dialog.RawLogMessage;
                         return false;

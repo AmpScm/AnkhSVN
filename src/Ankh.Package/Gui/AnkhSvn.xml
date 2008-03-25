@@ -97,8 +97,8 @@
 								toolTip="Updates local items with changes from the Subversion repository." iconFile="menu/Update.png"/>
 					</Group>
 					<Group id="Grp_FileSccMenuManagement" priority="0x0200">
-						<Button id="Cmd_ShowCommitDialog" name="ShowCommitDialog" priority="0x301"
-								text="Show &amp;Commit Dialog"
+						<Button id="Cmd_ShowPendingChanges" name="ShowPendingChanges" priority="0x301"
+								text="Show &amp;Pending Changes"
 								toolTip="Show the commit dialog." iconFile="menu/Commit.png"/>
 						<Button id="Cmd_EditConfigFile" name="EditConfigFile" priority="0x301"
 								text="&amp;Configuration..."

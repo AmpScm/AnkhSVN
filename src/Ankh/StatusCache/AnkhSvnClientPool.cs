@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Ankh.ContextServices;
-using SharpSvn;
 using System.ComponentModel.Design;
+using System.Text;
+using SharpSvn;
+
 using Ankh.Scc;
+using Ankh.VS;
 
 namespace Ankh
 {

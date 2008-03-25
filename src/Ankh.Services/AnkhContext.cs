@@ -4,6 +4,7 @@ using System.Text;
 using Ankh.ContextServices;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Ankh.VS;
 
 namespace Ankh
 {
