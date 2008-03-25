@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using Ankh.Scc;
 
-namespace Ankh.SolutionExplorer
+namespace Ankh.VS.SolutionExplorer
 {
     class SolutionTreeViewManager
     {

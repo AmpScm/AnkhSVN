@@ -8,7 +8,7 @@ using SharpSvn;
 using System.IO;
 using System.Diagnostics;
 
-namespace Ankh
+namespace Ankh.VS.SolutionExplorer
 {
     sealed class StatusImageMapper : IStatusImageMapper
     {
