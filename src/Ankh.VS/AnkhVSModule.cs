@@ -41,6 +41,7 @@ namespace Ankh.VS
 
             Container.AddService(typeof(IAnkhWebBrowser), new AnkhWebBrowser(Context));
             Container.AddService(typeof(IDialogRunner), new VSDialogRunner(Context));
+            Container.AddService(typeof(IStatusImageMapper), new StatusImageMapper(Context);
         }
 
         /// <summary>

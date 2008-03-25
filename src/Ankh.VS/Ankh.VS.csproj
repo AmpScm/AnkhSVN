@@ -70,6 +70,7 @@
     <Compile Include="Selection\SelectionUtils.cs" />
     <Compile Include="SolutionExplorer\SolutionExplorerWindow.cs" />
     <Compile Include="SolutionExplorer\SolutionTreeViewManager.cs" />
+    <Compile Include="SolutionExplorer\StatusImageMapper.cs" />
     <Compile Include="SolutionExplorer\TreeView\Win32TreeView.cs" />
     <Compile Include="Dialogs\VSDialogRunner.cs" />
     <Compile Include="WebBrowser\AnkhWebBrowser.cs" />
@@ -93,9 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ankh.VS.wxs" />
-    <Content Include="SolutionExplorer\lock.ico" />
-    <Content Include="SolutionExplorer\lockedreadonly.ico" />
-    <Content Include="SolutionExplorer\readonly.ico" />
+    <EmbeddedResource Include="SolutionExplorer\StatusGlyphs.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

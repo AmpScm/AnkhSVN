@@ -320,7 +320,6 @@
     <Compile Include="StatusCache\AnkhSvnClientPool.cs" />
     <Compile Include="StatusCache\DeletedFilesList.cs" />
     <Compile Include="StatusCache\FileStatusCache.cs" />
-    <Compile Include="StatusImageMapper.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />
@@ -361,22 +360,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RepositoryRootInfo.cs" />
-    <Compile Include="ResourceBitmaps.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SwitchDialogInfo.cs" />
     <Compile Include="UIShell.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\FileSystemRootItem.cs" />
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorer.cs" />
-    <Compile Include="WorkingCopyOperations.cs" />
+    <Compile Include="StatusCache\WorkingCopyOperations.cs" />
     <Compile Include="XmlResultBase.cs">
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="Commands\blame.xsl" />
     <EmbeddedResource Include="Commands\log.xsl" />
-    <EmbeddedResource Include="StatusGlyphs.bmp" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

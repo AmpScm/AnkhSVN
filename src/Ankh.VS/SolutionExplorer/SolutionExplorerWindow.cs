@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.Shell;
 using Ankh.UI;
 using Ankh.VS;
 
-namespace Ankh.SolutionExplorer
+namespace Ankh.VS.SolutionExplorer
 {
     /// <summary>
     /// 
