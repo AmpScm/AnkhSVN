@@ -10,6 +10,7 @@ using IServiceProvider = System.IServiceProvider;
 using Microsoft.VisualStudio.Shell;
 using Ankh.SolutionExplorer;
 using Ankh.Scc;
+using Ankh.VS.SolutionExplorer;
 
 namespace Ankh.Selection
 {

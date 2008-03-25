@@ -1,12 +1,10 @@
 // $Id$
 using System;
+using System.Diagnostics;
+using System.Windows.Forms;
 using Utils.Win32;
 
-using ImageList = System.Windows.Forms.ImageList;
-using System.Windows.Forms;
-using System.Diagnostics;
-
-namespace Ankh.UI
+namespace Ankh.VS.SolutionExplorer
 {
     /// <summary>
     /// Wraps a HWND to a Win32 treeview
