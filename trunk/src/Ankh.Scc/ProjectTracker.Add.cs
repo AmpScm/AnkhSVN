@@ -333,7 +333,7 @@ namespace Ankh.Scc
                     for (int i = 0; i < r; i++)
                     {
                         if (buffer1[i] != buffer2[i])
-                            return false; // Files are differend
+                            return false; // Files are different
                     }
                 }
             }
