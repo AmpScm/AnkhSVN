@@ -38,10 +38,7 @@ namespace Ankh.Scc
             Container.AddService(typeof(IFileStatusMonitor), notifier);
             
             // We declare the Scc provider as a delayed create service to allow delayed registration as primary scc
-            Container.AddService(typeof(ITheAnkhSvnSccProvider), new ServiceCreatorCallback(CreateSccProvider), true);
-
-            // TODO: BH: I'm working on removing the next line!
-            _sccProvider.RegisterAsPrimarySccProvider();
+            Container.AddService(typeof(ITheAnkhSvnSccProvider), new ServiceCreatorCallback(CreateSccProvider), true);            
         }
 
         /// <summary>
@@ -66,6 +63,9 @@ namespace Ankh.Scc
         {
             EnsureService<IStatusImageMapper>();
             EnsureService<IFileStatusCache>();
+
+            // TODO: BH: I'm working on removing the next line!
+            _sccProvider.RegisterAsPrimarySccProvider();
         }
     }
 }
