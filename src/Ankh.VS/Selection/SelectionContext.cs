@@ -8,7 +8,6 @@ using System.Collections;
 using Microsoft.VisualStudio.OLE.Interop;
 using IServiceProvider = System.IServiceProvider;
 using Microsoft.VisualStudio.Shell;
-using Ankh.SolutionExplorer;
 using Ankh.Scc;
 using Ankh.VS.SolutionExplorer;
 
