@@ -93,6 +93,12 @@ namespace Ankh.Scc
                     solution.UnadviseSolutionEvents(_documentCookie);
             }
         }
+
+        IFileStatusCache StatusCache
+        {
+            get { return GetService<IFileStatusCache>(); }
+        }
+
         #region IVsTrackProjectDocumentsEvents2 Members
 
         public int OnAfterSccStatusChanged(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, uint[] rgdwSccStatus)
