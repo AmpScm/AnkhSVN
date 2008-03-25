@@ -624,8 +624,16 @@ namespace Ankh.Selection
 
         public IEnumerable<SvnProject> GetSelectedProjects(bool recursive)
         {
-            // Temporary implementation
-            return GetOwnerProjects(recursive);
+            foreach (SelectionItem item in GetSelectedItems(recursive))
+            {
+                if (item.Id == VSConstants.VSITEMID_ROOT)
+                {
+                    if (item.SccProject != null)
+                        yield return new SvnProject(null, item.SccProject);
+                    else if (item.IsSolution)
+                        yield return SvnProject.Solution;
+                }
+            }
         }
 
         public bool IsSolutionSelected
