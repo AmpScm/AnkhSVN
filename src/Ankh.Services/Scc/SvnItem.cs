@@ -239,7 +239,7 @@ namespace Ankh
 
         /// <summary>
         /// Gets the SVN status of the item; retrieves a placeholder if the status is unknown
-        /// </summsary>
+        /// </summary>
         public AnkhStatus Status
         {
             get
