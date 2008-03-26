@@ -42,8 +42,8 @@ namespace Ankh.Scc.ProjectMap
             else if (project == null)
                 throw new ArgumentNullException("project");
 
-            _context = context;
             _project = project;
+            _context = context;            
             _projectType = GetProjectType(project);
             _files = new SccProjectFileCollection();
         }
@@ -65,21 +65,17 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                if (!_checkedProjectFile)
+                if (!_checkedProjectFile && _project != null)
                 {
                     _checkedProjectFile = true;
-                    ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+                    IVsProject project = _project as IVsProject;
+                    string name;
 
-                    if (walker != null)
+                    if (project != null && ErrorHandler.Succeeded(project.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
                     {
-                        foreach (string file in walker.GetSccFiles(Project, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.Empty))
-                        {
-                            _projectFile = file;
-                            break;
-                        }
+                        _projectFile = name;                        
                     }
                 }
-
                 return _projectFile;
             }
         }
