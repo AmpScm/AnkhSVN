@@ -5,6 +5,10 @@ using Ankh.Selection;
 
 namespace Ankh.Scc
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>The default implementation of this service is thread safe</remarks>
     public interface IProjectNotifier
     {
         void MarkDirty(SvnProject project);

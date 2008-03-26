@@ -292,6 +292,6 @@ namespace Ankh.Scc.ProjectMap
             {
                 _files[file].OnFileClose(itemId);
             }
-        }        
+        }
     }
 }
