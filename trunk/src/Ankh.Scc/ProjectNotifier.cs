@@ -10,16 +10,16 @@ using Ankh.Commands;
 
 namespace Ankh.Scc
 {
-    class ProjectNotifier : IProjectNotifier, IFileStatusMonitor
+    class ProjectNotifier : AnkhService, IProjectNotifier, IFileStatusMonitor
     {
-        readonly IAnkhServiceProvider _context;
+        readonly object _lock = new object();
+        volatile bool _posted;
+        List<SvnProject> _dirtyProjects;
+        List<SvnProject> _fullRefresh;        
 
         public ProjectNotifier(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
         }
 
         IAnkhCommandService _commandService;
@@ -29,7 +29,7 @@ namespace Ankh.Scc
         /// <value>The command service.</value>
         IAnkhCommandService CommandService
         {
-            get { return _commandService ?? (_commandService = _context.GetService<IAnkhCommandService>()); }
+            get { return _commandService ?? (_commandService = Context.GetService<IAnkhCommandService>()); }
         }
 
         public void MarkDirty(SvnProject project)
@@ -37,30 +37,39 @@ namespace Ankh.Scc
             if (project == null)
                 throw new ArgumentNullException("project");
 
-            MarkDirty(new SvnProject[] { project });
+            lock (_lock)
+            {
+                if (_dirtyProjects == null)
+                    _dirtyProjects = new List<SvnProject>();
+
+                if (!_dirtyProjects.Contains(project))
+                    _dirtyProjects.Add(project);
+
+                if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
+                    _posted = true;
+            }
         }
 
         public void MarkDirty(IEnumerable<SvnProject> projects)
         {
             if (projects == null)
                 throw new ArgumentNullException("projects");
-
-            IAnkhCommandService cmd = CommandService;
-
-            if (cmd == null)
-                return;
-
-            IList<SvnProject> prjs;
-
-            if (null == (prjs = projects as IList<SvnProject>) || projects is SvnProject[])
+            
+            lock (_lock)
             {
-                // Don't pass arrays (marshalled as safe-arrays (object[])
-                // Don't pass enumerators out of context
-                prjs = new List<SvnProject>(projects);
-            }
+                if (_dirtyProjects == null)
+                    _dirtyProjects = new List<SvnProject>();
 
-            if (prjs.Count > 0)
-                cmd.PostExecCommand(AnkhCommand.MarkProjectDirty, prjs);
+
+                foreach (SvnProject p in projects)
+                {
+                    if (!_dirtyProjects.Contains(p))
+                        _dirtyProjects.Add(p);
+                }
+
+                if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
+                    _posted = true;
+            }
         }
 
         public void MarkFullRefresh(SvnProject project)
@@ -68,7 +77,17 @@ namespace Ankh.Scc
             if(project == null)
                 throw new ArgumentNullException("project");
 
-            MarkFullRefresh(new SvnProject[] { project });
+            lock (_lock)
+            {
+                if (_fullRefresh == null)
+                    _fullRefresh = new List<SvnProject>();
+
+                if (!_fullRefresh.Contains(project))
+                    _fullRefresh.Add(project);
+
+                if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
+                    _posted = true;
+            }
         }
 
         public void MarkFullRefresh(IEnumerable<SvnProject> projects)
@@ -76,22 +95,20 @@ namespace Ankh.Scc
             if (projects == null)
                 throw new ArgumentNullException("projects");
 
-            IAnkhCommandService cmd = CommandService;
-
-            if (cmd == null)
-                return;
-
-            IList<SvnProject> prjs;
-
-            if (null == (prjs = projects as IList<SvnProject>) || projects is SvnProject[])
+            lock (_lock)
             {
-                // Don't pass arrays (marshalled as safe-arrays (object[])
-                // Don't pass enumerators out of context
-                prjs = new List<SvnProject>(projects);
-            }
+                if (_fullRefresh == null)
+                    _fullRefresh = new List<SvnProject>();
 
-            if (prjs.Count > 0)
-                cmd.PostExecCommand(AnkhCommand.MarkProjectRefresh, prjs);
+                foreach (SvnProject p in projects)
+                {
+                    if (!_fullRefresh.Contains(p))
+                        _fullRefresh.Add(p);
+                }
+
+                if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
+                    _posted = true;
+            }
         }
 
         public void ScheduleStatusUpdate(string path)
@@ -101,15 +118,59 @@ namespace Ankh.Scc
 
         public void ScheduleStatusUpdate(IList<string> paths)
         {
-            IFileStatusCache cache = _context.GetService<IFileStatusCache>();
+            IFileStatusCache cache = Context.GetService<IFileStatusCache>();
 
             if (cache != null)
                 cache.MarkDirty(paths);
 
-            IProjectFileMapper mapper = _context.GetService<IProjectFileMapper>();
+            IProjectFileMapper mapper = Context.GetService<IProjectFileMapper>();
 
             if (mapper != null)
                 MarkDirty(mapper.GetAllProjectsContaining(paths));
+        }
+
+        internal void HandleEvent(AnkhCommand command)
+        {
+            List<SvnProject> dirtyProjects;
+            List<SvnProject> fullRefresh;            
+            
+            AnkhSccProvider provider = Context.GetService<AnkhSccProvider>();            
+
+            lock(_lock)
+            {
+                _posted = false;
+
+                if(provider == null)
+                    return;
+                    
+                dirtyProjects = _dirtyProjects;
+                fullRefresh = _fullRefresh;
+                _dirtyProjects = null;
+                _fullRefresh = null;
+            }
+                
+            if(fullRefresh != null)
+            {
+                foreach(SvnProject project in fullRefresh)
+                {
+                    // Will handle glyphs and all
+                    provider.RefreshProject(project.RawHandle);
+                }
+            }
+
+            if(dirtyProjects != null)
+            {
+                foreach (SvnProject project in dirtyProjects)
+                {
+                    if(project.RawHandle == null)
+                        continue; // All IVsSccProjects have a RawHandle
+
+                    if (fullRefresh == null || !fullRefresh.Contains(project))
+                    {
+                        project.RawHandle.SccGlyphChanged(0, null, null, null);
+                    }
+                }
+            }
         }
     }
 }
