@@ -107,8 +107,13 @@ namespace Ankh.Scc
             if (ErrorHandler.Succeeded(RunningDocumentTable.GetDocumentInfo(cookie,
                 out flags, out locks, out editLocks, out name, out hier, out itemId, out ppunkDocData)))
             {
+                object document = null;
+
                 if (ppunkDocData != IntPtr.Zero)
+                {
+                    document = Marshal.GetObjectForIUnknown(ppunkDocData);
                     Marshal.Release(ppunkDocData);
+                }
 
                 if (!string.IsNullOrEmpty(name))
                 {
@@ -130,7 +135,10 @@ namespace Ankh.Scc
                         data.ItemId = itemId;
                     }
 
-                    data.Cookie = cookie;
+                    if (document != null)
+                        data.RawDocument = document;
+
+                    data.Cookie = cookie;                    
                     _cookieMap.Add(cookie, data);
                 }
             }
