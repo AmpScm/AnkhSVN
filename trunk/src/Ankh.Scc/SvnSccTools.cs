@@ -52,7 +52,7 @@ namespace Ankh.Scc
             a.ThrowOnError = false;
             a.RetrieveAllEntries = true;
             a.Depth = SvnDepth.Empty;
-            a.NoIgnore = true;
+            a.RetrieveIgnoredEntries = true;
 
             SvnStatusEventArgs status = null;
 
