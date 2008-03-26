@@ -200,7 +200,7 @@ namespace Ankh.Scc.ProjectMap
 
         internal bool TrackProjectChanges()
         {
-            return !_inLoad;
+            return _loaded && !_inLoad;
         }
 
         public IEnumerable<string> GetAllFiles()
