@@ -123,7 +123,7 @@ namespace Ankh.StatusCache
             SvnStatusArgs args = new SvnStatusArgs();
             args.Depth = depth;
             args.RetrieveAllEntries = true;
-            args.NoIgnore = true;
+            args.RetrieveIgnoredEntries = true;
             args.ThrowOnError = false;
 
             lock (_lock)
