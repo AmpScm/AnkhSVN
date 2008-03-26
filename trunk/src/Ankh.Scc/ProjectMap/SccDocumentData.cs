@@ -151,7 +151,10 @@ namespace Ankh.Scc.ProjectMap
             if (data == null)
                 throw new ArgumentNullException("data");
 
+            _initialUpdateCompleted = data._initialUpdateCompleted;
             _isDirty = data._isDirty;
+            _itemId = data._itemId;
+            _hierarchy = data._hierarchy;
         }        
     }
 }
