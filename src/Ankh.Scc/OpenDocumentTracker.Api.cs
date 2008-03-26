@@ -83,5 +83,49 @@ namespace Ankh.Scc
 
             return true;
         }
+
+        public DocumentLock LockDocuments(IEnumerable<string> paths)
+        {
+            return new SccDocumentLock(Context);
+        }
+
+        class SccDocumentLock : DocumentLock
+        {
+            readonly IAnkhServiceProvider _context;
+
+            public SccDocumentLock(IAnkhServiceProvider context)
+            {
+                if (context == null)
+                    throw new ArgumentNullException("context");
+
+                _context = context;
+            }
+
+            public override void Reload(IEnumerable<string> paths)
+            {
+                if (paths == null)
+                    throw new ArgumentNullException("paths");
+
+                OpenDocumentTracker dt = (OpenDocumentTracker)_context.GetService<IAnkhOpenDocumentTracker>();
+
+                if (dt == null)
+                    throw new InvalidOperationException();
+
+                foreach (string path in paths)
+                {
+                    SccDocumentData dd;
+                    if (dt._docMap.TryGetValue(path, out dd))
+                    {
+                        if (!dd.GetIsDirty())
+                            dd.Reload(true);
+                    }
+                }
+            }
+
+            public override void Dispose()
+            {
+                //
+            }
+        }
     }
 }
