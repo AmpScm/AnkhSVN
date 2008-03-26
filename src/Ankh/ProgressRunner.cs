@@ -5,6 +5,8 @@ using SharpSvn;
 using Ankh.ContextServices;
 using Ankh.UI;
 using Ankh.VS;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace Ankh
 {
@@ -61,8 +63,13 @@ namespace Ankh
     /// </summary>
     public class ProgressRunner
     {
-        IAnkhServiceProvider _context;
-        IProgressWorker _worker;
+        readonly IAnkhServiceProvider _context;
+        readonly IProgressWorker _worker;
+        volatile bool _cancel;
+        Form _invoker;
+        bool _done;
+        bool _cancelled;
+        Exception _exception;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressRunner"/> class.
@@ -73,6 +80,8 @@ namespace Ankh
         {
             if (context == null)
                 throw new ArgumentNullException("context");
+            else if (worker == null)
+                throw new ArgumentNullException("worker");
 
             _context = context;
             _worker = worker;
@@ -83,7 +92,7 @@ namespace Ankh
         /// </summary>
         public bool Cancelled
         {
-            get { return this.cancelled; }
+            get { return _cancelled; }
         }
 
         /// <summary>
@@ -97,13 +106,16 @@ namespace Ankh
             using (ProgressDialog dialog = new ProgressDialog())
             {
                 dialog.Caption = caption;
-                dialog.ProgressStatus += new EventHandler<ProgressStatusEventArgs>(this.ProgressStatus);
+                dialog.Cancel += new EventHandler(OnCancel);
+                dialog.ProgressStatus += OnProgressStatus;
 
                 thread.Start();
 
+                _invoker = dialog;
+                
                 dialog.ShowDialog(_context.GetService<IAnkhDialogOwner>().DialogOwner);
             }
-            if (this.cancelled)
+            if (_cancelled)
             {
                 IAnkhOperationLogger logger = _context.GetService<IAnkhOperationLogger>();
 
@@ -112,8 +124,13 @@ namespace Ankh
                     logger.WriteLine("Cancelled");
                 }
             }
-            else if (this.exception != null)
-                throw new ProgressRunnerException(this.exception);
+            else if (_exception != null)
+                throw new ProgressRunnerException(this._exception);
+        }
+
+        void OnCancel(object sender, EventArgs e)
+        {
+            _cancel = true;
         }
 
         private void Run()
@@ -124,43 +141,61 @@ namespace Ankh
 
                 using (SvnClient client = (pool != null) ? pool.GetClient() : new SvnClient())
                 {
-                    client.Cancel += new EventHandler<SvnCancelEventArgs>(Cancel);
+                    client.Cancel += OnCancel;
                     try
                     {
                         _worker.Work(new AnkhWorkerArgs(_context, client));
                     }
                     finally
                     {
-                        client.Cancel -= new EventHandler<SvnCancelEventArgs>(Cancel);
+                        client.Cancel -= OnCancel;
                     }
                 }
             }
             catch (SvnOperationCanceledException)
             {
-                this.cancelled = true;
+                _cancelled = true;
             }
             catch (Exception ex)
             {
-                this.exception = ex;
+                this._exception = ex;
             }
             finally
             {
-                this.done = true;
+                _done = true;
+                OnDone(this, EventArgs.Empty);
             }
         }
 
-        private void ProgressStatus(object sender, ProgressStatusEventArgs e)
+        private void OnDone(object sender, EventArgs e)
         {
-            if (done)
-                e.Done = true;
+            Form si = _invoker;
 
-            if(e.Cancelled)
-                this.cancel = true;
+            if (si != null && si.InvokeRequired)
+            {
+                EventHandler eh = new EventHandler(OnDone);
+                si.Invoke(eh, new object[] { sender, e });
+                return;
+            }
+
+            if (si.Visible)
+            {
+                si.Close();
+            }
         }
 
-        private void Cancel(object sender, SvnCancelEventArgs args)
+        private void OnProgressStatus(object sender, ProgressStatusEventArgs e)
         {
-            if(this.cancel)
+            if (_done)
+                e.Done = true;
+
+            if (e.Cancelled)
+                _cancel = true;
+        }
+
+        void OnCancel(object sender, SvnCancelEventArgs args)
+        {
+            if (_cancel)
                 args.Cancel = true;
         }
 
@@ -173,10 +208,5 @@ namespace Ankh
                 base("Exception thrown in progress runner thread", realException)
             { }
         }
-
-        private bool done = false;
-        private volatile bool cancel = false; // Modified out of thread
-        private bool cancelled = false;
-        private Exception exception;
     }
 }

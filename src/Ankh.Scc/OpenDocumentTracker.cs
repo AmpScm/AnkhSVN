@@ -284,7 +284,7 @@ namespace Ankh.Scc
 
             if (pHierNew != null)
                 data.Hierarchy = pHierNew;
-            if (itemidNew != 0)
+            if (itemidNew != VSConstants.VSITEMID_NIL)
                 data.ItemId = itemidNew;            
 
             return VSConstants.S_OK;

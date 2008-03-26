@@ -16,6 +16,8 @@ namespace Ankh.UI
         /// </summary>
         public event EventHandler<ProgressStatusEventArgs> ProgressStatus;
 
+        public event EventHandler Cancel;
+
         /// <summary>
         /// Loader Form
         /// </summary>
@@ -78,6 +80,8 @@ namespace Ankh.UI
 
         private void CancelClick(object sender, System.EventArgs e)
         {
+            if (Cancel != null)
+                Cancel(this, EventArgs.Empty);
             this.args.SetCancelled( true );
             this.cancelButton.Text = "Cancelling...";
             this.cancelButton.Enabled = false;
