@@ -537,9 +537,6 @@ namespace Ankh.Selection
                 if (ht.Contains(si.Hierarchy))
                     continue;
 
-                if (projectMapper == null)
-                    continue;
-
                 ht.Add(si.Hierarchy, si);
 
                 if (si.SccProject != null)

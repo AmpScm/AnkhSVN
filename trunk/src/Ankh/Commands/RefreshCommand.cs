@@ -18,11 +18,12 @@ namespace Ankh.Commands
 
             using(context.StartOperation( "Refreshing" ))
             {
-                foreach(SvnItem item in e.Selection.GetSelectedSvnItems(true))
-                {
-                    item.MarkDirty();
-                }
+                IFileStatusCache cache = e.Context.GetService<IFileStatusCache>();
                 IProjectNotifier pn = e.Context.GetService<IProjectNotifier>();
+
+                if(cache != null)
+                    cache.MarkDirty(e.Selection.GetSelectedFiles(true));
+                
                 if(pn != null)
                     pn.MarkFullRefresh(e.Selection.GetOwnerProjects(true));
             }
