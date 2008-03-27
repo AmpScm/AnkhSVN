@@ -150,22 +150,19 @@ namespace Ankh.Commands
         {
             IFileStatusCache statusCache = e.Context.GetService<IFileStatusCache>();
             IProjectFileMapper projectMap = e.Context.GetService<IProjectFileMapper>();
-            LinkedList<string> files = new LinkedList<string>();
+            LinkedList<string> paths = new LinkedList<string>();
 
             _args.ThrowOnError = false;
             _args.Notify += delegate(object sender, SvnNotifyEventArgs ne)
             {
-                SvnItem item = statusCache[ne.FullPath];
-                item.MarkDirty();
-                if(item.IsFile)
-                    files.AddLast(ne.FullPath);
+                statusCache.MarkDirty(ne.FullPath);
+                paths.AddLast(ne.FullPath);
             };
             e.Client.Commit(this.paths, _args, out commitInfo);
 
             IProjectNotifier pn = e.Context.GetService<IProjectNotifier>();
             if (pn != null)
-                pn.MarkFullRefresh(projectMap.GetAllProjectsContaining(files));
-
+                pn.MarkDirty(projectMap.GetAllProjectsContaining(paths));
         }
 
         /// <summary>
