@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.UI;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.VS
 {
@@ -27,5 +28,12 @@ namespace Ankh.VS
         /// </summary>
         /// <param name="vSContainerForm"></param>
         void OnContainerCreated(VSContainerForm vSContainerForm);
-    }
+
+
+        /// <summary>
+        /// Gets a message box instance
+        /// </summary>
+        /// <value>The message box.</value>
+        AnkhMessageBox MessageBox { get; }
+    }    
 }

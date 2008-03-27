@@ -56,6 +56,7 @@
     <Compile Include="Commands\CommandUpdateEventArgs.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Commands\IAnkhCommandService.cs" />
+    <Compile Include="UI\AnkhMessageBox.cs" />
     <Compile Include="VS\IAnkhDialogOwner.cs" />
     <Compile Include="ContextServices\IAnkhErrorHandler.cs" />
     <Compile Include="ContextServices\IAnkhOperationLogger.cs" />
@@ -86,7 +87,6 @@
     <Compile Include="Subversion\ISvnLogService.cs" />
     <Compile Include="UI\IAnkhConfigurationService.cs" />
     <Compile Include="UI\IAnkhUISite.cs" />
-    <Compile Include="UI\IDialogRunner.cs" />
     <Compile Include="UI\ISvnLogView.cs" />
     <Compile Include="UI\VSContainerForm.cs">
       <SubType>Form</SubType>

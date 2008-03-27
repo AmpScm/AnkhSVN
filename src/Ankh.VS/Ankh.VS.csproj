@@ -61,10 +61,6 @@
   <ItemGroup>
     <Compile Include="Dialogs\AnkhDialogOwner.cs" />
     <Compile Include="AnkhVSModule.cs" />
-    <Compile Include="Dialogs\AnkhDialogContainerWithToolbar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\DialogButtonCloser.cs" />
     <Compile Include="Dialogs\VSCommandRouting.cs" />
     <Compile Include="Dialogs\VSFormContainerPane.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,7 +71,6 @@
     <Compile Include="SolutionExplorer\SolutionTreeViewManager.cs" />
     <Compile Include="SolutionExplorer\StatusImageMapper.cs" />
     <Compile Include="SolutionExplorer\Win32TreeView.cs" />
-    <Compile Include="Dialogs\VSDialogRunner.cs" />
     <Compile Include="WebBrowser\AnkhWebBrowser.cs" />
   </ItemGroup>
   <ItemGroup>

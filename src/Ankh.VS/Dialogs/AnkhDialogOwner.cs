@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Ankh.ContextServices;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Runtime.InteropServices;
+using Ankh.UI;
 
 namespace Ankh.VS.Dialogs
 {
@@ -19,7 +20,7 @@ namespace Ankh.VS.Dialogs
 
         IVsUIShell Shell
         {
-            get { return _shell ?? (_shell = (IVsUIShell)GetService(typeof(SVsUIShell))); }
+            get { return _shell ?? (_shell = GetService <IVsUIShell>(typeof(SVsUIShell))); }
         }
 
         #region IAnkhDialogOwner Members
@@ -70,6 +71,15 @@ namespace Ankh.VS.Dialogs
                 return handle;
             }
         }        
+
+        #endregion
+
+        #region IAnkhDialogOwner Members
+
+        public AnkhMessageBox MessageBox
+        {
+            get { return new AnkhMessageBox(this); }
+        }
 
         #endregion
     }
