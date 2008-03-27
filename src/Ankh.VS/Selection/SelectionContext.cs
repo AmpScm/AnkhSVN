@@ -37,6 +37,7 @@ namespace Ankh.Selection
         CachedEnumerable<SvnItem> _svnItemsRecursive;
         CachedEnumerable<SvnProject> _selectedProjects;
         CachedEnumerable<SvnProject> _selectedProjectsRecursive;
+        IVsProject3 _miscFiles;
         bool _deteminedSolutionExplorer;
         bool _isSolutionExplorer;
         string _solutionFilename;
@@ -114,6 +115,12 @@ namespace Ankh.Selection
             _deteminedSolutionExplorer = false;
             _isSolutionExplorer = false;
             _solutionFilename = null;
+            _miscFiles = null;
+        }
+
+        public IVsProject3 MiscellaneousProject
+        {
+            get { return _miscFiles ?? (_miscFiles = VsShellUtilities.GetMiscellaneousProject(Context)); }
         }
 
         public IVsSolution Solution
@@ -184,7 +191,7 @@ namespace Ankh.Selection
 
             public bool IsSolution
             {
-                get { return SelectionUtils.IsSolutionSccProject(SccProject); }
+                get { return (SccProject != null) && SelectionUtils.IsSolutionSccProject(SccProject); }
             }
 
             #region IEquatable<SelectionItem> Members
@@ -354,7 +361,7 @@ namespace Ankh.Selection
         /// <param name="si"></param>
         /// <param name="previous"></param>
         /// <returns></returns>
-        private static IEnumerable<SelectionItem> GetDescendants(SelectionItem si, Dictionary<SelectionItem, SelectionItem> previous, ProjectWalkDepth depth)
+        private IEnumerable<SelectionItem> GetDescendants(SelectionItem si, Dictionary<SelectionItem, SelectionItem> previous, ProjectWalkDepth depth)
         {
             if (si.Hierarchy == null)
                 yield break;
@@ -373,6 +380,13 @@ namespace Ankh.Selection
                     Marshal.Release(hierPtr); // we are responsible to release the refcount on the out IntPtr parameter
                     if (nestedHierarchy != null)
                     {
+                        if (nestedHierarchy == MiscellaneousProject)
+                        {
+                            // Don't iterate files in the misc files project unless they are 
+                            // explicitly selected, as they are not part of the solution
+                            yield break;
+                        }
+
                         // Display name and type of the node in the Output Window
                         SelectionItem i = new SelectionItem(nestedHierarchy, id);
 
@@ -387,6 +401,8 @@ namespace Ankh.Selection
                         {
                             yield return ii;
                         }
+
+                        yield break;
                     }
                 }
             }
