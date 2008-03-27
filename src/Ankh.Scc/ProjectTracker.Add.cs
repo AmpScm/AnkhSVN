@@ -31,7 +31,7 @@ namespace Ankh.Scc
 
             bool allOk = true;
 
-            bool track = _sccProvider.TrackProjectChanges(pProject);
+            bool track = _sccProvider.TrackProjectChanges(pProject as IVsSccProject2);
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -75,12 +75,11 @@ namespace Ankh.Scc
         {
             // For now, we allow adding all files as is
             // We might propose moving files to within a managed root
-
             
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
             bool allOk = true;
 
-            bool track = _sccProvider.TrackProjectChanges(pProject);
+            bool track = _sccProvider.TrackProjectChanges(pProject as IVsSccProject2);
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -166,10 +165,9 @@ namespace Ankh.Scc
             {
                 int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
 
-                IVsProject project = rgpProjects[iProject];
-                IVsSccProject2 sccProject = project as IVsSccProject2;
+                IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                bool track = _sccProvider.TrackProjectChanges(project);
+                bool track = _sccProvider.TrackProjectChanges(sccProject);
 
                 for (; iFile < iLastFileThisProject; iFile++)
                 {
@@ -370,7 +368,10 @@ namespace Ankh.Scc
         /// <remarks>Deny a query only if allowing the operation would compromise your stable state</remarks>
         public int OnQueryAddDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYADDDIRECTORYFLAGS[] rgFlags, VSQUERYADDDIRECTORYRESULTS[] pSummaryResult, VSQUERYADDDIRECTORYRESULTS[] rgResults)
         {
-            bool track = _sccProvider.TrackProjectChanges(pProject);
+            if (pProject == null || rgpszMkDocuments == null)
+                return VSConstants.E_POINTER;
+
+            bool track = _sccProvider.TrackProjectChanges(pProject as IVsSccProject2);
 
             bool allOk = true;
             for (int i = 0; i < cDirectories; i++)
@@ -409,16 +410,27 @@ namespace Ankh.Scc
         /// <remarks>Deny a query only if allowing the operation would compromise your stable state</remarks>
         public int OnAfterAddDirectoriesEx(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSADDDIRECTORYFLAGS[] rgFlags)
         {
+            if (rgpProjects == null || rgpszMkDocuments == null)
+                return VSConstants.E_POINTER;
+
             int iDirectory = 0;
+
+            for (int i = 0; i < cDirectories; i++)
+            {
+                string s = rgpszMkDocuments[i];
+                if (!string.IsNullOrEmpty(s))
+                {
+                    StatusCache.MarkDirty(s);
+                }
+            }
 
             for (int iProject = 0; (iProject < cProjects) && (iDirectory < cDirectories); iProject++)
             {
                 int iLastDirectoryThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cDirectories;
 
-                IVsProject project = rgpProjects[iProject];
-                IVsSccProject2 sccProject = project as IVsSccProject2;
+                IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                bool track = _sccProvider.TrackProjectChanges(project);
+                bool track = _sccProvider.TrackProjectChanges(sccProject);
 
                 for (; iDirectory < iLastDirectoryThisProject; iDirectory++)
                 {
