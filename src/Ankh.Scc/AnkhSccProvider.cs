@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using AnkhSvn.Ids;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
+using Ankh.VS;
 
 namespace Ankh.Scc
 {
@@ -20,6 +21,7 @@ namespace Ankh.Scc
 
     partial class AnkhSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService
     {
+        bool _active;
         IFileStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
 
@@ -65,8 +67,21 @@ namespace Ankh.Scc
         /// </returns>
         public int AnyItemsUnderSourceControl(out int pfResult)
         {
-            Trace.WriteLine("In AnyItemsUnderSourceControl");
-            pfResult = active ? 1 : 0;
+            // Set pfResult to false when the solution can change to an other scc provider
+            bool oneManaged = _active && _managedSolution;
+
+            if (_active && !oneManaged)
+            {
+                foreach (SccProjectData data in _projectMap.Values)
+                {
+                    if (data.IsManaged)
+                    {
+                        oneManaged = true;
+                        break;
+                    }
+                }
+            }
+            pfResult = oneManaged ? 1 : 0;
             return VSConstants.S_OK;
         }
 
@@ -78,22 +93,30 @@ namespace Ankh.Scc
         /// </returns>
         public int SetActive()
         {
-            this.active = true;
-
-            //LoadInitialProjectMap(); // Make sure we know all projects
-
-            // Flush all glyphs of all projects when a user enables us.
-            IProjectNotifier pn = Context.GetService<IProjectNotifier>();
-
-            if(pn != null)
+            if (!_active)
             {
-                List<SvnProject> allProjects = new List<SvnProject>();
+                _active = true;
 
-                foreach (SccProjectData pd in _projectMap.Values)
+
+                // Disable our custom glyphs before an other SCC provider is initialized!
+                IAnkhSolutionExplorerWindow solutionExplorer = GetService<IAnkhSolutionExplorerWindow>();
+
+                if (solutionExplorer != null)
+                    solutionExplorer.EnableAnkhIcons(true);
+
+                // Delayed flush all glyphs of all projects when a user enables us.
+                IProjectNotifier pn = GetService<IProjectNotifier>();
+
+                if (pn != null)
                 {
-                    allProjects.Add(pd.SvnProject);
+                    List<SvnProject> allProjects = new List<SvnProject>();
+
+                    foreach (SccProjectData pd in _projectMap.Values)
+                    {
+                        allProjects.Add(pd.SvnProject);
+                    }
+                    pn.MarkDirty(allProjects);
                 }
-                pn.MarkDirty(allProjects);            
             }
 
             return VSConstants.S_OK;
@@ -107,8 +130,30 @@ namespace Ankh.Scc
         /// </returns>
         public int SetInactive()
         {
-            Trace.WriteLine("In SetInActive");
-            this.active = false;
+            if (_active)
+            {
+                _active = false;
+
+                // Disable our custom glyphs before an other SCC provider is initialized!
+                IAnkhSolutionExplorerWindow solutionExplorer = GetService<IAnkhSolutionExplorerWindow>();
+
+                if (solutionExplorer != null)
+                    solutionExplorer.EnableAnkhIcons(false);
+
+                // If VS asked us for c ustom glyphs, we can release the handle now
+                if (_glyphList != null)
+                {
+                    _glyphList.Dispose();
+                    _glyphList = null;
+                }
+
+                // Remove all glyphs currently set
+                foreach (SccProjectData pd in _projectMap.Values)
+                {
+                    pd.Project.SccGlyphChanged(0, null, null, null);
+                }                
+            }
+            
             return VSConstants.S_OK;
         }
 
@@ -120,7 +165,7 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int IsInstalled(out int pbInstalled)
         {
-            pbInstalled = 1;
+            pbInstalled = 1; // We are always installed as we have no external dependencies
 
             return VSConstants.S_OK;
         }
@@ -175,7 +220,7 @@ namespace Ankh.Scc
         /// <value><c>true</c> if this instance is active; otherwise, <c>false</c>.</value>
         public bool IsActive
         {
-            get { return active; }
+            get { return _active; }
         }
 
         #region // Obsolete Methods
@@ -201,9 +246,6 @@ namespace Ankh.Scc
         {
             return VSConstants.E_NOTIMPL;
         }
-        #endregion
-
-        private uint baseIndex;
-        private bool active;        
+        #endregion        
     }
 }

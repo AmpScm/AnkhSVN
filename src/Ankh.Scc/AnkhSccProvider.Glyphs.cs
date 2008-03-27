@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using SharpSvn;
+using System.Windows.Forms;
 
 namespace Ankh.Scc
 {
@@ -49,8 +50,17 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int GetSccGlyph(int cFiles, string[] rgpszFullPaths, VsStateIcon[] rgsiGlyphs, uint[] rgdwSccStatus)
         {
-            if (rgpszFullPaths == null)
+            if (rgpszFullPaths == null || rgsiGlyphs == null)
                 return VSConstants.E_POINTER; // Documented as impossible
+
+            if (!_active)
+            {
+                for (int i = 0; i < cFiles; i++)
+                {
+                    rgsiGlyphs[i] = VsStateIcon.STATEICON_NOSTATEICON;
+                }
+                return VSConstants.S_OK;
+            }
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -121,7 +131,8 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int GetSccGlyphFromStatus(uint dwSccStatus, VsStateIcon[] psiGlyph)
         {
-            psiGlyph[0] = VsStateIcon.STATEICON_CHECKEDIN;
+            // This method is called when some user (e.g. classview) 
+            psiGlyph[0] = VsStateIcon.STATEICON_BLANK;
 
             return VSConstants.S_OK;
         }
@@ -168,11 +179,27 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
+        uint _baseIndex;
+        ImageList _glyphList;
         public int GetCustomGlyphList(uint BaseIndex, out uint pdwImageListHandle)
         {
-            pdwImageListHandle = (uint)StatusImages.StatusImageList.Handle.ToInt32();
+            if (_glyphList != null && BaseIndex != _baseIndex)
+            {
+                _glyphList.Dispose();
+                _glyphList = null;
+            }
 
-            this.baseIndex = BaseIndex;
+            // We give VS all our custom glyphs from baseindex upwards
+            if (_glyphList == null)
+            {
+                _baseIndex = BaseIndex;
+                _glyphList = StatusImages.CreateStatusImageList();
+                for(int i = (int)BaseIndex-1; i >= 0; i--)
+                {
+                    _glyphList.Images.RemoveAt(i);
+                }                
+            }
+            pdwImageListHandle = unchecked((uint)_glyphList.Handle);
 
             return VSConstants.S_OK;
         }
