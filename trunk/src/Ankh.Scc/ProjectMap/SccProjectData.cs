@@ -20,7 +20,7 @@ namespace Ankh.Scc.ProjectMap
         WebSite,
     }
 
-    [DebuggerDisplay("Project={ProjectFile}, ProjectType={_projectType}")]
+    [DebuggerDisplay("Project={ProjectName}, ProjectType={_projectType}")]
     class SccProjectData
     {
         readonly IAnkhServiceProvider _context;
@@ -34,6 +34,7 @@ namespace Ankh.Scc.ProjectMap
         bool _checkedProjectFile;
         AnkhSccProvider _scc;
         SvnProject _svnProjectInstance;
+        string _projectName;
 
         public SccProjectData(IAnkhServiceProvider context, IVsSccProject2 project)
         {
@@ -59,6 +60,26 @@ namespace Ankh.Scc.ProjectMap
 
             // Called by IVsSccManager.RegisterSccProject() when we were preregistered
             internal set { _isManaged = value; }
+        }
+
+        public string ProjectName
+        {
+            get
+            {
+                if (_projectName == null && _project != null)
+                {
+                    _projectName = "";
+                    IVsHierarchy hier = _project as IVsHierarchy;
+                    object name;
+
+                    if(hier != null && ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
+                    {
+                        _projectName = name as string;
+                    }
+                }
+
+                return _projectName;
+            }
         }
 
         public string ProjectFile
