@@ -234,17 +234,16 @@ namespace Ankh.Scc
             }
         }
 
-        internal bool TrackProjectChanges(IVsProject project)
+        internal bool TrackProjectChanges(IVsSccProject2 project)
         {
-            IVsSccProject2 sccProject = project as IVsSccProject2;
-
+            // We can be called with a null project
             SccProjectData data;
-            if (sccProject != null && _projectMap.TryGetValue(sccProject, out data))
+            if (project != null && _projectMap.TryGetValue(project, out data))
             {
                 return data.TrackProjectChanges(); // Allows temporary disabling changes
             }
 
-            return true;
+            return false;
         }
 
         /// <summary>
