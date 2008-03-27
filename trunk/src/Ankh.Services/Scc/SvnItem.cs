@@ -346,7 +346,7 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Is this resource modified(implies that it is versioned)?
+        /// Is this resource modified; implies the item is versioned
         /// </summary>
         public bool IsModified
         {
@@ -356,11 +356,7 @@ namespace Ankh
                 
                 AnkhStatus status = _status;
 
-                SvnStatus t = status.LocalContentStatus;
-                SvnStatus p = status.LocalPropertyStatus;
-                return GetIsVersioned(status) &&
-                    (t != SvnStatus.Normal ||
-                      (p != SvnStatus.None && p != SvnStatus.Normal));
+                return GetIsVersioned(status) && (status.CombinedStatus != SvnStatus.Normal);
             }
         }  
 

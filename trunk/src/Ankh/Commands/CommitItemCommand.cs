@@ -34,12 +34,19 @@ namespace Ankh.Commands
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             IAnkhOpenDocumentTracker documentTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
+            IProjectFileMapper projectMapper = e.Context.GetService<IProjectFileMapper>();
+
             foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
             {
-                if (i.IsModified)
-                    return;
-                if (documentTracker.IsDocumentDirty(i.FullPath))
-                    return;
+                if (i.IsVersioned)
+                {
+                    if (i.IsModified || documentTracker.IsDocumentDirty(i.FullPath))
+                        return; // There might be a new version of this file
+                }
+                else if (i.IsIgnored)
+                    continue;
+                else if (projectMapper.ContainsPath(i.FullPath))
+                    return; // The file is 'to be added'
             }
 
             e.Enabled = false;
@@ -56,30 +63,35 @@ namespace Ankh.Commands
             // make sure all files are saved
             IAnkhOpenDocumentTracker tracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
             IFileStatusCache statusCache = e.Context.GetService<IFileStatusCache>();
+            IProjectFileMapper projectMapper = e.Context.GetService<IProjectFileMapper>();
 
             tracker.SaveDocuments(e.Selection.GetSelectedFiles());
-            
+
             Collection<SvnItem> resources = new Collection<SvnItem>();
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (item.IsModified)
-                {
-                    if(!resources.Contains(item))
-                        resources.Add(item);
+                if (item.IsVersioned && !item.IsModified)
+                    continue; // Check for dirty files is not necessary here, because we just saved the dirty documents
+                else if (item.IsIgnored)
+                    continue;
+                else if (!projectMapper.ContainsPath(item.FullPath))
+                    continue;
 
-                    if (item.Status.LocalContentStatus == SvnStatus.Added)
+                if (!resources.Contains(item))
+                    resources.Add(item);
+
+                if (!item.IsVersioned || item.Status.LocalContentStatus == SvnStatus.Added)
+                {
+                    SvnItem parent = GetParent(statusCache, item);
+                    while (parent != null && parent.IsVersioned && parent.Status.LocalContentStatus == SvnStatus.Added)
                     {
-                        SvnItem parent = GetParent(statusCache, item);
-                        while (parent != null && parent.IsVersioned && parent.Status.LocalContentStatus == SvnStatus.Added)
-                        {
-                            if(!resources.Contains(parent))
-                                resources.Add(parent);
-                            parent = GetParent(statusCache, parent);
-                        }
+                        if (!resources.Contains(parent))
+                            resources.Add(parent);
+                        parent = GetParent(statusCache, parent);
                     }
                 }
-                // Check for dirty files is not necessary here, because we just saved the dirty documents
+
             }
 
             if (resources.Count == 0)
@@ -87,7 +99,7 @@ namespace Ankh.Commands
 
             _args = new SvnCommitArgs();
 
-            CommitOperation operation = new CommitOperation( 
+            CommitOperation operation = new CommitOperation(
                 _args,
                 new SimpleProgressWorker(new SimpleProgressWorkerCallback(this.DoCommit)),
                 resources,
@@ -98,18 +110,18 @@ namespace Ankh.Commands
             // bail out if the user cancels
             bool cancelled = !operation.ShowLogMessageDialog();
             this.storedLogMessage = operation.LogMessage;
-            if ( cancelled )
+            if (cancelled)
                 return;
 
             // we need to commit to each repository separately
-            ICollection repositories = this.SortByRepository( e.Context, operation.Items );           
+            ICollection repositories = this.SortByRepository(e.Context, operation.Items);
 
             this.commitInfo = null;
-            
-            foreach( IList items in repositories )
+
+            foreach (IList items in repositories)
             {
                 string startText = "Committing ";
-                if ( repositories.Count > 1 && items.Count > 0 )
+                if (repositories.Count > 1 && items.Count > 0)
                     startText += "to repository " + ((SvnItem)items[0]).Status.Uri;
                 using (e.Context.BeginOperation(startText))
                 {
@@ -170,52 +182,50 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        private ICollection SortByRepository( AnkhContext context, IList items )
+        private ICollection SortByRepository(AnkhContext context, IList items)
         {
             Dictionary<string, List<SvnItem>> repositories = new Dictionary<string, List<SvnItem>>(StringComparer.OrdinalIgnoreCase);
-            foreach( SvnItem item in items )
+            foreach (SvnItem item in items)
             {
-                string uuid = this.GetUuid( context, item );
+                string uuid = this.GetUuid(context, item);
 
                 // give up on this one
-                if ( uuid == null )
+                if (uuid == null)
                     uuid = DefaultUuid;
 
-                if ( !repositories.ContainsKey(uuid) )
+                if (!repositories.ContainsKey(uuid))
                 {
-                    repositories.Add( uuid, new List<SvnItem>() ); 
+                    repositories.Add(uuid, new List<SvnItem>());
                 }
-                repositories[uuid].Add( item );
+                repositories[uuid].Add(item);
             }
 
             return repositories.Values;
         }
 
-        private string GetUuid( AnkhContext context, SvnItem item )
+        private string GetUuid(AnkhContext context, SvnItem item)
         {
             string uuid = item.Status.RepositoryId;
             // freshly added items have no uuid
-            if ( uuid == null )
+            if (uuid == null)
             {
-                string parentDir = PathUtils.GetParent( item.FullPath );
-                if ( Directory.Exists( parentDir ) )
+                string parentDir = PathUtils.GetParent(item.FullPath);
+                if (Directory.Exists(parentDir))
                 {
                     IFileStatusCache statusCache = context.GetService<IFileStatusCache>();
                     SvnItem parentItem = statusCache[parentDir];
                     uuid = parentItem.Status.RepositoryId;
 
                     // still nothing? try the parent item
-                    if ( uuid == null )
-                        return this.GetUuid( context, parentItem );
-                }   
+                    if (uuid == null)
+                        return this.GetUuid(context, parentItem);
+                }
                 else
                 {
-                    return null; 
-                }                    
+                    return null;
+                }
             }
             return uuid;
         }
-
-
     }
 }
