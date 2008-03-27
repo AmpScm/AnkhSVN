@@ -14,7 +14,7 @@ namespace Ankh.UI
     [CLSCompliant(false)]
     public interface IAnkhVSContainerForm
     {
-        IVsToolWindowToolbarHost ToolBarHost { get; }
+        //IVsToolWindowToolbarHost ToolBarHost { get; }
     }
 
     /// <summary>
@@ -154,16 +154,5 @@ namespace Ankh.UI
             get { return _toolbarId; }
             set { _toolbarId = value; }
         }
-
-        #region Infrastructure for hosting in VS        
-
-        IVsToolWindowToolbarHost __toolBarHost;
-
-        IVsToolWindowToolbarHost IAnkhVSContainerForm.ToolBarHost
-        {
-            get { return __toolBarHost; }
-        }
-
-        #endregion
-    }    
+    }
 }
