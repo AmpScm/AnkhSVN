@@ -18,10 +18,6 @@
      Inputs="$(MSBuildAllProjects)" 
      Outputs="@(DependencyDownload->'%(TargetDir)\%(Version)-%(Identity).tick')">
      
-     <!--Message Importance="High" Text="Dependencies: $(MSBuildAllProjects)" />
-     <Message Importance="High" Text="Ticks: @(DependencyDownload->'%(TargetDir)\%(Version)-%(Identity).tick')" />
-     <Message Importance="High" Text="Urls: @(DependencyDownload->'%(Url)%(Identity)')" /-->
-          
     <Delete Files="@(DependencyDownload->'%(TargetDir)\%(Version)-%(Identity).tick')" />
 		<CachedDownloadAndExtract
 			Uris="@(DependencyDownload->'%(Url)%(Identity)')"
@@ -37,7 +33,6 @@
 			Outputs="@(XslSource->'%(To)')"
 			DependsOnTargets="$(ApplyXslTemplatesDependsOn)"
 			>
-		<Message Importance="High" Text="Extra references: @(ReferencePath)" />
 		<ApplyXslTransform
 			Sources="@(XslSource)"
 			Transform="@(XslSource->'%(Transform)')"
