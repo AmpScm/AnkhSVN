@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using AnkhSvn.Ids;
 using Ankh.Selection;
+using System.Diagnostics;
 
 namespace Ankh.Commands
 {
@@ -19,11 +20,13 @@ namespace Ankh.Commands
 
         public AnkhCommand Command
         {
+            [DebuggerStepThrough]
             get { return _command; }
         }
 
         public AnkhContext Context
         {
+            [DebuggerStepThrough]
             get { return _context; }
         }
 
@@ -33,6 +36,7 @@ namespace Ankh.Commands
         /// <value>The selection.</value>
         public ISelectionContext Selection
         {
+            [DebuggerStepThrough]
             get { return _context.GetService<ISelectionContext>(); }
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 
 namespace Ankh
 {
@@ -30,6 +31,7 @@ namespace Ankh
         /// <value>The context.</value>
         protected IAnkhServiceProvider Context
         {
+            [DebuggerStepThrough]
             get { return _context; }
         }
 
@@ -42,6 +44,7 @@ namespace Ankh
         /// <returns>
         /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
+        [DebuggerStepThrough]
         T IAnkhServiceProvider.GetService<T>()
         {
             return _context.GetService<T>();
@@ -53,6 +56,7 @@ namespace Ankh
         /// <typeparam name="T"></typeparam>
         /// <param name="type">The type.</param>
         /// <returns></returns>
+        [DebuggerStepThrough]
         T IAnkhServiceProvider.GetService<T>(Type type)
         {
             return _context.GetService<T>(type);
@@ -65,6 +69,7 @@ namespace Ankh
         /// <returns>
         /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
+        [DebuggerStepThrough]
         protected T GetService<T>()
             where T : class
         {
@@ -77,6 +82,7 @@ namespace Ankh
         /// <typeparam name="T"></typeparam>
         /// <param name="type">The type.</param>
         /// <returns></returns>
+        [DebuggerStepThrough]
         protected T GetService<T>(Type type)
             where T : class
         {
@@ -90,6 +96,7 @@ namespace Ankh
         /// <returns>
         /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
+        [DebuggerStepThrough]
         object IServiceProvider.GetService(Type serviceType)
         {
             return _context.GetService(serviceType);
@@ -102,6 +109,7 @@ namespace Ankh
         /// <returns>
         /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
+        [DebuggerStepThrough]
         protected object GetService(Type serviceType)
         {
             return _context.GetService(serviceType);
@@ -112,9 +120,10 @@ namespace Ankh
         /// <summary>
         /// Gets the service container.
         /// </summary>
-        /// <value>The service container.</value>
+        /// <value>The service container.</value>        
         protected IServiceContainer ServiceContainer
         {
+            [DebuggerStepThrough]
             get { return _context.GetService<IServiceContainer>(); }
         }
     }
