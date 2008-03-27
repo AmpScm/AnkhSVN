@@ -131,7 +131,8 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int GetSccGlyphFromStatus(uint dwSccStatus, VsStateIcon[] psiGlyph)
         {
-            // This method is called when some user (e.g. classview) 
+            // This method is called when some user (e.g. like classview) wants to combine icons
+            // (Unfortunately classview uses a hardcoded mapping)
             psiGlyph[0] = VsStateIcon.STATEICON_BLANK;
 
             return VSConstants.S_OK;

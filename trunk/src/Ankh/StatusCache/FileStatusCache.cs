@@ -276,7 +276,7 @@ namespace Ankh.StatusCache
                 if (!_deletions.TryGetValue(parentDir, out deletedItems))
                     _deletions[parentDir] = deletedItems = new DeletedSvnItemList();
 
-                if(deletedItems.Contains(path) && deletedItems[path] != item)
+                if(deletedItems.Contains(path))
                     deletedItems.Remove(path);
 
                 deletedItems.Add(item);

@@ -445,6 +445,9 @@ namespace Ankh.Selection
         /// <returns></returns>
         IEnumerable<string> InternalGetSelectedFiles(bool recursive)
         {
+            if (IsSolutionSelected && !string.IsNullOrEmpty(SolutionFilename))
+                yield return SolutionFilename;
+
             foreach (SelectionItem i in GetSelectedItems(recursive))
             {
                 Dictionary<string, string> foundFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -518,11 +521,12 @@ namespace Ankh.Selection
                 if (ht.Contains(si.Hierarchy))
                     continue;
 
+                if (projectMapper == null)
+                    continue;
+
                 ht.Add(si.Hierarchy, si);
 
-                if (si.IsSolution)
-                    yield return SvnProject.Solution;
-                else if (si.SccProject != null)
+                if (si.SccProject != null)
                 {
                     yield return new SvnProject(null, si.SccProject);
                     continue;
@@ -540,9 +544,8 @@ namespace Ankh.Selection
                     projectMapper = Context.GetService<IProjectFileMapper>();
                 }
 
-                foreach (string file in files)
-                {
-                    if (projectMapper != null)
+                if (projectMapper != null)
+                    foreach (string file in files)
                     {
                         foreach (SvnProject project in projectMapper.GetAllProjectsContaining(file))
                         {
@@ -561,11 +564,6 @@ namespace Ankh.Selection
                             }
                         }
                     }
-                    else
-                    {
-                        yield return new SvnProject(file, null);
-                    }
-                }
             }
         }
 
@@ -628,10 +626,8 @@ namespace Ankh.Selection
             {
                 if (item.Id == VSConstants.VSITEMID_ROOT)
                 {
-                    if (item.SccProject != null)
+                    if (!item.IsSolution && item.SccProject != null)
                         yield return new SvnProject(null, item.SccProject);
-                    else if (item.IsSolution)
-                        yield return SvnProject.Solution;
                 }
             }
         }

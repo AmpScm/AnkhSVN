@@ -61,10 +61,10 @@ namespace Ankh.Scc
                     _dirtyProjects = new List<SvnProject>();
 
 
-                foreach (SvnProject p in projects)
+                foreach (SvnProject project in projects)
                 {
-                    if (!_dirtyProjects.Contains(p))
-                        _dirtyProjects.Add(p);
+                    if (!_dirtyProjects.Contains(project))
+                        _dirtyProjects.Add(project);
                 }
 
                 if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
@@ -100,10 +100,10 @@ namespace Ankh.Scc
                 if (_fullRefresh == null)
                     _fullRefresh = new List<SvnProject>();
 
-                foreach (SvnProject p in projects)
+                foreach (SvnProject project in projects)
                 {
-                    if (!_fullRefresh.Contains(p))
-                        _fullRefresh.Add(p);
+                    if (!_fullRefresh.Contains(project))
+                        _fullRefresh.Add(project);
                 }
 
                 if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
