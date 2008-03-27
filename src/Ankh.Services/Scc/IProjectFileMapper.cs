@@ -40,5 +40,12 @@ namespace Ankh.Scc
         ICollection<string> GetAllFilesOfAllProjects();
 
         SvnProject ResolveRawProject(SvnProject project);
+
+        /// <summary>
+        /// Gets a boolean indicating whether one or more projects (or the solution) contains path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        bool ContainsPath(string path);
     }
 }

@@ -364,6 +364,28 @@ namespace Ankh.Scc
         }
 
         /// <summary>
+        /// Gets a boolean indicating whether one or more projects (or the solution) contains path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public bool ContainsPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            if (_fileMap.ContainsKey(path))
+                return true;
+
+            // TODO: Keep some local copy of the solution filename
+            ISelectionContext sc = GetService<ISelectionContext>();
+
+            if (string.Equals(path, sc.SolutionFilename, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
         /// Gets a list of all files contained within <paramref name="project"/>
         /// </summary>
         /// <param name="project"></param>
