@@ -48,6 +48,17 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Gets the service of the specified type safely casted to T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        T IAnkhServiceProvider.GetService<T>(Type type)
+        {
+            return _context.GetService<T>(type);
+        }
+
+        /// <summary>
         /// Gets the service object of the specified type.
         /// </summary>
         /// <typeparam name="T">The type of service to get</typeparam>
@@ -55,8 +66,21 @@ namespace Ankh
         /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
         protected T GetService<T>()
+            where T : class
         {
             return _context.GetService<T>();
+        }
+
+        /// <summary>
+        /// Gets the service of the specified type safely casted to T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        protected T GetService<T>(Type type)
+            where T : class
+        {
+            return _context.GetService<T>(type);
         }
 
         /// <summary>

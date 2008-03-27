@@ -54,8 +54,16 @@ namespace Ankh
         /// </returns>
         [DebuggerStepThrough]
         public T GetService<T>()
+            where T : class
         {
             return _runtime.GetService<T>();
+        }
+
+        [DebuggerStepThrough]
+        public T GetService<T>(Type type)
+            where T : class
+        {
+            return _runtime.GetService<T>(type);
         }
 
         #endregion
@@ -96,6 +104,6 @@ namespace Ankh
                 else
                     return null;
             }
-        }
+        }        
     }
 }

@@ -180,9 +180,18 @@ namespace Ankh.VSPackage
 
         #region IAnkhServiceProvider Members
 
+        [DebuggerStepThrough]
         public T GetService<T>()
+            where T : class
         {
             return (T)GetService(typeof(T));
+        }
+
+        [DebuggerStepThrough]
+        public T GetService<T>(Type serviceType)
+            where T : class
+        {
+            return (T)GetService(serviceType);
         }
 
         #endregion

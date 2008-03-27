@@ -80,12 +80,28 @@ namespace Ankh
         /// <summary>
         /// Gets the service.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">The type of service to get</typeparam>
+        /// <returns>
+        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
+        /// </returns>
         [DebuggerStepThrough]
         public T GetService<T>()
+            where T : class
         {
-            return (T)GetService(typeof(T));
+            return GetService(typeof(T)) as T;
+        }
+
+        /// <summary>
+        /// Gets the service of the specified type safely casted to T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public T GetService<T>(Type type)
+            where T : class
+        {
+            return GetService(type) as T;
         }
 
         #endregion

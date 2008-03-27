@@ -15,7 +15,18 @@ namespace Ankh
         /// <returns>
         /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
-        T GetService<T>();
+        T GetService<T>()
+            where T : class;
+
+
+        /// <summary>
+        /// Gets the service of the specified type safely casted to T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        T GetService<T>(Type serviceType)
+            where T : class;
     }
 
     /// <summary>
@@ -52,8 +63,20 @@ namespace Ankh
         /// </returns>
         [DebuggerStepThrough]
         public T GetService<T>()
+            where T : class
         {
             return (T)GetService(typeof(T));
+        }
+
+        #endregion
+
+        #region IAnkhServiceProvider Members
+
+        [DebuggerStepThrough]
+        public T GetService<T>(Type serviceType)
+            where T : class
+        {
+            return GetService(serviceType) as T;
         }
 
         #endregion

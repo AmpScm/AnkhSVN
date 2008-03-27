@@ -85,8 +85,22 @@ namespace Ankh
         /// </returns>
         [DebuggerStepThrough]
         public T GetService<T>()
+            where T : class
         {
-            return (T)GetService(typeof(T));
+            return GetService(typeof(T)) as T;
+        }
+
+        /// <summary>
+        /// Gets the service of the specified type safely casted to T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public T GetService<T>(Type type)
+            where T : class
+        {
+            return GetService(type) as T;
         }
 
         #endregion
