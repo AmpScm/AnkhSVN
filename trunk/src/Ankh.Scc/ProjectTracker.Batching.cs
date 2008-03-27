@@ -33,6 +33,7 @@ namespace Ankh.Scc
         public int OnCancelQueryBatch()
         {
             _inBatch = _batchOk = false;
+            RegisterForSccCleanup();
             return VSConstants.S_OK;
         }
 
@@ -47,6 +48,7 @@ namespace Ankh.Scc
         {
             pfActionOK = _inBatch && _batchOk ? 1 : 0;
             _inBatch = _batchOk = false;
+            RegisterForSccCleanup();
             return VSConstants.S_OK;
         }
 
@@ -58,7 +60,6 @@ namespace Ankh.Scc
             IVsUIShell shell = (IVsUIShell)Context.GetService(typeof(SVsUIShell));
 
             // TODO: Show dialog containing a summary of the errors in _batchErrors
-
             // shell.ShowMessageBox(....)
             _batchErrors.Clear();
         }

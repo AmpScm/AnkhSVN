@@ -24,18 +24,29 @@ namespace Ankh.Scc
 
         public int OnAfterRemoveFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEFILEFLAGS[] rgFlags)
         {
+            if (rgpProjects == null || rgpszMkDocuments == null)
+                return VSConstants.E_POINTER;
+
+            for (int i = 0; i < cFiles; i++)
+            {
+                string s = rgpszMkDocuments[i];
+
+                if (!string.IsNullOrEmpty(s))
+                    StatusCache.MarkDirty(s);
+            }
+
             int iFile = 0;
 
             for (int iProject = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
             {
                 int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
 
-                IVsProject project = rgpProjects[iProject];
-                IVsSccProject2 sccProject = project as IVsSccProject2;
+                IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
+                bool track = _sccProvider.TrackProjectChanges(sccProject);
 
                 for (; iFile < iLastFileThisProject; iFile++)
                 {
-                    if (sccProject == null)
+                    if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
                     string file = rgpszMkDocuments[iFile];
@@ -63,18 +74,29 @@ namespace Ankh.Scc
 
         public int OnAfterRemoveDirectories(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEDIRECTORYFLAGS[] rgFlags)
         {
+            if (rgpProjects == null || rgpszMkDocuments == null)
+                return VSConstants.E_POINTER;
+
             int iDirectory = 0;
+
+            for (int i = 0; i < cDirectories; i++)
+            {
+                string s = rgpszMkDocuments[i];
+
+                if (!string.IsNullOrEmpty(s))
+                    StatusCache.MarkDirty(s);
+            }
 
             for (int iProject = 0; (iProject < cProjects) && (iDirectory < cDirectories); iProject++)
             {
                 int iLastDirectoryThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cDirectories;
 
-                IVsProject project = rgpProjects[iProject];
-                IVsSccProject2 sccProject = project as IVsSccProject2;
+                IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
+                bool track = _sccProvider.TrackProjectChanges(sccProject);
 
                 for (; iDirectory < iLastDirectoryThisProject; iDirectory++)
                 {
-                    if (sccProject == null)
+                    if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
                     _sccProvider.OnProjectDirectoryRemoved(sccProject, rgpszMkDocuments[iDirectory], rgFlags[iDirectory]);
