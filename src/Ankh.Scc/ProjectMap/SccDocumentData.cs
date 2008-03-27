@@ -336,7 +336,7 @@ namespace Ankh.Scc.ProjectMap
         /// <summary>
         /// Enables the data document to place locks on its storage.
         /// </summary>
-        public void HandsOn()
+        public bool HandsOn()
         {
             IVsPersistDocData3 pdd3 = RawDocument as IVsPersistDocData3;
 
