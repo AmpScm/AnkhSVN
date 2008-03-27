@@ -52,12 +52,6 @@ namespace Ankh.Commands
             e.Enabled = false;
         }
 
-        static SvnItem GetParent(IFileStatusCache statusCache, SvnItem item)
-        {
-            string parentDir = Path.GetDirectoryName(item.FullPath);
-            return statusCache[parentDir];
-        }
-
         public override void OnExecute(CommandEventArgs e)
         {
             // make sure all files are saved
@@ -83,12 +77,13 @@ namespace Ankh.Commands
 
                 if (!item.IsVersioned || item.Status.LocalContentStatus == SvnStatus.Added)
                 {
-                    SvnItem parent = GetParent(statusCache, item);
+                    SvnItem parent = item.Parent;
                     while (parent != null && parent.IsVersioned && parent.Status.LocalContentStatus == SvnStatus.Added)
                     {
                         if (!resources.Contains(parent))
                             resources.Add(parent);
-                        parent = GetParent(statusCache, parent);
+
+                        parent = parent.Parent;
                     }
                 }
 
@@ -114,7 +109,7 @@ namespace Ankh.Commands
                 return;
 
             // we need to commit to each repository separately
-            ICollection repositories = this.SortByRepository(e.Context, operation.Items);
+            ICollection<List<SvnItem>> repositories = this.SortByRepository(e.Context, operation.Items);
 
             this.commitInfo = null;
 
@@ -182,7 +177,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        private ICollection SortByRepository(AnkhContext context, IList items)
+        private ICollection<List<SvnItem>> SortByRepository(AnkhContext context, IList items)
         {
             Dictionary<string, List<SvnItem>> repositories = new Dictionary<string, List<SvnItem>>(StringComparer.OrdinalIgnoreCase);
             foreach (SvnItem item in items)
