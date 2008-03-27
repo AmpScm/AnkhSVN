@@ -10,13 +10,14 @@ using IServiceProvider = System.IServiceProvider;
 using SharpSvn;
 using Ankh.UI.Services;
 using Ankh.UI;
+using System.Diagnostics;
 
 namespace Ankh.Tests
 {
     /// <summary>
     /// Summary description for ContextBase.
     /// </summary>
-    public class ContextBase : IContext, IDTEContext
+    public class ContextBase : AnkhServiceContainer, IContext, IDTEContext
     {        
         public ContextBase()
         {
@@ -37,15 +38,6 @@ namespace Ankh.Tests
                 if ( this.outputPane == null )
                     this.outputPane = new OutputPaneWriter( this, "Test" );
                 return this.outputPane;
-            }
-        }
-
-        public IServiceProvider ServiceProvider
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get
-            {
-                return this.dte as IServiceProvider;
             }
         }
 
@@ -666,25 +658,7 @@ namespace Ankh.Tests
 			get { throw new Exception("The method or operation is not implemented."); }
 		}
 
-		#endregion
-
-        #region IAnkhServiceProvider Members
-
-        public T GetService<T>()
-        {
-            return (T)GetService(typeof(T));
-        }
-
-        #endregion
-
-        #region IServiceProvider Members
-
-        public object GetService(Type serviceType)
-        {
-            return ServiceProvider.GetService(serviceType);
-        }
-
-        #endregion
+		#endregion        
 
         #region IContext Members
 
