@@ -49,7 +49,7 @@ namespace Ankh
         XBool _isVersionable; // Unknown, Yes, No
         bool _ticked;
 
-        public SvnItem(IAnkhServiceProvider context, string fullPath, AnkhStatus status)            
+        public SvnItem(IAnkhServiceProvider context, string fullPath, AnkhStatus status)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -113,9 +113,9 @@ namespace Ankh
                     _exists = XBool.False;
                     break;
                 default:
-                // case SvnStatus.Deleted: // The file is scheduled for delete; but can exist locally
+                    // case SvnStatus.Deleted: // The file is scheduled for delete; but can exist locally
                     break;
-                
+
             }
 
             // In the obstructed case the NodeKind is incorrect!
@@ -129,7 +129,7 @@ namespace Ankh
                 case SvnNodeKind.File:
                     _isFile = XBool.True;
                     break;
-            }            
+            }
         }
 
         void ISvnItemUpdate.RefreshTo(AnkhStatus status)
@@ -207,7 +207,7 @@ namespace Ankh
 
             _exists = XBool.True;
 
-            if((value & NativeMethods.FILE_ATTRIBUTE_READONLY) != 0)
+            if ((value & NativeMethods.FILE_ATTRIBUTE_READONLY) != 0)
                 _readOnly = XBool.True;
 
             if ((value & NativeMethods.FILE_ATTRIBUTE_DIRECTORY) != 0)
@@ -245,7 +245,7 @@ namespace Ankh
             get
             {
                 EnsureClean();
-                
+
                 return _status;
             }
         }
@@ -322,7 +322,7 @@ namespace Ankh
             get
             {
                 EnsureClean();
-                
+
                 return GetIsVersioned(_status);
             }
         }
@@ -353,12 +353,12 @@ namespace Ankh
             get
             {
                 EnsureClean();
-                
+
                 AnkhStatus status = _status;
 
                 return GetIsVersioned(status) && (status.CombinedStatus != SvnStatus.Normal);
             }
-        }  
+        }
 
         /// <summary>
         /// Whether the item is potentially versionable.
@@ -379,7 +379,7 @@ namespace Ankh
 
                 return _isVersionable == XBool.True;
             }
-        }        
+        }
 
         /// <summary>
         /// Gets a boolean indicating whether the <see cref="SvnItem"/> specifies a readonly file
@@ -408,7 +408,7 @@ namespace Ankh
                 return _exists == XBool.True;
             }
         }
- 
+
         /// <summary>
         /// Gets a boolean indicating whether you must lock the <see cref="SvnItem"/> before editting
         /// </summary>
@@ -421,14 +421,14 @@ namespace Ankh
                 {
                     _mustLock = XBool.False;
 
-                    if(IsFile && IsReadOnly && IsVersioned)
+                    if (IsFile && IsReadOnly && IsVersioned)
                     {
                         using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
                         {
                             string propVal;
                             if (client.TryGetProperty(new SvnPathTarget(_fullPath), SvnPropertyNames.SvnNeedsLock, out propVal))
                             {
-                                if(propVal == SvnPropertyNames.SvnBooleanValue)
+                                if (propVal == SvnPropertyNames.SvnBooleanValue)
                                     _mustLock = XBool.True;
                             }
                         }
@@ -448,7 +448,7 @@ namespace Ankh
             get
             {
                 EnsureClean();
-                
+
                 return _status.IsLockedLocal;
             }
         }
@@ -461,7 +461,7 @@ namespace Ankh
             get
             {
                 EnsureClean();
-                
+
                 return _status.LocalContentStatus == SvnStatus.Obstructed;
             }
         }
@@ -487,7 +487,7 @@ namespace Ankh
             get
             {
                 EnsureClean();
-                
+
                 return _status.LocalContentStatus == SvnStatus.Deleted;
             }
         }
@@ -500,7 +500,7 @@ namespace Ankh
             get
             {
                 EnsureClean();
-                
+
                 return (_status.LocalContentStatus == SvnStatus.Ignored);
             }
         }
@@ -534,20 +534,43 @@ namespace Ankh
             }
 
             return paths;
-        }        
+        }
 
         void EnsureClean()
         {
             Debug.Assert(_statusDirty != XBool.None, "Recursive refresh call");
 
             if (_statusDirty == XBool.True)
-                this.RefreshMe();            
-        }        
+                this.RefreshMe();
+        }
 
         public void Dispose()
         {
             // TODO: Mark item as no longer valid
-        }        
+        }
+
+        /// <summary>
+        /// Gets the <see cref="SvnItem"/> of this instances parent (the directory it is in)
+        /// </summary>
+        /// <value>The parent directory or <c>null</c> if this instance is the root directory 
+        /// or the cache can not be contacted</value>
+        public SvnItem Parent
+        {
+            get
+            {
+                string parentDir = Path.GetDirectoryName(FullPath);
+
+                if(parentDir == FullPath)
+                    return null; // We are the root folder!
+
+                IFileStatusCache cache = _context.GetService<IFileStatusCache>();
+
+                if (cache != null)
+                    return cache[parentDir];
+                else
+                    return null;
+            }
+        }
 
         static class NativeMethods
         {
@@ -558,16 +581,16 @@ namespace Ankh
             /// <returns></returns>
             public static uint GetFileAttributes(string filename)
             {
-                if(string.IsNullOrEmpty(filename))
+                if (string.IsNullOrEmpty(filename))
                     throw new ArgumentNullException("filename");
 
-                if(filename.Length < 160)
+                if (filename.Length < 160)
                     return GetFileAttributesW(filename);
                 else
                     return GetFileAttributesW("\\\\?\\" + filename); // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
             }
 
-            [DllImport("kernel32.dll", ExactSpelling=true)]
+            [DllImport("kernel32.dll", ExactSpelling = true)]
             extern static uint GetFileAttributesW([MarshalAs(UnmanagedType.LPWStr)]string filename);
 
             public const uint INVALID_FILE_ATTRIBUTES = 0xFFFFFFFF;

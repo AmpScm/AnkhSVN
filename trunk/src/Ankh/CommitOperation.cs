@@ -12,7 +12,7 @@ namespace Ankh
     /// <summary>
     /// Encapsulates the details of an operation requiring a log message
     /// </summary>
-    public class CommitOperation  
+    public class CommitOperation
     {
         readonly IProgressWorker worker;
         readonly IAnkhServiceProvider _context;
@@ -31,20 +31,20 @@ namespace Ankh
             _args = args;
             _context = context;
             this.worker = worker;
-            
+
             this.items = items;
         }
 
         public bool UrlPaths
         {
             get { return this.urlPaths; }
-            set{ this.urlPaths = value; }
+            set { this.urlPaths = value; }
         }
 
         public string LogMessage
         {
-            get{ return this.logMessage; }
-            set{ this.logMessage = value; }
+            get { return this.logMessage; }
+            set { this.logMessage = value; }
         }
 
         public IList Items
@@ -59,20 +59,20 @@ namespace Ankh
 
             AnkhConfig config = configSvc.Instance;
 
-            string templateText = config.LogMessageTemplate != null ? 
+            string templateText = config.LogMessageTemplate != null ?
                 config.LogMessageTemplate : "";
-            LogMessageTemplate template = new LogMessageTemplate(_context, templateText );
+            LogMessageTemplate template = new LogMessageTemplate(_context, templateText);
 
 
             // is there a previous log message?
-            if ( this.LogMessage != null )
+            if (!string.IsNullOrEmpty(this.LogMessage))
             {
-                if ( config.AutoReuseComment ||
-                    MessageBox.Show( ownerSvc.DialogOwner, 
-                    "The previous commit did not complete." + Environment.NewLine + 
-                    "Do you want to reuse the log message?", 
-                    "Previous log message", MessageBoxButtons.YesNo ) ==
-                    DialogResult.Yes )
+                if (config.AutoReuseComment ||
+                    MessageBox.Show(ownerSvc.DialogOwner,
+                    "The previous commit did not complete." + Environment.NewLine +
+                    "Do you want to reuse the log message?",
+                    "Previous log message", MessageBoxButtons.YesNo) ==
+                    DialogResult.Yes)
 
                     _args.LogMessage = this.LogMessage;
             }
@@ -96,19 +96,19 @@ namespace Ankh
 
             //this.items = commitContext.CommitItems;
             this.logMessage = _args.LogMessage;
-            return true;                
+            return true;
         }
 
         /// <summary>
         /// Get the show on the road.
         /// </summary>
-        public bool Run( string caption )
+        public bool Run(string caption)
         {
             ProgressRunner runner = new ProgressRunner(_context, worker);
             runner.Start(caption);
 
             return !runner.Cancelled;
-        } 
+        }
 
 
     }
