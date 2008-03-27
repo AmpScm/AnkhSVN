@@ -30,7 +30,6 @@ namespace Ankh.Commands
             {
                 first = false;
                 enable = !scc.IsProjectManaged(null);
-                return;
             }
 
             foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
@@ -60,6 +59,14 @@ namespace Ankh.Commands
 
             bool enable = false;
             bool first = true;
+            if (e.Selection.IsSolutionSelected)
+            {
+                enable = !scc.IsProjectManaged(null);
+                first = false;
+
+                scc.SetProjectManaged(null, enable);
+            }
+            
             foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
             {
                 if (first)
