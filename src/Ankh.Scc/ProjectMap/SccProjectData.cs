@@ -7,6 +7,7 @@ using AnkhSvn.Ids;
 using Microsoft.VisualStudio;
 using Ankh.Selection;
 using System.Diagnostics;
+using SharpSvn;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -35,6 +36,7 @@ namespace Ankh.Scc.ProjectMap
         AnkhSccProvider _scc;
         SvnProject _svnProjectInstance;
         string _projectName;
+        string _projectDirectory;
 
         public SccProjectData(IAnkhServiceProvider context, IVsSccProject2 project)
         {
@@ -47,6 +49,7 @@ namespace Ankh.Scc.ProjectMap
             _context = context;            
             _projectType = GetProjectType(project);
             _files = new SccProjectFileCollection();
+            GC.KeepAlive(ProjectDirectory);
         }
 
         public IVsSccProject2 Project
@@ -79,6 +82,31 @@ namespace Ankh.Scc.ProjectMap
                 }
 
                 return _projectName;
+            }
+        }
+
+        public string ProjectDirectory
+        {
+            get
+            {
+                if (_projectDirectory == null && _project != null)
+                {
+                    _projectDirectory = "";
+                    IVsHierarchy hier = _project as IVsHierarchy;
+                    object name;
+
+                    if (hier != null && ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectDir, out name)))
+                    {
+                        string dir = name as string;
+
+                        if(dir != null)
+                            dir = SvnTools.GetNormalizedFullPath(dir);
+
+                        _projectDirectory = dir;
+                    }
+                }
+
+                return _projectDirectory;
             }
         }
 
