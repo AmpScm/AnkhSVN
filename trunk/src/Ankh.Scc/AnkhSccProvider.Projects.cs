@@ -10,6 +10,7 @@ using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
 using AnkhSvn.Ids;
+using Ankh.VS;
 
 namespace Ankh.Scc
 {
@@ -132,6 +133,11 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
+            IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
+
+            if (window != null)
+                window.EnableAnkhIcons(true);
+
             foreach (SccProjectData data in _projectMap.Values)
             {
                 if (data.IsSolutionFolder || data.IsWebSite)
@@ -155,6 +161,14 @@ namespace Ankh.Scc
         /// <remarks>At this time the closing can not be canceled.</remarks>
         internal void OnStartedSolutionClose()
         {
+            if (IsActive)
+            {
+                IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
+
+                if (window != null)
+                    window.EnableAnkhIcons(false);
+            }
+
 #if !DEBUG
             // Skip file by file cleanup of the project<-> file mapping
             // Should proably always be enabled around the release of AnkhSVN 2.0

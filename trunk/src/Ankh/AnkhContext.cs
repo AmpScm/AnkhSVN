@@ -62,28 +62,6 @@ namespace Ankh
                 new RepositoryExplorer.Controller(this);
             this.workingCopyExplorer =
                 new Ankh.WorkingCopyExplorer.WorkingCopyExplorer(this);
-
-            SolutionEventsSink solutionEvents = new SolutionEventsSink(this);
-            eventSinks.Add(solutionEvents);            
-
-            solutionEvents.AfterOpenSolution += new EventHandler(OnAfterOpenSolution);
-            solutionEvents.BeforeCloseSolution += new EventHandler(OnBeforeCloseSolution);
-        }
-
-        void OnAfterOpenSolution(object sender, EventArgs e)
-        {
-            IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
-
-            if(window != null)
-                window.EnableAnkhIcons(true);
-        }
-
-        void OnBeforeCloseSolution(object sender, EventArgs e)
-        {
-            IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
-
-            if (window != null)
-                window.EnableAnkhIcons(false);
         }
 
         public IAnkhPackage Package
@@ -390,9 +368,6 @@ namespace Ankh
         private RepositoryExplorer.Controller repositoryController;
 
         private OutputPaneWriter outputPane;
-
-        //required to ensure events will still fire
-        private List<EventSink> eventSinks = new List<EventSink>();
 
         private bool operationRunning;
 

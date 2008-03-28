@@ -45,19 +45,9 @@ namespace Ankh
         RepositoryExplorer.Controller RepositoryExplorer { get; }
 
         /// <summary>
-        /// Whether a solution is open.
-        /// </summary>
-        bool SolutionIsOpen { get; }
-
-        /// <summary>
         /// The configloader.
         /// </summary>
         IAnkhConfigurationService Configuration { get; }
-
-        /// <summary>
-        /// Whether an operation is currently running.
-        /// </summary>
-        bool OperationRunning { get; }
 
         /// <summary>
         /// Manage issues related to conflicts.
