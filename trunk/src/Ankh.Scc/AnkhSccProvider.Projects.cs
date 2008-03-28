@@ -11,6 +11,7 @@ using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
 using AnkhSvn.Ids;
 using Ankh.VS;
+using System.IO;
 
 namespace Ankh.Scc
 {
@@ -18,6 +19,7 @@ namespace Ankh.Scc
     {
         readonly Dictionary<IVsSccProject2, SccProjectData> _projectMap = new Dictionary<IVsSccProject2, SccProjectData>();
         bool _managedSolution;
+        List<string> _delayedDelete;
         bool _isDirty;
 
         public void LoadingManagedSolution(bool asPrimarySccProvider)
@@ -287,7 +289,25 @@ namespace Ankh.Scc
 
                 foreach (SccProjectData pd in _projectMap.Values)
                     pd.Load();
-            }                
+            }
+
+            if (_delayedDelete != null)
+            {
+                List<string> files = _delayedDelete;
+                _delayedDelete = null;
+
+                using (SvnSccContext svn = new SvnSccContext(Context))
+                {
+                    foreach (string file in files)
+                    {
+                        if (!File.Exists(file))
+                        {
+                            svn.SafeDelete(file);
+                            StatusCache.MarkDirty(file);
+                        }
+                    }
+                }
+            }
         }
 
         void RegisterForSccCleanup()

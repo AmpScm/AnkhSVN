@@ -55,9 +55,7 @@ namespace Ankh.Scc
 
                     string file = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
 
-                    bool wasDeleted = !System.IO.File.Exists(file);
-
-                    _sccProvider.OnProjectFileRemoved(sccProject, file, wasDeleted, rgFlags[iFile]);
+                    _sccProvider.OnProjectFileRemoved(sccProject, file, rgFlags[iFile]);
                 }
             }
             return VSConstants.S_OK;

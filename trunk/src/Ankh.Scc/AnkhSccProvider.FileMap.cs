@@ -77,7 +77,7 @@ namespace Ankh.Scc
         /// <param name="filename">The filename.</param>
         /// <param name="forDelete">if set to <c>true</c> the file was deleted; if set to <c>false</c> the file was removed.</param>
         /// <param name="flags">The flags.</param>
-        internal void OnProjectFileRemoved(IVsSccProject2 project, string filename, bool forDelete, VSREMOVEFILEFLAGS flags)
+        internal void OnProjectFileRemoved(IVsSccProject2 project, string filename, VSREMOVEFILEFLAGS flags)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
@@ -88,21 +88,32 @@ namespace Ankh.Scc
             if (!IsActive)
                 return; // Let the other SCC package manage it
 
+            MarkGlyphsDirty(data, filename);
+            MarkFilesDirty(filename);
+
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
                 SvnStatusEventArgs status = svn.SafeGetStatus(filename);
-
-                MarkGlyphsDirty(data, filename);
-                if (!forDelete)
-                {
-                    if (svn.IsUnversioned(status))
-                        return; // The file was only removed from the project. We should not touch it
-
-                    // else: The file was already removed on disk; mark it as deleted in subversion
-                }
                 
+                if (File.Exists(filename))
+                {
+                    // The file was only removed from the project. We should not touch it
+
+                    // Some projects delete the file before (C#) and some after (C++) calling OnProjectFileRemoved
+                    if (_delayedDelete == null)
+                        _delayedDelete = new List<string>();
+
+                    if(!_delayedDelete.Contains(filename))
+                        _delayedDelete.Add(filename);
+
+                    RegisterForSccCleanup();
+                    return;
+                }
+
+                if (svn.IsUnversioned(status))
+                    return;
+
                 svn.SafeDelete(filename);
-                MarkFilesDirty(filename);
             }
         }
 
