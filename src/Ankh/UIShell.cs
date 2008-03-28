@@ -17,16 +17,14 @@ namespace Ankh
     /// <summary>
     /// Summary description for UIShell.
     /// </summary>
-    public class UIShell : IUIShell
+    public class UIShell : AnkhService, IUIShell
     {
-        readonly IAnkhServiceProvider _context;
         public UIShell(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
+            
         }
+
         #region IUIShell Members
         public RepositoryExplorerControl RepositoryExplorer
         {
@@ -42,7 +40,7 @@ namespace Ankh
                 this.repositoryExplorerControl = value;
 
                 if (value != null)
-                    Context.RepositoryExplorer.SetControl(value);
+                    GetService<IContext>().RepositoryExplorer.SetControl(value);
             }
         }
 
@@ -58,7 +56,7 @@ namespace Ankh
                 this.workingCopyExplorerControl = value;
 
                 if (value != null)
-                    Context.WorkingCopyExplorer.SetControl(value);
+                    GetService<IContext>().WorkingCopyExplorer.SetControl(value);
             }
         }
 
@@ -70,15 +68,6 @@ namespace Ankh
                 Debug.Assert(this.commitDialog == null);
                 this.commitDialog = value;
             }
-        }
-
-        public IContext Context
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.context; }
-
-            [System.Diagnostics.DebuggerStepThrough]
-            set { this.context = value; }
         }
 
         public System.ComponentModel.ISynchronizeInvoke SynchronizingObject
@@ -256,7 +245,7 @@ namespace Ankh
 
         public void DisplayHtml(string caption, string html, bool reuse)
         {
-            IAnkhWebBrowser browser = _context.GetService<IAnkhWebBrowser>();
+            IAnkhWebBrowser browser = Context.GetService<IAnkhWebBrowser>();
             
             string htmlFile = Path.GetTempFileName();
             using (StreamWriter w = new StreamWriter(htmlFile, false, System.Text.Encoding.UTF8))

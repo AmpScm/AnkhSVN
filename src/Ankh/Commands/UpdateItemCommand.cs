@@ -8,26 +8,27 @@ using SharpSvn;
 using Ankh.UI;
 using AnkhSvn.Ids;
 using Ankh.VS;
+using Ankh.Selection;
 
 namespace Ankh.Commands
 {
-	/// <summary>
-	/// A command that updates an item.
-	/// </summary>
-	[Command(AnkhCommand.UpdateItem)]
-	public class UpdateItem : CommandBase
-	{
-		#region Implementation of ICommand
+    /// <summary>
+    /// A command that updates an item.
+    /// </summary>
+    [Command(AnkhCommand.UpdateItem)]
+    public class UpdateItem : CommandBase
+    {
+        #region Implementation of ICommand
 
-		public override void OnUpdate(CommandUpdateEventArgs e)
-		{
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
                 if (item.IsVersioned)
                     return;
             }
             e.Enabled = false;
-		}
+        }
 
         public override void OnExecute(CommandEventArgs e)
         {
@@ -40,7 +41,7 @@ namespace Ankh.Commands
                 ArrayList files = new ArrayList();
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
                 {
-                    if(item.IsVersioned)
+                    if (item.IsVersioned)
                         files.Add(item);
                 }
 
@@ -53,58 +54,58 @@ namespace Ankh.Commands
             }
         }
 
-		#endregion
+        #endregion
 
-		#region UpdateVisitor
-		private class UpdateRunner : IProgressWorker
-		{
-			public UpdateRunner(IContext context, IList resources)
-			{
-				this.context = context;
-				this.resources = resources;
-			}
+        #region UpdateVisitor
+        private class UpdateRunner : IProgressWorker
+        {
+            public UpdateRunner(IContext context, IList resources)
+            {
+                this.context = context;
+                this.resources = resources;
+            }
 
-			public IContext Context
-			{
-				get { return this.context; }
-			}
+            public IContext Context
+            {
+                get { return this.context; }
+            }
 
-			/// <summary>
-			/// Show the update dialog if wanted.
-			/// </summary>
-			/// <returns></returns>
-			public bool MaybeShowUpdateDialog()
-			{
-				this.depth = SvnDepth.Empty;
-				this.revision = SvnRevision.Head;
+            /// <summary>
+            /// Show the update dialog if wanted.
+            /// </summary>
+            /// <returns></returns>
+            public bool MaybeShowUpdateDialog()
+            {
+                this.depth = SvnDepth.Empty;
+                this.revision = SvnRevision.Head;
 
-				// We're using the update dialog no matter what to
-				// take advantage of it's path processing capabilities.
-				// This is the best way to ensure holding down Shift is
-				// equivalent to accepting the default in the dialog.
-				using (UpdateDialog d = new UpdateDialog())
-				{
-					d.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
-					d.Items = this.resources;
-					d.CheckedItems = this.resources;
-					d.Recursive = true;
+                // We're using the update dialog no matter what to
+                // take advantage of it's path processing capabilities.
+                // This is the best way to ensure holding down Shift is
+                // equivalent to accepting the default in the dialog.
+                using (UpdateDialog d = new UpdateDialog())
+                {
+                    d.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
+                    d.Items = this.resources;
+                    d.CheckedItems = this.resources;
+                    d.Recursive = true;
 
-					if (!CommandBase.Shift)
-					{
+                    if (!CommandBase.Shift)
+                    {
                         IAnkhDialogOwner owner = Context.GetService<IAnkhDialogOwner>();
 
-						if (d.ShowDialog(owner.DialogOwner) != DialogResult.OK)
-							return false;
-					}
+                        if (d.ShowDialog(owner.DialogOwner) != DialogResult.OK)
+                            return false;
+                    }
 
-					depth = d.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-					this.resources = d.CheckedItems;
-					this.revision = d.Revision;
-				}
+                    depth = d.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
+                    this.resources = d.CheckedItems;
+                    this.revision = d.Revision;
+                }
 
-				// the user hasn't cancelled the update
-				return true;
-			}
+                // the user hasn't cancelled the update
+                return true;
+            }
 
             public static void GetPathInfo(object sender, ResolvingPathEventArgs args)
             {
@@ -114,44 +115,51 @@ namespace Ankh.Commands
             }
 
 
-			/// <summary>
-			/// The actual updating happens here.
-			/// </summary>
+            /// <summary>
+            /// The actual updating happens here.
+            /// </summary>
             public void Work(AnkhWorkerArgs e)
-			{
-				string[] paths = SvnItem.GetPaths(this.resources);
-				SvnUpdateArgs args = new SvnUpdateArgs();
-				args.Notify += new EventHandler<SvnNotifyEventArgs>(OnNotificationEventHandler);
-				args.Revision = revision;
-				args.Depth = depth;
-				args.IgnoreExternals = false;
+            {
+                string[] paths = SvnItem.GetPaths(this.resources);
+                SvnUpdateArgs args = new SvnUpdateArgs();
+                args.Notify += new EventHandler<SvnNotifyEventArgs>(OnNotificationEventHandler);
+                args.Revision = revision;
+                args.Depth = depth;
+                args.IgnoreExternals = false;
 
                 e.Client.Update(paths, args);
 
-				if (this.conflictsOccurred)
-					context.ConflictManager.NavigateTaskList();
-			}
+                if (this.conflictsOccurred)
+                {
+                    IAnkhTaskManager manager = e.Context.GetService<IAnkhTaskManager>();
 
-			/// <summary>
-			///  Handlke event for onNotification that conflicts occurred from update
-			/// </summary>
-			/// <param name="taskItem"></param>
-			/// <param name="navigateHandled"></param>
-			private void OnNotificationEventHandler(Object sender, SvnNotifyEventArgs args)
-			{
-				if (args.ContentState == SvnNotifyState.Conflicted)
-				{
-					this.Context.ConflictManager.AddTask(args.Path);
-					this.conflictsOccurred = true;
-				}
-			}
+                    manager.NavigateTaskList();
+                }
+            }
 
-			private IList resources;
-			private SvnRevision revision;
-			private SvnDepth depth;
-			private bool conflictsOccurred = false;
-			private IContext context;
-		}
-		#endregion
-	}
+            /// <summary>
+            ///  Handle event for onNotification that conflicts occurred from update
+            /// </summary>
+            /// <param name="taskItem"></param>
+            /// <param name="navigateHandled"></param>
+            private void OnNotificationEventHandler(Object sender, SvnNotifyEventArgs args)
+            {
+                if (args.ContentState == SvnNotifyState.Conflicted)
+                {
+                    IAnkhTaskManager manager = Context.GetService<IAnkhTaskManager>();
+
+                    if (manager != null)
+                        manager.AddConflictTask(args.Path);
+                    this.conflictsOccurred = true;
+                }
+            }
+
+            private IList resources;
+            private SvnRevision revision;
+            private SvnDepth depth;
+            private bool conflictsOccurred = false;
+            private IContext context;
+        }
+        #endregion
+    }
 }

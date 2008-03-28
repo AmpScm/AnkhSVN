@@ -95,15 +95,6 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual ConflictManager ConflictManager
-        {
-            get
-            {
-                // TODO:  Add ContextBase.ConflictManager getter implementation
-                return null;
-            }
-        }
-
         public virtual IUIShell UIShell
         {
             get
@@ -138,16 +129,6 @@ namespace Ankh.Tests
         public virtual void Shutdown()
         {
             // TODO:  Add ContextBase.Shutdown implementation
-        }
-
-        public virtual Ankh.Configuration.ConfigLoader ConfigLoader
-        {
-            get
-            {
-                if ( this.configLoader == null )
-                    this.configLoader = new ConfigLoader(this, Path.GetTempPath() );
-                return this.configLoader;
-            }
         }
 
         public virtual void EnableAnkhForLoadedSolution()
@@ -489,18 +470,6 @@ namespace Ankh.Tests
                 get { throw new NotImplementedException(); }
             }
 
-            IContext IUIShell.Context
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-                set
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
             Ankh.UI.CommitDialog IUIShell.CommitDialog
             {
                 get
@@ -627,7 +596,6 @@ namespace Ankh.Tests
         public IAnkhErrorHandler errorHandler;
         public OutputPaneWriter outputPane;
         public IUIShell uiShell;
-        private ConfigLoader configLoader;
         private Control control;
 
         #region IContext Members
@@ -675,7 +643,7 @@ namespace Ankh.Tests
 
         public IAnkhConfigurationService Configuration
         {
-            get { return configLoader; }
+            get { return GetService<IAnkhConfigurationService>(); }
         }
 
         #endregion

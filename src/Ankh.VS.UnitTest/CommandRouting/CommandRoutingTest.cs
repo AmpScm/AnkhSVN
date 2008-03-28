@@ -519,7 +519,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             
             IContext context = AnkhContextMock.GetInstance(mocks);
             mocks.BackToRecord(context);
-            Expect.Call(context.Package).Return(package).Repeat.AtLeastOnce();
             mocks.Replay(context);
             
             
@@ -543,7 +542,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             IContext context = AnkhContextMock.GetInstance(mocks);
             mocks.BackToRecord(context);
-            Expect.Call(context.Package).Return(package).Repeat.AtLeastOnce();
             mocks.Replay(context);
 
 
@@ -567,7 +565,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             IContext context = AnkhContextMock.GetInstance(mocks);
             mocks.BackToRecord(context);
-            Expect.Call(context.Package).Return(package).Repeat.AtLeastOnce();
             mocks.Replay(context);
 
 

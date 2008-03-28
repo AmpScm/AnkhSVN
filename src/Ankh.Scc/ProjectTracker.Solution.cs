@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using AnkhSvn.Ids;
+using Ankh.Selection;
 
 namespace Ankh.Scc
 {
@@ -21,6 +22,12 @@ namespace Ankh.Scc
         public int OnBeforeCloseSolution(object pUnkReserved)
         {
             _sccProvider.OnStartedSolutionClose();
+
+            IAnkhTaskManager conflicts = GetService<IAnkhTaskManager>();
+
+            if (conflicts != null)
+                conflicts.OnCloseSolution();
+
             return VSConstants.S_OK;
         }
 
