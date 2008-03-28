@@ -22,16 +22,21 @@ namespace Ankh
         void TickItem();
         bool IsItemTicked();
         bool IsStatusClean();
+
+        void MarkStatusDirty();
+
+        bool ShouldClean();
     }
 
     /// <summary>
     /// Represents a version controlled path on disk, caching its status
     /// </summary>
+    [DebuggerDisplay("Path={FullPath}")]
     public sealed class SvnItem : LocalSvnItem, ISvnItemUpdate
     {
         enum XBool : sbyte
         {
-            None = 0, // The three fastest values to check for X86 CPU's
+            None = 0, // The three fastest values to check for most CPU's
             True = -1,
             False = 1
         }
@@ -165,6 +170,11 @@ namespace Ankh
             _isVersionable = XBool.None;
         }
 
+        void ISvnItemUpdate.MarkStatusDirty()
+        {
+            _statusDirty = XBool.True;
+        }
+
         bool ISvnItemUpdate.IsStatusClean()
         {
             return _statusDirty == XBool.False;
@@ -176,6 +186,11 @@ namespace Ankh
         void ISvnItemUpdate.TickItem()
         {
             _ticked = true; // Will be updated soon
+        }
+
+        public bool ShouldClean()
+        {
+            return _ticked || (_statusDirty == XBool.False && _status == AnkhStatus.NotExisting);
         }
 
         /// <summary>
@@ -226,7 +241,8 @@ namespace Ankh
         /// </summary>
         public string FullPath
         {
-            get { return this._fullPath; }
+            [DebuggerStepThrough]
+            get { return _fullPath; }
         }
 
         /// <summary>
@@ -309,7 +325,7 @@ namespace Ankh
             }
             finally
             {
-                Debug.Assert(_statusDirty == XBool.False, "No longer dirty after refresh");
+                Debug.Assert(_statusDirty == XBool.False, "No longer dirty after refresh", string.Format("Path = {0}", FullPath));
                 _statusDirty = XBool.False;
             }
         }
@@ -569,6 +585,24 @@ namespace Ankh
                     return cache[parentDir];
                 else
                     return null;
+            }
+        }
+
+        public SvnDirectory ParentDirectory
+        {
+            get
+            {
+                string parentDir = Path.GetDirectoryName(FullPath);
+
+                if (parentDir == FullPath)
+                    return null;
+
+                IFileStatusCache cache = _context.GetService<IFileStatusCache>();
+
+                if (cache == null)
+                    return null;
+                    
+                return cache.GetDirectory(parentDir);
             }
         }
 

@@ -57,6 +57,7 @@
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Commands\IAnkhCommandService.cs" />
     <Compile Include="ContextServices\IAnkhPackage.cs" />
+    <Compile Include="Scc\SvnDirectory.cs" />
     <Compile Include="Selection\IAnkhTaskManager.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />
     <Compile Include="VS\IAnkhDialogOwner.cs" />
