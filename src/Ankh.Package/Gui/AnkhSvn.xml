@@ -111,7 +111,7 @@
 								toolTip="Enable Subversion management on this project." iconFile="menu/ToggleAnkh.png" textChanges="true"/>
 						<Button id="Cmd_RunSvnCommand" name="RunSvn" text="RunSvn" priority="0xffff" commandWellOnly="true" allowParams="true" />
 						<Button id="Cmd_MarkProjectDirty" name="." text="." priority="0xffff" commandWellOnly="true" allowParams="true" />
-            <Button id="Cmd_MarkProjectRefresh" name="." text="." priority="0xffff" commandWellOnly="true" allowParams="true" />
+            <Button id="Cmd_FileCacheFinishTasks" name="." text="." priority="0xffff" commandWellOnly="true" allowParams="true" />
 						<Button id="Cmd_SccFinishTasks" name="." text="." priority="0xffff" commandWellOnly="true" allowParams="true" />
 					</Group>
 				</Menu>
