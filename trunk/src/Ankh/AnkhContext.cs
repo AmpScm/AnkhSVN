@@ -23,52 +23,45 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
-    public class OldAnkhContext : IContext, IDTEContext, IAnkhServiceProvider
+    public class OldAnkhContext : AnkhService, IContext, IDTEContext, IAnkhServiceProvider
     {
+        WorkingCopyExplorer.WorkingCopyExplorer _workingCopyExplorer;
+        RepositoryExplorer.Controller _repositoryController;
+        OutputPaneWriter _outputPane;
+        ProgressDialog _progressDialog;        
+        IAnkhConfigurationService _config;
+
         /// <summary>
         /// Fired when the addin is unloading.
         /// </summary>
         public event EventHandler Unloading;
 
         public OldAnkhContext(IAnkhPackage package)
-            : this(package, new UIShell(package))
+            : this(package, null)
         {
-            Trace.Assert(package != null);
         }
 
         public OldAnkhContext(IAnkhPackage package, IUIShell uiShell)
+            : base(package)
         {
-            this.package = package;
+            if(uiShell != null)
+                _uiShell = uiShell;
 
-            this.dte = (EnvDTE._DTE)package.GetService(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
-            this.uiShell = uiShell;
-            this.uiShell.Context = this;
-
-            this.config = package.GetService<IAnkhConfigurationService>();
+            this._config = package.GetService<IAnkhConfigurationService>();
 
             this.LoadConfig();
 
-            this.outputPane = new OutputPaneWriter(this, "AnkhSVN");
+            this._outputPane = new OutputPaneWriter(this, "AnkhSVN");
 
-            this.progressDialog = new ProgressDialog();
+            this._progressDialog = new ProgressDialog();
 
-            //this.SetUpEvents();    
-
-            this.conflictManager = new ConflictManager(this);
-
-            //GC.KeepAlive(this.solutionExplorerWindow.TreeWindow);
-
-            this.repositoryController =
+            this._repositoryController =
                 new RepositoryExplorer.Controller(this);
-            this.workingCopyExplorer =
+            this._workingCopyExplorer =
                 new Ankh.WorkingCopyExplorer.WorkingCopyExplorer(this);
         }
 
-        public IAnkhPackage Package
-        {
-            get { return package; }
-        }
-
+        EnvDTE._DTE _dte;
         /// <summary>
         /// The top level automation object.
         /// </summary>
@@ -76,16 +69,17 @@ namespace Ankh
         public EnvDTE._DTE DTE
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this.dte; }
+            get { return _dte ?? (_dte = GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE))); }
         }
-
+        
+        IUIShell _uiShell;
         /// <summary>
-        /// The UI shell.
+        /// The UI shell service
         /// </summary>
         public IUIShell UIShell
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this.uiShell; }
+            get { return _uiShell ?? (_uiShell = GetService<IUIShell>()); }
         }
 
         /// <summary>
@@ -94,24 +88,17 @@ namespace Ankh
         public OutputPaneWriter OutputPane
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this.outputPane; }
+            get { return this._outputPane; }
         }
 
-        //        public RepositoryExplorer.Controller RepositoryController
-        //        {
-        //            [System.Diagnostics.DebuggerStepThrough]
-        //            get{ return this.repositoryController; }
-        //        }
-
-
-
+        ISvnClientPool _clientPool;
         /// <summary>
-        /// The SvnContext object used by the NSvn objects.
+        /// Gets the client pool service
         /// </summary>
         public ISvnClientPool ClientPool
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this.clientPool ?? (this.clientPool = GetService<ISvnClientPool>()); }
+            get { return this._clientPool ?? (this._clientPool = GetService<ISvnClientPool>()); }
         }
 
         /// <summary>
@@ -120,31 +107,8 @@ namespace Ankh
         public RepositoryExplorer.Controller RepositoryExplorer
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this.repositoryController; }
-        }
-
-        /// <summary>
-        /// Whether a solution is open.
-        /// </summary>
-        public bool SolutionIsOpen
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.dte.Solution.IsOpen; }
-        }
-
-        public bool AnkhLoadedForSolution
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get
-            {
-                IAnkhSccService scc = (IAnkhSccService)Package.GetService(typeof(IAnkhSccService));
-
-                if (scc == null)
-                    return false;
-                else
-                    return scc.IsActive;
-            }
-        }
+            get { return this._repositoryController; }
+        }   
 
         /// <summary>
         /// The configloader.
@@ -152,63 +116,23 @@ namespace Ankh
         public IAnkhConfigurationService Configuration
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this.config; }
-        }
-
-        public bool OperationRunning
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.operationRunning; }
-        }
-
-        /// <summary>
-        /// Manage issues related to conflicts.
-        /// </summary>
-        public ConflictManager ConflictManager
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.conflictManager; }
+            get { return this._config; }
         }
        
-        public IServiceProvider ServiceProvider
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get
-            {
-                return Package;
-            }
-        }
-
         public IWorkingCopyExplorer WorkingCopyExplorer
         {
             [DebuggerStepThrough]
-            get { return this.workingCopyExplorer; }
+            get { return this._workingCopyExplorer; }
         }
 
-        /// <summary>
-        /// Event handler for the SolutionOpened event. Can also be called at
-        /// addin load time, or if Ankh is enabled for a solution.
-        /// </summary>
-        public bool EnableAnkhForLoadedSolution()
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Called when a solution is closed.
-        /// </summary>
-        public void SolutionClosing()
-        {
-            this.conflictManager.RemoveAllTaskItems();
-        }
-
+        bool _operationRunning;
         /// <summary>
         /// Should be called before starting any lengthy operation
         /// </summary>
         public IDisposable StartOperation(string description)
         {
             //TODO: maybe refactor this?
-            this.operationRunning = true;
+            _operationRunning = true;
             try
             {
                 this.DTE.StatusBar.Text = description + "...";
@@ -219,7 +143,7 @@ namespace Ankh
                 // Swallow, not critical
             }
 
-            this.progressDialog.Caption = description;
+            this._progressDialog.Caption = description;
 
             return new OperationCompleter(this, this.OutputPane.StartActionText(description));
         }
@@ -249,7 +173,7 @@ namespace Ankh
         /// </summary>
         public void EndOperation()
         {
-            if (this.operationRunning)
+            if (_operationRunning)
             {
                 try
                 {
@@ -260,7 +184,7 @@ namespace Ankh
                 {
                     // swallow, not critical
                 }
-                this.operationRunning = false;
+                _operationRunning = false;
             }
         }
 
@@ -280,7 +204,7 @@ namespace Ankh
         {
             try
             {
-                this.config.LoadConfig();
+                this._config.LoadConfig();
             }
             catch (Ankh.Configuration.ConfigException ex)
             {
@@ -288,13 +212,13 @@ namespace Ankh
                     "There is an error in your configuration file:" +
                     Environment.NewLine + Environment.NewLine +
                     ex.Message + Environment.NewLine + Environment.NewLine +
-                    "Please edit the " + this.config.UserConfigurationPath +
+                    "Please edit the " + this._config.UserConfigurationPath +
                     " file and correct the error." + Environment.NewLine +
                     "Ankh will now load a default configuration.", "Configuration error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 // fall back on the default configuration
-                this.config.LoadDefaultConfig();
+                this._config.LoadDefaultConfig();
             }
 
             SetupFromConfig();
@@ -360,53 +284,6 @@ namespace Ankh
             private IntPtr handle;
 
         }
-        #endregion
-
-        private EnvDTE._DTE dte;
-
-        private WorkingCopyExplorer.WorkingCopyExplorer workingCopyExplorer;
-        private RepositoryExplorer.Controller repositoryController;
-
-        private OutputPaneWriter outputPane;
-
-        private bool operationRunning;
-
-        private ConflictManager conflictManager;
-
-        private ProgressDialog progressDialog;
-        private ISvnClientPool clientPool;
-
-        private IUIShell uiShell;
-
-        private IAnkhConfigurationService config;
-
-        readonly IAnkhPackage package;
-
-        #region IAnkhServiceProvider Members
-
-        [DebuggerStepThrough]
-        public T GetService<T>()
-            where T : class
-        {
-            return GetService(typeof(T)) as T;
-        }
-
-        [DebuggerStepThrough]
-        public T GetService<T>(Type serviceType)
-            where T : class
-        {
-            return GetService(serviceType) as T;
-        }
-
-        #endregion
-
-        #region IServiceProvider Members
-
-        public object GetService(Type serviceType)
-        {
-            return ServiceProvider.GetService(serviceType);
-        }
-
-        #endregion
+        #endregion        
     }
 }

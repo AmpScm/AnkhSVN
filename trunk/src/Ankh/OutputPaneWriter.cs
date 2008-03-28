@@ -15,7 +15,7 @@ namespace Ankh
 	{
 		public OutputPaneWriter(IContext context, string caption)
 		{
-			IVsOutputWindow window = (IVsOutputWindow)context.Package.GetService(typeof(SVsOutputWindow));
+			IVsOutputWindow window = (IVsOutputWindow)context.GetService(typeof(SVsOutputWindow));
 
 			Guid ankhPaneId = AnkhId.AnkhOutputPaneGuid;
 

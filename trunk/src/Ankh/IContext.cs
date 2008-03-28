@@ -21,8 +21,6 @@ namespace Ankh
 
     public interface IContext : IAnkhServiceProvider
     {
-        IAnkhPackage Package { get; }        
-
         /// <summary>
         /// The UI shell.
         /// </summary>
@@ -48,11 +46,6 @@ namespace Ankh
         /// The configloader.
         /// </summary>
         IAnkhConfigurationService Configuration { get; }
-
-        /// <summary>
-        /// Manage issues related to conflicts.
-        /// </summary>
-        ConflictManager ConflictManager { get; }
 
         /// <summary>
         /// Should be called before starting any lengthy operation
