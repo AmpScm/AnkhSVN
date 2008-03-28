@@ -229,7 +229,7 @@ namespace Ankh.Scc.ProjectMap
                 {
                     foreach (string file in walker.GetSccFiles(_project, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy))
                     {
-                        AddPath(file);
+                        AddPath(SvnTools.GetNormalizedFullPath(file));
                     }
                 }
 

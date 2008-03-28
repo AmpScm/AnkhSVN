@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -10,6 +11,9 @@ namespace Ankh.Scc
     {
         public int OnQueryRemoveFiles(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYREMOVEFILEFLAGS[] rgFlags, VSQUERYREMOVEFILERESULTS[] pSummaryResult, VSQUERYREMOVEFILERESULTS[] rgResults)
         {
+            if (rgpszMkDocuments == null)
+                return VSConstants.E_POINTER;
+
             if (rgResults != null)
                 for (int i = 0; i < cFiles; i++)
                 {
@@ -49,7 +53,7 @@ namespace Ankh.Scc
                     if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
-                    string file = rgpszMkDocuments[iFile];
+                    string file = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
 
                     bool wasDeleted = !System.IO.File.Exists(file);
 
@@ -61,11 +65,15 @@ namespace Ankh.Scc
 
         public int OnQueryRemoveDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYFLAGS[] rgFlags, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults)
         {
+            if (rgpszMkDocuments == null)
+                return VSConstants.E_POINTER;
+
             if (rgResults != null)
                 for (int i = 0; i < cDirectories; i++)
                 {
                     rgResults[i] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
                 }
+
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
 
@@ -98,6 +106,8 @@ namespace Ankh.Scc
                 {
                     if (sccProject == null || !track)
                         continue; // Not handled by our provider
+
+                    string dir = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iDirectory]);
 
                     _sccProvider.OnProjectDirectoryRemoved(sccProject, rgpszMkDocuments[iDirectory], rgFlags[iDirectory]);
                 }
