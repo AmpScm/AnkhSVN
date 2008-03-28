@@ -56,6 +56,7 @@
     <Compile Include="Commands\CommandUpdateEventArgs.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Commands\IAnkhCommandService.cs" />
+    <Compile Include="ContextServices\IAnkhPackage.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />
     <Compile Include="VS\IAnkhDialogOwner.cs" />
     <Compile Include="ContextServices\IAnkhErrorHandler.cs" />
@@ -76,8 +77,6 @@
     <Compile Include="Scc\ISccHierarchyWalker.cs" />
     <Compile Include="Scc\IProjectFileMapper.cs" />
     <Compile Include="Scc\IStatusImageMapper.cs" />
-    <Compile Include="Scc\NodeStatus.cs" />
-    <Compile Include="Scc\NodeStatusKind.cs" />
     <Compile Include="Scc\SvnItem.cs" />
     <Compile Include="Scc\SvnItemFilters.cs" />
     <Compile Include="Selection\ISelectionContext.cs" />

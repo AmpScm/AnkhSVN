@@ -21,7 +21,7 @@ namespace Ankh.VS.Dialogs
         IVsToolWindowToolbarHost _tbHost;
         IVsFilterKeys2 _filterKeys;
         Panel _panel;
-        IntPtr _paneHwnd;
+        //IntPtr _paneHwnd;
 
         bool _installed;
         public VSCommandRouting(IAnkhServiceProvider context, VSContainerForm form)

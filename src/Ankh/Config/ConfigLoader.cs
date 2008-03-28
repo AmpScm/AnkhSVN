@@ -36,7 +36,7 @@ namespace Ankh.Configuration
 	/// <summary>
 	/// Contains functions used to load and save configuration data.
 	/// </summary>
-    public sealed class ConfigLoader : IAnkhConfigurationService, IVsFileChangeEvents, IDisposable
+    sealed class ConfigLoader : IAnkhConfigurationService, IVsFileChangeEvents, IDisposable
 	{
         const string _CONFIGDIRNAME = "AnkhSVN";
         const string _CONFIGFILENAME = "AnkhSVN.user.xml";

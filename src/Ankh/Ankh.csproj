@@ -273,13 +273,9 @@
     <Compile Include="Commands\SendErrorReportCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\ShowCommitDialogCommand.cs">
+    <Compile Include="Commands\ShowToolWindows.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\ShowRepositoryExplorerCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\ShowWorkingCopyExplorerCommand.cs" />
     <Compile Include="Commands\SwitchItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -306,20 +302,17 @@
     <Compile Include="ErrorHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EventSinks\EventSink.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventSinks\SolutionEventsSink.cs" />
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
-    <Compile Include="IAnkhPackage.cs" />
-    <Compile Include="IAnkhSelectionContainer.cs" />
-    <Compile Include="IWorkingCopyExplorer.cs" />
+    <Compile Include="WorkingCopyExplorer\IAnkhSelectionContainer.cs" />
+    <Compile Include="WorkingCopyExplorer\IWorkingCopyExplorer.cs" />
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusCache\AnkhSvnClientPool.cs" />
     <Compile Include="StatusCache\DeletedFilesList.cs" />
     <Compile Include="StatusCache\FileStatusCache.cs" />
-    <Compile Include="TreeNode.cs" />
+    <Compile Include="Trees\TreeNode.cs" />
+    <Compile Include="Trees\NodeStatus.cs" />
+    <Compile Include="Trees\NodeStatusKind.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemItem.cs" />
