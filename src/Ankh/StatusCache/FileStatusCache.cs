@@ -9,21 +9,25 @@ using SharpSvn;
 using Ankh.Scc;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using Ankh.Commands;
+using AnkhSvn.Ids;
 
 namespace Ankh.StatusCache
 {
     /// <summary>
     /// Maintains path->SvnItem mappings.
     /// </summary>
-    public sealed class FileStatusCache : Ankh.Scc.IFileStatusCache
+    public sealed class FileStatusCache : AnkhService, Ankh.Scc.IFileStatusCache
     {
         readonly object _lock = new object();
         readonly IAnkhServiceProvider _context;
         readonly SvnClient _client;
-        readonly Dictionary<string, DeletedSvnItemList> _deletions;
-        readonly Dictionary<string, SvnItem> _map;
-        
+        readonly Dictionary<string, SvnItem> _map; // Maps from full-normalized paths to SvnItems
+        readonly Dictionary<string, SvnDirectory> _dirMap;
+        IAnkhCommandService _commandService;
+
         public FileStatusCache(IAnkhServiceProvider context)
+            : base(context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -31,8 +35,18 @@ namespace Ankh.StatusCache
             _context = context;
             _client = new SvnClient();
             _map = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-            _deletions = new Dictionary<string, DeletedSvnItemList>(StringComparer.OrdinalIgnoreCase);
-        }        
+            _dirMap = new Dictionary<string, SvnDirectory>(StringComparer.OrdinalIgnoreCase);
+        }
+
+        
+        /// <summary>
+        /// Gets the command service.
+        /// </summary>
+        /// <value>The command service.</value>
+        IAnkhCommandService CommandService
+        {
+            get { return _commandService ?? (_commandService = Context.GetService<IAnkhCommandService>()); }
+        }
 
         void Ankh.Scc.IFileStatusCache.UpdateStatus(string directory, SvnDepth depth)
         {
@@ -57,7 +71,7 @@ namespace Ankh.StatusCache
                 }
                 else
                 {
-                    Debug.Assert(false, "RefreshPath did not deliver up to date information", 
+                    Debug.Assert(false, "RefreshPath did not deliver up to date information",
                         "The RefreshPath public api promises delivering up to date data, but none was received");
 
                     updateItem.RefreshTo(item.Exists ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting);
@@ -78,6 +92,77 @@ namespace Ankh.StatusCache
         }
 
         /// <summary>
+        /// Stores the item in the caching dictionary/ies
+        /// </summary>
+        /// <param name="item"></param>
+        void StoreItem(SvnItem item)
+        {
+            if(item == null)
+                throw new ArgumentNullException("item");
+
+            _map[item.FullPath] = item;
+
+            SvnDirectory dir;
+            if (_dirMap.TryGetValue(item.FullPath, out dir))
+            {
+                if (item.IsDirectory)
+                {
+                    ((ISvnDirectoryUpdate)dir).Store(item);
+                }
+                else
+                    ScheduleForCleanup(dir);                    
+            }
+
+            string parentDir = Path.GetDirectoryName(item.FullPath);
+
+            if (parentDir == item.FullPath)
+                return; // Skip root directory
+            
+            if (_dirMap.TryGetValue(item.FullPath, out dir))
+            {
+                ((ISvnDirectoryUpdate)dir).Store(item);
+            }
+        }
+
+        void RemoveItem(SvnItem item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            bool deleted = false;
+            SvnDirectory dir;
+            if (_dirMap.TryGetValue(item.FullPath, out dir))
+            {
+                // The item is a directory itself.. remove it's map
+                if (dir.Directory == item)
+                {
+                    _dirMap.Remove(item.FullPath);
+                    deleted = true;
+                }
+            }
+
+            SvnItem other;
+            if (_map.TryGetValue(item.FullPath, out other))
+            {
+                if (item == other)
+                    _map.Remove(item.FullPath);
+            }
+
+            if (!deleted)
+                return;
+
+            string parentDir = Path.GetDirectoryName(item.FullPath);
+
+            if (parentDir == item.FullPath)
+                return; // Skip root directory
+
+            if (_dirMap.TryGetValue(item.FullPath, out dir))
+            {
+                dir.Remove(item.FullPath);
+            }
+        }
+
+        /// <summary>
         /// Refreshes the specified path using the specified depth
         /// </summary>
         /// <param name="path">A normalized path</param>
@@ -95,24 +180,26 @@ namespace Ankh.StatusCache
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
+            else if (depth < SvnDepth.Empty || depth > SvnDepth.Infinity)
+                throw new ArgumentNullException("depth"); // Make sure we fail on possible new depths
 
             string walkPath = path;
             bool walkingDirectory = false;
 
-            switch(pathKind)
+            switch (pathKind)
             {
                 case SvnNodeKind.Directory:
                     walkingDirectory = true;
                     break;
                 default:
-                    if(File.Exists(path))
+                    if (File.Exists(path))
                     {
                         pathKind = SvnNodeKind.File;
                         goto case SvnNodeKind.File;
                     }
                     break;
                 case SvnNodeKind.File:
-                    if(depth != SvnDepth.Empty)
+                    if (depth != SvnDepth.Empty)
                     {
                         walkPath = Path.GetDirectoryName(path);
                         walkingDirectory = true;
@@ -128,102 +215,204 @@ namespace Ankh.StatusCache
 
             lock (_lock)
             {
-                DeletedSvnItemList deletedItems = null;
+                SvnDirectory directory = null;
+                ISvnDirectoryUpdate updateDir = null;
+                SvnItem walkItem;
 
-                if (depth >= SvnDepth.Files && depth <= SvnDepth.Infinity) // Exclude possible new depths!
+                if (depth > SvnDepth.Empty)
                 {
                     // We get more information for free, lets use that to update other items
-
-                    if (_deletions.TryGetValue(walkPath, out deletedItems))
+                    if (_dirMap.TryGetValue(walkPath, out directory))
                     {
-                        // The path we walk contains deletions; mark them dirty to detect them after the status call
-                        foreach (SvnItem item in deletedItems)
-                        {
-                            if ((depth > SvnDepth.Files) || item.IsFile)
-                                ((ISvnItemUpdate)item).TickItem();
-                        }
+                        updateDir = directory;
+
+                        if (depth > SvnDepth.Children)
+                            updateDir.TickAll();
+                        else
+                            updateDir.TickFiles();
                     }
+                    else
+                    {
+                        // No existing directory instance, let's create one
+                        updateDir = directory = new SvnDirectory(Context, walkPath);
+                        _dirMap[walkPath] = directory;
+                    }
+
+                    walkItem = directory.Directory;
+                }
+                else
+                {
+                    if (_map.TryGetValue(walkPath, out walkItem))
+                        ((ISvnItemUpdate)walkItem).TickItem();
                 }
 
-                bool ok = _client.Status(walkPath, args, RefreshCallback);
+                bool ok = _client.Status(walkPath, args, RefreshCallback); // RefreshC
+                bool statSelf = false;
 
-                if (ok)
+                if (!ok)
+                    statSelf = true;
+                else if (directory != null)
+                    walkItem = directory.Directory; // Might have changed via casing
+
+                if (!statSelf && ((ISvnItemUpdate)walkItem).IsItemTicked())
+                    statSelf = true;
+
+                if (statSelf)
                 {
-                    // Status call succeeded
-                    if (deletedItems != null)
-                    {
-                        for(int i = 0; i < deletedItems.Count; i++)
-                        {
-                            SvnItem item = deletedItems[i];
-
-                            if ((depth > SvnDepth.Files) || item.IsFile)
-                            {
-                                ISvnItemUpdate updateItem = item;
-
-                                if (updateItem.IsItemTicked()) // Should have been unticked if it is still deleted
-                                {                                    
-                                    deletedItems.RemoveAt(i--);
-                                    
-                                    // TODO: BH: Verify if this is always safe...
-                                    // (RefreshItem() fixes up if we dispose the item we are looking at)
-
-                                    SvnItem other;
-                                    if(_map.TryGetValue(item.FullPath, out other))
-                                    {
-                                        if(other == item)
-                                            _map.Remove(item.FullPath);
-                                    }
-
-                                    item.Dispose();
-                                }
-                            }
-                        }
-                    }
-                }
-
-                SvnItem pathItem;
-                if (!_map.TryGetValue(path, out pathItem))
-                {
-                    // We promised data on path but we didn't receive from subversion
-                    // Let's just provide what we know about the on-disk files
+                    // Svn did not stat the items for us.. Let's make something up
 
                     if (walkingDirectory)
+                        StatDirectory(walkPath, depth, directory);
+                    else
                     {
-                        DirectoryInfo dir = new DirectoryInfo(walkPath);
+                        // Just stat the item passed and nothing else in the Depth.Empty case
 
-                        if (!_map.ContainsKey(walkPath))
+                        if (walkItem == null)
                         {
-                            // Mark it as existing if we are sure 
-                            _map[walkPath] = CreateItem(walkPath, AnkhStatus.NotVersioned,
-                                dir.Exists ? SvnNodeKind.Directory : SvnNodeKind.None);
+                            string truepath = SvnTools.GetFullTruePath(walkPath); // Gets the on-disk casing if it exists
+
+                            StoreItem(walkItem = CreateItem(truepath ?? walkPath,
+                                (truepath != null) ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting));
                         }
-
-                        if (walkPath != path && dir.Exists)
+                        else
                         {
-                            // BH: Ankh used do this for all files here; this prevents casing regenerations but does not help much
-                            foreach (FileInfo file in dir.GetFiles())
-                            {
-                                if (!_map.ContainsKey(file.FullName))
-                                    _map[file.FullName] = CreateItem(file.FullName, AnkhStatus.NotVersioned, SvnNodeKind.File);
-                            }
+                            ((ISvnItemUpdate)walkItem).RefreshTo(walkItem.Exists ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting);
                         }
                     }
+                }
 
-                    if (!_map.ContainsKey(path))
+                if (directory != null)
+                {
+                    foreach (ISvnItemUpdate item in directory)
                     {
-                        // Ok: We have a non existing file/directory; just create a nonexisting one
-                        _map[path] = CreateItem(path, AnkhStatus.NotExisting);
+                        if (item.IsItemTicked()) // These items were not found in the stat calls
+                            item.RefreshTo(AnkhStatus.NotExisting);
+                    }
+
+                    if (updateDir.ScheduleForCleanup)
+                        ScheduleForCleanup(directory); // Handles removing already deleted items
+                    // We keep them cached for the current command only
+                }
+
+
+                SvnItem pathItem; // We promissed to return an updated item for the specified path; check if we updated it
+
+                if (!_map.TryGetValue(path, out pathItem))
+                {
+                    // We did not; it does not even exist in the cache
+                    StoreItem(pathItem = CreateItem(path, AnkhStatus.NotExisting));
+
+                    if (directory != null)
+                    {
+                        ((ISvnDirectoryUpdate)directory).Store(pathItem);
+                        ScheduleForCleanup(directory);
                     }
                 }
                 else
                 {
-                    // We promised to update the item specified by path; let's verify if we did.
-                    ISvnItemUpdate updateItem = pathItem;
+                    ISvnItemUpdate update = pathItem;
 
-                    if (!updateItem.IsStatusClean())
+                    if(!update.IsStatusClean())
                     {
-                        // We did not; so the file does not exist!
-                        updateItem.RefreshTo(pathItem.Exists ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting);
+                        update.RefreshTo(AnkhStatus.NotExisting); // We did not see it in the walker
+
+                        if (directory != null)
+                        {
+                            ((ISvnDirectoryUpdate)directory).Store(pathItem);
+                            ScheduleForCleanup(directory);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void StatDirectory(string walkPath, SvnDepth depth, SvnDirectory directory)
+        {
+            // Note: There is a lock(_lock) around this in our caller
+
+            DirectoryInfo dir = new DirectoryInfo(walkPath);
+
+            if (!dir.Exists)
+                return;
+
+            if (!_map.ContainsKey(walkPath))
+            {
+                StoreItem(CreateItem(walkPath, AnkhStatus.NotVersioned, SvnNodeKind.Directory));
+                // Mark it as existing if we are sure 
+            }
+
+            if(depth >= SvnDepth.Files)
+            {
+                foreach (FileInfo file in dir.GetFiles())
+                {
+                    string path = SvnTools.GetNormalizedFullPath(file.FullName);
+                    if (!_map.ContainsKey(path))
+                    {
+                        StoreItem(CreateItem(path, AnkhStatus.NotVersioned, SvnNodeKind.File));
+                    }
+                }
+            }
+
+            if (depth >= SvnDepth.Children)
+            {
+                string adminName = SvnClient.AdministrativeDirectoryName;
+                foreach (DirectoryInfo sd in dir.GetDirectories())
+                {
+                    if (!string.Equals(sd.Name, adminName) && 0 == (sd.Attributes & (FileAttributes.Hidden | FileAttributes.System)))
+                    {
+                        string path = SvnTools.GetNormalizedFullPath(sd.FullName);
+                        if (!_map.ContainsKey(path))
+                        {
+                            StoreItem(CreateItem(path, AnkhStatus.NotVersioned, SvnNodeKind.Directory));
+                        }
+                    }
+                }
+            }
+
+            // Note: There is a lock(_lock) around this in our caller
+        }
+
+        bool _postedCleanup;
+        List<SvnDirectory> _cleanup = new List<SvnDirectory>();
+        private void ScheduleForCleanup(SvnDirectory directory)
+        {
+            lock (_lock)
+            {
+                if (!_cleanup.Contains(directory))
+                    _cleanup.Add(directory);
+
+                if (!_postedCleanup && CommandService != null && CommandService.PostExecCommand(AnkhCommand.FileCacheFinishTasks))
+                    _postedCleanup = true;
+            }
+        }
+
+        internal void OnCleanup()
+        {
+            lock (_lock)
+            {
+                _postedCleanup = false;
+
+                while(_cleanup.Count > 0)
+                {
+                    SvnDirectory dir = _cleanup[0];
+                    string path = dir.FullPath; 
+
+                    _cleanup.RemoveAt(0);
+                
+                    for (int i = 0; i < dir.Count; i++)
+                    {
+                        SvnItem item = dir[i];
+                        if (((ISvnItemUpdate)item).ShouldClean())
+                        {
+                            RemoveItem(item);
+                            dir.RemoveAt(i--);
+                        }
+                    }
+
+                    if (dir.Count == 0)
+                    {
+                        // We cache the path before.. as we don't want the svnitem to be generated again
+                        _dirMap.Remove(path);
                     }
                 }
             }
@@ -240,7 +429,7 @@ namespace Ankh.StatusCache
         /// </remarks>
         void RefreshCallback(object sender, SvnStatusEventArgs e)
         {
-            // Note: There is a lock(_lock) around this in our caller; should we remove it there and apply it here?
+            // Note: There is a lock(_lock) around this in our caller
 
             string path = e.FullPath; // SharpSvn normalized it for us
 
@@ -261,26 +450,10 @@ namespace Ankh.StatusCache
                     item.Dispose();
                 }
 
-                _map[path] = item = new SvnItem(_context, path, status);
+                StoreItem(item = new SvnItem(_context, path, status));
             }
             else
                 ((ISvnItemUpdate)item).RefreshTo(status);
-            
-            if (e.LocalContentStatus == SvnStatus.Deleted)
-            {
-                string parentDir = Path.GetDirectoryName(path);
-
-                // store the deletions keyed on the parent directory
-                DeletedSvnItemList deletedItems;
-
-                if (!_deletions.TryGetValue(parentDir, out deletedItems))
-                    _deletions[parentDir] = deletedItems = new DeletedSvnItemList();
-
-                if(deletedItems.Contains(path))
-                    deletedItems.Remove(path);
-
-                deletedItems.Add(item);
-            }
 
             // Note: There is a lock(_lock) around this in our caller
         }
@@ -297,7 +470,7 @@ namespace Ankh.StatusCache
             string normPath = SvnTools.GetNormalizedFullPath(path);
 
             lock (_lock)
-            {                
+            {
                 SvnItem item;
 
                 if (_map.TryGetValue(normPath, out item))
@@ -331,6 +504,7 @@ namespace Ankh.StatusCache
             }
         }
 
+
         public SvnItem this[string path]
         {
             get
@@ -349,8 +523,8 @@ namespace Ankh.StatusCache
                         string truePath = SvnTools.GetTruePath(path);
 
                         // Just create an item based on his name. Delay the svn calls as long as we can
-                        _map[path] = item = new SvnItem(_context, truePath ?? path, 
-                            (truePath != null) ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting, SvnNodeKind.Unknown);
+                        StoreItem(item = new SvnItem(_context, truePath ?? path,
+                            (truePath != null) ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting, SvnNodeKind.Unknown));
 
                         item.MarkDirty(); // Load status on first access
                     }
@@ -367,7 +541,7 @@ namespace Ankh.StatusCache
         {
             lock (_lock)
             {
-                this._deletions.Clear();
+                this._dirMap.Clear();
                 this._map.Clear();
             }
         }
@@ -377,24 +551,20 @@ namespace Ankh.StatusCache
         /// </summary>
         /// <param name="dir"></param>
         /// <returns></returns>
-        public IList<SvnItem> GetDeletions(string dir)
+        IEnumerable<SvnItem> GetDeletions(string path)
         {
+            if (path == null)
+                throw new ArgumentNullException("path");
+
+            SvnDirectory dir = GetDirectory(path);
+
             if (dir == null)
-                throw new ArgumentNullException("dir");
+                yield break;
 
-            dir = SvnTools.GetNormalizedFullPath(dir);
-
-            lock (_lock)
+            foreach (SvnItem item in dir)
             {
-                DeletedSvnItemList deletions;
-                if (_deletions.TryGetValue(dir, out deletions))
-                {
-                    deletions = RefreshDeletionsList(deletions);
-                    _deletions[dir] = deletions;
-                    return deletions;
-                }
-                else
-                    return new SvnItem[] { };
+                if (item.IsDeleteScheduled && item != dir.Directory)
+                    yield return item;
             }
         }
 
@@ -414,7 +584,7 @@ namespace Ankh.StatusCache
             }
 
             // Now get the deleted items
-            foreach(SvnItem item in deletions)
+            foreach (SvnItem item in deletions)
             {
                 if (item.Status.LocalContentStatus == SvnStatus.Deleted)
                     newList.Add(item);
@@ -444,6 +614,36 @@ namespace Ankh.StatusCache
             // TODO: Add more checks. This code is called from the OpenDocumentTracker
 
             return true;
+        }
+
+        #endregion
+
+        #region IFileStatusCache Members
+
+
+        public SvnDirectory GetDirectory(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            lock (_lock)
+            {
+                SvnDirectory dir;
+
+                if (_dirMap.TryGetValue(path, out dir))
+                    return dir;
+
+                SvnItem item = this[path];
+
+                if (item.IsDirectory)
+                {
+                    dir = new SvnDirectory(Context, path);
+                    dir.Add(item);
+                    return dir;
+                }
+                else
+                    return null;
+            }
         }
 
         #endregion

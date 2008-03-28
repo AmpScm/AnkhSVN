@@ -17,9 +17,6 @@ namespace Ankh.Scc
         /// <value></value>
         SvnItem this[string path] { get; }
 
-
-        IEnumerable<SvnItem> GetDeletions(string directory);
-
         /// <summary>
         /// Updates the status.
         /// </summary>
@@ -60,5 +57,20 @@ namespace Ankh.Scc
         /// <param name="item">The item.</param>
         /// <param name="diskNodeKind">The on-disk node kind if it is known to be correct.</param>
         void RefreshItem(SvnItem item, SvnNodeKind diskNodeKind);
+
+        /// <summary>
+        /// Gets the <see cref="SvnDirectory"/> of the specified path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        SvnDirectory GetDirectory(string path);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <returns></returns>
+        [Obsolete("Please use GetDirectory")]
+        IEnumerable<SvnItem> GetDeletions(string directory);
     }
 }

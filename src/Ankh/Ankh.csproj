@@ -303,6 +303,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
+    <Compile Include="StatusCache\FileStatusCleanup.cs" />
     <Compile Include="WorkingCopyExplorer\IAnkhSelectionContainer.cs" />
     <Compile Include="WorkingCopyExplorer\IWorkingCopyExplorer.cs" />
     <Compile Include="NotificationHandler.cs" />
