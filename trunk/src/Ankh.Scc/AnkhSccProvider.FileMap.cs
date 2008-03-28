@@ -327,7 +327,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            path = Path.GetFullPath(path);
+            path = SvnTools.GetNormalizedFullPath(path);
 
             SccProjectFile file;
             if (!_fileMap.TryGetValue(path, out file))
@@ -347,8 +347,10 @@ namespace Ankh.Scc
             Hashtable projects = new Hashtable();
             foreach (string path in paths)
             {
+                string nPath = SvnTools.GetNormalizedFullPath(path);
+
                 SccProjectFile file;
-                if (!_fileMap.TryGetValue(path, out file))
+                if (!_fileMap.TryGetValue(nPath, out file))
                     continue;
 
                 foreach (SccProjectData pd in file.GetOwnerProjects())
