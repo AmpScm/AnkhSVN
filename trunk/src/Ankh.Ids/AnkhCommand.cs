@@ -19,7 +19,7 @@ namespace AnkhSvn.Ids
 
         // Special task commands not used in menu's
         MarkProjectDirty,
-        MarkProjectRefresh,
+        FileCacheFinishTasks,
         SccFinishTasks,        
 
 		// These values live in the same numberspace as the other values within 
