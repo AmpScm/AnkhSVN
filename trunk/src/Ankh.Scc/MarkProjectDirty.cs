@@ -12,8 +12,7 @@ using System.Diagnostics;
 
 namespace Ankh.Scc
 {
-    [Command(AnkhCommand.MarkProjectDirty)]
-    [Command(AnkhCommand.MarkProjectRefresh)]
+    [Command(AnkhCommand.MarkProjectDirty)]    
     public class MarkProjectDirty : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

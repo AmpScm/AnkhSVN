@@ -23,8 +23,8 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int OnQueryAddFiles(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYADDFILEFLAGS[] rgFlags, VSQUERYADDFILERESULTS[] pSummaryResult, VSQUERYADDFILERESULTS[] rgResults)
         {
-            // For now, we allow adding all files as is
-            // We might propose moving files to within a managed root
+            if (rgpszMkDocuments == null)
+                return VSConstants.E_POINTER;
 
             RegisterForSccCleanup(); // Clear the origins
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
@@ -38,7 +38,7 @@ namespace Ankh.Scc
                 bool ok = true;
 
                 // TODO: Verify the new names do not give invalid Subversion state (Double casings, etc.)
-                if (track && !SvnCanAddPath(rgpszMkDocuments[i], SvnNodeKind.File))
+                if (track && !SvnCanAddPath(SvnTools.GetNormalizedFullPath(rgpszMkDocuments[i]), SvnNodeKind.File))
                     ok = false;
 
                 if (rgResults != null)
@@ -87,16 +87,19 @@ namespace Ankh.Scc
 
                 // Save the origins of the to be added files as they are not available in the added event
 
-                string newDoc = rgpszNewMkDocuments[i];
+                string newDoc = SvnTools.GetNormalizedFullPath(rgpszNewMkDocuments[i]);
                 string origDoc = rgpszSrcMkDocuments[i];
+
+                if (origDoc != null)
+                    origDoc = SvnTools.GetNormalizedFullPath(origDoc);
 
                 if (!string.IsNullOrEmpty(newDoc) && !string.IsNullOrEmpty(origDoc)
                     && !string.Equals(newDoc, origDoc, StringComparison.OrdinalIgnoreCase)) // VS tries to add the file
                 {
-                    _fileOrigins[rgpszNewMkDocuments[i]] = rgpszSrcMkDocuments[i];
+                    _fileOrigins[newDoc] = origDoc;
                 }
 
-                if (track && !SvnCanAddPath(rgpszNewMkDocuments[i], SvnNodeKind.File))
+                if (track && !SvnCanAddPath(newDoc, SvnNodeKind.File))
                     ok = false;
 
                 if (rgResults != null)
@@ -175,6 +178,7 @@ namespace Ankh.Scc
                         continue; // Not handled by our provider
 
                     string origin = null;
+                    string newName = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
 
                     if ((!_fileOrigins.TryGetValue(rgpszMkDocuments[iFile], out origin) || (origin == null)))
                     {
@@ -187,8 +191,7 @@ namespace Ankh.Scc
                         //  5 - The file is added via drag&drop from another application (OLE drop)
                         //
                         // The only way to determine is walking through these options
-
-                        string newName = rgpszMkDocuments[iFile];
+                        
                         FileInfo newInfo = new FileInfo(newName);
 
                         // 2 -  If the file is drag&dropped in the solution explorer
@@ -247,7 +250,7 @@ namespace Ankh.Scc
                                         if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
                                         {
                                             // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
-                                            _fileOrigins[newName] = origin = file;
+                                            _fileOrigins[newName] = origin = SvnTools.GetNormalizedFullPath(file);
 
                                             break;
                                         }
@@ -291,7 +294,7 @@ namespace Ankh.Scc
                                                     if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
                                                     {
                                                         // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
-                                                        _fileOrigins[newName] = origin = file;
+                                                        _fileOrigins[newName] = origin = SvnTools.GetNormalizedFullPath(file);
 
                                                         break;
                                                     }
@@ -307,7 +310,8 @@ namespace Ankh.Scc
                     }
 
                     if (sccProject != null)
-                        _sccProvider.OnProjectFileAdded(sccProject, rgpszMkDocuments[iFile], origin, rgFlags[iFile]);
+                        _sccProvider.OnProjectFileAdded(sccProject, newName,
+                            origin, rgFlags[iFile]);
                     else
                     {
                         // TODO: Just track svn changes?
@@ -438,7 +442,7 @@ namespace Ankh.Scc
                         continue;
 
                     if (sccProject != null)
-                        _sccProvider.OnProjectDirectoryAdded(sccProject, rgpszMkDocuments[iDirectory], rgFlags[iDirectory]);
+                        _sccProvider.OnProjectDirectoryAdded(sccProject, SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iDirectory]), rgFlags[iDirectory]);
                 }
             }
 

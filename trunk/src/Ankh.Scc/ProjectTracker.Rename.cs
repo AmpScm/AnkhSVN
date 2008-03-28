@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -30,7 +31,8 @@ namespace Ankh.Scc
                 bool ok = true;
 
                 if(track)
-                    _sccProvider.OnBeforeProjectRenameFile(sccProject, rgszMkOldNames[i], rgszMkNewNames[i], rgFlags[i], out ok);
+                    _sccProvider.OnBeforeProjectRenameFile(sccProject, SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
+                        SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]), rgFlags[i], out ok);
 
                 if (rgResults != null)
                     rgResults[i] = ok ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
@@ -79,7 +81,9 @@ namespace Ankh.Scc
                     if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
-                    _sccProvider.OnProjectRenamedFile(sccProject, rgszMkOldNames[iFile], rgszMkNewNames[iFile], rgFlags[iFile]);
+                    _sccProvider.OnProjectRenamedFile(sccProject, 
+                        SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]),
+                        SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]), rgFlags[iFile]);
                 }
             }
 
@@ -108,7 +112,9 @@ namespace Ankh.Scc
                 bool ok = true;
 
                 if(track)
-                    _sccProvider.OnBeforeProjectDirectoryRename(sccProject, rgszMkOldNames[i], rgszMkNewNames[i], rgFlags[i], out ok);
+                    _sccProvider.OnBeforeProjectDirectoryRename(sccProject, 
+                        SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
+                        SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]), rgFlags[i], out ok);
 
                 if (rgResults != null)
                     rgResults[i] = ok ? VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK : VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameNotOK;
@@ -157,7 +163,9 @@ namespace Ankh.Scc
                     if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
-                    _sccProvider.OnProjectDirectoryRenamed(sccProject, rgszMkOldNames[iDirectory], rgszMkNewNames[iDirectory], rgFlags[iDirectory]);
+                    _sccProvider.OnProjectDirectoryRenamed(sccProject, 
+                        SvnTools.GetNormalizedFullPath(rgszMkOldNames[iDirectory]),
+                        SvnTools.GetNormalizedFullPath(rgszMkNewNames[iDirectory]), rgFlags[iDirectory]);
                 }
             }
 
