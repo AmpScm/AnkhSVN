@@ -28,19 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem("gf");
-            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem("sad");
-            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem("sda");
-            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem("sda");
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor();
-            this.pendingCommits = new System.Windows.Forms.ListView();
+            this.pendingCommits = new Ankh.UI.PendingChanges.ListViewWithSelection();
             this.pathColumn = new System.Windows.Forms.ColumnHeader();
             this.projectColumn = new System.Windows.Forms.ColumnHeader();
             this.fileStatusColumn = new System.Windows.Forms.ColumnHeader();
@@ -49,7 +44,8 @@
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.topLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer
@@ -62,7 +58,7 @@
             // 
             // splitContainer.Panel1
             // 
-            this.splitContainer.Panel1.Controls.Add(this.tableLayoutPanel1);
+            this.splitContainer.Panel1.Controls.Add(this.panel1);
             this.splitContainer.Panel1MinSize = 10;
             // 
             // splitContainer.Panel2
@@ -71,34 +67,44 @@
             this.splitContainer.Panel2MinSize = 10;
             this.splitContainer.Size = new System.Drawing.Size(768, 300);
             this.splitContainer.SplitterDistance = 83;
-            this.splitContainer.SplitterWidth = 2;
+            this.splitContainer.SplitterWidth = 3;
             this.splitContainer.TabIndex = 0;
             // 
-            // tableLayoutPanel1
+            // panel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 144F));
-            this.tableLayoutPanel1.Controls.Add(this.textBox1, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.logMessageEditor, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(768, 83);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.topLayoutPanel);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(768, 83);
+            this.panel1.TabIndex = 1;
+            // 
+            // topLayoutPanel
+            // 
+            this.topLayoutPanel.ColumnCount = 3;
+            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
+            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 144F));
+            this.topLayoutPanel.Controls.Add(this.textBox1, 2, 0);
+            this.topLayoutPanel.Controls.Add(this.label2, 1, 0);
+            this.topLayoutPanel.Controls.Add(this.label1, 0, 0);
+            this.topLayoutPanel.Controls.Add(this.logMessageEditor, 0, 1);
+            this.topLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.topLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.topLayoutPanel.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.topLayoutPanel.Name = "topLayoutPanel";
+            this.topLayoutPanel.RowCount = 2;
+            this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.topLayoutPanel.Size = new System.Drawing.Size(766, 81);
+            this.topLayoutPanel.TabIndex = 0;
             // 
             // textBox1
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(624, 0);
+            this.textBox1.Location = new System.Drawing.Point(622, 0);
             this.textBox1.Margin = new System.Windows.Forms.Padding(0);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(144, 20);
@@ -110,7 +116,7 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(586, 3);
+            this.label2.Location = new System.Drawing.Point(584, 3);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
@@ -130,17 +136,18 @@
             // 
             // logMessageEditor
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.logMessageEditor, 3);
+            this.topLayoutPanel.SetColumnSpan(this.logMessageEditor, 3);
             this.logMessageEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logMessageEditor.Location = new System.Drawing.Point(0, 20);
             this.logMessageEditor.Margin = new System.Windows.Forms.Padding(0);
             this.logMessageEditor.Name = "logMessageEditor";
-            this.logMessageEditor.Size = new System.Drawing.Size(768, 63);
+            this.logMessageEditor.Size = new System.Drawing.Size(766, 61);
             this.logMessageEditor.TabIndex = 4;
             // 
             // pendingCommits
             // 
             this.pendingCommits.AllowColumnReorder = true;
+            this.pendingCommits.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pendingCommits.CheckBoxes = true;
             this.pendingCommits.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.pathColumn,
@@ -151,32 +158,22 @@
             this.pendingCommits.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pendingCommits.FullRowSelect = true;
             this.pendingCommits.GridLines = true;
-            listViewItem7.StateImageIndex = 0;
-            listViewItem8.StateImageIndex = 0;
-            listViewItem9.StateImageIndex = 0;
-            listViewItem10.StateImageIndex = 0;
-            listViewItem11.StateImageIndex = 0;
-            listViewItem12.StateImageIndex = 0;
-            this.pendingCommits.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem7,
-            listViewItem8,
-            listViewItem9,
-            listViewItem10,
-            listViewItem11,
-            listViewItem12});
             this.pendingCommits.Location = new System.Drawing.Point(0, 0);
             this.pendingCommits.Name = "pendingCommits";
+            this.pendingCommits.ServiceProvider = null;
             this.pendingCommits.ShowItemToolTips = true;
-            this.pendingCommits.Size = new System.Drawing.Size(768, 215);
+            this.pendingCommits.Size = new System.Drawing.Size(768, 214);
             this.pendingCommits.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.pendingCommits.TabIndex = 0;
             this.pendingCommits.UseCompatibleStateImageBehavior = false;
             this.pendingCommits.View = System.Windows.Forms.View.Details;
+            this.pendingCommits.RetrieveSelection += new System.EventHandler<Ankh.UI.PendingChanges.ListViewWithSelection.RetrieveSelectionEventArgs>(this.pendingCommits_RetrieveSelection);
+            this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.PendingChanges.ListViewWithSelection.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
             // 
             // pathColumn
             // 
             this.pathColumn.Text = "Path";
-            this.pathColumn.Width = 126;
+            this.pathColumn.Width = 290;
             // 
             // projectColumn
             // 
@@ -207,25 +204,27 @@
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             this.splitContainer.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.topLayoutPanel.ResumeLayout(false);
+            this.topLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ListView pendingCommits;
+        private Ankh.UI.PendingChanges.ListViewWithSelection pendingCommits;
         private System.Windows.Forms.ColumnHeader pathColumn;
         private System.Windows.Forms.ColumnHeader projectColumn;
         private System.Windows.Forms.ColumnHeader fileStatusColumn;
         private System.Windows.Forms.ColumnHeader fullPathColumn;
         private System.Windows.Forms.ColumnHeader propertyStatusColumn;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel topLayoutPanel;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor;
         private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.Panel panel1;
     }
 }

@@ -465,7 +465,7 @@ namespace Ankh.Scc
             if (selection != null && !string.IsNullOrEmpty(selection.SolutionFilename))
                 files.Add(selection.SolutionFilename);
 
-            foreach(string file in files)
+            foreach(string file in _fileMap.Keys)
             {
                 if (file[file.Length - 1] == '\\') // Don't return paths
                         continue;
@@ -517,6 +517,52 @@ namespace Ankh.Scc
             {
                 data.OnFileClose(file, itemId);
             }
-        }         
+        }
+
+        #region IProjectFileMapper Members
+
+
+        public ISvnProjectInfo GetProjectInfo(SvnProject project)
+        {
+            if (project == null || project.RawHandle == null)
+                return null;
+
+            SccProjectData pd;
+            if(_projectMap.TryGetValue(project.RawHandle, out pd))
+            {
+                return new WrapProjectInfo(pd);
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Wrapper class providing a public api to the data contained within <see cref="SccProjectData"/>
+        /// </summary>
+        /// <remarks>Showing the raw properties of SccProjectData has side-effects. We wrap the class to hide this problem</remarks>
+        sealed class WrapProjectInfo : ISvnProjectInfo
+        {
+            readonly SccProjectData _data;
+
+            public WrapProjectInfo(SccProjectData data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException("data");
+
+                _data = data;
+            }
+
+            public string ProjectName
+            {
+                get { return _data.ProjectName; }
+            }
+
+            public string ProjectDirectory
+            {
+                get { return _data.ProjectDirectory; }
+            }            
+        }
     }
 }

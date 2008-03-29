@@ -276,6 +276,7 @@
     <Compile Include="PendingChanges\LogMessageEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="PendingChanges\PendingCommitItem.cs" />
     <Compile Include="PendingChanges\PendingCommitsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -309,6 +310,9 @@
     </Compile>
     <Compile Include="PendingChanges\RecentChangesPage.Designer.cs">
       <DependentUpon>RecentChangesPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PendingChanges\ListViewWithSelection.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PopUpListForm.Designer.cs">
       <DependentUpon>PopUpListForm.cs</DependentUpon>

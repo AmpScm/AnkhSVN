@@ -19,7 +19,12 @@ namespace Ankh.UI.PendingChanges.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            //throw new NotImplementedException();
+            PendingCommitsPage page = e.Context.GetService<PendingCommitsPage>();
+
+            if (page == null || !page.Visible)
+                return;
+
+            page.RefreshList();
         }
     }
 }

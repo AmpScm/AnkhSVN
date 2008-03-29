@@ -47,5 +47,12 @@ namespace Ankh.Scc
         /// <param name="path"></param>
         /// <returns></returns>
         bool ContainsPath(string path);
+
+        /// <summary>
+        /// Gets the project info.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        ISvnProjectInfo GetProjectInfo(SvnProject project);
     }
 }
