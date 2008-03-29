@@ -58,10 +58,11 @@
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Commands\IAnkhCommandService.cs" />
     <Compile Include="ContextServices\IAnkhPackage.cs" />
+    <Compile Include="Scc\IProjectInfo.cs" />
     <Compile Include="Scc\SvnDirectory.cs" />
     <Compile Include="Selection\IAnkhTaskManager.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />
-    <Compile Include="UI\PendingChange.cs" />
+    <Compile Include="Scc\PendingChange.cs" />
     <Compile Include="VS\IAnkhDialogOwner.cs" />
     <Compile Include="ContextServices\IAnkhErrorHandler.cs" />
     <Compile Include="ContextServices\IAnkhOperationLogger.cs" />

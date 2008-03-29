@@ -8,7 +8,7 @@ namespace Ankh.Commands
     /// <summary>
     /// 
     /// </summary>
-    public sealed class CommandMapItem
+    public class CommandMapItem
     {
         readonly AnkhCommand _command;
         ICommandHandler _handler;
