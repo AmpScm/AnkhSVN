@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Ankh
 {
     /// <summary>
     /// Generic service baseclass
     /// </summary>
-    public abstract class AnkhService : IAnkhServiceProvider
+    public abstract class AnkhService : IAnkhServiceProvider, IComponent
     {
         readonly IAnkhServiceProvider _context;
         /// <summary>
@@ -125,6 +126,49 @@ namespace Ankh
         {
             [DebuggerStepThrough]
             get { return _context.GetService<IServiceContainer>(); }
+        }
+
+        #region IComponent Members
+
+        /// <summary>
+        /// Represents the method that handles the <see cref="E:System.ComponentModel.IComponent.Disposed"/> event of a component.
+        /// </summary>
+        public event EventHandler Disposed;
+
+        ISite _site;
+        /// <summary>
+        /// Gets or sets the <see cref="T:System.ComponentModel.ISite"/> associated with the <see cref="T:System.ComponentModel.IComponent"/>.
+        /// </summary>
+        /// <value></value>
+        /// <returns>The <see cref="T:System.ComponentModel.ISite"/> object associated with the component; or null, if the component does not have a site.</returns>
+        ISite IComponent.Site
+        {
+            get { return _site; }
+            set { _site = value; }
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        void IDisposable.Dispose()
+        {
+            Dispose(true);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (Disposed != null)
+                Disposed(this, EventArgs.Empty);
         }
     }
 }

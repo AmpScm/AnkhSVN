@@ -4,68 +4,17 @@ using System.Text;
 using AnkhSvn.Ids;
 using System.Diagnostics;
 using System.Reflection;
+using System.ComponentModel;
 
 namespace Ankh.Commands
 {
-    public class CommandMapItem
+    public sealed class CommandMapper : AnkhService
     {
-        readonly AnkhCommand _command;
-        ICommandHandler _handler;
-
-        public event EventHandler<CommandEventArgs> Execute;
-        public event EventHandler<CommandUpdateEventArgs> Update;
-
-        public CommandMapItem(AnkhCommand command)
-        {
-            _command = command;
-        }
-
-        public AnkhCommand Command
-        {
-            get { return _command; }
-        }
-
-        public ICommandHandler ICommand
-        {
-            get { return _handler; }
-            set { _handler = value; }
-        }
-
-        protected internal void OnExecute(CommandEventArgs e)
-        {
-            if (ICommand != null)
-                ICommand.OnExecute(e);
-
-            if (Execute != null)
-                Execute(this, e);
-        }
-
-        protected internal void OnUpdate(CommandUpdateEventArgs e)
-        {
-            if (ICommand != null)
-                ICommand.OnUpdate(e);
-
-            if (Update != null)
-                Update(this, e);
-        }
-
-        public bool IsHandled
-        {
-            get { return (Execute != null) || (ICommand != null); }
-        }
-    }
-
-    public sealed class CommandMapper
-    {
-        readonly IAnkhServiceProvider _context;
         readonly Dictionary<AnkhCommand, CommandMapItem> _map;
 
         public CommandMapper(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
             _map = new Dictionary<AnkhCommand, CommandMapItem>();
         }
 
@@ -82,7 +31,7 @@ namespace Ankh.Commands
                 }
                 catch (Exception ex)
                 {
-                    IAnkhErrorHandler handler = _context.GetService<IAnkhErrorHandler>();
+                    IAnkhErrorHandler handler = Context.GetService<IAnkhErrorHandler>();
 
                     if (handler != null)
                     {
@@ -119,7 +68,7 @@ namespace Ankh.Commands
                 }
                 catch (Exception ex)
                 {
-                    IAnkhErrorHandler handler = _context.GetService<IAnkhErrorHandler>();
+                    IAnkhErrorHandler handler = Context.GetService<IAnkhErrorHandler>();
 
                     if (handler != null)
                     {
@@ -200,7 +149,14 @@ namespace Ankh.Commands
                         if (item != null)
                         {
                             if (instance == null)
+                            {
                                 instance = (ICommandHandler)Activator.CreateInstance(type);
+
+                                IComponent component = instance as IComponent;
+
+                                if (component != null)
+                                    component.Site = CommandSite;
+                            }
 
                             Debug.Assert(item.ICommand == null || item.ICommand == instance, string.Format("No previous ICommand registered on the CommandMapItem for {0}", cmdAttr.Command));
 
@@ -209,6 +165,45 @@ namespace Ankh.Commands
                     }
                 }
             }
+        }
+
+        CommandMapperSite _commandMapperSite;
+        CommandMapperSite CommandSite
+        {
+            get { return _commandMapperSite ?? (_commandMapperSite = new CommandMapperSite(this)); }
+        }
+
+        sealed class CommandMapperSite : AnkhService, ISite
+        {
+            readonly CommandMapper _mapper;
+            readonly Container _container = new Container();
+
+            public CommandMapperSite(CommandMapper context)
+                : base(context)
+            {
+                _mapper = context;
+            }
+
+            public IComponent Component
+            {
+                get { return _mapper; }
+            }
+
+            public IContainer Container
+            {
+                get { return _container; }
+            }
+
+            public bool DesignMode
+            {
+                get { return false; }
+            }
+
+            public string Name
+            {
+                get { return "CommandMapper"; }
+                set { throw new InvalidOperationException();  }
+            }            
         }
     }
 }
