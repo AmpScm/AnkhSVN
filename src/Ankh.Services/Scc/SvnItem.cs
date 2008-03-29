@@ -53,6 +53,7 @@ namespace Ankh
         XBool _mustLock; // Unknown, Yes, No
         XBool _isVersionable; // Unknown, Yes, No
         bool _ticked;
+        int _cookie;
 
         public SvnItem(IAnkhServiceProvider context, string fullPath, AnkhStatus status)
         {
@@ -87,11 +88,13 @@ namespace Ankh
             }
         }
 
+
         void RefreshTo(AnkhStatus status)
         {
             if (status == null)
                 throw new ArgumentNullException("status");
 
+            _cookie = NextCookie();
             _ticked = false;
             _statusDirty = XBool.False;
             _status = status;
@@ -156,6 +159,8 @@ namespace Ankh
             _readOnly = lead._readOnly;
             _mustLock = lead._mustLock;
             _isVersionable = lead._isVersionable;
+            _ticked = false;
+            _cookie = NextCookie(); // Status 100% the same, but changed... Cookies are free ;)
         }
 
         public void MarkDirty()
@@ -168,11 +173,13 @@ namespace Ankh
             _readOnly = XBool.None;
             _mustLock = XBool.None;
             _isVersionable = XBool.None;
+            _cookie = NextCookie();
         }
 
         void ISvnItemUpdate.MarkStatusDirty()
         {
             _statusDirty = XBool.True;
+            _cookie = NextCookie();
         }
 
         bool ISvnItemUpdate.IsStatusClean()
@@ -200,6 +207,16 @@ namespace Ankh
         bool ISvnItemUpdate.IsItemTicked()
         {
             return _ticked;
+        }
+
+        /// <summary>
+        /// Gets a value which is incremented everytime the status was changed.
+        /// </summary>
+        /// <remarks>The cookie is provided globally over all <see cref="SvnItem"/> instances.  External users can be sure
+        /// the status is 100% the same if the cookie did not change</remarks>
+        public int ChangeCookie
+        {
+            get { return _cookie; }
         }
 
         void UpdateAttributeInfo()
@@ -640,6 +657,23 @@ namespace Ankh
                 return true;
 
             return false;
+        }
+
+        static int _globalCookieBox = 0;
+
+        /// <summary>
+        /// Gets a new unique cookie
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>Threadsafe provider of cookie values</remarks>
+        static int NextCookie()
+        {
+            int n = System.Threading.Interlocked.Increment(ref _globalCookieBox); // Wraps on Int32.MaxValue
+
+            if (n != 0)
+                return n;
+            else
+                return NextCookie(); // 1 in 4 billion times
         }
     }
 }

@@ -52,6 +52,7 @@
     <Compile Include="Commands\BaseCommandEventArgs.cs" />
     <Compile Include="Commands\CommandAttribute.cs" />
     <Compile Include="Commands\CommandEventArgs.cs" />
+    <Compile Include="Commands\CommandMapItem.cs" />
     <Compile Include="Commands\CommandMapper.cs" />
     <Compile Include="Commands\CommandUpdateEventArgs.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Scc\SvnDirectory.cs" />
     <Compile Include="Selection\IAnkhTaskManager.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />
+    <Compile Include="UI\PendingChange.cs" />
     <Compile Include="VS\IAnkhDialogOwner.cs" />
     <Compile Include="ContextServices\IAnkhErrorHandler.cs" />
     <Compile Include="ContextServices\IAnkhOperationLogger.cs" />
