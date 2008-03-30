@@ -35,7 +35,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor();
-            this.pendingCommits = new Ankh.UI.PendingChanges.ListViewWithSelection();
+            this.pendingCommits = new Ankh.UI.PendingChanges.PendingCommitsView();
             this.pathColumn = new System.Windows.Forms.ColumnHeader();
             this.projectColumn = new System.Windows.Forms.ColumnHeader();
             this.fileStatusColumn = new System.Windows.Forms.ColumnHeader();
@@ -147,7 +147,6 @@
             // pendingCommits
             // 
             this.pendingCommits.AllowColumnReorder = true;
-            this.pendingCommits.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pendingCommits.CheckBoxes = true;
             this.pendingCommits.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.pathColumn,
@@ -157,9 +156,10 @@
             this.fullPathColumn});
             this.pendingCommits.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pendingCommits.FullRowSelect = true;
-            this.pendingCommits.GridLines = true;
+            this.pendingCommits.HideSelection = false;
             this.pendingCommits.Location = new System.Drawing.Point(0, 0);
             this.pendingCommits.Name = "pendingCommits";
+            this.pendingCommits.ProvideWholeListForSelection = false;
             this.pendingCommits.ServiceProvider = null;
             this.pendingCommits.ShowItemToolTips = true;
             this.pendingCommits.Size = new System.Drawing.Size(768, 214);
@@ -167,8 +167,8 @@
             this.pendingCommits.TabIndex = 0;
             this.pendingCommits.UseCompatibleStateImageBehavior = false;
             this.pendingCommits.View = System.Windows.Forms.View.Details;
-            this.pendingCommits.RetrieveSelection += new System.EventHandler<Ankh.UI.PendingChanges.ListViewWithSelection.RetrieveSelectionEventArgs>(this.pendingCommits_RetrieveSelection);
-            this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.PendingChanges.ListViewWithSelection.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
+            this.pendingCommits.RetrieveSelection += new System.EventHandler<Ankh.UI.PendingChanges.ListViewWithSelection<Ankh.UI.PendingChanges.PendingCommitItem>.RetrieveSelectionEventArgs>(this.pendingCommits_RetrieveSelection);
+            this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.PendingChanges.ListViewWithSelection<Ankh.UI.PendingChanges.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
             // 
             // pathColumn
             // 
@@ -213,7 +213,6 @@
 
         #endregion
 
-        private Ankh.UI.PendingChanges.ListViewWithSelection pendingCommits;
         private System.Windows.Forms.ColumnHeader pathColumn;
         private System.Windows.Forms.ColumnHeader projectColumn;
         private System.Windows.Forms.ColumnHeader fileStatusColumn;
@@ -226,5 +225,6 @@
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Panel panel1;
+        private PendingCommitsView pendingCommits;
     }
 }

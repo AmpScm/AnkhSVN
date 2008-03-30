@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -118,6 +120,61 @@ namespace Ankh.Scc.ProjectMap
                     _ids = ids;
                 }
             }
+        }
+
+        public bool TryGetId(out uint id)
+        {
+            IVsProject project = _project.Project as IVsProject;
+
+            if (project == null)
+            {
+                id = 0;
+                return false;
+            }
+
+            int found;
+            VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
+            if (ErrorHandler.Succeeded(project.IsDocumentInProject(Filename, out found, prio, out id)) && id != VSConstants.VSITEMID_NIL)
+                return true;
+
+            id = 0;
+            return false;
+        }
+
+        internal bool TryGetIcon(out ProjectIconReference icon)
+        {
+            uint id;
+            icon = null;
+
+            if (!TryGetId(out id))
+                return false;
+
+            IVsHierarchy hier = _project.Project as IVsHierarchy;
+
+            if (hier == null)
+                return false;
+
+            object value;
+            if (ErrorHandler.Succeeded(hier.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconHandle, out value)))
+            {
+                icon = new ProjectIconReference((IntPtr)(int)value);
+                return true;
+            }
+
+            IntPtr list;
+
+            if(!ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_IconImgList, out value)))
+                return false;
+
+            list = (IntPtr)(int)value;
+
+
+            if (!ErrorHandler.Succeeded(hier.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconIndex, out value)))
+                return false;
+
+            icon = new ProjectIconReference(list, (int)value);
+
+            return true;
         }
     }
 }

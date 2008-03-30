@@ -112,6 +112,22 @@ namespace Ankh.Selection
                 }
             }
 
+            IAnkhGetMkDocument getDoc = hierarchy as IAnkhGetMkDocument;
+            if (getDoc != null)
+            {
+                string mkDocument;
+
+                if (ErrorHandler.Succeeded(getDoc.GetMkDocument(id, out mkDocument)))
+                {
+                    if (string.IsNullOrEmpty(mkDocument))
+                        files = new string[0];
+                    else
+                        files = new string[] { mkDocument };
+
+                    return true;
+                }
+            }
+
             return ok;
         }
 

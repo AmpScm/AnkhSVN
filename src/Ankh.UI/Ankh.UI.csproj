@@ -273,6 +273,7 @@
     </Compile>
     <Compile Include="PendingChanges\Commands\ViewLogMessage.cs" />
     <Compile Include="PendingChanges\Commands\RefreshPendingChanges.cs" />
+    <Compile Include="PendingChanges\FileIconMap.cs" />
     <Compile Include="PendingChanges\LogMessageEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -282,6 +283,9 @@
     </Compile>
     <Compile Include="PendingChanges\PendingCommitsPage.Designer.cs">
       <DependentUpon>PendingCommitsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PendingChanges\PendingCommitsView.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingIssuesPage.cs">
       <SubType>UserControl</SubType>

@@ -521,6 +521,22 @@ namespace Ankh.Scc
 
         #region IProjectFileMapper Members
 
+        public ProjectIconReference GetPathIconHandle(string path)
+        {
+            SccProjectFile file;
+
+            if (_fileMap.TryGetValue(path, out file))
+            {
+                foreach (SccProjectFileReference fr in file.GetAllReferences())
+                {
+                    ProjectIconReference icon;
+                    if (fr.TryGetIcon(out icon))
+                        return icon;
+                }
+            }
+
+            return null;
+        }
 
         public ISvnProjectInfo GetProjectInfo(SvnProject project)
         {

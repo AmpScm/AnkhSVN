@@ -63,6 +63,8 @@ namespace Ankh.UI.PendingChanges
         readonly Dictionary<string, PendingCommitItem> _listItems = new Dictionary<string,PendingCommitItem>(StringComparer.OrdinalIgnoreCase);
         readonly SortedList<string, PendingChange> _pendingChanges = new SortedList<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
 
+        FileIconMap _iconMap;
+
         internal void RefreshList()
         {
             if (UISite == null)
@@ -72,6 +74,16 @@ namespace Ankh.UI.PendingChanges
             IFileStatusCache cache = UISite.GetService<IFileStatusCache>();            
 
             SortedList<string, SvnItem> items = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
+
+            if (_iconMap == null)
+            {
+                _iconMap = UISite.GetService<FileIconMap>();
+
+                if (_iconMap == null)
+                    UISite.GetService<IServiceContainer>().AddService(typeof(FileIconMap), _iconMap = new FileIconMap(UISite));
+
+                pendingCommits.SmallImageList = _iconMap.ImageList;
+            }
 
             foreach (string file in allFiles)
             {
@@ -106,14 +118,14 @@ namespace Ankh.UI.PendingChanges
                 }
                 else if(!_listItems.ContainsKey(pc.FullPath))
                 {
-                    PendingCommitItem lvi = new PendingCommitItem(pc);
+                    PendingCommitItem lvi = new PendingCommitItem(UISite, pc, _iconMap);
                     _listItems.Add(pc.FullPath, lvi);
                     pendingCommits.Items.Add(lvi);
                 }
             }
         }
 
-        private void pendingCommits_ResolveItem(object sender, ListViewWithSelection.ResolveItemEventArgs e)
+        private void pendingCommits_ResolveItem(object sender, PendingCommitsView.ResolveItemEventArgs e)
         {
             PendingChange pc = e.SelectionItem as PendingChange;
 
@@ -124,7 +136,7 @@ namespace Ankh.UI.PendingChanges
             }            
         }
 
-        private void pendingCommits_RetrieveSelection(object sender, ListViewWithSelection.RetrieveSelectionEventArgs e)
+        private void pendingCommits_RetrieveSelection(object sender, PendingCommitsView.RetrieveSelectionEventArgs e)
         {
             PendingCommitItem pi = (PendingCommitItem)e.Item;
 
