@@ -54,5 +54,12 @@ namespace Ankh.Scc
         /// <param name="project">The project.</param>
         /// <returns></returns>
         ISvnProjectInfo GetProjectInfo(SvnProject project);
+
+        /// <summary>
+        /// Gets the icon of the file in the first project containing the file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        ProjectIconReference GetPathIconHandle(string path);
     }
 }

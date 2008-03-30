@@ -5,23 +5,28 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Collections;
+using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace Ankh.UI.PendingChanges
 {
     /// <summary>
     /// Generic listview with <see cref="ISelectionContainer"/> support
     /// </summary>
-    public class ListViewWithSelection : ListView, ISelectionContainer
+    public class ListViewWithSelection<TListViewItem> : ListView, ISelectionContainer
+        where TListViewItem : ListViewItem
     {
         bool _provideFullList;
 
         IServiceProvider _serviceProvider;
+        [Browsable(false)]
         public IServiceProvider ServiceProvider
         {
             get { return _serviceProvider; }
             set { _serviceProvider = value; }
         }
 
+        [Browsable(false)]
         public bool ProvideWholeListForSelection
         {
             get { return _provideFullList; }
@@ -57,6 +62,16 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        internal virtual ListViewHierarchy CreateHierarchy()
+        {
+            return new ListViewHierarchy(this);
+        }
+
+        ListViewHierarchy _hier;
+        internal ListViewHierarchy Hierarchy
+        {
+            get { return _hier ?? (_hier = CreateHierarchy()); }
+        }
         /// <summary>
         /// Notifies to external listeners selection updated.
         /// </summary>
@@ -65,10 +80,33 @@ namespace Ankh.UI.PendingChanges
             _maybeUnselect = true;
             if (ServiceProvider != null)
             {
-                ITrackSelection sel = (ITrackSelection)ServiceProvider.GetService(typeof(STrackSelection));
+                IVsTrackSelectionEx sel = (IVsTrackSelectionEx)ServiceProvider.GetService(typeof(SVsTrackSelectionEx));
 
                 if (sel != null)
-                    sel.OnSelectChange(this);
+                {
+                    IntPtr hier = Marshal.GetComInterfaceForObject(Hierarchy, typeof(IVsHierarchy));
+                    IntPtr handle = Marshal.GetComInterfaceForObject(this, typeof(ISelectionContainer));
+                    try
+                    {
+                        uint id;
+
+                        if (SelectedItems.Count >= 1)
+                            id = Hierarchy.GetId((TListViewItem)SelectedItems[0]);
+                        else
+                            id = VSConstants.VSITEMID_NIL;
+
+                        IVsMultiItemSelect ms = null;
+                        if (SelectedItems.Count > 1)
+                            ms = Hierarchy;
+
+                        sel.OnSelectChangeEx(hier, id, ms, handle);
+                    }
+                    finally
+                    {
+                        Marshal.Release(handle);
+                        Marshal.Release(hier);
+                    }
+                }
             }
         }
 
@@ -149,7 +187,7 @@ namespace Ankh.UI.PendingChanges
 
             return VSConstants.S_OK;
         }
-        
+
         int ISelectionContainer.SelectObjects(uint cSelect, object[] apUnkSelect, uint dwFlags)
         {
             if (apUnkSelect == null)
@@ -167,7 +205,7 @@ namespace Ankh.UI.PendingChanges
                     OnResolveItem(e);
 
                     ListViewItem lvi = e.Item;
-                    
+
                     if (lvi != null && lvi.ListView == this)
                         lvi.Selected = true;
                 }
@@ -246,12 +284,268 @@ namespace Ankh.UI.PendingChanges
             /// <value>The item.</value>
             public ListViewItem Item
             {
-                get { return _item; }                
+                get { return _item; }
             }
         }
 
         sealed class NotWrapped
         {
         }
+
+        #region IVsHierarchy implementation over the ListViewItems
+
+        internal class ListViewHierarchy : IVsHierarchy, IVsMultiItemSelect
+        {
+            readonly Dictionary<uint, IVsHierarchyEvents> _eventHandlers = new Dictionary<uint, IVsHierarchyEvents>();
+            readonly Dictionary<TListViewItem, uint> _items = new Dictionary<TListViewItem, uint>();
+            readonly Dictionary<uint, TListViewItem> _ids = new Dictionary<uint, TListViewItem>();
+            readonly ListViewWithSelection<TListViewItem> _lv;
+            uint lvId;
+
+            public ListViewHierarchy(ListViewWithSelection<TListViewItem> lv)
+            {
+                _lv = lv;
+                lv.SelectedIndexChanged += new EventHandler(OnSelectedIndexChanged);
+            }
+
+            void OnSelectedIndexChanged(object sender, EventArgs e)
+            {
+                if (_items.Count == 0)
+                    return;
+
+                foreach (TListViewItem i in new List<TListViewItem>(_items.Keys))
+                {
+                    if (_lv.SelectedItems.Contains(i))
+                    {
+                        uint id = (uint)_items[i];
+                        _ids.Remove(id);
+                        _items.Remove(i);
+
+                        foreach (IVsHierarchyEvents h in _eventHandlers.Values)
+                        {
+                            h.OnItemDeleted(id);
+                        }
+                    }
+                }
+            }            
+
+            public uint GetId(TListViewItem item)
+            {
+                uint id;
+                if (_items.TryGetValue(item, out id))
+                    return id;
+
+                id = ++lvId;
+                _ids.Add(id, item);
+                _items.Add(item, id);
+
+                if (_eventHandlers != null)
+                    foreach (IVsHierarchyEvents h in _eventHandlers.Values)
+                    {
+                        h.OnItemAdded(VSConstants.VSITEMID_ROOT, VSConstants.VSITEMID_ROOT, id);
+                    }
+
+                return id;
+            }
+
+            public TListViewItem GetItem(uint id)
+            {
+                TListViewItem value;
+                if (_ids.TryGetValue(id, out value))
+                    return value;
+                else
+                    return null;
+            }
+
+            int IVsHierarchy.AdviseHierarchyEvents(IVsHierarchyEvents pEventSink, out uint pdwCookie)
+            {
+                if (pEventSink == null)
+                {
+                    pdwCookie = 0;
+                    return VSConstants.E_POINTER;
+                }
+
+                _eventHandlers.Add(pdwCookie = ++lvId, pEventSink);
+
+                return VSConstants.S_OK;
+            }
+
+            int IVsHierarchy.UnadviseHierarchyEvents(uint dwCookie)
+            {
+                if (_eventHandlers != null)
+                    _eventHandlers.Remove(dwCookie);
+
+                return VSConstants.S_OK;
+            }
+
+            int IVsHierarchy.Close()
+            {
+                return VSConstants.S_OK;
+            }
+
+            int IVsHierarchy.GetCanonicalName(uint itemid, out string pbstrName)
+            {
+                pbstrName = "{" + itemid + "}";
+                return VSConstants.S_OK;
+            }
+
+            int IVsHierarchy.GetGuidProperty(uint itemid, int propid, out Guid pguid)
+            {
+                pguid = Guid.Empty;
+                return VSConstants.E_FAIL;
+            }
+
+            int IVsHierarchy.GetNestedHierarchy(uint itemid, ref Guid iidHierarchyNested, out IntPtr ppHierarchyNested, out uint pitemidNested)
+            {
+                ppHierarchyNested = IntPtr.Zero;
+                pitemidNested = VSConstants.VSITEMID_NIL;
+                return VSConstants.E_FAIL;
+            }
+
+            int IVsHierarchy.GetProperty(uint itemid, int propid, out object pvar)
+            {
+                TListViewItem lv;
+                if (!_ids.TryGetValue(itemid, out lv) && itemid != VSConstants.VSITEMID_ROOT)
+                {
+                    pvar = null;
+                    return VSConstants.E_FAIL;
+                }
+
+                switch ((__VSHPROPID)propid)
+                {
+                    case __VSHPROPID.VSHPROPID_Parent:
+                    case __VSHPROPID.VSHPROPID_FirstChild:
+                    case __VSHPROPID.VSHPROPID_NextSibling:
+                    case __VSHPROPID.VSHPROPID_NextVisibleSibling:
+
+                        pvar = unchecked((int)VSConstants.VSITEMID_NIL);
+                        break;
+                    case __VSHPROPID.VSHPROPID_Caption:
+                    case __VSHPROPID.VSHPROPID_Name:
+                    case __VSHPROPID.VSHPROPID_TypeName:
+                        pvar = lv.Text;
+                        break;
+                    case __VSHPROPID.VSHPROPID_IconImgList:
+                        if (_lv.SmallImageList != null) // Called on VSITEMID_ROOT
+                            pvar = (int)_lv.SmallImageList.Handle;
+                        else
+                            pvar = 0;
+                        break;
+                    case __VSHPROPID.VSHPROPID_IconIndex:
+                        if (lv != null && lv.ImageList != null)
+                            pvar = lv.ImageIndex;
+                        else
+                            pvar = 0;
+                        break;
+                    case __VSHPROPID.VSHPROPID_Expandable:
+                    case __VSHPROPID.VSHPROPID_ExpandByDefault:
+                        pvar = false;
+                        break;
+                    case __VSHPROPID.VSHPROPID_StateIconIndex:
+                        pvar = 0;
+                        break;
+                    default:
+                        pvar = null;
+                        return VSConstants.E_FAIL;
+                }
+
+                return VSConstants.S_OK;
+            }
+
+            Microsoft.VisualStudio.OLE.Interop.IServiceProvider _serviceProvider;
+            int IVsHierarchy.GetSite(out Microsoft.VisualStudio.OLE.Interop.IServiceProvider ppSP)
+            {
+                ppSP = _serviceProvider;
+                return VSConstants.S_OK;
+            }
+
+            int IVsHierarchy.ParseCanonicalName(string pszName, out uint pitemid)
+            {
+                pitemid = uint.Parse(pszName.TrimStart('{').TrimEnd('}'));
+                return VSConstants.S_OK;
+            }
+
+            int IVsHierarchy.QueryClose(out int pfCanClose)
+            {
+                pfCanClose = 0;
+                return VSConstants.S_OK;
+            }
+
+            int IVsHierarchy.SetGuidProperty(uint itemid, int propid, ref Guid rguid)
+            {
+                return VSConstants.E_FAIL;
+            }
+
+            int IVsHierarchy.SetProperty(uint itemid, int propid, object var)
+            {
+                return VSConstants.E_FAIL;
+            }
+
+            int IVsHierarchy.SetSite(Microsoft.VisualStudio.OLE.Interop.IServiceProvider psp)
+            {
+                _serviceProvider = psp;
+                return VSConstants.S_OK;
+            }
+
+            int IVsHierarchy.Unused0()
+            {
+                return VSConstants.E_NOTIMPL;
+            }
+
+            int IVsHierarchy.Unused1()
+            {
+                return VSConstants.E_NOTIMPL;
+            }
+
+            int IVsHierarchy.Unused2()
+            {
+                return VSConstants.E_NOTIMPL;
+            }
+
+            int IVsHierarchy.Unused3()
+            {
+                return VSConstants.E_NOTIMPL;
+            }
+
+            int IVsHierarchy.Unused4()
+            {
+                return VSConstants.E_NOTIMPL;
+            }
+
+
+            public int GetSelectionInfo(out uint pcItems, out int pfSingleHierarchy)
+            {
+                pcItems = (uint)_lv.SelectedItems.Count;
+                pfSingleHierarchy = 1;
+                return VSConstants.S_OK;
+            }
+
+            public int GetSelectedItems(uint grfGSI, uint cItems, VSITEMSELECTION[] rgItemSel)
+            {
+                bool omitHiers = (grfGSI == (uint)__VSGSIFLAGS.GSI_fOmitHierPtrs);
+
+                if (cItems != _lv.SelectedItems.Count)
+                    return VSConstants.E_FAIL;
+
+                for (int i = 0; i < cItems; i++)
+                {
+                    rgItemSel[i].pHier = omitHiers ? null : this;
+
+                    if (i < _lv.SelectedItems.Count)
+                        rgItemSel[i].itemid = GetId((TListViewItem)_lv.SelectedItems[i]);
+                }
+
+                return VSConstants.S_OK;
+            }
+
+
+
+            #region IListViewHierarchy Members
+
+            
+
+            #endregion
+        }
+        #endregion
     }
 }

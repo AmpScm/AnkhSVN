@@ -10,15 +10,18 @@ namespace Ankh.UI.PendingChanges
     {
         readonly PendingChange _change;
 
-        public PendingCommitItem(PendingChange change)
+        public PendingCommitItem(IAnkhServiceProvider context, PendingChange change, FileIconMap iconMap)
         {
             if (change == null)
                 throw new ArgumentNullException("change");
 
             _change = change;
-            this.Text = _change.FullPath;
-            this.SubItems.Add(change.Project);
-            //this.SubItems[1] 
+            Text = change.FullPath;
+            SubItems.Add(change.Project);
+            SubItems.Add(change.Name);
+            Checked = true;
+
+            ImageIndex = iconMap.GetIcon(change.FullPath);
         }
 
         /// <summary>
