@@ -21,7 +21,7 @@ namespace Ankh.Scc
 
         public ProjectIconReference(IntPtr handle)
         {
-            _handle = handle;
+            _staticHandle = handle;
         }
 
         ~ProjectIconReference()
