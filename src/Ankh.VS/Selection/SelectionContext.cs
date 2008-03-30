@@ -401,10 +401,10 @@ namespace Ankh.Selection
                         {
                             yield return ii;
                         }
-
-                        yield break;
                     }
                 }
+
+                // Fall through or projects within solution folders are not correctly evaluated in 2008
             }
 
             // Note: There is a bug with firstchild on solutions pre vs2008, in that it contains
@@ -461,9 +461,6 @@ namespace Ankh.Selection
         /// <returns></returns>
         IEnumerable<string> InternalGetSelectedFiles(bool recursive)
         {
-            if (IsSolutionSelected && !string.IsNullOrEmpty(SolutionFilename))
-                yield return SolutionFilename;
-
             foreach (SelectionItem i in GetSelectedItems(recursive))
             {
                 Dictionary<string, string> foundFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
