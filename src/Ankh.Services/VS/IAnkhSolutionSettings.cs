@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Ankh.VS
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IAnkhSolutionSettings
     {
         /// <summary>
@@ -18,5 +21,12 @@ namespace Ankh.VS
         /// </summary>
         /// <value>The solution filename.</value>
         string SolutionFilename { get; }
+
+
+        /// <summary>
+        /// Gets the project root URI.
+        /// </summary>
+        /// <value>The project root URI.</value>
+        Uri ProjectRootUri { get; }
     }
 }

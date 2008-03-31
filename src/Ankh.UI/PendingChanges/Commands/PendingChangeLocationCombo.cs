@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
 using AnkhSvn.Ids;
+using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
@@ -12,6 +13,10 @@ namespace Ankh.UI.PendingChanges.Commands
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
+            IAnkhSolutionSettings settings = e.Context.GetService<IAnkhSolutionSettings>();
+
+            if (settings == null || settings.ProjectRootUri == null)
+                e.Enabled = false;
         }
 
         public void OnExecute(CommandEventArgs e)
@@ -46,7 +51,17 @@ namespace Ankh.UI.PendingChanges.Commands
 
         void OnExecuteGet(CommandEventArgs e)
         {
-            e.Result = _currentValue; 
+            IAnkhSolutionSettings settings = e.Context.GetService<IAnkhSolutionSettings>();
+
+            if (settings != null)
+            {
+                Uri uri = settings.ProjectRootUri;
+
+                if (uri != null)
+                    e.Result = uri.ToString();
+            }
+            else
+                e.Result = _currentValue; 
         }
 
         void OnExecuteFilter(CommandEventArgs e)

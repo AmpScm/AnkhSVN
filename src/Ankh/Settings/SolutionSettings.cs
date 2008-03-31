@@ -21,10 +21,10 @@ namespace Ankh.Settings
         {
             public string SolutionFilename;
             public string ProjectRoot;
+            public Uri ProjectRootUri;
         }
 
         SettingsCache _cache = new SettingsCache();
-
 
         private void ClearIfDirty()
         {
@@ -69,12 +69,19 @@ namespace Ankh.Settings
                 if (_cache.ProjectRoot != null)
                     return _cache.ProjectRoot;
 
-                string sd = Path.GetDirectoryName(SolutionFilename); // Contains ClearIfDirty();
+                string solutionFilename = SolutionFilename;
+
+                if (string.IsNullOrEmpty(solutionFilename))
+                    return null;
+
+                string sd = Path.GetDirectoryName(SolutionFilename).TrimEnd('\\') + '\\'; // Contains ClearIfDirty();
 
                 using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
                 {
                     string value;
-                    if (client.TryGetProperty(new SvnPathTarget(_cache.SolutionFilename), "vs:project-root", out value))
+
+                    if (client.TryGetProperty(new SvnPathTarget(_cache.SolutionFilename), "vs:project-root", out value)
+                            && !string.IsNullOrEmpty(value))
                     {
                         Uri solution, relative;
 
@@ -98,6 +105,7 @@ namespace Ankh.Settings
 
                         return _cache.ProjectRoot = combined.AbsolutePath.Replace('/', '\\').TrimEnd('\\') + '\\';
                     }
+
 
                     return _cache.ProjectRoot = sd;
                 }
@@ -130,6 +138,28 @@ namespace Ankh.Settings
 
                     GetService<IFileStatusCache>().MarkDirty(SolutionFilename);
                 }
+            }
+        }
+
+        public Uri ProjectRootUri
+        {
+            get
+            {
+                ClearIfDirty();
+
+                if (_cache.ProjectRootUri != null)
+                    return _cache.ProjectRootUri;
+
+                string projectroot = ProjectRoot;
+
+                if (string.IsNullOrEmpty(projectroot))
+                    return null;
+
+                IFileStatusCache cache = GetService<IFileStatusCache>();
+
+                SvnItem rootItem = cache[projectroot];
+
+                return _cache.ProjectRootUri = rootItem.Status.Uri;
             }
         }
 
