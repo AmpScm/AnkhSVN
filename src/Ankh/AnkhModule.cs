@@ -9,6 +9,8 @@ using Ankh.Commands;
 using Ankh.Configuration;
 using Ankh.StatusCache;
 using Ankh.Selection;
+using Ankh.VS;
+using Ankh.Settings;
 
 namespace Ankh
 {
@@ -30,6 +32,7 @@ namespace Ankh
             Container.AddService(typeof(ISvnClientPool), new AnkhSvnClientPool(Context));
             Container.AddService(typeof(IAnkhTaskManager), new ConflictManager(Context));
             Container.AddService(typeof(IUIShell), new UIShell(Context));
+            Container.AddService(typeof(IAnkhSolutionSettings), new SolutionSettings(Context));
 
             // Ensure old context behaviour
             _context = GetService<IContext>();

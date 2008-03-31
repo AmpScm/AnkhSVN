@@ -481,6 +481,5 @@ namespace Ankh
         private RepositoryExplorerControl repositoryExplorerControl;
         private WorkingCopyExplorerControl workingCopyExplorerControl;
         private CommitDialog commitDialog;
-        private IContext context;
     }
 }

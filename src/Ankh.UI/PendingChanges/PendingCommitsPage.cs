@@ -135,6 +135,11 @@ namespace Ankh.UI.PendingChanges
                     pendingCommits.Items.Add(lvi);
                 }
             }
+
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                pci.RefreshText(UISite, _iconMap);
+            }
         }
 
         private void pendingCommits_ResolveItem(object sender, PendingCommitsView.ResolveItemEventArgs e)
