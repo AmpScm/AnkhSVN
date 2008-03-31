@@ -10,7 +10,6 @@ namespace Ankh
     public sealed class AnkhStatus
     {
         readonly SvnNodeKind _nodeKind;        
-        readonly string _fullPath;
         readonly string _changeList;
         readonly SvnStatus _localContentStatus;
         readonly bool _localCopied;
@@ -31,7 +30,6 @@ namespace Ankh
                 throw new ArgumentNullException("args");
 
             _nodeKind = args.NodeKind;
-            _fullPath = args.FullPath;
             _localContentStatus = args.LocalContentStatus;
             _localCopied = args.LocalCopied;
             _localLocked = args.LocalLocked;
@@ -57,9 +55,9 @@ namespace Ankh
         private AnkhStatus(SvnStatus allStatuses)
         {
             _localContentStatus = allStatuses;
-            _localPropertyStatus = allStatuses;
-            _localLocked = false;
-            _localCopied = false;
+            _localPropertyStatus = SvnStatus.None;
+            //_localLocked = false;
+            //_localCopied = false;
         }
 
         #region Static instances
@@ -81,15 +79,6 @@ namespace Ankh
             get { return _none; }
         }
         #endregion
-
-        /// <summary>
-        /// The full path of this status item
-        /// </summary>
-        /// <remarks>Guaranteed always normalized</remarks>
-        public string FullPath
-        {
-            get { return _fullPath; }
-        }
 
         /// <summary>
         /// Content status in working copy

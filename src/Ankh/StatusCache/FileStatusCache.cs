@@ -38,7 +38,7 @@ namespace Ankh.StatusCache
             _dirMap = new Dictionary<string, SvnDirectory>(StringComparer.OrdinalIgnoreCase);
         }
 
-        
+
         /// <summary>
         /// Gets the command service.
         /// </summary>
@@ -97,7 +97,7 @@ namespace Ankh.StatusCache
         /// <param name="item"></param>
         void StoreItem(SvnItem item)
         {
-            if(item == null)
+            if (item == null)
                 throw new ArgumentNullException("item");
 
             _map[item.FullPath] = item;
@@ -110,14 +110,14 @@ namespace Ankh.StatusCache
                     ((ISvnDirectoryUpdate)dir).Store(item);
                 }
                 else
-                    ScheduleForCleanup(dir);                    
+                    ScheduleForCleanup(dir);
             }
 
             string parentDir = Path.GetDirectoryName(item.FullPath);
 
             if (parentDir == item.FullPath)
                 return; // Skip root directory
-            
+
             if (_dirMap.TryGetValue(item.FullPath, out dir))
             {
                 ((ISvnDirectoryUpdate)dir).Store(item);
@@ -254,8 +254,13 @@ namespace Ankh.StatusCache
                 else if (directory != null)
                     walkItem = directory.Directory; // Might have changed via casing
 
-                if (!statSelf && ((ISvnItemUpdate)walkItem).IsItemTicked())
-                    statSelf = true;
+                if (!statSelf)
+                {
+                    if (((ISvnItemUpdate)walkItem).ShouldRefresh())
+                        statSelf = true;
+                    if (walkingDirectory && !walkItem.IsVersioned)
+                        statSelf = true;
+                }
 
                 if (statSelf)
                 {
@@ -312,7 +317,7 @@ namespace Ankh.StatusCache
                 {
                     ISvnItemUpdate update = pathItem;
 
-                    if(!update.IsStatusClean())
+                    if (!update.IsStatusClean())
                     {
                         update.RefreshTo(AnkhStatus.NotExisting); // We did not see it in the walker
 
@@ -335,20 +340,32 @@ namespace Ankh.StatusCache
             if (!dir.Exists)
                 return;
 
-            if (!_map.ContainsKey(walkPath))
+            SvnItem item;
+            if (!_map.TryGetValue(walkPath, out item))
             {
                 StoreItem(CreateItem(walkPath, AnkhStatus.NotVersioned, SvnNodeKind.Directory));
                 // Mark it as existing if we are sure 
             }
+            else
+            {
+                ISvnItemUpdate updateItem = item;
+                if (updateItem.ShouldRefresh())
+                    updateItem.RefreshTo(AnkhStatus.NotVersioned);
+            }
 
-            if(depth >= SvnDepth.Files)
+            if (depth >= SvnDepth.Files)
             {
                 foreach (FileInfo file in dir.GetFiles())
                 {
                     string path = SvnTools.GetNormalizedFullPath(file.FullName);
-                    if (!_map.ContainsKey(path))
-                    {
+
+                    if (!_map.TryGetValue(path, out item))
                         StoreItem(CreateItem(path, AnkhStatus.NotVersioned, SvnNodeKind.File));
+                    else
+                    {
+                        ISvnItemUpdate updateItem = item;
+                        if (updateItem.ShouldRefresh())
+                            updateItem.RefreshTo(AnkhStatus.NotVersioned);
                     }
                 }
             }
@@ -392,13 +409,13 @@ namespace Ankh.StatusCache
             {
                 _postedCleanup = false;
 
-                while(_cleanup.Count > 0)
+                while (_cleanup.Count > 0)
                 {
                     SvnDirectory dir = _cleanup[0];
-                    string path = dir.FullPath; 
+                    string path = dir.FullPath;
 
                     _cleanup.RemoveAt(0);
-                
+
                     for (int i = 0; i < dir.Count; i++)
                     {
                         SvnItem item = dir[i];
