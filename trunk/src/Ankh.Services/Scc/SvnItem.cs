@@ -21,6 +21,7 @@ namespace Ankh
         void RefreshTo(SvnItem lead);
         void TickItem();
         bool IsItemTicked();
+        bool ShouldRefresh();
         bool IsStatusClean();
 
         void MarkStatusDirty();
@@ -207,6 +208,11 @@ namespace Ankh
         bool ISvnItemUpdate.IsItemTicked()
         {
             return _ticked;
+        }
+
+        bool ISvnItemUpdate.ShouldRefresh()
+        {
+            return _ticked || _statusDirty != XBool.False;
         }
 
         /// <summary>

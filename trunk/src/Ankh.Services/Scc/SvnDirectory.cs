@@ -114,6 +114,8 @@ namespace Ankh.Scc
                 if(item.IsFile || item == Directory)
                     ((ISvnItemUpdate)item).TickItem();
             }
+
+            ((ISvnItemUpdate)this.Directory).TickItem();
         }
 
         void ISvnDirectoryUpdate.Store(SvnItem item)
