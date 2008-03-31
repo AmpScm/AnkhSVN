@@ -59,7 +59,7 @@ namespace Ankh.Scc
                 case AnkhGlyph.Normal:
                     break; // See below
                 case AnkhGlyph.Blank:
-                    if (ContainsPath(path))
+                    if (ContainsPath(path) && item.IsVersionable)
                         return AnkhGlyph.ShouldBeAdded;
                     goto default;
                 default:
