@@ -4,6 +4,8 @@ using System.Text;
 using System.Windows.Forms;
 using Ankh.Scc;
 using System.Drawing;
+using Utils.Win32;
+using System.Runtime.InteropServices;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -23,6 +25,35 @@ namespace Ankh.UI.PendingChanges
 
         public int GetIcon(string path)
         {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            int icon = GetProjectIcon(path);
+
+            if (icon == -1)
+                icon = GetOsIcon(path);
+
+            return icon;
+
+        }
+
+        private int GetOsIcon(string path)
+        {
+            SHFILEINFO fileinfo = new SHFILEINFO();
+            IntPtr sysImageList = Win32.SHGetFileInfo(path, 0, ref fileinfo,
+                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_SHELLICONSIZE |
+                Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON);
+
+            if (sysImageList == IntPtr.Zero)
+                return -1;
+
+            ProjectIconReference handle = new ProjectIconReference(sysImageList, (int)fileinfo.iIcon);
+
+            return ResolveReference(handle);
+        }
+
+        int GetProjectIcon(string path)
+        {
             IProjectFileMapper map = GetService<IProjectFileMapper>();
 
             if (map == null)
@@ -30,6 +61,11 @@ namespace Ankh.UI.PendingChanges
 
             ProjectIconReference handle = map.GetPathIconHandle(path);
 
+            return ResolveReference(handle);
+        }
+
+        private int ResolveReference(ProjectIconReference handle)
+        {
             if (handle == null)
                 return -1;
 
@@ -37,7 +73,7 @@ namespace Ankh.UI.PendingChanges
             if (_iconMap.TryGetValue(handle, out value))
                 return value;
 
-            using(handle)
+            using (handle)
             {
                 _imageList.Images.Add(Icon.FromHandle(handle.GetHandle()));
             }

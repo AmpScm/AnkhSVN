@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.Scc;
+using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -16,12 +17,38 @@ namespace Ankh.UI.PendingChanges
                 throw new ArgumentNullException("change");
 
             _change = change;
-            Text = change.FullPath;
-            SubItems.Add(change.Project);
-            SubItems.Add(change.Name);
+
+            while (SubItems.Count < 6)
+                SubItems.Add("");
+
             Checked = true;
 
-            ImageIndex = iconMap.GetIcon(change.FullPath);
+            RefreshText(context, iconMap);
+        }
+
+        public void RefreshText(IAnkhServiceProvider context, FileIconMap iconMap)
+        {
+            IAnkhSolutionSettings solSet = context.GetService<IAnkhSolutionSettings>();
+            IFileStatusCache cache = context.GetService<IFileStatusCache>();
+
+
+            string start = solSet.ProjectRoot;
+
+            if (FullPath.StartsWith(start, StringComparison.OrdinalIgnoreCase))
+                Text = FullPath.Substring(start.Length);
+
+            SubItems[1].Text = PendingChange.Project;
+
+            SvnItem item = cache[FullPath];
+
+            if(item == null)
+                throw new InvalidOperationException(); // Item no longer valued
+
+            SubItems[2].Text = item.Status.LocalContentStatus.ToString();
+            SubItems[3].Text = item.Status.LocalPropertyStatus.ToString();
+            SubItems[4].Text = item.FullPath;            
+
+            ImageIndex = iconMap.GetIcon(FullPath);
         }
 
         /// <summary>
