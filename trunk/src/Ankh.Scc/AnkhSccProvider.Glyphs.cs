@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using SharpSvn;
 using System.Windows.Forms;
+using Ankh.Scc.ProjectMap;
 
 namespace Ankh.Scc
 {
@@ -39,6 +40,74 @@ namespace Ankh.Scc
             get { return _statusImages ?? (_statusImages = Context.GetService<IStatusImageMapper>()); }
         }
 
+        public AnkhGlyph GetPathGlyph(string path)
+        {
+            return GetPathGlyph(path, true);
+        }
+
+        AnkhGlyph GetPathGlyph(string path, bool lookForChildren)
+        {
+            SvnItem item = StatusCache[path];
+
+            if (item == null)
+                return AnkhGlyph.None;
+
+            AnkhGlyph glyph = StatusImages.GetStatusImageForSvnItem(item);
+
+            if(glyph != AnkhGlyph.Normal)
+                return glyph; // We have some usefull status
+
+            if (DocumentTracker.IsDocumentDirty(item.FullPath))
+                return AnkhGlyph.FileDirty;
+
+            // Let's try to do some simple inheritance trick on scc-special files
+
+            SccProjectFile file;
+            if(!lookForChildren || !_fileMap.TryGetValue(item.FullPath, out file))
+                return glyph;
+
+            SccProjectFileReference rf = file.FirstReference;
+
+            if(rf != null)
+                foreach (string fn in rf.GetSubFiles())
+                {
+                    AnkhGlyph gl = GetPathGlyph(fn, false);
+
+                    if (gl != AnkhGlyph.Normal)
+                        return AnkhGlyph.Free1;
+                }
+
+            return AnkhGlyph.Normal;
+        }
+
+        uint GlyphToStatus(AnkhGlyph glyph)
+        {
+            SccStatus status;
+            switch (glyph)
+            {
+                case AnkhGlyph.MustLock:
+                    status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_LOCKED;
+                    break;
+                case AnkhGlyph.None:
+                case AnkhGlyph.Blank:
+                case AnkhGlyph.Ignored:
+                case AnkhGlyph.FileMissing:
+                    status = SccStatus.SCC_STATUS_NOTCONTROLLED;
+                    break;
+                case AnkhGlyph.LockedModified:
+                case AnkhGlyph.LockedNormal:
+                    status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
+                        | SccStatus.SCC_STATUS_OUTBYUSER | SccStatus.SCC_STATUS_OUTEXCLUSIVE;
+                    break;
+                default:
+                    status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
+                        | SccStatus.SCC_STATUS_OUTBYUSER;
+                    break;
+            }
+
+            return (uint)status;
+        }
+
         /// <summary>
         /// This method is called by projects to discover the source control glyphs 
         /// to use on files and the files' source control status; this is the only way to get status.
@@ -64,27 +133,7 @@ namespace Ankh.Scc
 
             for (int i = 0; i < cFiles; i++)
             {
-                string path = rgpszFullPaths[i];
-
-                AnkhGlyph glyph;
-                SvnItem item = StatusCache[rgpszFullPaths[i]];
-
-                if (item != null)
-                    glyph = StatusImages.GetStatusImageForSvnItem(item);
-                else
-                    glyph = AnkhGlyph.None;
-
-                switch (glyph)
-                {
-                    case AnkhGlyph.Blank:
-                        if (_fileMap.ContainsKey(path))
-                            glyph = AnkhGlyph.ShouldBeAdded;
-                        break;
-                    case AnkhGlyph.Normal:
-                        if (DocumentTracker.IsDocumentDirty(path))
-                            glyph = AnkhGlyph.FileDirty;
-                        break;
-                }
+                AnkhGlyph glyph = GetPathGlyph(rgpszFullPaths[i]);
 
                 if (rgsiGlyphs != null)
                     rgsiGlyphs[i] = (VsStateIcon)glyph;
@@ -92,31 +141,7 @@ namespace Ankh.Scc
                 if (rgdwSccStatus != null)
                 {
                     // This will make VS use the right texts on refactor, replace, etc.
-
-                    SccStatus status;
-                    switch (glyph)
-                    {
-                        case AnkhGlyph.MustLock:
-                            status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_LOCKED;
-                            break;
-                        case AnkhGlyph.None:
-                        case AnkhGlyph.Blank:
-                        case AnkhGlyph.Ignored:
-                        case AnkhGlyph.FileMissing:
-                            status = SccStatus.SCC_STATUS_NOTCONTROLLED;
-                            break;
-                        case AnkhGlyph.LockedModified:
-                        case AnkhGlyph.LockedNormal:
-                            status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
-                                | SccStatus.SCC_STATUS_OUTBYUSER | SccStatus.SCC_STATUS_OUTEXCLUSIVE;
-                            break;
-                        default:
-                            status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
-                                | SccStatus.SCC_STATUS_OUTBYUSER;
-                            break;
-                    }
-
-                    rgdwSccStatus[i] = (uint)status;
+                    rgdwSccStatus[i] = GlyphToStatus(glyph);
                 }
             }
 

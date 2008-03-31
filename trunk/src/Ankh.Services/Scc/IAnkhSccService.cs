@@ -62,5 +62,13 @@ namespace Ankh.Scc
         /// Register the scc provider as primary scc provider in Visual Studio
         /// </summary>
         void RegisterAsPrimarySccProvider();
+
+
+        /// <summary>
+        /// Gets the glyph for a specific path
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        AnkhGlyph GetPathGlyph(string path);
     }
 }

@@ -118,6 +118,15 @@ namespace Ankh.Scc.ProjectMap
             return refs;
         }
 
+        /// <summary>
+        /// Gets the first project reference to this file
+        /// </summary>
+        /// <value>The first reference.</value>
+        public SccProjectFileReference FirstReference
+        {
+            get { return _firstReference; }
+        }
+
         #region Linked list management
         internal void AddReference(SccProjectFileReference reference)
         {

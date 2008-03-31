@@ -25,7 +25,9 @@ namespace Ankh.Scc.ProjectMap
     class SccProjectData
     {
         readonly IAnkhServiceProvider _context;
-        readonly IVsSccProject2 _project;
+        readonly IVsSccProject2 _sccProject;
+        readonly IVsHierarchy _hierarchy;
+        readonly IVsProject _vsProject;
         readonly SccProjectType _projectType;
         readonly SccProjectFileCollection _files;
         bool _isManaged;
@@ -45,16 +47,31 @@ namespace Ankh.Scc.ProjectMap
             else if (project == null)
                 throw new ArgumentNullException("project");
 
-            _project = project;
-            _context = context;            
+
+            _context = context;
+
+            // Project references to speed up marshalling
+            _sccProject = project;
+            _hierarchy = (IVsHierarchy)project; // A project must be a hierarchy in VS
+            _vsProject = (IVsProject)project; // A project must be a VS project
+            
             _projectType = GetProjectType(project);
             _files = new SccProjectFileCollection();
-            GC.KeepAlive(ProjectDirectory);
         }
 
-        public IVsSccProject2 Project
+        public IVsSccProject2 SccProject
         {
-            get { return _project; }
+            get { return _sccProject; }
+        }
+
+        public IVsProject VsProject
+        {
+            get { return _vsProject; }
+        }
+
+        public IVsHierarchy ProjectHierarchy
+        {
+            get { return _hierarchy; }
         }
 
         public bool IsManaged
@@ -69,10 +86,10 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                if (_projectName == null && _project != null)
+                if (_projectName == null && _sccProject != null)
                 {
                     _projectName = "";
-                    IVsHierarchy hier = _project as IVsHierarchy;
+                    IVsHierarchy hier = _sccProject as IVsHierarchy;
                     object name;
 
                     if(hier != null && ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
@@ -89,10 +106,10 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                if (_projectDirectory == null && _project != null)
+                if (_projectDirectory == null && _sccProject != null)
                 {
                     _projectDirectory = "";
-                    IVsHierarchy hier = _project as IVsHierarchy;
+                    IVsHierarchy hier = _sccProject as IVsHierarchy;
                     object name;
 
                     if (hier != null && ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectDir, out name)))
@@ -114,10 +131,10 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                if (!_checkedProjectFile && _project != null)
+                if (!_checkedProjectFile && _sccProject != null)
                 {
                     _checkedProjectFile = true;
-                    IVsProject project = _project as IVsProject;
+                    IVsProject project = _sccProject as IVsProject;
                     string name;
 
                     if (project != null && ErrorHandler.Succeeded(project.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
@@ -134,7 +151,7 @@ namespace Ankh.Scc.ProjectMap
             get
             {
                 if (_svnProjectInstance == null)
-                    _svnProjectInstance = new SvnProject(ProjectFile, Project);
+                    _svnProjectInstance = new SvnProject(ProjectFile, SccProject);
 
                 return _svnProjectInstance;
             }
@@ -185,11 +202,11 @@ namespace Ankh.Scc.ProjectMap
                 return;
 
             if (managed)
-                Marshal.ThrowExceptionForHR(Project.SetSccLocation("Svn", "Svn", "Svn", AnkhId.SubversionSccName));
+                Marshal.ThrowExceptionForHR(SccProject.SetSccLocation("Svn", "Svn", "Svn", AnkhId.SubversionSccName));
             else
             {
                 // The managed package framework assumes empty strings for clearing; null will fail there
-                Marshal.ThrowExceptionForHR(Project.SetSccLocation("", "", "", ""));
+                Marshal.ThrowExceptionForHR(SccProject.SetSccLocation("", "", "", ""));
             }
 
             IsManaged = managed;
@@ -227,13 +244,13 @@ namespace Ankh.Scc.ProjectMap
 
                 if (walker != null)
                 {
-                    foreach (string file in walker.GetSccFiles(_project, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy))
+                    foreach (string file in walker.GetSccFiles(_sccProject, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy))
                     {
-                        AddPath(SvnTools.GetNormalizedFullPath(file));
+                        AddPath(file); // GetSccFiles returns normalized paths
                     }
                 }
 
-                _project.SccGlyphChanged(0, null, null, null);
+                _sccProject.SccGlyphChanged(0, null, null, null);
             }
             finally
             {
@@ -266,6 +283,8 @@ namespace Ankh.Scc.ProjectMap
                 _files[path].AddReference();
             else
                 _files.Add(new SccProjectFileReference(_context, this, Scc.GetFile(path)));
+
+            ClearIdCache();
         }
 
         internal void RemoveFile(string path)
@@ -274,6 +293,8 @@ namespace Ankh.Scc.ProjectMap
                 throw new ArgumentOutOfRangeException("path");
 
             _files[path].ReleaseReference();
+
+            ClearIdCache();
         }
 
         #region File list management code
@@ -327,20 +348,60 @@ namespace Ankh.Scc.ProjectMap
             return _files.Contains(path);
         }
 
-        internal void OnFileOpen(string file, uint itemId)
+        void ClearIdCache()
         {
-            if (_files.Contains(file))
+            foreach (SccProjectFileReference r in _files)
             {
-                _files[file].OnFileOpen(itemId);
+                r.ClearIdCache();
             }
         }
 
-        internal void OnFileClose(string file, uint itemId)
+        bool _fetchedImgList;
+        IntPtr _projectImgList;
+        internal IntPtr ProjectImageList
         {
-            if (_files.Contains(file))
+            get
             {
-                _files[file].OnFileClose(itemId);
+                if (_fetchedImgList)
+                    return _projectImgList;
+
+                _fetchedImgList = true;
+                object value;
+                if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(VSConstants.VSITEMID_ROOT, 
+                    (int)__VSHPROPID.VSHPROPID_IconImgList, out value)))
+                {
+                    _projectImgList = (IntPtr)(int)value; // Marshalled by VS as 32 bit integer
+                }
+
+                return _projectImgList;
             }
+        }
+
+        /// <summary>
+        /// Tries to get the hierarchy id of a file within a project
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="itemId">The item id.</param>
+        /// <returns></returns>
+        public bool TryGetProjectFileId(string path, out uint itemId)
+        {
+            int found;
+            uint id;
+            VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
+
+            if(ErrorHandler.Succeeded(
+                VsProject.IsDocumentInProject(path, out found, prio, out id)))
+            {
+                // Priority also returns information on whether the file can be added
+                if(found != 0 && prio[0] >= VSDOCUMENTPRIORITY.DP_Standard && id != 0)
+                {
+                    itemId = id;
+                    return true;
+                }
+            }
+
+            itemId = VSConstants.VSITEMID_NIL;
+            return false;
         }
     }
 }

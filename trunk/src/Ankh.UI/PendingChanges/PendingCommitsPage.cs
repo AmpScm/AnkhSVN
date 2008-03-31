@@ -16,7 +16,7 @@ namespace Ankh.UI.PendingChanges
         public PendingCommitsPage()
         {
             InitializeComponent();
-        }    
+        }
 
         bool _createdEditor;
         protected override void OnUISiteChanged()
@@ -33,7 +33,7 @@ namespace Ankh.UI.PendingChanges
                     logMessageEditor.Init(sp);
                     UISite.CommandTarget = logMessageEditor.CommandTarget;
                     _createdEditor = true;
-                }               
+                }
             }
 
             if (pendingCommits != null)
@@ -60,7 +60,7 @@ namespace Ankh.UI.PendingChanges
             set { splitContainer.Panel1Collapsed = !value; }
         }
 
-        readonly Dictionary<string, PendingCommitItem> _listItems = new Dictionary<string,PendingCommitItem>(StringComparer.OrdinalIgnoreCase);
+        readonly Dictionary<string, PendingCommitItem> _listItems = new Dictionary<string, PendingCommitItem>(StringComparer.OrdinalIgnoreCase);
         readonly SortedList<string, PendingChange> _pendingChanges = new SortedList<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
 
         FileIconMap _iconMap;
@@ -71,7 +71,8 @@ namespace Ankh.UI.PendingChanges
                 return;
 
             ICollection<string> allFiles = UISite.GetService<IProjectFileMapper>().GetAllFilesOfAllProjects();
-            IFileStatusCache cache = UISite.GetService<IFileStatusCache>();            
+            IFileStatusCache cache = UISite.GetService<IFileStatusCache>();
+            IAnkhOpenDocumentTracker tracker = UISite.GetService<IAnkhOpenDocumentTracker>();
 
             SortedList<string, SvnItem> items = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
 
@@ -85,6 +86,9 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.SmallImageList = _iconMap.ImageList;
             }
 
+            if ((ModifierKeys & Keys.Control) != 0)
+                cache.ClearCache(); // Rebuild all status!
+
             foreach (string file in allFiles)
             {
                 if (items.ContainsKey(file))
@@ -92,31 +96,39 @@ namespace Ankh.UI.PendingChanges
 
                 SvnItem item = cache[file];
 
-                if (item.IsModified || (!item.IsVersioned && !item.IsIgnored))
+                bool add = false;
+                if (item.IsVersioned)
+                {
+                    add = item.IsModified || tracker.IsDocumentDirty(item.FullPath);
+                }
+                else if (item.IsIgnored)
+                    add = true;
+
+                if (add)
                     items.Add(item.FullPath, item);
             }
 
-            foreach(SvnItem item in items.Values)
+            foreach (SvnItem item in items.Values)
             {
-                if(!_pendingChanges.ContainsKey(item.FullPath))
+                if (!_pendingChanges.ContainsKey(item.FullPath))
                     _pendingChanges.Add(item.FullPath, new PendingChange(UISite, item));
             }
 
-            foreach(PendingChange pc in new List<PendingChange>(_pendingChanges.Values))
+            foreach (PendingChange pc in new List<PendingChange>(_pendingChanges.Values))
             {
-                if(!items.ContainsKey(pc.FullPath))
+                if (!items.ContainsKey(pc.FullPath))
                 {
                     _pendingChanges.Remove(pc.FullPath);
 
                     PendingCommitItem item;
 
-                    if(_listItems.TryGetValue(pc.FullPath, out item))
+                    if (_listItems.TryGetValue(pc.FullPath, out item))
                     {
                         _listItems.Remove(pc.FullPath);
                         pendingCommits.Items.Remove(item);
                     }
                 }
-                else if(!_listItems.ContainsKey(pc.FullPath))
+                else if (!_listItems.ContainsKey(pc.FullPath))
                 {
                     PendingCommitItem lvi = new PendingCommitItem(UISite, pc, _iconMap);
                     _listItems.Add(pc.FullPath, lvi);
@@ -133,14 +145,14 @@ namespace Ankh.UI.PendingChanges
             if (pc != null && this._listItems.TryGetValue(pc.FullPath, out pci))
             {
                 e.Item = pci;
-            }            
+            }
         }
 
         private void pendingCommits_RetrieveSelection(object sender, PendingCommitsView.RetrieveSelectionEventArgs e)
         {
             PendingCommitItem pi = (PendingCommitItem)e.Item;
 
-            e.SelectionItem = pi.PendingChange;            
+            e.SelectionItem = pi.PendingChange;
         }
     }
 

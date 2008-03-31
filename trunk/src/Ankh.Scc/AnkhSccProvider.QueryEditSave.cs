@@ -149,6 +149,7 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int QueryEditFiles(uint rgfQueryEdit, int cFiles, string[] rgpszMkDocuments, uint[] rgrgf, VSQEQS_FILE_ATTRIBUTE_DATA[] rgFileInfo, out uint pfEditVerdict, out uint prgfMoreInfo)
         {
+            tagVSQueryEditFlags queryFlags = (tagVSQueryEditFlags)rgfQueryEdit;
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
             prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0;
 
