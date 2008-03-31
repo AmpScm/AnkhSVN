@@ -35,18 +35,20 @@ namespace Ankh.UI.PendingChanges
             string start = solSet.ProjectRoot;
 
             if (FullPath.StartsWith(start, StringComparison.OrdinalIgnoreCase))
-                Text = FullPath.Substring(start.Length);
+                Text = FullPath.Substring(start.Length).Replace('\\', '/');
+            else
+                Text = FullPath;
 
             SubItems[1].Text = PendingChange.Project;
 
             SvnItem item = cache[FullPath];
 
-            if(item == null)
+            if (item == null)
                 throw new InvalidOperationException(); // Item no longer valued
 
             SubItems[2].Text = item.Status.LocalContentStatus.ToString();
             SubItems[3].Text = item.Status.LocalPropertyStatus.ToString();
-            SubItems[4].Text = item.FullPath;            
+            SubItems[4].Text = item.FullPath;
 
             ImageIndex = iconMap.GetIcon(FullPath);
         }

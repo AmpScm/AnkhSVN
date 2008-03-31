@@ -101,7 +101,7 @@ namespace Ankh.UI.PendingChanges
                 {
                     add = item.IsModified || tracker.IsDocumentDirty(item.FullPath);
                 }
-                else if (item.IsIgnored)
+                else if (!item.IsIgnored)
                     add = true;
 
                 if (add)
