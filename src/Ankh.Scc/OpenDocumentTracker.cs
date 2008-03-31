@@ -87,6 +87,11 @@ namespace Ankh.Scc
 
         bool TryGetDocument(uint cookie, out SccDocumentData data)
         {
+            return TryGetDocument(cookie, false, out data);
+        }
+
+        bool TryGetDocument(uint cookie, bool forUpdate, out SccDocumentData data)
+        {
             if (cookie == 0)
             {
                 data = null;
@@ -125,8 +130,11 @@ namespace Ankh.Scc
                             data.Cookie = 0;
                         }
 
-                        Debug.Assert(data.Hierarchy == hier, "Hierarchy not the same", string.Format("File={0}", data.Name));
-                        Debug.Assert(data.ItemId == itemId, "Id not the same", string.Format("File={0}; from {1} into {2}", data.Name, data.ItemId, itemId));
+                        if (!forUpdate)
+                        {
+                            Debug.Assert(data.Hierarchy == hier, "Hierarchy not the same", string.Format("File={0}", data.Name));
+                            Debug.Assert(data.ItemId == itemId, "Id not the same", string.Format("File={0}; from {1} into {2}", data.Name, data.ItemId, itemId));
+                        }
                     }
                     else
                     {
@@ -173,15 +181,6 @@ namespace Ankh.Scc
                 data.ItemId = itemid;
             }
 
-            if (itemid != VSConstants.VSITEMID_NIL && itemid != VSConstants.VSITEMID_SELECTION)
-            {
-                IVsSccProject2 sccProject = pHier as IVsSccProject2;
-                if (sccProject != null)
-                {
-                    _sccProvider.OnFileOpen(sccProject, pszMkDocument, itemid);
-                }
-            }
-
             return VSConstants.S_OK;
         }
 
@@ -206,12 +205,6 @@ namespace Ankh.Scc
 
                 if (data.Cookie != 0)
                     _cookieMap.Remove(data.Cookie);
-            }
-
-            IVsSccProject2 sccProject = pHier as IVsSccProject2;
-            if (sccProject != null)
-            {
-                _sccProvider.OnFileClose(sccProject, pszMkDocument, itemid);
             }
 
             return VSConstants.S_OK;
@@ -246,7 +239,7 @@ namespace Ankh.Scc
         {
             SccDocumentData data;
 
-            if (TryGetDocument(docCookie, out data))
+            if (TryGetDocument(docCookie, false, out data))
             {
                 data.OnAttributeChange((__VSRDTATTRIB)grfAttribs);
             }
@@ -257,7 +250,7 @@ namespace Ankh.Scc
         public int OnAfterAttributeChangeEx(uint docCookie, uint grfAttribs, IVsHierarchy pHierOld, uint itemidOld, string pszMkDocumentOld, IVsHierarchy pHierNew, uint itemidNew, string pszMkDocumentNew)
         {
             SccDocumentData data;
-            if (!TryGetDocument(docCookie, out data))
+            if (!TryGetDocument(docCookie, true, out data))
                 return VSConstants.S_OK;
 
             data.OnAttributeChange((__VSRDTATTRIB)grfAttribs);

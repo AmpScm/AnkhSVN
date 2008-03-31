@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using SharpSvn;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -13,9 +14,10 @@ namespace Ankh.Scc.ProjectMap
     {
         readonly IAnkhServiceProvider _context;
         readonly SccProjectFile _file;
-        readonly SccProjectData _project;
+        readonly SccProjectData _project;        
         int _refCount;
-        uint[] _ids;
+        uint _id;
+        IList<string> _subFiles;
 
         internal SccProjectFileReference _nextReference; // Linked list managed by SccProjectFile
 
@@ -82,99 +84,86 @@ namespace Ankh.Scc.ProjectMap
             _project.InvokeRemoveReference(this);
         }
 
-        internal void OnFileOpen(uint itemId)
+        /// <summary>
+        /// Gets the item id of the file within the project or <see cref="VSConstants.VSITEMID_NIL"/> if no id is assigned
+        /// </summary>
+        internal uint ProjectItemId
         {
-            if (_ids == null)
-                _ids = new uint[] { itemId };
-            else
+            get
             {
-                // More than one item should never happen; but accept anyway
-                uint[] ids = new uint[_ids.Length + 1];
-
-                ids[1] = itemId;
-                _ids.CopyTo(ids, 1);
-                _ids = ids;
+                if (_id != 0)
+                    return _id;
+                
+                uint id;
+                if (_project.TryGetProjectFileId(Filename, out id))
+                    return _id = id;
+                else
+                    return _id = VSConstants.VSITEMID_NIL;
             }
-        }
-
-        internal void OnFileClose(uint itemId)
-        {
-            if (_ids == null)
-                return;
-            else if (_ids.Length == 1 && _ids[0] == itemId)
-                _ids = null; // 99% case
-            else
-            {
-                int n = Array.IndexOf(_ids, itemId);
-
-                if (n >= 0)
-                {
-                    uint[] ids = new uint[_ids.Length - 1];
-                    for (int i = 0; i < ids.Length; i++)
-                    {
-                        if (i < n)
-                            ids[i] = _ids[i];
-                        else
-                            ids[i] = _ids[i + 1];
-                    }
-                    _ids = ids;
-                }
-            }
-        }
-
-        public bool TryGetId(out uint id)
-        {
-            IVsProject project = _project.Project as IVsProject;
-
-            if (project == null)
-            {
-                id = 0;
-                return false;
-            }
-
-            int found;
-            VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
-            if (ErrorHandler.Succeeded(project.IsDocumentInProject(Filename, out found, prio, out id)) && id != VSConstants.VSITEMID_NIL)
-                return true;
-
-            id = 0;
-            return false;
         }
 
         internal bool TryGetIcon(out ProjectIconReference icon)
         {
-            uint id;
+            uint id = ProjectItemId;
             icon = null;
 
-            if (!TryGetId(out id))
+            if (id == 0 || id == VSConstants.VSITEMID_NIL)
                 return false;
 
-            IVsHierarchy hier = _project.Project as IVsHierarchy;
-
-            if (hier == null)
-                return false;
-
+            IntPtr imageList = _project.ProjectImageList;
             object value;
-            if (ErrorHandler.Succeeded(hier.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconHandle, out value)))
+
+            if (imageList != IntPtr.Zero)
             {
-                icon = new ProjectIconReference((IntPtr)(int)value);
+                if (ErrorHandler.Succeeded(
+                    Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconIndex, out value)))
+                {
+                    icon = new ProjectIconReference(imageList, (int)value);
+                    return true;
+                }
+            }
+
+            // Only do this if we know there is no imagelist behind the icons
+            // (This will create a cached icon handle if called on a managed project, which we only need once)
+            if (ErrorHandler.Succeeded(
+                Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconHandle, out value)))
+            {
+                icon = new ProjectIconReference((IntPtr)(int)value); // Marshalled by VS as 32 bit integer
                 return true;
             }
 
-            IntPtr list;
+            return false;
+        }
 
-            if(!ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_IconImgList, out value)))
-                return false;
+        internal IList<string> GetSubFiles()
+        {
+            if (_subFiles != null)
+                return _subFiles;
 
-            list = (IntPtr)(int)value;
+            ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
 
+            List<string> files = new List<string>(walker.GetSccFiles(Project.ProjectHierarchy, ProjectItemId, ProjectWalkDepth.SpecialFiles));
+            files.Remove(Filename);
 
-            if (!ErrorHandler.Succeeded(hier.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconIndex, out value)))
-                return false;
+            _subFiles = files.AsReadOnly();
 
-            icon = new ProjectIconReference(list, (int)value);
+            return _subFiles;
+        }
 
-            return true;
+        public bool OpenAsDocument()
+        {
+            Guid editorType = Guid.Empty;
+
+            IntPtr DOCDATAEXISTING_UNKNOWN = (IntPtr)(int)-1;
+            IVsWindowFrame frame;
+            return ErrorHandler.Succeeded(
+                Project.VsProject.OpenItem(ProjectItemId, ref editorType, DOCDATAEXISTING_UNKNOWN, out frame));
+        }
+
+        internal void ClearIdCache()
+        {
+            _id = 0;
+            _subFiles = null;
         }
     }
 }

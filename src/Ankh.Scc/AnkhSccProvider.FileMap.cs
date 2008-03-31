@@ -497,30 +497,6 @@ namespace Ankh.Scc
             return project;
         }
 
-        #endregion
-
-        internal void OnFileOpen(IVsSccProject2 project, string file, uint itemId)
-        {
-            SccProjectData data;
-
-            if (_projectMap.TryGetValue(project, out data))
-            {
-                data.OnFileOpen(file, itemId);
-            }
-        }
-
-        internal void OnFileClose(IVsSccProject2 project, string file, uint itemId)
-        {
-            SccProjectData data;
-
-            if (_projectMap.TryGetValue(project, out data))
-            {
-                data.OnFileClose(file, itemId);
-            }
-        }
-
-        #region IProjectFileMapper Members
-
         public ProjectIconReference GetPathIconHandle(string path)
         {
             SccProjectFile file;

@@ -81,7 +81,6 @@
       <DependentUpon>OpenDocumentTracker.cs</DependentUpon>
     </Compile>
     <Compile Include="MarkProjectDirty.cs" />
-    
     <Compile Include="ProjectMap\SccDocumentData.cs" />
     <Compile Include="ProjectTracker.cs" />
     <Compile Include="ProjectTracker.Add.cs">
@@ -110,7 +109,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SvnSccTools.cs" />
+    <Compile Include="SvnSccContext.cs" />
     <Compile Include="TaskFinisher.cs" />
   </ItemGroup>
   <ItemGroup>
