@@ -54,11 +54,20 @@ namespace Ankh.Scc
 
             AnkhGlyph glyph = StatusImages.GetStatusImageForSvnItem(item);
 
-            if(glyph != AnkhGlyph.Normal)
-                return glyph; // We have some usefull status
-
+            switch(glyph)
+            {
+                case AnkhGlyph.Normal:
+                    break; // See below
+                case AnkhGlyph.Blank:
+                    if (ContainsPath(path))
+                        return AnkhGlyph.ShouldBeAdded;
+                    goto default;
+                default:
+                    return glyph;
+            }
+                                
             if (DocumentTracker.IsDocumentDirty(item.FullPath))
-                return AnkhGlyph.FileDirty;
+                return AnkhGlyph.FileDirty;            
 
             // Let's try to do some simple inheritance trick on scc-special files
 
