@@ -10,6 +10,7 @@ using IServiceProvider = System.IServiceProvider;
 using Microsoft.VisualStudio.Shell;
 using Ankh.Scc;
 using Ankh.VS.SolutionExplorer;
+using SharpSvn;
 
 namespace Ankh.Selection
 {
@@ -163,15 +164,17 @@ namespace Ankh.Selection
 
             public SelectionItem(IVsHierarchy hierarchy, uint id)
             {
+                if (hierarchy == null)
+                    throw new ArgumentNullException("hierarchy");
+
                 _hierarchy = hierarchy;
                 _id = id;
             }
 
             public SelectionItem(IVsHierarchy hierarchy, uint id, IVsSccProject2 project)
+                : this(hierarchy, id)
             {
-                _hierarchy = hierarchy;
                 _sccProject = project;
-                _id = id;
             }
 
             public IVsHierarchy Hierarchy
@@ -363,53 +366,43 @@ namespace Ankh.Selection
         /// <returns></returns>
         private IEnumerable<SelectionItem> GetDescendants(SelectionItem si, Dictionary<SelectionItem, SelectionItem> previous, ProjectWalkDepth depth)
         {
-            if (si.Hierarchy == null)
-                yield break;
+            if(si == null)
+                throw new ArgumentNullException("si");
+
+            // A hierarchy node can have 2 identities. We only need the inner one
+
+            bool isNested = false;
+            IVsHierarchy subHierarchy = null;
+            uint subId;
 
             Guid hierarchyId = typeof(IVsHierarchy).GUID;
+
             IntPtr hierPtr;
-            uint id;
+            int hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out subId);
 
-            if (depth == ProjectWalkDepth.AllDescendants)
+            if(ErrorHandler.Succeeded(hr) && hierPtr != IntPtr.Zero)
             {
-                int hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out id);
-
-                if (hr == VSConstants.S_OK && hierPtr != IntPtr.Zero)
-                {
-                    IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
-                    Marshal.Release(hierPtr); // we are responsible to release the refcount on the out IntPtr parameter
-                    if (nestedHierarchy != null)
-                    {
-                        if (nestedHierarchy == MiscellaneousProject)
-                        {
-                            // Don't iterate files in the misc files project unless they are 
-                            // explicitly selected, as they are not part of the solution
-                            yield break;
-                        }
-
-                        // Display name and type of the node in the Output Window
-                        SelectionItem i = new SelectionItem(nestedHierarchy, id);
-
-                        if (previous.ContainsKey(i))
-                            yield break;
-
-                        previous.Add(i, i);
-
-                        yield return i;
-
-                        foreach (SelectionItem ii in GetDescendants(i, previous, depth))
-                        {
-                            yield return ii;
-                        }
-                    }
-                }
-
-                // Fall through or projects within solution folders are not correctly evaluated in 2008
+                IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
+                Marshal.Release(hierPtr);
+                isNested = true;
             }
 
-            // Note: There is a bug with firstchild on solutions pre vs2008, in that it contains
-            // all projects on the top level instead of below solution folders. But we can ignore 
-            // that as we would include the projects anyway
+            if(isNested && depth <= ProjectWalkDepth.AllDescendantsInHierarchy)
+            {
+                yield break; // Don't walk into sub-hierarchies
+            }
+            else if(isNested)
+                si = new SelectionItem(subHierarchy, subId);
+
+            if (!previous.ContainsKey(si))
+            {
+                previous.Add(si, si);
+                yield return si;
+            }
+
+            // Note: VS2005 and earlier have all projects on the top level; from VS2008+ projects are nested
+            // We can ignore that as we would include the projects anyway
+
             object child;
             Marshal.ThrowExceptionForHR(si.Hierarchy.GetProperty(si.Id,
                 (int)__VSHPROPID.VSHPROPID_FirstChild, out child));
@@ -418,11 +411,6 @@ namespace Ankh.Selection
             while (childId != VSConstants.VSITEMID_NIL)
             {
                 SelectionItem i = new SelectionItem(si.Hierarchy, childId);
-                if (!previous.ContainsKey(i))
-                {
-                    previous.Add(i, i);
-                    yield return i;
-                }
 
                 foreach (SelectionItem ii in GetDescendants(i, previous, depth))
                 {
@@ -605,7 +593,7 @@ namespace Ankh.Selection
 
             foreach (string file in files)
             {
-                yield return file;
+                yield return SvnTools.GetNormalizedFullPath(file);
             }
 
             if (depth > ProjectWalkDepth.SpecialFiles)
@@ -620,7 +608,7 @@ namespace Ankh.Selection
 
                     foreach (string file in files)
                     {
-                        yield return file;
+                        yield return SvnTools.GetNormalizedFullPath(file);
                     }
                 }
             }
