@@ -228,11 +228,11 @@
 
     <xsl:text>&#10;&#10;CMDPLACEMENT_SECTION&#10;</xsl:text>
     <xsl:text>&#9;&#9;// Item ID, Parent ID, Priority&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// Buttons</xsl:text>
+    <xsl:text>&#9;&#9;// Buttons&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:ButtonRef" mode="placement" />
-    <xsl:text>&#9;&#9;// Menus</xsl:text>    
+    <xsl:text>&#9;&#9;// Menus&#10;</xsl:text>    
     <xsl:apply-templates select="gui:UI//gui:MenuRef" mode="placement" />
-    <xsl:text>&#9;&#9;// Groups</xsl:text>
+    <xsl:text>&#9;&#9;// Groups&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:GroupRef" mode="placement" />
     <xsl:text>&#10;CMDPLACEMENT_END&#10;&#10;</xsl:text>
 
