@@ -47,10 +47,28 @@ namespace Ankh.UI.PendingChanges
                 throw new InvalidOperationException(); // Item no longer valued
 
             SubItems[2].Text = item.Status.LocalContentStatus.ToString();
-            SubItems[3].Text = item.Status.LocalPropertyStatus.ToString();
+            SharpSvn.SvnStatus ps = item.Status.LocalPropertyStatus;
+
+            if (ps == SharpSvn.SvnStatus.Normal || ps == SharpSvn.SvnStatus.None)
+                SubItems[3].Text = "";
+            else
+                SubItems[3].Text = item.Status.LocalPropertyStatus.ToString();
             SubItems[4].Text = item.FullPath;
 
             ImageIndex = iconMap.GetIcon(FullPath);
+
+            System.Drawing.Color clr = System.Drawing.Color.Black;
+
+            if(item.IsConflicted)
+                clr = System.Drawing.Color.Red;
+            else if(item.IsDeleteScheduled)
+                clr = System.Drawing.Color.DarkRed;
+            else if(item.Status.IsCopied || item.Status.CombinedStatus == SharpSvn.SvnStatus.Added || !item.IsVersioned)
+                clr = System.Drawing.Color.FromArgb(255,100,0,100);
+            else if(item.IsModified)
+                clr = System.Drawing.Color.DarkBlue;
+
+            ForeColor = clr;
         }
 
         /// <summary>
