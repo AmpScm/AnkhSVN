@@ -11,7 +11,7 @@ namespace Ankh.Scc
     {
         public bool IsDocumentOpen(string path)
         {
-            if(path == null)
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             SccDocumentData data;
@@ -24,7 +24,7 @@ namespace Ankh.Scc
 
         public bool IsDocumentDirty(string path)
         {
-            if(path == null)
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             SccDocumentData data;
@@ -37,13 +37,15 @@ namespace Ankh.Scc
 
         public bool PromptSaveDocument(string path)
         {
-            if (path == null)
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             SccDocumentData data;
 
             if (!_docMap.TryGetValue(path, out data))
                 return false;
+
+            data.CheckDirty();
 
             if (!data.IsDirty || (data.Cookie == 0))
                 return true; // Not/never modified, no need to save
@@ -55,7 +57,7 @@ namespace Ankh.Scc
 
         public bool SaveDocument(string path)
         {
-            if (path == null)
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             SccDocumentData data;
@@ -63,11 +65,26 @@ namespace Ankh.Scc
             if (!_docMap.TryGetValue(path, out data))
                 return false;
 
+            data.CheckDirty();
+
             if (!data.IsDirty || (data.Cookie == 0))
                 return true; // Not/never modified, no need to save
 
             // Save the document if it is dirty
             return ErrorHandler.Succeeded(RunningDocumentTable.SaveDocuments(0, data.Hierarchy, data.ItemId, data.Cookie));
+        }
+
+        public void CheckDirty(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            SccDocumentData data;
+
+            if (!_docMap.TryGetValue(path, out data))
+                return;
+
+            data.CheckDirty();
         }
 
         public bool SaveDocuments(IEnumerable<string> paths)

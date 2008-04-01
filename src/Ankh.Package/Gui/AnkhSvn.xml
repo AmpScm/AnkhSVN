@@ -405,10 +405,12 @@
 		</GroupRef>
 		<GroupRef id="Menu_PendingChangesContextMenu">
 			<!-- The Working Copy Explorer Toolbar -->
-			<Menu id="Menu_PendingChangesContextMenu" name="PendingChangesContext" priority="0" type="ToolWindowToolbar">
-				<Group id="Grp_PendingChangesContextMenu" priority="0x900">
-					<ButtonRef id="Cmd_Refresh" priority="0x100" />
+			<Menu id="Menu_PendingChangesContextMenu" name="PendingChangesContext" priority="0" type="Context">
+				<Group id="Grp_PendingChangesContextMenu" priority="0x100">
+          <ButtonRef id="Cmd_ItemOpenVisualStudio" priority="0x100" />
+					<ButtonRef id="Cmd_Refresh" priority="0x200" />
 				</Group>
+        <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC" priority="0x200" />
 			</Menu>
 		</GroupRef>
 	</UI>

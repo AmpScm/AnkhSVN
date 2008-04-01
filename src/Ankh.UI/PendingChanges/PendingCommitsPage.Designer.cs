@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -35,7 +36,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor();
-            this.pendingCommits = new Ankh.UI.PendingChanges.PendingCommitsView();
+            this.pendingCommits = new Ankh.UI.PendingChanges.PendingCommitsView(this.components);
             this.pathColumn = new System.Windows.Forms.ColumnHeader();
             this.projectColumn = new System.Windows.Forms.ColumnHeader();
             this.fileStatusColumn = new System.Windows.Forms.ColumnHeader();
@@ -167,8 +168,11 @@
             this.pendingCommits.TabIndex = 0;
             this.pendingCommits.UseCompatibleStateImageBehavior = false;
             this.pendingCommits.View = System.Windows.Forms.View.Details;
+            this.pendingCommits.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_MouseDoubleClick);
+            this.pendingCommits.ShowContextMenu += new System.EventHandler(this.pendingCommits_ShowContextMenu);
             this.pendingCommits.RetrieveSelection += new System.EventHandler<Ankh.UI.PendingChanges.ListViewWithSelection<Ankh.UI.PendingChanges.PendingCommitItem>.RetrieveSelectionEventArgs>(this.pendingCommits_RetrieveSelection);
             this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.PendingChanges.ListViewWithSelection<Ankh.UI.PendingChanges.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
+            this.pendingCommits.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.pendingCommits_ColumnReordered);
             // 
             // pathColumn
             // 
