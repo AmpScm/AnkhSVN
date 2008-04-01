@@ -6,6 +6,7 @@ using AnkhSvn.Ids;
 using Ankh.VS;
 using System;
 using Microsoft.VisualStudio.Shell.Interop;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -13,6 +14,11 @@ namespace Ankh.Commands
     /// Shows differences compared to local text base.
     /// </summary>
     [Command(AnkhCommand.DiffLocalItem)]
+    [Command(AnkhCommand.ItemCompareBase)]
+    [Command(AnkhCommand.ItemCompareCommitted)]
+    [Command(AnkhCommand.ItemCompareHead)]
+    [Command(AnkhCommand.ItemComparePrevious)]
+    [Command(AnkhCommand.ItemCompareSpecific)]
     public class DiffLocalItem : LocalDiffCommandBase
     {
         #region Implementation of ICommand
@@ -25,7 +31,20 @@ namespace Ankh.Commands
 
             using (context.StartOperation("Diffing"))
             {
-                string diff = this.GetDiff(e.Selection, context);
+                SvnRevisionRange revRange = null;
+                switch (e.Command)
+                {
+                    case AnkhCommand.ItemCompareCommitted:
+                        revRange = new SvnRevisionRange(SvnRevision.Committed, SvnRevision.Working);
+                        break;
+                    case AnkhCommand.ItemCompareHead:
+                        revRange = new SvnRevisionRange(SvnRevision.Head, SvnRevision.Working);
+                        break;
+                    case AnkhCommand.ItemComparePrevious:
+                        revRange = new SvnRevisionRange(SvnRevision.Previous, SvnRevision.Working);
+                        break;
+                }
+                string diff = this.GetDiff(e.Selection, context, revRange);
                 if (diff != null)
                 {
                     // convert it to HTML and store in a temp file
