@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using System.ComponentModel.Design;
 using Ankh.Scc;
+using AnkhSvn.Ids;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -158,6 +159,22 @@ namespace Ankh.UI.PendingChanges
             PendingCommitItem pi = (PendingCommitItem)e.Item;
 
             e.SelectionItem = pi.PendingChange;
+        }
+
+        private void pendingCommits_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void pendingCommits_ColumnReordered(object sender, ColumnReorderedEventArgs e)
+        {
+
+        }
+
+        private void pendingCommits_ShowContextMenu(object sender, EventArgs e)
+        {
+            Point p = MousePosition;
+            UISite.ShowContextMenu(AnkhCommandMenu.PendingChangesContextMenu, p.X, p.Y); 
         }
     }
 

@@ -43,6 +43,9 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnSelectedIndexChanged(e);
 
+            if(DesignMode)
+                return;
+
             if (!_updatingSelection)
             {
                 if (SelectedItems.Count > 0)
@@ -56,10 +59,30 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnMouseUp(e);
 
-            if (_maybeUnselect && SelectedItems.Count == 0)
+            if (!DesignMode && _maybeUnselect && SelectedItems.Count == 0)
             {
                 NotifySelectionUpdated();
             }
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (!DesignMode)
+            {
+                if (m.Msg == 123) // WM_CONTEXT
+                {
+                    OnShowContextMenu(EventArgs.Empty);
+                    return;
+                }
+            }
+            base.WndProc(ref m);
+        }
+
+        public event EventHandler ShowContextMenu;
+        public virtual void OnShowContextMenu(EventArgs e)
+        {
+            if (ShowContextMenu != null)
+                ShowContextMenu(this, e);
         }
 
         internal virtual ListViewHierarchy CreateHierarchy()

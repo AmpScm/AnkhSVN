@@ -227,9 +227,13 @@
     <xsl:text>/* /Inline values */&#10;&#10;</xsl:text>
 
     <xsl:text>&#10;&#10;CMDPLACEMENT_SECTION&#10;</xsl:text>
-    <xsl:text>// Item ID, Parent ID, Priority&#10;</xsl:text>
+    <xsl:text>&#9;&#9;// Item ID, Parent ID, Priority&#10;</xsl:text>
+    <xsl:text>&#9;&#9;// Buttons</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:ButtonRef" mode="placement" />
-    <xsl:apply-templates select="gui:UI//gui:MenuRef | gui:UI//gui:GroupRef" mode="placement" />
+    <xsl:text>&#9;&#9;// Menus</xsl:text>    
+    <xsl:apply-templates select="gui:UI//gui:MenuRef" mode="placement" />
+    <xsl:text>&#9;&#9;// Groups</xsl:text>
+    <xsl:apply-templates select="gui:UI//gui:GroupRef" mode="placement" />
     <xsl:text>&#10;CMDPLACEMENT_END&#10;&#10;</xsl:text>
 
     <xsl:value-of select="concat('CMDS_SECTION ', gui:UI/@packageId)"/>
@@ -659,8 +663,8 @@
   </xsl:template>
   <xsl:template match="gui:MenuRef | gui:GroupRef" mode="placement">
     <xsl:if test="
-            (self::gui-MenuRef and (parent::gui:Group or parent::gui:GroupRef)) or
-            (self::gui-GroupRef and (parent::gui:Menu or parent::gui:MenuRef))">
+            (self::gui:MenuRef and (parent::gui:Group or parent::gui:GroupRef)) or
+            (self::gui:GroupRef and (parent::gui:Menu or parent::gui:MenuRef))">
       <xsl:text>&#9;&#9;</xsl:text>
       <!-- Item ID -->
       <xsl:value-of select="@id"/>

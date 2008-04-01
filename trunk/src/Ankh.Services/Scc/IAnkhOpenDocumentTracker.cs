@@ -27,6 +27,8 @@ namespace Ankh.Scc
         bool PromptSaveDocument(string path);
         bool SaveDocuments(IEnumerable<string> paths);
 
+        void CheckDirty(string path);
+
         /// <summary>
         /// Locks the specified documents for processing until the lock is disposed
         /// </summary>

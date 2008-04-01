@@ -3,11 +3,22 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Selection;
 using Microsoft.VisualStudio;
+using System.ComponentModel;
 
 namespace Ankh.UI.PendingChanges
 {
     class PendingCommitsView : ListViewWithSelection<PendingCommitItem>
     {
+        public PendingCommitsView()
+        {
+        }
+
+
+        public PendingCommitsView(IContainer container)
+        {
+            container.Add(this);
+        }
+
         internal override ListViewHierarchy CreateHierarchy()
         {
             return new PendingCommitsHierarchy(this);
