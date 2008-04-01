@@ -90,14 +90,18 @@ namespace Ankh.UI.PendingChanges
                     {
                         uint id;
 
-                        if (SelectedItems.Count >= 1)
+                        int selectedCount = SelectedItems.Count;
+                        IVsMultiItemSelect ms = null;
+
+                        if(selectedCount == 1)
                             id = Hierarchy.GetId((TListViewItem)SelectedItems[0]);
+                        else if(selectedCount > 1)
+                        {
+                            id = VSConstants.VSITEMID_SELECTION;
+                            ms = Hierarchy; // Our hierarchy implements IVsMultiItemSelect
+                        }
                         else
                             id = VSConstants.VSITEMID_NIL;
-
-                        IVsMultiItemSelect ms = null;
-                        if (SelectedItems.Count > 1)
-                            ms = Hierarchy;
 
                         sel.OnSelectChangeEx(hier, id, ms, handle);
                     }
