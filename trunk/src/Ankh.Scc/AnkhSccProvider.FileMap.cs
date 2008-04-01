@@ -83,7 +83,7 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 return; // Not managed by us
 
-            data.RemoveFile(filename);
+            data.RemovePath(filename);
 
             if (!IsActive)
                 return; // Let the other SCC package manage it
@@ -151,7 +151,7 @@ namespace Ankh.Scc
                 return; // Not managed by us
 
             // Add a directory like a folder but with an ending '\'
-            data.RemoveFile(Path.GetFullPath(directoryname).TrimEnd('\\') + '\\');
+            data.RemovePath(Path.GetFullPath(directoryname).TrimEnd('\\') + '\\');
 
             if (IsActive)
             {
@@ -207,7 +207,7 @@ namespace Ankh.Scc
             else
                 data.CheckProjectRename(project, oldName, newName);
 
-            data.RemoveFile(oldName);
+            data.RemovePath(oldName);
             data.AddPath(newName);
 
             if (!IsActive)
@@ -271,7 +271,7 @@ namespace Ankh.Scc
             if(!IsActive)
                 return;
 
-            data.RemoveFile(Path.GetFullPath(oldName).TrimEnd('\\') + '\\');
+            data.RemovePath(Path.GetFullPath(oldName).TrimEnd('\\') + '\\');
             data.AddPath(Path.GetFullPath(newName).TrimEnd('\\') + '\\');
             MarkGlyphsDirty(data, newName);
         }

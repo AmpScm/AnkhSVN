@@ -14,6 +14,7 @@ namespace Ankh.Scc.ProjectMap
     /// <summary>
     /// 
     /// </summary>
+    [DebuggerDisplay("Name={Name}, Dirty={IsDirty}")]
     class SccDocumentData
     {
         readonly IAnkhServiceProvider _context;
@@ -185,6 +186,18 @@ namespace Ankh.Scc.ProjectMap
             UpdateGlyph();
         }
 
+        internal void CheckDirty()
+        {
+            bool wasDirty = IsDirty;
+            bool dirty = GetIsDirty();
+
+            if (dirty != wasDirty)
+            {
+                _isDirty = wasDirty;
+                UpdateGlyph();
+            }
+        }
+
         void UpdateGlyph()
         {            
             IVsSccProject2 project = Hierarchy as IVsSccProject2;
@@ -350,6 +363,6 @@ namespace Ankh.Scc.ProjectMap
                 return false;
 
             return ErrorHandler.Succeeded(pdd3.HandsOnDocDataStorage());
-        }
+        }        
     }
 }

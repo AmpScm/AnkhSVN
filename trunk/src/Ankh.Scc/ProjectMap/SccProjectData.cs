@@ -285,9 +285,17 @@ namespace Ankh.Scc.ProjectMap
                 _files.Add(new SccProjectFileReference(_context, this, Scc.GetFile(path)));
 
             ClearIdCache();
+
+            if (!_inLoad && _loaded && !string.IsNullOrEmpty(ProjectFile))
+            {
+                IAnkhOpenDocumentTracker tracker = _context.GetService<IAnkhOpenDocumentTracker>();
+
+                if (tracker != null)
+                    tracker.CheckDirty(ProjectFile);
+            }
         }
 
-        internal void RemoveFile(string path)
+        internal void RemovePath(string path)
         {
             if (!_files.Contains(path))
                 throw new ArgumentOutOfRangeException("path");
@@ -295,6 +303,15 @@ namespace Ankh.Scc.ProjectMap
             _files[path].ReleaseReference();
 
             ClearIdCache();
+
+            if (!_inLoad && _loaded && !string.IsNullOrEmpty(ProjectFile))
+            {
+                // Some projects don't notify they are dirty to the open document tracker when they are really changed
+                IAnkhOpenDocumentTracker tracker = _context.GetService<IAnkhOpenDocumentTracker>();
+
+                if (tracker != null)
+                    tracker.CheckDirty(ProjectFile);
+            }
         }
 
         #region File list management code
