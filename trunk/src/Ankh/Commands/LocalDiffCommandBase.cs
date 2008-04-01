@@ -30,13 +30,22 @@ namespace Ankh.Commands
                 return null;
         }
 
+        protected virtual string GetDiff(ISelectionContext selection, IContext context)
+        {
+            return GetDiff(selection, context, null);
+        }
         /// <summary>
         /// Generates the diff from the current selection.
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff(ISelectionContext selection, IContext context)
+        protected virtual string GetDiff(ISelectionContext selection, IContext context, SvnRevisionRange revisions)
         {
+            if (selection == null)
+                throw new ArgumentNullException("selection");
+            if (context == null)
+                throw new ArgumentNullException("context");
+
             bool useExternalDiff = GetExe(selection, context) != null;
 
             // We use VersionedFilter here to allow diffs between arbitrary revisions
@@ -49,22 +58,17 @@ namespace Ankh.Commands
 
             IList resources = new ArrayList(checkedResources);
 
-            // are we shifted?
             PathSelectorInfo info = new PathSelectorInfo("Select items for diffing",
                 resources, checkedResources);
-            info.RevisionStart = SvnRevision.Base;
-            info.RevisionEnd = SvnRevision.Working;
+            info.RevisionStart = revisions == null ? SvnRevision.Base : revisions.StartRevision;
+            info.RevisionEnd = revisions == null ? SvnRevision.Working : revisions.EndRevision;
 
             // "Recursive" doesn't make much sense if using an external diff
             info.EnableRecursive = !useExternalDiff;
             info.Depth = useExternalDiff ? SvnDepth.Empty : SvnDepth.Infinity;
 
-            // default to textbase vs wc diff                
-            SvnRevision revisionStart = SvnRevision.Base;
-            SvnRevision revisionEnd = SvnRevision.Working;
-
             // should we show the path selector?
-            if (!CommandBase.Shift && resources.Count != 1)
+            if (!CommandBase.Shift && revisions == null)
             {
                 info = context.UIShell.ShowPathSelector(info);
 

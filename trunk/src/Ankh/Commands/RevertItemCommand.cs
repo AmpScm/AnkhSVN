@@ -6,6 +6,7 @@ using AnkhSvn.Ids;
 using SharpSvn;
 using System.Collections.Generic;
 using Ankh.Scc;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
@@ -13,10 +14,9 @@ namespace Ankh.Commands
     /// Command to revert current item to last updated revision.
     /// </summary>
     [Command(AnkhCommand.RevertItem)]
+    [Command(AnkhCommand.ItemRevertBase)]
     public class RevertItemCommand : CommandBase
     {
-        #region Implementation of ICommand
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
@@ -30,63 +30,75 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context.GetService<IContext>();
+            IAnkhDialogOwner dialogOwner = e.Context.GetService<IAnkhDialogOwner>();
+            IAnkhOpenDocumentTracker docTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
+            SaveAllDirtyDocuments(e.Selection, e.Context);
 
-            SaveAllDirtyDocuments(e.Selection, context);
-
-            // TODO: fix user interface
-            /*// get the modified resources
-            IList resources = context.Selection.GetSelectionResources( true,
-                new ResourceFilterCallback( SvnItem.ModifiedFilter ) );
+            // get the modified resources
+            List<SvnItem> resources = new List<SvnItem>();
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (item.IsModified)
+                    resources.Add(item);
+            }
 
             SvnDepth depth = SvnDepth.Empty;
             bool confirmed = false;
-            // is Shift down?
-            if ( !CommandBase.Shift )
+
+            if (!CommandBase.Shift &&
+                e.Command == AnkhCommand.RevertItem)
             {
-                PathSelectorInfo info = new PathSelectorInfo( "Select items to revert", 
-                    resources, resources );
-                info = context.UIShell.ShowPathSelector( info );
-                if ( info == null )
+                PathSelectorInfo info = new PathSelectorInfo("Select items to revert",
+                    resources, resources);
+
+                //if(e.Command == AnkhCommand.ItemRevertSpecific)
+                //    info.RevisionStart = SvnRevision.Base;
+
+                info = context.UIShell.ShowPathSelector(info);
+                if (info == null)
                     return;
                 confirmed = true;
                 depth = info.Depth;
-                resources = info.CheckedItems;                
+
+                resources.Clear();
+                foreach (SvnItem item in info.CheckedItems)
+                {
+                    resources.Add(item);
+                }
             }
 
-            string[] paths = SvnItem.GetPaths( resources );
-            
-            // ask for confirmation if the Shift dialog hasn't been used
-            if ( !confirmed )
-            {
-                string msg = "Do you really want to revert these item(s)?" + 
-                    Environment.NewLine + Environment.NewLine;            
-                msg += string.Join( Environment.NewLine, paths );
+            List<string> paths = new List<string>();
 
-                if( MessageBox.Show( context.HostWindow, msg, "Revert", MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Information ) != DialogResult.Yes )
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (item.IsModified)
+                {
+                    paths.Add(item.FullPath);
+                    item.MarkDirty();
+                }
+            }
+
+            // ask for confirmation if the Shift dialog hasn't been used
+            if (!confirmed)
+            {
+                string msg = "Do you really want to revert these item(s)?" +
+                    Environment.NewLine + Environment.NewLine;
+                msg += string.Join(Environment.NewLine, paths.ToArray());
+
+                if (dialogOwner.MessageBox.Show(msg, "Revert", MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Information) != DialogResult.Yes)
                 {
                     return;
                 }
             }
-            */
-   
+
             // perform the actual revert 
-            using (context.StartOperation("Reverting"))
+            using (e.Context.BeginOperation("Reverting"))
+            using (DocumentLock dl = docTracker.LockDocuments(paths))
             {
                 SvnRevertArgs args = new SvnRevertArgs();
                 //args.Depth = depth;
                 args.ThrowOnError = false;
-
-                List<string> paths = new List<string>();
-
-                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
-                {
-                    if (item.IsModified)
-                    {
-                        paths.Add(item.FullPath);
-                        item.MarkDirty();
-                    }
-                }
 
                 using (SvnClient client = e.Context.GetService<ISvnClientPool>().GetClient())
                 {
@@ -96,9 +108,8 @@ namespace Ankh.Commands
                     if (pn != null)
                         pn.MarkDirty(e.Selection.GetOwnerProjects(true));
                 }
+                dl.Reload(paths);
             }
         }
-
-        #endregion
     }
 }
