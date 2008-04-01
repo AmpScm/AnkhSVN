@@ -46,8 +46,15 @@ namespace Ankh.UI.PendingChanges
             if (item == null)
                 throw new InvalidOperationException(); // Item no longer valued
 
-            SubItems[2].Text = item.Status.LocalContentStatus.ToString();
-            SharpSvn.SvnStatus ps = item.Status.LocalPropertyStatus;
+            SharpSvn.SvnStatus ps = item.Status.LocalContentStatus;
+
+            if (ps == SharpSvn.SvnStatus.NotVersioned)
+                SubItems[2].Text = "New";
+            else if (ps == SharpSvn.SvnStatus.Normal)
+                SubItems[2].Text = "";
+            else
+                SubItems[2].Text = item.Status.LocalContentStatus.ToString();
+            ps = item.Status.LocalPropertyStatus;
 
             if (ps == SharpSvn.SvnStatus.Normal || ps == SharpSvn.SvnStatus.None)
                 SubItems[3].Text = "";
