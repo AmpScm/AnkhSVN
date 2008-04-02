@@ -34,6 +34,7 @@
             this.issuesButton = new System.Windows.Forms.ToolStripButton();
             this.recentChangesButton = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.conflictsButton = new System.Windows.Forms.ToolStripButton();
             this.pendingChangesTabs.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,7 +47,8 @@
             this.pendingChangesTabs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileChangesButton,
             this.issuesButton,
-            this.recentChangesButton});
+            this.recentChangesButton,
+            this.conflictsButton});
             this.pendingChangesTabs.Location = new System.Drawing.Point(0, 0);
             this.pendingChangesTabs.Name = "pendingChangesTabs";
             this.pendingChangesTabs.Padding = new System.Windows.Forms.Padding(0);
@@ -63,7 +65,7 @@
             this.fileChangesButton.Name = "fileChangesButton";
             this.fileChangesButton.Size = new System.Drawing.Size(35, 36);
             this.fileChangesButton.Text = "Local File Changes";
-            this.fileChangesButton.Click += new System.EventHandler(this.newToolStripButton_Click);
+            this.fileChangesButton.Click += new System.EventHandler(this.fileChangesButton_Click);
             // 
             // issuesButton
             // 
@@ -73,7 +75,7 @@
             this.issuesButton.Name = "issuesButton";
             this.issuesButton.Size = new System.Drawing.Size(35, 36);
             this.issuesButton.Text = "Issues";
-            this.issuesButton.Click += new System.EventHandler(this.openToolStripButton_Click);
+            this.issuesButton.Click += new System.EventHandler(this.issuesButton_Click);
             // 
             // recentChangesButton
             // 
@@ -83,7 +85,7 @@
             this.recentChangesButton.Name = "recentChangesButton";
             this.recentChangesButton.Size = new System.Drawing.Size(35, 36);
             this.recentChangesButton.Text = "Recent Changes";
-            this.recentChangesButton.Click += new System.EventHandler(this.saveToolStripButton_Click);
+            this.recentChangesButton.Click += new System.EventHandler(this.recentChangesButton_Click);
             // 
             // panel1
             // 
@@ -92,6 +94,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(768, 300);
             this.panel1.TabIndex = 1;
+            // 
+            // conflictsButton
+            // 
+            this.conflictsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.conflictsButton.Image = ((System.Drawing.Image)(resources.GetObject("conflictsButton.Image")));
+            this.conflictsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.conflictsButton.Name = "conflictsButton";
+            this.conflictsButton.Size = new System.Drawing.Size(35, 36);
+            this.conflictsButton.Text = "Conflicts";
+            this.conflictsButton.Click += new System.EventHandler(this.conflictsButton_Click);
             // 
             // PendingChangesToolControl
             // 
@@ -115,5 +127,6 @@
         private System.Windows.Forms.ToolStripButton issuesButton;
         private System.Windows.Forms.ToolStripButton recentChangesButton;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ToolStripButton conflictsButton;
     }
 }

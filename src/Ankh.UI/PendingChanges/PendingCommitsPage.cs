@@ -9,6 +9,7 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using System.ComponentModel.Design;
 using Ankh.Scc;
 using AnkhSvn.Ids;
+using Ankh.Commands;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -163,7 +164,15 @@ namespace Ankh.UI.PendingChanges
 
         private void pendingCommits_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            ListViewHitTestInfo info = pendingCommits.HitTest(e.X, e.Y);
 
+            if(info != null && info.Location != ListViewHitTestLocations.None)
+            {
+                IAnkhCommandService cmd = UISite.GetService<IAnkhCommandService>();
+
+                if (cmd != null)
+                    cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio);
+            }            
         }
 
         private void pendingCommits_ColumnReordered(object sender, ColumnReorderedEventArgs e)

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Ankh.UI.Services;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Commands;
+using Microsoft.VisualStudio;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -16,6 +17,9 @@ namespace Ankh.UI.PendingChanges
         PendingCommitsPage _commitsPage;
         PendingIssuesPage _issuesPage;
         RecentChangesPage _changesPage;
+        PendingConflictsPage _conflictsPage;
+        PendingChangesPage _currentPage;
+        
         IAnkhUISite _site;
         public PendingChangesToolControl()
         {
@@ -24,6 +28,7 @@ namespace Ankh.UI.PendingChanges
             _commitsPage = new PendingCommitsPage();
             _issuesPage = new PendingIssuesPage();
             _changesPage = new RecentChangesPage();
+            _conflictsPage = new PendingConflictsPage();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -49,6 +54,41 @@ namespace Ankh.UI.PendingChanges
                     {
                         page.UISite = site;
                     }
+
+                    UpdateColors();
+                    UpdateCaption();
+                }
+            }
+        }
+
+        private void UpdateColors()
+        {
+            if (UISite == null)
+                return;
+
+            // We should use the VS colors instead of the ones provided by the OS
+
+            IVsUIShell2 shell = UISite.GetService<IVsUIShell2>(typeof(SVsUIShell));
+
+            if (shell != null)
+            {
+                uint rgb;
+                if (ErrorHandler.Succeeded(shell.GetVSSysColorEx((int)__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out rgb)))
+                {
+                    Color clr = ColorTranslator.FromWin32(unchecked((int)rgb));
+                    BackColor = clr;
+                }
+
+                if (ErrorHandler.Succeeded(shell.GetVSSysColorEx((int)__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out rgb)))
+                {
+                    Color clr = ColorTranslator.FromWin32(unchecked((int)rgb));
+                    pendingChangesTabs.BackColor = clr;
+                }
+
+                if (ErrorHandler.Succeeded(shell.GetVSSysColorEx((int)__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out rgb)))
+                {
+                    Color clr = ColorTranslator.FromWin32(unchecked((int)rgb));
+                    pendingChangesTabs.ForeColor = clr;
                 }
             }
         }
@@ -63,6 +103,8 @@ namespace Ankh.UI.PendingChanges
         {
             if (page == null)
                 throw new ArgumentNullException("page");
+            else if (page == _currentPage)
+                return;
 
             bool foundPage = false;
             foreach (PendingChangesPage p in panel1.Controls)
@@ -89,9 +131,12 @@ namespace Ankh.UI.PendingChanges
                 }
             }
 
+            _currentPage = page;
+
             fileChangesButton.Checked = (page == _commitsPage);
-            issuesButton.Checked = (page == _changesPage);
-            recentChangesButton.Checked = (page == _issuesPage);
+            issuesButton.Checked = (page == _issuesPage);
+            recentChangesButton.Checked = (page == _changesPage);
+            conflictsButton.Checked = (page == _conflictsPage);
 
             if (UISite != null)
             {
@@ -99,27 +144,40 @@ namespace Ankh.UI.PendingChanges
 
                 if (cmd != null)
                     cmd.UpdateCommandUI(false);
+
+                UpdateCaption();
             }
         }
 
-        private object IAnkhCommandHandler(Type type)
+        void UpdateCaption()
         {
-            throw new NotImplementedException();
+            if (UISite != null)
+            {
+                if (_currentPage == null || string.IsNullOrEmpty(_currentPage.Text))
+                    UISite.Title = UISite.OriginalTitle;
+                else
+                    UISite.Title = UISite.OriginalTitle + " - " + _currentPage.Text;
+            }
         }
 
-        private void newToolStripButton_Click(object sender, EventArgs e)
+        private void fileChangesButton_Click(object sender, EventArgs e)
         {
-            ShowPanel(_commitsPage);            
+            ShowPanel(_commitsPage);
         }
 
-        private void openToolStripButton_Click(object sender, EventArgs e)
+        private void issuesButton_Click(object sender, EventArgs e)
+        {
+            ShowPanel(_issuesPage);
+        }
+
+        private void recentChangesButton_Click(object sender, EventArgs e)
         {
             ShowPanel(_changesPage);
         }
 
-        private void saveToolStripButton_Click(object sender, EventArgs e)
+        private void conflictsButton_Click(object sender, EventArgs e)
         {
-            ShowPanel(_issuesPage);
+            ShowPanel(_conflictsPage);
         }
     }
 }
