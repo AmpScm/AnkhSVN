@@ -17,7 +17,7 @@
 		<MenuRef id="guidSHLMainMenu:IDM_VS_MENU_FILE">
 			<!-- Visual Studio file menu -->
 			<Group id="Grp_FileMenuScc" priority="0x0800">
-				<Menu id="Menu_FileScc" priority="0x0100" name="SvnMenu" text="Sub&amp;version">
+				<Menu id="Menu_FileScc" priority="0x0100" name="SvnMenu" text="Subve&amp;rsion">
 					<Group id="Grp_FileSccMenuTasks" priority="0x0100">
 						<Button id="Cmd_Checkout" name="Checkout" priority="0x301"
 								text="Chec&amp;kout a Repository..."
@@ -333,7 +333,7 @@
 									text="Resolve using &amp;Their Version" dynamicVisibility="true"/>
 						</Group>
 					</Menu>
-					<Menu id="Menu_ItemCompare" priority="0x200" name="Compare" type="MenuControllerLatched">
+					<Menu id="Menu_ItemCompare" priority="0x200" name="Compare" type="MenuControllerLatched" dynamicVisibility="true">
 						<Group id="Menu_ItemCompare" priority="0x100">
 							<Button id="Cmd_ItemCompareBase" name="CompareBase" priority="0x100"
 									text="&amp;Compare to Original Version" fixMenuController="true" iconFile="PendingChanges/Compare.png"/>
@@ -387,7 +387,7 @@
 							text="Refresh Pending Changes" iconFile="PendingChanges/Refresh.png"/>
 				</Group>
 				<Group id="Grp_PendingChangesSwitch" priority="0x500">
-					<ComboBox id="Cmd_SolutionSwitchCombo" type="DynamicCombo" width="100" priority="0x100"
+					<ComboBox id="Cmd_SolutionSwitchCombo" type="DropDownCombo" width="100" priority="0x100"
 							  fillCommand="Cmd_SolutionSwitchComboFill_IdOnly"
 							  caseSensitive="true"
 							  stretchHorizontally="true"
@@ -412,5 +412,14 @@
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC" priority="0x200" />
 			</Menu>
 		</GroupRef>
+    <GroupRef id="Menu_PendingChangesLogMessageMenu">
+      <Menu id="Menu_PendingChangesLogMessageMenu" name="PendingChangesLogMessage" priority="0" type="Context">
+        <Group id="Grp_PendingChangesLogEditor" priority="0x100">
+          <ButtonRef id="guidVSStd97:cmdidCut" priority="0x100"  />
+          <ButtonRef id="guidVSStd97:cmdidCopy"  priority="0x101" />
+          <ButtonRef id="guidVSStd97:cmdidPaste"  priority="0x102" />
+        </Group>        
+      </Menu>            
+    </GroupRef>
 	</UI>
 </VsGui>
