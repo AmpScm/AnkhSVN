@@ -372,7 +372,7 @@ namespace Ankh.Selection
             // A hierarchy node can have 2 identities. We only need the inner one
 
             bool isNested = false;
-            IVsHierarchy subHierarchy = null;
+            IVsHierarchy nestedHierarchy = null;
             uint subId;
 
             Guid hierarchyId = typeof(IVsHierarchy).GUID;
@@ -382,7 +382,7 @@ namespace Ankh.Selection
 
             if(ErrorHandler.Succeeded(hr) && hierPtr != IntPtr.Zero)
             {
-                IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
+                nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
                 Marshal.Release(hierPtr);
                 isNested = true;
             }
@@ -392,7 +392,7 @@ namespace Ankh.Selection
                 yield break; // Don't walk into sub-hierarchies
             }
             else if(isNested)
-                si = new SelectionItem(subHierarchy, subId);
+                si = new SelectionItem(nestedHierarchy, subId);
 
             if (!previous.ContainsKey(si))
             {
@@ -430,7 +430,7 @@ namespace Ankh.Selection
 
         #region ISelectionContext Members
 
-        public IEnumerable<string> GetSelectedFiles()
+        protected IEnumerable<string> GetSelectedFiles()
         {
             return _filenames ?? (_filenames = new CachedEnumerable<string>(InternalGetSelectedFiles(false)));
         }
@@ -472,7 +472,7 @@ namespace Ankh.Selection
             }
         }
 
-        public IEnumerable<SvnItem> GetSelectedSvnItems()
+        protected IEnumerable<SvnItem> GetSelectedSvnItems()
         {
             return _svnItems ?? (_svnItems = new CachedEnumerable<SvnItem>(InternalGetSelectedSvnItems(false)));
         }
@@ -499,7 +499,7 @@ namespace Ankh.Selection
 
         #region ISelectionContext Members
 
-        public IEnumerable<SvnProject> GetOwnerProjects()
+        protected IEnumerable<SvnProject> GetOwnerProjects()
         {
             return _selectedProjects ?? (_selectedProjects = new CachedEnumerable<SvnProject>(InternalGetOwnerProjects(false)));
         }

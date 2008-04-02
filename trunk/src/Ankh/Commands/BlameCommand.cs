@@ -22,7 +22,7 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems())
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (item.IsVersioned)
                     return;
