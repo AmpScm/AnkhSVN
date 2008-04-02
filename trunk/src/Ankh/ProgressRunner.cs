@@ -65,7 +65,6 @@ namespace Ankh
     {
         readonly IAnkhServiceProvider _context;
         readonly IProgressWorker _worker;
-        volatile bool _cancel;
         Form _invoker;
         bool _done;
         bool _cancelled;
@@ -101,19 +100,23 @@ namespace Ankh
         /// <param name="caption">The caption to use in the progress dialog.</param>
         public void Start(string caption)
         {
-            Thread thread = new Thread(new ThreadStart(this.Run));
+            Thread thread = new Thread(new ParameterizedThreadStart(this.Run));
+            ISvnClientPool pool = _context.GetService<ISvnClientPool>();
+            IAnkhDialogOwner dialogOwner = _context.GetService<IAnkhDialogOwner>();
 
             using (ProgressDialog dialog = new ProgressDialog())
+            using (SvnClient client = pool.GetClient())
+            using (dialog.Bind(client))
             {
                 dialog.Caption = caption;
-                dialog.Cancel += new EventHandler(OnCancel);
-                dialog.ProgressStatus += OnProgressStatus;
 
-                thread.Start();
+                thread.Start(client);
 
                 _invoker = dialog;
-                
-                dialog.ShowDialog(_context.GetService<IAnkhDialogOwner>().DialogOwner);
+
+                dialog.ShowDialog(dialogOwner.DialogOwner);
+
+                thread.Join();
             }
             if (_cancelled)
             {
@@ -128,29 +131,12 @@ namespace Ankh
                 throw new ProgressRunnerException(this._exception);
         }
 
-        void OnCancel(object sender, EventArgs e)
+        private void Run(object arg)
         {
-            _cancel = true;
-        }
-
-        private void Run()
-        {
+            SvnClient client = (SvnClient)arg;
             try
             {
-                ISvnClientPool pool = _context.GetService<ISvnClientPool>();
-
-                using (SvnClient client = (pool != null) ? pool.GetClient() : new SvnClient())
-                {
-                    client.Cancel += OnCancel;
-                    try
-                    {
-                        _worker.Work(new AnkhWorkerArgs(_context, client));
-                    }
-                    finally
-                    {
-                        client.Cancel -= OnCancel;
-                    }
-                }
+                _worker.Work(new AnkhWorkerArgs(_context, client));
             }
             catch (SvnOperationCanceledException)
             {
@@ -182,21 +168,6 @@ namespace Ankh
             {
                 si.Close();
             }
-        }
-
-        private void OnProgressStatus(object sender, ProgressStatusEventArgs e)
-        {
-            if (_done)
-                e.Done = true;
-
-            if (e.Cancelled)
-                _cancel = true;
-        }
-
-        void OnCancel(object sender, SvnCancelEventArgs args)
-        {
-            if (_cancel)
-                args.Cancel = true;
         }
 
         /// <summary>

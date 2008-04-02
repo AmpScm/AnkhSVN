@@ -28,7 +28,6 @@ namespace Ankh
         WorkingCopyExplorer.WorkingCopyExplorer _workingCopyExplorer;
         RepositoryExplorer.Controller _repositoryController;
         OutputPaneWriter _outputPane;
-        ProgressDialog _progressDialog;        
         IAnkhConfigurationService _config;
 
         /// <summary>
@@ -52,8 +51,6 @@ namespace Ankh
             this.LoadConfig();
 
             this._outputPane = new OutputPaneWriter(this, "AnkhSVN");
-
-            this._progressDialog = new ProgressDialog();
 
             this._repositoryController =
                 new RepositoryExplorer.Controller(this);
@@ -142,8 +139,6 @@ namespace Ankh
             {
                 // Swallow, not critical
             }
-
-            this._progressDialog.Caption = description;
 
             return new OperationCompleter(this, this.OutputPane.StartActionText(description));
         }
