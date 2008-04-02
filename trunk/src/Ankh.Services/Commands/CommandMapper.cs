@@ -76,7 +76,7 @@ namespace Ankh.Commands
                     if (handler != null)
                     {
                         handler.OnError(ex);
-                        return false;
+                        return true; // If we return false VS shows another error box!
                     }
 
                     throw;

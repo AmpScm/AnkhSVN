@@ -48,7 +48,7 @@ namespace Ankh
             Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
 
 #if !DEBUG
-            Container.AddService(typeof(IAnkhErrorHandler), new ErrorHandler(Context));
+            Container.AddService(typeof(IAnkhErrorHandler), new AnkhErrorHandler(Context));
 #endif
         }
 

@@ -301,7 +301,7 @@
     <Compile Include="ConflictManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ErrorHandler.cs">
+    <Compile Include="AnkhErrorHandler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />

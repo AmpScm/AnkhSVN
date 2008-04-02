@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.IO;
+using Ankh.UI;
+using System.Runtime.InteropServices;
 
 namespace Ankh.Commands
 {
@@ -43,41 +45,62 @@ namespace Ankh.Commands
         }
         public override void OnExecute(CommandEventArgs e)
         {
+            AnkhMessageBox mb = new AnkhMessageBox(e.Context);
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (!item.Exists)
                     continue;
 
-                switch (e.Command)
+                try
                 {
-                    case AnkhCommand.ItemOpenVisualStudio:
-                        VsShellUtilities.OpenDocument(e.Context, item.FullPath);
-                        break;
-                    case AnkhCommand.ItemOpenTextEditor:
-                        {
-                            IVsUIHierarchy hier;
-                            IVsWindowFrame frame;
-                            uint id;
+                    switch (e.Command)
+                    {
+                        case AnkhCommand.ItemOpenVisualStudio:
+                            VsShellUtilities.OpenDocument(e.Context, item.FullPath);
+                            break;
+                        case AnkhCommand.ItemOpenTextEditor:
+                            {
+                                IVsUIHierarchy hier;
+                                IVsWindowFrame frame;
+                                uint id;
 
-                            VsShellUtilities.OpenDocument(e.Context, item.FullPath, VSConstants.LOGVIEWID_TextView, out hier, out id, out frame);
-                        }
-                        break;
-                    case AnkhCommand.ItemOpenFolder:
-                        if(!item.IsDirectory)
-                            System.Diagnostics.Process.Start(Path.GetDirectoryName(item.FullPath));
-                        else
-                            System.Diagnostics.Process.Start(item.FullPath);
-                        break;
-                    case AnkhCommand.ItemOpenWindows:
-                        System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo(item.FullPath);
-                        psi.Verb = "open";
-                        System.Diagnostics.Process.Start(psi);
-                        break;
+                                VsShellUtilities.OpenDocument(e.Context, item.FullPath, VSConstants.LOGVIEWID_TextView, out hier, out id, out frame);
+                            }
+                            break;
+                        case AnkhCommand.ItemOpenFolder:
+                            if (!item.IsDirectory)
+                                System.Diagnostics.Process.Start(Path.GetDirectoryName(item.FullPath));
+                            else
+                                System.Diagnostics.Process.Start(item.FullPath);
+                            break;
+                        case AnkhCommand.ItemOpenWindows:
+                            System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo(item.FullPath);
+                            psi.Verb = "open";
+                            System.Diagnostics.Process.Start(psi);
+                            break;
 
-                    case AnkhCommand.ItemOpenSolutionExplorer:
-                        //VsShellUtilities.GetRunningDocumentContents
-                        break;
+                        case AnkhCommand.ItemOpenSolutionExplorer:
+                            //VsShellUtilities.GetRunningDocumentContents
+                            break;
+                    }
                 }
+                catch (IOException ee)
+                {
+                    mb.Show(ee.Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                }
+                catch (COMException ee)
+                {
+                    mb.Show(ee.Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                }
+                catch (InvalidOperationException ee)
+                {
+                    mb.Show(ee.Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                }
+                catch (System.ComponentModel.Win32Exception ee)
+                {
+                    mb.Show(ee.Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                }
+                    
             }            
         }
     }

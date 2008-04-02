@@ -11,6 +11,7 @@ using Ankh.Configuration;
 using System.Xml.Serialization;
 using SharpSvn;
 using Ankh.ContextServices;
+using Ankh.Xml;
 
 
 namespace Ankh
@@ -18,31 +19,34 @@ namespace Ankh
     /// <summary>
     /// Encapsulates error handling functionality.
     /// </summary>
-    class ErrorHandler : IAnkhErrorHandler
+    class AnkhErrorHandler : AnkhService, IAnkhErrorHandler
     {
-        public ErrorHandler(IAnkhServiceProvider context )
+        public AnkhErrorHandler(IAnkhServiceProvider context)
+            : base(context)
         {
-            this.context = context;
         }
 
         /// <summary>
         /// Handles an exception.
         /// </summary>
         /// <param name="ex"></param>
-        public void OnError( Exception ex )
+        public void OnError(Exception ex)
         {
             try
             {
                 // BH: Uses reflection to find the best match based on the exception??
 
-                Type t = typeof(ErrorHandler);
-                t.InvokeMember( "DoHandle", BindingFlags.InvokeMethod | BindingFlags.Instance |
-                    BindingFlags.NonPublic, null, 
-                    this, new object[]{ ex } );
+                Type t = typeof(AnkhErrorHandler);
+                MethodInfo method = t.GetMethod("DoHandle", new Type[] { ex.GetType() });
+
+                if (method != null)
+                    method.Invoke(this, new object[] { ex });
+                else
+                    DoHandle(ex);
             }
-            catch( Exception x )
+            catch (Exception x)
             {
-                Debug.WriteLine( x );
+                Debug.WriteLine(x);
             }
         }
 
@@ -55,21 +59,21 @@ namespace Ankh
                 System.Collections.Specialized.StringDictionary();
 
             Utils.ErrorMessage.SendByMail(ErrorReportMailAddress, ErrrorReportSubject, null,
-                typeof(ErrorHandler).Assembly, dict);
+                typeof(AnkhErrorHandler).Assembly, dict);
         }
 
-        public void Write( string message, Exception ex, TextWriter writer )
+        public void Write(string message, Exception ex, TextWriter writer)
         {
-            writer.WriteLine( message );
-            string exceptionMessage = GetNestedMessages( ex );
-            writer.WriteLine( exceptionMessage );
+            writer.WriteLine(message);
+            string exceptionMessage = GetNestedMessages(ex);
+            writer.WriteLine(exceptionMessage);
         }
 
-        private void DoHandle( ProgressRunner.ProgressRunnerException ex )
+        private void DoHandle(ProgressRunner.ProgressRunnerException ex)
         {
             // we're only interested in the inner exception - we know where the 
             // outer one comes from
-            OnError( ex.InnerException );
+            OnError(ex.InnerException);
         }
 
         private void DoHandle(SvnRepositoryHookException e)
@@ -85,20 +89,20 @@ namespace Ankh
         }
 
 
-        private void DoHandle( SvnWorkingCopyLockException ex )
+        private void DoHandle(SvnWorkingCopyLockException ex)
         {
-            MessageBox.Show( "Your working copy appear to be locked. " + NL + 
-                "Run Cleanup to amend the situation.", 
-                "Working copy locked", MessageBoxButtons.OK, 
-                MessageBoxIcon.Warning );
+            MessageBox.Show("Your working copy appear to be locked. " + NL +
+                "Run Cleanup to amend the situation.",
+                "Working copy locked", MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
         }
 
-        private void DoHandle( SvnAuthorizationException ex )
+        private void DoHandle(SvnAuthorizationException ex)
         {
-            MessageBox.Show( 
+            MessageBox.Show(
                 "You failed to authorize against the remote repository. ",
                 "Authorization failed", MessageBoxButtons.OK,
-                MessageBoxIcon.Warning );
+                MessageBoxIcon.Warning);
         }
 
         private void DoHandle(SvnAuthenticationException ex)
@@ -129,18 +133,18 @@ namespace Ankh
                 MessageBoxIcon.Warning);
         }
 
-        private void DoHandle( SvnException ex )
+        private void DoHandle(SvnException ex)
         {
-            if ( ex.SubversionErrorCode == LockedFileErrorCode )
+            if (ex.SubversionErrorCode == LockedFileErrorCode)
             {
                 MessageBox.Show(
                     ex.Message + NL + NL +
-                    "Avoid versioning files that can be locked by VS.NET. " + 
+                    "Avoid versioning files that can be locked by VS.NET. " +
                     "These include *.ncb, *.projdata etc." + NL +
                     "See the AnkhSVN FAQ for more details.",
                     "File exclusively locked",
-                    MessageBoxButtons.OK, 
-                    MessageBoxIcon.Error );
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
             else
             {
@@ -148,15 +152,15 @@ namespace Ankh
             }
         }
 
-        
 
-        private void DoHandle( Exception ex )
+
+        private void DoHandle(Exception ex)
         {
-            DoLogException( ex );
+            DoLogException(ex);
             ShowErrorDialog(ex, true, true);
         }
-       
-        public void LogException( Exception ex, string message, params object[] args )
+
+        public void LogException(Exception ex, string message, params object[] args)
         {
             IAnkhOperationLogger logger = context.GetService<IAnkhOperationLogger>();
 
@@ -167,13 +171,13 @@ namespace Ankh
             }
         }
 
-        private void DoLogException( Exception ex )
+        private void DoLogException(Exception ex)
         {
             ErrorItems errorItems = this.LoadErrorItems();
 
-            errorItems.Add( new ErrorItem( ex ) );
+            errorItems.Add(new ErrorItem(ex));
 
-            errorItems.Serialize( this.ErrorFile );
+            errorItems.Serialize(this.ErrorFile);
         }
 
 
@@ -181,7 +185,7 @@ namespace Ankh
         {
             this.EnsureErrorLogFile();
 
-            return ErrorItems.Deserialize( this.ErrorFile );
+            return ErrorItems.Deserialize(this.ErrorFile);
         }
 
         /// <summary>
@@ -190,11 +194,11 @@ namespace Ankh
         /// <returns></returns>
         private void EnsureErrorLogFile()
         {
-            if ( File.Exists(this.ErrorFile) )
+            if (File.Exists(this.ErrorFile))
             {
                 return;
             }
-            
+
             // Create an empty file containing no items.
             ErrorItems items = new ErrorItems();
             items.Serialize(this.ErrorFile);
@@ -205,15 +209,15 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get { return Path.Combine(Path.GetTempPath(), "AnkhErrors.txt");/* this.context.ConfigLoader.ConfigDir, ErrorLogFile );*/ }
         }
-       
-        private void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError )
+
+        private void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError)
         {
-            string stackTrace = GetNestedStackTraces( ex );
-            string message = GetNestedMessages( ex );
-            System.Collections.Specialized.StringDictionary additionalInfo = 
+            string stackTrace = GetNestedStackTraces(ex);
+            string message = GetNestedMessages(ex);
+            System.Collections.Specialized.StringDictionary additionalInfo =
                 new System.Collections.Specialized.StringDictionary();
 
-            using( ErrorDialog dlg = new ErrorDialog() )
+            using (ErrorDialog dlg = new ErrorDialog())
             {
                 dlg.ErrorMessage = message;
                 dlg.ShowStackTrace = showStackTrace;
@@ -222,99 +226,25 @@ namespace Ankh
                 if (dlg.ShowDialog() == DialogResult.Retry)
                 {
                     Utils.ErrorMessage.SendByMail(ErrorReportMailAddress,
-                        ErrrorReportSubject, ex, typeof(ErrorHandler).Assembly, additionalInfo);
+                        ErrrorReportSubject, ex, typeof(AnkhErrorHandler).Assembly, additionalInfo);
                 }
             }
         }
 
-        private static string GetNestedStackTraces( Exception ex )
+        private static string GetNestedStackTraces(Exception ex)
         {
-            if ( ex == null )
+            if (ex == null)
                 return String.Empty;
             else
-                return ex.StackTrace + NL + NL + GetNestedStackTraces( ex.InnerException );
+                return ex.StackTrace + NL + NL + GetNestedStackTraces(ex.InnerException);
         }
 
-        private static string GetNestedMessages( Exception ex )
+        private static string GetNestedMessages(Exception ex)
         {
-            if ( ex == null )
+            if (ex == null)
                 return String.Empty;
             else
-                return ex.Message + NL + NL + GetNestedMessages( ex.InnerException );
-        }
-
-        /// <summary>
-        /// Must be public for the sake of the XmlSerializer
-        /// </summary>
-        public class ErrorItem
-        {
-            public ErrorItem( Exception ex )
-            {
-                this.Message = ex.Message;
-                this.StackTrace = ex.StackTrace;
-                if ( this.InnerException != null )
-                {
-                    this.InnerException = new ErrorItem( ex.InnerException );
-                }
-                this.Source = ex.Source;
-                this.Time = DateTime.Now;
-            }
-
-            public ErrorItem()
-            {
-            }
-
-            public string Message;
-            public string StackTrace;
-            public string Source;
-            public ErrorItem InnerException;
-            public DateTime Time;
-            
-        }
-
-        /// <summary>
-        /// Must be public for the sake of the XmlSerializer
-        /// </summary>
-        public class ErrorItems
-        {
-            public ErrorItems( ErrorItem[] items )
-            {
-                this.Items = items;
-            }
-
-            public ErrorItems()
-            {
-                this.Items = new ErrorItem[0];
-            }
-
-            public void Add( ErrorItem item )
-            {
-                ErrorItem[] items = new ErrorItem[this.Items.Length + 1];
-                this.Items.CopyTo( items, 0 );
-                items[ this.Items.Length ] = item;
-
-                this.Items = items;
-            }
-
-            public void Serialize(string errorFile)
-            {
-                using (StreamWriter writer = new StreamWriter( errorFile ) )
-                {
-                    XmlSerializer serializer = new XmlSerializer( typeof(ErrorItems) );
-                    serializer.Serialize( writer, this );
-                }
-            }
-
-            public ErrorItem[] Items;
-
-            public static ErrorItems Deserialize( string errorFile )
-            {
-                using ( StreamReader reader = new StreamReader( errorFile ) )
-                {
-                    XmlSerializer serializer = new XmlSerializer( typeof( ErrorItems ) );
-                    return (ErrorItems)serializer.Deserialize( reader );
-                }
-            }
+                return ex.Message + NL + NL + GetNestedMessages(ex.InnerException);
         }
 
         private static readonly string NL = Environment.NewLine;
@@ -324,5 +254,82 @@ namespace Ankh
         private const string ErrrorReportSubject = "Exception";
         private const string ErrorLogFile = "errors.xml";
         private IAnkhServiceProvider context;
+    }
+
+    /// <summary>
+    /// Must be public for the sake of the XmlSerializer
+    /// </summary>
+    public class ErrorItem
+    {
+        public ErrorItem(Exception ex)
+        {
+            this.Message = ex.Message;
+            this.StackTrace = ex.StackTrace;
+            if (this.InnerException != null)
+            {
+                this.InnerException = new ErrorItem(ex.InnerException);
+            }
+            this.Source = ex.Source;
+            this.Time = DateTime.Now;
+        }
+
+        public ErrorItem()
+        {
+        }
+
+        public string Message;
+        public string StackTrace;
+        public string Source;
+        public ErrorItem InnerException;
+        public DateTime Time;
+
+    }
+
+    namespace Xml
+    {
+        /// <summary>
+        /// Must be public for the sake of the XmlSerializer
+        /// </summary>
+        public class ErrorItems
+        {
+            public ErrorItems(ErrorItem[] items)
+            {
+                this.Items = items;
+            }
+
+            public ErrorItems()
+            {
+                this.Items = new ErrorItem[0];
+            }
+
+            public void Add(ErrorItem item)
+            {
+                ErrorItem[] items = new ErrorItem[this.Items.Length + 1];
+                this.Items.CopyTo(items, 0);
+                items[this.Items.Length] = item;
+
+                this.Items = items;
+            }
+
+            public void Serialize(string errorFile)
+            {
+                using (StreamWriter writer = new StreamWriter(errorFile))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(ErrorItems));
+                    serializer.Serialize(writer, this);
+                }
+            }
+
+            public ErrorItem[] Items;
+
+            public static ErrorItems Deserialize(string errorFile)
+            {
+                using (StreamReader reader = new StreamReader(errorFile))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(ErrorItems));
+                    return (ErrorItems)serializer.Deserialize(reader);
+                }
+            }
+        }
     }
 }
