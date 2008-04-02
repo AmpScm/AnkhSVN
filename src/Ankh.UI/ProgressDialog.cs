@@ -61,21 +61,23 @@ namespace Ankh.UI
 
         class ProgressState
         {
-            int LastCount;
+            public long LastCount;
         };
 
         delegate void DoSomething();
         List<DoSomething> _todo = new List<DoSomething>();
-        SortedList<int, ProgressState> progressCalc = new SortedList<int, ProgressState>();
-
+        DateTime _start;
+        long _bytesReceived;
+        SortedList<long, ProgressState> _progressCalc = new SortedList<long, ProgressState>();        
 
         public void OnClientProcessing(object sender, SvnProcessingEventArgs e)
         {
-            e.Detach();
+            e.Detach();            
 
             Enqueue(delegate()
             {
-                progressCalc.Clear();
+                _progressCalc.Clear();
+                _start = DateTime.UtcNow;
                 ListViewItem item = new ListViewItem("Action");
                 item.SubItems.Add(e.CommandType.ToString());
                 item.ForeColor = Color.Gray;
@@ -129,8 +131,32 @@ namespace Ankh.UI
         {
             e.Detach();
 
+            ProgressState state;
+            if (e.TotalProgress > 0 && _progressCalc.TryGetValue(e.TotalProgress, out state))
+            {
+                _bytesReceived += e.Progress - state.LastCount;
+                if (e.TotalProgress == e.Progress)
+                    _progressCalc.Remove(e.TotalProgress);
+                else
+                    state.LastCount = e.Progress;
+            }
+            else
+                _bytesReceived += e.Progress;
+
+            TimeSpan ts = DateTime.UtcNow - _start;
+
+            if(ts.TotalSeconds <= 0.1)
+                return;
+
             Enqueue(delegate()
             {
+                int totalSeconds= (int)ts.TotalSeconds;
+                if (totalSeconds > 60)
+                    progressLabel.Text = string.Format("{0} kByte transferred ({1}:{2:00})", _bytesReceived / 1024, totalSeconds/60, totalSeconds %60);
+                else
+                    progressLabel.Text = string.Format("{0} kByte transferred (0:{1:00})", _bytesReceived / 1024, totalSeconds);
+
+                
                 GC.KeepAlive(e);
             });
         }
