@@ -133,7 +133,7 @@
 
 		<GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_SOLUTION_SCC">
 			<!-- VS Predefined group for SCC commands on the solution -->
-			<ButtonRef id="Cmd_UpdateItem" priority="0x10" />
+			<ButtonRef id="Cmd_SolutionUpdateHead" priority="0x10" />
 			<ButtonRef id="Cmd_CommitItem" priority="0x20" />
 			<ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
 			<ButtonRef id="Cmd_RevertItem" priority="0x40" />
@@ -159,7 +159,8 @@
 		</GroupRef>
 		<GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_SCC">
 			<!-- VS Predefined group for SCC commands on projects -->
-			<ButtonRef id="Cmd_UpdateItem" priority="0x10" />
+      <Button id="Cmd_ProjectUpdateHead" priority="0x10" name="ProjectUpdateHead" text="U&amp;pdate to Latest Version"
+              iconFile="PendingChanges/Update.png" />
 			<ButtonRef id="Cmd_CommitItem" priority="0x20" />
 			<ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
 			<ButtonRef id="Cmd_RevertItem" priority="0x40" />
@@ -287,7 +288,7 @@
 					<Menu id="Menu_PendingChangesUpdate" priority="0x200" name="Update" text="&amp;Update" type="MenuControllerLatched" iconAndText="true">
 						<Group id="Menu_PendingChangesUpdate" priority="0x100">
 							<Button id="Cmd_SolutionUpdateHead" name="UpdateHead" priority="0x100"
-									text="&amp;Update to HEAD"
+									text="U&amp;pdate to Latest Version"
 									toolTip="Update your solution to the HEAD version"
 									fixMenuController="true" iconFile="PendingChanges/Update.png"/>
 							<Button id="Cmd_SolutionUpdateSpecific" name="UpdateSpecific" priority="0x200"
