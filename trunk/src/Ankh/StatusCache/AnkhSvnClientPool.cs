@@ -56,6 +56,11 @@ namespace Ankh
 
         private SvnPoolClient CreateClient(bool hookUI)
         {
+            IAnkhDialogOwner owner = _context.GetService<IAnkhDialogOwner>();
+
+            if (owner == null)
+                hookUI = false;
+
             AnkhSvnPoolClient client = new AnkhSvnPoolClient(this, hookUI);
 
             ////// should we use a custom configuration directory?
@@ -65,13 +70,8 @@ namespace Ankh
 
             if (hookUI)
             {
-                IAnkhDialogOwner owner = _context.GetService<IAnkhDialogOwner>();
-
-                if (owner != null)
-                {
                     // Let SharpSvnUI handle login and SSL dialogs
                     SharpSvn.UI.SharpSvnUI.Bind(client, owner.DialogOwner);
-                }
             }
 
             return client;

@@ -221,10 +221,7 @@ namespace Ankh
                 this._config.LoadDefaultConfig();
             }
 
-            SetupFromConfig();
-
             this.Configuration.ConfigFileChanged += new EventHandler(ConfigLoader_ConfigFileChanged);
-
         }
 
         /// <summary>
@@ -237,7 +234,6 @@ namespace Ankh
             try
             {
                 this.Configuration.LoadConfig();
-                SetupFromConfig();
                 this.OutputPane.WriteLine("Configuration reloaded.");
             }
             catch (Ankh.Configuration.ConfigException ex)
@@ -254,14 +250,6 @@ namespace Ankh
                     throw;                
             }
         }
-
-        private void SetupFromConfig()
-        {
-            using (SvnClient client = ClientPool.GetClient())
-            {
-                
-            }
-        }   
 
         #region Win32Window class
         private class Win32Window : IWin32Window
