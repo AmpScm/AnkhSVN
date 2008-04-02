@@ -97,6 +97,7 @@ namespace Ankh.UI
                 case SvnNotifyAction.UpdateReplace:
                 case SvnNotifyAction.UpdateUpdate:
                 case SvnNotifyAction.UpdateCompleted:
+                case SvnNotifyAction.UpdateExternal:
                     actionText = actionText.Substring(6);
                     break;
                 case SvnNotifyAction.CommitSendData:
@@ -109,15 +110,18 @@ namespace Ankh.UI
 
         public void OnClientNotify(object sender, SvnNotifyEventArgs e)
         {            
-            e.Detach();
+            //e.Detach();
+
+            string path = e.FullPath;
+            SvnNotifyAction action = e.Action;
 
             Enqueue(delegate()
             {
                 ListViewItem item = null;
-                if(!string.IsNullOrEmpty(e.FullPath))
+                if(!string.IsNullOrEmpty(path))
                 {
-                    item = new ListViewItem(GetActionText(e.Action));
-                    item.SubItems.Add(e.FullPath);
+                    item = new ListViewItem(GetActionText(action));
+                    item.SubItems.Add(path);
                 }
 
                 if (item != null)
@@ -129,8 +133,6 @@ namespace Ankh.UI
 
         public void OnClientProgress(object sender, SvnProgressEventArgs e)
         {
-            e.Detach();
-
             ProgressState state;
             if (e.TotalProgress > 0 && _progressCalc.TryGetValue(e.TotalProgress, out state))
             {
@@ -155,9 +157,6 @@ namespace Ankh.UI
                     progressLabel.Text = string.Format("{0} kByte transferred ({1}:{2:00})", _bytesReceived / 1024, totalSeconds/60, totalSeconds %60);
                 else
                     progressLabel.Text = string.Format("{0} kByte transferred (0:{1:00})", _bytesReceived / 1024, totalSeconds);
-
-                
-                GC.KeepAlive(e);
             });
         }
 
