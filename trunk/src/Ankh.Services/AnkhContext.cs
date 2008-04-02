@@ -12,17 +12,18 @@ namespace Ankh
     /// Globally available context; the entry point for the service framework.
     /// </summary>
     /// <remarks>Members should only be added for the most common operations. Everything else should be handled via the <see cref="IAnkhServiceProvider"/> methods</remarks>
-    public class AnkhContext : IAnkhServiceProvider, IServiceProvider
+    public class AnkhContext : AnkhService, IAnkhServiceProvider
     {
-        readonly AnkhRuntime _runtime;
+        readonly IAnkhServiceProvider _runtime;
         IAnkhOperationLogger _logger;
 
-        protected AnkhContext(AnkhRuntime runtime)
+        protected AnkhContext(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (runtime == null)
-                throw new ArgumentNullException("runtime");
+            if (context == null)
+                throw new ArgumentNullException("context");
 
-            _runtime = runtime;
+            _runtime = GetService<AnkhRuntime>();
         }
 
         // Only add members which are really needed
@@ -43,51 +44,35 @@ namespace Ankh
             return null;
         }
 
-        #region IAnkhServiceProvider Members
+        /// <summary>
+        /// Creates a new <see cref="AnkhContext"/> instance over the specified context
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        public static AnkhContext Create(IAnkhServiceProvider context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            return new AnkhContext(context);
+        }
 
         /// <summary>
-        /// Gets the service object of the specified type.
+        /// Creates a new <see cref="AnkhContext"/> instance over the specified context
         /// </summary>
-        /// <typeparam name="T">The type of service to get</typeparam>
-        /// <returns>
-        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
-        /// </returns>
-        [DebuggerStepThrough]
-        public T GetService<T>()
-            where T : class
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        public static AnkhContext Create(IServiceProvider context)
         {
-            return _runtime.GetService<T>();
-        }
+            if (context == null)
+                throw new ArgumentNullException("context");
 
-        [DebuggerStepThrough]
-        public T GetService<T>(Type type)
-            where T : class
-        {
-            return _runtime.GetService<T>(type);
-        }
+            IAnkhServiceProvider sp = context as IAnkhServiceProvider;
 
-        #endregion
-
-        #region IServiceProvider Members
-
-        /// <summary>
-        /// Gets the service object of the specified type.
-        /// </summary>
-        /// <param name="serviceType">An object that specifies the type of service object to get.</param>
-        /// <returns>
-        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
-        /// </returns>
-        [DebuggerStepThrough]
-        public object GetService(Type serviceType)
-        {
-            return _runtime.GetService(serviceType);
-        }
-
-        #endregion
-
-        internal static AnkhContext Create(AnkhRuntime runtime)
-        {
-            return new AnkhContext(runtime);
+            if (sp != null)
+                return new AnkhContext(sp);
+            else
+                return new AnkhContext(new AnkhServiceProviderWrapper(context));
         }
 
         /// <summary>
@@ -104,6 +89,26 @@ namespace Ankh
                 else
                     return null;
             }
-        }        
+        }
+
+        [DebuggerStepThrough]
+        public new T GetService<T>()
+            where T : class
+        {
+            return base.GetService<T>();
+        }
+
+        [DebuggerStepThrough]
+        public new T GetService<T>(Type serviceType)
+            where T : class
+        {
+            return base.GetService<T>(serviceType);
+        }
+
+        [DebuggerStepThrough]
+        public new object GetService(Type serviceType)
+        {
+            return base.GetService(serviceType);
+        }
     }
 }

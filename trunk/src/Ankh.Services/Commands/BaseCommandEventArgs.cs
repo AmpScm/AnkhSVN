@@ -58,5 +58,30 @@ namespace Ankh.Commands
                     return false;
             }
         }
+
+        /// <summary>
+        /// Gets the service.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public T GetService<T>()
+            where T : class
+        {
+            return Context.GetService<T>();
+        }
+
+        /// <summary>
+        /// Gets the service.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public T GetService<T>(Type serviceType)
+            where T : class
+        {
+            return Context.GetService<T>(serviceType);
+        }
     }
 }

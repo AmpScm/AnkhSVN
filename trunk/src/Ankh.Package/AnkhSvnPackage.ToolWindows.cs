@@ -6,13 +6,16 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using Ankh.UI;
-using Ankh.UI.Services;
-using AnkhSvn.Ids;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio;
+using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+
+using AnkhSvn.Ids;
+using Ankh.Commands;
+using Ankh.UI;
+using Ankh.Selection;
 
 namespace Ankh.VSPackage
 {   
@@ -62,7 +65,7 @@ namespace Ankh.VSPackage
     {
         readonly AnkhToolWindowPane _pane;
         Container _container;
-        readonly string _originalTitle;
+        string _originalTitle;
         string _title;
 
         public AnkhToolWindowSite(AnkhToolWindowPane pane)
@@ -71,7 +74,11 @@ namespace Ankh.VSPackage
                 throw new ArgumentNullException("pane");
 
             _pane = pane;
-            _originalTitle = _title = pane.Caption;
+        }
+
+        internal void Load()
+        {
+            _originalTitle = _title = _pane.Caption;
         }
         #region IAnkhToolWindowSite Members
 
@@ -104,7 +111,7 @@ namespace Ankh.VSPackage
 
         public string OriginalTitle
         {
-            get { return _title; }
+            get { return _originalTitle; }
         }
 
         #endregion
@@ -210,14 +217,34 @@ namespace Ankh.VSPackage
                 return VSConstants.E_NOTIMPL;
         }
 
+        CommandMapper _mapper;
+
+        CommandMapper Mapper
+        {
+            get { return _mapper ?? (_mapper = GetService<CommandMapper>()); }
+        }
+
+        AnkhContext _context;
+        AnkhContext AnkhContext
+        {
+            get { return _context ?? (_context = AnkhContext.Create(this)); }
+        }
+
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             IOleCommandTarget t = _target ?? _baseTarget ?? (_baseTarget = (IOleCommandTarget)_pane.BaseGetService(typeof(IOleCommandTarget)));
+            int r = VSConstants.E_NOTIMPL;
 
             if (t != null)
-                return t.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
-            else
-                return VSConstants.E_NOTIMPL;
+                r = t.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+
+            if (((r == (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) || (r == (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)) 
+                && pguidCmdGroup == AnkhId.CommandSetGuid)
+            {
+                r = Mapper.QueryStatus(AnkhContext, cCmds, prgCmds, pCmdText);
+            }
+            
+            return r;
         }
 
         #endregion
@@ -247,6 +274,8 @@ namespace Ankh.VSPackage
         public override void OnToolBarAdded()
         {
             base.OnToolBarAdded();
+
+            _site.Load();
 
             if (Control != null)
                 Control.Site = _site;
