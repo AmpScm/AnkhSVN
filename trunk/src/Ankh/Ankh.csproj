@@ -180,6 +180,7 @@
     <Compile Include="Commands\AddSolutionToRepositoryCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\SolutionUpdateCommand.cs" />
     <Compile Include="Commands\ViewRepositoryFileCommand.cs" />
     <Compile Include="Commands\WorkingCopyExplorer\AddWorkingCopyExplorerRootCommand.cs" />
     <Compile Include="Commands\BlameCommand.cs">
