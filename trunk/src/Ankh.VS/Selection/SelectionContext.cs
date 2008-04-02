@@ -404,8 +404,11 @@ namespace Ankh.Selection
             // We can ignore that as we would include the projects anyway
 
             object child;
-            Marshal.ThrowExceptionForHR(si.Hierarchy.GetProperty(si.Id,
-                (int)__VSHPROPID.VSHPROPID_FirstChild, out child));
+            if (!ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
+                (int)__VSHPROPID.VSHPROPID_FirstChild, out child)))
+            {
+                yield break;
+            }
 
             uint childId = GetItemIdFromObject(child);
             while (childId != VSConstants.VSITEMID_NIL)

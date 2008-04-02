@@ -105,7 +105,9 @@ namespace Ankh.UI.PendingChanges
             {
                 IVsTrackSelectionEx sel = (IVsTrackSelectionEx)ServiceProvider.GetService(typeof(SVsTrackSelectionEx));
 
-                if (sel != null)
+                int selectedCount = SelectedItems.Count;
+
+                if (sel != null && selectedCount > 0)
                 {
                     IntPtr hier = Marshal.GetComInterfaceForObject(Hierarchy, typeof(IVsHierarchy));
                     IntPtr handle = Marshal.GetComInterfaceForObject(this, typeof(ISelectionContainer));
@@ -113,18 +115,16 @@ namespace Ankh.UI.PendingChanges
                     {
                         uint id;
 
-                        int selectedCount = SelectedItems.Count;
+
                         IVsMultiItemSelect ms = null;
 
-                        if(selectedCount == 1)
+                        if (selectedCount == 1)
                             id = Hierarchy.GetId((TListViewItem)SelectedItems[0]);
-                        else if(selectedCount > 1)
+                        else
                         {
-                            id = VSConstants.VSITEMID_SELECTION;
+                            id = VSConstants.VSITEMID_SELECTION; // Look at selection instead of this item
                             ms = Hierarchy; // Our hierarchy implements IVsMultiItemSelect
                         }
-                        else
-                            id = VSConstants.VSITEMID_NIL;
 
                         sel.OnSelectChangeEx(hier, id, ms, handle);
                     }
@@ -134,6 +134,9 @@ namespace Ankh.UI.PendingChanges
                         Marshal.Release(hier);
                     }
                 }
+                else if (sel != null)
+                    sel.OnSelectChangeEx(IntPtr.Zero, VSConstants.VSITEMID_NIL, null, IntPtr.Zero);
+
             }
         }
 
