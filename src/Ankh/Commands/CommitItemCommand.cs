@@ -59,7 +59,7 @@ namespace Ankh.Commands
             IFileStatusCache statusCache = e.Context.GetService<IFileStatusCache>();
             IProjectFileMapper projectMapper = e.Context.GetService<IProjectFileMapper>();
 
-            tracker.SaveDocuments(e.Selection.GetSelectedFiles());
+            tracker.SaveDocuments(e.Selection.GetSelectedFiles(true));
 
             Collection<SvnItem> resources = new Collection<SvnItem>();
 

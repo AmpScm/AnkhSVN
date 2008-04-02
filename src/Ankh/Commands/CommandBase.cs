@@ -45,7 +45,7 @@ namespace Ankh.Commands
 
             IAnkhOpenDocumentTracker tracker = context.GetService<IAnkhOpenDocumentTracker>();
             if(selection != null && tracker != null)
-                tracker.SaveDocuments(selection.GetSelectedFiles());
+                tracker.SaveDocuments(selection.GetSelectedFiles(true));
         }
 
         protected static XslCompiledTransform GetTransform(IContext context, string name)

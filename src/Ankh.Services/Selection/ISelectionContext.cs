@@ -17,21 +17,11 @@ namespace Ankh.Selection
     public interface ISelectionContext
     {
         /// <summary>
-        /// Gets a list of the currently direct selected files 
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<string> GetSelectedFiles();
-        /// <summary>
         /// Gets a list of the currently selected files
         /// </summary>
         /// <param name="recursive"><c>true</c> to select all descendants of selected nodes too</param>
         /// <returns></returns>
         IEnumerable<string> GetSelectedFiles(bool recursive);
-        /// <summary>
-        /// Gets a list of the currently selected <see cref="SvnItem"/> instances, mapped via their path. See <see cref="GetSelectedFiles()"/>
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<SvnItem> GetSelectedSvnItems();
         /// <summary>
         /// Gets a list of the currently selected <see cref="SvnItem"/> instances, mapped via their path. See <see cref="GetSelectedFiles(Boolean)"/>
         /// </summary>
@@ -39,11 +29,6 @@ namespace Ankh.Selection
         /// <returns></returns>
         IEnumerable<SvnItem> GetSelectedSvnItems(bool recursive);
 
-        /// <summary>
-        /// Gets the projects owning selected files
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<SvnProject> GetOwnerProjects();
         /// <summary>
         /// Gets the projects owning selected files
         /// </summary>

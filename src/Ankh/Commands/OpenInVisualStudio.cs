@@ -24,7 +24,7 @@ namespace Ankh.Commands
                 return;
             }
             bool first = true;
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems())
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (!item.Exists)
                     continue;
@@ -43,7 +43,7 @@ namespace Ankh.Commands
         }
         public override void OnExecute(CommandEventArgs e)
         {
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems())
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (!item.Exists)
                     continue;
