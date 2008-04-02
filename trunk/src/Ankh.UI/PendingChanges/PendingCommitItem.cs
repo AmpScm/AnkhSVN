@@ -52,8 +52,11 @@ namespace Ankh.UI.PendingChanges
                 SubItems[2].Text = "New";
             else if (ps == SharpSvn.SvnStatus.Normal)
                 SubItems[2].Text = "";
+            else if (ps == SharpSvn.SvnStatus.None)
+                SubItems[2].Text = "Not Found";
             else
                 SubItems[2].Text = item.Status.LocalContentStatus.ToString();
+
             ps = item.Status.LocalPropertyStatus;
 
             if (ps == SharpSvn.SvnStatus.Normal || ps == SharpSvn.SvnStatus.None)
