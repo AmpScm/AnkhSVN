@@ -62,8 +62,9 @@ namespace Ankh.UI
             // 
             // progressLabel
             // 
+            this.progressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.progressLabel.AutoSize = true;
-            this.progressLabel.Location = new System.Drawing.Point(12, 112);
+            this.progressLabel.Location = new System.Drawing.Point(12, 166);
             this.progressLabel.Name = "progressLabel";
             this.progressLabel.Size = new System.Drawing.Size(0, 13);
             this.progressLabel.TabIndex = 3;
@@ -73,6 +74,7 @@ namespace Ankh.UI
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(447, 201);
+            this.ControlBox = false;
             this.Controls.Add(this.progressLabel);
             this.Controls.Add(this.actionList);
             this.Controls.Add(this.cancelButton);
