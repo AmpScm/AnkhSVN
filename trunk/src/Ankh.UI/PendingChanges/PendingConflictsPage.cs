@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.PendingChanges
 {
-    partial class PendingIssuesPage : PendingChangesPage
+    partial class PendingConflictsPage : PendingChangesPage
     {
-        public PendingIssuesPage()
+        public PendingConflictsPage()
         {
             InitializeComponent();
         }

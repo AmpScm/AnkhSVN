@@ -19,11 +19,29 @@ namespace Ankh.UI.PendingChanges
             InitializeComponent();
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(true)]
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public override string Text
+        {
+            get
+            {
+                return base.Text;
+            }
+            set
+            {
+                base.Text = value;
+            }
+        }
+
+        [Browsable(false)]
         protected virtual Type PageType
         {
             get { return null; }
         }
 
+        [Browsable(false)]
         public IAnkhUISite UISite
         {
             get { return _uiSite; }

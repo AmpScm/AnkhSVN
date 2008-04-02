@@ -288,6 +288,12 @@
     <Compile Include="PendingChanges\PendingCommitsView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PendingChanges\PendingConflictsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PendingChanges\PendingConflictsPage.Designer.cs">
+      <DependentUpon>PendingConflictsPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="PendingChanges\PendingIssuesPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -685,6 +691,9 @@
       <DependentUpon>PendingChangesToolControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="PendingChanges\PendingConflictsPage.resx">
+      <DependentUpon>PendingConflictsPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\PendingIssuesPage.resx">
       <DependentUpon>PendingIssuesPage.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -747,6 +756,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\TabNotes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\TabConflicts.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />

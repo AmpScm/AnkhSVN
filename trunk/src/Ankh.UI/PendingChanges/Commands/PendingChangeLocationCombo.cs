@@ -17,7 +17,11 @@ namespace Ankh.UI.PendingChanges.Commands
         IAnkhSolutionSettings _settings;
         #region IComponent Members
 
-        public event EventHandler Disposed;
+        event EventHandler IComponent.Disposed
+        {
+            add { }
+            remove { }
+        }
 
         public ISite Site
         {
