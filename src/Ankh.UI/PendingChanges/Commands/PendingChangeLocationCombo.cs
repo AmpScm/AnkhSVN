@@ -4,18 +4,41 @@ using System.Text;
 using Ankh.Commands;
 using AnkhSvn.Ids;
 using Ankh.VS;
+using System.ComponentModel;
+using System.ComponentModel.Design;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
     [Command(AnkhCommand.SolutionSwitchComboFill)]
     [Command(AnkhCommand.SolutionSwitchCombo)]
-    class PendingChangeLocationCombo : ICommandHandler
+    class PendingChangeLocationCombo : ICommandHandler, IComponent
     {
+        ISite _site;
+        IAnkhSolutionSettings _settings;
+        #region IComponent Members
+
+        public event EventHandler Disposed;
+
+        public ISite Site
+        {
+            get { return _site; }
+            set
+            {
+                _site = value;
+            }
+        }
+
+        public void Dispose()
+        {
+            
+        }
+
+        #endregion
+
+
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            IAnkhSolutionSettings settings = e.Context.GetService<IAnkhSolutionSettings>();
-
-            if (settings == null || settings.ProjectRootUri == null)
+            if (ProjectRootUri == null)
                 e.Enabled = false;
         }
 
@@ -38,9 +61,34 @@ namespace Ankh.UI.PendingChanges.Commands
                 OnExecuteGet(e); // Get the current value
         }
 
+        protected IAnkhSolutionSettings SolutionSettings
+        {
+            get
+            {
+                if (_settings == null && _site != null)
+                    _settings = (IAnkhSolutionSettings)_site.GetService(typeof(IAnkhSolutionSettings));
+
+                return _settings;
+            }
+        }
+
+
+        protected Uri ProjectRootUri
+        {
+            get
+            {
+                if (SolutionSettings != null)
+                    return SolutionSettings.ProjectRootUri;
+
+                return null;
+            }
+        }
+
+
         void OnExecuteFill(CommandEventArgs e)
         {
-            e.Result = new string[] { "http://subversion.lan/project/trunk", "http://subversion.lan/project/branches/other" };        
+            if (ProjectRootUri != null)
+                e.Result = new string[] { ProjectRootUri.ToString() };
         }
 
         string _currentValue = "http://subversion.lan/project/trunk";
@@ -51,17 +99,8 @@ namespace Ankh.UI.PendingChanges.Commands
 
         void OnExecuteGet(CommandEventArgs e)
         {
-            IAnkhSolutionSettings settings = e.Context.GetService<IAnkhSolutionSettings>();
-
-            if (settings != null)
-            {
-                Uri uri = settings.ProjectRootUri;
-
-                if (uri != null)
-                    e.Result = uri.ToString();
-            }
-            else
-                e.Result = _currentValue; 
+            if (ProjectRootUri != null)
+                e.Result = ProjectRootUri.ToString();
         }
 
         void OnExecuteFilter(CommandEventArgs e)
