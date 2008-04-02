@@ -37,6 +37,7 @@ namespace AnkhSvn.Ids
         WorkingCopyExplorerContext,
 
         PendingChangesToolBar,
+        PendingChangesLogEditor,
         PendingChangesContextMenu,
 
         PendingChangesSolutionCommands,

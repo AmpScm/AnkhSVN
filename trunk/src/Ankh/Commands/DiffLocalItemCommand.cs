@@ -21,8 +21,15 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ItemCompareSpecific)]
     public class DiffLocalItem : LocalDiffCommandBase
     {
-        #region Implementation of ICommand
-
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (item.IsVersioned && (item.Status.CombinedStatus != SvnStatus.Added || item.Status.IsCopied))
+                    return;
+            }
+            e.Enabled = false;
+        }
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context.GetService<IContext>();
@@ -68,8 +75,5 @@ namespace Ankh.Commands
                 }
             }
         }
-
-
-        #endregion
     }
 }

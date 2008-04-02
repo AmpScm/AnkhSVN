@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Package;
 using System.ComponentModel.Design;
 using AnkhSvn.Ids;
 using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -23,6 +24,11 @@ namespace Ankh.UI.PendingChanges
 		{
 			base.UpdateLanguageContext(hint, buffer, ptsSelection, context);
 		}
+
+        public override ViewFilter CreateViewFilter(CodeWindowManager mgr, IVsTextView newView)
+        {
+            return new LogMessageViewFilter(this, mgr, newView);
+        }
         
 		public override LanguagePreferences GetLanguagePreferences()
 		{
@@ -68,6 +74,11 @@ namespace Ankh.UI.PendingChanges
 		{
 			return null;
 		}
+
+        public override Source CreateSource(Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer)
+        {
+            return new LogmessageSource(this, buffer, GetColorizer(buffer));
+        }     
 
 		class CommentScanner : IScanner
 		{
@@ -135,5 +146,47 @@ namespace Ankh.UI.PendingChanges
 
 			#endregion
 		}        
+    }
+
+    class LogmessageSource : Source
+    {
+        public LogmessageSource(LogMessageLanguageService service, IVsTextLines textLines, Colorizer colorizer)
+            : base(service, textLines, colorizer)
+        {
+        }
+
+        bool _initializedInfo;
+        CommentInfo _commentInfo;
+        public override CommentInfo GetCommentFormat()
+        {
+            if (!_initializedInfo)
+            {
+                _commentInfo.BlockStart = null;
+                _commentInfo.BlockEnd = null;
+                _commentInfo.LineStart = "#";
+                _commentInfo.UseLineComments = true;
+
+                _initializedInfo = true;
+            }
+            return _commentInfo;
+        }
+    }
+
+    class LogMessageViewFilter : ViewFilter
+    {
+        public LogMessageViewFilter(LogMessageLanguageService service, CodeWindowManager mgr, IVsTextView view)
+            : base(mgr, view)
+        {
+        }
+
+        public override void ShowContextMenu(int menuId, Guid groupGuid, Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target, int x, int y)
+        {
+            if (groupGuid == Microsoft.VisualStudio.Shell.VsMenus.guidSHLMainMenu && menuId == Microsoft.VisualStudio.Shell.VsMenus.IDM_VS_CTXT_CODEWIN)
+            {
+                groupGuid = AnkhId.CommandSetGuid;
+                menuId = (int)AnkhCommandMenu.PendingChangesLogMessageMenu;
+            }
+            base.ShowContextMenu(menuId, groupGuid, target, x, y);
+        }
     }
 }
