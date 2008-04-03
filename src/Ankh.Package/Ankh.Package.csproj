@@ -125,6 +125,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnkhSourceControlSettingsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AnkhSvnPackage.cs" />
     <Compile Include="AnkhSvnPackage.About.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
