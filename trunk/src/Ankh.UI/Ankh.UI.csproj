@@ -412,6 +412,12 @@
     <Compile Include="RevisionPicker.Designer.cs">
       <DependentUpon>RevisionPicker.cs</DependentUpon>
     </Compile>
+    <Compile Include="SccManagement\ChangeSourceControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccManagement\ChangeSourceControl.Designer.cs">
+      <DependentUpon>ChangeSourceControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\SvnLogService.cs" />
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
@@ -645,9 +651,6 @@
     <None Include="WCExplorer.cd" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\EnableBackgroundListing.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="AddWorkingCopyExplorerRootDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AddWorkingCopyExplorerRootDialog.cs</DependentUpon>
@@ -660,7 +663,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>ConfigurationDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\AddRepoURL.ico" />
     <EmbeddedResource Include="LogChangedPaths.resx">
       <DependentUpon>LogChangedPaths.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -753,6 +755,10 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccManagement\ChangeSourceControl.resx">
+      <DependentUpon>ChangeSourceControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkingCopyExplorerControl.resx">
       <SubType>Designer</SubType>
