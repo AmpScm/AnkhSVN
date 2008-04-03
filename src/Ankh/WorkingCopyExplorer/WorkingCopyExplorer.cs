@@ -179,19 +179,20 @@ namespace Ankh.WorkingCopyExplorer
 
         internal void OpenItem(string path)
         {
+            EnvDTE._DTE dte = context.GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
             if (File.Exists(path))
             {
                 if (path.ToLower().EndsWith(".sln"))
                 {
-                    ((IDTEContext)this.Context).DTE.Solution.Open(path);
+                    dte.Solution.Open(path);
                 }
                 else if (path.ToLower().EndsWith("proj"))
                 {
-                    ((IDTEContext)this.Context).DTE.ExecuteCommand("File.OpenProject", path);
+                    dte.ExecuteCommand("File.OpenProject", path);
                 }
                 else
                 {
-                    ((IDTEContext)this.Context).DTE.ItemOperations.OpenFile(path, EnvDTE.Constants.vsViewKindPrimary);
+                    dte.ItemOperations.OpenFile(path, EnvDTE.Constants.vsViewKindPrimary);
                 }
             }
         }

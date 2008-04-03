@@ -18,12 +18,11 @@ namespace AnkhSvn_UnitTestProject.Mocks
         {
             EnvDTE.DTE dte = DteMock.GetDteInstance(mocks);
 
-            IContext context = mocks.DynamicMultiMock<IContext>(typeof(IDTEContext));
+            IContext context = mocks.DynamicMultiMock<IContext>();
             Ankh.Configuration.AnkhConfig config = new Ankh.Configuration.AnkhConfig();
 
             using (mocks.Record())
             {
-                Expect.Call(((IDTEContext)context).DTE).Return(dte).Repeat.Any();
                 Expect.Call(context.Configuration.Instance).Return(config).Repeat.Any();
 
                 if (uiShell != null)
