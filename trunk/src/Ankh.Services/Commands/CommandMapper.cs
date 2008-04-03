@@ -252,6 +252,9 @@ namespace Ankh.Commands
 
                 if (updateArgs.Ninched)
                     cmdf |= OLECMDF.OLECMDF_NINCHED;
+
+                if (!updateArgs.Visible)
+                    cmdf |= OLECMDF.OLECMDF_INVISIBLE;
             }
 
             if (textQuery != TextQueryType.None)

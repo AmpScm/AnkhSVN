@@ -284,6 +284,13 @@
     <xsl:text>KEYBINDINGS_END&#10;&#10;</xsl:text>
 
     <xsl:text>VISIBILITY_SECTION&#10;</xsl:text>
+    <xsl:text>&#9;&#9;// Item ID, Context ID&#10;</xsl:text>
+    <xsl:text>&#9;&#9;// Buttons&#10;</xsl:text>
+    <xsl:apply-templates select="gui:UI//gui:Button/gui:Visibility | gui:UI//gui:ButtonRef/gui:Visibility" mode="visibility" />
+    <xsl:text>&#9;&#9;// Menus&#10;</xsl:text>
+    <xsl:apply-templates select="gui:UI//gui:Menu/gui:Visibility | gui:UI//gui:MenuRef/gui:Visibility" mode="visibility" />
+    <xsl:text>&#9;&#9;// Groups&#10;</xsl:text>
+    <xsl:apply-templates select="gui:UI//gui:Group/gui:Visibility | gui:UI//gui:GroupRef/gui:Visibility" mode="visibility" />
     <xsl:text>VISIBILITY_END&#10;&#10;</xsl:text>
     <xsl:text>/* END */&#10;</xsl:text>
   </xsl:template>
@@ -334,13 +341,13 @@
       <xsl:if test="@defaultDocked='true'">
         <xsl:text>|DEFAULTDOCKED</xsl:text>
       </xsl:if>
-      <xsl:if test="@defaultInvisible='true'">
+      <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
         <xsl:text>|DEFAULTINVISIBLE</xsl:text>
       </xsl:if>
       <xsl:if test="@dontCache='true'">
         <xsl:text>|DONTCACHE</xsl:text>
       </xsl:if>
-      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true'">
+      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true' or gui:Visibility[@context]">
         <!-- Should set if default invisible-->
         <xsl:text>|DYNAMICVISIBILITY</xsl:text>
       </xsl:if>
@@ -472,13 +479,13 @@
       <xsl:if test="@textChanges='true'">
         <xsl:text>|TEXTCHANGES</xsl:text>
       </xsl:if>
-      <xsl:if test="@defaultDisabled='true' or @defaultInvisible='true'">
+      <xsl:if test="@defaultDisabled='true' or @defaultInvisible='true' or gui:Visibility[@context]">
         <xsl:text>|DEFAULTDISABLED</xsl:text>
       </xsl:if>
-      <xsl:if test="@defaultInvisible='true'">
+      <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
         <xsl:text>|DEFAULTINVISIBLE</xsl:text>
       </xsl:if>
-      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true'">
+      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true' or gui:Visibility[@context]">
         <xsl:text>|DYNAMICVISIBILITY</xsl:text>
       </xsl:if>
       <xsl:if test="@dynamicItemStart='true'">
@@ -583,10 +590,10 @@
       <xsl:if test="@noCustomize='true'">
         <xsl:text>|NOCUSTOMIZE</xsl:text>
       </xsl:if>
-      <xsl:if test="@defaultInvisible='true'">
+      <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
         <xsl:text>|DEFAULTINVISIBLE</xsl:text>
       </xsl:if>
-      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true'">
+      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true' or gui:Visibility[@context]">
         <xsl:text>|DYNAMICVISIBILITY</xsl:text>
       </xsl:if>
       <xsl:if test="@commandWellOnly='true'">
@@ -731,6 +738,13 @@
         <xsl:value-of select="'S'"/>
       </xsl:if>      
     </xsl:if>
+    <xsl:text>;&#10;</xsl:text>
+  </xsl:template>
+  <xsl:template match="gui:Visibility[parent::gui:*/@id and @context]" mode="visibility">
+    <xsl:text>&#9;&#9;</xsl:text>
+    <xsl:value-of select="../@id"/>
+    <xsl:text>, </xsl:text>
+    <xsl:value-of select="@context"/>
     <xsl:text>;&#10;</xsl:text>
   </xsl:template>
 </xsl:stylesheet>

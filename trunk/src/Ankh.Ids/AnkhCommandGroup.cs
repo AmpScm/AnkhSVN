@@ -25,7 +25,10 @@ namespace AnkhSvn.Ids
 		FileSourceControl,
 		FileMenuScc,
 		FileSccMenuTasks,
-        FileSccMenuManagement,
+        FileSccItem,
+        FileSccOpen,
+        FileSccAdd,
+        FileSccManagement,
 
         SolutionExplorerSccForSolution,
         SolutionExplorerSccForProject,
@@ -46,6 +49,9 @@ namespace AnkhSvn.Ids
         PendingChangesAdmin,
         PendingChangesSwitch,
 
-        PendingChangesOpenEx
+        PendingChangesOpenEx,
+
+        FileFileOpen, // File->Open->*
+        FileFileAdd, // File->Add->*
 	}
 }
