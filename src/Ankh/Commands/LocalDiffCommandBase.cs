@@ -88,7 +88,8 @@ namespace Ankh.Commands
 
         private string DoInternalDiff(PathSelectorInfo info, ISelectionContext selection, IContext context)
         {
-            string slndir = Path.GetDirectoryName(selection.SolutionFilename);
+            Ankh.VS.IAnkhSolutionSettings ss = context.GetService<Ankh.VS.IAnkhSolutionSettings>();
+            string slndir = ss.ProjectRoot;
 
             SvnDiffArgs args = new SvnDiffArgs();
             args.IgnoreAncestry = true;

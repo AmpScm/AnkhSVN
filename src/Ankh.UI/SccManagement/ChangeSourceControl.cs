@@ -32,10 +32,10 @@ namespace Ankh.UI.SccManagement
             base.OnLoad(e);
 
             if (bindingGrid != null)
-                RefreshGrid();
+                RefreshGrid(true);
         }
 
-        private void RefreshGrid()
+        private void RefreshGrid(bool refreshCombo)
         {
             bindingGrid.Rows.Clear();
 
@@ -59,13 +59,13 @@ namespace Ankh.UI.SccManagement
             if(dirUri != null)
                 dirUri = new Uri(dirUri, "./");
 
-            bindingGrid.Rows.Add(
+            int n = bindingGrid.Rows.Add(
                 Path.GetFileNameWithoutExtension(settings.SolutionFilename) + " (Solution)",
                 info.ParentDirectory.FullPath,
                 (dirUri != null) ? dirUri.ToString() : "",
                 false,
                 scc.IsProjectManagedRaw(null),
-                "Ok");
+                "Ok");            
 
             foreach (SvnProject project in mapper.GetAllProjects())
             {
@@ -76,15 +76,19 @@ namespace Ankh.UI.SccManagement
 
                 info = cache[projectInfo.ProjectDirectory];
 
-                bindingGrid.Rows.Add(
+                n = bindingGrid.Rows.Add(
                     projectInfo.ProjectFullName,
                     projectInfo.ProjectDirectory,
                     info.Status.Uri,
                     false,
                     scc.IsProjectManaged(project),
                     "Ok");
+
+                bindingGrid.Rows[n].Tag = project;
             }
 
+            if (!refreshCombo)
+                return;
             SvnInfoEventArgs slnInfo = GetInfo(settings.SolutionFilename);
 
             if (slnInfo != null)
@@ -170,7 +174,7 @@ namespace Ankh.UI.SccManagement
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
-            RefreshGrid();
+            RefreshGrid(true);
         }
 
         private void okButton_Click(object sender, EventArgs e)
@@ -188,6 +192,38 @@ namespace Ankh.UI.SccManagement
             {
                 settings.ProjectRoot = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(settings.SolutionFilename), map.Value));
             }
+        }
+
+        private void connectButton_Click(object sender, EventArgs e)
+        {
+            if (Context == null)
+                return;
+
+            IAnkhSccService scc = Context.GetService<IAnkhSccService>();
+
+            foreach (DataGridViewRow row in bindingGrid.SelectedRows)
+            {
+                SvnProject project = row.Tag as SvnProject;
+                scc.SetProjectManaged(project, true);
+            }
+
+            RefreshGrid(false);
+        }
+
+        private void disconnectButton_Click(object sender, EventArgs e)
+        {
+            if (Context == null)
+                return;
+
+            IAnkhSccService scc = Context.GetService<IAnkhSccService>();
+
+            foreach (DataGridViewRow row in bindingGrid.SelectedRows)
+            {
+                SvnProject project = row.Tag as SvnProject;
+                scc.SetProjectManaged(project, false);
+            }
+
+            RefreshGrid(false);
         }
     }
 }
