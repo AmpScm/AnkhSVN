@@ -204,7 +204,11 @@ namespace Ankh.Commands
                         }
                     }
 
-                    e.Client.Update(now, ua);
+                    if (!e.Client.Update(now, ua) && ua.LastException != null)
+                    {
+                        e.Exception = ua.LastException;
+                        return;
+                    }
 
                     if(ua.IsLastInvocationCanceled)
                         return;
