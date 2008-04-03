@@ -201,8 +201,9 @@ namespace Ankh.UI.SccManagement
 
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
-            foreach (DataGridViewRow row in bindingGrid.SelectedRows)
+            foreach (DataGridViewCell cell in bindingGrid.SelectedCells)
             {
+                DataGridViewRow row = bindingGrid.Rows[cell.RowIndex];
                 SvnProject project = row.Tag as SvnProject;
                 scc.SetProjectManaged(project, true);
             }
@@ -217,8 +218,9 @@ namespace Ankh.UI.SccManagement
 
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
-            foreach (DataGridViewRow row in bindingGrid.SelectedRows)
+            foreach (DataGridViewCell cell in bindingGrid.SelectedCells)
             {
+                DataGridViewRow row = bindingGrid.Rows[cell.RowIndex];
                 SvnProject project = row.Tag as SvnProject;
                 scc.SetProjectManaged(project, false);
             }
