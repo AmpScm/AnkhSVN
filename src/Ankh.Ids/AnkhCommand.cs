@@ -27,7 +27,19 @@ namespace AnkhSvn.Ids
         // do not reuse values
         CommandFirst = 0x1FFFFFFF,
 
+        // Always visible+enabled entrance points to AnkhSvn
+        FileFileOpenFromSubversion,
+        FileFileAddFromSubversion,
+
+        FileSccOpenFromSubversion,
+        FileSccAddFromSubversion,    
+
+        FileSccAddSolutionToSubversion,
+        FileSccAddProjectToSubversion,
+
+        FileSccChangeSourceControl,
         // Two test commands
+
         FileSccMenuUpdateLatest,
         FileSccMenuUpdateSpecific,
 

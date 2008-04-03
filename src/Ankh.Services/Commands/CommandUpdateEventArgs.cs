@@ -44,7 +44,7 @@ namespace Ankh.Commands
         public bool Visible
         {
             get { return !_invisible; }
-            set { _invisible = value; }
+            set { _invisible = !value; }
         }
 
         public bool Latched
