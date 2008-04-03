@@ -164,9 +164,8 @@ namespace Ankh.Selection
 
             public SelectionItem(IVsHierarchy hierarchy, uint id)
             {
-                if (hierarchy == null)
-                    throw new ArgumentNullException("hierarchy");
-
+                // Hierarchy can be null in the solution case
+                
                 _hierarchy = hierarchy;
                 _id = id;
             }
