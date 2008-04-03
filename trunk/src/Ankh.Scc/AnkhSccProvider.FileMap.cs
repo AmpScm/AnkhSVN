@@ -377,6 +377,15 @@ namespace Ankh.Scc
         }
 
         /// <summary>
+        /// Gets all projects.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Ankh.Selection.SvnProject> GetAllProjects()
+        {
+            foreach (SccProjectData pd in _projectMap.Values)
+                yield return pd.SvnProject;
+        }
+        /// <summary>
         /// Gets a boolean indicating whether one or more projects (or the solution) contains path
         /// </summary>
         /// <param name="path"></param>
@@ -538,6 +547,10 @@ namespace Ankh.Scc
         {
             readonly SccProjectData _data;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="WrapProjectInfo"/> class.
+            /// </summary>
+            /// <param name="data">The data.</param>
             public WrapProjectInfo(SccProjectData data)
             {
                 if (data == null)
@@ -546,15 +559,46 @@ namespace Ankh.Scc
                 _data = data;
             }
 
+            /// <summary>
+            /// Gets the name of the project.
+            /// </summary>
+            /// <value>The name of the project.</value>
             public string ProjectName
             {
                 get { return _data.ProjectName; }
             }
 
+            /// <summary>
+            /// Gets the project directory.
+            /// </summary>
+            /// <value>The project directory.</value>
             public string ProjectDirectory
             {
                 get { return _data.ProjectDirectory; }
-            }            
+            }
+
+            #region ISvnProjectInfo Members
+
+
+            /// <summary>
+            /// Gets the project file.
+            /// </summary>
+            /// <value>The project file.</value>
+            public string ProjectFile
+            {
+                get { return _data.ProjectFile; }
+            }
+
+            /// <summary>
+            /// Gets the full name of the project (the project prefixed by the folder it is under)
+            /// </summary>
+            /// <value>The full name of the project.</value>
+            public string ProjectFullName
+            {
+                get { return _data.ProjectFullName; }
+            }
+
+            #endregion
         }
     }
 }
