@@ -12,8 +12,9 @@ namespace Ankh
 {
     public class AnkhWorkerArgs : EventArgs
     {
-        AnkhContext _context;
-        SvnClient _client;
+        readonly AnkhContext _context;
+        readonly SvnClient _client;
+        Exception _exception;
 
         public AnkhWorkerArgs(IAnkhServiceProvider context, SvnClient client)
         {
@@ -32,6 +33,12 @@ namespace Ankh
         public AnkhContext Context
         {
             get { return _context; }
+        }
+
+        public Exception Exception
+        {
+            get { return _exception; }
+            set { _exception = value; }
         }
     }
 
@@ -136,7 +143,11 @@ namespace Ankh
             SvnClient client = (SvnClient)arg;
             try
             {
-                _worker.Work(new AnkhWorkerArgs(_context, client));
+                AnkhWorkerArgs awa = new AnkhWorkerArgs(_context, client);
+                _worker.Work(awa);
+
+                if (_exception == null && awa.Exception != null)
+                    _exception = awa.Exception;
             }
             catch (SvnOperationCanceledException)
             {
