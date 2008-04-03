@@ -7,6 +7,7 @@ using Microsoft.VisualStudio;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -23,7 +24,16 @@ namespace Ankh.UI.PendingChanges
         public IServiceProvider ServiceProvider
         {
             get { return _serviceProvider; }
-            set { _serviceProvider = value; }
+            set 
+            {
+                if (value != null && value != _serviceProvider)
+                {
+                    _serviceProvider = value;
+                    NotifySelectionUpdated();
+                }
+                else
+                    _serviceProvider = value;
+            }
         }
 
         [Browsable(false)]
@@ -542,11 +552,14 @@ namespace Ankh.UI.PendingChanges
                 return VSConstants.E_NOTIMPL;
             }
 
-
+            [DebuggerHidden]
             public int GetSelectionInfo(out uint pcItems, out int pfSingleHierarchy)
             {
                 pcItems = (uint)_lv.SelectedItems.Count;
-                pfSingleHierarchy = 1;
+                
+                pfSingleHierarchy = 1;  // If this line throws a nullreference exception, the bug is in the interop layer or the caller. 
+                                        // Nothing we can do to fix it
+
                 return VSConstants.S_OK;
             }
 
