@@ -65,21 +65,31 @@ namespace Ankh.UI
         };
 
         delegate void DoSomething();
-        List<DoSomething> _todo = new List<DoSomething>();
+        readonly List<DoSomething> _todo = new List<DoSomething>();
+        const int _bucketCount = 16;
+        readonly long[] _buckets = new long[_bucketCount];
+        int _curBuck;
+        bool _queued;
         DateTime _start;
         long _bytesReceived;
+        
         SortedList<long, ProgressState> _progressCalc = new SortedList<long, ProgressState>();        
 
         public void OnClientProcessing(object sender, SvnProcessingEventArgs e)
         {
-            e.Detach();            
+            SvnCommandType type = e.CommandType;
+
+            _start = DateTime.UtcNow;
+            _curBuck = 0;
+            for (int i = 0; i < _buckets.Length; i++)
+                _buckets[i] = 0;
 
             Enqueue(delegate()
             {
                 _progressCalc.Clear();
-                _start = DateTime.UtcNow;
+                
                 ListViewItem item = new ListViewItem("Action");
-                item.SubItems.Add(e.CommandType.ToString());
+                item.SubItems.Add(type.ToString());
                 item.ForeColor = Color.Gray;
 
                 actionList.Items.Add(item);
@@ -134,30 +144,96 @@ namespace Ankh.UI
         public void OnClientProgress(object sender, SvnProgressEventArgs e)
         {
             ProgressState state;
-            if (e.TotalProgress > 0 && _progressCalc.TryGetValue(e.TotalProgress, out state))
+
+            long received;
+            
+            if(_progressCalc.TryGetValue(e.TotalProgress, out state))
             {
-                _bytesReceived += e.Progress - state.LastCount;
+                if(e.Progress < state.LastCount)
+                    state.LastCount = 0;
+
+                received = e.Progress - state.LastCount;
                 if (e.TotalProgress == e.Progress)
                     _progressCalc.Remove(e.TotalProgress);
                 else
                     state.LastCount = e.Progress;
             }
             else
-                _bytesReceived += e.Progress;
+            {
+                state = new ProgressState();
+                state.LastCount = e.Progress;
+                _progressCalc.Add(e.TotalProgress, state);
+                received = e.Progress;
+            }                
+            _bytesReceived += received;
 
             TimeSpan ts = DateTime.UtcNow - _start;
 
-            if(ts.TotalSeconds <= 0.1)
+
+            int totalSeconds = (int)ts.TotalSeconds;
+            if (totalSeconds < 0)
                 return;
+
+            // Clear all buckets of previous seconds where nothing was received
+            while (_curBuck < totalSeconds)
+            {
+                _curBuck++;
+                int n = _curBuck % _bucketCount;
+                _buckets[n] = 0;
+            }
+
+            // Add the amount of this second to the right bucket
+            _buckets[_curBuck % _bucketCount] += received;
+
+            int avg = -1;
+
+            int calcBuckets;
+
+            if (_curBuck < 3)
+                calcBuckets = 0;
+            else
+                calcBuckets = Math.Min(5,  _curBuck - 1);
+
+            if (calcBuckets > 0)
+            {
+                long tot = 0;
+                for (int n = _curBuck - 1; n > (_curBuck - calcBuckets-1); n--)
+                {
+                    tot += _buckets[n % _bucketCount];
+                }
+
+                avg = (int)(tot / (long)calcBuckets);
+            }
 
             Enqueue(delegate()
             {
-                int totalSeconds= (int)ts.TotalSeconds;
-                if (totalSeconds > 60)
-                    progressLabel.Text = string.Format("{0} kByte transferred ({1}:{2:00})", _bytesReceived / 1024, totalSeconds/60, totalSeconds %60);
+                string text= string.Format("{0} transferred", SizeStr(_bytesReceived));
+
+                if (avg > 0)
+                    text += string.Format(" at {0}/s.", SizeStr(avg));
+                else if (totalSeconds >= 1)
+                    text += string.Format(" in {0} seconds.", totalSeconds);
                 else
-                    progressLabel.Text = string.Format("{0} kByte transferred (0:{1:00})", _bytesReceived / 1024, totalSeconds);
+                    text += ".";
+
+                progressLabel.Text = text;
             });
+        }
+
+        private string SizeStr(long numberOfBytes)
+        {
+            if (numberOfBytes == 1)
+                return "1 byte";
+            else if (numberOfBytes < 1024)
+                return string.Format("{0} bytes", numberOfBytes);
+            else if (numberOfBytes < 16384)
+                return string.Format("{0:0.0} kByte", numberOfBytes / 1024.0);
+            else if (numberOfBytes < 1024 * 1024)
+                return string.Format("{0} kByte", numberOfBytes / 1024);
+            else if (numberOfBytes < 16 * 1024 * 1024)
+                return string.Format("{0:0.0} MByte", numberOfBytes / (1024.0 * 1024.0));
+            else
+                return string.Format("{0} MByte", numberOfBytes / 1024 / 1024);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -183,23 +259,21 @@ namespace Ankh.UI
             if (task == null)
                 return;
 
-            bool invoke = false;
             lock(_todo)
             {
-                invoke = (_todo.Count == 0);           
                 _todo.Add(task);
-            }
-
-            if (invoke && IsHandleCreated)
-            {
+                
                 try
                 {
-                    BeginInvoke(new DoSomething(RunQueue));
+                    if (!_queued && IsHandleCreated)
+                    {
+                        BeginInvoke(new DoSomething(RunQueue));
+                        _queued = true;
+                    }
                 }
                 catch
                 { 
                     // Don't kill svn on a failed begin invoke
-                    _canceling = true; // Cancel at the right time
                 }
             }
         }              
@@ -209,6 +283,7 @@ namespace Ankh.UI
             DoSomething[] actions;
             lock(_todo)
             {
+                _queued = false;
                 actions = _todo.ToArray();
                 _todo.Clear();
             }
