@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using AnkhSvn.Ids;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
 using System.IO;
-using Ankh.UI;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop; 
+
+using Ankh.UI;
+using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
@@ -94,19 +96,19 @@ namespace Ankh.Commands
                 }
                 catch (IOException ee)
                 {
-                    mb.Show(ee.Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                    mb.Show(ee.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (COMException ee)
                 {
-                    mb.Show(ee.Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                    mb.Show(ee.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (InvalidOperationException ee)
                 {
-                    mb.Show(ee.Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                    mb.Show(ee.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (System.ComponentModel.Win32Exception ee)
                 {
-                    mb.Show(ee.Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                    mb.Show(ee.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                     
             }            

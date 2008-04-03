@@ -97,9 +97,7 @@
 								toolTip="Updates local items with changes from the Subversion repository." iconFile="menu/Update.png"/>
 					</Group>
 					<Group id="Grp_FileSccMenuManagement" priority="0x0200">
-						<Button id="Cmd_ShowPendingChanges" name="ShowPendingChanges" priority="0x301"
-								text="Show &amp;Pending Changes"
-								toolTip="Show the commit dialog." iconFile="menu/Commit.png"/>
+            <ButtonRef id="Cmd_ShowPendingChanges" priority="0x301" />						
 						<Button id="Cmd_EditConfigFile" name="EditConfigFile" priority="0x301"
 								text="&amp;Configuration..."
 								toolTip="Configure AnkhSVN." iconFile="menu/EditConfigFile.png" />
@@ -119,6 +117,11 @@
 		</MenuRef>
 		<GroupRef id="guidSHLMainMenu:IDG_VS_VIEW_ORG_WINDOWS">
 			<!-- View - The Group containing the Solution Explorer,.. -->
+      <Button id="Cmd_ShowPendingChanges" name="ShowPendingChanges" priority="0x301"
+								text="Show &amp;Pending Changes"
+								toolTip="Show the commit dialog." iconFile="menu/PendingChanges.png">
+        <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="c" />        
+      </Button>
 			<Button id="Cmd_ShowRepositoryExplorer" name="RepositoryExplorer" priority="0x901"
 						text="Repositor&amp;y Explorer"
 						toolTip="Show the Repository Explorer window." iconFile="menu/ReposExplorer.png">
