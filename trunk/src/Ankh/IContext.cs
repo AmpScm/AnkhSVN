@@ -10,15 +10,6 @@ using Ankh.UI;
 
 namespace Ankh
 {
-    [CLSCompliant(false)]
-    public interface IDTEContext
-    {
-        /// <summary>
-        /// The top level automation object.
-        /// </summary>
-        EnvDTE._DTE DTE { get; }
-    }
-
     public interface IContext : IAnkhServiceProvider
     {
         /// <summary>

@@ -25,10 +25,11 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IContext context = e.GetService<IContext>();
+            EnvDTE._DTE dte = e.GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
 
             this.context = context;
-            this.window = (CommandWindow)((Window)((IDTEContext)this.context).DTE.Windows.Item( 
+            this.window = (CommandWindow)((Window)dte.Windows.Item( 
                 EnvDTE.Constants.vsWindowKindCommandWindow )).Object;
 
             // is it one of the intrinsic commands?

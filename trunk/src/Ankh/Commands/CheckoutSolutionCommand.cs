@@ -33,7 +33,8 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IContext context = e.GetService<IContext>();
+            EnvDTE._DTE dte = e.GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
 
             /// first get the parent folder
 			using (FolderBrowserDialog browser = new FolderBrowserDialog())
@@ -50,7 +51,7 @@ namespace Ankh.Commands
 					CheckoutRunner runner = new CheckoutRunner(browser.SelectedPath, parent.Revision, new Uri(parent.Url));
 					context.UIShell.RunWithProgressDialog(runner, "Checking out solution");
 
-					((IDTEContext)context).DTE.Solution.Open(Path.Combine(browser.SelectedPath, node.Name));
+					dte.Solution.Open(Path.Combine(browser.SelectedPath, node.Name));
 				}
 			}
         }

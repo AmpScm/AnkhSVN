@@ -23,7 +23,7 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
-    public class OldAnkhContext : AnkhService, IContext, IDTEContext, IAnkhServiceProvider
+    public class OldAnkhContext : AnkhService, IContext, IAnkhServiceProvider
     {
         WorkingCopyExplorer.WorkingCopyExplorer _workingCopyExplorer;
         RepositoryExplorer.Controller _repositoryController;
@@ -63,7 +63,7 @@ namespace Ankh
         /// The top level automation object.
         /// </summary>
         [CLSCompliant(false)]
-        public EnvDTE._DTE DTE
+        EnvDTE._DTE DTE
         {
             [System.Diagnostics.DebuggerStepThrough]
             get { return _dte ?? (_dte = GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE))); }

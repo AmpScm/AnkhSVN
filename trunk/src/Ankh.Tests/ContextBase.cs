@@ -17,7 +17,7 @@ namespace Ankh.Tests
     /// <summary>
     /// Summary description for ContextBase.
     /// </summary>
-    public class ContextBase : AnkhServiceContainer, IContext, IDTEContext
+    public class ContextBase : AnkhServiceContainer, IContext
     {        
         public ContextBase()
         {

@@ -15,17 +15,17 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IContext context = e.GetService<IContext>();
+            EnvDTE._DTE dte = e.GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
 
             using (e.Context.BeginOperation("Opening"))
             {
-
                 INode node = context.RepositoryExplorer.SelectedNode;
 
                 CatRunner runner = new CatRunner(node.Name, node.Revision, new Uri(node.Url));
                 context.UIShell.RunWithProgressDialog(runner, "Retrieving file");
 
-                ((IDTEContext)e.Context).DTE.ItemOperations.OpenFile(runner.Path,
+                dte.ItemOperations.OpenFile(runner.Path,
                     EnvDTE.Constants.vsViewKindPrimary);
             }
         }
