@@ -146,6 +146,41 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
+        public string ProjectFullName
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder(ProjectName);
+
+                IVsHierarchy hier = ProjectHierarchy;
+                while(hier != null)
+                {
+                    object value;
+                    if(!ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, 
+                        (int)__VSHPROPID.VSHPROPID_ParentHierarchy, out value)))
+                    {
+                        break;
+                    }
+
+                    hier = value as IVsHierarchy;
+
+                    if(hier == null || hier is IVsSolution)
+                        return sb.ToString();
+
+                    if(!ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, 
+                        (int)__VSHPROPID.VSHPROPID_Name, out value)) || !(value is String))
+                    {
+                        break;
+                    }
+
+                    sb.Insert(0, '\\');
+                    sb.Insert(0, (string)value);
+                }
+
+                return sb.ToString();
+            }
+        }
+
         public SvnProject SvnProject
         {
             get

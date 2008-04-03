@@ -53,6 +53,20 @@ namespace Ankh.Commands
                     switch (e.Command)
                     {
                         case AnkhCommand.ItemOpenVisualStudio:
+                            {
+                                Ankh.Scc.IProjectFileMapper mapper = e.GetService<Ankh.Scc.IProjectFileMapper>();
+
+                                if (mapper != null) // Opening a project file gives an error. Just jump to the project in the solution explorer
+                                {
+                                    foreach (Ankh.Selection.SvnProject p in mapper.GetAllProjectsContaining(item.FullPath))
+                                    {
+                                        Ankh.Scc.ISvnProjectInfo info = mapper.GetProjectInfo(p);
+
+                                        if (info != null && string.Equals(info.ProjectFile, item.FullPath, StringComparison.OrdinalIgnoreCase))
+                                            goto case AnkhCommand.ItemOpenSolutionExplorer;
+                                    }
+                                }
+                            }
                             VsShellUtilities.OpenDocument(e.Context, item.FullPath);
                             break;
                         case AnkhCommand.ItemOpenTextEditor:

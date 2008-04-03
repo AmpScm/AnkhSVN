@@ -92,6 +92,8 @@ namespace Ankh.UI
                 item.SubItems.Add(type.ToString());
                 item.ForeColor = Color.Gray;
 
+                if (actionList.Items.Count == 1)
+                    actionList.Items.Clear();
                 actionList.Items.Add(item);
             });
         }
