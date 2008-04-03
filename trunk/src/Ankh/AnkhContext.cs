@@ -62,7 +62,6 @@ namespace Ankh
         /// <summary>
         /// The top level automation object.
         /// </summary>
-        [CLSCompliant(false)]
         EnvDTE._DTE DTE
         {
             [System.Diagnostics.DebuggerStepThrough]
