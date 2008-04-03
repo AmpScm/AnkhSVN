@@ -60,7 +60,7 @@ namespace Ankh.Scc
                     break; // See below
                 case AnkhGlyph.Blank:
                     if (ContainsPath(path) && item.IsVersionable)
-                        return AnkhGlyph.ShouldBeAdded;
+                        return ShouldIgnore(item) ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
                     goto default;
                 default:
                     return glyph;
@@ -87,6 +87,21 @@ namespace Ankh.Scc
                 }
 
             return AnkhGlyph.Normal;
+        }
+
+        private bool ShouldIgnore(SvnItem item)
+        {
+            while (item != null)
+            {
+                SvnStatus lc = item.Status.LocalContentStatus;
+                if (lc == SvnStatus.Ignored)
+                    return true;
+                else if (lc != SvnStatus.NotVersioned)
+                    return false;
+
+                item = item.Parent;
+            }
+            return false;
         }
 
         uint GlyphToStatus(AnkhGlyph glyph)

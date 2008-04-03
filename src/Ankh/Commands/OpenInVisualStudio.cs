@@ -20,11 +20,6 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (e.Command == AnkhCommand.ItemOpenSolutionExplorer)
-            {
-                e.Enabled = false; // Not implemented yet
-                return;
-            }
             bool first = true;
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
@@ -80,7 +75,20 @@ namespace Ankh.Commands
                             break;
 
                         case AnkhCommand.ItemOpenSolutionExplorer:
-                            //VsShellUtilities.GetRunningDocumentContents
+                            IVsUIHierarchyWindow hierWindow = VsShellUtilities.GetUIHierarchyWindow(e.Context, new Guid(ToolWindowGuids80.SolutionExplorer));                            
+
+                            IVsProject project = VsShellUtilities.GetProject(e.Context, item.FullPath) as IVsProject;
+
+                            if (project != null && hierWindow != null)
+                            {
+                                int found;
+                                uint id;
+                                VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
+                                if (ErrorHandler.Succeeded(project.IsDocumentInProject(item.FullPath, out found, prio, out id)) && found != 0)
+                                {
+                                    hierWindow.ExpandItem(project as IVsUIHierarchy, id, EXPANDFLAGS.EXPF_SelectItem);
+                                }
+                            }
                             break;
                     }
                 }
