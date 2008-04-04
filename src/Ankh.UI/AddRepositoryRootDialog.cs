@@ -92,8 +92,8 @@ namespace Ankh.UI
 
         private void ValidateAdd()
         {
-            this.okButton.Enabled = this.revisionPicker.Valid && 
-                UriUtils.ValidUrl.IsMatch( this.urlTextBox.Text );
+            this.okButton.Enabled = this.revisionPicker.Valid &&
+                UriUtils.IsValidUrl(this.urlTextBox.Text);
         }
     }
 }

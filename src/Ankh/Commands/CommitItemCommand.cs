@@ -204,7 +204,7 @@ namespace Ankh.Commands
             // freshly added items have no uuid
             if (uuid == null)
             {
-                string parentDir = PathUtils.GetParent(item.FullPath);
+                string parentDir = item.Parent.FullPath;
                 if (Directory.Exists(parentDir))
                 {
                     IFileStatusCache statusCache = context.GetService<IFileStatusCache>();

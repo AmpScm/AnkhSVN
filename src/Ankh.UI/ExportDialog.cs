@@ -105,7 +105,7 @@ namespace Ankh.UI
                 if (this.revisionPicker.Valid && this.localDirTextBox.Text.Length > 0)
                 {
                     if (this.radioButtonFromURL.Checked)
-                        enable = UriUtils.ValidUrl.IsMatch(this.urlTextBox.Text);
+                        enable = UriUtils.IsValidUrl(this.urlTextBox.Text);
                     else
                         enable = wcOps.IsWorkingCopyPath(this.exportFromDirTextBox.Text);
                 }

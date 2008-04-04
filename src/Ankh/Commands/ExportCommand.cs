@@ -28,9 +28,6 @@ namespace Ankh.Commands
                     ExportRunner runner = new ExportRunner(
                         dlg.LocalPath, dlg.Revision, dlg.Source, dlg.NonRecursive ? SvnDepth.Infinity : SvnDepth.Empty);
                     context.UIShell.RunWithProgressDialog(runner, "Exporting");
-
-                    // make sure it's remembered
-                    RegistryUtils.CreateNewTypedUrl(dlg.Source);
                 }
             }
         }

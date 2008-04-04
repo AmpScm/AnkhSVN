@@ -154,14 +154,6 @@ namespace Ankh.Commands
                         if (!completed)
                             return;
                     }
-
-                    // we want ankh to get enabled right away
-                    // BH: This won't work any more
-                    // context.DTE.ExecuteCommand( "Ankh.ToggleAnkh", "" );
-
-                    // Make sure the URL typed gets remembered.
-                    RegistryUtils.CreateNewTypedUrl(url);
-
                 }
             }
         }
