@@ -319,11 +319,11 @@ namespace Ankh.Scc.ProjectMap
             else
                 _files.Add(new SccProjectFileReference(_context, this, Scc.GetFile(path)));
 
-            ClearIdCache();
-
             if (!_inLoad && _loaded && !string.IsNullOrEmpty(ProjectFile))
             {
                 IAnkhOpenDocumentTracker tracker = _context.GetService<IAnkhOpenDocumentTracker>();
+
+                ClearIdCache();
 
                 if (tracker != null)
                     tracker.CheckDirty(ProjectFile);
@@ -381,7 +381,7 @@ namespace Ankh.Scc.ProjectMap
                 if (guidClassID == _solutionFolderProjectId)
                     return SccProjectType.SolutionFolder;
                 else if (guidClassID == _websiteProjectId)
-                    return SccProjectType.SolutionFolder;
+                    return SccProjectType.WebSite;
             }
 
             return SccProjectType.Normal;
