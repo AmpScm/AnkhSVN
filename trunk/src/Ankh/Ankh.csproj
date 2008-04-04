@@ -163,7 +163,6 @@
   <ItemGroup>
     <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
-    <None Include="WorkingCopyExplorer\WCExplorer.cd" />
     <Compile Include="AnkhCommandService.cs" />
     <Compile Include="AnkhContext.cs">
       <SubType>Code</SubType>
