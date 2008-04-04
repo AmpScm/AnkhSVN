@@ -60,7 +60,7 @@ namespace Ankh.Scc
                     break; // See below
                 case AnkhGlyph.Blank:
                     if (ContainsPath(path) && item.IsVersionable)
-                        return ShouldIgnore(item) ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
+                        return AnkhGlyph.ShouldBeAdded;
                     goto default;
                 default:
                     return glyph;
