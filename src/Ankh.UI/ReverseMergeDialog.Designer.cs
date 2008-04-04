@@ -36,7 +36,6 @@ namespace Ankh.UI
             // 
             this.treeView.CheckBoxes = true;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Top;
-            this.treeView.Items = new object[0];
             this.treeView.Location = new System.Drawing.Point(0, 19);
             this.treeView.Name = "treeView";
             this.treeView.Recursive = false;

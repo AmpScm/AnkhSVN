@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Text;
 using SharpSvn;
 using AnkhSvn.Ids;
+using System.Collections.Generic;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -20,6 +22,7 @@ namespace Ankh.Commands
     public class AddSolutionToRepositoryCommand : CommandBase
     {
         SvnCommitArgs _args;
+        List<SvnItem> paths;
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -32,6 +35,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            IFileStatusCache statusCache = e.Context.GetService<IFileStatusCache>();
             IContext context = e.Context.GetService<IContext>();
 
             SaveAllDirtyDocuments(e.Selection, context);
@@ -104,11 +108,10 @@ namespace Ankh.Commands
                     try
                     {
                         // the solution dir is already a wc                
-                        this.paths = new ArrayList();
-                        this.paths.Add(solutionDir);
+                        this.paths.Add(statusCache[solutionDir]);
 
                         client.Add(e.Selection.SolutionFilename, SvnDepth.Empty);
-                        this.paths.Add(e.Selection.SolutionFilename);
+                        this.paths.Add(statusCache[e.Selection.SolutionFilename]);
                         this.AddProjects(context, vsProjects);
                     }
                     catch (Exception)
@@ -227,10 +230,9 @@ namespace Ankh.Commands
 
         private void DoCommit(AnkhWorkerArgs e)
         {
-            string[] paths = (string[])this.paths.ToArray(typeof(string));
             SvnCommitArgs args = new SvnCommitArgs();
             args.Depth = SvnDepth.Empty;
-            e.Client.Commit(paths, args);
+            e.Client.Commit(SvnItem.GetPaths(paths), args);
         }
 
         /// <summary>
@@ -262,6 +264,6 @@ namespace Ankh.Commands
             #endregion
         }
 
-        private ArrayList paths;
+        
     }
 }

@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
 using Utils;
+using System.Collections.Generic;
+using System.ComponentModel;
+using Ankh.Scc;
 
 namespace Ankh.UI
 {
@@ -14,6 +17,7 @@ namespace Ankh.UI
     /// </summary>
     public partial class PathSelectionTreeView : PathTreeView
     {
+		Predicate<SvnItem> _checkedFilter;
         /// <summary>
         /// Fired when the treeview needs information about a path.
         /// </summary>
@@ -24,10 +28,11 @@ namespace Ankh.UI
             this.CheckBoxes = true;
             this.SingleCheck = false;
             this.Recursive = false;
-            this.items = new object[]{};
+            this.items = new SvnItem[]{};
         }
 
-        public IList Items
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public ICollection<SvnItem> Items
         {
             get{ return this.items; }
             set
@@ -72,19 +77,24 @@ namespace Ankh.UI
             }
         }
 
-        public IList CheckedItems
+        public IEnumerable<SvnItem> CheckedItems
         {
-            get
-            { 
-                IList list = new ArrayList();
-                return this.GetCheckedItems( this.Nodes, list ); 
-            }
-            
-            set
-            { 
-                this.SetCheckedItems( this.Nodes, value ); 
-            }
+			get
+			{
+				return GetCheckedItems(this.Nodes);
+			}
         }
+
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Predicate<SvnItem> CheckedFilter
+		{
+			get { return _checkedFilter; }
+			set 
+            { 
+                _checkedFilter = value;
+                SetCheckedItems(Nodes);
+            }
+		}
 
         /// <summary>
         /// Keep track of the last checked node and make sure only
@@ -155,34 +165,31 @@ namespace Ankh.UI
         /// <param name="nodes"></param>
         /// <param name="list"></param>
         /// <returns></returns>
-        private IList GetCheckedItems( TreeNodeCollection nodes, IList list )
-        {
-            foreach( TreeNode node in nodes )
-            {
-                if ( node.Checked )
-                    list.Add( node.Tag );
-                this.GetCheckedItems( node.Nodes, list );
-            }
+		private IEnumerable<SvnItem> GetCheckedItems(TreeNodeCollection nodes)
+		{
+			foreach (TreeNode node in nodes)
+			{
+				if (node.Checked)
+					yield return (SvnItem)node.Tag;
 
-            return list;
-        }
+				foreach (SvnItem i in GetCheckedItems(node.Nodes))
+					yield return i;
+			}
+		}
 
         /// <summary>
         /// Sets the checked items.
         /// </summary>
         /// <param name="nodes"></param>
         /// <param name="items"></param>
-        private void SetCheckedItems( TreeNodeCollection nodes, IList items )
+        void SetCheckedItems(TreeNodeCollection nodes)
         {
-            foreach( TreeNode node in nodes )
+            foreach (TreeNode node in nodes)
             {
-                if ( items.Contains( node.Tag ) )
-                    node.Checked = true;
-                else
-                    node.Checked = false;
+                node.Checked = SvnItemFilters.Evaluate((SvnItem)node.Tag, _checkedFilter);
 
-                this.SetCheckedItems( node.Nodes, items );
-            }            
+                this.SetCheckedItems(node.Nodes);
+            }
         }
 
 
@@ -243,7 +250,7 @@ namespace Ankh.UI
                 if ( this.items.Count == 0 )
                     return;            
 
-                foreach( object item in this.items )
+                foreach( SvnItem item in this.items )
                     this.AddNode( item );
 
                 this.TrimTree();
@@ -260,7 +267,7 @@ namespace Ankh.UI
         /// Adds a node to the right place in the tree.
         /// </summary>
         /// <param name="nodeName"></param>
-        private void AddNode( object item )
+        private void AddNode( SvnItem item )
         {
             TreeNodeCollection nodes = this.Nodes;
 
@@ -342,7 +349,7 @@ namespace Ankh.UI
             }
         }
 
-        private IList items;
+		private ICollection<SvnItem> items;
         private TreeNode checkedNode;
         private bool singleCheck;
         private bool recursive;

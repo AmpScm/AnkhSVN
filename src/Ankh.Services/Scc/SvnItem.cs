@@ -12,6 +12,7 @@ using Ankh.Selection;
 using Ankh.Scc;
 using SharpSvn.Implementation;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace Ankh
 {
@@ -558,22 +559,21 @@ namespace Ankh
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        public static string[] GetPaths(System.Collections.IList items)
-        {
-            string[] paths = new string[items.Count];
-            int i = 0;
-            foreach (SvnItem item in items)
-            {
-                Debug.Assert(item != null, "SvnItem should not be null");
+        public static ICollection<string> GetPaths(IEnumerable<SvnItem> items)
+		{
+			List<String> paths = new List<string>();
+			foreach (SvnItem item in items)
+			{
+				Debug.Assert(item != null, "SvnItem should not be null");
 
-                if (item != null)
-                {
-                    paths[i++] = item.FullPath;
-                }
-            }
+				if (item != null)
+				{
+					paths.Add(item.FullPath);
+				}
+			}
 
-            return paths;
-        }
+			return paths;
+		}
 
         void EnsureClean()
         {

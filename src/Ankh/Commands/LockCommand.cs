@@ -4,6 +4,7 @@ using System.Collections;
 using System.Text;
 using SharpSvn;
 using AnkhSvn.Ids;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -85,7 +86,7 @@ namespace Ankh.Commands
 
         private void ProgressCallback(IContext context)
         {
-            string[] paths = SvnItem.GetPaths(info.CheckedItems);
+            ICollection<string> paths = SvnItem.GetPaths(info.CheckedItems);
             SvnLockArgs args = new SvnLockArgs();
             args.StealLock = info.StealLocks;
             args.Comment = info.Message;

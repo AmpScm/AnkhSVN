@@ -21,7 +21,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.CommitItem)]
     public class CommitItemCommand : CommandBase
     {
-        string[] paths;
+        ICollection<string> paths;
         SvnCommitResult commitInfo;
         string storedLogMessage = null;
 
@@ -113,7 +113,7 @@ namespace Ankh.Commands
 
             this.commitInfo = null;
 
-            foreach (IList items in repositories)
+			foreach (List<SvnItem> items in repositories)
             {
                 string startText = "Committing ";
                 if (repositories.Count > 1 && items.Count > 0)
@@ -177,7 +177,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        private ICollection<List<SvnItem>> SortByRepository(AnkhContext context, IList items)
+        private ICollection<List<SvnItem>> SortByRepository(AnkhContext context, ICollection<SvnItem> items)
         {
             Dictionary<string, List<SvnItem>> repositories = new Dictionary<string, List<SvnItem>>(StringComparer.OrdinalIgnoreCase);
             foreach (SvnItem item in items)

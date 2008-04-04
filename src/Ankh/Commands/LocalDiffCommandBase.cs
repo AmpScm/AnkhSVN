@@ -9,6 +9,8 @@ using Utils;
 using SharpSvn;
 using Ankh.Selection;
 using System.Text;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -48,18 +50,37 @@ namespace Ankh.Commands
 
             bool useExternalDiff = GetExe(selection, context) != null;
 
-            // We use VersionedFilter here to allow diffs between arbitrary revisions
-            ArrayList checkedResources = new ArrayList();
+            Dictionary<string, SvnItem> items = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
             foreach (SvnItem item in selection.GetSelectedSvnItems(true))
             {
-                if (item.IsVersioned && item.IsFile)
-                    checkedResources.Add(item);
+                if (item.IsModified && !items.ContainsKey(item.FullPath))
+                {
+                    items.Add(item.FullPath, item);
+                }
             }
 
-            IList resources = new ArrayList(checkedResources);
+			List<SvnItem> resources = new List<SvnItem>(selection.GetSelectedSvnItems(true));
 
-            PathSelectorInfo info = new PathSelectorInfo("Select items for diffing",
-                resources, checkedResources);
+
+            Predicate<SvnItem> checkFilter;
+            if (items.Count == 0)
+            {
+                // Always check something when there are no modified items to diff
+                checkFilter = delegate { return true; };
+            }
+            else
+            {
+                checkFilter = delegate(SvnItem item)
+                {
+                    return item.IsFile && item.IsModified;
+                };
+            }
+
+			PathSelectorInfo info = new PathSelectorInfo("Select items for diffing",
+				resources, 
+				checkFilter
+				);
+
             info.RevisionStart = revisions == null ? SvnRevision.Base : revisions.StartRevision;
             info.RevisionEnd = revisions == null ? SvnRevision.Working : revisions.EndRevision;
 
@@ -68,7 +89,7 @@ namespace Ankh.Commands
             info.Depth = useExternalDiff ? SvnDepth.Empty : SvnDepth.Infinity;
 
             // should we show the path selector?
-            if (!CommandBase.Shift && revisions == null)
+            if (!CommandBase.Shift && (revisions == null || items.Count != 1))
             {
                 info = context.UIShell.ShowPathSelector(info);
 

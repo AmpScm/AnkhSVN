@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using SharpSvn;
+using System.Collections.Generic;
 
 
 
@@ -35,12 +36,10 @@ namespace Ankh.UI
         public string SelectedPath
         {
             get
-            { 
-                if ( this.TreeView.CheckedItems.Count > 0 )
-                    return this.TreeView.CheckedItems[0].ToString();
-                else 
-                    return null;
-                
+            {
+				foreach (SvnItem item in TreeView.CheckedItems)
+					return item.FullPath;
+                return null;
             }
         }
 
@@ -61,7 +60,7 @@ namespace Ankh.UI
 
         private void AfterCheck(object sender, TreeViewEventArgs e)
         {
-            IList items = this.TreeView.CheckedItems;
+            List<SvnItem> items = new List<SvnItem>(TreeView.CheckedItems);
             if ( items.Count > 0 )
             {
                 ResolvingPathEventArgs args = new ResolvingPathEventArgs( items[0] );

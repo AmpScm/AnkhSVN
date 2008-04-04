@@ -9,6 +9,7 @@ using System.Collections;
 using SharpSvn;
 using System.Collections.ObjectModel;
 using AnkhSvn.Ids;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -72,7 +73,7 @@ namespace Ankh.Commands
             this.result = new LogResult();
             this.result.Start();
 
-            string[] paths = SvnItem.GetPaths(info.CheckedItems);
+            List<string> paths = new List<string>(SvnItem.GetPaths(info.CheckedItems));
 
             SvnLogArgs args = new SvnLogArgs();
             args.StrictNodeHistory = info.StopOnCopy;

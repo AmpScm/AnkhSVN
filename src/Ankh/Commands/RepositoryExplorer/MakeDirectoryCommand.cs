@@ -33,6 +33,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            /*
             IContext context = e.Context.GetService<IContext>();
 
             INode node = context.RepositoryExplorer.SelectedNode;
@@ -61,6 +62,7 @@ namespace Ankh.Commands
                 operation.Run("Creating directory");
                 context.RepositoryExplorer.Refresh(context.RepositoryExplorer.SelectedNode);
             }
+            */
         }
 
         #endregion

@@ -6,6 +6,7 @@ using SharpSvn;
 using Ankh.Configuration;
 using Ankh.ContextServices;
 using Ankh.VS;
+using System.Collections.Generic;
 
 namespace Ankh
 {
@@ -16,15 +17,21 @@ namespace Ankh
     {
         readonly IProgressWorker worker;
         readonly IAnkhServiceProvider _context;
-        readonly IList items;
+        readonly ICollection<SvnItem> _items;
         readonly SvnCommitArgs _args;
         bool urlPaths;
         string logMessage;
 
-        public CommitOperation(SvnCommitArgs args, IProgressWorker worker, IList items, IAnkhServiceProvider context)
+        public CommitOperation(
+            SvnCommitArgs args, 
+            IProgressWorker worker, 
+            ICollection<SvnItem> items, 
+            IAnkhServiceProvider context)
         {
             if (args == null)
                 throw new ArgumentNullException("args");
+            if (items == null)
+                throw new ArgumentNullException("items");
             if (context == null)
                 throw new ArgumentNullException("context");
 
@@ -32,7 +39,7 @@ namespace Ankh
             _context = context;
             this.worker = worker;
 
-            this.items = items;
+            _items = items;
         }
 
         public bool UrlPaths
@@ -47,9 +54,9 @@ namespace Ankh
             set { this.logMessage = value; }
         }
 
-        public IList Items
+        public ICollection<SvnItem> Items
         {
-            get { return this.items; }
+            get { return this._items; }
         }
 
         public bool ShowLogMessageDialog()
@@ -83,7 +90,8 @@ namespace Ankh
                 using (CommitDialog dialog = new CommitDialog())
                 {
                     dialog.LogMessageTemplate = template;
-                    dialog.CommitItems = items;
+                    dialog.Items = _items;
+                    dialog.CommitFilter = delegate { return true; };
                     if (dialog.ShowDialog(ownerSvc.DialogOwner) != DialogResult.OK)
                     {
                         logMessage = dialog.RawLogMessage;

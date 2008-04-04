@@ -35,7 +35,6 @@ namespace Ankh.UI
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.pathSelectionTreeView.CheckBoxes = true;
             this.pathSelectionTreeView.ImageIndex = -1;
-            this.pathSelectionTreeView.Items = new object[0];
             this.pathSelectionTreeView.Location = new System.Drawing.Point(0, 0);
             this.pathSelectionTreeView.Name = "pathSelectionTreeView";
             this.pathSelectionTreeView.Recursive = false;

@@ -4,6 +4,8 @@ using System.Collections;
 
 
 using SharpSvn;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Ankh
 {
@@ -12,29 +14,62 @@ namespace Ankh
     /// </summary>
     public class PathSelectorInfo
     {
-        public PathSelectorInfo( string caption, IList items, IList checkedItems )
+        Predicate<SvnItem> _checkedFilter;
+        readonly string caption;
+        private bool singleSelection = false;
+        private bool enableRecursive = false;
+        private SvnDepth depth = SvnDepth.Empty;
+        readonly ICollection<SvnItem> items;
+        ICollection<SvnItem> _checkedItems = new Collection<SvnItem>();
+        SvnRevision _revisionStart;
+        SvnRevision _revisionEnd;
+
+        public PathSelectorInfo(string caption, ICollection<SvnItem> items, Predicate<SvnItem> checkedFilter)
         {
+            if (string.IsNullOrEmpty(caption))
+                throw new ArgumentNullException("caption");
+            if (items == null)
+                throw new ArgumentNullException("items");
+            if (checkedFilter == null)
+                throw new ArgumentNullException("checkedFilter");
+
             this.caption = caption;
             this.items = items;
-            this.checkedItems = checkedItems;
+            _checkedFilter = checkedFilter;
+
+            EvaluateFilters();
         }
 
-        public IList Items
+        void EvaluateFilters()
         {
-            get{ return this.items; }
-            set{ this.items = value; }
+            foreach (SvnItem i in items)
+            {
+                if (Ankh.Scc.SvnItemFilters.Evaluate(i, _checkedFilter))
+                    _checkedItems.Add(i);
+            }
         }
 
-        public IList CheckedItems
+        public ICollection<SvnItem> Items
         {
-            get{ return this.checkedItems; }
-            set{ this.checkedItems = value; }
+            get { return this.items; }
+        }
+
+        public ICollection<SvnItem> CheckedItems
+        {
+            get { return this._checkedItems; }
+            internal set { _checkedItems = value; }
+        }
+
+        public Predicate<SvnItem> CheckedFilter
+        {
+            get { return _checkedFilter; }
+            //set { _checkedFilter = value; }
         }
 
         public bool EnableRecursive
         {
-            get{ return this.enableRecursive; }
-            set{ this.enableRecursive = value; }
+            get { return this.enableRecursive; }
+            set { this.enableRecursive = value; }
         }
 
         public SvnDepth Depth
@@ -45,34 +80,26 @@ namespace Ankh
 
         public SvnRevision RevisionStart
         {
-            get{ return this.revisionStart; }
-            set{ this.revisionStart = value; }
+            get { return _revisionStart; }
+            set { _revisionStart = value; }
         }
 
         public SvnRevision RevisionEnd
         {
-            get{ return this.revisionEnd; }
-            set{ this.revisionEnd = value; }
+            get { return _revisionEnd; }
+            set { _revisionEnd = value; }
         }
 
         public bool SingleSelection
         {
-            get{ return this.singleSelection; }
-            set{ this.singleSelection = value; }
+            get { return this.singleSelection; }
+            set { this.singleSelection = value; }
         }
 
         public string Caption
         {
-            get{ return this.caption; }
-            set{ this.caption = value; }
+            get { return this.caption; }
+            //set{ this.caption = value; }
         }
-
-        private string caption = "Someone obviously forgot to put a caption here.";
-        private bool singleSelection = false;
-        private bool enableRecursive = false;
-        private SvnDepth depth = SvnDepth.Empty;
-        private IList items = new object[]{};
-        private IList checkedItems = new object[]{};
-        private SvnRevision revisionStart, revisionEnd;
     }
 }

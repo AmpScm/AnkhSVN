@@ -19,6 +19,20 @@ namespace Ankh.Scc
     /// </summary>
     public static class SvnItemFilters
     {
+        public static bool Evaluate(SvnItem item, Predicate<SvnItem> filter)
+        {
+            if (item == null)
+                return false;
+            if (filter == null)
+                return true;
+
+            foreach (Predicate<SvnItem> i in filter.GetInvocationList())
+            {
+                if (!i(item))
+                    return false;
+            }
+            return true;
+        }
         /// <summary>
         /// Filter for conflicted items.
         /// </summary>

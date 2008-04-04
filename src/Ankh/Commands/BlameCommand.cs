@@ -9,6 +9,7 @@ using System.Collections;
 using System.Diagnostics;
 using SharpSvn;
 using AnkhSvn.Ids;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -34,7 +35,8 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            IList resources = new ArrayList();/* context.Selection.GetSelectionResources(true,
+            List<SvnItem> resources = new List<SvnItem>();
+			/* context.Selection.GetSelectionResources(true,
                  new ResourceFilterCallback(SvnItem.VersionedFilter));*/
 
             if ( resources.Count == 0 )
@@ -48,7 +50,11 @@ namespace Ankh.Commands
             // is shift depressed?
             if ( !CommandBase.Shift )
             {
-                PathSelectorInfo info = new PathSelectorInfo( "Blame", resources, new SvnItem[] {(SvnItem)resources[0]} );
+				SvnItem first = resources[0];
+				PathSelectorInfo info = new PathSelectorInfo("Blame",
+					resources,
+					delegate(SvnItem item) { return item == first; }
+					);
                 info.RevisionStart = revisionStart;
                 info.RevisionEnd = revisionEnd;
                 info.EnableRecursive = false;
@@ -62,11 +68,11 @@ namespace Ankh.Commands
 
                 revisionStart = info.RevisionStart;
                 revisionEnd = info.RevisionEnd;
-                resources = info.CheckedItems;
+                resources = new List<SvnItem>(info.CheckedItems);
             }
             else
             {
-                resources = new SvnItem[] { (SvnItem)resources[0] };
+                resources = new List<SvnItem>(new SvnItem[]{resources[0]});
             }
 
             XslCompiledTransform transform = CommandBase.GetTransform( 

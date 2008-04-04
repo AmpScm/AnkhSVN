@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using SharpSvn;
+using System.Collections.Generic;
 
 namespace Ankh.UI
 {
@@ -18,6 +19,7 @@ namespace Ankh.UI
     /// </summary>
     public partial class PathSelector : System.Windows.Forms.Form
     {
+		Predicate<SvnItem> _checkedFilter;
         /// <summary>
         /// Invoked when the treeview needs more information about a node.
         /// </summary>
@@ -65,20 +67,28 @@ namespace Ankh.UI
         /// The items to put in the treeview.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IList Items
+        public ICollection<SvnItem> Items
         {
             get{ return this.pathSelectionTreeView.Items; }
             set{ this.pathSelectionTreeView.Items = value; }
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		public Predicate<SvnItem> CheckedFilter
+		{
+			get { return pathSelectionTreeView.CheckedFilter; }
+			set { pathSelectionTreeView.CheckedFilter = value; }
+		}
+
         /// <summary>
         /// The items checked in the treeview.
         /// </summary>
         [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
-        public IList CheckedItems
+        public IEnumerable<SvnItem> CheckedItems
         {
             get{ return this.pathSelectionTreeView.CheckedItems; }
-            set{ this.pathSelectionTreeView.CheckedItems = value; }
         }
 
         /// <summary>

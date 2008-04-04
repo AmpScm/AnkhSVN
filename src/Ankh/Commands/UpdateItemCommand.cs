@@ -9,6 +9,7 @@ using Ankh.UI;
 using AnkhSvn.Ids;
 using Ankh.VS;
 using Ankh.Selection;
+using System.Collections.ObjectModel;
 
 namespace Ankh.Commands
 {
@@ -38,7 +39,7 @@ namespace Ankh.Commands
 
             using (e.Context.BeginOperation("Updating"))
             {
-                ArrayList files = new ArrayList();
+				Collection<SvnItem> files = new Collection<SvnItem>();
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
                 {
                     if (item.IsVersioned)
@@ -59,7 +60,7 @@ namespace Ankh.Commands
         #region UpdateVisitor
         private class UpdateRunner : IProgressWorker
         {
-            public UpdateRunner(IContext context, IList resources)
+			public UpdateRunner(IContext context, Collection<SvnItem> resources)
             {
                 this.context = context;
                 this.resources = resources;
@@ -87,7 +88,7 @@ namespace Ankh.Commands
                 {
                     d.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
                     d.Items = this.resources;
-                    d.CheckedItems = this.resources;
+                    d.CheckedFilter = delegate{return true;};
                     d.Recursive = true;
 
                     if (!CommandBase.Shift)
@@ -99,7 +100,7 @@ namespace Ankh.Commands
                     }
 
                     depth = d.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-                    this.resources = d.CheckedItems;
+                    this.resources = new List<SvnItem>(d.CheckedItems);
                     this.revision = d.Revision;
                 }
 
@@ -120,7 +121,7 @@ namespace Ankh.Commands
             /// </summary>
             public void Work(AnkhWorkerArgs e)
             {
-                string[] paths = SvnItem.GetPaths(this.resources);
+                ICollection<string> paths = SvnItem.GetPaths(this.resources);
                 SvnUpdateArgs args = new SvnUpdateArgs();
                 args.Notify += new EventHandler<SvnNotifyEventArgs>(OnNotificationEventHandler);
                 args.Revision = revision;
@@ -154,7 +155,7 @@ namespace Ankh.Commands
                 }
             }
 
-            private IList resources;
+			private ICollection<SvnItem> resources;
             private SvnRevision revision;
             private SvnDepth depth;
             private bool conflictsOccurred = false;

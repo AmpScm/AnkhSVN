@@ -35,12 +35,12 @@ namespace Ankh.Commands
             SaveAllDirtyDocuments(e.Selection, e.Context);
 
             // get the modified resources
-            List<SvnItem> resources = new List<SvnItem>();
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
-            {
-                if (item.IsModified)
-                    resources.Add(item);
-            }
+			Dictionary<string, SvnItem> resources = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
+			foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+			{
+				if (!resources.ContainsKey(item.FullPath))
+					resources.Add(item.FullPath, item);
+			}
 
             SvnDepth depth = SvnDepth.Empty;
             bool confirmed = false;
@@ -48,8 +48,8 @@ namespace Ankh.Commands
             if (!CommandBase.Shift &&
                 e.Command == AnkhCommand.RevertItem)
             {
-                PathSelectorInfo info = new PathSelectorInfo("Select items to revert",
-                    resources, resources);
+				PathSelectorInfo info = new PathSelectorInfo("Select items to revert",
+					resources.Values, delegate(SvnItem item) { return item.IsModified; });
 
                 //if(e.Command == AnkhCommand.ItemRevertSpecific)
                 //    info.RevisionStart = SvnRevision.Base;
@@ -63,34 +63,26 @@ namespace Ankh.Commands
                 resources.Clear();
                 foreach (SvnItem item in info.CheckedItems)
                 {
-                    resources.Add(item);
+					if(!resources.ContainsKey(item.FullPath))
+						resources.Add(item.FullPath, item);
                 }
             }
 
-            List<string> paths = new List<string>();
+			string[] paths = new string[resources.Count];
+			resources.Keys.CopyTo(paths, 0);
+			// ask for confirmation if the Shift dialog hasn't been used
+			if (!confirmed)
+			{
+				string msg = "Do you really want to revert these item(s)?" +
+					Environment.NewLine + Environment.NewLine;
+				msg += string.Join(Environment.NewLine, paths);
 
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
-            {
-                if (item.IsModified)
-                {
-                    paths.Add(item.FullPath);
-                    item.MarkDirty();
-                }
-            }
-
-            // ask for confirmation if the Shift dialog hasn't been used
-            if (!confirmed)
-            {
-                string msg = "Do you really want to revert these item(s)?" +
-                    Environment.NewLine + Environment.NewLine;
-                msg += string.Join(Environment.NewLine, paths.ToArray());
-
-                if (dialogOwner.MessageBox.Show(msg, "Revert", MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Information) != DialogResult.Yes)
-                {
-                    return;
-                }
-            }
+				if (dialogOwner.MessageBox.Show(msg, "Revert", MessageBoxButtons.YesNo,
+					MessageBoxIcon.Information) != DialogResult.Yes)
+				{
+					return;
+				}
+			}
 
             // perform the actual revert 
             using (e.Context.BeginOperation("Reverting"))
@@ -99,7 +91,12 @@ namespace Ankh.Commands
                 SvnRevertArgs args = new SvnRevertArgs();
                 //args.Depth = depth;
                 args.ThrowOnError = false;
-
+				Dictionary<string, SvnNotifyEventArgs> revertedItems = new Dictionary<string,SvnNotifyEventArgs>(StringComparer.OrdinalIgnoreCase);
+				args.Notify += delegate(object sender, SvnNotifyEventArgs eNotify)
+				{
+					if (eNotify.Action == SvnNotifyAction.Revert && !revertedItems.ContainsKey(eNotify.FullPath))
+						revertedItems.Add(eNotify.FullPath, eNotify);
+				};
                 using (SvnClient client = e.Context.GetService<ISvnClientPool>().GetClient())
                 {
                     client.Revert(paths, args);
@@ -108,7 +105,7 @@ namespace Ankh.Commands
                     if (pn != null)
                         pn.MarkDirty(e.Selection.GetOwnerProjects(true));
                 }
-                dl.Reload(paths);
+                dl.Reload(revertedItems.Keys);
             }
         }
     }

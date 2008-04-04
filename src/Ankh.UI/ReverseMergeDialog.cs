@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using SharpSvn;
+using System.Collections.Generic;
 
 namespace Ankh.UI
 {
@@ -30,7 +31,7 @@ namespace Ankh.UI
         /// <summary>
         /// The items to choose from.
         /// </summary>
-        public IList Items
+		public ICollection<SvnItem> Items
         {
             get { return this.treeView.Items; }
             set { this.treeView.Items = value; }
@@ -48,11 +49,15 @@ namespace Ankh.UI
         /// <summary>
         /// The selected items.
         /// </summary>
-        public IList CheckedItems
+        public IEnumerable<SvnItem> CheckedItems
         {
             get { return this.treeView.CheckedItems; }
-            set { this.treeView.CheckedItems = value; }
         }
+
+		public Predicate<SvnItem> CheckedFilter
+		{
+			get { return this.treeView.CheckedFilter; }
+		}
 
         /// <summary>
         /// Whether the operation should be recursive.

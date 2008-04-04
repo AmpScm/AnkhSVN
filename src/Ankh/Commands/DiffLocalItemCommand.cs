@@ -41,6 +41,7 @@ namespace Ankh.Commands
                 SvnRevisionRange revRange = null;
                 switch (e.Command)
                 {
+                    case AnkhCommand.DiffLocalItem:
                     case AnkhCommand.ItemCompareBase:
                         revRange = new SvnRevisionRange(SvnRevision.Base, SvnRevision.Working);
                         break;
