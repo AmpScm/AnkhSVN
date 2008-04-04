@@ -77,7 +77,7 @@ namespace Ankh.UI.SccManagement
                 info = cache[projectInfo.ProjectDirectory];
 
                 n = bindingGrid.Rows.Add(
-                    projectInfo.ProjectFullName,
+                    projectInfo.UniqueProjectName,
                     projectInfo.ProjectDirectory,
                     info.Status.Uri,
                     false,

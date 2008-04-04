@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Ankh.UI.RepositoryOpen;
 using System.Windows.Forms;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
@@ -45,9 +46,22 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
             using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
             {
                 dlg.Context = e.Context;
+                string filters = settings.AllProjectExtensionsFilter;
+
+                if (e.Command == AnkhCommand.FileFileOpenFromSubversion || e.Command == AnkhCommand.FileSccOpenFromSubversion)
+                {
+                    filters = "*.sln;*.dsw;" + filters;
+
+                    dlg.Filter = "All Projects and Solutions (" + filters + ")|" + filters + "|All Files (*.*)|*";
+                }
+                else
+                {
+                    dlg.Filter = "All Projects  (" + filters + ")|" + filters + "|All Files (*.*)|*";
+                }
 
                 if (dlg.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)
                 {

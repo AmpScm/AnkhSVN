@@ -6,6 +6,9 @@ using Ankh.Selection;
 using Ankh.Scc;
 using SharpSvn;
 using System.IO;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
+using Microsoft.Win32;
 
 namespace Ankh.Settings
 {
@@ -164,5 +167,63 @@ namespace Ankh.Settings
         }
 
         #endregion
+
+        string _allProjectTypesFilter;
+        public string AllProjectExtensionsFilter
+        {
+            get
+            {
+                if (_allProjectTypesFilter != null)
+                    return _allProjectTypesFilter;
+
+                // VS2008+ Use ILocalRegistry4.GetLocalRegistryRootEx to get RANU support
+
+                ILocalRegistry2 r = Context.GetService<ILocalRegistry2>(typeof(SLocalRegistry));
+
+                string root;
+
+                if (!ErrorHandler.Succeeded(r.GetLocalRegistryRoot(out root)))
+                    return null;
+                
+                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(root + "\\Projects", RegistryKeyPermissionCheck.ReadSubTree))
+                {
+                    if (rk == null)
+                        return null;
+
+                    List<string> extensions = new List<string>();
+                    StringBuilder sb = new StringBuilder();
+
+                    foreach(string sk in rk.GetSubKeyNames())
+                    {
+                        using (RegistryKey k = rk.OpenSubKey(sk, RegistryKeyPermissionCheck.ReadSubTree))
+                        {
+                            string v = k.GetValue("PossibleProjectExtensions", null) as string;
+                            
+                            if (string.IsNullOrEmpty(v))
+                                continue;
+
+                            foreach(string ext in v.Split(';'))
+                            {
+                                v = ext.Trim();
+
+                                if (string.IsNullOrEmpty(v) || extensions.Contains(v))
+                                    continue;
+
+                                extensions.Add(v);
+                                
+                                if(sb.Length > 0)
+                                    sb.Append(";*.");
+                                else
+                                    sb.Append("*.");
+
+                                sb.Append(v);
+                            }
+                        }
+                    }
+
+                    return _allProjectTypesFilter = sb.ToString();
+                }
+            }
+        }
     }
 }

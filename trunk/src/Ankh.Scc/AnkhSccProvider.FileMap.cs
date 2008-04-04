@@ -593,9 +593,9 @@ namespace Ankh.Scc
             /// Gets the full name of the project (the project prefixed by the folder it is under)
             /// </summary>
             /// <value>The full name of the project.</value>
-            public string ProjectFullName
+            public string UniqueProjectName
             {
-                get { return _data.ProjectFullName; }
+                get { return _data.UniqueProjectName; }
             }
 
             #endregion

@@ -123,6 +123,48 @@ namespace Ankh.UI.RepositoryOpen
                 fileTypeBox.SelectedItem = fileTypeBox.Items[0];
         }
 
+        string _filter;
+
+        class FilterItem
+        {
+            string _name;
+            string _filter;
+
+            public FilterItem(string name, string filter)
+            {
+                _name = name;
+                _filter = filter;
+            }
+
+            public override string ToString()
+            {
+                return _name;
+            }
+        }
+
+        public string Filter
+        {
+            get { return _filter; }
+            set
+            {
+                _filter = value;
+
+                fileTypeBox.Items.Clear();
+
+                string[] parts = value.Split('|');
+                for (int i = 0; i < parts.Length; i += 2)
+                {
+                    if (i + 1 > parts.Length)
+                        continue;
+
+                    fileTypeBox.Items.Add(new FilterItem(parts[i], parts[i + 1]));
+                }
+
+                if (fileTypeBox.SelectedValue == null && fileTypeBox.Items.Count > 0)
+                    fileTypeBox.SelectedValue = fileTypeBox.Items[0];
+            }
+        }
+
         bool _inSetDirectory;
         void SetDirectory(Uri uri)
         {

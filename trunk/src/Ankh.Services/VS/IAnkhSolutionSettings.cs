@@ -28,5 +28,8 @@ namespace Ankh.VS
         /// </summary>
         /// <value>The project root URI.</value>
         Uri ProjectRootUri { get; }
+
+
+        string AllProjectExtensionsFilter { get; }
     }
 }
