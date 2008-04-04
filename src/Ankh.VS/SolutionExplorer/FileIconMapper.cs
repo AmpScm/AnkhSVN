@@ -7,14 +7,14 @@ using System.Drawing;
 using Utils.Win32;
 using System.Runtime.InteropServices;
 
-namespace Ankh.UI.PendingChanges
+namespace Ankh.VS.SolutionExplorer
 {
-    class FileIconMap : AnkhService
+    class FileIconMapper : AnkhService, IFileIconMapper
     {
         readonly ImageList _imageList;
         readonly Dictionary<ProjectIconReference, int> _iconMap;        
 
-        public FileIconMap(IAnkhServiceProvider context)
+        public FileIconMapper(IAnkhServiceProvider context)
             : base(context)
         {
             _imageList = new ImageList();
@@ -87,5 +87,72 @@ namespace Ankh.UI.PendingChanges
         {
             get { return _imageList; }
         }
+
+        #region IFileIconMapper Members
+
+
+        int _dirIcon;
+        public int DirectoryIcon
+        {
+            get 
+            {
+                if (_dirIcon > 0)
+                    return _dirIcon - 1;
+
+                int n = GetSpecialIcon("", FileAttribute.Directory);
+
+                if (n >= 0)
+                    _dirIcon = n + 1;
+
+                return n;
+            }
+        }
+
+        int _fileIcon;
+        public int FileIcon
+        {
+            get 
+            {
+                if (_fileIcon > 0)
+                    return _fileIcon - 1;
+
+                int n = GetSpecialIcon("", FileAttribute.Normal);
+
+                if (n >= 0)
+                    _fileIcon = n + 1;
+
+                return n;
+            }
+        }
+
+        int GetSpecialIcon(string name, FileAttribute attr)
+        {
+            SHFILEINFO fileinfo = new SHFILEINFO();
+            IntPtr sysImageList = Win32.SHGetFileInfo(name, (uint)(int)attr, ref fileinfo,
+                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_SHELLICONSIZE |
+                Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON | Constants.SHGFI_USEFILEATTRIBUTES);
+
+            if (sysImageList == IntPtr.Zero)
+                return -1;
+
+            ProjectIconReference handle = new ProjectIconReference(sysImageList, (int)fileinfo.iIcon);
+
+            return ResolveReference(handle);
+        }
+
+        #endregion
+
+        #region IFileIconMapper Members
+
+
+        public int GetIconForExtension(string ext)
+        {
+            if (string.IsNullOrEmpty(ext))
+                return _fileIcon;
+
+            return GetSpecialIcon("c:\\file." + ext.Trim('.'), FileAttribute.Normal);
+        }
+
+        #endregion
     }
 }

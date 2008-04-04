@@ -101,6 +101,7 @@
     <Compile Include="Scc\IProjectNotifier.cs" />
     <Compile Include="VS\IAnkhSolutionSettings.cs" />
     <Compile Include="VS\IAnkhWebBrowser.cs" />
+    <Compile Include="VS\IFileIconMapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ankh.Configuration\Ankh.Configuration.csproj">

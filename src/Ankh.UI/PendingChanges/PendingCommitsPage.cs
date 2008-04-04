@@ -10,6 +10,7 @@ using System.ComponentModel.Design;
 using Ankh.Scc;
 using AnkhSvn.Ids;
 using Ankh.Commands;
+using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -65,7 +66,7 @@ namespace Ankh.UI.PendingChanges
         readonly Dictionary<string, PendingCommitItem> _listItems = new Dictionary<string, PendingCommitItem>(StringComparer.OrdinalIgnoreCase);
         readonly SortedList<string, PendingChange> _pendingChanges = new SortedList<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
 
-        FileIconMap _iconMap;
+        IFileIconMapper _iconMap;
 
         internal void RefreshList()
         {
@@ -80,10 +81,7 @@ namespace Ankh.UI.PendingChanges
 
             if (_iconMap == null)
             {
-                _iconMap = UISite.GetService<FileIconMap>();
-
-                if (_iconMap == null)
-                    UISite.GetService<IServiceContainer>().AddService(typeof(FileIconMap), _iconMap = new FileIconMap(UISite));
+                _iconMap = UISite.GetService<IFileIconMapper>();
 
                 pendingCommits.SmallImageList = _iconMap.ImageList;
             }
