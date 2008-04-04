@@ -67,6 +67,7 @@
     <Compile Include="Selection\CachedEnumerable.cs" />
     <Compile Include="Selection\SelectionContext.cs" />
     <Compile Include="Selection\SelectionUtils.cs" />
+    <Compile Include="SolutionExplorer\FileIconMapper.cs" />
     <Compile Include="SolutionExplorer\SolutionExplorerWindow.cs" />
     <Compile Include="SolutionExplorer\SolutionTreeViewManager.cs" />
     <Compile Include="SolutionExplorer\StatusImageMapper.cs" />

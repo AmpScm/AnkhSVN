@@ -53,7 +53,7 @@ namespace Ankh.VSPackage
     [ProvideSourceControlProvider("AnkhSVN - Subversion Support for Visual Studio", "#100")]
     [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName="AnkhSVN SubversionScc")]
     [ProvideOptionPage(typeof(AnkhSourceControlSettingsPage), "Source Control", "Subversion", 106, 107, false)]
-    [ProvideAutoLoad("F1536EF8-92EC-443C-9ED7-FDADF150DA82")] // = VSConstants.UICONTEXT_SolutionExists.ToString()
+    //[ProvideAutoLoad("F1536EF8-92EC-443C-9ED7-FDADF150DA82")] // = VSConstants.UICONTEXT_SolutionExists.ToString()
     public sealed partial class AnkhSvnPackage : Package, IAnkhPackage
     {
         AnkhRuntime _runtime;

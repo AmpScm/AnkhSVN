@@ -11,7 +11,7 @@ namespace Ankh.UI.PendingChanges
     {
         readonly PendingChange _change;
 
-        public PendingCommitItem(IAnkhServiceProvider context, PendingChange change, FileIconMap iconMap)
+        public PendingCommitItem(IAnkhServiceProvider context, PendingChange change, IFileIconMapper iconMap)
         {
             if (change == null)
                 throw new ArgumentNullException("change");
@@ -26,11 +26,10 @@ namespace Ankh.UI.PendingChanges
             RefreshText(context, iconMap);
         }
 
-        public void RefreshText(IAnkhServiceProvider context, FileIconMap iconMap)
+        public void RefreshText(IAnkhServiceProvider context, IFileIconMapper iconMap)
         {
             IAnkhSolutionSettings solSet = context.GetService<IAnkhSolutionSettings>();
             IFileStatusCache cache = context.GetService<IFileStatusCache>();
-
 
             string start = solSet.ProjectRoot;
 

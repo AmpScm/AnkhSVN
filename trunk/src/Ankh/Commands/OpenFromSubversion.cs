@@ -4,6 +4,8 @@ using System.Text;
 using AnkhSvn.Ids;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using Ankh.UI.RepositoryOpen;
+using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
@@ -43,7 +45,14 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            throw new NotImplementedException();
+            using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
+            {
+                dlg.Context = e.Context;
+
+                if (dlg.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)
+                {
+                }
+            }
         }
     }
 }

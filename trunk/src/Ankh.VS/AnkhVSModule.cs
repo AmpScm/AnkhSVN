@@ -43,6 +43,7 @@ namespace Ankh.VS
             Container.AddService(typeof(IAnkhDialogOwner), new AnkhDialogOwner(Context));
             Container.AddService(typeof(IAnkhWebBrowser), new AnkhWebBrowser(Context));
             Container.AddService(typeof(IStatusImageMapper), new StatusImageMapper(Context));
+            Container.AddService(typeof(IFileIconMapper), new FileIconMapper(Context));
         }
 
         /// <summary>

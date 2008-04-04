@@ -280,7 +280,6 @@
     <Compile Include="PendingChanges\Commands\PendingChangeLocationCombo.cs" />
     <Compile Include="PendingChanges\Commands\ViewLogMessage.cs" />
     <Compile Include="PendingChanges\Commands\RefreshPendingChanges.cs" />
-    <Compile Include="PendingChanges\FileIconMap.cs" />
     <Compile Include="PendingChanges\LogMessageEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -775,6 +774,8 @@
     <None Include="Resources\TabNotes.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\BrowseRefresh.png" />
+    <None Include="Resources\BrowseUp.png" />
     <Content Include="Resources\TabConflicts.png" />
   </ItemGroup>
   <ItemGroup>
