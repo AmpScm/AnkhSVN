@@ -146,38 +146,23 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        public string ProjectFullName
+        string _uniqueName;
+        public string UniqueProjectName
         {
             get
             {
-                StringBuilder sb = new StringBuilder(ProjectName);
+                if (_uniqueName != null)
+                    return _uniqueName;
+                IVsSolution3 solution = _context.GetService<IVsSolution3>(typeof(SVsSolution));
 
-                IVsHierarchy hier = ProjectHierarchy;
-                while(hier != null)
+                if (solution != null)
                 {
-                    object value;
-                    if(!ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, 
-                        (int)__VSHPROPID.VSHPROPID_ParentHierarchy, out value)))
-                    {
-                        break;
-                    }
+                    string name;
 
-                    hier = value as IVsHierarchy;
-
-                    if(hier == null || hier is IVsSolution)
-                        return sb.ToString();
-
-                    if(!ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, 
-                        (int)__VSHPROPID.VSHPROPID_Name, out value)) || !(value is String))
-                    {
-                        break;
-                    }
-
-                    sb.Insert(0, '\\');
-                    sb.Insert(0, (string)value);
+                    if (ErrorHandler.Succeeded(solution.GetUniqueUINameOfProject(ProjectHierarchy, out name)))
+                        _uniqueName = name;
                 }
-
-                return sb.ToString();
+                return _uniqueName ?? ProjectName;
             }
         }
 
@@ -295,6 +280,8 @@ namespace Ankh.Scc.ProjectMap
 
         internal void Reload()
         {
+            _projectName = null;
+            _uniqueName = null;
             OnClose();
             Load();
         }

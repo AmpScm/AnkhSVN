@@ -25,7 +25,7 @@ namespace Ankh.Scc
         /// Gets the full name of the project (the project prefixed by the folder it is under)
         /// </summary>
         /// <value>The full name of the project.</value>
-        string ProjectFullName { get; }
+        string UniqueProjectName { get; }
 
         /// <summary>
         /// Gets the project directory.
