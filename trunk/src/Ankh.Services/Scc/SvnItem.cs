@@ -541,7 +541,22 @@ namespace Ankh
             {
                 EnsureClean();
 
-                return (_status.LocalContentStatus == SvnStatus.Ignored);
+                AnkhStatus status = _status;
+                if (GetIsVersioned(status))
+                    return false;
+                else if (status.LocalContentStatus == SvnStatus.Ignored)
+                    return true;
+
+                // Ok. If a folder is ignored everything in it is ignored too
+
+                if (!Exists) // This check is cheap compared to checking the parent
+                    return false;
+
+                SvnItem parent = Parent;
+                if (parent != null)
+                    return parent.IsIgnored;
+                else
+                    return false;
             }
         }
 
@@ -599,7 +614,7 @@ namespace Ankh
             {
                 string parentDir = Path.GetDirectoryName(FullPath);
 
-                if(parentDir == FullPath)
+                if(parentDir.Length >= FullPath.Length)
                     return null; // We are the root folder!
 
                 IFileStatusCache cache = _context.GetService<IFileStatusCache>();

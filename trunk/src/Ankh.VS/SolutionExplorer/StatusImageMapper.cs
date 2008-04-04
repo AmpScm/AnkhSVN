@@ -55,12 +55,12 @@ namespace Ankh.VS.SolutionExplorer
                 return AnkhGlyph.InConflict;
             else if (item.ReadOnlyMustLock)
                 return AnkhGlyph.MustLock;
-            else if (item.IsIgnored)
-                return AnkhGlyph.Ignored;
             else if (!item.IsVersioned)
             {
                 if (!item.Exists)
                     return AnkhGlyph.FileMissing;
+                else if (item.IsIgnored)
+                    return AnkhGlyph.Ignored;
                 else if (item.IsVersionable)
                     return AnkhGlyph.Blank; // Scc provider will apply ShouldBeAdded if in a project
                 else

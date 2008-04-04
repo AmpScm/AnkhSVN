@@ -117,6 +117,7 @@ namespace Ankh
                 dialog.Caption = caption;
 
                 thread.Start(client);
+                thread.Name = "AnkhSVN Worker";
 
                 _invoker = dialog;
 
