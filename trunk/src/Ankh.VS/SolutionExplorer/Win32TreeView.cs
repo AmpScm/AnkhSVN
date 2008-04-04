@@ -27,15 +27,6 @@ namespace Ankh.VS.SolutionExplorer
             get { return true; }
         }
 
-        public bool RenameInProgress
-        {
-            get
-            {
-                IntPtr editControl = Win32.SendMessage(_hwnd, Msg.TVM_GETEDITCONTROL, IntPtr.Zero, IntPtr.Zero);
-                return editControl != IntPtr.Zero;
-            }
-        }
-
         /// <summary>
         /// Whether status image list messages should be suppressed.
         /// </summary>

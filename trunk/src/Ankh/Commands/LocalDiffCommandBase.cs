@@ -128,10 +128,56 @@ namespace Ankh.Commands
                 diffString = diffString.Replace("%base", quotedLeftPath);
                 diffString = diffString.Replace("%mine", quotedRightPath);
 
-                // We can't use System.Diagnostics.Process here because we want to keep the
-                // program path and arguments together, which it doesn't allow.
-                Utils.Exec exec = new Utils.Exec();
-                exec.ExecPath(diffString);
+                // We must split the line in program and arguments before running
+                diffString = diffString.TrimStart();
+                string program ;
+                string args;
+
+                if (diffString.Length > 0 && diffString[0] == '\"')
+                {
+                    int n = diffString.IndexOf('\"', 1);
+
+                    if (n > 0)
+                    {
+                        program = diffString.Substring(1, n - 1).Trim();
+                        args = diffString.Substring(n + 1).TrimStart();
+                    }
+                    else
+                    {
+                        program = diffString;
+                        args = "";
+                    }
+                }
+                else
+                {
+                    char[] spacers = new char[] { ' ', '\t' };
+
+                    int n = diffString.IndexOfAny(spacers);
+                    program = "";
+                    args = "";
+
+                    // We use the algorithm as documented by CreateProcess() in MSDN
+                    // http://msdn2.microsoft.com/en-us/library/ms682425(VS.85).aspx
+                    while(n >= 0)
+                    {
+                        program = diffString.Substring(0, n);
+
+                        if(File.Exists(program))
+                        {
+                            args = diffString.Substring(n + 1).TrimStart();
+                            break;
+                        }
+                        else
+                            n = diffString.IndexOfAny(spacers, n + 1);
+                    }
+
+                    if(n < 0)
+                    {
+                        program = diffString.Trim();
+                    }
+                }
+
+                Process.Start(program, args);
             }
 
             return null;

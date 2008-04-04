@@ -6,7 +6,7 @@ namespace Ankh.UI
 {
     partial class ProgressDialog
     {
-        private System.ComponentModel.IContainer components;
+        private System.ComponentModel.IContainer components = null;
 
 
         #region Windows Form Designer generated code

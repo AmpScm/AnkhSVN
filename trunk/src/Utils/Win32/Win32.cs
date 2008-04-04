@@ -80,52 +80,8 @@ namespace Utils.Win32
         public static extern IntPtr FindWindowEx(IntPtr parent, IntPtr afterChild, string className,
             string windowName);
 
-        /// <summary>
-        /// Locks or unlocks a window for updates.
-        /// </summary>
-        /// <param name="window">The window to lock or null to unlock.</param>
-        [DllImport("user32.dll")]
-        public static extern int LockWindowUpdate(IntPtr window);
-
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int GetLongPathName(string shortPath,
             StringBuilder longPath, int bufSize);
-
-        [DllImport("Kernel32.dll")]
-        public static extern int WaitForSingleObject( IntPtr handle,
-            UInt32 milliseconds );
-
-        [DllImport("Kernel32.dll")]
-        public static extern int CreateProcess( 
-            string appName,
-            string commandLine,
-            IntPtr processAttributes,
-            IntPtr threadAttributes,
-            [MarshalAs(UnmanagedType.Bool)] bool inheritHandles,
-            int creationFlags,
-            IntPtr environment,
-            string currentDir,
-            ref STARTUP_INFO si,
-            out PROCESS_INFORMATION pi);
-
-        [DllImport("kernel32.dll", SetLastError=true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool CloseHandle(IntPtr handle);
-
-        [DllImport("comctl32.dll")]
-        public static extern IntPtr ImageList_GetIcon(IntPtr imageList, int i, uint flags);
-
-        [DllImport("comctl32.dll")]
-        public static extern int ImageList_Add(IntPtr imageList, IntPtr image, IntPtr mask);
-
-        [DllImport("comctl32.dll")]
-        public static extern int ImageList_AddMasked(IntPtr imageList, IntPtr image, int color);
-
-        [DllImport("comctl32.dll")]
-        public static extern int ImageList_AddIcon(IntPtr imageList, IntPtr icon);
-
-        [DllImport("comctl32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool ImageList_SetOverlayImage(IntPtr imageList, int image, int overlay);
     }
 }
