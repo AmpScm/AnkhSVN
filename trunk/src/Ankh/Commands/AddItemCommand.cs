@@ -38,7 +38,8 @@ namespace Ankh.Commands
             IContext context = e.Context.GetService<IContext>();
 
             SortedList<string, SvnItem> paths = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-            IList resources = new Collection<SvnItem>();
+            Collection<SvnItem> resources = new Collection<SvnItem>();
+			ICollection<SvnItem> addItems=resources;
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
@@ -57,8 +58,8 @@ namespace Ankh.Commands
             // are we shifted?
             if (!CommandBase.Shift)
             {
-                PathSelectorInfo info = new PathSelectorInfo("Select items to add",
-                    resources, resources);
+				PathSelectorInfo info = new PathSelectorInfo("Select items to add",
+					resources, delegate { return true; });
                 info.EnableRecursive = false;
 
                 info = context.UIShell.ShowPathSelector(info);
@@ -66,7 +67,7 @@ namespace Ankh.Commands
                 if (info == null)
                     return;
 
-                resources = info.CheckedItems;
+                addItems = info.CheckedItems;
             }
 
             using(context.StartOperation("Adding"))
@@ -77,7 +78,7 @@ namespace Ankh.Commands
                 args.Depth = SvnDepth.Empty;
                 args.AddParents = true;
 
-                foreach (SvnItem item in resources)
+                foreach (SvnItem item in addItems)
                 {
                     client.Add(item.FullPath, args);
                 }

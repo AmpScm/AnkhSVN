@@ -71,8 +71,6 @@ namespace Ankh.UI
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.commitItemsTree.CheckBoxes = true;
-            this.commitItemsTree.CheckedItems = ((System.Collections.IList)(resources.GetObject("commitItemsTree.CheckedItems")));
-            this.commitItemsTree.Items = new object[0];
             this.commitItemsTree.Location = new System.Drawing.Point(3, 25);
             this.commitItemsTree.Name = "commitItemsTree";
             this.commitItemsTree.Recursive = false;

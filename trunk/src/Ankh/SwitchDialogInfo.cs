@@ -1,6 +1,7 @@
 // $Id$
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Ankh
 {
@@ -9,8 +10,8 @@ namespace Ankh
     /// </summary>
     public class SwitchDialogInfo : PathSelectorInfo
     {
-        public SwitchDialogInfo( IList items, IList checkedItems ) :
-            base( "", items, checkedItems )
+        public SwitchDialogInfo( ICollection<SvnItem> items, Predicate<SvnItem> checkedFilter ) :
+            base( "", items, checkedFilter )
         {
             this.switchToUrl = null;
             this.path = null;

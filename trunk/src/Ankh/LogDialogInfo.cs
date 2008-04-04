@@ -1,6 +1,7 @@
 // $Id$
 using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace Ankh
 {
@@ -9,8 +10,8 @@ namespace Ankh
     /// </summary>
     public class LogDialogInfo : PathSelectorInfo
     {
-        public LogDialogInfo( IList items, IList checkedItems ) : 
-            base( "", items, checkedItems )
+		public LogDialogInfo(Collection<SvnItem> items, Predicate<SvnItem> checkedFilter) : 
+            base( "", items, checkedFilter)
         {			
         }
 

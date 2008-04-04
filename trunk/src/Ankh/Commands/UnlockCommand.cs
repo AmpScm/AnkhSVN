@@ -3,6 +3,7 @@ using System.Collections;
 using SharpSvn;
 using AnkhSvn.Ids;
 using Ankh.VS;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -52,7 +53,7 @@ namespace Ankh.Commands
 
         private void DoUnlock(AnkhWorkerArgs e)
         {
-            string[] paths = SvnItem.GetPaths(this.info.CheckedItems);
+            ICollection<string> paths = SvnItem.GetPaths(this.info.CheckedItems);
             SvnUnlockArgs args = new SvnUnlockArgs();
             args.BreakLock = false;
             e.Client.Unlock(paths, args);

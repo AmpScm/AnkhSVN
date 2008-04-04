@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace Ankh.UI
 {
@@ -85,15 +86,27 @@ namespace Ankh.UI
             set{ this.logMessageTemplate = value; }
         }
 
-        public IList CommitItems
+        public ICollection<SvnItem> Items
+        {
+            get { return commitItemsTree.Items; }
+            set { commitItemsTree.Items = value; }
+        }
+
+        public IEnumerable<SvnItem> CommitItems
         {
             get{ return this.commitItemsTree.CheckedItems; }
-            set
-            { 
-                this.commitItemsTree.Items = value;
-                this.commitItemsTree.CheckedItems = value;
+			//set
+			//{ 
+			//    this.commitItemsTree.Items = value;
+			//    this.commitItemsTree.CheckedItems = value;
                
-            }
+			//}
+        }
+
+        public Predicate<SvnItem> CommitFilter
+        {
+            get { return commitItemsTree.CheckedFilter; }
+            set { commitItemsTree.CheckedFilter = value; }
         }
 
         public bool UrlPaths
@@ -178,7 +191,6 @@ namespace Ankh.UI
         {
             this.logMessageBox.Text = "";
             this.dialogResult = CommitDialogResult.Cancel;
-            this.CommitItems = new object[]{};
         }
 
         private void ItemChecked(object sender, TreeViewEventArgs e )

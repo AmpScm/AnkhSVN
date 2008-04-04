@@ -11,6 +11,7 @@ using SharpSvn;
 using Ankh.ContextServices;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Collections.Generic;
 
 namespace Ankh
 {
@@ -271,7 +272,7 @@ namespace Ankh
 
                 selector.EnableRecursive = info.EnableRecursive;
                 selector.Items = info.Items;
-                selector.CheckedItems = info.CheckedItems;
+                selector.CheckedFilter = info.CheckedFilter;
                 selector.Recursive = info.Depth == SvnDepth.Infinity;
                 selector.SingleSelection = info.SingleSelection;
                 selector.Caption = info.Caption;
@@ -298,7 +299,7 @@ namespace Ankh
                 // show it
                 if (selector.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) == DialogResult.OK)
                 {
-                    info.CheckedItems = selector.CheckedItems;
+                    info.CheckedItems = new List<SvnItem>(selector.CheckedItems);
                     info.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
                     info.RevisionStart = selector.RevisionStart;
                     info.RevisionEnd = selector.RevisionEnd;
@@ -324,13 +325,13 @@ namespace Ankh
                 dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
 
                 dlg.Items = info.Items;
-                dlg.CheckedItems = info.CheckedItems;
+                dlg.CheckedFilter = info.CheckedFilter;
                 dlg.Message = info.Message;
                 dlg.StealLocks = info.StealLocks;
                 if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                     return null;
 
-                info.CheckedItems = dlg.CheckedItems;
+                info.CheckedItems = new List<SvnItem>( dlg.CheckedItems);
                 info.Message = dlg.Message;
                 info.StealLocks = dlg.StealLocks;
                 return info;
@@ -348,7 +349,7 @@ namespace Ankh
             {
                 dlg.EnableRecursive = false;
                 dlg.Items = info.Items;
-                dlg.CheckedItems = info.CheckedItems;
+                dlg.CheckedFilter = info.CheckedFilter;
                 dlg.Options = PathSelectorOptions.DisplayRevisionRange;
                 dlg.RevisionStart = info.RevisionStart;
                 dlg.RevisionEnd = info.RevisionEnd;
@@ -358,7 +359,7 @@ namespace Ankh
                 if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                     return null;
 
-                info.CheckedItems = dlg.CheckedItems;
+                info.CheckedItems = new List<SvnItem>(dlg.CheckedItems);
                 info.StopOnCopy = dlg.StopOnCopy;
                 info.RevisionStart = dlg.RevisionStart;
                 info.RevisionEnd = dlg.RevisionEnd;
@@ -374,7 +375,7 @@ namespace Ankh
                 dialog.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetUrlPathinfo);
                 dialog.Items = info.Items;
                 dialog.SingleSelection = true;
-                dialog.CheckedItems = info.Items;
+				dialog.CheckedFilter = delegate { return true; };
                 dialog.Options = PathSelectorOptions.DisplaySingleRevision;
                 dialog.Recursive = true;
 
