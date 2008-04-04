@@ -34,32 +34,6 @@ namespace Ankh.VS.SolutionExplorer
             get { return _treeViewControl; }
         }
 
-        private void CreateOverlayImages()
-        {
-            IntPtr imageList = this.TreeView.ImageList;
-
-            Icon lockIcon = new Icon(
-                this.GetType().Assembly.GetManifestResourceStream(LOCK_ICON));
-            Icon readonlyIcon = new Icon(
-                this.GetType().Assembly.GetManifestResourceStream(READONLY_ICON));
-            Icon lockedAndReadonlyIcon = new Icon(
-                this.GetType().Assembly.GetManifestResourceStream(LOCKEDREADONLY_ICON));
-
-            int lockImageIndex = Win32.ImageList_AddIcon(imageList, lockIcon.Handle);
-            int readonlyImageIndex = Win32.ImageList_AddIcon(imageList, readonlyIcon.Handle);
-            int lockedAndReadonlyIndex = Win32.ImageList_AddIcon(imageList, lockedAndReadonlyIcon.Handle);
-
-            // We don't abort here if the overlay image cannot be set
-            if (!Win32.ImageList_SetOverlayImage(imageList, lockImageIndex, LockOverlay))
-                Trace.WriteLine("Could not set overlay image for the lock icon");
-
-            if (!Win32.ImageList_SetOverlayImage(imageList, readonlyImageIndex, ReadonlyOverlay))
-                Trace.WriteLine("Could not set overlay image for the readonly icon");
-
-            if (!Win32.ImageList_SetOverlayImage(imageList, lockedAndReadonlyIndex, LockReadonlyOverlay))
-                Trace.WriteLine("Could not set overlay image for the lockreadonly icon");
-        }
-
         public void Ensure(SolutionExplorerWindow solutionExplorerWindow)
         {
             if (solutionExplorerWindow == null)
@@ -219,18 +193,10 @@ namespace Ankh.VS.SolutionExplorer
                 RestoreIcons();
         }
 
-        internal const int LockOverlay = 15;
-        internal const int ReadonlyOverlay = 14;
-        internal const int LockReadonlyOverlay = 13;
-        const string VSNETWINDOW = "wndclass_desked_gsk";
-        string GENERICPANE = "GenericPane";
+        const string GENERICPANE = "GenericPane";
         const string VSAUTOHIDE = "VsAutoHide";
         const string UIHIERARCHY = "VsUIHierarchyBaseWin";
         const string TREEVIEW = "SysTreeView32";
         const string VBFLOATINGPALETTE = "VBFloatingPalette";
-
-        readonly string LOCK_ICON = typeof(SolutionTreeViewManager).Namespace + ".lock.ico";
-        readonly string LOCKEDREADONLY_ICON = typeof(SolutionTreeViewManager).Namespace + ".lockedreadonly.ico";
-        readonly string READONLY_ICON = typeof(SolutionTreeViewManager).Namespace + ".readonly.ico";
     }
 }

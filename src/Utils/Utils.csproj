@@ -95,13 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DebugTimer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ErrorMessage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Exec.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileUtils.cs" />
@@ -112,19 +106,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Timer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="UriUtils.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="VersionAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Win32\Constants.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Win32\delegates.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Win32\enums.cs">
