@@ -105,7 +105,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileUtils.cs" />
-    <Compile Include="HashUtils.cs" />
     <Compile Include="PathUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -113,9 +112,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegistryUtils.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Timer.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -81,7 +81,7 @@ namespace Ankh.UI
         private void ControlsChanged(object sender, System.EventArgs e)
         {
             this.okButton.Enabled = this.revisionPicker.Valid &&
-                UriUtils.ValidUrl.IsMatch(this.urlTextBox.Text) &&
+                UriUtils.IsValidUrl(this.urlTextBox.Text) &&
                 this.localDirTextBox.Text.Length > 0;
         }
 

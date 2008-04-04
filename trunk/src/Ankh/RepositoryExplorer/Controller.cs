@@ -86,9 +86,6 @@ namespace Ankh.RepositoryExplorer
             string label = String.Format( "{0} [{1}]", 
                 rootNode.Url, rootNode.Revision );
             this.repositoryExplorer.AddRoot( label, rootNode );
-
-            // Create a registry key for it
-            RegistryUtils.CreateNewTypedUrl( rootNode.Url );
         }
 
         public void RemoveRoot( INode node )

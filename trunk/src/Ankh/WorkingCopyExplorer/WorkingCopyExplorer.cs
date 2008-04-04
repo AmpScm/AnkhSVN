@@ -10,6 +10,7 @@ using System.Reflection;
 using Utils;
 using SharpSvn;
 using Ankh.Scc;
+using System.Collections.Generic;
 
 namespace Ankh.WorkingCopyExplorer
 {
@@ -159,22 +160,34 @@ namespace Ankh.WorkingCopyExplorer
 
         internal IFileSystemItem[] GetFileSystemItemsForDirectory(SvnItem directoryItem)
         {
-            ArrayList items = new ArrayList();
-            foreach (string path in Directory.GetFileSystemEntries(directoryItem.FullPath))
+            SortedList<string, IFileSystemItem> items = new SortedList<string, IFileSystemItem>(StringComparer.OrdinalIgnoreCase);
+
+            SvnDirectory dir = statusCache.GetDirectory(directoryItem.FullPath);
+
+            if (dir != null)
             {
-                if (PathUtils.GetName(path) != SvnClient.AdministrativeDirectoryName)
+                SvnItem dirItem = dir.Directory;
+
+                foreach (SvnItem item in dir)
                 {
-                    SvnItem item = this.statusCache[path];
-                    items.Add(FileSystemItem.Create(context, this, item));
+                    if (items.ContainsKey(item.Name))
+                        items.Add(item.Name, FileSystemFileItem.Create(context, this, item));
                 }
             }
 
-            foreach (SvnItem item in this.statusCache.GetDeletions(directoryItem.FullPath))
+            foreach(string path in Directory.GetFileSystemEntries(directoryItem.FullPath))
             {
-                items.Add(FileSystemItem.Create(context, this, item));
+                string name = Path.GetFileName(path);
+                if (!string.Equals(name, SvnClient.AdministrativeDirectoryName, StringComparison.OrdinalIgnoreCase) &&
+                    !items.ContainsKey(name))
+                {
+                    SvnItem item = this.statusCache[path];
+
+                    items.Add(name, FileSystemItem.Create(context, this, item));
+                }
             }
 
-            return (IFileSystemItem[])items.ToArray(typeof(IFileSystemItem));
+            return new List<IFileSystemItem>(items.Values).ToArray();
         }
 
         internal void OpenItem(string path)
