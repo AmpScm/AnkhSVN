@@ -125,7 +125,6 @@
       <ButtonRef id="Cmd_RevertItem" priority="0x40" />
       <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x50" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
-          <ButtonRef id="Cmd_AddItem" priority="0x10" />
           <ButtonRef id="Cmd_SwitchItem" priority="0x20" />
           <ButtonRef id="Cmd_Log" priority="0x30" />
           <ButtonRef id="Cmd_Lock" priority="0x40" />
