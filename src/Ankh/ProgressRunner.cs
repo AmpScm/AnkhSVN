@@ -73,7 +73,6 @@ namespace Ankh
         readonly IAnkhServiceProvider _context;
         readonly IProgressWorker _worker;
         Form _invoker;
-        bool _done;
         bool _cancelled;
         Exception _exception;
 
@@ -159,7 +158,6 @@ namespace Ankh
             }
             finally
             {
-                _done = true;
                 OnDone(this, EventArgs.Empty);
             }
         }

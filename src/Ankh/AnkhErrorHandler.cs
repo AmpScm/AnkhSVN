@@ -162,7 +162,7 @@ namespace Ankh
 
         public void LogException(Exception ex, string message, params object[] args)
         {
-            IAnkhOperationLogger logger = context.GetService<IAnkhOperationLogger>();
+            IAnkhOperationLogger logger = Context.GetService<IAnkhOperationLogger>();
 
             if (logger != null)
             {
@@ -206,7 +206,7 @@ namespace Ankh
 
         private string ErrorFile
         {
-            [System.Diagnostics.DebuggerStepThrough]
+            [DebuggerStepThrough]
             get { return Path.Combine(Path.GetTempPath(), "AnkhErrors.txt");/* this.context.ConfigLoader.ConfigDir, ErrorLogFile );*/ }
         }
 
@@ -253,40 +253,39 @@ namespace Ankh
         private const string ErrorReportMailAddress = "error@ankhsvn.tigris.org";
         private const string ErrrorReportSubject = "Exception";
         private const string ErrorLogFile = "errors.xml";
-        private IAnkhServiceProvider context;
-    }
-
-    /// <summary>
-    /// Must be public for the sake of the XmlSerializer
-    /// </summary>
-    public class ErrorItem
-    {
-        public ErrorItem(Exception ex)
-        {
-            this.Message = ex.Message;
-            this.StackTrace = ex.StackTrace;
-            if (this.InnerException != null)
-            {
-                this.InnerException = new ErrorItem(ex.InnerException);
-            }
-            this.Source = ex.Source;
-            this.Time = DateTime.Now;
-        }
-
-        public ErrorItem()
-        {
-        }
-
-        public string Message;
-        public string StackTrace;
-        public string Source;
-        public ErrorItem InnerException;
-        public DateTime Time;
-
     }
 
     namespace Xml
     {
+        /// <summary>
+        /// Must be public for the sake of the XmlSerializer
+        /// </summary>
+        public class ErrorItem
+        {
+            public ErrorItem(Exception ex)
+            {
+                this.Message = ex.Message;
+                this.StackTrace = ex.StackTrace;
+                if (this.InnerException != null)
+                {
+                    this.InnerException = new ErrorItem(ex.InnerException);
+                }
+                this.Source = ex.Source;
+                this.Time = DateTime.Now;
+            }
+
+            public ErrorItem()
+            {
+            }
+
+            public string Message;
+            public string StackTrace;
+            public string Source;
+            public ErrorItem InnerException;
+            public DateTime Time;
+
+        }
+
         /// <summary>
         /// Must be public for the sake of the XmlSerializer
         /// </summary>
