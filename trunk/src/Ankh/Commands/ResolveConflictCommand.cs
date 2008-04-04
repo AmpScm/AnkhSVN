@@ -36,7 +36,7 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (item.Status.LocalContentStatus == SvnStatus.Conflicted)
                     return;
