@@ -50,7 +50,7 @@
             // openButton
             // 
             this.openButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.openButton.Location = new System.Drawing.Point(444, 255);
+            this.openButton.Location = new System.Drawing.Point(489, 255);
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(75, 23);
             this.openButton.TabIndex = 1;
@@ -62,7 +62,7 @@
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(444, 284);
+            this.cancelButton.Location = new System.Drawing.Point(489, 284);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 2;
@@ -84,21 +84,18 @@
             this.versionButton});
             this.toolStrip1.Location = new System.Drawing.Point(77, 12);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(444, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(484, 25);
             this.toolStrip1.TabIndex = 4;
             this.toolStrip1.Text = "Url:";
             // 
             // urlBox
             // 
-            this.urlBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.urlBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
             this.urlBox.AutoToolTip = true;
+            this.urlBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.urlBox.Name = "urlBox";
             this.urlBox.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.urlBox.Size = new System.Drawing.Size(310, 25);
-            this.urlBox.ToolTipText = "Repository Url";
-            this.urlBox.Leave += new System.EventHandler(this.urlBox_Leave);
-            this.urlBox.TextChanged += new System.EventHandler(this.urlBox_TextChanged);
+            this.urlBox.Size = new System.Drawing.Size(330, 25);
+            this.urlBox.SelectedIndexChanged += new System.EventHandler(this.urlBox_SelectedIndexChanged);
             // 
             // refreshButton
             // 
@@ -108,7 +105,7 @@
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(23, 22);
             this.refreshButton.Text = "&Open";
-            this.refreshButton.Click += new System.EventHandler(this.openToolStripButton_Click);
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
             // dirUpButton
             // 
@@ -132,6 +129,7 @@
             this.versionButton.Name = "versionButton";
             this.versionButton.Size = new System.Drawing.Size(55, 22);
             this.versionButton.Text = "Head";
+            this.versionButton.Visible = false;
             // 
             // panel1
             // 
@@ -151,12 +149,13 @@
             this.dirView.Location = new System.Drawing.Point(77, 41);
             this.dirView.MultiSelect = false;
             this.dirView.Name = "dirView";
-            this.dirView.Size = new System.Drawing.Size(439, 208);
+            this.dirView.Size = new System.Drawing.Size(484, 208);
             this.dirView.TabIndex = 6;
             this.dirView.UseCompatibleStateImageBehavior = false;
             this.dirView.View = System.Windows.Forms.View.List;
             this.dirView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dirView_MouseDoubleClick);
             this.dirView.SelectedIndexChanged += new System.EventHandler(this.dirView_SelectedIndexChanged);
+            this.dirView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dirView_KeyDown);
             // 
             // label1
             // 
@@ -186,8 +185,9 @@
             this.fileNameBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
             this.fileNameBox.Location = new System.Drawing.Point(151, 257);
             this.fileNameBox.Name = "fileNameBox";
-            this.fileNameBox.Size = new System.Drawing.Size(287, 20);
+            this.fileNameBox.Size = new System.Drawing.Size(332, 20);
             this.fileNameBox.TabIndex = 9;
+            this.fileNameBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fileNameBox_KeyDown);
             // 
             // label3
             // 
@@ -209,7 +209,7 @@
             "All Files (*.*)"});
             this.fileTypeBox.Location = new System.Drawing.Point(151, 284);
             this.fileTypeBox.Name = "fileTypeBox";
-            this.fileTypeBox.Size = new System.Drawing.Size(287, 21);
+            this.fileTypeBox.Size = new System.Drawing.Size(332, 21);
             this.fileTypeBox.TabIndex = 11;
             // 
             // RepositoryOpenDialog
@@ -218,7 +218,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(528, 319);
+            this.ClientSize = new System.Drawing.Size(573, 319);
             this.Controls.Add(this.fileTypeBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.fileNameBox);
@@ -232,6 +232,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "RepositoryOpenDialog";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Open From Subversion";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();

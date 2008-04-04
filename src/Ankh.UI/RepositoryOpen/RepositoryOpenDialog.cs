@@ -9,6 +9,8 @@ using SharpSvn;
 using System.Threading;
 using Ankh.VS;
 using System.IO;
+using Microsoft.Win32;
+using System.Security;
 
 namespace Ankh.UI.RepositoryOpen
 {
@@ -43,6 +45,111 @@ namespace Ankh.UI.RepositoryOpen
             _dirOffset = mapper.DirectoryIcon;
             _fileOffset = mapper.FileIcon;
         }
+        
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (urlBox == null)
+                return;
+
+            if (urlBox.Items.Count == 0)
+            {
+                try
+                {
+                    using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(
+                        "SOFTWARE\\AnkhSVN\\AnkhSVN\\CurrentVersion\\Dialogs", RegistryKeyPermissionCheck.ReadSubTree))
+                    {
+                        if (rk != null)
+                        {
+                            string value = rk.GetValue("Last Repository") as string;
+
+                            Uri uri;
+                            if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
+                            {
+                                if (!urlBox.Items.Contains(uri))
+                                    urlBox.Items.Add(uri);
+                            }
+                        }
+                    }
+
+                    // Allow corporate rollout of a default repository list via group policy
+                    using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(
+                        "SOFTWARE\\AnkhSVN\\AnkhSVN\\CurrentVersion\\Subversion Repositories", RegistryKeyPermissionCheck.ReadSubTree))
+                    {
+                        if (rk != null)
+                            foreach (string name in rk.GetValueNames())
+                            {
+                                string value = rk.GetValue(name) as string;
+
+                                Uri uri;
+                                if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
+                                {
+                                    if (!urlBox.Items.Contains(uri))
+                                        urlBox.Items.Add(uri);
+                                }
+                            }
+                    }
+
+                    using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(
+                        "SOFTWARE\\AnkhSVN\\AnkhSVN\\CurrentVersion\\Subversion Repositories", RegistryKeyPermissionCheck.ReadSubTree))
+                    {
+                        if (rk != null)
+                            foreach (string name in rk.GetValueNames())
+                            {
+                                string value = rk.GetValue(name) as string;
+
+                                Uri uri;
+                                if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
+                                {
+                                    if (!urlBox.Items.Contains(uri))
+                                        urlBox.Items.Add(uri);
+                                }
+                            }
+                    }
+
+                }
+                catch (SecurityException)
+                { /* Ignore no read only access; stupid sysadmins */ }
+
+            }
+            if (urlBox.Items.Count > 0 && string.IsNullOrEmpty(urlBox.Text.Trim()))
+            {
+                urlBox.SelectedIndex = 0;
+                UpdateDirectories();
+            }
+
+            if (string.IsNullOrEmpty(fileTypeBox.Text) && fileTypeBox.Items.Count > 0)
+                fileTypeBox.SelectedItem = fileTypeBox.Items[0];
+        }
+
+        bool _inSetDirectory;
+        void SetDirectory(Uri uri)
+        {
+            _inSetDirectory = true;
+            try
+            {
+                string v = uri.ToString();
+
+                if (!v.EndsWith("/"))
+                    uri = new Uri(v + "/");
+
+                if (!urlBox.Items.Contains(uri))
+                    urlBox.Items.Add(uri);
+
+                urlBox.SelectedItem = uri;
+            }
+            finally
+            {
+                _inSetDirectory = false;
+            }
+        }
+
+        private void urlBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(!_inSetDirectory)
+                OnDirChanged();
+        }
 
         protected SvnClient GetClient()
         {
@@ -70,7 +177,7 @@ namespace Ankh.UI.RepositoryOpen
             Uri nameUri;
             Uri dirUri;
 
-            string urlBoxText = urlBox.Text.Trim(); // Url's can not contain whitespace
+            string urlBoxText = urlBox.Text; // Url's can not contain whitespace
 
             if (string.IsNullOrEmpty(urlBoxText) || !Uri.TryCreate(urlBoxText, UriKind.Absolute, out dirUri))
             {
@@ -81,7 +188,7 @@ namespace Ankh.UI.RepositoryOpen
             string name = fileNameBox.Text.Trim();
             if (!string.IsNullOrEmpty(name) && Uri.TryCreate(name, UriKind.RelativeOrAbsolute, out nameUri))
             {
-                if (dirUri != null && !nameUri.IsAbsoluteUri && nameUri.ToString().Contains("/"))
+                if (dirUri != null && !nameUri.IsAbsoluteUri && nameUri.ToString().Contains("/") || (nameUri.ToString() == ".."))
                     nameUri = new Uri(dirUri, nameUri);
 
                 if (nameUri.IsAbsoluteUri)
@@ -97,7 +204,7 @@ namespace Ankh.UI.RepositoryOpen
                         Uri dir = new Uri(nameUri, path.Substring(0, dirEnd + 1));
                         nameUri = dir.MakeRelativeUri(nameUri);
 
-                        urlBox.Text = dir.ToString();
+                        SetDirectory(dir);
                         fileNameBox.Text = nameUri.ToString();
                         RefreshBox(dir);
                     }
@@ -120,13 +227,7 @@ namespace Ankh.UI.RepositoryOpen
             if (!Uri.TryCreate(txt, UriKind.Absolute, out uri))
                 RefreshBox(null);
 
-            lastValidUri = uri;
             RefreshBox(uri);
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
@@ -147,15 +248,15 @@ namespace Ankh.UI.RepositoryOpen
 
                 Uri fileUri;
                 string fileText = fileNameBox.Text.Trim();
-                if (!string.IsNullOrEmpty(fileText) && 
+                if (!string.IsNullOrEmpty(fileText) &&
                     Uri.TryCreate(fileText.Trim(), UriKind.Relative, out fileUri))
                 {
                     fileUri = parentUri.MakeRelativeUri(new Uri(uri, fileUri));
 
-                    fileNameBox.Text = fileUri.ToString();                    
+                    fileNameBox.Text = fileUri.ToString();
                 }
 
-                urlBox.Text = parentUri.ToString();
+                SetDirectory(parentUri);
                 RefreshBox(parentUri);
             }
         }
@@ -246,15 +347,15 @@ namespace Ankh.UI.RepositoryOpen
                         });
 
 
-                    if(IsHandleCreated)
+                    if (IsHandleCreated)
                     {
                         DoSomething fill = delegate()
-                        {                            
+                        {
                             if (uri == _currentUri)
                             {
                                 dirView.Items.Clear();
-                                
-                                if(ok)
+
+                                if (ok)
                                 {
                                     IFileIconMapper mapper = Context != null ? Context.GetService<IFileIconMapper>() : null;
 
@@ -298,38 +399,14 @@ namespace Ankh.UI.RepositoryOpen
             }
         }
 
-        private void openToolStripButton_Click(object sender, EventArgs e)
+        private void refreshButton_Click(object sender, EventArgs e)
         {
-            Uri uri;
+            Uri uri = urlBox.SelectedItem as Uri;
 
-            if (Uri.TryCreate(urlBox.Text, UriKind.Absolute, out uri))
-            {
+            if (uri != null)
                 RefreshBox(uri);
-            }
-        }
+        }    
 
-        private void urlBox_Leave(object sender, EventArgs e)
-        {
-            if (lastValidUri != null)
-                urlBox.Text = lastValidUri.ToString();
-        }
-
-        Uri lastValidUri;
-        private void urlBox_TextChanged(object sender, EventArgs e)
-        {
-            _changingDir = true;
-            Uri uri;
-
-            string txt = urlBox.Text;
-
-            if (!txt.EndsWith("/"))
-                txt += '/';
-
-            if (Uri.TryCreate(txt, UriKind.Absolute, out uri))
-            {
-                lastValidUri = uri;
-            }
-        }
 
         private void dirView_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -359,6 +436,75 @@ namespace Ankh.UI.RepositoryOpen
                 SelectItem(info.Item);
                 ProcessOk();
             }
-        }        
+        }
+
+        private void dirView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Handled)
+                return;
+
+            switch (e.KeyCode)
+            {
+                case Keys.Back:
+                    if (ModifierKeys == Keys.None)
+                    {
+                        dirUpButton_Click(this, e);
+                        e.Handled = true;
+                    }
+                    break;
+                case Keys.Up:
+                    if (ModifierKeys == Keys.Alt)
+                    {
+                        dirUpButton_Click(this, e);
+                        e.Handled = true;
+                    }
+                    break;
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Handled)
+                return;
+
+            switch (e.KeyCode)
+            {
+                case Keys.Back:
+                    if (ModifierKeys == Keys.None)
+                    {
+                        dirUpButton_Click(this, e);
+                        e.Handled = true;
+                    }
+                    break;
+                case Keys.Up:
+                    if (ModifierKeys == Keys.Alt)
+                    {
+                        dirUpButton_Click(this, e);
+                        e.Handled = true;
+                    }
+                    break;
+            }
+
+            base.OnKeyDown(e);
+        }
+
+        private void fileNameBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Handled)
+                return;
+
+            switch (e.KeyCode)
+            {
+                case Keys.Up:
+                    if (ModifierKeys == Keys.Alt)
+                    {
+                        dirUpButton_Click(this, e);
+                        e.Handled = true;
+                    }
+                    break;
+            }
+
+            base.OnKeyDown(e);
+        }
     }
 }
