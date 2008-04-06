@@ -155,6 +155,10 @@ namespace Ankh.Scc
                     data.SccProject.SccGlyphChanged(0, null, null, null);
                 }
             }
+
+            // TODO: trigger refresh in pending changes in a more centralized and specific way (we know what files have changed)
+            IAnkhCommandService cmdSvc = GetService<IAnkhCommandService>();
+            cmdSvc.PostExecCommand(AnkhCommand.RefreshPendingChanges);
         }
 
         /// <summary>
