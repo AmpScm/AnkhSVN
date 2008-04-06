@@ -41,6 +41,8 @@ namespace Ankh.UI.PendingChanges
 
             if (pendingCommits != null)
                 pendingCommits.ServiceProvider = UISite;
+
+            RefreshList();
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
