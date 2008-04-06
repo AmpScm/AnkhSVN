@@ -216,12 +216,15 @@ namespace Ankh.Commands
                     return empty;
                 }
                 else
+                {
+                    // BH: We should use Export here instead.. This will give us keyword expansion for free
                     using (SvnClient client = context.ClientPool.GetClient())
                     {
                         SvnWorkingCopyState result;
                         client.GetWorkingCopyState(item.FullPath, out result);
                         return result.WorkingCopyBasePath;
                     }
+                }
                 
             }
             else if (revision == SvnRevision.Working)
