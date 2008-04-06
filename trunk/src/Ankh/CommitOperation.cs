@@ -70,7 +70,7 @@ namespace Ankh
                 config.LogMessageTemplate : "";
             LogMessageTemplate template = new LogMessageTemplate(_context, templateText);
 
-
+            string savedLogMessage = "";
             // is there a previous log message?
             if (!string.IsNullOrEmpty(this.LogMessage))
             {
@@ -81,7 +81,7 @@ namespace Ankh
                     "Previous log message", MessageBoxButtons.YesNo) ==
                     DialogResult.Yes)
 
-                    _args.LogMessage = this.LogMessage;
+                    savedLogMessage = LogMessage;
             }
 
             // don't show the dialog if shift is down.
@@ -89,6 +89,7 @@ namespace Ankh
             {
                 using (CommitDialog dialog = new CommitDialog())
                 {
+                    dialog.LogMessage = savedLogMessage;
                     dialog.LogMessageTemplate = template;
                     dialog.Items = _items;
                     dialog.CommitFilter = delegate { return true; };
