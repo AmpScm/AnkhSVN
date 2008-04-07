@@ -4,13 +4,14 @@ using System.Text;
 using System.ComponentModel;
 using Ankh.Scc;
 using Ankh.Selection;
+using System.Collections.ObjectModel;
 
 namespace Ankh.Scc
 {
     public sealed class PendingChange : CustomTypeDescriptor
     {
         readonly IAnkhServiceProvider _context;
-        readonly SvnItem _item;
+        readonly SvnItem _item;        
 
         public PendingChange(IAnkhServiceProvider context, SvnItem item)
         {
@@ -103,6 +104,72 @@ namespace Ankh.Scc
         public override object GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
+        }
+
+        /// <summary>
+        /// Gets a boolean indicating whether this pending change is clear / is no longer a pending change
+        /// </summary>
+        public bool IsClean
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Refreshes the pending change. Returns true if the state was modified, otherwise false
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool Refresh(SvnItem item, bool isDirty)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Creates if pending.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="isDirty">if set to <c>true</c> [is dirty].</param>
+        /// <param name="pc">The pc.</param>
+        /// <returns></returns>
+        public static bool CreateIfPending(SvnItem item, bool isDirty, out PendingChange pc)
+        {
+            pc = null;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class PendingChangeCollection : KeyedCollection<string, PendingChange>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PendingChangeCollection"/> class.
+        /// </summary>
+        public PendingChangeCollection()
+            : base(StringComparer.OrdinalIgnoreCase)
+        {
+        }
+
+        /// <summary>
+        /// Extracts the FullPath from the specified element.
+        /// </summary>
+        /// <param name="item">The element from which to extract the key.</param>
+        /// <returns>The key for the specified element.</returns>
+        protected override string GetKeyForItem(PendingChange item)
+        {
+            return item.FullPath;
+        }
+
+        /// <summary>
+        /// Gets the value associated with the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public bool TryGetValue(string key, out PendingChange value)
+        {
+            return Dictionary.TryGetValue(key, out value);
         }
     }
 }

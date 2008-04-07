@@ -58,6 +58,7 @@
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Commands\IAnkhCommandService.cs" />
     <Compile Include="ContextServices\IAnkhPackage.cs" />
+    <Compile Include="Scc\IPendingChangesManager.cs" />
     <Compile Include="Scc\IProjectInfo.cs" />
     <Compile Include="Scc\ProjectIconReference.cs" />
     <Compile Include="Scc\SvnDirectory.cs" />
