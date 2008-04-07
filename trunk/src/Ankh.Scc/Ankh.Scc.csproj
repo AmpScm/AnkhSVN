@@ -81,6 +81,8 @@
       <DependentUpon>OpenDocumentTracker.cs</DependentUpon>
     </Compile>
     <Compile Include="MarkProjectDirty.cs" />
+    <Compile Include="PendingChangeManager.cs" />
+    <Compile Include="PendingChangeManager.Map.cs" />
     <Compile Include="ProjectMap\SccDocumentData.cs" />
     <Compile Include="ProjectTracker.cs" />
     <Compile Include="ProjectTracker.Add.cs">
