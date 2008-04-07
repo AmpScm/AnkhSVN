@@ -30,6 +30,8 @@ namespace AnkhSvn.Ids
         FileSccAdd,
         FileSccManagement,
 
+        NoUI,
+
         SolutionExplorerSccForSolution,
         SolutionExplorerSccForProject,
         SolutionExplorerSccForItem,

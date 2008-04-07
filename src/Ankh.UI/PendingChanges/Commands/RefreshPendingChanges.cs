@@ -7,10 +7,14 @@ using AnkhSvn.Ids;
 namespace Ankh.UI.PendingChanges.Commands
 {
     [Command(AnkhCommand.RefreshPendingChanges)]
+    [Command(AnkhCommand.TickRefreshPendingTasks)]
     public class RefreshPendingChanges : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (e.Command == AnkhCommand.TickRefreshPendingTasks)
+                return; // Always enabled
+
             PendingCommitsPage page = e.Context.GetService<PendingCommitsPage>();
 
             if(page == null || !page.Visible)
@@ -21,10 +25,10 @@ namespace Ankh.UI.PendingChanges.Commands
         {
             PendingCommitsPage page = e.Context.GetService<PendingCommitsPage>();
 
-            if (page == null || !page.Visible)
+            if (page == null || (!page.Visible && (e.Command != AnkhCommand.TickRefreshPendingTasks)))
                 return;
 
-            page.RefreshList();
+            page.RefreshList(e.Command == AnkhCommand.TickRefreshPendingTasks);
         }
     }
 }

@@ -158,7 +158,8 @@ namespace Ankh.Scc
 
             // TODO: trigger refresh in pending changes in a more centralized and specific way (we know what files have changed)
             IAnkhCommandService cmdSvc = GetService<IAnkhCommandService>();
-            cmdSvc.PostExecCommand(AnkhCommand.RefreshPendingChanges);
+            if(cmdSvc != null)
+                cmdSvc.PostExecCommand(AnkhCommand.TickRefreshPendingTasks);
         }
 
         /// <summary>

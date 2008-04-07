@@ -21,6 +21,7 @@ namespace AnkhSvn.Ids
         MarkProjectDirty,
         FileCacheFinishTasks,
         SccFinishTasks,
+        TickRefreshPendingTasks,
 
         // These values live in the same numberspace as the other values within 
         // the command set. So we start countin at this number to make sure we
