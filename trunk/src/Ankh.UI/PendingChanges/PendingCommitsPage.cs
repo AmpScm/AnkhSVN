@@ -42,7 +42,7 @@ namespace Ankh.UI.PendingChanges
             if (pendingCommits != null)
                 pendingCommits.ServiceProvider = UISite;
 
-            RefreshList();
+            RefreshList(true);
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
@@ -70,7 +70,7 @@ namespace Ankh.UI.PendingChanges
 
         IFileIconMapper _iconMap;
 
-        internal void RefreshList()
+        internal void RefreshList(bool incrementalUpdate)
         {
             if (UISite == null)
                 return;
@@ -88,7 +88,7 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.SmallImageList = _iconMap.ImageList;
             }
 
-            if ((ModifierKeys & Keys.Control) != 0)
+            if (!incrementalUpdate && (ModifierKeys & Keys.Control) != 0)
                 cache.ClearCache(); // Rebuild all status!
 
             foreach (string file in allFiles)
