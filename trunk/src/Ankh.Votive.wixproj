@@ -5,11 +5,6 @@
 				<WixToolPathProp>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPathProp>
 			</PropertyGroup>
 		</When>
-		<Otherwise>
-			<PropertyGroup>
-				<WixToolPathProp>$(PATH)</WixToolPathProp>
-			</PropertyGroup>
-		</Otherwise>
 	</Choose>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
