@@ -11,28 +11,19 @@ namespace Ankh.UI.PendingChanges
     {
         public PendingCommitsView()
         {
+            StrictCheckboxesClick = true;
         }
 
 
         public PendingCommitsView(IContainer container)
         {
             container.Add(this);
+            StrictCheckboxesClick = true;
         }
 
         internal override ListViewHierarchy CreateHierarchy()
         {
             return new PendingCommitsHierarchy(this);
-        }
-
-        protected override bool IsInputKey(System.Windows.Forms.Keys keyData)
-        {
-            return base.IsInputKey(keyData);
-            //return true;
-        }
-
-        protected override bool IsInputChar(char charCode)
-        {
-            return base.IsInputChar(charCode);
         }
 
         sealed class PendingCommitsHierarchy : ListViewHierarchy, IAnkhGetMkDocument
