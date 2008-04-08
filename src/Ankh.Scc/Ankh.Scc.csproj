@@ -73,6 +73,7 @@
     <Compile Include="AnkhSccProvider.FileMap.cs">
       <DependentUpon>AnkhSccProvider.cs</DependentUpon>
     </Compile>
+    <Compile Include="Commands\PendingChangeTicker.cs" />
     <Compile Include="OpenDocumentTracker.cs" />
     <Compile Include="OpenDocumentTracker.Api.cs">
       <DependentUpon>OpenDocumentTracker.cs</DependentUpon>
@@ -80,7 +81,7 @@
     <Compile Include="OpenDocumentTracker.Visibility.cs">
       <DependentUpon>OpenDocumentTracker.cs</DependentUpon>
     </Compile>
-    <Compile Include="MarkProjectDirty.cs" />
+    <Compile Include="Commands\MarkProjectDirty.cs" />
     <Compile Include="PendingChangeManager.cs" />
     <Compile Include="PendingChangeManager.Map.cs" />
     <Compile Include="ProjectMap\SccDocumentData.cs" />
@@ -112,7 +113,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SvnSccContext.cs" />
-    <Compile Include="TaskFinisher.cs" />
+    <Compile Include="Commands\TaskFinisher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.Scc.snk" />

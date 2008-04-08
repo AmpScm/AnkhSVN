@@ -14,7 +14,7 @@ using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges
 {
-    partial class PendingCommitsPage : PendingChangesPage, IPendingChangeManager
+    partial class PendingCommitsPage : PendingChangesPage
     {
         public PendingCommitsPage()
         {
@@ -42,7 +42,43 @@ namespace Ankh.UI.PendingChanges
             if (pendingCommits != null)
                 pendingCommits.ServiceProvider = UISite;
 
-            RefreshList(true);
+            HookList();
+        }
+
+        IPendingChangesManager _manager;
+        private void HookList()
+        {
+            if(_manager != null || UISite == null)
+                return;
+
+            _manager = UISite.GetService<IPendingChangesManager>();
+
+            if (_manager == null)
+                return;
+
+            _manager.Added += new EventHandler<PendingChangeEventArgs>(OnPendingChangeAdded);
+            _manager.Removed += new EventHandler<PendingChangeEventArgs>(OnPendingChangeRemoved);
+            _manager.Changed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesChanged);
+            _manager.InitialUpdate += new EventHandler<PendingChangeEventArgs>(OnPendingChangesInitialUpdate);
+            _manager.IsActiveChanged += new EventHandler<PendingChangeEventArgs>(OnPendingChangesActiveChanged);
+            _manager.ListFlushed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesListFlushed);
+
+            if (!_manager.IsActive)
+            {
+                _manager.IsActive = true;
+                _manager.FullRefresh(false);
+            }
+        }
+
+        protected IPendingChangesManager Manager
+        {
+            get
+            {
+                if (_manager == null)
+                    HookList();
+
+                return _manager;
+            }
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
@@ -66,82 +102,109 @@ namespace Ankh.UI.PendingChanges
         }
 
         readonly Dictionary<string, PendingCommitItem> _listItems = new Dictionary<string, PendingCommitItem>(StringComparer.OrdinalIgnoreCase);
-        readonly SortedList<string, PendingChange> _pendingChanges = new SortedList<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
+
+        void OnPendingChangeAdded(object sender, PendingChangeEventArgs e)
+        {
+            PendingCommitItem pci;
+
+            string path = e.Change.FullPath;
+
+            if (_listItems.TryGetValue(path, out pci))
+            {
+                // Should never happend; will refresh checkbox, etc.
+                _listItems.Remove(path);
+                pendingCommits.Items.Remove(pci);
+            }
+
+            pci = new PendingCommitItem(UISite, e.Change);
+            _listItems.Add(path, pci);
+            pendingCommits.Items.Add(pci);
+        }
+
+        HybridCollection<string> _checkedItems;
+        void OnPendingChangesListFlushed(object sender, PendingChangeEventArgs e)
+        {
+            if (_listItems.Count > 0)
+            {
+                _checkedItems = new HybridCollection<string>();
+                foreach (PendingCommitItem pci in _listItems.Values)
+                {
+                    if (pci.Checked && !_checkedItems.Contains(pci.FullPath))
+                        _checkedItems.Add(pci.FullPath);
+                }
+                _listItems.Clear();
+                pendingCommits.Items.Clear();
+            }            
+        }
+
+        void OnPendingChangesActiveChanged(object sender, PendingChangeEventArgs e)
+        {
+            // Just ignore for now
+            Enabled = e.Manager.IsActive;
+        }
+
+        void OnPendingChangesInitialUpdate(object sender, PendingChangeEventArgs e)
+        {
+            _listItems.Clear(); // Make sure we are clear
+            pendingCommits.Items.Clear();
+            pendingCommits.BeginUpdate();
+            try
+            {
+                foreach (PendingChange pc in e.Manager.GetAll())
+                {
+                    PendingCommitItem pi = new PendingCommitItem(UISite, pc);
+                    _listItems.Add(pc.FullPath, pi);
+
+                    if (_checkedItems != null)
+                        pi.Checked = _checkedItems.Contains(pc.FullPath);
+
+                    pendingCommits.Items.Add(pi);
+                }
+
+                _checkedItems = null;
+            }
+            finally
+            {
+                pendingCommits.EndUpdate();
+                if (_listItems.Count > 0)
+                    pendingCommits.RedrawItems(0, _listItems.Count - 1, true);
+            }
+        }
+
+        void OnPendingChangesChanged(object sender, PendingChangeEventArgs e)
+        {
+            PendingCommitItem pci;
+
+            string path = e.Change.FullPath;
+
+            if (!_listItems.TryGetValue(path, out pci))
+            {
+                pci = new PendingCommitItem(UISite, e.Change);
+                _listItems.Add(path, pci);
+                pendingCommits.Items.Add(pci);
+            }
+            else
+                pci.RefreshText(UISite);
+        }
+
+        void OnPendingChangeRemoved(object sender, PendingChangeEventArgs e)
+        {
+            PendingCommitItem pci;
+
+            string path = e.Change.FullPath;
+
+            if (_listItems.TryGetValue(path, out pci))
+            {
+                _listItems.Remove(path);
+                pendingCommits.Items.Remove(pci);
+            }
+        }
 
         IFileIconMapper _iconMap;
 
         internal void RefreshList(bool incrementalUpdate)
         {
-            if (UISite == null)
-                return;
-
-            ICollection<string> allFiles = UISite.GetService<IProjectFileMapper>().GetAllFilesOfAllProjects();
-            IFileStatusCache cache = UISite.GetService<IFileStatusCache>();
-            IAnkhOpenDocumentTracker tracker = UISite.GetService<IAnkhOpenDocumentTracker>();
-
-            SortedList<string, SvnItem> items = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-
-            if (_iconMap == null)
-            {
-                _iconMap = UISite.GetService<IFileIconMapper>();
-
-                pendingCommits.SmallImageList = _iconMap.ImageList;
-            }
-
-            if (!incrementalUpdate && (ModifierKeys & Keys.Control) != 0)
-                cache.ClearCache(); // Rebuild all status!
-
-            foreach (string file in allFiles)
-            {
-                if (items.ContainsKey(file))
-                    continue;
-
-                SvnItem item = cache[file];
-
-                bool add = false;
-                if (item.IsVersioned)
-                {
-                    add = item.IsModified || tracker.IsDocumentDirty(item.FullPath);
-                }
-                else if (item.Exists && !item.IsIgnored)
-                    add = true;
-
-                if (add)
-                    items.Add(item.FullPath, item);
-            }
-
-            foreach (SvnItem item in items.Values)
-            {
-                if (!_pendingChanges.ContainsKey(item.FullPath))
-                    _pendingChanges.Add(item.FullPath, new PendingChange(UISite, item));
-            }
-
-            foreach (PendingChange pc in new List<PendingChange>(_pendingChanges.Values))
-            {
-                if (!items.ContainsKey(pc.FullPath))
-                {
-                    _pendingChanges.Remove(pc.FullPath);
-
-                    PendingCommitItem item;
-
-                    if (_listItems.TryGetValue(pc.FullPath, out item))
-                    {
-                        _listItems.Remove(pc.FullPath);
-                        pendingCommits.Items.Remove(item);
-                    }
-                }
-                else if (!_listItems.ContainsKey(pc.FullPath))
-                {
-                    PendingCommitItem lvi = new PendingCommitItem(UISite, pc, _iconMap);
-                    _listItems.Add(pc.FullPath, lvi);
-                    pendingCommits.Items.Add(lvi);
-                }
-            }
-
-            foreach (PendingCommitItem pci in _listItems.Values)
-            {
-                pci.RefreshText(UISite, _iconMap);
-            }
+            Manager.FullRefresh(!incrementalUpdate);
         }
 
         private void pendingCommits_ResolveItem(object sender, PendingCommitsView.ResolveItemEventArgs e)
@@ -166,13 +229,18 @@ namespace Ankh.UI.PendingChanges
         {
             ListViewHitTestInfo info = pendingCommits.HitTest(e.X, e.Y);
 
-            if(info != null && info.Location != ListViewHitTestLocations.None)
-            {
-                IAnkhCommandService cmd = UISite.GetService<IAnkhCommandService>();
+            if (info == null || info.Location == ListViewHitTestLocations.None)
+                return;
 
-                if (cmd != null)
-                    cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio);
-            }            
+            if (info.Location == ListViewHitTestLocations.StateImage)
+                return; // Just check the item
+
+            pendingCommits.RedrawItems(info.Item.Index, info.Item.Index, false);
+
+            IAnkhCommandService cmd = UISite.GetService<IAnkhCommandService>();
+
+            if (cmd != null)
+                cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio);
         }
 
         private void pendingCommits_ColumnReordered(object sender, ColumnReorderedEventArgs e)
@@ -185,9 +253,5 @@ namespace Ankh.UI.PendingChanges
             Point p = MousePosition;
             UISite.ShowContextMenu(AnkhCommandMenu.PendingChangesContextMenu, p.X, p.Y); 
         }
-    }
-
-    interface IPendingChangeManager
-    {
     }
 }

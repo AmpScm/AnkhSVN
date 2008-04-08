@@ -60,6 +60,8 @@
     <Compile Include="ContextServices\IAnkhPackage.cs" />
     <Compile Include="Scc\IPendingChangesManager.cs" />
     <Compile Include="Scc\IProjectInfo.cs" />
+    <Compile Include="Scc\HybridCollection.cs" />
+    <Compile Include="Scc\PendingChangeStatus.cs" />
     <Compile Include="Scc\ProjectIconReference.cs" />
     <Compile Include="Scc\SvnDirectory.cs" />
     <Compile Include="Selection\IAnkhGetMkDocument.cs" />

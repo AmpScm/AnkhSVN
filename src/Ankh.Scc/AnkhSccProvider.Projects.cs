@@ -156,10 +156,9 @@ namespace Ankh.Scc
                 }
             }
 
-            // TODO: trigger refresh in pending changes in a more centralized and specific way (we know what files have changed)
-            IAnkhCommandService cmdSvc = GetService<IAnkhCommandService>();
-            if(cmdSvc != null)
-                cmdSvc.PostExecCommand(AnkhCommand.TickRefreshPendingTasks);
+            IPendingChangesManager mgr = GetService<IPendingChangesManager>();
+            if (mgr != null)
+                mgr.Refresh((string)null);
         }
 
         /// <summary>
@@ -200,6 +199,10 @@ namespace Ankh.Scc
             // Clear status for reopening solution
             _managedSolution = false;
             _isDirty = false;
+
+            IPendingChangesManager mgr = GetService<IPendingChangesManager>();
+            if (mgr != null)
+                mgr.Refresh((string)null);
         }
 
         /// <summary>

@@ -10,7 +10,7 @@ using AnkhSvn.Ids;
 using Ankh.Scc.ProjectMap;
 using System.Diagnostics;
 
-namespace Ankh.Scc
+namespace Ankh.Scc.Commands
 {
     [Command(AnkhCommand.MarkProjectDirty)]    
     public class MarkProjectDirty : ICommandHandler
