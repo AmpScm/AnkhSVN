@@ -8,6 +8,7 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -24,7 +25,7 @@ namespace Ankh.UI.PendingChanges
         public IServiceProvider ServiceProvider
         {
             get { return _serviceProvider; }
-            set 
+            set
             {
                 if (value != null && value != _serviceProvider)
                 {
@@ -53,7 +54,7 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnSelectedIndexChanged(e);
 
-            if(DesignMode)
+            if (DesignMode)
                 return;
 
             if (!_updatingSelection)
@@ -75,6 +76,14 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        bool _strictCheckboxesClick;
+        [DefaultValue(false)]
+        public bool StrictCheckboxesClick
+        {
+            get { return _strictCheckboxesClick; }
+            set { _strictCheckboxesClick = value; }
+        }
+
         protected override void WndProc(ref Message m)
         {
             if (!DesignMode)
@@ -83,6 +92,25 @@ namespace Ankh.UI.PendingChanges
                 {
                     OnShowContextMenu(EventArgs.Empty);
                     return;
+                }
+                else if (m.Msg == 8270) // WM_REFLECTNOTIFY
+                {
+                    if (CheckBoxes && StrictCheckboxesClick)
+                    {
+                        NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
+
+                        if (hdr.code == -3) // Double click
+                        {
+                            Point mp = PointToClient(MousePosition);
+                            ListViewHitTestInfo hi = HitTest(mp);
+
+                            if (hi != null && hi.Location != ListViewHitTestLocations.StateImage)
+                            {
+                                OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, mp.X, mp.Y, 0));
+                                return;
+                            }
+                        }
+                    }
                 }
             }
             base.WndProc(ref m);
@@ -367,7 +395,7 @@ namespace Ankh.UI.PendingChanges
                         }
                     }
                 }
-            }            
+            }
 
             public uint GetId(TListViewItem item)
             {
@@ -556,9 +584,9 @@ namespace Ankh.UI.PendingChanges
             public int GetSelectionInfo(out uint pcItems, out int pfSingleHierarchy)
             {
                 pcItems = (uint)_lv.SelectedItems.Count;
-                
+
                 pfSingleHierarchy = 1;  // If this line throws a nullreference exception, the bug is in the interop layer or the caller. 
-                                        // Nothing we can do to fix it
+                // Nothing we can do to fix it
 
                 return VSConstants.S_OK;
             }
@@ -585,10 +613,17 @@ namespace Ankh.UI.PendingChanges
 
             #region IListViewHierarchy Members
 
-            
+
 
             #endregion
         }
         #endregion
+    }
+    [StructLayout(LayoutKind.Sequential)]
+    struct NMHDR
+    {
+        public IntPtr hwndFrom;
+        public int idFrom;
+        public int code;
     }
 }
