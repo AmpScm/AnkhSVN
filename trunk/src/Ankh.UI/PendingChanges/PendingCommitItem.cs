@@ -11,7 +11,7 @@ namespace Ankh.UI.PendingChanges
     {
         readonly PendingChange _change;
 
-        public PendingCommitItem(IAnkhServiceProvider context, PendingChange change, IFileIconMapper iconMap)
+        public PendingCommitItem(IAnkhServiceProvider context, PendingChange change)
         {
             if (change == null)
                 throw new ArgumentNullException("change");
@@ -23,10 +23,10 @@ namespace Ankh.UI.PendingChanges
 
             Checked = true;
 
-            RefreshText(context, iconMap);
+            RefreshText(context);
         }
 
-        public void RefreshText(IAnkhServiceProvider context, IFileIconMapper iconMap)
+        public void RefreshText(IAnkhServiceProvider context)
         {
             IAnkhSolutionSettings solSet = context.GetService<IAnkhSolutionSettings>();
             IFileStatusCache cache = context.GetService<IFileStatusCache>();
@@ -45,26 +45,18 @@ namespace Ankh.UI.PendingChanges
             if (item == null)
                 throw new InvalidOperationException(); // Item no longer valued
 
-            SharpSvn.SvnStatus ps = item.Status.LocalContentStatus;
+            PendingChangeStatus pcs = PendingChange.Status;
 
-            if (ps == SharpSvn.SvnStatus.NotVersioned)
-                SubItems[2].Text = "New";
-            else if (ps == SharpSvn.SvnStatus.Normal)
+            if (pcs != null)
+            {
+                SubItems[2].Text = pcs.PendingCommitText;
+            }
+            else
                 SubItems[2].Text = "";
-            else if (ps == SharpSvn.SvnStatus.None)
-                SubItems[2].Text = "Not Found";
-            else
-                SubItems[2].Text = item.Status.LocalContentStatus.ToString();
-
-            ps = item.Status.LocalPropertyStatus;
-
-            if (ps == SharpSvn.SvnStatus.Normal || ps == SharpSvn.SvnStatus.None)
-                SubItems[3].Text = "";
-            else
-                SubItems[3].Text = item.Status.LocalPropertyStatus.ToString();
+            
             SubItems[4].Text = item.FullPath;
 
-            ImageIndex = iconMap.GetIcon(FullPath);
+            ImageIndex = PendingChange.IconIndex;
 
             System.Drawing.Color clr = System.Drawing.Color.Black;
 

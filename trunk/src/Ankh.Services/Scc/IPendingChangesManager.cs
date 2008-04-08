@@ -53,7 +53,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Gets a boolean indicating whether the pending changes manager is active
         /// </summary>
-        bool IsActive { get; }
+        bool IsActive { get; set;  }
 
         /// <summary>
         /// Gets a list of all current pending changes
@@ -115,5 +115,15 @@ namespace Ankh.Scc
         /// Raised when the pending changes manager is activated or disabled
         /// </summary>
         event EventHandler<PendingChangeEventArgs> IsActiveChanged;
+
+        /// <summary>
+        /// Occurs when starting a refresh of more than a few items (This event allows you to batch a series of updates)
+        /// </summary>
+        event EventHandler<PendingChangeEventArgs> RefreshStarted;
+
+        /// <summary>
+        /// Occurs when completing a refresh of more than a few items (This event allows you to batch a series of updates)
+        /// </summary>
+        event EventHandler<PendingChangeEventArgs> RefreshCompleted;
     }
 }

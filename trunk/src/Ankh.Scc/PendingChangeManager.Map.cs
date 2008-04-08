@@ -8,7 +8,7 @@ namespace Ankh.Scc
     partial class PendingChangeManager
     {
         readonly PendingChangeCollection _pendingChanges = new PendingChangeCollection();
-        readonly Dictionary<string, string> _extraFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        readonly HybridCollection<string> _extraFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
         IFileIconMapper _iconMap;
         IFileStatusCache _cache;
         IProjectFileMapper _mapper;
@@ -39,8 +39,18 @@ namespace Ankh.Scc
             return new List<PendingChange>(_pendingChanges);
         }
 
+        PendingChange.RefreshContext _refreshContext;
+        protected PendingChange.RefreshContext RefreshContext
+        {
+            get { return _refreshContext ?? (_refreshContext = new PendingChange.RefreshContext(Context)); }
+        }
+
         void InnerRefresh()
         {
+            PendingChangeEventArgs pceMe = new PendingChangeEventArgs(this, null);
+
+            OnRefreshStarted(pceMe);
+
             bool wasClean = (_pendingChanges.Count == 0);
             Dictionary<PendingChange, PendingChange> mapped = new Dictionary<PendingChange, PendingChange>();
 
@@ -60,7 +70,7 @@ namespace Ankh.Scc
                 PendingChange pc;
                 if (_pendingChanges.TryGetValue(file, out pc))
                 {
-                    if (pc.Refresh(item, isDirty) && !wasClean)
+                    if (pc.Refresh(RefreshContext, item, isDirty) && !wasClean)
                     {
                         if (pc.IsClean)
                         {
@@ -75,7 +85,7 @@ namespace Ankh.Scc
                             OnChanged(new PendingChangeEventArgs(this, pc));
                     }
                 }
-                else if (PendingChange.CreateIfPending(item, isDirty, out pc))
+                else if (PendingChange.CreateIfPending(RefreshContext, item, isDirty, out pc))
                 {
                     _pendingChanges.Add(pc);
                     if (!wasClean)
@@ -87,7 +97,7 @@ namespace Ankh.Scc
                 mapped.Add(pc, pc);
             }
 
-            foreach (string file in _extraFiles.Keys)
+            foreach (string file in _extraFiles)
             {
                 SvnItem item = cache[file];
 
@@ -99,7 +109,7 @@ namespace Ankh.Scc
                 PendingChange pc;
                 if (_pendingChanges.TryGetValue(file, out pc))
                 {
-                    if (pc.Refresh(item, isDirty) && !wasClean)
+                    if (pc.Refresh(RefreshContext, item, isDirty) && !wasClean)
                     {
                         if (pc.IsClean)
                         {
@@ -114,7 +124,7 @@ namespace Ankh.Scc
                             OnChanged(new PendingChangeEventArgs(this, pc));
                     }
                 }
-                else if (PendingChange.CreateIfPending(item, isDirty, out pc))
+                else if (PendingChange.CreateIfPending(RefreshContext, item, isDirty, out pc))
                 {
                     _pendingChanges.Add(pc);
                     if (!wasClean)
@@ -142,7 +152,9 @@ namespace Ankh.Scc
             }
 
             if(wasClean && _pendingChanges.Count > 0)
-                OnInitialUpdate(new PendingChangeEventArgs(this, null));
+                OnInitialUpdate(pceMe);
+
+            OnRefreshCompleted(pceMe);
         }
 
         public event EventHandler<PendingChangeEventArgs> InitialUpdate;

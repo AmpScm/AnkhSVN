@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Ankh.Commands;
+using AnkhSvn.Ids;
 
 namespace Ankh.Scc
 {
@@ -29,21 +31,83 @@ namespace Ankh.Scc
                     OnIsActiveChanged(new PendingChangeEventArgs(this, null));
                 }
             }
-        }        
+        }
+
+        readonly HybridCollection<string> _toRefresh = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+        bool _fullRefresh;
+        internal void OnTickRefresh()
+        {
+            lock (_toRefresh)
+            {
+                _refreshScheduled = false;
+            }
+            InnerRefresh();
+        }
+
+        bool _refreshScheduled;
+        void ScheduleRefresh()
+        {
+            lock (_toRefresh)
+            {
+                if (!_refreshScheduled)
+                {
+                    IAnkhCommandService cmd = GetService<IAnkhCommandService>();
+
+                    if (cmd != null && cmd.PostExecCommand(AnkhCommand.TickRefreshPendingTasks))
+                        _refreshScheduled = true;
+                }
+            }
+        }
 
         public void FullRefresh(bool clearStateCache)
         {
-            
+            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
+            _pendingChanges.Clear();
+            OnListFlushed(ee);
+
+            lock (_toRefresh)
+            {
+                _fullRefresh = true;
+                _toRefresh.Clear();
+
+                ScheduleRefresh();
+            }
         }
 
         public void Refresh(string path)
         {
-            //throw new NotImplementedException();
+            if (path != null && string.IsNullOrEmpty(path)) // path == ""
+                throw new ArgumentNullException("path");
+
+            lock (_toRefresh)
+            {
+                if (path == null)
+                    _fullRefresh = true;
+                else if (!_fullRefresh && !_toRefresh.Contains(path))
+                    _toRefresh.Add(path);
+
+                ScheduleRefresh();
+            }
         }
 
         public void Refresh(IEnumerable<string> paths)
         {
-            //throw new NotImplementedException();
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
+            lock (_toRefresh)
+            {
+                if (!_fullRefresh)
+                {
+                    foreach (string path in paths)
+                    {
+                        if (!string.IsNullOrEmpty(path) && !_toRefresh.Contains(path))
+                            _toRefresh.Add(path);
+                    }
+                }
+
+                ScheduleRefresh();
+            }
         }
 
         /// <summary>
@@ -52,7 +116,16 @@ namespace Ankh.Scc
         /// <value></value>
         public PendingChange this[string fullPath]
         {
-            get { return null; }
+            get
+            {
+                PendingChange pc;
+
+                if (_pendingChanges.TryGetValue(fullPath, out pc))
+                {
+                    return pc;
+                }
+                return null;
+            }
         }
 
         /// <summary>
@@ -134,6 +207,27 @@ namespace Ankh.Scc
         {
             if (IsActiveChanged != null)
                 IsActiveChanged(this, e);
+        }
+
+        #endregion
+
+        #region IPendingChangesManager Members
+
+        // Not used at this time
+        public event EventHandler<PendingChangeEventArgs> RefreshStarted;
+
+        protected void OnRefreshStarted(PendingChangeEventArgs e)
+        {
+            if (RefreshStarted != null)
+                RefreshStarted(this, e);
+        }
+
+        public event EventHandler<PendingChangeEventArgs> RefreshCompleted;
+
+        protected void OnRefreshCompleted(PendingChangeEventArgs e)
+        {
+            if (RefreshCompleted != null)
+                RefreshCompleted(this, e);
         }
 
         #endregion

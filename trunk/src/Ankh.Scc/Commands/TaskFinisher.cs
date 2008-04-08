@@ -4,14 +4,14 @@ using System.Text;
 using Ankh.Commands;
 using AnkhSvn.Ids;
 
-namespace Ankh.Scc
+namespace Ankh.Scc.Commands
 {
     /// <summary>
     /// Handles the finishtasks special command; this command is posted to the back of the command queueue
     /// if the SCC implementation needs to perform some post processing of VSs scc actions
     /// </summary>
     [Command(AnkhCommand.SccFinishTasks)]
-    class TaskFinisher : ICommandHandler
+    sealed class TaskFinisher : ICommandHandler
     {
         ProjectTracker _tracker;
         AnkhSccProvider _scc;

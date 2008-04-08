@@ -7,7 +7,6 @@ using AnkhSvn.Ids;
 namespace Ankh.UI.PendingChanges.Commands
 {
     [Command(AnkhCommand.RefreshPendingChanges)]
-    [Command(AnkhCommand.TickRefreshPendingTasks)]
     public class RefreshPendingChanges : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

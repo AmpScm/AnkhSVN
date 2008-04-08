@@ -5,15 +5,23 @@ using System.ComponentModel;
 using Ankh.Scc;
 using Ankh.Selection;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Ankh.VS;
 
 namespace Ankh.Scc
 {
+    [DebuggerDisplay("File={FullPath}, Status={Status}")]
     public sealed class PendingChange : CustomTypeDescriptor
     {
         readonly IAnkhServiceProvider _context;
-        readonly SvnItem _item;        
+        readonly SvnItem _item;
 
-        public PendingChange(IAnkhServiceProvider context, SvnItem item)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PendingChange"/> class
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="item">The item.</param>
+        public PendingChange(RefreshContext context, SvnItem item, bool isDirty)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -22,6 +30,7 @@ namespace Ankh.Scc
 
             _context = context;
             _item = item;
+            Refresh(context, item, isDirty);
         }
 
         [Browsable(false)]
@@ -42,27 +51,22 @@ namespace Ankh.Scc
             get { return _item.Name; }
         }
 
+        [DisplayName("Change List")]
+        public string ChangeList
+        {
+            get { return _item.Status.ChangeList; }
+        }
+
+        [DisplayName("Project")]
         public string Project
         {
-            get
-            {
-                string name = null;
-                IProjectFileMapper mapper = _context.GetService<IProjectFileMapper>();
-                foreach (SvnProject project in mapper.GetAllProjectsContaining(FullPath))
-                {
-                    ISvnProjectInfo info = mapper.GetProjectInfo(project);
+            get { return _projects; }
+        }
 
-                    if (info == null)
-                        continue;
-
-                    if (name != null)
-                        name += ";" + info.ProjectName;
-                    else
-                        name = info.ProjectName;                    
-                }
-
-                return name;
-            }
+        [DisplayName("Status")]
+        public string StatusText
+        {
+            get { return _status.Text; }
         }
 
         public override string GetComponentName()
@@ -109,9 +113,26 @@ namespace Ankh.Scc
         /// <summary>
         /// Gets a boolean indicating whether this pending change is clear / is no longer a pending change
         /// </summary>
+        [Browsable(false)]
         public bool IsClean
         {
-            get { return false; }
+            get { return _status == null; }
+        }
+
+        int _iconIndex;
+        string _projects;
+        PendingChangeStatus _status;
+
+        [Browsable(false)]
+        public int IconIndex
+        {
+            get { return _iconIndex; }
+        }
+
+        [Browsable(false)]
+        public PendingChangeStatus Status
+        {
+            get { return _status; }
         }
 
         /// <summary>
@@ -119,9 +140,88 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Refresh(SvnItem item, bool isDirty)
+        public bool Refresh(RefreshContext context, SvnItem item, bool isDirty)
         {
-            return false;
+            bool m = false;
+
+            RefreshValue(ref m, ref _iconIndex, context.IconMapper.GetIcon(FullPath));
+            RefreshValue(ref m, ref _projects, GetProjects(context));
+            RefreshValue(ref m, ref _status, GetStatus(context, item, isDirty));
+
+            return m || (_status == null);
+        }
+
+        string GetProjects(RefreshContext context)
+        {
+            string name = null;
+            foreach (SvnProject project in context.ProjectFileMapper.GetAllProjectsContaining(FullPath))
+            {
+                ISvnProjectInfo info = context.ProjectFileMapper.GetProjectInfo(project);
+
+                if (info == null)
+                    continue;
+
+                if (name != null)
+                    name += ";" + info.ProjectName;
+                else
+                    name = info.ProjectName;
+            }
+            return name ?? "<none>";
+        }
+
+        PendingChangeStatus GetStatus(RefreshContext context, SvnItem item, bool isDirty)
+        {
+            AnkhStatus status = item.Status;
+
+            switch (status.LocalContentStatus)
+            {
+                case SharpSvn.SvnStatus.Normal:
+                    break; // Look further
+                case SharpSvn.SvnStatus.NotVersioned:
+                    return new PendingChangeStatus("New");
+                case SharpSvn.SvnStatus.Modified:
+                case SharpSvn.SvnStatus.Replaced:
+                    return new PendingChangeStatus("Modified");
+                case SharpSvn.SvnStatus.Added:
+                case SharpSvn.SvnStatus.Deleted:
+                case SharpSvn.SvnStatus.Missing:
+                    // Default text is ok
+                default:
+                    return new PendingChangeStatus(status.LocalContentStatus.ToString());
+            }
+
+            switch (status.LocalPropertyStatus)
+            {
+                case SharpSvn.SvnStatus.Normal:
+                case SharpSvn.SvnStatus.None:
+                    break; // Look further
+                default:
+                    return new PendingChangeStatus("Property " + status.LocalPropertyStatus.ToString());
+            }
+
+            if (isDirty)
+                return new PendingChangeStatus("Editted");
+            else
+                return null;
+        }
+
+        static void RefreshValue<T>(ref bool changed, ref T field, T newValue)
+            where T : class, IEquatable<T>
+        {
+            if (field == null || !field.Equals(newValue))
+            {
+                changed = true;
+                field = newValue;
+            }
+        }
+
+        static void RefreshValue(ref bool changed, ref int field, int newValue)
+        {
+            if (field == newValue)
+            {
+                changed = true;
+                field = newValue;
+            }
         }
 
         /// <summary>
@@ -131,10 +231,74 @@ namespace Ankh.Scc
         /// <param name="isDirty">if set to <c>true</c> [is dirty].</param>
         /// <param name="pc">The pc.</param>
         /// <returns></returns>
-        public static bool CreateIfPending(SvnItem item, bool isDirty, out PendingChange pc)
+        public static bool CreateIfPending(RefreshContext context, SvnItem item, bool isDirty, out PendingChange pc)
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (item == null)
+                throw new ArgumentNullException("item");
+
+            bool create = false;
+            if (isDirty)
+            {
+                create = !item.IsIgnored;
+            }
+            else if (item.IsModified)
+                create = true;
+
+            if (create)
+            {
+                pc = new PendingChange(context, item, isDirty);
+                return true;
+            }
+
             pc = null;
             return false;
+        }
+
+        public sealed class RefreshContext : IAnkhServiceProvider
+        {
+            readonly IAnkhServiceProvider _context;
+            public RefreshContext(IAnkhServiceProvider context)
+            {
+                if (context == null)
+                    throw new ArgumentNullException("context");
+                _context = context;
+            }
+
+            IProjectFileMapper _fileMapper;
+            IFileIconMapper _iconMapper;            
+            public IProjectFileMapper ProjectFileMapper
+            {
+                [DebuggerStepThrough]
+                get { return _fileMapper ?? (_fileMapper = GetService<IProjectFileMapper>()); }
+            }
+            
+            public IFileIconMapper IconMapper
+            {
+                [DebuggerStepThrough]
+                get { return _iconMapper ?? (_iconMapper = GetService<IFileIconMapper>()); }
+            }
+
+            #region IAnkhServiceProvider Members
+            [DebuggerStepThrough]
+            public T GetService<T>() where T : class
+            {
+                return _context.GetService<T>();
+            }
+
+            [DebuggerStepThrough]
+            public T GetService<T>(Type serviceType) where T : class
+            {
+                return _context.GetService<T>(serviceType);
+            }
+
+            [DebuggerStepThrough]
+            public object GetService(Type serviceType)
+            {
+                return _context.GetService(serviceType);
+            }
+            #endregion
         }
     }
 
@@ -169,6 +333,12 @@ namespace Ankh.Scc
         /// <returns></returns>
         public bool TryGetValue(string key, out PendingChange value)
         {
+            if (Dictionary == null)
+            {
+                // List is empty
+                value = null;
+                return false;
+            }
             return Dictionary.TryGetValue(key, out value);
         }
     }
