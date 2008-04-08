@@ -18,6 +18,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using System.ComponentModel;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -103,6 +104,22 @@ namespace Ankh.UI.PendingChanges
         }
 
         #endregion
+
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public override string Text
+        {
+            get
+            {
+                return codeEditorNativeWindow.Text;
+            }
+            set
+            {
+                codeEditorNativeWindow.Text = value;
+            }
+        }
     }
 
     /// <summary>
@@ -139,7 +156,34 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         private IVsCodeWindow codeWindow;
 
+        IVsTextBuffer textBuffer;
+
         #endregion
+
+        public string Text
+        {
+            get
+            {
+                if(textBuffer == null)
+                    return null;
+
+                IVsTextLines lines = textBuffer as IVsTextLines;
+
+                if(lines == null)
+                    return null;
+
+                string text;
+                int endLine, endIndex;
+                ErrorHandler.ThrowOnFailure(lines.GetLastLineIndex(out endLine, out endIndex));
+                ErrorHandler.ThrowOnFailure(lines.GetLineText(0, 0, endLine, endIndex, out text));
+                return text;
+            }
+            set
+            {
+                // NOOP for now
+                //throw new InvalidOperationException();
+            }
+        }
 
         #region Properties
 
@@ -208,7 +252,7 @@ namespace Ankh.UI.PendingChanges
 
             // set buffer
             Guid guidVsTextBuffer = typeof(VsTextBufferClass).GUID;
-            IVsTextBuffer textBuffer = (IVsTextBuffer)CreateObject(localRegistry, guidVsTextBuffer, typeof(IVsTextBuffer).GUID);
+            textBuffer = (IVsTextBuffer)CreateObject(localRegistry, guidVsTextBuffer, typeof(IVsTextBuffer).GUID);
             Guid CLSID_LogMessageService = typeof(LogMessageLanguageService).GUID;
 
             hr = textBuffer.SetLanguageServiceID(ref CLSID_LogMessageService);

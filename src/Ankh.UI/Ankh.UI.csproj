@@ -277,6 +277,7 @@
     <Compile Include="PathSelector.Designer.cs">
       <DependentUpon>PathSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="PendingChanges\Commands\CommitPendingChanges.cs" />
     <Compile Include="PendingChanges\Commands\PendingChangeLocationCombo.cs" />
     <Compile Include="PendingChanges\Commands\ViewLogMessage.cs" />
     <Compile Include="PendingChanges\Commands\RefreshPendingChanges.cs" />

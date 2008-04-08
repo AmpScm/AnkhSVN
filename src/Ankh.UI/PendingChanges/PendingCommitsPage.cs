@@ -48,7 +48,7 @@ namespace Ankh.UI.PendingChanges
         IPendingChangesManager _manager;
         private void HookList()
         {
-            if(_manager != null || UISite == null)
+            if (_manager != null || UISite == null)
                 return;
 
             _manager = UISite.GetService<IPendingChangesManager>();
@@ -134,7 +134,7 @@ namespace Ankh.UI.PendingChanges
                 }
                 _listItems.Clear();
                 pendingCommits.Items.Clear();
-            }            
+            }
         }
 
         void OnPendingChangesActiveChanged(object sender, PendingChangeEventArgs e)
@@ -251,7 +251,32 @@ namespace Ankh.UI.PendingChanges
         private void pendingCommits_ShowContextMenu(object sender, EventArgs e)
         {
             Point p = MousePosition;
-            UISite.ShowContextMenu(AnkhCommandMenu.PendingChangesContextMenu, p.X, p.Y); 
+            UISite.ShowContextMenu(AnkhCommandMenu.PendingChangesContextMenu, p.X, p.Y);
+        }
+
+        internal bool CanCommit(bool keepingLocks)
+        {
+            if (_listItems.Count == 0)
+                return false;
+
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (!pci.Checked)
+                    continue;
+
+                if (!keepingLocks || pci.PendingChange.Item.IsLocked)
+                    return true;
+            }
+
+            return false;
+        }
+
+        internal void DoCommit(bool keepingLocks)
+        {
+            string text = logMessageEditor.Text;
+
+
+            GC.KeepAlive(text);
         }
     }
 }
