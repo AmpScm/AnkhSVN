@@ -119,6 +119,9 @@ namespace Ankh.UI.PendingChanges
             pci = new PendingCommitItem(UISite, e.Change);
             _listItems.Add(path, pci);
             pendingCommits.Items.Add(pci);
+
+            // TODO: Maybe add something like
+            //pendingCommits.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         HybridCollection<string> _checkedItems;

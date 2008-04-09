@@ -54,7 +54,7 @@ namespace Ankh.UI.PendingChanges
             else
                 SubItems[2].Text = "";
             
-            SubItems[4].Text = item.FullPath;
+            SubItems[3].Text = item.FullPath;
 
             ImageIndex = PendingChange.IconIndex;
 

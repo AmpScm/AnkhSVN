@@ -39,8 +39,7 @@
             this.pendingCommits = new Ankh.UI.PendingChanges.PendingCommitsView(this.components);
             this.pathColumn = new System.Windows.Forms.ColumnHeader();
             this.projectColumn = new System.Windows.Forms.ColumnHeader();
-            this.fileStatusColumn = new System.Windows.Forms.ColumnHeader();
-            this.propertyStatusColumn = new System.Windows.Forms.ColumnHeader();
+            this.changeStatusColumn = new System.Windows.Forms.ColumnHeader();
             this.fullPathColumn = new System.Windows.Forms.ColumnHeader();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -152,8 +151,7 @@
             this.pendingCommits.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.pathColumn,
             this.projectColumn,
-            this.fileStatusColumn,
-            this.propertyStatusColumn,
+            this.changeStatusColumn,
             this.fullPathColumn});
             this.pendingCommits.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pendingCommits.FullRowSelect = true;
@@ -165,6 +163,7 @@
             this.pendingCommits.ShowItemToolTips = true;
             this.pendingCommits.Size = new System.Drawing.Size(768, 214);
             this.pendingCommits.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.pendingCommits.StrictCheckboxesClick = true;
             this.pendingCommits.TabIndex = 0;
             this.pendingCommits.UseCompatibleStateImageBehavior = false;
             this.pendingCommits.View = System.Windows.Forms.View.Details;
@@ -184,15 +183,10 @@
             this.projectColumn.Text = "Project";
             this.projectColumn.Width = 75;
             // 
-            // fileStatusColumn
+            // changeStatusColumn
             // 
-            this.fileStatusColumn.Text = "File Status";
-            this.fileStatusColumn.Width = 73;
-            // 
-            // propertyStatusColumn
-            // 
-            this.propertyStatusColumn.Text = "Property Status";
-            this.propertyStatusColumn.Width = 95;
+            this.changeStatusColumn.Text = "Status";
+            this.changeStatusColumn.Width = 73;
             // 
             // fullPathColumn
             // 
@@ -220,9 +214,8 @@
 
         private System.Windows.Forms.ColumnHeader pathColumn;
         private System.Windows.Forms.ColumnHeader projectColumn;
-        private System.Windows.Forms.ColumnHeader fileStatusColumn;
+        private System.Windows.Forms.ColumnHeader changeStatusColumn;
         private System.Windows.Forms.ColumnHeader fullPathColumn;
-        private System.Windows.Forms.ColumnHeader propertyStatusColumn;
         private System.Windows.Forms.TableLayoutPanel topLayoutPanel;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
