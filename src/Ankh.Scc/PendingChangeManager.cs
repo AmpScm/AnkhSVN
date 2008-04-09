@@ -37,12 +37,36 @@ namespace Ankh.Scc
         bool _fullRefresh;
         internal void OnTickRefresh()
         {
+            List<string> toRefresh;
+            bool fullRefresh = true;
             lock (_toRefresh)
             {
                 _refreshScheduled = false;
+
+                if (_fullRefresh)
+                {
+                    fullRefresh = true;
+                    toRefresh = null;
+                }
+                else
+                {
+                    fullRefresh = false;
+                    toRefresh = new List<string>(_toRefresh);
+                }
+                _toRefresh.Clear();
+                _fullRefresh = false;
             }
-            InnerRefresh();
-        }
+
+            if (fullRefresh)
+                InnerRefresh();
+            else
+            {
+                foreach (string path in toRefresh)
+                {
+                    ItemRefresh(path);
+                }
+            }
+        }        
 
         bool _refreshScheduled;
         void ScheduleRefresh()

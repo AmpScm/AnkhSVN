@@ -78,8 +78,6 @@ namespace Ankh.Scc
 
                             // No need to check wasClean or external files; not possible in this case
                             OnRemoved(new PendingChangeEventArgs(this, pc));
-
-                            //continue;
                         }
                         else if (!wasClean)
                             OnChanged(new PendingChangeEventArgs(this, pc));
@@ -115,7 +113,7 @@ namespace Ankh.Scc
                         {
                             _pendingChanges.Remove(file);
 
-                            // No need to check wasClean or external files; not possible in this case
+                            // No need to check wasClean
                             OnRemoved(new PendingChangeEventArgs(this, pc));
 
                             continue;
@@ -155,6 +153,47 @@ namespace Ankh.Scc
                 OnInitialUpdate(pceMe);
 
             OnRefreshCompleted(pceMe);
+        }
+
+        private void ItemRefresh(string file)
+        {
+            bool inProject = Mapper.ContainsPath(file);
+            bool inExtra = _extraFiles.Contains(file);
+
+            if (!inProject && !inExtra)
+                return;
+            else if (inProject && inExtra)
+                _extraFiles.Remove(file);
+
+            SvnItem item = Cache[file];
+
+            if (item == null)
+                return;
+
+            bool isDirty = !item.IsVersioned || Tracker.IsDocumentDirty(file);
+
+            PendingChange pc;
+            if (_pendingChanges.TryGetValue(file, out pc))
+            {
+                if (pc.Refresh(RefreshContext, item, isDirty))
+                {
+                    if (pc.IsClean)
+                    {
+                        _pendingChanges.Remove(file);
+
+                        // No need to check wasClean or external files; not possible in this case
+                        OnRemoved(new PendingChangeEventArgs(this, pc));
+                    }
+                    else
+                        OnChanged(new PendingChangeEventArgs(this, pc));
+                }
+            }
+            else if (PendingChange.CreateIfPending(RefreshContext, item, isDirty, out pc))
+            {
+                _pendingChanges.Add(pc);
+                
+                OnAdded(new PendingChangeEventArgs(this, pc));
+            }
         }
 
         public event EventHandler<PendingChangeEventArgs> InitialUpdate;
