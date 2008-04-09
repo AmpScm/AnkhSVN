@@ -128,7 +128,7 @@ namespace Ankh.Scc
 
             // Svn does not allow a repository in a path root 
             // (See: canonicalization rules)
-            while (path.Length > root.Length)
+            while (!string.IsNullOrEmpty(path))
             {
                 if (SvnTools.IsManagedPath(path))
                 {
