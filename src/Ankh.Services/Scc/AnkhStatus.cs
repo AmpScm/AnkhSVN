@@ -162,7 +162,13 @@ namespace Ankh
 
         public string RepositoryId
         {
-            get { return _repositoryId.ToString(); }
+            get 
+            {
+                if (_repositoryId == Guid.Empty)
+                    return null;
+                else
+                    return _repositoryId.ToString(); 
+            }
         }
 
         public Guid RepositoryGuid

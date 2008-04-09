@@ -25,7 +25,7 @@ namespace Ankh.Commands
         SvnCommitResult commitInfo;
         string storedLogMessage = null;
 
-        static readonly string DefaultUuid = Guid.NewGuid().ToString();
+        static readonly string DefaultUuid = "";
 
         SvnCommitArgs _args;
 
@@ -109,7 +109,7 @@ namespace Ankh.Commands
                 return;
 
             // we need to commit to each repository separately
-            ICollection<List<SvnItem>> repositories = this.SortByRepository(e.Context, operation.Items);
+            ICollection<List<SvnItem>> repositories = SortByRepository(operation.Items);
 
             this.commitInfo = null;
 
@@ -120,29 +120,9 @@ namespace Ankh.Commands
                     startText += "to repository " + ((SvnItem)items[0]).Status.Uri;
                 using (e.Context.BeginOperation(startText))
                 {
-                    try
-                    {
-                        this.paths = SvnItem.GetPaths(items);
+                    this.paths = SvnItem.GetPaths(items);
 
-                        bool completed = operation.Run("Committing");
-
-                        if (completed)
-                        {
-                            foreach (SvnItem item in items)
-                                item.MarkDirty();
-                        }
-                    }
-                    catch (SvnException)
-                    {
-                        //context.OutputPane.WriteLine("Commit aborted");
-                        throw;
-                    }
-                    finally
-                    {
-                        //if (this.commitInfo != null)
-                        //    context.OutputPane.WriteLine("\nCommitted revision {0}.",
-                        //        this.commitInfo.Revision);
-                    }
+                    bool completed = operation.Run("Committing");
                 }
             }
 
@@ -160,16 +140,7 @@ namespace Ankh.Commands
             LinkedList<string> paths = new LinkedList<string>();
 
             _args.ThrowOnError = false;
-            _args.Notify += delegate(object sender, SvnNotifyEventArgs ne)
-            {
-                statusCache.MarkDirty(ne.FullPath);
-                paths.AddLast(ne.FullPath);
-            };
             e.Client.Commit(this.paths, _args, out commitInfo);
-
-            IProjectNotifier pn = e.Context.GetService<IProjectNotifier>();
-            if (pn != null)
-                pn.MarkDirty(projectMap.GetAllProjectsContaining(paths));
         }
 
         /// <summary>
@@ -177,49 +148,33 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        private ICollection<List<SvnItem>> SortByRepository(AnkhContext context, ICollection<SvnItem> items)
+        static ICollection<List<SvnItem>> SortByRepository(ICollection<SvnItem> items)
         {
             Dictionary<string, List<SvnItem>> repositories = new Dictionary<string, List<SvnItem>>(StringComparer.OrdinalIgnoreCase);
             foreach (SvnItem item in items)
             {
-                string uuid = this.GetUuid(context, item);
+                string uuid = GetUuid(item);
 
-                // give up on this one
-                if (uuid == null)
+                if (string.IsNullOrEmpty(uuid))
                     uuid = DefaultUuid;
 
                 if (!repositories.ContainsKey(uuid))
-                {
                     repositories.Add(uuid, new List<SvnItem>());
-                }
+
                 repositories[uuid].Add(item);
             }
 
             return repositories.Values;
         }
 
-        private string GetUuid(AnkhContext context, SvnItem item)
+        static string GetUuid(SvnItem item)
         {
-            string uuid = item.Status.RepositoryId;
-            // freshly added items have no uuid
-            if (uuid == null)
+            string uuid = null;
+            while (item != null && (null == (uuid = item.Status.RepositoryId)))
             {
-                string parentDir = item.Parent.FullPath;
-                if (Directory.Exists(parentDir))
-                {
-                    IFileStatusCache statusCache = context.GetService<IFileStatusCache>();
-                    SvnItem parentItem = statusCache[parentDir];
-                    uuid = parentItem.Status.RepositoryId;
-
-                    // still nothing? try the parent item
-                    if (uuid == null)
-                        return this.GetUuid(context, parentItem);
-                }
-                else
-                {
-                    return null;
-                }
+                item = item.Parent;
             }
+
             return uuid;
         }
     }

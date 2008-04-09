@@ -614,7 +614,7 @@ namespace Ankh
             {
                 string parentDir = Path.GetDirectoryName(FullPath);
 
-                if(parentDir.Length >= FullPath.Length)
+                if(string.IsNullOrEmpty(parentDir) || parentDir.Length >= FullPath.Length)
                     return null; // We are the root folder!
 
                 IFileStatusCache cache = _context.GetService<IFileStatusCache>();
@@ -632,7 +632,7 @@ namespace Ankh
             {
                 string parentDir = Path.GetDirectoryName(FullPath);
 
-                if (parentDir == FullPath)
+                if (string.IsNullOrEmpty(parentDir))
                     return null;
 
                 IFileStatusCache cache = _context.GetService<IFileStatusCache>();
