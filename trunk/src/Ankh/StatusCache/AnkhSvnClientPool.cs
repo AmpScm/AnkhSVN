@@ -6,6 +6,7 @@ using SharpSvn;
 
 using Ankh.Scc;
 using Ankh.VS;
+using System.IO;
 
 namespace Ankh
 {
@@ -135,7 +136,31 @@ namespace Ankh
             {
                 base.OnNotify(e);
 
-                string path = e.FullPath;
+                AddTouchedPath(e.FullPath);
+
+                // *************** See subversion issue #3168 ************************
+                if (e.CommandType == SvnCommandType.Commit && e.Action.ToString().StartsWith("Commit"))
+                {
+                    if (!File.Exists(e.FullPath) && !Directory.Exists(e.FullPath) && !Directory.Exists(Path.GetDirectoryName(e.FullPath)))
+                    {
+                        // e.FullPath should have been ok, as all files to commit should exist (or its parent directory should)
+
+                        // As a workaround:
+                        //   We just add all possible variations of a path that might be committed to the list of files to refresh
+
+                        string dir = Environment.CurrentDirectory;
+
+                        while (!string.IsNullOrEmpty(dir))
+                        {
+                            AddTouchedPath(Path.GetFullPath(Path.Combine(dir, e.Path))); // Not e.FullPath, as that is absolute (and invalid)
+                            dir = Path.GetDirectoryName(dir);
+                        }
+                    }
+                }
+            }
+
+            void AddTouchedPath(string path)
+            {
                 if (!string.IsNullOrEmpty(path) && !_touchedPaths.ContainsKey(path))
                     _touchedPaths[path] = path;
             }

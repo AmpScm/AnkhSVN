@@ -115,7 +115,7 @@ namespace Ankh.StatusCache
 
             string parentDir = Path.GetDirectoryName(item.FullPath);
 
-            if (parentDir == item.FullPath)
+            if (string.IsNullOrEmpty(parentDir) || parentDir == item.FullPath)
                 return; // Skip root directory
 
             if (_dirMap.TryGetValue(item.FullPath, out dir))
@@ -153,7 +153,7 @@ namespace Ankh.StatusCache
 
             string parentDir = Path.GetDirectoryName(item.FullPath);
 
-            if (parentDir == item.FullPath)
+            if (string.IsNullOrEmpty(parentDir) || parentDir == item.FullPath)
                 return; // Skip root directory
 
             if (_dirMap.TryGetValue(item.FullPath, out dir))
