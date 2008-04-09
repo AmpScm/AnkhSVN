@@ -115,12 +115,13 @@ namespace Ankh
             using (dialog.Bind(client))
             {
                 dialog.Caption = caption;
-
-                thread.Start(client);
                 thread.Name = "AnkhSVN Worker";
 
+                dialog.HandleCreated += delegate
+                {
+                    thread.Start(client);
+                };
                 _invoker = dialog;
-
                 dialog.ShowDialog(dialogOwner.DialogOwner);
 
                 thread.Join();
