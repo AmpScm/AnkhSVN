@@ -31,6 +31,8 @@ namespace Ankh
                 _notifyHandler = new NotificationHandler(context);
                 context.GetService<IServiceContainer>().AddService(typeof(NotificationHandler), _notifyHandler);
             }
+
+            SvnClient.AddClientName("AnkhSVN", new System.Reflection.AssemblyName(typeof(AnkhSvnClientPool).Assembly.FullName).Version);
         }
 
         public SvnPoolClient GetClient()
