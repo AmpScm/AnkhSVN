@@ -203,11 +203,10 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        IFileIconMapper _iconMap;
-
-        internal void RefreshList(bool incrementalUpdate)
+        internal void RefreshList()
         {
-            Manager.FullRefresh(!incrementalUpdate);
+            UISite.GetService<IFileStatusCache>().ClearCache();
+            Manager.FullRefresh(true);
         }
 
         private void pendingCommits_ResolveItem(object sender, PendingCommitsView.ResolveItemEventArgs e)
