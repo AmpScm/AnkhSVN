@@ -317,6 +317,7 @@ namespace Ankh.UI.RepositoryOpen
                 client.Info(combined, args,
                     delegate(object sender, SvnInfoEventArgs e)
                     {
+                        e.Detach();
                         if (!IsHandleCreated)
                             return;
 
@@ -383,7 +384,7 @@ namespace Ankh.UI.RepositoryOpen
 
                     int dirEnd = path.LastIndexOf('/');
 
-                    if (dirEnd > 1)
+                    if (dirEnd >= 0)
                     {
                         Uri dir = new Uri(nameUri, path.Substring(0, dirEnd + 1));
                         nameUri = dir.MakeRelativeUri(nameUri);
@@ -519,7 +520,7 @@ namespace Ankh.UI.RepositoryOpen
 
                     if (IsHandleCreated)
                     {
-                        DoSomething fill = delegate()
+                        Invoke((DoSomething)delegate()
                         {
                             if (uri == _currentUri)
                             {
@@ -554,9 +555,7 @@ namespace Ankh.UI.RepositoryOpen
                                 else
                                     dirView.Items.Add("<Nothing>");
                             }
-                        };
-
-                        Invoke(fill);
+                        });
                     }
                 }
             }
