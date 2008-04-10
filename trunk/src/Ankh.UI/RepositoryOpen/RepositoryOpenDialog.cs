@@ -343,6 +343,7 @@ namespace Ankh.UI.RepositoryOpen
                                     return; // The user selected something else while we where busy
 
                                 SelectedUri = e.Uri;
+                                SelectedRepositoryRoot = e.RepositoryRoot;
                                 DialogResult = DialogResult.OK;
                             }
                         });
@@ -356,6 +357,17 @@ namespace Ankh.UI.RepositoryOpen
             get { return _selectedUri; }
             set { _selectedUri = value; }
         }
+
+        Uri _selectedUri;
+        /// <summary>
+        /// Contains the repository root of <see cref="SelectedUri"/> when available
+        /// </summary>
+        public Uri SelectedRepositoryRoot
+        {
+            get { return _selectedUri; }
+            private set { _selectedUri = value; }
+        }
+
 
         void UpdateDirectories()
         {
