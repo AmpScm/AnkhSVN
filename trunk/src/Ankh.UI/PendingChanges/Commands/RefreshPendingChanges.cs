@@ -24,7 +24,7 @@ namespace Ankh.UI.PendingChanges.Commands
             if (page == null || (!page.Visible && (e.Command != AnkhCommand.TickRefreshPendingTasks)))
                 return;
 
-            page.RefreshList(e.Command == AnkhCommand.TickRefreshPendingTasks);
+            page.RefreshList();
         }
     }
 }

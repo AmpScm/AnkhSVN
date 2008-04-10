@@ -285,6 +285,75 @@ namespace Ankh.UI.RepositoryOpen
         void ProcessOk()
         {
             UpdateDirectories();
+
+            string fileText = fileNameBox.Text;
+
+            if(string.IsNullOrEmpty(fileText))
+                return;
+
+            Uri dirUri;
+            Uri fileUri;
+
+            if (Uri.TryCreate(urlBox.Text, UriKind.Absolute, out dirUri) && Uri.TryCreate(fileText, UriKind.Relative, out fileUri))
+            {
+                Uri combined = new Uri(dirUri, fileUri);
+
+                DoSomething fill = delegate()
+                {
+                    CheckResult(combined);
+                };
+                fill.BeginInvoke(null, null);
+            }
+        }
+
+        private void CheckResult(Uri combined)
+        {
+            using (SvnClient client = Context.GetService<ISvnClientPool>().GetClient())
+            {
+                SvnInfoArgs args = new SvnInfoArgs();
+                args.ThrowOnError = false;
+                args.Depth = SvnDepth.Empty;
+
+                client.Info(combined, args,
+                    delegate(object sender, SvnInfoEventArgs e)
+                    {
+                        if (!IsHandleCreated)
+                            return;
+
+                        Invoke((DoSomething)delegate
+                        {
+                            if (e.NodeKind == SvnNodeKind.Directory)
+                            {
+                                Uri parentUri = new Uri(e.Uri, "../");
+
+                                if (parentUri.ToString() != urlBox.Text)
+                                    return; // The user selected something else while we where busy
+
+                                // The user typed a directory Url without ending '/'
+                                fileNameBox.Text = e.Uri.ToString();
+                                UpdateDirectories();
+                                return;
+                            }
+                            else
+                            {
+                                Uri parentUri = new Uri(e.Uri, "./");
+
+                                if (parentUri.ToString() != urlBox.Text)
+                                    return; // The user selected something else while we where busy
+
+                                SelectedUri = e.Uri;
+                                DialogResult = DialogResult.OK;
+                            }
+                        });
+                    });
+            }
+        }
+
+        Uri _selectedUri;
+        public Uri SelectedUri
+        {
+            get { return _selectedUri; }
+            set { _selectedUri = value; }
         }
 
         void UpdateDirectories()
