@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Text;
 using Ankh.Scc;
 using Ankh.Selection;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using Ankh.VS;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -166,7 +167,13 @@ namespace Ankh.Scc
                 else
                     name = info.ProjectName;
             }
-            return name ?? "<none>";
+
+            if (!string.IsNullOrEmpty(name))
+                return name;
+            else if(string.Equals(FullPath, context.SolutionSettings.SolutionFilename))
+                return "<Solution>";
+            else
+                return "<none>";
         }
 
         PendingChangeStatus GetStatus(RefreshContext context, SvnItem item, bool isDirty)
@@ -185,7 +192,7 @@ namespace Ankh.Scc
                 case SharpSvn.SvnStatus.Added:
                 case SharpSvn.SvnStatus.Deleted:
                 case SharpSvn.SvnStatus.Missing:
-                    // Default text is ok
+                // Default text is ok
                 default:
                     return new PendingChangeStatus(status.LocalContentStatus.ToString());
             }
@@ -246,7 +253,7 @@ namespace Ankh.Scc
             else if (item.IsModified)
                 create = true;
 
-            if (create)
+            if (create && item.Status.LocalContentStatus != SvnStatus.None)
             {
                 pc = new PendingChange(context, item, isDirty);
                 return true;
@@ -267,17 +274,25 @@ namespace Ankh.Scc
             }
 
             IProjectFileMapper _fileMapper;
-            IFileIconMapper _iconMapper;            
+            IFileIconMapper _iconMapper;
+            IAnkhSolutionSettings _solutionSettings;
+
             public IProjectFileMapper ProjectFileMapper
             {
                 [DebuggerStepThrough]
                 get { return _fileMapper ?? (_fileMapper = GetService<IProjectFileMapper>()); }
             }
-            
+
             public IFileIconMapper IconMapper
             {
                 [DebuggerStepThrough]
                 get { return _iconMapper ?? (_iconMapper = GetService<IFileIconMapper>()); }
+            }
+
+            public IAnkhSolutionSettings SolutionSettings
+            {
+                [DebuggerStepThrough]
+                get { return _solutionSettings ?? (_solutionSettings = GetService<IAnkhSolutionSettings>()); }
             }
 
             #region IAnkhServiceProvider Members
