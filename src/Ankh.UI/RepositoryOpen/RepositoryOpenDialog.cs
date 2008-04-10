@@ -11,16 +11,17 @@ using Ankh.VS;
 using System.IO;
 using Microsoft.Win32;
 using System.Security;
+using System.Text.RegularExpressions;
 
 namespace Ankh.UI.RepositoryOpen
 {
     public partial class RepositoryOpenDialog : Form
     {
         IAnkhServiceProvider _context;
-        Uri _lastUri;
         public RepositoryOpenDialog()
         {
             InitializeComponent();
+            dirView.ListViewItemSorter = new ItemSorter(this);
         }
 
         public IAnkhServiceProvider Context
@@ -123,22 +124,88 @@ namespace Ankh.UI.RepositoryOpen
                 fileTypeBox.SelectedItem = fileTypeBox.Items[0];
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            if(_currentUri != null)
+                try
+                {
+                    using (RegistryKey rk = Registry.CurrentUser.CreateSubKey(
+                        "SOFTWARE\\AnkhSVN\\AnkhSVN\\CurrentVersion\\Dialogs"))
+                    {
+                        rk.SetValue("Last Repository", _currentUri.ToString());
+                    }
+                }
+                catch
+                { }
+        }
+
         string _filter;
 
         class FilterItem
         {
-            string _name;
-            string _filter;
+            readonly string _name;
+            readonly string _filter;
+            readonly Regex _itemRegEx;
 
             public FilterItem(string name, string filter)
             {
+                if (string.IsNullOrEmpty(name))
+                    throw new ArgumentNullException("name");
+                else if(filter == null)
+                    throw new ArgumentNullException("filter");
+
                 _name = name;
                 _filter = filter;
+
+                if(string.IsNullOrEmpty(filter) || filter == "*" || filter == "*.*")
+                {
+                    _itemRegEx = new Regex("^.*$", RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture); // Match all
+                    return;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("^(");
+
+                bool first = true;
+                foreach (string part in filter.Split(';'))
+                {
+                    string p = part.Trim();
+
+                    sb.Append(first ? "(" : "|(");
+                    first = false;
+                    for (int i = 0; i < p.Length; i++)
+                        switch (p[i])
+                        {
+                            case '*':
+                                sb.Append(".*");
+                                break;
+                            case '?':
+                                if (i + 1 >= p.Length || p[i + 1] == '.')
+                                    sb.Append(".?"); // Dos artifact
+                                else
+                                    sb.Append(".");
+                                break;
+                            default:
+                                sb.Append(Regex.Escape(p[i].ToString()));
+                                break;
+                        }
+                    sb.Append(')');
+                }
+                sb.Append(")");
+
+                _itemRegEx = new Regex(sb.ToString(), RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
             }
 
             public override string ToString()
             {
                 return _name;
+            }
+
+            public Regex Regex
+            {
+                get { return _itemRegEx; }
             }
         }
 
@@ -165,6 +232,11 @@ namespace Ankh.UI.RepositoryOpen
             }
         }
 
+        FilterItem CurrentFilter
+        {
+            get { return fileTypeBox.SelectedItem as FilterItem; }
+        }
+
         bool _inSetDirectory;
         void SetDirectory(Uri uri)
         {
@@ -180,6 +252,7 @@ namespace Ankh.UI.RepositoryOpen
                     urlBox.Items.Add(uri);
 
                 urlBox.SelectedItem = uri;
+                dirUpButton.Enabled = !_repositoryRoots.Contains(uri);
             }
             finally
             {
@@ -285,7 +358,7 @@ namespace Ankh.UI.RepositoryOpen
             {
                 Uri parentUri = new Uri(uri, "../");
 
-                if (parentUri == uri)
+                if (parentUri == uri || _repositoryRoots.Contains(uri))
                     return;
 
                 Uri fileUri;
@@ -318,7 +391,7 @@ namespace Ankh.UI.RepositoryOpen
                 List<ListViewItem> items = _walking[uri];
 
                 if (items != null)
-                    dirView.Items.AddRange(items.ToArray());
+                    SetView(items.ToArray());
                 else
                     dirView.Items.Add("<loading>");
             }
@@ -341,7 +414,7 @@ namespace Ankh.UI.RepositoryOpen
             fill.BeginInvoke(null, null);
         }
 
-
+        List<Uri> _repositoryRoots = new List<Uri>();
 
         void OnFill(Uri uri)
         {
@@ -362,30 +435,16 @@ namespace Ankh.UI.RepositoryOpen
                         delegate(object sender, SvnListEventArgs e)
                         {
                             if (string.IsNullOrEmpty(e.Path))
-                            {
-                                // The directory itself. This gives us the repository root.
-
-                                // TODO: Move this code to the SvnListEventArgs object in SharpSvn
-
-                                string uriStr = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped).Trim('/');
-
-                                if (uriStr.EndsWith(e.BasePath))
-                                {
-                                    repositoryRoot = new Uri(uri, '/' + uriStr.Substring(0, uriStr.Length - e.BasePath.Length) + '/');
-                                }
-                                else if (e.BasePath == "/")
-                                    repositoryRoot = new Uri(uri, '/' + uriStr + '/');
-
-                                return;
-                            }
-                            else if (repositoryRoot == null)
                                 return;
 
                             ListViewItem lvi = new ListViewItem();
-                            lvi.Tag = new Uri(repositoryRoot, e.BasePath.Substring(1) + '/' + e.Path);
+                            lvi.Tag = new Uri(e.RepositoryRoot, e.BasePath.Substring(1) + '/' + e.Path);
                             lvi.Text = e.Path;
                             lvi.ImageIndex = (e.Entry.NodeKind == SvnNodeKind.Directory) ? _dirOffset : _fileOffset;
                             items.Add(lvi);
+
+                            if (repositoryRoot == null)
+                                repositoryRoot = e.RepositoryRoot;
                         });
 
 
@@ -397,10 +456,12 @@ namespace Ankh.UI.RepositoryOpen
                             {
                                 dirView.Items.Clear();
 
+                                if (repositoryRoot != null && !_repositoryRoots.Contains(repositoryRoot))
+                                    _repositoryRoots.Add(repositoryRoot);
+
                                 if (ok)
                                 {
                                     IFileIconMapper mapper = Context != null ? Context.GetService<IFileIconMapper>() : null;
-
 
                                     foreach (ListViewItem item in items)
                                     {
@@ -418,8 +479,7 @@ namespace Ankh.UI.RepositoryOpen
                                         }
                                     }
 
-
-                                    dirView.Items.AddRange(items.ToArray());
+                                    SetView(items.ToArray());
                                     _walking[uri] = items;
                                 }
                                 else
@@ -438,6 +498,42 @@ namespace Ankh.UI.RepositoryOpen
                     _running.Remove(uri);
                 }
                 // Exception or something
+            }
+        }
+
+        IList<ListViewItem> _currentItems;
+        void SetView(IList<ListViewItem> items)
+        {
+            dirView.Items.Clear();
+            _currentItems = items;
+
+            if (items.Count > 0)
+            {
+                FilterItem filter = CurrentFilter;
+
+                ListViewItem select = null;
+                string selText = fileNameBox.Text;
+
+                List<ListViewItem> newList = new List<ListViewItem>();
+                foreach (ListViewItem i in items)
+                {
+                    // Show directories and matching items
+                    if((i.ImageIndex == _dirOffset) || filter == null || filter.Regex.Match(i.Text).Success)
+                    {
+                        if (!string.IsNullOrEmpty(selText) &&
+                            selText.StartsWith(i.Text, StringComparison.Ordinal) &&
+                            (i.Text.Length == selText.Length || selText[i.Text.Length] == '/'))
+                        {
+                            select = i;
+                        }
+                        newList.Add(i);
+                    }
+                }
+
+                dirView.Items.AddRange(newList.ToArray());
+
+                if (select != null)
+                    select.Selected = true;
             }
         }
 
@@ -547,6 +643,48 @@ namespace Ankh.UI.RepositoryOpen
             }
 
             base.OnKeyDown(e);
+        }
+
+        private void fileTypeBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(_currentItems != null)
+                SetView(_currentItems); // Refilter current directory
+        }
+
+        sealed class ItemSorter : IComparer<ListViewItem>, System.Collections.IComparer
+        {
+            readonly RepositoryOpenDialog _dlg;
+
+            public ItemSorter(RepositoryOpenDialog dlg)
+            {
+                if (dlg == null)
+                    throw new ArgumentNullException("dlg");
+                _dlg = dlg;
+            }
+
+            #region IComparer Members
+            // This method is called by the ListView; map it to the typed version
+            public int Compare(object x, object y)
+            {
+                return Compare((ListViewItem)x, (ListViewItem)y);
+            }
+
+            #endregion
+
+            public int Compare(ListViewItem x, ListViewItem y)
+            {
+                if (x == null)
+                    return -1;
+                else if (y == null)
+                    return 1;
+
+                int dirOffset = _dlg._dirOffset;
+
+                if((x.ImageIndex == dirOffset) != (y.ImageIndex == dirOffset))
+                    return (x.ImageIndex == dirOffset) ? -1 : 1;
+
+                return StringComparer.OrdinalIgnoreCase.Compare(x.Text, y.Text);
+            }
         }
     }
 }

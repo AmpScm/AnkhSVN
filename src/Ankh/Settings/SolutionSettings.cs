@@ -63,6 +63,41 @@ namespace Ankh.Settings
             }
         }
 
+
+        string GetSvnWcRoot(string directory)
+        {
+            if (string.IsNullOrEmpty(directory))
+                throw new ArgumentNullException("directory");
+
+            IFileStatusCache cache = GetService<IFileStatusCache>();
+
+            if(cache == null)
+                return directory;
+
+            SvnItem item = cache[directory];
+
+            while (item != null)
+            {
+                SvnItem parent = item.Parent;
+                if (parent == null || !parent.IsVersioned)
+                    break;
+
+                if (parent.Status.RepositoryId != item.Status.RepositoryId)
+                    break;
+
+                Uri uri = new Uri(item.Status.Uri, "../");
+
+                if (parent.Status.Uri != uri)
+                    break;
+
+                item = parent;
+            }
+
+            return item.FullPath;
+        }
+
+
+
         public string ProjectRoot
         {
             get
@@ -77,6 +112,9 @@ namespace Ankh.Settings
                 if (string.IsNullOrEmpty(solutionFilename))
                     return null;
 
+
+                string wcRoot = GetSvnWcRoot(Path.GetDirectoryName(SolutionFilename)).TrimEnd('\\') + '\\';
+
                 string sd = Path.GetDirectoryName(SolutionFilename).TrimEnd('\\') + '\\'; // Contains ClearIfDirty();
 
                 using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
@@ -88,8 +126,11 @@ namespace Ankh.Settings
                     {
                         Uri solution, relative;
 
-                        if (!Uri.TryCreate("file:///" + _cache.SolutionFilename.Replace(Path.DirectorySeparatorChar, '/'), UriKind.Absolute, out solution))
-                            return _cache.ProjectRoot = sd;
+                        if (!Uri.TryCreate("file:///" + _cache.SolutionFilename.Replace(Path.DirectorySeparatorChar, '/'), UriKind.Absolute, out solution)
+                            || !Uri.TryCreate(value, UriKind.Relative, out relative))
+                        {
+                            return _cache.ProjectRoot = wcRoot;
+                        }
 
                         if (value != "./")
                         {
@@ -98,7 +139,7 @@ namespace Ankh.Settings
                                 r = r.Substring(3);
 
                             if (!string.IsNullOrEmpty(r))
-                                return _cache.ProjectRoot = sd;
+                                return _cache.ProjectRoot = wcRoot;
                         }
 
                         if (!Uri.TryCreate(value, UriKind.Relative, out relative))
@@ -109,8 +150,7 @@ namespace Ankh.Settings
                         return _cache.ProjectRoot = combined.AbsolutePath.Replace('/', '\\').TrimEnd('\\') + '\\';
                     }
 
-
-                    return _cache.ProjectRoot = sd;
+                    return _cache.ProjectRoot = GetSvnWcRoot(sd.TrimEnd('\\'));
                 }
             }
             set
