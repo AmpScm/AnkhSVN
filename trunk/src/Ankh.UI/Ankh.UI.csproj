@@ -777,6 +777,9 @@
   <ItemGroup>
     <None Include="Resources\BrowseRefresh.png" />
     <None Include="Resources\BrowseUp.png" />
+    <None Include="Resources\disconnectButton.Image.png" />
+    <None Include="Resources\connectButton.Image.png" />
+    <None Include="Resources\refreshButton.Image.png" />
     <Content Include="Resources\TabConflicts.png" />
   </ItemGroup>
   <ItemGroup>

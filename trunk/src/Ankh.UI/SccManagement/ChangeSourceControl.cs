@@ -59,13 +59,13 @@ namespace Ankh.UI.SccManagement
             if(dirUri != null)
                 dirUri = new Uri(dirUri, "./");
 
+            bool solutionControlled = scc.IsProjectManaged(null);
             int n = bindingGrid.Rows.Add(
-                Path.GetFileNameWithoutExtension(settings.SolutionFilename) + " (Solution)",
-                info.ParentDirectory.FullPath,
+                "Solution: " + Path.GetFileNameWithoutExtension(settings.SolutionFilename),
                 (dirUri != null) ? dirUri.ToString() : "",
-                false,
-                scc.IsProjectManagedRaw(null),
-                "Ok");            
+                solutionControlled,
+                scc.IsProjectManaged(null) ? "Ok" : "Not Controlled",
+                info.ParentDirectory.FullPath);
 
             foreach (SvnProject project in mapper.GetAllProjects())
             {
@@ -78,11 +78,10 @@ namespace Ankh.UI.SccManagement
 
                 n = bindingGrid.Rows.Add(
                     projectInfo.UniqueProjectName,
-                    projectInfo.ProjectDirectory,
-                    info.Status.Uri,
-                    false,
-                    scc.IsProjectManaged(project),
-                    "Ok");
+                    info.Status.Uri.ToString(),
+                    scc.IsProjectManaged(project),                    
+                    (scc.IsProjectManaged(null) || solutionControlled) ? "Ok" : "Not Controlled",
+                    projectInfo.ProjectDirectory);
 
                 bindingGrid.Rows[n].Tag = project;
             }
@@ -226,6 +225,57 @@ namespace Ankh.UI.SccManagement
             }
 
             RefreshGrid(false);
+        }
+
+        private void bindingGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            if(DesignMode)
+                return;
+
+            bool enableConnect = false;
+            bool enableDisconnect = false;
+
+            IAnkhSccService scc = Context.GetService<IAnkhSccService>();
+            IFileStatusCache cache = Context.GetService<IFileStatusCache>();
+            IProjectFileMapper mapper = Context.GetService<IProjectFileMapper>();
+            IAnkhSolutionSettings solset = Context.GetService<IAnkhSolutionSettings>();
+
+            foreach (DataGridViewCell cell in bindingGrid.SelectedCells)
+            {
+                DataGridViewRow row = bindingGrid.Rows[cell.RowIndex];
+                SvnProject project = row.Tag as SvnProject;
+
+                if (scc.IsProjectManaged(project))
+                    enableDisconnect = true;
+                else if(!enableConnect)
+                {
+                    string dir;
+                    if (project != null)
+                    {
+                        ISvnProjectInfo projectInfo = mapper.GetProjectInfo(project);
+
+                        if (projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
+                            continue;
+
+                        dir = projectInfo.ProjectDirectory;
+                    }
+                    else if (string.IsNullOrEmpty(solset.SolutionFilename))
+                        continue;
+                    else
+                        dir = Path.GetDirectoryName(solset.SolutionFilename);
+
+                    SvnItem item = cache[dir];
+
+                    if (item.Status.Uri != null)
+                        enableConnect = true;
+                }
+
+                if (enableConnect && enableDisconnect)
+                    break;
+            }
+
+            connectButton.Enabled = enableConnect;
+            disconnectButton.Enabled = enableDisconnect;
         }
     }
 }

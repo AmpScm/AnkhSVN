@@ -94,7 +94,7 @@
             this.urlBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.urlBox.Name = "urlBox";
             this.urlBox.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.urlBox.Size = new System.Drawing.Size(330, 25);
+            this.urlBox.Size = new System.Drawing.Size(380, 25);
             this.urlBox.SelectedIndexChanged += new System.EventHandler(this.urlBox_SelectedIndexChanged);
             // 
             // refreshButton
@@ -127,7 +127,7 @@
             this.versionButton.Image = ((System.Drawing.Image)(resources.GetObject("versionButton.Image")));
             this.versionButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.versionButton.Name = "versionButton";
-            this.versionButton.Size = new System.Drawing.Size(55, 22);
+            this.versionButton.Size = new System.Drawing.Size(55, 20);
             this.versionButton.Text = "Head";
             this.versionButton.Visible = false;
             // 
@@ -150,6 +150,7 @@
             this.dirView.MultiSelect = false;
             this.dirView.Name = "dirView";
             this.dirView.Size = new System.Drawing.Size(484, 208);
+            this.dirView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.dirView.TabIndex = 6;
             this.dirView.UseCompatibleStateImageBehavior = false;
             this.dirView.View = System.Windows.Forms.View.List;
@@ -211,6 +212,7 @@
             this.fileTypeBox.Name = "fileTypeBox";
             this.fileTypeBox.Size = new System.Drawing.Size(332, 21);
             this.fileTypeBox.TabIndex = 11;
+            this.fileTypeBox.SelectedIndexChanged += new System.EventHandler(this.fileTypeBox_SelectedIndexChanged);
             // 
             // RepositoryOpenDialog
             // 
@@ -232,6 +234,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "RepositoryOpenDialog";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Open From Subversion";

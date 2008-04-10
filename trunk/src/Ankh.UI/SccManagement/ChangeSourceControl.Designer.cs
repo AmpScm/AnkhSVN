@@ -31,15 +31,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChangeSourceControl));
             this.bindingGrid = new System.Windows.Forms.DataGridView();
             this.ProjectColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.UrlColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExternalColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.RegisteredColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.StatusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.connectButton = new System.Windows.Forms.ToolStripButton();
             this.disconnectButton = new System.Windows.Forms.ToolStripButton();
-            this.browseButton = new System.Windows.Forms.ToolStripButton();
             this.refreshButton = new System.Windows.Forms.ToolStripButton();
             this.registerInSubversion = new System.Windows.Forms.CheckBox();
             this.projectRootLabel = new System.Windows.Forms.Label();
@@ -64,30 +62,24 @@
             this.bindingGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.bindingGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ProjectColumn,
-            this.PathColumn,
             this.UrlColumn,
-            this.ExternalColumn,
             this.RegisteredColumn,
-            this.StatusColumn});
+            this.StatusColumn,
+            this.PathColumn});
             this.bindingGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.bindingGrid.Location = new System.Drawing.Point(15, 37);
             this.bindingGrid.Name = "bindingGrid";
             this.bindingGrid.RowHeadersVisible = false;
             this.bindingGrid.ShowEditingIcon = false;
-            this.bindingGrid.Size = new System.Drawing.Size(756, 185);
+            this.bindingGrid.Size = new System.Drawing.Size(756, 193);
             this.bindingGrid.TabIndex = 1;
+            this.bindingGrid.SelectionChanged += new System.EventHandler(this.bindingGrid_SelectionChanged);
             // 
             // ProjectColumn
             // 
             this.ProjectColumn.HeaderText = "Solution/Project";
             this.ProjectColumn.Name = "ProjectColumn";
             this.ProjectColumn.Width = 108;
-            // 
-            // PathColumn
-            // 
-            this.PathColumn.HeaderText = "Path";
-            this.PathColumn.Name = "PathColumn";
-            this.PathColumn.Width = 54;
             // 
             // UrlColumn
             // 
@@ -96,17 +88,11 @@
             this.UrlColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.UrlColumn.Width = 45;
             // 
-            // ExternalColumn
-            // 
-            this.ExternalColumn.HeaderText = "External";
-            this.ExternalColumn.Name = "ExternalColumn";
-            this.ExternalColumn.Width = 51;
-            // 
             // RegisteredColumn
             // 
-            this.RegisteredColumn.HeaderText = "Registered";
+            this.RegisteredColumn.HeaderText = "Connected";
             this.RegisteredColumn.Name = "RegisteredColumn";
-            this.RegisteredColumn.Width = 64;
+            this.RegisteredColumn.Width = 65;
             // 
             // StatusColumn
             // 
@@ -115,6 +101,12 @@
             this.StatusColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.StatusColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.StatusColumn.Width = 43;
+            // 
+            // PathColumn
+            // 
+            this.PathColumn.HeaderText = "Path";
+            this.PathColumn.Name = "PathColumn";
+            this.PathColumn.Width = 54;
             // 
             // toolStrip1
             // 
@@ -126,7 +118,6 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectButton,
             this.disconnectButton,
-            this.browseButton,
             this.refreshButton});
             this.toolStrip1.Location = new System.Drawing.Point(15, 9);
             this.toolStrip1.Name = "toolStrip1";
@@ -152,14 +143,6 @@
             this.disconnectButton.Text = "&Disconnect";
             this.disconnectButton.Click += new System.EventHandler(this.disconnectButton_Click);
             // 
-            // browseButton
-            // 
-            this.browseButton.Image = ((System.Drawing.Image)(resources.GetObject("browseButton.Image")));
-            this.browseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(65, 22);
-            this.browseButton.Text = "&Browse";
-            // 
             // refreshButton
             // 
             this.refreshButton.Image = ((System.Drawing.Image)(resources.GetObject("refreshButton.Image")));
@@ -176,7 +159,7 @@
             this.registerInSubversion.Checked = true;
             this.registerInSubversion.CheckState = System.Windows.Forms.CheckState.Checked;
             this.registerInSubversion.Enabled = false;
-            this.registerInSubversion.Location = new System.Drawing.Point(112, 252);
+            this.registerInSubversion.Location = new System.Drawing.Point(112, 279);
             this.registerInSubversion.Name = "registerInSubversion";
             this.registerInSubversion.Size = new System.Drawing.Size(194, 17);
             this.registerInSubversion.TabIndex = 5;
@@ -187,7 +170,7 @@
             // 
             this.projectRootLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.projectRootLabel.AutoSize = true;
-            this.projectRootLabel.Location = new System.Drawing.Point(12, 228);
+            this.projectRootLabel.Location = new System.Drawing.Point(12, 255);
             this.projectRootLabel.Name = "projectRootLabel";
             this.projectRootLabel.Size = new System.Drawing.Size(74, 13);
             this.projectRootLabel.TabIndex = 2;
@@ -197,7 +180,7 @@
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(618, 271);
+            this.cancelButton.Location = new System.Drawing.Point(618, 298);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 7;
@@ -208,7 +191,7 @@
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(537, 271);
+            this.okButton.Location = new System.Drawing.Point(537, 298);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 6;
@@ -220,7 +203,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(610, 228);
+            this.label1.Location = new System.Drawing.Point(610, 255);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(164, 13);
             this.label1.TabIndex = 4;
@@ -230,7 +213,7 @@
             // 
             this.helpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.helpButton.Enabled = false;
-            this.helpButton.Location = new System.Drawing.Point(699, 271);
+            this.helpButton.Location = new System.Drawing.Point(699, 298);
             this.helpButton.Name = "helpButton";
             this.helpButton.Size = new System.Drawing.Size(75, 23);
             this.helpButton.TabIndex = 8;
@@ -243,7 +226,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.solutionRootBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.solutionRootBox.FormattingEnabled = true;
-            this.solutionRootBox.Location = new System.Drawing.Point(112, 225);
+            this.solutionRootBox.Location = new System.Drawing.Point(112, 252);
             this.solutionRootBox.Name = "solutionRootBox";
             this.solutionRootBox.Size = new System.Drawing.Size(492, 21);
             this.solutionRootBox.TabIndex = 3;
@@ -254,7 +237,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(783, 306);
+            this.ClientSize = new System.Drawing.Size(783, 333);
             this.Controls.Add(this.helpButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.okButton);
@@ -267,6 +250,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChangeSourceControl";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Change Source Control";
             ((System.ComponentModel.ISupportInitialize)(this.bindingGrid)).EndInit();
             this.toolStrip1.ResumeLayout(false);
@@ -282,7 +267,6 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton connectButton;
         private System.Windows.Forms.ToolStripButton disconnectButton;
-        private System.Windows.Forms.ToolStripButton browseButton;
         private System.Windows.Forms.ToolStripButton refreshButton;
         private System.Windows.Forms.CheckBox registerInSubversion;
         private System.Windows.Forms.Label projectRootLabel;
@@ -290,12 +274,11 @@
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button helpButton;
+        private System.Windows.Forms.ComboBox solutionRootBox;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProjectColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PathColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn UrlColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn ExternalColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn RegisteredColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn StatusColumn;
-        private System.Windows.Forms.ComboBox solutionRootBox;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PathColumn;
     }
 }
