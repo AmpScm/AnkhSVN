@@ -88,8 +88,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return; // Let the other SCC package manage it
 
-            MarkGlyphsDirty(data, filename);
-            MarkFilesDirty(filename);
+            MarkDirty(filename, true);
 
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
@@ -217,16 +216,12 @@ namespace Ankh.Scc
             {
                 SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
 
-                MarkGlyphsDirty(data, newName); // Mark the glyphs dirty anyway
-
-                if (svn.IsUnversioned(status))
+                if (!svn.IsUnversioned(status))
                 {
-                    return; // Nothing to do
+                    svn.SafeWcMoveFixup(oldName, newName);
                 }
 
-                svn.SafeWcMoveFixup(oldName, newName);
-                MarkFilesDirty(newName);
-                MarkFilesDirty(oldName);
+                MarkDirty(new string[] { oldName, newName }, true);
             }            
         }
 
@@ -276,40 +271,38 @@ namespace Ankh.Scc
             MarkGlyphsDirty(data, newName);
         }
 
-        /// <summary>
-        /// Temporary
-        /// </summary>
-        /// <param name="filename"></param>
-        private void MarkFilesDirty(string filename)
-        {
-            if(string.IsNullOrEmpty(filename))
-                throw new ArgumentNullException("filename");
 
-            if (StatusCache != null)
-                StatusCache.MarkDirty(filename);
+        void MarkDirty(string path, bool rescan)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
+
+            if (rescan)
+                monitor.ScheduleSvnStatus(path);
+            else
+                monitor.ScheduleGlyphUpdate(path);                
         }
+
+        void MarkDirty(IEnumerable<string> paths, bool rescan)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
+            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
+
+            if (rescan)
+                monitor.ScheduleSvnStatus(paths);
+            else
+                monitor.ScheduleGlyphUpdate(paths);
+        }        
 
         private void MarkGlyphsDirty(SccProjectData project, string filename)
         {
-            List<SvnProject> projects = new List<SvnProject>();
-            // TODO: We can probably do this smarter then the notifier; but for now it works
-            if (project != null)
-                projects.Add(project.SvnProject);
+            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
-            if (filename != null)
-            {
-                SccProjectFile file;
-                if (_fileMap.TryGetValue(filename, out file))
-                {
-                    foreach (SccProjectData pd in file.GetOwnerProjects())
-                    {
-                        projects.Add(pd.SvnProject);
-                    }
-                }
-            }
-
-            if(projects.Count > 0)
-                Context.GetService<IProjectNotifier>().MarkDirty(projects);
+            monitor.ScheduleGlyphUpdate(filename);
         }      
 
         #region ProjectFile

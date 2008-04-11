@@ -106,6 +106,28 @@ namespace Ankh.Scc
             return new SccDocumentLock(Context);
         }
 
+
+        /// <summary>
+        /// Marks the specified path dirty
+        /// </summary>
+        /// <param name="ProjectFile">The project file.</param>
+        /// <param name="sure">if sure set to <c>true</c>.. <c>false</c> if the editory should be queried.</param>
+        public void SetDirty(string path, bool sure)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            SccDocumentData data;
+
+            if (_docMap.TryGetValue(path, out data))
+            {
+                if (sure)
+                    data.SetDirty(true);
+                else
+                    data.CheckDirty();
+            }
+        }
+
         class SccDocumentLock : DocumentLock
         {
             readonly IAnkhServiceProvider _context;

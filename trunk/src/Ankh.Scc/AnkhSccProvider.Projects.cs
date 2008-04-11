@@ -175,6 +175,11 @@ namespace Ankh.Scc
                     window.EnableAnkhIcons(false);
             }
 
+            foreach (SccProjectData pd in _projectMap.Values)
+            {
+                pd.Hook(false);
+            }
+
 #if !DEBUG
             // Skip file by file cleanup of the project<-> file mapping
             // Should proably always be enabled around the release of AnkhSVN 2.0
@@ -311,7 +316,7 @@ namespace Ankh.Scc
                         if (!File.Exists(file))
                         {
                             svn.SafeDelete(file);
-                            StatusCache.MarkDirty(file);
+                            MarkDirty(file, true);
                         }
                     }
                 }

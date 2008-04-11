@@ -83,8 +83,11 @@
     </Compile>
     <Compile Include="Commands\MarkProjectDirty.cs" />
     <Compile Include="PendingChangeManager.cs" />
-    <Compile Include="PendingChangeManager.Map.cs" />
+    <Compile Include="PendingChangeManager.Map.cs">
+      <DependentUpon>PendingChangeManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectMap\SccDocumentData.cs" />
+    
     <Compile Include="ProjectTracker.cs" />
     <Compile Include="ProjectTracker.Add.cs">
       <DependentUpon>ProjectTracker.cs</DependentUpon>
@@ -102,6 +105,9 @@
       <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
     <Compile Include="ProjectMap\SccProjectData.cs" />
+    <Compile Include="ProjectMap\SccProjectData.Hierarchy.cs">
+      <DependentUpon>SccProjectData.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectMap\SccProjectFile.cs" />
     <Compile Include="ProjectMap\SccProjectFileCollection.cs" />
     <Compile Include="ProjectMap\SccProjectFileReference.cs" />
