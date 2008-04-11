@@ -120,7 +120,7 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int OnAfterSaveUnreloadableFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo)
         {
-            MarkGlyphsDirty(null, pszMkDocument);
+            MarkDirty(pszMkDocument, true);
 
             return VSConstants.S_OK;
         }
@@ -202,7 +202,7 @@ namespace Ankh.Scc
                 item.MarkDirty();
             }
 
-            MarkGlyphsDirty(null, pszMkDocument);
+            MarkDirty(pszMkDocument, true);
             
             return VSConstants.S_OK;
         }
@@ -220,6 +220,11 @@ namespace Ankh.Scc
         public int QuerySaveFiles(uint rgfQuerySave, int cFiles, string[] rgpszMkDocuments, uint[] rgrgf, VSQEQS_FILE_ATTRIBUTE_DATA[] rgFileInfo, out uint pdwQSResult)
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+
+            if (rgpszMkDocuments != null)
+                for (int i = 0; i < cFiles; i++)
+                    MarkDirty(rgpszMkDocuments[i], true);
+
             return VSConstants.S_OK;
         }
 

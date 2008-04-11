@@ -15,7 +15,7 @@ namespace Ankh.Scc.ProjectMap
     /// 
     /// </summary>
     [DebuggerDisplay("Name={Name}, Dirty={IsDirty}")]
-    class SccDocumentData
+    sealed class SccDocumentData
     {
         readonly IAnkhServiceProvider _context;
         readonly string _name;
@@ -177,7 +177,7 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        void SetDirty(bool dirty)
+        internal void SetDirty(bool dirty)
         {
             if (dirty == _isDirty)
                 return;
@@ -199,15 +199,11 @@ namespace Ankh.Scc.ProjectMap
         }
 
         void UpdateGlyph()
-        {            
-            IVsSccProject2 project = Hierarchy as IVsSccProject2;
+        {
+            IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
 
-            if (project != null)
-            {
-                IProjectNotifier pn = _context.GetService<IProjectNotifier>();
-
-                pn.MarkDirty(new SvnProject(null, project));
-            }
+            if (monitor != null)
+                monitor.ScheduleGlyphUpdate(Name);
         }
 
         internal void Dispose()

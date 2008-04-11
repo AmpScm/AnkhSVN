@@ -35,5 +35,13 @@ namespace Ankh.Scc
         /// <param name="paths">The paths to lock. If a path ends with a '\' all files below that path will be locked</param>
         /// <returns></returns>
         DocumentLock LockDocuments(IEnumerable<string> paths);
+
+
+        /// <summary>
+        /// Marks the specified path dirty
+        /// </summary>
+        /// <param name="ProjectFile">The project file.</param>
+        /// <param name="sure">if sure set to <c>true</c>.. <c>false</c> if the editory should be queried.</param>
+        void SetDirty(string path, bool sure);
     }
 }

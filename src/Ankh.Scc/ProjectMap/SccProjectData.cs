@@ -22,7 +22,7 @@ namespace Ankh.Scc.ProjectMap
     }
 
     [DebuggerDisplay("Project={ProjectName}, ProjectType={_projectType}")]
-    class SccProjectData
+    sealed partial class SccProjectData
     {
         readonly IAnkhServiceProvider _context;
         readonly IVsSccProject2 _sccProject;
@@ -46,7 +46,6 @@ namespace Ankh.Scc.ProjectMap
                 throw new ArgumentNullException("context");
             else if (project == null)
                 throw new ArgumentNullException("project");
-
 
             _context = context;
 
@@ -234,6 +233,7 @@ namespace Ankh.Scc.ProjectMap
 
         internal void OnClose()
         {
+            Hook(false);
             while (_files.Count > 0)
             {
                 SccProjectFileReference r = _files[0];
@@ -271,6 +271,7 @@ namespace Ankh.Scc.ProjectMap
                 }
 
                 _sccProject.SccGlyphChanged(0, null, null, null);
+                Hook(true); 
             }
             finally
             {
@@ -346,7 +347,7 @@ namespace Ankh.Scc.ProjectMap
 
         #region Helper code
 
-        protected AnkhSccProvider Scc
+        AnkhSccProvider Scc
         {
             get { return _scc ?? (_scc = _context.GetService<AnkhSccProvider>()); }
         }
