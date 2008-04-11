@@ -92,7 +92,7 @@ namespace Ankh
 
                 if (monitor != null)
                 {
-                    monitor.ScheduleStatusUpdate(changedPaths);
+                    monitor.ScheduleSvnStatus(changedPaths);
                 }
             }
 
