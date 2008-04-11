@@ -10,7 +10,7 @@ namespace Ankh.Scc.ProjectMap
     /// <summary>
     /// Container of a coupling between a single project(1) and a file(ReferenceCount)
     /// </summary>
-    class SccProjectFileReference
+    sealed class SccProjectFileReference
     {
         readonly IAnkhServiceProvider _context;
         readonly SccProjectFile _file;

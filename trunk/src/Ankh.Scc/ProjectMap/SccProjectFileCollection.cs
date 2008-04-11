@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace Ankh.Scc.ProjectMap
 {
-    class SccProjectFileCollection : KeyedCollection<string, SccProjectFileReference>
+    sealed class SccProjectFileCollection : KeyedCollection<string, SccProjectFileReference>
     {
         public SccProjectFileCollection()
             : base(StringComparer.OrdinalIgnoreCase, 0)
