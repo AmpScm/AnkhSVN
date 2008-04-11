@@ -18,14 +18,9 @@ namespace Ankh.Commands
 
             using(context.StartOperation( "Refreshing" ))
             {
-                IFileStatusCache cache = e.Context.GetService<IFileStatusCache>();
-                IProjectNotifier pn = e.Context.GetService<IProjectNotifier>();
+                IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
 
-                if(cache != null)
-                    cache.MarkDirty(e.Selection.GetSelectedFiles(true));
-                
-                if(pn != null)
-                    pn.MarkFullRefresh(e.Selection.GetOwnerProjects(true));
+                monitor.ScheduleSvnStatus(e.Selection.GetSelectedFiles(true));
             }
         }
     }

@@ -109,25 +109,7 @@ namespace Ankh.Scc
                 if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
                     _posted = true;
             }
-        }
-
-        public void ScheduleStatusUpdate(string path)
-        {
-            ScheduleStatusUpdate(new string[] { path });
-        }
-
-        public void ScheduleStatusUpdate(IList<string> paths)
-        {
-            IFileStatusCache cache = Context.GetService<IFileStatusCache>();
-
-            if (cache != null)
-                cache.MarkDirty(paths);
-
-            IProjectFileMapper mapper = Context.GetService<IProjectFileMapper>();
-
-            if (mapper != null)
-                MarkDirty(mapper.GetAllProjectsContaining(paths));
-        }
+        }        
 
         internal void HandleEvent(AnkhCommand command)
         {
@@ -170,12 +152,64 @@ namespace Ankh.Scc
                         project.RawHandle.SccGlyphChanged(0, null, null, null);
                     }
                 }
-
-                // TODO: trigger refresh in pending changes in a more centralized and specific way (we know what files have changed)
-                IPendingChangesManager mgr = GetService<IPendingChangesManager>();
-                if (mgr != null)
-                    mgr.Refresh((string)null);
             }
         }
+
+        IFileStatusCache _statusCache;
+        IFileStatusCache Cache
+        {
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
+        }
+
+        IProjectFileMapper _mapper;
+        IProjectFileMapper Mapper
+        {
+            get { return _mapper ?? (_mapper = GetService<IProjectFileMapper>()); }
+        }
+
+        IPendingChangesManager _changeManager;
+        IPendingChangesManager ChangeManager
+        {
+            get { return _changeManager ?? (_changeManager = GetService<IPendingChangesManager>()); }
+        }       
+
+        #region IFileStatusMonitor Members
+
+        public void ScheduleSvnStatus(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            Cache.MarkDirty(path);
+
+            ScheduleGlyphUpdate(path);
+        }
+
+        public void ScheduleSvnStatus(IEnumerable<string> paths)
+        {
+            if(paths == null)
+                throw new ArgumentNullException("paths");
+
+            Cache.MarkDirty(paths);
+
+            ScheduleGlyphUpdate(paths);
+        }
+
+        public void ScheduleGlyphUpdate(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            MarkDirty(Mapper.GetAllProjectsContaining(path));
+            ChangeManager.Refresh(path);
+        }
+
+        public void ScheduleGlyphUpdate(IEnumerable<string> paths)
+        {
+            MarkDirty(Mapper.GetAllProjectsContaining(paths));
+            ChangeManager.Refresh(paths);
+        }
+
+        #endregion
     }
 }
