@@ -358,14 +358,14 @@ namespace Ankh.UI.RepositoryOpen
             set { _selectedUri = value; }
         }
 
-        Uri _selectedUri;
+        Uri _selectedRepositoryRoot;
         /// <summary>
         /// Contains the repository root of <see cref="SelectedUri"/> when available
         /// </summary>
         public Uri SelectedRepositoryRoot
         {
-            get { return _selectedUri; }
-            private set { _selectedUri = value; }
+            get { return _selectedRepositoryRoot; }
+            private set { _selectedRepositoryRoot = value; }
         }
 
 
