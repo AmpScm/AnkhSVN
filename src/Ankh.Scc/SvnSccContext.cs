@@ -154,6 +154,53 @@ namespace Ankh.Scc
             return false;
         }
 
+        /// <summary>
+        /// Reverts the specified path if the path specifies a file replaced with itself
+        /// </summary>
+        /// <param name="path"></param>
+        void MaybeRevertReplaced(string path)
+        {
+            if(string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            SvnItem item = GetService<IFileStatusCache>()[path];
+            item.MarkDirty();
+
+            if (!item.IsFile || item.Status.LocalContentStatus != SvnStatus.Replaced)
+                return;
+
+            SvnInfoEventArgs info = null;
+            SvnInfoArgs ia = new SvnInfoArgs();
+            ia.ThrowOnError = false;
+            ia.Depth = SvnDepth.Empty;
+
+            if (!_client.Info(new SvnPathTarget(path), ia,
+                delegate(object sender, SvnInfoEventArgs e)
+                {
+                    e.Detach();
+                    info = e;
+                }))
+            {
+                return;
+            }
+
+            if(info == null)
+                return;
+
+            if((info.CopyFromUri != null) && (info.Uri != info.CopyFromUri))
+                return;
+            else if(info.CopyFromRev >= 0 && info.CopyFromRev != info.Revision)
+                return;
+            
+            // Ok, the file was copied back to its original location!
+
+            SvnRevertArgs ra = new SvnRevertArgs();
+            ra.Depth = SvnDepth.Empty;
+            ra.ThrowOnError = false;
+
+            _client.Revert(path, ra);
+        }
+
         public bool SafeWcCopyFixup(string fromPath, string toPath)
         {
             if (string.IsNullOrEmpty(fromPath))
@@ -198,6 +245,8 @@ namespace Ankh.Scc
                     {
                         setReadOnly = (int)(File.GetAttributes(toPath) & FileAttributes.ReadOnly) != 0;
                     }
+
+                    MaybeRevertReplaced(toPath);
                 }
 
                 if (setReadOnly)
@@ -254,6 +303,8 @@ namespace Ankh.Scc
                         setReadOnly = (File.GetAttributes(toPath) & FileAttributes.ReadOnly) != (FileAttributes)0;
                     }
                 }
+
+                MaybeRevertReplaced(toPath);
 
                 if (setReadOnly)
                     File.SetAttributes(toPath, File.GetAttributes(toPath) | FileAttributes.ReadOnly);
