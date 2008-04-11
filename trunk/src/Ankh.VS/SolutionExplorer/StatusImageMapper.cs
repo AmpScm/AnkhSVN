@@ -74,8 +74,9 @@ namespace Ankh.VS.SolutionExplorer
                 case SvnStatus.Modified:
                     return item.IsLocked ? AnkhGlyph.LockedModified : AnkhGlyph.Modified;
 
-                case SvnStatus.Added:
                 case SvnStatus.Replaced:
+                    return AnkhGlyph.CopiedOrMoved;
+                case SvnStatus.Added:
                     return item.Status.IsCopied ? AnkhGlyph.CopiedOrMoved : AnkhGlyph.Added;
 
                 case SvnStatus.Missing:

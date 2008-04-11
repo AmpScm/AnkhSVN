@@ -187,9 +187,14 @@ namespace Ankh.Scc
                 case SharpSvn.SvnStatus.NotVersioned:
                     return new PendingChangeStatus("New");
                 case SharpSvn.SvnStatus.Modified:
-                case SharpSvn.SvnStatus.Replaced:
                     return new PendingChangeStatus("Modified");
+                case SharpSvn.SvnStatus.Replaced:
+                    return new PendingChangeStatus("Replaced");
                 case SharpSvn.SvnStatus.Added:
+                    if (item.Status.IsCopied)
+                        return new PendingChangeStatus("Copied");
+                    else
+                        return new PendingChangeStatus("Added");
                 case SharpSvn.SvnStatus.Deleted:
                 case SharpSvn.SvnStatus.Missing:
                 // Default text is ok
