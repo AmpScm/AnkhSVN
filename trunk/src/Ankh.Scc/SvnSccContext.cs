@@ -13,25 +13,21 @@ namespace Ankh.Scc
     /// Container of Svn/SharpSvn helper tools which should be refactored to a better location
     /// in a future version, but which functionality is required to get file tracking working
     /// </summary>
-    class SvnSccContext : IDisposable
+    class SvnSccContext : AnkhService
     {
-        readonly IAnkhServiceProvider _context;
         readonly SvnClient _client;
         readonly IFileStatusCache _statusCache;
 
         public SvnSccContext(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
-            _client = context.GetService<ISvnClientPool>().GetClient();
-            _statusCache = context.GetService<IFileStatusCache>();
+            _client = context.GetService<ISvnClientPool>().GetNoUIClient();
+            _statusCache = GetService<IFileStatusCache>();
         }
 
         public void Dispose()
         {
-            _client.Dispose();
+            ((IDisposable)_client).Dispose();
         }
 
         /// <summary>
@@ -221,6 +217,8 @@ namespace Ankh.Scc
             bool setReadOnly = false;
             bool ok = true;
 
+            using (HandsOff(fromPath))
+            using (HandsOff(toPath))
             using (MarkIgnoreFile(fromPath))
             using (MarkIgnoreFile(toPath))
             {
@@ -322,12 +320,41 @@ namespace Ankh.Scc
             }
         }
 
+        public IDisposable HandsOff(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            IVsTrackProjectDocuments3 tracker = GetService<IVsTrackProjectDocuments3>(typeof(SVsTrackProjectDocuments));
+
+            if (tracker != null)
+            {
+                string[] paths = new string[] { path, null };
+
+                int hr =tracker.HandsOffFiles(
+                    (uint)__HANDSOFFMODE.HANDSOFFMODE_DeleteAccess,
+                    1,
+                    paths);
+
+
+                Marshal.ThrowExceptionForHR(hr);
+
+                return new DelegateRunner(
+                    delegate()
+                    {
+                        tracker.HandsOnFiles(1, paths);
+                    });
+            }
+            else
+                return null;
+        }
+
         public IDisposable MarkIgnoreFile(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            IVsFileChangeEx change = (IVsFileChangeEx)_context.GetService(typeof(SVsFileChangeEx));
+            IVsFileChangeEx change = GetService <IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
             if (change != null)
             {
@@ -350,34 +377,84 @@ namespace Ankh.Scc
                 throw new ArgumentNullException("path");
 
             path = Path.GetFullPath(path);
+            bool isFile = true;
 
             if (!File.Exists(path))
-                throw new InvalidOperationException();
+            {
+                if (Directory.Exists(path))
+                    isFile = false;
+                else
+                    throw new InvalidOperationException();
+            }
 
-            FileAttributes attrs = File.GetAttributes(path);
-            File.SetAttributes(path, FileAttributes.Normal);
-            string tmp = path + ".AnkhSVN.tmp";
+            FileAttributes attrs = FileAttributes.Normal;
+            if (isFile)
+            {
+                attrs = File.GetAttributes(path);
+                File.SetAttributes(path, FileAttributes.Normal);
+            }
 
-            File.Move(path, tmp);
-            File.SetAttributes(tmp, FileAttributes.ReadOnly);
+            string tmp;
+            int n = 0;
+            do
+            {
+                tmp = path + string.Format(".AnkhSVN.{0}.tmp", n++);
+            }
+            while (File.Exists(tmp) || Directory.Exists(tmp));
+
+            RetriedRename(path, tmp);    
+  
+            if(isFile)
+                File.SetAttributes(tmp, FileAttributes.ReadOnly);
 
             return new DelegateRunner(
                 delegate()
                 {
-                    if (File.Exists(path))
+                    if (isFile && File.Exists(path))
                     {
                         File.SetAttributes(path, FileAttributes.Normal);
                         File.Delete(path);
                     }
-                    File.SetAttributes(tmp, FileAttributes.Normal);
+                    else if (!isFile && Directory.Exists(path))
+                    {
+                        Directory.Delete(path, true);
+                    }
 
-                    File.Move(tmp, path);
+                    if(isFile)
+                        File.SetAttributes(tmp, FileAttributes.Normal);
 
-                    if (touch)
-                        File.SetLastWriteTime(path, DateTime.Now);
+                    RetriedRename(tmp, path);
 
-                    File.SetAttributes(path, attrs);
+                    if (isFile)
+                    {
+                        if (touch)
+                            File.SetLastWriteTime(path, DateTime.Now);
+
+                        File.SetAttributes(path, attrs);
+                    }
                 });
+        }
+
+        private static void RetriedRename(string path, string tmp)
+        {
+            const int retryCount = 4;
+            for (int i = 0; i < retryCount; i++)
+            {
+                // Don't throw an exception on the common case the file is locked
+                // The project just renamed the file so a virusscanner or directory scanner (Tortoise)
+                // Will now look at the file
+                if (!NativeMethods.MoveFile(path, tmp))
+                {
+                    if (i == retryCount - 1)
+                    {
+                        File.Move(path, tmp); // Throw an exception after 4 attempts
+                    }
+                    else
+                        System.Threading.Thread.Sleep(20 * (i + 1));
+                }
+                else
+                    break;
+            }
         }
 
         public IDisposable TempFile(string path, string contentFrom)
@@ -404,9 +481,6 @@ namespace Ankh.Scc
                     }
                 });
         }
-
-
-
 
         /// <summary>
         /// Check if adding the path might succeed
@@ -447,6 +521,15 @@ namespace Ankh.Scc
                 });
 
             return ok;
-        }        
+        }
+
+        static class NativeMethods
+        {
+            [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+            internal static extern bool MoveFile(string src, string dst);
+ 
+
+
+        }
     }
 }
