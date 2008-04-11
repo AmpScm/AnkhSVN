@@ -43,7 +43,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return; // Let the other SCC package manage it
 
-            MarkGlyphsDirty(data, filename);
+            MarkDirty(filename, true);
 
             if (string.IsNullOrEmpty(fileOrigin))
                 return; // Don't add new files to Subversion yet to allow case only renames, etc.
@@ -131,10 +131,10 @@ namespace Ankh.Scc
             // Add a directory like a folder but with an ending '\'
             data.AddPath(Path.GetFullPath(directoryname).TrimEnd('\\') + '\\');
 
-            if (IsActive)
-            {
-                // Should we add it to subversion now or can we wait until commit time to allow case renaming, etc.
-            }
+            if (!IsActive)
+                return;
+
+            // Do nothing
         }
 
         /// <summary>
@@ -152,10 +152,10 @@ namespace Ankh.Scc
             // Add a directory like a folder but with an ending '\'
             data.RemovePath(Path.GetFullPath(directoryname).TrimEnd('\\') + '\\');
 
-            if (IsActive)
-            {
-                // Should we add it to subversion now or can we wait until commit time to allow case renaming, etc.
-            }
+            if (!IsActive)
+                return;
+
+            // TODO: Tell subversion
         }
 
         /// <summary>
@@ -265,10 +265,6 @@ namespace Ankh.Scc
 
             if(!IsActive)
                 return;
-
-            data.RemovePath(Path.GetFullPath(oldName).TrimEnd('\\') + '\\');
-            data.AddPath(Path.GetFullPath(newName).TrimEnd('\\') + '\\');
-            MarkGlyphsDirty(data, newName);
         }
 
 

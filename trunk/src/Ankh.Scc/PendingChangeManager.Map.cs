@@ -159,9 +159,17 @@ namespace Ankh.Scc
         {
             bool inProject = Mapper.ContainsPath(file);
             bool inExtra = _extraFiles.Contains(file);
+            PendingChange pc;
 
             if (!inProject && !inExtra)
-                return;
+            {
+                if (_pendingChanges.TryGetValue(file, out pc))
+                {
+                    _pendingChanges.Remove(file);
+                    OnRemoved(new PendingChangeEventArgs(this, pc));
+                    return;
+                }
+            }
             else if (inProject && inExtra)
                 _extraFiles.Remove(file);
 
@@ -172,7 +180,6 @@ namespace Ankh.Scc
 
             bool isDirty = !item.IsVersioned || Tracker.IsDocumentDirty(file);
 
-            PendingChange pc;
             if (_pendingChanges.TryGetValue(file, out pc))
             {
                 if (pc.Refresh(RefreshContext, item, isDirty))

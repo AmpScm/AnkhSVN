@@ -128,6 +128,7 @@ namespace Ankh.Scc.ProjectMap
 
         internal void OnSaved()
         {
+            SetDirty(false);
             IFileStatusCache statusCache = _context.GetService<IFileStatusCache>();
             if (statusCache.IsValidPath(Name))
             {
