@@ -92,6 +92,7 @@ namespace Ankh
 
                 if (monitor != null)
                 {
+                    monitor.ScheduleMonitor(changedPaths); // Adds the files to the to-commit list while they are not in a project
                     monitor.ScheduleSvnStatus(changedPaths);
                 }
             }
