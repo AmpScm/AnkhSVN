@@ -41,12 +41,6 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Ask the user whether Ankh should load for a given solution.
-        /// </summary>
-        /// <returns></returns>
-        DialogResult QueryWhetherAnkhShouldLoad();
-
-        /// <summary>
         /// Set the selection for the repository explorer.
         /// </summary>
         /// <param name="selection"></param>
@@ -77,14 +71,6 @@ namespace Ankh
         [Obsolete]
         bool SolutionExplorerHasFocus();
 
-
-
-        /// <summary>
-        /// Executes the worker.Work method while displaying a progress dialog.
-        /// </summary>
-        /// <param name="worker"></param>
-        /// <returns>True if the operation completed successfully without user cancellation.</returns>
-        bool RunWithProgressDialog( IProgressWorker worker, string caption );
 
         /// <summary>
         /// Display a message box.

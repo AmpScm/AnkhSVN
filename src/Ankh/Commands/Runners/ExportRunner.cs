@@ -27,7 +27,7 @@ namespace Ankh.Commands
             // empty
         }
 
-        public void Work(AnkhWorkerArgs e)
+        public void Work(object sender, ProgressWorkerArgs e)
         {
             SvnExportArgs args = new SvnExportArgs();
             args.Depth = depth;

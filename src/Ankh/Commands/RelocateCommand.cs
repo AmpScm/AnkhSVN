@@ -71,7 +71,7 @@ namespace Ankh.Commands
                 this.recursive = recursive;
             }
 
-            public void Work(AnkhWorkerArgs e)
+            public void Work(object sender, ProgressWorkerArgs e)
             {
                 SvnRelocateArgs args = new SvnRelocateArgs();
                 args.NonRecursive = !recursive;

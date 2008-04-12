@@ -51,7 +51,7 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void DoUnlock(AnkhWorkerArgs e)
+        private void DoUnlock(ProgressWorkerArgs e)
         {
             ICollection<string> paths = SvnItem.GetPaths(this.info.CheckedItems);
             SvnUnlockArgs args = new SvnUnlockArgs();

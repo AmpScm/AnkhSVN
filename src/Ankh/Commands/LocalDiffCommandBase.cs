@@ -234,8 +234,8 @@ namespace Ankh.Commands
 
             // we need to get it from the repos
             CatRunner runner = new CatRunner(revision, item.Status.Uri);
-            context.UIShell.RunWithProgressDialog(runner, "Retrieving file for diffing");
-            //			runner.Work( context );
+            context.GetService<IProgressRunner>().Run("Retrieving file for diffing", runner.Work);
+
             return runner.Path;
         }
     }

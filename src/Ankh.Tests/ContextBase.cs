@@ -317,16 +317,7 @@ namespace Ankh.Tests
             public virtual void ResetCommitDialog()
             {
                 // TODO: add implementation
-            }
-
-            public virtual bool RunWithProgressDialog( IProgressWorker worker, string caption )
-            {
-                using (SvnClient client = context.ClientPool.GetClient())
-                {
-                    worker.Work(new AnkhWorkerArgs(context, client));
-                }
-                return true;
-            }
+            }     
 
             public virtual DialogResult QueryWhetherAnkhShouldLoad()
             {
@@ -482,11 +473,6 @@ namespace Ankh.Tests
                 }
             }
 
-            DialogResult IUIShell.QueryWhetherAnkhShouldLoad()
-            {
-                throw new NotImplementedException();
-            }
-
             void IUIShell.SetRepositoryExplorerSelection(object[] selection)
             {
                 throw new NotImplementedException();
@@ -508,11 +494,6 @@ namespace Ankh.Tests
             }
 
             bool IUIShell.SolutionExplorerHasFocus()
-            {
-                throw new NotImplementedException();
-            }
-
-            bool IUIShell.RunWithProgressDialog(IProgressWorker worker, string caption)
             {
                 throw new NotImplementedException();
             }

@@ -81,7 +81,7 @@ namespace Ankh.Commands
                 this.dryRun = dryRun;
             }
 
-            public void Work(AnkhWorkerArgs e)
+            public void Work(object sender, ProgressWorkerArgs e)
             {
                 SvnMergeArgs args = new SvnMergeArgs();
                 args.Depth = depth;

@@ -80,22 +80,6 @@ namespace Ankh
             }
         }
 
-        public DialogResult QueryWhetherAnkhShouldLoad()
-        {
-            string nl = Environment.NewLine;
-            string msg = "Ankh has detected that the solution file for this solution " +
-                "is in a Subversion working copy." + nl +
-                "Do you want to enable Ankh for this solution?" + nl +
-                "(If you select Cancel, Ankh will not be enabled, " + nl +
-                "but you will " +
-                "be asked this question again the next time you open the solution)";
-
-            //TODO: The UIShell should be responsible for maintaining the hostwindow
-            return MessageBox.Show(
-                Context.GetService<IAnkhDialogOwner>().DialogOwner, msg, "Ankh",
-                MessageBoxButtons.YesNoCancel);
-        }
-
         public void SetRepositoryExplorerSelection(object[] selection)
         {
             //this.repositoryExplorerWindow.SetSelectionContainer( ref selection );
@@ -194,12 +178,18 @@ namespace Ankh
         /// Executes the worker.Work method while displaying a progress dialog.
         /// </summary>
         /// <param name="worker"></param>
-        public bool RunWithProgressDialog(IProgressWorker worker, string caption)
+        internal bool RunWithProgressDialog(IProgressWorker worker, string caption)
         {
             ProgressRunner runner = new ProgressRunner(this.Context, worker);
             runner.Start(caption);
 
             return !runner.Cancelled;
+        }
+
+        AnkhMessageBox _box;
+        AnkhMessageBox MessageBox
+        {
+            get { return _box ?? (_box = new AnkhMessageBox(this)); }
         }
 
         /// <summary>
@@ -212,8 +202,7 @@ namespace Ankh
         public DialogResult ShowMessageBox(string text, string caption,
             MessageBoxButtons buttons)
         {
-            return MessageBox.Show(Context.GetService<IAnkhDialogOwner>().DialogOwner, text, caption,
-                buttons);
+            return MessageBox.Show(text, caption, buttons);
         }
 
         /// <summary>
@@ -226,8 +215,7 @@ namespace Ankh
         public DialogResult ShowMessageBox(string text, string caption,
             MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            return MessageBox.Show(Context.GetService<IAnkhDialogOwner>().DialogOwner, text, caption,
-                buttons, icon);
+            return MessageBox.Show(text, caption, buttons, icon);
         }
 
         /// <summary>
@@ -240,8 +228,7 @@ namespace Ankh
         public DialogResult ShowMessageBox(string text, string caption,
             MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
         {
-            return MessageBox.Show(Context.GetService<IAnkhDialogOwner>().DialogOwner, text, caption,
-                buttons, icon, defaultButton);
+            return MessageBox.Show(text, caption, buttons, icon, defaultButton);
         }
 
         public void DisplayHtml(string caption, string html, bool reuse)

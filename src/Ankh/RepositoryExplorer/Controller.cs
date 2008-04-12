@@ -163,8 +163,9 @@ namespace Ankh.RepositoryExplorer
 
                     // we want to run this in a separate thread
                     ListRunner runner = new ListRunner( parent );
-                    bool completed = this.context.UIShell.RunWithProgressDialog( runner, 
-                        "Retrieving directory info." );
+                    bool completed = context.GetService<IProgressRunner>().Run(
+                        "Retrieving directory info.",
+                        runner.Work).Succeeded;
                     if ( completed )
                     {
                         ICollection<SvnListEventArgs> entries = runner.Entries;
@@ -335,7 +336,7 @@ namespace Ankh.RepositoryExplorer
                 get{ return this.entries; }
             }
 
-            public void Work(AnkhWorkerArgs e)
+            public void Work(object sender, ProgressWorkerArgs e)
             {
                 ReposListArgs args = new ReposListArgs();
                 args.Depth = SvnDepth.Children;

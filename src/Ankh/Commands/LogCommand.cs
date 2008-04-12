@@ -68,7 +68,7 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void ProgressCallback(AnkhWorkerArgs e)
+        private void ProgressCallback(ProgressWorkerArgs e)
         {
             this.result = new LogResult();
             this.result.Start();
