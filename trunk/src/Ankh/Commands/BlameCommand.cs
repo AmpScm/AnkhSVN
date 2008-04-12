@@ -86,7 +86,8 @@ namespace Ankh.Commands
                 result.Start();
                 BlameRunner runner = new BlameRunner( item.FullPath, 
                     revisionStart, revisionEnd, result );
-                context.UIShell.RunWithProgressDialog( runner, "Figuring out who to blame" );
+
+                e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
                 result.End();
                
                 // transform it to HTML
@@ -112,7 +113,7 @@ namespace Ankh.Commands
                 this.result = result;
             }
 
-            public void Work(AnkhWorkerArgs e)
+            public void Work(ProgressWorkerArgs e)
             {
                 SvnBlameArgs args = new SvnBlameArgs();
                 args.Start = start;
@@ -129,6 +130,11 @@ namespace Ankh.Commands
             private SvnRevision start;
             private SvnRevision end;
             private BlameResult result;
+
+            public void Work(object sender, ProgressWorkerArgs e)
+            {
+                Work(e);
+            }
         }
 
         

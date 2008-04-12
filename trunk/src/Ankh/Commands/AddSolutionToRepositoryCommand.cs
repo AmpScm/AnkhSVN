@@ -80,10 +80,10 @@ namespace Ankh.Commands
                             url = UriUtils.Combine(url, dlg.SubDirectoryName);
                             MakeDirWorker makeDirWorker = new MakeDirWorker(url,
                                        dlg.LogMessage, context);
-                            {
-                                context.UIShell.RunWithProgressDialog(makeDirWorker,
-                                    "Creating directory");
-                            }
+                            
+                            e.GetService<IProgressRunner>().Run(
+                                    "Creating directory",
+                                    makeDirWorker.Work);
                         }
                     }
                 }
@@ -99,7 +99,10 @@ namespace Ankh.Commands
                     // check out the repository directory specified               
                     CheckoutRunner checkoutRunner = new CheckoutRunner(
                         solutionDir, SvnRevision.Head, new Uri(url));
-                    context.UIShell.RunWithProgressDialog(checkoutRunner, "Checking out");
+
+                    e.GetService<IProgressRunner>().Run(
+                        "Checking out",
+                        checkoutRunner.Work);
                 }
 
                 // walk the tree and add all the files
@@ -131,7 +134,7 @@ namespace Ankh.Commands
                 // now commit the added files
                 CommitOperation operation = new CommitOperation(
                     _args,
-                    new SimpleProgressWorker(new SimpleProgressWorkerCallback(this.DoCommit)),
+                    new SimpleProgressWorker(new EventHandler<ProgressWorkerArgs>(this.DoCommit)),
                     this.paths,
                     e.Context);
 
@@ -228,7 +231,7 @@ namespace Ankh.Commands
 
 
 
-        private void DoCommit(AnkhWorkerArgs e)
+        private void DoCommit(object sender, ProgressWorkerArgs e)
         {
             SvnCommitArgs args = new SvnCommitArgs();
             args.Depth = SvnDepth.Empty;
@@ -247,7 +250,7 @@ namespace Ankh.Commands
                 this.context = context;
             }
 
-            public void Work(AnkhWorkerArgs e)
+            public void Work(object sender, ProgressWorkerArgs e)
             {
                 SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
                 args.LogMessage = this.logMessage;

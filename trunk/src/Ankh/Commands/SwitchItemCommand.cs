@@ -72,7 +72,7 @@ namespace Ankh.Commands
                 this.depth = depth;
             }
 
-            public void Work(AnkhWorkerArgs e)
+            public void Work(object sender, ProgressWorkerArgs e)
             {
                 SvnSwitchArgs args = new SvnSwitchArgs();
                 args.Revision = revision;

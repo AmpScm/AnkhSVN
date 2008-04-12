@@ -13,7 +13,7 @@ namespace Ankh
     /// <summary>
     /// Encapsulates the details of an operation requiring a log message
     /// </summary>
-    public class CommitOperation
+    class CommitOperation
     {
         readonly IProgressWorker worker;
         readonly IAnkhServiceProvider _context;

@@ -96,7 +96,7 @@ namespace Ankh.Commands
 
             CommitOperation operation = new CommitOperation(
                 _args,
-                new SimpleProgressWorker(new SimpleProgressWorkerCallback(this.DoCommit)),
+                new SimpleProgressWorker(new EventHandler<ProgressWorkerArgs>(this.DoCommit)),
                 resources,
                 e.Context);
 
@@ -133,12 +133,8 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void DoCommit(AnkhWorkerArgs e)
+        private void DoCommit(object sender, ProgressWorkerArgs e)
         {
-            IFileStatusCache statusCache = e.Context.GetService<IFileStatusCache>();
-            IProjectFileMapper projectMap = e.Context.GetService<IProjectFileMapper>();
-            LinkedList<string> paths = new LinkedList<string>();
-
             _args.ThrowOnError = false;
             e.Client.Commit(this.paths, _args, out commitInfo);
         }

@@ -67,7 +67,7 @@ namespace Ankh.Commands
 
         #endregion
 
-        private void DoCreateDir( AnkhWorkerArgs e )
+        private void DoCreateDir( ProgressWorkerArgs e )
         {
             // create the dir.
             e.Client.CreateDirectory( this.url );

@@ -51,7 +51,7 @@ namespace Ankh.Commands
                 if (!runner.MaybeShowUpdateDialog())
                     return;
 
-                context.UIShell.RunWithProgressDialog(runner, "Updating");
+                e.GetService<IProgressRunner>().Run("Updating", runner.Work);
             }
         }
 
@@ -119,7 +119,7 @@ namespace Ankh.Commands
             /// <summary>
             /// The actual updating happens here.
             /// </summary>
-            public void Work(AnkhWorkerArgs e)
+            public void Work(object sender, ProgressWorkerArgs e)
             {
                 ICollection<string> paths = SvnItem.GetPaths(this.resources);
                 SvnUpdateArgs args = new SvnUpdateArgs();

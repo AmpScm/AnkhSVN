@@ -48,7 +48,7 @@ namespace Ankh.Commands
                 tracker.SaveDocuments(selection.GetSelectedFiles(true));
         }
 
-        protected static XslCompiledTransform GetTransform(IContext context, string name)
+        internal static XslCompiledTransform GetTransform(IContext context, string name)
         {
             // is the file already there?
             string configDir = Path.GetDirectoryName(context.Configuration.UserConfigurationPath);

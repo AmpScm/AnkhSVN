@@ -33,6 +33,7 @@ namespace Ankh
             Container.AddService(typeof(IAnkhTaskManager), new ConflictManager(Context));
             Container.AddService(typeof(IUIShell), new UIShell(Context));
             Container.AddService(typeof(IAnkhSolutionSettings), new SolutionSettings(Context));
+            Container.AddService(typeof(IProgressRunner), new ProgressRunnerService(Context));
 
             // Ensure old context behaviour
             _context = GetService<IContext>();

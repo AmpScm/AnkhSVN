@@ -31,7 +31,7 @@ namespace Ankh.Commands
             // empty
         }
 
-        public void Work(AnkhWorkerArgs e)
+        public void Work(object sender, ProgressWorkerArgs e)
         {
             SvnUpdateResult result;
             SvnCheckOutArgs args = new SvnCheckOutArgs();

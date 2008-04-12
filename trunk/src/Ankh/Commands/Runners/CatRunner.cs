@@ -41,7 +41,7 @@ namespace Ankh.Commands
             get{ return this.path; }
         }
 
-        public void Work(AnkhWorkerArgs e)
+        public void Work(object sender, ProgressWorkerArgs e)
         {
             using (FileStream fs = new FileStream(this.path, FileMode.Create,
                        FileAccess.Write))

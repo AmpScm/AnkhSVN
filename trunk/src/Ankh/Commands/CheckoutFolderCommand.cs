@@ -42,7 +42,9 @@ namespace Ankh.Commands
 
 					CheckoutRunner runner = new CheckoutRunner(
 						browser.SelectedPath, node.Revision, new Uri(node.Url));
-					context.UIShell.RunWithProgressDialog(runner, "Checking out folder");
+                    e.GetService<IProgressRunner>().Run(
+                        "Checking out folder",
+                        runner.Work);
 
 				}
 			}

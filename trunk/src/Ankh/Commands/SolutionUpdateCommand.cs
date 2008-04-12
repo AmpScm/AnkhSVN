@@ -130,8 +130,9 @@ namespace Ankh.Commands
 
             IContext context = e.GetService<IContext>();
 
-            context.UIShell.RunWithProgressDialog(new UpdateRunner(paths, rev),
-                string.Format("Updating {0}", IsSolutionCommand(e.Command) ? "Solution" : "Project"));
+            e.GetService<IProgressRunner>().Run(
+                string.Format("Updating {0}", IsSolutionCommand(e.Command) ? "Solution" : "Project"),
+                new UpdateRunner(paths, rev).Work);
         }
 
         class UpdateRunner : IProgressWorker
@@ -152,7 +153,7 @@ namespace Ankh.Commands
 
             #region IProgressWorker Members
 
-            public void Work(AnkhWorkerArgs e)
+            public void Work(object sender, ProgressWorkerArgs e)
             {
                 SvnUpdateArgs ua = new SvnUpdateArgs();
                 ua.Revision = _rev;
@@ -174,7 +175,7 @@ namespace Ankh.Commands
                         ia.ThrowOnError = false;
 
                         e.Client.Info(new SvnPathTarget(now[0]), ia,
-                            delegate(object sender, SvnInfoEventArgs ee)
+                            delegate(object s, SvnInfoEventArgs ee)
                             {
                                 reposGuid = ee.RepositoryId;
                                 reposRoot = ee.RepositoryRoot;
@@ -188,7 +189,7 @@ namespace Ankh.Commands
                         for (int i = 0; i < _paths.Count; i++)
                         {
                             e.Client.Info(new SvnPathTarget(_paths[i]), ia,
-                            delegate(object sender, SvnInfoEventArgs ee)
+                            delegate(object s, SvnInfoEventArgs ee)
                             {
                                 if (reposGuid == ee.RepositoryId &&
                                     reposRoot == ee.RepositoryRoot)

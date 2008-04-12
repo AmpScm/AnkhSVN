@@ -10,65 +10,57 @@ using System.Windows.Forms;
 
 namespace Ankh
 {
-    public class AnkhWorkerArgs : EventArgs
-    {
-        readonly AnkhContext _context;
-        readonly SvnClient _client;
-        Exception _exception;
-
-        public AnkhWorkerArgs(IAnkhServiceProvider context, SvnClient client)
-        {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context.GetService<AnkhContext>();
-            _client = client;
-        }
-
-        public SvnClient Client
-        {
-            get { return _client; }
-        }
-
-        public AnkhContext Context
-        {
-            get { return _context; }
-        }
-
-        public Exception Exception
-        {
-            get { return _exception; }
-            set { _exception = value; }
-        }
-    }
-
-    public interface IProgressWorker
-    {
-        void Work(AnkhWorkerArgs e);
-    }
-
-    public delegate void SimpleProgressWorkerCallback(AnkhWorkerArgs e);
-
-
     public class SimpleProgressWorker : IProgressWorker
     {
-        public SimpleProgressWorker(SimpleProgressWorkerCallback cb)
+        readonly EventHandler<ProgressWorkerArgs> _handler;
+
+        public SimpleProgressWorker(EventHandler<ProgressWorkerArgs> handler)
         {
-            this.callback = cb;
+            if (handler == null)
+                throw new ArgumentNullException("handler");
+
+            _handler = handler;
         }
-        public void Work(AnkhWorkerArgs e)
+        public void Work(object sender, ProgressWorkerArgs e)
         {
-            this.callback(e);
+            _handler(this, e);
+        }
+    }
+
+    interface IProgressWorker
+    {
+        void Work(object sender, ProgressWorkerArgs e);
+    }
+
+    class ProgressRunnerService : AnkhService, IProgressRunner
+    {
+        public ProgressRunnerService(IAnkhServiceProvider context)
+            : base(context)
+        {
         }
 
-        private SimpleProgressWorkerCallback callback;
+        #region IProgressRunner Members
+
+        public ProgressRunnerResult Run(string caption, EventHandler<ProgressWorkerArgs> handler)
+        {
+            if(string.IsNullOrEmpty(caption))
+                caption = "AnkhSVN";
+
+            ProgressRunner pr = new ProgressRunner(this, new SimpleProgressWorker(handler));
+
+            pr.Start(caption);
+
+            return new ProgressRunnerResult(!pr.Cancelled);
+        }
+
+        #endregion
     }
 
     /// <summary>
     /// Used to run lengthy operations in a separate thread while 
     /// displaying a modal progress dialog in the main thread.
     /// </summary>
-    public class ProgressRunner
+    class ProgressRunner
     {
         readonly IAnkhServiceProvider _context;
         readonly IProgressWorker _worker;
@@ -144,8 +136,8 @@ namespace Ankh
             SvnClient client = (SvnClient)arg;
             try
             {
-                AnkhWorkerArgs awa = new AnkhWorkerArgs(_context, client);
-                _worker.Work(awa);
+                ProgressWorkerArgs awa = new ProgressWorkerArgs(_context, client);
+                _worker.Work(null, awa);
 
                 if (_exception == null && awa.Exception != null)
                     _exception = awa.Exception;

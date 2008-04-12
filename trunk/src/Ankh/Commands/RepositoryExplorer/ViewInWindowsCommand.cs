@@ -25,7 +25,7 @@ namespace Ankh.Commands
                 CatRunner runner = new CatRunner(node.Name,
                     node.Revision, new Uri(node.Url));
 
-                context.UIShell.RunWithProgressDialog(runner, "Retrieving");
+                e.GetService<IProgressRunner>().Run("Retrieving", runner.Work);
 
                 // now have windows try to start it.
                 Process process = new Process();

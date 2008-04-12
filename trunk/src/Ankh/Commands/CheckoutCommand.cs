@@ -30,7 +30,8 @@ namespace Ankh.Commands
                 {
                     CheckoutRunner runner = new CheckoutRunner(
                         dlg.LocalPath, dlg.Revision, new Uri(dlg.Url), dlg.Recursive ? SvnDepth.Infinity : SvnDepth.Empty);
-                    context.UIShell.RunWithProgressDialog(runner, "Checking out");
+
+                    e.GetService<IProgressRunner>().Run("Checking out", runner.Work);
                 }
             }
         }
