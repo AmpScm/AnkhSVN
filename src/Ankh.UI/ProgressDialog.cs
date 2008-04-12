@@ -13,6 +13,7 @@ namespace Ankh.UI
     /// </summary>
     public partial class ProgressDialog : System.Windows.Forms.Form
     {
+        IAnkhServiceProvider _context;
         public event EventHandler Cancel;
         string _title;
         string _caption;
@@ -28,6 +29,16 @@ namespace Ankh.UI
             InitializeComponent();
 
             _title = Text;
+        }
+
+        /// <summary>
+        /// Gets or sets the context.
+        /// </summary>
+        /// <value>The context.</value>
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set { _context = value; }
         }
 
         public string Caption

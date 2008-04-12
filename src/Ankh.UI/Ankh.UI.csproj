@@ -284,6 +284,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingCommitItem.cs" />
+    <Compile Include="PendingChanges\PendingCommitsPage.Commit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="PendingChanges\PendingCommitsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
