@@ -17,8 +17,9 @@ namespace Ankh.UI.PendingChanges
 	{
 		public override void ShowContextMenu(int menuId, Guid groupGuid, Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target, int x, int y)
 		{
-			if(!ShowLogMessageContextMenu(menuId, groupGuid, target, x, y))
-				base.ShowContextMenu(menuId, groupGuid, target, x, y);
+            PrepareLogMessageContextMenu(ref menuId, ref groupGuid, ref target);
+				
+            base.ShowContextMenu(menuId, groupGuid, target, x, y);
 		}
 	}
 }

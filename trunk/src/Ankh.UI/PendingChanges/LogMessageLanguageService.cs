@@ -179,15 +179,13 @@ namespace Ankh.UI.PendingChanges
         {
         }
 
-        public bool ShowLogMessageContextMenu(int menuId, Guid groupGuid, Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target, int x, int y)
+        public void PrepareLogMessageContextMenu(ref int menuId, ref Guid groupGuid, ref Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target)
         {
             if (groupGuid == Microsoft.VisualStudio.Shell.VsMenus.guidSHLMainMenu && menuId == Microsoft.VisualStudio.Shell.VsMenus.IDM_VS_CTXT_CODEWIN)
             {
                 groupGuid = AnkhId.CommandSetGuid;
                 menuId = (int)AnkhCommandMenu.PendingChangesLogMessageMenu;
-				return true;
             }
-			return false;
         }
     }
 }
