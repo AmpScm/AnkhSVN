@@ -21,7 +21,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.AddSolutionToRepository)]
     public class AddSolutionToRepositoryCommand : CommandBase
     {
-        SvnCommitArgs _args;
+        SvnCommitArgs _args = null;
         List<SvnItem> paths;
         #region Implementation of ICommand
 

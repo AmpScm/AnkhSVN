@@ -20,6 +20,11 @@ namespace Ankh.UI.PendingChanges
     {
         bool _provideFullList;
 
+		public ListViewWithSelection()
+		{
+			DoubleBuffered = true;
+		}
+
         IServiceProvider _serviceProvider;
         [Browsable(false)]
         public IServiceProvider ServiceProvider

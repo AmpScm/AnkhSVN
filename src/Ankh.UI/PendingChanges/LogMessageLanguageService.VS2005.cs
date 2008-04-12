@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -8,4 +9,15 @@ namespace Ankh.UI.PendingChanges
     {
         // Intensionally left blank
     }
+
+	partial class LogMessageViewFilter
+	{
+		public override void ShowContextMenu(int menuId, Guid groupGuid, Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target)
+		{
+			Point p = System.Windows.Forms.Cursor.Position;
+
+			if(!ShowLogMessageContextMenu(menuId, groupGuid, target, p.X, p.Y))
+				base.ShowContextMenu(menuId, groupGuid, target);
+		}
+	}
 }

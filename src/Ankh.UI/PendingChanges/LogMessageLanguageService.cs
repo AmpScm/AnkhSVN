@@ -172,21 +172,22 @@ namespace Ankh.UI.PendingChanges
         }
     }
 
-    class LogMessageViewFilter : ViewFilter
+    partial class LogMessageViewFilter : ViewFilter
     {
         public LogMessageViewFilter(LogMessageLanguageService service, CodeWindowManager mgr, IVsTextView view)
             : base(mgr, view)
         {
         }
 
-        public override void ShowContextMenu(int menuId, Guid groupGuid, Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target, int x, int y)
+        public bool ShowLogMessageContextMenu(int menuId, Guid groupGuid, Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target, int x, int y)
         {
             if (groupGuid == Microsoft.VisualStudio.Shell.VsMenus.guidSHLMainMenu && menuId == Microsoft.VisualStudio.Shell.VsMenus.IDM_VS_CTXT_CODEWIN)
             {
                 groupGuid = AnkhId.CommandSetGuid;
                 menuId = (int)AnkhCommandMenu.PendingChangesLogMessageMenu;
+				return true;
             }
-            base.ShowContextMenu(menuId, groupGuid, target, x, y);
+			return false;
         }
     }
 }

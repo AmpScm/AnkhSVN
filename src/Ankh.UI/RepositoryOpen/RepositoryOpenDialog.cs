@@ -276,7 +276,6 @@ namespace Ankh.UI.RepositoryOpen
                 return new SvnClient();
         }
 
-        bool _changingDir;
         private void OnOkClicked(object sender, EventArgs e)
         {
             ProcessOk();
@@ -413,8 +412,6 @@ namespace Ankh.UI.RepositoryOpen
 
         void OnDirChanged()
         {
-            _changingDir = false;
-
             string txt = urlBox.Text;
 
             if (!txt.EndsWith("/"))
