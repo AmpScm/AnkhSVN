@@ -185,18 +185,20 @@ namespace Ankh.Scc
                 case SharpSvn.SvnStatus.Normal:
                     break; // Look further
                 case SharpSvn.SvnStatus.NotVersioned:
-                    return new PendingChangeStatus("New");
+                    return new PendingChangeStatus(PendingChangeState.New);
                 case SharpSvn.SvnStatus.Modified:
-                    return new PendingChangeStatus("Modified");
+                    return new PendingChangeStatus(PendingChangeState.Modified);
                 case SharpSvn.SvnStatus.Replaced:
-                    return new PendingChangeStatus("Replaced");
+                    return new PendingChangeStatus(PendingChangeState.Replaced);
                 case SharpSvn.SvnStatus.Added:
                     if (item.Status.IsCopied)
-                        return new PendingChangeStatus("Copied");
+                        return new PendingChangeStatus(PendingChangeState.Copied);
                     else
-                        return new PendingChangeStatus("Added");
+                        return new PendingChangeStatus(PendingChangeState.Added);
                 case SharpSvn.SvnStatus.Deleted:
+                    return new PendingChangeStatus(PendingChangeState.Deleted);
                 case SharpSvn.SvnStatus.Missing:
+                    return new PendingChangeStatus(PendingChangeState.Missing);
                 // Default text is ok
                 default:
                     return new PendingChangeStatus(status.LocalContentStatus.ToString());

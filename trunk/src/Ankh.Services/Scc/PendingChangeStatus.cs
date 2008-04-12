@@ -4,9 +4,27 @@ using System.Text;
 
 namespace Ankh.Scc
 {
+    public enum PendingChangeState
+    {
+        None,
+        New,
+        Modified,
+        Replaced,
+        Copied,
+        Added,
+        Deleted,
+        Missing,
+    }
     public class PendingChangeStatus : IEquatable<PendingChangeStatus>
     {
+        readonly PendingChangeState _state;
         string _text;
+                
+        public PendingChangeStatus(PendingChangeState state)
+        {
+            _state = state;
+        }
+
         public PendingChangeStatus(string text)
         {
             if (text == null)
@@ -17,7 +35,7 @@ namespace Ankh.Scc
 
         public override string ToString()
         {
-            return _text;
+            return Text;
         }
 
         /// <summary>
@@ -25,7 +43,35 @@ namespace Ankh.Scc
         /// </summary>
         public string Text
         {
-            get { return _text; }
+            get { return _text ?? (_text = GetText()); }
+        }
+
+        private string GetText()
+        {
+            switch (State)
+            {
+                case PendingChangeState.New:
+                    return PendingChangeText.StateNew;
+                case PendingChangeState.Added:
+                    return PendingChangeText.StateAdded;
+                case PendingChangeState.Copied:
+                    return PendingChangeText.StateCopied;
+                case PendingChangeState.Deleted:
+                    return PendingChangeText.StateDeleted;
+                case PendingChangeState.Replaced:
+                    return PendingChangeText.StateReplaced;
+                case PendingChangeState.Missing:
+                    return PendingChangeText.StateMissing;
+                case PendingChangeState.Modified:
+                    return PendingChangeText.StateModified;
+                default:
+                    return State.ToString();
+            }            
+        }
+
+        public PendingChangeState State
+        {
+            get { return _state; }
         }
 
         /// <summary>
@@ -33,7 +79,7 @@ namespace Ankh.Scc
         /// </summary>
         public string PendingCommitText
         {
-            get { return _text; }
+            get { return Text; }
         }
 
         public override bool Equals(object obj)
@@ -46,7 +92,7 @@ namespace Ankh.Scc
 
         public override int GetHashCode()
         {
-            return _text.GetHashCode();
+            return _state.GetHashCode();
         }
 
         #region IEquatable<PendingChangeStatus> Members
@@ -56,7 +102,7 @@ namespace Ankh.Scc
             if ((object)other == null)
                 return false;
 
-            return _text == other._text;
+            return State == other.State && Text == other.Text; // Todo: Remove text check
         }
 
         #endregion

@@ -6,7 +6,6 @@ using AnkhSvn.Ids;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
-#if DEBUG
     [Command(AnkhCommand.CommitPendingChanges)]
     [Command(AnkhCommand.CommitPendingChangesKeepingLocks)]
     class CommitPendingChanges : ICommandHandler
@@ -29,5 +28,4 @@ namespace Ankh.UI.PendingChanges.Commands
                 page.DoCommit(e.Command == AnkhCommand.CommitPendingChangesKeepingLocks);
         }
     }
-#endif
 }

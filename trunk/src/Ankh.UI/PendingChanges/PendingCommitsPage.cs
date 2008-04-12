@@ -271,14 +271,6 @@ namespace Ankh.UI.PendingChanges
             }
 
             return false;
-        }
-
-        internal void DoCommit(bool keepingLocks)
-        {
-            string text = logMessageEditor.Text;
-
-
-            GC.KeepAlive(text);
-        }
+        }        
     }
 }
