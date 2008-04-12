@@ -315,7 +315,7 @@ namespace Ankh.Scc
                     {
                         if (!File.Exists(file))
                         {
-                            svn.SafeDelete(file);
+                            svn.SafeDeleteFile(file);
                             MarkDirty(file, true);
                         }
                     }

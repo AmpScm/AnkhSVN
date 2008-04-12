@@ -112,7 +112,7 @@ namespace Ankh.Scc
                 if (svn.IsUnversioned(status))
                     return;
 
-                svn.SafeDelete(filename);
+                svn.SafeDeleteFile(filename);
             }
         }
 
