@@ -313,7 +313,7 @@ namespace Ankh.Scc
             return ok;
         }
 
-        public bool SafeDelete(string path)
+        public bool SafeDeleteFile(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
@@ -322,6 +322,7 @@ namespace Ankh.Scc
             da.Force = true;
             da.KeepLocal = false;
             da.ThrowOnError = false;
+            da.KeepLocal = !File.Exists(path); // This will stop the error if the file was already deleted
 
             return _client.Delete(path, da);
         }
