@@ -25,5 +25,21 @@ namespace Ankh
         {
             return item;
         }
+
+        /// <summary>
+        /// Adds all items which are not already in this collection to the collection
+        /// </summary>
+        /// <param name="items">The items to add.</param>
+        public void UniqueAddRange(IEnumerable<T> items)
+        {
+            if(items == null)
+                throw new ArgumentNullException("items");
+
+            foreach (T item in items)
+            {
+                if (!Contains(item))
+                    Add(item);
+            }
+        }
     }    
 }

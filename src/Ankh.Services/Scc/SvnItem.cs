@@ -570,7 +570,7 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Retrieves the paths from an IList of SvnItem instances.
+        /// Retrieves a collection of paths from all provided SvnItems.
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
