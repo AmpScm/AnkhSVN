@@ -131,7 +131,7 @@ namespace Ankh.UI
                         string cssClass = this.GetClass(line);
                         writer.Write("<span class=\"{0}\">", cssClass);
                         writer.Write(XHtmlEncode(line));
-                        writer.Write("</span>");
+                        writer.WriteLine("</span>");
                     }
                 }
                 this.WriteEpilog(writer);
