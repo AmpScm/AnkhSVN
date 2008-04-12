@@ -63,7 +63,7 @@ namespace Ankh.Scc
             SccDocumentData data;
 
             if (!_docMap.TryGetValue(path, out data))
-                return false;
+                return true;
 
             data.CheckDirty();
 

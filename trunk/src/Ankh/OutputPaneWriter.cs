@@ -13,7 +13,7 @@ namespace Ankh
 	/// </summary>
 	public class OutputPaneWriter : TextWriter
 	{
-		public OutputPaneWriter(IContext context, string caption)
+		public OutputPaneWriter(IAnkhServiceProvider context, string caption)
 		{
 			IVsOutputWindow window = (IVsOutputWindow)context.GetService(typeof(SVsOutputWindow));
 
