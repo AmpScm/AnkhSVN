@@ -1,4 +1,5 @@
 ﻿using System;
+using AnkhSvn.Ids;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -11,4 +12,13 @@ namespace Ankh.UI.PendingChanges
             return "";
         }
     }
+
+	partial class LogMessageViewFilter
+	{
+		public override void ShowContextMenu(int menuId, Guid groupGuid, Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target, int x, int y)
+		{
+			if(!ShowLogMessageContextMenu(menuId, groupGuid, target, x, y))
+				base.ShowContextMenu(menuId, groupGuid, target, x, y);
+		}
+	}
 }
