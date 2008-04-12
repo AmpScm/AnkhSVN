@@ -34,6 +34,7 @@ namespace Ankh.Scc
         }
 
         readonly HybridCollection<string> _toRefresh = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+        readonly List<string> _toMonitor = new List<string>();
         bool _fullRefresh;
         internal void OnTickRefresh()
         {
@@ -55,6 +56,13 @@ namespace Ankh.Scc
                 }
                 _toRefresh.Clear();
                 _fullRefresh = false;
+
+                foreach (string file in _toMonitor)
+                {
+                    if (!_extraFiles.Contains(file))
+                        _extraFiles.Add(file);
+                }
+                _toMonitor.Clear();
             }
 
             if (fullRefresh)
@@ -255,5 +263,25 @@ namespace Ankh.Scc
         }
 
         #endregion
+
+        internal void ScheduleMonitor(string path)
+        {
+            lock (_toRefresh)
+            {
+                _toMonitor.Add(path);
+
+                ScheduleRefresh();
+            }            
+        }
+
+        internal void ScheduleMonitor(IEnumerable<string> paths)
+        {
+            lock (_toRefresh)
+            {
+                _toMonitor.AddRange(paths);
+
+                ScheduleRefresh();
+            }            
+        }
     }
 }

@@ -10,7 +10,7 @@ using Ankh.Commands;
 
 namespace Ankh.Scc
 {
-    class ProjectNotifier : AnkhService, IProjectNotifier, IFileStatusMonitor
+    sealed class ProjectNotifier : AnkhService, IProjectNotifier, IFileStatusMonitor
     {
         readonly object _lock = new object();
         volatile bool _posted;
@@ -208,6 +208,26 @@ namespace Ankh.Scc
         {
             MarkDirty(Mapper.GetAllProjectsContaining(paths));
             ChangeManager.Refresh(paths);
+        }
+
+        #endregion
+
+        #region IFileStatusMonitor Members
+
+        public void ScheduleMonitor(string path)
+        {
+            if(string.IsNullOrEmpty("path"))
+                throw new ArgumentNullException("path");
+
+            ((PendingChangeManager)ChangeManager).ScheduleMonitor(path);
+        }
+
+        public void ScheduleMonitor(IEnumerable<string> paths)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
+            ((PendingChangeManager)ChangeManager).ScheduleMonitor(paths);
         }
 
         #endregion
