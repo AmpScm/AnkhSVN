@@ -10,7 +10,7 @@ namespace Ankh.VS
     public interface IAnkhSolutionSettings
     {
         /// <summary>
-        /// Gets or sets the full path of the solution root
+        /// Gets or sets the full path of the solution root including a final '\'
         /// </summary>
         /// <remarks>The project root is stored as a relative path from the solution file</remarks>
         string ProjectRoot { get; set; }

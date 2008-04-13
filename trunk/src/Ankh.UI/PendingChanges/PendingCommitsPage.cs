@@ -51,6 +51,13 @@ namespace Ankh.UI.PendingChanges
             if (_manager != null || UISite == null)
                 return;
 
+            if (pendingCommits.SmallImageList == null)
+            {
+                IFileIconMapper mapper = UISite.GetService<IFileIconMapper>();
+
+                pendingCommits.SmallImageList = mapper.ImageList;
+            }
+
             _manager = UISite.GetService<IPendingChangesManager>();
 
             if (_manager == null)
@@ -118,7 +125,7 @@ namespace Ankh.UI.PendingChanges
 
             pci = new PendingCommitItem(UISite, e.Change);
             _listItems.Add(path, pci);
-            pendingCommits.Items.Add(pci);
+            pendingCommits.Items.Add(pci);                            
 
             // TODO: Maybe add something like
             //pendingCommits.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -254,23 +261,45 @@ namespace Ankh.UI.PendingChanges
         {
             Point p = MousePosition;
             UISite.ShowContextMenu(AnkhCommandMenu.PendingChangesContextMenu, p.X, p.Y);
+        }        
+
+        internal void OnUpdate(Ankh.Commands.CommandUpdateEventArgs e)
+        {
+            switch (e.Command)
+            {
+                case AnkhCommand.PcLogEditorPasteFileList:
+                    foreach (PendingCommitItem pci in _listItems.Values)
+                    {
+                        if (pci.Checked)
+                            return;
+                    }
+                    e.Enabled = false;
+                    return;
+                case AnkhCommand.PcLogEditorPasteRecentLog:
+                    return;
+            }
         }
 
-        internal bool CanCommit(bool keepingLocks)
+        internal void OnExecute(Ankh.Commands.CommandEventArgs e)
         {
-            if (_listItems.Count == 0)
-                return false;
-
-            foreach (PendingCommitItem pci in _listItems.Values)
+            StringBuilder sb = new StringBuilder();
+            switch (e.Command)
             {
-                if (!pci.Checked)
-                    continue;
-
-                if (!keepingLocks || pci.PendingChange.Item.IsLocked)
-                    return true;
+                case AnkhCommand.PcLogEditorPasteFileList:
+                    foreach (PendingCommitItem pci in _listItems.Values)
+                    {
+                        if (pci.Checked)
+                        {
+                            sb.AppendFormat("* {0}", pci.PendingChange.RelativePath);
+                            sb.AppendLine();
+                        }
+                    }
+                    break;
+                case AnkhCommand.PcLogEditorPasteRecentLog:
+                    break;
             }
-
-            return false;
-        }        
+            if(sb.Length > 0)
+                logMessageEditor.PasteText(sb.ToString());
+        }
     }
 }
