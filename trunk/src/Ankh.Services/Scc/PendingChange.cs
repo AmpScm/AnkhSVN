@@ -249,7 +249,7 @@ namespace Ankh.Scc
 
         static void RefreshValue(ref bool changed, ref int field, int newValue)
         {
-            if (field == newValue)
+            if (field != newValue)
             {
                 changed = true;
                 field = newValue;
