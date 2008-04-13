@@ -67,9 +67,6 @@ namespace Ankh.Scc
 
             data.CheckDirty();
 
-            if (!data.IsDirty || (data.Cookie == 0))
-                return true; // Not/never modified, no need to save
-
             // Save the document if it is dirty
             return ErrorHandler.Succeeded(RunningDocumentTable.SaveDocuments(0, data.Hierarchy, data.ItemId, data.Cookie));
         }
