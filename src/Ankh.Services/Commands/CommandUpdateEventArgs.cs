@@ -20,6 +20,7 @@ namespace Ankh.Commands
         bool _invisible;
         bool _latched;
         bool _ninched;
+        bool _dynamicMenuEnd;
         string _text;
 
         public CommandUpdateEventArgs(AnkhCommand command, AnkhContext context, TextQueryType textQuery, string oldText)
@@ -63,6 +64,12 @@ namespace Ankh.Commands
         {
             get { return _text ?? _originalText; }
             set { _text = value; }
+        }
+
+        public bool DynamicMenuEnd
+        {
+            get { return _dynamicMenuEnd; }
+            set { _dynamicMenuEnd = value; }
         }
 
         public string OriginalText
