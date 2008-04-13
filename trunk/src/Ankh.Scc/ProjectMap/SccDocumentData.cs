@@ -189,6 +189,9 @@ namespace Ankh.Scc.ProjectMap
 
         internal void CheckDirty()
         {
+            if (IsDirty)
+                return;
+
             bool wasDirty = IsDirty;
             bool dirty = GetIsDirty();
 
