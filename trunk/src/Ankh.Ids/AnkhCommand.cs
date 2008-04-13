@@ -26,7 +26,7 @@ namespace AnkhSvn.Ids
         // These values live in the same numberspace as the other values within 
         // the command set. So we start countin at this number to make sure we
         // do not reuse values
-        CommandFirst = 0x1FFFFFFF,
+        CommandFirst = 0x1FFFFFF,
 
         // Always visible+enabled entrance points to AnkhSvn
         FileFileOpenFromSubversion,
@@ -65,6 +65,7 @@ namespace AnkhSvn.Ids
         ExportFolder,
         Lock,
         Log,
+        LogItem,
         NewDirectory,
         Refresh,
         RefreshRepositoryItem,
@@ -84,6 +85,7 @@ namespace AnkhSvn.Ids
         ToggleAnkh,
         Unlock,
         UpdateItem,
+        UpdateItemSpecific,
         ViewInVsNet,
         ViewInWindows,
         CheckForOrphanedTreeNodes,
@@ -139,5 +141,8 @@ namespace AnkhSvn.Ids
         SolutionSwitchDialog,
 
         RunSvnCommand,
+
+        PcLogEditorPasteFileList,
+        PcLogEditorPasteRecentLog,
     }
 }

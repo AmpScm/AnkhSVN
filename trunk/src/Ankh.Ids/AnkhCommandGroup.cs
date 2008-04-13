@@ -20,7 +20,7 @@ namespace AnkhSvn.Ids
 		// These values live in the same numberspace as the other values within 
 		// the command set. So we start countin at this number to make sure we
 		// do not reuse values
-		GroupFirst = 0x3FFFFFFF,
+		GroupFirst = 0x3FFFFFF,
 
 		FileSourceControl,
 		FileMenuScc,
@@ -42,7 +42,9 @@ namespace AnkhSvn.Ids
         WorkingCopyExplorerContext,
 
         PendingChangesToolBar,
+        PendingChangesLogMessageCommands,
         PendingChangesLogEditor,
+        PendingChangesLogEditor2,
         PendingChangesContextMenu,
 
         PendingChangesSolutionCommands,
@@ -53,7 +55,13 @@ namespace AnkhSvn.Ids
 
         PendingChangesOpenEx,
 
+        LogMessageCommands,
+
         FileFileOpen, // File->Open->*
         FileFileAdd, // File->Add->*
+
+        SccTbManage,
+        SccTbItem,
+        SccTbExtra
 	}
 }
