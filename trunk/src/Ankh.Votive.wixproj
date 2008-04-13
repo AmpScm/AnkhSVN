@@ -1,11 +1,11 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Choose>
-		<When Condition="Exists('$(ProgramFiles)\Windows Installer XML v3\bin')">
-			<PropertyGroup>
-				<WixToolPathProp>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPathProp>
-			</PropertyGroup>
-		</When>
-	</Choose>
+  <Choose>
+    <When Condition="Exists('$(ProgramFiles)\Windows Installer XML v3\bin')">
+      <PropertyGroup>
+        <WixToolPathProp>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPathProp>
+      </PropertyGroup>
+    </When>
+  </Choose>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <ProductVersion>3.0</ProductVersion>
@@ -14,7 +14,7 @@
     <OutputName>AnkhSVN</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
-	<WixToolsPath>$(WixToolsPathProp)</WixToolsPath>
+    <WixToolsPath>$(WixToolsPathProp)</WixToolsPath>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
