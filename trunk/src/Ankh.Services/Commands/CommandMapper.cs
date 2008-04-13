@@ -255,6 +255,9 @@ namespace Ankh.Commands
 
                 if (!updateArgs.Visible)
                     cmdf |= OLECMDF.OLECMDF_INVISIBLE;
+
+                if (updateArgs.DynamicMenuEnd)
+                    return OLEConstants.OLECMDERR_E_NOTSUPPORTED;
             }
 
             if (textQuery != TextQueryType.None)
