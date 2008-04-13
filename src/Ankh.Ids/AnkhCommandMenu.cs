@@ -20,7 +20,7 @@ namespace AnkhSvn.Ids
 		// These values live in the same numberspace as the other values within 
 		// the command set. So we start countin at this number to make sure we
 		// do not reuse values
-		MenuFirst = 0x5FFFFFFF,
+		MenuFirst = 0x5FFFFFF,
 
 		FileScc,
 
@@ -32,8 +32,7 @@ namespace AnkhSvn.Ids
         SolutionExplorerSccForSolution,
         SolutionExplorerSccForProject,
         SolutionExplorerSccForItem,
-
-        PendingChangesToolBar,
+        
         PendingChangesContextMenu,
         PendingChangesLogMessageMenu,
 

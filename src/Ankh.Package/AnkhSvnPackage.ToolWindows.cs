@@ -366,7 +366,7 @@ namespace Ankh.VSPackage
             this.BitmapResourceID = 401;
             this.BitmapIndex = 2;
 
-            this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.PendingChangesToolBar);
+            this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.PendingChanges);
             this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
 
             Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();

@@ -185,6 +185,10 @@
     <Content Include="Gui\menu\ViewInVSNet.png" />
     <Content Include="Gui\menu\ViewInWindows.png" />
     <Content Include="Gui\menu\WorkExplorer.png" />
+    <Content Include="Gui\PendingChanges\AddToSourceControl.ico" />
+    <Content Include="Gui\PendingChanges\BrowseRefresh.png" />
+    <Content Include="Gui\PendingChanges\BrowseUp.png" />
+    <Content Include="Gui\PendingChanges\ChangeSourceControl.ico" />
     <Content Include="Gui\PendingChanges\CheckOut.png" />
     <Content Include="Gui\PendingChanges\Commit.png" />
     <Content Include="Gui\PendingChanges\Compare.png" />
@@ -194,6 +198,7 @@
     <Content Include="Gui\PendingChanges\FindInSolution.png" />
     <Content Include="Gui\PendingChanges\FlatView.png" />
     <Content Include="Gui\PendingChanges\FolderView.png" />
+    <Content Include="Gui\PendingChanges\GenerateMessage.png" />
     <Content Include="Gui\PendingChanges\Help.png" />
     <Content Include="Gui\PendingChanges\ignore.png" />
     <Content Include="Gui\PendingChanges\Open.png" />
@@ -205,10 +210,13 @@
     <Content Include="Gui\PendingChanges\RevisionGraph.png" />
     <Content Include="Gui\PendingChanges\ShowAll.png" />
     <Content Include="Gui\PendingChanges\ShowComment.png" />
+    <Content Include="Gui\PendingChanges\SolutionExplorer.png" />
     <Content Include="Gui\PendingChanges\Switch.png" />
     <Content Include="Gui\PendingChanges\Update.png" />
     <Content Include="Gui\PendingChanges\UpdateSpecific.png" />
+    <Content Include="Gui\PendingChanges\UrlRefresh.ico" />
     <Content Include="Gui\PendingChanges\ViewItems.png" />
+    <Content Include="Gui\PendingChanges\Views.png" />
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>

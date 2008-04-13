@@ -10,6 +10,7 @@
     <Import type="AnkhSvn.Ids.AnkhCommand" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Cmd_" />
     <Import type="AnkhSvn.Ids.AnkhCommandGroup" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Grp_" />
     <Import type="AnkhSvn.Ids.AnkhCommandMenu" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Menu_" />
+    <Import type="AnkhSvn.Ids.AnkhToolBar" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="ToolBar_" />
   </Imports>
   <Defines>
   </Defines>
@@ -39,7 +40,7 @@
           <Group id="Grp_FileSccMenuTasks" priority="0x0100">
             <Button id="Cmd_UpdateItem" name="UpdateItem" priority="0x100"
 								text="&amp;Update..."
-								toolTip="Updates local items with changes from the Subversion repository." iconFile="menu/Update.png" defaultInvisible="true"/>
+								toolTip="Updates local items with changes from the Subversion repository." iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
             <Button id="Cmd_CommitItem" name="CommitItem" priority="0x200"
 								text="&amp;Commit..."
 								toolTip="Commit selected items to the Subversion repository." iconFile="menu/Commit.png" defaultInvisible="true"/>
@@ -287,9 +288,9 @@
         </Group>
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_PendingChangesToolBar">
+    <GroupRef id="ToolBar_PendingChanges">
       <!-- The Working Copy Explorer Toolbar -->
-      <Menu id="Menu_PendingChangesToolBar" name="PendingChanges" priority="0" type="ToolWindowToolbar">
+      <Menu id="ToolBar_PendingChanges" name="PendingChanges" priority="0" type="ToolWindowToolbar">
         <Group id="Grp_PendingChangesSolutionCommands" priority="0x100">
           <Button id="Cmd_PendingChangesSpacer" name="Spacer" text=" " iconAndText="true" priority="0x001"
 							toolTip="AnkhSVN" />
@@ -341,7 +342,7 @@
           <Menu id="Menu_ItemConflict" priority="0x100" name="Conflicts" type="MenuControllerLatched" dynamicVisibility="true">
             <Group id="Menu_ItemConflict" priority="0x100">
               <Button id="Cmd_ItemConflictEdit" name="ItemConflictEdit" priority="0x100"
-									text="&amp;Edit" dynamicVisibility="true" iconFile="PendingChanges/EditConflict.png" fixMenuController="true"/>
+									text="&amp;Edit Conflicts" dynamicVisibility="true" iconFile="PendingChanges/EditConflict.png" fixMenuController="true"/>
               <Button id="Cmd_ItemConflictEditVisualStudio" name="ItemConflictEditVisualStudio" priority="0x200"
 									text="Edit in &amp;Visual Studio" dynamicVisibility="true"/>
               <Button id="Cmd_ItemConflictResolvedMerged" name="ItemConflictResolvedMerged" priority="0x300"
@@ -379,7 +380,7 @@
               <Button id="Cmd_ItemOpenFolder" name="OpenFolder" priority="0x100"
 									text="Open Containing &amp;Folder" iconFile="PendingChanges/OpenFolder.png"/>
               <Button id="Cmd_ItemOpenSolutionExplorer" name="FindInSolutionExplorer" priority="0x200"
-									text="Select in Solution E&amp;xplorer" iconFile="PendingChanges/FindInSolution.png"/>
+									text="Select in Solution E&amp;xplorer" iconFile="PendingChanges/SolutionExplorer.png"/>
             </Group>
           </Menu>
           <Menu id="Menu_ItemRevert" priority="0x300" name="Revert" type="MenuControllerLatched">
@@ -433,10 +434,38 @@
     </GroupRef>
     <GroupRef id="Menu_PendingChangesLogMessageMenu">
       <Menu id="Menu_PendingChangesLogMessageMenu" name="PendingChangesLogMessage" priority="0" type="Context">
-        <Group id="Grp_PendingChangesLogEditor" priority="0x100">
+        <Group id="Grp_PendingChangesLogMessageCommands" priority="0x100">
+          <Button id="Cmd_PcLogEditorPasteFileList" name="PasteFiles" priority="0x100"
+                  text="Paste &amp;Filename List" iconFile="PendingChanges/GenerateMessage.png"/>
+          <!--Button id="Cmd_PcLogEditorPasteRecentLog" name="PasteRecent" priority="0x200"
+                  text="Paste &amp;Recent Message" /-->
+        </Group>               
+        <Group id="Grp_PendingChangesLogEditor" priority="0x300">
           <ButtonRef id="guidVSStd97:cmdidCut" priority="0x100"  />
           <ButtonRef id="guidVSStd97:cmdidCopy"  priority="0x101" />
           <ButtonRef id="guidVSStd97:cmdidPaste"  priority="0x102" />
+        </Group>
+        <Group id="Grp_PendingChangesLogEditor2" priority="0x400">
+          <ButtonRef id="guidVSStd97:cmdidDelete" priority="0x100"  />
+          <ButtonRef id="guidVSStd97:cmdidSelectAll"  priority="0x200" />
+        </Group>
+      </Menu>
+    </GroupRef>
+    <GroupRef id="ToolBar_SourceControl">
+      <Menu id="ToolBar_SourceControl" name="SourceControl" text="Source Control - Subversion" priority="0" type="Toolbar">
+        <Group id="Grp_SccTbManage" priority="0x100">
+          <ButtonRef id="Cmd_FileSccChangeSourceControl" priority="0x100" />
+        </Group>
+        <Group id="Grp_SccTbItem" priority="0x200">
+          <ButtonRef id="Cmd_CommitItem" priority="0x100" />
+          <ButtonRef id="Cmd_UpdateItem" priority="0x200" />
+          <ButtonRef id="Cmd_UpdateItemSpecific" priority="0x300" />
+          <ButtonRef id="Cmd_RevertItem" priority="0x400" />
+          <ButtonRef id="Cmd_LogItem" priority="0x500" />
+        </Group>
+        <Group id="Grp_SccTbExtra" priority="0x300">
+          <ButtonRef id="Cmd_ShowPendingChanges" priority="0x100" />
+          <ButtonRef id="Cmd_Refresh" priority="0xF000" />
         </Group>
       </Menu>
     </GroupRef>
