@@ -31,21 +31,19 @@ namespace Ankh.UI.PendingChanges
             IAnkhSolutionSettings solSet = context.GetService<IAnkhSolutionSettings>();
             IFileStatusCache cache = context.GetService<IFileStatusCache>();
 
+            Text = PendingChange.RelativePath;
             string start = solSet.ProjectRoot;
 
-            if (FullPath.StartsWith(start, StringComparison.OrdinalIgnoreCase))
-                Text = FullPath.Substring(start.Length).Replace('\\', '/');
-            else
-                Text = FullPath;
-
+            ImageIndex = PendingChange.IconIndex;
             SubItems[1].Text = PendingChange.Project;
+           
 
             SvnItem item = cache[FullPath];
 
             if (item == null)
                 throw new InvalidOperationException(); // Item no longer valued
 
-            PendingChangeStatus pcs = PendingChange.Status;
+            PendingChangeStatus pcs = PendingChange.Change;
 
             if (pcs != null)
             {

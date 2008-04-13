@@ -277,6 +277,7 @@
       <DependentUpon>PathSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="PendingChanges\Commands\CommitPendingChanges.cs" />
+    <Compile Include="PendingChanges\Commands\PasteToEditorList.cs" />
     <Compile Include="PendingChanges\Commands\PendingChangeLocationCombo.cs" />
     <Compile Include="PendingChanges\Commands\ViewLogMessage.cs" />
     <Compile Include="PendingChanges\Commands\RefreshPendingChanges.cs" />
@@ -285,6 +286,7 @@
     </Compile>
     <Compile Include="PendingChanges\PendingCommitItem.cs" />
     <Compile Include="PendingChanges\PendingCommitsPage.Commit.cs">
+      <DependentUpon>PendingCommitsPage.cs</DependentUpon>
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingCommitsPage.cs">

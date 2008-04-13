@@ -220,7 +220,7 @@ namespace Ankh.UI.PendingChanges
         {
             foreach (PendingChange pc in state.Changes)
             {
-                if (pc.Status.State == PendingChangeState.New)
+                if (pc.Change.State == PendingChangeState.New)
                 {
                     SvnItem item = pc.Item;
 
@@ -315,6 +315,23 @@ namespace Ankh.UI.PendingChanges
 
             
             return true;
+        }
+
+        internal bool CanCommit(bool keepingLocks)
+        {
+            if (_listItems.Count == 0)
+                return false;
+
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (!pci.Checked)
+                    continue;
+
+                if (!keepingLocks || pci.PendingChange.Item.IsLocked)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

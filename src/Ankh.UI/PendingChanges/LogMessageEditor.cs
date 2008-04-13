@@ -120,6 +120,15 @@ namespace Ankh.UI.PendingChanges
                 codeEditorNativeWindow.Text = value;
             }
         }
+
+        /// <summary>
+        /// Pastes the specified text at the current location
+        /// </summary>
+        /// <param name="text">The text.</param>
+        public void PasteText(string text)
+        {
+            codeEditorNativeWindow.PasteText(text);
+        }
     }
 
     /// <summary>
@@ -157,6 +166,7 @@ namespace Ankh.UI.PendingChanges
         private IVsCodeWindow codeWindow;
 
         IVsTextBuffer textBuffer;
+        IVsTextView _textView;
 
         #endregion
 
@@ -164,12 +174,12 @@ namespace Ankh.UI.PendingChanges
         {
             get
             {
-                if(textBuffer == null)
+                if (textBuffer == null)
                     return null;
 
                 IVsTextLines lines = textBuffer as IVsTextLines;
 
-                if(lines == null)
+                if (lines == null)
                     return null;
 
                 string text;
@@ -183,6 +193,61 @@ namespace Ankh.UI.PendingChanges
                 // NOOP for now
                 //throw new InvalidOperationException();
             }
+        }
+
+        public bool PasteText(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return true;
+
+            IVsTextLines lines = textBuffer as IVsTextLines;
+
+            if (lines == null || _textView == null)
+                return false;
+
+            Point[] s = GetSelection();
+
+            if (s == null)
+            {
+                Point p = GetCaretPosition();
+                s = new Point[] { p, p };
+            }
+
+            IntPtr pText = Marshal.StringToCoTaskMemUni(text);
+            try
+            {
+                return ErrorHandler.Succeeded(lines.ReplaceLines(s[0].Y, s[0].X, s[1].Y, s[1].X, pText, text.Length, null));
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(pText);
+            }
+
+
+        }
+
+        Point[] GetSelection()
+        {
+            int y1, x1, y2, x2;
+            if (!ErrorHandler.Succeeded(_textView.GetSelection(out y1, out x1, out y2, out x2)))
+                return null;
+
+            if (y1 < y2)
+                return new Point[] { new Point(x1, y1), new Point(x2, y2) };
+            else if (y2 < y1)
+                return new Point[] { new Point(x2, y2), new Point(x1, y1) };
+            else
+                return new Point[] { new Point(Math.Min(x1, x2), y1), new Point(Math.Max(x1, x2), y1) };
+        }
+
+        Point GetCaretPosition()
+        {
+            int y, x;
+
+            if (!ErrorHandler.Succeeded(_textView.GetCaretPos(out y, out x)))
+                return new Point();
+            else
+                return new Point(x, y);
         }
 
         #region Properties
@@ -199,7 +264,7 @@ namespace Ankh.UI.PendingChanges
                     NativeMethods.SetWindowPos(editorHwnd, IntPtr.Zero, value.X, value.Y,
                         value.Width, value.Height, 0x04);
                 }
-                if(commandHwnd != IntPtr.Zero)
+                if (commandHwnd != IntPtr.Zero)
                 {
                     NativeMethods.SetWindowPos(this.commandHwnd, IntPtr.Zero, value.X, value.Y,
                         value.Width, value.Height, 0x04);
@@ -352,12 +417,13 @@ namespace Ankh.UI.PendingChanges
                 Marshal.ThrowExceptionForHR(hr);
             }
 
+            _textView = textView;
             commandHwnd = textView.GetWindowHandle();
 
             //Assign a handle to this window
             AssignHandle(commandHwnd);
             NativeMethods.ShowWindow(editorHwnd, 1);
-          }
+        }
 
         /// <summary>
         ///  This method is used to get service of specified type
@@ -420,7 +486,7 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        #endregion       
+        #endregion
 
         #region IOleCommandTarget Members
         //This implementation is a simple delegation to the implementation inside the text view 

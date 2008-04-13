@@ -39,7 +39,7 @@
             this.pendingCommits = new Ankh.UI.PendingChanges.PendingCommitsView(this.components);
             this.pathColumn = new System.Windows.Forms.ColumnHeader();
             this.projectColumn = new System.Windows.Forms.ColumnHeader();
-            this.changeStatusColumn = new System.Windows.Forms.ColumnHeader();
+            this.changeColumn = new System.Windows.Forms.ColumnHeader();
             this.fullPathColumn = new System.Windows.Forms.ColumnHeader();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -151,7 +151,7 @@
             this.pendingCommits.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.pathColumn,
             this.projectColumn,
-            this.changeStatusColumn,
+            this.changeColumn,
             this.fullPathColumn});
             this.pendingCommits.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pendingCommits.FullRowSelect = true;
@@ -183,10 +183,10 @@
             this.projectColumn.Text = "Project";
             this.projectColumn.Width = 75;
             // 
-            // changeStatusColumn
+            // changeColumn
             // 
-            this.changeStatusColumn.Text = "Status";
-            this.changeStatusColumn.Width = 73;
+            this.changeColumn.Text = "Change";
+            this.changeColumn.Width = 73;
             // 
             // fullPathColumn
             // 
@@ -214,7 +214,7 @@
 
         private System.Windows.Forms.ColumnHeader pathColumn;
         private System.Windows.Forms.ColumnHeader projectColumn;
-        private System.Windows.Forms.ColumnHeader changeStatusColumn;
+        private System.Windows.Forms.ColumnHeader changeColumn;
         private System.Windows.Forms.ColumnHeader fullPathColumn;
         private System.Windows.Forms.TableLayoutPanel topLayoutPanel;
         private System.Windows.Forms.TextBox textBox1;

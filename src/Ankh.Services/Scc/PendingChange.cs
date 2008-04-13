@@ -15,7 +15,7 @@ namespace Ankh.Scc
     public sealed class PendingChange : CustomTypeDescriptor
     {
         readonly IAnkhServiceProvider _context;
-        readonly SvnItem _item;
+        readonly SvnItem _item;        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PendingChange"/> class
@@ -122,6 +122,7 @@ namespace Ankh.Scc
 
         int _iconIndex;
         string _projects;
+        string _relativePath;
         PendingChangeStatus _status;
 
         [Browsable(false)]
@@ -131,10 +132,16 @@ namespace Ankh.Scc
         }
 
         [Browsable(false)]
-        public PendingChangeStatus Status
+        public PendingChangeStatus Change
         {
             get { return _status; }
         }
+
+        [Browsable(false)]
+        public string RelativePath
+        {
+            get { return _relativePath; }
+        }        
 
         /// <summary>
         /// Refreshes the pending change. Returns true if the state was modified, otherwise false
@@ -148,8 +155,19 @@ namespace Ankh.Scc
             RefreshValue(ref m, ref _iconIndex, context.IconMapper.GetIcon(FullPath));
             RefreshValue(ref m, ref _projects, GetProjects(context));
             RefreshValue(ref m, ref _status, GetStatus(context, item, isDirty));
+            RefreshValue(ref m, ref _relativePath, GetRelativePath(context));
 
             return m || (_status == null);
+        }
+
+        private string GetRelativePath(RefreshContext context)
+        {
+            string projectRoot = context.SolutionSettings.ProjectRoot;
+
+            if (FullPath.StartsWith(projectRoot, StringComparison.OrdinalIgnoreCase))
+                return FullPath.Substring(projectRoot.Length).Replace('\\', '/');
+            else
+                return FullPath;
         }
 
         string GetProjects(RefreshContext context)
