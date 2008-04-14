@@ -128,6 +128,7 @@ namespace Ankh.UI
                 case SvnNotifyAction.CommitModified:
                 case SvnNotifyAction.CommitReplaced:
                     actionText = actionText.Substring(6);
+                    break;
                 case SvnNotifyAction.CommitSendData:
                     actionText = "Sending";
                     break;
