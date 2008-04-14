@@ -384,6 +384,11 @@ namespace Ankh.Selection
                 nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
                 Marshal.Release(hierPtr);
                 isNested = true;
+
+                IVsProject3 p3 = nestedHierarchy as IVsProject3;
+
+                if(p3 != null && (p3 == MiscellaneousProject))
+                    yield break;
             }
 
             if(isNested && depth <= ProjectWalkDepth.AllDescendantsInHierarchy)
