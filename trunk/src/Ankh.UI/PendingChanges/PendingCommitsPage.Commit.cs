@@ -220,7 +220,7 @@ namespace Ankh.UI.PendingChanges
         {
             foreach (PendingChange pc in state.Changes)
             {
-                if (pc.Change.State == PendingChangeState.New)
+                if (pc.Change.State == PendingChangeKind.New)
                 {
                     SvnItem item = pc.Item;
 
