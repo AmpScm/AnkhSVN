@@ -344,9 +344,6 @@
     <Compile Include="OutputPaneWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PathSelectorInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ProgressRunner.cs">
       <SubType>Code</SubType>
     </Compile>

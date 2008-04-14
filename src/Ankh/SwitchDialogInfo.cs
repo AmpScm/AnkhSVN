@@ -10,11 +10,14 @@ namespace Ankh
     /// </summary>
     public class SwitchDialogInfo : PathSelectorInfo
     {
+        public SwitchDialogInfo(ICollection<SvnItem> items)
+            : base("", items)
+        {
+        }
+
         public SwitchDialogInfo( ICollection<SvnItem> items, Predicate<SvnItem> checkedFilter ) :
             base( "", items, checkedFilter )
         {
-            this.switchToUrl = null;
-            this.path = null;
         }
 
         public string SwitchToUrl
@@ -35,7 +38,7 @@ namespace Ankh
             set{ this.path = value; }
         }
 
-        private string path;
-        private string switchToUrl;
+        string path;
+        string switchToUrl;
     }
 }

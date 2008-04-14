@@ -9,11 +9,17 @@ namespace Ankh
 	/// </summary>
 	public class LockDialogInfo : PathSelectorInfo
 	{
+        public LockDialogInfo(ICollection<SvnItem> items)
+            : base("", items)
+        {
+            this.message = "";
+        }
+
+        [Obsolete]
 		public LockDialogInfo(ICollection<SvnItem> items, Predicate<SvnItem> checkedFilter) :
 			base("", items, checkedFilter)
 		{
 			this.message = "";
-			this.stealLocks = false;
 		}
 
 		public string Message

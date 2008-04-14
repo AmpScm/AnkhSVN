@@ -19,40 +19,8 @@ namespace Ankh.UI
     /// </summary>
     public partial class PathSelector : System.Windows.Forms.Form
     {
-		Predicate<SvnItem> _checkedFilter;
+        PathSelectorInfo _info;
         IAnkhServiceProvider _context;
-
-        public PathSelector()
-        {
-            //
-            // Required for Windows Form Designer support
-            //
-            InitializeComponent();
-
-            this.Options = PathSelectorOptions.NoRevision;
-        }
-
-        public IAnkhServiceProvider Context
-        {
-            get { return _context; }
-            set
-            {
-                if (value != _context)
-                {
-                    _context = value;
-                    OnContextChanged(EventArgs.Empty);
-                }
-            }
-        }
-
-        protected virtual void OnContextChanged(EventArgs eventArgs)
-        {
-            pathSelectionTreeView.Context = Context;
-        }
-
-
-
-
         /// <summary>
         /// Invoked when the treeview needs more information about a node.
         /// </summary>
@@ -68,6 +36,70 @@ namespace Ankh.UI
                 this.pathSelectionTreeView.ResolvingPathInfo -= value; 
                 this.getPathInfo -= value;
             }
+        }
+
+
+        public PathSelector()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
+
+            this.Options = PathSelectorOptions.NoRevision;
+        }
+
+        public PathSelector(PathSelectorInfo info)
+            :this()
+        {
+            _info = info;
+            EnableRecursive = info.EnableRecursive;
+            Items = info.VisibleItems;
+            //selector.CheckedFilter = info.CheckedFilter;
+            Recursive = info.Depth == SvnDepth.Infinity;
+            SingleSelection = info.SingleSelection;
+            Caption = info.Caption;
+
+            // do we need go get a revision range?
+            if (info.RevisionStart == null && info.RevisionEnd == null)
+            {
+                Options = PathSelectorOptions.NoRevision;
+            }
+            else if (info.RevisionEnd == null)
+            {
+                RevisionStart = info.RevisionStart;
+                Options = PathSelectorOptions.DisplaySingleRevision;
+            }
+            else
+            {
+                RevisionStart = info.RevisionStart;
+                RevisionEnd = info.RevisionEnd;
+                Options = PathSelectorOptions.DisplayRevisionRange;
+            }
+
+
+
+            //// show it
+            //if (selector.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) == DialogResult.OK)
+            //{
+            //    info.CheckedItems = new List<SvnItem>(selector.CheckedItems);
+            //    info.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
+            //    info.RevisionStart = selector.RevisionStart;
+            //    info.RevisionEnd = selector.RevisionEnd;
+
+            //    return info;
+            //}
+            //else
+            //{
+            //    return null;
+            //}
+
+        }
+
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set { _context = value; }
         }
 
         /// <summary>
