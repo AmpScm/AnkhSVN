@@ -257,6 +257,8 @@ namespace Ankh.UI.PendingChanges
                     {
                         if (!state.CommitPaths.Contains(parent.FullPath))
                             state.CommitPaths.Add(parent.FullPath);
+
+                        parent = parent.Parent;
                     }
                 }
             }
