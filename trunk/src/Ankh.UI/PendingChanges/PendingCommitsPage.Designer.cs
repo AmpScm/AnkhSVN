@@ -143,6 +143,7 @@
             this.logMessageEditor.Name = "logMessageEditor";
             this.logMessageEditor.Size = new System.Drawing.Size(766, 61);
             this.logMessageEditor.TabIndex = 4;
+            this.logMessageEditor.Text = null;
             // 
             // pendingCommits
             // 
@@ -159,7 +160,6 @@
             this.pendingCommits.Location = new System.Drawing.Point(0, 0);
             this.pendingCommits.Name = "pendingCommits";
             this.pendingCommits.ProvideWholeListForSelection = false;
-            this.pendingCommits.ServiceProvider = null;
             this.pendingCommits.ShowItemToolTips = true;
             this.pendingCommits.Size = new System.Drawing.Size(768, 214);
             this.pendingCommits.Sorting = System.Windows.Forms.SortOrder.Ascending;

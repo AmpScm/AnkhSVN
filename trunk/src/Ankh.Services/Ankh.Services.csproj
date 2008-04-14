@@ -71,6 +71,7 @@
     <Compile Include="Scc\PendingChangeStatus.cs" />
     <Compile Include="Scc\ProjectIconReference.cs" />
     <Compile Include="Scc\SvnDirectory.cs" />
+    <Compile Include="Scc\SvnItemData.cs" />
     <Compile Include="Selection\IAnkhGetMkDocument.cs" />
     <Compile Include="Selection\IAnkhTaskManager.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />

@@ -40,7 +40,7 @@ namespace Ankh.UI.PendingChanges
             }
 
             if (pendingCommits != null)
-                pendingCommits.ServiceProvider = UISite;
+                pendingCommits.SelectionPublishServiceProvider = UISite;
 
             HookList();
         }

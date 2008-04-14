@@ -26,8 +26,8 @@ namespace Ankh.UI.VSSelectionControls
 		}
 
         IServiceProvider _serviceProvider;
-        [Browsable(false)]
-        public IServiceProvider ServiceProvider
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IServiceProvider SelectionPublishServiceProvider
         {
             get { return _serviceProvider; }
             set
@@ -145,9 +145,9 @@ namespace Ankh.UI.VSSelectionControls
         {
             _maybeUnselect = true;
 
-            if (ServiceProvider != null)
+            if (SelectionPublishServiceProvider != null)
             {
-                Hierarchy.NotifySelectionUpdated(ServiceProvider);               
+                Hierarchy.NotifySelectionUpdated(SelectionPublishServiceProvider);               
             }
         }
 

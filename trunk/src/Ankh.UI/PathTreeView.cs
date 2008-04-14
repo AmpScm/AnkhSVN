@@ -5,6 +5,7 @@ using Utils.Win32;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using Ankh.VS;
+using Ankh.UI.VSSelectionControls;
 
 namespace Ankh.UI
 {
@@ -14,7 +15,7 @@ namespace Ankh.UI
     [Docking(DockingBehavior.Ask)]
     [Designer("System.Windows.Forms.Design.TreeViewDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [DesignTimeVisible(true)]
-    public class PathTreeView : TreeView
+    public class PathTreeView : TreeViewWithSelection<TreeNode>
     {
         IAnkhServiceProvider _context;
         public PathTreeView()
@@ -80,6 +81,19 @@ namespace Ankh.UI
                 node.SelectedImageIndex = node.ImageIndex = IconMapper.GetIcon(path);
             else
                 node.SelectedImageIndex = node.ImageIndex = -1;
+        }
+
+        internal override TreeViewWithSelection<TreeNode>.TreeViewHierarchy CreateHierarchy()
+        {
+            return new PathHierarchy(this);
+        }
+
+        sealed class PathHierarchy : TreeViewHierarchy
+        {
+            public PathHierarchy(PathTreeView ptv)
+                : base(ptv)
+            {
+            }
         }
     }
 }

@@ -40,19 +40,19 @@ namespace Ankh.Scc
             get { return _item; }
         }
 
-        [DisplayName("Full Path")]
+        [DisplayName("Full Path"), Category("Subversion")]
         public string FullPath
         {
             get { return _item.FullPath; }
         }
 
-        [DisplayName("File Name")]
+        [DisplayName("File Name"), Category("Subversion")]
         public string Name
         {
             get { return _item.Name; }
         }
 
-        [DisplayName("Change List")]
+        [DisplayName("Change List"), Category("Subversion")]
         public string ChangeList
         {
             get { return _item.Status.ChangeList; }
@@ -64,7 +64,7 @@ namespace Ankh.Scc
             get { return _projects; }
         }
 
-        [DisplayName("Change")]
+        [DisplayName("Change"), Category("Subversion")]
         public string ChangeText
         {
             get { return _status.Text; }
@@ -194,9 +194,9 @@ namespace Ankh.Scc
                     continue;
 
                 if (name != null)
-                    name += ";" + info.ProjectName;
+                    name += ";" + info.UniqueProjectName;
                 else
-                    name = info.ProjectName;
+                    name = info.UniqueProjectName;
             }
 
             if (!string.IsNullOrEmpty(name))

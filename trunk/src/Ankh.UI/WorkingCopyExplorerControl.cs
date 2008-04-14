@@ -9,6 +9,8 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Ankh.UI.Services;
 using AnkhSvn.Ids;
+using Microsoft.VisualStudio.Shell;
+using Ankh.Scc;
 
 namespace Ankh.UI
 {
@@ -176,8 +178,57 @@ namespace Ankh.UI
             {
                 base.Site = value;
                 if (value is IAnkhUISite)
+                {
                     _uiSite = value as IAnkhUISite;
+                    OnUISiteChanged(EventArgs.Empty);
+                }
             }
+        }
+
+        private void OnUISiteChanged(EventArgs eventArgs)
+        {
+            treeView.SelectionPublishServiceProvider = UISite;
+            listView.SelectionPublishServiceProvider = UISite;
+            treeView.RetrieveSelection += new EventHandler<Ankh.UI.VSSelectionControls.TreeViewWithSelection<TreeNode>.RetrieveSelectionEventArgs>(treeView_RetrieveSelection);
+            listView.RetrieveSelection += new EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<ListViewItem>.RetrieveSelectionEventArgs>(listView_RetrieveSelection);
+            treeView.Context = UISite;
+            listView.Context = UISite;
+        }
+
+        void listView_RetrieveSelection(object sender, Ankh.UI.VSSelectionControls.ListViewWithSelection<ListViewItem>.RetrieveSelectionEventArgs e)
+        {
+            IFileSystemItem ii = e.Item.Tag as IFileSystemItem;
+
+            if (ii == null)
+            {
+                e.SelectionItem = null;
+                return;
+            }
+
+            SvnItem item = ii.SvnItem;
+
+            if (item != null)
+                e.SelectionItem = new SvnItemData(UISite, item);
+            else
+                e.SelectionItem = null;
+        }
+
+        void treeView_RetrieveSelection(object sender, Ankh.UI.VSSelectionControls.TreeViewWithSelection<TreeNode>.RetrieveSelectionEventArgs e)
+        {
+            IFileSystemItem ii = e.Item.Tag as IFileSystemItem;
+
+            if (ii == null)
+            {
+                e.SelectionItem = null;
+                return;
+            }
+
+            SvnItem item = ii.SvnItem;
+
+            if (item != null)
+                e.SelectionItem = new SvnItemData(UISite, item);
+            else
+                e.SelectionItem = null;
         }
 
         [CLSCompliant(false)]
