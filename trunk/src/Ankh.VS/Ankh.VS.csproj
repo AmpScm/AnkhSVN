@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnkhVSColor.cs" />
     <Compile Include="Dialogs\AnkhDialogOwner.cs" />
     <Compile Include="AnkhVSModule.cs" />
     <Compile Include="Dialogs\VSCommandRouting.cs" />

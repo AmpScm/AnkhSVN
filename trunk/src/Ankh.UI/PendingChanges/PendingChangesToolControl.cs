@@ -9,6 +9,7 @@ using Ankh.UI.Services;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Commands;
 using Microsoft.VisualStudio;
+using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -67,30 +68,17 @@ namespace Ankh.UI.PendingChanges
                 return;
 
             // We should use the VS colors instead of the ones provided by the OS
+            IAnkhVSColor colorSvc = UISite.GetService<IAnkhVSColor>();
+            
+            Color color;
+            if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
+                BackColor = color;
 
-            IVsUIShell2 shell = UISite.GetService<IVsUIShell2>(typeof(SVsUIShell));
+            if(colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
+                pendingChangesTabs.BackColor = color;
 
-            if (shell != null)
-            {
-                uint rgb;
-                if (ErrorHandler.Succeeded(shell.GetVSSysColorEx((int)__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out rgb)))
-                {
-                    Color clr = ColorTranslator.FromWin32(unchecked((int)rgb));
-                    BackColor = clr;
-                }
-
-                if (ErrorHandler.Succeeded(shell.GetVSSysColorEx((int)__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out rgb)))
-                {
-                    Color clr = ColorTranslator.FromWin32(unchecked((int)rgb));
-                    pendingChangesTabs.BackColor = clr;
-                }
-
-                if (ErrorHandler.Succeeded(shell.GetVSSysColorEx((int)__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out rgb)))
-                {
-                    Color clr = ColorTranslator.FromWin32(unchecked((int)rgb));
-                    pendingChangesTabs.ForeColor = clr;
-                }
-            }
+            if(colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
+                pendingChangesTabs.ForeColor = color;
         }
 
         [CLSCompliant(false)]

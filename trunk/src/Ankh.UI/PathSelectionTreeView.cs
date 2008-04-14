@@ -9,6 +9,8 @@ using Utils;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Ankh.Scc;
+using Ankh.VS;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI
 {
@@ -18,23 +20,26 @@ namespace Ankh.UI
     public partial class PathSelectionTreeView : PathTreeView
     {
         Predicate<SvnItem> _checkedFilter;
-
+        ICollection<SvnItem> _items;
+        TreeNode _checkedNode;
+        bool _singleCheck;
+        bool _recursive;
 
         public PathSelectionTreeView()
         {
             this.CheckBoxes = true;
             this.SingleCheck = false;
             this.Recursive = false;
-            this.items = new SvnItem[] { };
+            this._items = new SvnItem[] { };
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ICollection<SvnItem> Items
         {
-            get { return this.items; }
+            get { return this._items; }
             set
             {
-                this.items = value;
+                this._items = value;
                 this.BuildTree();
             }
         }
@@ -56,8 +61,8 @@ namespace Ankh.UI
         /// </summary>
         public bool SingleCheck
         {
-            get { return this.singleCheck; }
-            set { this.singleCheck = value; }
+            get { return this._singleCheck; }
+            set { this._singleCheck = value; }
         }
 
         /// <summary>
@@ -65,10 +70,10 @@ namespace Ankh.UI
         /// </summary>
         public bool Recursive
         {
-            get { return this.recursive; }
+            get { return this._recursive; }
             set
             {
-                this.recursive = value;
+                this._recursive = value;
                 BeginUpdate();
                 this.UncheckChildren(this.Nodes, value);
                 EndUpdate();
@@ -106,7 +111,7 @@ namespace Ankh.UI
             // unchecking?
             if (!e.Node.Checked)
             {
-                this.checkedNode = null;
+                this._checkedNode = null;
                 // reenable children?
                 if (this.Recursive)
                     this.ToggleChildren(e.Node, true);
@@ -114,13 +119,13 @@ namespace Ankh.UI
             }
 
             // make sure only one node is checked if SingleCheck is true
-            if (this.SingleCheck && this.checkedNode != null)
+            if (this.SingleCheck && this._checkedNode != null)
             {
-                this.checkedNode.Checked = false;
+                this._checkedNode.Checked = false;
             }
 
             // keep track of the last checked node
-            this.checkedNode = e.Node;
+            this._checkedNode = e.Node;
 
             // disable children?
             if (this.Recursive)
@@ -241,10 +246,10 @@ namespace Ankh.UI
                 this.BeginUpdate();
                 this.Nodes.Clear();
 
-                if (this.items.Count == 0)
+                if (this._items.Count == 0)
                     return;
 
-                foreach (SvnItem item in this.items)
+                foreach (SvnItem item in this._items)
                     this.AddNode(item);
 
                 this.TrimTree();
@@ -361,13 +366,49 @@ namespace Ankh.UI
             }
         }
 
-        private ICollection<SvnItem> items;
-        private TreeNode checkedNode;
-        private bool singleCheck;
-        private bool recursive;
+        IAnkhVSColor ColorProvider
+        {
+            get
+            {
+                return Context == null ? null : Context.GetService<IAnkhVSColor>();
+            }
+        }
 
-        private static readonly Color EnabledColor = Color.Black;
-        private static readonly Color DisabledColor = Color.Gray;
 
+        Color _enabledColor;
+        Color EnabledColor
+        {
+            get 
+            {
+                if (_enabledColor == Color.Empty)
+                {
+                    Color color;
+                    if (ColorProvider != null &&
+                        ColorProvider.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_TEXT_ACTIVE, out color))
+                        _enabledColor = color;
+                    else
+                        _enabledColor = Color.Black;
+                } 
+                return _enabledColor;
+            }
+        }
+
+        Color _disabledColor;
+        Color DisabledColor
+        {
+            get
+            {
+                if (_disabledColor == Color.Empty)
+                {
+                    Color color;
+                    if (ColorProvider != null &&
+                        ColorProvider.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_TEXT_INACTIVE, out color))
+                        _disabledColor = color;
+                    else
+                        _disabledColor = Color.Gray;
+                }
+                return _disabledColor;
+            }
+        }
     }
 }
