@@ -151,8 +151,7 @@ namespace Ankh.UI
 
             // create a new node.
             TreeNode node = new TreeNode( "Newdir" );
-            node.SelectedImageIndex = this.treeView.ClosedFolderIndex;
-            node.ImageIndex = this.treeView.ClosedFolderIndex;
+            node.SelectedImageIndex = node.ImageIndex = this.treeView.FolderIndex;
             this.treeView.SelectedNode.Nodes.Add( node );
 
             // start editing it

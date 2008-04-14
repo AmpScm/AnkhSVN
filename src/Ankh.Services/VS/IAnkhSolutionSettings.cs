@@ -13,8 +13,9 @@ namespace Ankh.VS
         /// Gets or sets the full path of the solution root including a final '\'
         /// </summary>
         /// <remarks>The project root is stored as a relative path from the solution file</remarks>
-        string ProjectRoot { get; set; }
+        string ProjectRootWithSeparator { get; }
 
+        string ProjectRoot { get; set; }
 
         /// <summary>
         /// Gets the solution filename.

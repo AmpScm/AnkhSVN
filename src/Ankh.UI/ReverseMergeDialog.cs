@@ -13,19 +13,35 @@ namespace Ankh.UI
     /// </summary>
     public partial class ReverseMergeDialog : System.Windows.Forms.Form
     {
+        IAnkhServiceProvider _context;
+
+        public ReverseMergeDialog()
+        {
+            InitializeComponent();
+        }
+
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set
+            {
+                if (value != _context)
+                {
+                    _context = value;
+                    OnContextChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        protected virtual void OnContextChanged(EventArgs eventArgs)
+        {
+            treeView.Context = Context;
+        }
+
         public event EventHandler<ResolvingPathEventArgs> GetPathInfo
         {
             add { this.treeView.ResolvingPathInfo += value; }
             remove { this.treeView.ResolvingPathInfo -= value; }
-        }
-
-
-        public ReverseMergeDialog()
-        {
-            //
-            // Required for Windows Form Designer support
-            //
-            InitializeComponent();
         }
 
         /// <summary>

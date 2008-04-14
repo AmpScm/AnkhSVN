@@ -20,6 +20,39 @@ namespace Ankh.UI
     public partial class PathSelector : System.Windows.Forms.Form
     {
 		Predicate<SvnItem> _checkedFilter;
+        IAnkhServiceProvider _context;
+
+        public PathSelector()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
+
+            this.Options = PathSelectorOptions.NoRevision;
+        }
+
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set
+            {
+                if (value != _context)
+                {
+                    _context = value;
+                    OnContextChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        protected virtual void OnContextChanged(EventArgs eventArgs)
+        {
+            pathSelectionTreeView.Context = Context;
+        }
+
+
+
+
         /// <summary>
         /// Invoked when the treeview needs more information about a node.
         /// </summary>
@@ -35,17 +68,6 @@ namespace Ankh.UI
                 this.pathSelectionTreeView.ResolvingPathInfo -= value; 
                 this.getPathInfo -= value;
             }
-        }
-
-
-        public PathSelector()
-        {
-            //
-            // Required for Windows Form Designer support
-            //
-            InitializeComponent();
-
-            this.Options = PathSelectorOptions.NoRevision;
         }
 
         /// <summary>

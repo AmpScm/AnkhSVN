@@ -89,6 +89,7 @@ namespace Ankh
             {
                 using (CommitDialog dialog = new CommitDialog())
                 {
+                    dialog.Context = _context;
                     dialog.LogMessage = savedLogMessage;
                     dialog.LogMessageTemplate = template;
                     dialog.Items = _items;

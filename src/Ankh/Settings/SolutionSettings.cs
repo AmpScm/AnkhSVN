@@ -51,7 +51,6 @@ namespace Ankh.Settings
                     _solutionCookie = solutionItem.ChangeCookie;
             }
         }
-        #region IAnkhSolutionSettings Members
 
         public string SolutionFilename
         {
@@ -112,10 +111,7 @@ namespace Ankh.Settings
                 if (string.IsNullOrEmpty(solutionFilename))
                     return null;
 
-
                 string wcRoot = GetSvnWcRoot(Path.GetDirectoryName(SolutionFilename)).TrimEnd('\\') + '\\';
-
-                string sd = Path.GetDirectoryName(SolutionFilename).TrimEnd('\\') + '\\'; // Contains ClearIfDirty();
 
                 using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
                 {
@@ -129,7 +125,7 @@ namespace Ankh.Settings
                         if (!Uri.TryCreate("file:///" + _cache.SolutionFilename.Replace(Path.DirectorySeparatorChar, '/'), UriKind.Absolute, out solution)
                             || !Uri.TryCreate(value, UriKind.Relative, out relative))
                         {
-                            return _cache.ProjectRoot = wcRoot;
+                            return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
                         }
 
                         if (value != "./")
@@ -139,7 +135,7 @@ namespace Ankh.Settings
                                 r = r.Substring(3);
 
                             if (!string.IsNullOrEmpty(r))
-                                return _cache.ProjectRoot = wcRoot;
+                                return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
                         }
 
                         if (!Uri.TryCreate(value, UriKind.Relative, out relative))
@@ -147,10 +143,10 @@ namespace Ankh.Settings
 
                         Uri combined = new Uri(solution, relative);
 
-                        return _cache.ProjectRoot = combined.AbsolutePath.Replace('/', '\\').TrimEnd('\\') + '\\';
+                        return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(combined.AbsolutePath.Replace('/', Path.DirectorySeparatorChar));
                     }
 
-                    return _cache.ProjectRoot = GetSvnWcRoot(sd.TrimEnd('\\'));
+                    return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
                 }
             }
             set
@@ -160,7 +156,7 @@ namespace Ankh.Settings
                     return;
 
                 string sd = Path.GetDirectoryName(SolutionFilename).TrimEnd('\\') + '\\';
-                string v = Path.GetFullPath(value).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+                string v = SvnTools.GetNormalizedFullPath(value);
 
                 if (!sd.StartsWith(v, StringComparison.OrdinalIgnoreCase))
                     return;
@@ -180,7 +176,21 @@ namespace Ankh.Settings
                     client.SetProperty(SolutionFilename, "vs:project-root", solUri.MakeRelativeUri(resUri).ToString(), ps);
 
                     GetService<IFileStatusCache>().MarkDirty(SolutionFilename);
+                    // The getter will reload the settings for us
                 }
+            }
+        }
+
+        public string ProjectRootWithSeparator
+        {
+            get
+            {
+                string pr = ProjectRoot;
+
+                if(!string.IsNullOrEmpty(pr) && pr[pr.Length-1] != Path.DirectorySeparatorChar)
+                    return pr + Path.DirectorySeparatorChar;
+                else
+                    return pr;
             }
         }
 
@@ -193,7 +203,7 @@ namespace Ankh.Settings
                 if (_cache.ProjectRootUri != null)
                     return _cache.ProjectRootUri;
 
-                string projectroot = ProjectRoot;
+                string projectroot = ProjectRootWithSeparator;
 
                 if (string.IsNullOrEmpty(projectroot))
                     return null;
@@ -205,8 +215,6 @@ namespace Ankh.Settings
                 return _cache.ProjectRootUri = rootItem.Status.Uri;
             }
         }
-
-        #endregion
 
         string _allProjectTypesFilter;
         public string AllProjectExtensionsFilter

@@ -32,7 +32,7 @@ namespace Ankh.UI.PendingChanges
             IFileStatusCache cache = context.GetService<IFileStatusCache>();
 
             Text = PendingChange.RelativePath;
-            string start = solSet.ProjectRoot;
+            string start = solSet.ProjectRootWithSeparator;
 
             ImageIndex = PendingChange.IconIndex;
             SubItems[1].Text = PendingChange.Project;

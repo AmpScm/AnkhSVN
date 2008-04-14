@@ -169,7 +169,7 @@ namespace Ankh.Scc
 
         private string GetRelativePath(RefreshContext context)
         {
-            string projectRoot = context.SolutionSettings.ProjectRoot;
+            string projectRoot = context.SolutionSettings.ProjectRootWithSeparator;
 
             if (FullPath.StartsWith(projectRoot, StringComparison.OrdinalIgnoreCase))
                 return FullPath.Substring(projectRoot.Length).Replace('\\', '/');

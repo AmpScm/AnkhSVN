@@ -461,18 +461,6 @@ namespace Ankh.Tests
                 get { throw new NotImplementedException(); }
             }
 
-            Ankh.UI.CommitDialog IUIShell.CommitDialog
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-                set
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
             void IUIShell.SetRepositoryExplorerSelection(object[] selection)
             {
                 throw new NotImplementedException();
