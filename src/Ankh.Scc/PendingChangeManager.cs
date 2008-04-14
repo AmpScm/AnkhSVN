@@ -243,27 +243,6 @@ namespace Ankh.Scc
 
         #endregion
 
-        #region IPendingChangesManager Members
-
-        // Not used at this time
-        public event EventHandler<PendingChangeEventArgs> RefreshStarted;
-
-        protected void OnRefreshStarted(PendingChangeEventArgs e)
-        {
-            if (RefreshStarted != null)
-                RefreshStarted(this, e);
-        }
-
-        public event EventHandler<PendingChangeEventArgs> RefreshCompleted;
-
-        protected void OnRefreshCompleted(PendingChangeEventArgs e)
-        {
-            if (RefreshCompleted != null)
-                RefreshCompleted(this, e);
-        }
-
-        #endregion
-
         internal void ScheduleMonitor(string path)
         {
             lock (_toRefresh)
