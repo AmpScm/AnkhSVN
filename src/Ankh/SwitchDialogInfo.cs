@@ -15,10 +15,10 @@ namespace Ankh
         {
         }
 
-        public SwitchDialogInfo( ICollection<SvnItem> items, Predicate<SvnItem> checkedFilter ) :
+        /*public SwitchDialogInfo( ICollection<SvnItem> items, Predicate<SvnItem> checkedFilter ) :
             base( "", items, checkedFilter )
         {
-        }
+        }*/
 
         public string SwitchToUrl
         {
