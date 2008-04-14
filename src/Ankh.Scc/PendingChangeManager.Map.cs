@@ -172,8 +172,9 @@ namespace Ankh.Scc
                 {
                     _pendingChanges.Remove(file);
                     OnRemoved(new PendingChangeEventArgs(this, pc));
-                    return;
                 }
+
+                return;
             }
             else if (inProject && inExtra)
                 _extraFiles.Remove(file);
