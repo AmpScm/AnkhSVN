@@ -38,12 +38,6 @@ namespace Ankh.UI
             treeView.Context = Context;
         }
 
-        public event EventHandler<ResolvingPathEventArgs> GetPathInfo
-        {
-            add { this.treeView.ResolvingPathInfo += value; }
-            remove { this.treeView.ResolvingPathInfo -= value; }
-        }
-
         /// <summary>
         /// The items to choose from.
         /// </summary>

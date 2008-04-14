@@ -60,22 +60,22 @@ namespace Ankh.UI
 
         private void AfterCheck(object sender, TreeViewEventArgs e)
         {
-            List<SvnItem> items = new List<SvnItem>(TreeView.CheckedItems);
-            if ( items.Count > 0 )
-            {
-                ResolvingPathEventArgs args = new ResolvingPathEventArgs( items[0] );
-                this.RaiseGetPathInfo( args );
-                this.currentUrl = args.Path;
-                this.urlTextBox.Text = this.currentUrl;
-                this.urlTextBox.Enabled = true;
-            }
-            else
-            {
-                this.currentUrl = null;
-                this.urlTextBox.Enabled = false;             
-            }
+            //List<SvnItem> items = new List<SvnItem>(TreeView.CheckedItems);
+            //if ( items.Count > 0 )
+            //{
+            //    ResolvingPathEventArgs args = new ResolvingPathEventArgs( items[0] );
+            //    this.RaiseGetPathInfo( args );
+            //    this.currentUrl = args.Path;
+            //    this.urlTextBox.Text = this.currentUrl;
+            //    this.urlTextBox.Enabled = true;
+            //}
+            //else
+            //{
+            //    this.currentUrl = null;
+            //    this.urlTextBox.Enabled = false;             
+            //}
 
-            this.ValidateDialog();
+            //this.ValidateDialog();
     
         }
        

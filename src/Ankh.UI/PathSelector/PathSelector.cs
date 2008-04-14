@@ -38,47 +38,41 @@ namespace Ankh.UI
             :this()
         {
             _info = info;
-            EnableRecursive = info.EnableRecursive;
-            Items = info.VisibleItems;
-            //selector.CheckedFilter = info.CheckedFilter;
-            Recursive = info.Depth == SvnDepth.Infinity;
-            SingleSelection = info.SingleSelection;
-            Caption = info.Caption;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if(!DesignMode)
+                EnsureSelection();
+        }
+
+        void EnsureSelection()
+        {
+            EnableRecursive = _info.EnableRecursive;
+            Items = _info.VisibleItems;
+            //selector.CheckedFilter = _info.CheckedFilter;
+            Recursive = _info.Depth == SvnDepth.Infinity;
+            SingleSelection = _info.SingleSelection;
+            Caption = _info.Caption;
 
             // do we need go get a revision range?
-            if (info.RevisionStart == null && info.RevisionEnd == null)
+            if (_info.RevisionStart == null && _info.RevisionEnd == null)
             {
                 Options = PathSelectorOptions.NoRevision;
             }
-            else if (info.RevisionEnd == null)
+            else if (_info.RevisionEnd == null)
             {
-                RevisionStart = info.RevisionStart;
+                RevisionStart = _info.RevisionStart;
                 Options = PathSelectorOptions.DisplaySingleRevision;
             }
             else
             {
-                RevisionStart = info.RevisionStart;
-                RevisionEnd = info.RevisionEnd;
+                RevisionStart = _info.RevisionStart;
+                RevisionEnd = _info.RevisionEnd;
                 Options = PathSelectorOptions.DisplayRevisionRange;
             }
-
-
-
-            //// show it
-            //if (selector.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) == DialogResult.OK)
-            //{
-            //    info.CheckedItems = new List<SvnItem>(selector.CheckedItems);
-            //    info.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-            //    info.RevisionStart = selector.RevisionStart;
-            //    info.RevisionEnd = selector.RevisionEnd;
-
-            //    return info;
-            //}
-            //else
-            //{
-            //    return null;
-            //}
-
         }
 
 
@@ -221,12 +215,6 @@ namespace Ankh.UI
             get{ return this.pathSelectionTreeView; }
         }
 
-        protected void RaiseGetPathInfo( ResolvingPathEventArgs args )
-        {
-            if ( this.getPathInfo != null )
-                this.getPathInfo( this, args );
-        }
-
         protected Button OkButton
         {
             get{ return this.okButton; }
@@ -268,9 +256,6 @@ namespace Ankh.UI
             this.pathSelectionTreeView.Recursive = this.recursiveCheckBox.Checked;        
         }
 
-        
-
         private PathSelectorOptions options;        
-        private EventHandler<ResolvingPathEventArgs> getPathInfo;
     }
 }

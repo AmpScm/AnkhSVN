@@ -58,12 +58,6 @@ namespace Ankh.Commands
             }*/
         }
 
-        public static void GetPathInfo(object sender, ResolvingPathEventArgs args)
-        {
-            SvnItem item = (SvnItem)args.Item;
-            args.IsDirectory = item.IsDirectory;
-            args.Path = item.FullPath;
-        }
 
         #endregion
 

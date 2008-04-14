@@ -406,36 +406,6 @@ namespace Ankh
             this.commitDialog.Proceed -= new EventHandler(this.ProceedCommit);
         }
 
-        protected static void GetPathInfo(object sender, ResolvingPathEventArgs args)
-        {
-            SvnItem item = (SvnItem)args.Item;
-            args.IsDirectory = item.IsDirectory;
-            args.Path = item.FullPath;
-        }
-
-        protected static void GetUrlPathinfo(object sender, ResolvingPathEventArgs args)
-        {
-            SvnItem item = (SvnItem)args.Item;
-            args.IsDirectory = item.IsDirectory;
-            args.Path = item.FullPath;
-        }
-
-        private void EnsureWindowSize(Window window)
-        {
-            try
-            {
-                if (window.Width < 150)
-                    window.Width = 400;
-
-                if (window.Height < 100)
-                    window.Height = 500;
-            }
-            catch (System.Runtime.InteropServices.COMException)
-            {
-                // swallow, no biggie
-            }
-        }
-
         private RepositoryExplorerControl repositoryExplorerControl;
         private WorkingCopyExplorerControl workingCopyExplorerControl;
         private CommitDialog commitDialog;
