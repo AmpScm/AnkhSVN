@@ -19,7 +19,7 @@ namespace Ankh.UI
             Runtime.CommandMapper.LoadFrom(typeof(AnkhUIModule).Assembly);
 
             // Instantiate the logmessage language service
-            LogMessageLanguageService ls = new LogMessageLanguageService();
+            LogMessageLanguageService ls = new LogMessageLanguageService(Context);
             Container.AddService(typeof(LogMessageLanguageService), ls, true);
             ls.SetSite(Container);
 
