@@ -75,6 +75,7 @@ namespace Ankh.Scc
                         if (pc.IsClean)
                         {
                             _pendingChanges.Remove(file);
+                            _extraFiles.Remove(file);
 
                             // No need to check wasClean or external files; not possible in this case
                             OnRemoved(new PendingChangeEventArgs(this, pc));
@@ -95,12 +96,15 @@ namespace Ankh.Scc
                 mapped.Add(pc, pc);
             }
 
-            foreach (string file in _extraFiles)
+            foreach (string file in new List<string>(_extraFiles))
             {
                 SvnItem item = cache[file];
 
                 if (item == null)
+                {
+                    _extraFiles.Remove(file);
                     continue;
+                }
 
                 bool isDirty = !item.IsVersioned || Tracker.IsDocumentDirty(file);
 
@@ -112,6 +116,7 @@ namespace Ankh.Scc
                         if (pc.IsClean)
                         {
                             _pendingChanges.Remove(file);
+                            _extraFiles.Remove(file);
 
                             // No need to check wasClean
                             OnRemoved(new PendingChangeEventArgs(this, pc));
@@ -187,6 +192,7 @@ namespace Ankh.Scc
                     if (pc.IsClean)
                     {
                         _pendingChanges.Remove(file);
+                        _extraFiles.Remove(file);
 
                         // No need to check wasClean or external files; not possible in this case
                         OnRemoved(new PendingChangeEventArgs(this, pc));
@@ -210,5 +216,22 @@ namespace Ankh.Scc
             if (InitialUpdate != null)
                 InitialUpdate(this, e);
         }
+
+        public event EventHandler<PendingChangeEventArgs> RefreshStarted;
+
+        protected void OnRefreshStarted(PendingChangeEventArgs e)
+        {
+            if (RefreshStarted != null)
+                RefreshStarted(this, e);
+        }
+
+        public event EventHandler<PendingChangeEventArgs> RefreshCompleted;
+
+        protected void OnRefreshCompleted(PendingChangeEventArgs e)
+        {
+            if (RefreshCompleted != null)
+                RefreshCompleted(this, e);
+        }
+
     }
 }
