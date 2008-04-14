@@ -161,12 +161,12 @@ namespace Ankh.UI
 
         private void AddToolBarImages()
         {
-            this.toolbarImageList.Images.Add(
+            /*this.toolbarImageList.Images.Add(
                 new Icon( this.GetType().Assembly.GetManifestResourceStream(
                 "Ankh.UI.Graphics.EnableBackgroundListing.ico" ) ) );
             this.toolbarImageList.Images.Add(
                 new Icon(this.GetType().Assembly.GetManifestResourceStream( 
-                "Ankh.UI.Graphics.AddRepoURL.ico") ) );
+                "Ankh.UI.Graphics.AddRepoURL.ico") ) );*/
         }
 
         

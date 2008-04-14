@@ -334,7 +334,7 @@
     <Compile Include="PendingChanges\RecentChangesPage.Designer.cs">
       <DependentUpon>RecentChangesPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="PendingChanges\ListViewWithSelection.cs">
+    <Compile Include="VSSelectionControls\ListViewWithSelection.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PopUpListForm.Designer.cs">
@@ -537,6 +537,11 @@
     </Compile>
     <Compile Include="ViewLogDialog.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VSSelectionControls\SelectionItemMap.cs" />
+    <Compile Include="VSSelectionControls\SvnItemTreeView.cs" />
+    <Compile Include="VSSelectionControls\TreeViewWithSelection.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorerControl.cs">
       <SubType>UserControl</SubType>

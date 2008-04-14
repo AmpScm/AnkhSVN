@@ -4,6 +4,7 @@ using System.Text;
 using Ankh.Selection;
 using Microsoft.VisualStudio;
 using System.ComponentModel;
+using Ankh.UI.VSSelectionControls;
 
 namespace Ankh.UI.PendingChanges
 {
