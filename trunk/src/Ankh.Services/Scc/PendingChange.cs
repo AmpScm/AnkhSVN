@@ -148,7 +148,13 @@ namespace Ankh.Scc
         public string RelativePath
         {
             get { return _relativePath; }
-        }        
+        }
+
+        [Browsable(false)]
+        public string LogMessageToolTipText
+        {
+            get { return String.Format("{0}: {1}", RelativePath, Change.PendingCommitText); }
+        }
 
         /// <summary>
         /// Refreshes the pending change. Returns true if the state was modified, otherwise false

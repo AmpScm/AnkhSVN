@@ -46,6 +46,8 @@ namespace Ankh.Scc
                     return PendingChangeText.StateMissing;
                 case PendingChangeKind.Modified:
                     return PendingChangeText.StateModified;
+                case PendingChangeKind.EditorDirty:
+                    return PendingChangeText.StateEdited;
                 default:
                     return State.ToString();
             }            

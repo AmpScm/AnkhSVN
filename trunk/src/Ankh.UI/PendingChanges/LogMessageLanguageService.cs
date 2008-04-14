@@ -6,6 +6,8 @@ using System.ComponentModel.Design;
 using AnkhSvn.Ids;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio;
+using Ankh.Scc;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -16,9 +18,20 @@ namespace Ankh.UI.PendingChanges
     public partial class LogMessageLanguageService : LanguageService
     {
         public const string ServiceName = AnkhId.LogMessageServiceName;
-        public LogMessageLanguageService()
+        readonly IAnkhServiceProvider _context;
+        
+        public LogMessageLanguageService(IAnkhServiceProvider context)
 		{
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
 		}
+
+        internal IAnkhServiceProvider Context
+        {
+            get { return _context; }
+        }
 
 		public override void UpdateLanguageContext(Microsoft.VisualStudio.TextManager.Interop.LanguageContextHint hint, Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer, Microsoft.VisualStudio.TextManager.Interop.TextSpan[] ptsSelection, Microsoft.VisualStudio.Shell.Interop.IVsUserContext context)
 		{
@@ -174,9 +187,14 @@ namespace Ankh.UI.PendingChanges
 
     partial class LogMessageViewFilter : ViewFilter
     {
+        readonly LogMessageLanguageService _service;
         public LogMessageViewFilter(LogMessageLanguageService service, CodeWindowManager mgr, IVsTextView view)
             : base(mgr, view)
         {
+            if (service == null)
+                throw new ArgumentNullException("service");
+
+            _service = service;
         }
 
         public void PrepareLogMessageContextMenu(ref int menuId, ref Guid groupGuid, ref Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target)
@@ -187,5 +205,75 @@ namespace Ankh.UI.PendingChanges
                 menuId = (int)AnkhCommandMenu.PendingChangesLogMessageMenu;
             }
         }
+
+        /// <summary>
+        /// Gets the data tip text.
+        /// </summary>
+        /// <param name="aspan">[in,out] The selection on input; on output the range to which the tooltip applies.</param>
+        /// <param name="textValue">The text value.</param>
+        /// <returns></returns>
+        public override int GetDataTipText(TextSpan[] aspan, out string textValue)
+        {
+            if(aspan == null || aspan.Length != 1 || aspan[0].iEndLine != aspan[0].iStartLine)
+                return base.GetDataTipText(aspan, out textValue);
+
+            textValue = null;
+
+            int lineNr = aspan[0].iStartLine;
+            int iFrom = Math.Min(aspan[0].iStartIndex, aspan[0].iEndIndex);
+            int iTo = Math.Max(aspan[0].iStartIndex, aspan[0].iEndIndex);
+
+            string line = Source.GetLine(lineNr);
+
+            if (line == null)
+                return VSConstants.E_FAIL;
+
+            while (iFrom > 0 && iFrom < line.Length)
+            {
+                if (!char.IsWhiteSpace(line, iFrom - 1) && "*?;".IndexOf(line[iFrom - 1]) < 0)
+                    iFrom--;
+                else
+                    break;
+            }
+
+            while (iTo+1 < line.Length)
+            {
+                if (!char.IsWhiteSpace(line, iTo) && "*?;".IndexOf(line[iTo]) < 0)
+                    iTo++;
+                else
+                    break;
+            }
+
+            string text = line.Substring(iFrom, iTo - iFrom + 1);
+
+            if (string.IsNullOrEmpty(text))
+                return VSConstants.E_FAIL;
+
+            IPendingChangesManager mgr = _service.Context.GetService<IPendingChangesManager>();
+            PendingChange change = null;
+            if(mgr == null || !mgr.TryMatchFile(text, out change))
+                return VSConstants.E_FAIL;
+
+            aspan[0].iStartIndex = iFrom;
+            aspan[0].iEndIndex = iTo;
+
+            textValue = change.LogMessageToolTipText;
+
+            return VSConstants.S_OK;
+        }
+
+        /// <summary>
+        /// Gets the word extent.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <param name="index">The index.</param>
+        /// <param name="flags">The flags.</param>
+        /// <param name="span">The span.</param>
+        /// <returns></returns>
+        public override int GetWordExtent(int line, int index, uint flags, TextSpan[] span)
+        {
+            // TODO: determine what the word break characters of a log message should be
+            return base.GetWordExtent(line, index, flags, span);
+        }        
     }
 }

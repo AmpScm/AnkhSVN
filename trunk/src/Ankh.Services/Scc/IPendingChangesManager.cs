@@ -130,5 +130,14 @@ namespace Ankh.Scc
         /// Clears all state; called on solution close
         /// </summary>
         void Clear();
+
+        /// <summary>
+        /// Tries to get a matching file from the specified text
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="change"></param>
+        /// <returns></returns>
+        /// <remarks>Called from the log message editor in an attempt to provide a mouse over</remarks>
+        bool TryMatchFile(string text, out PendingChange change);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Ankh.VS;
+using System.IO;
 
 namespace Ankh.Scc
 {
@@ -56,7 +57,7 @@ namespace Ankh.Scc
 
             IFileStatusCache cache = Cache;
 
-            foreach(string file in Mapper.GetAllFilesOfAllProjects())
+            foreach (string file in Mapper.GetAllFilesOfAllProjects())
             {
                 _extraFiles.Remove(file); // If we find it here; it is no longer 'extra'!
 
@@ -154,7 +155,7 @@ namespace Ankh.Scc
                 }
             }
 
-            if(wasClean && _pendingChanges.Count > 0)
+            if (wasClean && _pendingChanges.Count > 0)
                 OnInitialUpdate(pceMe);
 
             OnRefreshCompleted(pceMe);
@@ -205,7 +206,7 @@ namespace Ankh.Scc
             else if (PendingChange.CreateIfPending(RefreshContext, item, isDirty, out pc))
             {
                 _pendingChanges.Add(pc);
-                
+
                 OnAdded(new PendingChangeEventArgs(this, pc));
             }
         }
@@ -234,5 +235,49 @@ namespace Ankh.Scc
                 RefreshCompleted(this, e);
         }
 
+        /// <summary>
+        /// Tries to get a matching file from the specified text
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="change"></param>
+        /// <returns></returns>
+        /// <remarks>Called from the log message editor in an attempt to provide a mouse over</remarks>
+        public bool TryMatchFile(string text, out PendingChange change)
+        {
+            change = null;
+            if (string.IsNullOrEmpty(text))
+                return false;
+
+            lock (_toRefresh)
+            {
+                text = text.Replace(Path.DirectorySeparatorChar, '/');
+                foreach (PendingChange pc in _pendingChanges)
+                {
+                    if (pc.RelativePath == text)
+                    {
+                        change = pc;
+                        return true;
+                    }
+                }
+
+                int liSlash = text.LastIndexOf('/');
+                if (liSlash > 0)
+                {
+                    text = text.Substring(liSlash + 1);
+                }
+
+                foreach (PendingChange pc in _pendingChanges)
+                {
+                    if (text == pc.Name || text == Path.GetFileNameWithoutExtension(pc.Name))
+                    {
+                        change = pc;
+                        return true;
+                    }
+
+                }
+
+                return false;
+            }
+        }
     }
 }
