@@ -26,25 +26,6 @@ namespace Ankh.UI
 
             this.propertyGrid.SelectedObject = configuration;
         }
-
-        [STAThread]
-        static void Main(string[] args)
-        {
-            //    object config = new Config();
-            //    do
-            //    {
-            //        ConfigurationDialog dlg = new ConfigurationDialog( config );
-            //        dlg.ShowInTaskbar = true;
-            //        dlg.ShowDialog();
-
-            //        foreach ( PropertyDescriptor desc in TypeDescriptor.GetProperties( config ) )
-            //        {
-            //            object val = desc.GetValue( config );
-            //            Console.WriteLine( "{0}: '{1}'", desc.DisplayName, val == null ? "{null}" : val );
-            //        }
-            //        Console.WriteLine();
-            //    } while ( Console.ReadKey(true).Key != ConsoleKey.Q );
-        }
     }
 
     //------------------------------------------------------------------------------
