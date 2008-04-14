@@ -38,20 +38,18 @@
             this.directory = new System.Windows.Forms.Label();
             this.browseDirectoryButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.dirIco = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.version = new System.Windows.Forms.Label();
             this.browseVersionButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.versionIcon = new System.Windows.Forms.PictureBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.projectIcon)).BeginInit();
             this.locationIcon.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dirIco)).BeginInit();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.versionIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -72,6 +70,8 @@
             // 
             // checkOutFrom
             // 
+            this.checkOutFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.checkOutFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.checkOutFrom.FormattingEnabled = true;
             this.checkOutFrom.Location = new System.Drawing.Point(96, 36);
@@ -91,7 +91,7 @@
             // projectLabel
             // 
             this.projectLabel.AutoSize = true;
-            this.projectLabel.Location = new System.Drawing.Point(28, 18);
+            this.projectLabel.Location = new System.Drawing.Point(6, 18);
             this.projectLabel.Name = "projectLabel";
             this.projectLabel.Size = new System.Drawing.Size(43, 13);
             this.projectLabel.TabIndex = 0;
@@ -108,7 +108,7 @@
             // 
             // projectIcon
             // 
-            this.projectIcon.Location = new System.Drawing.Point(6, 18);
+            this.projectIcon.Location = new System.Drawing.Point(71, 15);
             this.projectIcon.Name = "projectIcon";
             this.projectIcon.Size = new System.Drawing.Size(16, 16);
             this.projectIcon.TabIndex = 0;
@@ -121,7 +121,7 @@
             this.locationIcon.Controls.Add(this.directory);
             this.locationIcon.Controls.Add(this.browseDirectoryButton);
             this.locationIcon.Controls.Add(this.label2);
-            this.locationIcon.Controls.Add(this.pictureBox2);
+            this.locationIcon.Controls.Add(this.dirIco);
             this.locationIcon.Location = new System.Drawing.Point(12, 87);
             this.locationIcon.Name = "locationIcon";
             this.locationIcon.Size = new System.Drawing.Size(453, 43);
@@ -152,19 +152,19 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(28, 19);
+            this.label2.Location = new System.Drawing.Point(6, 19);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 13);
             this.label2.TabIndex = 0;
             this.label2.Text = "Directory:";
             // 
-            // pictureBox2
+            // dirIco
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(6, 19);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
+            this.dirIco.Location = new System.Drawing.Point(71, 19);
+            this.dirIco.Name = "dirIco";
+            this.dirIco.Size = new System.Drawing.Size(16, 16);
+            this.dirIco.TabIndex = 0;
+            this.dirIco.TabStop = false;
             // 
             // groupBox3
             // 
@@ -173,7 +173,6 @@
             this.groupBox3.Controls.Add(this.version);
             this.groupBox3.Controls.Add(this.browseVersionButton);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Controls.Add(this.versionIcon);
             this.groupBox3.Location = new System.Drawing.Point(12, 136);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(453, 43);
@@ -204,19 +203,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(28, 19);
+            this.label1.Location = new System.Drawing.Point(6, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Version:";
-            // 
-            // versionIcon
-            // 
-            this.versionIcon.Location = new System.Drawing.Point(6, 19);
-            this.versionIcon.Name = "versionIcon";
-            this.versionIcon.Size = new System.Drawing.Size(16, 16);
-            this.versionIcon.TabIndex = 0;
-            this.versionIcon.TabStop = false;
             // 
             // cancelButton
             // 
@@ -264,10 +255,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.projectIcon)).EndInit();
             this.locationIcon.ResumeLayout(false);
             this.locationIcon.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dirIco)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.versionIcon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -279,14 +269,13 @@
         private System.Windows.Forms.PictureBox projectIcon;
         private System.Windows.Forms.GroupBox locationIcon;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox dirIco;
         private System.Windows.Forms.Label projectRootLabel;
         private System.Windows.Forms.Label directory;
         private System.Windows.Forms.Button browseDirectoryButton;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button browseVersionButton;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox versionIcon;
         private System.Windows.Forms.Label version;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
