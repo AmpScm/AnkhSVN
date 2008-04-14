@@ -21,22 +21,7 @@ namespace Ankh.UI
     {
         PathSelectorInfo _info;
         IAnkhServiceProvider _context;
-        /// <summary>
-        /// Invoked when the treeview needs more information about a node.
-        /// </summary>
-        public event EventHandler<ResolvingPathEventArgs> GetPathInfo
-        {
-            add
-            { 
-                this.getPathInfo += value;
-                this.pathSelectionTreeView.ResolvingPathInfo += value; 
-            }
-            remove
-            { 
-                this.pathSelectionTreeView.ResolvingPathInfo -= value; 
-                this.getPathInfo -= value;
-            }
-        }
+
 
 
         public PathSelector()
@@ -96,10 +81,23 @@ namespace Ankh.UI
 
         }
 
+
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set { _context = value; }
+            set
+            {
+                if (value != _context)
+                {
+                    _context = value;
+                    OnContextChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        protected virtual void OnContextChanged(EventArgs eventArgs)
+        {
+            pathSelectionTreeView.Context = Context;
         }
 
         /// <summary>
@@ -274,21 +272,5 @@ namespace Ankh.UI
 
         private PathSelectorOptions options;        
         private EventHandler<ResolvingPathEventArgs> getPathInfo;
-
-
-        public static void Main()
-        {
-            PathSelector s = new PathSelector();
-            s.Options = PathSelectorOptions.NoRevision;
-            s.ShowDialog();
-
-            s.Options = PathSelectorOptions.DisplaySingleRevision;
-            s.ShowDialog();
-
-            s.Options = PathSelectorOptions.DisplayRevisionRange;
-            s.ShowDialog();
-        }
-
-       
     }
 }

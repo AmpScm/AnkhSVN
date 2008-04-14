@@ -330,7 +330,6 @@ namespace Ankh
         {
             using (SwitchDialog dialog = new SwitchDialog())
             {
-                dialog.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetUrlPathinfo);
                 dialog.Items = info.VisibleItems;
                 dialog.SingleSelection = true;
 				dialog.CheckedFilter = delegate { return true; };
